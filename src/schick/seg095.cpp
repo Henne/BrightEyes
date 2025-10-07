@@ -137,7 +137,7 @@ void npc_farewell(void)
 							char ta_rise_bak = hero_i->skill_incs;
 #endif
 							/* All non-dead heroes in the same group get a chance to increase TA_SCHLEICHEN */
-							inc_skill_novice((Bit8u*)hero_i, TA_SCHLEICHEN);
+							inc_skill_novice(hero_i, TA_SCHLEICHEN);
 #ifdef M302de_ORIGINAL_BUGFIX
 							/* The unwanted reduction is done within the function inc_skill_novice(). We revert it. */
 							hero_i->skill_incs = ta_rise_bak;

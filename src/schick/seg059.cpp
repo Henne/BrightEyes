@@ -151,8 +151,8 @@ void do_tavern(void)
 
 					gs_food_message[i] = g_food_message_shown[i] = 0;
 
-					if (host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(get_hero(i) + HERO_GROUP_NO) == gs_current_group)
+					if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) &&
+						(((struct struct_hero*)get_hero(i))->group_no == gs_current_group))
 					{
 
 						l3 = (21 - tavern->quality) * 20;
@@ -160,10 +160,10 @@ void do_tavern(void)
 							l3 = 100;
 						}
 
-						sub_ptr_bs(get_hero(i) + HERO_HUNGER, (unsigned char)l3);
+						((struct struct_hero*)get_hero(i))->hunger -= (unsigned char)l3;
 
-						if (host_readbs(get_hero(i) + HERO_HUNGER) < 0) {
-							host_writebs(get_hero(i) + HERO_HUNGER, 0);
+						if (((struct struct_hero*)get_hero(i))->hunger < 0) {
+							((struct struct_hero*)get_hero(i))->hunger = 0;
 						}
 
 						l3 = (21 - tavern->quality) * 30;
@@ -171,10 +171,10 @@ void do_tavern(void)
 							l3 = 100;
 						}
 
-						sub_ptr_bs(get_hero(i) + HERO_THIRST, (unsigned char)l3);
+						((struct struct_hero*)get_hero(i))->thirst -= (unsigned char)l3;
 
-						if (host_readbs(get_hero(i) + HERO_THIRST) < 0) {
-							host_writebs(get_hero(i) + HERO_THIRST, 0);
+						if (((struct struct_hero*)get_hero(i))->thirst < 0) {
+							((struct struct_hero*)get_hero(i))->thirst = 0;
 						}
 					}
 				}

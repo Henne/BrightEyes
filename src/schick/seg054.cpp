@@ -508,7 +508,7 @@ void do_inn(void)
 							GUI_output(get_ttx(334));
 
 						} else {
-							magic_act[answer] = (signed char)use_magic((Bit8u*)hero);
+							magic_act[answer] = (signed char)use_magic(hero);
 						}
 					} else {
 						GUI_output(get_ttx(330));

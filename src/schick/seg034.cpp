@@ -505,7 +505,7 @@ signed short FIG_move_pathlen(void)
  * \param   px          pointer to the x-coordinate on the chessboard
  * \param   py          pointer to the y-coordinate on the chessboard
  */
-void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed short *py)
+void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short *px, signed short *py)
 {
 	signed short problem;
 	signed short path_end;
@@ -722,7 +722,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 					} else {
 
 						FIG_set_cb_field(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
-						target_reachable = FIG_find_path_to_target(hero, hero_pos, *px, *py, 10);
+						target_reachable = FIG_find_path_to_target((Bit8u*)hero, hero_pos, *px, *py, 10);
 						/* target_reachable = 1: there is a path of length < 50 to the target square; target_reachable = -1: there is no such path */
 						bp_cost = (signed char)FIG_move_pathlen();
 #if !defined(__BORLANDC__)
@@ -747,7 +747,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 
 							sel_x = -1;
 
-							if (host_readbs(hero + HERO_BP_LEFT) > bp_cost) {
+							if (hero->bp_left > bp_cost) {
 
 								g_fig_move_pathdir[path_end] = 2;
 								g_fig_move_pathdir[path_end + 1] = -1;
@@ -757,7 +757,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 
 							sel_y = -1;
 
-							if (bp_cost < (host_readbs(hero + HERO_BP_LEFT) - 1)) {
+							if (bp_cost < (hero->bp_left - 1)) {
 
 								g_fig_move_pathdir[path_end] = 1;
 								g_fig_move_pathdir[path_end + 1] = -1;
@@ -767,7 +767,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 
 							sel_y = 24;
 
-							if (bp_cost < (host_readbs(hero + HERO_BP_LEFT) - 1)) {
+							if (bp_cost < (hero->bp_left - 1)) {
 
 								g_fig_move_pathdir[path_end] = 3;
 								g_fig_move_pathdir[path_end + 1] = -1;
@@ -803,8 +803,8 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 					} else if (cb_entry_bak > 0) {
 
 						/* target square contains a hero */
-						if (!hero_dead(get_hero(cb_entry_bak - 1)) &&
-							!hero_unconscious(get_hero(cb_entry_bak - 1)) &&
+						if (!hero_dead((Bit8u*)get_hero(cb_entry_bak - 1)) &&
+							!hero_unconscious((Bit8u*)get_hero(cb_entry_bak - 1)) &&
 							(cb_entry_bak != hero_pos + 1))
 						{
 							/* hero is not dead, not unconscious, and not the active hero */
@@ -824,7 +824,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 						/* target square contains a non-dead monster (including the tail of a two-squares monster) */
 						problem = 3;
 
-					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !hero_dead(get_hero(cb_entry_bak - 1)) && !hero_unconscious(get_hero(cb_entry_bak - 1)) && (cb_entry_bak != hero_pos + 1)) {
+					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !hero_dead((Bit8u*)get_hero(cb_entry_bak - 1)) && !hero_unconscious((Bit8u*)get_hero(cb_entry_bak - 1)) && (cb_entry_bak != hero_pos + 1)) {
 
 						/* target square contains a non-dead and non-unconscious hero different from the active hero */
 						problem = 3;
@@ -833,7 +833,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 
 						problem = 4;
 
-					} else if (host_readbs(hero + HERO_BP_LEFT) < bp_cost) {
+					} else if (hero->bp_left < bp_cost) {
 
 						problem = 2;
 
@@ -886,7 +886,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 
 				if (GUI_bool(get_tx(35))) {
 
-					host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
+					hero->action_id = FIG_ACTION_FLEE;
 					problem = 0;
 
 				} else {
@@ -901,11 +901,11 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed 
 				FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 				g_fig_cb_selector_id[0] = -1;
 
-				seg036_00ae(hero, hero_pos);
+				seg036_00ae((Bit8u*)hero, hero_pos);
 
-				if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE) {
+				if (hero->action_id == FIG_ACTION_FLEE) {
 
-					host_writeb(hero + HERO_BP_LEFT, 0);
+					hero->bp_left = 0;
 
 				} else {
 					FIG_search_obj_on_cb(hero_pos + 1, px, py);

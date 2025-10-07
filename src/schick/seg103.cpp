@@ -30,7 +30,7 @@ struct dummy {
 	char a[6];
 };
 
-signed short LVL_select_skill(Bit8u *hero, signed short show_values)
+signed int LVL_select_skill(struct struct_hero *hero, const signed int show_values)
 {
 	signed short i;
 
@@ -44,17 +44,13 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 		strcpy(g_text_output_buf, get_ttx(205));
 
-		if (host_readbs(hero + HERO_TA_RISE) > 1) {
+		if (hero->skill_incs > 1) {
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
-		sprintf(g_dtp2,
-			get_ttx(204),
-			/* sind / ist */
-			(host_readbs(hero + HERO_TA_RISE) > 1) ? get_ttx(305) : get_ttx(304),
-			/* # of tries left */
-			host_readbs(hero + HERO_TA_RISE),
-			g_text_output_buf);
+		sprintf(g_dtp2, get_ttx(204),
+			(hero->skill_incs > 1) ? get_ttx(305) : get_ttx(304),	/* sind / ist */
+			hero->skill_incs, g_text_output_buf);
 	} else {
 
 		strcpy(g_dtp2, get_ttx(216));
@@ -71,7 +67,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 			for (i = 0; g_skills_index[answer].length > i; i++) {
 
-				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(l1 + i + 48), host_readbs(hero + l1 + i + HERO_TALENTS));
+				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(l1 + i + 48), hero->skills[l1 + i]);
 
 				g_radio_name_list[i] = g_dtp2 + 50 * i;
 			}
@@ -694,14 +690,14 @@ signed short GUI_use_skill2(signed short handicap, char *msg)
  * \return              the result of the throw. A value greater than zero
  *	means success, below or zero means failed.
  */
-signed short bargain(Bit8u *hero, signed short items, Bit32s price,
-	signed short percent, signed char mod_init)
+signed int bargain(struct struct_hero *hero, const signed int items, const Bit32s price,
+	const signed int percent, const signed char mod_init)
 {
 
 	signed char mod = mod_init;
 
 	/* NPC Harika gets a bonus on bargain */
-	if (host_readb(get_hero(6) + HERO_NPC_ID) == NPC_HARIKA) {
+	if (((struct struct_hero*)get_hero(6))->npc_id == NPC_HARIKA) {
 		mod -= 2;
 	}
 
@@ -720,7 +716,7 @@ signed short bargain(Bit8u *hero, signed short items, Bit32s price,
 	/* the lower the percent, the easier the bargain */
 	mod += percent / 5 + 1;
 
-	return test_skill((struct struct_hero*)hero, TA_FEILSCHEN, mod);
+	return test_skill(hero, TA_FEILSCHEN, mod);
 }
 
 #if !defined(__BORLANDC__)

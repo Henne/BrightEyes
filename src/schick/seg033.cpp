@@ -188,7 +188,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						x = host_readws((Bit8u*)&x);
 						y = host_readws((Bit8u*)&y);
 #endif
-						FIG_move_hero((Bit8u*)hero, hero_pos, &x, &y);
+						FIG_move_hero(hero, hero_pos, &x, &y);
 
 #if !defined(__BORLANDC__)
 						/* BE-fix */
@@ -342,7 +342,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					if (hero->bp_left >= 5) {
 
 						refresh_screen_size();
-						hero->spell_id = select_spell((Bit8u*)hero, 0);
+						hero->spell_id = select_spell(hero, 0);
 						update_mouse_cursor();
 
 						if (hero->spell_id > 0) {

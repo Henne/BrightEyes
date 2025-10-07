@@ -372,7 +372,7 @@ void status_menu(signed short hero_pos)
 					if (flag4 != 0) {
 
 						if (g_statuspage_selitem4_no < 23) {
-							pass_item((Bit8u*)hero1, g_statuspage_selitem3_no, (Bit8u*)hero2, g_statuspage_selitem4_no);
+							pass_item(hero1, g_statuspage_selitem3_no, hero2, g_statuspage_selitem4_no);
 							g_request_refresh = 1;
 						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
 							print_item_description((struct struct_hero*)hero1, g_statuspage_selitem3_no);

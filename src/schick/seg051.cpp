@@ -205,7 +205,7 @@ void do_wildcamp(void)
 							GUI_output(get_ttx(334));
 
 						} else {
-							g_wildcamp_magicstatus[answer] = use_magic((Bit8u*)hero);
+							g_wildcamp_magicstatus[answer] = use_magic(hero);
 						}
 					}
 				} else {

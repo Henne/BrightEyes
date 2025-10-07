@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void FIG_move_hero(Bit8u*, signed short, signed short*, signed short*);
+void FIG_move_hero(struct struct_hero*, signed short, signed short*, signed short*);
 
 /* 0x25 */
 signed short seg034_000(signed short, signed short, signed short, signed short,

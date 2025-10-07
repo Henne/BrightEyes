@@ -41,25 +41,25 @@ namespace M302de {
  *
  * \param   hero        the hero who heals
  */
-void magic_heal_ani(Bit8u *hero)
+void magic_heal_ani(const struct struct_hero *hero)
 {
 	signed short target_no;
 	struct Bit16s_5 a = g_ani_heal_picstars;
 	//signed short a[5] = { 0, 1, 2, 1, 0 };
 
-	unsigned char *target;
-	signed short fd;
+	struct struct_hero *target;
+	signed short handle;
 	signed short i;
 
 	/* load SPSTAR.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_SPSTAR_NVF);
-	read_archive_file(fd, g_buffer8_ptr, 0x400);
-	read_archive_file(fd, g_buffer8_ptr + 0x400, 0x400);
-	read_archive_file(fd, g_buffer8_ptr + 0x800, 0x400);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_SPSTAR_NVF);
+	read_archive_file(handle, g_buffer8_ptr, 0x400);
+	read_archive_file(handle, g_buffer8_ptr + 0x400, 0x400);
+	read_archive_file(handle, g_buffer8_ptr + 0x800, 0x400);
+	close(handle);
 
-	target_no = host_readbs(hero + HERO_ENEMY_ID) - 1;
-	target = get_hero(target_no);
+	target_no = hero->enemy_id - 1;
+	target = (struct struct_hero*)get_hero(target_no);
 
 	g_pic_copy.v1 = 0;
 	g_pic_copy.v2 = 0;
@@ -74,7 +74,7 @@ void magic_heal_ani(Bit8u *hero)
 		g_pic_copy.x2 = 31;
 		g_pic_copy.y2 = 31;
 		g_pic_copy.dst = g_renderbuf_ptr;
-		g_pic_copy.src = target + HERO_PORTRAIT;
+		g_pic_copy.src = target->pic;
 		do_pic_copy(0);
 
 		/* copy stars over it */
@@ -119,7 +119,7 @@ void FIG_do_spell_damage(signed short le)
 			/* do the damage */
 			sub_hero_le((struct struct_hero*)get_spelltarget(), le);
 
-			/* add a message (ired star with le) */
+			/* add a message (red star with le) */
 			FIG_add_msg(0x08, le);
 
 			/* set a variable if the hoer died */
@@ -236,7 +236,7 @@ signed short get_spell_cost(signed short spell_id, signed short half_cost)
  * \param   hero        pointer to the hero
  * \return              {0, 1, 2}
  */
-signed short use_magic(Bit8u* hero)
+signed int use_magic(struct struct_hero *hero)
 {
 	signed short ae;
 	signed short retval;
@@ -250,14 +250,15 @@ signed short use_magic(Bit8u* hero)
 	if (answer != -1) {
 
 		switch(answer) {
+
 		case 1: {
 			/* Meditation */
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_MAGE) {
+			if (hero->typus != HERO_TYPE_MAGE) {
 				/* not a mage, need thonnys */
 
 
-				if ((thonny_pos = get_item_pos(hero, ITEM_THONNYS)) == -1) {
+				if ((thonny_pos = get_item_pos((Bit8u*)hero, ITEM_THONNYS)) == -1) {
 					GUI_output(get_ttx(790));
 					return 0;
 				}
@@ -274,33 +275,33 @@ signed short use_magic(Bit8u* hero)
 
 				if (thonny_pos != -1) {
 					/* drop a thonny */
-					drop_item((struct struct_hero*)hero, thonny_pos, 1);
+					drop_item(hero, thonny_pos, 1);
 				}
 
 				/* cap the converted AE such that the hero has at most HERO_AE_ORIG in the end. */
-				if (host_readws(hero + HERO_AE_ORIG) - host_readws(hero + HERO_AE)  < ae) {
-					ae = host_readws(hero + HERO_AE_ORIG) - host_readws(hero + HERO_AE);
+				if ((hero->ae_max - hero->ae)  < ae) {
+					ae = hero->ae_max - hero->ae;
 				}
 
 				/* spend one AE point */
-				sub_ae_splash((struct struct_hero*)hero, 1);
+				sub_ae_splash(hero, 1);
 
 #if !defined(__BORLANDC__)
-				D1_INFO("%s Meditationsprobe +0 ",(char*)(hero + HERO_NAME2));
+				D1_INFO("%s Meditationsprobe +0 ", hero->alias);
 #endif
-				if (test_attrib3((struct struct_hero*)hero, ATTRIB_MU, ATTRIB_CH, ATTRIB_KK, 0) > 0) {
+				if (test_attrib3(hero, ATTRIB_MU, ATTRIB_CH, ATTRIB_KK, 0) > 0) {
 					/* Success */
 
 					/* cap the converted AE such that at least 5 LE remain .*/
-					if (host_readws(hero + HERO_LE) <= ae + 8) {
-						ae = host_readws(hero + HERO_LE) - 8;
+					if (hero->le <= ae + 8) {
+						ae = hero->le - 8;
 					}
 
-					sub_hero_le((struct struct_hero*)hero, ae + 3);
-					add_hero_ae((struct struct_hero*)hero, ae);
+					sub_hero_le(hero, ae + 3);
+					add_hero_ae(hero, ae);
 				} else {
 					/* Failed, print only a message */
-					sprintf(g_dtp2, get_ttx(795), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(795), hero->alias);
 					GUI_output(g_dtp2);
 				}
 			}
@@ -309,53 +310,56 @@ signed short use_magic(Bit8u* hero)
 		case 2: {
 			/* Staffspell */
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_MAGE) {
+			if (hero->typus != HERO_TYPE_MAGE) {
 				/* only for mages */
 				GUI_output(get_ttx(403));
 				return 0;
 			}
 
-			if (host_readbs(hero + HERO_STAFFSPELL_LVL) == 7) {
+			if (hero->staff_level == 7) {
 				/* Original-Bug: This never happens.
 				 * The highest possible staff spell is the 4th one, since the 5th staff spell has handicap 99.
 				 * The check should ask for '== 4' instead. */
 				GUI_output(get_ttx(335));
 			} else {
 
-				if (g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost <= host_readws(hero + HERO_AE)) {
+				if (g_staffspell_descriptions[hero->staff_level].ae_cost <= hero->ae) {
+
 					/* check AE */
 
 					retval = 1;
 
 #if !defined(__BORLANDC__)
-					D1_INFO("%s Probe fuer Stabzauber Nr. %d (%+d)",(char*)(hero + HERO_NAME2), host_readbs(hero + HERO_STAFFSPELL_LVL + 1), g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].handicap);
+					D1_INFO("%s Probe fuer Stabzauber Nr. %d (%+d)", hero->alias, hero->staff_level + 1,
+						       	g_staffspell_descriptions[hero->staff_level].handicap);
 #endif
-					if (test_attrib3((struct struct_hero*)hero,
-							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib1,
-							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib2,
+					if (test_attrib3(hero,
+							g_staffspell_descriptions[hero->staff_level].attrib1,
+							g_staffspell_descriptions[hero->staff_level].attrib2,
 #ifndef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 17: the first attribute is tested twice, the second one is left out */
-							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib2,
+							g_staffspell_descriptions[hero->staff_level].attrib2,
 #else
-							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib3,
+							g_staffspell_descriptions[hero->staff_level].attrib3,
 #endif
-							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].handicap) > 0)
+							g_staffspell_descriptions[hero->staff_level].handicap) > 0)
 					{
 						/* Success */
 
 						/* print a message */
-						sprintf(g_dtp2,	get_ttx(339), host_readbs(hero + HERO_STAFFSPELL_LVL) + 1);
+						sprintf(g_dtp2,	get_ttx(339), hero->staff_level + 1);
 						GUI_output(g_dtp2);
 
-						sub_ae_splash((struct struct_hero*)hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost);
+						sub_ae_splash(hero, g_staffspell_descriptions[hero->staff_level].ae_cost);
 
-						sub_ptr_ws(hero + HERO_AE_ORIG, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_mod);
+						/* REMARK: ae_max or ae */
+						hero->ae_max -= g_staffspell_descriptions[hero->staff_level].ae_mod;
 
 						/* Staffspell level +1 */
-						inc_ptr_bs(hero + HERO_STAFFSPELL_LVL);
+						hero->staff_level++;
 
 						/* set the timer */
-						host_writed(hero + HERO_STAFFSPELL_TIMER, HOURS(12));
+						hero->staffspell_timer = HOURS(12);
 
 						timewarp(HOURS(5));
 					} else {
@@ -363,7 +367,7 @@ signed short use_magic(Bit8u* hero)
 						GUI_output(get_ttx(338));
 
 						/* only half of the AE costs */
-						sub_ae_splash((struct struct_hero*)hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost / 2);
+						sub_ae_splash(hero, g_staffspell_descriptions[hero->staff_level].ae_cost / 2);
 
 						timewarp(HOURS(2));
 					}
@@ -390,19 +394,17 @@ signed short use_magic(Bit8u* hero)
  * \brief   check if a spellclass can be used
  *
  * \param   hero        pointer to the hero
- * \param   spellclass_no the number of the spellclass
+ * \param   spellclass_id the ID of the spellclass
  * \return              0 = can't be used, 1 = can be used
  */
-signed short can_use_spellclass(Bit8u *hero, signed short spellclass_no)
+signed int can_use_spellclass(const struct struct_hero *hero, const signed int spellclass_id)
 {
-	signed short i;
-	signed short first_spell;
+	signed int i;
+	const signed int first_spell = g_spells_index[spellclass_id].first;
 
+	for (i = 0; g_spells_index[spellclass_id].length > i; i++) {
 
-	first_spell = g_spells_index[spellclass_no].first;
-	for (i = 0; g_spells_index[spellclass_no].length > i; i++) {
-
-		if ((host_readbs(hero + HERO_SPELLS + first_spell + i) >= -5) &&
+		if ((hero->spells[first_spell + i] >= -5) &&
 			((g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use == 1)) ||
 			(!g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use != 1))))
 		{
@@ -414,7 +416,7 @@ signed short can_use_spellclass(Bit8u *hero, signed short spellclass_no)
 	return 0;
 }
 
-signed short select_spell(Bit8u *hero, signed short show_vals)
+signed int select_spell(struct struct_hero *hero, signed int show_vals)
 {
 	signed short l_di;
 	signed short answer1;
@@ -431,7 +433,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 	}
 
 	/* only for magic users */
-	if (host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH) {
+	if (hero->typus < HERO_TYPE_WITCH) {
 		GUI_output(get_ttx(330));
 		return -2;
 	}
@@ -440,13 +442,13 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 		strcpy(g_text_output_buf, get_ttx(205));
 
-		if (host_readbs(hero + HERO_SP_RISE) > 1) {
+		if (hero->spell_incs > 1) {
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
 		sprintf(g_dtp2,	get_ttx(204),
-			(host_readbs(hero + HERO_SP_RISE) > 1) ? get_ttx(305) : get_ttx(304),
-			host_readbs(hero + HERO_SP_RISE), g_text_output_buf);
+			(hero->spell_incs > 1) ? get_ttx(305) : get_ttx(304),
+			hero->spell_incs, g_text_output_buf);
 
 		answer1 = GUI_radio(g_dtp2, 12,
 					get_ttx(192), get_ttx(193),
@@ -469,12 +471,12 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 		}
 
 		answer1 = GUI_radio(g_dtp2, 12,
-					g_radio_name_list[0], g_radio_name_list[1],
-					g_radio_name_list[2], g_radio_name_list[3],
-					g_radio_name_list[4], g_radio_name_list[5],
-					g_radio_name_list[6], g_radio_name_list[7],
-					g_radio_name_list[8], g_radio_name_list[9],
-					g_radio_name_list[10], g_radio_name_list[11]) - 1;
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6], g_radio_name_list[7],
+				g_radio_name_list[8], g_radio_name_list[9],
+				g_radio_name_list[10], g_radio_name_list[11]) - 1;
 	}
 
 	if (answer1 != -2) {
@@ -483,8 +485,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 			/* this cant use any spells of this class */
 
-			sprintf(g_dtp2, get_ttx(559), (char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2, get_ttx(559), hero->alias);
 			GUI_output(g_dtp2);
 
 			retval = -2;
@@ -500,17 +501,17 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 					sprintf(g_radio_name_list[l_di], (char*)str_val.a,
 						get_ttx(first_spell + l_di + 106),
-						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
+						hero->spells[first_spell + l_di]);
 				} else if (
 					((g_in_fight && (g_spell_descriptions[first_spell + l_di].where_to_use == 1)) ||
 					(!g_in_fight && (g_spell_descriptions[first_spell + l_di].where_to_use != 1))) &&
-					(host_readbs(hero + HERO_SPELLS + first_spell + l_di) >= -5))
+					(hero->spells[first_spell + l_di] >= -5))
 				{
 
 					if (show_vals == 2) {
 						sprintf(g_radio_name_list[l_di], (char*)str_val.a,
 							get_ttx(first_spell + l_di + 106),
-							host_readbs(hero + HERO_SPELLS + first_spell + l_di));
+							hero->spells[first_spell + l_di]);
 					} else {
 						sprintf(g_radio_name_list[l_di], (char*)str.a, get_ttx(first_spell + l_di + 106));
 					}
@@ -518,7 +519,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 					sprintf(g_radio_name_list[l_di], (char*)col_str_val.a,
 						get_ttx(first_spell + l_di + 106),
-						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
+						hero->spells[first_spell + l_di]);
 				} else {
 					sprintf(g_radio_name_list[l_di], (char*)col_str.a, get_ttx(first_spell + l_di + 106));
 				}
@@ -535,10 +536,10 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 					g_radio_name_list[14], g_radio_name_list[15]);
 
 			if (retval != -1) {
-				if ((host_readbs((retval + first_spell) + hero + HERO_TA_RISE) < -5) &&
-					(show_vals == 0))
+
+				if ((hero->spells[retval + first_spell - 1] < -5) && (show_vals == 0))
 				{
-					sprintf(g_dtp2,	get_ttx(560), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_ttx(560), hero->alias);
 					GUI_output(g_dtp2);
 					retval = -1;
 
@@ -667,7 +668,7 @@ signed short select_magic_user(void)
 
 	if (answer != -1) {
 		/* valid answer => cast spell */
-		return use_spell(get_hero(answer), 1, 0);
+		return use_spell((struct struct_hero*)get_hero(answer), 1, 0);
 	}
 
 	/* abort with error message */
@@ -681,7 +682,7 @@ signed short select_magic_user(void)
  * \param   selection_menu	1: select spell from menu / 0: spell is preselected in HERO_SPELL_ID
  * \param   handicap		modifier for the spell cast
  */
-signed short use_spell(Bit8u* hero, signed short selection_menu, signed char handicap)
+signed int use_spell(struct struct_hero* hero, const signed int selection_menu, signed char handicap)
 {
 	signed short retval = 1;
 	signed short spell_id;
@@ -698,7 +699,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 	struct dungeon_door *ptr_doors;
 #endif
 
-	if (!check_hero(hero) && !hero_renegade(hero)) {
+	if (!check_hero((Bit8u*)hero) && !hero_renegade((Bit8u*)hero)) {
 
 		return 0;
 	}
@@ -716,7 +717,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 			spell_description = &g_spell_descriptions[spell_id];
 
 			/* reset the spelltarget of the hero */
-			host_writeb(hero + HERO_ENEMY_ID, 0);
+			hero->enemy_id = 0;
 
 			if (spell_description->target_type && (spell_description->target_type != 4)) {
 
@@ -726,9 +727,9 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 				} else {
 
-					host_writeb(hero + HERO_ENEMY_ID, select_hero_from_group(get_ttx(47)) + 1);
+					hero->enemy_id = select_hero_from_group(get_ttx(47)) + 1;
 
-					if (host_readbs(hero + HERO_ENEMY_ID) <= 0) {
+					if (hero->enemy_id <= 0) {
 						spell_id = -1;
 					}
 				}
@@ -736,7 +737,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 		}
 
 	} else {
-		spell_id = host_readbs(hero + HERO_SPELL_ID);
+		spell_id = hero->spell_id;
 	}
 
 	if (spell_id > 0) {
@@ -793,12 +794,12 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 			}
 #endif
 
-			g_spelltest_result = test_spell((struct struct_hero*)hero, spell_id, handicap);
+			g_spelltest_result = test_spell(hero, spell_id, handicap);
 
 			if (g_spelltest_result == -99) {
 
 				/* prepare output */
-				sprintf(g_dtp2, get_ttx(607), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(607), hero->alias);
 
 				if (!g_in_fight) {
 					GUI_output(g_dtp2);
@@ -810,7 +811,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 				strcpy(g_dtp2, get_ttx(606));
 
-				sub_ae_splash((struct struct_hero*)hero, get_spell_cost(spell_id, 1)); /* spell failed -> half AE cost */
+				sub_ae_splash(hero, get_spell_cost(spell_id, 1)); /* spell failed -> half AE cost */
 
 				if (!g_in_fight) {
 					GUI_output(g_dtp2);
@@ -819,7 +820,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				retval = 0;
 			} else {
 				/* set global spelluser variable */
-				g_spelluser = (struct struct_hero*)hero;
+				g_spelluser = hero;
 
 				ae_cost = get_spell_cost(spell_id, 0); /* spell successful -> full AE cost */
 				g_spell_special_aecost = -1;
@@ -850,13 +851,13 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				} else if (g_spell_special_aecost == -2) {
 
 					strcpy(g_dtp2, get_ttx(606));
-					sub_ae_splash((struct struct_hero*)hero, get_spell_cost(spell_id, 1));
+					sub_ae_splash(hero, get_spell_cost(spell_id, 1));
 					retval = 0;
 
 				} else if (g_spell_special_aecost != -1) {
-					sub_ae_splash((struct struct_hero*)hero, g_spell_special_aecost);
+					sub_ae_splash(hero, g_spell_special_aecost);
 				} else {
-					sub_ae_splash((struct struct_hero*)hero, ae_cost);
+					sub_ae_splash(hero, ae_cost);
 				}
 
 				if (!g_in_fight) {
@@ -866,9 +867,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 					if (retval > 0) {
 						play_voc(ARCHIVE_FILE_FX17_VOC);
 
-						if ((host_readbs(hero + HERO_ENEMY_ID) < 10) &&
-							(host_readbs(hero + HERO_ENEMY_ID) > 0) &&
-							(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+						if ((hero->enemy_id < 10) && (hero->enemy_id > 0) && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 						{
 							magic_heal_ani(hero);
 						}

@@ -2808,7 +2808,7 @@ void sub_mod_timers(Bit32s val)
 					}
 
 					if (reset_target) {
-						host_writeb(get_hero(h_index) + HERO_TIMER_ID, 0);
+						((struct struct_hero*)get_hero(h_index))->timer_id = 0;
 					}
 				} else {
 #if !defined(__BORLANDC__)
@@ -2912,7 +2912,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 				}
 			}
 
-			host_writeb(get_hero(who) + HERO_TIMER_ID, target);
+			((struct struct_hero*)get_hero(who))->timer_id = target;
 		}
 
 		gs_modification_timers[slot_no].target = target;

@@ -404,7 +404,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 							hero_bargain = (struct struct_hero*)get_hero(answer);
 
-							l12 = bargain((Bit8u*)hero_bargain, 1, price, percent, 2) > 0 ? 1 : 0;
+							l12 = bargain(hero_bargain, 1, price, percent, 2) > 0 ? 1 : 0;
 						}
 
 						if (l12 > 0) {

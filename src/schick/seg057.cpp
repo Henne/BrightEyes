@@ -66,7 +66,7 @@ void sell_screen(struct shop_descr *shop_descr)
 	Bit32s p_money;
 	Bit32s price = 0;
 	signed short l12 = 0;
-	Bit8u *hero1;
+	struct struct_hero *hero1;
 	struct struct_hero *hero2;
 	struct struct_hero *hero3;
 	signed short width;
@@ -132,7 +132,7 @@ void sell_screen(struct shop_descr *shop_descr)
 					break;
 				}
 
-				hero1 = get_hero(hero_pos);
+				hero1 = (struct struct_hero*)get_hero(hero_pos);
 
 				deselect_hero_icon(hero_pos_old);
 				select_hero_icon(hero_pos);
@@ -146,7 +146,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 				l20 = 0;
 				for (l_di = 0; l_di < NR_HERO_INVENTORY_SLOTS; l_di++) {
-					if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * l_di) != ITEM_NONE) {
+					if (hero1->inventory[l_di].item_id != ITEM_NONE) {
 						insert_sell_items(shop_descr, hero1, l_di, l20++);
 					}
 				}
@@ -202,7 +202,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 						if (item_stackable(get_itemsdat(j))) {
 
-							if ((nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)g_sellitems + 7 * answer + 6))) > 1)
+							if ((nice = hero1->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
 							{
 								my_itoa(nice, g_dtp2, 10);
 
@@ -327,7 +327,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 					if (tmp[hero_pos][l15] != 0) {
 
-						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
+						if (item_stackable(get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
 
 							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
 
@@ -337,8 +337,8 @@ void sell_screen(struct shop_descr *shop_descr)
 								nice = 0;
 							}
 
-							if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) < nice) {
-								nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15);
+							if (hero1->inventory[l15].quantity < nice) {
+								nice = hero1->inventory[l15].quantity;
 							}
 
 							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
@@ -358,7 +358,7 @@ void sell_screen(struct shop_descr *shop_descr)
 									nice * g_price_modificator) / 4L;
 						}
 					} else {
-						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
+						if (item_stackable(get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
 
 							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
 
@@ -368,8 +368,8 @@ void sell_screen(struct shop_descr *shop_descr)
 								nice = 0;
 							}
 
-							if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) < nice) {
-								nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15);
+							if (hero1->inventory[l15].quantity < nice) {
+								nice = hero1->inventory[l15].quantity;
 							}
 
 							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
@@ -429,7 +429,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 					hero2 = (struct struct_hero*)get_hero(answer);
 
-					l12 = bargain((Bit8u*)hero2, nice, price, percent, 0) > 0 ? 1 : 0;
+					l12 = bargain(hero2, nice, price, percent, 0) > 0 ? 1 : 0;
 				}
 
 				if (l12 > 0) {
@@ -443,7 +443,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 								item_id = hero3->inventory[l_di].item_id;
 
-								drop_item((struct struct_hero*)hero3, l_di, tmp[items_x][l_di]);
+								drop_item(hero3, l_di, tmp[items_x][l_di]);
 
 								g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] - tmp[items_x][l_di];
 
@@ -501,7 +501,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 			if ((hero3->typus != HERO_TYPE_NONE) && (hero3->group_no == gs_current_group))
 			{
-				hero1 = get_hero(hero_pos);
+				hero1 = (struct struct_hero*)get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);
 				select_hero_icon(hero_pos);
 				hero_pos_old = hero_pos;
@@ -517,7 +517,7 @@ void sell_screen(struct shop_descr *shop_descr)
 			done = 1;
 		}
 
-		if (host_readbs(hero1 + HERO_NR_INVENTORY_SLOTS_FILLED) == 0) {
+		if (hero1->items_num == 0) {
 			done = 1;
 		}
 	}

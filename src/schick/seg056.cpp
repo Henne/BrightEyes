@@ -499,7 +499,7 @@ void buy_screen(void)
 
 					hero1 = (struct struct_hero*)get_hero(l3);
 
-					offended = bargain((Bit8u*)hero1, nice, price, percent, 0) > 0 ? 1 : 0;
+					offended = bargain(hero1, nice, price, percent, 0) > 0 ? 1 : 0;
 				}
 
 				if (offended > 0) {
@@ -588,12 +588,12 @@ void buy_screen(void)
  * \param   item_pos    position of the item in the heroes inventory
  * \param   shop_pos    position if the item in the sales array
  */
-void insert_sell_items(struct shop_descr *shop_descr, Bit8u *hero, signed short item_pos, signed short shop_pos)
+void insert_sell_items(struct shop_descr *shop_descr, struct struct_hero *hero, signed short item_pos, signed short shop_pos)
 {
 	signed short item_id;
 	signed short sellable = 0;
 
-	item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos);
+	item_id = hero->inventory[item_pos].item_id;
 
 	g_sellitems[shop_pos].item_id = item_id;
 
@@ -619,8 +619,7 @@ void insert_sell_items(struct shop_descr *shop_descr, Bit8u *hero, signed short 
 		g_sellitems[shop_pos].shop_price = 0;
 		g_sellitems[shop_pos].price_unit = 1;
 
-	} else if (((struct struct_hero*)hero)->inventory[item_pos].flags.broken ||
-			 host_readbs(hero + (HERO_INVENTORY + INVENTORY_RS_LOST) + SIZEOF_INVENTORY * item_pos) != 0)
+	} else if (hero->inventory[item_pos].flags.broken || (hero->inventory[item_pos].rs_lost != 0))
 	{
 		/* this item is broken or RS of an armor got degraded => 1 HELLER */
 		g_sellitems[shop_pos].shop_price = 1;

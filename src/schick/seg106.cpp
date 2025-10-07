@@ -265,7 +265,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 }
 
 /* Borlandified and nearly identical */
-void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short pos2)
+void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct struct_hero *hero2, const signed int pos2)
 {
 	signed short l_di;
 	register signed short pos1 = old_pos1;
@@ -280,7 +280,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 	struct inventory tmp;
 
 
-	item1 = host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + pos1 * SIZEOF_INVENTORY);
+	item1 = hero1->inventory[pos1].item_id;
 
 	/* check if item1 is an item */
 	if (item1 == 0) {
@@ -289,7 +289,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 		return;
 	}
 
-	item2 = host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + pos2 * SIZEOF_INVENTORY);
+	item2 = hero2->inventory[pos2].item_id;
 
 	item1_desc = get_itemsdat(item1);
 	item2_desc = get_itemsdat(item2);
@@ -312,10 +312,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	/* identical until here */
 	if (pos2 < 7) {
-		if (!can_hero_use_item((struct struct_hero*)hero2, item1)) {
+		if (!can_hero_use_item(hero2, item1)) {
 
-			sprintf(g_dtp2,	get_ttx(221), (char*)(hero2 + HERO_NAME2),
-				get_ttx((host_readbs(hero2 + HERO_SEX) ? 593 : 9) + host_readbs(hero2 + HERO_TYPE)),
+			sprintf(g_dtp2,	get_ttx(221), hero2->alias, get_ttx((hero2->sex ? 593 : 9) + hero2->typus),
 				GUI_names_grammar(2, item1, 0));
 
 			GUI_output(g_dtp2);
@@ -333,9 +332,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 			GUI_output(g_dtp2);
 			return;
 
-		} else if (two_hand_collision((struct struct_hero*)hero2, item1, pos2)) {
+		} else if (two_hand_collision(hero2, item1, pos2)) {
 
-			sprintf(g_dtp2, get_tx2(67), (char*)(hero2 + HERO_NAME2));
+			sprintf(g_dtp2, get_tx2(67), hero2->alias);
 			GUI_output(g_dtp2);
 			return;
 		}
@@ -350,10 +349,10 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	if ((item2 != 0) && (pos1 < 7)) {
 
-		if (!can_hero_use_item((struct struct_hero*)hero1, item2)) {
+		if (!can_hero_use_item(hero1, item2)) {
 
-			sprintf(g_dtp2,	get_ttx(221), (char*)(hero1 + HERO_NAME2),
-				get_ttx((host_readbs(hero1 + HERO_SEX) ? 593 : 9) + host_readbs(hero1 + HERO_TYPE)),
+			sprintf(g_dtp2,	get_ttx(221), hero1->alias,
+				get_ttx((hero1->sex ? 593 : 9) + hero1->typus),
 				(char*)GUI_names_grammar(2, item2, 0));
 
 #if defined(__BORLANDC__)
@@ -388,37 +387,35 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 			flag = 0;
 			l_di = 1;
 
-			if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) > 1) {
+			if (hero1->inventory[pos1].quantity > 1) {
 
-				sprintf(g_dtp2,	get_ttx(210),
-					host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
-					(char*)GUI_names_grammar(6, item1, 0),
-					(char*)hero2 + HERO_NAME2);
+				sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
+					(char*)GUI_names_grammar(6, item1, 0), hero2->alias);
 
 
 				l_di = GUI_input(g_dtp2, 2);
 			}
 
-			if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) < l_di) {
-				l_di = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY);
+			if (hero1->inventory[pos1].quantity < l_di) {
+				l_di = hero1->inventory[pos1].quantity;
 			}
 
-			if ((l_di > 0) && (host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY) < 99)) {
+			if ((l_di > 0) && (hero2->inventory[pos2].quantity < 99)) {
 
-				if (host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY) + l_di > 99) {
-					l_di = 99 - host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY);
+				if (hero2->inventory[pos2].quantity + l_di > 99) {
+					l_di = 99 - hero2->inventory[pos2].quantity;
 				}
 
-				while ((host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + host_readws(item1_desc + 5) * l_di) && l_di > 0) {
+				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + 5) * l_di) && (l_di > 0)) {
 					l_di--;
 				}
 
 				if (l_di > 0) {
-					add_ptr_ws(hero2 + HERO_LOAD, host_readws(item1_desc + 5) * l_di);
-					add_ptr_ws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY, l_di);
-					drop_item((struct struct_hero*)hero1, pos1, l_di);
+					hero2->load += host_readws(item1_desc + 5) * l_di;
+					hero2->inventory[pos2].quantity += l_di;
+					drop_item(hero1, pos1, l_di);
 				} else {
-					sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+					sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 					GUI_output(g_dtp2);
 				}
 			}
@@ -427,78 +424,63 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 		if (flag != 0) {
 
 			desc1_5 = (item_stackable(item1_desc)) ?
-				host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) * host_readw(item1_desc + 5) :
+				hero1->inventory[pos1].quantity * host_readw(item1_desc + 5) :
 				host_readws(item1_desc + 5);
 
 			desc2_5 = (item_stackable(item2_desc)) ?
-				host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY) * host_readw(item2_desc + 5) :
+				hero2->inventory[pos2].quantity * host_readw(item2_desc + 5) :
 				host_readws(item2_desc + 5);
 
-			if (host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + desc1_5 - desc2_5) {
+			if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + desc1_5 - desc2_5) {
 
-				sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+				sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 				GUI_output(g_dtp2);
 
 			} else {
 				if (pos1 < 7) {
-					unequip((struct struct_hero*)hero1, item1, pos1);
-					add_equip_boni((struct struct_hero*)hero2, (struct struct_hero*)hero1, item2, pos2, pos1);
+					unequip(hero1, item1, pos1);
+					add_equip_boni(hero2, hero1, item2, pos2, pos1);
 				}
 
 				if (pos2 < 7) {
-					unequip((struct struct_hero*)hero2, item2, pos2);
-					add_equip_boni((struct struct_hero*)hero1, (struct struct_hero*)hero2, item1, pos1, pos2);
+					unequip(hero2, item2, pos2);
+					add_equip_boni(hero1, hero2, item1, pos1, pos2);
 				}
 
 				/* exchange two items */
-#if !defined(__BORLANDC__)
-				struct_copy((Bit8u*)&tmp, hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY, SIZEOF_INVENTORY);
-#else
-				tmp = *(struct inventory*)(hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY);
-#endif
+				tmp = hero2->inventory[pos2]; /* struct_copy */
 
-				sub_ptr_ws(hero2 + HERO_LOAD, desc2_5);
+				hero2->load -= desc2_5;
 
-#if !defined(__BORLANDC__)
-				struct_copy(hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY,
-						hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY,
-						SIZEOF_INVENTORY);
-#else
-				*(struct inventory*)(hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY) =
-					*(struct inventory*)(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY);
-#endif
+				hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
 
-				add_ptr_ws(hero2 + HERO_LOAD, desc1_5);
-				sub_ptr_ws(hero1 + HERO_LOAD, desc1_5);
+				hero2->load += desc1_5;
+				hero1->load -= desc1_5;
 
-#if !defined(__BORLANDC__)
-				struct_copy(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY, (Bit8u*)&tmp, SIZEOF_INVENTORY);
-#else
-				*(struct inventory*)(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY) = tmp;
-#endif
+				hero1->inventory[pos1] = tmp; /* struct_copy */
 
-				add_ptr_ws(hero1 + HERO_LOAD, desc2_5);
+				hero1->load += desc2_5;
 
 				/* item counter */
-				dec_ptr_bs(hero1 + HERO_NR_INVENTORY_SLOTS_FILLED);
-				inc_ptr_bs(hero2 + HERO_NR_INVENTORY_SLOTS_FILLED);
+				hero1->items_num--;
+				hero2->items_num++;
 
 				/* special items */
 				if (item2 == ITEM_SICKLE_MAGIC) {
-					host_writeb(hero1 + (HERO_TALENTS + TA_PFLANZENKUNDE), host_readbs(hero1 + (HERO_TALENTS + TA_PFLANZENKUNDE)) + 3);
-					host_writeb(hero2 + (HERO_TALENTS + TA_PFLANZENKUNDE), host_readbs(hero2 + (HERO_TALENTS + TA_PFLANZENKUNDE)) + -3);
+					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] + 3;
+					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] - 3;
 				}
 				if (item2 == ITEM_AMULET_BLUE) {
-					host_writeb(hero1 + HERO_MR, host_readbs(hero1 + HERO_MR) + 5);
-					host_writeb(hero2 + HERO_MR, host_readbs(hero2 + HERO_MR) + -5);
+					hero1->mr = hero1->mr + 5;
+					hero2->mr = hero2->mr - 5;
 				}
 				if (item1 == ITEM_SICKLE_MAGIC) {
-					host_writeb(hero1 + (HERO_TALENTS + TA_PFLANZENKUNDE), host_readbs(hero1 + (HERO_TALENTS + TA_PFLANZENKUNDE)) + -3);
-					host_writeb(hero2 + (HERO_TALENTS + TA_PFLANZENKUNDE), host_readbs(hero2 + (HERO_TALENTS + TA_PFLANZENKUNDE)) + 3);
+					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
+					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
 				}
 				if (item1 == ITEM_AMULET_BLUE) {
-					host_writeb(hero1 + HERO_MR, host_readbs(hero1 + HERO_MR) + -5);
-					host_writeb(hero2 + HERO_MR, host_readbs(hero2 + HERO_MR) + 5);
+					hero1->mr = hero1->mr - 5;
+					hero2->mr = hero2->mr + 5;
 				}
 			}
 		}
@@ -506,44 +488,39 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 		l_di = 1;
 
-		if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) > 1) {
+		if (hero1->inventory[pos1].quantity > 1) {
 
-			sprintf(g_dtp2,	get_ttx(210),
-				host_readws(hero1+ (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
-				(char*)(GUI_names_grammar(6, item1, 0)), (char*)hero2 + HERO_NAME2);
+			sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
+				(char*)GUI_names_grammar(6, item1, 0), hero2->alias);
 
 
 			l_di = GUI_input(g_dtp2, 2);
 		}
 
-		if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) < l_di) {
-			l_di = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY);
+		if (hero1->inventory[pos1].quantity < l_di) {
+			l_di = hero1->inventory[pos1].quantity;
 		}
 
-		while ((host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di) && l_di > 0) {
+		while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di) && (l_di > 0)) {
 			l_di--;
 		}
 
 		if (l_di > 0) {
-#if !defined(__BORLANDC__)
-			struct_copy(hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY,
-				hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY, SIZEOF_INVENTORY);
-#else
-			*(struct inventory*)(hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY) =
-					*(struct inventory*)(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY);
-#endif
-			add_ptr_ws(hero2 + HERO_LOAD, host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di);
-			host_writews(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY, l_di);
-			drop_item((struct struct_hero*)hero1, pos1, l_di);
+
+			hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
+
+			hero2->load += host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di;
+			hero2->inventory[pos2].quantity = l_di;
+			drop_item(hero1, pos1, l_di);
 
 		} else {
-			sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+			sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 			GUI_output(g_dtp2);
 		}
 
-	} else if (host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + host_readws(item1_desc + 5)) {
+	} else if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + 5)) {
 
-		sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+		sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 		GUI_output(g_dtp2);
 
 	} else {
@@ -551,39 +528,34 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 		/* do the change */
 
 		if (pos1 < 7) {
-			unequip((struct struct_hero*)hero1, item1, pos1);
+			unequip(hero1, item1, pos1);
 		}
 
 		if (pos2 < 7) {
-			add_equip_boni((struct struct_hero*)hero1, (struct struct_hero*)hero2, item1, pos1, pos2);
+			add_equip_boni(hero1, hero2, item1, pos1, pos2);
 		}
 
-#if !defined(__BORLANDC__)
-		struct_copy(hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY,
-			hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY, SIZEOF_INVENTORY);
-#else
-		*(struct inventory*)(hero2 + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY) =
-			*(struct inventory*)(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY);
-#endif
+		hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
+
 		/* adjust weight */
-		add_ptr_ws(hero2 + HERO_LOAD, host_readws(item1_desc + 5));
-		sub_ptr_ws(hero1 + HERO_LOAD, host_readws(item1_desc + 5));
+		hero2->load += host_readws(item1_desc + 5);
+		hero1->load -= host_readws(item1_desc + 5);
 
 		/* adjust item counter */
-		dec_ptr_bs(hero1 + HERO_NR_INVENTORY_SLOTS_FILLED);
-		inc_ptr_bs(hero2 + HERO_NR_INVENTORY_SLOTS_FILLED);
+		hero1->items_num--;
+		hero2->items_num++;
 
 		/* clear slot */
-		memset(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY, 0, SIZEOF_INVENTORY);
+		memset(&hero1->inventory[pos1], 0, SIZEOF_INVENTORY);
 
 		/* special items */
 		if (item1 == ITEM_SICKLE_MAGIC) {
-			host_writeb(hero1 + (HERO_TALENTS + TA_PFLANZENKUNDE), host_readbs(hero1 + (HERO_TALENTS + TA_PFLANZENKUNDE)) + -3);
-			host_writeb(hero2 + (HERO_TALENTS + TA_PFLANZENKUNDE), host_readbs(hero2 + (HERO_TALENTS + TA_PFLANZENKUNDE)) + 3);
+			hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
+			hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
 		}
 		if (item1 == ITEM_AMULET_BLUE) {
-			host_writeb(hero1 + HERO_MR, host_readbs(hero1 + HERO_MR) + -5);
-			host_writeb(hero2 + HERO_MR, host_readbs(hero2 + HERO_MR) + 5);
+			hero1->mr = hero1->mr - 5;
+			hero2->mr = hero2->mr + 5;
 		}
 	}
 }

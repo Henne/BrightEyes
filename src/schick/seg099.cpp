@@ -41,7 +41,7 @@ void spell_beherrschung(void)
 	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 	if (!hero_renegade(get_spelltarget())) {
-		g_spell_special_aecost = (-2);
+		g_spell_special_aecost = -2;
 	} else {
 		if (get_spelltarget() == get_spelluser()) {
 			strcpy(g_dtp2, get_tx(0));
@@ -64,7 +64,7 @@ void spell_destructibo(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Destructibo\" ist nicht implementiert\n");
 #endif
-	g_spell_special_aecost = (-2);
+	g_spell_special_aecost = -2;
 }
 
 void spell_gardanium(void)
@@ -89,7 +89,7 @@ void spell_gardanium(void)
 
 			gs_gardanium_used_ae += answer;
 			/* set AE costs */
-			g_spell_special_aecost = (answer);
+			g_spell_special_aecost = answer;
 			/* prepare the message */
 			strcpy(g_dtp2, get_tx(7));
 		} else {
@@ -846,14 +846,14 @@ void spell_hexenspeichel(void)
 
 void spell_klarum_purum(void)
 {
-	signed short poison;
+	signed short poison_id;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+	g_spelltarget = get_hero(((struct struct_hero*)get_spelluser())->enemy_id - 1);
 
-	poison = hero_is_poisoned((struct struct_hero*)get_spelltarget());
+	poison_id = hero_is_poisoned((struct struct_hero*)get_spelltarget());
 
-	if (!poison) {
+	if (!poison_id) {
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(21), ((struct struct_hero*)get_spelltarget())->alias);
@@ -862,15 +862,15 @@ void spell_klarum_purum(void)
 	}
 
 	/* AE-cost = poison cost */
-	g_spell_special_aecost = (g_poison_prices[poison]);
+	g_spell_special_aecost = g_poison_prices[poison_id];
 
-	if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
+	if (((struct struct_hero*)get_spelluser())->ae < g_spell_special_aecost) {
 		/* not enough AE */
 		g_spell_special_aecost = -2;
 	} else {
 		/* reset poison */
-		host_writeb(get_spelltarget() + poison * 5 + 0xd7, 0);
-		host_writeb(get_spelltarget() + poison * 5 + 0xd6, 1);
+		((struct struct_hero*)get_spelltarget())->poison[poison_id][1] = 0;
+		((struct struct_hero*)get_spelltarget())->poison[poison_id][0] = 1;
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(22), ((struct struct_hero*)get_spelltarget())->alias);
@@ -880,10 +880,10 @@ void spell_klarum_purum(void)
 void spell_ruhe_koerper(void)
 {
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+	g_spelltarget = get_hero(((struct struct_hero*)get_spelluser())->enemy_id - 1);
 
 	/* set the flag */
-	host_writeb(get_spelltarget() + HERO_RUHE_KOERPER, 1);
+	((struct struct_hero*)get_spelltarget())->ruhe_koerper = 1;
 
 	/* prepare message */
 	sprintf(g_dtp2, get_tx(51), ((struct struct_hero*)get_spelltarget())->alias);
@@ -952,9 +952,9 @@ char* spell_analues(void)
 	/* If the player cancels item selection or has no items select_item_to_drop() returns -1.
 	The original uses the return value to calculate an index, whithout checking for this. */
 	if (item_pos == -1) item_id = 0;
-	else item_id = host_readws(get_spelluser() + SIZEOF_INVENTORY * item_pos + HERO_INVENTORY + INVENTORY_ITEM_ID);
+	else item_id = ((struct struct_hero*)get_spelluser())->inventory[item_pos].item_id;
 #else
-	item_id = host_readws(get_spelluser() + SIZEOF_INVENTORY * item_pos + HERO_INVENTORY + INVENTORY_ITEM_ID);
+	item_id = ((struct struct_hero*)get_spelluser())->inventory[item_pos].item_id;
 #endif
 
 	strcpy(g_text_output_buf, get_tx(52));
@@ -979,7 +979,7 @@ char* spell_analues(void)
 					/* copy the matching result string */
 					strcpy(g_text_output_buf, get_tx(g_analues_items[i].text_id));
 
-					or_ptr_bs(get_spelluser() + item_pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
+					((struct struct_hero*)get_spelluser())->inventory[item_pos].flags.magic_revealed = 1;
 					break;
 				} else {
 					/* nothing found string */

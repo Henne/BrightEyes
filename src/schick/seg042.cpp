@@ -702,7 +702,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 				*g_dtp2 = '\0';
 
-				l15 = use_spell(hero, 0, 0);
+				l15 = use_spell((struct struct_hero*)hero, 0, 0);
 
 				clear_anisheets();
 
