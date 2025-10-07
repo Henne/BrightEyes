@@ -253,7 +253,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 	item_p_rh = get_itemsdat(right_hand);
 
-	weapon_type = weapon_check(hero);
+	weapon_type = weapon_check((struct struct_hero*)hero);
 
 	if (weapon_type == -1) {
 		/* not a weapon or a ranged weapon */
@@ -569,38 +569,43 @@ void clear_anisheets(void)
  *	1 = non-broken force weapon (includes ITEM_MAGIC_WAND and ITEM_QUARTERSTAFF),
  *	2 = any other non-broken melee weapon, including WEAPON_TYPE_WAFFENLOS (i.e. ammunition), but no WEAPON_TYPE_SPEER
  */
-signed short weapon_check(Bit8u *hero)
+signed int weapon_check(struct struct_hero *hero)
 {
 	Bit8u *item_p;
 
-	signed short item;
-	signed short l_di;
+	signed int item_id;
+	signed int retval;
 
 	/* get the ID of the equipped weapon */
-	item = host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
+	item_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-	item_p = get_itemsdat(item);
+	item_p = get_itemsdat(item_id);
 
-	if (!item_weapon(item_p) ||
-		inventory_broken(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY) ||
+	if (!item_weapon(item_p) || hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken ||
 		(item_weapon(item_p) &&
 			((host_readbs(item_p + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SCHUSSWAFFE) ||
 			(host_readbs(item_p + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE) ||
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline. */
-			(host_readbs(item_p + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SPEER && item != ITEM_MAGIC_WAND && item != ITEM_QUARTERSTAFF))))
+			(host_readbs(item_p + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SPEER &&
+			(item_id != ITEM_MAGIC_WAND) && (item_id != ITEM_QUARTERSTAFF)))))
 	{
-		l_di = -1;
+		retval = -1;
 	} else {
-		if (is_in_word_array(item, g_force_weapons)) {
-			l_di = 1;
-		} else if (is_in_word_array(item, g_knive_weapons)) {
-			l_di = 0;
+		if (is_in_word_array(item_id, g_force_weapons)) {
+
+			retval = 1;
+
+		} else if (is_in_word_array(item_id, g_knive_weapons)) {
+
+			retval = 0;
+
 		} else {
-			l_di = 2;
+
+			retval = 2;
 		}
 	}
 
-	return l_di;
+	return retval;
 }
 
 #if !defined(__BORLANDC__)

@@ -621,7 +621,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			} else if (selected == FIG_ACTION_CHECK_VALUES) {
 				/* CHECK VALUES / WERTE PRUEFEN */
 
-				rwt1 = weapon_check((Bit8u*)hero);
+				rwt1 = weapon_check(hero);
 
 				if (rwt1 == -1) {
 

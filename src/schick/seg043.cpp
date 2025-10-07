@@ -168,7 +168,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				p_weapon = hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY;
 
-				weapon_type = weapon_check(hero);
+				weapon_type = weapon_check((struct struct_hero*)hero);
 
 				if (weapon_type == -1) {
 					/* no valid weapon == bare hands */

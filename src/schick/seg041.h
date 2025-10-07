@@ -15,7 +15,7 @@ void FIG_damage_enemy(struct enemy_sheet*, Bit16s, signed short);
 /* 0x39 */
 signed short FIG_get_hero_weapon_attack_damage(Bit8u*, Bit8u*, signed short);
 //0x3e
-signed short weapon_check(Bit8u *);
+signed int weapon_check(struct struct_hero*);
 //0x43
 signed short FIG_get_enemy_attack_damage(struct enemy_sheet*, struct enemy_sheet*, signed short);
 //0x48

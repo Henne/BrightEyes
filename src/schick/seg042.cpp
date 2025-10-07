@@ -208,12 +208,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			p_weapon = hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY;
 
-			weapon_type = weapon_check(hero);
+			weapon_type = weapon_check((struct struct_hero*)hero);
 
 			if (target_is_hero != 0) {
 				p_weapon_target = target_hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY;
 
-				weapon_type_target = weapon_check(target_hero);
+				weapon_type_target = weapon_check((struct struct_hero*)target_hero);
 			}
 
 			if (weapon_type == -1) {
