@@ -611,10 +611,6 @@ static inline Bit8u *get_spelluser(void) {
 	return (Bit8u*)M302de::g_spelluser;
 }
 
-static inline Bit8u *get_itemuser(void) {
-	return (Bit8u*)M302de::g_itemuser;
-}
-
 static inline char *get_monname(const int no)
 {
 	if ((0 <= no) && (no < 77))
@@ -758,8 +754,6 @@ static inline char* get_itemname(unsigned short item)
 #define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
 #define get_spelltarget()	((unsigned char*)g_spelltarget)
 #define get_spelluser()		((unsigned char*)g_spelluser)
-
-#define get_itemuser() ((unsigned char*)g_itemuser)
 
 #define get_ttx(no) ((char*)(g_text_ltx_index[(no)]))
 #define get_tx(no) ((char*)(g_tx_index[(no)]))
