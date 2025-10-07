@@ -294,7 +294,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (target_is_hero != 0) {
 
 						if (random_schick(20) <= l11) {
-							damage = FIG_get_hero_weapon_attack_damage(target_hero, hero, 1);
+							damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)target_hero, (struct struct_hero*)hero, 1);
 						}
 
 					} else {
@@ -406,7 +406,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								if (target_is_hero != 0) {
 
-									damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
+									damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_hero, 1);
 
 									if (damage > 0) {
 
@@ -420,7 +420,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 									}
 								} else {
 
-									damage = FIG_get_hero_weapon_attack_damage(hero, (Bit8u*)target_monster, 0);
+									damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_monster, 0);
 
 									if (damage > 0) {
 
@@ -505,7 +505,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					if (target_is_hero != 0) {
 
-						damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
+						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_hero, 1);
 
 						if (damage > 0) {
 
@@ -519,7 +519,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						}
 					} else {
 
-						damage = FIG_get_hero_weapon_attack_damage(hero, (Bit8u*)target_monster, 0);
+						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_monster, 0);
 
 						if (damage > 0 ) {
 
@@ -579,7 +579,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					 * This means that they will always hit (without a skill test) and will do only 1D6 damage.
 					 * found 2016-04-02 by NRS at https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=146051#pid146051
 					 * "Oh mein Gott..." */
-					if (!range_attack_check_ammo(hero, 0)) {
+					if (!range_attack_check_ammo((struct struct_hero*)hero, 0)) {
 						return;
 					}
 #endif
@@ -587,12 +587,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (target_is_hero != 0) {
 
 						/* note that for ranged attacks, the skill test will be done in the following function call. */
-						damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
+						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_hero, 1);
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 32:
 						 * Fix: move the function call after the damage calculation.
 						 */
-						if (!range_attack_check_ammo(hero, 0)) {
+						if (!range_attack_check_ammo((struct struct_hero*)hero, 0)) {
 							return;
 						}
 #endif
@@ -610,12 +610,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					} else {
 
 						/* note that for ranged attacks, the skill test will be done in the following function call. */
-						damage = FIG_get_hero_weapon_attack_damage(hero, (Bit8u*)target_monster, 0);
+						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_monster, 0);
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 32:
 						 * Fix: move the function call after the damage calculation.
 						 */
-						if (!range_attack_check_ammo(hero, 0)) {
+						if (!range_attack_check_ammo((struct struct_hero*)hero, 0)) {
 							return;
 						}
 #endif

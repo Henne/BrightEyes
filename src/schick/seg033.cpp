@@ -235,7 +235,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 #endif
 						update_mouse_cursor();
 					} else {
-						if (range_attack_check_ammo((Bit8u*)hero, 1)) {
+						if (range_attack_check_ammo((struct struct_hero*)hero, 1)) {
 							/* a range weapon */
 							refresh_screen_size();
 #if !defined(__BORLANDC__)

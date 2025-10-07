@@ -264,7 +264,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 						if (random_schick(20) <= defender_at) {
 
 							if (target_is_hero != 0) {
-								damage = FIG_get_hero_weapon_attack_damage(hero, (Bit8u*)monster, 0);
+								damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)monster, 0);
 							} else {
 								damage = FIG_get_enemy_attack_damage(target_enemy, monster, 1);
 							}

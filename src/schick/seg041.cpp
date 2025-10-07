@@ -38,7 +38,7 @@ static signed short msg_counter;
  * \param   arg         0 = drop one unit, 1 = just check, 2 = check with output
  * \return              0 = no ammo / 1 = have ammo
  */
-signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
+signed int range_attack_check_ammo(struct struct_hero *hero, const signed int arg)
 {
 	signed short right_hand;
 	signed short left_hand;
@@ -47,8 +47,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 	retval = 0;
 
 	/* read the item ids from the hands */
-	right_hand = host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
-	left_hand = host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
+	right_hand = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
+	left_hand = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
 
 	switch (right_hand) {
 		case ITEM_SPEAR:		/* Speer */
@@ -70,10 +70,10 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 						g_fig_dropped_counter++;
 					}
 
-					drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
+					drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
 
 					if (left_hand == right_hand) {
-						move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_LEFT_HAND, (struct struct_hero*)hero);
+						move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_LEFT_HAND, hero);
 					}
 
 				}
@@ -86,13 +86,13 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_ARROWS) { /* Pfeil */
 					if (arg != 2) {
 
-						sprintf(g_dtp2, get_tx(8), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(8), hero->alias);
 						GUI_output(g_dtp2);
 					}
 
 				} else {
 					if (!arg) {
-						drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
+						drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 					}
 					retval = 1;
 				}
@@ -103,12 +103,12 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_BOLTS) { /* Bolzen */
 					if (arg != 2) {
 
-						sprintf(g_dtp2, get_tx(9), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(9), hero->alias);
 						GUI_output(g_dtp2);
 					}
 				} else {
 					if (!arg) {
-						drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
+						drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 					}
 					retval = 1;
 				}
@@ -124,12 +124,12 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != 999) {
 					if (arg != 2) {
 
-						sprintf(g_dtp2, get_tx(10), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(10), hero->alias);
 						GUI_output(g_dtp2);
 					}
 				} else {
 					if (!arg) {
-						drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
+						drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 					}
 					retval = 1;
 				}
@@ -223,7 +223,7 @@ void FIG_damage_enemy(struct enemy_sheet *enemy, Bit16s damage, signed short pre
 /*
  *	\param attack_hero	0 = the attacked one is a foe; 1 = the attacked one is a hero
  */
-signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signed short attack_hero)
+signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct struct_hero* target, const signed int attack_hero)
 {
 	signed short damage;
 	signed short damage_mod;
@@ -249,15 +249,15 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		enemy_p = (struct enemy_sheet*)target; /* TODO: to attack an enemy enemy_p should be used instead of target */
 	}
 
-	right_hand = host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
+	right_hand = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
 	item_p_rh = get_itemsdat(right_hand);
 
-	weapon_type = weapon_check((struct struct_hero*)hero);
+	weapon_type = weapon_check(hero);
 
 	if (weapon_type == -1) {
 		/* not a weapon or a ranged weapon */
-		weapon_type = FIG_get_range_weapon_type(hero);
+		weapon_type = FIG_get_range_weapon_type((Bit8u*)hero);
 	}
 
 	/* now depending on the item in the right hand, <weapon_type> is
@@ -280,18 +280,11 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 			/* weapon does ranged damage */
 
-			hero_idx = get_hero_index(hero);
+			hero_idx = get_hero_index((Bit8u*)hero);
 
 			FIG_search_obj_on_cb(hero_idx + 1, &x_hero, &y_hero);
-			FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID), &x_target, &y_target);
+			FIG_search_obj_on_cb(hero->enemy_id, &x_target, &y_target);
 
-#if !defined(__BORLANDC__)
-			/* BE-fix */
-			x_hero = host_readws((Bit8u*)&x_hero);
-			y_hero = host_readws((Bit8u*)&y_hero);
-			x_target = host_readws((Bit8u*)&x_target);
-			y_target = host_readws((Bit8u*)&y_target);
-#endif
 			beeline = calc_beeline(x_hero, y_hero, x_target, y_target);
 
 			if (beeline <= 2) {
@@ -313,7 +306,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			p_rangedtab = &g_ranged_weapons_table[weapon->ranged_index];
 
 			if (attack_hero) {
-				if (host_readbs(target + HERO_TYPE) == HERO_TYPE_DWARF) {
+				if (target->typus == HERO_TYPE_DWARF) {
 					/* ZWERG / DWARF */
 					target_size = 2;
 				} else {
@@ -326,7 +319,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			}
 
 			/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
-			damage_mod = (test_skill((struct struct_hero*)hero,
+			damage_mod = (test_skill(hero,
 						(host_readbs(item_p_rh + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
 					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[distance] : -damage;
@@ -339,7 +332,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		} else {
 			/* weapon does melee damage */
 
-			damage_mod = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)) - weapon->damage_kk_bonus;
+			damage_mod = hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod - weapon->damage_kk_bonus;
 			if (damage_mod > 0) {
 				damage += damage_mod;
 			}
@@ -364,9 +357,9 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			damage = 1000;
 
 			/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
-			drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
-			give_hero_new_item((struct struct_hero*)hero, ITEM_DAGGER, 1 ,1); /* TODO: what if no free knapsack slot? */
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DAGGER), (struct struct_hero*)hero);
+			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
+			give_hero_new_item(hero, ITEM_DAGGER, 1, 1); /* TODO: what if no free knapsack slot? */
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos((Bit8u*)hero, ITEM_DAGGER), hero);
 
 		} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
 
@@ -375,9 +368,9 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			damage = 1000;
 
 			/* drop the KUKRISMENGBILAR and equip a normal MENGBILAR  */
-			drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
-			give_hero_new_item((struct struct_hero*)hero, ITEM_MENGBILAR, 1 ,1); /* TODO: what if no free knapsack slot? */
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), (struct struct_hero*)hero);
+			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
+			give_hero_new_item(hero, ITEM_MENGBILAR, 1, 1); /* TODO: what if no free knapsack slot? */
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos((Bit8u*)hero, ITEM_MENGBILAR), hero);
 
 		} else if ((right_hand == ITEM_SILVER_MACE) && (enemy_gfx_id == 0x1c)) {
 
@@ -391,46 +384,47 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		}
 	}
 
-	damage += host_readbs(hero + HERO_SAFTKRAFT);
+	damage += hero->saftkraft;
 
 	if (damage > 0) {
 
-		if (inventory_poison_expurgicum(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID)) {
+		if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.poison_expurgicum) {
+
 			damage += dice_roll(1, 6, 2); /* D6 + 2 damage */
-			and_ptr_bs(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0xdf); /* unset 'poison_expurgicum' flag */
+			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.poison_expurgicum = 0;
 		}
 
-		if (inventory_poison_vomicum(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
+		if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.poison_vomicum) {
+
 			damage += dice_roll(1, 20, 5); /* D20 + 5 damage */
-			and_ptr_bs(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0xbf); /* unset 'poison_vomicum' set */
+			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.poison_vomicum = 0;
 		}
 
-		if (host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE) != POISON_TYPE_NONE) {
+		if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type != POISON_TYPE_NONE) {
 
-			if (host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE) == POISON_TYPE_ANGSTGIFT) {
+			if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type == POISON_TYPE_ANGSTGIFT) {
 
 				enemy_p->flags.scared = 1;
 				enemy_p->flags.renegade = 0;
 
 			} else {
 				/* the following line is the source for the totally excessive and unbalanced poison damage */
-
-				damage += 10 * g_poison_prices[host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE)];
+				damage += 10 * g_poison_prices[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type];
 			}
 
-			dec_ptr_bs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES);
+			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges--;
 
-			if (!host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES)) {
-				host_writebs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE, POISON_TYPE_NONE);
+			if (!hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges) {
+				hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_NONE;
 			}
 		}
 	}
 
-	if (host_readbs(hero + HERO_ECLIPTIFACTUS) != 0) {
+	if (hero->ecliptifactus_timer != 0) {
 		damage *= 2;
 	}
 
-	if (gs_tevent071_orcstatue && (host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
+	if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_DWARF) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
 	{
 		damage++;
 	}
@@ -443,7 +437,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			damage = 0;
 		}
 
-		if (enemy_p->magic && !inventory_magic(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
+		if (enemy_p->magic && !hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.magic) {
 			damage = 0;
 		}
 
@@ -451,14 +445,14 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			damage = enemy_p->le + 1;
 		}
 	} else {
-		damage -= host_readbs(target + HERO_RS_BONUS1);
+		damage -= target->rs_bonus1;
 
-		if (hero_petrified(target)) {
+		if (hero_petrified((Bit8u*)target)) {
 			damage = 0;
 		}
 
-		if (host_readws(target + HERO_LE) < damage) {
-			damage = host_readws(target + HERO_LE) + 1;
+		if (target->le < damage) {
+			damage = target->le + 1;
 		}
 	}
 

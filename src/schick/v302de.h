@@ -535,45 +535,6 @@ static inline unsigned short inventory_magic(Bit8u *ks) {
 }
 
 /**
- * inventory_poison_expurgicum() -	check if an item in the inventory has the poison_expurgicum flag set
- * @item:	ptr to item
- *
- * 0 = no / 1 = yes
- */
-static inline unsigned short inventory_poison_expurgicum(Bit8u *ks) {
-	if (((host_readb(ks + INVENTORY_FLAGS) >> 5) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * inventory_poison_vomicum() -	check if an item in the inventory has the poison_vomicum flag set
- * @item:	ptr to item
- *
- * 0 = no / 1 = yes
- */
-static inline unsigned short inventory_poison_vomicum(Bit8u *ks) {
-	if (((host_readb(ks + INVENTORY_FLAGS) >> 6) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * inventory_magic_revealed() -	check if an item in the inventory is magic and you know
- * @item:	ptr to item
- *
- * 0 = know not / 1 = you know its magic
- */
-static inline unsigned short inventory_magic_revealed(Bit8u *ks) {
-	if (((host_readb(ks + INVENTORY_FLAGS) >> 7) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
  * item_armor() -	check if an item is an armor
  * @item:	ptr to item
  *
@@ -814,9 +775,6 @@ static inline char* get_itemname(unsigned short item)
 
 #define inventory_broken(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).broken)
 #define inventory_magic(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).magic)
-#define inventory_poison_expurgicum(ks)	((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).poison_expurgicum)
-#define inventory_poison_vomicum(ks)		((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).poison_vomicum)
-#define inventory_magic_revealed(ks)		((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).magic_revealed)
 
 #define item_armor(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).armor)
 #define item_weapon(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).weapon)
