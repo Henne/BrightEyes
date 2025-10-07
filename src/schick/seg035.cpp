@@ -255,7 +255,7 @@ void FIG_split_ap(void)
  * \param   hero_pos    position of the hero
  * \return              1 = range attack is possible, 0 = ... not possible
  */
-signed short check_hero_range_attack(Bit8u *hero, signed short hero_pos)
+signed short check_hero_range_attack(const struct struct_hero *hero, const signed int hero_pos)
 {
 	signed short i;
 	signed short retval;	/* retval */
@@ -267,18 +267,11 @@ signed short check_hero_range_attack(Bit8u *hero, signed short hero_pos)
 	retval = 1;
 
 	/* get position of the target */
-	FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID), &target_x, &target_y);
+	FIG_search_obj_on_cb(hero->enemy_id, &target_x, &target_y);
 
 	/* get position of the hero */
 	FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);
 
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	target_x = host_readws((Bit8u*)&target_x);
-	target_y = host_readws((Bit8u*)&target_y);
-	hero_x = host_readws((Bit8u*)&hero_x);
-	hero_y = host_readws((Bit8u*)&hero_y);
-#endif
 	/* check that the range attack is in the same line */
 	if ((hero_x != target_x) && (hero_y != target_y)) {
 		GUI_output(get_tx(45));
@@ -323,7 +316,7 @@ signed short check_hero_range_attack(Bit8u *hero, signed short hero_pos)
 		}
 	} else {
 
-		if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK) {
+		if (hero->action_id == FIG_ACTION_RANGE_ATTACK) {
 			GUI_output(get_ttx(508));
 			retval = 0;
 		}

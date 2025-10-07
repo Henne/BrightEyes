@@ -57,7 +57,7 @@ void add_item_to_smith(struct smith_descr *smith, Bit8u *hero, signed short item
 
 	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
 
-		if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos)) {
+		if (((struct struct_hero*)hero)->inventory[item_pos].flags.broken) {
 
 			g_sellitems[smith_pos].shop_price =
 				(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +

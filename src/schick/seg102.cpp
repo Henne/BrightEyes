@@ -545,7 +545,7 @@ void mspell_blitz(void)
 
 void mspell_eisenrost(void)
 {
-	signed short id;
+	signed int item_id;
 
 	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
@@ -553,20 +553,21 @@ void mspell_eisenrost(void)
 		/* set the pointer to the target */
 		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
-		id = host_readws(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
+		item_id = ((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-		if (!id) {
+		if (!item_id) {
+
 			/* target hero has no weapon */
 			g_monster_spell_ae_cost = 2;
 
-		} else if (!inventory_broken(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
+		} else if (!((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
 
-			if (host_readbs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_BF)) > 0) {
+			if (((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].bf > 0) {
 
-				or_ptr_bs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 1); /* set 'broken' flag */
+				((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2,	get_tx(92), (Bit8u*)GUI_names_grammar((signed short)0x8000, id, 0), ((struct struct_hero*)get_spelltarget())->alias);
+				sprintf(g_dtp2,	get_tx(92), (Bit8u*)GUI_names_grammar((signed short)0x8000, item_id, 0), ((struct struct_hero*)get_spelltarget())->alias);
 
 			} else {
 				g_monster_spell_ae_cost = -2;

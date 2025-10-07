@@ -537,14 +537,14 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			clear_anisheets();
 
-			FIG_prepare_hero_fight_ani(0, hero, weapon_type, 2, hero_pos + 1,
+			FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, weapon_type, 2, hero_pos + 1,
 							l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20, 0);
 
 			if (target_is_hero != 0) {
 
 				if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
-					FIG_prepare_hero_fight_ani(1, target_hero, weapon_type_target,
+					FIG_prepare_hero_fight_ani(1, (struct struct_hero*)target_hero, weapon_type_target,
 								100, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 				}
 			} else {
@@ -639,7 +639,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					FIG_call_draw_pic();
 
-					FIG_prepare_hero_fight_ani(0, hero, weapon_type,
+					FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, weapon_type,
 							15, hero_pos + 1,
 							l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20, 0);
 
@@ -673,7 +673,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (g_defender_dead != 0) {
 
 						if (target_is_hero != 0) {
-							FIG_prepare_hero_fight_ani(1, target_hero, -1, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+							FIG_prepare_hero_fight_ani(1, (struct struct_hero*)target_hero, -1, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 						} else {
 							FIG_prepare_enemy_fight_ani(1, target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 						}
@@ -744,7 +744,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					if (l15 != -1) {
 
-						seg044_002a(0, hero, 4, hero_pos + 1,
+						seg044_002a(0, (struct struct_hero*)hero, 4, hero_pos + 1,
 								l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20, l12, 0);
 					}
 
@@ -753,7 +753,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						if (l6 > 0) {
 
 							if (l6 != 4) {
-								seg045_0394(6, hero, l6);
+								seg045_0394(6, (struct struct_hero*)hero, l6);
 							}
 
 						} else {
@@ -769,7 +769,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 									if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
-										seg044_002a(1, target_hero, 99, host_readbs(hero + HERO_ENEMY_ID), 0 , -1, 1);
+										seg044_002a(1, (struct struct_hero*)target_hero, 99, host_readbs(hero + HERO_ENEMY_ID), 0 , -1, 1);
 									}
 								}
 							}
@@ -912,7 +912,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			} else if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) {
 
-				FIG_use_item(hero, target_monster, target_hero, target_is_hero, hero_pos);
+				FIG_use_item((struct struct_hero*)hero, target_monster, (struct struct_hero*)target_hero, target_is_hero, hero_pos);
 			}
 		}
 	}

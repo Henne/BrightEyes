@@ -849,7 +849,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						hero->enemy_id = 0;
 						done = 0;
 
-					} else if (((hero->action_id == FIG_ACTION_SPELL) ||	(hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack((Bit8u*)hero, hero_pos))
+					} else if (((hero->action_id == FIG_ACTION_SPELL) ||	(hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack((struct struct_hero*)hero, hero_pos))
 					{
 						/* GUI_output(get_tx(29)); */
 						hero->action_id = FIG_ACTION_WAIT;

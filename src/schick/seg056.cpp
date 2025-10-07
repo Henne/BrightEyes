@@ -619,7 +619,7 @@ void insert_sell_items(struct shop_descr *shop_descr, Bit8u *hero, signed short 
 		g_sellitems[shop_pos].shop_price = 0;
 		g_sellitems[shop_pos].price_unit = 1;
 
-	} else if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos) ||
+	} else if (((struct struct_hero*)hero)->inventory[item_pos].flags.broken ||
 			 host_readbs(hero + (HERO_INVENTORY + INVENTORY_RS_LOST) + SIZEOF_INVENTORY * item_pos) != 0)
 	{
 		/* this item is broken or RS of an armor got degraded => 1 HELLER */

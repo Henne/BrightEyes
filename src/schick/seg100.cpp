@@ -402,7 +402,7 @@ void spell_eisenrost(void)
 				g_spell_special_aecost = (-2);
 			} else {
 				/* check if weapon is already broken */
-				if (inventory_broken(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
+				if (((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
 
 					strcpy(g_dtp2, get_tx(90));
 

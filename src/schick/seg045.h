@@ -21,7 +21,7 @@ void seg045_0273(signed short, signed short, signed short);
 void FIG_remove_smth2(void);
 
 /* 0x3e */
-void seg045_0394(signed short, Bit8u*, signed short);
+void seg045_0394(const signed int, const struct struct_hero*, const signed int);
 
 /* 0x43 */
 void seg045_041b(signed short, struct enemy_sheet*, signed short);

@@ -509,19 +509,6 @@ static inline unsigned short hero_seen_phantom_set(Bit8u *hero, unsigned short v
 }
 
 /**
- * inventory_broken() -	check if an item in the inventory is broken
- * @item:	ptr to item
- *
- * 0 = not broken / 1 = broken
- */
-static inline unsigned short inventory_broken(Bit8u *ks) {
-	if (((host_readb(ks + INVENTORY_FLAGS) >> 0) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
  * item_armor() -	check if an item is an armor
  * @item:	ptr to item
  *
@@ -759,8 +746,6 @@ static inline char* get_itemname(unsigned short item)
 #define hero_encouraged(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).encouraged)
 
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
-
-#define inventory_broken(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).broken)
 
 #define item_armor(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).armor)
 #define item_weapon(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).weapon)

@@ -10,13 +10,13 @@ Bit8s get_seq_header(Bit16s);
 #endif
 
 /* 0x20 */
-void FIG_prepare_hero_fight_ani(signed short, Bit8u*, signed short, signed short, signed short, signed short, signed short);
+void FIG_prepare_hero_fight_ani(signed short, struct struct_hero*, signed short, signed short, signed short, signed short, signed short);
 
 /* 0x25 */
 void FIG_prepare_enemy_fight_ani(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);
 
 /* 0x2a */
-void seg044_002a(Bit16u, Bit8u*, Bit16u, Bit16s, Bit16s, Bit16u, Bit16u);
+void seg044_002a(Bit16u, struct struct_hero*, Bit16u, Bit16s, Bit16s, Bit16u, Bit16u);
 
 /* 0x2f */
 void seg044_002f(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);

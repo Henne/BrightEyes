@@ -205,14 +205,14 @@ void FIG_remove_smth2(void)
 	g_fig_spellgfx_id = -1;
 }
 
-void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)
+void seg045_0394(const signed int a1, const struct struct_hero *hero, const signed int spell_ani_id)
 {
 	Bit8s *ptr;
 	signed short x;
 	signed short y;
 
 	/* search the target on the chessboard */
-	FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID), &x, &y);
+	FIG_search_obj_on_cb(hero->enemy_id, &x, &y);
 
 	ptr = &g_fig_anisheets[a1][1];
 

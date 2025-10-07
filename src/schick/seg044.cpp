@@ -138,7 +138,7 @@ Bit8s get_seq_header(Bit16s ani)
  * \param   action_type {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_UNKNOWN2 = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
  */
 /* Borlandified and identical */
-void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapon_type, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
+void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signed short weapon_type, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
 {
 	signed short l1;
 	signed short attacker_x;
@@ -155,21 +155,13 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 	signed short weapon;
 	Bit16s *p3;
 
-	p3 = g_gfx_ani_index[host_readbs(hero + HERO_SPRITE_NO)];
-	weapon = host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY);
+	p3 = g_gfx_ani_index[hero->sprite_no];
+	weapon = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
 	if ((signed char)fid_target) {
 
 		FIG_search_obj_on_cb((signed char)fid_target, &target_x, &target_y);
 		FIG_search_obj_on_cb((signed char)fid_attacker, &attacker_x, &attacker_y);
-
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		target_x = host_readws((Bit8u*)&target_x);
-		target_y = host_readws((Bit8u*)&target_y);
-		attacker_x = host_readws((Bit8u*)&attacker_x);
-		attacker_y = host_readws((Bit8u*)&attacker_y);
-#endif
 
 		if (attacker_x == target_x) {
 			if (target_y < attacker_y) {
@@ -185,10 +177,10 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 			}
 		}
 	} else {
-		dir = host_readbs(hero + HERO_VIEWDIR);
+		dir = hero->viewdir;
 	}
 
-	if ((weapon_type == -1) || ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE) && (weapon == ITEM_MAGIC_WAND))) {
+	if ((weapon_type == -1) || ((hero->typus == HERO_TYPE_MAGE) && (weapon == ITEM_MAGIC_WAND))) {
 
 		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 :		/* melee attack */
 			(f_action == FIG_ACTION_UNKNOWN3) ? 41 :		/* drink potion */
@@ -210,9 +202,9 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 	p2 = (Bit8u*)&g_fig_anisheets[a1 + 4][1];
 
 	g_fig_anisheets[a1][0] = get_seq_header(p3[l1]);
-	g_fig_anisheets[a1][242] = host_readbs(hero + HERO_SPRITE_NO);
+	g_fig_anisheets[a1][242] = hero->sprite_no;
 
-	if (check_hero(hero) && (host_readbs(hero + HERO_VIEWDIR) != dir) &&
+	if (check_hero((Bit8u*)hero) && (hero->viewdir != dir) &&
 
 		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1]) ||
@@ -221,7 +213,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 	{
 			g_fig_anisheets[a1][0] = 0;
 			l8 = l7 = -1;
-			l9 = host_readbs(hero + HERO_VIEWDIR);
+			l9 = hero->viewdir;
 			l8 = l9;
 			l9++;
 
@@ -237,12 +229,12 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 				}
 
 				if (l9 != dir) {
-					l8 = host_readbs(hero + HERO_VIEWDIR) + 4;
+					l8 = hero->viewdir + 4;
 					l7 = -1;
 				}
 			}
 
-			host_writeb(hero + HERO_VIEWDIR, (signed char)dir);
+			hero->viewdir = (signed char)dir;
 
 			if (l7 == -1) {
 				for (l10 = 0; l10 < 2; l10++) {
@@ -269,15 +261,15 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 		}
 	}
 
-	if ((check_hero(hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
+	if ((check_hero((Bit8u*)hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
 		((f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN3) || (f_action == FIG_ACTION_UNKNOWN4) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1])))
 	{
 		p1 += copy_ani_seq(p1, p3[l1], 2);
 
 		if ((weapon_type != -1) && (weapon_type < 3) &&
-			(host_readb(hero + HERO_TYPE) != HERO_TYPE_MAGE) &&
-			(host_readb(hero + HERO_TYPE) != HERO_TYPE_DRUID))
+			(hero->typus != HERO_TYPE_MAGE) &&
+			(hero->typus != HERO_TYPE_DRUID))
 		{
 			for (l10 = 0; l10 < 5; l10++) {
 				host_writeb(p2++, 0xfb);
@@ -286,22 +278,22 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 			}
 
 			p2 += copy_ani_seq(p2,
-				g_weaponani_table[(g_weaponani_types[host_readbs(hero + HERO_SPRITE_NO)] * 48 + weapon_type * 16) +
-				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + host_readbs(hero + HERO_VIEWDIR)], 3);
+				g_weaponani_table[(g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
+				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir], 3);
 		}
 	}
 
-	if ((check_hero(hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
+	if ((check_hero((Bit8u*)hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
 
 			p1 += copy_ani_seq(p1, p3[l1], 2);
 
 			if ((weapon_type != -1) && (weapon_type < 3) &&
-				(host_readb(hero + HERO_TYPE) != HERO_TYPE_MAGE) &&
-				(host_readb(hero + HERO_TYPE) != HERO_TYPE_DRUID))
+				(hero->typus != HERO_TYPE_MAGE) &&
+				(hero->typus != HERO_TYPE_DRUID))
 			{
 				p2 += copy_ani_seq(p2,
-					g_weaponani_table[(g_weaponani_types[host_readbs(hero + HERO_SPRITE_NO)] * 48 + weapon_type * 16) +
-					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + host_readbs(hero + HERO_VIEWDIR)], 3);
+					g_weaponani_table[(g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
+					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir], 3);
 			}
 	}
 
@@ -314,16 +306,16 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 		p1 += copy_ani_seq(p1, p3[20], 2);
 	}
 
-	if (check_hero(hero) ||	(!g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
+	if (check_hero((Bit8u*)hero) ||	(!g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
-		FIG_set_sheet(host_readb(hero + HERO_FIGHTER_ID), (signed char)a1);
+		FIG_set_sheet(hero->fighter_id, (signed char)a1);
 		host_writebs(p1, -1);
 
 		if ( (weapon_type != -1) && (weapon_type < 3) &&
-			(host_readb(hero + HERO_TYPE) != HERO_TYPE_MAGE) &&
-			(host_readb(hero + HERO_TYPE) != HERO_TYPE_DRUID))
+			(hero->typus != HERO_TYPE_MAGE) &&
+			(hero->typus != HERO_TYPE_DRUID))
 		{
-			FIG_set_weapon_sheet(host_readb(hero + HERO_FIGHTER_ID), a1 + 4);
+			FIG_set_weapon_sheet(hero->fighter_id, a1 + 4);
 			host_writeb(p2, 0xff);
 		}
 	}
@@ -562,7 +554,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
  */
 
 /* Borlandified and identical */
-void seg044_002a(Bit16u v1, Bit8u *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
+void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
 			Bit16u v5, Bit16u v6)
 {
 	signed short x_obj1, y_obj1;
@@ -576,20 +568,11 @@ void seg044_002a(Bit16u v1, Bit8u *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
 	signed short l_di;
 	signed short l_si;
 
-
 	/* get a pointer from an array where the Monster-ID serves as index */
-	lp2 = g_gfx_ani_index[host_readbs(hero + HERO_SPRITE_NO)];
+	lp2 = g_gfx_ani_index[hero->sprite_no];
 
 	FIG_search_obj_on_cb((signed char)obj2, &x_obj2, &y_obj2);
 	FIG_search_obj_on_cb((signed char)obj1, &x_obj1, &y_obj1);
-
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	x_obj1 = host_readws((Bit8u*)&x_obj1);
-	y_obj1 = host_readws((Bit8u*)&y_obj1);
-	x_obj2 = host_readws((Bit8u*)&x_obj2);
-	y_obj2 = host_readws((Bit8u*)&y_obj2);
-#endif
 
 	if (x_obj1 == x_obj2) {
 		if (y_obj2 < y_obj1)
@@ -604,25 +587,25 @@ void seg044_002a(Bit16u v1, Bit8u *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
 	}
 
 	if ((signed char)obj2 == (signed char)obj1)
-		dir = host_readbs(hero + HERO_VIEWDIR);
+		dir = hero->viewdir;
 
 
 	l_di = (v2 == 4) ? ((v5 == 1) ? 37 : 29) : 16;
 
-	l_di += (v2 == 4) ? dir : host_readbs(hero + HERO_VIEWDIR);
+	l_di += (v2 == 4) ? dir : hero->viewdir;
 
 	lp1 = (Bit8u*)&g_fig_anisheets[v1][1];
 
 	g_fig_anisheets[v1][0] = get_seq_header(lp2[l_di]);
 
-	g_fig_anisheets[v1][242] = host_readbs(hero + HERO_SPRITE_NO);
+	g_fig_anisheets[v1][242] = hero->sprite_no;
 
-	if ((host_readbs(hero + HERO_VIEWDIR) != dir) && (v2 == 4)) {
+	if ((hero->viewdir != dir) && (v2 == 4)) {
 
 		g_fig_anisheets[v1][0] = 0;
 
 		l3 = l2 = -1;
-		l_si = host_readbs(hero + HERO_VIEWDIR);
+		l_si = hero->viewdir;
 		l3 = l_si;
 		l_si++;
 		if (l_si == 4)
@@ -635,16 +618,17 @@ void seg044_002a(Bit16u v1, Bit8u *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
 				l_si = 0;
 
 			if (l_si != dir) {
-				l3 = host_readbs(hero + HERO_VIEWDIR) + 4;
+				l3 = hero->viewdir + 4;
 				l2 = -1;
 			}
 		}
 
-		host_writebs(hero + HERO_VIEWDIR, (signed char)dir);
+		hero->viewdir = (signed char)dir;
 		lp1 += copy_ani_seq(lp1, lp2[l3], 2);
 
-		if (l2 != -1)
+		if (l2 != -1) {
 			lp1 += copy_ani_seq(lp1, lp2[l2], 2);
+		}
 
 		host_writeb(lp1, 0xfc);
 		lp1++;
@@ -656,7 +640,7 @@ void seg044_002a(Bit16u v1, Bit8u *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
 		lp1++;
 	}
 
-	if ((v2 == 4) || check_hero(hero) ||
+	if ((v2 == 4) || check_hero((Bit8u*)hero) ||
 		((g_attacker_dead != 0) && (v6 == 0)) ||
 		((g_defender_dead != 0) && (v6 == 1))) {
 

@@ -501,7 +501,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				if (check_hero(hero) || (g_defender_dead != 0)) {
 
-					FIG_prepare_hero_fight_ani(0, hero, weapon_type, 100, monster->enemy_id, monster_pos + 10, 1);
+					FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, weapon_type, 100, monster->enemy_id, monster_pos + 10, 1);
 				}
 
 			} else if (l17 == 0) {
@@ -596,7 +596,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 					if (target_is_hero != 0) {
 
-						FIG_prepare_hero_fight_ani(1, hero, -1, 0, monster->enemy_id, monster_pos + 10, 1);
+						FIG_prepare_hero_fight_ani(1, (struct struct_hero*)hero, -1, 0, monster->enemy_id, monster_pos + 10, 1);
 					} else {
 
 						FIG_prepare_enemy_fight_ani(1, target_enemy, 0, monster->enemy_id, monster_pos + 10, 1);
@@ -655,7 +655,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 									if (check_hero(hero) || (g_defender_dead != 0)) {
 
-										seg044_002a(1, hero, 99, monster->enemy_id, 0, -1, 1);
+										seg044_002a(1, (struct struct_hero*)hero, 99, monster->enemy_id, 0, -1, 1);
 									}
 								}
 							}
@@ -805,19 +805,19 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
  * \param   flag        bool value, used when a hero attacks a hero
  * \param   hero_pos    position of the hero
  */
-void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target_hero, signed short flag, signed short hero_pos)
+void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, struct struct_hero *target_hero, signed short flag, signed short hero_pos)
 {
 	signed short damage;
 
 	signed short l3;
 	signed short hylailic = 0;
 	signed short usecase;
-	signed short item_id = host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
+	signed short item_id = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
 	Bit8u *p_item = get_itemsdat(item_id);
 
 	if (item_herb_potion(p_item)) {
 		usecase = 1;
-	} else if (!item_useable(p_item) || (host_readws(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_QUANTITY)) == 0)) {
+	} else if (!item_useable(p_item) || (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].quantity == 0)) {
 		usecase = 0;
 	} else {
 		usecase = 2;
@@ -825,13 +825,13 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 
 	*g_dtp2 = '\0';
 
-	if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_MIASTHMATICUM) {
+	if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_MIASTHMATICUM) {
 		/* MIASTHMATIC */
 
 		/* 1W6 + 4 */
 		damage = dice_roll(1, 6, 4);
 
-		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
+		if (hero->enemy_id >= 10) {
 
 			strcpy(g_dtp2, get_tx(37));
 
@@ -848,24 +848,24 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 
 				strcpy(g_dtp2, get_tx(37));
 
-				sub_hero_le((struct struct_hero*)target_hero, damage);
+				sub_hero_le(target_hero, damage);
 
 				FIG_add_msg(8, damage);
 
-				if (hero_dead(target_hero)) {
+				if (hero_dead((Bit8u*)target_hero)) {
 					g_defender_dead = 1;
 				}
 			}
 		}
 
 		/* drop the item in the left hand */
-		drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
+		drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 
-	} else if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_HYLAILIC_FIRE) {
+	} else if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_HYLAILIC_FIRE) {
 
 		/* HYLAILIC FIRE */
 
-		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
+		if (hero->enemy_id >= 10) {
 
 			/* .. used on a monster */
 
@@ -880,18 +880,18 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 			/* .. used on another hero */
 			if (flag != 0) {
 
-				sub_hero_le((struct struct_hero*)target_hero, 20);
+				sub_hero_le(target_hero, 20);
 
 				FIG_add_msg(8, 20);
 
-				if (hero_dead(target_hero)) {
+				if (hero_dead((Bit8u*)target_hero)) {
 					g_defender_dead = 1;
 				}
 			}
 		}
 
 		/* drop the item in the left hand */
-		drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
+		drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 
 		hylailic = 1;
 	} else {
@@ -906,7 +906,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 
 		clear_anisheets();
 
-		FIG_prepare_hero_fight_ani(0, hero, -1, usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4, hero_pos + 1, host_readbs(hero + HERO_ENEMY_ID), 0);
+		FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, -1, usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4, hero_pos + 1, hero->enemy_id, 0);
 
 		l3 = 0;
 
@@ -936,9 +936,9 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 		if (g_defender_dead != 0) {
 
 			if (flag != 0) {
-				FIG_prepare_hero_fight_ani(1, target_hero, -1, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+				FIG_prepare_hero_fight_ani(1, (struct struct_hero*)target_hero, -1, 0, hero->enemy_id, hero_pos + 1, 1);
 			} else {
-				FIG_prepare_enemy_fight_ani(1, target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+				FIG_prepare_enemy_fight_ani(1, target_monster, 0, hero->enemy_id, hero_pos + 1, 1);
 			}
 
 		}
