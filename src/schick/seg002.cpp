@@ -5347,13 +5347,13 @@ signed short get_hero_index(Bit8u *hero)
  * \param   item        item ID to look for
  * \return              position of the item or -1 if the item is not in the inventory.
  */
-signed short get_item_pos(Bit8u *hero, signed short item)
+signed int get_item_pos(Bit8u *hero, const signed int item_id)
 {
 
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
-		if (item == host_readws(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)) {
+		if (item_id == host_readws(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)) {
 			return i;
 		}
 	}

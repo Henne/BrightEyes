@@ -196,7 +196,7 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 			(host_readbs(item_p + ITEM_STATS_SUBTYPE) != WEAPON_TYPE_WURFWAFFE) &&
 			(host_readbs(item_p + ITEM_STATS_SUBTYPE) != WEAPON_TYPE_SPEER))
 		{
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, (struct struct_hero*)hero);
 			has_new_weapon = 1;
 			break;
 		}
@@ -207,7 +207,7 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 		/* find a free slot, to get rid of the broken weapon */
 		for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
 			if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + pos * SIZEOF_INVENTORY) == ITEM_NONE) {
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
+				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, (struct struct_hero*)hero);
 				has_new_weapon = 2;
 				break;
 			}
@@ -215,7 +215,7 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 
 		/* if nothing helps, put it in the left hand */
 		if (!has_new_weapon) {
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_LEFT_HAND, hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_LEFT_HAND, (struct struct_hero*)hero);
 		}
 
 		has_new_weapon = 0;
@@ -768,10 +768,10 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 				(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 				(get_item_pos(hero, ITEM_LONGBOW) != -1))
 			{
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), hero);
+				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), (struct struct_hero*)hero);
 
 				if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_ARROWS) {
-					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);
+					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), (struct struct_hero*)hero);
 				}
 			}
 
@@ -786,10 +786,10 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 					(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 					(get_item_pos(hero, ITEM_LONGBOW) != -1))
 				{
-					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), hero);
+					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), (struct struct_hero*)hero);
 
 					if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_ARROWS) {
-						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);
+						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), (struct struct_hero*)hero);
 					}
 				} else if (FIG_get_range_weapon_type(hero) == -1)
 				{

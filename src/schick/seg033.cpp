@@ -527,7 +527,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 								/* subtract 2 BP */
 								hero->bp_left -= 2;
-								move_item(HERO_INVENTORY_SLOT_LEFT_HAND, slots[selected -1], (Bit8u*)hero);
+								move_item(HERO_INVENTORY_SLOT_LEFT_HAND, slots[selected -1], (struct struct_hero*)hero);
 							}
 						}
 					} else {
@@ -593,7 +593,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 								rwt1 = FIG_get_range_weapon_type((Bit8u*)hero);
 
-								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected - 1], (Bit8u*)hero);
+								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected - 1], (struct struct_hero*)hero);
 
 								rwt2 = FIG_get_range_weapon_type((Bit8u*)hero);
 

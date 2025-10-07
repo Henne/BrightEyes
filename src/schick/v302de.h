@@ -573,10 +573,6 @@ static inline unsigned short inventory_magic_revealed(Bit8u *ks) {
 		return 1;
 }
 
-static inline void add_inventory_quantity(signed short i1, signed short i2, Bit8u *hero) {
-	add_ptr_ws(hero + HERO_INVENTORY + i1 * SIZEOF_INVENTORY + INVENTORY_QUANTITY, host_readw(hero + HERO_INVENTORY + i2 * SIZEOF_INVENTORY + INVENTORY_QUANTITY));
-}
-
 /**
  * item_armor() -	check if an item is an armor
  * @item:	ptr to item
@@ -815,8 +811,6 @@ static inline char* get_itemname(unsigned short item)
 #define hero_encouraged(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).encouraged)
 
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
-
-#define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 
 #define inventory_broken(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).broken)
 #define inventory_magic(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).magic)
