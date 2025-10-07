@@ -134,7 +134,7 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 						dec_ptr_bs(hero + HERO_NR_INVENTORY_SLOTS_FILLED);
 #endif
 					} else {
-						if (!can_hero_use_item(hero, item2)) {
+						if (!can_hero_use_item((struct struct_hero*)hero, item2)) {
 
 							sprintf(g_dtp2, get_ttx(221), (char*)hero + HERO_NAME2,
 								get_ttx((host_readbs(hero + HERO_SEX) != 0 ? 593 : 9) + host_readbs(hero + HERO_TYPE)),
@@ -161,16 +161,16 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 
 								} else {
 									if (item1 != 0)
-										unequip(hero, item1, pos1);
+										unequip((struct struct_hero*)hero, item1, pos1);
 
-									add_equip_boni(hero, hero, item2, pos2, pos1);
+									add_equip_boni((struct struct_hero*)hero, (struct struct_hero*)hero, item2, pos2, pos1);
 									v3 = 1;
 								}
 							}
 						}
 					}
 				} else {
-					unequip(hero, item1, pos1);
+					unequip((struct struct_hero*)hero, item1, pos1);
 					v3 = 1;
 				}
 			}
@@ -320,7 +320,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	/* identical until here */
 	if (pos2 < 7) {
-		if (!can_hero_use_item(hero2, item1)) {
+		if (!can_hero_use_item((struct struct_hero*)hero2, item1)) {
 
 			sprintf(g_dtp2,	get_ttx(221), (char*)(hero2 + HERO_NAME2),
 				get_ttx((host_readbs(hero2 + HERO_SEX) ? 593 : 9) + host_readbs(hero2 + HERO_TYPE)),
@@ -358,7 +358,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	if ((item2 != 0) && (pos1 < 7)) {
 
-		if (!can_hero_use_item(hero1, item2)) {
+		if (!can_hero_use_item((struct struct_hero*)hero1, item2)) {
 
 			sprintf(g_dtp2,	get_ttx(221), (char*)(hero1 + HERO_NAME2),
 				get_ttx((host_readbs(hero1 + HERO_SEX) ? 593 : 9) + host_readbs(hero1 + HERO_TYPE)),
@@ -424,7 +424,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 				if (l_di > 0) {
 					add_ptr_ws(hero2 + HERO_LOAD, host_readws(item1_desc + 5) * l_di);
 					add_ptr_ws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY, l_di);
-					drop_item(hero1, pos1, l_di);
+					drop_item((struct struct_hero*)hero1, pos1, l_di);
 				} else {
 					sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
 					GUI_output(g_dtp2);
@@ -449,13 +449,13 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			} else {
 				if (pos1 < 7) {
-					unequip(hero1, item1, pos1);
-					add_equip_boni(hero2, hero1, item2, pos2, pos1);
+					unequip((struct struct_hero*)hero1, item1, pos1);
+					add_equip_boni((struct struct_hero*)hero2, (struct struct_hero*)hero1, item2, pos2, pos1);
 				}
 
 				if (pos2 < 7) {
-					unequip(hero2, item2, pos2);
-					add_equip_boni(hero1, hero2, item1, pos1, pos2);
+					unequip((struct struct_hero*)hero2, item2, pos2);
+					add_equip_boni((struct struct_hero*)hero1, (struct struct_hero*)hero2, item1, pos1, pos2);
 				}
 
 				/* exchange two items */
@@ -542,7 +542,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 #endif
 			add_ptr_ws(hero2 + HERO_LOAD, host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di);
 			host_writews(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY, l_di);
-			drop_item(hero1, pos1, l_di);
+			drop_item((struct struct_hero*)hero1, pos1, l_di);
 
 		} else {
 			sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
@@ -559,11 +559,11 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 		/* do the change */
 
 		if (pos1 < 7) {
-			unequip(hero1, item1, pos1);
+			unequip((struct struct_hero*)hero1, item1, pos1);
 		}
 
 		if (pos2 < 7) {
-			add_equip_boni(hero1, hero2, item1, pos1, pos2);
+			add_equip_boni((struct struct_hero*)hero1, (struct struct_hero*)hero2, item1, pos1, pos2);
 		}
 
 #if !defined(__BORLANDC__)
@@ -609,7 +609,7 @@ void startup_equipment(struct struct_hero *hero)
 	*(struct items_all*)&all = *(struct items_all*)g_hero_startup_items_all;
 
 	for (i = 0; i < 4; i++) {
-		give_hero_new_item((Bit8u*)hero, all.a[i], 1, 1);
+		give_hero_new_item((struct struct_hero*)hero, all.a[i], 1, 1);
 	}
 
 	move_item(HERO_INVENTORY_SLOT_LEGS, HERO_INVENTORY_SLOT_KNAPSACK_3, (Bit8u*)hero);
@@ -617,14 +617,14 @@ void startup_equipment(struct struct_hero *hero)
 	if ((hero->sex != 0) && (hero->typus != HERO_TYPE_WARRIOR) && (hero->typus != HERO_TYPE_MAGE))
        	{
 		/* female non-warriors and non-mages get a free shirt */
-		give_hero_new_item((Bit8u*)hero, ITEM_SHIRT, 1, 1);
+		give_hero_new_item((struct struct_hero*)hero, ITEM_SHIRT, 1, 1);
 		move_item(HERO_INVENTORY_SLOT_BODY, HERO_INVENTORY_SLOT_KNAPSACK_3, (Bit8u*)hero);
 	}
 
 	i = 0;
 	while ((g_hero_startup_items[hero->typus - 1][i] != -1) && (i < 4)) {
 
-		give_hero_new_item((Bit8u*)hero, g_hero_startup_items[hero->typus - 1][i++], 1, 1);
+		give_hero_new_item((struct struct_hero*)hero, g_hero_startup_items[hero->typus - 1][i++], 1, 1);
 
 		if (i == 1) {
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_KNAPSACK_3, (Bit8u*)hero);
@@ -643,7 +643,7 @@ void startup_equipment(struct struct_hero *hero)
 		(hero->typus == HERO_TYPE_GREEN_ELF) ||
 		(hero->typus == HERO_TYPE_SYLVAN_ELF))
 	{
-		give_hero_new_item((Bit8u*)hero, ITEM_ARROWS, 1, 20);
+		give_hero_new_item((struct struct_hero*)hero, ITEM_ARROWS, 1, 20);
 		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos((Bit8u*)hero, ITEM_ARROWS), (Bit8u*)hero);
 	}
 }

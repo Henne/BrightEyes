@@ -350,7 +350,7 @@ void tevent_137(void)
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
 					/* each hero gets five FOODPACKAGES */
-					give_hero_new_item((Bit8u*)hero, ITEM_FOOD_PACKAGE, 1, 5);
+					give_hero_new_item((struct struct_hero*)hero, ITEM_FOOD_PACKAGE, 1, 5);
 
 					/* each hero gets his first WATERSKIN filled */
 					/* potential Original-Bug: Does it make sense that the further WATERSKINs are not filled? */

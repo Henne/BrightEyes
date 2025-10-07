@@ -282,7 +282,7 @@ void item_weapon_poison(void)
 			/* VOMICUM */
 			or_ptr_bs(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0x40); /* set 'poison_vomicum' flag */
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_VOMICUM), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_VOMICUM), 1);
 
 			bottle = ITEM_FLASK_BRONZE;
 			break;
@@ -291,7 +291,7 @@ void item_weapon_poison(void)
 			/* EXPURGICUM */
 			or_ptr_bs(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0x20); /* set 'poison_expurgicum' flag */
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_EXPURGICUM), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_EXPURGICUM), 1);
 
 			bottle = ITEM_FLASK_BRONZE;
 			break;
@@ -300,7 +300,7 @@ void item_weapon_poison(void)
 			/* SHURIN-BULB POISON / SHURINKNOLLENGIFT */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_SHURINKNOLLENGIFT);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SHURIN_POISON), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_SHURIN_POISON), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
@@ -308,7 +308,7 @@ void item_weapon_poison(void)
 			/* ARAX POISON / ARAXGIFT */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_ARAX);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ARAX_POISON), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_ARAX_POISON), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
@@ -316,7 +316,7 @@ void item_weapon_poison(void)
 			/* FEAR POISON / ANGSTGIFT */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_ANGSTGIFT);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ANGST_POISON), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_ANGST_POISON), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
@@ -324,7 +324,7 @@ void item_weapon_poison(void)
 			/* SLEPPING POISON / SCHALFGIFT */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_SCHLAFGIFT);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SLEEP_POISON), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_SLEEP_POISON), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
@@ -332,7 +332,7 @@ void item_weapon_poison(void)
 			/* GOLDEN GLUE / GOLDLEIM */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_GOLDLEIM);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_GOLDLEIM), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_GOLDLEIM), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
@@ -340,7 +340,7 @@ void item_weapon_poison(void)
 			/* LOTUS POISON / LOTUSGIFT */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_LOTUSGIFT);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_LOTUS_POISON), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_LOTUS_POISON), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
@@ -348,7 +348,7 @@ void item_weapon_poison(void)
 			/* KUKRIS */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_KUKRIS);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KUKRIS), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_KUKRIS), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
@@ -356,20 +356,20 @@ void item_weapon_poison(void)
 			/* BANE DUST / BANNSTAUB */
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_BANNSTAUB);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BANNSTAUB), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_BANNSTAUB), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_KROETEN_POISON: {
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE), POISON_TYPE_KROETENSCHEMEL);
 			host_writeb(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES), 5);
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KROETEN_POISON), 1);
+			drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_KROETEN_POISON), 1);
 			bottle = ITEM_FLASK_GLASS;
 			break;
 		}
 		}
 
-		give_hero_new_item(get_itemuser(), bottle, 1, 1);
+		give_hero_new_item((struct struct_hero*)get_itemuser(), bottle, 1, 1);
 
 		sprintf(g_dtp2, get_ttx(739),
 			(char*)(GUI_names_grammar((signed short)0x8000, host_readws(get_itemuser() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
@@ -410,7 +410,7 @@ void item_magic_book(void)
 	add_ptr_bs(get_itemuser() + (HERO_SPELLS + SP_HEPTAGON_UND_KROETENEI), 2);
 
 	/* drop the book */
-	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BOOK_HEPTAGON), 1);
+	drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_BOOK_HEPTAGON), 1);
 }
 
 /* Borlandified and identical */
@@ -448,10 +448,10 @@ void item_brenne(void)
 			host_writeb(get_itemuser() + (HERO_INVENTORY + INVENTORY_LIGHTING_TIMER) + refill_pos * SIZEOF_INVENTORY, 100);
 
 			/* drop the oil */
-			drop_item(get_itemuser(), pos, 1);
+			drop_item((struct struct_hero*)get_itemuser(), pos, 1);
 
 			/* give a bronze flask */
-			give_hero_new_item(get_itemuser(), ITEM_FLASK_BRONZE, 0, 1);
+			give_hero_new_item((struct struct_hero*)get_itemuser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* prepare message */
 			sprintf(g_dtp2, get_tx(119), ((struct struct_hero*)get_itemuser())->alias);
@@ -519,7 +519,7 @@ void item_bag(void)
 	GUI_output(get_ttx(775));
 
 	/* drop the BAG */
-	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BAG), 1);
+	drop_item((struct struct_hero*)get_itemuser(), get_item_pos(get_itemuser(), ITEM_BAG), 1);
 }
 
 #if !defined(__BORLANDC__)

@@ -3,30 +3,30 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void unequip(Bit8u *hero, unsigned short item, unsigned short pos);
+void unequip(struct struct_hero*, const signed int, const signed int);
 /* 0x25 */
-void add_equip_boni(Bit8u*, Bit8u*, signed short, signed short, signed short);
+void add_equip_boni(struct struct_hero*, struct struct_hero*, const signed int, const signed int, const signed int);
 /* 0x2f */
-signed short give_hero_new_item(Bit8u *hero, signed short, signed short, signed short);
+signed int give_hero_new_item(struct struct_hero*, const signed int, const signed int, const signed int);
 /* 0x34 */
-unsigned short drop_item(Bit8u *, signed short, signed short);
+signed int drop_item(struct struct_hero*, const signed int, signed int);
 /* 0x39 */
-signed short get_item(signed short, signed short, signed short);
+signed int get_item(signed int, const signed int, signed int);
 /* 0x3e */
-unsigned short can_hero_use_item(Bit8u *, unsigned short);
+signed int can_hero_use_item(const struct struct_hero*, const signed int);
 /* 0x43 */
-unsigned short can_item_at_pos(unsigned short item, unsigned short pos);
+signed int can_item_at_pos(const signed int, const signed int);
 /* 0x48 */
 signed short has_hero_stacked(Bit8u *, unsigned short);
 /* 0x4d */
 /* static */
-unsigned short item_pleasing_ingerimm(unsigned short);
+signed int item_pleasing_ingerimm(const signed int);
 /* 0x52 */
-signed short select_item_to_drop(Bit8u*);
+signed int select_item_to_drop(struct struct_hero*);
 /* 0x57 */
-signed short hero_count_item(Bit8u *, unsigned short);
+signed int hero_count_item(struct struct_hero*, const signed int);
 /* 0x5c */
-signed short group_count_item(signed short);
+signed int group_count_item(const signed int);
 /* 0x61 */
 void loose_random_item(struct struct_hero*, const signed int, char*);
 

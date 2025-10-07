@@ -793,7 +793,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 						if (selected != -1) {
 
-							drop_item((Bit8u*)hero, slots[selected -1], -1);
+							drop_item((struct struct_hero*)hero, slots[selected -1], -1);
 
 							/* subtract 1 BP */
 							hero->bp_left--;

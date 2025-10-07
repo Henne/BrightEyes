@@ -443,7 +443,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 								item_id = hero3->inventory[l_di].item_id;
 
-								drop_item((Bit8u*)hero3, l_di, tmp[items_x][l_di]);
+								drop_item((struct struct_hero*)hero3, l_di, tmp[items_x][l_di]);
 
 								g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] - tmp[items_x][l_di];
 

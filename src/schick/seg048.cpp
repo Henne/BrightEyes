@@ -524,7 +524,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item((Bit8u*)hero2, g_statuspage_selitem3_no, -1);
+							drop_item((struct struct_hero*)hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -641,7 +641,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item((Bit8u*)hero2, g_statuspage_selitem3_no, -1);
+							drop_item((struct struct_hero*)hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}

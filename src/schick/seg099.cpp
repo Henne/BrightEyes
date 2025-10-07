@@ -946,7 +946,7 @@ char* spell_analues(void)
 		g_spelltest_result = 99;
 	}
 
-	item_pos = select_item_to_drop(get_spelluser());
+	item_pos = select_item_to_drop((struct struct_hero*)get_spelluser());
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* If the player cancels item selection or has no items select_item_to_drop() returns -1.

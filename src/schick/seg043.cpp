@@ -859,7 +859,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 		}
 
 		/* drop the item in the left hand */
-		drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
+		drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 
 	} else if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_HYLAILIC_FIRE) {
 
@@ -891,7 +891,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 		}
 
 		/* drop the item in the left hand */
-		drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
+		drop_item((struct struct_hero*)hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 
 		hylailic = 1;
 	} else {

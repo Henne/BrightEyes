@@ -699,10 +699,10 @@ void spell_brenne(void)
 			host_writeb(get_spelluser() + HERO_INVENTORY  + INVENTORY_LIGHTING_TIMER + lantern_pos * SIZEOF_INVENTORY, 100);
 
 			/* drop one oil flask */
-			drop_item(get_spelluser(), oil_pos, 1);
+			drop_item((struct struct_hero*)get_spelluser(), oil_pos, 1);
 
 			/* give bronze flask */
-			give_hero_new_item(get_spelluser(), ITEM_FLASK_BRONZE, 0, 1);
+			give_hero_new_item((struct struct_hero*)get_spelluser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* set AP cost */
 			g_spell_special_aecost = (random_schick(20));

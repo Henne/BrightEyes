@@ -274,7 +274,7 @@ signed short use_magic(Bit8u* hero)
 
 				if (thonny_pos != -1) {
 					/* drop a thonny */
-					drop_item(hero, thonny_pos, 1);
+					drop_item((struct struct_hero*)hero, thonny_pos, 1);
 				}
 
 				/* cap the converted AE such that the hero has at most HERO_AE_ORIG in the end. */

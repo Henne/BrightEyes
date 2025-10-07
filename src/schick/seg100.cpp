@@ -138,7 +138,7 @@ void spell_odem_arcanum(void)
 	signed short id;
 
 
-	pos = select_item_to_drop(get_spelluser());
+	pos = select_item_to_drop((struct struct_hero*)get_spelluser());
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* If the player cancels item selection or has no items select_item_to_drop() returns -1.

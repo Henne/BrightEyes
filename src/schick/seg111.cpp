@@ -290,8 +290,8 @@ void tevent_060(void)
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 							!hero_dead((Bit8u*)hero))
 						{
-							nr_items += hero_count_item((Bit8u*)hero, ITEM_ROPE);
-							nr_items += hero_count_item((Bit8u*)hero, ITEM_ROPE_LADDER);
+							nr_items += hero_count_item((struct struct_hero*)hero, ITEM_ROPE);
+							nr_items += hero_count_item((struct struct_hero*)hero, ITEM_ROPE_LADDER);
 
 							if (hero->staff_level >= 3)
 							{
@@ -311,7 +311,7 @@ void tevent_060(void)
 								answer = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 							}
 
-							drop_item((Bit8u*)hero, answer, 1);
+							drop_item((struct struct_hero*)hero, answer, 1);
 						}
 
 						timewarp(HOURS(1));
