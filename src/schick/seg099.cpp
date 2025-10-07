@@ -38,22 +38,22 @@ namespace M302de {
 
 void spell_beherrschung(void)
 {
-	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	if (!hero_renegade(get_spelltarget())) {
+	if (!hero_renegade((Bit8u*)get_spelltarget())) {
 		g_spell_special_aecost = -2;
 	} else {
-		if (get_spelltarget() == get_spelluser()) {
+		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 			strcpy(g_dtp2, get_tx(0));
 			g_spell_special_aecost = 0;
 		} else {
-			g_spell_special_aecost = (random_interval(2, 5) * 4);
+			g_spell_special_aecost = random_interval(2, 5) * 4;
 
 			if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
-				g_spell_special_aecost = (-2);
+				g_spell_special_aecost = -2;
 			} else {
-				and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
-				sprintf(g_dtp2,	get_tx(1), ((struct struct_hero*)get_spelltarget())->alias);
+				and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+				sprintf(g_dtp2,	get_tx(1), get_spelltarget()->alias);
 			}
 		}
 	}
@@ -142,9 +142,9 @@ void spell_verwandlung(void)
 	signed short i;
 
 	/* set spelltarget */
-	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	if (hero_petrified(get_spelltarget())) {
+	if (hero_petrified((Bit8u*)get_spelltarget())) {
 
 		/* set AEcosts */
 		g_spell_special_aecost = random_schick(10) * 5;
@@ -156,18 +156,19 @@ void spell_verwandlung(void)
 		} else {
 			/* YES: spell has effect */
 			/* unset petrified bit */
-			and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
-			sprintf(g_dtp2,	get_tx(4), ((struct struct_hero*)get_spelltarget())->alias);
+			and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
+			sprintf(g_dtp2,	get_tx(4), get_spelltarget()->alias);
 		}
 	} else {
-		if (hero_transformed(get_spelltarget())) {
+		if (hero_transformed((Bit8u*)get_spelltarget())) {
 
-			and_ptr_bs(get_spelltarget() + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
+			and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
 
 			/* increase attributes */
-			for (i = 0; i <= 6; i++)
-				inc_ptr_bs(get_spelltarget() + HERO_ATTRIB + i * 3);
-			sprintf(g_dtp2,	get_ttx(565), ((struct struct_hero*)get_spelltarget())->alias);
+			for (i = 0; i <= 6; i++) {
+				get_spelltarget()->attrib[i].current++;
+			}
+			sprintf(g_dtp2,	get_ttx(565), get_spelltarget()->alias);
 		} else {
 
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -175,7 +176,7 @@ void spell_verwandlung(void)
 			get_tx(5)[5] = 's';
 #endif
 
-			sprintf(g_dtp2,	get_tx(5), ((struct struct_hero*)get_spelltarget())->alias);
+			sprintf(g_dtp2,	get_tx(5), get_spelltarget()->alias);
 			g_spell_special_aecost = 0;
 		}
 	}
@@ -211,9 +212,10 @@ void spell_band(void)
 		/* cast hero */
 
 		/* Set pointer to hero target */
-		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-		if (get_spelltarget() == get_spelluser()) {
+		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+
 			/* don't cast yourself */
 
 			/* set AE costs */
@@ -223,10 +225,10 @@ void spell_band(void)
 			strcpy(g_dtp2, get_tx(112));
 		} else {
 			/* set flag */
-			or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x80); /* set 'tied' flag */
+			or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x80); /* set 'tied' flag */
 
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(6), ((struct struct_hero*)get_spelltarget())->alias);
+			sprintf(g_dtp2, get_tx(6), get_spelltarget()->alias);
 		}
 	}
 }
@@ -402,9 +404,10 @@ void spell_somnigravis(void)
 	/* cast hero */
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+
 		/* don't cast yourself */
 
 		/* set AE costs */
@@ -414,10 +417,10 @@ void spell_somnigravis(void)
 		strcpy(g_dtp2, get_tx(112));
 	} else {
 		/* set the flag */
-		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 2); /* set 'sleep' flag */
+		or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 2); /* set 'sleep' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(13), ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2, get_tx(13), get_spelltarget()->alias);
 	}
 }
 
@@ -619,34 +622,32 @@ void spell_axxeleratus(void)
 	hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(hero_pos);
+	g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
-	if (!host_readbs(get_spelltarget() + HERO_AXXELERATUS)) {
+	if (!get_spelltarget()->axxeleratus) {
 
 		/* AT + 2 for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(1),
-			get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE),
+			(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
 			2, (signed char)hero_pos);
 
 		/* PA + 2 for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(1),
-			get_spelltarget() + HERO_PA + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE),
+			(Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type],
 			2, (signed char)hero_pos);
 
 		/* set Axxeleratus flag (yields +4 BP, second action phase per round of fighting) for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(1),
-			get_spelltarget() + HERO_AXXELERATUS,
-			1, (signed char)hero_pos);
+		set_mod_slot(slot, MINUTES(1), (Bit8u*)&get_spelltarget()->axxeleratus, 1, (signed char)hero_pos);
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(17), ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2,	get_tx(17), get_spelltarget()->alias);
 
 	} else {
 		/* axxeleratus already active */
-		g_spell_special_aecost = (-2);
+		g_spell_special_aecost = -2;
 	}
 }
 
@@ -752,7 +753,7 @@ void spell_balsam(void)
 	signed short le_to_heal;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 	g_spell_special_aecost = 0;
 
@@ -760,10 +761,10 @@ void spell_balsam(void)
 		((host_readbs(get_spelluser() + HERO_NPC_ID) != 0) && g_in_fight))
 	{
 		/* automatic */
-		le_to_heal = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE)) / 2;
+		le_to_heal = (get_spelltarget()->le_max - get_spelltarget()->le) / 2;
 	} else {
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(19), ((struct struct_hero*)get_spelluser())->alias, ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2,	get_tx(19), ((struct struct_hero*)get_spelluser())->alias, get_spelltarget()->alias);
 
 		/* ask question */
 		le_to_heal = GUI_input(g_dtp2, 2);
@@ -776,17 +777,17 @@ void spell_balsam(void)
 
 		if (le_to_heal < 7) {
 			/* AE-cost is at least 7 */
-			g_spell_special_aecost = (7);
+			g_spell_special_aecost = 7;
 			/* TODO: potential ORIGINAL-BUG: What if le_to_heal is bigger than the missing LE? */
 		} else {
-			if (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE) < le_to_heal) {
+			if (get_spelltarget()->le_max - get_spelltarget()->le < le_to_heal) {
 				/* spellcaster wants to heal more LE than wiche are missing */
-				g_spell_special_aecost = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE));
+				g_spell_special_aecost = get_spelltarget()->le_max - get_spelltarget()->le;
 				le_to_heal = g_spell_special_aecost;
 				/* reduce le and AE_COST to the amount of LE which is actually missing */
 				/* This is in accordance with DSA3 rules. The spell costs are at least 7 AE, unless the spellcaster does not have 7 AE any more. */
 			} else {
-				g_spell_special_aecost = (le_to_heal);
+				g_spell_special_aecost = le_to_heal;
 			}
 		}
 
@@ -797,7 +798,7 @@ void spell_balsam(void)
 			/* reduce AE-costs and 'le_to_heal' to the available AE */
 		}
 
-		add_hero_le((struct struct_hero*)get_spelltarget(), le_to_heal);
+		add_hero_le(get_spelltarget(), le_to_heal);
 	}
 }
 
@@ -806,12 +807,12 @@ void spell_hexenspeichel(void)
 	signed short le;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 	/* set costs to 0 */
 	g_spell_special_aecost = 0;
 
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 		/* spell cannot be used to heal yourself */
 
 		/* prepare message */
@@ -820,7 +821,7 @@ void spell_hexenspeichel(void)
 	}
 
 	/* prepare question */
-	sprintf(g_dtp2, get_tx(19), ((struct struct_hero*)get_spelluser())->alias, ((struct struct_hero*)get_spelltarget())->alias);
+	sprintf(g_dtp2, get_tx(19), ((struct struct_hero*)get_spelluser())->alias, get_spelltarget()->alias);
 
 	le = GUI_input(g_dtp2, 2);
 
@@ -828,19 +829,19 @@ void spell_hexenspeichel(void)
 
 	if (le != -1) {
 
-		if (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE) < le * 2) {
+		if (get_spelltarget()->le_max - get_spelltarget()->le < le * 2) {
 
-			g_spell_special_aecost = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE)) * 2;
+			g_spell_special_aecost = (get_spelltarget()->le_max - get_spelltarget()->le) * 2;
 
 		} else {
-			if (host_readws(get_spelluser() + HERO_AE ) < g_spell_special_aecost) {
+			if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
 				g_spell_special_aecost = host_readws(get_spelluser() + HERO_AE);
 			} else {
-				g_spell_special_aecost = (le * 2);
+				g_spell_special_aecost = le * 2;
 			}
 		}
 
-		add_hero_le((struct struct_hero*)get_spelltarget(), g_spell_special_aecost / 2);
+		add_hero_le(get_spelltarget(), g_spell_special_aecost / 2);
 	}
 }
 
@@ -849,14 +850,14 @@ void spell_klarum_purum(void)
 	signed short poison_id;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(((struct struct_hero*)get_spelluser())->enemy_id - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(((struct struct_hero*)get_spelluser())->enemy_id - 1);
 
-	poison_id = hero_is_poisoned((struct struct_hero*)get_spelltarget());
+	poison_id = hero_is_poisoned(get_spelltarget());
 
 	if (!poison_id) {
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(21), ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2, get_tx(21), get_spelltarget()->alias);
 		g_spell_special_aecost = 0;
 		return;
 	}
@@ -869,24 +870,24 @@ void spell_klarum_purum(void)
 		g_spell_special_aecost = -2;
 	} else {
 		/* reset poison */
-		((struct struct_hero*)get_spelltarget())->poison[poison_id][1] = 0;
-		((struct struct_hero*)get_spelltarget())->poison[poison_id][0] = 1;
+		get_spelltarget()->poison[poison_id][1] = 0;
+		get_spelltarget()->poison[poison_id][0] = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(22), ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2,	get_tx(22), get_spelltarget()->alias);
 	}
 }
 
 void spell_ruhe_koerper(void)
 {
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(((struct struct_hero*)get_spelluser())->enemy_id - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(((struct struct_hero*)get_spelluser())->enemy_id - 1);
 
 	/* set the flag */
-	((struct struct_hero*)get_spelltarget())->ruhe_koerper = 1;
+	get_spelltarget()->ruhe_koerper = 1;
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(51), ((struct struct_hero*)get_spelltarget())->alias);
+	sprintf(g_dtp2, get_tx(51), get_spelltarget()->alias);
 }
 
 void spell_tiere_heilen(void)

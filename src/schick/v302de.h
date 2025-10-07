@@ -603,9 +603,16 @@ static inline Bit8u *get_spelltarget_e(void) {
 	return (Bit8u*)M302de::g_spelltarget_e;
 }
 
-static inline Bit8u *get_spelltarget(void) {
-	return (Bit8u*)M302de::g_spelltarget;
+
+#if !defined(__BORLANDC__)
+namespace M302de {
+
+static inline struct struct_hero *get_spelltarget(void) {
+	return (struct struct_hero*)g_spelltarget;
 }
+
+}
+#endif
 
 static inline Bit8u *get_spelluser(void) {
 	return (Bit8u*)M302de::g_spelluser;
@@ -752,7 +759,7 @@ static inline char* get_itemname(unsigned short item)
 #define item_undropable(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).undropable)
 
 #define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
-#define get_spelltarget()	((unsigned char*)g_spelltarget)
+#define get_spelltarget()	((struct struct_hero*)g_spelltarget)
 #define get_spelluser()		((unsigned char*)g_spelluser)
 
 #define get_ttx(no) ((char*)(g_text_ltx_index[(no)]))

@@ -43,16 +43,16 @@ void spell_arcano(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* get a free mod_slot */
 	slot = get_free_mod_slot();
 
 	/* MR + 2 for 1 h */
-	set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_MR, 2, (signed char)target);
+	set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->mr, 2, (signed char)target);
 
 	/* "Die Magieresistenz von %s steigt um 2 Punkte." */
-	sprintf(g_dtp2, get_tx(98), (char*)(((struct struct_hero*)get_spelltarget())->alias));
+	sprintf(g_dtp2, get_tx(98), get_spelltarget()->alias);
 }
 
 void spell_armatrutz(void)
@@ -123,40 +123,33 @@ void spell_inc_ch(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
 
 		/* copy message text */
-		strcpy(g_dtp2,
-			get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 
 		return;
 	}
 
 	/* check if CH was already increased */
-	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_CH)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_CH))) {
+	if (get_spelltarget()->attrib[ATTRIB_CH].current > get_spelltarget()->attrib[ATTRIB_CH].normal) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf(g_dtp2,
-			get_tx(113),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(414));
+		sprintf(g_dtp2,	get_tx(113), get_spelltarget()->alias, get_ttx(414));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
 
 		/* CH + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_CH), 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_CH].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf(g_dtp2,
-			get_tx(101),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(414));
+		sprintf(g_dtp2, get_tx(101), get_spelltarget()->alias, get_ttx(414));
 	}
 }
 
@@ -177,9 +170,7 @@ void spell_feuerbann(void)
 			get_spelluser() + HERO_FIREBAN, 1, (signed char)target);
 
 		/* prepare message */
-		sprintf(g_dtp2,
-			get_tx(102),
-			((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2,	get_tx(102), ((struct struct_hero*)get_spelluser())->alias);
 	} else {
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -195,40 +186,34 @@ void spell_inc_ff(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
 
 		/* copy message text */
-		strcpy(g_dtp2,
-			get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 
 		return;
 	}
 
 	/* check if FF was already increased */
-	if (host_readbs(get_spelltarget() + 0x3e) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_FF))) {
+	if (get_spelltarget()->attrib[ATTRIB_FF].current > get_spelltarget()->attrib[ATTRIB_FF].normal) {
+
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf(g_dtp2,
-			get_tx(113),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(415));
+		sprintf(g_dtp2,	get_tx(113), get_spelltarget()->alias, get_ttx(415));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
 
 		/* FF + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), get_spelltarget() + 0x3e, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_FF].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf(g_dtp2,
-			get_tx(101),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(415));
+		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(415));
 	}
 }
 
@@ -241,40 +226,33 @@ void spell_inc_ge(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
 
 		/* copy message text */
-		strcpy(g_dtp2,
-			get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 
 		return;
 	}
 
 	/* check if GE was already increased */
-	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_GE)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_GE))) {
+	if (get_spelltarget()->attrib[ATTRIB_GE].current > get_spelltarget()->attrib[ATTRIB_GE].normal) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf(g_dtp2,
-			get_tx(113),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(416));
+		sprintf(g_dtp2, get_tx(113), get_spelltarget()->alias, get_ttx(416));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
 
 		/* GE + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_GE), 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_GE].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf(g_dtp2,
-			get_tx(101),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(416));
+		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(416));
 	}
 }
 
@@ -287,40 +265,33 @@ void spell_inc_in(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
 
 		/* copy message text */
-		strcpy(g_dtp2,
-			get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 
 		return;
 	}
 
 	/* check if IN was already increased */
-	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_IN)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_IN))) {
+	if (get_spelltarget()->attrib[ATTRIB_IN].current > get_spelltarget()->attrib[ATTRIB_IN].normal) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf(g_dtp2,
-			get_tx(113),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(417));
+		sprintf(g_dtp2, get_tx(113), get_spelltarget()->alias, get_ttx(417));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
 
 		/* IN + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_IN), 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_IN].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf(g_dtp2,
-			get_tx(101),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(417));
+		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(417));
 	}
 }
 
@@ -333,40 +304,33 @@ void spell_inc_kk(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
 
 		/* copy message text */
-		strcpy(g_dtp2,
-			get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 
 		return;
 	}
 
 	/* check if KK was already increased */
-	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KK)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KK))) {
+	if (get_spelltarget()->attrib[ATTRIB_KK].current > get_spelltarget()->attrib[ATTRIB_KK].normal) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf(g_dtp2,
-			get_tx(113),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(418));
+		sprintf(g_dtp2,	get_tx(113), get_spelltarget()->alias, get_ttx(418));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
 
 		/* IN + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KK), 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_KK].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf(g_dtp2,
-			get_tx(101),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(418));
+		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(418));
 	}
 }
 
@@ -379,40 +343,33 @@ void spell_inc_kl(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
 
 		/* copy message text */
-		strcpy(g_dtp2,
-			get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 
 		return;
 	}
 
 	/* check if KL was already increased */
-	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KL)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KL))) {
+	if (get_spelltarget()->attrib[ATTRIB_KL].current > get_spelltarget()->attrib[ATTRIB_KL].normal) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf(g_dtp2,
-			get_tx(113),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(413));
+		sprintf(g_dtp2,	get_tx(113), get_spelltarget()->alias, get_ttx(413));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
 
 		/* KL + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KL), 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_KL].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf(g_dtp2,
-			get_tx(101),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(413));
+		sprintf(g_dtp2, get_tx(101), get_spelltarget()->alias, get_ttx(413));
 	}
 }
 
@@ -425,47 +382,40 @@ void spell_inc_mu(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == get_spelluser()) {
+	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
 
 		/* copy message text */
-		strcpy(g_dtp2,
-			get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 
 		return;
 	}
 
 	/* check if MU was already increased */
-	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_MU)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_MU))) {
+	if (get_spelltarget()->attrib[ATTRIB_MU].current > get_spelltarget()->attrib[ATTRIB_MU].normal) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf(g_dtp2,
-			get_tx(113),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(412));
+		sprintf(g_dtp2,	get_tx(113), get_spelltarget()->alias, get_ttx(412));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
 
 		/* MU + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_MU), 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_MU].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf(g_dtp2,
-			get_tx(101),
-			((struct struct_hero*)get_spelltarget())->alias,
-			get_ttx(412));
+		sprintf(g_dtp2, get_tx(101), get_spelltarget()->alias, get_ttx(412));
 	}
 }
 
 void spell_mutabili(void)
 {
 	/* triggers the "spell failed" messages */
-	g_spell_special_aecost = (-2);
+	g_spell_special_aecost = -2;
 #if !defined(__BORLANDC__)
 	D1_INFO("Zauberspruch \"Mutabili\" ist nicht implementiert\n");
 #endif
@@ -486,23 +436,23 @@ void spell_paralue(void)
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
-		if (get_spelltarget() != get_spelluser()) {
+		if (get_spelltarget() != (struct struct_hero*)get_spelluser()) {
 
 			/* set the target  */
-			g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+			g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 			/* check again */
-			if (get_spelltarget() == get_spelluser()) {
+			if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 				/* never cast yourself */
 				g_spell_special_aecost = 0;
 
 				strcpy(g_dtp2, get_tx(112));
 			} else {
-				or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x4); /* set 'petrified' flag */
+				or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x4); /* set 'petrified' flag */
 
 				/* prepare message */
-				sprintf(g_dtp2, get_tx(103), ((struct struct_hero*)get_spelltarget())->alias);
+				sprintf(g_dtp2, get_tx(103), get_spelltarget()->alias);
 			}
 		} else {
 			/* set AE to 0 */
@@ -539,7 +489,7 @@ void spell_salander(void)
 		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set AE cost */
-		g_spell_special_aecost = (ae_cost);
+		g_spell_special_aecost = ae_cost;
 	} else {
 		/* prepare message */
 		sprintf(g_dtp2, get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
@@ -585,7 +535,7 @@ void spell_visibili(void)
 	/* check if the hero has enough AE */
 	if (rounds * 5 <= host_readws(get_spelluser() + HERO_AE)) {
 
-		g_spell_special_aecost = (rounds * 5);
+		g_spell_special_aecost = rounds * 5;
 		pos = (signed short)get_hero_index(get_spelluser());
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
@@ -649,12 +599,9 @@ void spell_brenne(void)
 		if (lantern_pos != -1) {
 			/* lantern and torch are available, must decide */
 
-			sprintf(g_dtp2,
-				get_tx(107),
-				((struct struct_hero*)get_spelluser())->alias);
+			sprintf(g_dtp2,	get_tx(107), ((struct struct_hero*)get_spelluser())->alias);
 
-			answer = GUI_radio(g_dtp2,
-					2,
+			answer = GUI_radio(g_dtp2, 2,
 					(char*)(GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0)),
 					(char*)(GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0)));
 

@@ -318,19 +318,19 @@ void spell_blitz(void)
 		/* cast a hero */
 
 		/* set the spell target */
-		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-		if (get_spelltarget() == get_spelluser()) {
+		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 			g_spell_special_aecost = 0;
 
 			strcpy(g_dtp2, get_tx(112));
 		} else {
 			/* set the rounds counter */
-			host_writeb(get_spelltarget() + HERO_BLIND, 3);
+			get_spelltarget()->blind_timer = 3;
 
 			/* prepare the message */
-			sprintf(g_dtp2, get_tx(86), ((struct struct_hero*)get_spelltarget())->alias);
+			sprintf(g_dtp2, get_tx(86), get_spelltarget()->alias);
 		}
 	} else {
 		/* cast an enemy */
@@ -386,36 +386,36 @@ void spell_eisenrost(void)
 		/* target is a hero */
 
 		/* set the spell target */
-		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-		if (get_spelltarget() == get_spelluser()) {
+		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 			g_spell_special_aecost = 0;
 
 			strcpy(g_dtp2, get_tx(112));
 		} else {
 			/* get weapon id of the target */
-			id = host_readws(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
+			id = get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
 			if (!id) {
 				/* no weapon in hand */
 				g_spell_special_aecost = (-2);
 			} else {
 				/* check if weapon is already broken */
-				if (((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
+				if (get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
 
 					strcpy(g_dtp2, get_tx(90));
 
 				} else {
 
-					if (host_readbs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_BF)) > 0) {
-						or_ptr_bs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0x01); /* set 'broken' flag */
+					if (get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].bf > 0) {
 
-						sprintf(g_dtp2, get_tx(92),
-							GUI_names_grammar((signed short)0x8000, id, 0),
-							(char*)(((struct struct_hero*)get_spelltarget())->alias));
+						get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
+
+						sprintf(g_dtp2, get_tx(92), GUI_names_grammar((signed short)0x8000, id, 0),
+							(char*)get_spelltarget()->alias);
 					} else {
-						g_spell_special_aecost = (-2);
+						g_spell_special_aecost = -2;
 					}
 				}
 			}
@@ -557,10 +557,10 @@ void spell_ignifaxius(void)
 		hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 		/* set the spell target */
-		g_spelltarget = get_hero(hero_pos);
+		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
 		/* get a pointer to the armor */
-		p_armor = get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY;
+		p_armor = (Bit8u*)&(get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY]);
 
 		if ((host_readws(p_armor + INVENTORY_ITEM_ID) != ITEM_NONE) && (rs_malus != 0)) {
 
@@ -573,19 +573,18 @@ void spell_ignifaxius(void)
 			host_writebs(p_armor + INVENTORY_RS_LOST,
 				host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus);
 			/* subtract rs_malus from RS1 */
-			host_writebs(get_spelltarget() + HERO_RS_BONUS1,
-				host_readbs(get_spelltarget() + HERO_RS_BONUS1) - rs_malus);
+			get_spelltarget()->rs_bonus1 = get_spelltarget()->rs_bonus1 - rs_malus;
 		}
 
 		/* get an AT/PA-Malus of -level / 2 for the current weapon and one hour */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, HOURS(1),
-			get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE),
+			(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
 			-level / 2, (signed char)hero_pos);
 
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, HOURS(1),
-			get_spelltarget() + HERO_PA + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE),
+			(Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type],
 			-level / 2, (signed char)hero_pos);
 
 	} else {
@@ -609,7 +608,7 @@ void spell_ignifaxius(void)
 	}
 
 	/* set spell costs */
-	g_spell_special_aecost = (damage);
+	g_spell_special_aecost = damage;
 }
 
 void spell_plumbumbarum(void)
@@ -624,9 +623,9 @@ void spell_plumbumbarum(void)
 		hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 		/* set the spell target */
-		g_spelltarget = get_hero(hero_pos);
+		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
-		if (get_spelltarget() == get_spelluser()) {
+		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
 
 			/* don't attack yourself */
 			g_spell_special_aecost = 0;
@@ -639,12 +638,12 @@ void spell_plumbumbarum(void)
 			/* give a short AT-malus of -3 to the current weapon of the target */
 			slot = get_free_mod_slot();
 			set_mod_slot(slot, 0x2d,
-				get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE),
+				(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
 				-3, (signed char)hero_pos);
 
 			/* prepare the message */
-			sprintf(g_dtp2, get_tx(94), ((struct struct_hero*)get_spelltarget())->alias);
-			}
+			sprintf(g_dtp2, get_tx(94), get_spelltarget()->alias);
+		}
 
 		return;
 
@@ -679,30 +678,29 @@ void spell_saft_kraft(void)
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 	/* set a pointer to the target */
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* +5 on AT of the current weapon */
 	slot = get_free_mod_slot();
 
 	set_mod_slot(slot, rounds * 9L,
-		get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE),
+		(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
 		5, (signed char)target);
 
 	/* -5 on PA of the current weapon */
 	slot = get_free_mod_slot();
 
 	set_mod_slot(slot, rounds * 9L,
-		get_spelltarget() + HERO_PA + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE),
+		(Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type],
 		-5, (signed char)target);
 
 	/* +5 extra damage */
 	slot = get_free_mod_slot();
 
-	set_mod_slot(slot, rounds * 9L,
-		get_spelltarget() + HERO_SAFTKRAFT, 5, (signed char)target);
+	set_mod_slot(slot, rounds * 9L, (Bit8u*)&get_spelltarget()->saftkraft, 5, (signed char)target);
 
 	/* set ae costs */
-	g_spell_special_aecost = (rounds);
+	g_spell_special_aecost = rounds;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	char *p = get_tx(96);
@@ -715,7 +713,7 @@ void spell_saft_kraft(void)
 #endif
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(96), ((struct struct_hero*)get_spelltarget())->alias);
+	sprintf(g_dtp2, get_tx(96), get_spelltarget()->alias);
 
 }
 
@@ -728,19 +726,19 @@ void spell_scharfes_auge(void)
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 	/* set a pointer to the target */
-	g_spelltarget = get_hero(target);
+	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* all range skills are boosted + 3 */
 
 	slot = get_free_mod_slot();
 
-	set_mod_slot(slot, 3 * 9L, get_spelltarget() + (HERO_TALENTS + TA_WURFWAFFEN), 3, (signed char)target); /* TA_WURFWAFFEN */
+	set_mod_slot(slot, 3 * 9L, (Bit8u*)&get_spelltarget()->skills[TA_WURFWAFFEN], 3, (signed char)target); /* TA_WURFWAFFEN */
 
 	slot = get_free_mod_slot();
 
-	set_mod_slot(slot, 3 * 9L, get_spelltarget() + (HERO_TALENTS + TA_SCHUSSWAFFEN), 3, (signed char)target); /* TA_SCHUSSWAFFEN */
+	set_mod_slot(slot, 3 * 9L, (Bit8u*)&get_spelltarget()->skills[TA_SCHUSSWAFFEN], 3, (signed char)target); /* TA_SCHUSSWAFFEN */
 
-	sprintf(g_dtp2, get_tx(97), ((struct struct_hero*)get_spelltarget())->alias);
+	sprintf(g_dtp2, get_tx(97), get_spelltarget()->alias);
 }
 
 

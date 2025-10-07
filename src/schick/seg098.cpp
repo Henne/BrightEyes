@@ -111,19 +111,19 @@ void FIG_do_spell_damage(signed short le)
 		/* attack hero */
 
 		/* set pointer */
-		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 		/* ensure the spelluser does not attack himself */
-		if (get_spelltarget() != get_spelluser()) {
+		if (get_spelltarget() != (struct struct_hero*)get_spelluser()) {
 
 			/* do the damage */
-			sub_hero_le((struct struct_hero*)get_spelltarget(), le);
+			sub_hero_le(get_spelltarget(), le);
 
 			/* add a message (red star with le) */
 			FIG_add_msg(0x08, le);
 
 			/* set a variable if the hoer died */
-			if (hero_dead(get_spelltarget())) {
+			if (hero_dead((Bit8u*)get_spelltarget())) {
 				g_defender_dead = 1;
 			}
 		}
@@ -157,15 +157,15 @@ signed short get_attackee_parade(void)
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
 
 		/* attacked a hero */
-		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 		/* calculate PA  */
 
 		/* PA = PA-Current-Weapon - AT-Modificator - 1/2 * RS-BE */
 
-		return host_readbs(get_spelltarget() + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE) + HERO_PA)
-			- host_readbs(get_spelltarget() + HERO_ATTACK_TYPE)
-			- host_readbs(get_spelltarget() + HERO_RS_BE) / 2;
+		return get_spelltarget()->pa_weapon[get_spelltarget()->w_type]
+			- get_spelltarget()->atpa_mod
+			- get_spelltarget()->rs_be / 2;
 	} else {
 
 		/* attacked an enemy */
@@ -188,9 +188,9 @@ signed short get_attackee_rs(void)
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
 
 		/* attacked a hero */
-		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-		return host_readbs(get_spelltarget() + HERO_RS_BONUS1); /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
+		return get_spelltarget()->rs_bonus1; /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
 	} else {
 

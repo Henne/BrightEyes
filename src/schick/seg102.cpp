@@ -27,7 +27,7 @@ namespace M302de {
 
 signed int g_spelltest_result;			// ds:0xe5b2
 struct enemy_sheet *g_spelltarget_e;		// ds:0xe5b4, Pointer to enemy
-unsigned char *g_spelltarget;			// ds:0xe5b8
+struct struct_hero *g_spelltarget;		// ds:0xe5b8
 struct struct_hero *g_spelluser;		// ds:0xe5bc
 static struct enemy_sheet *g_spelluser_e;	// ds:0xe5c0
 
@@ -39,16 +39,16 @@ void MON_do_spell_damage(signed short damage)
 			/* target is a hero */
 
 			/* set the pointer to the target */
-			g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+			g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 			/* do the damage */
-			sub_hero_le((struct struct_hero*)get_spelltarget(), damage);
+			sub_hero_le(get_spelltarget(), damage);
 
 			/* add a fight message */
 			FIG_add_msg(8, damage);
 
 			/* check if someone died */
-			if (hero_dead(get_spelltarget())) {
+			if (hero_dead((Bit8u*)get_spelltarget())) {
 				g_defender_dead = 1;
 			}
 
@@ -79,11 +79,10 @@ signed short MON_get_target_PA(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget =  get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget =  (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* calc and return PA-value */
-		return host_readbs(get_spelltarget() + HERO_PA + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE))
-			- host_readbs(get_spelltarget() + HERO_ATTACK_TYPE);
+		return get_spelltarget()->pa_weapon[get_spelltarget()->w_type] - get_spelltarget()->atpa_mod;
 
 	} else {
 		/* target is a monster */
@@ -103,10 +102,10 @@ signed short MON_get_target_RS(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* return RS-value */
-		return host_readbs(get_spelltarget() + HERO_RS_BONUS1);
+		return get_spelltarget()->rs_bonus1;
 
 	} else {
 		/* target is a monster */
@@ -410,38 +409,38 @@ void mspell_verwandlung(void)
 void mspell_bannbaladin(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
-	or_ptr_bs(get_spelltarget() + HERO_FLAGS2, 0x08); /* set 'tame' flag */
+	or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS2, 0x08); /* set 'tame' flag */
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(115), ((struct struct_hero*)get_spelltarget())->alias);
+	sprintf(g_dtp2, get_tx(115), get_spelltarget()->alias);
 }
 
 void mspell_boeser_blick(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
-	or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x20); /* set 'renegade' flag */
+	or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x20); /* set 'renegade' flag */
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(116), ((struct struct_hero*)get_spelltarget())->alias);
+	sprintf(g_dtp2, get_tx(116), get_spelltarget()->alias);
 }
 
 void mspell_horriphobus(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
-	or_ptr_bs(get_spelltarget() + HERO_FLAGS2, 0x01); /* set 'scared' flag */
-	and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+	or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS2, 0x01); /* set 'scared' flag */
+	and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(117), ((struct struct_hero*)get_spelltarget())->alias);
+	sprintf(g_dtp2, get_tx(117), get_spelltarget()->alias);
 }
 
 void mspell_axxeleratus(void)
@@ -522,13 +521,13 @@ void mspell_blitz(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* set blitz timer to 3 rounds */
-		host_writeb(get_spelltarget() + HERO_BLIND, 3);
+		get_spelltarget()->blind_timer = 3;
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(86), ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2, get_tx(86), get_spelltarget()->alias);
 	} else {
 		/* target is a monster */
 
@@ -551,23 +550,23 @@ void mspell_eisenrost(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
-		item_id = ((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
+		item_id = get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
 		if (!item_id) {
 
 			/* target hero has no weapon */
 			g_monster_spell_ae_cost = 2;
 
-		} else if (!((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
+		} else if (!get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
 
-			if (((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].bf > 0) {
+			if (get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].bf > 0) {
 
-				((struct struct_hero*)get_spelltarget())->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
+				get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2,	get_tx(92), (Bit8u*)GUI_names_grammar((signed short)0x8000, item_id, 0), ((struct struct_hero*)get_spelltarget())->alias);
+				sprintf(g_dtp2,	get_tx(92), (Bit8u*)GUI_names_grammar((signed short)0x8000, item_id, 0), get_spelltarget()->alias);
 
 			} else {
 				g_monster_spell_ae_cost = -2;
@@ -647,10 +646,10 @@ void mspell_ignifaxius(void)
 		hero_pos = g_spelluser_e->enemy_id - 1;
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(hero_pos);
+		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
 		/* pointer to the armor of the target hero */
-		p_armor = get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY;
+		p_armor = (Bit8u*)&get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY];
 
 		if ((host_readws(p_armor + INVENTORY_ITEM_ID) != ITEM_NONE) && (rs_malus != 0)) {
 
@@ -662,16 +661,17 @@ void mspell_ignifaxius(void)
 			}
 
 			host_writeb(p_armor + INVENTORY_RS_LOST, host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus);
-			host_writeb(get_spelltarget() + HERO_RS_BONUS1, host_readbs(get_spelltarget() + HERO_RS_BONUS1) - rs_malus);
+
+			get_spelltarget()->rs_bonus1 = get_spelltarget()->rs_bonus1 - rs_malus;
 		}
 
 		/* AT - level / 2 */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE), -level / 2, (signed char)hero_pos);
+		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type], -level / 2, (signed char)hero_pos);
 
 		/* PA - level / 2 */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_PA + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE), -level / 2, (signed char)hero_pos);
+		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type], -level / 2, (signed char)hero_pos);
 
 	} else {
 		/* target is a monster */
@@ -706,14 +706,14 @@ void mspell_plumbumbarum(void)
 		hero_pos = g_spelluser_e->enemy_id - 1;
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(hero_pos);
+		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
 		/* AT - 3 */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE), -3, (signed char)hero_pos);
+		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type], -3, (signed char)hero_pos);
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(94), ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2, get_tx(94), get_spelltarget()->alias);
 	} else {
 		/* target is a monster */
 
@@ -782,13 +782,13 @@ void mspell_paralue(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* set the flag */
-		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+		or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(103), ((struct struct_hero*)get_spelltarget())->alias);
+		sprintf(g_dtp2, get_tx(103), get_spelltarget()->alias);
 	}
 }
 
