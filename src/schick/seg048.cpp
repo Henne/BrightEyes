@@ -70,8 +70,8 @@ void status_menu(signed short hero_pos)
 	signed short width;
 	signed short height;
 	signed short file_bak;
-	Bit8u *hero2;
-	Bit8u *hero1;
+	struct struct_hero *hero2;
+	struct struct_hero *hero1;
 	signed short flag3;
 	signed short l1;
 	signed short tw_bak;
@@ -84,9 +84,9 @@ void status_menu(signed short hero_pos)
 	flag4 = 0;
 	g_mouse1_doubleclick = 0;
 
-	hero1 = hero2 = get_hero(hero_pos);
+	hero1 = hero2 = (struct struct_hero*)get_hero(hero_pos);
 
-	if (!host_readbs(hero2 + HERO_TYPE) || !g_statusmenu_allowed) {
+	if (!hero2->typus || !g_statusmenu_allowed) {
 		return;
 	}
 
@@ -135,17 +135,15 @@ void status_menu(signed short hero_pos)
 						9);
 				}
 
-				if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no) != ITEM_NONE) {
+				if (hero1->inventory[g_statuspage_selitem3_no].item_id != ITEM_NONE) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings,
-						(char*)GUI_name_singular(get_itemname(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no))),
-						!is_in_word_array(
-						    host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no),
-						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? g_empty_string8 : get_tx2(66));
+						(char*)GUI_name_singular(get_itemname(hero1->inventory[g_statuspage_selitem3_no].item_id)),
+						!is_in_word_array(hero1->inventory[g_statuspage_selitem3_no].item_id,
+							g_wearable_items_index[hero2->typus - 1]) ? g_empty_string8 : get_tx2(66));
 
-					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)))) {
-						strcat(g_dtp2,
-							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) + 3)));
+					if (item_weapon(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
+						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + 3)));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
@@ -178,9 +176,9 @@ void status_menu(signed short hero_pos)
 
 				if (hero_pos > 6) hero_pos = 0;
 
-			} while (!host_readbs(get_hero(hero_pos) + HERO_TYPE) ||
-					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != gs_current_group ||
-					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && g_status_page_mode > 3));
+			} while (!(((struct struct_hero*)get_hero(hero_pos))->typus) ||
+					(((struct struct_hero*)get_hero(hero_pos))->group_no != gs_current_group) ||
+					((((struct struct_hero*)get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -189,12 +187,12 @@ void status_menu(signed short hero_pos)
 					hero1 = hero2;
 				}
 
-				hero2 = get_hero(hero_pos);
+				hero2 = (struct struct_hero*)get_hero(hero_pos);
 				flag4 = 1;
 			} else {
 				flag4 = 0;
 
-				hero1 = hero2 = get_hero(hero_pos);
+				hero1 = hero2 = (struct struct_hero*)get_hero(hero_pos);
 
 				reset_item_selector();
 			}
@@ -210,9 +208,10 @@ void status_menu(signed short hero_pos)
 				hero_pos--;
 
 				if (hero_pos < 0) hero_pos = 6;
-			} while (!host_readbs(get_hero(hero_pos) + HERO_TYPE) ||
-					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != gs_current_group ||
-					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && g_status_page_mode > 3));
+
+			} while (!(((struct struct_hero*)get_hero(hero_pos))->typus) ||
+					(((struct struct_hero*)get_hero(hero_pos))->group_no != gs_current_group) ||
+					((((struct struct_hero*)get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -221,12 +220,12 @@ void status_menu(signed short hero_pos)
 					hero1 = hero2;
 				}
 
-				hero2 = get_hero(hero_pos);
+				hero2 = (struct struct_hero*)get_hero(hero_pos);
 				flag4 = 1;
 			} else {
 				flag4 = 0;
 
-				hero1 = hero2 = get_hero(hero_pos);
+				hero1 = hero2 = (struct struct_hero*)get_hero(hero_pos);
 
 				reset_item_selector();
 			}
@@ -317,16 +316,17 @@ void status_menu(signed short hero_pos)
 				*(g_dtp2 + 60) = '\0';
 				GUI_print_string(g_dtp2, 16, 192);
 
-				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) {
-					sprintf(g_dtp2, g_extraspace_separated_strings2,
-						(char*)GUI_name_singular(get_itemname(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no))),
-						!is_in_word_array(
-						    host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no),
-						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? g_empty_string9 : get_tx2(66));
+				if (hero2->inventory[g_statuspage_selitem3_no].item_id) {
 
-					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)))) {
-						strcat(g_dtp2,
-							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) + 3)));
+					sprintf(g_dtp2, g_extraspace_separated_strings2,
+						(char*)GUI_name_singular(get_itemname(hero2->inventory[g_statuspage_selitem3_no].item_id)),
+						!is_in_word_array(
+						    hero2->inventory[g_statuspage_selitem3_no].item_id,
+						    g_wearable_items_index[hero2->typus - 1]) ? g_empty_string9 : get_tx2(66));
+
+					if (item_weapon(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
+
+						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + 3)));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
@@ -372,12 +372,12 @@ void status_menu(signed short hero_pos)
 					if (flag4 != 0) {
 
 						if (g_statuspage_selitem4_no < 23) {
-							pass_item(hero1, g_statuspage_selitem3_no, hero2, g_statuspage_selitem4_no);
+							pass_item((Bit8u*)hero1, g_statuspage_selitem3_no, (Bit8u*)hero2, g_statuspage_selitem4_no);
 							g_request_refresh = 1;
 						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
-							print_item_description(hero1, g_statuspage_selitem3_no);
+							print_item_description((Bit8u*)hero1, g_statuspage_selitem3_no);
 						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
-							consume((struct struct_hero*)hero1, (struct struct_hero*)hero2, g_statuspage_selitem3_no);
+							consume(hero1, hero2, g_statuspage_selitem3_no);
 						}
 
 						/* set the new ??? border */
@@ -393,12 +393,12 @@ void status_menu(signed short hero_pos)
 
 					} else {
 						if (g_statuspage_selitem4_no < 23) {
-							move_item(g_statuspage_selitem3_no, g_statuspage_selitem4_no, hero2);
+							move_item(g_statuspage_selitem3_no, g_statuspage_selitem4_no, (Bit8u*)hero2);
 							g_request_refresh = 1;
-						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
-							print_item_description(hero2, g_statuspage_selitem3_no);
-						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
-							consume((struct struct_hero*)hero2, (struct struct_hero*)hero2, g_statuspage_selitem3_no);
+						} else if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_EYE) { /* eye icon */
+							print_item_description((Bit8u*)hero2, g_statuspage_selitem3_no);
+						} else if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_MOUTH) { /* mouth icon */
+							consume(hero2, hero2, g_statuspage_selitem3_no);
 						}
 
 						/* set the new ??? border */
@@ -414,7 +414,7 @@ void status_menu(signed short hero_pos)
 					flag2 = 1;
 				} else {
 
-					g_statuspage_selitem4_no = (23);
+					g_statuspage_selitem4_no = HERO_INVENTORY_SLOT_EYE;
 
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
@@ -424,14 +424,14 @@ void status_menu(signed short hero_pos)
 						g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
 						8);
 
-					if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) {
+					if (hero2->inventory[g_statuspage_selitem3_no].item_id) {
 
 						nvf.dst = g_icon;
 						nvf.src = g_buffer10_ptr;
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
 						nvf.height = (Bit8u*)&height;
-						nvf.no = host_readws(get_itemsdat(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)));
+						nvf.no = host_readws(get_itemsdat(hero2->inventory[g_statuspage_selitem3_no].item_id));
 						process_nvf(&nvf);
 
 						make_ggst_cursor(g_icon);
@@ -445,10 +445,10 @@ void status_menu(signed short hero_pos)
 		/* check if the hero is diseased and print a message */
 		if (g_status_page_mode == 1 &&
 			g_action == ACTION_ID_240 &&
-			hero_is_diseased((struct struct_hero*)hero2))
+			hero_is_diseased(hero2))
 		{
-			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased((struct struct_hero*)hero2)), (char*)(hero2 + HERO_NAME2),
-				GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1));
+			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), hero2->alias,
+				GUI_get_ptr(hero2->sex, 1));
 
 			GUI_output(g_dtp2);
 
@@ -468,7 +468,7 @@ void status_menu(signed short hero_pos)
 					g_radio_name_list[1] = get_tx2(20);
 					g_radio_name_list[2] = get_tx2(21);
 
-					flag3 = hero_is_diseased((struct struct_hero*)hero2);
+					flag3 = hero_is_diseased(hero2);
 
 					if (flag3 != 0) {
 						g_radio_name_list[3] = get_tx2(25);
@@ -480,7 +480,7 @@ void status_menu(signed short hero_pos)
 					}
 				} else {
 
-					if ((flag3 = hero_is_diseased((struct struct_hero*)hero2))) {
+					if ((flag3 = hero_is_diseased(hero2))) {
 						g_radio_name_list[0] = get_tx2(25);
 						g_radio_name_list[1] = get_tx2(15);
 						l1 = 7;
@@ -499,11 +499,11 @@ void status_menu(signed short hero_pos)
 					switch (l_di) {
 					case 1: {
 						/* change name */
-						if (host_readbs(hero2 + HERO_NPC_ID) != 0) {
+						if (hero2->npc_id != 0) {
 							GUI_output(get_tx2(71));
 						} else {
 							GUI_input(get_tx2(70), 15);
-							strcpy((char*)hero2 + HERO_NAME2, g_text_input_buf);
+							strcpy(hero2->alias, g_text_input_buf);
 							g_request_refresh = 1;
 						}
 						break;
@@ -524,7 +524,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item(hero2, g_statuspage_selitem3_no, -1);
+							drop_item((Bit8u*)hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -558,7 +558,7 @@ void status_menu(signed short hero_pos)
 						} else if (l1 == 7) {
 
 							sprintf(g_dtp2, get_tx2(25 + flag3),
-								(char*)(hero2 + HERO_NAME2), GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1));
+								hero2->alias, GUI_get_ptr(hero2->sex, 1));
 
 								GUI_output(g_dtp2);
 						} else {
@@ -581,7 +581,7 @@ void status_menu(signed short hero_pos)
 					}
 					case 8: {
 						/* show spells */
-						if (host_readbs(hero2 + HERO_TYPE) < HERO_TYPE_WITCH) {
+						if (hero2->typus < HERO_TYPE_WITCH) {
 							/* not a spellcaster */
 							GUI_output(get_ttx(215));
 						} else {
@@ -595,7 +595,7 @@ void status_menu(signed short hero_pos)
 						if (flag3) {
 
 							sprintf(g_dtp2, get_tx2(25 + flag3),
-								(char*)(hero2 + HERO_NAME2), GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1));
+								hero2->alias, GUI_get_ptr(hero2->sex, 1));
 
 							GUI_output(g_dtp2);
 							break;
@@ -641,7 +641,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item(hero2, g_statuspage_selitem3_no, -1);
+							drop_item((Bit8u*)hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -680,7 +680,7 @@ void status_menu(signed short hero_pos)
 						break;
 					}
 					case 7: {
-						if (host_readbs(hero2 + HERO_TYPE) < HERO_TYPE_WITCH) {
+						if (hero2->typus < HERO_TYPE_WITCH) {
 							/* not a spellcaster */
 							GUI_output(get_ttx(215));
 						} else {
@@ -727,7 +727,7 @@ void status_menu(signed short hero_pos)
 						break;
 					}
 					case 4: {
-						if (host_readbs(hero2 + HERO_TYPE) < HERO_TYPE_WITCH) {
+						if (hero2->typus < HERO_TYPE_WITCH) {
 							/* not a spellcaster */
 							GUI_output(get_ttx(215));
 						} else {
