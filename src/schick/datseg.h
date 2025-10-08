@@ -450,6 +450,19 @@ struct sea_route {
 	unsigned char price_mod;	/* one byte rw */ /* a number between 70 and 130 which serves as a percentage modifier to the price of the next ship on this route */
 };
 
+/* structure of the entries of ITEMS.DAT */
+struct item_stats {
+	Bit16s gfx;
+	Bit8u flags;		/* bitfield. bit 0: armor / bit 1: weapon / bit 2: useable / bit 3: nutrition / bit 4: stackable / bit 5: poison/herb/potion / bit 6: personal item (undropable) / bit 7: not usable by "use object"?? */
+	Bit8s subtype;		/* meaning depends on item type set in ITEM_STATS_FLAGS. weapon -> WEAPON_TYPE_..., armor -> ARMOR_TYPE_..., nutrition -> NUTRITION_TYPE... */
+	Bit8s table_index;
+	Bit16s weight;		/* weight in ounces */
+	Bit8s price_unit;	/* 1: Heller / 10: Silberstücke / 100: Dukaten */
+	Bit16s price;		/* unit is ITEM_STATS_PRICE_UNIT. So the price in Heller is ITEM_STATS_PRICE_UNIT * ITEM_STATS_PRICE */
+	Bit8s commonness;
+	Bit8s magic;		/* 0: not magic / 1: magic */
+};
+
 /* TODO: This structure makes an inconsistent game state */
 struct harbor_option_obsolete {
 	char *ship_name_ptr;

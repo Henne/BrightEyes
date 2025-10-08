@@ -251,7 +251,7 @@ void buy_screen(void)
 
 			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0));
 
-			if (item_weapon(get_itemsdat(item_id))) {
+			if (item_weapon((Bit8u*)get_itemsdat(item_id))) {
 
 				strcat(g_dtp2, g_buy_screen_str_comma_space);
 
@@ -333,7 +333,7 @@ void buy_screen(void)
 					l16 = l_di;
 				}
 
-				l17 += (g_buy_shopping_cart[l_di].item_id != 0) && item_stackable(get_itemsdat(item_id)) ?
+				l17 += (g_buy_shopping_cart[l_di].item_id != 0) && item_stackable((Bit8u*)get_itemsdat(item_id)) ?
 						g_buy_shopping_cart[l_di].quantity / 100 + 1 :
 						g_buy_shopping_cart[l_di].quantity;
 			}
@@ -342,7 +342,7 @@ void buy_screen(void)
 
 				l4 = 1;
 
-				if (item_stackable(get_itemsdat(item_id))) {
+				if (item_stackable((Bit8u*)get_itemsdat(item_id))) {
 
 					if (l3 == 2) {
 
@@ -408,7 +408,7 @@ void buy_screen(void)
 
 					l4 = 1;
 
-					if (item_stackable(get_itemsdat(g_buyitems[item_pos + item].item_id))) {
+					if (item_stackable((Bit8u*)get_itemsdat(g_buyitems[item_pos + item].item_id))) {
 
 						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[item_pos + item].item_id, 0));
 
@@ -597,12 +597,12 @@ void insert_sell_items(struct shop_descr *shop_descr, struct struct_hero *hero, 
 
 	g_sellitems[shop_pos].item_id = item_id;
 
-	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
+	if (item_armor((Bit8u*)get_itemsdat(item_id)) || item_weapon((Bit8u*)get_itemsdat(item_id))) {
 
 		/* WEAPON SHOP */
 		if (shop_descr->type == 1) sellable = 1;
 
-	} else if (item_herb_potion(get_itemsdat(item_id))) {
+	} else if (item_herb_potion((Bit8u*)get_itemsdat(item_id))) {
 
 		/* HERB SHOP */
 		if (shop_descr->type == 2) sellable = 1;

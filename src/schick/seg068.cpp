@@ -709,7 +709,7 @@ signed short academy_get_equal_item(signed short price)
 	signed short i;
 	Bit32s p_money;
 	struct struct_hero *hero;
-	Bit8u *p_item;
+	struct item_stats *p_item;
 
 	retval = -2;
 	p_money = get_party_money();
@@ -727,9 +727,9 @@ signed short academy_get_equal_item(signed short price)
 					if ((hero->inventory[item_pos].item_id != ITEM_NONE) && !hero->inventory[item_pos].flags.broken)
 						/* remark: armor with degraded RS is accepted */
 					{
-						p_item = get_itemsdat(hero->inventory[item_pos].item_id);
+						p_item = (struct item_stats*)get_itemsdat(hero->inventory[item_pos].item_id);
 
-						if (host_readws(p_item + ITEM_STATS_PRICE) * host_readbs(p_item + ITEM_STATS_PRICE_UNIT) >= price)
+						if (p_item->price * p_item->price_unit >= price)
 						{
 							retval = hero->inventory[item_pos].item_id;
 							break;

@@ -324,7 +324,7 @@ void status_menu(signed short hero_pos)
 						    hero2->inventory[g_statuspage_selitem3_no].item_id,
 						    g_wearable_items_index[hero2->typus - 1]) ? g_empty_string9 : get_tx2(66));
 
-					if (item_weapon(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
+					if (item_weapon((Bit8u*)get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
 
 						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + ITEM_STATS_SUBTYPE)));
 					}

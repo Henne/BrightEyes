@@ -200,7 +200,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 						do_pic_copy(0);
 
-						if (item_stackable(get_itemsdat(j))) {
+						if (item_stackable((Bit8u*)get_itemsdat(j))) {
 
 							if ((nice = hero1->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
 							{
@@ -315,7 +315,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 			} else {
 
-				if (item_undropable(get_itemsdat(item_id))) {
+				if (item_undropable((Bit8u*)get_itemsdat(item_id))) {
 
 					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
 					GUI_output(g_dtp2);
@@ -327,7 +327,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 					if (tmp[hero_pos][l15] != 0) {
 
-						if (item_stackable(get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
+						if (item_stackable((Bit8u*)get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
 
 							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
 
@@ -358,7 +358,7 @@ void sell_screen(struct shop_descr *shop_descr)
 									nice * g_price_modificator) / 4L;
 						}
 					} else {
-						if (item_stackable(get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
+						if (item_stackable((Bit8u*)get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
 
 							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
 

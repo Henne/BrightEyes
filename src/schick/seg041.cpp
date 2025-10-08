@@ -227,7 +227,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 {
 	signed short damage;
 	signed short damage_mod;
-	Bit8u* item_p_rh;
+	struct item_stats *item_p_rh;
 	struct weapon_descr *weapon;
 	const struct ranged_weapon_descr *p_rangedtab;
 	signed short target_size;
@@ -251,7 +251,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 	right_hand = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-	item_p_rh = get_itemsdat(right_hand);
+	item_p_rh = (struct item_stats*)get_itemsdat(right_hand);
 
 	weapon_type = weapon_check(hero);
 
@@ -272,7 +272,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 	if (weapon_type != -1) {
 
-		weapon = &g_weapons_table[host_readbs(item_p_rh + ITEM_STATS_TABLE_INDEX)];
+		weapon = &g_weapons_table[item_p_rh->table_index];
 
 		damage = dice_roll(weapon->damage_d6, 6, weapon->damage_const);
 
@@ -320,7 +320,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 			/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
 			damage_mod = (test_skill(hero,
-						(host_readbs(item_p_rh + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
+						(item_p_rh->subtype == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
 					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[distance] : -damage;
 
@@ -564,7 +564,7 @@ void clear_anisheets(void)
  */
 signed int weapon_check(struct struct_hero *hero)
 {
-	Bit8u *item_p;
+	struct item_stats *item_p;
 
 	signed int item_id;
 	signed int retval;
@@ -572,14 +572,14 @@ signed int weapon_check(struct struct_hero *hero)
 	/* get the ID of the equipped weapon */
 	item_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-	item_p = get_itemsdat(item_id);
+	item_p = (struct item_stats*)get_itemsdat(item_id);
 
-	if (!item_weapon(item_p) || hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken ||
-		(item_weapon(item_p) &&
-			((host_readbs(item_p + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SCHUSSWAFFE) ||
-			(host_readbs(item_p + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE) ||
+	if (!item_weapon((Bit8u*)item_p) || hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken ||
+		(item_weapon((Bit8u*)item_p) &&
+			((item_p->subtype == WEAPON_TYPE_SCHUSSWAFFE) ||
+			(item_p->subtype == WEAPON_TYPE_WURFWAFFE) ||
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline. */
-			(host_readbs(item_p + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SPEER &&
+			(item_p->subtype == WEAPON_TYPE_SPEER &&
 			(item_id != ITEM_MAGIC_WAND) && (item_id != ITEM_QUARTERSTAFF)))))
 	{
 		retval = -1;

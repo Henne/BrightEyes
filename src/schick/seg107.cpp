@@ -28,7 +28,7 @@
 namespace M302de {
 #endif
 
-static unsigned char *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
+static struct item_stats *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
 static signed int g_used_item_id;	// ds:0xe5ca, used_item ID
 static signed int g_used_item_pos;	// ds:0xe5cc, used_item position
 
@@ -52,11 +52,11 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 	g_used_item_id = get_itemuser()->inventory[g_used_item_pos].item_id;
 
-	g_used_item_desc = g_itemsdat + g_used_item_id * SIZEOF_ITEM_STATS;
+	g_used_item_desc = (struct item_stats*)get_itemsdat(g_used_item_id);
 
 	if (check_hero((Bit8u*)get_itemuser())) {
 
-			if (!item_useable(g_used_item_desc)) {
+			if (!item_useable((Bit8u*)g_used_item_desc)) {
 
 				/* item is not usable */
 
@@ -70,7 +70,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 				GUI_output(g_dtp2);
 
-			} else if ((item_herb_potion(g_used_item_desc)) && !is_in_word_array(g_used_item_id, g_poison_potions)) {
+			} else if ((item_herb_potion((Bit8u*)g_used_item_desc)) && !is_in_word_array(g_used_item_id, g_poison_potions)) {
 
 				/* don't consume poison */
 				consume(get_itemuser(), get_itemuser(), item_pos);
@@ -81,7 +81,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 				GUI_output(get_ttx(638));
 			} else {
 				/* special item */
-				func = g_use_special_item_handlers[g_specialitems_table[host_readbs(g_used_item_desc + ITEM_STATS_TABLE_INDEX)].handler_id];
+				func = g_use_special_item_handlers[g_specialitems_table[g_used_item_desc->table_index].handler_id];
 				func();
 			}
 	}

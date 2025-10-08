@@ -394,7 +394,7 @@ void ask_miracle(void)
 
 								for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-									if ((item_id = hero->inventory[j].item_id) && item_weapon(get_itemsdat(item_id)))
+									if ((item_id = hero->inventory[j].item_id) && item_weapon((Bit8u*)get_itemsdat(item_id)))
 									{
 										if (hero->inventory[j].bf > 0) {
 											hero->inventory[j].bf--;

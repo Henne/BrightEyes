@@ -53,7 +53,7 @@ void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, cons
 
 	g_sellitems[smith_pos].item_id = item_id;
 
-	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
+	if (item_armor((Bit8u*)get_itemsdat(item_id)) || item_weapon((Bit8u*)get_itemsdat(item_id))) {
 
 		if (((struct struct_hero*)hero)->inventory[item_pos].flags.broken) {
 
@@ -267,7 +267,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 							do_pic_copy(0);
 
-							if (item_stackable(get_itemsdat(j))) {
+							if (item_stackable((Bit8u*)get_itemsdat(j))) {
 
 								if ((val = hero2->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
 								{

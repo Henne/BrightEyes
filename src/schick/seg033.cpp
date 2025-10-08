@@ -54,7 +54,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 	signed short rwt2;
 	signed char at;
 	signed char pa;
-	Bit8u *p_itemsdat;
+	struct item_stats *p_itemsdat;
 	struct weapon_descr *weapon;
 	struct spell_descr *spell_description;
 	signed short damage_lo;
@@ -116,7 +116,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 				weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-				if (!item_weapon(get_itemsdat(weapon_id)) || (item_weapon(get_itemsdat(weapon_id)) && hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken)) {
+				if (!item_weapon((Bit8u*)get_itemsdat(weapon_id)) || (item_weapon((Bit8u*)get_itemsdat(weapon_id)) && hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken)) {
 					/* test 'broken' flag */
 					/* no weapon or weapon broken, use red color for "change weapon" */
 					sprintf(g_text_output_buf, (char*)g_red_string1, get_tx(24));
@@ -508,7 +508,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 							weapon_id = hero->inventory[slot_no].item_id;
 
-							if (item_weapon(get_itemsdat(weapon_id))) {
+							if (item_weapon((Bit8u*)get_itemsdat(weapon_id))) {
 
 								slots[radio_i] = slot_no;
 
@@ -614,8 +614,8 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						pa = hero->pa_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_pa_mod;
 
 
-						p_itemsdat = get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
-						weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
+						p_itemsdat = (struct item_stats*)get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
+						weapon = &g_weapons_table[p_itemsdat->table_index];
 
 						calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
@@ -630,8 +630,8 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					pa = hero->pa_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_pa_mod;
 
 
-					p_itemsdat = get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
-					weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
+					p_itemsdat = (struct item_stats*)get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
+					weapon = &g_weapons_table[p_itemsdat->table_index];
 
 					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 

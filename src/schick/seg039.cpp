@@ -48,28 +48,28 @@ signed short calc_beeline(signed short x1, signed short y1, signed short x2, sig
  */
 signed int FIG_get_range_weapon_type(struct struct_hero *hero)
 {
-	Bit8u *ptr;
+	struct item_stats *item_p;
 	signed int retval = -1;
 	signed int weapon_id;
 
 	/* get equipped item in the right hand of the hero and make a pointer to the entry of ITEMS.DAT */
-	ptr = get_itemsdat(weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
+	item_p = (struct item_stats*)get_itemsdat(weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
 
 
-	if (item_weapon(ptr)) {
+	if (item_weapon((Bit8u*)item_p)) {
 		/* is a weapon */
 
 		/* MagicStaffs or Fightstaffs are spears, but no range weapons */
-		if ((host_readb(ptr + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SPEER) && (weapon_id != ITEM_MAGIC_WAND) && (weapon_id != ITEM_QUARTERSTAFF)) {
+		if ((item_p->subtype == WEAPON_TYPE_SPEER) && (weapon_id != ITEM_MAGIC_WAND) && (weapon_id != ITEM_QUARTERSTAFF)) {
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline... */
 
 			retval = 5;
 
-		} else if (host_readb(ptr + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SCHUSSWAFFE) {
+		} else if (item_p->subtype == WEAPON_TYPE_SCHUSSWAFFE) {
 
 			retval = 3;
 
-		} else if (host_readb(ptr + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE) {
+		} else if (item_p->subtype == WEAPON_TYPE_WURFWAFFE) {
 
 			retval = 4;
 		}

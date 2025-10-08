@@ -33,7 +33,7 @@ namespace M302de {
  */
 void consume(struct struct_hero *owner, struct struct_hero *consumer, const signed short pos)
 {
-	Bit8u *item_p;
+	struct item_stats *item_p;
 	signed short item;
 
 	signed short id_bad_elex;
@@ -57,24 +57,24 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	item = owner->inventory[pos].item_id;
 
 	/* get pointer to ITEMS.DAT */
-	item_p = get_itemsdat(item);
+	item_p = (struct item_stats*)get_itemsdat(item);
 
 	/* is food */
-	if (item_food(item_p)) {
+	if (item_food((Bit8u*)item_p)) {
 
-		if (host_readb(item_p + ITEM_STATS_SUBTYPE) == 1) {
+		if (item_p->subtype == 1) {
 			/* eating */
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->hunger - host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
+				int diff = consumer->hunger - item_p->table_index;
 
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item)),	host_readbs(item_p + ITEM_STATS_TABLE_INDEX),
+					consumer->alias, GUI_name_singular(get_itemname(item)),	item_p->table_index,
 					consumer->hunger, (diff >= 0) ? diff : 0);
 #endif
 
 			/* subtract from hunger value */
-			consumer->hunger -= host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
+			consumer->hunger -= item_p->table_index;
 
 			/* adjust hunger value */
 			if (consumer->hunger < 0) {
@@ -95,14 +95,14 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 			if (!owner->inventory[pos].flags.empty) {
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->thirst - host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
+				int diff = consumer->thirst - item_p->table_index;
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item)), host_readbs(item_p + ITEM_STATS_TABLE_INDEX),
+					consumer->alias, GUI_name_singular(get_itemname(item)), item_p->table_index,
 					consumer->thirst, (diff >= 0) ? diff : 0);
 #endif
 
 				/* subtract from thirst value */
-				consumer->thirst -= host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
+				consumer->thirst -= item_p->table_index;
 
 				/* adjust thirst value */
 				if (consumer->thirst < 0) {
@@ -146,9 +146,9 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 		g_request_refresh = 1;
 
-	} else if (item_herb_potion(item_p)) {
+	} else if (item_herb_potion((Bit8u*)item_p)) {
 
-		if (host_readb(item_p + ITEM_STATS_SUBTYPE) == 0) {
+		if (item_p->subtype == 0) {
 
 			if (is_in_word_array(item, g_herbs_uneatable)) {
 				GUI_output(get_ttx(499));

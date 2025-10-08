@@ -39,20 +39,20 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 	/* unequip of item 0 is not allowed */
 	if (item_id != ITEM_NONE) {
 
-		Bit8u *item_p = get_itemsdat(item_id);
+		struct item_stats *item_p = (struct item_stats*)get_itemsdat(item_id);
 	
 		/* if item is an armor ? */
-		if (item_armor(item_p)) {
+		if (item_armor((Bit8u*)item_p)) {
 
-			hero->rs_bonus1 -= g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].rs;
+			hero->rs_bonus1 -= g_armors_table[item_p->table_index].rs;
 
 			hero->rs_bonus1 += hero->inventory[inv_pos].rs_lost;
 
-			hero->rs_be -= g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].be;
+			hero->rs_be -= g_armors_table[item_p->table_index].be;
 		}
 
 		/* if item is a weapon and in the right hand ? */
-		if (item_weapon(item_p) && (inv_pos == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
+		if (item_weapon((Bit8u*)item_p) && (inv_pos == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
 			hero->w_type = 0;
 
@@ -112,33 +112,33 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 	if (item_id != ITEM_NONE) {
 
 		/* calculate pointer to item description */
-		Bit8u *item_p = g_itemsdat + item_id * SIZEOF_ITEM_STATS;
+		struct item_stats *item_p = (struct item_stats*)get_itemsdat(item_id);
 
 		/* armor and shield */
-		if (item_armor(item_p)) {
+		if (item_armor((Bit8u*)item_p)) {
 
 			/* add RS boni */
-			equipper->rs_bonus1 += g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].rs;
+			equipper->rs_bonus1 += g_armors_table[item_p->table_index].rs;
 
 			/* subtract degraded RS */
 			equipper->rs_bonus1 -= owner->inventory[inv_pos_owner].rs_lost;
 
 			/* add RS-BE */
-			equipper->rs_be += g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].be;
+			equipper->rs_be += g_armors_table[item_p->table_index].be;
 
 		}
 
 		/* weapon right hand */
-		if (item_weapon(item_p) && (inv_pos_equipper == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
+		if (item_weapon((Bit8u*)item_p) && (inv_pos_equipper == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
 			/* set weapon type */
-			equipper->w_type = host_readb(item_p + ITEM_STATS_SUBTYPE);
+			equipper->w_type = item_p->subtype;
 
 			/* set AT */
-			equipper->w_at_mod = g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].at_mod;
+			equipper->w_at_mod = g_weapons_table[item_p->table_index].at_mod;
 
 			/* set PA */
-			equipper->w_pa_mod = g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].pa_mod;
+			equipper->w_pa_mod = g_weapons_table[item_p->table_index].pa_mod;
 		}
 
 		/* Girdle of might / Kraftguertel */
@@ -219,23 +219,23 @@ signed int can_hero_use_item(const struct struct_hero *hero, const signed int it
  */
 signed int can_item_at_pos(const signed int item_id, const signed int inv_pos)
 {
-	Bit8u *item_p = get_itemsdat(item_id);
+	struct item_stats *item_p = (struct item_stats*)get_itemsdat(item_id);
 
 	/* if item is an armor ? */
-	if (item_armor(item_p)) {
+	if (item_armor((Bit8u*)item_p)) {
 
 		/* can be weared on the head */
-		if ((inv_pos == HERO_INVENTORY_SLOT_HEAD && host_readb(item_p + ITEM_STATS_SUBTYPE) == ARMOR_TYPE_HEAD) ||
+		if ((inv_pos == HERO_INVENTORY_SLOT_HEAD && item_p->subtype == ARMOR_TYPE_HEAD) ||
 			/* can be weared on the torso */
-			(inv_pos == HERO_INVENTORY_SLOT_BODY && host_readb(item_p + ITEM_STATS_SUBTYPE) == ARMOR_TYPE_BODY) ||
+			(inv_pos == HERO_INVENTORY_SLOT_BODY && item_p->subtype == ARMOR_TYPE_BODY) ||
 			/* can be weared at the feet */
-			(inv_pos == HERO_INVENTORY_SLOT_FEET && host_readb(item_p + ITEM_STATS_SUBTYPE) == ARMOR_TYPE_FEET) ||
+			(inv_pos == HERO_INVENTORY_SLOT_FEET && item_p->subtype == ARMOR_TYPE_FEET) ||
 			/* can be weared at the arms */
-			(inv_pos == HERO_INVENTORY_SLOT_ARMS && host_readb(item_p + ITEM_STATS_SUBTYPE) == ARMOR_TYPE_ARMS) ||
+			(inv_pos == HERO_INVENTORY_SLOT_ARMS && item_p->subtype == ARMOR_TYPE_ARMS) ||
 			/* can be weared at the legs */
-			(inv_pos == HERO_INVENTORY_SLOT_LEGS && host_readb(item_p + ITEM_STATS_SUBTYPE) == ARMOR_TYPE_LEGS) ||
+			(inv_pos == HERO_INVENTORY_SLOT_LEGS && item_p->subtype == ARMOR_TYPE_LEGS) ||
 			/* can be weared at the left hand */
-			(inv_pos == HERO_INVENTORY_SLOT_LEFT_HAND && host_readb(item_p + ITEM_STATS_SUBTYPE) == ARMOR_TYPE_LEFT_HAND)) {
+			(inv_pos == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->subtype == ARMOR_TYPE_LEFT_HAND)) {
 			return 1;
 		} else {
 			return 0;
@@ -327,7 +327,7 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 	signed short l1;
 	signed short retval;
 	signed short done;
-	Bit8u *item_p;
+	struct item_stats *item_p;
 	signed short si, di;
 
 	si = quantity;
@@ -344,10 +344,10 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 		}
 
 	} else {
-		item_p = get_itemsdat(item_id);
+		item_p = (struct item_stats*)get_itemsdat(item_id);
 
 		/* hero has a non-full stack of this item */
-		if (item_stackable(item_p) && ((l1 = has_hero_stacked(hero, item_id)) != -1)) {
+		if (item_stackable((Bit8u*)item_p) && ((l1 = has_hero_stacked(hero, item_id)) != -1)) {
 
 
 			/* check for space on existing stack */
@@ -360,7 +360,7 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 			hero->inventory[l1].quantity += si;
 
 			/* add weight */
-			hero->load += host_readws(item_p + ITEM_STATS_WEIGHT) * si;
+			hero->load += item_p->weight * si;
 
 			retval = si;
 		} else {
@@ -391,11 +391,11 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 							hero->inventory[di].item_id = item_id;
 
 							hero->inventory[di].quantity =
-								(item_stackable(item_p) ? si : (item_useable(item_p) ?
-								g_specialitems_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].quantity : 0));
+								(item_stackable((Bit8u*)item_p) ? si : (item_useable((Bit8u*)item_p) ?
+								g_specialitems_table[item_p->table_index].quantity : 0));
 
 							/* set magical flag */
-							if (host_readb(item_p + ITEM_STATS_MAGIC)) {
+							if (item_p->magic) {
 
 								hero->inventory[di].flags.magic = 1;
 
@@ -406,20 +406,20 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 							}
 
 							/* set breakfactor */
-							if (item_weapon(item_p)) {
-								hero->inventory[di].bf = g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].bf;
+							if (item_weapon((Bit8u*)item_p)) {
+								hero->inventory[di].bf = g_weapons_table[item_p->table_index].bf;
 							}
 
 							/* adjust weight */
-							if (item_stackable(item_p)) {
+							if (item_stackable((Bit8u*)item_p)) {
 
 								/* add stackable items weight */
-								hero->load += host_readws(item_p + ITEM_STATS_WEIGHT) * si;
+								hero->load += item_p->weight * si;
 								retval = si;
 								si = 0;
 							} else {
 								/* add single item weight */
-								hero->load += host_readws(item_p + ITEM_STATS_WEIGHT);
+								hero->load += item_p->weight;
 								si--;
 								retval++;
 							}
@@ -462,13 +462,13 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 signed int item_pleasing_ingerimm(const signed int item_id)
 {
 
-	Bit8u *p_item = get_itemsdat(item_id);
+	struct item_stats *item_p = (struct item_stats*)get_itemsdat(item_id);
 
-	if (item_weapon(p_item) && (host_readb(p_item + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_AXT))
+	if (item_weapon((Bit8u*)item_p) && (item_p->subtype == WEAPON_TYPE_AXT))
 		/* Ingerimm is pleased by either an axe ... */
 		return 1;
 
-	if (item_armor(p_item) && (g_armors_table[host_readbs(p_item + ITEM_STATS_TABLE_INDEX)].rs > 1))
+	if (item_armor((Bit8u*)item_p) && (g_armors_table[item_p->table_index].rs > 1))
 		/* or an armor with RS > 1 */
 		return 1;
 
@@ -488,7 +488,7 @@ signed int item_pleasing_ingerimm(const signed int item_id)
 signed int drop_item(struct struct_hero *hero, const signed int pos, signed int no)
 {
 
-	Bit8u *p_item;
+	struct item_stats *p_item;
 	signed short answer;
 	signed int retval = 0;
 	signed int item_id;
@@ -498,9 +498,9 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 	/* check if that item is valid */
 	if (item_id != ITEM_NONE) {
 
-		p_item = get_itemsdat(item_id);
+		p_item = (struct item_stats*)get_itemsdat(item_id);
 
-		if (item_undropable(p_item)) {
+		if (item_undropable((Bit8u*)p_item)) {
 
 			/* this item is not droppable */
 			sprintf(g_dtp2,get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
@@ -509,7 +509,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 		} else {
 
 			/* this item is droppable */
-			if (item_stackable(p_item)) {
+			if (item_stackable((Bit8u*)p_item)) {
 
 				if (no == -1) {
 					sprintf(g_dtp2,	get_ttx(219), (char*)GUI_names_grammar(6, item_id, 0));
@@ -530,12 +530,12 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 					hero->inventory[pos].quantity -= no;
 
 					/* adjust weight */
-					hero->load -= host_readws(p_item + ITEM_STATS_WEIGHT) * no;
+					hero->load -= p_item->weight * no;
 				} else {
 					/* remove all stacked items */
 
 					/* adjust weight */
-					hero->load -= host_readws(p_item + ITEM_STATS_WEIGHT) * hero->inventory[pos].quantity;
+					hero->load -= p_item->weight * hero->inventory[pos].quantity;
 
 					/* decrement item counter */
 					hero->items_num--;
@@ -558,7 +558,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 					hero->items_num--;
 
 					/* subtract item weight */
-					hero->load -= host_readws(p_item + ITEM_STATS_WEIGHT);
+					hero->load -= p_item->weight;
 
 					/* check special items */
 					/* item: SICHEL Pflanzenkunde -3 */
@@ -724,7 +724,7 @@ signed int group_count_item(const signed int item_id)
  */
 void loose_random_item(struct struct_hero *hero, const signed int percent, char *text)
 {
-	Bit8u *p_item;
+	struct item_stats *p_item;
 	signed int item_id;
 	signed int pos;
 
@@ -737,10 +737,10 @@ void loose_random_item(struct struct_hero *hero, const signed int percent, char 
 
 		item_id = hero->inventory[pos].item_id;
 
-		p_item = get_itemsdat(item_id);
+		p_item = (struct item_stats*)get_itemsdat(item_id);
 
 		/* No item to drop */
-		if (item_id != 0 && !item_undropable(p_item)) {
+		if (item_id != 0 && !item_undropable((Bit8u*)p_item)) {
 
 			/* drop 1 item */
 			drop_item(hero, pos, 1);

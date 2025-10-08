@@ -122,7 +122,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 			} else {
 				if (item2 != 0) {
 					/* item have the same ids and are stackable */
-					if ((item2 == item1) && item_stackable(get_itemsdat(item1))) {
+					if ((item2 == item1) && item_stackable((Bit8u*)get_itemsdat(item1))) {
 						/* merge them */
 
 						/* add quantity of item at pos2 to item at pos1 */
@@ -182,7 +182,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 		if (v3 != 0) {
 
 			/* item have the same ids and are stackable */
-			if ((item2 == item1) && item_stackable(get_itemsdat(item1))) {
+			if ((item2 == item1) && item_stackable((Bit8u*)get_itemsdat(item1))) {
 				/* merge them */
 
 				/* add quantity of item at pos2 to item at pos1 */
@@ -215,7 +215,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 
 		/* normal item */
 
-		if (((inventory_p->quantity > 1) && item_stackable(get_itemsdat(inventory_p->item_id))) ||
+		if (((inventory_p->quantity > 1) && item_stackable((Bit8u*)get_itemsdat(inventory_p->item_id))) ||
 			is_in_word_array(inventory_p->item_id, g_items_pluralwords)) {
 
 			/* more than one item or special */
@@ -272,8 +272,8 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	signed short item1;
 	signed short item2;
-	Bit8u *item1_desc;
-	Bit8u *item2_desc;
+	struct item_stats *item1_desc;
+	struct item_stats *item2_desc;
 	signed short flag;
 	signed short desc1_5;
 	signed short desc2_5;
@@ -291,10 +291,10 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	item2 = hero2->inventory[pos2].item_id;
 
-	item1_desc = get_itemsdat(item1);
-	item2_desc = get_itemsdat(item2);
+	item1_desc = (struct item_stats*)get_itemsdat(item1);
+	item2_desc = (struct item_stats*)get_itemsdat(item2);
 
-	if (item_undropable(item1_desc)) {
+	if (item_undropable((Bit8u*)item1_desc)) {
 
 		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item1, 0));
 
@@ -302,7 +302,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		return;
 	}
 
-	if (item_undropable(item2_desc)) {
+	if (item_undropable((Bit8u*)item2_desc)) {
 
 		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item2, 0));
 		GUI_output(g_dtp2);
@@ -382,7 +382,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 	if (item2 != 0) {
 
 		flag = 1;
-		if ((item2 == item1) && item_stackable(item2_desc)) {
+		if ((item2 == item1) && item_stackable((Bit8u*)item2_desc)) {
 
 			flag = 0;
 			l_di = 1;
@@ -406,12 +406,12 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 					l_di = 99 - hero2->inventory[pos2].quantity;
 				}
 
-				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di) && (l_di > 0)) {
+				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight * l_di) && (l_di > 0)) {
 					l_di--;
 				}
 
 				if (l_di > 0) {
-					hero2->load += host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di;
+					hero2->load += item1_desc->weight * l_di;
 					hero2->inventory[pos2].quantity += l_di;
 					drop_item(hero1, pos1, l_di);
 				} else {
@@ -423,13 +423,13 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 		if (flag != 0) {
 
-			desc1_5 = (item_stackable(item1_desc)) ?
-				hero1->inventory[pos1].quantity * host_readw(item1_desc + ITEM_STATS_WEIGHT) :
-				host_readws(item1_desc + ITEM_STATS_WEIGHT);
+			desc1_5 = (item_stackable((Bit8u*)item1_desc)) ?
+				hero1->inventory[pos1].quantity * item1_desc->weight :
+				item1_desc->weight;
 
-			desc2_5 = (item_stackable(item2_desc)) ?
-				hero2->inventory[pos2].quantity * host_readw(item2_desc + ITEM_STATS_WEIGHT) :
-				host_readws(item2_desc + ITEM_STATS_WEIGHT);
+			desc2_5 = (item_stackable((Bit8u*)item2_desc)) ?
+				hero2->inventory[pos2].quantity * item2_desc->weight :
+				item2_desc->weight;
 
 			if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + desc1_5 - desc2_5) {
 
@@ -484,7 +484,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 				}
 			}
 		}
-	} else if (item_stackable(item1_desc)) {
+	} else if (item_stackable((Bit8u*)item1_desc)) {
 
 		l_di = 1;
 
@@ -501,7 +501,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			l_di = hero1->inventory[pos1].quantity;
 		}
 
-		while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di) && (l_di > 0)) {
+		while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight * l_di) && (l_di > 0)) {
 			l_di--;
 		}
 
@@ -509,7 +509,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 			hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
 
-			hero2->load += host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di;
+			hero2->load += item1_desc->weight * l_di;
 			hero2->inventory[pos2].quantity = l_di;
 			drop_item(hero1, pos1, l_di);
 
@@ -518,7 +518,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			GUI_output(g_dtp2);
 		}
 
-	} else if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + ITEM_STATS_WEIGHT)) {
+	} else if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight) {
 
 		sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 		GUI_output(g_dtp2);
@@ -538,8 +538,8 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
 
 		/* adjust weight */
-		hero2->load += host_readws(item1_desc + ITEM_STATS_WEIGHT);
-		hero1->load -= host_readws(item1_desc + ITEM_STATS_WEIGHT);
+		hero2->load += item1_desc->weight;
+		hero1->load -= item1_desc->weight;
 
 		/* adjust item counter */
 		hero1->items_num--;

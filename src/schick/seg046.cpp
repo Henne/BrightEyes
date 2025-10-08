@@ -257,7 +257,7 @@ void status_show(Bit16u index)
 			g_pic_copy.dst = g_vga_memstart;
 
 			/* check if stackable */
-			if (item_stackable(get_itemsdat(hero->inventory[i].item_id))) {
+			if (item_stackable((Bit8u*)get_itemsdat(hero->inventory[i].item_id))) {
 
 
 				set_textcolor(0xff, 0);

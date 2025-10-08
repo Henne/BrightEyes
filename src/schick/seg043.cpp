@@ -806,11 +806,11 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 	signed short hylailic = 0;
 	signed short usecase;
 	signed short item_id = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
-	Bit8u *p_item = get_itemsdat(item_id);
+	struct item_stats *p_item = (struct item_stats*)get_itemsdat(item_id);
 
-	if (item_herb_potion(p_item)) {
+	if (item_herb_potion((Bit8u*)p_item)) {
 		usecase = 1;
-	} else if (!item_useable(p_item) || (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].quantity == 0)) {
+	} else if (!item_useable((Bit8u*)p_item) || (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].quantity == 0)) {
 		usecase = 0;
 	} else {
 		usecase = 2;
