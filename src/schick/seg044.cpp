@@ -33,22 +33,22 @@ namespace M302de {
 #if defined(__BORLANDC__)
 static
 #endif
-Bit16s copy_ani_seq(Bit8u *dst, Bit16s ani, Bit16u type)
+Bit16s copy_ani_seq(Bit8s *dst, Bit16s ani, Bit16u type)
 {
-	Bit8u *p_start, *p_seq;
+	Bit8s *p_start, *p_seq;
 	signed short nr_anis;
 	signed short i;
 	signed char length;
 
 	/* get pointer from ANI.DAT */
-	p_start = g_buffer_anidat;
+	p_start = (Bit8s*)g_buffer_anidat;
 
 	/* check if we must use WEAPANI.DAT */
 	if (type == 3)
-		p_start = g_buffer_weapanidat;
+		p_start = (Bit8s*)g_buffer_weapanidat;
 
 	/* get number of animation sequences */
-	nr_anis = host_readws(p_start);
+	nr_anis = *(Bit16s*)p_start;
 
 	/* sanity check */
 	if (ani < 0)
@@ -62,12 +62,12 @@ Bit16s copy_ani_seq(Bit8u *dst, Bit16s ani, Bit16u type)
 	p_seq += nr_anis + 2;
 
 	/* set length to the length of the first sequence */
-	length = host_readbs(p_start + 2);
+	length = p_start[2];
 
 	/* fast forward to the requestet sequence */
 	for (i = 1; i <= ani; i++) {
 		p_seq += length;
-		length = host_readbs(p_start + i + 2);
+		length = *(p_start + i + 2);
 	}
 
 	/* skip the first byte */
@@ -77,8 +77,8 @@ Bit16s copy_ani_seq(Bit8u *dst, Bit16s ani, Bit16u type)
 	/* REMARK: the first an the last byte of the sequence are skipped */
 
 	/* copy them */
-	for (i = 0; i < length; p_seq++, dst++, i++)
-		host_writeb(dst, host_readbs(p_seq));
+	for (i = 0; i < length; i++)
+		*dst++ = *p_seq++;
 
 	return length;
 }
@@ -95,16 +95,16 @@ static
 #endif
 Bit8s get_seq_header(Bit16s ani)
 {
-	Bit8u *p_start, *p_seq;
+	Bit8s *p_start, *p_seq;
 	Bit8s length;
 	Bit16s nr_anis;
 	Bit16s i;
 
 	/* get pointer from ANI.DAT */
-	p_start = g_buffer_anidat;
+	p_start = (Bit8s*)g_buffer_anidat;
 
 	/* get number of ani seqences in ANI.DAT */
-	nr_anis = host_readws(p_start);
+	nr_anis = *(Bit16s*)p_start;
 
 	if (ani < 0) {
 		return 0;
@@ -117,16 +117,16 @@ Bit8s get_seq_header(Bit16s ani)
 	p_seq = p_start;
 	p_seq += nr_anis + 2;
 
-	length = host_readbs(p_start + 2);
+	length = p_start[2];
 
 	for (i = 1; i <= ani; i++) {
 		/* set pointer to the start of the next sequence */
 		p_seq += length;
 		/* set length to the length of the next sequence */
-		length = host_readbs(p_start + i + 2);
+		length = *(p_start + i + 2);
 	}
 
-	return host_readbs(p_seq);
+	return *p_seq;
 }
 
 /**
@@ -150,8 +150,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 	signed short l8;
 	signed short l9;
 	signed short l10;
-	Bit8u *p1;
-	Bit8u *p2;
+	Bit8s *p1;
+	Bit8s *p2;
 	signed short weapon;
 	Bit16s *p3;
 
@@ -198,8 +198,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 	}
 
 	l1 += dir;
-	p1 = (Bit8u*)&g_fig_anisheets[a1][1];
-	p2 = (Bit8u*)&g_fig_anisheets[a1 + 4][1];
+	p1 = (Bit8s*)&g_fig_anisheets[a1][1];
+	p2 = (Bit8s*)&g_fig_anisheets[a1 + 4][1];
 
 	g_fig_anisheets[a1][0] = get_seq_header(p3[l1]);
 	g_fig_anisheets[a1][242] = hero->sprite_no;
@@ -238,9 +238,9 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 
 			if (l7 == -1) {
 				for (l10 = 0; l10 < 2; l10++) {
-					host_writeb(p1++, 0xfb);
-					host_writeb(p1++, 0);
-					host_writeb(p1++, 0);
+					*p1++ = -5;
+					*p1++ = 0;
+					*p1++ = 0;
 				}
 			}
 
@@ -250,14 +250,14 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 				p1 += copy_ani_seq(p1, p3[l7], 2);
 			}
 
-			host_writeb(p1++, 0xfc);
-			host_writeb(p1++, get_seq_header(p3[l1]));
-			host_writeb(p1++, 0);
+			*p1++ = -4;
+			*p1++ = get_seq_header(p3[l1]);
+			*p1++ = 0;
 	} else {
 		for (l10 = 0; l10 < 5; l10++) {
-			host_writeb(p1++, 0xfb);
-			host_writeb(p1++, 0);
-			host_writeb(p1++, 0);
+			*p1++ = -5;
+			*p1++ = 0;
+			*p1++ = 0;
 		}
 	}
 
@@ -272,9 +272,9 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 			(hero->typus != HERO_TYPE_DRUID))
 		{
 			for (l10 = 0; l10 < 5; l10++) {
-				host_writeb(p2++, 0xfb);
-				host_writeb(p2++, 0);
-				host_writeb(p2++, 0);
+				*p2++ = -5;
+				*p2++ = 0;
+				*p2++ = 0;
 			}
 
 			p2 += copy_ani_seq(p2,
@@ -299,9 +299,9 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 
 	if ((g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
-		host_writeb(p1++, 0xfc);
-		host_writeb(p1++, get_seq_header(p3[20]));
-		host_writeb(p1++, 0);
+		*p1++ = -4;
+		*p1++ = get_seq_header(p3[20]);
+		*p1++ = 0;
 
 		p1 += copy_ani_seq(p1, p3[20], 2);
 	}
@@ -309,18 +309,18 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 	if (check_hero((Bit8u*)hero) ||	(!g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
 		FIG_set_sheet(hero->fighter_id, (signed char)a1);
-		host_writebs(p1, -1);
+		*p1 = -1;
 
 		if ( (weapon_type != -1) && (weapon_type < 3) &&
 			(hero->typus != HERO_TYPE_MAGE) &&
 			(hero->typus != HERO_TYPE_DRUID))
 		{
 			FIG_set_weapon_sheet(hero->fighter_id, a1 + 4);
-			host_writeb(p2, 0xff);
+			*p2 = -1;
 		}
 	}
 
-	host_writeb(p1, 0xff);
+	*p1 = -1;
 	if (f_action == FIG_ACTION_UNKNOWN2) {
 		g_hero_is_target[(signed char)fid_attacker - 1] = 1;
 	}
@@ -342,8 +342,8 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	signed short l8;
 	signed short l9;
 	signed short i;
-	Bit8u *p1;
-	Bit8u *p2;
+	Bit8s *p1;
+	Bit8s *p2;
 	struct struct_fighter *fighter;			/* only user for two sprited figures */
 	Bit16s *p4;			/* read only */
 	signed short weapon_type;
@@ -401,8 +401,8 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 
 	l1 += dir;
 
-	p1 = (Bit8u*)&g_fig_anisheets[a1][1];
-	p2 = (Bit8u*)&g_fig_anisheets[a1 + 4][1];
+	p1 = (Bit8s*)&g_fig_anisheets[a1][1];
+	p2 = (Bit8s*)&g_fig_anisheets[a1 + 4][1];
 
 
 	g_fig_anisheets[a1][0] = get_seq_header(p4[l1]);
@@ -451,9 +451,9 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 		if (l7 == -1) {
 			/* do not move for 2 frames */
 			for (i = 0; i < 2; i++) {
-				host_writeb(p1++, 0xfb);
-				host_writeb(p1++, 0);
-				host_writeb(p1++, 0);
+				*p1++ = -5;
+				*p1++ = 0;
+				*p1++ = 0;
 			}
 		}
 
@@ -463,15 +463,15 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 			p1 += copy_ani_seq(p1, p4[l7], 1);
 		}
 
-		host_writeb(p1++, 0xfc);
-		host_writeb(p1++, get_seq_header(p4[l1]));
-		host_writeb(p1++, 0);
+		*p1++ = -4;
+		*p1++ = get_seq_header(p4[l1]);
+		*p1++ = 0;
 	} else {
 		/* do not move for 5 frames */
 		for (i = 0; i < 5; i++) {
-			host_writeb(p1++, 0xfb);
-			host_writeb(p1++, 0);
-			host_writeb(p1++, 0);
+			*p1++ = -5;
+			*p1++ = 0;
+			*p1++ = 0;
 		}
 	}
 
@@ -484,9 +484,9 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 
 			/* do not move for 5 frames */
 			for (i = 0; i < 5; i++) {
-				host_writeb(p2++, 0xfb);
-				host_writeb(p2++, 0);
-				host_writeb(p2++, 0);
+				*p2++ = -5;
+				*p2++ = 0;
+				*p2++ = 0;
 			}
 
 			/* copy the weapon ani */
@@ -511,16 +511,17 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	if ( ((g_attacker_dead != 0) && (a7 == 0)) ||
 		((g_defender_dead != 0) && (a7 == 1)))
 	{
-		host_writeb(p1++, 0xfc);
-		host_writeb(p1++, get_seq_header(p4[20]));
-		host_writeb(p1++, 0);
+		*p1++ = -4;
+		*p1++ = get_seq_header(p4[20]);
+		*p1++ = 0;
 
 		p1 += copy_ani_seq(p1, p4[20], 1);
 	}
 
 	FIG_set_sheet(enemy->fighter_id, (signed char)a1);
+
 	/* terminate figure animation array */
-	host_writebs(p1, -1);
+	*p1 = -1;
 
 	/* does this sprite need two fields */
 	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id))	{
@@ -534,8 +535,9 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 
 	if (weapon_type != -1) {
 		FIG_set_weapon_sheet(enemy->fighter_id, a1 + 4);
+
 		/* terminate weapon animation array */
-		host_writeb(p2, 0xff);
+		*p2 = -1;
 	}
 
 	if (f_action == FIG_ACTION_UNKNOWN2) {
@@ -562,7 +564,7 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
 	signed short dir;
 	signed short l2;
 	signed short l3;
-	Bit8u *lp1;
+	Bit8s *lp1;
 	Bit16s *lp2;
 
 	signed short l_di;
@@ -594,7 +596,7 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
 
 	l_di += (v2 == 4) ? dir : hero->viewdir;
 
-	lp1 = (Bit8u*)&g_fig_anisheets[v1][1];
+	lp1 = (Bit8s*)&g_fig_anisheets[v1][1];
 
 	g_fig_anisheets[v1][0] = get_seq_header(lp2[l_di]);
 
@@ -630,13 +632,13 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
 			lp1 += copy_ani_seq(lp1, lp2[l2], 2);
 		}
 
-		host_writeb(lp1, 0xfc);
+		*lp1 = -4;
 		lp1++;
 
-		host_writeb(lp1, get_seq_header(lp2[l_di]));
+		*lp1 = get_seq_header(lp2[l_di]);
 		lp1++;
 
-		host_writeb(lp1, 0x00);
+		*lp1 = 0x00;
 		lp1++;
 	}
 
@@ -650,19 +652,19 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
 	if (((g_attacker_dead != 0) && (v6 == 0)) ||
 		((g_defender_dead != 0) && (v6 == 1))) {
 
-		host_writeb(lp1, 0xfc);
+		*lp1 = -4;
 		lp1++;
 
-		host_writeb(lp1, get_seq_header(lp2[20]));
+		*lp1 = get_seq_header(lp2[20]);
 		lp1++;
 
-		host_writeb(lp1, 0x00);
+		*lp1 = 0;
 		lp1++;
 
 		lp1 += copy_ani_seq(lp1, lp2[20], 2);
 	}
 
-	host_writeb(lp1, 0xff);
+	*lp1 = -1;
 }
 
 
@@ -687,7 +689,7 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 	signed short x_caster, y_caster;
 	signed short dir;
 	signed short l2, l3;	/* indicees to lp2 */
-	Bit8u *lp1;		/* mostly written */
+	Bit8s *lp1;		/* mostly written */
 	Bit16s *lp2;		/* read only */
 
 	signed short dir2;
@@ -717,7 +719,7 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 	/* this is true if a monster attacks a hero */
 	l1 = (v2 == 4) ? 29 : 16;
 
-	lp1 = (Bit8u*)&g_fig_anisheets[v1][1];
+	lp1 = (Bit8s*)&g_fig_anisheets[v1][1];
 
 	/* this is true if a monster attacks a hero */
 	l1 += (v2 == 4) ? dir : enemy->viewdir;
@@ -757,13 +759,13 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 		if (l2 != -1)
 			lp1 += copy_ani_seq(lp1, lp2[l2], 1);
 
-		host_writeb(lp1, 0xfc);
+		*lp1 = -4;
 		lp1++;
 
-		host_writeb(lp1, get_seq_header(lp2[l1]));
+		*lp1 = get_seq_header(lp2[l1]);
 		lp1++;
 
-		host_writeb(lp1, 0);
+		*lp1 = 0;
 		lp1++;
 	}
 
@@ -771,25 +773,24 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 
 	if ((g_attacker_dead && !v5) || (g_defender_dead && (v5 == 1))) {
 
-		host_writeb(lp1, 0xfc);
+		*lp1 = -4;
 		lp1++;
 
-		host_writeb(lp1, get_seq_header(lp2[20]));
+		*lp1 = get_seq_header(lp2[20]);
 		lp1++;
 
-		host_writeb(lp1, 0);
+		*lp1 = 0;
 		lp1++;
 
 		lp1 += copy_ani_seq(lp1, lp2[20], 1);
 	}
 
-	host_writeb(lp1, 0xff);
+	*lp1 = -1;
 
 	/* check if the moster sprite ID needs two fields */
 	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 		memcpy(&g_fig_anisheets[v1 + 2], &g_fig_anisheets[v1], 0xf3);
 	}
-
 }
 
 #if !defined(__BORLANDC__)
