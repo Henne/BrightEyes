@@ -50,13 +50,13 @@ signed short g_attacker_attacks_again;	// ds:0xe3ac
  * \param   hero        pointer to the hero
  * \param   hero_pos    position in the group (fighter_id = hero_pos + 1)
  */
-void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
+void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 {
 	signed short damage;
 	struct enemy_sheet *target_monster;
-	Bit8u *target_hero;
-	Bit8u *p_weapon;
-	Bit8u *p_weapon_target;
+	struct struct_hero *target_hero;
+	struct inventory *p_weapon;
+	struct inventory *p_weapon_target;
 	signed short weapon_type;
 	signed short weapon_type_target;
 	signed short two_w_6;
@@ -103,17 +103,17 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 		g_fig_actor_grammar.type = 2;
 		g_fig_actor_grammar.id = hero_pos;
 
-		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
+		if (hero->enemy_id >= 10) {
 
 			/* attack monster */
-			if (host_readbs(hero + HERO_ENEMY_ID) >= 30) {
+			if (hero->enemy_id >= 30) {
 				/* tail part of two-fielded enemy */
-				sub_ptr_bs(hero + HERO_ENEMY_ID, 20);
+				hero->enemy_id -= 20;
 				l16 = 1;
 				l17 = 1;
 			}
 
-			target_monster = &g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10];
+			target_monster = &g_enemy_sheets[hero->enemy_id - 10];
 
 			/* attacked enemy won't be asleep any more */
 			target_monster->flags.asleep = 0;
@@ -121,7 +121,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			g_fig_target_grammar.type = 1;
 			g_fig_target_grammar.id = target_monster->mon_id;
 
-			if (!target_monster->mon_id || (target_monster->flags.dead && ((host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_SPELL) || (host_readbs(hero + HERO_SPELL_ID) != SP_SKELETTARIUS_KRYPTADUFT))))
+			if (!target_monster->mon_id || (target_monster->flags.dead && ((hero->action_id != FIG_ACTION_SPELL) || (hero->spell_id != SP_SKELETTARIUS_KRYPTADUFT))))
 			{
 				refresh_screen_size();
 				return;
@@ -129,16 +129,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			if ((is_in_byte_array(target_monster->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) && (l16 == 0))
 			{
-				FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID), &target_x, &target_y);
+				FIG_search_obj_on_cb(hero->enemy_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);
 
-#if !defined(__BORLANDC__)
-				/* BE-fix */
-				target_x = host_readws((Bit8u*)&target_x);
-				target_y = host_readws((Bit8u*)&target_y);
-				hero_x = host_readws((Bit8u*)&hero_x);
-				hero_y = host_readws((Bit8u*)&hero_y);
-#endif
 				if (hero_x == target_x) {
 
 					if (target_y < hero_y) {
@@ -171,29 +164,29 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				}
 			}
 		} else {
-			if (host_readbs(hero + HERO_ENEMY_ID) > 0) {
+			if (hero->enemy_id > 0) {
 
 				/* hero attacks another hero */
-				target_hero = get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1);
+				target_hero = (struct struct_hero*)get_hero(hero->enemy_id - 1);
 
 				g_fig_target_grammar.type = 2;
-				g_fig_target_grammar.id = host_readbs(hero + HERO_ENEMY_ID) - 1;
+				g_fig_target_grammar.id = hero->enemy_id - 1;
 
-				if (hero_asleep(target_hero)) {
+				if (hero_asleep((Bit8u*)target_hero)) {
 
 					/* wake up target hero */
 
-					and_ptr_bs(target_hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+					and_ptr_bs((Bit8u*)target_hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
-					fighter = FIG_get_fighter(host_readbs(target_hero + HERO_FIGHTER_ID));
+					fighter = FIG_get_fighter(target_hero->fighter_id);
 
-					fighter->nvf_no = host_readbs(target_hero + HERO_VIEWDIR);
+					fighter->nvf_no = target_hero->viewdir;
 					fighter->reload = -1;
 					fighter->offsetx = 0;
 					fighter->offsety = 0;
 				}
 
-				if (hero_dead(target_hero) || !host_readbs(target_hero + HERO_TYPE)) {
+				if (hero_dead((Bit8u*)target_hero) || !target_hero->typus) {
 					refresh_screen_size();
 					return;
 				}
@@ -202,35 +195,35 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			}
 		}
 
-		if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) {
+		if (hero->action_id == FIG_ACTION_MELEE_ATTACK) {
 
 			/* attack a hero */
 
-			p_weapon = hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY;
+			p_weapon = &hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-			weapon_type = weapon_check((struct struct_hero*)hero);
+			weapon_type = weapon_check(hero);
 
 			if (target_is_hero != 0) {
-				p_weapon_target = target_hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY;
+				p_weapon_target = &target_hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-				weapon_type_target = weapon_check((struct struct_hero*)target_hero);
+				weapon_type_target = weapon_check(target_hero);
 			}
 
 			if (weapon_type == -1) {
 				/* no valid weapon == bare hands */
-				atpa = host_readbs(hero + HERO_AT + WEAPON_TYPE_WAFFENLOS) + host_readbs(hero + HERO_ATTACK_TYPE) - host_readbs(hero + HERO_RS_BE) / 2;
+				atpa = hero->at_weapon[WEAPON_TYPE_WAFFENLOS] + hero->atpa_mod - hero->rs_be / 2;
 			} else {
-				atpa = host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE)) + host_readbs(hero + HERO_ATTACK_TYPE) + host_readbs(hero + HERO_AT_MOD) - host_readbs(hero + HERO_RS_BE) / 2;
+				atpa = hero->at_weapon[hero->w_type] + hero->atpa_mod + hero->w_at_mod - hero->rs_be / 2;
 			}
 
-			if (host_readbs(hero + HERO_RS_BE) & 1) {
-				/* if RS_BE is odd, subtract another point. Changes the rounding behavior of 'host_readbs(hero + HERO_RS_BE) / 2' above to "round up". */
+			if (hero->rs_be & 1) {
+				/* if RS_BE is odd, subtract another point. Changes the rounding behavior of 'hero->rs_be / 2' above to "round up". */
 				atpa--;
 			}
 
 			/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a PA-bonus against orcs */
 			if (gs_tevent071_orcstatue &&
-				(host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) &&
+				(hero->typus == HERO_TYPE_DWARF) &&
 				!target_is_hero &&
 				(target_monster->gfx_id == 24))
 			{
@@ -245,12 +238,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			if (target_is_hero) {
 
 				if (weapon_type_target == -1) {
-					l11 = host_readbs(target_hero + HERO_AT) + host_readbs(target_hero + HERO_ATTACK_TYPE) - host_readbs(hero + HERO_RS_BE) / 2;
+					l11 = target_hero->at_weapon[WEAPON_TYPE_WAFFENLOS] + target_hero->atpa_mod - hero->rs_be / 2;
 				} else {
-					l11 = host_readbs(target_hero + HERO_AT + host_readbs(target_hero + HERO_WEAPON_TYPE)) + host_readbs(target_hero + HERO_ATTACK_TYPE) - host_readbs(hero + HERO_RS_BE) / 2;
+					l11 = target_hero->at_weapon[target_hero->w_type] + target_hero->atpa_mod - hero->rs_be / 2;
 				}
 
-				if (host_readbs(hero + HERO_RS_BE) & 1) {
+				if (hero->rs_be & 1) {
 					l11--;
 				}
 
@@ -259,12 +252,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					l11 -= 4;
 				}
 
-				if (g_hero_is_target[host_readbs(hero + HERO_ENEMY_ID) - 1] == 1) {
+				if (g_hero_is_target[hero->enemy_id - 1] == 1) {
 					atpa += 2;
 				}
 
 			} else {
-				if ((g_fig_actors_unkn[host_readbs(hero + HERO_ENEMY_ID)] == 1) || (l16 != 0)) {
+				if ((g_fig_actors_unkn[hero->enemy_id] == 1) || (l16 != 0)) {
 					atpa += 2;
 				}
 			}
@@ -279,11 +272,10 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 				two_w_6 = random_interval(2, 12);
 
-				if ((two_w_6 == 2) && (weapon_type != -1) &&
-					host_readbs(p_weapon + INVENTORY_BF) != -99)
+				if ((two_w_6 == 2) && (weapon_type != -1) && (p_weapon->bf != -99))
 				{
 					/* weapon broken */
-					or_ptr_bs(p_weapon + INVENTORY_FLAGS, 1); /* set 'broken' flag */
+					p_weapon->flags.broken = 1;
 					FIG_add_msg(6, 0);
 
 				} else if ((two_w_6 >= 3) && (two_w_6 <= 8) && (l16 == 0)) {
@@ -294,7 +286,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (target_is_hero != 0) {
 
 						if (random_schick(20) <= l11) {
-							damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)target_hero, (struct struct_hero*)hero, 1);
+							damage = FIG_get_hero_weapon_attack_damage(target_hero, hero, 1);
 						}
 
 					} else {
@@ -307,7 +299,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					if (damage > 0) {
 
-						sub_hero_le((struct struct_hero*)hero, damage);
+						sub_hero_le(hero, damage);
 
 						FIG_add_msg(8, damage);
 
@@ -317,7 +309,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						g_fig_actor_grammar = tmp;
 					}
 
-					if (hero_dead(hero)) {
+					if (hero_dead((Bit8u*)hero)) {
 						g_attacker_dead = 1;
 					}
 
@@ -326,32 +318,32 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					damage = random_schick(6);
 
-					sub_hero_le((struct struct_hero*)hero, damage);
+					sub_hero_le(hero, damage);
 
 					FIG_add_msg(8, damage);
 
 					g_fig_target_grammar = g_fig_actor_grammar;
 
-					if (hero_dead(hero)) {
+					if (hero_dead((Bit8u*)hero)) {
 						g_attacker_dead = 1;
 					}
 				}
 
 			} else if (randval1 <= atpa) {
 
-				if (((target_is_hero == 0) && !g_fig_actors_unkn[host_readbs(hero + HERO_ENEMY_ID)] && (l16 == 0)) ||
-					((target_is_hero) && !g_hero_is_target[host_readbs(hero + HERO_ENEMY_ID) - 1]))
+				if (((target_is_hero == 0) && !g_fig_actors_unkn[hero->enemy_id] && (l16 == 0)) ||
+					((target_is_hero) && !g_hero_is_target[hero->enemy_id - 1]))
 				{
 
 					if (target_is_hero != 0) {
 
 						if (weapon_type_target == -1) {
-							l10 = host_readbs(target_hero + HERO_PA) - host_readbs(target_hero + HERO_ATTACK_TYPE) - host_readbs(target_hero + HERO_RS_BE) / 2;
+							l10 = target_hero->pa_weapon[WEAPON_TYPE_WAFFENLOS] - target_hero->atpa_mod - target_hero->rs_be / 2;
 						} else {
-							l10 = host_readbs(target_hero + HERO_PA + host_readbs(target_hero + HERO_WEAPON_TYPE)) -host_readbs(target_hero + HERO_ATTACK_TYPE) - host_readbs(target_hero + HERO_RS_BE) / 2 + host_readbs(target_hero + HERO_AT_MOD);
+							l10 = target_hero->pa_weapon[target_hero->w_type] - target_hero->atpa_mod - target_hero->rs_be / 2 + target_hero->w_at_mod;
 						}
 
-						if (host_readbs(target_hero + HERO_ACTION_ID) == FIG_ACTION_GUARD) {
+						if (target_hero->action_id == FIG_ACTION_GUARD) {
 							l10 += 3;
 						}
 					} else {
@@ -406,21 +398,21 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								if (target_is_hero != 0) {
 
-									damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_hero, 1);
+									damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
 
 									if (damage > 0) {
 
-										sub_hero_le((struct struct_hero*)target_hero, damage);
+										sub_hero_le(target_hero, damage);
 
 										FIG_add_msg(8, damage);
 
-										if (hero_dead(target_hero)) {
+										if (hero_dead((Bit8u*)target_hero)) {
 											g_defender_dead = 1;
 										}
 									}
 								} else {
 
-									damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_monster, 0);
+									damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)target_monster, 0);
 
 									if (damage > 0) {
 
@@ -440,11 +432,11 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 							if (target_is_hero != 0) {
 
-								sub_hero_le((struct struct_hero*)target_hero, damage);
+								sub_hero_le(target_hero, damage);
 
 								FIG_add_msg(8, damage);
 
-								if (hero_dead(target_hero)) {
+								if (hero_dead((Bit8u*)target_hero)) {
 									g_defender_dead = 1;
 								}
 							} else {
@@ -464,35 +456,35 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						} else {
 							FIG_add_msg(5, 0);
 
-							if ((randval2 == randval1) && (host_readbs(p_weapon + INVENTORY_BF) != -99)) {
+							if ((randval2 == randval1) && (p_weapon->bf != -99)) {
 
-								if (host_readbs(p_weapon + INVENTORY_BF) > 3) {
+								if (p_weapon->bf > 3) {
 
-									if (random_schick(12) + host_readbs(p_weapon + INVENTORY_BF) > 15) {
+									if ((random_schick(12) + p_weapon->bf) > 15) {
 
-										if ((target_is_hero != 0) && (host_readbs(p_weapon_target + INVENTORY_BF) != -99))
+										if ((target_is_hero != 0) && (p_weapon_target->bf != -99))
 										{
-											or_ptr_bs(p_weapon_target + 0x04, 1);
+											p_weapon_target->flags.broken = 1;
 										}
 
-										or_ptr_bs(p_weapon + INVENTORY_FLAGS, 1); /* set 'broken' flag */
+										p_weapon->flags.broken = 1; /* set 'broken' flag */
 
 										FIG_add_msg(6, 0);
 
 									} else {
 										if (target_is_hero != 0) {
-											inc_ptr_bs(p_weapon_target + 6);
+											p_weapon_target->bf++;
 										}
 
-										inc_ptr_bs(p_weapon + INVENTORY_BF);
+										p_weapon->bf++;
 									}
 								} else {
 
 									if (target_is_hero != 0) {
-										inc_ptr_bs(p_weapon_target + 0x06);
+										p_weapon_target->bf++;
 									}
 
-									inc_ptr_bs(p_weapon + INVENTORY_BF);
+									p_weapon->bf++;
 								}
 							}
 						}
@@ -505,21 +497,21 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					if (target_is_hero != 0) {
 
-						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_hero, 1);
+						damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
 
 						if (damage > 0) {
 
-							sub_hero_le((struct struct_hero*)target_hero, damage);
+							sub_hero_le(target_hero, damage);
 
 							FIG_add_msg(8, damage);
 
-							if (hero_dead(target_hero)) {
+							if (hero_dead((Bit8u*)target_hero)) {
 								g_defender_dead = 1;
 							}
 						}
 					} else {
 
-						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_monster, 0);
+						damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)target_monster, 0);
 
 						if (damage > 0 ) {
 
@@ -537,23 +529,23 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			clear_anisheets();
 
-			FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, weapon_type, 2, hero_pos + 1,
-							l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20, 0);
+			FIG_prepare_hero_fight_ani(0, hero, weapon_type, 2, hero_pos + 1,
+							l17 == 0 ? hero->enemy_id : hero->enemy_id + 20, 0);
 
 			if (target_is_hero != 0) {
 
-				if (check_hero(target_hero) || (g_defender_dead != 0)) {
+				if (check_hero((Bit8u*)target_hero) || (g_defender_dead != 0)) {
 
-					FIG_prepare_hero_fight_ani(1, (struct struct_hero*)target_hero, weapon_type_target,
-								100, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+					FIG_prepare_hero_fight_ani(1, target_hero, weapon_type_target,
+								100, hero->enemy_id, hero_pos + 1, 1);
 				}
 			} else {
 
 				if (l16 == 0) {
-					FIG_prepare_enemy_fight_ani(1, target_monster, 100, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+					FIG_prepare_enemy_fight_ani(1, target_monster, 100, hero->enemy_id, hero_pos + 1, 1);
 				} else {
 					if (g_defender_dead != 0) {
-						FIG_prepare_enemy_fight_ani(1, target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+						FIG_prepare_enemy_fight_ani(1, target_monster, 0, hero->enemy_id, hero_pos + 1, 1);
 					}
 				}
 			}
@@ -566,7 +558,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 		} else {
 
-			if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK) {
+			if (hero->action_id == FIG_ACTION_RANGE_ATTACK) {
 
 				weapon_type = FIG_get_range_weapon_type(hero);
 
@@ -579,7 +571,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					 * This means that they will always hit (without a skill test) and will do only 1D6 damage.
 					 * found 2016-04-02 by NRS at https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=146051#pid146051
 					 * "Oh mein Gott..." */
-					if (!range_attack_check_ammo((struct struct_hero*)hero, 0)) {
+					if (!range_attack_check_ammo(hero, 0)) {
 						return;
 					}
 #endif
@@ -587,35 +579,35 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (target_is_hero != 0) {
 
 						/* note that for ranged attacks, the skill test will be done in the following function call. */
-						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_hero, 1);
+						damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 32:
 						 * Fix: move the function call after the damage calculation.
 						 */
-						if (!range_attack_check_ammo((struct struct_hero*)hero, 0)) {
+						if (!range_attack_check_ammo(hero, 0)) {
 							return;
 						}
 #endif
 
 						if (damage > 0) {
 
-							sub_hero_le((struct struct_hero*)target_hero, damage);
+							sub_hero_le(target_hero, damage);
 
 							FIG_add_msg(8, damage);
 
-							if (hero_dead(target_hero)) {
+							if (hero_dead((Bit8u*)target_hero)) {
 								g_defender_dead = 1;
 							}
 						}
 					} else {
 
 						/* note that for ranged attacks, the skill test will be done in the following function call. */
-						damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)target_monster, 0);
+						damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)target_monster, 0);
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 32:
 						 * Fix: move the function call after the damage calculation.
 						 */
-						if (!range_attack_check_ammo((struct struct_hero*)hero, 0)) {
+						if (!range_attack_check_ammo(hero, 0)) {
 							return;
 						}
 #endif
@@ -639,23 +631,23 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					FIG_call_draw_pic();
 
-					FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, weapon_type,
+					FIG_prepare_hero_fight_ani(0, hero, weapon_type,
 							15, hero_pos + 1,
-							l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20, 0);
+							l17 == 0 ? hero->enemy_id : hero->enemy_id + 20, 0);
 
 					l13 = seg045_01a0(7, l12, hero_pos + 1,
-						l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20,
-						host_readbs(hero + HERO_VIEWDIR));
+						l17 == 0 ? hero->enemy_id : hero->enemy_id + 20,
+						hero->viewdir);
 
-					FIG_set_sheet(host_readbs(hero + HERO_FIGHTER_ID), 0);
+					FIG_set_sheet(hero->fighter_id, 0);
 
 					draw_fight_screen_pal(0);
 
 					if (FIG_get_range_weapon_type(hero) == -1) {
 
-						fighter = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
+						fighter = FIG_get_fighter(hero->fighter_id);
 
-						fighter->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+						fighter->nvf_no = hero->viewdir;
 						fighter->reload = -1;
 					}
 
@@ -673,9 +665,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (g_defender_dead != 0) {
 
 						if (target_is_hero != 0) {
-							FIG_prepare_hero_fight_ani(1, (struct struct_hero*)target_hero, -1, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+							FIG_prepare_hero_fight_ani(1, target_hero, -1, 0, hero->enemy_id, hero_pos + 1, 1);
 						} else {
-							FIG_prepare_enemy_fight_ani(1, target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+							FIG_prepare_enemy_fight_ani(1, target_monster, 0, hero->enemy_id, hero_pos + 1, 1);
 						}
 					}
 
@@ -686,23 +678,23 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					clear_anisheets();
 				}
 
-			} else if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) {
+			} else if (hero->action_id == FIG_ACTION_SPELL) {
 
 				/* cast a spell */
 
 				if (g_current_fight_no == FIGHTS_F144) {
 					/* no spells allowed in the final fight */
 
-					sub_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE) + 1);
+					sub_hero_le(hero, hero->le + 1);
 
 					g_attacker_dead = 1;
 				}
 
-				l6 = g_spell_descriptions[host_readbs(hero + HERO_SPELL_ID)].unkn6;
+				l6 = g_spell_descriptions[hero->spell_id].unkn6;
 
 				*g_dtp2 = '\0';
 
-				l15 = use_spell((struct struct_hero*)hero, 0, 0);
+				l15 = use_spell(hero, 0, 0);
 
 				clear_anisheets();
 
@@ -718,8 +710,8 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					get_textcolor(&fg_bak, &bg_bak);
 					set_textcolor(0xff, 0x00);
 
-					sprintf(g_text_output_buf, g_string_casts_spell, (char*)hero + HERO_NAME2,
-						get_ttx(host_readbs(hero + HERO_SPELL_ID) + 0x6a));
+					sprintf(g_text_output_buf, g_string_casts_spell, hero->alias,
+						get_ttx(hero->spell_id + 0x6a));
 
 					GUI_print_string(g_text_output_buf, 1, 194);
 
@@ -728,7 +720,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					delay_or_keypress(50);
 				}
 
-				if (host_readbs(hero + HERO_ENEMY_ID) != 0) {
+				if (hero->enemy_id != 0) {
 
 					l12 = l13 = 0;
 
@@ -736,7 +728,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						l12 = 1;
 					}
 
-					if (host_readbs(hero + HERO_ENEMY_ID) < 10) {
+					if (hero->enemy_id < 10) {
 						l12 = 2;
 					}
 
@@ -745,7 +737,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (l15 != -1) {
 
 						seg044_002a(0, (struct struct_hero*)hero, 4, hero_pos + 1,
-								l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20, l12, 0);
+								l17 == 0 ? hero->enemy_id : hero->enemy_id + 20, l12, 0);
 					}
 
 					if (l15 > 0) {
@@ -758,37 +750,37 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						} else {
 
-							if (host_readbs(hero + HERO_ENEMY_ID) > 0) {
+							if (hero->enemy_id > 0) {
 
 								if (target_is_hero == 0) {
 
 									seg044_002f(1, target_monster, 99,
-											l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20,
+											l17 == 0 ? hero->enemy_id : hero->enemy_id + 20,
 											hero_pos + 1, 1);
 								} else {
 
-									if (check_hero(target_hero) || (g_defender_dead != 0)) {
+									if (check_hero((Bit8u*)target_hero) || (g_defender_dead != 0)) {
 
-										seg044_002a(1, (struct struct_hero*)target_hero, 99, host_readbs(hero + HERO_ENEMY_ID), 0 , -1, 1);
+										seg044_002a(1, target_hero, 99, hero->enemy_id, 0 , -1, 1);
 									}
 								}
 							}
 						}
 
-						if ((host_readbs(hero + HERO_SPRITE_NO) != 7) &&
-							(host_readbs(hero + HERO_SPRITE_NO) != 18) &&
-							(host_readbs(hero + HERO_ENEMY_ID) > 0 ))
+						if ((hero->sprite_no != 7) &&
+							(hero->sprite_no != 18) &&
+							(hero->enemy_id > 0 ))
 						{
 
 							l13 = seg045_01a0(7, l12, hero_pos + 1,
-								l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20,
-								host_readbs(hero + HERO_VIEWDIR));
+								l17 == 0 ? hero->enemy_id : hero->enemy_id + 20,
+								hero->viewdir);
 						}
 					}
 
 					if (l15 != -1) {
 
-						FIG_set_sheet(host_readbs(hero + HERO_FIGHTER_ID), 0);
+						FIG_set_sheet(hero->fighter_id, 0);
 						draw_fight_screen_pal(1);
 					}
 
@@ -822,11 +814,6 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 								nvf.height = (Bit8u*)&height;
 
 								process_nvf(&nvf);
-#if !defined(__BORLANDC__)
-								/* BE-fix */
-								width = host_readws((Bit8u*)&width);
-								height = host_readws((Bit8u*)&height);
-#endif
 
 								g_fig_list_elem.offsetx = 0;
 								g_fig_list_elem.offsety = 0;
@@ -856,9 +843,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 							} else {
 
-								if (host_readbs(hero + HERO_ENEMY_ID) > 0) {
+								if (hero->enemy_id > 0) {
 
-									FIG_set_sheet(host_readbs(target_hero + HERO_FIGHTER_ID), 1);
+									FIG_set_sheet(target_hero->fighter_id, 1);
 								}
 							}
 						}
@@ -873,7 +860,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if (g_spell_illusionen) {
 
-							if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
+							if (hero->enemy_id >= 10) {
 
 								FIG_make_invisible(target_monster->fighter_id);
 
@@ -884,9 +871,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 									FIG_make_invisible(g_fig_twofielded_table[fighter_add->twofielded]);
 								}
 							} else {
-								if (host_readbs(hero + HERO_ENEMY_ID) > 0) {
+								if (hero->enemy_id > 0) {
 
-									FIG_make_invisible(host_readbs(target_hero + HERO_FIGHTER_ID));
+									FIG_make_invisible(target_hero->fighter_id);
 								}
 							}
 						}
@@ -910,9 +897,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					FIG_output(g_dtp2);
 				}
 
-			} else if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) {
+			} else if (hero->action_id == FIG_ACTION_USE_ITEM) {
 
-				FIG_use_item((struct struct_hero*)hero, target_monster, (struct struct_hero*)target_hero, target_is_hero, hero_pos);
+				FIG_use_item(hero, target_monster, target_hero, target_is_hero, hero_pos);
 			}
 		}
 	}
@@ -920,7 +907,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 	refresh_screen_size();
 
 	if (l17 != 0) {
-		add_ptr_bs(hero + HERO_ENEMY_ID, 20);
+		hero->enemy_id += 20;
 	}
 }
 

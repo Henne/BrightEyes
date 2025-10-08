@@ -376,7 +376,7 @@ void tevent_029(void)
 			{
 				sub_hero_le(hero, 2);
 
-				item_pos = get_item_pos((Bit8u*)hero, ITEM_FOOD_PACKAGE);
+				item_pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
 
 				if (item_pos != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
@@ -387,7 +387,7 @@ void tevent_029(void)
 
 				if (item_pos) {
 					/* hero looses the first WATERSKIN */
-					drop_item((struct struct_hero*)hero, get_item_pos((Bit8u*)hero, ITEM_WATERSKIN), item_pos - 1);
+					drop_item((struct struct_hero*)hero, get_item_pos(hero, ITEM_WATERSKIN), item_pos - 1);
 				}
 			}
 		}

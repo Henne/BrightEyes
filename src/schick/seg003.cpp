@@ -18,11 +18,6 @@
 #include "seg097.h"
 
 #if !defined(__BORLANDC__)
-#include "t_map.h"
-#endif
-
-
-#if !defined(__BORLANDC__)
 namespace M302de {
 #endif
 
@@ -140,12 +135,6 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
-
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	width = host_readws((Bit8u*)&width);
-	height = host_readws((Bit8u*)&height);
-#endif
 
 	height -= frame;
 	l1 = width;

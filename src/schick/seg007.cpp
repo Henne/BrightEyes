@@ -83,10 +83,10 @@ int dice_roll(const int n, const int m, const int x)
  * \param m	number of sides of the dice (outcome of a single dice roll is [1..m])
  * \param x	constant summand in the damage formula
  */
-void calc_damage_range(const int n, const int m, const int x, Bit8u *min, Bit8u *max)
+void calc_damage_range(const int n, const int m, const int x, signed short *min, signed short *max)
 {
-	host_writew(min, n+x);
-	host_writew(max, n*m+x);
+	*min = n + x;
+	*max = n * m + x;
 }
 
 /**
@@ -151,7 +151,7 @@ int dice_template(const unsigned short val)
 /**
  * \brief   writes damage range from enemy templates to mem
  */
-void damage_range_template(unsigned short val, Bit8u *min, Bit8u *max)
+void damage_range_template(unsigned short val, signed short *min, signed short *max)
 {
 	signed short n, m;
 	signed char x;
@@ -168,15 +168,16 @@ void damage_range_template(unsigned short val, Bit8u *min, Bit8u *max)
 	x = (signed char)tmp;
 
 	/* set vars to 0 */
-	host_writew(min, host_writews(max, 0));
+
+	*min = *max = 0;
 
 	for (i = 0; i < n; i++) {
-		inc_ptr_ws(min);	/* *min++; */
-		add_ptr_ws(max, m);	/* *max += m; */
+		(*min)++;
+		*max += m;
 	}
 
-	add_ptr_ws(min, x);
-	add_ptr_ws(max, x);
+	*min += x;
+	*max += x;
 }
 
 #if !defined(__BORLANDC__)

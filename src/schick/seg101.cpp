@@ -29,7 +29,8 @@ namespace M302de {
 void spell_adler(void)
 {
 	/* triggers the "spell failed" messages */
-	g_spell_special_aecost = (-2);
+	g_spell_special_aecost = -2;
+
 #if !defined(__BORLANDC__)
 	D1_INFO("Zauberspruch \"Adler, Wolf und Hammerhai\" ist nicht implementiert\n");
 #endif
@@ -82,8 +83,7 @@ void spell_armatrutz(void)
 		max_bonus = 9;
 
 	/* ask the user which bonus he wants */
-	sprintf(g_dtp2,
-		get_tx(99), max_bonus);
+	sprintf(g_dtp2,	get_tx(99), max_bonus);
 	bonus = GUI_input(g_dtp2, 1);
 
 	/* fix wrong input */
@@ -95,15 +95,10 @@ void spell_armatrutz(void)
 		pos = get_hero_index(get_spelluser());
 		g_spell_special_aecost = (bonus * bonus);
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(5),
-			get_spelluser() + HERO_RS_BONUS1,
-			(signed char)bonus, (signed char)pos);
+		set_mod_slot(slot, MINUTES(5), get_spelluser() + HERO_RS_BONUS1, (signed char)bonus, (signed char)pos);
 
 		/* prepare output message */
-		sprintf(g_dtp2,
-			get_tx(100),
-			((struct struct_hero*)get_spelluser())->alias,
-			bonus);
+		sprintf(g_dtp2,	get_tx(100), ((struct struct_hero*)get_spelluser())->alias, bonus);
 
 	} else {
 		/* spell canceled */
@@ -585,14 +580,14 @@ void spell_brenne(void)
 	g_spell_special_aecost = 0;
 
 	if (g_light_type == LIGHTING_TORCH) {
-		torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
+		torch_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_TORCH_OFF);
 	} else {
 		if (g_light_type == LIGHTING_LANTERN) {
 		} else {
-			torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
+			torch_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_TORCH_OFF);
 		}
 
-		lantern_pos = get_item_pos(get_spelluser(), ITEM_LANTERN_OFF);
+		lantern_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_LANTERN_OFF);
 	}
 
 	if (torch_pos != -1) {
@@ -602,8 +597,8 @@ void spell_brenne(void)
 			sprintf(g_dtp2,	get_tx(107), ((struct struct_hero*)get_spelluser())->alias);
 
 			answer = GUI_radio(g_dtp2, 2,
-					(char*)(GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0)),
-					(char*)(GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0)));
+					(char*)GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0),
+					(char*)GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0));
 
 			if (answer == -1) {
 				/* abort */
@@ -619,31 +614,29 @@ void spell_brenne(void)
 	if (torch_pos != -1) {
 
 		/* change torch to burning torch */
-		host_writew(get_spelluser() + HERO_INVENTORY + INVENTORY_ITEM_ID + torch_pos * SIZEOF_INVENTORY, ITEM_TORCH_ON);
+		((struct struct_hero*)get_spelluser())->inventory[torch_pos].item_id = ITEM_TORCH_ON;
 
 		/* set counter to 10 */
-		host_writeb(get_spelluser() + HERO_INVENTORY  + INVENTORY_LIGHTING_TIMER + torch_pos * SIZEOF_INVENTORY, 10);
+		((struct struct_hero*)get_spelluser())->inventory[torch_pos].lighting_timer = 10;
 
 		/* set AP cost */
-		g_spell_special_aecost = (random_schick(20));
+		g_spell_special_aecost = random_schick(20);
 
 		/* prepare message */
-		sprintf(g_dtp2,
-			get_tx(108),
-			((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2,	get_tx(108), ((struct struct_hero*)get_spelluser())->alias);
 
 	} else if (lantern_pos != -1) {
 
 		/* get position of oil */
-		oil_pos = get_item_pos(get_spelluser(), ITEM_OIL);
+		oil_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_OIL);
 
 		if (oil_pos != -1) {
 
 			/* change lantern to burning lantern */
-			host_writew(get_spelluser() + HERO_INVENTORY + INVENTORY_ITEM_ID + lantern_pos * SIZEOF_INVENTORY, ITEM_LANTERN_ON);
+			((struct struct_hero*)get_spelluser())->inventory[lantern_pos].item_id = ITEM_LANTERN_ON;
 
 			/* set counter to 100 */
-			host_writeb(get_spelluser() + HERO_INVENTORY  + INVENTORY_LIGHTING_TIMER + lantern_pos * SIZEOF_INVENTORY, 100);
+			((struct struct_hero*)get_spelluser())->inventory[lantern_pos].lighting_timer = 100;
 
 			/* drop one oil flask */
 			drop_item((struct struct_hero*)get_spelluser(), oil_pos, 1);
@@ -652,25 +645,19 @@ void spell_brenne(void)
 			give_hero_new_item((struct struct_hero*)get_spelluser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* set AP cost */
-			g_spell_special_aecost = (random_schick(20));
+			g_spell_special_aecost = random_schick(20);
 
 			/* prepare message */
-			sprintf(g_dtp2,
-				get_tx(119),
-				((struct struct_hero*)get_spelluser())->alias);
+			sprintf(g_dtp2,	get_tx(119), ((struct struct_hero*)get_spelluser())->alias);
 		} else {
 			/* prepare message */
-			sprintf(g_dtp2,
-				get_tx(120),
-				((struct struct_hero*)get_spelluser())->alias);
+			sprintf(g_dtp2, get_tx(120), ((struct struct_hero*)get_spelluser())->alias);
 		}
 	} else {
 		/* neither torch nor lantern */
 
 		/* prepare message */
-		sprintf(g_dtp2,
-			get_tx(121),
-			((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2, get_tx(121), ((struct struct_hero*)get_spelluser())->alias);
 	}
 }
 

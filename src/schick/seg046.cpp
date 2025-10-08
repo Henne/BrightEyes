@@ -241,7 +241,7 @@ void status_show(Bit16u index)
 
 			nvf.dst = g_icon;
 			/* set no */
-			nvf.no = host_readw(get_itemsdat(hero->inventory[i].item_id));
+			nvf.no = host_readw(get_itemsdat(hero->inventory[i].item_id) + ITEM_STATS_GFX);
 
 			process_nvf(&nvf);
 

@@ -113,7 +113,7 @@ signed short DNG12_handler(void)
 
 					/* NPC will find secret door */
 
-					if (is_hero_available_in_group(get_hero(6))) {
+					if (is_hero_available_in_group((struct struct_hero*)get_hero(6))) {
 
 						/* prepare a message with the name of the NPC */
 						sprintf(g_dtp2, get_tx(22), ((struct struct_hero*)get_hero(6))->alias);

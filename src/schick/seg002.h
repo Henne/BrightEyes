@@ -66,7 +66,7 @@ Bit32s process_nvf(struct nvf_desc *);
 void interrupt mouse_isr(void);
 #endif
 //static
-void mouse_action(Bit8u *, Bit8u *, Bit8u *, Bit8u *, Bit8u *);
+void mouse_action(unsigned short*, unsigned short*, unsigned short*, unsigned short*, unsigned short*);
 signed short is_mouse_in_rect(signed short, signed short, signed short, signed short);
 void mouse_init(void);
 void disable_mouse(void);
@@ -155,7 +155,7 @@ void seg002_484f(void);
 signed short check_hero(Bit8u*);
 signed short check_hero_no2(struct struct_hero*);
 signed short check_hero_no3(struct struct_hero*);
-signed short is_hero_available_in_group(Bit8u*);
+signed short is_hero_available_in_group(struct struct_hero*);
 void sub_ae_splash(struct struct_hero*, signed int);
 void add_hero_ae(struct struct_hero*, const signed int);
 void sub_hero_le(struct struct_hero*, const signed short);
@@ -178,7 +178,7 @@ void add_group_ap(Bit32s);
 void add_hero_ap_all(signed short);
 void sub_hero_ap_all(signed short);
 signed short get_hero_index(Bit8u*);
-signed int get_item_pos(Bit8u*, const signed int);
+signed int get_item_pos(struct struct_hero*, const signed int);
 signed short get_first_hero_with_item(signed short);
 signed short get_first_hero_with_item_in_group(signed short, signed short);
 void sub_group_le(signed short);

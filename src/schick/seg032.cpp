@@ -565,13 +565,6 @@ void FIG_do_round(void)
 
 			if (FIG_search_obj_on_cb(actor_id + 1, &x_coord, &y_coord) && check_hero((Bit8u*)hero))
 			{
-
-#if !defined(__BORLANDC__)
-				/* BE-fix */
-				x_coord = host_readws((Bit8u*)&x_coord);
-				y_coord = host_readws((Bit8u*)&y_coord);
-#endif
-
 				if (hero->blind_timer) {
 
 					hero->blind_timer--;
@@ -593,7 +586,7 @@ void FIG_do_round(void)
 						(hero->action_id == FIG_ACTION_USE_ITEM) || (hero->action_id == FIG_ACTION_RANGE_ATTACK))
 					{
 
-						FIG_do_hero_action((Bit8u*)hero, actor_id);
+						FIG_do_hero_action(hero, actor_id);
 
 						if (hero->enemy_id >= 10) {
 
@@ -619,11 +612,6 @@ void FIG_do_round(void)
 									FIG_search_obj_on_cb(hero->enemy_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
-#if !defined(__BORLANDC__)
-									/* BE-fix */
-									x = host_readws((Bit8u*)&x);
-									y = host_readws((Bit8u*)&y);
-#endif
 
 									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->enemy_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
@@ -673,11 +661,6 @@ void FIG_do_round(void)
 
 			if (FIG_search_obj_on_cb(actor_id + 10, &x_coord, &y_coord) && FIG_is_enemy_active(enemy))
 			{
-#if !defined(__BORLANDC__)
-				/* BE-fix */
-				x_coord = host_readws((Bit8u*)&x_coord);
-				y_coord = host_readws((Bit8u*)&y_coord);
-#endif
 				if (enemy->blind) {
 
 					enemy->blind--;
@@ -720,11 +703,6 @@ void FIG_do_round(void)
 									FIG_search_obj_on_cb(enemy->enemy_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
-#if !defined(__BORLANDC__)
-									/* BE-fix */
-									x = host_readws((Bit8u*)&x);
-									y = host_readws((Bit8u*)&y);
-#endif
 
 									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->enemy_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
@@ -866,11 +844,6 @@ void FIG_load_ship_sprites(void)
 					nvf.height = (Bit8u*)&height;
 
 					process_nvf(&nvf);
-#if !defined(__BORLANDC__)
-					/* BE-fix */
-					width = host_readws((Bit8u*)&width);
-					height = host_readws((Bit8u*)&height);
-#endif
 
 					/* buffer this picture */
 					g_figobj_gfxbuf_table[l_si] = g_fightobj_buf_seek_ptr;

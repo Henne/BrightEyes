@@ -62,19 +62,19 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	/* is food */
 	if (item_food(item_p)) {
 
-		if (host_readb(item_p + 3) == 1) {
+		if (host_readb(item_p + ITEM_STATS_SUBTYPE) == 1) {
 			/* eating */
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->hunger - host_readbs(item_p + 4);
+				int diff = consumer->hunger - host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
 
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item)),	host_readbs(item_p + 4),
+					consumer->alias, GUI_name_singular(get_itemname(item)),	host_readbs(item_p + ITEM_STATS_TABLE_INDEX),
 					consumer->hunger, (diff >= 0) ? diff : 0);
 #endif
 
 			/* subtract from hunger value */
-			consumer->hunger -= host_readbs(item_p + 4);
+			consumer->hunger -= host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
 
 			/* adjust hunger value */
 			if (consumer->hunger < 0) {
@@ -95,14 +95,14 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 			if (!owner->inventory[pos].flags.empty) {
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->thirst - host_readbs(item_p + 4);
+				int diff = consumer->thirst - host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item)), host_readbs(item_p + 4),
+					consumer->alias, GUI_name_singular(get_itemname(item)), host_readbs(item_p + ITEM_STATS_TABLE_INDEX),
 					consumer->thirst, (diff >= 0) ? diff : 0);
 #endif
 
 				/* subtract from thirst value */
-				consumer->thirst -= host_readbs(item_p + 4);
+				consumer->thirst -= host_readbs(item_p + ITEM_STATS_TABLE_INDEX);
 
 				/* adjust thirst value */
 				if (consumer->thirst < 0) {
@@ -148,7 +148,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 	} else if (item_herb_potion(item_p)) {
 
-		if (host_readb(item_p + 3) == 0) {
+		if (host_readb(item_p + ITEM_STATS_SUBTYPE) == 0) {
 
 			if (is_in_word_array(item, g_herbs_uneatable)) {
 				GUI_output(get_ttx(499));

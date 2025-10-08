@@ -306,9 +306,9 @@ void tevent_060(void)
 
 						for (i = 0; i < 3; i++) {
 
-							answer = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+							answer = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 							if (answer == -1) {
-								answer = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+								answer = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 							}
 
 							drop_item((struct struct_hero*)hero, answer, 1);

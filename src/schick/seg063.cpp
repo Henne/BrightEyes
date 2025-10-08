@@ -342,7 +342,7 @@ void do_harbor(void)
 
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 						{
-							GRP_hero_sleep((Bit8u*)hero, a.a[g_sea_travel_sleep_quality]);
+							GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
 
 							hero->hunger = hero->thirst = 0;
 							/* on the ship, food and drinks are served. */
@@ -616,7 +616,7 @@ void sea_travel(signed short passage, signed short dir)
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 				{
-					GRP_hero_sleep((Bit8u*)hero, a.a[g_sea_travel_sleep_quality]);
+					GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
 					hero->hunger = hero->thirst = 0;
 				}
 			}

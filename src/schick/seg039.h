@@ -5,7 +5,7 @@ namespace M302de {
 /* 0x20 */
 signed short calc_beeline(signed short, signed short, signed short, signed short);
 /* 0x25 */
-signed short FIG_get_range_weapon_type(Bit8u *);
+signed int FIG_get_range_weapon_type(struct struct_hero*);
 /* 0x2a */
 void fill_enemy_sheet(signed short, signed char, signed char);
 

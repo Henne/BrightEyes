@@ -299,12 +299,6 @@ void show_treasure_map(void)
 
 				process_nvf(&nvf);
 
-				#if !defined(__BORLANDC__)
-				/* BE-fix */
-				width = host_readws((Bit8u*)&width);
-				height = host_readws((Bit8u*)&height);
-				#endif
-
 				/* copy to screen */
 				g_pic_copy.x1 = g_tmap_x[l_si];
 				g_pic_copy.y1 = g_tmap_y[l_si];

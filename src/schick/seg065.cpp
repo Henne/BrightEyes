@@ -220,7 +220,6 @@ void hyg_ani_2(struct struct_ani *ani, signed short x, signed short y)
 	g_pic_copy.x2 = x + ani->width - 1;
 	g_pic_copy.y2 = y + ani->height - 1;
 
-	//g_pic_copy.src = host_readd(ptr);
 	g_pic_copy.src = ani->ptr;
 	g_pic_copy.dst = g_renderbuf_ptr;
 

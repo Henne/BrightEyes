@@ -886,16 +886,16 @@ void draw_wallclock(signed short pos, signed short night)
  */
 void array_add(Bit8u *dst, signed short len, signed short op, signed short flag)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < len; i++) {
 
 		if (flag == 2) {
-			if (host_readb(dst + i) != 0) {
-				add_ptr_bs(dst + i, op);
+			if (dst[i] != 0) {
+				dst[i] += op;
 			}
 		} else {
-			add_ptr_bs(dst + i, op);
+			dst[i] += op;
 		}
 	}
 }

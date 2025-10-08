@@ -24,10 +24,6 @@
 #include "seg105.h"
 
 #if !defined(__BORLANDC__)
-#include "t_map.h"
-#endif
-
-#if !defined(__BORLANDC__)
 namespace M302de {
 #endif
 
@@ -517,7 +513,7 @@ void use_key_on_chest(struct struct_chest* chest)
 	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
-	if ((key_pos = get_item_pos((Bit8u*)hero, ((struct struct_chest*)chest)->key)) != -1) {
+	if ((key_pos = get_item_pos(hero, ((struct struct_chest*)chest)->key)) != -1) {
 
 		if (!hero->inventory[key_pos].flags.broken) {
 

@@ -38,7 +38,7 @@ signed short hero_has_ingrendients(struct struct_hero *hero, const signed short 
 	/* loop over ingrendients */
 	while ((r_ptr->ingredients[i] != -1) && retval) {
 
-		item_pos = get_item_pos((Bit8u*)hero, r_ptr->ingredients[i]);
+		item_pos = get_item_pos(hero, r_ptr->ingredients[i]);
 
 		if (item_pos == -1) {
 
@@ -79,7 +79,7 @@ void hero_use_ingrendients(struct struct_hero *hero, const signed short recipe_i
 	/* loop over ingredients */
 	while (r_ptr->ingredients[i] != -1) {
 
-		item_pos = get_item_pos((Bit8u*)hero, r_ptr->ingredients[i]);
+		item_pos = get_item_pos(hero, r_ptr->ingredients[i]);
 
 		/* drop the needed item */
 		drop_item((struct struct_hero*)hero, item_pos, 1);
@@ -156,7 +156,7 @@ signed short plan_alchemy(struct struct_hero *hero)
 
 	retval = 1;
 	recipes = 0;
-	item_pos = get_item_pos((Bit8u*)hero, ITEM_ALCHEMY_KIT);
+	item_pos = get_item_pos(hero, ITEM_ALCHEMY_KIT);
 
 	if (item_pos == -1) {
 
@@ -167,7 +167,7 @@ signed short plan_alchemy(struct struct_hero *hero)
 
 		/* count all recipes and prepare the menu */
 		for (i = 0; i <= 12; i++) {
-			if (get_item_pos((Bit8u*)hero, g_alchemy_recipes[i].item_id) != -1) {
+			if (get_item_pos(hero, g_alchemy_recipes[i].item_id) != -1) {
 
 				strcpy(g_dtp2 + recipes * 50, GUI_name_singular(get_itemname(g_alchemy_recipes[i].outcome)));
 
@@ -268,7 +268,7 @@ signed short plan_alchemy(struct struct_hero *hero)
 									for (i = 0; i <= 6; i++, hero_p++) {
 										if ((hero_p->typus != HERO_TYPE_NONE) && (hero_p->group_no == gs_current_group))
 										{
-											GRP_hero_sleep((Bit8u*)hero_p, g_sleep_quality);
+											GRP_hero_sleep(hero_p, g_sleep_quality);
 										}
 									}
 								} else {
@@ -333,32 +333,32 @@ signed short has_herb_for_disease(struct struct_hero *hero, const signed short d
 
 		case ILLNESS_TYPE_DUMPFSCHAEDEL:
 			/* any single one of the following herbs is sufficient */
-			if (get_item_pos((Bit8u*)hero, ITEM_BELMART)          != -1) retval = ITEM_BELMART;
-			else if (get_item_pos((Bit8u*)hero, ITEM_WHIRLWEED)   != -1) retval = ITEM_WHIRLWEED;
-			else if (get_item_pos((Bit8u*)hero, ITEM_EINBEERE)    != -1) retval = ITEM_EINBEERE;
-			else if (get_item_pos((Bit8u*)hero, ITEM_TARNELE)     != -1) retval = ITEM_TARNELE;
-			else if (get_item_pos((Bit8u*)hero, ITEM_DONF_SPRING) != -1) retval = ITEM_DONF_SPRING;
-			else if (get_item_pos((Bit8u*)hero, ITEM_FINAGE_TREE) != -1) retval = ITEM_FINAGE_TREE;
-			else if (get_item_pos((Bit8u*)hero, ITEM_MENCHAL)     != -1) retval = ITEM_MENCHAL;
-			else if (get_item_pos((Bit8u*)hero, ITEM_OLGIN_ROOT)  != -1) retval = ITEM_OLGIN_ROOT;
-			else if (get_item_pos((Bit8u*)hero, ITEM_JORUGA_ROOT) != -1) retval = ITEM_JORUGA_ROOT;
+			if (get_item_pos(hero, ITEM_BELMART)          != -1) retval = ITEM_BELMART;
+			else if (get_item_pos(hero, ITEM_WHIRLWEED)   != -1) retval = ITEM_WHIRLWEED;
+			else if (get_item_pos(hero, ITEM_EINBEERE)    != -1) retval = ITEM_EINBEERE;
+			else if (get_item_pos(hero, ITEM_TARNELE)     != -1) retval = ITEM_TARNELE;
+			else if (get_item_pos(hero, ITEM_DONF_SPRING) != -1) retval = ITEM_DONF_SPRING;
+			else if (get_item_pos(hero, ITEM_FINAGE_TREE) != -1) retval = ITEM_FINAGE_TREE;
+			else if (get_item_pos(hero, ITEM_MENCHAL)     != -1) retval = ITEM_MENCHAL;
+			else if (get_item_pos(hero, ITEM_OLGIN_ROOT)  != -1) retval = ITEM_OLGIN_ROOT;
+			else if (get_item_pos(hero, ITEM_JORUGA_ROOT) != -1) retval = ITEM_JORUGA_ROOT;
 			break;
 
 		case ILLNESS_TYPE_PARALYSE:
-			if (get_item_pos((Bit8u*)hero, ITEM_DONF_SPRING) != -1)
+			if (get_item_pos(hero, ITEM_DONF_SPRING) != -1)
 				retval = ITEM_DONF_SPRING;
 			break;
 
 		case ILLNESS_TYPE_SCHLACHTENFIEBER:
-			if ( (get_item_pos((Bit8u*)hero, ITEM_JORUGA_ROOT) != -1) && (get_item_pos((Bit8u*)hero, ITEM_GULMOND_LEAF) != -1)) retval = 999;
+			if ( (get_item_pos(hero, ITEM_JORUGA_ROOT) != -1) && (get_item_pos(hero, ITEM_GULMOND_LEAF) != -1)) retval = 999;
 			break;
 
 		case ILLNESS_TYPE_FROSTSCHAEDEN:
-			if (get_item_pos((Bit8u*)hero, ITEM_WHIRLWEED) != -1) retval = ITEM_WHIRLWEED;
+			if (get_item_pos(hero, ITEM_WHIRLWEED) != -1) retval = ITEM_WHIRLWEED;
 			break;
 
 		case ILLNESS_TYPE_TOLLWUT:
-			if (get_item_pos((Bit8u*)hero, ITEM_JORUGA_ROOT) != -1) retval = ITEM_JORUGA_ROOT;
+			if (get_item_pos(hero, ITEM_JORUGA_ROOT) != -1) retval = ITEM_JORUGA_ROOT;
 			break;
 	}
 
@@ -426,11 +426,11 @@ signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *
 
 					if (herb == 999) {
 						/* drop JORUGA & GULMOND LEAF */
-						drop_item((struct struct_hero*)healer, get_item_pos((Bit8u*)healer, ITEM_JORUGA_ROOT), 1);
-						drop_item((struct struct_hero*)healer, get_item_pos((Bit8u*)healer, ITEM_GULMOND_LEAF), 1);
+						drop_item((struct struct_hero*)healer, get_item_pos(healer, ITEM_JORUGA_ROOT), 1);
+						drop_item((struct struct_hero*)healer, get_item_pos(healer, ITEM_GULMOND_LEAF), 1);
 					} else {
 						/* drop the herb */
-						drop_item((struct struct_hero*)healer, get_item_pos((Bit8u*)healer, herb), 1);
+						drop_item((struct struct_hero*)healer, get_item_pos(healer, herb), 1);
 					}
 
 					retval = 1;

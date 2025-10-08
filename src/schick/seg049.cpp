@@ -30,17 +30,15 @@ namespace M302de {
 
 int GRP_compare_heroes(const void *p1, const void *p2)
 {
-	Bit8u *hero1, *hero2;
+	struct struct_hero *hero1 = (struct struct_hero*)p1;
+	struct struct_hero *hero2 = (struct struct_hero*)p2;
 
-	hero1 = (Bit8u*)p1;
-	hero2 = (Bit8u*)p2;
-
-	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) == gs_current_group) &&
-		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group))
+	if ((hero1->typus != HERO_TYPE_NONE) &&
+		(hero1->group_no == gs_current_group) &&
+		(hero2->typus != HERO_TYPE_NONE) &&
+		(hero2->group_no == gs_current_group))
 	{
-		if (host_readbs(hero1 + HERO_GROUP_POS) < host_readbs(hero2 + HERO_GROUP_POS))
+		if (hero1->group_pos < hero2->group_pos)
 		{
 			return -1;
 		} else {
@@ -48,28 +46,28 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 		}
 	}
 
-	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) == gs_current_group) &&
-		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) != gs_current_group))
+	if ((hero1->typus != HERO_TYPE_NONE) &&
+		(hero1->group_no == gs_current_group) &&
+		(hero2->typus != HERO_TYPE_NONE) &&
+		(hero2->group_no != gs_current_group))
 	{
 		return -1;
 	}
 
-	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) &&
-		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group))
+	if ((hero1->typus != HERO_TYPE_NONE) &&
+		(hero1->group_no != gs_current_group) &&
+		(hero2->typus != HERO_TYPE_NONE) &&
+		(hero2->group_no == gs_current_group))
 	{
 		return 1;
 	}
 
-	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) &&
-		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) != gs_current_group))
+	if ((hero1->typus != HERO_TYPE_NONE) &&
+		(hero1->group_no != gs_current_group) &&
+		(hero2->typus != HERO_TYPE_NONE) &&
+		(hero2->group_no != gs_current_group))
 	{
-		if (host_readbs(hero1 + HERO_GROUP_POS) < host_readbs(hero2 + HERO_GROUP_POS))
+		if (hero1->group_pos < hero2->group_pos)
 		{
 			return -1;
 		} else {
@@ -77,36 +75,35 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 		}
 	}
 
-	if (!(host_readbs(hero1 + HERO_TYPE)) &&
-		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group))
+	if (!(hero1->typus) &&
+		(hero2->typus != HERO_TYPE_NONE) &&
+		(hero2->group_no == gs_current_group))
 	{
 		return 1;
 	}
 
-	if (!(host_readbs(hero1 + HERO_TYPE)) &&
-		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) != gs_current_group))
+	if (!(hero1->typus) &&
+		(hero2->typus != HERO_TYPE_NONE) &&
+		(hero2->group_no != gs_current_group))
 	{
 		return -1;
 	}
 
-	if (!(host_readbs(hero1 + HERO_TYPE)) &&
-		!(host_readbs(hero2 + HERO_TYPE)))
+	if (!(hero1->typus) && !(hero2->typus))
 	{
 		return 0;
 	}
 
-	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) == gs_current_group) &&
-		!(host_readbs(hero2 + HERO_TYPE)))
+	if ((hero1->typus != HERO_TYPE_NONE) &&
+		(hero1->group_no == gs_current_group) &&
+		!(hero2->typus))
 	{
 		return -1;
 	}
 
-	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) &&
-		!(host_readbs(hero2 + HERO_TYPE)))
+	if ((hero1->typus != HERO_TYPE_NONE) &&
+		(hero1->group_no != gs_current_group) &&
+		!(hero2->typus))
 	{
 		return 1;
 	}
@@ -624,33 +621,32 @@ void GRP_move_hero(signed short src_pos)
 	}
 }
 
-void GRP_hero_sleep(Bit8u *hero, signed short quality)
+void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 {
 	signed short le_regen;
 	signed short ae_regen;
 	signed short diff;
 	signed short tmp;
 
-	if (!hero_dead(hero) && (host_readd(hero + HERO_STAFFSPELL_TIMER) == 0) &&
-		(host_readbs(hero + HERO_RECIPE_TIMER) == 0))
+	if (!hero_dead((Bit8u*)hero) && (hero->staffspell_timer == 0) && (hero->recipe_timer == 0))
 	{
 
 		if (g_travel_by_ship && (random_schick(100) < 10)) {
 
 			/* chance of motion sickness is 9% */
 
-			sprintf(g_dtp2,	get_ttx(796), hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_ttx(796), hero->alias);
 			GUI_output(g_dtp2);
 
 		} else {
 
-			if (!hero_is_diseased((struct struct_hero*)hero) && !hero_is_poisoned((struct struct_hero*)hero)) {
+			if (!hero_is_diseased(hero) && !hero_is_poisoned(hero)) {
 
-				if (host_readbs(hero + HERO_RUHE_KOERPER) > 0) {
-					dec_ptr_bs(hero + HERO_RUHE_KOERPER);
+				if (hero->ruhe_koerper > 0) {
+					hero->ruhe_koerper--;
 				}
 
-				if (!hero_brewing(hero)) {
+				if (!hero_brewing((Bit8u*)hero)) {
 
 					le_regen = random_schick(6) + quality;
 					ae_regen = random_schick(6) + quality;
@@ -666,20 +662,20 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 					}
 
 					/* swap LE and AE */
-					if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) && (le_regen < ae_regen)) {
+					if ((hero->typus >= HERO_TYPE_WITCH) && (le_regen < ae_regen)) {
 						tmp = ae_regen;
 						ae_regen = le_regen;
 						le_regen = tmp;
 					}
 
-					if (host_readbs(hero + HERO_RUHE_KOERPER) > 0) {
+					if (hero->ruhe_koerper > 0) {
 						le_regen += le_regen;
 						ae_regen += ae_regen;
 					}
 
 					/* Do LE */
 
-					diff = host_readws(hero + HERO_LE_ORIG) - host_readws(hero + HERO_LE);
+					diff = hero->le_max - hero->le;
 
 					if ((diff != 0) && le_regen) {
 
@@ -687,7 +683,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 							le_regen = diff;
 						}
 
-						add_hero_le((struct struct_hero*)hero, le_regen);
+						add_hero_le(hero, le_regen);
 
 						strcpy(g_text_output_buf, get_ttx(392));
 
@@ -695,7 +691,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 							strcat(g_text_output_buf, get_ttx(393));
 						}
 
-						sprintf(g_dtp2, get_ttx(319), hero + HERO_NAME2, le_regen, g_text_output_buf);
+						sprintf(g_dtp2, get_ttx(319), hero->alias, le_regen, g_text_output_buf);
 
 						if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
@@ -711,9 +707,9 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 					}
 
-					if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+					if (hero->typus >= HERO_TYPE_WITCH) {
 
-						diff = host_readws(hero + HERO_AE_ORIG) - host_readws(hero + HERO_AE);
+						diff = hero->ae_max - hero->ae;
 
 						if ((diff != 0) && ae_regen) {
 
@@ -721,7 +717,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 								ae_regen = diff;
 							}
 
-							add_hero_ae((struct struct_hero*)hero, ae_regen);
+							add_hero_ae(hero, ae_regen);
 
 							strcpy(g_text_output_buf, get_ttx(392));
 
@@ -729,7 +725,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 								strcat(g_text_output_buf, get_ttx(393));
 							}
 
-							sprintf(g_dtp2, get_ttx(320), hero + HERO_NAME2,	ae_regen, g_text_output_buf);
+							sprintf(g_dtp2, get_ttx(320), hero->alias, ae_regen, g_text_output_buf);
 
 							if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
@@ -746,10 +742,10 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 				} else {
 					/* hero brewing, HERO_STAFFSPELL_TIMER == 0, HERO_RECIPE_TIMER == 0, not dead, not deseased, not poisoned */
 					/* TODO: potential Original-Bug: why is 'not poisoned', 'not deseased' and 'HERO_STAFFSPELL_TIMER == 0' needed to complete the brewing process? */
-					do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
+					do_alchemy(hero, hero->recipe_id, 0);
 				}
 			} else {
-				sprintf(g_dtp2,	get_ttx(558), hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_ttx(558), hero->alias);
 				GUI_output(g_dtp2);
 			}
 		}

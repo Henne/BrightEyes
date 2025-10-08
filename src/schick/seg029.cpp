@@ -148,14 +148,14 @@ void draw_status_line(void)
 		/* Clear name field */
 		do_fill_rect(g_vga_memstart, g_hero_pic_posx[i], 190, g_hero_pic_posx[i] + 41, 197, 0);
 
-		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
+		if (((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) {
 
 			copy_forename(g_dtp2, ((struct struct_hero*)get_hero(i))->alias);
 
 			set_textcolor(0xff, 0);
 
 			/* Gray the names of heroes in another group */
-			if (host_readb(get_hero(i) + HERO_GROUP_NO) != gs_current_group) {
+			if (((struct struct_hero*)get_hero(i))->group_no != gs_current_group) {
 
 				set_textcolor(0x6f, 0);
 			}
@@ -168,12 +168,12 @@ void draw_status_line(void)
 
 		update_mouse_cursor();
 
-		if (!host_readbs(get_hero(i) + HERO_TYPE)) {
+		if (!((struct struct_hero*)get_hero(i))->typus) {
 
 			clear_hero_icon(i);
 
 		} else {
-			if (host_readb(get_hero(i) + HERO_GROUP_NO) == gs_current_group) {
+			if (((struct struct_hero*)get_hero(i))->group_no == gs_current_group) {
 
 				g_pic_copy.x1 = g_hero_pic_posx[i];
 				g_pic_copy.y1 = 157;
@@ -255,7 +255,7 @@ void clear_hero_icon(unsigned short pos)
 	/* fill icon area black */
 	do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos], 157, g_hero_pic_posx[pos] + 31, 188, 0);
 
-	if (!host_readbs(get_hero(pos) + HERO_TYPE)) {
+	if (!((struct struct_hero*)get_hero(pos))->typus) {
 
 		/* fill bars area black */
 		do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos] + 33, 157, g_hero_pic_posx[pos] + 39, 188, 0);

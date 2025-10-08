@@ -168,12 +168,6 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
 
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	height = host_readws((Bit8u*)&height);
-	width = host_readws((Bit8u*)&width);
-#endif
-
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = a.a[spell_ani_id - 1];
 	g_fig_list_elem.cbx = (signed char)x;

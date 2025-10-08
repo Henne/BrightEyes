@@ -35,7 +35,8 @@ static
 #endif
 signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
 {
-	Bit8u *buffer, *src;
+	Bit8u *buffer;
+	Bit8s *src;
 	signed char retval;
 	signed short i;
 	signed short max_no;
@@ -47,7 +48,7 @@ signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
 	if (mode == 3)
 		buffer = g_buffer_weapanidat;
 
-	max_no = host_readw(buffer);
+	max_no = *(Bit16s*)buffer;
 
 	/* Sanity check of no */
 	if (no < 0)
@@ -57,14 +58,14 @@ signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
 		return 0;
 
 	/* set src to the requested data entry */
-	src = buffer;
+	src = (Bit8s*)buffer;
 	src += max_no + 2;
 
-	retval = host_readb(buffer + 2);
+	retval = (Bit8s)buffer[2];
 
 	for (i = 1; i <= no; i++) {
 		src += retval;
-		retval = host_readb(buffer + i + 2);
+		retval = *(Bit8s*)(buffer + i + 2);
 	}
 
 	src++;
@@ -74,7 +75,7 @@ signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
 	/* copy some bytes from ANI.DAT */
 
 	for (i = 0; retval > i; i++) {
-		host_writeb(dst, host_readb(src));
+		*dst = *src;
 		src++;
 		dst++;
 	}
@@ -89,7 +90,7 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 	signed char b1;
 	signed char b2;
 	signed char b3;
-	Bit8u *p1;
+	Bit8s *p1;
 	struct struct_fighter *fighter;
 	Bit16s *p3;
 
@@ -97,7 +98,7 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 
 	g_fig_anisheets[1][0] = 0;
 	g_fig_anisheets[1][242] = enemy->gfx_id;
-	p1 = (Bit8u*)&g_fig_anisheets[1][1];
+	p1 = (Bit8s*)&g_fig_anisheets[1][1];
 
 	i = 0;
 	p3 = g_gfx_ani_index[enemy->gfx_id];
@@ -134,23 +135,23 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 
 			enemy->viewdir = g_fig_move_pathdir[i];
 
-			p1 += copy_ani_stuff(p1, p3[b2], 1);
+			p1 += copy_ani_stuff((Bit8u*)p1, p3[b2], 1);
 
 			if (b1 != -1) {
 
-				p1 += copy_ani_stuff(p1, p3[b1], 1);
+				p1 += copy_ani_stuff((Bit8u*)p1, p3[b1], 1);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			p1 += copy_ani_stuff(p1, p3[g_fig_move_pathdir[i] + 0x0c], 1);
+			p1 += copy_ani_stuff((Bit8u*)p1, p3[g_fig_move_pathdir[i] + 0x0c], 1);
 			i += 2;
 			/* BP - 2 */
 			enemy->bp = enemy->bp - 2;
 
 		} else {
-			p1 += copy_ani_stuff(p1, p3[g_fig_move_pathdir[i] + 0x08], 1);
+			p1 += copy_ani_stuff((Bit8u*)p1, p3[g_fig_move_pathdir[i] + 0x08], 1);
 			i++;
 			/* BP - 1 */
 			enemy->bp--;
@@ -158,7 +159,7 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 	}
 
 	/* terminate array */
-	host_writeb(p1, -1);
+	*p1 = -1;
 
 	FIG_call_draw_pic();
 
@@ -509,11 +510,6 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 									seg037_00ae(enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
-#if !defined(__BORLANDC__)
-									/* BE-fix */
-									x = host_readws((Bit8u*)&x);
-									y = host_readws((Bit8u*)&y);
-#endif
 									if (enemy->bp < 3) {
 										enemy->bp = 0;
 									}
@@ -561,11 +557,6 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 									seg037_00ae(enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
-#if !defined(__BORLANDC__)
-									/* BE-fix */
-									x = host_readws((Bit8u*)&x);
-									y = host_readws((Bit8u*)&y);
-#endif
 									if (enemy->bp < 5) {
 										enemy->bp = 0;
 									}
@@ -646,11 +637,6 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 							seg037_00ae(enemy, enemy_no);
 							FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
-#if !defined(__BORLANDC__)
-							/* BE-fix */
-							x = host_readws((Bit8u*)&x);
-							y = host_readws((Bit8u*)&y);
-#endif
 							if (enemy->bp < 3) {
 								enemy->bp = 0;
 							}
@@ -855,11 +841,6 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 					seg037_00ae(enemy, enemy_no);
 					FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
-#if !defined(__BORLANDC__)
-					/* BE-fix */
-					x = host_readws((Bit8u*)&x);
-					y = host_readws((Bit8u*)&y);
-#endif
 					if ((x_bak == x) && (y_bak == y)) {
 						enemy->bp = 0;
 					}

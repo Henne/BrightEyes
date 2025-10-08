@@ -257,7 +257,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 	if (weapon_type == -1) {
 		/* not a weapon or a ranged weapon */
-		weapon_type = FIG_get_range_weapon_type((Bit8u*)hero);
+		weapon_type = FIG_get_range_weapon_type(hero);
 	}
 
 	/* now depending on the item in the right hand, <weapon_type> is
@@ -359,7 +359,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
 			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
 			give_hero_new_item(hero, ITEM_DAGGER, 1, 1); /* TODO: what if no free knapsack slot? */
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos((Bit8u*)hero, ITEM_DAGGER), hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DAGGER), hero);
 
 		} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
 
@@ -370,7 +370,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			/* drop the KUKRISMENGBILAR and equip a normal MENGBILAR  */
 			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
 			give_hero_new_item(hero, ITEM_MENGBILAR, 1, 1); /* TODO: what if no free knapsack slot? */
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos((Bit8u*)hero, ITEM_MENGBILAR), hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), hero);
 
 		} else if ((right_hand == ITEM_SILVER_MACE) && (enemy_gfx_id == 0x1c)) {
 
@@ -471,7 +471,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct enemy_sheet *target, signed short is_enemy)
 {
 	signed short pos;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	signed short damage;
 	signed short dice;
@@ -487,16 +487,15 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 	if (!is_enemy) {
 
 		/* the target is a hero */
-		hero = (Bit8u*)target;
+		hero = (struct struct_hero*)target;
 
 		/* subtract RS */
-		damage -= host_readbs(hero + HERO_RS_BONUS1);
+		damage -= hero->rs_bonus1;
 
 		/* armor bonus against skeletons and zombies */
-		if (host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_CHAIN_MAIL_CURSED && (
-			(attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c))) {
-
-				damage -= 3;
+		if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_CHAIN_MAIL_CURSED && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c)))
+		{
+			damage -= 3;
 		}
 
 		/* get position of Totenkopfguertel/Skullbelt */
@@ -508,13 +507,13 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 
 			/* 4% chance to loose this item */
 			if (random_schick(100) < 5) {
-				drop_item((struct struct_hero*)hero, pos, 1);
+				drop_item(hero, pos, 1);
 				GUI_output(get_tx(11));
 			}
 		}
 
 		/* no damage if the hero is petrified */
-		if (hero_petrified(hero))
+		if (hero_petrified((Bit8u*)hero))
 			damage = 0;
 	} else {
 		/* the target is an enemy */

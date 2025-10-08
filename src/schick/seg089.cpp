@@ -85,7 +85,7 @@ signed short DNG15_handler(void)
 				sprintf(g_dtp2,	(char*)(tmp == 3 ? get_tx(3) : (tmp == 2 ? get_tx(4) : get_tx(5))), hero->alias);
 				GUI_output(g_dtp2);
 
-				sub_hero_le((struct struct_hero*)hero, 1);
+				sub_hero_le(hero, 1);
 			}
 		}
 
@@ -473,9 +473,7 @@ void DNG15_small_wounds(void)
 {
 	signed short i;
 	signed short randval;
-	struct struct_hero *hero;
-
-	hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++)
 	{
@@ -487,7 +485,7 @@ void DNG15_small_wounds(void)
 			sprintf(g_dtp2, (char*)(randval == 3 ? get_tx(3) : (randval == 2 ? get_tx(7) : get_tx(8))), hero->alias);
 			GUI_output(g_dtp2);
 
-			sub_hero_le((struct struct_hero*)hero, 1);
+			sub_hero_le(hero, 1);
 		}
 	}
 }
@@ -540,7 +538,7 @@ void DNG15_smelling_chest(Bit8u* chest)
 		sprintf(g_dtp2,	get_tx(36), hero->alias);
 		GUI_output(g_dtp2);
 
-		sub_hero_le((struct struct_hero*)hero, 4);
+		sub_hero_le(hero, 4);
 	}
 }
 
@@ -586,7 +584,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 
 	hero = (struct struct_hero*)get_hero(0);
 
-	switch (host_readb(ptr))
+	switch (*ptr)
 	{
 		case 1:
 		{
@@ -606,7 +604,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			if (cnt >= 2)
 			{
 				/* if more that one hero failed, the ceiling cracks */
-				inc_ptr_bs(ptr);
+				(*ptr)++;
 
 				GUI_output(get_tx(41));
 			}
@@ -616,7 +614,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 		{
 			/* the beams crash imediately */
 			GUI_output(get_tx(42));
-			inc_ptr_bs(ptr);
+			(*ptr)++;
 			GUI_output(get_tx(43));
 
 			/* each hero gets 1W6 damage on a failed GE test */
@@ -628,7 +626,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 					GUI_output(g_dtp2);
 
-					sub_hero_le((struct struct_hero*)hero, random_schick(6));
+					sub_hero_le(hero, random_schick(6));
 				}
 			}
 
@@ -644,7 +642,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 				/* the way is already cleared */
 				GUI_output(get_tx(48));
 			} else {
-				dec_ptr_bs(ptr);
+				(*ptr)--;
 
 				if (GUI_bool(get_tx(49)))
 				{
@@ -687,14 +685,14 @@ void DNG15_clear_way(Bit8u* ptr)
 				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
-				sub_hero_le((struct struct_hero*)hero, random_schick(6));
+				sub_hero_le(hero, random_schick(6));
 			}
 		}
 
 		gs_x_target = gs_x_target_bak;
 		gs_y_target = gs_y_target_bak;
 	} else {
-		inc_ptr_bs(ptr);
+		(*ptr)++;
 		GUI_output(get_tx(47));
 	}
 }

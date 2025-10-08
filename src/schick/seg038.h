@@ -3,12 +3,14 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-unsigned short FIG_search_obj_on_cb(signed short, signed short*, signed short*);
+signed int FIG_search_obj_on_cb(const signed short, signed short*, signed short*);
 /* 0x25 */
 void FIG_init_list_elem(signed short);
 /* 0x2a */
+#if defined(__BORLANDC__)
 /* static */
-void FIG_unused(signed short, signed short, Bit8u*, Bit8u*);
+void FIG_unused(const signed short, const signed short, signed short*, signed short*);
+#endif
 /* 0x2f */
 /* static */
 void FIG_find_path_to_target_backtrack(Bit8u*, signed short, signed short, signed short, signed char, signed short, signed short, signed short);

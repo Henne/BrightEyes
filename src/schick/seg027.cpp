@@ -532,11 +532,6 @@ void load_scenario(signed short scenario_id)
 	/* read the first two bytes == scenario_id of scenarios */
 	read_archive_file(scenario_lst_handle, (Bit8u*)&scenario_lst_buf, 2);
 
-#if !defined(__BORLANDC__)
-	/* BE-fix: */
-	scenario_lst_buf = host_readw((Bit8u*)&scenario_lst_buf);
-#endif
-
 	/* check if scenario_id is valid */
 	if ((scenario_id > scenario_lst_buf) || (scenario_id < 1))
 		scenario_id = 1;
@@ -577,10 +572,6 @@ signed short count_fight_enemies(signed short fight_id)
 	/* read the first 2 bytes (fight_count number of fights) */
 	_read(fight_lst_handle, (void*)&fight_count, 2);
 
-#if !defined(__BORLANDC__)
-	/* BE-fix: */
-	fight_count = host_readw((Bit8u*)&fight_count);
-#endif
 	/* sanity check for parameter fight_id */
 	if ((fight_id > (fight_count - 1)) || (fight_id < 0))
 		fight_id = 0;
@@ -624,10 +615,6 @@ void read_fight_lst(signed short fight_id)
 	/* read the first 2 bytes (fight_count number of fights) */
 	_read(fight_lst_handle, (void*)&fight_count, 2);
 
-#if !defined(__BORLANDC__)
-	/* BE-fix: */
-	fight_count = host_readw((Bit8u*)&fight_count);
-#endif
 	/* sanity check for parameter fight_id */
 	if ((fight_count - 1) < fight_id || fight_id < 0)
 		fight_id = 0;

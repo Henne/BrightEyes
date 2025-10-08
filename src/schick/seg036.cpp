@@ -82,7 +82,7 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 
 	/* copy the ani sequenecs to dst */
 	for (i = 0; len > i; i++) {
-		host_writeb(dst, host_readb(p_datitem));
+		*dst = *p_datitem;
 		p_datitem++;
 		dst++;
 	}
@@ -90,29 +90,29 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 	return len;
 }
 
-void seg036_00ae(Bit8u *hero, signed short hero_pos)
+void seg036_00ae(struct struct_hero *hero, const signed int hero_pos)
 {
 	signed short i;
 	signed char dir1;
 	signed char dir2;
-	Bit8u *ptr1;
+	Bit8s *ptr1;
 	signed char dir3;
 	Bit16s *ptr2;
 
 	g_fig_anisheets[0][0] = 0;
-	g_fig_anisheets[0][242] = host_readbs(hero + HERO_SPRITE_NO);
+	g_fig_anisheets[0][242] = hero->sprite_no;
 
-	ptr1 = (Bit8u*)&g_fig_anisheets[0][1];
-	ptr2 = g_gfx_ani_index[host_readbs(hero + HERO_SPRITE_NO)];
+	ptr1 = (Bit8s*)&g_fig_anisheets[0][1];
+	ptr2 = g_gfx_ani_index[hero->sprite_no];
 
 	i = 0;
 
 	while (g_fig_move_pathdir[i] != -1) {
 
-		if (host_readbs(hero + HERO_VIEWDIR) != g_fig_move_pathdir[i]) {
+		if (hero->viewdir != g_fig_move_pathdir[i]) {
 
 			dir2 = dir1 = -1;
-			dir3 = host_readbs(hero + HERO_VIEWDIR);
+			dir3 = hero->viewdir;
 			dir2 = dir3;
 			dir3++;
 
@@ -131,40 +131,40 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 
 				if (g_fig_move_pathdir[i] != dir3) {
 
-					dir2 = host_readbs(hero + HERO_VIEWDIR) + 4;
+					dir2 = hero->viewdir + 4;
 					dir1 = -1;
 				}
 			}
 
 			/* set heroes looking direction */
-			host_writeb(hero + HERO_VIEWDIR, g_fig_move_pathdir[i]);
+			hero->viewdir = g_fig_move_pathdir[i];
 
-			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[dir2], 2);
+			ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[dir2], 2);
 
 			if (dir1 != -1) {
-				ptr1 += KI_copy_ani_sequence(ptr1, ptr2[dir1], 2);
+				ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[dir1], 2);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[(g_fig_move_pathdir[i] + 12)], 2);
+			ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[(g_fig_move_pathdir[i] + 12)], 2);
 			i += 2;
 			/* BP - 2 */
-			host_writeb(hero + HERO_BP_LEFT, host_readbs(hero + HERO_BP_LEFT) - 2);
+			hero->bp_left = hero->bp_left - 2;
 		} else {
-			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[(g_fig_move_pathdir[i] + 8)], 2);
+			ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[(g_fig_move_pathdir[i] + 8)], 2);
 			i++;
 			/* BP - 1 */
-			dec_ptr_bs(hero + HERO_BP_LEFT);
+			hero->bp_left--;
 		}
 	}
 
-	host_writeb(ptr1, -1);
+	*ptr1 = -1;
 	FIG_call_draw_pic();
 	FIG_remove_from_list(g_fig_cb_marker_id, 0);
 	g_fig_cb_marker_id = -1;
-	FIG_set_sheet(host_readbs(hero + HERO_FIGHTER_ID), 0);
+	FIG_set_sheet(hero->fighter_id, 0);
 	draw_fight_screen(0);
 	memset(&g_fig_anisheets[0], -1, 0xf3);
 	FIG_init_list_elem(hero_pos + 1);
@@ -176,7 +176,7 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
  * \param   hero        pointer to the hero with a broken weapon
  * \return              1 if a weapon was found, 0 if the hero fights now with bare hands
  */
-signed short KI_change_hero_weapon(Bit8u *hero)
+signed int KI_change_hero_weapon(struct struct_hero *hero)
 {
 	signed short pos;
 	signed short has_new_weapon = 0;
@@ -186,7 +186,7 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 
 	for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
 
-		item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + pos * SIZEOF_INVENTORY);
+		item_id = hero->inventory[pos].item_id;
 		item_p = get_itemsdat(item_id);
 
 		/* grab the first melee weapon in the knapsack,
@@ -196,7 +196,7 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 			(host_readbs(item_p + ITEM_STATS_SUBTYPE) != WEAPON_TYPE_WURFWAFFE) &&
 			(host_readbs(item_p + ITEM_STATS_SUBTYPE) != WEAPON_TYPE_SPEER))
 		{
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, (struct struct_hero*)hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
 			has_new_weapon = 1;
 			break;
 		}
@@ -206,8 +206,10 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 
 		/* find a free slot, to get rid of the broken weapon */
 		for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
-			if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + pos * SIZEOF_INVENTORY) == ITEM_NONE) {
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, (struct struct_hero*)hero);
+
+			if (hero->inventory[pos].item_id == ITEM_NONE) {
+
+				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
 				has_new_weapon = 2;
 				break;
 			}
@@ -215,19 +217,19 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 
 		/* if nothing helps, put it in the left hand */
 		if (!has_new_weapon) {
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_LEFT_HAND, (struct struct_hero*)hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_LEFT_HAND, hero);
 		}
 
 		has_new_weapon = 0;
 	}
 
-	fighter = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
-	fighter->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+	fighter = FIG_get_fighter(hero->fighter_id);
+	fighter->nvf_no = hero->viewdir;
 	fighter->reload = -1;
 
 	draw_fight_screen_pal(0);
 
-	host_writeb(hero + HERO_BP_LEFT, host_readbs(hero + HERO_BP_LEFT) - 2);
+	hero->bp_left = hero->bp_left - 2;
 
 	return has_new_weapon;
 }
@@ -385,7 +387,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
  * \param   y           y-coordinate of the hero
  * \return              0 = no target found, 1 = target found (long distance), 2 = target found (short distance)
  */
-signed short KI_select_spell_target(Bit8u *hero, signed short hero_pos, signed short renegade, signed short x, signed short y)
+signed int KI_select_spell_target(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
 {
 	signed short dir;
 	signed short count;
@@ -398,21 +400,21 @@ signed short KI_select_spell_target(Bit8u *hero, signed short hero_pos, signed s
 	retval = 0;
 	done = 0;
 
-	while ((done == 0) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
+	while ((done == 0) && (hero->bp_left > 0)) {
 
 		/* reset target fight-id */
-		host_writeb(hero + HERO_ENEMY_ID, 0);
+		hero->enemy_id = 0;
 
-		if (host_readbs(hero + HERO_BP_LEFT) >= 3) {
+		if (hero->bp_left >= 3) {
 
-			dir = host_readbs(hero + HERO_VIEWDIR);
+			dir = hero->viewdir;
 
 			count = 0;
 
 			/* try to find a target clockwise from current direction */
-			while (!host_readbs(hero + HERO_ENEMY_ID) && (count < 4)) {
+			while (!hero->enemy_id && (count < 4)) {
 
-				host_writebs(hero + HERO_ENEMY_ID, (signed char)KI_search_spell_target(x, y, dir, renegade));
+				hero->enemy_id = (signed char)KI_search_spell_target(x, y, dir, renegade);
 
 				count++;
 
@@ -423,16 +425,11 @@ signed short KI_select_spell_target(Bit8u *hero, signed short hero_pos, signed s
 		}
 
 		/* check if a target was found */
-		if (host_readbs(hero + HERO_ENEMY_ID) != 0) {
+		if (hero->enemy_id != 0) {
+
 			/* yes */
 
-			FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID), &target_x, &target_y);
-
-#if !defined(__BORLANDC__)
-			/* BE-fix */
-			target_x = host_readws((Bit8u*)&target_x);
-			target_y = host_readws((Bit8u*)&target_y);
-#endif
+			FIG_search_obj_on_cb(hero->enemy_id, &target_x, &target_y);
 
 			if (calc_beeline(target_x, target_y, x, y) < 2) {
 				retval = 2;
@@ -445,12 +442,12 @@ signed short KI_select_spell_target(Bit8u *hero, signed short hero_pos, signed s
 		} else {
 			/* try a more expensive search */
 
-			if (!hero_tied(hero)) {
+			if (!hero_tied((Bit8u*)hero)) {
 
 				if (renegade == 0) {
-					l5 = FIG_find_path_to_target(hero, hero_pos, x, y, 9);
+					l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
 				} else {
-					l5 = FIG_find_path_to_target(hero, hero_pos, x, y, 8);
+					l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
 				}
 
 				if (l5 != -1) {
@@ -458,22 +455,18 @@ signed short KI_select_spell_target(Bit8u *hero, signed short hero_pos, signed s
 
 					FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 
-#if !defined(__BORLANDC__)
-					/* BE-fix */
-					x = host_readws((Bit8u*)&x);
-					y = host_readws((Bit8u*)&y);
-#endif
-					if (host_readbs(hero + HERO_BP_LEFT) < 3) {
+					if (hero->bp_left < 3) {
+
 						/* set BP to 0 */
-						host_writeb(hero + HERO_BP_LEFT, 0);
+						hero->bp_left = 0;
 					}
 				} else {
 					/* set BP to 0 */
-					host_writeb(hero + HERO_BP_LEFT, 0);
+					hero->bp_left = 0;
 				}
 			} else {
 				/* set BP to 0 */
-				host_writeb(hero + HERO_BP_LEFT, 0);
+				hero->bp_left = 0;
 			}
 		}
 	}
@@ -532,7 +525,7 @@ struct dummy {
  * \param   y           y-coordinate of the hero
  * \return              {0, 1}
  */
-signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegade, signed short x, signed short y)
+signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
 {
 	signed short l_si;
 	signed short count;
@@ -548,7 +541,7 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 	retval = 0;
 	done = 0;
 
-	while ((done == 0) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
+	while ((done == 0) && (hero->bp_left > 0)) {
 
 		decided = 0;
 
@@ -574,31 +567,33 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 		}
 
 		/* reset the target of the hero */
-		host_writebs(hero + HERO_ENEMY_ID, 0);
+		hero->enemy_id = 0;
 
 		if ((spell_mode = KI_get_spell(spell, renegade)) != -1) {
 
 			if (spell_mode == 2) {
 
 				/* set target to hero */
-				host_writebs(hero + HERO_ENEMY_ID, hero_pos + 1);
+				hero->enemy_id = hero_pos + 1;
+
 				/* set spell */
-				host_writebs(hero + HERO_SPELL_ID, (signed char)spell);
+				hero->spell_id = (signed char)spell;
+
 				retval = 1;
 				done = 1;
 			} else {
 
 				if (!g_spell_descriptions[spell].range) {
 
-					while ((host_readbs(hero + HERO_BP_LEFT) != 0) && (done == 0)) {
+					while ((hero->bp_left != 0) && (done == 0)) {
 
-						l_si = host_readbs(hero + HERO_VIEWDIR);
+						l_si = hero->viewdir;
 
 						count = 0;
-						while ((!host_readbs(hero + HERO_ENEMY_ID)) && (count < 4)) {
+						while ((!hero->enemy_id) && (count < 4)) {
 
 							if (KI_can_attack_neighbour(x, y, a.a[l_si].x, a.a[l_si].y, spell_mode)) {
-								host_writebs(hero + HERO_ENEMY_ID, get_cb_val(x + a.a[l_si].x, y + a.a[l_si].y));
+								hero->enemy_id = get_cb_val(x + a.a[l_si].x, y + a.a[l_si].y);
 							}
 
 							count++;
@@ -608,54 +603,53 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 							}
 						}
 
-						if (host_readbs(hero + HERO_ENEMY_ID) != 0) {
+						if (hero->enemy_id != 0) {
 
-							if (host_readbs(hero + HERO_BP_LEFT) >= 5) {
+							if (hero->bp_left >= 5) {
+
 								/* enough BP */
-								host_writeb(hero + HERO_SPELL_ID, (signed char)spell);
+								hero->spell_id = (signed char)spell;
 								retval = 1;
 							} else {
 								/* set BP to 0 */
-								host_writeb(hero + HERO_BP_LEFT, 0);
+								hero->bp_left = 0;
 							}
 
 							done = 1;
-						} else if (!hero_tied(hero)) {
+
+						} else if (!hero_tied((Bit8u*)hero)) {
 
 							if (spell_mode == 0) {
-								l5 = FIG_find_path_to_target(hero, hero_pos, x, y, 3);
+								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
 							} else {
-								l5 = FIG_find_path_to_target(hero, hero_pos, x, y, 1);
+								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
 							}
 
 							if (l5 != -1) {
+
 								seg036_00ae(hero, hero_pos);
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
-#if !defined(__BORLANDC__)
-								/* BE-fix */
-								x = host_readws((Bit8u*)&x);
-								y = host_readws((Bit8u*)&y);
-#endif
+
 							} else {
 								/* set BP to 0 */
-								host_writeb(hero + HERO_BP_LEFT, 0);
+								hero->bp_left = 0;
 							}
 
 						} else {
 							/* set BP to 0 */
-							host_writeb(hero + HERO_BP_LEFT, 0);
+							hero->bp_left = 0;
 						}
 					}
 				} else {
-					while ((done == 0) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
+					while ((done == 0) && (hero->bp_left > 0)) {
 
-						l_si = host_readbs(hero + HERO_VIEWDIR);
+						l_si = hero->viewdir;
 
 						count = 0;
 
-						while ((!host_readbs(hero + HERO_ENEMY_ID)) && (count < 4)) {
+						while (!hero->enemy_id && (count < 4)) {
 
-							host_writebs(hero + HERO_ENEMY_ID, (signed char)KI_search_spell_target(x, y, l_si, spell_mode));
+							hero->enemy_id = (signed char)KI_search_spell_target(x, y, l_si, spell_mode);
 
 							count++;
 
@@ -664,42 +658,41 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 							}
 						}
 
-						if (host_readbs(hero + HERO_ENEMY_ID) != 0) {
+						if (hero->enemy_id != 0) {
 
-							if (host_readbs(hero + HERO_BP_LEFT) >= 5) {
+							if (hero->bp_left >= 5) {
+
 								/* enough BP */
-								host_writeb(hero + HERO_SPELL_ID, (signed char)spell);
+								hero->spell_id = (signed char)spell;
 								retval = 1;
 							} else {
 								/* set BP to 0 */
-								host_writeb(hero + HERO_BP_LEFT, 0);
+								hero->bp_left = 0;
 							}
 
 							done = 1;
-						} else if (!hero_tied(hero)) {
+
+						} else if (!hero_tied((Bit8u*)hero)) {
 
 							if (spell_mode == 0) {
-								l5 = FIG_find_path_to_target(hero, hero_pos, x, y, 9);
+								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
 							} else {
-								l5 = FIG_find_path_to_target(hero, hero_pos, x, y, 8);
+								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
 							}
 
 							if (l5 != -1) {
+
 								seg036_00ae(hero, hero_pos);
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
-#if !defined(__BORLANDC__)
-								/* BE-fix */
-								x = host_readws((Bit8u*)&x);
-								y = host_readws((Bit8u*)&y);
-#endif
+
 							} else {
 								/* set BP to 0 */
-								host_writeb(hero + HERO_BP_LEFT, 0);
+								hero->bp_left = 0;
 							}
 
 						} else {
 							/* set BP to 0 */
-							host_writeb(hero + HERO_BP_LEFT, 0);
+							hero->bp_left = 0;
 						}
 					}
 				}
@@ -740,7 +733,7 @@ signed short KI_count_heroes(signed short hero_pos)
  * \param   x           x-coordinate of the hero
  * \param   y           y-coordinate of the hero
  */
-void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
+void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x, signed short y)
 {
 	signed short l_di;
 	signed short l1;
@@ -757,89 +750,87 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 
 	done = 0;
 	l5 = 1;
-	host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
-	if (host_readbs(hero + HERO_NPC_ID) > 0) {
 
-		if (host_readbs(hero + HERO_NPC_ID) == NPC_NARIELL) {
+	hero->action_id = FIG_ACTION_MOVE;
+
+	if (hero->npc_id > 0) {
+
+		if (hero->npc_id == NPC_NARIELL) {
+
 			/* equip LONGBOW and ARROWS in the first round,
 			 * if the hero has them in the inventory */
 			if ((g_fight_round == 0) &&
-				(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_LONGBOW) &&
+				(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LONGBOW) &&
 				(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 				(get_item_pos(hero, ITEM_LONGBOW) != -1))
 			{
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), (struct struct_hero*)hero);
+				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), hero);
 
-				if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_ARROWS) {
-					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), (struct struct_hero*)hero);
+				if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_ARROWS) {
+					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);
 				}
 			}
 
-		} else if (host_readbs(hero + HERO_NPC_ID) == NPC_HARIKA) {
+		} else if (hero->npc_id == NPC_HARIKA) {
 
-			if (host_readws(hero + HERO_LE) <= 12) {
+			if (hero->le <= 12) {
 
 				/* equip LONGBOW and ARROWS in the first round,
 				 * if the hero has them in the inventory */
 				if ((g_fight_round == 0) &&
-					(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_LONGBOW) &&
+					(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LONGBOW) &&
 					(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 					(get_item_pos(hero, ITEM_LONGBOW) != -1))
 				{
-					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), (struct struct_hero*)hero);
+					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LONGBOW), hero);
 
-					if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_ARROWS) {
-						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), (struct struct_hero*)hero);
+					if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_ARROWS) {
+						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);
 					}
-				} else if (FIG_get_range_weapon_type(hero) == -1)
-				{
-					host_writebs(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
+
+				} else if (FIG_get_range_weapon_type(hero) == -1) {
+					hero->action_id = FIG_ACTION_FLEE;
 				}
 			}
 
-		} else if (host_readbs(hero + HERO_NPC_ID) == NPC_CURIAN) {
+		} else if (hero->npc_id == NPC_CURIAN) {
 
-			if ((host_readws(hero + HERO_LE) < 10) &&
-				(host_readws(hero + HERO_AE) < 10))
+			if ((hero->le < 10) && (hero->ae < 10))
 			{
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
+				hero->action_id = FIG_ACTION_FLEE;
 			}
 
-		} else if (host_readbs(hero + HERO_NPC_ID) == NPC_ARDORA) {
+		} else if (hero->npc_id == NPC_ARDORA) {
 
-			if (host_readws(hero + HERO_LE) < 8)
+			if (hero->le < 8)
 			{
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
+				hero->action_id = FIG_ACTION_FLEE;
 			}
 
-		} else if (host_readbs(hero + HERO_NPC_ID) == NPC_GARSVIK) {
+		} else if (hero->npc_id == NPC_GARSVIK) {
 
 			if (!KI_count_heroes(hero_pos)) {
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
+				hero->action_id = FIG_ACTION_FLEE;
 			}
 
-		} else if (host_readbs(hero + HERO_NPC_ID) == NPC_ERWO) {
+		} else if (hero->npc_id == NPC_ERWO) {
 
-			if (host_readws(hero + HERO_LE) < 15)
+			if (hero->le < 15)
 			{
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
+				hero->action_id = FIG_ACTION_FLEE;
 			}
 
 		}
 
 		if (FIG_get_first_active_hero() == 6) {
-			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
+
+			hero->action_id = FIG_ACTION_FLEE;
 		}
 
-		if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE) {
+		if (hero->action_id == FIG_ACTION_FLEE) {
 
 			FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);
 
-#if !defined(__BORLANDC__)
-			/* BE-fix */
-			hero_x = host_readws((Bit8u*)&hero_x);
-			hero_y = host_readws((Bit8u*)&hero_y);
-#endif
 			if ((hero_x - 1 >= 0) && (hero_x + 1 <= 25) &&
 				(hero_y -1 >= 0) && (hero_y + 1 <= 25) &&
 				(get_cb_val(hero_x, hero_y + 1) != 0) &&
@@ -847,25 +838,25 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 				(get_cb_val(hero_x + 1, hero_y) != 0) &&
 				(get_cb_val(hero_x - 1, hero_y) != 0))
 			{
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
+				hero->action_id = FIG_ACTION_MOVE;
 			}
 		}
 	}
 
-	if (host_readbs(hero + HERO_BP_LEFT) == 1) {
+	if (hero->bp_left == 1) {
 		/* set BP to 0 */
-		host_writebs(hero + HERO_BP_LEFT, 0);
+		hero->bp_left = 0;
 	}
 
-	while ((done == 0) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
+	while ((done == 0) && (hero->bp_left > 0)) {
 
 		seg001_02c4();
 
-		if ((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
+		if ((hero->action_id == FIG_ACTION_FLEE) && (hero->bp_left > 0)) {
 
-			if (!hero_tied(hero)) {
+			if (!hero_tied((Bit8u*)hero)) {
 
-				l4 = FIG_find_path_to_target(hero, hero_pos, x, y, 5);
+				l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5);
 
 				if (l4 != -1) {
 
@@ -874,61 +865,56 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 
 					seg036_00ae(hero, hero_pos);
 
-					host_writeb(hero + HERO_ENEMY_ID, 0);
+					hero->enemy_id = 0;
 
 					if (FIG_search_obj_on_cb(hero_pos + 1, &x, &y)) {
 
-#if !defined(__BORLANDC__)
-						/* BE-fix */
-						x = host_readws((Bit8u*)&x);
-						y = host_readws((Bit8u*)&y);
-#endif
-						host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
+						hero->action_id = FIG_ACTION_MOVE;
 
 						if ((x_bak == x) && (y_bak == y)) {
 
-							host_writeb(hero + HERO_BP_LEFT, 0);
+							hero->bp_left = 0;
 						}
 					} else {
-						host_writeb(hero + HERO_BP_LEFT, 0);
+						hero->bp_left = 0;
 					}
 
-					if (host_readbs(hero + HERO_BP_LEFT) < 3) {
-						host_writeb(hero + HERO_BP_LEFT, 0);
+					if (hero->bp_left < 3) {
+						hero->bp_left = 0;
 					}
 
 				} else {
-					host_writeb(hero + HERO_BP_LEFT, 0);
+					hero->bp_left = 0;
 				}
 			} else {
-				host_writeb(hero + HERO_BP_LEFT, 0);
+				hero->bp_left = 0;
 			}
 
 		} else {
 
-			if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) &&		/* magic user */
-				(host_readws(hero + HERO_AE) > 10) &&	/* AE > 10 */
+			if ((hero->typus >= HERO_TYPE_WITCH) &&		/* magic user */
+				(hero->ae > 10) &&	/* AE > 10 */
 				(l5 != 0) &&
 				(g_current_fight_no != FIGHTS_F144) &&	/* not in the final fight */
 				g_autofight_magic) /* magic activated in auto fight */
 			{
-				if (seg036_8cf(hero, hero_pos, hero_renegade(hero), x, y)) {
-
-					host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_SPELL);
-					host_writeb(hero + HERO_BP_LEFT, 0);
+				if (seg036_8cf(hero, hero_pos, hero_renegade((Bit8u*)hero), x, y))
+				{
+					hero->action_id = FIG_ACTION_SPELL;
+					hero->bp_left = 0;
 
 				} else {
 					l5 = 0;
 				}
 			}
 
-			if ((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MOVE) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
+			if ((hero->action_id == FIG_ACTION_MOVE) && (hero->bp_left > 0)) {
 
 				if (FIG_get_range_weapon_type(hero) != -1) {
 
-					if (range_attack_check_ammo((struct struct_hero*)hero, 2)) {
+					if (range_attack_check_ammo(hero, 2)) {
 
-						l8 = KI_select_spell_target(hero, hero_pos, hero_renegade(hero), x, y);
+						l8 = KI_select_spell_target(hero, hero_pos, hero_renegade((Bit8u*)hero), x, y);
 
 						if (l8 != 0) {
 							if (l8 == 2) {
@@ -936,30 +922,30 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 									done = 1;
 								}
 							} else {
-								host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_RANGE_ATTACK);
+								hero->action_id = FIG_ACTION_RANGE_ATTACK;
 							}
 						}
 
 						/* set BP to 0 */
-						host_writeb(hero + HERO_BP_LEFT, 0);
+						hero->bp_left = 0;
 					} else {
 						if (!KI_change_hero_weapon(hero)) {
 							done = 1;
 						}
 					}
 				} else {
-					host_writeb(hero + HERO_ENEMY_ID, 0);
+					hero->enemy_id = 0;
 
-					if (host_readbs(hero + HERO_BP_LEFT) >= 3) {
+					if (hero->bp_left >= 3) {
 
-						l_di = host_readbs(hero + HERO_VIEWDIR);
+						l_di = hero->viewdir;
 						l1 = 0;
 
-						while (!host_readbs(hero + HERO_ENEMY_ID) && (l1 < 4)) {
+						while (!hero->enemy_id && (l1 < 4)) {
 
-							if (KI_can_attack_neighbour(x, y, a.a[l_di].x, a.a[l_di].y, hero_renegade(hero)))
+							if (KI_can_attack_neighbour(x, y, a.a[l_di].x, a.a[l_di].y, hero_renegade((Bit8u*)hero)))
 							{
-								host_writeb(hero + HERO_ENEMY_ID, get_cb_val(x + a.a[l_di].x, y + a.a[l_di].y));
+								hero->enemy_id = get_cb_val(x + a.a[l_di].x, y + a.a[l_di].y);
 							}
 
 							l1++;
@@ -969,19 +955,19 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 						}
 					}
 
-					if (host_readbs(hero + HERO_ENEMY_ID) != 0) {
+					if (hero->enemy_id != 0) {
 
-						host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MELEE_ATTACK);
-						host_writeb(hero + HERO_BP_LEFT, 0);
+						hero->action_id = FIG_ACTION_MELEE_ATTACK;
+						hero->bp_left = 0;
 
 					} else {
 
-						if (!hero_tied(hero)) {
+						if (!hero_tied((Bit8u*)hero)) {
 
-							if (!hero_renegade(hero)) {
-								l4 = FIG_find_path_to_target(hero, hero_pos, x, y, 3);
+							if (!hero_renegade((Bit8u*)hero)) {
+								l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
 							} else {
-								l4 = FIG_find_path_to_target(hero, hero_pos, x, y, 1);
+								l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
 							}
 
 							if (l4 != -1) {
@@ -990,28 +976,23 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 
 								seg036_00ae(hero, hero_pos);
 
-								host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
-								host_writeb(hero + HERO_ENEMY_ID, 0);
+								hero->action_id = FIG_ACTION_MOVE;
+								hero->enemy_id = 0;
 
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 
-#if !defined(__BORLANDC__)
-								/* BE-fix */
-								x = host_readws((Bit8u*)&x);
-								y = host_readws((Bit8u*)&y);
-#endif
 								if ((x_bak == x) && (y_bak == y)) {
-									host_writeb(hero + HERO_BP_LEFT, 0);
+									hero->bp_left = 0;
 								}
 
-								if (host_readbs(hero + HERO_BP_LEFT) < 3) {
-									host_writeb(hero + HERO_BP_LEFT, 0);
+								if (hero->bp_left < 3) {
+									hero->bp_left = 0;
 								}
 							} else {
-								host_writeb(hero + HERO_BP_LEFT, 0);
+								hero->bp_left = 0;
 							}
 						} else {
-							host_writeb(hero + HERO_BP_LEFT, 0);
+							hero->bp_left = 0;
 						}
 					}
 				}

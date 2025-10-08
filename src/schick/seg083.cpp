@@ -28,10 +28,6 @@
 #include "seg105.h"
 
 #if !defined(__BORLANDC__)
-#include "t_map.h"
-#endif
-
-#if !defined(__BORLANDC__)
 namespace M302de {
 #endif
 
@@ -261,8 +257,8 @@ signed short DNG08_handler(void)
 			GUI_output(g_dtp2);
 
 			/* open door at (8,13) */
-			and_ptr_bs(amap_ptr + MAP_POS(8,13), 0x0f);
-			or_ptr_bs(amap_ptr + MAP_POS(8,13), DNG_TILE_OPEN_DOOR << 4);
+			*(amap_ptr + MAP_POS(8,13)) &= 0x0f;
+			*(amap_ptr + MAP_POS(8,13)) |= DNG_TILE_OPEN_DOOR << 4;
 
 			if (gs_group_member_counts[gs_current_group] > 1) {
 
@@ -299,8 +295,8 @@ signed short DNG08_handler(void)
 		/* if not, close door at (8,13) */
 		if (tmp == 0)
 		{
-			and_ptr_bs(amap_ptr + MAP_POS(8,13), 0x0f);
-			or_ptr_bs(amap_ptr + MAP_POS(8,13), DNG_TILE_CLOSED_DOOR << 4);
+			*(amap_ptr + MAP_POS(8,13)) &= 0x0f;
+			*(amap_ptr + MAP_POS(8,13)) |= DNG_TILE_CLOSED_DOOR << 4;
 		}
 
 	} else if (target_pos == DNG_POS(0,10,12) && target_pos != gs_dng_handled_pos)

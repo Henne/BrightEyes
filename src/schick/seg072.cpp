@@ -122,7 +122,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
  */
 void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!informer) {
 		/* YASMA THINMARSDOTTER */
@@ -159,8 +159,8 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 			g_dialog_next_state = (get_first_hero_with_item(ITEM_BONE_WITH_RUNE) != -1 ? 16 : 17);
 		} else if (state == 19) {
 			/* give the RUNENKNOCHEN / BONE WITH RUNE to UMBRIK */
-			hero = get_hero(get_first_hero_with_item(ITEM_BONE_WITH_RUNE));
-			drop_item((struct struct_hero*)hero, get_item_pos(hero, ITEM_BONE_WITH_RUNE), 1);
+			hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_BONE_WITH_RUNE));
+			drop_item(hero, get_item_pos(hero, ITEM_BONE_WITH_RUNE), 1);
 		} else if (state == 23) {
 			/* mark UMBRIK SIEBENSTEIN as done */
 			gs_informer_flags[INFORMER_UMBRIK] = 2;
@@ -297,7 +297,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				g_dialog_next_state = (gs_informer_flags[INFORMER_BEORN] == 2 ? 1 : 2);
 			} else if (state == 2) {
 				/* is ERWO in the group ? */
-				g_dialog_next_state = (host_readbs(get_hero(6) + HERO_NPC_ID) == NPC_ERWO && is_hero_available_in_group(get_hero(6)) ? 3 : 15);
+				g_dialog_next_state = (((struct struct_hero*)get_hero(6))->npc_id == NPC_ERWO && is_hero_available_in_group((struct struct_hero*)get_hero(6)) ? 3 : 15);
 			} else if (state == 6) {
 
 				/* copy the name */

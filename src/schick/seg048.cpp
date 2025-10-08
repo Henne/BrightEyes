@@ -143,7 +143,7 @@ void status_menu(signed short hero_pos)
 							g_wearable_items_index[hero2->typus - 1]) ? g_empty_string8 : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
-						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + 3)));
+						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + ITEM_STATS_SUBTYPE)));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
@@ -326,7 +326,7 @@ void status_menu(signed short hero_pos)
 
 					if (item_weapon(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
 
-						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + 3)));
+						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + ITEM_STATS_SUBTYPE)));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
@@ -431,7 +431,7 @@ void status_menu(signed short hero_pos)
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
 						nvf.height = (Bit8u*)&height;
-						nvf.no = host_readws(get_itemsdat(hero2->inventory[g_statuspage_selitem3_no].item_id));
+						nvf.no = host_readws(get_itemsdat(hero2->inventory[g_statuspage_selitem3_no].item_id) + ITEM_STATS_GFX);
 						process_nvf(&nvf);
 
 						make_ggst_cursor(g_icon);

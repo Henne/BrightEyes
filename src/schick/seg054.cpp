@@ -562,7 +562,7 @@ void do_inn(void)
 
 								for (rested_days = 0; rested_days < booked_days; rested_days++)
 								{
-									GRP_hero_sleep((Bit8u*)hero, g_sleep_quality);
+									GRP_hero_sleep(hero, g_sleep_quality);
 								}
 							}
 						}

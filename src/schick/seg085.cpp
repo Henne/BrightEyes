@@ -360,7 +360,7 @@ signed short DNG10_handler(void)
 			if ((answer = get_first_hero_with_item(ITEM_KEY_PLATIN)) != -1)
 			{
 				hero = (struct struct_hero*)get_hero(answer);
-				result = get_item_pos((Bit8u*)hero, ITEM_KEY_PLATIN);
+				result = get_item_pos(hero, ITEM_KEY_PLATIN);
 				drop_item((struct struct_hero*)hero, result, 1);
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(36), 0);

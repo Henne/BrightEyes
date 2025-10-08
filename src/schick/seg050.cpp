@@ -582,7 +582,7 @@ void level_up(signed short hero_pos)
 			hero->mr += 2;
 		}
 		/* check for AMULETT / in inventory => MR + 5 */
-		if (get_item_pos((Bit8u*)hero, ITEM_AMULET_BLUE) != -1) {
+		if (get_item_pos(hero, ITEM_AMULET_BLUE) != -1) {
 			hero->mr += 5;
 		}
 

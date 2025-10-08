@@ -85,7 +85,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag (why???) */
 
 			if (FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5) != -1) {
-				seg036_00ae((Bit8u*)hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
+				seg036_00ae(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
 
@@ -96,7 +96,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
 				(hero->bp_left >= 3))
 			{
-				KI_hero((Bit8u*)hero, hero_pos, x, y);
+				KI_hero(hero, hero_pos, x, y);
 			}
 			done = 1;
 		} else {
@@ -183,18 +183,9 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						/* let the player select a move destination */
 
 						refresh_screen_size();
-#if !defined(__BORLANDC__)
-						/* BE-fix */
-						x = host_readws((Bit8u*)&x);
-						y = host_readws((Bit8u*)&y);
-#endif
+
 						FIG_move_hero(hero, hero_pos, &x, &y);
 
-#if !defined(__BORLANDC__)
-						/* BE-fix */
-						x = host_readws((Bit8u*)&x);
-						y = host_readws((Bit8u*)&y);
-#endif
 						update_mouse_cursor();
 
 						/* Moving destroys an active 'Chamaelioni' spell */
@@ -219,36 +210,21 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					target_x = x;
 					target_y = y;
 					target_id = -5;
-					if ((range_weapon = FIG_get_range_weapon_type((Bit8u*)hero)) == -1) {
+					if ((range_weapon = FIG_get_range_weapon_type(hero)) == -1) {
 						/* not a range weapon */
 						refresh_screen_size();
-#if !defined(__BORLANDC__)
-						/* BE-fix */
-						target_x = host_readws((Bit8u*)&target_x);
-						target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 						target_id = FIG_cb_select_target(&target_x, &target_y, 1);
-#if !defined(__BORLANDC__)
-						/* BE-fix */
-						target_x = host_readws((Bit8u*)&target_x);
-						target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 						update_mouse_cursor();
 					} else {
-						if (range_attack_check_ammo((struct struct_hero*)hero, 1)) {
+						if (range_attack_check_ammo(hero, 1)) {
+
 							/* a range weapon */
 							refresh_screen_size();
-#if !defined(__BORLANDC__)
-							/* BE-fix */
-							target_x = host_readws((Bit8u*)&target_x);
-							target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
-#if !defined(__BORLANDC__)
-							/* BE-fix */
-							target_x = host_readws((Bit8u*)&target_x);
-							target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 							update_mouse_cursor();
 						}
 					}
@@ -364,21 +340,15 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 									target_x = x;
 									target_y = y;
 									weapon_id = 1;
+
 									if (spell_description->range > 0) {
 										weapon_id = 99;
 									}
+
 									refresh_screen_size();
-#if !defined(__BORLANDC__)
-									/* BE-fix */
-									target_x = host_readws((Bit8u*)&target_x);
-									target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 									target_id = FIG_cb_select_target(&target_x, &target_y, weapon_id);
-#if !defined(__BORLANDC__)
-									/* BE-fix */
-									target_x = host_readws((Bit8u*)&target_x);
-									target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 									update_mouse_cursor();
 
 									if (target_id != -99) {
@@ -440,17 +410,9 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							target_x = x;
 							target_y = y;
 							refresh_screen_size();
-#if !defined(__BORLANDC__)
-							/* BE-fix */
-							target_x = host_readws((Bit8u*)&target_x);
-							target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
-#if !defined(__BORLANDC__)
-							/* BE-fix */
-							target_x = host_readws((Bit8u*)&target_x);
-							target_y = host_readws((Bit8u*)&target_y);
-#endif
+
 							update_mouse_cursor();
 							hero->enemy_id = target_id;
 						} else {
@@ -527,7 +489,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 								/* subtract 2 BP */
 								hero->bp_left -= 2;
-								move_item(HERO_INVENTORY_SLOT_LEFT_HAND, slots[selected -1], (struct struct_hero*)hero);
+								move_item(HERO_INVENTORY_SLOT_LEFT_HAND, slots[selected -1], hero);
 							}
 						}
 					} else {
@@ -591,11 +553,11 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 								/* subtract 2 BP */
 								hero->bp_left -= 2;
 
-								rwt1 = FIG_get_range_weapon_type((Bit8u*)hero);
+								rwt1 = FIG_get_range_weapon_type(hero);
 
-								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected - 1], (struct struct_hero*)hero);
+								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected - 1], hero);
 
-								rwt2 = FIG_get_range_weapon_type((Bit8u*)hero);
+								rwt2 = FIG_get_range_weapon_type(hero);
 
 								if (rwt1 != rwt2) {
 
@@ -625,7 +587,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 				if (rwt1 == -1) {
 
-					rwt1 = FIG_get_range_weapon_type((Bit8u*)hero);
+					rwt1 = FIG_get_range_weapon_type(hero);
 
 					if (rwt1 == -1) {
 
@@ -655,7 +617,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						p_itemsdat = get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
 						weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
 
-						calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, (Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
+						calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
 					}
 				} else {
@@ -671,7 +633,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					p_itemsdat = get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
 					weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
 
-					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, (Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
+					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
 					/* "THE SWORD GRIMRING" gets a damage bonus + 5 in the final fight */
 					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_GRIMRING) && (g_current_fight_no == FIGHTS_F144)) {

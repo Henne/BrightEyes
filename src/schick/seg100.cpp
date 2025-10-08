@@ -39,7 +39,7 @@ void spell_eigenschaften(void)
 
 	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-	damage_range_template(g_spelltarget_e->dam1, (Bit8u*)&min, (Bit8u*)&max);
+	damage_range_template(g_spelltarget_e->dam1, &min, &max);
 
 	/* Remark: For unknown reasons the shown TP-values of enemies are scaled down to 80% */
 	min = min * 8 / 10;
@@ -271,12 +271,6 @@ void spell_hexenknoten(void)
 		nvf.height = (Bit8u*)&height;
 		process_nvf(&nvf);
 
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		width = host_readws((Bit8u*)&width);
-		height = host_readws((Bit8u*)&height);
-#endif
-
 		g_hexenknoten_gfx_buf = g_fightobj_buf_seek_ptr;
 		/* move pointer further */
 		g_fightobj_buf_seek_ptr += width * height + 8;
@@ -485,7 +479,7 @@ void spell_ignifaxius(void)
 	signed short hero_pos;
 	signed short slot;
 	signed short mummy = 0;
-	Bit8u *p_armor;
+	struct inventory *p_armor;
 	signed short damage;
 	signed short level;
 
@@ -560,18 +554,17 @@ void spell_ignifaxius(void)
 		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
 		/* get a pointer to the armor */
-		p_armor = (Bit8u*)&(get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY]);
+		p_armor = (struct inventory*)&(get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY]);
 
-		if ((host_readws(p_armor + INVENTORY_ITEM_ID) != ITEM_NONE) && (rs_malus != 0)) {
+		if ((p_armor->item_id != ITEM_NONE) && (rs_malus != 0)) {
 
 			/* adjust rs_malus such that the RS of the worn body armor won't be negative */
-			if ((host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus) > g_armors_table[host_readbs(get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID)) + ITEM_STATS_TABLE_INDEX)].rs) {
-				rs_malus = g_armors_table[host_readbs(get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID)) + ITEM_STATS_TABLE_INDEX)].rs - host_readbs(p_armor + INVENTORY_RS_LOST);
+			if ((p_armor->rs_lost + rs_malus) > g_armors_table[host_readbs(get_itemsdat(p_armor->item_id) + ITEM_STATS_TABLE_INDEX)].rs) {
+				rs_malus = g_armors_table[host_readbs(get_itemsdat(p_armor->item_id) + ITEM_STATS_TABLE_INDEX)].rs - p_armor->rs_lost;
 			}
 
 			/* add rs_malus to the armor */
-			host_writebs(p_armor + INVENTORY_RS_LOST,
-				host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus);
+			p_armor->rs_lost = p_armor->rs_lost + rs_malus;
 			/* subtract rs_malus from RS1 */
 			get_spelltarget()->rs_bonus1 = get_spelltarget()->rs_bonus1 - rs_malus;
 		}

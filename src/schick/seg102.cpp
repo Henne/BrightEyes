@@ -266,7 +266,7 @@ signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id,
 	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : host_readbs(get_hero(monster->enemy_id - 1) + HERO_MR));
+		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : ((struct struct_hero*)get_hero(monster->enemy_id - 1))->mr);
 	}
 
 	/* check if the monster spell has a valid ID */
@@ -620,7 +620,7 @@ void mspell_ignifaxius(void)
 	signed short rs_malus;
 	signed short hero_pos;
 	signed short slot;
-	Bit8u *p_armor;
+	struct inventory *p_armor;
 
 	/* get the level of the spelluser */
 	level = g_spelluser_e->level;
@@ -649,18 +649,17 @@ void mspell_ignifaxius(void)
 		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
 		/* pointer to the armor of the target hero */
-		p_armor = (Bit8u*)&get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY];
+		p_armor = (struct inventory*)&get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY];
 
-		if ((host_readws(p_armor + INVENTORY_ITEM_ID) != ITEM_NONE) && (rs_malus != 0)) {
+		if ((p_armor->item_id != ITEM_NONE) && (rs_malus != 0)) {
 
 			/* adjust rs_malus such that the RS of the worn body armor won't be negative */
-			if ((host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus) > g_armors_table[host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID)))].rs)
+			if ((p_armor->rs_lost + rs_malus) > g_armors_table[host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(p_armor->item_id))].rs)
 			{
-				rs_malus = g_armors_table[host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID)))].rs
-						- host_readbs(p_armor + INVENTORY_RS_LOST);
+				rs_malus = g_armors_table[host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(p_armor->item_id))].rs - p_armor->rs_lost;
 			}
 
-			host_writeb(p_armor + INVENTORY_RS_LOST, host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus);
+			p_armor->rs_lost = p_armor->rs_lost + rs_malus;
 
 			get_spelltarget()->rs_bonus1 = get_spelltarget()->rs_bonus1 - rs_malus;
 		}

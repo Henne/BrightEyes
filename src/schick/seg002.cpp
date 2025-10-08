@@ -1327,52 +1327,52 @@ Bit32s process_nvf(struct nvf_desc *nvf)
  * to call interrupts. We use the one of DOSBox, which means, that we
  * put the values in the emulated registers, instead in a structure.
  */
-void mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
+void mouse_action(unsigned short *p1, unsigned short *p2, unsigned short *p3, unsigned short *p4, unsigned short *p5)
 {
 #if defined(__BORLANDC__)
 	struct SREGS sregs;
 	union REGS wregs;
 
-	if (host_readws(p1) >= 0) {
+	if (*(signed short*)p1 >= 0) {
 
-		wregs.x.ax = host_readw(p1);
-		wregs.x.bx = host_readw(p2);
-		wregs.x.cx = host_readw(p3);
+		wregs.x.ax = *p1;
+		wregs.x.bx = *p2;
+		wregs.x.cx = *p3;
 
-		switch (host_readw(p1)) {
+		switch (*p1) {
 		case 0x9:	/* define Cursor in graphic mode */
 		case 0xc:	/* install event handler */
 		case 0x14:	/* swap event handler */
 		case 0x16:	/* save mouse state */
 		case 0x17:	/* load mouse state */
 		{
-			wregs.x.dx = host_readw(p4);
-			sregs.es = host_readw(p5);
+			wregs.x.dx = *p4;
+			sregs.es = *p5;
 			break;
 		}
 		case 0x10: {
-			wregs.x.cx = host_readw(p2);
-			wregs.x.dx = host_readw(p3);
-			wregs.x.si = host_readw(p4);
-			wregs.x.di = host_readw(p5);
+			wregs.x.cx = *p2;
+			wregs.x.dx = *p3;
+			wregs.x.si = *p4;
+			wregs.x.di = *p5;
 			break;
 		}
 		default : {
-			wregs.x.dx = host_readw(p4);
+			wregs.x.dx = *p4;
 		}
 		}
 
 		int86x(0x33, &wregs, &wregs, &sregs);
 
-		if (host_readw(p1) == 0x14) {
-			host_writew(p2, sregs.es);
+		if (*p1 == 0x14) {
+			*p2 = sregs.es;
 		} else {
-			host_writew(p2, wregs.x.bx);
+			*p2 = wregs.x.bx;
 		}
 
-		host_writew(p1, wregs.x.ax);
-		host_writew(p3, wregs.x.cx);
-		host_writew(p4, wregs.x.dx);
+		*p1 = wregs.x.ax;
+		*p3 = wregs.x.cx;
+		*p4 = wregs.x.dx;
 	}
 #endif
 }
@@ -1381,11 +1381,11 @@ void mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 void interrupt mouse_isr(void)
 {
 	signed short l_si = _AX;
-	signed short l1;
-	signed short l3;
-	signed short l4;
-	signed short l5;
-	signed short l6;
+	unsigned short l1;
+	unsigned short l3;
+	unsigned short l4;
+	unsigned short l5;
+	unsigned short l6;
 
 	if (!g_mouse_locked) {
 
@@ -1417,7 +1417,7 @@ void interrupt mouse_isr(void)
 			l4 = g_mouse_posx;
 			l5 = g_mouse_posy;
 
-			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+			mouse_action(&l1, &l3, &l4, &l5, &l6);
 
 			g_mouse_posx = l4;
 			g_mouse_posy = l5;
@@ -1439,7 +1439,7 @@ void interrupt mouse_isr(void)
 			l4 = g_mouse_posx;
 			l5 = g_mouse_posy;
 
-			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+			mouse_action(&l1, &l3, &l4, &l5, &l6);
 
 			g_mouse_moved = 1;
 		}
@@ -1477,7 +1477,7 @@ void mouse_init(void)
 
 		p1 = 0;
 
-		mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+		mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 		if (p1 == 0) {
 			g_have_mouse = 0;
@@ -1494,7 +1494,7 @@ void mouse_init(void)
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 
-			mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+			mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 			mouse_irq_init(0x1f, (unsigned char*)&mouse_isr);
 		}
@@ -1509,13 +1509,13 @@ void disable_mouse(void)
 	}
 }
 
-void seg002_170e(Bit8u *a1, Bit8u *a2, Bit8u *a3, Bit8u *a4)
+void seg002_170e(unsigned short *a1, unsigned short *a2, unsigned short *a3, unsigned short *a4)
 {
-	signed short tmp;
+	unsigned short tmp;
 
-	host_writew(a1, 5);
+	*a1 = 5;
 
-	mouse_action(a1, a2, a3, a4, (Bit8u*)&tmp);
+	mouse_action(a1, a2, a3, a4, &tmp);
 }
 
 #if defined(__BORLANDC__)
@@ -1526,11 +1526,11 @@ void call_mouse_isr(void)
 
 void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 {
-	signed short l1;
-	signed short l3;
-	signed short l4;
-	signed short l5;
-	signed short l6;
+	unsigned short l1;
+	unsigned short l3;
+	unsigned short l4;
+	unsigned short l5;
+	unsigned short l6;
 
 	l1 = 12;
 	l4 = irq_no;
@@ -1541,7 +1541,7 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 	g_mouse_handler_bak = getvect(0x78);
 	setvect(0x78, (void interrupt far (*)(...))isr);
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
 
 	g_mouse_irq_init = 1;
 }
@@ -1551,11 +1551,11 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 void mouse_reset_ehandler(void)
 {
 #if defined(__BORLANDC__)
-	signed short l1;
-	signed short l2;
-	signed short l3;
-	signed short l4;
-	signed short l5;
+	unsigned short l1;
+	unsigned short l2;
+	unsigned short l3;
+	unsigned short l4;
+	unsigned short l5;
 
 	setvect(0x78, g_mouse_handler_bak);
 
@@ -1564,7 +1564,7 @@ void mouse_reset_ehandler(void)
 	l4 = 0;
 	l5 = 0;
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l2, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5);
+	mouse_action(&l1, &l2, &l3, &l4, &l5);
 
 	g_mouse_irq_init = 0;
 #endif
@@ -1579,13 +1579,13 @@ void mouse_reset_ehandler(void)
 void mouse_move_cursor(signed short x, signed short y)
 {
 #if defined(__BORLANDC__)
-	signed short l1 = 4;
-	signed short l3;
-	signed short l4 = x;
-	signed short l5 = y;
-	signed short l6;
+	unsigned short l1 = 4;
+	unsigned short l3;
+	unsigned short l4 = x;
+	unsigned short l5 = y;
+	unsigned short l6;
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
 #endif
 }
 
@@ -1593,25 +1593,25 @@ void mouse_move_cursor(signed short x, signed short y)
 /* unused */
 void seg002_1838(signed short a1, signed short a2, signed short a3, signed short a4)
 {
-	signed short l1 = 9;
-	signed short l3 = a1;
-	signed short l4 = a2;
-	signed short l5 = a3;
-	signed short l6 = a4;
+	unsigned short l1 = 9;
+	unsigned short l3 = a1;
+	unsigned short l4 = a2;
+	unsigned short l5 = a3;
+	unsigned short l6 = a4;
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
 }
 
 /* unused */
 void seg002_1880(signed short a1)
 {
-	signed short l1 = 29;
-	signed short l3 = a1;
-	signed short l4;
-	signed short l5;
-	signed short l6;
+	unsigned short l1 = 29;
+	unsigned short l3 = a1;
+	unsigned short l4;
+	unsigned short l5;
+	unsigned short l6;
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
 }
 #endif
 
@@ -1831,8 +1831,8 @@ void handle_gui_input(void)
 			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
-				if ((host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
+				if ((((struct struct_hero*)get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
+						((struct struct_hero*)get_hero(l_si - 241))->group_no == gs_current_group)
 				{
 					status_menu(l_si - 241);
 					l_si = 0;
@@ -1842,8 +1842,8 @@ void handle_gui_input(void)
 			} else {
 				/* swap heroes by click - move mouse - click */
 				if (g_heroswap_allowed &&
-					(host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
+					(((struct struct_hero*)get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
+						((struct struct_hero*)get_hero(l_si - 241))->group_no == gs_current_group)
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
 					GRP_move_hero(l_si - 241);
@@ -2039,7 +2039,7 @@ void game_loop(void)
 				/* no heroes or only the NPC can act => GAME OVER */
 				g_game_state = GAME_STATE_DEAD;
 
-			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
+			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group((struct struct_hero*)get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC in this group can act => switch to next */
 				GRP_switch_to_next(2);
@@ -2776,7 +2776,7 @@ void sub_mod_timers(Bit32s val)
 				/* get the hero index from the target */
 				target = sp->target;
 				for (j = 0; j <= 6; j++) {
-					if (host_readbs(get_hero(j) + HERO_TIMER_ID) == target) {
+					if (((struct struct_hero*)get_hero(j))->timer_id == target) {
 						h_index = j;
 						break;
 					}
@@ -2888,11 +2888,11 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 		mod_ptr = (Bit8u*)&gs_datseg_status_start;
 	} else {
 		/* mod slot is on a hero/npc */
-		mod_ptr = get_hero(who);
+		mod_ptr = (Bit8u*)get_hero(who);
 
-		if (host_readb(get_hero(who) + HERO_TIMER_ID) != 0) {
+		if (((struct struct_hero*)get_hero(who))->timer_id != 0) {
 			/* hero/npc has a target number */
-			target = host_readbs(get_hero(who) + HERO_TIMER_ID);
+			target = ((struct struct_hero*)get_hero(who))->timer_id;
 		} else {
 			/* hero/npc has no target number */
 
@@ -2900,7 +2900,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 
 				new_target = 1;
 				for (j = 0; j <= 6; j++) {
-					if (host_readbs(get_hero(j) + HERO_TIMER_ID) == i) {
+					if (((struct struct_hero*)get_hero(j))->timer_id == i) {
 						new_target = 0;
 						break;
 					}
@@ -2921,7 +2921,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 	gs_modification_timers[slot_no].modifier = mod;
 	gs_modification_timers[slot_no].offset = (HugePt)ptr - mod_ptr;
 	gs_modification_timers[slot_no].time_left = timer_value;
-	add_ptr_bs(ptr, mod);
+	*((Bit8s*)ptr) += mod;
 }
 
 /**
@@ -3116,14 +3116,14 @@ void herokeeping(void)
 			if (get_first_hero_with_item_in_group(ITEM_MAGIC_BREADBAG, hero->group_no) == -1) {
 
 				/* if not, check if the hero has the food amulet */
-				if (get_item_pos((Bit8u*)hero, ITEM_TRAVIA_AMULET) == -1) {
+				if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
 					/* if not... */
 
 					/* eat if hunger > 90 % */
 					if (hero->hunger > 90) {
 
 						/* search for Lunchpack */
-						pos = get_item_pos((Bit8u*)hero, ITEM_FOOD_PACKAGE);
+						pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
 
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
@@ -3136,7 +3136,7 @@ void herokeeping(void)
 
 							/* search for another Lunchpack */
 							/* print last ration message */
-							if (get_item_pos((Bit8u*)hero, ITEM_FOOD_PACKAGE) == -1) {
+							if (get_item_pos(hero, ITEM_FOOD_PACKAGE) == -1) {
 								gs_food_message[i] = 6;
 							}
 						} else {
@@ -3189,7 +3189,7 @@ void herokeeping(void)
 				((hero->group_no != gs_current_group) && !gs_groups_town[hero->group_no])))
 			{
 					/* check for food amulett */
-					if (get_item_pos((Bit8u*)hero, ITEM_TRAVIA_AMULET) == -1) {
+					if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
 
 						/* hero should drink something */
 						if (hero->thirst > 90) {
@@ -3197,7 +3197,7 @@ void herokeeping(void)
 							g_consume_quiet = 1;
 
 							/* first check for beer :) */
-							pos = get_item_pos((Bit8u*)hero, ITEM_BEER);
+							pos = get_item_pos(hero, ITEM_BEER);
 
 							/* and then for water */
 							if (pos == -1) {
@@ -3211,7 +3211,7 @@ void herokeeping(void)
 								D1_INFO("%s trinkt etwas\n", hero->alias);
 #endif
 								/* nothing to drink message */
-								if ((get_item_pos((Bit8u*)hero, ITEM_BEER) == -1)
+								if ((get_item_pos(hero, ITEM_BEER) == -1)
 									&& (get_full_waterskin_pos(hero) == -1)) {
 									gs_food_message[i] = 5;
 								}
@@ -4512,9 +4512,9 @@ signed short check_hero_no3(struct struct_hero *hero)
 	return 1;
 }
 
-signed short is_hero_available_in_group(Bit8u *hero)
+signed short is_hero_available_in_group(struct struct_hero *hero)
 {
-	if (check_hero(hero) &&	(host_readbs(hero + HERO_GROUP_NO) == gs_current_group)) {
+	if (check_hero((Bit8u*)hero) &&	(hero->group_no == gs_current_group)) {
 
 		return 1;
 	}
@@ -4670,7 +4670,7 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 			}
 
 			if (g_traveling	&& !g_in_fight &&
-				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group((Bit8u*)get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
+				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group((struct struct_hero*)get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
 
@@ -4775,7 +4775,7 @@ void add_hero_le(struct struct_hero *hero, const signed short le)
 
 				fighter = FIG_get_fighter(hero->fighter_id);
 
-				ret = FIG_get_range_weapon_type((Bit8u*)hero);
+				ret = FIG_get_range_weapon_type(hero);
 
 				if (ret != -1) {
 
@@ -5347,13 +5347,12 @@ signed short get_hero_index(Bit8u *hero)
  * \param   item        item ID to look for
  * \return              position of the item or -1 if the item is not in the inventory.
  */
-signed int get_item_pos(Bit8u *hero, const signed int item_id)
+signed int get_item_pos(struct struct_hero *hero, const signed int item_id)
 {
-
 	signed int i;
 
 	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
-		if (item_id == host_readws(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)) {
+		if (item_id == hero->inventory[i].item_id) {
 			return i;
 		}
 	}
@@ -5367,10 +5366,10 @@ signed int get_item_pos(Bit8u *hero, const signed int item_id)
  * \param   item_id     item ID to look for
  * \return              position of the hero or -1 if nobody of the group has this item
  */
-signed short get_first_hero_with_item(signed short item)
+signed short get_first_hero_with_item(signed short item_id)
 {
-	signed short j;
-	signed short i;
+	signed int j;
+	signed int i;
 	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
@@ -5379,7 +5378,7 @@ signed short get_first_hero_with_item(signed short item)
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-				if (host_readw((Bit8u*)hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item) {
+				if (hero_i->inventory[j].item_id == item_id) {
 					return i;
 				}
 			}
@@ -5398,8 +5397,8 @@ signed short get_first_hero_with_item(signed short item)
  */
 signed short get_first_hero_with_item_in_group(signed short item_id, signed short group)
 {
-	signed short j;
-	signed short i;
+	signed int j;
+	signed int i;
 	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
@@ -5408,7 +5407,7 @@ signed short get_first_hero_with_item_in_group(signed short item_id, signed shor
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-				if (host_readws((Bit8u*)hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item_id) {
+				if (hero_i->inventory[j].item_id == item_id) {
 					return i;
 				}
 			}

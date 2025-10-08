@@ -541,7 +541,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 					hero->items_num--;
 
 					/* clear the inventory pos */
-					memset(&hero->inventory[pos], 0, SIZEOF_INVENTORY);
+					memset(&hero->inventory[pos], 0, sizeof(inventory));
 				}
 
 				retval = 1;
@@ -574,7 +574,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 					}
 
 					/* clear the inventory pos */
-					memset(&hero->inventory[pos], 0, SIZEOF_INVENTORY);
+					memset(&hero->inventory[pos], 0, sizeof(inventory));
 					retval = 1;
 				}
 			}

@@ -47,9 +47,9 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 {
 	signed short damage;
 
-	Bit8u *hero;
+	struct struct_hero *hero;
 	struct enemy_sheet *target_enemy;
-	Bit8u *p_weapon;
+	struct inventory *p_weapon;
 	signed short two_w_6;
 	signed short weapon_type;
 	signed short defender_gets_hit;
@@ -90,12 +90,12 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 		if (monster->enemy_id < 10) {
 
 			/* monster attacks hero */
-			hero = get_hero(monster->enemy_id - 1);
+			hero = (struct struct_hero*)get_hero(monster->enemy_id - 1);
 
 			g_fig_target_grammar.type = 2;
 			g_fig_target_grammar.id = monster->enemy_id - 1;
 
-			if (hero_dead(hero) || !host_readbs(hero + HERO_TYPE)) {
+			if (hero_dead((Bit8u*)hero) || !hero->typus) {
 				return;
 			}
 
@@ -119,13 +119,6 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 				FIG_search_obj_on_cb(monster->enemy_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(monster_pos + 10, &hero_x, &hero_y);
 
-#if !defined(__BORLANDC__)
-				/* BE-fix */
-				target_x = host_readws((Bit8u*)&target_x);
-				target_y = host_readws((Bit8u*)&target_y);
-				hero_x = host_readws((Bit8u*)&hero_x);
-				hero_y = host_readws((Bit8u*)&hero_y);
-#endif
 				if (hero_x == target_x) {
 
 					if (target_y < hero_y) {
@@ -148,7 +141,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 					if (fighter_id != 0) {
 
 						if ((fighter_id >= 50) ||
-							((fighter_id < 10) && !hero_dead(get_hero(fighter_id - 1))) ||
+							((fighter_id < 10) && !hero_dead((Bit8u*)get_hero(fighter_id - 1))) ||
 							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags.dead) ||
 							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags.dead))
 						{
@@ -166,33 +159,33 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				/* attack a hero */
 
-				p_weapon = hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY;
+				p_weapon = &hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-				weapon_type = weapon_check((struct struct_hero*)hero);
+				weapon_type = weapon_check(hero);
 
 				if (weapon_type == -1) {
 					/* no valid weapon == bare hands */
-					defender_at = host_readbs(hero + HERO_AT) + host_readbs(hero + HERO_ATTACK_TYPE);
-					defender_pa = host_readbs(hero + HERO_PA) - host_readbs(hero + HERO_ATTACK_TYPE);
+					defender_at = hero->at_weapon[WEAPON_TYPE_WAFFENLOS] + hero->atpa_mod;
+					defender_pa = hero->pa_weapon[WEAPON_TYPE_WAFFENLOS] - hero->atpa_mod;
 				} else {
-					defender_at = host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE)) + host_readbs(hero + HERO_ATTACK_TYPE) + host_readbs(hero + HERO_AT_MOD);
-					defender_pa = host_readbs(hero + HERO_PA + host_readbs(hero + HERO_WEAPON_TYPE)) - host_readbs(hero + HERO_ATTACK_TYPE) + host_readbs(hero + HERO_PA_MOD);
+					defender_at = hero->at_weapon[hero->w_type] + hero->atpa_mod + hero->w_at_mod;
+					defender_pa = hero->pa_weapon[hero->w_type] - hero->atpa_mod + hero->w_pa_mod;
 				}
 
 				/* guarding heroes get a PA-bonus of 3 */
-				if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_GUARD) {
+				if (hero->action_id == FIG_ACTION_GUARD) {
 					defender_pa += 3;
 				}
 
 				/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a PA-bonus against orcs */
-				if (gs_tevent071_orcstatue && (host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) && (monster->gfx_id == 24))
+				if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_DWARF) && (monster->gfx_id == 24))
 				{
 					defender_pa++;
 				}
 
 				/* subtract RS handycap */
-				defender_at -= host_readbs(hero + HERO_RS_BE) / 2;
-				defender_pa -= host_readbs(hero + HERO_RS_BE) / 2;
+				defender_at -= hero->rs_be / 2;
+				defender_pa -= hero->rs_be / 2;
 
 			} else {
 				/* attack a monster */
@@ -219,12 +212,12 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 				}
 
 				/* 'Chamaelioni' spell is active on the target hero => AT-5 */
-				if (hero_chamaelioni(hero) == 1) {
+				if (hero_chamaelioni((Bit8u*)hero) == 1) {
 					attacker_at -= 5;
 				}
 
 				/* 'Duplicatus' spell is active on the target hero => AT/2 */
-				if (hero_duplicatus(hero) == 1) {
+				if (hero_duplicatus((Bit8u*)hero) == 1) {
 					attacker_at /= 2;
 				}
 			} else {
@@ -242,7 +235,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 				D1_INFO("Critical attack failure...");
 #endif
 
-				if (!target_is_hero || check_hero(hero)) {
+				if (!target_is_hero || check_hero((Bit8u*)hero)) {
 					/* if enemy has been attacked, or if hero has been attacked and that hero
 					 * is not asleep, dead, petrified, unconscious, renegade or fleeing */
 					FIG_add_msg(3, 0);
@@ -317,7 +310,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				if (randval <= attacker_at) {
 
-					if ((target_is_hero && !g_hero_is_target[monster->enemy_id - 1] && check_hero(hero)) ||
+					if ((target_is_hero && !g_hero_is_target[monster->enemy_id - 1] && check_hero((Bit8u*)hero)) ||
 						(!target_is_hero && !g_fig_actors_unkn[monster->enemy_id]))
 					{
 
@@ -355,12 +348,12 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 											/* HESHTHOT */
 											if (monster->mon_id != 0x4d) {
-												sub_hero_le((struct struct_hero*)hero, damage);
+												sub_hero_le(hero, damage);
 											}
 
 											FIG_add_msg(8, damage);
 
-											if (hero_dead(hero)) {
+											if (hero_dead((Bit8u*)hero)) {
 												g_defender_dead = 1;
 											}
 										}
@@ -390,11 +383,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								if (target_is_hero != 0) {
 
-									sub_hero_le((struct struct_hero*)hero, damage);
+									sub_hero_le(hero, damage);
 
 									FIG_add_msg(8, damage);
 
-									if (hero_dead(hero)) {
+									if (hero_dead((Bit8u*)hero)) {
 										g_defender_dead = 1;
 									}
 
@@ -422,34 +415,34 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								FIG_add_msg(5, 0);
 
-								if ((randval2 == randval) && (target_is_hero != 0) && (host_readbs(p_weapon + INVENTORY_BF) != -99)) {
+								if ((randval2 == randval) && (target_is_hero != 0) && (p_weapon->bf != -99)) {
 									/* if both random values agree and hero got attacked and his weapon is not unbreakable */
 									/* now if 1W12 + BF is >= 16, weapon is broken. Otherwise, BF is increased by 1. */
 #if !defined(__BORLANDC__)
 									D1_INFO("weapon of defender gets damaged...");
 #endif
 
-									if (host_readbs(p_weapon + INVENTORY_BF) > 3) {
+									if (p_weapon->bf > 3) {
 
-										if (random_schick(12) + host_readbs(p_weapon + INVENTORY_BF) > 15) {
+										if ((random_schick(12) + p_weapon->bf) > 15) {
 #if !defined(__BORLANDC__)
 											D1_INFO("broken.\n");
 #endif
 
-											or_ptr_bs(p_weapon + INVENTORY_FLAGS, 1); /* set 'broken' flag */
+											p_weapon->flags.broken = 1; /* set 'broken' flag */
 
 											FIG_add_msg(6, 0);
 										} else {
 #if !defined(__BORLANDC__)
-											D1_INFO("BF increased from %d -> %d.\n",host_readbs(p_weapon + INVENTORY_BF),host_readbs(p_weapon + INVENTORY_BF) + 1);
+											D1_INFO("BF increased from %d -> %d.\n", p_weapon->bf, p_weapon->bf + 1);
 #endif
-											inc_ptr_bs(p_weapon + INVENTORY_BF);
+											p_weapon->bf++;
 										}
 									} else {
 #if !defined(__BORLANDC__)
-										D1_INFO("BF increased %d -> %d.\n",host_readbs(p_weapon + INVENTORY_BF),host_readbs(p_weapon + INVENTORY_BF) + 1);
+										D1_INFO("BF increased from %d -> %d.\n", p_weapon->bf, p_weapon->bf + 1);
 #endif
-										inc_ptr_bs(p_weapon + INVENTORY_BF);
+										p_weapon->bf++;
 									}
 								}
 							}
@@ -467,12 +460,12 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							if (damage > 0) {
 
 								if (monster->mon_id != 0x4d) {
-									sub_hero_le((struct struct_hero*)hero, damage);
+									sub_hero_le(hero, damage);
 								}
 
 								FIG_add_msg(8, damage);
 
-								if (hero_dead(hero)) {
+								if (hero_dead((Bit8u*)hero)) {
 									g_defender_dead = 1;
 								}
 							}
@@ -499,9 +492,9 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 			if (target_is_hero != 0) {
 
-				if (check_hero(hero) || (g_defender_dead != 0)) {
+				if (check_hero((Bit8u*)hero) || (g_defender_dead != 0)) {
 
-					FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, weapon_type, 100, monster->enemy_id, monster_pos + 10, 1);
+					FIG_prepare_hero_fight_ani(0, hero, weapon_type, 100, monster->enemy_id, monster_pos + 10, 1);
 				}
 
 			} else if (l17 == 0) {
@@ -536,15 +529,15 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 					damage = (damage * 8) / 10;
 
 					/* RS */
-					damage -= host_readbs(hero + HERO_RS_BONUS1);
+					damage -= hero->rs_bonus1;
 
 					if (damage > 0) {
 
-						sub_hero_le((struct struct_hero*)hero, damage);
+						sub_hero_le(hero, damage);
 
 						FIG_add_msg(8, damage);
 
-						if (hero_dead(hero)) {
+						if (hero_dead((Bit8u*)hero)) {
 							g_defender_dead = 1;
 						}
 					}
@@ -653,9 +646,9 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 									seg044_002f(1, target_enemy, 99, monster->enemy_id, monster_pos + 10, 1);
 								} else {
 
-									if (check_hero(hero) || (g_defender_dead != 0)) {
+									if (check_hero((Bit8u*)hero) || (g_defender_dead != 0)) {
 
-										seg044_002a(1, (struct struct_hero*)hero, 99, monster->enemy_id, 0, -1, 1);
+										seg044_002a(1, hero, 99, monster->enemy_id, 0, -1, 1);
 									}
 								}
 							}
@@ -704,7 +697,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 							if (monster->enemy_id > 0) {
 
-								FIG_set_sheet(host_readbs(hero + HERO_FIGHTER_ID), 1);
+								FIG_set_sheet(hero->fighter_id, 1);
 							}
 						}
 
@@ -765,7 +758,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								if (monster->enemy_id > 0) {
 
-									FIG_make_invisible(host_readbs(hero + HERO_FIGHTER_ID));
+									FIG_make_invisible(hero->fighter_id);
 								}
 							}
 						}

@@ -31,23 +31,12 @@ namespace M302de {
  * \return              0 if the object was not found. If the object was
  * found it returns 1 and stores the coordinates at the pointers.
  */
-unsigned short FIG_search_obj_on_cb(signed short obj, signed short *px, signed short *py)
+signed int FIG_search_obj_on_cb(const signed short obj, signed short *px, signed short *py)
 {
-	/* This is the readable version */
-	/*
-	for (*px = 0; *px < 25; ++*px) {
-		for (*py = 0; *py < 24; ++*py) {
-			if (get_cb_val(*px, *py) == obj) {
-				return 1;
-			}
-		}
-	}
-	*/
-
 	/* This is the Endian save version */
-	for (host_writew((Bit8u*)px, 0); host_readws((Bit8u*)px) < 25; inc_ptr_ws((Bit8u*)px)) {
-		for (host_writew((Bit8u*)py, 0); host_readws((Bit8u*)py) < 24; inc_ptr_ws((Bit8u*)py)) {
-			if (get_cb_val(host_readws((Bit8u*)px), host_readws((Bit8u*)py)) == obj) {
+	for (*px = 0; *px < 25; (*px)++) {
+		for (*py = 0; *py < 24; (*py)++) {
+			if (get_cb_val(*px, *py) == obj) {
 				return 1;
 			}
 		}
@@ -62,12 +51,6 @@ void FIG_init_list_elem(signed short obj)
 	signed short x, y;
 
 	FIG_search_obj_on_cb(obj, &x, &y);
-
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	x = host_readws((Bit8u*)&x);
-	y = host_readws((Bit8u*)&y);
-#endif
 
 	/* This initializes the global FIGHTER structure g_fig_list_elem */
 	g_fig_list_elem.figure = 0;
@@ -96,15 +79,16 @@ void FIG_init_list_elem(signed short obj)
 	g_fig_cb_marker_id = FIG_add_to_list(-1);
 }
 
-void FIG_unused(signed short a1, signed short a2,  Bit8u *p1, Bit8u *p2)
+#if defined(__BORLANDC__)
+void FIG_unused(const signed short a1, const signed short a2, signed short *p1, signed short *p2)
 {
 	signed short loc1 = 10;
 	signed short loc2 = 118;
 
-	host_writew(p2, ((loc2 - a2) + ((a1 - loc1) / 2)) / 10);
-	host_writew(p1, (a1 - loc1) / 10 - host_readws(p2));
-
+	*p2 = ((loc2 - a2) + ((a1 - loc1) / 2)) / 10;
+	*p1 = (a1 - loc1) / 10 - *p2;
 }
+#endif
 
 static signed char *g_chessboard_cpy; // ds:0xe356
 
@@ -146,22 +130,22 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 #else
 	signed short best_dir = 0;
 #endif
-	Bit8u *path_cur;
+	Bit8s *path_cur;
 	signed short x_bak;
 	signed short y_bak;
 	signed short target_out_of_reach; /* will be set to 1 if the target is out of reach with avail_bp steps. Redundant, as this could simply be tested by (avail_bp < dist). */
 	struct viewdir_offsets inverse_coordinate_offset = g_viewdir_invoffsets1;
 
-	Bit8u *path_table[4];
+	Bit8s *path_table[4];
 
 	target_out_of_reach = 0;
 	lowest_nr_dir_changes = 99;
 
 	memset(g_text_output_buf, 0, 80);
-	path_table[0] = (Bit8u*)g_text_output_buf;
-	path_table[1] = (Bit8u*)g_text_output_buf + 20;
-	path_table[2] = (Bit8u*)g_text_output_buf + 40;
-	path_table[3] = (Bit8u*)g_text_output_buf + 60;
+	path_table[0] = (Bit8s*)g_text_output_buf;
+	path_table[1] = (Bit8s*)g_text_output_buf + 20;
+	path_table[2] = (Bit8s*)g_text_output_buf + 40;
+	path_table[3] = (Bit8s*)g_text_output_buf + 60;
 
 	cb_or_dist_entry = get_cb_val(target_x, target_y); /* possibly reads out of the boundary of the chessboard. not critical, as the following condition is always true for coordinates (target_x, target_y) out of the map. */
 
@@ -185,7 +169,7 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 		path_cur = path_table[i];
 		dist_duplicate = dist;
 
-		host_writeb(path_cur + dist_duplicate, -1);
+		path_cur[dist_duplicate] = -1;
 		dist_duplicate--;
 		dist--;
 
@@ -229,12 +213,12 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 
 						if (bp_avail <= dist) {
 							/* if the old square (target_x, target_y) (before updating to (backtrack_x, backtrack_y)) cannot be reached with the available BP, write -1 to the path */
-							host_writeb(path_cur + dist_duplicate, -1);
+							path_cur[dist_duplicate] = -1;
 							dist_duplicate--;
 							target_out_of_reach = 1;
 						} else {
 							/* otherwise, write the found direction to the path */
-							host_writebs(path_cur + dist_duplicate, (signed char)dir);
+							path_cur[dist_duplicate] = (signed char)dir;
 							dist_duplicate--;
 						}
 
@@ -259,16 +243,12 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 		 * As the target square is always an escape square for the flee mode, this should be logically equivalent to (bp_avail >= dist_bak) && (mode < 4) */
 		{
 			/* remove the last step from the path (as for melee attack, the target should not be entered) */
-#if !defined(__BORLANDC__)
-			host_writeb(path_cur + dist_bak - 1, -1);
-#else
 			path_cur[dist_bak - 1] = -1;
-#endif
 		}
 
-		if (host_readbs(path_cur) != -1) {
+		if (*path_cur != -1) {
 
-			nr_dir_changes = FIG_count_direction_changes_of_path((signed char*)path_cur);
+			nr_dir_changes = FIG_count_direction_changes_of_path(path_cur);
 
 			if (nr_dir_changes < lowest_nr_dir_changes) {
 
@@ -358,7 +338,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	signed char cb_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
 	signed char cb_entry;
 	Bit8u *dist_table_ptr;
-	Bit8u *hero_ptr;
+	struct struct_hero *hero_ptr;
 	struct enemy_sheet *enemy_ptr;
 	signed short done;
 	signed short ranged_dist;
@@ -431,19 +411,15 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 		for (i = 0; i <= 6; i++) { /* loop over all heroes */
 			if ((mode != 8) || (i != actor_id)) { /* hero should not attack himself */
 
-				hero_ptr = get_hero(i);
+				hero_ptr = (struct struct_hero*)get_hero(i);
 
-				if ((host_readbs(hero_ptr + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero_ptr + HERO_GROUP_NO) == gs_current_group) &&
-					!hero_dead(hero_ptr))
-				{ /* hero_ptr points to an actual alive hero in the current group */
+				if ((hero_ptr->typus != HERO_TYPE_NONE) &&
+					(hero_ptr->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero_ptr))
+				{
+					/* hero_ptr points to an actual alive hero in the current group */
 					FIG_search_obj_on_cb(i + 1, &x, &y);
 
-#if !defined(__BORLANDC__)
-					/* BE-fix */
-					x = host_readws((Bit8u*)&x);
-					y = host_readws((Bit8u*)&y);
-#endif
 					for (dir = 0; dir < 4; dir++) {
 
 						done = 0;
@@ -497,11 +473,6 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 					FIG_search_obj_on_cb(i + 10, &x, &y);
 
-#if !defined(__BORLANDC__)
-					/* BE-fix */
-					x = host_readws((Bit8u*)&x);
-					y = host_readws((Bit8u*)&y);
-#endif
 					for (dir = 0; dir < 4; dir++) {
 						done = 0;
 						ranged_dist = 1;

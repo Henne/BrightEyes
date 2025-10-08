@@ -129,7 +129,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 						hero->inventory[pos1].quantity += hero->inventory[pos2].quantity;
 
 						/* delete item at pos2 */
-						memset((Bit8u*)&hero->inventory[pos2], 0, SIZEOF_INVENTORY);
+						memset((Bit8u*)&hero->inventory[pos2], 0, sizeof(inventory));
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Decrement the item counter */
 						hero->items_num--;
@@ -189,7 +189,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 				hero->inventory[pos1].quantity += hero->inventory[pos2].quantity;
 
 				/* delete item at pos2 */
-				memset(&hero->inventory[pos2], 0, SIZEOF_INVENTORY);
+				memset(&hero->inventory[pos2], 0, sizeof(inventory));
 #ifdef M302de_ORIGINAL_BUGFIX
 				/* Decrement the item counter */
 				hero->items_num--;
@@ -406,12 +406,12 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 					l_di = 99 - hero2->inventory[pos2].quantity;
 				}
 
-				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + 5) * l_di) && (l_di > 0)) {
+				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di) && (l_di > 0)) {
 					l_di--;
 				}
 
 				if (l_di > 0) {
-					hero2->load += host_readws(item1_desc + 5) * l_di;
+					hero2->load += host_readws(item1_desc + ITEM_STATS_WEIGHT) * l_di;
 					hero2->inventory[pos2].quantity += l_di;
 					drop_item(hero1, pos1, l_di);
 				} else {
@@ -424,12 +424,12 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		if (flag != 0) {
 
 			desc1_5 = (item_stackable(item1_desc)) ?
-				hero1->inventory[pos1].quantity * host_readw(item1_desc + 5) :
-				host_readws(item1_desc + 5);
+				hero1->inventory[pos1].quantity * host_readw(item1_desc + ITEM_STATS_WEIGHT) :
+				host_readws(item1_desc + ITEM_STATS_WEIGHT);
 
 			desc2_5 = (item_stackable(item2_desc)) ?
-				hero2->inventory[pos2].quantity * host_readw(item2_desc + 5) :
-				host_readws(item2_desc + 5);
+				hero2->inventory[pos2].quantity * host_readw(item2_desc + ITEM_STATS_WEIGHT) :
+				host_readws(item2_desc + ITEM_STATS_WEIGHT);
 
 			if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + desc1_5 - desc2_5) {
 
@@ -518,7 +518,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			GUI_output(g_dtp2);
 		}
 
-	} else if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + 5)) {
+	} else if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + host_readws(item1_desc + ITEM_STATS_WEIGHT)) {
 
 		sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 		GUI_output(g_dtp2);
@@ -538,15 +538,15 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
 
 		/* adjust weight */
-		hero2->load += host_readws(item1_desc + 5);
-		hero1->load -= host_readws(item1_desc + 5);
+		hero2->load += host_readws(item1_desc + ITEM_STATS_WEIGHT);
+		hero1->load -= host_readws(item1_desc + ITEM_STATS_WEIGHT);
 
 		/* adjust item counter */
 		hero1->items_num--;
 		hero2->items_num++;
 
 		/* clear slot */
-		memset(&hero1->inventory[pos1], 0, SIZEOF_INVENTORY);
+		memset(&hero1->inventory[pos1], 0, sizeof(inventory));
 
 		/* special items */
 		if (item1 == ITEM_SICKLE_MAGIC) {
@@ -596,11 +596,11 @@ void startup_equipment(struct struct_hero *hero)
 	}
 
 	if (hero->typus == HERO_TYPE_WARRIOR) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos((Bit8u*)hero, ITEM_LEATHER_ARMOR), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_LEATHER_ARMOR), hero);
 	}
 
 	if (hero->typus == HERO_TYPE_MAGE) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos((Bit8u*)hero, ITEM_ROBE_GREEN), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_ROBE_GREEN), hero);
 	}
 
 	if ((hero->typus == HERO_TYPE_HUNTER) ||
@@ -608,7 +608,7 @@ void startup_equipment(struct struct_hero *hero)
 		(hero->typus == HERO_TYPE_SYLVAN_ELF))
 	{
 		give_hero_new_item(hero, ITEM_ARROWS, 1, 20);
-		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos((Bit8u*)hero, ITEM_ARROWS), hero);
+		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);
 	}
 }
 
@@ -736,11 +736,6 @@ void equip_belt_ani(void)
 		nvf.height = (Bit8u*)&height;
 
 		process_nvf(&nvf);
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		width = host_readws((Bit8u*)&width);
-		height = host_readws((Bit8u*)&height);
-#endif
 
 		g_pic_copy.x1 = 160;
 		g_pic_copy.y1 = 50;

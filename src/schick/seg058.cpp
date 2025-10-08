@@ -47,11 +47,9 @@ signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and 
  * \param   item_pos    the position of the item in the inventory
  * \param   smith_pos   the position of the item in the repair list
  */
-void add_item_to_smith(struct smith_descr *smith, Bit8u *hero, signed short item_pos, signed short smith_pos)
+void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, const signed int item_pos, signed short smith_pos)
 {
-	signed short item_id;
-
-	item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos);
+	const signed short item_id = hero->inventory[item_pos].item_id;
 
 	g_sellitems[smith_pos].item_id = item_id;
 
@@ -72,7 +70,7 @@ void add_item_to_smith(struct smith_descr *smith, Bit8u *hero, signed short item
 
 		} else {
 
-			if (host_readbs(hero + HERO_INVENTORY + INVENTORY_RS_LOST + SIZEOF_INVENTORY * item_pos)) {
+			if (hero->inventory[item_pos].rs_lost) {
 
 				/* armor has degraded RS */
 
@@ -217,7 +215,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 					smith_pos = 0;
 					for (l_si = 0; l_si < NR_HERO_INVENTORY_SLOTS; l_si++) {
 						if (hero2->inventory[l_si].item_id != ITEM_NONE) {
-							add_item_to_smith(smith, (Bit8u*)hero2, l_si, smith_pos++);
+							add_item_to_smith(smith, hero2, l_si, smith_pos++);
 						}
 					}
 
@@ -263,7 +261,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 							g_pic_copy.y2 = array5.a[l_si] + 15;
 							g_pic_copy.src = g_renderbuf_ptr;
 
-							nvf.no = host_readws(get_itemsdat(j));
+							nvf.no = host_readws(get_itemsdat(j) + ITEM_STATS_GFX);
 
 							process_nvf(&nvf);
 

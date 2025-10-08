@@ -535,7 +535,7 @@ void TLK_tavern(signed short answer)
 
 		g_dialog_next_state = (108);
 
-		if ((host_readbs(get_hero(gs_tlk_tav_testdrunk) + HERO_TYPE)) &&
+		if ((((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk))->typus) &&
 			!hero_dead(get_hero(gs_tlk_tav_testdrunk)) &&
 			gs_tlk_tav_drinkcount)
 		{

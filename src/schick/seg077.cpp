@@ -30,10 +30,6 @@
 #include "seg105.h"
 
 #if !defined(__BORLANDC__)
-#include "t_map.h"
-#endif
-
-#if !defined(__BORLANDC__)
 namespace M302de {
 #endif
 

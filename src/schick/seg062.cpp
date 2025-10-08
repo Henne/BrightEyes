@@ -71,7 +71,7 @@ void ask_miracle(void)
 					l5 = 1;
 
 					for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
-						if (host_readbs(get_hero(i) + HERO_TYPE) >= HERO_TYPE_WITCH) {
+						if (((struct struct_hero*)get_hero(i))->typus >= HERO_TYPE_WITCH) {
 							l5 = 1;
 						}
 					}

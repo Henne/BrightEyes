@@ -283,7 +283,7 @@ void do_citycamp(void)
 								(g_citycamp_guardstatus[l_si] < 2) &&
 								(g_citycamp_magicstatus[l_si] != 1))
 							{
-								GRP_hero_sleep((Bit8u*)hero, hours - 10);
+								GRP_hero_sleep(hero, hours - 10);
 							}
 						}
 					}

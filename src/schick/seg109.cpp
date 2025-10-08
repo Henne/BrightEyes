@@ -722,15 +722,15 @@ void TRV_barrier(signed short text_start)
 
 					add_hero_ap_all(10);
 
-					i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+					i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 					if (i == -1) {
-						i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+						i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
 					drop_item((struct struct_hero*)hero, i, 1);
 
-					i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+					i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 					if (i == -1) {
-						i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+						i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
 					drop_item((struct struct_hero*)hero, i, 1);
 

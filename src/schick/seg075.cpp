@@ -338,12 +338,6 @@ void DNG_draw_walls(signed short x, signed short y, signed short a3)
 	nvf.type = 3;
 	process_nvf(&nvf);
 
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	nvf_height = host_readws((Bit8u*)&nvf_height);
-	nvf_width = host_readws((Bit8u*)&nvf_width);
-#endif
-
 	width2 = nvf_width;
 	height2 = nvf_height;
 

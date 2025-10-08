@@ -123,7 +123,7 @@ void do_merchant(void)
 	item_pos = 0;
 	armor_pos = 70;
 
-	while (host_readws(get_itemsdat(l_si)) != -1) {
+	while (host_readws(get_itemsdat(l_si) + ITEM_STATS_GFX) != -1) {
 
 		if (shop->sortiment <= host_readbs(get_itemsdat(l_si) + ITEM_STATS_COMMONNESS)) {
 

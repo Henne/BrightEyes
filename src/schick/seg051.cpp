@@ -116,7 +116,7 @@ void do_wildcamp(void)
 			for (i = 0; i <= 6; i++) {
 
 				if (!g_wildcamp_magicstatus[i] && !g_wildcamp_herbstatus[i] &&
-					!g_wildcamp_replstatus[i] && is_hero_available_in_group(get_hero(i)))
+					!g_wildcamp_replstatus[i] && is_hero_available_in_group((struct struct_hero*)get_hero(i)))
 				{
 					g_wildcamp_guardstatus[i] = 0;
 					answer = 0;
@@ -332,7 +332,7 @@ void do_wildcamp(void)
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 							g_wildcamp_guardstatus[i] < 2 && g_wildcamp_magicstatus[i] != 1)
 						{
-							GRP_hero_sleep((Bit8u*)hero, g_wildcamp_sleep_quality);
+							GRP_hero_sleep(hero, g_wildcamp_sleep_quality);
 						}
 					}
 

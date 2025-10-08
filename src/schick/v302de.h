@@ -301,16 +301,6 @@ static inline void and_ptr_bs(Bit8u *p, const unsigned char val)
 	host_writebs(p, host_readbs(p) & val);
 }
 
-static inline void add_ptr_bs(Bit8u *p, const signed char val)
-{
-	host_writebs(p, host_readbs(p) + val);
-}
-
-static inline void sub_ptr_bs(Bit8u *p, const signed char val)
-{
-	host_writebs(p, host_readbs(p) - val);
-}
-
 static inline void add_ptr_ws(Bit8u *p, Bit16s val)
 {
 	host_writews(p, host_readws(p) + val);
@@ -699,9 +689,6 @@ static inline char* get_itemname(unsigned short item)
 
 #define or_ptr_bs(p, v)		(*(Bit8s*)(p) |= (v))
 #define and_ptr_bs(p, v)	(*(Bit8s*)(p) &= (v))
-
-#define add_ptr_bs(p, v)	(*(Bit8s*)(p) += (v))
-#define sub_ptr_bs(p, v)	(*(Bit8s*)(p) -= (v))
 
 #define add_ptr_ws(p, v)	(*(Bit16s*)(p) += (v))
 #define sub_ptr_ws(p, v)	(*(Bit16s*)(p) -= (v))

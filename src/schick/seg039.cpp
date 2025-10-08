@@ -46,21 +46,21 @@ signed short calc_beeline(signed short x1, signed short y1, signed short x2, sig
  * \param   hero        pointer to hero
  * \return              range weapon type {-1, 3, 4, 5}: -1 = none, 3 = shooting, 4 = throwing, 5 = weapon of type spear, but not magic wand or quarterstaff
  */
-signed short FIG_get_range_weapon_type(Bit8u *hero)
+signed int FIG_get_range_weapon_type(struct struct_hero *hero)
 {
 	Bit8u *ptr;
-	signed short retval = -1;
-	signed short weapon;
+	signed int retval = -1;
+	signed int weapon_id;
 
 	/* get equipped item in the right hand of the hero and make a pointer to the entry of ITEMS.DAT */
-	ptr = get_itemsdat(weapon = host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID));
+	ptr = get_itemsdat(weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
 
 
 	if (item_weapon(ptr)) {
 		/* is a weapon */
 
 		/* MagicStaffs or Fightstaffs are spears, but no range weapons */
-		if (host_readb(ptr + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SPEER && weapon != ITEM_MAGIC_WAND && weapon != ITEM_QUARTERSTAFF) {
+		if ((host_readb(ptr + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_SPEER) && (weapon_id != ITEM_MAGIC_WAND) && (weapon_id != ITEM_QUARTERSTAFF)) {
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline... */
 
 			retval = 5;
@@ -402,7 +402,7 @@ void FIG_init_enemies(void)
 
 void FIG_init_heroes(void)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short cb_x;
 	signed short cb_y;
 	signed short l_si;
@@ -410,36 +410,37 @@ void FIG_init_heroes(void)
 
 	for (l_si = 0; l_si <= 6; l_si++) {
 
-		if (host_readbs(get_hero(l_si) + HERO_FIGHTER_ID) != -1) {
+		if (((struct struct_hero*)get_hero(l_si))->fighter_id != -1) {
 
-			FIG_remove_from_list(host_readb(get_hero(l_si) + HERO_FIGHTER_ID), 0);
-			host_writeb(get_hero(l_si) + HERO_FIGHTER_ID, 0xff);
+			FIG_remove_from_list(((struct struct_hero*)get_hero(l_si))->fighter_id, 0);
+
+			((struct struct_hero*)get_hero(l_si))->fighter_id = -1;
 		}
 	}
 
 	for (l_si = 0; l_si <= 6; l_si++) {
 
-		hero = get_hero(l_si);
+		hero = (struct struct_hero*)get_hero(l_si);
 
-		if (host_readb(hero + HERO_TYPE) == HERO_TYPE_NONE)
+		if (hero->typus == HERO_TYPE_NONE)
 			continue;
 
 		/* check group */
-		if (host_readb(hero + HERO_GROUP_NO) != gs_current_group)
+		if (hero->group_no != gs_current_group)
 			continue;
 
-		host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
-		host_writeb(hero + HERO_ENEMY_ID, 0);
+		hero->action_id = FIG_ACTION_WAIT;
+		hero->enemy_id = 0;
 
 		/* FINAL FIGHT */
 		if (g_current_fight_no == FIGHTS_F144) {
 
-			if ((struct struct_hero*)hero == gs_main_acting_hero) {
+			if (hero == gs_main_acting_hero) {
 
 				cb_x = g_current_fight->heroes[0].x;
 				cb_y = g_current_fight->heroes[0].y;
 
-				host_writeb(hero + HERO_VIEWDIR, g_current_fight->heroes[0].viewdir);
+				hero->viewdir = g_current_fight->heroes[0].viewdir;
 
 			} else {
 				do {
@@ -447,7 +448,7 @@ void FIG_init_heroes(void)
 
 					cb_x = g_current_fight->heroes[l_di].x;
 					cb_y = g_current_fight->heroes[l_di].y;
-					host_writeb(hero + HERO_VIEWDIR, g_current_fight->heroes[l_di].viewdir);
+					hero->viewdir = g_current_fight->heroes[l_di].viewdir;
 
 				} while (get_cb_val(cb_x, cb_y) != 0);
 			}
@@ -455,45 +456,45 @@ void FIG_init_heroes(void)
 
 			cb_x = g_current_fight->heroes[l_si].x;
 			cb_y = g_current_fight->heroes[l_si].y;
-			host_writeb(hero + HERO_VIEWDIR, g_current_fight->heroes[l_si].viewdir);
+			hero->viewdir = g_current_fight->heroes[l_si].viewdir;
 		}
 
 		/* heroes sleep until they appear */
 		if (g_current_fight->heroes[l_si].round_appear) {
 
-			if (!hero_dead(hero))
-				or_ptr_bs(hero + HERO_FLAGS1, 2); /* set 'sleep' flag */
+			if (!hero_dead((Bit8u*)hero))
+				or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 2); /* set 'sleep' flag */
 		}
 
-		place_obj_on_cb(cb_x, cb_y, l_si + 1, host_readbs(hero + HERO_TYPE), host_readbs(hero + HERO_VIEWDIR));
+		place_obj_on_cb(cb_x, cb_y, l_si + 1, hero->typus, hero->viewdir);
 
 		l_di = FIG_get_range_weapon_type(hero);
 
 		if (l_di != -1) {
-			g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][l_di][host_readbs(hero + HERO_VIEWDIR)];
+			g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_no - 1][l_di][hero->viewdir];
 		} else {
-			g_fig_list_elem.nvf_no = host_readb(hero + HERO_VIEWDIR);
+			g_fig_list_elem.nvf_no = hero->viewdir;
 		}
 
-		g_fig_list_elem.figure = g_gfxtab_figures_main[host_readbs(hero + HERO_SPRITE_NO)][0];
+		g_fig_list_elem.figure = g_gfxtab_figures_main[hero->sprite_no][0];
 		g_fig_list_elem.cbx = (signed char)cb_x;
 		g_fig_list_elem.cby = (signed char)cb_y;
 		g_fig_list_elem.offsetx = 0;
 		g_fig_list_elem.offsety = 0;
 
-		if (hero_dead(hero)) {
+		if (hero_dead((Bit8u*)hero)) {
 
 			/* hero is dead */
-			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[host_readbs(hero + HERO_SPRITE_NO)];
-			g_fig_list_elem.offsetx = g_gfxtab_offsets_main[host_readbs(hero + HERO_SPRITE_NO)][4].x;
-			g_fig_list_elem.offsety = g_gfxtab_offsets_main[host_readbs(hero + HERO_SPRITE_NO)][4].y;
+			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->sprite_no];
+			g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->sprite_no][4].x;
+			g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->sprite_no][4].y;
 
-		} else if (hero_asleep(hero) || hero_unconscious(hero)) {
+		} else if (hero_asleep((Bit8u*)hero) || hero_unconscious((Bit8u*)hero)) {
 
 			/* hero is asleep or unconscious */
-			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[host_readbs(hero + HERO_SPRITE_NO)] + host_readbs(hero + HERO_VIEWDIR);
-			g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].x;
-			g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].y;
+			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->sprite_no] + hero->viewdir;
+			g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].x;
+			g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].y;
 		}
 
 
@@ -508,7 +509,7 @@ void FIG_init_heroes(void)
 		 * however, the apparently only read operation checks for ==1, so the value 2 does not make a difference */
 		g_fig_list_elem.is_enemy = 2;
 
-		g_fig_list_elem.sprite_no = host_readb(hero + HERO_SPRITE_NO);
+		g_fig_list_elem.sprite_no = hero->sprite_no;
 		g_fig_list_elem.reload = -1;
 		g_fig_list_elem.wsheet = -1;
 		g_fig_list_elem.sheet = -1;
@@ -520,7 +521,7 @@ void FIG_init_heroes(void)
 		g_fig_list_elem.visible = 1;
 		g_fig_list_elem.twofielded = -1;
 
-		host_writeb(get_hero(l_si) + HERO_FIGHTER_ID, FIG_add_to_list(-1));
+		((struct struct_hero*)get_hero(l_si))->fighter_id = FIG_add_to_list(-1);
 	}
 }
 

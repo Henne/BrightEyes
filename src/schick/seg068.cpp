@@ -589,7 +589,7 @@ void THO_academy(void)
 					} else {
 
 						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
-						item_pos = get_item_pos((Bit8u*)hero, item_id);
+						item_pos = get_item_pos(hero, item_id);
 
 						if (drop_item((struct struct_hero*)hero, item_pos, 1)) {
 
@@ -661,7 +661,7 @@ void THO_academy(void)
 					} else {
 
 						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
-						item_pos = get_item_pos((Bit8u*)hero, item_id);
+						item_pos = get_item_pos(hero, item_id);
 
 						if (drop_item((struct struct_hero*)hero, item_pos, 1)) {
 

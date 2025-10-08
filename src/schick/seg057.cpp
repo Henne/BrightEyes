@@ -194,7 +194,7 @@ void sell_screen(struct shop_descr *shop_descr)
 						g_pic_copy.y2 = array5.a[l_di] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.no = host_readws(get_itemsdat(j));
+						nvf.no = host_readws(get_itemsdat(j) + ITEM_STATS_GFX);
 
 						process_nvf(&nvf);
 

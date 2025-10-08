@@ -272,8 +272,8 @@ signed short DNG09_handler(void)
 				GUI_output(g_dtp2);
 
 				/* remove wall at (4,5), lvl 2 */
-				and_ptr_bs(amap_ptr + MAP_POS(4,5), (DNG_TILE_CORRIDOR << 4) + MAP_POS(15,0));
-				or_ptr_bs(amap_ptr + MAP_POS(3,5), 0xf0); /* clear flags */
+				*(amap_ptr + MAP_POS(4,5)) &= (DNG_TILE_CORRIDOR << 4) + MAP_POS(15,0);
+				*(amap_ptr + MAP_POS(3,5)) |= 0xf0; /* clear flags */
 
 				if (gs_group_member_counts[gs_current_group] > 1)
 				{
@@ -316,8 +316,8 @@ signed short DNG09_handler(void)
 		/* if not, close wall at (4,5), lvl 2 */
 		if (l3 == 0)
 		{
-			or_ptr_bs(amap_ptr + MAP_POS(4,5), 0xf0); /* clear flags */
-			and_ptr_bs(amap_ptr + MAP_POS(3,5), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+			*(amap_ptr + MAP_POS(4,5)) |= 0xf0; /* clear flags */
+			*(amap_ptr + MAP_POS(3,5)) &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 			gs_dng09_lever_fast = 0;
 		}
 
@@ -377,7 +377,7 @@ signed short DNG09_handler(void)
 
 			if (l3 > 0)
 			{
-				and_ptr_bs(amap_ptr + MAP_POS(3,2), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				*(amap_ptr + MAP_POS(3,2)) &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 				gs_dng09_secretdoor1 = 2;
 
@@ -408,7 +408,7 @@ signed short DNG09_handler(void)
 
 			if (l3 > 0)
 			{
-				and_ptr_bs(amap_ptr + MAP_POS(6,11), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				*(amap_ptr + MAP_POS(6,11)) &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 				gs_dng09_secretdoor2 = 2;
 

@@ -240,7 +240,6 @@ void DNG_door(signed short action)
 							print_msg_with_first_hero(get_ttx(533));
 
 							hero->inventory[lockpick_pos].flags.broken = 1;
-//							or_ptr_bs(hero + SIZEOF_INVENTORY * lockpick_pos + (HERO_INVENTORY + INVENTORY_FLAGS), 1); /* set 'broken' flag */
 
 							g_lockpick_try_counter = 0;
 

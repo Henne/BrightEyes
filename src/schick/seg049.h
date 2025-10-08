@@ -7,7 +7,7 @@ void GRP_swap_heroes(void);
 /* 0x25 */
 void GRP_move_hero(signed short);
 /* 0x2a */
-void GRP_hero_sleep(Bit8u*, signed short);
+void GRP_hero_sleep(struct struct_hero*, const signed int);
 
 /* 0x2f */
 void GRP_sort_heroes(void);
