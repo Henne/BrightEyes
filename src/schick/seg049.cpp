@@ -193,7 +193,7 @@ void GRP_split(void)
 			} else {
 
 				not_empty = 1;
-				host_writeb(get_hero(answer) + HERO_GROUP_NO, (signed char)new_group_id);
+				((struct struct_hero*)get_hero(answer))->group_no = (signed char)new_group_id;
 				gs_group_member_counts[new_group_id]++;
 				gs_group_member_counts[gs_current_group]--;
 			}
@@ -242,7 +242,7 @@ void GRP_merge(void)
 				if ((host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
 					host_readbs(get_hero(i) + HERO_GROUP_NO) == answer)
 				{
-					host_writeb(get_hero(i) + HERO_GROUP_NO, gs_current_group);
+					((struct struct_hero*)get_hero(i))->group_no = gs_current_group;
 					gs_group_member_counts[gs_current_group]++;
 				}
 			}
@@ -443,15 +443,15 @@ void GRP_swap_heroes(void)
 			g_wildcamp_herbstatus[hero2_no] = l5;
 
 			if (host_readbs(get_hero(hero1_no) + HERO_TYPE)) {
-				host_writebs(get_hero(hero1_no) + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
+				((struct struct_hero*)get_hero(hero1_no))->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
 			if (host_readbs(get_hero(hero2_no) + HERO_TYPE)) {
-				host_writebs(get_hero(hero2_no) + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
+				((struct struct_hero*)get_hero(hero2_no))->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			host_writeb(get_hero(hero1_no) + HERO_GROUP_POS, hero1_no + 1);
-			host_writeb(get_hero(hero2_no) + HERO_GROUP_POS, hero2_no + 1);
+			((struct struct_hero*)get_hero(hero1_no))->group_pos = hero1_no + 1;
+			((struct struct_hero*)get_hero(hero2_no))->group_pos = hero2_no + 1;
 		}
 	}
 

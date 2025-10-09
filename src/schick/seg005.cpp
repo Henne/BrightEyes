@@ -514,7 +514,7 @@ void draw_fight_screen(Bit16u val)
 
 					} else if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -4) {
 
-						host_writeb(sheet, host_readb(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+						*sheet = *(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]);
 
 						g_fig_ani_state[list_ii->sheet]++;
 
@@ -750,7 +750,7 @@ void draw_fight_screen(Bit16u val)
 										}
 
 										list_ii->obj_id = 0;
-										host_writebs(sheet + 1 + 3 * (1 + g_fig_ani_state[list_ii->sheet]), -1);
+										*((Bit8s*)(sheet + 1 + 3 * (1 + g_fig_ani_state[list_ii->sheet]))) = -1;
 
 										if (list_ii->twofielded != -1) {
 

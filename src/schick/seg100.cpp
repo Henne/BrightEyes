@@ -354,7 +354,7 @@ void spell_ecliptifactus(void)
 			/* set AP costs */
 			g_spell_special_aecost = (ae);
 			/* enable the spell */
-			host_writeb(get_spelluser() + HERO_ECLIPTIFACTUS, (signed char)rounds + 1);
+			((struct struct_hero*)get_spelluser())->ecliptifactus_timer = (signed char)rounds + 1;
 			/* prepare the message */
 			sprintf(g_dtp2, get_tx(88), ((struct struct_hero*)get_spelluser())->alias,
 				GUI_get_ptr(((struct struct_hero*)get_spelluser())->sex, 3), rounds);

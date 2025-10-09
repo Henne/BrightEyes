@@ -102,7 +102,7 @@ void item_arcano(void)
 	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	host_writeb(get_spelluser() + HERO_ENEMY_ID, select_hero_from_group(get_ttx(637)) + 1);
+	((struct struct_hero*)get_spelluser())->enemy_id = select_hero_from_group(get_ttx(637)) + 1;
 
 	if (((struct struct_hero*)get_spelluser())->enemy_id > 0) {
 		/* use it */
@@ -185,7 +185,7 @@ void item_armatrutz(void)
 	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	host_writeb(get_spelluser() + HERO_ENEMY_ID, select_hero_from_group(get_ttx(637)) + 1);
+	((struct struct_hero*)get_spelluser())->enemy_id = select_hero_from_group(get_ttx(637)) + 1;
 
 	if (((struct struct_hero*)get_spelluser())->enemy_id > 0) {
 		/* use it */

@@ -366,7 +366,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	g_chessboard_cpy = (signed char*)(g_dtp2 + 600);
 	new_squares_reached = 1;
 	memset(dist_table_ptr, -1, 600);
-	host_writeb(dist_table_ptr + (y_in * 25) + x_in, 0);
+	*(dist_table_ptr + (y_in * 25) + x_in) = 0;
 	memcpy(g_chessboard_cpy, g_chessboard, 600);
 
 	for (i = 0; i < 10; i++) {
@@ -559,7 +559,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 														(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 30)) && /* tail of active enemy is on square */
 														((tail_y < 24) && (tail_y >= 0) && (tail_x < 24) && (tail_x >= 0))))))
 									{
-										host_writebs(dist_table_ptr + (new_y * 25) + new_x, (signed char)dist);
+										*(dist_table_ptr + (new_y * 25) + new_x) = (signed char)dist;
 										new_squares_reached = 1;
 									}
 								} else {
@@ -575,7 +575,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 												break;
 											}
 										} else {
-											host_writeb(dist_table_ptr + (new_y * 25) + new_x, 100); /* for all other modes: square is blocked */
+											*(dist_table_ptr + (new_y * 25) + new_x) = 100; /* for all other modes: square is blocked */
 										}
 									} else if (cb_entry == 124) { /* target marker for hero movement (implies mode == 10 (hero movement)) */
 										/* test of the tail-condition not needed here, as the active actor is a hero */
@@ -587,7 +587,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 											break;
 										}
 									} else if (cb_entry >= 50) { /* square is blocked */
-										host_writeb(dist_table_ptr + (new_y * 25) + new_x, 100);
+										*(dist_table_ptr + (new_y * 25) + new_x) = 100;
 									} else if (cb_entry < 10) {
 
 										if (cb_entry == 9) { /* target marker for ranged attack to some hero (implies mode == 6 or mode == 8) */

@@ -288,10 +288,9 @@ void ask_miracle(void)
 							if (i != -1 && !((struct struct_hero*)get_hero(i))->flags.gods_pissed) {
 
 								slot = get_free_mod_slot();
-								set_mod_slot(slot, DAYS(7), get_hero(i) + HERO_HUNGER_TIMER,
-									1, (signed char)i);
+								set_mod_slot(slot, DAYS(7), (Bit8u*)&((struct struct_hero*)get_hero(i))->hunger_timer, 1, (signed char)i);
 
-								host_writebs(get_hero(i) + HERO_HUNGER, host_writebs(get_hero(i) + HERO_THIRST, 0));
+								((struct struct_hero*)get_hero(i))->hunger = ((struct struct_hero*)get_hero(i))->thirst = 0;
 
 								sprintf(g_dtp2, get_tx2(20), ((struct struct_hero*)get_hero(i))->alias);
 								gs_ingame_timers[INGAME_TIMER_FIRUN_SATED] = DAYS(7);

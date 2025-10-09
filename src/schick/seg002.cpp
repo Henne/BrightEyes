@@ -601,7 +601,7 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 
 	buf = schick_alloc(g_sample_ad_length);
 
-	host_writew(buf, g_sample_ad_length);
+	*((unsigned short*)buf) = g_sample_ad_length;
 
 	read_archive_file(g_sample_ad_handle, buf + 2, g_sample_ad_length - 2);
 
