@@ -2191,45 +2191,39 @@ void pal_fade(Bit8u *dst, Bit8u *p2)
 
 	for (i = 0; i < 32; i++) {
 
-		if ((host_readbs(p2 + 3 * i) < host_readbs(dst + 3 * i)) &&
-			(host_readbs(dst + 3 * i) > 0))
+		if ((host_readbs(p2 + 3 * i) < host_readbs(dst + 3 * i)) && (host_readbs(dst + 3 * i) > 0))
 		{
 
-			dec_ptr_bs(dst + i * 3);
+			(*(dst + i * 3))--;
 
 		} else {
-			if ((host_readbs(p2 + 3 * i) > host_readbs(dst + 3 * i)) &&
-				(host_readbs(dst + 3 * i) < 0x3f))
+			if ((host_readbs(p2 + 3 * i) > host_readbs(dst + 3 * i)) && (host_readbs(dst + 3 * i) < 0x3f))
 			{
-				inc_ptr_bs(dst + i * 3);
+				(*(dst + i * 3))++;
 			}
 		}
 
-		if ((host_readbs((p2 + 1) + 3 * i) < host_readbs((dst + 1) + 3 * i)) &&
-			(host_readbs((dst + 1) + 3 * i) > 0))
+		if ((host_readbs((p2 + 1) + 3 * i) < host_readbs((dst + 1) + 3 * i)) && (host_readbs((dst + 1) + 3 * i) > 0))
 		{
 
-			dec_ptr_bs((dst + 1) + i * 3);
+			(*((dst + 1) + i * 3))--;
 
 		} else {
-			if ((host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)) &&
-				(host_readbs((dst + 1) + 3 * i) < 0x3f))
+			if ((host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)) &&	(host_readbs((dst + 1) + 3 * i) < 0x3f))
 			{
-				inc_ptr_bs((dst + 1) + i * 3);
+				(*((dst + 1) + i * 3))++;
 			}
 		}
 
-		if ((host_readbs((p2 + 2) + 3 * i) < host_readbs((dst + 2) + 3 * i)) &&
-			(host_readbs((dst + 2) + 3 * i) > 0))
+		if ((host_readbs((p2 + 2) + 3 * i) < host_readbs((dst + 2) + 3 * i)) && (host_readbs((dst + 2) + 3 * i) > 0))
 		{
 
-			dec_ptr_bs((dst + 2) + i * 3);
+			(*((dst + 2) + i * 3))--;
 
 		} else {
-			if ((host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)) &&
-				(host_readbs((dst + 2) + 3 * i) < 0x3f))
+			if ((host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)) &&	(host_readbs((dst + 2) + 3 * i) < 0x3f))
 			{
-				inc_ptr_bs((dst + 2) + i * 3);
+				(*((dst + 2) + i * 3))++;
 			}
 		}
 	}
@@ -2243,22 +2237,19 @@ void pal_fade_in(Bit8u *dst, Bit8u *p2, signed short v3, signed short colors)
 
 	for (i = 0; i < colors; i++) {
 
-		if ((host_readbs((p2 + 0) + 3 * i) >= si) &&
-			(host_readbs((p2 + 0) + 3 * i) > host_readbs((dst + 0) + 3 * i)))
+		if ((host_readbs((p2 + 0) + 3 * i) >= si) && (host_readbs((p2 + 0) + 3 * i) > host_readbs((dst + 0) + 3 * i)))
 		{
-			inc_ptr_bs((dst + 0) + i * 3);
+			(*((dst + 0) + i * 3))++;
 		}
 
-		if ((host_readbs((p2 + 1) + 3 * i) >= si) &&
-			(host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)))
+		if ((host_readbs((p2 + 1) + 3 * i) >= si) && (host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)))
 		{
-			inc_ptr_bs((dst + 1) + i * 3);
+			(*((dst + 1) + i * 3))++;
 		}
 
-		if ((host_readbs((p2 + 2) + 3 * i) >= si) &&
-			(host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)))
+		if ((host_readbs((p2 + 2) + 3 * i) >= si) && (host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)))
 		{
-			inc_ptr_bs((dst + 2) + i * 3);
+			(*((dst + 2) + i * 3))++;
 		}
 	}
 }

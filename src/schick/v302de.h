@@ -163,25 +163,6 @@ static inline void D1_GFX(...) { }
 #endif
 
 
-/**
- * struct_copy() - wrapper for struct assignments
- * @dst:	destination
- * @src:	source
- * @len:	length
- *
- * This is only a marker for copying structs.
- */
-static inline void struct_copy(Bit8u *dst, Bit8u *src, int len)
-{
-
-	if (len < 0) {
-		D1_ERR("ERROR: %s copy negative amount of bytes\n", __func__);
-		return;
-	}
-
-	memcpy(dst, src, len);
-}
-
 static inline Bit8u host_readb(Bit8u* p)
 {
 	return ((Bit8u)*p);
@@ -247,17 +228,6 @@ static inline Bit32s host_writeds(Bit8u* p, Bit32s val)
 {
 	host_writed(p, val);
 	return val;
-}
-
-static inline void inc_ptr_bs(Bit8u *p)
-{
-	host_writebs(p, host_readbs(p) + 1);
-}
-
-static inline Bit8s dec_ptr_bs(Bit8u *p)
-{
-	host_writebs(p, host_readbs(p) - 1);
-	return host_readbs(p) + 1;
 }
 
 /**
@@ -458,12 +428,8 @@ static inline char* get_itemname(unsigned short item)
 #undef M302de_ORIGINAL_BUGFIX
 
 /* helper, use only when neccessary */
-#define struct_copy memcpy
 
 #define my_itoa itoa
-
-#define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
-#define dec_ptr_bs(p)		((*(Bit8s*)(p))--)
 
 #define get_hero(no) ((unsigned char*)g_heroes + SIZEOF_HERO * (no))
 
