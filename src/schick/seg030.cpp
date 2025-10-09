@@ -214,47 +214,47 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						txt_id == 27 || txt_id == 28)
 					{
 						sprintf(dst, fmt,
-							gs_unicorn_hero_ptr + HERO_NAME2,
-							GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 0),
-							GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 1));
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0),
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1));
 
 					} else if (txt_id == 19) {
 
 						sprintf(dst, fmt,
-							gs_unicorn_hero_ptr + HERO_NAME2,
-							gs_unicorn_hero_ptr + HERO_NAME2);
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 					} else if (txt_id == 23) {
 
 						sprintf(dst, fmt,
-							gs_unicorn_hero_ptr + HERO_NAME2,
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 2)));
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2)));
 					} else if (txt_id == 29) {
 
 						sprintf(dst, fmt,
-							gs_unicorn_hero_ptr + HERO_NAME2,
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 0)),
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 1)),
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 2)));
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1)),
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2)));
 
 					} else if (txt_id == 30) {
 
 						sprintf(dst, fmt,
-							gs_unicorn_hero_ptr + HERO_NAME2,
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 1)),
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 2)));
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1)),
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2)));
 
 					} else if (txt_id == 31) {
 
 						sprintf(dst, fmt,
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 3)));
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 3)));
 
 					} else if (txt_id == 32) {
 
 						sprintf(dst, fmt,
-							gs_unicorn_hero_ptr + HERO_NAME2,
-							(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 0)),
-							gs_unicorn_hero_ptr + HERO_NAME2);
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
+							((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 					} else {
 						strcpy(dst, fmt);
@@ -377,27 +377,27 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						if (!txt_id || txt_id == 3 || txt_id == 4) {
 
 							sprintf(dst, fmt,
-								gs_unicorn_hero_ptr + HERO_NAME2,
-								(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 0)));
+								((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+								(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)));
 
 						} else if (txt_id == 5) {
 
 							sprintf(dst, fmt,
-								(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 0)),
-								gs_unicorn_hero_ptr + HERO_NAME2);
+								(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
+								((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 						} else if (txt_id == 6) {
 
 							sprintf(dst, fmt,
-								gs_unicorn_hero_ptr + HERO_NAME2,
-								GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 1),
-								gs_unicorn_hero_ptr + HERO_NAME2);
+								((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+								GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1),
+								((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 						} else if (txt_id == 8) {
 
 							sprintf(dst, fmt,
-								gs_unicorn_hero_ptr + HERO_NAME2,
-								gs_unicorn_hero_ptr + HERO_NAME2);
+								((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
+								((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 						} else {
 							strcpy(dst, fmt);
