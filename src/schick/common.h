@@ -239,20 +239,6 @@ enum {
 
 #define SIZEOF_HERO_POISON (5)
 
-struct item_flags {
-	/* item + 0x02 */
-	unsigned short armor		:1;
-	unsigned short weapon		:1;
-	unsigned short useable	 	:1;
-	unsigned short food		:1;
-
-	unsigned short stackable	:1;
-	unsigned short herb_potion	:1;
-	unsigned short undropable	:1;
-	unsigned short bit7		:1;
-};
-
-
 struct enemy_flags {
 	/* enemy + 0x31 */
 	unsigned short dead		:1;

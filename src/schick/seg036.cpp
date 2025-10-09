@@ -187,11 +187,11 @@ signed int KI_change_hero_weapon(struct struct_hero *hero)
 	for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
 
 		item_id = hero->inventory[pos].item_id;
-		item_p = (struct item_stats*)get_itemsdat(item_id);
+		item_p = &g_itemsdat[item_id];
 
 		/* grab the first melee weapon in the knapsack,
 		 * and exchange it with the broken weapon. */
-		if (item_weapon((Bit8u*)item_p) &&
+		if (item_p->flags.weapon &&
 			(item_p->subtype != WEAPON_TYPE_SCHUSSWAFFE) &&
 			(item_p->subtype != WEAPON_TYPE_WURFWAFFE) &&
 			(item_p->subtype != WEAPON_TYPE_SPEER))

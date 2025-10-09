@@ -251,7 +251,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 	right_hand = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-	item_p_rh = (struct item_stats*)get_itemsdat(right_hand);
+	item_p_rh = &g_itemsdat[right_hand];
 
 	weapon_type = weapon_check(hero);
 
@@ -572,10 +572,10 @@ signed int weapon_check(struct struct_hero *hero)
 	/* get the ID of the equipped weapon */
 	item_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-	item_p = (struct item_stats*)get_itemsdat(item_id);
+	item_p = &g_itemsdat[item_id];
 
-	if (!item_weapon((Bit8u*)item_p) || hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken ||
-		(item_weapon((Bit8u*)item_p) &&
+	if (!item_p->flags.weapon || hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken ||
+		(item_p->flags.weapon &&
 			((item_p->subtype == WEAPON_TYPE_SCHUSSWAFFE) ||
 			(item_p->subtype == WEAPON_TYPE_WURFWAFFE) ||
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline. */

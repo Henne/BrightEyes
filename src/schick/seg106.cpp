@@ -60,8 +60,8 @@ signed int two_hand_collision(struct struct_hero* hero, const signed int item_id
 		if (in_hand) {
 
 			/* check if one hand has a two-handed weapon */
-			if ((item_weapon(get_itemsdat(item_id)) && host_readbs(get_itemsdat(item_id) + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_ZWEIHAENDER) ||
-			(item_weapon(get_itemsdat(in_hand)) && host_readbs(get_itemsdat(in_hand) + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_ZWEIHAENDER)) {
+			if ((g_itemsdat[item_id].flags.weapon && (g_itemsdat[item_id].subtype == WEAPON_TYPE_ZWEIHAENDER)) ||
+			(g_itemsdat[in_hand].flags.weapon && (g_itemsdat[in_hand].subtype == WEAPON_TYPE_ZWEIHAENDER))) {
 				retval = 1;
 			}
 		}
@@ -122,7 +122,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 			} else {
 				if (item2 != 0) {
 					/* item have the same ids and are stackable */
-					if ((item2 == item1) && item_stackable((Bit8u*)get_itemsdat(item1))) {
+					if ((item2 == item1) && g_itemsdat[item1].flags.stackable) {
 						/* merge them */
 
 						/* add quantity of item at pos2 to item at pos1 */
@@ -182,7 +182,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 		if (v3 != 0) {
 
 			/* item have the same ids and are stackable */
-			if ((item2 == item1) && item_stackable((Bit8u*)get_itemsdat(item1))) {
+			if ((item2 == item1) && g_itemsdat[item1].flags.stackable) {
 				/* merge them */
 
 				/* add quantity of item at pos2 to item at pos1 */
@@ -215,7 +215,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 
 		/* normal item */
 
-		if (((inventory_p->quantity > 1) && item_stackable((Bit8u*)get_itemsdat(inventory_p->item_id))) ||
+		if (((inventory_p->quantity > 1) && g_itemsdat[inventory_p->item_id].flags.stackable) ||
 			is_in_word_array(inventory_p->item_id, g_items_pluralwords)) {
 
 			/* more than one item or special */
@@ -291,10 +291,10 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	item2 = hero2->inventory[pos2].item_id;
 
-	item1_desc = (struct item_stats*)get_itemsdat(item1);
-	item2_desc = (struct item_stats*)get_itemsdat(item2);
+	item1_desc = &g_itemsdat[item1];
+	item2_desc = &g_itemsdat[item2];
 
-	if (item_undropable((Bit8u*)item1_desc)) {
+	if (item1_desc->flags.undropable) {
 
 		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item1, 0));
 
@@ -302,7 +302,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		return;
 	}
 
-	if (item_undropable((Bit8u*)item2_desc)) {
+	if (item2_desc->flags.undropable) {
 
 		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item2, 0));
 		GUI_output(g_dtp2);
@@ -382,7 +382,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 	if (item2 != 0) {
 
 		flag = 1;
-		if ((item2 == item1) && item_stackable((Bit8u*)item2_desc)) {
+		if ((item2 == item1) && item2_desc->flags.stackable) {
 
 			flag = 0;
 			l_di = 1;
@@ -423,11 +423,11 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 		if (flag != 0) {
 
-			desc1_5 = (item_stackable((Bit8u*)item1_desc)) ?
+			desc1_5 = item1_desc->flags.stackable ?
 				hero1->inventory[pos1].quantity * item1_desc->weight :
 				item1_desc->weight;
 
-			desc2_5 = (item_stackable((Bit8u*)item2_desc)) ?
+			desc2_5 = item2_desc->flags.stackable ?
 				hero2->inventory[pos2].quantity * item2_desc->weight :
 				item2_desc->weight;
 
@@ -484,7 +484,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 				}
 			}
 		}
-	} else if (item_stackable((Bit8u*)item1_desc)) {
+	} else if (item1_desc->flags.stackable) {
 
 		l_di = 1;
 

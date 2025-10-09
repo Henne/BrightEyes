@@ -278,7 +278,7 @@ struct struct_memslot_ani *g_memslots_anis; // ds:0xe121, to ()[36]
 struct enemy_sheet *g_monster_dat_buf; // ds:0xe125
 char **g_monnames_index; // ds:0xe129
 signed char g_market_itemsaldo_table[254]; // ds:0xe12d
-unsigned char* g_itemsdat; // ds:0xe22b
+struct item_stats *g_itemsdat; // ds:0xe22b
 char **g_itemsname; // ds:0xe22f
 
 
@@ -3028,7 +3028,7 @@ void sub_light_timers(Bit32s quarter)
 						hero_i->items_num--;
 
 						/* subtract weight of a torch */
-						hero_i->load -= host_readws(get_itemsdat(ITEM_TORCH_ON) + ITEM_STATS_WEIGHT);
+						hero_i->load -= g_itemsdat[ITEM_TORCH_ON].weight;
 
 						/* Remove Torch from inventory */
 						memset(&hero_i->inventory[j], 0, sizeof(inventory));

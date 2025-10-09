@@ -52,11 +52,11 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 	g_used_item_id = get_itemuser()->inventory[g_used_item_pos].item_id;
 
-	g_used_item_desc = (struct item_stats*)get_itemsdat(g_used_item_id);
+	g_used_item_desc = &g_itemsdat[g_used_item_id];
 
 	if (check_hero((Bit8u*)get_itemuser())) {
 
-			if (!item_useable((Bit8u*)g_used_item_desc)) {
+			if (!g_used_item_desc->flags.useable) {
 
 				/* item is not usable */
 
@@ -70,7 +70,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 				GUI_output(g_dtp2);
 
-			} else if ((item_herb_potion((Bit8u*)g_used_item_desc)) && !is_in_word_array(g_used_item_id, g_poison_potions)) {
+			} else if (g_used_item_desc->flags.herb_potion && !is_in_word_array(g_used_item_id, g_poison_potions)) {
 
 				/* don't consume poison */
 				consume(get_itemuser(), get_itemuser(), item_pos);

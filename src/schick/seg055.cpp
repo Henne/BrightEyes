@@ -41,10 +41,10 @@ void add_item_to_shop(struct shop_descr *shop, signed short item_id, signed shor
 {
 	g_buyitems[pos].item_id = item_id;
 
-	g_buyitems[pos].shop_price = host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE)
-				+ host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * shop->price_mod / 100;
+	g_buyitems[pos].shop_price =
+		g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop->price_mod / 100;
 
-	g_buyitems[pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
+	g_buyitems[pos].price_unit = g_itemsdat[item_id].price_unit;
 }
 
 void do_merchant(void)
@@ -123,19 +123,19 @@ void do_merchant(void)
 	item_pos = 0;
 	armor_pos = 70;
 
-	while (host_readws(get_itemsdat(l_si) + ITEM_STATS_GFX) != -1) {
+	while (g_itemsdat[l_si].gfx != -1) {
 
-		if (shop->sortiment <= host_readbs(get_itemsdat(l_si) + ITEM_STATS_COMMONNESS)) {
+		if (shop->sortiment <= g_itemsdat[l_si].commonness) {
 
-			if (item_armor(get_itemsdat(l_si)) || item_weapon(get_itemsdat(l_si))) {
+			if (g_itemsdat[l_si].flags.armor || g_itemsdat[l_si].flags.weapon) {
 
 				if (shop->type == 1) {
 
 					add_item_to_shop(shop, l_si,
-						item_weapon(get_itemsdat(l_si)) ? item_pos++ : armor_pos++);
+						g_itemsdat[l_si].flags.weapon ? item_pos++ : armor_pos++);
 				}
 
-			} else if (item_herb_potion(get_itemsdat(l_si))) {
+			} else if (g_itemsdat[l_si].flags.herb_potion) {
 
 				if (shop->type == 2) {
 

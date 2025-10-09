@@ -498,97 +498,6 @@ static inline unsigned short hero_seen_phantom_set(Bit8u *hero, unsigned short v
 	return (val & 1);
 }
 
-/**
- * item_armor() -	check if an item is an armor
- * @item:	ptr to item
- *
- * 0 = non armor / 1 = armor
- */
-static inline unsigned short item_armor(Bit8u *item) {
-	if (((host_readb(item + ITEM_STATS_FLAGS) >> 0) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * item_weapon() -	check if an item is a weapon
- * @item:	ptr to item
- *
- * 0 = non weapon / 1 = weapon
- */
-static inline unsigned short item_weapon(Bit8u *item) {
-	if (((host_readb(item + ITEM_STATS_FLAGS) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * item_useable() -	check if an item is useable
- * @item:	ptr to item
- *
- * 0 = no / 1 = yes
- */
-static inline unsigned short item_useable(Bit8u *item) {
-	if (((host_readb(item + ITEM_STATS_FLAGS) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * item_food() -	check if an item is food
- * @item:	ptr to item
- *
- * 0 = non food / 1 = food
- */
-static inline unsigned short item_food(Bit8u *item) {
-	if (((host_readb(item + ITEM_STATS_FLAGS) >> 3) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * item_stackable() -	check if an item is stackable
- * @item:	ptr to item
- *
- * 0 = non stackable / 1 = stackable
- */
-static inline unsigned short item_stackable(Bit8u *item) {
-	if (((host_readb(item + ITEM_STATS_FLAGS) >> 4) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * item_herb_potion() -	check if an item is a herb or potion
- * @item:	ptr to item
- *
- * 0 = non / 1 = herb or potion
- */
-static inline unsigned short item_herb_potion(Bit8u *item) {
-	if (((host_readb(item + ITEM_STATS_FLAGS) >> 5) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * item_undropable() -	check if an item is undropable
- * @item:	ptr to item
- *
- * 0 = dropable / 1 = undropable
- */
-static inline unsigned short item_undropable(Bit8u *item) {
-	if (((host_readb(item + ITEM_STATS_FLAGS) >> 6) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
 static inline Bit8u *get_spelltarget_e(void) {
 	return (Bit8u*)M302de::g_spelltarget_e;
 }
@@ -656,10 +565,6 @@ static inline void dump_cb(void)
 		fprintf(fd, "\n");
 	}
 	fclose(fd);
-}
-
-static inline Bit8u *get_itemsdat(unsigned short item) {
-	return M302de::g_itemsdat + SIZEOF_ITEM_STATS * item;
 }
 
 static inline char* get_itemname(unsigned short item)
@@ -737,14 +642,6 @@ static inline char* get_itemname(unsigned short item)
 
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
 
-#define item_armor(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).armor)
-#define item_weapon(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).weapon)
-#define item_useable(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).useable)
-#define item_food(item)		((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).food)
-#define item_stackable(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).stackable)
-#define item_herb_potion(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).herb_potion)
-#define item_undropable(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).undropable)
-
 #define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
 #define get_spelltarget()	((struct struct_hero*)g_spelltarget)
 #define get_spelluser()		((unsigned char*)g_spelluser)
@@ -753,7 +650,6 @@ static inline char* get_itemname(unsigned short item)
 #define get_tx(no) ((char*)(g_tx_index[(no)]))
 #define get_tx2(no) ((char*)(g_tx2_index[(no)]))
 #define get_monname(no) ((char*)g_monnames_index[no])
-#define get_itemsdat(no) ((unsigned char*)(g_itemsdat + SIZEOF_ITEM_STATS * (no)))
 #define get_itemname(no) ((char*)g_itemsname[(no)])
 
 #define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))

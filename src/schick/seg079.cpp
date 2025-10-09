@@ -217,7 +217,7 @@ signed short DNG03_handler(void)
 			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				l3 = g_armors_table[host_readbs(get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id) + ITEM_STATS_TABLE_INDEX)].rs
+				l3 = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
 				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
 				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));
@@ -245,7 +245,7 @@ signed short DNG03_handler(void)
 			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				l3 = g_armors_table[host_readbs(get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id) + ITEM_STATS_TABLE_INDEX)].rs
+				l3 = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
 				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
 				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));

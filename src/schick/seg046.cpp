@@ -241,7 +241,7 @@ void status_show(Bit16u index)
 
 			nvf.dst = g_icon;
 			/* set no */
-			nvf.no = host_readw(get_itemsdat(hero->inventory[i].item_id) + ITEM_STATS_GFX);
+			nvf.no = g_itemsdat[hero->inventory[i].item_id].gfx;
 
 			process_nvf(&nvf);
 
@@ -257,7 +257,7 @@ void status_show(Bit16u index)
 			g_pic_copy.dst = g_vga_memstart;
 
 			/* check if stackable */
-			if (item_stackable((Bit8u*)get_itemsdat(hero->inventory[i].item_id))) {
+			if (g_itemsdat[hero->inventory[i].item_id].flags.stackable) {
 
 
 				set_textcolor(0xff, 0);

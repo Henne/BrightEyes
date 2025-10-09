@@ -142,8 +142,8 @@ void status_menu(signed short hero_pos)
 						!is_in_word_array(hero1->inventory[g_statuspage_selitem3_no].item_id,
 							g_wearable_items_index[hero2->typus - 1]) ? g_empty_string8 : get_tx2(66));
 
-					if (item_weapon(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
-						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + ITEM_STATS_SUBTYPE)));
+					if (g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].flags.weapon) {
+						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].subtype));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
@@ -324,9 +324,9 @@ void status_menu(signed short hero_pos)
 						    hero2->inventory[g_statuspage_selitem3_no].item_id,
 						    g_wearable_items_index[hero2->typus - 1]) ? g_empty_string9 : get_tx2(66));
 
-					if (item_weapon((Bit8u*)get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id))) {
+					if (g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].flags.weapon) {
 
-						strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(hero1->inventory[g_statuspage_selitem3_no].item_id) + ITEM_STATS_SUBTYPE)));
+						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].subtype));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
@@ -431,7 +431,7 @@ void status_menu(signed short hero_pos)
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
 						nvf.height = (Bit8u*)&height;
-						nvf.no = host_readws(get_itemsdat(hero2->inventory[g_statuspage_selitem3_no].item_id) + ITEM_STATS_GFX);
+						nvf.no = g_itemsdat[hero2->inventory[g_statuspage_selitem3_no].item_id].gfx;
 						process_nvf(&nvf);
 
 						make_ggst_cursor(g_icon);

@@ -194,13 +194,13 @@ void sell_screen(struct shop_descr *shop_descr)
 						g_pic_copy.y2 = array5.a[l_di] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.no = host_readws(get_itemsdat(j) + ITEM_STATS_GFX);
+						nvf.no = g_itemsdat[j].gfx;
 
 						process_nvf(&nvf);
 
 						do_pic_copy(0);
 
-						if (item_stackable((Bit8u*)get_itemsdat(j))) {
+						if (g_itemsdat[j].flags.stackable) {
 
 							if ((nice = hero1->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
 							{
@@ -315,7 +315,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 			} else {
 
-				if (item_undropable((Bit8u*)get_itemsdat(item_id))) {
+				if (g_itemsdat[item_id].flags.undropable) {
 
 					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
 					GUI_output(g_dtp2);
@@ -327,7 +327,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 					if (tmp[hero_pos][l15] != 0) {
 
-						if (item_stackable((Bit8u*)get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
+						if (g_itemsdat[item_id].flags.stackable && (hero1->inventory[l15].quantity > 1)) {
 
 							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
 
@@ -358,7 +358,7 @@ void sell_screen(struct shop_descr *shop_descr)
 									nice * g_price_modificator) / 4L;
 						}
 					} else {
-						if (item_stackable((Bit8u*)get_itemsdat(item_id)) && (hero1->inventory[l15].quantity > 1)) {
+						if (g_itemsdat[item_id].flags.stackable && (hero1->inventory[l15].quantity > 1)) {
 
 							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
 
@@ -449,7 +449,9 @@ void sell_screen(struct shop_descr *shop_descr)
 
 								if (g_market_itemsaldo_table[item_id] <= -10) {
 									g_market_itemsaldo_table[item_id] = 0;
-									sub_ptr_ws(get_itemsdat(item_id) + ITEM_STATS_PRICE, host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * 10 / 100);
+
+									/* REMARK: write to g_itemsdat ? */
+									g_itemsdat[item_id].price -= g_itemsdat[item_id].price * 10 / 100;
 								}
 							}
 						}

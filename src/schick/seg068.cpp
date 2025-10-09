@@ -727,7 +727,7 @@ signed short academy_get_equal_item(signed short price)
 					if ((hero->inventory[item_pos].item_id != ITEM_NONE) && !hero->inventory[item_pos].flags.broken)
 						/* remark: armor with degraded RS is accepted */
 					{
-						p_item = (struct item_stats*)get_itemsdat(hero->inventory[item_pos].item_id);
+						p_item = &g_itemsdat[hero->inventory[item_pos].item_id];
 
 						if (p_item->price * p_item->price_unit >= price)
 						{

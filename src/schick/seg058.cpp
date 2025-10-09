@@ -53,20 +53,19 @@ void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, cons
 
 	g_sellitems[smith_pos].item_id = item_id;
 
-	if (item_armor((Bit8u*)get_itemsdat(item_id)) || item_weapon((Bit8u*)get_itemsdat(item_id))) {
+	if (g_itemsdat[item_id].flags.armor || g_itemsdat[item_id].flags.weapon) {
 
 		if (((struct struct_hero*)hero)->inventory[item_pos].flags.broken) {
 
 			g_sellitems[smith_pos].shop_price =
-				(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 2;
+				(g_itemsdat[item_id].price + g_itemsdat[item_id].price * smith->price_mod / 100) / 2;
 
 			if (g_sellitems[smith_pos].shop_price == 0) {
 
 				g_sellitems[smith_pos].shop_price = 1;
 			}
 
-			g_sellitems[smith_pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
+			g_sellitems[smith_pos].price_unit = g_itemsdat[item_id].price_unit;
 
 		} else {
 
@@ -75,15 +74,14 @@ void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, cons
 				/* armor has degraded RS */
 
 				g_sellitems[smith_pos].shop_price =
-					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-						(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 4;
+					(g_itemsdat[item_id].price + g_itemsdat[item_id].price * smith->price_mod / 100) / 4;
 
 				if (g_sellitems[smith_pos].shop_price == 0) {
 
 					g_sellitems[smith_pos].shop_price = 1;
 				}
 
-				g_sellitems[smith_pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
+				g_sellitems[smith_pos].price_unit = g_itemsdat[item_id].price_unit;
 
 			} else {
 				/* price => 1 HELLER */
@@ -261,13 +259,13 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 							g_pic_copy.y2 = array5.a[l_si] + 15;
 							g_pic_copy.src = g_renderbuf_ptr;
 
-							nvf.no = host_readws(get_itemsdat(j) + ITEM_STATS_GFX);
+							nvf.no = g_itemsdat[j].gfx;
 
 							process_nvf(&nvf);
 
 							do_pic_copy(0);
 
-							if (item_stackable((Bit8u*)get_itemsdat(j))) {
+							if (g_itemsdat[j].flags.stackable) {
 
 								if ((val = hero2->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
 								{

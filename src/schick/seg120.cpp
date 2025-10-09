@@ -390,7 +390,7 @@ signed short init_memory(void)
 #else
 	g_itemsname		= (char**)schick_alloc(255 * sizeof(char*));
 #endif
-	g_itemsdat 		= (unsigned char*)schick_alloc(255 * sizeof(item_stats));
+	g_itemsdat 		= (struct item_stats*)schick_alloc(255 * sizeof(item_stats));
 	g_monnames_buffer	= (char*)schick_alloc(950);
 #if defined(__BORLANDC__)
 	g_monnames_index	= (char**)schick_alloc(77 * sizeof(char*));

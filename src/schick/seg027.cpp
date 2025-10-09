@@ -688,7 +688,7 @@ void init_common_buffers(void)
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);
-	bytes = read_archive_file(fd, g_itemsdat, 3060);
+	bytes = read_archive_file(fd, (Bit8u*)g_itemsdat, 255 * sizeof(item_stats));
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ANIS_TAB);

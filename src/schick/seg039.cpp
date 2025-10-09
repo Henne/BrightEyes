@@ -53,10 +53,9 @@ signed int FIG_get_range_weapon_type(struct struct_hero *hero)
 	signed int weapon_id;
 
 	/* get equipped item in the right hand of the hero and make a pointer to the entry of ITEMS.DAT */
-	item_p = (struct item_stats*)get_itemsdat(weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
+	item_p = &g_itemsdat[weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id];
 
-
-	if (item_weapon((Bit8u*)item_p)) {
+	if (item_p->flags.weapon) {
 		/* is a weapon */
 
 		/* MagicStaffs or Fightstaffs are spears, but no range weapons */

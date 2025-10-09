@@ -57,10 +57,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	item = owner->inventory[pos].item_id;
 
 	/* get pointer to ITEMS.DAT */
-	item_p = (struct item_stats*)get_itemsdat(item);
+	item_p = &g_itemsdat[item];
 
 	/* is food */
-	if (item_food((Bit8u*)item_p)) {
+	if (item_p->flags.food) {
 
 		if (item_p->subtype == 1) {
 			/* eating */
@@ -146,7 +146,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 		g_request_refresh = 1;
 
-	} else if (item_herb_potion((Bit8u*)item_p)) {
+	} else if (item_p->flags.herb_potion) {
 
 		if (item_p->subtype == 0) {
 

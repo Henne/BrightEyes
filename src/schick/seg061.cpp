@@ -526,7 +526,7 @@ void miracle_weapon(char *str, signed short mode)
 			for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++)
 			{
 
-				if ((item_id = hero->inventory[i].item_id) && item_weapon((Bit8u*)get_itemsdat(item_id)))
+				if ((item_id = hero->inventory[i].item_id) && g_itemsdat[item_id].flags.weapon)
 				{
 
 					if (mode == 0) {

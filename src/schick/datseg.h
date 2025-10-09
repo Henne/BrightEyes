@@ -451,9 +451,22 @@ struct sea_route {
 };
 
 /* structure of the entries of ITEMS.DAT */
+struct item_flags {
+	/* item + 0x02 */
+	unsigned short armor		:1;	/* bit 0: armor */
+	unsigned short weapon		:1;	/* bit 1: weapon */
+	unsigned short useable	 	:1;	/* bit 2: useable */
+	unsigned short food		:1;	/* bit 3: nutrition */
+
+	unsigned short stackable	:1;	/* bit 4: stackable */
+	unsigned short herb_potion	:1;	/* bit 5: poison/herb/potion */
+	unsigned short undropable	:1;	/* bit 6: personal item (undropable) */
+	unsigned short bit7		:1;	/* bit 7: not usable by "use object"?? */
+};
+
 struct item_stats {
 	Bit16s gfx;
-	Bit8u flags;		/* bitfield. bit 0: armor / bit 1: weapon / bit 2: useable / bit 3: nutrition / bit 4: stackable / bit 5: poison/herb/potion / bit 6: personal item (undropable) / bit 7: not usable by "use object"?? */
+	struct item_flags flags;		/* bitfield */
 	Bit8s subtype;		/* meaning depends on item type set in ITEM_STATS_FLAGS. weapon -> WEAPON_TYPE_..., armor -> ARMOR_TYPE_..., nutrition -> NUTRITION_TYPE... */
 	Bit8s table_index;
 	Bit16s weight;		/* weight in ounces */
@@ -1841,7 +1854,7 @@ extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
 extern struct struct_msg g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
 extern struct struct_msg g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
-extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
+extern struct item_stats *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
 extern struct enemy_sheet *g_monster_dat_buf;// ds:0xe125; seg032, seg039

@@ -193,7 +193,7 @@ void buy_screen(void)
 						g_pic_copy.y2 = array5.a[l_di] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.no = host_readws(get_itemsdat(j));
+						nvf.no = g_itemsdat[j].gfx;
 
 						process_nvf(&nvf);
 
@@ -251,11 +251,11 @@ void buy_screen(void)
 
 			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0));
 
-			if (item_weapon((Bit8u*)get_itemsdat(item_id))) {
+			if (g_itemsdat[item_id].flags.weapon) {
 
 				strcat(g_dtp2, g_buy_screen_str_comma_space);
 
-				strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(item_id) + ITEM_STATS_SUBTYPE)));
+				strcat(g_dtp2, get_ttx(48 + g_itemsdat[item_id].subtype));
 			}
 
 			GUI_print_loc_line(g_dtp2);
@@ -333,7 +333,7 @@ void buy_screen(void)
 					l16 = l_di;
 				}
 
-				l17 += (g_buy_shopping_cart[l_di].item_id != 0) && item_stackable((Bit8u*)get_itemsdat(item_id)) ?
+				l17 += (g_buy_shopping_cart[l_di].item_id != 0) && g_itemsdat[item_id].flags.stackable ?
 						g_buy_shopping_cart[l_di].quantity / 100 + 1 :
 						g_buy_shopping_cart[l_di].quantity;
 			}
@@ -342,7 +342,7 @@ void buy_screen(void)
 
 				l4 = 1;
 
-				if (item_stackable((Bit8u*)get_itemsdat(item_id))) {
+				if (g_itemsdat[item_id].flags.stackable) {
 
 					if (l3 == 2) {
 
@@ -408,7 +408,7 @@ void buy_screen(void)
 
 					l4 = 1;
 
-					if (item_stackable((Bit8u*)get_itemsdat(g_buyitems[item_pos + item].item_id))) {
+					if (g_itemsdat[g_buyitems[item_pos + item].item_id].flags.stackable) {
 
 						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[item_pos + item].item_id, 0));
 
@@ -521,8 +521,8 @@ void buy_screen(void)
 
 							g_market_itemsaldo_table[item_id] = 0;
 
-							add_ptr_ws(get_itemsdat(item_id) + ITEM_STATS_PRICE,
-									host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * 10 / 100);
+							/* REMARK: write to g_itemsdat ? */
+							g_itemsdat[item_id].price += g_itemsdat[item_id].price * 10 / 100;
 						}
 
 						if (given_items == 0 && !l_di) {
@@ -597,12 +597,12 @@ void insert_sell_items(struct shop_descr *shop_descr, struct struct_hero *hero, 
 
 	g_sellitems[shop_pos].item_id = item_id;
 
-	if (item_armor((Bit8u*)get_itemsdat(item_id)) || item_weapon((Bit8u*)get_itemsdat(item_id))) {
+	if (g_itemsdat[item_id].flags.armor || g_itemsdat[item_id].flags.weapon) {
 
 		/* WEAPON SHOP */
 		if (shop_descr->type == 1) sellable = 1;
 
-	} else if (item_herb_potion((Bit8u*)get_itemsdat(item_id))) {
+	} else if (g_itemsdat[item_id].flags.herb_potion) {
 
 		/* HERB SHOP */
 		if (shop_descr->type == 2) sellable = 1;
@@ -628,15 +628,14 @@ void insert_sell_items(struct shop_descr *shop_descr, struct struct_hero *hero, 
 	} else {
 		/* calculate the price */
 		g_sellitems[shop_pos].shop_price =
-			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * shop_descr->price_mod / 100) ) / 2;
+			(g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop_descr->price_mod / 100) / 2;
 
 		/* adjust price to 1 if zero */
 		if (g_sellitems[shop_pos].shop_price == 0) {
 			g_sellitems[shop_pos].shop_price = 1;
 		}
 
-		g_sellitems[shop_pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
+		g_sellitems[shop_pos].price_unit = g_itemsdat[item_id].price_unit;
 	}
 
 	g_sellitems[shop_pos].item_pos = item_pos;
