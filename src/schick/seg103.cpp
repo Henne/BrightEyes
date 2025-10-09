@@ -641,17 +641,17 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 signed short GUI_use_skill(signed short hero_pos, signed char handicap)
 {
-	signed short skill;
-	Bit8u *hero;
+	signed short skill_id;
+	struct struct_hero *hero;
 
-	hero = get_hero(hero_pos);
+	hero = (struct struct_hero*)get_hero(hero_pos);
 
-	if (!check_hero(hero)) {
+	if (!check_hero((Bit8u*)hero)) {
 		return -1;
 	}
 
-	skill = select_skill();
-	return use_skill(hero_pos, handicap, skill);
+	skill_id = select_skill();
+	return use_skill(hero_pos, handicap, skill_id);
 }
 
 signed short GUI_use_skill2(signed short handicap, char *msg)
