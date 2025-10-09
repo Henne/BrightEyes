@@ -177,7 +177,7 @@ void add_hero_ap(struct struct_hero*, Bit32s);
 void add_group_ap(Bit32s);
 void add_hero_ap_all(signed short);
 void sub_hero_ap_all(signed short);
-signed short get_hero_index(Bit8u*);
+signed int get_hero_index(const struct struct_hero*);
 signed int get_item_pos(struct struct_hero*, const signed int);
 signed short get_first_hero_with_item(signed short);
 signed short get_first_hero_with_item_in_group(signed short, signed short);

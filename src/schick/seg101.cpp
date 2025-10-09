@@ -92,7 +92,7 @@ void spell_armatrutz(void)
 
 	if (bonus != -1) {
 
-		pos = get_hero_index(get_spelluser());
+		pos = get_hero_index((struct struct_hero*)get_spelluser());
 		g_spell_special_aecost = (bonus * bonus);
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(5), get_spelluser() + HERO_RS_BONUS1, (signed char)bonus, (signed char)pos);
@@ -156,7 +156,7 @@ void spell_feuerbann(void)
 	/* check if spell is already activated */
 	if (!host_readbs(get_spelluser() + HERO_FIREBAN)) {
 
-		target = get_hero_index(get_spelluser());
+		target = get_hero_index((struct struct_hero*)get_spelluser());
 
 		slot = get_free_mod_slot();
 
@@ -531,7 +531,7 @@ void spell_visibili(void)
 	if (rounds * 5 <= host_readws(get_spelluser() + HERO_AE)) {
 
 		g_spell_special_aecost = rounds * 5;
-		pos = (signed short)get_hero_index(get_spelluser());
+		pos = (signed short)get_hero_index((struct struct_hero*)get_spelluser());
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
 

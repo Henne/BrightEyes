@@ -240,7 +240,7 @@ void TRV_found_replenish_place(signed short a0)
 				g_wildcamp_guardstatus[hero_pos] = 0;
 		}
 #else
-		hero_pos = get_hero_index((Bit8u*)get_first_hero_available_in_group());
+		hero_pos = get_hero_index((struct struct_hero*)get_first_hero_available_in_group());
 
 		g_wildcamp_replstatus[hero_pos] =
 			g_wildcamp_herbstatus[hero_pos] =

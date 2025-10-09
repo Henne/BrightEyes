@@ -51,7 +51,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 		return;
 	}
 
-	consumer_idx = get_hero_index((Bit8u*)consumer);
+	consumer_idx = get_hero_index(consumer);
 
 	/* get item id */
 	item = owner->inventory[pos].item_id;

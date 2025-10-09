@@ -927,7 +927,7 @@ void spell_adleraug(void)
 	signed short slot;
 	signed short hero_pos;
 
-	hero_pos = get_hero_index(get_spelluser());
+	hero_pos = get_hero_index((struct struct_hero*)get_spelluser());
 
 	slot = get_free_mod_slot();
 

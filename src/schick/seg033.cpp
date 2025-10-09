@@ -827,7 +827,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 	/* final fight vs. Orkchampion */
 	if ((g_current_fight_no == FIGHTS_F144) &&
-		(get_hero_index((Bit8u*)gs_main_acting_hero) != hero_pos) &&
+		(get_hero_index(gs_main_acting_hero) != hero_pos) &&
 		((hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_RANGE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_SPELL) ||

@@ -280,7 +280,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 			/* weapon does ranged damage */
 
-			hero_idx = get_hero_index((Bit8u*)hero);
+			hero_idx = get_hero_index(hero);
 
 			FIG_search_obj_on_cb(hero_idx + 1, &x_hero, &y_hero);
 			FIG_search_obj_on_cb(hero->enemy_id, &x_target, &y_target);
