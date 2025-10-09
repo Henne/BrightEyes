@@ -300,15 +300,15 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 	signed short patient_pos;
 	signed short le;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	struct struct_hero *patient;
 	Bit32s money;
-	signed short poison;
+	signed short poison_id;
 	signed short tx_file_bak;
 
 	l_si = 1;
 
-	hero = get_hero(hero_pos);
+	hero = (struct struct_hero*)get_hero(hero_pos);
 
 	if (skill != -1) {
 
@@ -328,9 +328,9 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				if (is_hero_healable(patient)) {
 
-					poison = hero_is_poisoned(patient);
+					poison_id = hero_is_poisoned(patient);
 
-					if (poison == 0) {
+					if (poison_id == 0) {
 
 						/* patient is not poisoned */
 						sprintf(g_dtp2,	get_ttx(463), patient->alias);
@@ -346,19 +346,19 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 						/* set patient timer */
 						patient->heal_timer = HOURS(4); /* 4 hours */
 
-						if (test_skill((struct struct_hero*)hero, TA_HEILEN_GIFT, handicap) > 0) {
+						if (test_skill(hero, TA_HEILEN_GIFT, handicap) > 0) {
 
 							timewarp(MINUTES(20));
 
-							if (test_skill((struct struct_hero*)hero, TA_HEILEN_GIFT, g_poison_prices[poison] + handicap) > 0) {
+							if (test_skill(hero, TA_HEILEN_GIFT, g_poison_prices[poison_id] + handicap) > 0) {
 								/* success */
-								sprintf(g_dtp2, get_ttx(690), (char*)hero + HERO_NAME2,	patient->alias);
+								sprintf(g_dtp2, get_ttx(690), hero->alias, patient->alias);
 								GUI_output(g_dtp2);
 
-								patient->poison[poison][1] = 0;
-								patient->poison[poison][0] = 1;
+								patient->poison[poison_id][1] = 0;
+								patient->poison[poison_id][0] = 1;
 
-								sprintf(g_dtp2,	get_ttx(692), (char*)hero + HERO_NAME2,	patient->alias);
+								sprintf(g_dtp2,	get_ttx(692), hero->alias, patient->alias);
 
 								if (GUI_bool(g_dtp2)) {
 
@@ -367,9 +367,9 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 									} while (le <= 0);
 
-									if ((l_si = test_skill((struct struct_hero*)hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
+									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
-										sprintf(g_dtp2,	get_ttx(691), (char*)hero + HERO_NAME2,	patient->alias, le);
+										sprintf(g_dtp2,	get_ttx(691), hero->alias, patient->alias, le);
 
 										add_hero_le(patient, le);
 
@@ -384,7 +384,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 											le_damage = patient->le - 1;
 										}
 
-										sub_hero_le((struct struct_hero*)patient, le_damage);
+										sub_hero_le(patient, le_damage);
 
 										sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 										GUI_output(g_dtp2);
@@ -394,12 +394,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								}
 							} else {
 								/* healing failed */
-								sprintf(g_dtp2,	get_ttx(689), (char*)hero + HERO_NAME2, patient->alias);
+								sprintf(g_dtp2,	get_ttx(689), hero->alias, patient->alias);
 								GUI_output(g_dtp2);
 							}
 						} else {
 							/* recognizing the poison failed */
-							sprintf(g_dtp2,	get_ttx(688), (char*)hero + HERO_NAME2,	patient->alias);
+							sprintf(g_dtp2,	get_ttx(688), hero->alias, patient->alias);
 							GUI_output(g_dtp2);
 						}
 					}
@@ -416,7 +416,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				patient = (struct struct_hero*)get_hero(patient_pos);
 
-				skill_cure_disease((struct struct_hero*)hero, patient, handicap, 0);
+				skill_cure_disease(hero, patient, handicap, 0);
 			}
 			break;
 		}
@@ -446,16 +446,15 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 					} else {
 						patient->heal_timer = DAYS(1);
 
-						if (test_skill((struct struct_hero*)hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+						if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
-							if (test_skill((struct struct_hero*)hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+							if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
-								l_si = (host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) > 1) ? host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) : 1;
+								l_si = hero->skills[TA_HEILEN_WUNDEN] > 1 ? hero->skills[TA_HEILEN_WUNDEN] : 1;
 
 								add_hero_le(patient, l_si);
 
-								sprintf(g_dtp2, get_ttx(691), (char*)hero + HERO_NAME2,
-									patient->alias, l_si);
+								sprintf(g_dtp2, get_ttx(691), hero->alias, patient->alias, l_si);
 								GUI_output(g_dtp2);
 
 							} else {
@@ -468,7 +467,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 									le_damage = patient->le - 1;
 								}
 
-								sub_hero_le((struct struct_hero*)patient, le_damage);
+								sub_hero_le(patient, le_damage);
 
 								sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 								GUI_output(g_dtp2);
@@ -483,14 +482,14 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 							if (random_schick(20) <= 7) {
 
 								/* 35% chance: infected with Wundfieber illness */
-								sprintf(g_dtp2, get_ttx(699), (char*)hero + HERO_NAME2,	patient->alias);
+								sprintf(g_dtp2, get_ttx(699), hero->alias, patient->alias);
 
 								patient->sick[ILLNESS_TYPE_WUNDFIEBER][0] = -1;
 								patient->sick[ILLNESS_TYPE_WUNDFIEBER][1] = 0;
 
 							} else {
 								/* 65% chance: just failed, no infection */
-								sprintf(g_dtp2,	get_ttx(698), (char*)hero + HERO_NAME2,	patient->alias);
+								sprintf(g_dtp2,	get_ttx(698), hero->alias, patient->alias);
 							}
 
 							GUI_output(g_dtp2);
@@ -508,13 +507,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 			} else {
 
-				if (test_skill((struct struct_hero*)hero, TA_AKROBATIK, handicap) > 0) {
+				if (test_skill(hero, TA_AKROBATIK, handicap) > 0) {
 
 					money = random_interval(10, 200);
 
 					make_valuta_str(g_text_output_buf, money);
 
-					sprintf(g_dtp2, get_tx(35), (char*)hero + HERO_NAME2, g_text_output_buf);
+					sprintf(g_dtp2, get_tx(35), hero->alias, g_text_output_buf);
 
 					GUI_output(g_dtp2);
 
@@ -541,13 +540,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 			} else {
 
-				if (test_skill((struct struct_hero*)hero, TA_MUSIZIEREN, handicap) > 0) {
+				if (test_skill(hero, TA_MUSIZIEREN, handicap) > 0) {
 
 					money = random_interval(100, 300);
 
 					make_valuta_str(g_text_output_buf, money);
 
-					sprintf(g_dtp2, get_tx(35), (char*)hero + HERO_NAME2, g_text_output_buf);
+					sprintf(g_dtp2, get_tx(35), hero->alias, g_text_output_buf);
 
 					GUI_output(g_dtp2);
 
@@ -568,13 +567,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 		}
 		case TA_FALSCHSPIEL : {
 
-			if (test_skill((struct struct_hero*)hero, TA_FALSCHSPIEL, handicap) > 0) {
+			if (test_skill(hero, TA_FALSCHSPIEL, handicap) > 0) {
 
 				money = random_interval(500, 1000);
 
 				make_valuta_str(g_text_output_buf, money);
 
-				sprintf(g_dtp2, get_tx(38), g_text_output_buf, (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(38), g_text_output_buf, hero->alias);
 
 				GUI_output(g_dtp2);
 
@@ -593,16 +592,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 		}
 		case TA_TASCHENDIEBSTAHL : {
 
-			if (test_skill((struct struct_hero*)hero, TA_TASCHENDIEBSTAHL, handicap) > 0) {
+			if (test_skill(hero, TA_TASCHENDIEBSTAHL, handicap) > 0) {
 
 				money = random_interval(500, 1000);
 
 				make_valuta_str(g_text_output_buf, money);
 
-				sprintf(g_dtp2,
-					get_tx(40),
-					g_text_output_buf,
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(40), g_text_output_buf, hero->alias);
 
 				GUI_output(g_dtp2);
 
@@ -610,9 +606,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				g_request_refresh = 1;
 			} else {
-				sprintf(g_dtp2,
-					get_tx(41),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(41), hero->alias);
 
 				GUI_output(g_dtp2);
 
@@ -626,7 +620,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			break;
 		}
 		case TA_ALCHIMIE : {
-			l_si = plan_alchemy((struct struct_hero*)hero);
+			l_si = plan_alchemy(hero);
 			break;
 		}
 		}
