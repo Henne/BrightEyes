@@ -735,7 +735,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					if (l15 != -1) {
 
-						seg044_002a(0, (struct struct_hero*)hero, 4, hero_pos + 1,
+						seg044_002a(0, hero, 4, hero_pos + 1,
 								l17 == 0 ? hero->enemy_id : hero->enemy_id + 20, l12, 0);
 					}
 
@@ -744,7 +744,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						if (l6 > 0) {
 
 							if (l6 != 4) {
-								seg045_0394(6, (struct struct_hero*)hero, l6);
+								seg045_0394(6, hero, l6);
 							}
 
 						} else {

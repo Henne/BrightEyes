@@ -589,7 +589,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 					if (target_is_hero != 0) {
 
-						FIG_prepare_hero_fight_ani(1, (struct struct_hero*)hero, -1, 0, monster->enemy_id, monster_pos + 10, 1);
+						FIG_prepare_hero_fight_ani(1, hero, -1, 0, monster->enemy_id, monster_pos + 10, 1);
 					} else {
 
 						FIG_prepare_enemy_fight_ani(1, target_enemy, 0, monster->enemy_id, monster_pos + 10, 1);
@@ -899,7 +899,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 
 		clear_anisheets();
 
-		FIG_prepare_hero_fight_ani(0, (struct struct_hero*)hero, -1, usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4, hero_pos + 1, hero->enemy_id, 0);
+		FIG_prepare_hero_fight_ani(0, hero, -1, usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4, hero_pos + 1, hero->enemy_id, 0);
 
 		l3 = 0;
 
@@ -929,7 +929,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 		if (g_defender_dead != 0) {
 
 			if (flag != 0) {
-				FIG_prepare_hero_fight_ani(1, (struct struct_hero*)target_hero, -1, 0, hero->enemy_id, hero_pos + 1, 1);
+				FIG_prepare_hero_fight_ani(1, target_hero, -1, 0, hero->enemy_id, hero_pos + 1, 1);
 			} else {
 				FIG_prepare_enemy_fight_ani(1, target_monster, 0, hero->enemy_id, hero_pos + 1, 1);
 			}

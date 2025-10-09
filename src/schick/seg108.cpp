@@ -87,7 +87,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 			}
 
 			/* drop one unit of that item */
-			drop_item((struct struct_hero*)owner, pos, 1);
+			drop_item(owner, pos, 1);
 		} else {
 			/* drinking */
 
@@ -127,15 +127,15 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				} else if (item == ITEM_BRANDY || item == ITEM_WINE) {
 					/* wine or snaps */
 					hero_get_drunken(consumer);
-					drop_item((struct struct_hero*)owner, pos, 1);
+					drop_item(owner, pos, 1);
 				} else {
 					/* everything else: Beer */
-					drop_item((struct struct_hero*)owner, pos, 1);
+					drop_item(owner, pos, 1);
 
 					/* That does not happen */
 					if (item != ITEM_BEER) {
 						/* get an empty glass bottle */
-						give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 					}
 				}
 			} else {
@@ -159,7 +159,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* consume with effects */
 
 				/* drop one entity */
-				drop_item((struct struct_hero*)owner, pos, 1);
+				drop_item(owner, pos, 1);
 
 				/* terminate output string */
 				*g_dtp2 = '\0';
@@ -275,10 +275,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* handle good elexires */
 
 				/* drop elexire */
-				drop_item((struct struct_hero*)owner, pos, 1);
+				drop_item(owner, pos, 1);
 
 				/* get glassbottle */
-				give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+				give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 				/* Attribute +5 for 1h */
 				l_di = get_free_mod_slot();
@@ -294,10 +294,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* handle bad elexires */
 
 				/* drop elexire */
-				drop_item((struct struct_hero*)owner, pos, 1);
+				drop_item(owner, pos, 1);
 
 				/* get glassbottle */
-				give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+				give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 				/* Attribute -7 for 1h */
 				l_di = get_free_mod_slot();
@@ -313,7 +313,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* everything else */
 
 				/* drop the item */
-				drop_item((struct struct_hero*)owner, pos, 1);
+				drop_item(owner, pos, 1);
 
 				switch (item) {
 				case 0x91 : {
@@ -335,7 +335,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					add_hero_le(consumer, l_si);
 
 					/* give owner a glassbottle */
-					give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(510), consumer->alias, l_si, g_text_output_buf);
@@ -353,7 +353,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					add_hero_le(consumer, l_si);
 
 					/* give owner a copperbottle */
-					give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_BRONZE, 2, 1);
+					give_hero_new_item(owner, ITEM_FLASK_BRONZE, 2, 1);
 
 					/* singular POINT/ PUNKT */
 					strcpy(g_text_output_buf, get_ttx(392));
@@ -388,7 +388,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* poison */
-					poison = hero_is_poisoned((struct struct_hero*)consumer);
+					poison = hero_is_poisoned(consumer);
 
 					if (poison != 0 && poison < 7) {
 						consumer->poison[poison][1] = 0;
@@ -396,7 +396,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* give owner a glasbottle */
-					give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(511), consumer->alias, GUI_get_ptr(consumer->sex, 0));
@@ -410,7 +410,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					consumer->ruhe_koerper = 3;
 
 					/* give owner a glasbottle */
-					give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(738), consumer->alias);
@@ -431,7 +431,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						add_hero_ae(consumer, l_si);
 
 						/* give hero a glassbottle */
-						give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 						/* prepare output */
 						strcpy(g_text_output_buf, get_ttx(392));
@@ -447,7 +447,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
-						give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 					}
 
 					break;
@@ -467,7 +467,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						add_hero_ae(consumer, l_si);
 
 						/* give owner a glassbottle */
-						give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 						/* prepare output */
 						if (consumer->ae >= consumer->ae_max) {
@@ -486,7 +486,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
-						give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 					}
 					break;
 				}
@@ -501,7 +501,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* give owner a glassbottle */
-					give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					sprintf(g_dtp2, get_ttx(467), consumer->alias);
 					break;
@@ -515,7 +515,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					consumer->sick[disease][1] = 0;
 
 					/* give owner a glassbottle */
-					give_hero_new_item((struct struct_hero*)owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					sprintf(g_dtp2, get_ttx(467), consumer->alias);
 					break;

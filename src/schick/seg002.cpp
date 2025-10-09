@@ -5419,7 +5419,7 @@ void sub_group_le(signed short le)
 
 		if (hero_i->typus && (hero_i->group_no == gs_current_group))
 		{
-			sub_hero_le((struct struct_hero*)hero_i, le);
+			sub_hero_le(hero_i, le);
 		}
 	}
 }

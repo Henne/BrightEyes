@@ -537,7 +537,7 @@ void tevent_124(void)
 					sprintf(g_dtp2, get_tx2(55), hero->alias);
 					GUI_output(g_dtp2);
 
-					sub_hero_le((struct struct_hero*)hero, random_schick(5));
+					sub_hero_le(hero, random_schick(5));
 				}
 			}
 		}

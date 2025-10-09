@@ -429,7 +429,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 									GUI_output(get_ttx(491));
 								}
 
-								drop_item((struct struct_hero*)hero2, g_sellitems[item_pos + item].item_pos, 1);
+								drop_item(hero2, g_sellitems[item_pos + item].item_pos, 1);
 								p_money -= price;
 								set_party_money(p_money);
 

@@ -380,14 +380,14 @@ void tevent_029(void)
 
 				if (item_pos != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
-					drop_item((struct struct_hero*)hero, item_pos, hero->inventory[item_pos].quantity);
+					drop_item(hero, item_pos, hero->inventory[item_pos].quantity);
 				}
 
-				item_pos = hero_count_item((struct struct_hero*)hero, ITEM_WATERSKIN);
+				item_pos = hero_count_item(hero, ITEM_WATERSKIN);
 
 				if (item_pos) {
 					/* hero looses the first WATERSKIN */
-					drop_item((struct struct_hero*)hero, get_item_pos(hero, ITEM_WATERSKIN), item_pos - 1);
+					drop_item(hero, get_item_pos(hero, ITEM_WATERSKIN), item_pos - 1);
 				}
 			}
 		}

@@ -192,7 +192,7 @@ signed short DNG11_handler(void)
 			sprintf(g_dtp2,	get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((gs_dng11_lever_flag == 2 || gs_dng11_lever_flag == 3) && (test_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
+				(char*)((gs_dng11_lever_flag == 2 || gs_dng11_lever_flag == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
 				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -222,7 +222,7 @@ signed short DNG11_handler(void)
 			sprintf(g_dtp2, get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((gs_dng11_lever_flag == 1 || gs_dng11_lever_flag == 3) && (test_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
+				(char*)((gs_dng11_lever_flag == 1 || gs_dng11_lever_flag == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
 				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);

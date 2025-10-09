@@ -331,9 +331,9 @@ void DNG_door(signed short action)
 
 void print_msg_with_first_hero(char *msg)
 {
-	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	sprintf(g_text_output_buf, msg, (char*)hero + HERO_NAME2);
+	sprintf(g_text_output_buf, msg, hero->alias);
 
 	GUI_input(g_text_output_buf, 0);
 	

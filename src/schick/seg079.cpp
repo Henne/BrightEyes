@@ -309,7 +309,7 @@ signed short DNG03_handler(void)
 			do {
 				hero = (struct struct_hero*)get_hero(i);
 
-				drop_item((struct struct_hero*)hero, get_item_pos(hero, ITEM_CRYSTAL), 1);
+				drop_item(hero, get_item_pos(hero, ITEM_CRYSTAL), 1);
 
 				i = get_first_hero_with_item(ITEM_CRYSTAL);
 

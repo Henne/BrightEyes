@@ -130,7 +130,7 @@ void tevent_016(void)
 
 							add_hero_ap(hero, 5);
 
-							loose_random_item((struct struct_hero*)hero, 10, get_ttx(506));
+							loose_random_item(hero, 10, get_ttx(506));
 
 							hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 						}
@@ -159,10 +159,10 @@ void tevent_090(void)
 			test_skill(hero, TA_GEFAHRENSINN, 0) <= 0)
 		{
 			/* failed */
-			sub_hero_le((struct struct_hero*)hero, random_schick(10));
+			sub_hero_le(hero, random_schick(10));
 
-			loose_random_item((struct struct_hero*)hero, 10, get_ttx(506));
-			loose_random_item((struct struct_hero*)hero, 10, get_ttx(506));
+			loose_random_item(hero, 10, get_ttx(506));
+			loose_random_item(hero, 10, get_ttx(506));
 		}
 	}
 

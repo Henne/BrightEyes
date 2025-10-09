@@ -591,7 +591,7 @@ void THO_academy(void)
 						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
 						item_pos = get_item_pos(hero, item_id);
 
-						if (drop_item((struct struct_hero*)hero, item_pos, 1)) {
+						if (drop_item(hero, item_pos, 1)) {
 
 							GUI_input(get_tx2(62), 0);
 							GUI_input(get_tx2(63), 0);
@@ -662,7 +662,7 @@ void THO_academy(void)
 						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
 						item_pos = get_item_pos(hero, item_id);
 
-						if (drop_item((struct struct_hero*)hero, item_pos, 1)) {
+						if (drop_item(hero, item_pos, 1)) {
 
 							academy_analues();
 

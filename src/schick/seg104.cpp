@@ -49,7 +49,7 @@ signed short hero_has_ingrendients(struct struct_hero *hero, const signed short 
 			g_alchemy_missing_item = r_ptr->ingredients[i];
 		} else {
 			/* drop all needed items */
-			drop_item((struct struct_hero*)hero, item_pos, 1);
+			drop_item(hero, item_pos, 1);
 		}
 
 		i++;
@@ -63,7 +63,7 @@ signed short hero_has_ingrendients(struct struct_hero *hero, const signed short 
 
 	while (i >= 0) {
 		/* give all needed items back */
-		give_hero_new_item((struct struct_hero*)hero, r_ptr->ingredients[i], 1, 1);
+		give_hero_new_item(hero, r_ptr->ingredients[i], 1, 1);
 		i--;
 	}
 
@@ -82,18 +82,18 @@ void hero_use_ingrendients(struct struct_hero *hero, const signed short recipe_i
 		item_pos = get_item_pos(hero, r_ptr->ingredients[i]);
 
 		/* drop the needed item */
-		drop_item((struct struct_hero*)hero, item_pos, 1);
+		drop_item(hero, item_pos, 1);
 
 		/* exchange wine- or brandybottles into glass flask */
 		if ((r_ptr->ingredients[i] == ITEM_WINE) || (r_ptr->ingredients[i] == ITEM_BRANDY))
 		{
-			give_hero_new_item((struct struct_hero*)hero, ITEM_FLASK_GLASS, 1, 1);
+			give_hero_new_item(hero, ITEM_FLASK_GLASS, 1, 1);
 		}
 
 		/* exchange oil into bronze flask */
 		if (r_ptr->ingredients[i] == ITEM_OIL)
 		{
-			give_hero_new_item((struct struct_hero*)hero, ITEM_FLASK_BRONZE, 1, 1);
+			give_hero_new_item(hero, ITEM_FLASK_BRONZE, 1, 1);
 		}
 
 		i++;
@@ -117,11 +117,11 @@ signed short do_alchemy(struct struct_hero* hero, const signed short recipe_id, 
 	hero->recipe_id = 0;
 	hero->alchemy_inn_id = 0;
 
-	if ((test_skill((struct struct_hero*)(Bit8u*)hero, TA_ALCHIMIE, r_ptr->handicap) > 0) && (flag_abort == 0))
+	if ((test_skill(hero, TA_ALCHIMIE, r_ptr->handicap) > 0) && (flag_abort == 0))
 	{
 		/* success */
 
-		give_hero_new_item((struct struct_hero*)hero, r_ptr->outcome, 1, 1);
+		give_hero_new_item(hero, r_ptr->outcome, 1, 1);
 
 		sprintf(g_dtp2, get_ttx(731), hero->alias, (char*)GUI_names_grammar(1, r_ptr->outcome, 0));
 		GUI_output(g_dtp2);
@@ -130,7 +130,7 @@ signed short do_alchemy(struct struct_hero* hero, const signed short recipe_id, 
 	} else {
 		/* failure */
 		/* give first ingredient back, which is always the bottle (glass or bronze). */
-		give_hero_new_item((struct struct_hero*)hero, r_ptr->ingredients[0], 1, 1);
+		give_hero_new_item(hero, r_ptr->ingredients[0], 1, 1);
 
 		sprintf(g_dtp2,	get_ttx(732), hero->alias, (char*)GUI_names_grammar(2, r_ptr->outcome, 0));
 		GUI_output(g_dtp2);
@@ -411,9 +411,9 @@ signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *
 			/* set timer */
 			patient->heal_timer = HOURS(4);
 
-			if ((flag != 0) || (test_skill((struct struct_hero*)(Bit8u*)healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
+			if ((flag != 0) || (test_skill(healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
 
-				if (((retval = test_skill((struct struct_hero*)(Bit8u*)healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
+				if (((retval = test_skill(healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
 					(disease_id != ILLNESS_TYPE_WUNDFIEBER) && (disease_id != ILLNESS_TYPE_BLAUE_KEUCHE))
 				{
 
@@ -428,11 +428,11 @@ signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *
 
 					if (herb == 999) {
 						/* drop JORUGA & GULMOND LEAF */
-						drop_item((struct struct_hero*)healer, get_item_pos(healer, ITEM_JORUGA_ROOT), 1);
-						drop_item((struct struct_hero*)healer, get_item_pos(healer, ITEM_GULMOND_LEAF), 1);
+						drop_item(healer, get_item_pos(healer, ITEM_JORUGA_ROOT), 1);
+						drop_item(healer, get_item_pos(healer, ITEM_GULMOND_LEAF), 1);
 					} else {
 						/* drop the herb */
-						drop_item((struct struct_hero*)healer, get_item_pos(healer, herb), 1);
+						drop_item(healer, get_item_pos(healer, herb), 1);
 					}
 
 					retval = 1;
@@ -445,7 +445,7 @@ signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *
 						damage = patient->le - 1;
 					}
 
-					sub_hero_le((struct struct_hero*)patient, damage);
+					sub_hero_le(patient, damage);
 
 					sprintf(g_dtp2,	get_ttx(694), patient->alias, damage);
 					GUI_output(g_dtp2);

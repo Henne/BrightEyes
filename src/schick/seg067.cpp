@@ -72,7 +72,7 @@ void city_event_1(void)
 
 	randval = random_schick(20);
 
-	if (test_skill((struct struct_hero*)(Bit8u*)hero, TA_SINNESSCHAERFE, 2) <= 0) {
+	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
 		/* TODO:	check the format strings in the english version
 		 *		they may be broken.
@@ -265,9 +265,9 @@ void city_event_6(void)
 
 		sprintf(g_dtp2 + 0x400,
 			get_tx(random_schick(4) + 102),
-			(char*)get_hero(get_random_hero()) + HERO_NAME2);
+		       ((struct struct_hero*)get_hero(get_random_hero()))->alias);
 
-		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 3,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 3,
 			get_tx(random_schick(4) + 106),
 			get_tx(random_schick(4) + 110),
 			get_tx(random_schick(4) + 114));

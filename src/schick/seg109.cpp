@@ -685,8 +685,8 @@ void TRV_barrier(signed short text_start)
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 				{
-					l_di += hero_count_item((struct struct_hero*)hero, ITEM_ROPE);
-					l_di += hero_count_item((struct struct_hero*)hero, ITEM_ROPE_LADDER);
+					l_di += hero_count_item(hero, ITEM_ROPE);
+					l_di += hero_count_item(hero, ITEM_ROPE_LADDER);
 				}
 			}
 
@@ -726,13 +726,13 @@ void TRV_barrier(signed short text_start)
 					if (i == -1) {
 						i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
-					drop_item((struct struct_hero*)hero, i, 1);
+					drop_item(hero, i, 1);
 
 					i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 					if (i == -1) {
 						i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
-					drop_item((struct struct_hero*)hero, i, 1);
+					drop_item(hero, i, 1);
 
 					if (l_di >= 3) {
 

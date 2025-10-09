@@ -375,7 +375,7 @@ void status_menu(signed short hero_pos)
 							pass_item(hero1, g_statuspage_selitem3_no, hero2, g_statuspage_selitem4_no);
 							g_request_refresh = 1;
 						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
-							print_item_description((struct struct_hero*)hero1, g_statuspage_selitem3_no);
+							print_item_description(hero1, g_statuspage_selitem3_no);
 						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
 							consume(hero1, hero2, g_statuspage_selitem3_no);
 						}
@@ -393,10 +393,10 @@ void status_menu(signed short hero_pos)
 
 					} else {
 						if (g_statuspage_selitem4_no < 23) {
-							move_item(g_statuspage_selitem3_no, g_statuspage_selitem4_no, (struct struct_hero*)hero2);
+							move_item(g_statuspage_selitem3_no, g_statuspage_selitem4_no, hero2);
 							g_request_refresh = 1;
 						} else if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_EYE) { /* eye icon */
-							print_item_description((struct struct_hero*)hero2, g_statuspage_selitem3_no);
+							print_item_description(hero2, g_statuspage_selitem3_no);
 						} else if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_MOUTH) { /* mouth icon */
 							consume(hero2, hero2, g_statuspage_selitem3_no);
 						}
@@ -524,7 +524,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item((struct struct_hero*)hero2, g_statuspage_selitem3_no, -1);
+							drop_item(hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -641,7 +641,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item((struct struct_hero*)hero2, g_statuspage_selitem3_no, -1);
+							drop_item(hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}

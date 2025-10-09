@@ -406,7 +406,7 @@ signed short gather_herbs(struct struct_hero *hero, signed short hours, signed s
 		if ((random_schick(100) <= ptr->chance_max) &&
 			test_skill(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
 
-			herb_count[herb_index] = (signed char)give_hero_new_item((struct struct_hero*)hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
+			herb_count[herb_index] = (signed char)give_hero_new_item(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
 
 			if (herb_count[herb_index]) {
 				unique_herbs_count++;

@@ -292,7 +292,7 @@ void hunt_cavebear(void)
 #endif
 
 					add_hero_ap(hero, 3);
-					sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 0));
+					sub_hero_le(hero, dice_roll(2, 6, 0));
 				}
 			}
 		}
@@ -352,7 +352,7 @@ void hunt_viper(void)
 			add_hero_ap(hero_i, 3);
 
 			/* and 2 * 3W6 damage */
-			sub_hero_le((struct struct_hero*)hero_i, dice_roll(3, 6, 0) * 2);
+			sub_hero_le(hero_i, dice_roll(3, 6, 0) * 2);
 		}
 	} else {
 		GUI_output(get_tx2(27));
@@ -412,7 +412,7 @@ void octopus_attack(void)
 					/* <hero> GERAET IN DEN WUERGEGRIFF DES KRAKENMOLCHS UND KANN SICH NUR UNTER MUEHEN WIEDER BEFREIEN. */
 
 					add_hero_ap(hero, 5);
-					sub_hero_le((struct struct_hero*)hero, random_schick(6));
+					sub_hero_le(hero, random_schick(6));
 					sprintf(g_dtp2, get_tx2(30), hero->alias);
 					GUI_output(g_dtp2);
 				}
@@ -428,12 +428,12 @@ void octopus_attack(void)
 					/* <hero> WIRD VON EINEM TENTAKEL GEPACKT UND UEBER BORD GERISSEN! */
 
 					add_hero_ap(hero, 20);
-					sub_hero_le((struct struct_hero*)hero, random_schick(6));
+					sub_hero_le(hero, random_schick(6));
 					sprintf(g_dtp2, get_tx2(31), hero->alias);
 					GUI_output(g_dtp2);
 
 					if (test_skill(hero, TA_SCHWIMMEN, 0) <= 0) {
-						sub_hero_le((struct struct_hero*)hero, random_schick(6));
+						sub_hero_le(hero, random_schick(6));
 						overboard[i] = 1;
 					}
 
@@ -499,7 +499,7 @@ void hunt_bison(void)
 		sprintf(g_dtp2, get_tx2(37), hero->alias);
 		GUI_output(g_dtp2);
 
-		sub_hero_le((struct struct_hero*)hero, random_schick(6));
+		sub_hero_le(hero, random_schick(6));
 		add_hero_ap(hero, 2);
 	}
 
@@ -529,7 +529,7 @@ void hunt_rhino(void)
 		hero = (struct struct_hero*)get_hero(get_random_hero());
 		sprintf(g_dtp2, get_tx2(43), hero->alias);
 		GUI_output(g_dtp2);
-		sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 0));
+		sub_hero_le(hero, dice_roll(2, 6, 0));
 		add_hero_ap(hero, 6);
 	}
 
@@ -773,7 +773,7 @@ void TLK_way_to_ruin(signed short state)
 
 	} else if (state == 12) {
 
-		sub_hero_le((struct struct_hero*)gs_ruin_hero, random_schick(4) + 1);
+		sub_hero_le(gs_ruin_hero, random_schick(4) + 1);
 
 		/* Original-Bug: hero != RUIN_HERO */
 		hero_disease_test(gs_ruin_hero, 2, 25 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
@@ -796,8 +796,8 @@ void TLK_way_to_ruin(signed short state)
 		loose_random_item((struct struct_hero*)get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {
 		timewarp(MINUTES(10));
-		loose_random_item((struct struct_hero*)hero2, 10, get_ttx(506));
-		sub_hero_le((struct struct_hero*)hero2, random_schick(4) + 2);
+		loose_random_item(hero2, 10, get_ttx(506));
+		sub_hero_le(hero2, random_schick(4) + 2);
 	} else if (state == 22 || state == 30 || state == 52 || state == 53) {
 		timewarp(HOURS(3));
 	} else if (state == 26 || state == 36 || state == 37 || state == 38 || state == 39) {
