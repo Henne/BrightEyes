@@ -235,7 +235,7 @@ void city_event_5(void)
 
 	if (randval == 1) {
 
-		hero = (struct struct_hero*)get_first_hero_available_in_group();
+		hero = get_first_hero_available_in_group();
 
 		sprintf(g_dtp2 + 0x400,	get_tx(randval + 99), hero->alias);
 

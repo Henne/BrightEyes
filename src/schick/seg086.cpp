@@ -47,7 +47,7 @@ signed short DNG11_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,6,12) && target_pos != gs_dng_handled_pos && gs_dng11_soup_supply)
 	{

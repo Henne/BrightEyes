@@ -316,7 +316,7 @@ void TLK_ghandel(signed short state)
 		gs_merchant_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 10) {
 		/* test CH+0 */
-		g_dialog_next_state = (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 11 : 12);
+		g_dialog_next_state = (test_attrib(get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 11 : 12);
 	}
 }
 
@@ -338,7 +338,7 @@ void TLK_khandel(signed short state)
 		g_price_modificator = 3;
 	} else if (state == 12) {
 		/* test CH+4 */
-		g_dialog_next_state = (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 4) > 0 ? 13 : 10);
+		g_dialog_next_state = (test_attrib(get_first_hero_available_in_group(), ATTRIB_CH, 4) > 0 ? 13 : 10);
 	}
 }
 
@@ -363,11 +363,11 @@ void TLK_whandel(signed short state)
 	} else if (state == 18) {
 
 		/* test CH+0 */
-		g_dialog_next_state = (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 19 : -1);
+		g_dialog_next_state = (test_attrib(get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 19 : -1);
 
 	} else if (state == 25) {
 
-		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
+		if (test_skill(get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
 
 			g_dialog_next_state = 23;
 			g_price_modificator = 3;

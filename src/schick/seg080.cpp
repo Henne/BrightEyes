@@ -60,7 +60,7 @@ signed short DNG04_handler(void)
 
 		if (i == 2)
 		{
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 
 			sprintf(g_dtp2,	get_tx(5), hero->alias);
 			GUI_output(g_dtp2);
@@ -174,7 +174,7 @@ signed short DNG04_handler(void)
 	{
 		/* a very deep gap */
 		i = 1;
-		hero = (struct struct_hero*)get_first_hero_available_in_group();
+		hero = get_first_hero_available_in_group();
 
 		if (!gs_dng04_deepgap_flag || (test_attrib(hero, ATTRIB_GE, 0) > 0))
 		{
@@ -345,7 +345,7 @@ signed short DNG05_handler(void)
 		{
 			g_dng05_trash_flag = 1;
 
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 
 			GUI_output(get_tx(16));
 
@@ -406,7 +406,7 @@ signed short DNG05_handler(void)
 	{
 		if (GUI_bool(get_tx(12)))
 		{
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 
 			sprintf(g_dtp2,	get_tx(13), hero->alias);
 			GUI_output(g_dtp2);

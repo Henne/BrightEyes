@@ -39,7 +39,7 @@ void tevent_080(void)
 	signed short answer;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if ((!gs_tevent080_flag && (test_skill(hero, TA_WILDNISLEBEN, 4) > 0)) || gs_tevent080_flag != 0)
 	{
@@ -95,7 +95,7 @@ void tevent_080(void)
 
 void tevent_081(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent081_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent081_flag) ||
 		 gs_tevent081_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -110,7 +110,7 @@ void tevent_082(void)
 
 void tevent_083(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) ||
 		 gs_tevent083_flag != 0)
 	{
 		g_gather_herbs_special = 61;
@@ -140,7 +140,7 @@ void tevent_084(void)
 			}
 		} else {
 
-			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
+			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
 			{
 				g_fig_initiative = 1;
 
@@ -154,7 +154,7 @@ void tevent_084(void)
 
 void tevent_085(void)
 {
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if ((test_skill(hero, TA_WILDNISLEBEN, 4) > 0 && !gs_tevent085_flag) || gs_tevent085_flag) {
 
@@ -221,7 +221,7 @@ void tevent_086(void)
 
 void tevent_088(void)
 {
-	if (((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!gs_tevent088_flag)) ||
+	if (((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!gs_tevent088_flag)) ||
 		 gs_tevent088_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -300,7 +300,7 @@ void tevent_098(void)
 			/* Original-Bug: hero not initialized */
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Original-Bugfix: take the leader of the group */
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 #endif
 			hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
@@ -437,7 +437,7 @@ void tevent_099(void)
 #endif
 		} else {
 
-			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
+			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
 
 				g_fig_initiative = 1;
 
@@ -481,7 +481,7 @@ void tevent_101(void)
 #endif
 		} else {
 
-			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
+			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
 
 				g_fig_initiative = 1;
 
@@ -513,7 +513,7 @@ void tevent_103(void)
 
 	/* Original-Bug: save the address instead the return value of a function as a hero */
 #ifdef M302de_ORIGINAL_BUGFIX
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 #else
 	hero = (struct struct_hero*)(get_first_hero_available_in_group);
 #endif
@@ -739,7 +739,7 @@ void tevent_105(void)
 
 void tevent_106(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent106_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent106_flag) ||
 		 gs_tevent106_flag)
 	{
 		gs_tevent106_flag = 1;
@@ -792,7 +792,7 @@ void tevent_107(void)
 
 	} else {
 
-		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 1) > 0) {
+		if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 1) > 0) {
 
 			timewarp(HOURS(3));
 
@@ -816,7 +816,7 @@ void tevent_108(void)
 {
 	signed short answer;
 
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
+	if ((test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
 	{
 		gs_tevent108_flag = 1;
 
@@ -849,7 +849,7 @@ void tevent_108(void)
 
 void tevent_109(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent109_flag) || gs_tevent109_flag)
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent109_flag) || gs_tevent109_flag)
 	{
 		gs_tevent109_flag = 1;
 

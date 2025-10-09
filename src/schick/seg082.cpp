@@ -45,7 +45,7 @@ signed short DNG07_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,13,2) && target_pos != gs_dng_handled_pos)
 	{
@@ -293,7 +293,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 	struct struct_hero *hero;
 	Bit8u *amap_ptr;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	amap_ptr = g_dng_map;
 

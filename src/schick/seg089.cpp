@@ -54,7 +54,7 @@ signed short DNG15_handler(void)
 
 	dir = gs_direction;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group(); /* UNNEEDED */
+	hero = get_first_hero_available_in_group(); /* UNNEEDED */
 
 	if ((((target_pos == DNG_POS(0,6,3) || target_pos == DNG_POS(0,6,6) || target_pos == DNG_POS(0,6,9)) && dir == EAST) ||
 		((target_pos == DNG_POS(0,12,10) || target_pos == DNG_POS(0,8,10)) && dir == NORTH)) && target_pos != gs_dng_handled_pos)

@@ -73,7 +73,7 @@ signed short DNG06_handler(void)
 			{
 				gs_dng06_money_flag = 1;
 
-				hero = (struct struct_hero*)get_first_hero_available_in_group();
+				hero = get_first_hero_available_in_group();
 
 				i = dice_roll(3, 20, 0);
 
@@ -106,7 +106,7 @@ signed short DNG06_handler(void)
 			}
 		}
 
-		hero_first = (struct struct_hero*)get_first_hero_available_in_group();
+		hero_first = get_first_hero_available_in_group();
 		if (l3 > 1)
 		{
 			hero_second = (struct struct_hero*)get_second_hero_available_in_group();
@@ -204,7 +204,7 @@ signed short DNG06_handler(void)
 				get_item(ITEM_KEY_GOLDEN_1, 1, 1);
 
 				/* TODO: This is not neccessary */
-				hero = (struct struct_hero*)get_first_hero_available_in_group();
+				hero = get_first_hero_available_in_group();
 
 				add_party_money(3000L);
 			}
@@ -220,7 +220,7 @@ signed short DNG06_handler(void)
 
 			l3 = random_schick(5);
 
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 
 			sprintf(g_dtp2, (l3 == 1 ? get_tx(12) : get_tx(13)), hero->alias);
 			GUI_output(g_dtp2);
@@ -235,7 +235,7 @@ signed short DNG06_handler(void)
 
 		} while (i == -1);
 
-		hero = (struct struct_hero*)get_first_hero_available_in_group();
+		hero = get_first_hero_available_in_group();
 
 		if (i == 1 || i == 3)
 		{
@@ -300,7 +300,7 @@ signed short DNG06_handler(void)
 				gs_dng06_lever_flag = 1;
 			} else {
 				/* liquid from ceiling causes damage */
-				hero = (struct struct_hero*)get_first_hero_available_in_group();
+				hero = get_first_hero_available_in_group();
 
 				sprintf(g_dtp2, get_tx(23), hero->alias);
 				GUI_output(g_dtp2);
@@ -340,7 +340,7 @@ signed short DNG06_handler(void)
 				gs_dng06_lever_flag = 1;
 			} else {
 				/* liquid from ceiling causes damage */
-				hero = (struct struct_hero*)get_first_hero_available_in_group();
+				hero = get_first_hero_available_in_group();
 
 				sprintf(g_dtp2,	get_tx(23), hero->alias);
 				GUI_output(g_dtp2);
@@ -351,7 +351,7 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(1,5,8) && target_pos != gs_dng_handled_pos && !gs_dng06_lever_flag)
 	{
-		hero = (struct struct_hero*)get_first_hero_available_in_group();
+		hero = get_first_hero_available_in_group();
 
 		/* large disk comes down from ceiling */
 		sprintf(g_dtp2,	get_tx(25), hero->alias);
@@ -375,7 +375,7 @@ signed short DNG06_handler(void)
 	{
 		if (GUI_bool(get_tx(28)))
 		{
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 
 			sprintf(g_dtp2,	get_tx(29), hero->alias,
 				GUI_get_ptr(hero->sex, 0),
@@ -502,7 +502,7 @@ void DNG09_pitfall(void)
 	struct struct_hero *hero_first;
 	struct struct_hero *hero_second;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (!gs_dng09_pit_flag)
 	{
@@ -521,7 +521,7 @@ void DNG09_pitfall(void)
 			GUI_output(get_tx(29));
 
 		} else {
-			hero_first = (struct struct_hero*)get_first_hero_available_in_group();
+			hero_first = get_first_hero_available_in_group();
 			hero_second = get_second_hero_available_in_group();
 
 			if (gs_group_member_counts[gs_current_group] >= 2)

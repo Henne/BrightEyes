@@ -85,7 +85,7 @@ void talk_tavern(void)
 
 			txt_id = (state_ptr->txt_id & 0x7fff);
 			format = get_tx(txt_id);
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 
 			if (txt_id == 52 || txt_id == 72 || txt_id == 78 || txt_id == 83 || txt_id == 89) {
 
@@ -259,7 +259,7 @@ void TLK_tavern(signed short answer)
 	signed short hero_pos;
 
 	old_state = g_dialog_state;
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (!old_state) {
 

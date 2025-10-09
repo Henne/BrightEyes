@@ -48,7 +48,7 @@ signed short DNG14_handler(void)
 
 	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (!(gs_day_timer % MINUTES(10)) &&
 		(gs_dng14_poisontrap == 2) &&

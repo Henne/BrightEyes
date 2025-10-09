@@ -33,7 +33,7 @@ void chest_protected_normal(void)
 	print_msg_with_first_hero(get_ttx(518));
 
 	/* the first hero gets wounded with 1W6 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), random_schick(6));
+	sub_hero_le(get_first_hero_available_in_group(), random_schick(6));
 }
 
 void chest_closed(void)
@@ -48,7 +48,7 @@ void chest_protected_heavy(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), dice_roll(2, 6, 0));
+	sub_hero_le(get_first_hero_available_in_group(), dice_roll(2, 6, 0));
 }
 
 void chest_poisoned1(void)
@@ -57,7 +57,7 @@ void chest_poisoned1(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
 	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_SHURINKNOLLENGIFT);
@@ -73,7 +73,7 @@ void chest_poisoned2(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
 	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_ARAX);
@@ -89,7 +89,7 @@ void chest_poisoned3(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 1W6 */
-	sub_hero_le((gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group()), dice_roll(1, 6, 0));
+	sub_hero_le((gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
 	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_KUKRIS);
@@ -105,7 +105,7 @@ void chest_protected_brutal(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 4W6 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), dice_roll(4, 6, 0));
+	sub_hero_le(get_first_hero_available_in_group(), dice_roll(4, 6, 0));
 }
 
 void chest_petrified(void)
@@ -114,7 +114,7 @@ void chest_petrified(void)
 	print_msg_with_first_hero(get_ttx(776));
 
 	/* save pointer of the first hero */
-	gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group();
+	gs_main_acting_hero = get_first_hero_available_in_group();
 
 	/* and make him petrified */
 	gs_main_acting_hero->flags.petrified = 1;
@@ -130,7 +130,7 @@ void chest_ignifax_normal(void)
 	print_msg_with_first_hero(get_ttx(777));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), dice_roll(2, 6, 0));
+	sub_hero_le(get_first_hero_available_in_group(), dice_roll(2, 6, 0));
 }
 
 void chest_ignifax_brutal(void)
@@ -139,7 +139,7 @@ void chest_ignifax_brutal(void)
 	print_msg_with_first_hero(get_ttx(777));
 
 	/* the first hero gets wounded with 4W6 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), dice_roll(4, 6, 0));
+	sub_hero_le(get_first_hero_available_in_group(), dice_roll(4, 6, 0));
 }
 
 void chest_ignifax_heavy(void)
@@ -148,7 +148,7 @@ void chest_ignifax_heavy(void)
 	print_msg_with_first_hero(get_ttx(777));
 
 	/* the first hero gets wounded with 3W6 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), dice_roll(3, 6, 0));
+	sub_hero_le(get_first_hero_available_in_group(), dice_roll(3, 6, 0));
 }
 
 void chest_crossbow_bolts(void)
@@ -157,7 +157,7 @@ void chest_crossbow_bolts(void)
 	print_msg_with_first_hero(get_ttx(788));
 
 	/* the first hero gets wounded with 2W6+6 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), dice_roll(2, 6, 6));
+	sub_hero_le(get_first_hero_available_in_group(), dice_roll(2, 6, 6));
 }
 
 void chest_cursed(void)
@@ -165,7 +165,7 @@ void chest_cursed(void)
 	/* cursed chest on the Totenschiff. 50D, but each good attribute of the group leader is decreased by 1.
 	 * can be cured by 'Verwandlung beenden' spell or a Praios/Hesinde miracle */
 	signed short i;
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (!hero->flags.transformed) {
 
@@ -187,7 +187,7 @@ void chest_fulminictus(void)
 	print_msg_with_first_hero(get_ttx(564));
 
 	/* the first hero gets wounded with 4W6+5 */
-	sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), dice_roll(4, 6, 5));
+	sub_hero_le(get_first_hero_available_in_group(), dice_roll(4, 6, 5));
 }
 
 
@@ -454,7 +454,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 {
 	signed short item_pos;
 	signed short test_val;
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if ((item_pos = hero_has_lockpicks(hero)) != -1) {
 
@@ -510,7 +510,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 void use_key_on_chest(struct struct_chest* chest)
 {
 	signed short key_pos;
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
 	if ((key_pos = get_item_pos(hero, ((struct struct_chest*)chest)->key)) != -1) {

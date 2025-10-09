@@ -207,7 +207,7 @@ void DNG_door(signed short action)
 						g_dng_refresh_direction = -1;
 					}
 
-					sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), 1);
+					sub_hero_le(get_first_hero_available_in_group(), 1);
 
 					if (get_second_hero_available_in_group())
 					{
@@ -220,7 +220,7 @@ void DNG_door(signed short action)
 			{
 				/* use lockpicks */
 
-				hero = (struct struct_hero*)get_first_hero_available_in_group();
+				hero = get_first_hero_available_in_group();
 
 				if ((lockpick_pos = hero_has_lockpicks(hero)) != -1)
 				{

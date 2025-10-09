@@ -189,7 +189,7 @@ signed short DNG03_handler(void)
 	{
 		j = 0;
 
-		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
+		if (test_skill(get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
 		{
 			j++;
 		}
@@ -203,7 +203,7 @@ signed short DNG03_handler(void)
 			j++;
 		}
 
-		hero = (struct struct_hero*)get_first_hero_available_in_group();
+		hero = get_first_hero_available_in_group();
 
 		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
@@ -514,7 +514,7 @@ void DNG03_chest12_loot(Bit8u* chest)
 
 	crystals = 0;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	/* count the crystals in the knapsack of the leader */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++)

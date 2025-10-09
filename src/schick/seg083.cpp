@@ -47,7 +47,7 @@ signed short DNG08_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,1,10) && target_pos != gs_dng_handled_pos && !gs_dng08_bed_00)
 	{
@@ -321,7 +321,7 @@ signed short DNG08_handler(void)
 			gs_dng08_secret_door != 2)
 	{
 		if (gs_dng08_secret_door ||
-			test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 1) > 0)
+			test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 1) > 0)
 		{
 			gs_dng08_secret_door = 1;
 
@@ -397,7 +397,7 @@ void DNG08_search_bed(void)
 
 	money = counter = 0;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	slot = get_free_mod_slot();
 
@@ -450,7 +450,7 @@ void DNG08_search_bed(void)
 
 void DNG08_chest01_trap(void)
 {
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	sprintf(g_dtp2, get_tx(11), hero->alias, GUI_get_ptr(hero->sex, 1));
 	GUI_output(g_dtp2);
@@ -492,7 +492,7 @@ void DNG08_chest02_open(struct struct_chest* chest)
 {
 	if (!gs_dng08_chest2_looted)
 	{
-		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SPRACHEN, 2) > 0)
+		if (test_skill(get_first_hero_available_in_group(), TA_SPRACHEN, 2) > 0)
 		{
 			GUI_input(get_tx(27), 10);
 
@@ -515,7 +515,7 @@ void DNG08_chest02_open(struct struct_chest* chest)
 
 void DNG08_chest03_open(struct struct_chest* chest)
 {
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0)
 	{
@@ -536,7 +536,7 @@ void DNG08_chest03_open(struct struct_chest* chest)
 
 void DNG08_chest04_open(struct struct_chest* chest)
 {
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 
@@ -550,7 +550,7 @@ void DNG08_chest04_open(struct struct_chest* chest)
 
 void DNG08_chest05_open(struct struct_chest* chest)
 {
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 

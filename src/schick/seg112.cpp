@@ -35,7 +35,7 @@ void tevent_067(void)
 	signed short count;
 	struct struct_hero *hero;
 
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 && !gs_tevent067_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 && !gs_tevent067_flag) ||
 		gs_tevent067_flag)
 	{
 		GUI_output(get_tx2(90));
@@ -69,7 +69,7 @@ void tevent_067(void)
 
 				GUI_output(get_tx2(97));
 
-				hero = (struct struct_hero*)get_first_hero_available_in_group(); //TODO: no effect
+				hero = get_first_hero_available_in_group(); //TODO: no effect
 
 				add_party_money(7L);
 
@@ -124,7 +124,7 @@ void tevent_068(void)
 
 void tevent_069(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !gs_tevent069_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !gs_tevent069_flag) ||
 		gs_tevent069_flag)
 	{
 		TRV_found_camp_place(0);
@@ -136,12 +136,12 @@ void tevent_070(void)
 {
 	signed short l_si;
 
-	if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 ||
+	if (test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 ||
 		gs_tevent070_flag)
 	{
 		gs_tevent070_flag = 1;
 
-		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 ||
+		if (test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 ||
 			gs_tevent070_herb_flag)
 		{
 			gs_tevent070_herb_flag = 1;
@@ -152,7 +152,7 @@ void tevent_070(void)
 			l_si = TRV_found_camp_place(0);
 		}
 
-		if ((l_si && !gs_tevent070_trail_flag && test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0) ||
+		if ((l_si && !gs_tevent070_trail_flag && test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0) ||
 			gs_tevent070_trail_flag != 0) {
 
 			gs_tevent070_trail_flag = 1;
@@ -183,7 +183,7 @@ void tevent_071(void)
 	have_raft = 0;
 
 	/* Perception + 8, Sinnesschaerfe + 8 */
-	if (test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 &&
+	if (test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 &&
 		!gs_tevent071_flag)
 	{
 		gs_tevent071_flag = 1;
@@ -320,7 +320,7 @@ void tevent_unused01(void)
 
 	has_raft = 0;
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if ((test_skill(hero, TA_SINNESSCHAERFE, 8) > 0 && !gs_teventu01_flag) || gs_teventu01_flag)
 	{
@@ -382,7 +382,7 @@ void tevent_unused01(void)
 
 void tevent_072(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent072_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent072_flag) ||
 		gs_tevent072_flag != 0)
 	{
 		TRV_found_camp_place(1);
@@ -444,7 +444,7 @@ void tevent_074(void)
 
 			/* try to flee */
 
-			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 2) <= 0)
+			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 2) <= 0)
 			{
 				/* failed, so fight */
 				g_fig_initiative = 1;
@@ -503,7 +503,7 @@ void tevent_074(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib((struct struct_hero*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib(get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					g_fig_initiative = 1;
@@ -610,7 +610,7 @@ void tevent_076(void)
 
 	if (!gs_tevent076_flag) {
 
-		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 5) > 0)
+		if (test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 5) > 0)
 		{
 			gs_tevent076_flag = (1);
 
@@ -670,7 +670,7 @@ void tevent_077(void)
 
 		} else if (answer == 2) {
 
-			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 6) <= 0) {
+			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 6) <= 0) {
 
 				/* test failed, so fight */
 				g_fig_initiative = 1;
@@ -730,7 +730,7 @@ void tevent_077(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib((struct struct_hero*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib(get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					g_fig_initiative = 1;

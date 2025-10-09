@@ -39,7 +39,7 @@ signed short DNG13_handler(void)
 
 	pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (!(gs_day_timer % MINUTES(5)) &&
 		(pos == DNG_POS(0,5,1) || pos == DNG_POS(0,6,1) || pos == DNG_POS(0,7,1) || pos == DNG_POS(0,8,1)) &&

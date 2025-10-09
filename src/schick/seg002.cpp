@@ -5429,7 +5429,7 @@ void sub_group_le(signed short le)
  *
  * \return a pointer to the first available hero. If none in available it returns a pointer to the first hero.
  */
-Bit8u* get_first_hero_available_in_group(void)
+struct struct_hero* get_first_hero_available_in_group(void)
 {
 	signed short i;
 	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
@@ -5440,11 +5440,11 @@ Bit8u* get_first_hero_available_in_group(void)
 		if (hero_i->typus && (hero_i->group_no == gs_current_group) &&
 			!hero_dead((Bit8u*)hero_i) && check_hero((Bit8u*)hero_i))
 		{
-			return (Bit8u*)hero_i;
+			return hero_i;
 		}
 	}
 
-	return (Bit8u*)get_hero(0);
+	return (struct struct_hero*)get_hero(0);
 }
 
 /**

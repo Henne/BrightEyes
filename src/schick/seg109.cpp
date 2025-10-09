@@ -120,7 +120,7 @@ void TRV_found_herb_place(signed short a0)
 {
 	signed short answer;
 	signed short randval;
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	randval = random_schick(5) + 2;
 
@@ -240,7 +240,7 @@ void TRV_found_replenish_place(signed short a0)
 				g_wildcamp_guardstatus[hero_pos] = 0;
 		}
 #else
-		hero_pos = get_hero_index((struct struct_hero*)get_first_hero_available_in_group());
+		hero_pos = get_hero_index(get_first_hero_available_in_group());
 
 		g_wildcamp_replstatus[hero_pos] =
 			g_wildcamp_herbstatus[hero_pos] =
@@ -312,7 +312,7 @@ signed short TRV_enter_hut_question(void)
 signed short TRV_follow_trail_question(void)
 {
 	signed short answer;
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	sprintf(g_dtp2, get_tx(25), hero->alias);
 
@@ -504,7 +504,7 @@ void tevent_003(void)
 
 void tevent_004(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !gs_tevent004_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !gs_tevent004_flag) ||
 		gs_tevent004_flag)
 	{
 		gs_tevent004_flag = 1;
@@ -625,7 +625,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 void tevent_005(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent005_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent005_flag) ||
 		gs_tevent005_flag)
 	{
 		TRV_found_camp_place(1);
@@ -763,7 +763,7 @@ void TRV_barrier(signed short text_start)
 /* Tjeula <-> Breida: kleiner Bachlauf */
 void tevent_008(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent008_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent008_flag) ||
 		gs_tevent008_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -773,7 +773,7 @@ void tevent_008(void)
 
 void tevent_009(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||
 		gs_tevent009_flag)
 	{
 		g_gather_herbs_special = 60;

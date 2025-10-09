@@ -303,7 +303,7 @@ void DNG01_chest06_loot(Bit8u* chest)
 	/* Original-Bug: The string 14 from SHIP.DTX needs a pointer to the name of the hero, not an integer.
 	 */
 #ifdef M302de_ORIGINAL_BUGFIX
-	sprintf(g_text_output_buf, get_tx(14), ((struct struct_hero*)get_first_hero_available_in_group())->alias);
+	sprintf(g_text_output_buf, get_tx(14), (get_first_hero_available_in_group())->alias);
 #else
 	sprintf(g_text_output_buf, get_tx(14), 10);
 #endif

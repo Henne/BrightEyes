@@ -486,7 +486,7 @@ void PHX_alrik_derondan(void)
 		} else {
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61),
-				(test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) ? get_tx2(92) : get_tx2(78), 0);
+				(test_attrib(get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) ? get_tx2(92) : get_tx2(78), 0);
 		}
 	}
 

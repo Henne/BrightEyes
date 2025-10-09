@@ -471,7 +471,7 @@ void octopus_attack(void)
 	GUI_output(get_tx2(32));
 
 	g_basepos_x = g_basepos_y = 0;
-	status_menu(get_hero_index((struct struct_hero*)get_first_hero_available_in_group()));
+	status_menu(get_hero_index(get_first_hero_available_in_group()));
 	resume_traveling();
 }
 
@@ -551,7 +551,7 @@ void pirates_attack(void)
 
 	g_basepos_x = g_basepos_y = 0;
 
-	status_menu(get_hero_index((struct struct_hero*)get_first_hero_available_in_group()));
+	status_menu(get_hero_index(get_first_hero_available_in_group()));
 
 	resume_traveling();
 }
@@ -732,7 +732,7 @@ void TLK_way_to_ruin(signed short state)
 	struct struct_hero *hero;
 	struct struct_hero *hero2;
 
-	hero2 = (struct struct_hero*)get_first_hero_available_in_group();
+	hero2 = get_first_hero_available_in_group();
 
 	if (!state) {
 

@@ -50,7 +50,7 @@ signed short DNG10_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if ((target_pos == DNG_POS(0,1,1) || target_pos == DNG_POS(0,3,2)) && target_pos != gs_dng_handled_pos)
 	{

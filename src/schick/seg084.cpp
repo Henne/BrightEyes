@@ -361,7 +361,7 @@ signed short DNG09_handler(void)
 	} else if (target_pos == DNG_POS(1,4,2) && (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == WEST && gs_dng09_secretdoor1 != 2)
 	{
-		if (gs_dng09_secretdoor1 || test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
+		if (gs_dng09_secretdoor1 || test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
 		{
 			gs_dng09_secretdoor1 = 1;
 
@@ -392,7 +392,7 @@ signed short DNG09_handler(void)
 	} else if (target_pos == DNG_POS(1,5,11) && (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == EAST && gs_dng09_secretdoor2 != 2)
 	{
-		if (gs_dng09_secretdoor2 || test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
+		if (gs_dng09_secretdoor2 || test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
 		{
 			gs_dng09_secretdoor2 = 1;
 
@@ -513,7 +513,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 
 			} while (answer == -1);
 
-			hero = (struct struct_hero*)get_first_hero_available_in_group();
+			hero = get_first_hero_available_in_group();
 
 			if (answer == 1)
 			{

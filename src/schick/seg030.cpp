@@ -324,7 +324,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (g_dialog_informer == 0) {
 
-						hero = (struct struct_hero*)get_first_hero_available_in_group();
+						hero = get_first_hero_available_in_group();
 
 						if (!txt_id || txt_id == 18) {
 
@@ -422,7 +422,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				} else if (g_tlk_id == 17) {
 
 
-					hero = (struct struct_hero*)get_first_hero_available_in_group();
+					hero = get_first_hero_available_in_group();
 
 					if (!txt_id || txt_id == 2 || txt_id == 25 || txt_id == 31 ||
 						txt_id == 32 || txt_id == 60 || txt_id == 78 || txt_id == 87)

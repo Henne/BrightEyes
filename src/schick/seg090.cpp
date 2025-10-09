@@ -42,7 +42,7 @@ signed short DNG12_handler(void)
 	g_textbox_width = 7;
 	target_pos = DNG_POS(gs_dungeon_level,gs_x_target,gs_y_target);
 
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 
 	if (gs_day_timer % MINUTES(5) == 0) {
 

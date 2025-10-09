@@ -757,7 +757,7 @@ void DNG_stub6(void)
 
 			if (l_di == 2) {
 
-				hero1 = (struct struct_hero*)get_first_hero_available_in_group();
+				hero1 = get_first_hero_available_in_group();
 
 				hero2 = get_second_hero_available_in_group();
 

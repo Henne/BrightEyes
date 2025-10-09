@@ -111,7 +111,7 @@ void do_inn(void)
 	if (gs_group_member_counts[gs_current_group] == 1) {
 		/* current group consists only of a single hero */
 
-		hero = (struct struct_hero*)get_first_hero_available_in_group();
+		hero = get_first_hero_available_in_group();
 
 		if (hero->flags.brewing) {
 
@@ -199,7 +199,7 @@ void do_inn(void)
 	}
 #else
 	/* fix Original-Bug 8, 9, 10, 20 */
-	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	hero = get_first_hero_available_in_group();
 	if (hero->flags.brewing) {
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
@@ -620,7 +620,7 @@ void do_inn(void)
 
 void TLK_herberg(signed short state)
 {
-	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (!state) {
 		g_dialog_next_state = (gs_herberg_kicked_flags[gs_current_typeindex] ? 1 : 2);

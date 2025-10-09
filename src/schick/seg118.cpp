@@ -295,7 +295,7 @@ void tevent_078(void)
 
 			do {
 				/* ORIENTATION + 8 */
-				if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 8) > 0)
+				if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 8) > 0)
 				{
 					/* success, you found a way */
 					timewarp(HOURS(5));
@@ -360,7 +360,7 @@ void tevent_078(void)
 
 void tevent_079(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent079_flag) ||
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent079_flag) ||
 		gs_tevent079_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -373,7 +373,7 @@ void tevent_051(void)
 {
 	signed short answer;
 
-	if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent051_flag)
+	if (test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent051_flag)
 	{
 		gs_tevent051_flag = 1;
 
@@ -465,7 +465,7 @@ void tevent_052(void)
 
 void tevent_120(void)
 {
-	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent120_flag) || gs_tevent120_flag)
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent120_flag) || gs_tevent120_flag)
 	{
 		gs_tevent120_flag = 1;
 		TRV_found_camp_place(1);
