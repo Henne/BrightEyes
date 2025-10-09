@@ -57,7 +57,7 @@ struct struct_hero* get_first_brewing_hero(void)
 # endif
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no != gs_current_group) &&
-			hero_brewing((Bit8u*)hero) && (hero->alchemy_inn_id == gs_current_typeindex))
+			hero->flags.brewing && (hero->alchemy_inn_id == gs_current_typeindex))
 		{
 			return hero;
 		}
@@ -113,7 +113,7 @@ void do_inn(void)
 
 		hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-		if (hero_brewing((Bit8u*)hero)) {
+		if (hero->flags.brewing) {
 
 			draw_status_line();
 
@@ -200,7 +200,7 @@ void do_inn(void)
 #else
 	/* fix Original-Bug 8, 9, 10, 20 */
 	hero = (struct struct_hero*)get_first_hero_available_in_group();
-	if (hero_brewing((Bit8u*)hero)) {
+	if (hero->flags.brewing) {
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
 		/*
@@ -236,7 +236,7 @@ void do_inn(void)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = 0; i < 7; i++, hero++) {
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no != gs_current_group) &&
-				hero_brewing((Bit8u*)hero) && (hero->alchemy_inn_id == gs_current_typeindex))
+				hero->flags.brewing && (hero->alchemy_inn_id == gs_current_typeindex))
 			{
 				draw_status_line();
 
@@ -394,7 +394,7 @@ void do_inn(void)
 
 					for (i = 0, hero2 = (struct struct_hero*)get_hero(0); i <= 6; i++, hero2++) {
 
-						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) && !hero_dead((Bit8u*)hero2))
+						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) && !hero2->flags.dead)
 						{
 							portion_size = (21 - inn->quality) * 20;
 							if (portion_size > 100) {

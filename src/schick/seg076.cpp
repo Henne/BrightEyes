@@ -877,7 +877,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 			for (l_di = 0; l_di <= 6; l_di++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero))
+					!hero->flags.dead)
 				{
 					/* 1 unit of water <=> 10 Points of thirst */
 
@@ -914,7 +914,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 			for (hero_refilled_counter = l_di = 0; l_di <= 6; l_di++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero))
+					!hero->flags.dead)
 				{
 					for (item_pos = hero_refilled = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++)
 					{

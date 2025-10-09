@@ -38,7 +38,7 @@ signed short get_hero_CH_best(void)
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
-			(!hero_dead((Bit8u*)hero_i)) &&	(hero_i->attrib[ATTRIB_CH].current > ch_val))
+			(!hero_i->flags.dead) &&	(hero_i->attrib[ATTRIB_CH].current > ch_val))
 		{
 			/* check if CH value is higher */
 
@@ -68,7 +68,7 @@ signed short get_hero_KK_best(void)
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
-			(!hero_dead((Bit8u*)hero_i)) &&	(hero_i->attrib[ATTRIB_KK].current > kk_val))
+			(!hero_i->flags.dead) &&	(hero_i->attrib[ATTRIB_KK].current > kk_val))
 		{
 			/* check if KK is higher */
 
@@ -134,7 +134,7 @@ signed short hero_is_poisoned(struct struct_hero *hero)
  */
 void hero_gets_poisoned(struct struct_hero *hero, const signed short poison)
 {
-	if (!hero_dead((Bit8u*)hero)) {
+	if (!hero->flags.dead) {
 
 		hero->poison[poison][0] = -1;
 		hero->poison[poison][1] = 0;
@@ -158,7 +158,7 @@ void hero_gets_diseased(struct struct_hero *hero, const signed short disease)
 		return;
 #endif
 
-	if (!hero_dead((Bit8u*)hero)) {
+	if (!hero->flags.dead) {
 
 #if !defined(__BORLANDC__)
 		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease + 0x193));
@@ -226,7 +226,7 @@ signed short check_heroes_KK(const signed short val)
 	hero = (struct struct_hero*)get_hero(1);
 
 	/* check class, group and dead status of hero in slot 2*/
-	if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
+	if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
 		sum += hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod;
 	}
 
@@ -602,7 +602,7 @@ signed short count_heroes_in_group(void)
 	for (hero_i = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group and dead */
-		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) && !hero_dead((Bit8u*)hero_i)) {
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) && !hero_i->flags.dead) {
 
 			retval++;
 		}

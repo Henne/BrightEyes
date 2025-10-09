@@ -373,7 +373,7 @@ void TRV_ford_test(signed short mod, signed short time)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 		{
 			/* Original-Bugfix: tests fail if their result is lower or equal than zero */
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -537,7 +537,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	for (i = l_di = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
+			!hero->flags.dead && (test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
 		{
 			l_di++;
 		}

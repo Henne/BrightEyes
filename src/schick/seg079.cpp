@@ -124,7 +124,7 @@ signed short DNG03_handler(void)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) &&
+				!hero->flags.dead &&
 				(test_skill(hero, TA_KLETTERN, 2) <= 0))
 			{
 				sprintf(g_dtp2,	get_tx(6), hero->alias,	GUI_get_ptr(hero->sex, 0));
@@ -197,7 +197,7 @@ signed short DNG03_handler(void)
 		if ((hero = get_second_hero_available_in_group()) &&
 			(hero->typus != HERO_TYPE_NONE) &&
 			(hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) &&
+			!hero->flags.dead &&
 			(test_skill(hero, TA_GEFAHRENSINN, 4) <= 0))
 		{
 			j++;
@@ -231,7 +231,7 @@ signed short DNG03_handler(void)
 			(j == 2 ||
 			(hero->typus != HERO_TYPE_NONE) &&
 			(hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) &&
+			!hero->flags.dead &&
 			(test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
 
@@ -564,7 +564,7 @@ void DNG03_chest11_loot(Bit8u*)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero))
+				!hero->flags.dead)
 			{
 				l_si++;
 

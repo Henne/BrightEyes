@@ -238,7 +238,7 @@ signed short DNG10_handler(void)
 			hero = (struct struct_hero*)get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 				{
 					sub_hero_le(hero, random_schick(6));
 				}
@@ -314,7 +314,7 @@ signed short DNG10_handler(void)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) &&
+						!hero->flags.dead &&
 						(test_skill(hero, TA_SCHLEICHEN, hero->rs_bonus1 + 3) <= 0))
 					{
 						result++;

@@ -131,7 +131,7 @@ void disease_effect(void)
 					for (j = 0; j <= 6; j++, hero2++) {
 						if ((hero2->typus != HERO_TYPE_NONE) &&
 							(hero2->group_no == gs_current_group) &&
-							!hero_dead((Bit8u*)hero2) &&
+							!hero2->flags.dead &&
 							(hero2 != hero) &&
 							(random_schick(100) <= 20))
 						{
@@ -233,7 +233,7 @@ void disease_effect(void)
 
 					for (j = 0; j <= 6; j++, hero2++) {
 						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) &&
-							!hero_dead((Bit8u*)hero2) && (hero2 != hero) &&	(random_schick(100) <= 20))
+							!hero2->flags.dead && (hero2 != hero) &&	(random_schick(100) <= 20))
 						{
 							hero_gets_diseased(hero2, 3);
 						}
@@ -361,7 +361,7 @@ void disease_effect(void)
 							hero2 = (struct struct_hero*)get_hero(j);
 
 							if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) &&
-								!hero_dead((Bit8u*)hero2) && (hero2 != hero) && (random_schick(100) <= 5))
+								!hero2->flags.dead && (hero2 != hero) && (random_schick(100) <= 5))
 							{
 								hero_gets_diseased(hero2, 5);
 							}
@@ -471,7 +471,7 @@ void disease_effect(void)
 
 						if ((hero2->typus != HERO_TYPE_NONE) &&
 							(hero2->group_no == gs_current_group) &&
-							!hero_dead((Bit8u*)hero2) &&
+							!hero2->flags.dead &&
 							(hero2 != hero) &&
 							(random_schick(100) <= 10))
 						{

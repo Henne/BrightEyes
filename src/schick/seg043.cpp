@@ -95,7 +95,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 			g_fig_target_grammar.type = 2;
 			g_fig_target_grammar.id = monster->enemy_id - 1;
 
-			if (hero_dead((Bit8u*)hero) || !hero->typus) {
+			if (hero->flags.dead || !hero->typus) {
 				return;
 			}
 
@@ -212,12 +212,12 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 				}
 
 				/* 'Chamaelioni' spell is active on the target hero => AT-5 */
-				if (hero_chamaelioni((Bit8u*)hero) == 1) {
+				if (hero->flags.chamaelioni == 1) {
 					attacker_at -= 5;
 				}
 
 				/* 'Duplicatus' spell is active on the target hero => AT/2 */
-				if (hero_duplicatus((Bit8u*)hero) == 1) {
+				if (hero->flags.duplicatus == 1) {
 					attacker_at /= 2;
 				}
 			} else {
@@ -353,7 +353,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 											FIG_add_msg(8, damage);
 
-											if (hero_dead((Bit8u*)hero)) {
+											if (hero->flags.dead) {
 												g_defender_dead = 1;
 											}
 										}
@@ -387,7 +387,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 									FIG_add_msg(8, damage);
 
-									if (hero_dead((Bit8u*)hero)) {
+									if (hero->flags.dead) {
 										g_defender_dead = 1;
 									}
 
@@ -465,7 +465,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								FIG_add_msg(8, damage);
 
-								if (hero_dead((Bit8u*)hero)) {
+								if (hero->flags.dead) {
 									g_defender_dead = 1;
 								}
 							}
@@ -537,7 +537,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						FIG_add_msg(8, damage);
 
-						if (hero_dead((Bit8u*)hero)) {
+						if (hero->flags.dead) {
 							g_defender_dead = 1;
 						}
 					}
@@ -845,7 +845,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 
 				FIG_add_msg(8, damage);
 
-				if (hero_dead((Bit8u*)target_hero)) {
+				if (target_hero->flags.dead) {
 					g_defender_dead = 1;
 				}
 			}
@@ -877,7 +877,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 
 				FIG_add_msg(8, 20);
 
-				if (hero_dead((Bit8u*)target_hero)) {
+				if (target_hero->flags.dead) {
 					g_defender_dead = 1;
 				}
 			}

@@ -372,7 +372,7 @@ void drink_while_drinking(signed short amount)
 	hero = (struct struct_hero*)get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead) {
 
 			/* sub fluid amount */
 			hero->thirst = hero->thirst - amount;
@@ -403,7 +403,7 @@ void eat_while_drinking(signed short amount)
 	hero = (struct struct_hero*)get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead) {
 
 			/* sub food amount */
 			hero->hunger = hero->hunger - amount;

@@ -421,7 +421,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 		hero = (struct struct_hero*)get_hero(i);
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero) && !hero_dead((Bit8u*)hero) &&
+			!hero->flags.dead && !hero->flags.gods_pissed && !hero->flags.dead &&
 			((le_diff = hero->le_max - hero->le) > le))
 		{
 			le = le_diff;
@@ -457,10 +457,10 @@ void miracle_resurrect(char *str)
 
 		struct struct_hero *hero = (struct struct_hero*)get_hero(i);
 
-		if (hero_dead((Bit8u*)hero) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
+		if (hero->flags.dead && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
 		{
 			/* resurrect from the dead */
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfe); /* unset 'dead' flag */
+			hero->flags.dead = 0;
 
 			/* add 7 LE */
 			add_hero_le(hero, 7);
@@ -493,7 +493,7 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
+			!hero->flags.dead && !hero->flags.gods_pissed)
 		{
 			slot = get_free_mod_slot();
 			ptr = (Bit8u*)hero;
@@ -521,7 +521,7 @@ void miracle_weapon(char *str, signed short mode)
 
 		struct struct_hero *hero = (struct struct_hero*)get_hero(j);
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead && !hero->flags.gods_pissed)
 		{
 			for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++)
 			{

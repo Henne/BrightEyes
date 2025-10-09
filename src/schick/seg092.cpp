@@ -117,7 +117,7 @@ void chest_petrified(void)
 	gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	/* and make him petrified */
-	or_ptr_bs((Bit8u*)gs_main_acting_hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+	gs_main_acting_hero->flags.petrified = 1;
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -167,9 +167,9 @@ void chest_cursed(void)
 	signed short i;
 	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	if (!hero_transformed((Bit8u*)hero)) {
+	if (!hero->flags.transformed) {
 
-		or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x40); /* set 'transformed' flag */
+		hero->flags.transformed = 1;
 
 		/* decrement each good attribute */
 		for (i = 0; i <= 6; i++) {

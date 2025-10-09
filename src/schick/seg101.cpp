@@ -444,7 +444,7 @@ void spell_paralue(void)
 
 				strcpy(g_dtp2, get_tx(112));
 			} else {
-				or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x4); /* set 'petrified' flag */
+				get_spelltarget()->flags.petrified = 1;
 
 				/* prepare message */
 				sprintf(g_dtp2, get_tx(103), get_spelltarget()->alias);
@@ -709,7 +709,7 @@ void spell_silentium(void)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !(hero_dead((Bit8u*)hero)))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !(hero->flags.dead))
 		{
 			/* get a free mod_slot */
 			slot = get_free_mod_slot();

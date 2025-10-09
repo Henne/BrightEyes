@@ -536,7 +536,7 @@ void THO_academy(void)
 	hero = (struct struct_hero*)get_hero(0);
 	for (item_pos = cursed_hero_pos = 0; item_pos <= 6; item_pos++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && hero_renegade((Bit8u*)hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && hero->flags.renegade)
 		{
 			cursed_hero_pos = item_pos;
 			break;
@@ -598,8 +598,7 @@ void THO_academy(void)
 
 							gs_academy_daily_curse = 1;
 
-							/* unset 'renegate' flag */
-							and_ptr_bs((Bit8u*)get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf);
+							((struct struct_hero*)get_hero(cursed_hero_pos))->flags.renegade = 0;
 
 						} else {
 							GUI_input(get_tx2(70), 0);
@@ -616,7 +615,7 @@ void THO_academy(void)
 
 					gs_academy_daily_curse = 1;
 
-					and_ptr_bs((Bit8u*)get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf); /* unset 'renegate' flag */
+					((struct struct_hero*)get_hero(cursed_hero_pos))->flags.renegade = 0;
 
 				} else {
 					GUI_input(get_ttx(401), 0);
@@ -720,7 +719,7 @@ signed short academy_get_equal_item(signed short price)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = 0; i < 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 			{
 				for (item_pos = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++) {
 

@@ -145,7 +145,7 @@ void do_wildcamp(void)
 						}
 
 						if (answer != -1) {
-							if (hero_brewing(get_hero(answer))) {
+							if (((struct struct_hero*)get_hero(answer))->flags.brewing) {
 								GUI_output(get_ttx(730));
 								answer = -1;
 							}
@@ -180,7 +180,7 @@ void do_wildcamp(void)
 
 			if (answer != -1) {
 
-				if (hero_brewing(get_hero(answer))) {
+				if (((struct struct_hero*)get_hero(answer))->flags.brewing) {
 					GUI_output(get_ttx(730));
 					answer = -1;
 				}
@@ -220,7 +220,7 @@ void do_wildcamp(void)
 
 			answer = select_hero_ok(get_ttx(326));
 
-			if (answer != -1 && hero_brewing(get_hero(answer))) {
+			if (answer != -1 && ((struct struct_hero*)get_hero(answer))->flags.brewing) {
 				GUI_output(get_ttx(730));
 				answer = -1;
 			}
@@ -485,7 +485,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 	g_skilled_hero_pos = get_skilled_hero_pos(TA_WILDNISLEBEN);
 	hero_pos = select_hero_ok(get_ttx(322));
 
-	if (hero_pos != -1 && hero_brewing(get_hero(hero_pos))) {
+	if (hero_pos != -1 && ((struct struct_hero*)get_hero(hero_pos))->flags.brewing) {
 
 		GUI_output(get_ttx(730));
 		hero_pos = -1;
@@ -527,7 +527,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
 							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_no == gs_current_group) &&
-								!hero_dead((Bit8u*)hero2))
+								!hero2->flags.dead)
 							{
 								hero2->thirst = 0;
 
@@ -557,7 +557,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
 							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_no == gs_current_group) &&
-								!hero_dead((Bit8u*)hero2))
+								!hero2->flags.dead)
 							{
 								hero2->hunger = 0;
 							}

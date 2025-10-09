@@ -293,11 +293,9 @@ signed short FIG_get_first_active_hero(void)
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus != HERO_TYPE_NONE) &&
-			(hero_i->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero_i) && !hero_petrified((Bit8u*)hero_i) &&
-			!hero_renegade((Bit8u*)hero_i) && !hero_scared((Bit8u*)hero_i) &&
-			!hero_unconscious((Bit8u*)hero_i))
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
+			!hero_i->flags.dead && !hero_i->flags.petrified && !hero_i->flags.renegade &&
+			!hero_i->flags.scared && !hero_i->flags.unconscious)
 		{
 			return i;
 		}
@@ -326,7 +324,7 @@ unsigned short FIG_all_heroes_escaped(void)
 		for (i = 0; i <= 6; i++, hero_i++) {
 
 			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero_i) && (hero_i->action_id == FIG_ACTION_FLEE))
+				!hero_i->flags.dead && (hero_i->action_id == FIG_ACTION_FLEE))
 			{
 				return 1;
 			}
@@ -544,15 +542,14 @@ void FIG_do_round(void)
 
 			hero->actions--;
 
-			if (hero_asleep((Bit8u*)hero) && !hero_dead((Bit8u*)hero)) {
+			if (hero->flags.asleep && !hero->flags.dead) {
 
 				/* hero asleep and is not dead: 74% chance of waking up */
 
 				if (random_schick(100) < 75) {
 
 					/* awake him (or her) */
-
-					and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'sleep' flag */
+					hero->flags.asleep = 0;
 
 					fighter_ptr = FIG_get_fighter(hero->fighter_id);
 
@@ -1085,12 +1082,11 @@ signed short do_fight(signed short fight_id)
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 			{
-
-				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x7f); /* unset 'unconscious' flag */
-				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'sleeps' flag */
-				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xef); /* unset 'chamaelioni' flag */
-				and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xfb); /* unset 'duplicatus' flag */
-				and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xfe); /* unset 'scared' flag */
+				hero->flags.tied = 0;
+				hero->flags.asleep = 0;
+				hero->flags.chamaelioni = 0;
+				hero->flags.duplicatus = 0;
+				hero->flags.scared = 0;
 
 				hero->blind_timer = 0;				/* unset blindness (set counter to 0) */
 				hero->ecliptifactus_timer = 0;			/* unset 'Ecliptifactus' (set counter to 0) */

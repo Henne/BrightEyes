@@ -33,7 +33,7 @@ void poison_effect(void)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && !hero_dead((Bit8u*)hero)) {
+		if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead) {
 
 
 			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_SHURINKNOLLENGIFT];
@@ -183,7 +183,7 @@ void poison_effect(void)
 					hero->attrib[ATTRIB_TA].current = hero->attrib[ATTRIB_TA].current + 2;
 					hero->attrib[ATTRIB_NG].current = hero->attrib[ATTRIB_NG].current + 2;
 					hero->attrib[ATTRIB_JZ].current = hero->attrib[ATTRIB_JZ].current + 2;
-					or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 1); /* set 'scared' flag */
+					hero->flags.scared = 1;
 
 					sprintf(g_dtp2, get_ttx(39), hero->alias);
 
@@ -215,7 +215,7 @@ void poison_effect(void)
 					hero->attrib[ATTRIB_NG].current = hero->attrib[ATTRIB_NG].current - 2;
 					hero->attrib[ATTRIB_JZ].current = hero->attrib[ATTRIB_JZ].current - 2;
 
-					and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xfe); /* unset 'scared' flag */
+					hero->flags.scared = 0;
 
 					sprintf(g_dtp2, get_ttx(40), hero->alias);
 
@@ -231,7 +231,8 @@ void poison_effect(void)
 				if (!poison_ptr[4]) {
 
 					poison_ptr[4] = 1;
-					or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x02); /* set 'asleep' flag */
+
+					hero->flags.asleep = 1;
 
 					sprintf(g_dtp2, get_ttx(41), hero->alias);
 
@@ -250,7 +251,8 @@ void poison_effect(void)
 				poison_ptr[0] = 0;
 				poison_ptr[1] = 0;
 				poison_ptr[4] = 0;
-				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+
+				hero->flags.asleep = 0;
 
 				sprintf(g_dtp2, get_ttx(42), hero->alias);
 

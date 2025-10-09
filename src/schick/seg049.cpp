@@ -628,7 +628,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 	signed short diff;
 	signed short tmp;
 
-	if (!hero_dead((Bit8u*)hero) && (hero->staffspell_timer == 0) && (hero->recipe_timer == 0))
+	if (!hero->flags.dead && (hero->staffspell_timer == 0) && (hero->recipe_timer == 0))
 	{
 
 		if (g_travel_by_ship && (random_schick(100) < 10)) {
@@ -646,7 +646,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 					hero->ruhe_koerper--;
 				}
 
-				if (!hero_brewing((Bit8u*)hero)) {
+				if (!hero->flags.brewing) {
 
 					le_regen = random_schick(6) + quality;
 					ae_regen = random_schick(6) + quality;

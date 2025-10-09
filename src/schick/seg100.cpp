@@ -192,23 +192,20 @@ void spell_sensibar(void)
 /* Illusion */
 void spell_chamaelioni(void)
 {
-	or_ptr_bs(get_spelluser() + HERO_FLAGS1, 0x10); /* set 'chamaelioni' flag */
+	((struct struct_hero*)get_spelluser())->flags.chamaelioni = 1;
 
 	/* prepare the message */
 	sprintf(g_dtp2,	get_tx(83), ((struct struct_hero*)get_spelluser())->alias,
 		(GUI_get_ptr(((struct struct_hero*)get_spelluser())->sex, 0)));
-
 }
 
 void spell_duplicatus(void)
 {
-	/* set the flag for this spell */
-	or_ptr_bs(get_spelluser() + HERO_FLAGS2, 0x04); /* set 'duplicatus' flag
+	((struct struct_hero*)get_spelluser())->flags.duplicatus = 1;
 
 	/* prepare the message */
 	sprintf(g_dtp2, get_tx(84), ((struct struct_hero*)get_spelluser())->alias,
 		GUI_get_ptr(((struct struct_hero*)get_spelluser())->sex, 0));
-
 }
 
 void spell_harmlos(void)

@@ -48,7 +48,7 @@ void MON_do_spell_damage(signed short damage)
 			FIG_add_msg(8, damage);
 
 			/* check if someone died */
-			if (hero_dead((Bit8u*)get_spelltarget())) {
+			if (get_spelltarget()->flags.dead) {
 				g_defender_dead = 1;
 			}
 
@@ -412,7 +412,7 @@ void mspell_bannbaladin(void)
 	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
-	or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS2, 0x08); /* set 'tame' flag */
+	get_spelltarget()->flags.tame = 1;
 
 	/* prepare message */
 	sprintf(g_dtp2, get_tx(115), get_spelltarget()->alias);
@@ -424,7 +424,7 @@ void mspell_boeser_blick(void)
 	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
-	or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x20); /* set 'renegade' flag */
+	get_spelltarget()->flags.renegade = 1;
 
 	/* prepare message */
 	sprintf(g_dtp2, get_tx(116), get_spelltarget()->alias);
@@ -436,8 +436,8 @@ void mspell_horriphobus(void)
 	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
-	or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS2, 0x01); /* set 'scared' flag */
-	and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+	get_spelltarget()->flags.scared = 1; /* set 'scared' flag */
+	get_spelltarget()->flags.renegade = 0; /* unset 'renegade' flag */
 
 	/* prepare message */
 	sprintf(g_dtp2, get_tx(117), get_spelltarget()->alias);
@@ -784,7 +784,7 @@ void mspell_paralue(void)
 		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* set the flag */
-		or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+		get_spelltarget()->flags.petrified = 1;
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(103), get_spelltarget()->alias);

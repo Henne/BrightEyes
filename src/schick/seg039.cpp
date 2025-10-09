@@ -461,8 +461,9 @@ void FIG_init_heroes(void)
 		/* heroes sleep until they appear */
 		if (g_current_fight->heroes[l_si].round_appear) {
 
-			if (!hero_dead((Bit8u*)hero))
-				or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 2); /* set 'sleep' flag */
+			if (!hero->flags.dead) {
+				hero->flags.asleep = 1;
+			}
 		}
 
 		place_obj_on_cb(cb_x, cb_y, l_si + 1, hero->typus, hero->viewdir);
@@ -481,14 +482,14 @@ void FIG_init_heroes(void)
 		g_fig_list_elem.offsetx = 0;
 		g_fig_list_elem.offsety = 0;
 
-		if (hero_dead((Bit8u*)hero)) {
+		if (hero->flags.dead) {
 
 			/* hero is dead */
 			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->sprite_no];
 			g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->sprite_no][4].x;
 			g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->sprite_no][4].y;
 
-		} else if (hero_asleep((Bit8u*)hero) || hero_unconscious((Bit8u*)hero)) {
+		} else if (hero->flags.asleep || hero->flags.unconscious) {
 
 			/* hero is asleep or unconscious */
 			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->sprite_no] + hero->viewdir;

@@ -172,11 +172,10 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				g_fig_target_grammar.type = 2;
 				g_fig_target_grammar.id = hero->enemy_id - 1;
 
-				if (hero_asleep((Bit8u*)target_hero)) {
+				if (target_hero->flags.asleep) {
 
 					/* wake up target hero */
-
-					and_ptr_bs((Bit8u*)target_hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+					target_hero->flags.asleep = 0;
 
 					fighter = FIG_get_fighter(target_hero->fighter_id);
 
@@ -186,7 +185,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					fighter->offsety = 0;
 				}
 
-				if (hero_dead((Bit8u*)target_hero) || !target_hero->typus) {
+				if (target_hero->flags.dead || !target_hero->typus) {
 					refresh_screen_size();
 					return;
 				}
@@ -309,7 +308,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						g_fig_actor_grammar = tmp;
 					}
 
-					if (hero_dead((Bit8u*)hero)) {
+					if (hero->flags.dead) {
 						g_attacker_dead = 1;
 					}
 
@@ -324,7 +323,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					g_fig_target_grammar = g_fig_actor_grammar;
 
-					if (hero_dead((Bit8u*)hero)) {
+					if (hero->flags.dead) {
 						g_attacker_dead = 1;
 					}
 				}
@@ -406,7 +405,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 										FIG_add_msg(8, damage);
 
-										if (hero_dead((Bit8u*)target_hero)) {
+										if (target_hero->flags.dead) {
 											g_defender_dead = 1;
 										}
 									}
@@ -436,7 +435,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_add_msg(8, damage);
 
-								if (hero_dead((Bit8u*)target_hero)) {
+								if (target_hero->flags.dead) {
 									g_defender_dead = 1;
 								}
 							} else {
@@ -505,7 +504,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 							FIG_add_msg(8, damage);
 
-							if (hero_dead((Bit8u*)target_hero)) {
+							if (target_hero->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}
@@ -595,7 +594,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 							FIG_add_msg(8, damage);
 
-							if (hero_dead((Bit8u*)target_hero)) {
+							if (target_hero->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}

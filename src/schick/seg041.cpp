@@ -447,7 +447,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	} else {
 		damage -= target->rs_bonus1;
 
-		if (hero_petrified((Bit8u*)target)) {
+		if (target->flags.petrified) {
 			damage = 0;
 		}
 
@@ -513,7 +513,7 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 		}
 
 		/* no damage if the hero is petrified */
-		if (hero_petrified((Bit8u*)hero))
+		if (hero->flags.petrified)
 			damage = 0;
 	} else {
 		/* the target is an enemy */

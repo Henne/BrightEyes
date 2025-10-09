@@ -57,7 +57,7 @@ void tevent_067(void)
 			for (i = count = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 0) > 0)
+					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) > 0)
 				{
 					count++;
 				}
@@ -288,7 +288,7 @@ void TRV_swimm(signed short mod, signed short percent)
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero))
+			!hero->flags.dead)
 		{
 
 			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) <= 0) {
@@ -457,7 +457,7 @@ void tevent_074(void)
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero))
+						!hero->flags.dead)
 					{
 						answer = i;
 					}
@@ -564,7 +564,7 @@ void tevent_075(void)
 				for (i = answer = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
+						!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
 						answer++;
 					}
@@ -683,7 +683,7 @@ void tevent_077(void)
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero))
+						!hero->flags.dead)
 					{
 						answer = i;
 					}

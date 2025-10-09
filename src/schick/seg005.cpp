@@ -736,7 +736,7 @@ void draw_fight_screen(Bit16u val)
 											hero = FIG_get_hero_ptr(list_ii->id);
 											if (hero) {
 												hero->action_id = FIG_ACTION_FLEE;
-												or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 1); /* set 'scared' flag */
+												hero->flags.scared = 1;
 
 												/* set the dungeon position the hero escapes to.
 												 * This depends on the direction the escape square on the battlefield has been entered.

@@ -124,7 +124,7 @@ void npc_farewell(void)
 
 					hero_i = (struct struct_hero*)get_hero(0);
 					for (i = 0; i < 6; i++, hero_i++) {
-						if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && (!hero_dead((Bit8u*)hero_i)))
+						if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && (!hero_i->flags.dead))
 						{
 							/* Original-Bug 42:
 							 * When NPC Harika leaves the party, all non-dead heroes in the same group get up to

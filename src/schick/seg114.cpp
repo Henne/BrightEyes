@@ -50,7 +50,7 @@ void tevent_110(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 0) <= 0)
+				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 0) <= 0)
 			{
 				/* skill test failed */
 
@@ -119,7 +119,7 @@ void tevent_111(void)
 		for (i = counter = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, -5) <= 0)
+				!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -5) <= 0)
 			{
 				counter++;
 			}
@@ -226,7 +226,7 @@ void tevent_111(void)
 						for (i = 0; i <= 6; i++, hero++)
 						{
 							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-								!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 2) <= 0)
+								!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 2) <= 0)
 							{
 								/* attribute test failed */
 								sub_hero_le(hero, random_schick(10));
@@ -380,7 +380,7 @@ void tevent_114(void)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) &&
+						!hero->flags.dead &&
 						test_attrib(hero, ATTRIB_GE, 4) <= 0)
 					{
 						/* attrib test failed */
@@ -421,7 +421,7 @@ void tevent_114(void)
 
 				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
 				{
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 					{
 						add_hero_le(hero, 7);
 					}
@@ -436,7 +436,7 @@ void tevent_114(void)
 
 				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
 				{
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 					{
 						add_hero_le(hero, 4);
 					}
@@ -472,7 +472,7 @@ void tevent_117(void)
 	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 0) <= 0)
+			!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 		{
 			/* attrib test failed */
 			sub_hero_le(hero, random_schick(11) + 1);
@@ -570,7 +570,7 @@ void tevent_123(void)
 			for (i = counter = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_HA, 0) > 0)
+					!hero->flags.dead && test_attrib(hero, ATTRIB_HA, 0) > 0)
 				{
 					/* attrib test failed */
 					counter++;
@@ -605,7 +605,7 @@ void tevent_123(void)
 				hero = (struct struct_hero*)get_hero(0);
 				for (i = counter = 0; i <= 6; i++, hero++)
 				{
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 					{
 						attrib_result = test_attrib(hero, ATTRIB_HA, 4);
 						skill_result = test_skill(hero, TA_KLETTERN, 0);
@@ -659,7 +659,7 @@ void tevent_123(void)
 					{
 						if ((hero->typus != HERO_TYPE_NONE) &&
 							(hero->group_no == gs_current_group) &&
-							!hero_dead((Bit8u*)hero))
+							!hero->flags.dead)
 						{
 							sprintf(g_dtp2 + 0x400, get_tx2(42), hero->alias);
 
@@ -671,7 +671,7 @@ void tevent_123(void)
 				hero = (struct struct_hero*)get_hero(0);
 				for (i = counter = 0; i <= 6; i++, hero++)
 				{
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 					{
 						attrib_result = test_attrib(hero, ATTRIB_HA, 2);
 

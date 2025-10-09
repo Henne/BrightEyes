@@ -96,7 +96,7 @@ void ask_miracle(void)
 
 								i = get_random_hero();
 
-								if ((i != -1) && !hero_gods_pissed(get_hero(i))) {
+								if ((i != -1) && !((struct struct_hero*)get_hero(i))->flags.gods_pissed) {
 
 									slot = get_free_mod_slot();
 									set_mod_slot(slot, DAYS(3), get_hero(i) + HERO_MR,
@@ -114,9 +114,9 @@ void ask_miracle(void)
 
 								hero = (struct struct_hero*)get_hero(i);
 
-								if (hero_transformed((Bit8u*)hero)) {
+								if (hero->flags.transformed) {
 
-									and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
+									hero->flags.transformed = 0;
 
 									for (i = 0; i <= 6; i++) {
 										hero->attrib[i].current++;
@@ -126,9 +126,9 @@ void ask_miracle(void)
 									break;
 
 								} else {
-									if (hero_renegade((Bit8u*)hero) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
+									if (hero->flags.renegade && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
 									{
-										and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+										hero->flags.renegade = 0;
 
 										sprintf(g_dtp2,	get_tx2(3), hero->alias);
 										break;
@@ -195,7 +195,7 @@ void ask_miracle(void)
 
 							hero = (struct struct_hero*)get_hero(i);
 
-							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
+							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
 							{
 								hero->hunger = hero->thirst = 0;
 							}
@@ -242,9 +242,9 @@ void ask_miracle(void)
 
 							hero = (struct struct_hero*)get_hero(i);
 
-							if (hero_transformed((Bit8u*)hero)) {
+							if (hero->flags.transformed) {
 
-								and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
+								hero->flags.transformed = 0;
 
 								for (i = 0; i <= 6; i++) {
 									hero->attrib[i].current++;
@@ -252,9 +252,9 @@ void ask_miracle(void)
 
 								sprintf(g_dtp2,	get_ttx(565), hero->alias);
 								break;
-							} else if (hero_renegade((Bit8u*)hero) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
+							} else if (hero->flags.renegade && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
 							{
-								and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+								hero->flags.renegade = 0;
 
 								sprintf(g_dtp2,	get_tx2(17), hero->alias);
 								break;
@@ -285,7 +285,7 @@ void ask_miracle(void)
 
 							i = get_random_hero();
 
-							if (i != -1 && !hero_gods_pissed(get_hero(i))) {
+							if (i != -1 && !((struct struct_hero*)get_hero(i))->flags.gods_pissed) {
 
 								slot = get_free_mod_slot();
 								set_mod_slot(slot, DAYS(7), get_hero(i) + HERO_HUNGER_TIMER,
@@ -311,7 +311,7 @@ void ask_miracle(void)
 						for (i = 0; i <= 6; i++, hero++) {
 
 							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-								!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
+								!hero->flags.dead && !hero->flags.gods_pissed)
 							{
 								/* heal hero completely */
 								/* this looks like adding more LE than missing, but the excess LE will be dealt with in add_hero_le */
@@ -368,7 +368,7 @@ void ask_miracle(void)
 							hero = (struct struct_hero*)get_hero(i);
 							disease = hero_is_diseased(hero);
 
-							if (disease != 0 && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
+							if (disease != 0 && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
 							{
 								hero->sick[disease][0] = 1;
 								hero->sick[disease][1] = 0;
@@ -389,7 +389,7 @@ void ask_miracle(void)
 							hero = (struct struct_hero*)get_hero(i);
 
 							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-								!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
+								!hero->flags.dead && !hero->flags.gods_pissed)
 							{
 
 								for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
@@ -445,7 +445,7 @@ void ask_miracle(void)
 							for (i = 0; i <= 6; i++, hero++) {
 
 								if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-									!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
+									!hero->flags.dead && !hero->flags.gods_pissed)
 								{
 									/* permanent Betören +1 */
 									hero->skills[TA_BETOEREN]++;

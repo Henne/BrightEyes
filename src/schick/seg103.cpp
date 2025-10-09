@@ -124,7 +124,7 @@ struct struct_hero* get_proper_hero(const signed int skill_id)
 		if ((hero_i->typus != HERO_TYPE_NONE) &&
 			(hero_i->group_no == gs_current_group) &&
 			/* TODO: potential Original-Bug: What if petrified / unconscious etc.? */
-			!hero_dead((Bit8u*)hero_i)) {
+			!hero_i->flags.dead) {
 
 			/* add current and maximum attibute values */
 			cur =	hero_i->attrib[g_skill_descriptions[skill_id].attrib1].current +
@@ -667,7 +667,7 @@ signed short GUI_use_skill2(signed short handicap, char *msg)
 
 		hero_pos = select_hero_ok(msg);
 
-		if ((hero_pos != -1) && (hero_brewing(get_hero(hero_pos)))) {
+		if ((hero_pos != -1) && (((struct struct_hero*)get_hero(hero_pos))->flags.brewing)) {
 			GUI_output(get_ttx(730));
 			hero_pos = -1;
 		}

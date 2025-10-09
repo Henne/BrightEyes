@@ -78,7 +78,7 @@ signed short DNG15_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, -3) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 			{
 				tmp = random_schick(3);
 
@@ -478,7 +478,7 @@ void DNG15_small_wounds(void)
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, -3) <= 0)
+			!hero->flags.dead && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 		{
 			randval = random_schick(3);
 
@@ -595,7 +595,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			for (i = cnt = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, -3) <= 0)
+					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 				{
 					cnt++;
 				}
@@ -621,7 +621,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			for (i = cnt = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 0) <= 0)
+					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
 					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 					GUI_output(g_dtp2);
@@ -680,7 +680,7 @@ void DNG15_clear_way(Bit8u* ptr)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 0) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{
 				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);

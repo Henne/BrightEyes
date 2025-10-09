@@ -142,7 +142,7 @@ void do_house(void)
 		for (i = 0; i < 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && /* Original-Bug: What if petrified, sleeping etc. */
+				!hero->flags.dead && /* Original-Bug: What if petrified, sleeping etc. */
 				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
 			{
 				/* every hero must pass a sneak -2 test */

@@ -158,7 +158,7 @@ signed short DNG08_handler(void)
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero))
+					!hero->flags.dead)
 				{
 					gs_dng08_timer1 = 24;
 
@@ -181,7 +181,7 @@ signed short DNG08_handler(void)
 
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 				{
 					gs_dng08_timer2 = 24;
 
@@ -306,7 +306,7 @@ signed short DNG08_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 2) <= 0)
+				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
 				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);

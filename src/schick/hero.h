@@ -184,8 +184,9 @@ struct struct_hero {
 	signed char axxeleratus;
 	signed char drunk;
 	signed char unkn10[8];
-	signed char flags1;
-	signed char flags2;
+	//signed char flags1;
+	//signed char flags2;
+	struct hero_flags flags;
 	signed short unkn11;
 	/* Not figured out yet, but reserve space */
 	signed char sick[8][5];

@@ -94,7 +94,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -125,7 +125,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -145,7 +145,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -169,7 +169,7 @@ signed short DNG09_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_GEFAHRENSINN, 2) > 0)
+				!hero->flags.dead && test_skill(hero, TA_GEFAHRENSINN, 2) > 0)
 			{
 				l3 = 1;
 			}
@@ -194,7 +194,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -222,7 +222,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));

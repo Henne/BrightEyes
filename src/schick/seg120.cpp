@@ -310,7 +310,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
 				if ((l_di != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&
-					(hero2->group_no == gs_current_group) && !hero_dead((Bit8u*)hero2))
+					(hero2->group_no == gs_current_group) && !hero2->flags.dead)
 				{
 					sub_hero_le(hero2, dice_roll(1, 6, 2));
 				}

@@ -119,7 +119,7 @@ void hunt_karen(void)
 
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) &&
+					!hero->flags.dead &&
 					(test_skill(hero, TA_SCHLEICHEN, 2) > 0))
 				{
 					passed++;
@@ -136,7 +136,7 @@ void hunt_karen(void)
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
+						!hero->flags.dead && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -199,7 +199,7 @@ void hunt_wildboar(void)
 			for (i = passed = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHLEICHEN, 0) > 0))
+					!hero->flags.dead && (test_skill(hero, TA_SCHLEICHEN, 0) > 0))
 				{
 					passed++;
 				}
@@ -215,7 +215,7 @@ void hunt_wildboar(void)
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
+						!hero->flags.dead && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -272,7 +272,7 @@ void hunt_cavebear(void)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 			{
 
 				/* AT of the current weapon - (RS-BE / 2) <= 1W20 */
@@ -326,7 +326,7 @@ void hunt_viper(void)
 		/* check GE+0 */
 		/* Original-Bug: something was forgotten */
 		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
-			(!hero_dead((Bit8u*)hero_i)) &&	(test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
+			(!hero_i->flags.dead) &&	(test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
 		{
 			/* remember the hero */
 			choosen_hero = i;
@@ -389,7 +389,7 @@ void octopus_attack(void)
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && !overboard[i])
+				!hero->flags.dead && !overboard[i])
 			{
 #ifdef M302de_ORIGINAL_BUGFIX
 				/* Original-Bug 22: see below */
@@ -756,7 +756,7 @@ void TLK_way_to_ruin(signed short state)
 			g_tlk_ruin_hero_counter++;
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero)) {
+				!hero->flags.dead) {
 
 				gs_ruin_hero = hero;
 
@@ -813,7 +813,7 @@ void TLK_way_to_ruin(signed short state)
 		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
+				!hero->flags.dead && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
 		       	{
 				g_tlk_ruin_hero_counter++;
 			}
@@ -840,7 +840,7 @@ void TLK_way_to_ruin(signed short state)
 		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
+				!hero->flags.dead && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
 			{
 				g_tlk_ruin_hero_counter++;
 			}

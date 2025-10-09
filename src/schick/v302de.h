@@ -254,11 +254,6 @@ static inline void inc_ptr_bs(Bit8u *p)
 	host_writebs(p, host_readbs(p) + 1);
 }
 
-static inline void inc_ptr_ws(Bit8u *p)
-{
-	host_writews(p, host_readws(p) + 1);
-}
-
 static inline Bit8s dec_ptr_bs(Bit8u *p)
 {
 	host_writebs(p, host_readbs(p) - 1);
@@ -284,31 +279,6 @@ static inline unsigned char *get_hero(signed short index) {
 		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
 	}
 	return M302de::g_heroes + index * SIZEOF_HERO;
-}
-
-static inline void dec_ptr_ws(Bit8u *p)
-{
-	host_writews(p, host_readws(p) - 1);
-}
-
-static inline void or_ptr_bs(Bit8u *p, const unsigned char val)
-{
-	host_writebs(p, host_readbs(p) | val);
-}
-
-static inline void and_ptr_bs(Bit8u *p, const unsigned char val)
-{
-	host_writebs(p, host_readbs(p) & val);
-}
-
-static inline void add_ptr_ws(Bit8u *p, Bit16s val)
-{
-	host_writews(p, host_readws(p) + val);
-}
-
-static inline void sub_ptr_ws(Bit8u *p, Bit16s val)
-{
-	host_writews(p, host_readws(p) - val);
 }
 
 static inline int __abs__(int j)
@@ -362,31 +332,6 @@ static inline unsigned short hero_petrified(Bit8u *hero) {
 }
 
 /**
- * hero_brewing() -	check if hero is brewing
- * @hero:	ptr to hero
- *
- * 0 = not brewing / 1 = brewing
- */
-static inline unsigned short hero_brewing(Bit8u *hero) {
-	if (((host_readb(hero + 0xaa) >> 3) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * \brief		is hero under chamaelioni spell
- * \param	hero	pointer to hero
- *
- * \return 0 = no / 1 = yes
- */
-static inline unsigned short hero_chamaelioni(Bit8u *hero) {
-	if (((host_readb(hero + 0xaa) >> 4) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-/**
  * hero_renegade() -	check if hero is renegade
  * @hero:	ptr to hero
  *
@@ -412,79 +357,10 @@ static inline unsigned short hero_unconscious(Bit8u *hero) {
 		return 1;
 }
 
-static inline unsigned short hero_tied(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xaa) >> 7) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short hero_scared(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 0) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short hero_dummy2(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short hero_duplicatus(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short hero_tame(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 3) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
 
 static inline unsigned short hero_seen_phantom(Bit8u *hero) {
 
 	if (((host_readb(hero + 0xab) >> 4) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short hero_gods_pissed(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 5) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * hero_transformed() -	check if hero is transformed
- * @hero:	ptr to hero
- *
- * 0 = not transformed / 1 = transformed
- */
-static inline unsigned short hero_transformed(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 6) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short hero_encouraged(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 7) & 1) == 0)
 		return 0;
 	else
 		return 1;
@@ -589,15 +465,6 @@ static inline char* get_itemname(unsigned short item)
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)
 
-#define inc_ptr_ws(p)		((*(Bit16s*)(p))++)
-#define dec_ptr_ws(p)		((*(Bit16s*)(p))--)
-
-#define or_ptr_bs(p, v)		(*(Bit8s*)(p) |= (v))
-#define and_ptr_bs(p, v)	(*(Bit8s*)(p) &= (v))
-
-#define add_ptr_ws(p, v)	(*(Bit16s*)(p) += (v))
-#define sub_ptr_ws(p, v)	(*(Bit16s*)(p) -= (v))
-
 #define get_hero(no) ((unsigned char*)g_heroes + SIZEOF_HERO * (no))
 
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -625,20 +492,12 @@ static inline char* get_itemname(unsigned short item)
 #define hero_dead(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).dead)
 #define hero_asleep(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).asleep)
 #define hero_petrified(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).petrified)
-#define hero_brewing(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).brewing)
-#define hero_chamaelioni(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).chamaelioni)
 #define hero_renegade(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).renegade)
 #define hero_unconscious(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).unconscious)
-#define hero_tied(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).tied)
 
-#define hero_scared(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).scared)
-#define hero_dummy2(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).dummy2)
-#define hero_duplicatus(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).duplicatus)
-#define hero_tame(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).tame)
+
+
 #define hero_seen_phantom(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom)
-#define hero_gods_pissed(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).gods_pissed)
-#define hero_transformed(hero)  ((*(struct hero_flags*)(hero + HERO_FLAGS1)).transformed)
-#define hero_encouraged(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).encouraged)
 
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
 

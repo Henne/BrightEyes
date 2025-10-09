@@ -34,7 +34,7 @@ namespace M302de {
 signed short is_hero_healable(const struct struct_hero *hero)
 {
 
-	if (hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero)) {
+	if (hero->flags.dead || hero->flags.petrified) {
 
 		/* this hero can not be helped */
 		GUI_output(get_ttx(778));

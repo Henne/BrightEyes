@@ -40,7 +40,7 @@ void spell_beherrschung(void)
 {
 	g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	if (!hero_renegade((Bit8u*)get_spelltarget())) {
+	if (!get_spelltarget()->flags.renegade) {
 		g_spell_special_aecost = -2;
 	} else {
 		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
@@ -52,7 +52,8 @@ void spell_beherrschung(void)
 			if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
 				g_spell_special_aecost = -2;
 			} else {
-				and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+				get_spelltarget()->flags.renegade = 0;
+
 				sprintf(g_dtp2,	get_tx(1), get_spelltarget()->alias);
 			}
 		}
@@ -144,7 +145,7 @@ void spell_verwandlung(void)
 	/* set spelltarget */
 	g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	if (hero_petrified((Bit8u*)get_spelltarget())) {
+	if (get_spelltarget()->flags.petrified) {
 
 		/* set AEcosts */
 		g_spell_special_aecost = random_schick(10) * 5;
@@ -156,13 +157,14 @@ void spell_verwandlung(void)
 		} else {
 			/* YES: spell has effect */
 			/* unset petrified bit */
-			and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
+			get_spelltarget()->flags.petrified = 0;
+
 			sprintf(g_dtp2,	get_tx(4), get_spelltarget()->alias);
 		}
 	} else {
-		if (hero_transformed((Bit8u*)get_spelltarget())) {
+		if (get_spelltarget()->flags.transformed) {
 
-			and_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
+			get_spelltarget()->flags.transformed = 0;
 
 			/* increase attributes */
 			for (i = 0; i <= 6; i++) {
@@ -225,7 +227,7 @@ void spell_band(void)
 			strcpy(g_dtp2, get_tx(112));
 		} else {
 			/* set flag */
-			or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 0x80); /* set 'tied' flag */
+			get_spelltarget()->flags.tied = 1;
 
 			/* prepare message */
 			sprintf(g_dtp2, get_tx(6), get_spelltarget()->alias);
@@ -417,7 +419,7 @@ void spell_somnigravis(void)
 		strcpy(g_dtp2, get_tx(112));
 	} else {
 		/* set the flag */
-		or_ptr_bs((Bit8u*)get_spelltarget() + HERO_FLAGS1, 2); /* set 'sleep' flag */
+		get_spelltarget()->flags.asleep = 1;
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(13), get_spelltarget()->alias);

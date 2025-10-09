@@ -513,7 +513,7 @@ void tevent_124(void)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) &&
+				!hero->flags.dead &&
 				(skill_ret = test_skill(hero, TA_KLETTERN, -2)) <= 0)
 			{
 				/* the climb test failed */

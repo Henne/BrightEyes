@@ -100,7 +100,7 @@ signed short DNG06_handler(void)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = l3 = 0; i < 2; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 			{
 				l3++;
 			}
@@ -131,7 +131,7 @@ signed short DNG06_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_GEFAHRENSINN, 5) > 0))
+				!hero->flags.dead && (test_skill(hero, TA_GEFAHRENSINN, 5) > 0))
 			{
 				l3 = 1;
 				break;
@@ -149,7 +149,7 @@ signed short DNG06_handler(void)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) &&
+						!hero->flags.dead &&
 						(test_skill(hero, TA_GEFAHRENSINN, 5) > 0))
 					{
 						l3 = 1;
@@ -187,7 +187,7 @@ signed short DNG06_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SINNESSCHAERFE, 10) > 0))
+				!hero->flags.dead && (test_skill(hero, TA_SINNESSCHAERFE, 10) > 0))
 			{
 				l3++;
 			}
@@ -255,7 +255,7 @@ signed short DNG06_handler(void)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) &&
+					!hero->flags.dead &&
 					(test_skill(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus1) <= 0))
 				{
 					sprintf(g_dtp2,	get_tx(20), hero->alias,
@@ -476,7 +476,7 @@ void DNG06_chest01_loot(Bit8u* chest)
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_LESEN, 0) > 0))
+			!hero->flags.dead && (test_skill(hero, TA_LESEN, 0) > 0))
 		{
 			strcat(g_dtp2, get_tx(34));
 			break;
@@ -509,7 +509,7 @@ void DNG09_pitfall(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_GEFAHRENSINN, 4) > 0)
+				!hero->flags.dead && test_skill(hero, TA_GEFAHRENSINN, 4) > 0)
 				/* TODO: potential Original-Bug: Why should 'petrified' or 'uncouscious' (or maybe other properties ) be o.k. here?? */
 			{
 				l3 = 1;

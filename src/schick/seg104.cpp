@@ -110,7 +110,8 @@ signed short do_alchemy(struct struct_hero* hero, const signed short recipe_id, 
 
 	sub_ae_splash(hero, r_ptr->ae_cost);
 
-	and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xf7); /* unset 'brewing' flag */
+	hero->flags.brewing = 0;
+
 	hero->recipe_timer = 0;
 	/* set heroes receipe to 0 */
 	hero->recipe_id = 0;
@@ -295,7 +296,8 @@ signed short plan_alchemy(struct struct_hero *hero)
 
 								hero->recipe_id = recipe_index;
 								hero->alchemy_inn_id = gs_current_typeindex;
-								or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 8); /* set 'brewing' flag */
+
+								hero->flags.brewing = 1;
 
 								GRP_save_pos(l5);
 							} else {

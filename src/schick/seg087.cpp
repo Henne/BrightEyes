@@ -369,7 +369,7 @@ signed short DNG14_handler(void)
 
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) &&
+					!hero->flags.dead &&
 					(hero->typus == HERO_TYPE_MAGE) &&
 					(hero->staff_level > 2))
 				{
@@ -389,7 +389,7 @@ signed short DNG14_handler(void)
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_KLETTERN, 0) <= 0))
+						!hero->flags.dead && (test_skill(hero, TA_KLETTERN, 0) <= 0))
 					{
 						sprintf(g_dtp2, get_tx(26), hero->alias, GUI_get_ptr(hero->sex, 2));
 						GUI_output(g_dtp2);
@@ -409,7 +409,7 @@ signed short DNG14_handler(void)
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_KLETTERN, 4) <= 0))
+						!hero->flags.dead && (test_skill(hero, TA_KLETTERN, 4) <= 0))
 					{
 						sprintf(g_dtp2, get_tx(27), hero->alias);
 						GUI_output(g_dtp2);
@@ -443,7 +443,7 @@ signed short DNG14_handler(void)
 		for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_TA, 0) <= 0)
+				!hero->flags.dead && test_attrib(hero, ATTRIB_TA, 0) <= 0)
 			{
 				l_di = get_free_mod_slot();
 
@@ -548,7 +548,7 @@ signed short DNG14_handler(void)
 
 						gs_x_target = (pos == DNG_POS(3,10,10) ? 9 : 13);
 
-						if (hero_dead((Bit8u*)hero)) {
+						if (hero->flags.dead) {
 
 							sprintf(g_dtp2,	get_tx(63), hero->alias);
 							GUI_output(g_dtp2);

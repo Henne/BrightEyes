@@ -158,7 +158,7 @@ void tevent_133(void)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 			{
 				timewarp(HOURS(1));
 
@@ -347,7 +347,7 @@ void tevent_137(void)
 			hero = (struct struct_hero*)get_hero(0);
 			for (i = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 				{
 					/* each hero gets five FOODPACKAGES */
 					give_hero_new_item((struct struct_hero*)hero, ITEM_FOOD_PACKAGE, 1, 5);
@@ -395,7 +395,7 @@ void tevent_139(void)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 			{
 				sub_hero_le(hero, random_schick(2));
 			}

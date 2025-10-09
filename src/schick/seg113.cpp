@@ -275,7 +275,7 @@ void tevent_098(void)
 			for (i = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero))
+					!hero->flags.dead)
 				{
 
 					if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
@@ -324,7 +324,7 @@ void tevent_098(void)
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((i != hero_pos) && (hero->typus != HERO_TYPE_NONE) &&
-						(hero->group_no == gs_current_group) &&	!hero_dead((Bit8u*)hero))
+						(hero->group_no == gs_current_group) &&	!hero->flags.dead)
 					{
 						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
 
@@ -600,7 +600,7 @@ void tevent_104(void)
 
 		for (i = l_si = nr_heroes = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 			{
 				nr_heroes++;
 
@@ -768,7 +768,7 @@ void tevent_107(void)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 1) <= 0)
+				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 1) <= 0)
 			{
 
 				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */

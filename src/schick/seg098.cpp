@@ -122,8 +122,8 @@ void FIG_do_spell_damage(signed short le)
 			/* add a message (red star with le) */
 			FIG_add_msg(0x08, le);
 
-			/* set a variable if the hoer died */
-			if (hero_dead((Bit8u*)get_spelltarget())) {
+			/* set a variable if the hero died */
+			if (get_spelltarget()->flags.dead) {
 				g_defender_dead = 1;
 			}
 		}
@@ -646,7 +646,7 @@ signed short test_spell_group(signed short spell, signed char handicap)
 			/* Check in group */
 			(hero_i->group_no == gs_current_group) &&
 			/* Check if dead */
-			!hero_dead((Bit8u*)hero_i))
+			!hero_i->flags.dead)
 			/* Original-Bug: what if petrified, sleeping, unconcious etc. */
 		{
 
@@ -699,7 +699,7 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 	struct dungeon_door *ptr_doors;
 #endif
 
-	if (!check_hero((Bit8u*)hero) && !hero_renegade((Bit8u*)hero)) {
+	if (!check_hero((Bit8u*)hero) && !hero->flags.renegade) {
 
 		return 0;
 	}

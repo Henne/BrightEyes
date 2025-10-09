@@ -103,7 +103,7 @@ signed short DNG12_handler(void)
 
 						if ((hero->typus != HERO_TYPE_NONE) &&
 							(hero->group_no == gs_current_group) &&
-							!hero_dead((Bit8u*)hero))
+							!hero->flags.dead)
 						{
 							hero_disappear(hero, i, -1);
 						}

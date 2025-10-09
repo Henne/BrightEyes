@@ -172,10 +172,11 @@ signed short DNG07_handler(void)
 			/* ORIGINAL-BUG: forgot to set hero */
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 				{
 					hero->attrib[ATTRIB_MU].current += 3;
-					or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x80); /* set 'encouraged' flag */
+
+					hero->flags.encouraged = 1;
 				}
 			}
 		} else {
@@ -248,10 +249,11 @@ signed short DNG07_handler(void)
 			/* ORIGINAL-BUG: forgot to set hero */
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && hero_encouraged((Bit8u*)hero))
+				if ((hero->typus != HERO_TYPE_NONE) && hero->flags.encouraged)
 				{
 					hero->attrib[ATTRIB_MU].current -= 3;
-					and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x7f); /* unset 'encouraged' flag */
+
+					hero->flags.encouraged = 0;
 				}
 			}
 
@@ -305,7 +307,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 			/* praise the nameless god */
 			if (random_schick(100) <= prob)
 			{
-				if (random_schick(100) < 50 && !hero_gods_pissed((Bit8u*)hero) && !gs_nameless_destroyed)
+				if (random_schick(100) < 50 && !hero->flags.gods_pissed && !gs_nameless_destroyed)
 				{
 					/* increase one attribute of the leader permanently */
 					randval = random_schick(7) - 1;
@@ -314,7 +316,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 					hero->attrib[randval].current++;
 
 					/* ... but the twelve won't grant miracles any more */
-					or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x20); /* set 'gods_pissed' flag */
+					hero->flags.gods_pissed = 1;
 
 					sprintf(g_dtp2, get_tx(8), hero->alias);
 					GUI_output(g_dtp2);
@@ -345,10 +347,10 @@ void DNG09_statues(signed short prob, signed short bonus)
 			hero = (struct struct_hero*)get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 				{
 					/* the twelve will grant miracles again */
-					and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xdf); /* unset 'gods_pissed' flag */
+					hero->flags.gods_pissed = 0;
 				}
 			}
 

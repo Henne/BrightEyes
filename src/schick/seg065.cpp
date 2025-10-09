@@ -551,10 +551,10 @@ void show_outro(void)
 			/* get 50D */
 			add_party_money(5000);
 
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xf7); /* unset 'brewing' flag */
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+			hero->flags.asleep = 0;
+			hero->flags.petrified = 0;
+			hero->flags.brewing = 0;
+			hero->flags.renegade = 0;
 
 			/* reset every disease */
 			for (j = 0; j < 8; j++) {

@@ -174,7 +174,7 @@ signed short DNG02_handler(void)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero)) /* TODO: Why !dead? */
+					!hero->flags.dead) /* TODO: Why !dead? */
 				{
 					hero_disappear(hero, i, -1);
 				}
@@ -186,7 +186,7 @@ signed short DNG02_handler(void)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero) &&
+					!hero->flags.dead &&
 					!hero_seen_phantom((Bit8u*)hero))
 				{
 					mod_slot = get_free_mod_slot();
@@ -310,9 +310,9 @@ signed short DNG02_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && (hero->mr < 8))
+				!hero->flags.dead && (hero->mr < 8))
 			{
-				or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+				hero->flags.petrified = 1;
 
 				sprintf(g_dtp2, get_tx(42), hero->alias,
 					GUI_get_ptr(hero->sex, 0),

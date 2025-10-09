@@ -111,7 +111,7 @@ void tevent_057(void)
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 3) <= 0)
+				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 3) <= 0)
 			{
 
 				/* TODO: Original-Bug: that condition does not make sense */
@@ -247,7 +247,7 @@ void tevent_060(void)
 					for (i = 0; i <= 6; i++, hero++) {
 
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-							!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 0) <= 0)
+							!hero->flags.dead && test_skill(hero, TA_KLETTERN, 0) <= 0)
 						{
 							sub_hero_le(hero, random_schick(10));
 						}
@@ -288,7 +288,7 @@ void tevent_060(void)
 					for (i = has_magic_rope = nr_items = 0; i <= 6 ; i++, hero++){
 
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-							!hero_dead((Bit8u*)hero))
+							!hero->flags.dead)
 						{
 							nr_items += hero_count_item((struct struct_hero*)hero, ITEM_ROPE);
 							nr_items += hero_count_item((struct struct_hero*)hero, ITEM_ROPE_LADDER);
@@ -421,7 +421,7 @@ void tevent_063(void)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 		{
 			/* MU+0 */
 			if ((proof = test_attrib(hero, ATTRIB_MU, 0)) < max) {
@@ -511,7 +511,7 @@ void tevent_064(void)
 				for (i = result = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
+						!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
 						result++;
 					}
@@ -685,7 +685,7 @@ void tevent_066(void)
 				for (l_di = count = 0; l_di <= 6; l_di++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
-						!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, -2) <= 0)
+						!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -2) <= 0)
 					{
 						count++;
 					}

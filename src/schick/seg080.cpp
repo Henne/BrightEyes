@@ -101,7 +101,7 @@ signed short DNG04_handler(void)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) &&
+				!hero->flags.dead &&
 				(test_skill(hero, TA_SCHLEICHEN, 2) <= 0))
 			{
 				sprintf(g_dtp2,	get_tx(10), hero->alias);
@@ -145,7 +145,7 @@ signed short DNG04_handler(void)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_no == gs_current_group) &&
-				!hero_dead((Bit8u*)hero) &&
+				!hero->flags.dead &&
 				(test_skill(hero, TA_SCHLEICHEN, 4) <= 0))
 			{
 				sprintf(g_dtp2, get_tx(10), hero->alias);
@@ -220,7 +220,7 @@ signed short DNG04_handler(void)
 				if ((random_schick(100) <= 5) &&
 					(hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_no == gs_current_group) &&
-					!hero_dead((Bit8u*)hero))
+					!hero->flags.dead)
 				{
 					sub_hero_le(hero, 2);
 

@@ -79,17 +79,17 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 		FIG_init_list_elem(hero_pos + 1);
 		draw_fight_screen_pal(0);
 
-		if ((hero_scared((Bit8u*)hero)) || (hero->action_id == FIG_ACTION_FLEE)) {
+		if (hero->flags.scared || (hero->action_id == FIG_ACTION_FLEE)) {
 
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x7f); /* unset 'tied' flag (why??) */
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag (why???) */
+			hero->flags.tied = 0; /* unset 'tied' flag (why??) */
+			hero->flags.petrified = 0; /* unset 'petrified' flag (why???) */
 
 			if (FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5) != -1) {
 				seg036_00ae(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
 
-		} else if (hero_renegade((Bit8u*)hero) || (hero->npc_id > 0)|| (g_autofight != 0)) {
+		} else if (hero->flags.renegade || (hero->npc_id > 0)|| (g_autofight != 0)) {
 
 			hero->action_id = FIG_ACTION_WAIT;
 
@@ -161,11 +161,13 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			if (selected == FIG_ACTION_MOVE) {
 				/* MOVE / BEWEGEN */
 
-				if (hero_tied((Bit8u*)hero)) {
+				if (hero->flags.tied) {
+
 					/* Probe: MU + 2 */
 					if (test_attrib(hero, ATTRIB_MU, 2) > 0) {
+
 						/* Success */
-						and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x7f); /* unset 'tied' flag */
+						hero->flags.tied = 0;
 
 					} else if (hero->attrib[ATTRIB_MU].current > 4) {
 						/* Failure */
@@ -175,7 +177,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					}
 				}
 
-				if (!hero_tied((Bit8u*)hero)) {
+				if (!hero->flags.tied) {
 
 					hero->action_id = FIG_ACTION_MOVE;
 
@@ -189,7 +191,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						update_mouse_cursor();
 
 						/* Moving destroys an active 'Chamaelioni' spell */
-						and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xef); /* unset 'chamaelioni' flag.  (???) */
+						hero->flags.chamaelioni = 0; /* unset 'chamaelioni' flag.  (???) */
 						/* TODO: What if the target square agreed with the starting square (such that no movement has happened? */
 
 					} else {
@@ -677,7 +679,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					/* poison */
 					hero_is_poisoned(hero) ? get_tx(36) : (char*)g_empty_string4,
 					/* renegade */
-					hero_renegade((Bit8u*)hero) == 1 ? get_tx(38) : (char*)g_empty_string5);
+					hero->flags.renegade == 1 ? get_tx(38) : (char*)g_empty_string5);
 
 				GUI_output(g_dtp2);
 
@@ -803,7 +805,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 					/* TODO: check fighter_id upper bound */
 					} else if (((hero->enemy_id >= 10) && ((struct enemy_sheet*)(&g_enemy_sheets[hero->enemy_id] - 10))->flags.scared) || /* check 'scared' flag */
-						((hero->enemy_id < 10) && (hero_scared((Bit8u*)get_hero(hero->enemy_id - 1)))))
+						((hero->enemy_id < 10) && (((struct struct_hero*)get_hero(hero->enemy_id - 1))->flags.scared)))
 					{
 
 						/* GUI_output(get_tx(29)); */

@@ -309,12 +309,12 @@ void status_show(Bit16u index)
 	GUI_print_string(g_dtp2, 59, 43);
 
 	/* dead, unconscious or drunk */
-	if (hero_dead((Bit8u*)hero)) {
+	if (hero->flags.dead) {
 
 		/* print if dead */
 		GUI_print_string(get_tx2(0), 155, 9);
 
-	} else if (hero_unconscious((Bit8u*)hero)) {
+	} else if (hero->flags.unconscious) {
 
 		/* print if uncounscious */
 		GUI_print_string(get_tx2(6), 155, 9);
@@ -326,11 +326,11 @@ void status_show(Bit16u index)
 	}
 
 	/* print asleep */
-	if (hero_asleep((Bit8u*)hero))
+	if (hero->flags.asleep)
 		GUI_print_string(get_tx2(1), 155, 16);
 
 	/* print petrified */
-	if (hero_petrified((Bit8u*)hero))
+	if (hero->flags.petrified)
 		GUI_print_string(get_tx2(2), 155, 23);
 
 	/* print diseased */

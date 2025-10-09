@@ -523,7 +523,6 @@ Bit8u* read_music_driver(Bit8u* fname)
 		ptr = (Bit32u)g_ail_music_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((Bit8u*)ptr);
-		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
 		_read(handle, (Bit8u*)buf, (unsigned short)len);
 		_close(handle);
 		return buf;
@@ -3289,7 +3288,7 @@ void herokeeping(void)
 		/* print unconscious message */
 		if (gs_unconscious_message[i] && !g_dialogbox_lock) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 			{
 					sprintf(buffer, get_ttx(789), hero->alias);
 					GUI_output(buffer);
@@ -4464,15 +4463,11 @@ void seg002_484f(void)
 /* should be static */
 signed short check_hero(Bit8u *hero)
 {
-	if (
-		!host_readbs(hero + HERO_TYPE) ||
-		hero_asleep(hero) ||
-		hero_dead(hero) ||
-		hero_petrified(hero) ||
-		hero_unconscious(hero) ||
-		hero_renegade(hero) ||
-		(host_readb(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE)
-	) {
+	if (!host_readbs(hero + HERO_TYPE) ||
+		hero_asleep((Bit8u*)hero) || hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero) ||
+		hero_unconscious((Bit8u*)hero) || hero_renegade((Bit8u*)hero) ||
+		(host_readb(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE))
+	{
 		return 0;
 	}
 
@@ -4486,8 +4481,7 @@ signed short check_hero(Bit8u *hero)
 signed short check_hero_no2(struct struct_hero *hero)
 {
 
-	if (!hero->typus || hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero) ||
-		hero_unconscious((Bit8u*)hero) || hero_renegade((Bit8u*)hero))
+	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious || hero->flags.renegade)
 	{
 		return 0;
 	}
@@ -4504,8 +4498,8 @@ signed short check_hero_no2(struct struct_hero *hero)
 /* should be static */
 signed short check_hero_no3(struct struct_hero *hero)
 {
-	if (!hero->typus || hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero) || hero_unconscious((Bit8u*)hero)) {
-
+	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious)
+	{
 		return 0;
 	}
 
@@ -4530,7 +4524,7 @@ signed short is_hero_available_in_group(struct struct_hero *hero)
  */
 void sub_ae_splash(struct struct_hero *hero, signed int ae_cost)
 {
-	if (!hero_dead((Bit8u*)hero) && (ae_cost > 0)) {
+	if (!hero->flags.dead && (ae_cost > 0)) {
 
 		signed short tmp = g_update_statusline;
 		g_update_statusline = 0;
@@ -4612,10 +4606,10 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 		old_le = hero->le;
 		hero->le -= le;
 
-		if (hero_asleep((Bit8u*)hero)) {
+		if (hero->flags.asleep) {
 
 			/* awake him/her */
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+			hero->flags.asleep = 0;
 
 			/* in fight mode */
 			if (g_in_fight) {
@@ -4638,7 +4632,7 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 			hero->le = 0;
 
 			/* mark hero as dead */
-			or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 1); /* set 'dead' flag */
+			hero->flags.dead = 1;
 
 			gs_unconscious_message[get_hero_index((Bit8u*)hero)] = 0;
 
@@ -4690,7 +4684,7 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 			if ((old_le >= 5) && (hero->le < 5)) {
 
 				/* make hero unsonscious */
-				or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x40); /* set 'unconscious' flag */
+				hero->flags.unconscious = 1;
 
 				/* unknown yet */
 				hero->action_id = FIG_ACTION_WAIT;
@@ -4765,10 +4759,10 @@ void add_hero_le(struct struct_hero *hero, const signed short le)
 		}
 
 		/* if current LE is >= 5 and the hero is unconscious */
-		if ((hero->le >= 5) && hero_unconscious((Bit8u*)hero)) {
+		if ((hero->le >= 5) && hero->flags.unconscious) {
 
 			/* awake */
-			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xbf); /* set 'conscious' flag */
+			hero->flags.unconscious = 0;
 
 			/* maybe if we are in a fight */
 			if (g_in_fight) {

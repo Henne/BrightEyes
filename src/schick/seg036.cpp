@@ -442,7 +442,7 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 		} else {
 			/* try a more expensive search */
 
-			if (!hero_tied((Bit8u*)hero)) {
+			if (!hero->flags.tied) {
 
 				if (renegade == 0) {
 					l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
@@ -617,7 +617,7 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 
 							done = 1;
 
-						} else if (!hero_tied((Bit8u*)hero)) {
+						} else if (!hero->flags.tied) {
 
 							if (spell_mode == 0) {
 								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
@@ -672,7 +672,7 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 
 							done = 1;
 
-						} else if (!hero_tied((Bit8u*)hero)) {
+						} else if (!hero->flags.tied) {
 
 							if (spell_mode == 0) {
 								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
@@ -854,7 +854,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 		if ((hero->action_id == FIG_ACTION_FLEE) && (hero->bp_left > 0)) {
 
-			if (!hero_tied((Bit8u*)hero)) {
+			if (!hero->flags.tied) {
 
 				l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5);
 
@@ -898,7 +898,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 				(g_current_fight_no != FIGHTS_F144) &&	/* not in the final fight */
 				g_autofight_magic) /* magic activated in auto fight */
 			{
-				if (seg036_8cf(hero, hero_pos, hero_renegade((Bit8u*)hero), x, y))
+				if (seg036_8cf(hero, hero_pos, hero->flags.renegade, x, y))
 				{
 					hero->action_id = FIG_ACTION_SPELL;
 					hero->bp_left = 0;
@@ -914,7 +914,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 					if (range_attack_check_ammo(hero, 2)) {
 
-						l8 = KI_select_spell_target(hero, hero_pos, hero_renegade((Bit8u*)hero), x, y);
+						l8 = KI_select_spell_target(hero, hero_pos, hero->flags.renegade, x, y);
 
 						if (l8 != 0) {
 							if (l8 == 2) {
@@ -943,7 +943,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 						while (!hero->enemy_id && (l1 < 4)) {
 
-							if (KI_can_attack_neighbour(x, y, a.a[l_di].x, a.a[l_di].y, hero_renegade((Bit8u*)hero)))
+							if (KI_can_attack_neighbour(x, y, a.a[l_di].x, a.a[l_di].y, hero->flags.renegade))
 							{
 								hero->enemy_id = get_cb_val(x + a.a[l_di].x, y + a.a[l_di].y);
 							}
@@ -962,9 +962,9 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 					} else {
 
-						if (!hero_tied((Bit8u*)hero)) {
+						if (!hero->flags.tied) {
 
-							if (!hero_renegade((Bit8u*)hero)) {
+							if (!hero->flags.renegade) {
 								l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
 							} else {
 								l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
