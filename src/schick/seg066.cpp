@@ -365,8 +365,8 @@ void refresh_floor_and_sky(void)
 	nvf.src = g_tex_floor[1]; // tex_sky
 	nvf.no = 0;
 	nvf.type = 3;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 
 	process_nvf(&nvf);
 
@@ -374,8 +374,8 @@ void refresh_floor_and_sky(void)
 	nvf.src = g_tex_floor[0];
 	nvf.no = 0;
 	nvf.type = 3;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 
 	process_nvf(&nvf);
 }
@@ -805,8 +805,8 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 
 	nvf.no = nvf_no;
 	nvf.type = (direction == 0 ? 3: 5);
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	copy_width = width;

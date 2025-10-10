@@ -177,8 +177,8 @@ void sell_screen(struct shop_descr *shop_descr)
 			nvf.dst = g_renderbuf_ptr;
 			nvf.src = g_buffer10_ptr;
 			nvf.type = 0;
-			nvf.width =  (Bit8u*)&width;
-			nvf.height = (Bit8u*)&height;
+			nvf.width =  &width;
+			nvf.height = &height;
 
 			for (items_x = 0; items_x < 3; items_x++) {
 

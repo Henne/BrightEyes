@@ -429,8 +429,8 @@ void status_menu(signed short hero_pos)
 						nvf.dst = g_icon;
 						nvf.src = g_buffer10_ptr;
 						nvf.type = 0;
-						nvf.width = (Bit8u*)&width;
-						nvf.height = (Bit8u*)&height;
+						nvf.width = &width;
+						nvf.height = &height;
 						nvf.no = g_itemsdat[hero2->inventory[g_statuspage_selitem3_no].item_id].gfx;
 						process_nvf(&nvf);
 

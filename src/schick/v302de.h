@@ -54,10 +54,10 @@ struct nvf_desc {
 	Bit8u huge *dst;
 	Bit8u huge *src;
 #endif
-	short no;
+	signed short no;
 	signed char type;
-	Bit8u *width;
-	Bit8u *height;
+	signed short *width;
+	signed short *height;
 };
 
 /**

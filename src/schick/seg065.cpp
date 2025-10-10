@@ -36,8 +36,8 @@ void sub_light_timers(signed short);
 
 struct struct_ani {
 	Bit8u* ptr;
-	signed int width;
-	signed int height;
+	signed short width;
+	signed short height;
 };
 
 void do_market(void)
@@ -137,8 +137,8 @@ void final_intro(void)
 	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 3;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	map_effect(g_renderbuf_ptr);
@@ -147,8 +147,8 @@ void final_intro(void)
 	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 1;
 	nvf.type = 3;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	g_pic_copy.x1 = 0;
@@ -200,8 +200,8 @@ Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = nvf_no;
 	nvf.type = 3;
-	nvf.width = (Bit8u*)&ani->width;
-	nvf.height = (Bit8u*)&ani->height;
+	nvf.width = &ani->width;
+	nvf.height = &ani->height;
 
 	process_nvf(&nvf);
 
@@ -459,8 +459,8 @@ void show_outro(void)
 	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	g_pic_copy.x1 = (320 - width) / 2;
@@ -488,8 +488,8 @@ void show_outro(void)
 	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	g_pic_copy.x1 = (320 - width) / 2;
@@ -517,8 +517,8 @@ void show_outro(void)
 	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	g_pic_copy.x1 = (320 - width) / 2;

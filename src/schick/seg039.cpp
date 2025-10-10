@@ -322,8 +322,8 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 		nvf.dst = g_fig_list_elem.gfxbuf;
 		nvf.no = g_fig_list_elem.nvf_no;
 		nvf.type = 0;
-		nvf.width = (Bit8u*)&l1;
-		nvf.height = (Bit8u*)&l1;
+		nvf.width = &l1;
+		nvf.height = &l1;
 		process_nvf(&nvf);
 		g_fig_list_elem.reload = 0;
 	}

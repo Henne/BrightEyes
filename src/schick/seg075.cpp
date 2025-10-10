@@ -39,15 +39,16 @@ signed short div16(unsigned char);
 void DNG_floor_ceil(void)
 {
 	struct nvf_desc nvf;
-	signed short width, height;
+	signed short width;
+	signed short height;
 
 	/* Load ceiling */
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = g_buffer9_ptr3;
 	nvf.no = 0;
 	nvf.type = !g_dng_floor_tex ? 3 : 5;
-	nvf.width = (unsigned char*)&width;
-	nvf.height = (unsigned char*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 
@@ -56,8 +57,8 @@ void DNG_floor_ceil(void)
 	nvf.src = g_buffer9_ptr3;
 	nvf.no = (!(gs_direction&1)) ? 1 : 2;
 	nvf.type = !g_dng_floor_tex ? 3 : 5;
-	nvf.width = (unsigned char*)&width;
-	nvf.height = (unsigned char*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 }
@@ -333,8 +334,8 @@ void DNG_draw_walls(signed short x, signed short y, signed short a3)
 	nvf.dst = dst_ptr = g_renderbuf_ptr + 0x7530;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = a3;
-	nvf.width = (Bit8u*)&nvf_width;
-	nvf.height = (Bit8u*)&nvf_height;
+	nvf.width = &nvf_width;
+	nvf.height = &nvf_height;
 	nvf.type = 3;
 	process_nvf(&nvf);
 

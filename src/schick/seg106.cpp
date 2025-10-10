@@ -732,8 +732,8 @@ void equip_belt_ani(void)
 		nvf.src = (Bit8u*)g_buffer9_ptr;
 		nvf.no = i;
 		nvf.type = 3;
-		nvf.width = (Bit8u*)&width;
-		nvf.height = (Bit8u*)&height;
+		nvf.width = &width;
+		nvf.height = &height;
 
 		process_nvf(&nvf);
 

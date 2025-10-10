@@ -175,8 +175,8 @@ void FIG_preload_gfx(void)
 	nvf.src = g_objects_nvf_buf;
 	nvf.no = 10;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&i;
-	nvf.height = (Bit8u*)&i;
+	nvf.width = &i;
+	nvf.height = &i;
 	process_nvf(&nvf);
 
 	g_fig_cb_selector_buf = g_fightobj_buf_seek_ptr;
@@ -240,8 +240,8 @@ void FIG_draw_scenario(void)
 						nvf.src = g_fightobj_buf;
 						nvf.no = obj_id;
 						nvf.type = 0;
-						nvf.width = (Bit8u*)&width;
-						nvf.height = (Bit8u*)&height;
+						nvf.width = &width;
+						nvf.height = &height;
 						process_nvf(&nvf);
 
 						/* save sprite info */

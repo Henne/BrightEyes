@@ -375,8 +375,8 @@ void unused_store(signed short no)
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = no;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage, 0);
@@ -435,8 +435,8 @@ void load_map(void)
 	/* load the grey border for the wallclock overlay */
 	nvf.src = g_renderbuf_ptr;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&fd;
-	nvf.height = (Bit8u*)&fd;
+	nvf.width = &fd;
+	nvf.height = &fd;
 	nvf.dst = (Bit8u*)(g_buffer9_ptr + 18000L);
 	nvf.no = 16;
 
@@ -552,16 +552,16 @@ void load_splashes(void)
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = 0;
 	nvf.type = 1;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	fd = (signed short)process_nvf(&nvf);
 
 	nvf.dst = g_splash_ae = g_splash_buffer + fd;
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = 1;
 	nvf.type = 1;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 }
 

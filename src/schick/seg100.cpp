@@ -264,8 +264,8 @@ void spell_hexenknoten(void)
 		nvf.src = g_spellobj_nvf_buf;
 		nvf.no = no;
 		nvf.type = 0;
-		nvf.width = (Bit8u*)&width;
-		nvf.height = (Bit8u*)&height;
+		nvf.width = &width;
+		nvf.height = &height;
 		process_nvf(&nvf);
 
 		g_hexenknoten_gfx_buf = g_fightobj_buf_seek_ptr;

@@ -1311,8 +1311,8 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		retval = p_size;
 	}
 
-	host_writew(nvf->width, width);
-	host_writew(nvf->height, height);
+	*nvf->width = width;
+	*nvf->height = height;
 
 	return retval;
 }
@@ -4201,8 +4201,8 @@ void draw_compass(void)
 		/* set type*/
 		n.type = 0;
 
-		n.width = (Bit8u*)&width;
-		n.height = (Bit8u*)&height;
+		n.width = &width;
+		n.height = &height;
 
 		/* process the nvf */
 		process_nvf(&n);

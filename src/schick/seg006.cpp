@@ -514,8 +514,8 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		nvf.dst = p1;
 		nvf.no = 1;
 		nvf.type = 0;
-		nvf.width = (Bit8u*)&height_width;
-		nvf.height = (Bit8u*)&height_width;
+		nvf.width = &height_width;
+		nvf.height = &height_width;
 
 		process_nvf(&nvf);
 

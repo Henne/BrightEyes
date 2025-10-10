@@ -353,8 +353,8 @@ void draw_fight_screen(Bit16u val)
 			nvf.dst = list_ii->gfxbuf;
 			nvf.no = list_ii->nvf_no;
 			nvf.type = 0;
-			nvf.width = (Bit8u*)&width;
-			nvf.height = (Bit8u*)&obj_id;
+			nvf.width = &width;
+			nvf.height = &obj_id;
 
 			process_nvf(&nvf);
 
@@ -590,8 +590,8 @@ void draw_fight_screen(Bit16u val)
 						nvf.dst = list_ii->gfxbuf;
 						nvf.no = list_ii->nvf_no;
 						nvf.type = 0;
-						nvf.width = (Bit8u*)&width;
-						nvf.height = (Bit8u*)&obj_id;
+						nvf.width = &width;
+						nvf.height = &obj_id;
 
 						process_nvf(&nvf);
 
@@ -807,8 +807,8 @@ void draw_fight_screen(Bit16u val)
 							nvf.dst = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
 							nvf.no = host_readbs(sheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
 							nvf.type = 0;
-							nvf.width = (Bit8u*)&width;
-							nvf.height = (Bit8u*)&obj_id;
+							nvf.width = &width;
+							nvf.height = &obj_id;
 
 							process_nvf(&nvf);
 
@@ -830,8 +830,8 @@ void draw_fight_screen(Bit16u val)
 										nvf.src = g_weapons_nvf_buf;
 										nvf.no = host_readb(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
 										nvf.type = 0;
-										nvf.width = (Bit8u*)&width;
-										nvf.height = (Bit8u*)&obj_id;
+										nvf.width = &width;
+										nvf.height = &obj_id;
 
 										process_nvf(&nvf);
 

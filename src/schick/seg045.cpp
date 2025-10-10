@@ -63,8 +63,8 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 	nvf.src = g_spellobj_nvf_buf;
 	nvf.no = g_fig_list_elem.nvf_no;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&obj_x;
-	nvf.height = (Bit8u*)&obj_x;
+	nvf.width = &obj_x;
+	nvf.height = &obj_x;
 
 	process_nvf(&nvf);
 
@@ -149,8 +149,8 @@ struct dummy4 {
 
 void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 {
-	unsigned short height;
-	unsigned short width;
+	signed short height;
+	signed short width;
 
 	/* TODO: some kind of initialized structure */
 	struct dummy2 a = *(struct dummy2*)&g_anitab_spell_nvfno;
@@ -164,24 +164,24 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 
 	nvf.no = a.a[spell_ani_id - 1];
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = &width;
+	nvf.height = &height;
 	process_nvf(&nvf);
 
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = a.a[spell_ani_id - 1];
-	g_fig_list_elem.cbx = (signed char)x;
-	g_fig_list_elem.cby = (signed char)y;
+	g_fig_list_elem.cbx = x;
+	g_fig_list_elem.cby = y;
 
 	g_fig_list_elem.offsetx = (unsigned char)b.a[spell_ani_id - 1];
 	g_fig_list_elem.offsety = (unsigned char)c.a[spell_ani_id - 1];
 
-	g_fig_list_elem.height = ((unsigned char)height);
-	g_fig_list_elem.width = ((unsigned char)width);
+	g_fig_list_elem.height = height;
+	g_fig_list_elem.width = width;
 	g_fig_list_elem.x1 = 0;
 	g_fig_list_elem.y1 = 0;
-	g_fig_list_elem.x2 = (unsigned char)(width - 1);
-	g_fig_list_elem.y2 = (unsigned char)(height - 1);
+	g_fig_list_elem.x2 = (signed char)width - 1;
+	g_fig_list_elem.y2 = (signed char)height - 1;
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
 	g_fig_list_elem.wsheet = -1;

@@ -231,8 +231,8 @@ void status_show(Bit16u index)
 		nvf.src = g_buffer10_ptr;
 		nvf.type = 0;
 
-		nvf.width = (Bit8u*)&width;
-		nvf.height = (Bit8u*)&height;
+		nvf.width = &width;
+		nvf.height = &height;
 
 		for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
 

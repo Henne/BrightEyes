@@ -860,8 +860,8 @@ void load_tempicon(signed short no)
 	nvf.src = g_buffer8_ptr;
 	nvf.no = no;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&handle;
-	nvf.height = (Bit8u*)&handle;
+	nvf.width = &handle;
+	nvf.height = &handle;
 
 	process_nvf(&nvf);
 }

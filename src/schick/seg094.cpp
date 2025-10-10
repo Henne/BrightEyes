@@ -66,8 +66,8 @@ void prepare_map_marker(void)
 		nvf.src = g_buffer6_ptr;
 		nvf.no = i;
 		nvf.type = 0;
-		nvf.width = (Bit8u*)&dummy;
-		nvf.height = (Bit8u*)&dummy;
+		nvf.width = &dummy;
+		nvf.height = &dummy;
 
 		process_nvf(&nvf);
 	}

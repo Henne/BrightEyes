@@ -702,7 +702,7 @@ void restore_mouse_bg(void)
 void load_wallclock_nvf(void)
 {
 	struct nvf_desc nvf;
-	unsigned short fd;
+	signed short fd;
 
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
 	read_archive_file(fd, g_renderbuf_ptr, 2000);
@@ -710,8 +710,8 @@ void load_wallclock_nvf(void)
 
 	nvf.src = g_renderbuf_ptr;
 	nvf.type = 0;
-	nvf.width = (Bit8u*)&fd;
-	nvf.height = (Bit8u*)&fd;
+	nvf.width = &fd;
+	nvf.height = &fd;
 
 	/* sky background */
 	nvf.dst = g_objects_nvf_buf;

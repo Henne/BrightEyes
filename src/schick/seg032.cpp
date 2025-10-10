@@ -837,8 +837,8 @@ void FIG_load_ship_sprites(void)
 					nvf.src = g_fightobj_buf;
 					nvf.no = l_si;
 					nvf.type = 0;
-					nvf.width = (Bit8u*)&width;
-					nvf.height = (Bit8u*)&height;
+					nvf.width = &width;
+					nvf.height = &height;
 
 					process_nvf(&nvf);
 
