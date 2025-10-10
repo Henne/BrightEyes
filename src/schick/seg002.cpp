@@ -3062,7 +3062,7 @@ void magical_chainmail_damage(void)
 
 			hero_i = (struct struct_hero*)get_hero(i);
 
-			if (!hero_dead((Bit8u*)hero_i) &&
+			if (!hero_i->flags.dead &&
 				/* check if not in jail (the argument might be: heroes are forced to take off armor in jail) */
 				!hero_i->jail &&
 				/* check if cursed chainmail is equipped */
@@ -3252,7 +3252,7 @@ void herokeeping(void)
 		/* print hero message */
 		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !g_freeze_timers)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead &&
 				(!gs_show_travel_map || (g_food_message_shown[i] != gs_food_message[i]))) {
 
 					sprintf(buffer,	 (gs_food_message[i] == 1) ? get_ttx(224):
@@ -3312,8 +3312,7 @@ void check_level_up(void)
 		hero = (struct struct_hero*)get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && !hero_dead((Bit8u*)hero) &&
-				(hero->level < 20) &&
+			if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead && (hero->level < 20) &&
 
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 8:
@@ -4553,7 +4552,7 @@ void sub_ae_splash(struct struct_hero *hero, signed int ae_cost)
 void add_hero_ae(struct struct_hero* hero, const signed int ae)
 {
 	/* dont add AE if hero is dead or ae = 0 */
-	if (!hero_dead((Bit8u*)hero) && (ae > 0)) {
+	if (!hero->flags.dead && (ae > 0)) {
 
 		signed short tmp = g_update_statusline;
 		g_update_statusline = 0;
@@ -4585,7 +4584,7 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 	struct struct_fighter *fighter;
 	struct struct_hero *hero_i;
 
-	if (!hero_dead((Bit8u*)hero) && (le > 0)) {
+	if (!hero->flags.dead && (le > 0)) {
 
 		bak = g_update_statusline;
 		g_update_statusline = 0;
@@ -4732,7 +4731,7 @@ void add_hero_le(struct struct_hero *hero, const signed short le)
 	signed short ret;
 
 	/* dead heroes never get LE */
-	if (!hero_dead((Bit8u*)hero) && (le > 0)) {
+	if (!hero->flags.dead && (le > 0)) {
 
 		val_bak = g_update_statusline;
 		g_update_statusline = 0;
@@ -4806,7 +4805,7 @@ void add_group_le(signed short le)
 void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type)
 {
 	/* check if the hero is dead */
-	if (!hero_dead((Bit8u*)hero)) {
+	if (!hero->flags.dead) {
 
 		/* save this value locally */
 		const int sl_bak = g_update_statusline;
@@ -5162,7 +5161,7 @@ void set_party_money(Bit32s money)
 	hero = (struct struct_hero*)get_hero(6);
 
 	/* if we have an NPC in current group and alive */
-	if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
+	if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
 
 		/* If only the NPC is in that group give him all the money */
 		if (heroes > 1) {
@@ -5181,7 +5180,7 @@ void set_party_money(Bit32s money)
 
 		for (i = 0; i < 6; i++, hero++) {
 
-			if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
+			if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
 
 				/* account the money to hero */
 				hero->money = hero_money;
@@ -5235,7 +5234,7 @@ void add_group_ap(Bit32s ap)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
 		{
 			add_hero_ap(hero, ap);
 		}
@@ -5258,7 +5257,7 @@ void add_hero_ap_all(signed short ap)
 	hero = (struct struct_hero*)get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
 		{
 #if !defined(__BORLANDC__)
 			D1_INFO("%s erhaelt %d AP\n", hero->alias, ap);
@@ -5285,7 +5284,7 @@ void sub_hero_ap_all(signed short ap)
 	hero = (struct struct_hero*)get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
 		{
 			if ((Bit32u)ap <= hero->ap) {
 #if !defined(__BORLANDC__)
@@ -5435,7 +5434,7 @@ struct struct_hero* get_first_hero_available_in_group(void)
 
 		/* Check class, group, deadness and check_hero() */
 		if (hero_i->typus && (hero_i->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero_i) && check_hero(hero_i))
+			!hero_i->flags.dead && check_hero(hero_i))
 		{
 			return hero_i;
 		}
