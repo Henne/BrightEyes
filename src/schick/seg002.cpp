@@ -3792,7 +3792,7 @@ void dec_splash(void)
 	for (i = 0; i <= 6; i++) {
 
 		if (!g_dialogbox_lock && (g_hero_splash_timer[i]) && !(--g_hero_splash_timer[i]) &&
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !hero_dead((Bit8u*)get_hero(i))) {
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !((struct struct_hero*)get_hero(i))->flags.dead) {
 
 			restore_rect(g_vga_memstart, ((struct struct_hero*)get_hero(i))->pic, g_hero_pic_posx[i], 157, 32, 32);
 		}
@@ -5113,7 +5113,7 @@ signed short get_random_hero(void)
 	} while (
 		!((struct struct_hero*)get_hero(cur_hero))->typus ||
 		(((struct struct_hero*)get_hero(cur_hero))->group_no != gs_current_group) ||
-		hero_dead((Bit8u*)get_hero(cur_hero))
+		((struct struct_hero*)get_hero(cur_hero))->flags.dead
 	);
 
 	return cur_hero;

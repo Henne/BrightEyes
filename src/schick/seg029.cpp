@@ -183,13 +183,16 @@ void draw_status_line(void)
 				head_bak = -1;
 
 				/* load skull if hero is dead */
-				if (hero_dead((Bit8u*)get_hero(i))) {
+				if (((struct struct_hero*)get_hero(i))->flags.dead) {
 					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
 
 				/* set the src pointer of the head */
-				g_pic_copy.src = ((hero_dead((Bit8u*)get_hero(i)) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT)));
+				g_pic_copy.src =
+					((((struct struct_hero*)get_hero(i))->flags.dead ?
+						(Bit8u*)g_dtp2 :
+						(Bit8u*)((struct struct_hero*)get_hero(i))->pic));
 
 				do_pic_copy(0);
 
@@ -203,14 +206,17 @@ void draw_status_line(void)
 				head_bak = -1;
 
 				/* load skull if hero is dead */
-				if (hero_dead((Bit8u*)get_hero(i))) {
+				if (((struct struct_hero*)get_hero(i))->flags.dead) {
 					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
 
 				/* set the src pointer of the head */
 				/* TODO: expression to complicated ? */
-				src = (hero_dead((Bit8u*)get_hero(i))) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT);
+				src =
+					((((struct struct_hero*)get_hero(i))->flags.dead ?
+						(Bit8u*)g_dtp2 :
+						(Bit8u*)((struct struct_hero*)get_hero(i))->pic));
 
 				/* Gray out picture */
 				for (j = 0; j < 1024; src++, dst++, j++)

@@ -380,7 +380,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 			cb_or_dist_entry = *(g_chessboard_cpy + (y * 25) + x);
 
 			if (cb_or_dist_entry > 0) {
-				if ((cb_or_dist_entry < 10) && (hero_dead((Bit8u*)get_hero(cb_or_dist_entry - 1)) || hero_unconscious((Bit8u*)get_hero(cb_or_dist_entry - 1))))
+				if ((cb_or_dist_entry < 10) && (((struct struct_hero*)get_hero(cb_or_dist_entry - 1))->flags.dead || ((struct struct_hero*)get_hero(cb_or_dist_entry - 1))->flags.unconscious))
 				{
 					/* cb_or_dist_entry is a dead or unsonscious hero */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;

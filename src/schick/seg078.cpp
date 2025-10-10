@@ -187,12 +187,13 @@ signed short DNG02_handler(void)
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_no == gs_current_group) &&
 					!hero->flags.dead &&
-					!hero_seen_phantom((Bit8u*)hero))
+					!hero->flags.seen_phantom)
 				{
 					mod_slot = get_free_mod_slot();
 					set_mod_slot(mod_slot, HOURS(5), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -3, (signed char)i);
 					{
-						hero_seen_phantom_set((Bit8u*)hero, (mod_slot = 1)); /* set 'seen_phantom' flag */
+						/* mod_slot with different usage */
+						hero->flags.seen_phantom = mod_slot = 1;
 					}
 				}
 			}

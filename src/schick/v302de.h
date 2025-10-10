@@ -193,11 +193,6 @@ static inline Bit32s host_readds(Bit8u* p)
 	return (Bit32s)host_readd(p);
 }
 
-static inline Bit8u host_writeb(Bit8u* p, Bit8u val)
-{
-	return (*p = val);
-}
-
 /**
  * \brief mark informer only as known iff unknown
  * \param informer the index of the informer
@@ -221,49 +216,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 {
 	sprintf(string, "%d", value);
 	return string;
-}
-
-/**
- * hero_dead() -	check if hero is dead
- * @hero:	ptr to hero
- *
- * 0 = alive / 1 = dead
- */
-static inline unsigned short hero_dead(Bit8u *hero) {
-	if ((host_readb(hero + 0xaa) & 1))
-		return 1;
-	else
-		return 0;
-}
-
-/**
- * hero_unconscious() -	check if hero is unconscious
- * @hero:	ptr to hero
- *
- * 0 = awake / 1 = unconscious
- */
-static inline unsigned short hero_unconscious(Bit8u *hero) {
-	if (((host_readb(hero + 0xaa) >> 6) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-
-static inline unsigned short hero_seen_phantom(Bit8u *hero) {
-
-	if (((host_readb(hero + 0xab) >> 4) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short hero_seen_phantom_set(Bit8u *hero, unsigned short val)
-{
-	/* unset this bit */
-	host_writeb(hero + HERO_FLAGS2, host_readb(hero + HERO_FLAGS2) & 0xef);
-	host_writeb(hero + HERO_FLAGS2, host_readb(hero + HERO_FLAGS2) | ((val & 1) << 4));
-	return (val & 1);
 }
 
 static inline Bit8u *get_spelltarget_e(void) {
@@ -376,17 +328,6 @@ static inline char* get_itemname(unsigned short item)
 #define host_readbs(p) (*(Bit8s*)(p))
 #define host_readws(p) (*(Bit16s*)(p))
 #define host_readds(p) (*(Bit32s*)(p))
-
-#define host_writeb(p, d)	(*(Bit8u*)(p) = (d))
-
-#define hero_dead(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).dead)
-#define hero_unconscious(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).unconscious)
-
-
-
-#define hero_seen_phantom(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom)
-
-#define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
 
 #define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
 #define get_spelltarget()	((struct struct_hero*)g_spelltarget)
