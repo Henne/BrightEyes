@@ -356,12 +356,13 @@ static inline struct struct_hero *get_spelltarget(void) {
 	return (struct struct_hero*)g_spelltarget;
 }
 
+static inline struct struct_hero *get_spelluser(void) {
+	return (struct struct_hero*)g_spelluser;
+}
+
 }
 #endif
 
-static inline Bit8u *get_spelluser(void) {
-	return (Bit8u*)M302de::g_spelluser;
-}
 
 static inline char *get_monname(const int no)
 {
@@ -469,7 +470,7 @@ static inline char* get_itemname(unsigned short item)
 
 #define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
 #define get_spelltarget()	((struct struct_hero*)g_spelltarget)
-#define get_spelluser()		((unsigned char*)g_spelluser)
+#define get_spelluser()		((struct struct_hero*)g_spelluser)
 
 #define get_ttx(no) ((char*)(g_text_ltx_index[(no)]))
 #define get_tx(no) ((char*)(g_tx_index[(no)]))

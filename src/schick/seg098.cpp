@@ -43,13 +43,13 @@ namespace M302de {
  */
 void magic_heal_ani(const struct struct_hero *hero)
 {
-	signed short target_no;
+	signed int target_no;
 	struct Bit16s_5 a = g_ani_heal_picstars;
 	//signed short a[5] = { 0, 1, 2, 1, 0 };
 
 	struct struct_hero *target;
-	signed short handle;
-	signed short i;
+	signed int handle;
+	signed int i;
 
 	/* load SPSTAR.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_SPSTAR_NVF);
@@ -107,14 +107,14 @@ void FIG_do_spell_damage(signed short le)
 	if (le <= 0)
 		return;
 
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 		/* attack hero */
 
 		/* set pointer */
-		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
 
 		/* ensure the spelluser does not attack himself */
-		if (get_spelltarget() != (struct struct_hero*)get_spelluser()) {
+		if (get_spelltarget() != get_spelluser()) {
 
 			/* do the damage */
 			sub_hero_le(get_spelltarget(), le);
@@ -132,10 +132,11 @@ void FIG_do_spell_damage(signed short le)
 		/* attack enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 		/* do the damage */
 		FIG_damage_enemy(g_spelltarget_e, le, 0);
+
 		/* add a message (green star with le) */
 		FIG_add_msg(0x0b, le);
 
@@ -154,10 +155,10 @@ void FIG_do_spell_damage(signed short le)
 signed short get_attackee_parade(void)
 {
 	/* check if enemy or hero is attacked */
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 
 		/* attacked a hero */
-		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
 
 		/* calculate PA  */
 
@@ -171,7 +172,7 @@ signed short get_attackee_parade(void)
 		/* attacked an enemy */
 
 		/* set a global pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 		return g_spelltarget_e->pa;
 	}
@@ -185,10 +186,11 @@ signed short get_attackee_parade(void)
 signed short get_attackee_rs(void)
 {
 	/* check if enemy or hero is attacked */
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 
 		/* attacked a hero */
-		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+
+		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
 
 		return get_spelltarget()->rs_bonus1; /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
@@ -197,7 +199,7 @@ signed short get_attackee_rs(void)
 		/* attacked an enemy */
 
 		/* set a global pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 		return g_spelltarget_e->rs;
 	}
@@ -206,8 +208,8 @@ signed short get_attackee_rs(void)
 /**
  * \brief   get the amount of AE-Points needed for a spell
  *
- * \param   spell_id       number of the spell
- * \param   half        cost    	the caster needs only half AE
+ * \param   spell_id	the spell ID
+ * \param   half_cost	spellcaster needs only half AE
  */
 signed short get_spell_cost(signed short spell_id, signed short half_cost)
 {
@@ -238,10 +240,10 @@ signed short get_spell_cost(signed short spell_id, signed short half_cost)
  */
 signed int use_magic(struct struct_hero *hero)
 {
-	signed short ae;
-	signed short retval;
-	signed short answer;
-	signed short thonny_pos;
+	signed int ae;
+	signed int retval;
+	signed int answer;
+	signed int thonny_pos;
 
 	retval = 0;
 
@@ -418,10 +420,10 @@ signed int can_use_spellclass(const struct struct_hero *hero, const signed int s
 
 signed int select_spell(struct struct_hero *hero, signed int show_vals)
 {
-	signed short l_di;
-	signed short answer1;
-	signed short first_spell;
-	signed short retval = -1;
+	signed int l_di;
+	signed int answer1;
+	signed int first_spell;
+	signed int retval = -1;
 	struct c_str_6 str_val = g_spell_select_str_keyval;
 	struct c_str_5 col_str = g_spell_select_str_key;
 	struct c_str_3 str = g_spell_select_str_key_color;
@@ -575,7 +577,7 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
  */
 signed short test_spell(struct struct_hero *hero, signed short spell_no, signed char handicap)
 {
-	signed short retval;
+	signed int retval;
 	struct spell_descr *spell_desc;
 
 	/* check if class is magic user */
@@ -635,7 +637,7 @@ signed short test_spell_group(signed short spell, signed char handicap)
 {
 
 	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
-	signed short i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -661,7 +663,7 @@ signed short test_spell_group(signed short spell, signed char handicap)
 
 signed short select_magic_user(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* select the hero who shoulds cast a spell */
 	answer = select_hero_ok(get_ttx(317));
@@ -684,18 +686,18 @@ signed short select_magic_user(void)
  */
 signed int use_spell(struct struct_hero* hero, const signed int selection_menu, signed char handicap)
 {
-	signed short retval = 1;
-	signed short spell_id;
-	signed short ae_cost;
-	signed short tw_bak;
+	signed int retval = 1;
+	signed int spell_id;
+	signed int ae_cost;
+	signed int tw_bak;
 	struct spell_descr *spell_description;
 	void (*func)(void);
-	signed short l4;
+	signed int l4;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 29: see below */
 	signed short x;
 	signed short y;
-	signed short pos;
+	signed int pos;
 	struct dungeon_door *ptr_doors;
 #endif
 

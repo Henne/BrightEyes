@@ -37,7 +37,7 @@ void spell_eigenschaften(void)
 	signed short min;
 	signed short max;
 
-	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 	damage_range_template(g_spelltarget_e->dam1, &min, &max);
 
@@ -137,7 +137,7 @@ void spell_odem_arcanum(void)
 	signed int inv_pos;
 	signed int item_id;
 
-	inv_pos = select_item_to_drop((struct struct_hero*)get_spelluser());
+	inv_pos = select_item_to_drop(get_spelluser());
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* If the player cancels item selection or has no items select_item_to_drop() returns -1.
@@ -150,15 +150,15 @@ void spell_odem_arcanum(void)
 
 #endif
 
-	item_id = ((struct struct_hero*)get_spelluser())->inventory[inv_pos].item_id;
+	item_id = get_spelluser()->inventory[inv_pos].item_id;
 
 	if (item_id) {
 
-		if (((struct struct_hero*)get_spelluser())->inventory[inv_pos].flags.magic) {
+		if (get_spelluser()->inventory[inv_pos].flags.magic) {
 
 			sprintf(g_dtp2, get_tx(81), GUI_names_grammar((signed short)0x8000, item_id, 0));
 
-			((struct struct_hero*)get_spelluser())->inventory[inv_pos].flags.magic_revealed = 1;
+			get_spelluser()->inventory[inv_pos].flags.magic_revealed = 1;
 
 		} else {
 			sprintf(g_dtp2, get_tx(82), GUI_names_grammar((signed short)0x8000, item_id, 0));
@@ -192,20 +192,20 @@ void spell_sensibar(void)
 /* Illusion */
 void spell_chamaelioni(void)
 {
-	((struct struct_hero*)get_spelluser())->flags.chamaelioni = 1;
+	get_spelluser()->flags.chamaelioni = 1;
 
 	/* prepare the message */
-	sprintf(g_dtp2,	get_tx(83), ((struct struct_hero*)get_spelluser())->alias,
-		(GUI_get_ptr(((struct struct_hero*)get_spelluser())->sex, 0)));
+	sprintf(g_dtp2,	get_tx(83), get_spelluser()->alias,
+		(GUI_get_ptr(get_spelluser()->sex, 0)));
 }
 
 void spell_duplicatus(void)
 {
-	((struct struct_hero*)get_spelluser())->flags.duplicatus = 1;
+	get_spelluser()->flags.duplicatus = 1;
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(84), ((struct struct_hero*)get_spelluser())->alias,
-		GUI_get_ptr(((struct struct_hero*)get_spelluser())->sex, 0));
+	sprintf(g_dtp2, get_tx(84), get_spelluser()->alias,
+		GUI_get_ptr(get_spelluser()->sex, 0));
 }
 
 void spell_harmlos(void)
@@ -231,20 +231,20 @@ void spell_hexenknoten(void)
 		return;
 	}
 
-	fighter = FIG_get_fighter(host_readbs(get_spelluser() + HERO_FIGHTER_ID));
+	fighter = FIG_get_fighter(get_spelluser()->fighter_id);
 	x = fighter->cbx;
 	y = fighter->cby;
 
-	if (!host_readbs(get_spelluser() + HERO_VIEWDIR)) {
+	if (!get_spelluser()->viewdir) {
 		x++;
 	}
-	if (host_readbs(get_spelluser() + HERO_VIEWDIR) == 1) {
+	if (get_spelluser()->viewdir == 1) {
 		y--;
 	}
-	if (host_readbs(get_spelluser() + HERO_VIEWDIR) == 2) {
+	if (get_spelluser()->viewdir == 2) {
 		x--;
 	}
-	if (host_readbs(get_spelluser() + HERO_VIEWDIR) == 3) {
+	if (get_spelluser()->viewdir == 3) {
 		y++;
 	}
 
@@ -305,13 +305,13 @@ void spell_hexenknoten(void)
 void spell_blitz(void)
 {
 
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 		/* cast a hero */
 
 		/* set the spell target */
-		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
 
-		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+		if (get_spelltarget() == get_spelluser()) {
 
 			g_spell_special_aecost = 0;
 
@@ -327,7 +327,7 @@ void spell_blitz(void)
 		/* cast an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 		/* set the rounds counter */
 		g_spelltarget_e->blind = 3;
@@ -350,17 +350,17 @@ void spell_ecliptifactus(void)
 		/* calculate the AE costs */
 		ae = rounds * 2 + 5;
 
-		if (host_readws(get_spelluser() + HERO_AE) >= ae) {
+		if (get_spelluser()->ae >= ae) {
 			/* set AP costs */
 			g_spell_special_aecost = (ae);
 			/* enable the spell */
-			((struct struct_hero*)get_spelluser())->ecliptifactus_timer = (signed char)rounds + 1;
+			get_spelluser()->ecliptifactus_timer = (signed char)rounds + 1;
 			/* prepare the message */
-			sprintf(g_dtp2, get_tx(88), ((struct struct_hero*)get_spelluser())->alias,
-				GUI_get_ptr(((struct struct_hero*)get_spelluser())->sex, 3), rounds);
+			sprintf(g_dtp2, get_tx(88), get_spelluser()->alias,
+				GUI_get_ptr(get_spelluser()->sex, 3), rounds);
 		} else {
 			/* prepare the message */
-			sprintf(g_dtp2, get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
+			sprintf(g_dtp2, get_ttx(607), get_spelluser()->alias);
 			/* set costs to 0 */
 			g_spell_special_aecost = 0;
 		}
@@ -373,13 +373,13 @@ void spell_eisenrost(void)
 {
 	signed short id;
 
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 		/* target is a hero */
 
 		/* set the spell target */
-		g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
 
-		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+		if (get_spelltarget() == get_spelluser()) {
 
 			g_spell_special_aecost = 0;
 
@@ -413,7 +413,7 @@ void spell_eisenrost(void)
 		}
 	} else {
 		/* target is an enemy */
-		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 		/* check if target is an animal */
 		if (g_spelltarget_e->is_animal)
@@ -439,8 +439,8 @@ void spell_fulminictus(void)
 {
 	signed short damage;
 
-	if ((host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) &&
-		get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) == get_spelluser()) {
+	if ((get_spelluser()->enemy_id < 10) &&
+		(struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
 
 		/* do not attack yourself */
 
@@ -454,12 +454,12 @@ void spell_fulminictus(void)
 		damage = dice_roll(3, 6, 0);
 
 		/* add level to damage */
-		damage += host_readbs(get_spelluser() + HERO_LEVEL);
+		damage += get_spelluser()->level;
 
 		/* reduce damage if the spellcaster has not enough AE */
-		if (host_readws(get_spelluser() + HERO_AE) < damage) {
+		if (get_spelluser()->ae < damage) {
 
-			damage = host_readws(get_spelluser() + HERO_AE);
+			damage = get_spelluser()->ae;
 		}
 
 		/* do the damage */
@@ -480,9 +480,9 @@ void spell_ignifaxius(void)
 	signed short damage;
 	signed short level;
 
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 
-		if (get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) == get_spelluser()) {
+		if ((struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
 
 			/* don't attack yourself */
 			g_spell_special_aecost = 0;
@@ -494,11 +494,11 @@ void spell_ignifaxius(void)
 	}
 
 	/* get spell level... */
-	if ((g_autofight == 0) && (host_readbs(get_spelluser() + HERO_NPC_ID) == 0)) {
+	if ((g_autofight == 0) && (get_spelluser()->npc_id == 0)) {
 		/* ... manual mode */
 
 		/* prepare question of spell level */
-		sprintf(g_dtp2, get_tx(93), host_readbs(get_spelluser() + HERO_LEVEL) + 1);
+		sprintf(g_dtp2, get_tx(93), get_spelluser()->level + 1);
 
 		level = GUI_input(g_dtp2, 2);
 
@@ -511,27 +511,27 @@ void spell_ignifaxius(void)
 		}
 
 		/* adjust wrong input */
-		if ((host_readbs(get_spelluser() + HERO_LEVEL) + 1) < level) {
-			level = host_readbs(get_spelluser() + HERO_LEVEL) + 1;
+		if ((get_spelluser()->level + 1) < level) {
+			level = get_spelluser()->level + 1;
 		}
 
 	} else {
 		/* ... autofight mode */
 		/* always cast at maximum possible spell level */
-		level = host_readbs(get_spelluser() + HERO_LEVEL) + 1;
+		level = get_spelluser()->level + 1;
 	}
 
 	/* calculate: damage = level * W6 */
 	damage = dice_roll(level, 6, 0);
 
 	/* damage must not exceed AE of the spelluser */
-	if (host_readws(get_spelluser() + HERO_AE) < damage) {
-		damage = host_readws(get_spelluser() + HERO_AE);
+	if (get_spelluser()->ae < damage) {
+		damage = get_spelluser()->ae;
 	}
 
 	/* damage doubles if the target is a mummy */
-	if ((host_readbs(get_spelluser() + HERO_ENEMY_ID) >= 10) &&
-			(g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10].gfx_id == 0x1e))
+	if ((get_spelluser()->enemy_id >= 10) &&
+			(g_enemy_sheets[get_spelluser()->enemy_id - 10].gfx_id == 0x1e))
 	{
 		damage *= 2;
 		mummy = 1;
@@ -542,10 +542,10 @@ void spell_ignifaxius(void)
 
 	rs_malus = damage / 10;
 
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 
 		/* target is a hero */
-		hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+		hero_pos = get_spelluser()->enemy_id - 1;
 
 		/* set the spell target */
 		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
@@ -581,7 +581,7 @@ void spell_ignifaxius(void)
 		/* target is an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 		g_spelltarget_e->rs = g_spelltarget_e->rs - rs_malus;
 		g_spelltarget_e->at -= level / 2;
@@ -606,16 +606,16 @@ void spell_plumbumbarum(void)
 	signed short slot;
 	signed short hero_pos;
 
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
+	if (get_spelluser()->enemy_id < 10) {
 
 		/* target is a hero */
 
-		hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+		hero_pos = get_spelluser()->enemy_id - 1;
 
 		/* set the spell target */
 		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
 
-		if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+		if (get_spelltarget() == get_spelluser()) {
 
 			/* don't attack yourself */
 			g_spell_special_aecost = 0;
@@ -642,7 +642,7 @@ void spell_plumbumbarum(void)
 	/* target is an enemy */
 
 	/* set a pointer to the enemy */
-	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 	/* AT-malus of -3 (permanent) */
 	g_spelltarget_e->at -= 3;
@@ -665,7 +665,7 @@ void spell_saft_kraft(void)
 	rounds = random_schick(20);
 
 	/* get the index of the hero on whom the spell is cast */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	/* set a pointer to the target */
 	g_spelltarget = (struct struct_hero*)get_hero(target);
@@ -713,7 +713,7 @@ void spell_scharfes_auge(void)
 	signed short slot;
 
 	/* get the index of the hero on whom the spell is cast */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	/* set a pointer to the target */
 	g_spelltarget = (struct struct_hero*)get_hero(target);

@@ -102,9 +102,9 @@ void item_arcano(void)
 	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	((struct struct_hero*)get_spelluser())->enemy_id = select_hero_from_group(get_ttx(637)) + 1;
+	g_spelluser->enemy_id = select_hero_from_group(get_ttx(637)) + 1;
 
-	if (((struct struct_hero*)get_spelluser())->enemy_id > 0) {
+	if (g_spelluser->enemy_id > 0) {
 		/* use it */
 		spell_arcano();
 		/* decrement usage counter */
@@ -185,9 +185,9 @@ void item_armatrutz(void)
 	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	((struct struct_hero*)get_spelluser())->enemy_id = select_hero_from_group(get_ttx(637)) + 1;
+	g_spelluser->enemy_id = select_hero_from_group(get_ttx(637)) + 1;
 
-	if (((struct struct_hero*)get_spelluser())->enemy_id > 0) {
+	if (get_spelluser()->enemy_id > 0) {
 		/* use it */
 		spell_armatrutz();
 		/* decrement usage counter */
@@ -456,17 +456,17 @@ void item_brenne(void)
 		/* refill burning lantern */
 
 #ifdef M302de_ORIGINAL_BUGFIX
-		if ((struct struct_hero*)get_spelluser() != get_itemuser()) {
+		if (get_spelluser() != get_itemuser()) {
 			g_spelluser = get_itemuser();
 		}
 #endif
 
 		/* look for oil at the spelluser() */
-		pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_OIL);
+		pos = get_item_pos(get_spelluser(), ITEM_OIL);
 
 		if (pos != -1) {
 			/* look for the burning lantern at the spelluser() ??? */
-			refill_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_LANTERN_ON);
+			refill_pos = get_item_pos(get_spelluser(), ITEM_LANTERN_ON);
 
 			/* reset the burning time of the lantern */
 			get_itemuser()->inventory[refill_pos].lighting_timer = 100;

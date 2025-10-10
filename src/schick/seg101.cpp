@@ -38,11 +38,11 @@ void spell_adler(void)
 
 void spell_arcano(void)
 {
-	signed short target;
-	unsigned short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
@@ -58,21 +58,21 @@ void spell_arcano(void)
 
 void spell_armatrutz(void)
 {
-	signed short max_bonus;
-	signed short pos;
-	signed short bonus;
-	signed short slot;
+	signed int max_bonus;
+	signed int pos;
+	signed int bonus;
+	signed int slot;
 
 	max_bonus = 0;
 
 	/* calc the maximal RS bonus */
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug: you can get one RS point more that you have AE for */
-	while (max_bonus * max_bonus < host_readws(get_spelluser() + HERO_AE)) {
+	while (max_bonus * max_bonus < get_spelluser()->ae) {
 		max_bonus++;
 	}
 #else
-	while (max_bonus * max_bonus <= host_readws(get_spelluser() + HERO_AE)) {
+	while (max_bonus * max_bonus <= get_spelluser()->ae) {
 		max_bonus++;
 	}
 	--max_bonus;
@@ -92,13 +92,13 @@ void spell_armatrutz(void)
 
 	if (bonus != -1) {
 
-		pos = get_hero_index((struct struct_hero*)get_spelluser());
+		pos = get_hero_index(get_spelluser());
 		g_spell_special_aecost = (bonus * bonus);
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(5), get_spelluser() + HERO_RS_BONUS1, (signed char)bonus, (signed char)pos);
+		set_mod_slot(slot, MINUTES(5), (Bit8u*)&get_spelluser()->rs_bonus1, (signed char)bonus, (signed char)pos);
 
 		/* prepare output message */
-		sprintf(g_dtp2,	get_tx(100), ((struct struct_hero*)get_spelluser())->alias, bonus);
+		sprintf(g_dtp2,	get_tx(100), get_spelluser()->alias, bonus);
 
 	} else {
 		/* spell canceled */
@@ -111,17 +111,16 @@ void spell_armatrutz(void)
 
 void spell_inc_ch(void)
 {
-
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -150,22 +149,21 @@ void spell_inc_ch(void)
 
 void spell_feuerbann(void)
 {
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* check if spell is already activated */
-	if (!host_readbs(get_spelluser() + HERO_FIREBAN)) {
+	if (!get_spelluser()->fireban) {
 
-		target = get_hero_index((struct struct_hero*)get_spelluser());
+		target = get_hero_index(get_spelluser());
 
 		slot = get_free_mod_slot();
 
 		/* Duration = Level * 12 min */
-		set_mod_slot(slot, host_readbs(get_spelluser() + HERO_LEVEL) * MINUTES(5),
-			get_spelluser() + HERO_FIREBAN, 1, (signed char)target);
+		set_mod_slot(slot, get_spelluser()->level * MINUTES(5), (Bit8u*)&get_spelluser()->fireban, 1, (signed char)target);
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(102), ((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2,	get_tx(102), get_spelluser()->alias);
 	} else {
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -174,17 +172,16 @@ void spell_feuerbann(void)
 
 void spell_inc_ff(void)
 {
-
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -214,17 +211,16 @@ void spell_inc_ff(void)
 
 void spell_inc_ge(void)
 {
-
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -253,17 +249,16 @@ void spell_inc_ge(void)
 
 void spell_inc_in(void)
 {
-
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -292,17 +287,16 @@ void spell_inc_in(void)
 
 void spell_inc_kk(void)
 {
-
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -331,17 +325,16 @@ void spell_inc_kk(void)
 
 void spell_inc_kl(void)
 {
-
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -370,17 +363,16 @@ void spell_inc_kl(void)
 
 void spell_inc_mu(void)
 {
-
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the spell target */
-	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
+	target = get_spelluser()->enemy_id - 1;
 
 	g_spelltarget = (struct struct_hero*)get_hero(target);
 
 	/* check if the target is the spelluser */
-	if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -418,11 +410,11 @@ void spell_mutabili(void)
 
 void spell_paralue(void)
 {
-	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) >= 10) {
+	if (get_spelluser()->enemy_id >= 10) {
 		/* cast at an enemy */
 
 		/* BC-TODO: calculation of ptr could be better */
-		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 		/* set 'petrified' flag */
 		g_spelltarget_e->flags.petrified = 1;
@@ -431,13 +423,13 @@ void spell_paralue(void)
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
-		if (get_spelltarget() != (struct struct_hero*)get_spelluser()) {
+		if (get_spelltarget() != get_spelluser()) {
 
 			/* set the target  */
-			g_spelltarget = (struct struct_hero*)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
+			g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
 
 			/* check again */
-			if (get_spelltarget() == (struct struct_hero*)get_spelluser()) {
+			if (get_spelltarget() == get_spelluser()) {
 
 				/* never cast yourself */
 				g_spell_special_aecost = 0;
@@ -464,9 +456,9 @@ void spell_paralue(void)
 void spell_salander(void)
 {
 	/* TODO: Original-Bug: Strange effect when cast on a two-squared monster */
-	signed short ae_cost;
+	signed int ae_cost;
 
-	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
 
 	/* read a value from that struct */
 	ae_cost = g_spelltarget_e->mr * 3;
@@ -475,7 +467,7 @@ void spell_salander(void)
 	if (ae_cost < 25)
 		ae_cost = 25;
 
-	if (host_readws(get_spelluser() + HERO_AE) >= ae_cost) {
+	if (get_spelluser()->ae >= ae_cost) {
 
 		/* sets 'mushroom' flag */
 		g_spelltarget_e->flags.mushroom = 1;
@@ -487,7 +479,7 @@ void spell_salander(void)
 		g_spell_special_aecost = ae_cost;
 	} else {
 		/* prepare message */
-		sprintf(g_dtp2, get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2, get_ttx(607), get_spelluser()->alias);
 
 		/* no AE cost */
 		g_spell_special_aecost = 0;
@@ -508,16 +500,16 @@ void spell_see(void)
  */
 void spell_visibili(void)
 {
-	signed short slot;
-	signed short pos;
-	signed short rounds;
+	signed int slot;
+	signed int pos;
+	signed int rounds;
 
 	/* ask the user how many rounds he wants to be invisible */
-	sprintf(g_dtp2, get_tx(105), ((struct struct_hero*)get_spelluser())->alias);
+	sprintf(g_dtp2, get_tx(105), get_spelluser()->alias);
 	rounds = GUI_input(g_dtp2, 2);
 
 	/* the spell has also no effect if it is already active */
-	if ((rounds <= 0) || (host_readb(get_spelluser() + HERO_INVISIBLE) != 0)) {
+	if ((rounds <= 0) || (get_spelluser()->invisible != 0)) {
 
 		/* set AE to 0 */
 		g_spell_special_aecost = 0;
@@ -528,17 +520,16 @@ void spell_visibili(void)
 	}
 
 	/* check if the hero has enough AE */
-	if (rounds * 5 <= host_readws(get_spelluser() + HERO_AE)) {
+	if (rounds * 5 <= get_spelluser()->ae) {
 
 		g_spell_special_aecost = rounds * 5;
-		pos = (signed short)get_hero_index((struct struct_hero*)get_spelluser());
+		pos = (signed short)get_hero_index(get_spelluser());
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
+		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), (Bit8u*)&get_spelluser()->invisible, 1, (signed char)pos);
 
-		sprintf(g_dtp2,	get_tx(106), ((struct struct_hero*)get_spelluser())->alias,
-			(GUI_get_ptr(((struct struct_hero*)get_spelluser())->sex, 0)));
+		sprintf(g_dtp2,	get_tx(106), get_spelluser()->alias, GUI_get_ptr(get_spelluser()->sex, 0));
 	} else {
-		sprintf(g_dtp2,	get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2,	get_ttx(607), get_spelluser()->alias);
 
 		g_spell_special_aecost = 0;
 	}
@@ -568,11 +559,11 @@ void spell_aeolitus(void)
  */
 void spell_brenne(void)
 {
-	signed short oil_pos;
-	signed short answer;
+	signed int oil_pos;
+	signed int answer;
 
-	signed short torch_pos;
-	signed short lantern_pos;
+	signed int torch_pos;
+	signed int lantern_pos;
 
 	torch_pos = -1;
 	lantern_pos = -1;
@@ -580,32 +571,38 @@ void spell_brenne(void)
 	g_spell_special_aecost = 0;
 
 	if (g_light_type == LIGHTING_TORCH) {
-		torch_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_TORCH_OFF);
+		torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
 	} else {
 		if (g_light_type == LIGHTING_LANTERN) {
 		} else {
-			torch_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_TORCH_OFF);
+			torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
 		}
 
-		lantern_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_LANTERN_OFF);
+		lantern_pos = get_item_pos(get_spelluser(), ITEM_LANTERN_OFF);
 	}
 
 	if (torch_pos != -1) {
-		if (lantern_pos != -1) {
-			/* lantern and torch are available, must decide */
 
-			sprintf(g_dtp2,	get_tx(107), ((struct struct_hero*)get_spelluser())->alias);
+		if (lantern_pos != -1) {
+
+			/* lantern and torch are available, must decide */
+			sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
 
 			answer = GUI_radio(g_dtp2, 2,
 					(char*)GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0),
 					(char*)GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0));
 
 			if (answer == -1) {
+
 				/* abort */
 				torch_pos = lantern_pos = -1;
+
 			} else if (answer == 1) {
+
 				lantern_pos = -1;
+
 			} else {
+
 				torch_pos = -1;
 			}
 		}
@@ -614,50 +611,50 @@ void spell_brenne(void)
 	if (torch_pos != -1) {
 
 		/* change torch to burning torch */
-		((struct struct_hero*)get_spelluser())->inventory[torch_pos].item_id = ITEM_TORCH_ON;
+		get_spelluser()->inventory[torch_pos].item_id = ITEM_TORCH_ON;
 
-		/* set counter to 10 */
-		((struct struct_hero*)get_spelluser())->inventory[torch_pos].lighting_timer = 10;
+		/* set timer to 10 */
+		get_spelluser()->inventory[torch_pos].lighting_timer = 10;
 
 		/* set AP cost */
 		g_spell_special_aecost = random_schick(20);
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(108), ((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2,	get_tx(108), get_spelluser()->alias);
 
 	} else if (lantern_pos != -1) {
 
 		/* get position of oil */
-		oil_pos = get_item_pos((struct struct_hero*)get_spelluser(), ITEM_OIL);
+		oil_pos = get_item_pos(get_spelluser(), ITEM_OIL);
 
 		if (oil_pos != -1) {
 
 			/* change lantern to burning lantern */
-			((struct struct_hero*)get_spelluser())->inventory[lantern_pos].item_id = ITEM_LANTERN_ON;
+			get_spelluser()->inventory[lantern_pos].item_id = ITEM_LANTERN_ON;
 
 			/* set counter to 100 */
-			((struct struct_hero*)get_spelluser())->inventory[lantern_pos].lighting_timer = 100;
+			get_spelluser()->inventory[lantern_pos].lighting_timer = 100;
 
 			/* drop one oil flask */
-			drop_item((struct struct_hero*)get_spelluser(), oil_pos, 1);
+			drop_item(get_spelluser(), oil_pos, 1);
 
 			/* give bronze flask */
-			give_hero_new_item((struct struct_hero*)get_spelluser(), ITEM_FLASK_BRONZE, 0, 1);
+			give_hero_new_item(get_spelluser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* set AP cost */
 			g_spell_special_aecost = random_schick(20);
 
 			/* prepare message */
-			sprintf(g_dtp2,	get_tx(119), ((struct struct_hero*)get_spelluser())->alias);
+			sprintf(g_dtp2,	get_tx(119), get_spelluser()->alias);
 		} else {
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(120), ((struct struct_hero*)get_spelluser())->alias);
+			sprintf(g_dtp2, get_tx(120), get_spelluser()->alias);
 		}
 	} else {
 		/* neither torch nor lantern */
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(121), ((struct struct_hero*)get_spelluser())->alias);
+		sprintf(g_dtp2, get_tx(121), get_spelluser()->alias);
 	}
 }
 
@@ -671,7 +668,7 @@ void spell_claudibus(void)
 void spell_dunkelheit(void)
 {
 	/* set dunkelheit duration (level + 3) * hours */
-	gs_ingame_timers[INGAME_TIMER_DARKNESS] = (Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1);
+	gs_ingame_timers[INGAME_TIMER_DARKNESS] = (Bit32s)(get_spelluser()->level + 3) * HOURS(1);
 
 	/* copy message text */
 	strcpy(g_dtp2, get_tx(109));
@@ -687,7 +684,7 @@ void spell_erstarre(void)
 void spell_flimflam(void)
 {
 	/* set flim flam duration (level + 3) hours */
-	gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] = (Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1);
+	gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] = (Bit32s)(get_spelluser()->level + 3) * HOURS(1);
 
 	/* copy message text */
 	strcpy(g_dtp2, get_tx(110));
@@ -702,9 +699,8 @@ void spell_schmelze(void)
 
 void spell_silentium(void)
 {
-
-	signed short i;
-	signed short slot;
+	signed int i;
+	signed int slot;
 	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
@@ -713,6 +709,7 @@ void spell_silentium(void)
 		{
 			/* get a free mod_slot */
 			slot = get_free_mod_slot();
+
 			/* skill stealth + 10 for 5 minutes */
 			set_mod_slot(slot, MINUTES(5), (Bit8u*)&hero->skills[TA_SCHLEICHEN], 10, (signed char)i);
 		}
