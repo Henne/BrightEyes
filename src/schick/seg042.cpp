@@ -533,7 +533,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			if (target_is_hero != 0) {
 
-				if (check_hero((Bit8u*)target_hero) || (g_defender_dead != 0)) {
+				if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
 					FIG_prepare_hero_fight_ani(1, target_hero, weapon_type_target,
 								100, hero->enemy_id, hero_pos + 1, 1);
@@ -758,7 +758,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 											hero_pos + 1, 1);
 								} else {
 
-									if (check_hero((Bit8u*)target_hero) || (g_defender_dead != 0)) {
+									if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
 										seg044_002a(1, target_hero, 99, hero->enemy_id, 0 , -1, 1);
 									}

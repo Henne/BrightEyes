@@ -473,7 +473,7 @@ signed short is_staff_lvl2_in_group(void)
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) &&
-			check_hero((Bit8u*)hero_i) && (hero_i->staff_level >= 2))
+			check_hero(hero_i) && (hero_i->staff_level >= 2))
 		{
 			return 1;
 		}

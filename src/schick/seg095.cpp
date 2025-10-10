@@ -99,7 +99,7 @@ void npc_farewell(void)
 		return;
 
 	/* Unconscious or dead NPCs cannot be removed automatically (99 means manual). */
-	if (check_hero((Bit8u*)get_hero(6)) == 0 && (gs_npc_months < 99))
+	if (check_hero((struct struct_hero*)get_hero(6)) == 0 && (gs_npc_months < 99))
 		return;
 
 	tmp = g_tx_file_index;
@@ -482,7 +482,7 @@ void remove_npc(signed short head_index, signed char days,
 	save_npc(index);
 
 	/* print farewell message if the NPC has and can */
-        if (text && check_hero((Bit8u*)get_hero(6))) {
+        if (text && check_hero((struct struct_hero*)get_hero(6))) {
 
 		load_in_head(head_index);
 		GUI_dialogbox((unsigned char*)g_dtp2, name, text, 0);
@@ -501,7 +501,7 @@ void remove_npc(signed short head_index, signed char days,
 
 	/* TODO:	check_hero() will now, after memset() return 0,
 			so the parameter days is useless */
-	if (check_hero((Bit8u*)get_hero(6)))
+	if (check_hero((struct struct_hero*)get_hero(6)))
 		gs_npc_timers[index - 0xe1] = days;
 	else
 		gs_npc_timers[index - 0xe1] = -1;

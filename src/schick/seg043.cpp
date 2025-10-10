@@ -235,7 +235,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 				D1_INFO("Critical attack failure...");
 #endif
 
-				if (!target_is_hero || check_hero((Bit8u*)hero)) {
+				if (!target_is_hero || check_hero(hero)) {
 					/* if enemy has been attacked, or if hero has been attacked and that hero
 					 * is not asleep, dead, petrified, unconscious, renegade or fleeing */
 					FIG_add_msg(3, 0);
@@ -310,7 +310,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				if (randval <= attacker_at) {
 
-					if ((target_is_hero && !g_hero_is_target[monster->enemy_id - 1] && check_hero((Bit8u*)hero)) ||
+					if ((target_is_hero && !g_hero_is_target[monster->enemy_id - 1] && check_hero(hero)) ||
 						(!target_is_hero && !g_fig_actors_unkn[monster->enemy_id]))
 					{
 
@@ -492,7 +492,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 			if (target_is_hero != 0) {
 
-				if (check_hero((Bit8u*)hero) || (g_defender_dead != 0)) {
+				if (check_hero(hero) || (g_defender_dead != 0)) {
 
 					FIG_prepare_hero_fight_ani(0, hero, weapon_type, 100, monster->enemy_id, monster_pos + 10, 1);
 				}
@@ -646,7 +646,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 									seg044_002f(1, target_enemy, 99, monster->enemy_id, monster_pos + 10, 1);
 								} else {
 
-									if (check_hero((Bit8u*)hero) || (g_defender_dead != 0)) {
+									if (check_hero(hero) || (g_defender_dead != 0)) {
 
 										seg044_002a(1, hero, 99, monster->enemy_id, 0, -1, 1);
 									}

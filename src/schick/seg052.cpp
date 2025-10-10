@@ -104,7 +104,7 @@ void do_citycamp(void)
 
 			for (l_si = 0; l_si <= 6; l_si++) {
 
-				if (!g_citycamp_magicstatus[l_si] && check_hero(get_hero(l_si))) {
+				if (!g_citycamp_magicstatus[l_si] && check_hero((struct struct_hero*)get_hero(l_si))) {
 					g_citycamp_guardstatus[l_si] = 0;
 					answer = 0;
 				}

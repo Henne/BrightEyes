@@ -161,7 +161,7 @@ void do_house(void)
 
 						hero = (struct struct_hero*)get_hero(i);
 
-						if (check_hero((Bit8u*)hero) && !hero->jail) {
+						if (check_hero(hero) && !hero->jail) {
 							l_di = 1;
 						}
 					}

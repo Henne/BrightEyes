@@ -47,7 +47,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	signed short l_di, l_si;
 
 	/* this hero cannot consume */
-	if (check_hero((Bit8u*)consumer) == 0) {
+	if (check_hero(consumer) == 0) {
 		return;
 	}
 

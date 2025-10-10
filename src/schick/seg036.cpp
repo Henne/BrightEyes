@@ -717,7 +717,7 @@ signed short KI_count_heroes(signed short hero_pos)
 	/* for each hero in this group */
 	for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
 
-		if ((i != hero_pos) && check_hero(get_hero(i))) {
+		if ((i != hero_pos) && check_hero((struct struct_hero*)get_hero(i))) {
 			cnt++;
 		}
 	}

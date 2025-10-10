@@ -54,7 +54,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 	g_used_item_desc = &g_itemsdat[g_used_item_id];
 
-	if (check_hero((Bit8u*)get_itemuser())) {
+	if (check_hero(get_itemuser())) {
 
 			if (!g_used_item_desc->flags.useable) {
 

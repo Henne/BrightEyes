@@ -2033,7 +2033,7 @@ void game_loop(void)
 
 			g_check_party = 0;
 
-			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero(get_hero(6)))) // count_heroes_available_ignore_npc() == 0
+			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero((struct struct_hero*)get_hero(6)))) // count_heroes_available_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC can act => GAME OVER */
 				g_game_state = GAME_STATE_DEAD;
@@ -4451,13 +4451,10 @@ void seg002_484f(void)
  * \param   hero        pointer to the hero
  * \return              {0, 1}
  */
-/* should be static */
-signed short check_hero(Bit8u *hero)
+signed short check_hero(struct struct_hero *hero)
 {
-	if (!host_readbs(hero + HERO_TYPE) ||
-		hero_asleep((Bit8u*)hero) || hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero) ||
-		hero_unconscious((Bit8u*)hero) || hero_renegade((Bit8u*)hero) ||
-		(host_readb(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE))
+	if (!hero->typus || hero->flags.asleep || hero->flags.dead || hero->flags.petrified ||
+		hero->flags.unconscious || hero->flags.renegade || (hero->action_id == FIG_ACTION_FLEE))
 	{
 		return 0;
 	}
@@ -4499,7 +4496,7 @@ signed short check_hero_no3(struct struct_hero *hero)
 
 signed short is_hero_available_in_group(struct struct_hero *hero)
 {
-	if (check_hero((Bit8u*)hero) &&	(hero->group_no == gs_current_group)) {
+	if (check_hero(hero) &&	(hero->group_no == gs_current_group)) {
 
 		return 1;
 	}
@@ -5438,7 +5435,7 @@ struct struct_hero* get_first_hero_available_in_group(void)
 
 		/* Check class, group, deadness and check_hero() */
 		if (hero_i->typus && (hero_i->group_no == gs_current_group) &&
-			!hero_dead((Bit8u*)hero_i) && check_hero((Bit8u*)hero_i))
+			!hero_dead((Bit8u*)hero_i) && check_hero(hero_i))
 		{
 			return hero_i;
 		}
@@ -5463,7 +5460,7 @@ struct struct_hero* get_second_hero_available_in_group(void)
 	for (i = tmp = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group and check_hero() */
-		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && check_hero((Bit8u*)hero_i))
+		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && check_hero(hero_i))
 		{
 			if (tmp) {
 				return hero_i;
@@ -5493,7 +5490,7 @@ signed short count_heroes_available(void)
 	for (i = 0; i <= 6; i++, hero++) {
 
 		/* Check if hero is available */
-		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2(hero)))
+		if (hero->typus && (check_hero(hero) || check_hero_no2(hero)))
 		{
 			retval++;
 		}
@@ -5515,7 +5512,7 @@ signed short count_heroes_available_ignore_npc(void)
 
 	for (i = 0; i < 6; i++, hero++) {
 		/* Check if hero is available */
-		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2(hero)))
+		if (hero->typus && (check_hero(hero) || check_hero_no2(hero)))
 		{
 			retval++;
 		}

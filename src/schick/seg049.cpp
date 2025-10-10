@@ -283,7 +283,7 @@ void GRP_switch_to_next(signed short mode)
 
 				if ((host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
 					(host_readbs(get_hero(i) + HERO_GROUP_NO) == group) &&
-					check_hero(get_hero(i)))
+					check_hero((struct struct_hero*)get_hero(i)))
 				{
 					if (host_readbs(get_hero(i) + HERO_JAIL) != 0) {
 						/* hero is in prison */

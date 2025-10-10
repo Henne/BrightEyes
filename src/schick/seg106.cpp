@@ -80,7 +80,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 	signed short temp;
 	struct inventory tmp;
 
-	if (!check_hero((Bit8u*)hero) || (pos1 == pos2)) {
+	if (!check_hero(hero) || (pos1 == pos2)) {
 
 	} else {
 

@@ -152,7 +152,7 @@ void set_automap_tile(signed short, signed short);
 void set_automap_tiles(signed short, signed short);
 void seg002_47e2(void);
 void seg002_484f(void);
-signed short check_hero(Bit8u*);
+signed short check_hero(struct struct_hero*);
 signed short check_hero_no2(struct struct_hero*);
 signed short check_hero_no3(struct struct_hero*);
 signed short is_hero_available_in_group(struct struct_hero*);

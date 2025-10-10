@@ -581,7 +581,7 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 	struct spell_descr *spell_desc;
 
 	/* check if class is magic user */
-	if ((hero->typus < HERO_TYPE_WITCH) || (check_hero((Bit8u*)hero) == 0)) {
+	if ((hero->typus < HERO_TYPE_WITCH) || (check_hero(hero) == 0)) {
 		return 0;
 	}
 
@@ -701,7 +701,7 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 	struct dungeon_door *ptr_doors;
 #endif
 
-	if (!check_hero((Bit8u*)hero) && !hero->flags.renegade) {
+	if (!check_hero(hero) && !hero->flags.renegade) {
 
 		return 0;
 	}

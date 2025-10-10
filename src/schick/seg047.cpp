@@ -477,7 +477,7 @@ signed short select_hero_ok(char *title)
 
 	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero((Bit8u*)hero) && (g_hero_sel_exclude != i)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
 
 			/* save pointer to the name of the hero */
 			g_radio_name_list[cnt] = hero->alias;
@@ -546,7 +546,7 @@ signed short select_hero_ok_forced(char *title)
 
 	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero((Bit8u*)hero) && (g_hero_sel_exclude != i)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
 
 			/* save pointer to the name of the hero */
 			g_radio_name_list[cnt] = hero->alias;

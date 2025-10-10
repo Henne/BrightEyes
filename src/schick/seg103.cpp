@@ -640,7 +640,7 @@ signed short GUI_use_skill(signed short hero_pos, signed char handicap)
 
 	hero = (struct struct_hero*)get_hero(hero_pos);
 
-	if (!check_hero((Bit8u*)hero)) {
+	if (!check_hero(hero)) {
 		return -1;
 	}
 

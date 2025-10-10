@@ -204,7 +204,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 	g_fig_anisheets[a1][0] = get_seq_header(p3[l1]);
 	g_fig_anisheets[a1][242] = hero->sprite_no;
 
-	if (check_hero((Bit8u*)hero) && (hero->viewdir != dir) &&
+	if (check_hero(hero) && (hero->viewdir != dir) &&
 
 		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1]) ||
@@ -261,7 +261,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 		}
 	}
 
-	if ((check_hero((Bit8u*)hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
+	if ((check_hero(hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
 		((f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN3) || (f_action == FIG_ACTION_UNKNOWN4) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1])))
 	{
@@ -283,7 +283,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 		}
 	}
 
-	if ((check_hero((Bit8u*)hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
+	if ((check_hero(hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
 
 			p1 += copy_ani_seq(p1, p3[l1], 2);
 
@@ -306,7 +306,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 		p1 += copy_ani_seq(p1, p3[20], 2);
 	}
 
-	if (check_hero((Bit8u*)hero) ||	(!g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
+	if (check_hero(hero) ||	(!g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
 		FIG_set_sheet(hero->fighter_id, (signed char)a1);
 		*p1 = -1;
@@ -642,7 +642,7 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
 		lp1++;
 	}
 
-	if ((v2 == 4) || check_hero((Bit8u*)hero) ||
+	if ((v2 == 4) || check_hero(hero) ||
 		((g_attacker_dead != 0) && (v6 == 0)) ||
 		((g_defender_dead != 0) && (v6 == 1))) {
 

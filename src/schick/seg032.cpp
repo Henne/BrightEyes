@@ -560,7 +560,7 @@ void FIG_do_round(void)
 				}
 			}
 
-			if (FIG_search_obj_on_cb(actor_id + 1, &x_coord, &y_coord) && check_hero((Bit8u*)hero))
+			if (FIG_search_obj_on_cb(actor_id + 1, &x_coord, &y_coord) && check_hero(hero))
 			{
 				if (hero->blind_timer) {
 
