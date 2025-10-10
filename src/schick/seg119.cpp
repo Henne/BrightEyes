@@ -50,7 +50,7 @@ void disease_effect(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) && !hero_dead(get_hero(i))) {
+		if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) && !hero_dead((Bit8u*)get_hero(i))) {
 
 			hero = (struct struct_hero*)get_hero(i);
 

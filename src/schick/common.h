@@ -161,8 +161,6 @@ enum {
 	HERO_PORTRAIT			= 0x2DA /* 1024 = 32 * 32 bytes */ /* 32 x 32 pixels, 8 bpp */
 };
 
-#define SIZEOF_HERO (0x6da)
-
 enum {
 	NPC_NONE	= 0,
 	NPC_NARIELL	= 1,
@@ -222,8 +220,6 @@ enum {
 	ILLNESS_TYPE_TOLLWUT		= 7
 };
 
-#define SIZEOF_HERO_ILLNESS (5)
-
 enum {
 	POISON_TYPE_NONE		= 0,
 	POISON_TYPE_SHURINKNOLLENGIFT	= 1,
@@ -236,8 +232,6 @@ enum {
 	POISON_TYPE_KUKRIS		= 8,
 	POISON_TYPE_BANNSTAUB		= 9
 };
-
-#define SIZEOF_HERO_POISON (5)
 
 struct enemy_flags {
 	/* enemy + 0x31 */

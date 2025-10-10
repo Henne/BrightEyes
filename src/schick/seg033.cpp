@@ -237,7 +237,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							GUI_output(get_tx(28));
 						} else if (target_id == (hero_pos + 1)) {
 							GUI_output(get_tx(3));
-						} else if (((target_id < 10) && hero_dead(get_hero(target_id - 1))) ||
+						} else if (((target_id < 10) && hero_dead((Bit8u*)get_hero(target_id - 1))) ||
 								//((target_id >= 10) && (target_id < 30) && (g_enemy_sheets[target_id - 10].flags.dead || g_enemy_sheets[target_id - 10].flags.dead)) ||
 								((target_id >= 10) && (target_id < 30) && (g_enemy_sheets[target_id].flags.dead || g_enemy_sheets[target_id].flags.mushroom)) ||
 								/* TODO: check target_id < 50 */

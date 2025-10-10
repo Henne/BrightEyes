@@ -239,8 +239,8 @@ void GRP_merge(void)
 
 			for (i = 0; i <= 6; i++) {
 
-				if ((host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
-					host_readbs(get_hero(i) + HERO_GROUP_NO) == answer)
+				if ((host_readbs((Bit8u*)get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
+					host_readbs((Bit8u*)get_hero(i) + HERO_GROUP_NO) == answer)
 				{
 					((struct struct_hero*)get_hero(i))->group_no = gs_current_group;
 					gs_group_member_counts[gs_current_group]++;
@@ -281,11 +281,11 @@ void GRP_switch_to_next(signed short mode)
 
 			for (i = 0; i < 6; i++) {
 
-				if ((host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(get_hero(i) + HERO_GROUP_NO) == group) &&
+				if ((host_readbs((Bit8u*)get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
+					(host_readbs((Bit8u*)get_hero(i) + HERO_GROUP_NO) == group) &&
 					check_hero((struct struct_hero*)get_hero(i)))
 				{
-					if (host_readbs(get_hero(i) + HERO_JAIL) != 0) {
+					if (host_readbs((Bit8u*)get_hero(i) + HERO_JAIL) != 0) {
 						/* hero is in prison */
 						state = 2;
 					} else {
@@ -442,11 +442,11 @@ void GRP_swap_heroes(void)
 			g_wildcamp_replstatus[hero2_no] = l4;
 			g_wildcamp_herbstatus[hero2_no] = l5;
 
-			if (host_readbs(get_hero(hero1_no) + HERO_TYPE)) {
+			if (host_readbs((Bit8u*)get_hero(hero1_no) + HERO_TYPE)) {
 				((struct struct_hero*)get_hero(hero1_no))->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			if (host_readbs(get_hero(hero2_no) + HERO_TYPE)) {
+			if (host_readbs((Bit8u*)get_hero(hero2_no) + HERO_TYPE)) {
 				((struct struct_hero*)get_hero(hero2_no))->action_id = FIG_ACTION_UNKNOWN2;
 			}
 

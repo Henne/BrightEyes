@@ -684,7 +684,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			/* REMARK: what if the NPC is choosen ? */
 			/* REMARK: what if the positions are changed ? */
 			/* REMARK: what if the game is saved and the heroes are at another mem location ? */
-			gs_unicorn_hero_ptr = get_hero((gs_unicorn_hero_pos = get_hero_CH_best()));
+			gs_unicorn_hero_ptr = (Bit8u*)get_hero((gs_unicorn_hero_pos = get_hero_CH_best()));
 		} else if (state == 7) {
 			timewarp(HOURS(1));
 		} else if (state == 8) {

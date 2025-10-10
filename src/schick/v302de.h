@@ -244,13 +244,6 @@ static inline void update_informer_cond(const int informer)
 	}
 }
 
-static inline unsigned char *get_hero(signed short index) {
-	if (index < 0 || index > 6) {
-		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
-	}
-	return M302de::g_heroes + index * SIZEOF_HERO;
-}
-
 static inline int __abs__(int j)
 {
 	return abs(j);
@@ -312,6 +305,13 @@ static inline Bit8u *get_spelltarget_e(void) {
 
 #if !defined(__BORLANDC__)
 namespace M302de {
+
+static inline struct struct_hero *get_hero(signed short index) {
+	if (index < 0 || index > 6) {
+		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
+	}
+	return &g_heroes[index];
+}
 
 static inline struct struct_hero *get_spelltarget(void) {
 	return (struct struct_hero*)g_spelltarget;
@@ -393,7 +393,7 @@ static inline char* get_itemname(unsigned short item)
 
 #define my_itoa itoa
 
-#define get_hero(no) ((unsigned char*)g_heroes + SIZEOF_HERO * (no))
+#define get_hero(no) (((unsigned char*)g_heroes + sizeof(struct struct_hero) * (no)))
 
 #ifdef M302de_ORIGINAL_BUGFIX
 #define update_informer_cond(informer) (if (gs_informer_flags[informer] == 0) gs_informer_flags[informer] = 1)

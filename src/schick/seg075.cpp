@@ -868,8 +868,8 @@ signed short DNG_fallpit(signed short max_damage)
 			do {
 				hero_id = random_schick(7) - 1;
 
-			} while ( (!host_readbs(get_hero(hero_id) + HERO_TYPE)) ||
-					(host_readbs(get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group) ||
+			} while ( (!host_readbs((Bit8u*)get_hero(hero_id) + HERO_TYPE)) ||
+					(host_readbs((Bit8u*)get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group) ||
 					((nr_fallen_heroes == 1) && (hero_id == 6))); /* avoid that the NPC gets separated into a single group */
 
 			((struct struct_hero*)get_hero(hero_id))->group_no = (unsigned char)new_group;
@@ -889,8 +889,8 @@ signed short DNG_fallpit(signed short max_damage)
 
 		for (i = 0; i < nr_fallen_heroes; i++) {
 
-			while (!host_readbs(get_hero(hero_id) + HERO_TYPE) ||
-				(host_readbs(get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group))
+			while (!host_readbs((Bit8u*)get_hero(hero_id) + HERO_TYPE) ||
+				(host_readbs((Bit8u*)get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group))
 			{
 				hero_id++;
 			}

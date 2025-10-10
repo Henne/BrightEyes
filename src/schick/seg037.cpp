@@ -212,7 +212,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 
 	if (mode == 0) {
 
-		if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) || (
+		if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead((Bit8u*)get_hero(cb_val - 1)) && !hero_unconscious((Bit8u*)get_hero(cb_val - 1))) || (
 			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && /* */g_enemy_sheets[cb_val - 10].flags.renegade))
 		{
 			return 1;
@@ -233,7 +233,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	} else if (mode == 2) {
 
 		/* is a living, conscious hero */
-		if ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1)))
+		if ((cb_val > 0) && (cb_val < 10) && !hero_dead((Bit8u*)get_hero(cb_val - 1)) && !hero_unconscious((Bit8u*)get_hero(cb_val - 1)))
 		{
 			return 1;
 		} else {
@@ -293,7 +293,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 			if (mode == 0) {
 				/* hero or enemy reacheable from enemies position */
-				if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) ||
+				if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead((Bit8u*)get_hero(cb_val - 1)) && !hero_unconscious((Bit8u*)get_hero(cb_val - 1))) ||
 					((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && g_enemy_sheets[cb_val - 10].flags.renegade))
 				{
 					can_attack = 1;
@@ -331,7 +331,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 #endif
 
 					/* handle heroes or walls */
-					if (((cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) ||
+					if (((cb_val < 10) && !hero_dead((Bit8u*)get_hero(cb_val - 1)) && !hero_unconscious((Bit8u*)get_hero(cb_val - 1))) ||
 						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)))
 					{
 						done = 1;
@@ -340,7 +340,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 			} else if (mode == 2) {
 				/* attack hero */
-				if ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1)))
+				if ((cb_val > 0) && (cb_val < 10) && !hero_dead((Bit8u*)get_hero(cb_val - 1)) && !hero_unconscious((Bit8u*)get_hero(cb_val - 1)))
 				{
 					can_attack = 1;
 					done = 1;
@@ -355,7 +355,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 					} else
 #endif
 
-					if ( ((cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) ||
+					if ( ((cb_val < 10) && !hero_dead((Bit8u*)get_hero(cb_val - 1)) && !hero_unconscious((Bit8u*)get_hero(cb_val - 1))) ||
 						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)) ||
 						((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead))
 					{
@@ -794,7 +794,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 						if (l_di && (enemy_no + 30 != l_di)) {
 
 							if ((l_di < 0) || (l_di >= 50) || (l_di >= 30) ||
-								((l_di > 0) && (l_di < 10) && !hero_dead(get_hero(l_di - 1))) ||
+								((l_di > 0) && (l_di < 10) && !hero_dead((Bit8u*)get_hero(l_di - 1))) ||
 								((l_di < 30) && (l_di >= 10) && !g_enemy_sheets[l_di - 10].flags.dead))
 							{
 								l5 = 0;

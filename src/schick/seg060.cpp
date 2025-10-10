@@ -536,7 +536,7 @@ void TLK_tavern(signed short answer)
 		g_dialog_next_state = (108);
 
 		if ((((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk))->typus) &&
-			!hero_dead(get_hero(gs_tlk_tav_testdrunk)) &&
+			!hero_dead((Bit8u*)get_hero(gs_tlk_tav_testdrunk)) &&
 			gs_tlk_tav_drinkcount)
 		{
 			g_dialog_next_state = (test_skill((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);

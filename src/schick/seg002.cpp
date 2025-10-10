@@ -123,7 +123,7 @@ signed char g_citycamp_city;		// ds:0xbd27, {0 = camp in dungeon, 1}
 struct fight *g_current_fight;		// ds:0xbd28
 signed char *g_scenario_buf;		// ds:0xbd2c
 unsigned char *g_fightobj_buf;		// ds:0xbd30
-unsigned char *g_heroes;		// ds:0xbd34
+struct struct_hero *g_heroes;		// ds:0xbd34
 signed char g_new_menu_icons[9];	// ds:0xbd38
 unsigned char g_unkn_073[12];		// ds:0xbd41
 unsigned char g_steptarget_front;	// ds:0xbd4d
@@ -2046,7 +2046,7 @@ void game_loop(void)
 
 		}
 
-		if ((host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
+		if ((host_readbs((Bit8u*)get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
 			((gs_current_town != TOWNS_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
 			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
@@ -2633,7 +2633,7 @@ void do_timers(void)
 			}
 
 			/* increment the months the NPC is in the group */
-			if (host_readb(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) {
+			if (host_readb((Bit8u*)get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) {
 				gs_npc_months++;
 			}
 
@@ -2775,7 +2775,7 @@ void sub_mod_timers(Bit32s val)
 				if (h_index != -1) {
 					/* if a hero/npc is determined */
 
-					mp = get_hero(h_index);
+					mp = (Bit8u*)get_hero(h_index);
 					/* make a pointer to the hero's attribute mod */
 					mp += (Bit32u)sp->offset;
 					/* subtract the mod */
@@ -5064,7 +5064,7 @@ signed short unused_cruft(void)
 	do {
 		l_si = random_schick(6) - 1;
 
-	} while (!(host_readbs(get_hero(l_si) + HERO_TYPE)) || (host_readbs(get_hero(l_si) + HERO_GROUP_NO) != gs_current_group));
+	} while (!(host_readbs((Bit8u*)get_hero(l_si) + HERO_TYPE)) || (host_readbs((Bit8u*)get_hero(l_si) + HERO_GROUP_NO) != gs_current_group));
 
 	return l_si;
 }

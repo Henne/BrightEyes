@@ -128,7 +128,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 				hero_pos = select_hero_ok(get_ttx(448));
 
-				if (hero_pos == -1 || host_readbs(get_hero(hero_pos) + HERO_NR_INVENTORY_SLOTS_FILLED) == 0) {
+				if (hero_pos == -1 || host_readbs((Bit8u*)get_hero(hero_pos) + HERO_NR_INVENTORY_SLOTS_FILLED) == 0) {
 					break;
 				}
 

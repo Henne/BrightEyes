@@ -154,7 +154,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (fighter_id != 0) {
 
 						if ((fighter_id >= 50) ||
-							((fighter_id < 10) && !hero_dead(get_hero(fighter_id - 1))) ||
+							((fighter_id < 10) && !hero_dead((Bit8u*)get_hero(fighter_id - 1))) ||
 							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags.dead) ||
 							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags.dead))
 						{

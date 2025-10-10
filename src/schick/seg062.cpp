@@ -99,8 +99,7 @@ void ask_miracle(void)
 								if ((i != -1) && !((struct struct_hero*)get_hero(i))->flags.gods_pissed) {
 
 									slot = get_free_mod_slot();
-									set_mod_slot(slot, DAYS(3), get_hero(i) + HERO_MR,
-										99, (signed char)i);
+									set_mod_slot(slot, DAYS(3), (Bit8u*)&((struct struct_hero*)get_hero(i))->mr, 99, (signed char)i);
 
 									sprintf(g_dtp2, get_tx2(2), ((struct struct_hero*)get_hero(i))->alias);
 									gs_ingame_timers[INGAME_TIMER_PRAIOS_MR] = DAYS(3);

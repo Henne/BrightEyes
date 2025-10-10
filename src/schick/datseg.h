@@ -1991,7 +1991,7 @@ extern signed char g_direction_unkn;		// ds:0xbd4f; seg003
 extern unsigned char g_steptarget_back;		// ds:0xbd4e; seg003, seg066, seg076
 extern unsigned char g_steptarget_front;	// ds:0xbd4d; seg003, seg066, seg076, seg099
 extern signed char g_new_menu_icons[9];		// ds:0xbd38; seg002, seg026, seg066, seg076, seg099
-extern unsigned char *g_heroes;		// ds:0xbd34
+extern struct struct_hero *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
 extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
 extern struct fight *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100

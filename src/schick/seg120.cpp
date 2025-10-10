@@ -401,7 +401,7 @@ signed short init_memory(void)
 	g_memslots_mfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
 	g_memslots_wfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
 	g_memslots_mon		= (struct struct_memslot_fig*)schick_alloc(36 * sizeof(struct struct_memslot_fig));
-	g_heroes		= (unsigned char*)schick_alloc(7 * sizeof(struct struct_hero));
+	g_heroes		= (struct struct_hero*)schick_alloc(7 * sizeof(struct struct_hero));
 	g_dungeon_fights_buf	= (unsigned char*)schick_alloc(630);
 	g_dungeon_doors_buf	= (struct dungeon_door*)schick_alloc(45 * sizeof(struct dungeon_door));
 	g_dungeon_stairs_buf	= (unsigned char*)schick_alloc(80);
