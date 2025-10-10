@@ -276,45 +276,6 @@ static inline unsigned short hero_dead(Bit8u *hero) {
 }
 
 /**
- * hero_asleep() -	check if hero is sleeping
- * @hero:	ptr to hero
- *
- * 0 = awake / 1 = asleep
- */
-static inline unsigned short hero_asleep(Bit8u *hero) {
-	if (((host_readb(hero + 0xaa) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * hero_petrified() -	check if hero is petrified
- * @hero:	ptr to hero
- *
- * 0 = non-petrified / 1 = petrified
- */
-static inline unsigned short hero_petrified(Bit8u *hero) {
-	if (((host_readb(hero + 0xaa) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * hero_renegade() -	check if hero is renegade
- * @hero:	ptr to hero
- *
- * 0 = no / 1 = yes
- */
-static inline unsigned short hero_renegade(Bit8u *hero) {
-	if (((host_readb(hero + 0xaa) >> 5) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
  * hero_unconscious() -	check if hero is unconscious
  * @hero:	ptr to hero
  *
@@ -457,9 +418,6 @@ static inline char* get_itemname(unsigned short item)
 #define host_writeds(p, d)	(*(Bit32s*)(p) = (d))
 
 #define hero_dead(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).dead)
-#define hero_asleep(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).asleep)
-#define hero_petrified(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).petrified)
-#define hero_renegade(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).renegade)
 #define hero_unconscious(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).unconscious)
 
 
