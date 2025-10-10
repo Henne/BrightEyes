@@ -536,8 +536,8 @@ void set_textcolor(signed short fg, signed short bg)
  */
 void get_textcolor(signed short *fg, signed short *bg)
 {
-	host_writew((Bit8u*)fg, g_textcolor_fg[0]);
-	host_writew((Bit8u*)bg, g_textcolor_bg);
+	*fg = g_textcolor_fg[0];
+	*bg = g_textcolor_bg;
 }
 
 unsigned short GUI_unused(Bit8u *str)
