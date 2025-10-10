@@ -88,6 +88,13 @@ struct struct_char_height {
 	char height;
 };
 
+struct ems_tab {
+	unsigned char lpage;
+	unsigned char offset;
+	signed short width;
+	unsigned char height;
+};
+
 struct struct_memslot_ani {
 	signed int figure;
 	signed int ems_handle;
@@ -1454,8 +1461,10 @@ extern signed short g_locations_tab_size;	//ds:0x5eb8; seg028
 extern signed short g_areadescr_dng_level;	//ds:0x5ebc; seg028
 extern signed short g_areadescr_fileid;		//ds:0x5ebc; seg028
 extern signed short g_areadescr_dng_flag;	//ds:0x5ebe; seg028
+#if defined(__BORLANDC__)
 extern unsigned short g_ems_unused_lpage;	//ds:0x5ec0; seg028
 extern signed short g_ems_unused_offset;	//ds:0x5ec2; seg028
+#endif
 extern signed char g_loaded_menu_icons[9];	//ds:0x5ecc; seg029
 extern struct_informer_tab g_informer_tab[15];	//ds:0x5ed6; seg031
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
@@ -1982,9 +1991,13 @@ extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, se
 extern char *g_radio_name_list[25];	// ds:0xbf95; seg033, seg047, seg048, seg098, seg103, seg104, seg105
 extern unsigned char g_dng_map[512];	// ds:0xbd95; seg002-seg107
 extern unsigned char g_dng_map_size;	// ds:0xbd94; seg002, seg003, seg028, seg066, seg074, seg100
+#if defined(__BORLANDC__)
 extern signed short g_ems_unused_handle;	// ds:0xbd92; seg028, seg120
+#endif
 extern signed short g_ems_travelmap_handle;	// ds:0xbd90; seg028, seg120
-extern Bit8u *g_ems_unused_tab;		// ds:0xbd8c; seg028
+#if defined(__BORLANDC__)
+extern struct ems_tab *g_ems_unused_tab;	// ds:0xbd8c; seg028
+#endif
 extern unsigned char g_visual_field_vals[29];	// ds:0xbd6e; seg003, seg066,seg075, seg077, seg080
 extern signed char g_visual_fields_tex[29];	// ds:0xbd50; seg066, seg075
 extern signed char g_direction_unkn;		// ds:0xbd4f; seg003

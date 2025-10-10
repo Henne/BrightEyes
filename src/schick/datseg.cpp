@@ -2956,8 +2956,10 @@ signed short g_locations_tab_size = 0; // ds:0x5eb8
 signed short g_areadescr_dng_level = 0; // ds:0x5eba
 signed short g_areadescr_fileid = 0; // ds:0x5ebc
 signed short g_areadescr_dng_flag = 0; // ds:0x5ebe
+#if defined(__BORLANDC__)
 unsigned short g_ems_unused_lpage = 0; // ds:0x5ec0
 signed short g_ems_unused_offset = 0x0300; // ds:0x5ec2
+#endif
 unsigned char g_unkn_039[8] = { 0x0b, 0xc0, 0x75, 0x06, 0xb8, 0x01, 0x00, 0x00 }; // ds:0x5ec4
 signed char g_loaded_menu_icons[9] = { -2, -2, -2, -2, -2, -2, -2, -2, -2 }; // ds:0x5ecc
 unsigned char g_unkn_040[1] = { 0x00 }; // ds:0x5ed5

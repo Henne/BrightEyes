@@ -367,7 +367,7 @@ void unused_store(signed short no)
 {
 	signed short width;
 	signed short height;
-	Bit8u *ptr;
+	struct ems_tab *ptr;
 	struct nvf_desc nvf;
 	signed short size;
 
@@ -387,12 +387,12 @@ void unused_store(signed short no)
 	size = width * height;
 	memmove((Bit8u*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
 
-	ptr = no * 5 + g_ems_unused_tab;
+	ptr = &g_ems_unused_tab[no];
 
-	host_writeb(ptr, (signed char)g_ems_unused_lpage);
-	host_writeb(ptr + 1, g_ems_unused_offset >> 8);
-	host_writew(ptr + 2, width);
-	host_writeb(ptr + 4, (signed char)height);
+	ptr->lpage = g_ems_unused_lpage;
+	ptr->offset = g_ems_unused_offset >> 8;
+	ptr->width = width;
+	ptr->height = height;
 
 	g_ems_unused_lpage = g_ems_unused_lpage + ((unsigned short)(g_ems_unused_offset + size) >> 14);
 	g_ems_unused_offset = ((((g_ems_unused_offset + size) & 0x3fff) + 0x100) & 0xff00);
@@ -400,17 +400,17 @@ void unused_store(signed short no)
 
 Bit8u* unused_load(signed short no)
 {
-	signed short l_si;
+	unsigned short lpage;
 
 	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
-	l_si = host_readb(g_ems_unused_tab + 5 * no);
+	lpage = g_ems_unused_tab[no].lpage;
 
-	EMS_map_memory(g_ems_unused_handle, l_si, 0);
-	EMS_map_memory(g_ems_unused_handle, l_si + 1, 1);
-	EMS_map_memory(g_ems_unused_handle, l_si + 2, 2);
+	EMS_map_memory(g_ems_unused_handle, lpage, 0);
+	EMS_map_memory(g_ems_unused_handle, lpage + 1, 1);
+	EMS_map_memory(g_ems_unused_handle, lpage + 2, 2);
 
-	return g_ems_frame_ptr + 256 * host_readb(g_ems_unused_tab + 5 * no + 1);
+	return g_ems_frame_ptr + 256 * g_ems_unused_tab[no].offset;
 }
 #endif
 

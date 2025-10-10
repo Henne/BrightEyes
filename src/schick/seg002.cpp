@@ -133,9 +133,13 @@ signed char g_visual_fields_tex[29];	// ds:0xbd50
 unsigned char g_unkn_074[1];		// ds:0xbd6d
 unsigned char g_visual_field_vals[29];	// ds:0xbd6e
 unsigned char g_unkn_075[1];		// ds:0xbd8b
-Bit8u *g_ems_unused_tab;		// ds:0xbd8c
+#if defined(__BORLANDC__)
+struct ems_tab *g_ems_unused_tab;	// ds:0xbd8c
+#endif
 signed short g_ems_travelmap_handle;	// ds:0xbd90
+#if defined(__BORLANDC__)
 signed short g_ems_unused_handle;	// ds:0xbd92
+#endif
 unsigned char g_dng_map_size;		// ds:0xbd94
 unsigned char g_dng_map[512];		// ds:0xbd95
 char *g_radio_name_list[25];		// ds:0xbf95, used for items, heroes, spells, skills, recipes
