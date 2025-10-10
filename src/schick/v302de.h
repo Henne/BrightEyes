@@ -198,13 +198,6 @@ static inline Bit8u host_writeb(Bit8u* p, Bit8u val)
 	return (*p = val);
 }
 
-static inline Bit16u host_writew(Bit8u* p, Bit16u val)
-{
-	host_writeb(p, val & 0xff);
-	host_writeb(p + 1, (val >> 8)& 0xff);
-	return val;
-}
-
 /**
  * \brief mark informer only as known iff unknown
  * \param informer the index of the informer
@@ -385,7 +378,6 @@ static inline char* get_itemname(unsigned short item)
 #define host_readds(p) (*(Bit32s*)(p))
 
 #define host_writeb(p, d)	(*(Bit8u*)(p) = (d))
-#define host_writew(p, d)	(*(Bit16u*)(p) = (d))
 
 #define hero_dead(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).dead)
 #define hero_unconscious(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).unconscious)
