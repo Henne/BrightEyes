@@ -389,7 +389,7 @@ void unused_store(signed short no)
 
 	ptr = no * 5 + g_ems_unused_tab;
 
-	host_writebs(ptr, (signed char)g_ems_unused_lpage);
+	host_writeb(ptr, (signed char)g_ems_unused_lpage);
 	host_writeb(ptr + 1, g_ems_unused_offset >> 8);
 	host_writew(ptr + 2, width);
 	host_writeb(ptr + 4, (signed char)height);

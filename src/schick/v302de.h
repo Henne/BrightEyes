@@ -198,35 +198,10 @@ static inline Bit8u host_writeb(Bit8u* p, Bit8u val)
 	return (*p = val);
 }
 
-static inline Bit8s host_writebs(Bit8u* p, Bit8s val)
-{
-	host_writeb(p, val);
-	return val;
-}
-
 static inline Bit16u host_writew(Bit8u* p, Bit16u val)
 {
 	host_writeb(p, val & 0xff);
 	host_writeb(p + 1, (val >> 8)& 0xff);
-	return val;
-}
-
-static inline Bit16s host_writews(Bit8u* p, Bit16s val)
-{
-	host_writew(p, val);
-	return val;
-}
-
-static inline Bit32u host_writed(Bit8u* p, Bit32u val)
-{
-	host_writew(p, val & 0xffff);
-	host_writew(p + 2, (val >> 16) & 0xffff);
-	return val;
-}
-
-static inline Bit32s host_writeds(Bit8u* p, Bit32s val)
-{
-	host_writed(p, val);
 	return val;
 }
 
@@ -411,11 +386,6 @@ static inline char* get_itemname(unsigned short item)
 
 #define host_writeb(p, d)	(*(Bit8u*)(p) = (d))
 #define host_writew(p, d)	(*(Bit16u*)(p) = (d))
-#define host_writed(p, d)	(*(Bit32u*)(p) = (d))
-
-#define host_writebs(p, d)	(*(Bit8s*)(p) = (d))
-#define host_writews(p, d)	(*(Bit16s*)(p) = (d))
-#define host_writeds(p, d)	(*(Bit32s*)(p) = (d))
 
 #define hero_dead(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).dead)
 #define hero_unconscious(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).unconscious)
