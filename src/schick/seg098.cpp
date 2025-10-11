@@ -785,7 +785,7 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 					while (ptr_doors->pos != pos) {
 						/* ASSERT */
 						/*
-						if (host_readws(ptr_doors + 0) == -1) {
+						if (ptr_doors->pos == -1) {
 						D1_INFO("In free call of Foramen spell: door not found. This should not happen.\n");
 						 */
 

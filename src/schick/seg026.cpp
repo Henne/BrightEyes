@@ -100,18 +100,20 @@ void load_tx2(signed short index)
 	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, len);
 }
 
+/* REMARK: 1000 byte for pointer, means 250 strings on 16/32-bit machines and 125 strings on 64-bit machines.
+ * WAFFINFO.LTX seems to have 19 + 40 + 67 = 126 strings, which will lead to problems */
 void load_ltx(unsigned short index)
 {
 	Bit32s len;
-	signed short fd;
+	signed short handle;
 
-	fd = load_archive_file(index);
+	handle = load_archive_file(index);
 
 	g_area_prepared = -1;
 
-	len = (signed short)read_archive_file(fd, ((Bit8u*)g_buffer9_ptr3) + 1000, 64000);
+	len = (signed short)read_archive_file(handle, ((Bit8u*)g_buffer9_ptr3) + 1000, 64000);
 
-	close(fd);
+	close(handle);
 
 	split_textbuffer((char**)g_buffer9_ptr3, (char*)(g_buffer9_ptr3 + 1000L), len);
 }
