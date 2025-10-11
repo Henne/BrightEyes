@@ -411,52 +411,52 @@ void city_event_9(void)
 /**
  * \brief   return a pointer to a weapon related information
  */
-Bit8u* waffinfo_weapons(void)
+char* waffinfo_weapons(void)
 {
-	signed short randval;
-	Bit8u *ptr;
+	signed int randval;
+	char **ptr;
 
 	load_ltx(ARCHIVE_FILE_WAFFINFO_LTX);
 
-	ptr = (Bit8u*)g_buffer9_ptr3;
+	ptr = (char**)g_buffer9_ptr3;
 
 	randval = random_schick(19) - 1;
 
-	return (Bit8u*)host_readd(ptr + 4 * randval);
+	return ptr[randval];
 }
 
 /**
  * \brief   return a pointer to a herb related information
  */
-Bit8u* waffinfo_herbs(void)
+char* waffinfo_herbs(void)
 {
-	signed short randval;
-	Bit8u *ptr;
+	signed int randval;
+	char **ptr;
 
 	load_ltx(ARCHIVE_FILE_WAFFINFO_LTX);
 
-	ptr = ((Bit8u*)g_buffer9_ptr3) + 0x4c;
+	ptr = ((char**)g_buffer9_ptr3) + 19;
 
 	randval = random_schick(40) - 1;
 
-	return (Bit8u*)host_readd(ptr + 4 * randval);
+	return ptr[randval];
 }
 
 /**
  * \brief   return a pointer to a general information
  */
-Bit8u* waffinfo_general(void)
+char* waffinfo_general(void)
 {
-	signed short randval;
-	Bit8u *ptr;
+	signed int randval;
+	char **ptr;
 
 	load_ltx(ARCHIVE_FILE_WAFFINFO_LTX);
 
-	ptr = ((Bit8u*)g_buffer9_ptr3) + 0xec;
+	ptr = ((char**)g_buffer9_ptr3) + 59;
 
 	randval = random_schick(67) - 1;
 
-	return (Bit8u*)host_readd(ptr + 4 * randval);
+	return ptr[randval];
 }
 
 
