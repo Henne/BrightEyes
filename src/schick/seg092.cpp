@@ -386,7 +386,7 @@ void seg092_06b4(signed short a1)
 		}
 	}
 
-	l4 = ptr[MAP_POS(x,y)] & 0x02;
+	l4 = *(ptr + MAP_POS(x,y)) & 0x02;
 	pos = DNG_POS(gs_dungeon_level, x, y);
 
 	play_voc(ARCHIVE_FILE_FX13_VOC);

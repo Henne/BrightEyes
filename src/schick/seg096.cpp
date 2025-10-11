@@ -27,7 +27,7 @@ namespace M302de {
 static char g_gui_print_char;		// ds:0xe4d8
 signed int g_dialogbox_indent_height;	// ds:0xe4d9
 signed int g_dialogbox_indent_width;	// ds:0xe4db
-unsigned char g_unkn_092[7];		// ds:0xe4dd
+unsigned char g_unkn_092[6];		// ds:0xe4dd
 static char g_grammar_bufs[5][40];	// ds:0xe4e3
 
 
@@ -69,14 +69,14 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 		flag += lp5.a[g_monname_genders[index]];
 	}
 
-	lp1 = (flag & 0x8000) ? &g_grammar_def_table[(flag & 0xf) * 6] :
-		((flag & 0x4000) ? &g_grammar_noarticle_table[0] : &g_grammar_indef_table[(flag & 0xf) * 6]);
+	lp1 = (flag & 0x8000) ? &g_grammar_def_table[(flag & 0xf) * 3] :
+		((flag & 0x4000) ? &g_grammar_noarticle_table[0] : &g_grammar_indef_table[(flag & 0xf) * 3]);
 
 
-	sprintf(g_grammar_bufs[g_grammar_buf_no], (l2 == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
+	sprintf(g_grammar_bufs[g_grammar_buf_no + 1], (l2 == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
 		g_grammar_articles_index[lp1[((flag & 0x3000) - 1) >> 12]], GUI_name_plural(flag, p_name));
 
-	p_name = g_grammar_bufs[g_grammar_buf_no];
+	p_name = g_grammar_bufs[g_grammar_buf_no + 1];
 
 	if (*p_name == 0x20) {
 		do {
@@ -91,7 +91,7 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 	if (++g_grammar_buf_no == 4)
 		g_grammar_buf_no = 0;
 
-	return (Bit8u*)g_grammar_bufs[l4];
+	return (Bit8u*)g_grammar_bufs[1 + l4];
 }
 
 //1a7
@@ -139,6 +139,7 @@ char* GUI_name_singular(char *s)
 	}
 
 	*p = 0;
+
 	return g_grammar_bufs[0];
 }
 
@@ -301,7 +302,7 @@ unsigned short GUI_count_lines(char *str)
 		}
 	}
 
-	g_textline_maxlen = (max_line_width);
+	g_textline_maxlen = max_line_width;
 	return ++lines;
 }
 

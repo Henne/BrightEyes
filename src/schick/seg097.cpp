@@ -186,7 +186,7 @@ signed short GUI_enter_text(char* dst, signed short x, signed short y, signed sh
 dummy:
 
 			/* This loop is evil */
-			do {;} while ((CD_bioskey(1) == 0) && !g_mouse1_event2);
+			do {;} while ((CD_bioskey(1) == 0) && !g_mouse1_event1);
 
 			if (g_mouse1_event1) {
 				g_bioskey_event = 0x0d;

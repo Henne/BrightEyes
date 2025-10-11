@@ -108,7 +108,7 @@ signed short do_travel_mode(void)
 				if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP)
 				{
 					i = 0;
-					while ((l_di = signpost_ptr->end_points[i]) != -1)
+					while ((l_di = signpost_ptr->end_points[i]) != 0xff)
 					{
 						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
 							(answer = g_land_routes[l_di - 1].town1_id) != gs_current_town ?

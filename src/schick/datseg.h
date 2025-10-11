@@ -247,8 +247,8 @@ struct skill_descr {
 
 struct trv_start_point {
 	Bit8s town;
-	Bit8s typeindex;
-	Bit8s *end_points;
+	Bit8u typeindex;
+	Bit8u *end_points;
 };
 
 // A location is a point of interest in a town or a travel event. //

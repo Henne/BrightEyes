@@ -86,7 +86,7 @@ void set_textbox_positions(signed short town_id)
 
 
 	x = g_current_town_anix = g_town_positions[town_id - 1].x;
-	y = g_current_town_aniy = g_town_positions[town_id - 1].y;
+	y = g_current_town_aniy = (g_town_positions + (town_id - 1))->y;
 
 	r_dx = (x >= 0 && x <= 159) ? (y >= 0 && y <= 99 ? 3 : 1) : (y >= 0 && y <= 99 ? 2 : 0);
 
