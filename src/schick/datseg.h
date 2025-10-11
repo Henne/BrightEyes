@@ -407,8 +407,8 @@ struct shop_descr {
 
 struct gather_herbs {
 	Bit8u item_id;
-	Bit8s chance_max;
-	Bit8s max_count;
+	Bit8u chance_max;
+	Bit8u max_count;
 	Bit8s handicap;
 };
 

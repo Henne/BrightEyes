@@ -583,12 +583,6 @@ void load_informer_tlk(signed short index)
 	read_archive_file(fd, (Bit8u*)&off, 4);
 	read_archive_file(fd, (Bit8u*)&partners, 2);
 
-#if !defined(__BORLANDC__)
-	/* BE-Fix */
-	off = host_readd((Bit8u*)&off);
-	partners = host_readw((Bit8u*)&partners);
-#endif
-
 	/* read the partner structures */
 	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
@@ -627,12 +621,6 @@ void load_tlk(signed short index)
 	/* read the header */
 	read_archive_file(fd, (Bit8u*)&off, 4);
 	read_archive_file(fd, (Bit8u*)&partners, 2);
-
-#if !defined(__BORLANDC__)
-	/* BE-Fix */
-	off = host_readd((Bit8u*)&off);
-	partners = host_readw((Bit8u*)&partners);
-#endif
 
 	/* read the partner structures */
 	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));

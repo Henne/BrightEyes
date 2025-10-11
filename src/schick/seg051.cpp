@@ -220,16 +220,16 @@ void do_wildcamp(void)
 
 			answer = select_hero_ok(get_ttx(326));
 
-			if (answer != -1 && (get_hero(answer))->flags.brewing) {
+			if (answer != -1 && get_hero(answer)->flags.brewing) {
 				GUI_output(get_ttx(730));
 				answer = -1;
 			}
 
 			if (answer != -1) {
 
-				if (g_wildcamp_replstatus[answer])
+				if (g_wildcamp_herbstatus[answer])
 				{
-					sprintf(g_dtp2,	get_ttx(803), (get_hero(answer))->alias);
+					sprintf(g_dtp2,	get_ttx(803), get_hero(answer)->alias);
 					GUI_output(g_dtp2);
 
 				} else if (g_wildcamp_guardstatus[answer] != 0 ||
@@ -290,7 +290,7 @@ void do_wildcamp(void)
 
 				if (g_wildcamp_guards[l_si] != -1) {
 
-					sprintf(g_dtp2, get_ttx(774), (get_hero(g_wildcamp_guards[l_si]))->alias);
+					sprintf(g_dtp2, get_ttx(774), get_hero(g_wildcamp_guards[l_si])->alias);
 
 					GUI_print_loc_line(g_dtp2);
 				}
@@ -316,7 +316,7 @@ void do_wildcamp(void)
 						if (g_wildcamp_guards[l_si] != -1) {
 
 							sprintf(g_dtp2,	get_ttx(774),
-								(get_hero(g_wildcamp_guards[l_si]))->alias);
+								get_hero(g_wildcamp_guards[l_si])->alias);
 							GUI_print_loc_line(g_dtp2);
 						}
 					}
@@ -485,7 +485,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 	g_skilled_hero_pos = get_skilled_hero_pos(TA_WILDNISLEBEN);
 	hero_pos = select_hero_ok(get_ttx(322));
 
-	if (hero_pos != -1 && (get_hero(hero_pos))->flags.brewing) {
+	if (hero_pos != -1 && get_hero(hero_pos)->flags.brewing) {
 
 		GUI_output(get_ttx(730));
 		hero_pos = -1;
@@ -495,12 +495,12 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 		if (g_wildcamp_replstatus[hero_pos] != 0) {
 
-			sprintf(g_dtp2, get_ttx(802), (get_hero(hero_pos))->alias);
+			sprintf(g_dtp2, get_ttx(802), get_hero(hero_pos)->alias);
 			GUI_output(g_dtp2);
 
 		} else {
 
-			if (g_wildcamp_replstatus[hero_pos] != 0 ||
+			if (g_wildcamp_herbstatus[hero_pos] != 0 ||
 				g_wildcamp_magicstatus[hero_pos] != 0 ||
 				g_wildcamp_guardstatus[hero_pos] != 0)
 			{
