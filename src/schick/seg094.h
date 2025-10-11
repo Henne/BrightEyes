@@ -21,7 +21,7 @@ signed short TM_unused1(struct trv_start_point*, signed short);
 signed short TM_enter_target_town_viewdir(signed short);
 
 /* 0x43 */
-signed short TM_get_track_length(Bit8u*);
+signed int TM_get_track_length(struct struct_point*);
 /* 0x48 */
 signed short TM_enter_target_town(void);
 /* 0x4d */

@@ -122,7 +122,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	 * 		Can be replaced by a locvar! */
 	gs_travel_route_ptr = &g_land_routes[route_no - 1];
 	gs_travel_speed = 166;
-	gs_route_total_steps = (TM_get_track_length(gs_route_course_ptr));
+	gs_route_total_steps = TM_get_track_length((struct struct_point*)gs_route_course_ptr);
 	gs_route_length = (gs_travel_route_ptr->distance * 100);
 	gs_route_duration = (gs_route_length / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60);
 	gs_route_timedelta = (gs_route_duration / gs_route_total_steps);
@@ -567,17 +567,16 @@ signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_r
 }
 #endif
 
-signed short TM_get_track_length(Bit8u *track)
+signed int TM_get_track_length(struct struct_point *track)
 {
-	signed short length;
+	signed int length = 0;
 
-	length = 0;
-
-	while (host_readws(track) != -1)
+	while (track->x != -1)
 	{
-		track += 4;
+		track++;
 		length++;
 	}
+
 	return length;
 }
 

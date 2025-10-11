@@ -255,7 +255,7 @@ signed short do_travel_mode(void)
 
 	} else if (gs_travel_detour != 99)
 	{
-		gs_current_town = (TOWNS_NONE);
+		gs_current_town = TOWNS_NONE;
 	}
 
 	if (g_pp20_index == 5)
