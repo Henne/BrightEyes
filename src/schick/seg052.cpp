@@ -127,7 +127,7 @@ void do_citycamp(void)
 							answer = -1;
 						}
 
-						if (answer != -1 && (get_hero(answer))->flags.brewing) {
+						if (answer != -1 && get_hero(answer)->flags.brewing) {
 							GUI_output(get_ttx(730));
 							answer = -1;
 						}
@@ -147,7 +147,7 @@ void do_citycamp(void)
 
 			answer = select_hero_ok(get_ttx(317));
 
-			if (answer != -1 && (get_hero(answer))->flags.brewing) {
+			if (answer != -1 && get_hero(answer)->flags.brewing) {
 
 				GUI_output(get_ttx(730));
 				answer = -1;
@@ -203,8 +203,7 @@ void do_citycamp(void)
 
 					if (g_citycamp_guards[l_di] != -1) {
 
-						sprintf(g_dtp2,	get_ttx(774),
-							(char*)get_hero(g_citycamp_guards[l_di]) + 0x10);
+						sprintf(g_dtp2,	get_ttx(774), get_hero(g_citycamp_guards[l_di])->alias);
 
 						GUI_print_loc_line(g_dtp2);
 					}
@@ -229,8 +228,7 @@ void do_citycamp(void)
 
 							if (g_citycamp_guards[l_di] != -1) {
 
-								sprintf(g_dtp2,	get_ttx(774),
-									(char*)get_hero(g_citycamp_guards[l_di]) + 0x10);
+								sprintf(g_dtp2,	get_ttx(774), get_hero(g_citycamp_guards[l_di])->alias);
 
 								GUI_print_loc_line(g_dtp2);
 							}
