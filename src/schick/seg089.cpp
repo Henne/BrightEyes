@@ -74,7 +74,7 @@ signed short DNG15_handler(void)
 			target_pos != gs_dng_handled_pos)
 	{
 		/* TRAP: light wounds */
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -473,7 +473,7 @@ void DNG15_small_wounds(void)
 {
 	signed short i;
 	signed short randval;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++)
 	{
@@ -533,7 +533,7 @@ void DNG15_smelling_chest(Bit8u* chest)
 
 	if (GUI_bool(get_tx(35))) {
 
-		hero = (struct struct_hero*)get_hero(get_random_hero());
+		hero = get_hero(get_random_hero());
 
 		sprintf(g_dtp2,	get_tx(36), hero->alias);
 		GUI_output(g_dtp2);
@@ -582,7 +582,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 	signed short cnt;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	switch (*ptr)
 	{
@@ -657,7 +657,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 void DNG15_clear_way(Bit8u* ptr)
 {
 	signed short i;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 	i = 0;
 
 	/* With all of the following items SHOVEL, HOE, CROWBAR, FRANCESCA ...*/

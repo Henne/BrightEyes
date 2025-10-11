@@ -126,7 +126,7 @@ void FIG_preload_gfx(void)
 
 	/* set something in the hero charactersheet to -1 */
 	for (i = 0; i <= 6; i++) {
-		((struct struct_hero*)get_hero(i))->fighter_id = -1;
+		(get_hero(i))->fighter_id = -1;
 	}
 
 	for (i = 0; i < 20; i++) {

@@ -117,7 +117,7 @@ struct struct_hero* get_proper_hero(const signed int skill_id)
 	retval = 0;
 #endif
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -308,7 +308,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 	l_si = 1;
 
-	hero = (struct struct_hero*)get_hero(hero_pos);
+	hero = get_hero(hero_pos);
 
 	if (skill != -1) {
 
@@ -324,7 +324,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 			if (patient_pos != -1) {
 
-				patient = (struct struct_hero*)get_hero(patient_pos);
+				patient = get_hero(patient_pos);
 
 				if (is_hero_healable(patient)) {
 
@@ -414,7 +414,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 			if (patient_pos != -1) {
 
-				patient = (struct struct_hero*)get_hero(patient_pos);
+				patient = get_hero(patient_pos);
 
 				skill_cure_disease(hero, patient, handicap, 0);
 			}
@@ -427,7 +427,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 			if (patient_pos != -1) {
 
-				patient = (struct struct_hero*)get_hero(patient_pos);
+				patient = get_hero(patient_pos);
 
 				if (is_hero_healable(patient)) {
 
@@ -638,7 +638,7 @@ signed short GUI_use_skill(signed short hero_pos, signed char handicap)
 	signed short skill_id;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_hero(hero_pos);
+	hero = get_hero(hero_pos);
 
 	if (!check_hero(hero)) {
 		return -1;
@@ -661,7 +661,7 @@ signed short GUI_use_skill2(signed short handicap, char *msg)
 
 		hero_pos = select_hero_ok(msg);
 
-		if ((hero_pos != -1) && (((struct struct_hero*)get_hero(hero_pos))->flags.brewing)) {
+		if ((hero_pos != -1) && ((get_hero(hero_pos))->flags.brewing)) {
 			GUI_output(get_ttx(730));
 			hero_pos = -1;
 		}
@@ -691,7 +691,7 @@ signed int bargain(struct struct_hero *hero, const signed int items, const Bit32
 	signed char mod = mod_init;
 
 	/* NPC Harika gets a bonus on bargain */
-	if (((struct struct_hero*)get_hero(6))->npc_id == NPC_HARIKA) {
+	if ((get_hero(6))->npc_id == NPC_HARIKA) {
 		mod -= 2;
 	}
 

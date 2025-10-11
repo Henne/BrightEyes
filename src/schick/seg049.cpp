@@ -118,7 +118,7 @@ void GRP_sort_heroes(void)
 	qsort((void*)get_hero(0), 6, sizeof(struct struct_hero), GRP_compare_heroes);
 
 	for (i = 0; i < 6; i++) {
-		((struct struct_hero*)get_hero(i))->group_pos = i + 1;
+		(get_hero(i))->group_pos = i + 1;
 	}
 }
 
@@ -193,7 +193,7 @@ void GRP_split(void)
 			} else {
 
 				not_empty = 1;
-				((struct struct_hero*)get_hero(answer))->group_no = (signed char)new_group_id;
+				(get_hero(answer))->group_no = (signed char)new_group_id;
 				gs_group_member_counts[new_group_id]++;
 				gs_group_member_counts[gs_current_group]--;
 			}
@@ -242,7 +242,7 @@ void GRP_merge(void)
 				if ((host_readbs((Bit8u*)get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
 					host_readbs((Bit8u*)get_hero(i) + HERO_GROUP_NO) == answer)
 				{
-					((struct struct_hero*)get_hero(i))->group_no = gs_current_group;
+					(get_hero(i))->group_no = gs_current_group;
 					gs_group_member_counts[gs_current_group]++;
 				}
 			}
@@ -283,7 +283,7 @@ void GRP_switch_to_next(signed short mode)
 
 				if ((host_readbs((Bit8u*)get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
 					(host_readbs((Bit8u*)get_hero(i) + HERO_GROUP_NO) == group) &&
-					check_hero((struct struct_hero*)get_hero(i)))
+					check_hero(get_hero(i)))
 				{
 					if (host_readbs((Bit8u*)get_hero(i) + HERO_JAIL) != 0) {
 						/* hero is in prison */
@@ -421,21 +421,21 @@ void GRP_swap_heroes(void)
 			}
 
 			/* save hero1 in tmp */
-			tmp = *(struct struct_hero*)get_hero(hero1_no);
+			tmp = *get_hero(hero1_no);
 
 			l2 = g_wildcamp_guardstatus[hero1_no];
 			l3 = g_wildcamp_magicstatus[hero1_no];
 			l4 = g_wildcamp_replstatus[hero1_no];
 			l5 = g_wildcamp_herbstatus[hero1_no];
 
-			*((struct struct_hero*)get_hero(hero1_no)) = *((struct struct_hero*)get_hero(hero2_no));
+			*(get_hero(hero1_no)) = *(get_hero(hero2_no));
 
 			g_wildcamp_guardstatus[hero1_no] = g_wildcamp_guardstatus[hero2_no];
 			g_wildcamp_magicstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
 			g_wildcamp_replstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
 			g_wildcamp_herbstatus[hero1_no] = g_wildcamp_herbstatus[hero2_no];
 
-			*((struct struct_hero*)get_hero(hero2_no)) = tmp;
+			*(get_hero(hero2_no)) = tmp;
 
 			g_wildcamp_guardstatus[hero2_no] = l2;
 			g_wildcamp_magicstatus[hero2_no] = l3;
@@ -443,15 +443,15 @@ void GRP_swap_heroes(void)
 			g_wildcamp_herbstatus[hero2_no] = l5;
 
 			if (host_readbs((Bit8u*)get_hero(hero1_no) + HERO_TYPE)) {
-				((struct struct_hero*)get_hero(hero1_no))->action_id = FIG_ACTION_UNKNOWN2;
+				(get_hero(hero1_no))->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
 			if (host_readbs((Bit8u*)get_hero(hero2_no) + HERO_TYPE)) {
-				((struct struct_hero*)get_hero(hero2_no))->action_id = FIG_ACTION_UNKNOWN2;
+				(get_hero(hero2_no))->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			((struct struct_hero*)get_hero(hero1_no))->group_pos = hero1_no + 1;
-			((struct struct_hero*)get_hero(hero2_no))->group_pos = hero2_no + 1;
+			(get_hero(hero1_no))->group_pos = hero1_no + 1;
+			(get_hero(hero2_no))->group_pos = hero2_no + 1;
 		}
 	}
 
@@ -571,8 +571,8 @@ void GRP_move_hero(signed short src_pos)
 
 		if ((src_pos != dst_pos) && (dst_pos != 6)) {
 
-			dst = (struct struct_hero*)get_hero(dst_pos);
-			src = (struct struct_hero*)get_hero(src_pos);
+			dst = get_hero(dst_pos);
+			src = get_hero(src_pos);
 
 			if (!dst->typus || (dst->group_no == gs_current_group)) {
 

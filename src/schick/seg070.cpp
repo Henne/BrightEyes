@@ -150,7 +150,7 @@ void PHX_spielhaus(void)
 
 		GUI_output(get_tx2(29));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		for (pos = counter = answer = 0; pos <= 6; pos++, hero++) {
 

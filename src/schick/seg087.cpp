@@ -364,7 +364,7 @@ signed short DNG14_handler(void)
 			l_di = group_count_item(ITEM_ROPE);
 			l_di += group_count_item(ITEM_ROPE_LADDER);
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) &&
@@ -385,7 +385,7 @@ signed short DNG14_handler(void)
 
 			if (hero_pos == 3) {
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -405,7 +405,7 @@ signed short DNG14_handler(void)
 
 			} else if (hero_pos == 1) {
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -439,7 +439,7 @@ signed short DNG14_handler(void)
 
 		GUI_output(get_tx(29));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -536,7 +536,7 @@ signed short DNG14_handler(void)
 
 				if ((hero_pos = select_hero_ok(get_tx(39))) != -1) {
 
-					hero = (struct struct_hero*)get_hero(hero_pos);
+					hero = get_hero(hero_pos);
 
 					if (test_skill(hero, TA_SCHWIMMEN, 8) <= 0) {
 

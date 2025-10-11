@@ -97,7 +97,7 @@ void talk_tavern(void)
 
 			} else if (txt_id == 95) {
 
-				hero = (struct struct_hero*)get_hero(gs_tlk_tav_testdrunk - 1);
+				hero = get_hero(gs_tlk_tav_testdrunk - 1);
 
 				sprintf(text_buffer, format, hero->alias,
 					GUI_get_ptr(hero->sex, 3),
@@ -267,7 +267,7 @@ void TLK_tavern(signed short answer)
 
 			hero_pos = get_hero_CH_best();
 
-			g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(hero_pos), ATTRIB_CH, 0) <= 0 ? 112 : 113);
+			g_dialog_next_state = (test_attrib(get_hero(hero_pos), ATTRIB_CH, 0) <= 0 ? 112 : 113);
 
 			gs_tav_kicked_flags[gs_current_typeindex] = 0;
 
@@ -535,11 +535,11 @@ void TLK_tavern(signed short answer)
 
 		g_dialog_next_state = (108);
 
-		if ((((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk))->typus) &&
-			!((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk))->flags.dead &&
+		if (((get_hero(gs_tlk_tav_testdrunk))->typus) &&
+			!(get_hero(gs_tlk_tav_testdrunk))->flags.dead &&
 			gs_tlk_tav_drinkcount)
 		{
-			g_dialog_next_state = (test_skill((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
+			g_dialog_next_state = (test_skill(get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
 		}
 
 		/* TODO: this variable is unsigned */
@@ -547,7 +547,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 110) {
 
-		hero_get_drunken((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk - 1));
+		hero_get_drunken(get_hero(gs_tlk_tav_testdrunk - 1));
 
 	} else if (old_state == 112) {
 

@@ -29,7 +29,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 	signed short i;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		if ((i != diver_pos) && (hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)

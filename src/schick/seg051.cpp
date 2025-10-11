@@ -116,7 +116,7 @@ void do_wildcamp(void)
 			for (i = 0; i <= 6; i++) {
 
 				if (!g_wildcamp_magicstatus[i] && !g_wildcamp_herbstatus[i] &&
-					!g_wildcamp_replstatus[i] && is_hero_available_in_group((struct struct_hero*)get_hero(i)))
+					!g_wildcamp_replstatus[i] && is_hero_available_in_group(get_hero(i)))
 				{
 					g_wildcamp_guardstatus[i] = 0;
 					answer = 0;
@@ -145,7 +145,7 @@ void do_wildcamp(void)
 						}
 
 						if (answer != -1) {
-							if (((struct struct_hero*)get_hero(answer))->flags.brewing) {
+							if ((get_hero(answer))->flags.brewing) {
 								GUI_output(get_ttx(730));
 								answer = -1;
 							}
@@ -180,7 +180,7 @@ void do_wildcamp(void)
 
 			if (answer != -1) {
 
-				if (((struct struct_hero*)get_hero(answer))->flags.brewing) {
+				if ((get_hero(answer))->flags.brewing) {
 					GUI_output(get_ttx(730));
 					answer = -1;
 				}
@@ -188,7 +188,7 @@ void do_wildcamp(void)
 
 			if (answer != -1) {
 
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 
 				if (hero->typus >= HERO_TYPE_WITCH) {
 
@@ -220,7 +220,7 @@ void do_wildcamp(void)
 
 			answer = select_hero_ok(get_ttx(326));
 
-			if (answer != -1 && ((struct struct_hero*)get_hero(answer))->flags.brewing) {
+			if (answer != -1 && (get_hero(answer))->flags.brewing) {
 				GUI_output(get_ttx(730));
 				answer = -1;
 			}
@@ -229,7 +229,7 @@ void do_wildcamp(void)
 
 				if (g_wildcamp_replstatus[answer])
 				{
-					sprintf(g_dtp2,	get_ttx(803), ((struct struct_hero*)get_hero(answer))->alias);
+					sprintf(g_dtp2,	get_ttx(803), (get_hero(answer))->alias);
 					GUI_output(g_dtp2);
 
 				} else if (g_wildcamp_guardstatus[answer] != 0 ||
@@ -242,7 +242,7 @@ void do_wildcamp(void)
 
 					if (herb_tries < 1)
 					{
-						hero = (struct struct_hero*)get_hero(answer);
+						hero = get_hero(answer);
 
 						herb_hours = (signed char)GUI_input(get_ttx(327), 1);
 
@@ -290,7 +290,7 @@ void do_wildcamp(void)
 
 				if (g_wildcamp_guards[l_si] != -1) {
 
-					sprintf(g_dtp2, get_ttx(774), ((struct struct_hero*)get_hero(g_wildcamp_guards[l_si]))->alias);
+					sprintf(g_dtp2, get_ttx(774), (get_hero(g_wildcamp_guards[l_si]))->alias);
 
 					GUI_print_loc_line(g_dtp2);
 				}
@@ -316,7 +316,7 @@ void do_wildcamp(void)
 						if (g_wildcamp_guards[l_si] != -1) {
 
 							sprintf(g_dtp2,	get_ttx(774),
-								((struct struct_hero*)get_hero(g_wildcamp_guards[l_si]))->alias);
+								(get_hero(g_wildcamp_guards[l_si]))->alias);
 							GUI_print_loc_line(g_dtp2);
 						}
 					}
@@ -325,7 +325,7 @@ void do_wildcamp(void)
 
 				if (done == 0) {
 
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 
 					for (i = 0; i <= 6; i++, hero++) {
 
@@ -485,7 +485,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 	g_skilled_hero_pos = get_skilled_hero_pos(TA_WILDNISLEBEN);
 	hero_pos = select_hero_ok(get_ttx(322));
 
-	if (hero_pos != -1 && ((struct struct_hero*)get_hero(hero_pos))->flags.brewing) {
+	if (hero_pos != -1 && (get_hero(hero_pos))->flags.brewing) {
 
 		GUI_output(get_ttx(730));
 		hero_pos = -1;
@@ -495,7 +495,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 		if (g_wildcamp_replstatus[hero_pos] != 0) {
 
-			sprintf(g_dtp2, get_ttx(802), ((struct struct_hero*)get_hero(hero_pos))->alias);
+			sprintf(g_dtp2, get_ttx(802), (get_hero(hero_pos))->alias);
 			GUI_output(g_dtp2);
 
 		} else {
@@ -511,7 +511,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 				if (tries < 2) {
 
 					timewarp(HOURS(1));
-					gs_main_acting_hero = hero = (struct struct_hero*)get_hero(hero_pos);
+					gs_main_acting_hero = hero = get_hero(hero_pos);
 					g_wildcamp_replstatus[hero_pos] = 1;
 					retval = 1;
 
@@ -522,7 +522,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						sprintf(g_dtp2, get_ttx(324), hero->alias);
 
 						/* fill up all waterskins and remove thirst of all living heroes in the current group */
-						hero2 = (struct struct_hero*)get_hero(0);
+						hero2 = get_hero(0);
 
 						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
@@ -553,7 +553,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					if ((test_skill(hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
 
 						/* remove hunger of all living heroes in the current group */
-						hero2 = (struct struct_hero*)get_hero(0);
+						hero2 = get_hero(0);
 						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
 							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_no == gs_current_group) &&

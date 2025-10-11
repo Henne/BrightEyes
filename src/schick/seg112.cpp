@@ -53,7 +53,7 @@ void tevent_067(void)
 
 		} else if (answer == 3) {
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = count = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -80,7 +80,7 @@ void tevent_067(void)
 
 				GUI_output(get_tx2(95));
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -283,7 +283,7 @@ void TRV_swimm(signed short mod, signed short percent)
 	signed short i;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
@@ -453,7 +453,7 @@ void tevent_074(void)
 			} else {
 
 				/* remember the position of the last hero in the group */
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -463,7 +463,7 @@ void tevent_074(void)
 					}
 				}
 
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 
 				sprintf((char*)g_dtp2 + 0x400, get_tx2(54), hero->alias);
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), (char*)(g_dtp2 + 0x400), 0);
@@ -560,7 +560,7 @@ void tevent_075(void)
 
 			} else {
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = answer = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -679,7 +679,7 @@ void tevent_077(void)
 			} else {
 
 				/* remember the last hero */
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -689,7 +689,7 @@ void tevent_077(void)
 					}
 				}
 
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 
 				sprintf((char*)(g_dtp2 + 0x400), get_tx2(54), hero->alias);
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), (char*)(g_dtp2 + 0x400), 0);

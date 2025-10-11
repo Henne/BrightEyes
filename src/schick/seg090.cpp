@@ -98,7 +98,7 @@ signed short DNG12_handler(void)
 				if (gs_dng12_watertrap_timer == MINUTES(0)) {
 
 					/* time is up, drown party */
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero++) {
 
 						if ((hero->typus != HERO_TYPE_NONE) &&
@@ -113,10 +113,10 @@ signed short DNG12_handler(void)
 
 					/* NPC will find secret door */
 
-					if (is_hero_available_in_group((struct struct_hero*)get_hero(6))) {
+					if (is_hero_available_in_group(get_hero(6))) {
 
 						/* prepare a message with the name of the NPC */
-						sprintf(g_dtp2, get_tx(22), ((struct struct_hero*)get_hero(6))->alias);
+						sprintf(g_dtp2, get_tx(22), (get_hero(6))->alias);
 						GUI_output(g_dtp2);
 
 						while (gs_x_target != 6) {

@@ -191,7 +191,7 @@ void tevent_086(void)
 
 	if (answer == 1) {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		for (i = 0; i <= 6; i++, hero++) {
 
@@ -270,7 +270,7 @@ void tevent_098(void)
 
 		if (answer == 1) {
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 
 			for (i = 0; i <= 6; i++, hero++) {
 
@@ -313,14 +313,14 @@ void tevent_098(void)
 			TRV_load_textfile(-1);
 		} else {
 
-			hero = (struct struct_hero*)get_hero(hero_pos = select_hero_ok_forced(get_tx2(34)));
+			hero = get_hero(hero_pos = select_hero_ok_forced(get_tx2(34)));
 
 			if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
 				sprintf(g_dtp2,	get_tx2(35), hero->alias);
 				GUI_output(g_dtp2);
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((i != hero_pos) && (hero->typus != HERO_TYPE_NONE) &&
@@ -388,10 +388,10 @@ void hero_disappear(struct struct_hero *hero, const signed int pos, const signed
 
 	if (pos == 6) {
 		/* NPC */
-		save_npc(ARCHIVE_FILE_NPCS + ((struct struct_hero*)get_hero(6))->npc_id);
+		save_npc(ARCHIVE_FILE_NPCS + (get_hero(6))->npc_id);
 
 		/* reset NPC timer */
-		gs_npc_timers[((struct struct_hero*)get_hero(6))->npc_id + 1] = -1;
+		gs_npc_timers[(get_hero(6))->npc_id + 1] = -1;
 	} else {
 		/* Regular Hero */
 		write_chr_temp(pos);
@@ -596,7 +596,7 @@ void tevent_104(void)
 
 		GUI_dialog_na(0, get_tx2(54));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		for (i = l_si = nr_heroes = 0; i <= 6; i++, hero++)
 		{
@@ -680,7 +680,7 @@ void tevent_104(void)
 
 				} else if (l_si == 2) {
 
-					hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
+					hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 
 					if (hero->typus < HERO_TYPE_WITCH) {
 
@@ -765,7 +765,7 @@ void tevent_107(void)
 
 	if (answer == 1) {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 1) <= 0)

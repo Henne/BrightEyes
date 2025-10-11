@@ -168,11 +168,11 @@ struct struct_hero* FIG_get_hero_ptr(const signed short fighter_id)
 	signed int i;
 
 	for (i = 0; i <= 6; i++) {
-		if (((struct struct_hero*)get_hero(i))->fighter_id == fighter_id)
-			return (struct struct_hero*)get_hero(i);
+		if ((get_hero(i))->fighter_id == fighter_id)
+			return get_hero(i);
 	}
 
-	return (struct struct_hero*)get_hero(0);
+	return get_hero(0);
 }
 
 struct enemy_sheet* FIG_get_enemy_sheet(const signed short fighter_id)
@@ -451,7 +451,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 	struct struct_hero *hero;
 	signed short fg_bak, bg_bak;
 
-	hero = (struct struct_hero*)get_hero(hero_pos - 1);
+	hero = get_hero(hero_pos - 1);
 	g_pic_copy.src = hero->pic;
 
 	get_textcolor(&fg_bak, &bg_bak);

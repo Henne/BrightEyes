@@ -82,7 +82,7 @@ void tevent_016(void)
 
 					GUI_dialog_na(0, get_tx2(31));
 
-					hero = (struct struct_hero*)get_hero(get_hero_KK_best());
+					hero = get_hero(get_hero_KK_best());
 
 					/* test KK+3 */
 					if (test_attrib(hero, ATTRIB_KK, 3) > 0)
@@ -96,7 +96,7 @@ void tevent_016(void)
 						/* fail */
 						GUI_dialog_na(0, get_tx2(33));
 
-						hero = (struct struct_hero*)get_hero(get_random_hero());
+						hero = get_hero(get_random_hero());
 
 						/* GE+0 */
 						if (test_attrib(hero, ATTRIB_GE, 0) > 0)
@@ -152,7 +152,7 @@ void tevent_090(void)
 	GUI_output(get_tx2(0));
 	GUI_output(get_tx2(1));
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus) && (hero->group_no == gs_current_group) && !hero->flags.dead &&
@@ -232,7 +232,7 @@ void tevent_095(void)
 
 		GUI_output(get_tx2(7));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		for (i = counter_failed = counter_heroes = 0; i <= 6; i++, hero++)
 		{
@@ -303,7 +303,7 @@ void tevent_095(void)
 				} else if (counter_failed == 2)
 				{
 					/* try a spell */
-					hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
+					hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 
 					if (hero->typus < HERO_TYPE_WITCH)
 					{

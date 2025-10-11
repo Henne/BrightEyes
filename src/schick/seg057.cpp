@@ -132,7 +132,7 @@ void sell_screen(struct shop_descr *shop_descr)
 					break;
 				}
 
-				hero1 = (struct struct_hero*)get_hero(hero_pos);
+				hero1 = get_hero(hero_pos);
 
 				deselect_hero_icon(hero_pos_old);
 				select_hero_icon(hero_pos);
@@ -427,14 +427,14 @@ void sell_screen(struct shop_descr *shop_descr)
 
 					answer = select_hero_ok_forced(get_ttx(442));
 
-					hero2 = (struct struct_hero*)get_hero(answer);
+					hero2 = get_hero(answer);
 
 					l12 = bargain(hero2, nice, price, percent, 0) > 0 ? 1 : 0;
 				}
 
 				if (l12 > 0) {
 
-					hero3 = (struct struct_hero*)get_hero(0);
+					hero3 = get_hero(0);
 					for (items_x = 0; items_x <= 6; items_x++, hero3++) {
 
 						for (l_di = 0; l_di < NR_HERO_INVENTORY_SLOTS; l_di++) {
@@ -499,11 +499,11 @@ void sell_screen(struct shop_descr *shop_descr)
 		if (g_action >= 241 && g_action <= 247) {
 
 			hero_pos = g_action - 241;
-			hero3 = (struct struct_hero*)get_hero(hero_pos);
+			hero3 = get_hero(hero_pos);
 
 			if ((hero3->typus != HERO_TYPE_NONE) && (hero3->group_no == gs_current_group))
 			{
-				hero1 = (struct struct_hero*)get_hero(hero_pos);
+				hero1 = get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);
 				select_hero_icon(hero_pos);
 				hero_pos_old = hero_pos;

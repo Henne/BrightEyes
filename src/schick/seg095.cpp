@@ -29,7 +29,7 @@ unsigned short npc_meetings(unsigned short type_index)
 {
 	/* check if an NPC is in the party and if we
 		already had an NPC conversation here */
-	if (!((struct struct_hero*)get_hero(6))->typus && (type_index != gs_npc_meet_tavern)) {
+	if (!(get_hero(6))->typus && (type_index != gs_npc_meet_tavern)) {
 
 		gs_npc_meet_tavern = type_index;
 
@@ -91,21 +91,21 @@ void npc_farewell(void)
 	signed short tmp;
 
 	/* no NPC there */
-	if (((struct struct_hero*)get_hero(6))->typus == HERO_TYPE_NONE)
+	if ((get_hero(6))->typus == HERO_TYPE_NONE)
 		return;
 
 	/* no NPC in that group */
-	if (((struct struct_hero*)get_hero(6))->group_no != gs_current_group)
+	if ((get_hero(6))->group_no != gs_current_group)
 		return;
 
 	/* Unconscious or dead NPCs cannot be removed automatically (99 means manual). */
-	if (check_hero((struct struct_hero*)get_hero(6)) == 0 && (gs_npc_months < 99))
+	if (check_hero(get_hero(6)) == 0 && (gs_npc_months < 99))
 		return;
 
 	tmp = g_tx_file_index;
 	load_tx(ARCHIVE_FILE_NSC_LTX);
 
-	switch (((struct struct_hero*)get_hero(6))->npc_id) {
+	switch ((get_hero(6))->npc_id) {
 
 		case NPC_NARIELL: {
 			if (gs_npc_months >= 2)
@@ -122,7 +122,7 @@ void npc_farewell(void)
 
 					remove_npc(0x16, 0x1f, 0xe3, get_ttx(754), get_tx(19));
 
-					hero_i = (struct struct_hero*)get_hero(0);
+					hero_i = get_hero(0);
 					for (i = 0; i < 6; i++, hero_i++) {
 						if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && (!hero_i->flags.dead))
 						{
@@ -476,13 +476,13 @@ void remove_npc(signed short head_index, signed char days,
 
 	/* reset NPCs groups position */
 	/* TODO: this is bogus, since memset() will come */
-	((struct struct_hero*)get_hero(6))->group_pos = 0;
+	(get_hero(6))->group_pos = 0;
 
 	/* save the NPC */
 	save_npc(index);
 
 	/* print farewell message if the NPC has and can */
-        if (text && check_hero((struct struct_hero*)get_hero(6))) {
+        if (text && check_hero(get_hero(6))) {
 
 		load_in_head(head_index);
 		GUI_dialogbox((unsigned char*)g_dtp2, name, text, 0);
@@ -501,7 +501,7 @@ void remove_npc(signed short head_index, signed char days,
 
 	/* TODO:	check_hero() will now, after memset() return 0,
 			so the parameter days is useless */
-	if (check_hero((struct struct_hero*)get_hero(6)))
+	if (check_hero(get_hero(6)))
 		gs_npc_timers[index - 0xe1] = days;
 	else
 		gs_npc_timers[index - 0xe1] = -1;
@@ -513,7 +513,7 @@ void add_npc(signed short index)
 	load_npc(index);
 
 	/* overwrite the picture of the NPC with one from IN_HEAD.NVF */
-	memcpy(((struct struct_hero*)get_hero(6))->pic, g_dtp2, 0x400);
+	memcpy((get_hero(6))->pic, g_dtp2, 0x400);
 
 	/* increment heroes in that group */
 	gs_group_member_counts[gs_current_group]++;
@@ -525,10 +525,10 @@ void add_npc(signed short index)
 	gs_npc_months = 0;
 
 	/* set a number to decide between the NPCs (1-6) */
-	((struct struct_hero*)get_hero(6))->npc_id = index - 0xe1;
+	(get_hero(6))->npc_id = index - 0xe1;
 
 	/* set the group the NPC contains in */
-	((struct struct_hero*)get_hero(6))->group_no = gs_current_group;
+	(get_hero(6))->group_no = gs_current_group;
 
 	draw_status_line();
 }

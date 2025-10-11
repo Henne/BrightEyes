@@ -280,7 +280,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					} else if (txt_id == 29) {
 
-						hero = (struct struct_hero*)get_hero(gs_tiomar_drinkmate);
+						hero = get_hero(gs_tiomar_drinkmate);
 
 						sprintf(dst, fmt, hero->alias, GUI_get_ptr(hero->sex, 0));
 
@@ -457,7 +457,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 40 || txt_id == 41 || txt_id == 43) {
 #if !defined(__BORLANDC__)
-						gs_random_tlk_hero = (struct struct_hero*)get_hero(get_random_hero());
+						gs_random_tlk_hero = get_hero(get_random_hero());
 #endif
 
 						sprintf(dst, fmt, gs_random_tlk_hero->alias,

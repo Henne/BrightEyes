@@ -148,14 +148,14 @@ void draw_status_line(void)
 		/* Clear name field */
 		do_fill_rect(g_vga_memstart, g_hero_pic_posx[i], 190, g_hero_pic_posx[i] + 41, 197, 0);
 
-		if (((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) {
+		if ((get_hero(i))->typus != HERO_TYPE_NONE) {
 
-			copy_forename(g_dtp2, ((struct struct_hero*)get_hero(i))->alias);
+			copy_forename(g_dtp2, (get_hero(i))->alias);
 
 			set_textcolor(0xff, 0);
 
 			/* Gray the names of heroes in another group */
-			if (((struct struct_hero*)get_hero(i))->group_no != gs_current_group) {
+			if ((get_hero(i))->group_no != gs_current_group) {
 
 				set_textcolor(0x6f, 0);
 			}
@@ -168,12 +168,12 @@ void draw_status_line(void)
 
 		update_mouse_cursor();
 
-		if (!((struct struct_hero*)get_hero(i))->typus) {
+		if (!(get_hero(i))->typus) {
 
 			clear_hero_icon(i);
 
 		} else {
-			if (((struct struct_hero*)get_hero(i))->group_no == gs_current_group) {
+			if ((get_hero(i))->group_no == gs_current_group) {
 
 				g_pic_copy.x1 = g_hero_pic_posx[i];
 				g_pic_copy.y1 = 157;
@@ -183,16 +183,16 @@ void draw_status_line(void)
 				head_bak = -1;
 
 				/* load skull if hero is dead */
-				if (((struct struct_hero*)get_hero(i))->flags.dead) {
+				if ((get_hero(i))->flags.dead) {
 					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
 
 				/* set the src pointer of the head */
 				g_pic_copy.src =
-					((((struct struct_hero*)get_hero(i))->flags.dead ?
+					(((get_hero(i))->flags.dead ?
 						(Bit8u*)g_dtp2 :
-						(Bit8u*)((struct struct_hero*)get_hero(i))->pic));
+						(Bit8u*)(get_hero(i))->pic));
 
 				do_pic_copy(0);
 
@@ -206,7 +206,7 @@ void draw_status_line(void)
 				head_bak = -1;
 
 				/* load skull if hero is dead */
-				if (((struct struct_hero*)get_hero(i))->flags.dead) {
+				if ((get_hero(i))->flags.dead) {
 					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
@@ -214,9 +214,9 @@ void draw_status_line(void)
 				/* set the src pointer of the head */
 				/* TODO: expression to complicated ? */
 				src =
-					((((struct struct_hero*)get_hero(i))->flags.dead ?
+					(((get_hero(i))->flags.dead ?
 						(Bit8u*)g_dtp2 :
-						(Bit8u*)((struct struct_hero*)get_hero(i))->pic));
+						(Bit8u*)(get_hero(i))->pic));
 
 				/* Gray out picture */
 				for (j = 0; j < 1024; src++, dst++, j++)
@@ -261,7 +261,7 @@ void clear_hero_icon(unsigned short pos)
 	/* fill icon area black */
 	do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos], 157, g_hero_pic_posx[pos] + 31, 188, 0);
 
-	if (!((struct struct_hero*)get_hero(pos))->typus) {
+	if (!(get_hero(pos))->typus) {
 
 		/* fill bars area black */
 		do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos] + 33, 157, g_hero_pic_posx[pos] + 39, 188, 0);
@@ -383,7 +383,7 @@ void select_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, ((struct struct_hero*)get_hero(pos))->alias);
+	copy_forename(g_dtp2, (get_hero(pos))->alias);
 
 	/* set the textcolors */
 	set_textcolor(0xfc, 0);
@@ -417,7 +417,7 @@ void deselect_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, ((struct struct_hero*)get_hero(pos))->alias);
+	copy_forename(g_dtp2, (get_hero(pos))->alias);
 
 	/* set the textcolors */
 	set_textcolor(0xff, 0);

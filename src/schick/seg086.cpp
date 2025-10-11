@@ -109,7 +109,7 @@ signed short DNG11_handler(void)
 
 			gs_dng11_firetrap1_flag--;
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -128,7 +128,7 @@ signed short DNG11_handler(void)
 
 			gs_dng11_firetrap2_flag--;
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -162,7 +162,7 @@ signed short DNG11_handler(void)
 
 			GUI_output(get_tx(23));
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))

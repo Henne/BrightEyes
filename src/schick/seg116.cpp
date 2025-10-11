@@ -155,7 +155,7 @@ void tevent_133(void)
 
 		GUI_output(get_tx2(38));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -221,7 +221,7 @@ void tevent_135(void)
 		do {
 			done = 0;
 
-			hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_tx2(45)));
+			hero = get_hero(select_hero_ok_forced(get_tx2(45)));
 
 			tmp = 1;
 			if (test_skill(hero, TA_KLETTERN, -1) > 0) {
@@ -344,7 +344,7 @@ void tevent_137(void)
 
 		if (answer == 1) {
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -392,7 +392,7 @@ void tevent_139(void)
 
 	if (answer == 1) {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -486,7 +486,7 @@ void tevent_143(void)
 
 	if (answer == 1) {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -564,7 +564,7 @@ void tevent_144(void)
 			load_in_head(44);
 			memmove(g_buffer10_ptr, g_dtp2, 0x400);
 
-			hero = (struct struct_hero*)get_hero(grimring_hero_pos);
+			hero = get_hero(grimring_hero_pos);
 
 			sprintf(g_dtp2, get_tx2(10), hero->alias);
 
@@ -592,14 +592,14 @@ void tevent_144(void)
 
 				if (grimring_hero_pos == 6) {
 
-					sprintf(g_dtp2, get_tx2(38), ((struct struct_hero*)get_hero(6))->alias);
+					sprintf(g_dtp2, get_tx2(38), (get_hero(6))->alias);
 
-					GUI_dialogbox(((struct struct_hero*)get_hero(6))->pic, ((struct struct_hero*)get_hero(6))->alias, g_dtp2, 0);
+					GUI_dialogbox((get_hero(6))->pic, (get_hero(6))->alias, g_dtp2, 0);
 				}
 
 			} while (grimring_hero_pos == 6);
 
-			gs_main_acting_hero = (struct struct_hero*)get_hero(grimring_hero_pos);
+			gs_main_acting_hero = get_hero(grimring_hero_pos);
 
 			final_intro();
 			if (!TRV_fight_event(FIGHTS_F144, 144)) {
@@ -639,7 +639,7 @@ void TLK_old_woman(signed short state)
 
 	if (state == 3) {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (l_di = counter = 0; l_di <= 6; l_di++, hero++) {
 			/* Original-Bug: check if this is realy a hero in the current group and alive before test_skill((struct struct_hero*)) */
 			if (test_skill(hero, TA_VERSTECKEN, -5) > 0) {
@@ -659,7 +659,7 @@ void TLK_old_woman(signed short state)
 
 	} else if (state == 23) {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (l_di = counter = 0; l_di <= 6; l_di++, hero++) {
 			/* Original-Bug: check if this is realy a hero in the current group and alive before test_skill((struct struct_hero*)) */
 			if (test_skill(hero, TA_VERSTECKEN, -5) > 0) {
@@ -667,7 +667,7 @@ void TLK_old_woman(signed short state)
 			}
 		}
 
-		gs_random_tlk_hero = (struct struct_hero*)get_hero(get_random_hero()); /* TODO: can be removed here ? */
+		gs_random_tlk_hero = get_hero(get_random_hero()); /* TODO: can be removed here ? */
 
 		g_dialog_next_state = (count_heroes_in_group() == counter ? 24 : 25);
 

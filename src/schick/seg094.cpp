@@ -276,7 +276,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				/* Remark: gs_forcedmarch_le_cost = gs_forcedmarch_le_cost / 2; */
 				gs_forcedmarch_le_cost >>= 1;
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (gs_trv_i = 0; gs_trv_i <= 6; gs_trv_i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&

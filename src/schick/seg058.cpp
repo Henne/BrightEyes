@@ -199,7 +199,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 					hero_pos = select_hero_ok(get_ttx(495));
 
-					hero2 = (struct struct_hero*)get_hero(hero_pos);
+					hero2 = get_hero(hero_pos);
 
 					deselect_hero_icon(hero_pos_old);
 					select_hero_icon(hero_pos);
@@ -398,7 +398,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 							answer = select_hero_ok_forced(get_ttx(442));
 
-							hero_bargain = (struct struct_hero*)get_hero(answer);
+							hero_bargain = get_hero(answer);
 
 							l12 = bargain(hero_bargain, 1, price, percent, 2) > 0 ? 1 : 0;
 						}
@@ -454,7 +454,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 			if (g_action >= 241 && g_action <= 247) {
 
 				hero_pos = g_action - 241;
-				hero2 = (struct struct_hero*)get_hero(hero_pos);
+				hero2 = get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);
 				select_hero_icon(hero_pos);
 				hero_pos_old = hero_pos;

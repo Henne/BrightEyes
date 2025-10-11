@@ -155,7 +155,7 @@ void TRV_inside_herb_place(void)
 			bak = g_special_screen;
 			g_special_screen = 1;
 
-			gather_herbs((struct struct_hero*)get_hero(hero_pos), hours - 1, -3);
+			gather_herbs(get_hero(hero_pos), hours - 1, -3);
 
 			g_special_screen = (signed char)bak;
 		}
@@ -369,7 +369,7 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 void TRV_ford_test(signed short mod, signed short time)
 {
 	signed short i;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
@@ -533,7 +533,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 	GUI_output(get_tx2(city_index));
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = l_di = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -554,7 +554,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 		i = select_hero_ok_forced(get_tx2(city_index + 2));
 
-		hero = (struct struct_hero*)get_hero(i);
+		hero = get_hero(i);
 
 		if (test_skill(hero, TA_SCHLEICHEN, (signed char)mod2) <= 0) {
 
@@ -680,7 +680,7 @@ void TRV_barrier(signed short text_start)
 		} else {
 
 			/* count ropes and rope ladders in the active group */
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = l_di = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -713,7 +713,7 @@ void TRV_barrier(signed short text_start)
 					GUI_dialog_na(0, get_tx2(text_start + 4));
 
 				} else {
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 
 					for (i = l_di = 0; i <= 6; i++, hero++)
 					{
@@ -722,15 +722,15 @@ void TRV_barrier(signed short text_start)
 
 					add_hero_ap_all(10);
 
-					i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 					if (i == -1) {
-						i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
 					drop_item(hero, i, 1);
 
-					i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 					if (i == -1) {
-						i = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
 					drop_item(hero, i, 1);
 
@@ -739,7 +739,7 @@ void TRV_barrier(signed short text_start)
 						GUI_dialog_na(0, get_tx2(text_start + 6));
 					} else {
 
-						hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
+						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
 
 						sprintf(g_dtp2 + 0x400,	get_tx2(text_start + 7), hero->alias,
 								GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));

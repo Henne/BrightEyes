@@ -91,7 +91,7 @@ signed short DNG10_handler(void)
 			(target_pos == DNG_POS(0,7,4) && target_pos != gs_dng_handled_pos && gs_dng10_lever_state))
 	{
 		/* TRAP: terrible pain; radom hero gets 3W6+4 LE damage */
-		hero = (struct struct_hero*)get_hero(get_random_hero());
+		hero = get_hero(get_random_hero());
 
 		answer = dice_roll(3, 6, 4);
 
@@ -235,7 +235,7 @@ signed short DNG10_handler(void)
 		{
 			GUI_output(get_tx(24));
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -308,7 +308,7 @@ signed short DNG10_handler(void)
 				}
 			} else {
 				/* try to plunder the hoard */
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 
 				for (answer = result = 0; answer <= 6; answer++, hero++)
 				{
@@ -359,7 +359,7 @@ signed short DNG10_handler(void)
 
 			if ((answer = get_first_hero_with_item(ITEM_KEY_PLATIN)) != -1)
 			{
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 				result = get_item_pos(hero, ITEM_KEY_PLATIN);
 				drop_item(hero, result, 1);
 

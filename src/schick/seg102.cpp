@@ -39,7 +39,7 @@ void MON_do_spell_damage(signed short damage)
 			/* target is a hero */
 
 			/* set the pointer to the target */
-			g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+			g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 			/* do the damage */
 			sub_hero_le(get_spelltarget(), damage);
@@ -79,7 +79,7 @@ signed short MON_get_target_PA(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget =  (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget =  get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* calc and return PA-value */
 		return get_spelltarget()->pa_weapon[get_spelltarget()->w_type] - get_spelltarget()->atpa_mod;
@@ -102,7 +102,7 @@ signed short MON_get_target_RS(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* return RS-value */
 		return get_spelltarget()->rs_bonus1;
@@ -266,7 +266,7 @@ signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id,
 	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : ((struct struct_hero*)get_hero(monster->enemy_id - 1))->mr);
+		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : (get_hero(monster->enemy_id - 1))->mr);
 	}
 
 	/* check if the monster spell has a valid ID */
@@ -409,7 +409,7 @@ void mspell_verwandlung(void)
 void mspell_bannbaladin(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->flags.tame = 1;
@@ -421,7 +421,7 @@ void mspell_bannbaladin(void)
 void mspell_boeser_blick(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->flags.renegade = 1;
@@ -433,7 +433,7 @@ void mspell_boeser_blick(void)
 void mspell_horriphobus(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->flags.scared = 1; /* set 'scared' flag */
@@ -521,7 +521,7 @@ void mspell_blitz(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* set blitz timer to 3 rounds */
 		get_spelltarget()->blind_timer = 3;
@@ -550,7 +550,7 @@ void mspell_eisenrost(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		item_id = get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
@@ -646,7 +646,7 @@ void mspell_ignifaxius(void)
 		hero_pos = g_spelluser_e->enemy_id - 1;
 
 		/* set the pointer to the target */
-		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
+		g_spelltarget = get_hero(hero_pos);
 
 		/* pointer to the armor of the target hero */
 		p_armor = (struct inventory*)&get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY];
@@ -705,7 +705,7 @@ void mspell_plumbumbarum(void)
 		hero_pos = g_spelluser_e->enemy_id - 1;
 
 		/* set the pointer to the target */
-		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
+		g_spelltarget = get_hero(hero_pos);
 
 		/* AT - 3 */
 		slot = get_free_mod_slot();
@@ -781,7 +781,7 @@ void mspell_paralue(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = (struct struct_hero*)get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* set the flag */
 		get_spelltarget()->flags.petrified = 1;

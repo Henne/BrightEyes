@@ -501,7 +501,7 @@ void academy_analues(void)
 
 	if (hero_pos != -1) {
 
-		g_spelluser = (struct struct_hero*)get_hero(hero_pos);
+		g_spelluser = get_hero(hero_pos);
 
 		buffer1_bak = g_tx_file_index;
 
@@ -533,7 +533,7 @@ void THO_academy(void)
 	struct struct_hero *hero;
 
 	/* find the position of the first cursed (=renegade) hero */
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (item_pos = cursed_hero_pos = 0; item_pos <= 6; item_pos++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && hero->flags.renegade)
@@ -588,7 +588,7 @@ void THO_academy(void)
 
 					} else {
 
-						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
+						hero = get_hero(get_first_hero_with_item(item_id));
 						item_pos = get_item_pos(hero, item_id);
 
 						if (drop_item(hero, item_pos, 1)) {
@@ -598,7 +598,7 @@ void THO_academy(void)
 
 							gs_academy_daily_curse = 1;
 
-							((struct struct_hero*)get_hero(cursed_hero_pos))->flags.renegade = 0;
+							(get_hero(cursed_hero_pos))->flags.renegade = 0;
 
 						} else {
 							GUI_input(get_tx2(70), 0);
@@ -615,7 +615,7 @@ void THO_academy(void)
 
 					gs_academy_daily_curse = 1;
 
-					((struct struct_hero*)get_hero(cursed_hero_pos))->flags.renegade = 0;
+					(get_hero(cursed_hero_pos))->flags.renegade = 0;
 
 				} else {
 					GUI_input(get_ttx(401), 0);
@@ -659,7 +659,7 @@ void THO_academy(void)
 
 					} else {
 
-						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
+						hero = get_hero(get_first_hero_with_item(item_id));
 						item_pos = get_item_pos(hero, item_id);
 
 						if (drop_item(hero, item_pos, 1)) {
@@ -716,7 +716,7 @@ signed short academy_get_equal_item(signed short price)
 	if (price > p_money) {
 
 		retval = -1;
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i < 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)

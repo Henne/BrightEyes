@@ -135,7 +135,7 @@ void do_healer(void)
 			answer = select_hero_from_group(get_ttx(460));
 			if (answer != - 1) {
 
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 
 				if (is_hero_healable(hero)) {
 
@@ -197,7 +197,7 @@ void do_healer(void)
 			answer = select_hero_from_group(get_ttx(460));
 			if (answer != -1) {
 
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 
 				if (is_hero_healable(hero)) {
 
@@ -259,7 +259,7 @@ void do_healer(void)
 			answer = select_hero_from_group(get_ttx(460));
 			if (answer != -1) {
 
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 
 				if (is_hero_healable(hero)) {
 

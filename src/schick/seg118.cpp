@@ -136,7 +136,7 @@ void tevent_037(void)
 					gs_tevent037_flag = 1;
 
 					/* select a hero randomly */
-					hero = (struct struct_hero*)get_hero(answer = get_random_hero());
+					hero = get_hero(answer = get_random_hero());
 
 					sprintf(g_dtp2, get_tx2(45), hero->alias, GUI_get_ptr(hero->sex, 2));
 					GUI_output(g_dtp2);
@@ -208,7 +208,7 @@ void tevent_037(void)
 					if (answer == 2)
 					{
 						/* select a hero randomly */
-						hero = (struct struct_hero*)get_hero(get_random_hero());
+						hero = get_hero(get_random_hero());
 
 						timewarp(HOURS(1));
 
@@ -337,7 +337,7 @@ void tevent_078(void)
 				timewarp(HOURS(8));
 
 				/* TODO: Original-Bug: all heroes die, even if they are not in the current group */
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (tmp = 0; tmp <= 6; tmp++, hero++)
 				{
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -508,7 +508,7 @@ void tevent_124(void)
 
 	} else {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = counter = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&

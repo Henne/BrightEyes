@@ -470,7 +470,7 @@ signed short is_staff_lvl2_in_group(void)
 	struct struct_hero *hero_i;
 	signed short i;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) &&

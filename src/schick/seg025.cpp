@@ -137,7 +137,7 @@ void do_house(void)
 		/* print a randomized text */
 		GUI_output(get_ttx(random_schick(8) + 623));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		for (i = 0; i < 6; i++, hero++) {
 
@@ -159,7 +159,7 @@ void do_house(void)
 
 					for (i = 0; i < 6; i++) {
 
-						hero = (struct struct_hero*)get_hero(i);
+						hero = get_hero(i);
 
 						if (check_hero(hero) && !hero->jail) {
 							l_di = 1;
@@ -170,10 +170,10 @@ void do_house(void)
 					{
 						i = 0;
 
-						while (((struct struct_hero*)get_hero(i))->group_no == gs_current_group)
+						while ((get_hero(i))->group_no == gs_current_group)
 						{
 							/* imprison hero */
-							((struct struct_hero*)get_hero(i))->jail = 1;
+							(get_hero(i))->jail = 1;
 							i++;
 						}
 
@@ -346,7 +346,7 @@ void show_treasure_map(void)
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
 
-			sprintf(g_text_output_buf, get_ttx(727), ((struct struct_hero*)get_hero(get_random_hero()))->alias);
+			sprintf(g_text_output_buf, get_ttx(727), (get_hero(get_random_hero()))->alias);
 			GUI_output(g_text_output_buf);
 
 			g_textbox_width = tw_bak;

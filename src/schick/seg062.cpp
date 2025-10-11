@@ -71,7 +71,7 @@ void ask_miracle(void)
 					l5 = 1;
 
 					for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
-						if (((struct struct_hero*)get_hero(i))->typus >= HERO_TYPE_WITCH) {
+						if ((get_hero(i))->typus >= HERO_TYPE_WITCH) {
 							l5 = 1;
 						}
 					}
@@ -96,12 +96,12 @@ void ask_miracle(void)
 
 								i = get_random_hero();
 
-								if ((i != -1) && !((struct struct_hero*)get_hero(i))->flags.gods_pissed) {
+								if ((i != -1) && !(get_hero(i))->flags.gods_pissed) {
 
 									slot = get_free_mod_slot();
-									set_mod_slot(slot, DAYS(3), (Bit8u*)&((struct struct_hero*)get_hero(i))->mr, 99, (signed char)i);
+									set_mod_slot(slot, DAYS(3), (Bit8u*)&(get_hero(i))->mr, 99, (signed char)i);
 
-									sprintf(g_dtp2, get_tx2(2), ((struct struct_hero*)get_hero(i))->alias);
+									sprintf(g_dtp2, get_tx2(2), (get_hero(i))->alias);
 									gs_ingame_timers[INGAME_TIMER_PRAIOS_MR] = DAYS(3);
 								}
 							}
@@ -111,7 +111,7 @@ void ask_miracle(void)
 							/* remove a transformation or a curse of one hero */
 							for (i = 0; i <= 6; i++) {
 
-								hero = (struct struct_hero*)get_hero(i);
+								hero = get_hero(i);
 
 								if (hero->flags.transformed) {
 
@@ -193,7 +193,7 @@ void ask_miracle(void)
 						/* "Die ganze Gruppe wird von Travia goettlich gesaettigt." */
 						for (i = 0; i <= 6; i++) {
 
-							hero = (struct struct_hero*)get_hero(i);
+							hero = get_hero(i);
 
 							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
 							{
@@ -242,7 +242,7 @@ void ask_miracle(void)
 						/* unset transformation or renegade state of the first feasible hero */
 						for (i = 0; i <= 6; i++) {
 
-							hero = (struct struct_hero*)get_hero(i);
+							hero = get_hero(i);
 
 							if (hero->flags.transformed) {
 
@@ -288,14 +288,14 @@ void ask_miracle(void)
 
 							i = get_random_hero();
 
-							if (i != -1 && !((struct struct_hero*)get_hero(i))->flags.gods_pissed) {
+							if (i != -1 && !(get_hero(i))->flags.gods_pissed) {
 
 								slot = get_free_mod_slot();
-								set_mod_slot(slot, DAYS(7), (Bit8u*)&((struct struct_hero*)get_hero(i))->hunger_timer, 1, (signed char)i);
+								set_mod_slot(slot, DAYS(7), (Bit8u*)&(get_hero(i))->hunger_timer, 1, (signed char)i);
 
-								((struct struct_hero*)get_hero(i))->hunger = ((struct struct_hero*)get_hero(i))->thirst = 0;
+								(get_hero(i))->hunger = (get_hero(i))->thirst = 0;
 
-								sprintf(g_dtp2, get_tx2(20), ((struct struct_hero*)get_hero(i))->alias);
+								sprintf(g_dtp2, get_tx2(20), (get_hero(i))->alias);
 								gs_ingame_timers[INGAME_TIMER_FIRUN_SATED] = DAYS(7);
 							}
 						}
@@ -309,7 +309,7 @@ void ask_miracle(void)
 					} else if (l_si <= 15) {
 						/* completely heal all heroes */
 
-						hero = (struct struct_hero*)get_hero(0);
+						hero = get_hero(0);
 						for (i = 0; i <= 6; i++, hero++) {
 
 							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -367,7 +367,7 @@ void ask_miracle(void)
 					} else if (l_si <= 18) {
 
 						for (i = 0; i <= 6; i++) {
-							hero = (struct struct_hero*)get_hero(i);
+							hero = get_hero(i);
 							disease = hero_is_diseased(hero);
 
 							if (disease != 0 && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
@@ -388,7 +388,7 @@ void ask_miracle(void)
 						/* decrease BF of all weapons of all heroes by 2, but not below 0 */
 
 						for (i = 0; i <= 6; i++) {
-							hero = (struct struct_hero*)get_hero(i);
+							hero = get_hero(i);
 
 							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 								!hero->flags.dead && !hero->flags.gods_pissed)
@@ -443,7 +443,7 @@ void ask_miracle(void)
 
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS_PERMANENT]) {
 
-							hero = (struct struct_hero*)get_hero(0);
+							hero = get_hero(0);
 							for (i = 0; i <= 6; i++, hero++) {
 
 								if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&

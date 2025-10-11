@@ -282,7 +282,7 @@ void DNG_door(signed short action)
 
 				if (hero_pos != -1)
 				{
-					hero = (struct struct_hero*)get_hero(hero_pos);
+					hero = get_hero(hero_pos);
 
 					if (hero->typus < HERO_TYPE_WITCH)
 					{
@@ -368,7 +368,7 @@ void DNG_fallpit_test(signed short max_damage)
 		/* effect: 0101.... */
 
 		/* damage the heroes */
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			/* TODO: need to check if the hero is dead ? */
@@ -873,7 +873,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 		if (answer == 1) {
 
 			/* drink */
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (l_di = 0; l_di <= 6; l_di++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -910,7 +910,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 		} else	if (answer == 2) {
 
 			/* replenish WATERSKINS */
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (hero_refilled_counter = l_di = 0; l_di <= 6; l_di++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&

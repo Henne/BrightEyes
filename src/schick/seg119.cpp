@@ -50,9 +50,9 @@ void disease_effect(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) && !((struct struct_hero*)get_hero(i))->flags.dead) {
+		if (((get_hero(i))->typus != HERO_TYPE_NONE) && !(get_hero(i))->flags.dead) {
 
-			hero = (struct struct_hero*)get_hero(i);
+			hero = get_hero(i);
 
 			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_WUNDFIEBER];
 
@@ -126,7 +126,7 @@ void disease_effect(void)
 					/* after two days, each other hero in the group
 					 * can be infectect by a chance of 20 % */
 
-					hero2 = (struct struct_hero*)get_hero(0);
+					hero2 = get_hero(0);
 
 					for (j = 0; j <= 6; j++, hero2++) {
 						if ((hero2->typus != HERO_TYPE_NONE) &&
@@ -229,7 +229,7 @@ void disease_effect(void)
 
 				} else {
 
-					hero2 = (struct struct_hero*)get_hero(0);
+					hero2 = get_hero(0);
 
 					for (j = 0; j <= 6; j++, hero2++) {
 						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) &&
@@ -358,7 +358,7 @@ void disease_effect(void)
 
 						for (j = 0; j <= 6; j++) {
 
-							hero2 = (struct struct_hero*)get_hero(j);
+							hero2 = get_hero(j);
 
 							if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) &&
 								!hero2->flags.dead && (hero2 != hero) && (random_schick(100) <= 5))
@@ -464,7 +464,7 @@ void disease_effect(void)
 
 				} else {
 
-					hero2 = (struct struct_hero*)get_hero(0);
+					hero2 = get_hero(0);
 
 					for (j = 0; j <= 6; j++, hero2++) {
 

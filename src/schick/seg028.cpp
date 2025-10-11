@@ -507,7 +507,7 @@ void load_npc(signed short index)
 	struct struct_hero *npc;
 	signed short handle;
 
-	npc = (struct struct_hero*)get_hero(6);
+	npc = get_hero(6);
 
 	/* load from temp directory */
 	handle = load_archive_file(index | 0x8000);

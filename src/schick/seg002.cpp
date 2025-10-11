@@ -1834,8 +1834,8 @@ void handle_gui_input(void)
 			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
-				if ((((struct struct_hero*)get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
-						((struct struct_hero*)get_hero(l_si - 241))->group_no == gs_current_group)
+				if (((get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
+						(get_hero(l_si - 241))->group_no == gs_current_group)
 				{
 					status_menu(l_si - 241);
 					l_si = 0;
@@ -1845,8 +1845,8 @@ void handle_gui_input(void)
 			} else {
 				/* swap heroes by click - move mouse - click */
 				if (g_heroswap_allowed &&
-					(((struct struct_hero*)get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
-						((struct struct_hero*)get_hero(l_si - 241))->group_no == gs_current_group)
+					((get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
+						(get_hero(l_si - 241))->group_no == gs_current_group)
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
 					GRP_move_hero(l_si - 241);
@@ -2037,12 +2037,12 @@ void game_loop(void)
 
 			g_check_party = 0;
 
-			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero((struct struct_hero*)get_hero(6)))) // count_heroes_available_ignore_npc() == 0
+			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero(get_hero(6)))) // count_heroes_available_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC can act => GAME OVER */
 				g_game_state = GAME_STATE_DEAD;
 
-			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group((struct struct_hero*)get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
+			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC in this group can act => switch to next */
 				GRP_switch_to_next(2);
@@ -2138,10 +2138,10 @@ void timers_daily(void)
 		gs_merchant_offended_flags[i] = 0;
 	}
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) &&
+		if (((get_hero(i))->typus != HERO_TYPE_NONE) &&
 			(hero_i->recipe_timer > 0))
 		{
 			hero_i->recipe_timer--;
@@ -2500,7 +2500,7 @@ void do_timers(void)
 	/* at 6 o'clock in the morninig */
 	if (gs_day_timer == HOURS(6)) {
 
-		hero_i = (struct struct_hero*)get_hero(0);
+		hero_i = get_hero(0);
 
 		for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -2523,7 +2523,7 @@ void do_timers(void)
 	/* at 10 o'clock */
 	if (gs_day_timer == HOURS(10)) {
 
-		hero_i = (struct struct_hero*)get_hero(0);
+		hero_i = get_hero(0);
 
 		for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -2543,7 +2543,7 @@ void do_timers(void)
 		/* every 15 minutes do damage */
 		if (gs_dng07_poison_timer % MINUTES(15) == 0) {
 
-			ptr = (struct struct_hero*)get_hero(0);
+			ptr = get_hero(0);
 
 			for (i = 0; i <= 6; i++, ptr++) {
 
@@ -2770,7 +2770,7 @@ void sub_mod_timers(Bit32s val)
 				/* get the hero index from the target */
 				target = sp->target;
 				for (j = 0; j <= 6; j++) {
-					if (((struct struct_hero*)get_hero(j))->timer_id == target) {
+					if ((get_hero(j))->timer_id == target) {
 						h_index = j;
 						break;
 					}
@@ -2802,7 +2802,7 @@ void sub_mod_timers(Bit32s val)
 					}
 
 					if (reset_target) {
-						((struct struct_hero*)get_hero(h_index))->timer_id = 0;
+						(get_hero(h_index))->timer_id = 0;
 					}
 				} else {
 #if !defined(__BORLANDC__)
@@ -2884,9 +2884,9 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 		/* mod slot is on a hero/npc */
 		mod_ptr = (Bit8u*)get_hero(who);
 
-		if (((struct struct_hero*)get_hero(who))->timer_id != 0) {
+		if ((get_hero(who))->timer_id != 0) {
 			/* hero/npc has a target number */
-			target = ((struct struct_hero*)get_hero(who))->timer_id;
+			target = (get_hero(who))->timer_id;
 		} else {
 			/* hero/npc has no target number */
 
@@ -2894,7 +2894,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 
 				new_target = 1;
 				for (j = 0; j <= 6; j++) {
-					if (((struct struct_hero*)get_hero(j))->timer_id == i) {
+					if ((get_hero(j))->timer_id == i) {
 						new_target = 0;
 						break;
 					}
@@ -2906,7 +2906,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 				}
 			}
 
-			((struct struct_hero*)get_hero(who))->timer_id = target;
+			(get_hero(who))->timer_id = target;
 		}
 
 		gs_modification_timers[slot_no].target = target;
@@ -2932,7 +2932,7 @@ void sub_heal_staffspell_timers(Bit32s fmin)
 	if (g_timers_disabled)
 		return;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -2998,7 +2998,7 @@ void sub_light_timers(Bit32s quarter)
 	if (g_timers_disabled)
 		return;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 		if (hero_i->typus != HERO_TYPE_NONE) {
@@ -3062,9 +3062,9 @@ void magical_chainmail_damage(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if (((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) {
+		if ((get_hero(i))->typus != HERO_TYPE_NONE) {
 
-			hero_i = (struct struct_hero*)get_hero(i);
+			hero_i = get_hero(i);
 
 			if (!hero_i->flags.dead &&
 				/* check if not in jail (the argument might be: heroes are forced to take off armor in jail) */
@@ -3096,7 +3096,7 @@ void herokeeping(void)
 	 * The flag is reset at the end of this function. */
 
 	/* for each hero ..*/
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
 		/* consume food and set messages */
@@ -3313,7 +3313,7 @@ void check_level_up(void)
 
 	do {
 		not_done = 0;
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead && (hero->level < 20) &&
@@ -3792,9 +3792,9 @@ void dec_splash(void)
 	for (i = 0; i <= 6; i++) {
 
 		if (!g_dialogbox_lock && (g_hero_splash_timer[i]) && !(--g_hero_splash_timer[i]) &&
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !((struct struct_hero*)get_hero(i))->flags.dead) {
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !(get_hero(i))->flags.dead) {
 
-			restore_rect(g_vga_memstart, ((struct struct_hero*)get_hero(i))->pic, g_hero_pic_posx[i], 157, 32, 32);
+			restore_rect(g_vga_memstart, (get_hero(i))->pic, g_hero_pic_posx[i], 157, 32, 32);
 		}
 	}
 }
@@ -4655,13 +4655,13 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 			}
 
 			if (g_traveling	&& !g_in_fight &&
-				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group((struct struct_hero*)get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
+				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
 
 				gs_travel_detour = 99;
 
-				hero_i = (struct struct_hero*)get_hero(0);
+				hero_i = get_hero(0);
 				for (i = 0; i <= 6; i++, hero_i++) {
 
 					if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group))
@@ -4789,7 +4789,7 @@ void add_group_le(signed short le)
 	struct struct_hero *hero;
 	signed short i;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -4846,7 +4846,7 @@ signed short compare_name(char *name)
 
 	for (i = 0; i < 6; i++) {
 
-		if (!strcmp(((struct struct_hero*)get_hero(i))->alias, name)) {
+		if (!strcmp((get_hero(i))->alias, name)) {
 			return 1;
 		}
 	}
@@ -5091,7 +5091,7 @@ signed short get_random_hero(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 		signed short pos = 0;
 
-		struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+		struct struct_hero *hero = get_hero(0);
 		for (int i = 0; i <= 6; i++, hero++) {
 
 			if (hero->typus == HERO_TYPE_NONE)
@@ -5111,9 +5111,9 @@ signed short get_random_hero(void)
 #endif
 
 	} while (
-		!((struct struct_hero*)get_hero(cur_hero))->typus ||
-		(((struct struct_hero*)get_hero(cur_hero))->group_no != gs_current_group) ||
-		((struct struct_hero*)get_hero(cur_hero))->flags.dead
+		!(get_hero(cur_hero))->typus ||
+		((get_hero(cur_hero))->group_no != gs_current_group) ||
+		(get_hero(cur_hero))->flags.dead
 	);
 
 	return cur_hero;
@@ -5128,7 +5128,7 @@ Bit32s get_party_money(void)
 {
 	signed short i;
 	Bit32s sum = 0;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i < 6; i++, hero++) {
 
@@ -5162,7 +5162,7 @@ void set_party_money(Bit32s money)
 	heroes = count_heroes_in_group();
 
 	/* set hero to NPC */
-	hero = (struct struct_hero*)get_hero(6);
+	hero = get_hero(6);
 
 	/* if we have an NPC in current group and alive */
 	if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
@@ -5180,7 +5180,7 @@ void set_party_money(Bit32s money)
 
 		hero_money = money / heroes;
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		for (i = 0; i < 6; i++, hero++) {
 
@@ -5234,7 +5234,7 @@ void add_group_ap(Bit32s ap)
 
 	ap = ap / count_heroes_in_group();
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
@@ -5258,7 +5258,7 @@ void add_hero_ap_all(signed short ap)
 	if (ap < 0)
 		return;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -5285,7 +5285,7 @@ void sub_hero_ap_all(signed short ap)
 	if (ap < 0)
 		return;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -5316,10 +5316,10 @@ signed int get_hero_index(const struct struct_hero *hero)
 	signed short i = 0;
 	struct struct_hero *p;
 
-	p = (struct struct_hero*)get_hero(i);
+	p = get_hero(i);
 	while (hero != p) {
 		i++;
-		p = (struct struct_hero*)get_hero(i);
+		p = get_hero(i);
 	}
 
 	return i;
@@ -5355,7 +5355,7 @@ signed short get_first_hero_with_item(signed short item_id)
 {
 	signed int j;
 	signed int i;
-	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -5384,7 +5384,7 @@ signed short get_first_hero_with_item_in_group(signed short item_id, signed shor
 {
 	signed int j;
 	signed int i;
-	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -5415,7 +5415,7 @@ void sub_group_le(signed short le)
 
 	for (i = 0; i <= 6; i++) {
 
-		hero_i = (struct struct_hero*)get_hero(i);
+		hero_i = get_hero(i);
 
 		if (hero_i->typus && (hero_i->group_no == gs_current_group))
 		{
@@ -5432,7 +5432,7 @@ void sub_group_le(signed short le)
 struct struct_hero* get_first_hero_available_in_group(void)
 {
 	signed short i;
-	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -5444,7 +5444,7 @@ struct struct_hero* get_first_hero_available_in_group(void)
 		}
 	}
 
-	return (struct struct_hero*)get_hero(0);
+	return get_hero(0);
 }
 
 /**
@@ -5458,7 +5458,7 @@ struct struct_hero* get_second_hero_available_in_group(void)
 	signed short tmp;
 	struct struct_hero *hero_i;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 
 	for (i = tmp = 0; i <= 6; i++, hero_i++) {
 
@@ -5488,7 +5488,7 @@ signed short count_heroes_available(void)
 	struct struct_hero *hero;
 
 	retval = 0;
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
@@ -5511,7 +5511,7 @@ signed short count_heroes_available_ignore_npc(void)
 	struct struct_hero *hero;
 
 	retval = 0;
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	for (i = 0; i < 6; i++, hero++) {
 		/* Check if hero is available */
@@ -5534,7 +5534,7 @@ signed short count_heroes_available_in_group(void)
 {
 	signed short heroes = 0;
 	signed short i;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2(hero))
@@ -5553,7 +5553,7 @@ signed short count_heroes_available_in_group_ignore_npc(void)
 {
 	signed short heroes = 0;
 	signed short i;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i < 6; i++, hero++) {
 

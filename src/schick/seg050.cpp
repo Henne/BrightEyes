@@ -409,7 +409,7 @@ void level_up(signed short hero_pos)
 	struct struct_hero *hero;
 	signed short city_bak;
 
-	hero = (struct struct_hero*)get_hero(hero_pos);
+	hero = get_hero(hero_pos);
 
 	if (g_fading_state) {
 		refresh_colors();

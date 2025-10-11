@@ -134,7 +134,7 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
 static char* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
 {
 	if (type == 2) {
-		return ((struct struct_hero*)get_hero(pos))->alias;
+		return (get_hero(pos))->alias;
 	} else {
 		return (char*)GUI_names_grammar(3, pos, 1);
 	}
@@ -151,7 +151,7 @@ static char* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return ((struct struct_hero*)get_hero(pos))->alias;
+		return (get_hero(pos))->alias;
 	else
 		return (char*)GUI_names_grammar(2, pos, 1);
 }
@@ -167,7 +167,7 @@ static char *FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return ((struct struct_hero*)get_hero(pos))->alias;
+		return (get_hero(pos))->alias;
 	else
 		return (char*)GUI_names_grammar(0, pos, 1);
 }

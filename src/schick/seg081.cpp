@@ -97,7 +97,7 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(0,2,1) && target_pos != gs_dng_handled_pos)
 	{
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = l3 = 0; i < 2; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -127,7 +127,7 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(0,9,7) && target_pos != gs_dng_handled_pos && !gs_dng06_pitdoor_flag)
 	{
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -144,7 +144,7 @@ signed short DNG06_handler(void)
 			{
 				GUI_output(get_tx(8));
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = l3 = 0; i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) &&
@@ -183,7 +183,7 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(0,8,7) && target_pos != gs_dng_handled_pos && gs_dng06_goldkey_flag != 2)
 	{
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -250,7 +250,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero, dice_roll(3, 6, 0));
 		} else {
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
@@ -279,7 +279,7 @@ signed short DNG06_handler(void)
 				if (gs_groups_x_target[i] == 3 && gs_groups_y_target[i] == 6 &&
 					gs_current_group != i)
 				{
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 					for (l4 = 0; l4 <= 6; l4++, hero++)
 					{
 						if ((hero->typus != HERO_TYPE_NONE) &&
@@ -319,7 +319,7 @@ signed short DNG06_handler(void)
 				if (gs_groups_x_target[i] == 1 && gs_groups_y_target[i] == 2 &&
 					gs_current_group != i)
 				{
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 					for (l4 = 0; l4 <= 6; l4++, hero++)
 					{
 						if ((hero->typus != HERO_TYPE_NONE) &&
@@ -472,7 +472,7 @@ void DNG06_chest01_loot(Bit8u* chest)
 
 	sprintf(g_dtp2, get_tx(33));
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -590,7 +590,7 @@ void DNG09_pitfall(void)
 				*g_dtp2 = '\0';
 
 				if (i) {
-					sprintf(g_dtp2, get_ttx(768), ((struct struct_hero*)get_hero(i - 1))->alias);
+					sprintf(g_dtp2, get_ttx(768), (get_hero(i - 1))->alias);
 				}
 
 				strcat(g_dtp2, (char*)(gs_dng09_pit_flag == 2 ? get_tx(36) : get_tx(37)));

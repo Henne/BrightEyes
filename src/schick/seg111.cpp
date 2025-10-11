@@ -94,7 +94,7 @@ void tevent_057(void)
 
 			GUI_output(get_tx2(5));
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 
 			for (i = 0; i <= 6; i++, hero++) {
 
@@ -106,7 +106,7 @@ void tevent_057(void)
 		}
 	} else {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		for (i = 0; i <= 6; i++, hero++) {
 
@@ -242,7 +242,7 @@ void tevent_060(void)
 
 					timewarp(HOURS(1));
 
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 
 					for (i = 0; i <= 6; i++, hero++) {
 
@@ -283,7 +283,7 @@ void tevent_060(void)
 
 				if (answer == 2) {
 
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 
 					for (i = has_magic_rope = nr_items = 0; i <= 6 ; i++, hero++){
 
@@ -306,9 +306,9 @@ void tevent_060(void)
 
 						for (i = 0; i < 3; i++) {
 
-							answer = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+							answer = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 							if (answer == -1) {
-								answer = get_item_pos((hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+								answer = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 							}
 
 							drop_item(hero, answer, 1);
@@ -417,7 +417,7 @@ void tevent_063(void)
 	/* intro message */
 	GUI_output(get_tx2(46));
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
@@ -431,7 +431,7 @@ void tevent_063(void)
 		}
 	}
 
-	hero = (struct struct_hero*)get_hero(vomiter);
+	hero = get_hero(vomiter);
 
 	sprintf(g_dtp2, get_tx2(47), hero->alias);
 
@@ -475,7 +475,7 @@ void tevent_064(void)
 
 			if (answer == 1) {
 
-				hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
+				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 
 				if (hero->typus < HERO_TYPE_WITCH) {
 					GUI_output(get_ttx(330));
@@ -506,7 +506,7 @@ void tevent_064(void)
 
 				GUI_output(get_tx2(54));
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 
 				for (i = result = 0; i <= 6; i++, hero++) {
 
@@ -681,7 +681,7 @@ void tevent_066(void)
 
 				GUI_output(get_tx2(84));
 
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (l_di = count = 0; l_di <= 6; l_di++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&

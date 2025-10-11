@@ -45,7 +45,7 @@ signed short DNG13_handler(void)
 		(pos == DNG_POS(0,5,1) || pos == DNG_POS(0,6,1) || pos == DNG_POS(0,7,1) || pos == DNG_POS(0,8,1)) &&
 		random_schick(100) <= 5)
 	{
-		hero = (struct struct_hero*)get_hero(get_random_hero());
+		hero = get_hero(get_random_hero());
 
 		sprintf(g_dtp2,	get_tx(18), hero->alias);
 		GUI_output(g_dtp2);
@@ -263,7 +263,7 @@ void DNG13_collapsing_ceiling(void)
 
 	gs_dng13_collapsecount++;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = fails = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -310,7 +310,7 @@ void DNG13_collapsing_ceiling_easy(void)
 
 	gs_dng13_collapsecount++;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = fails = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&

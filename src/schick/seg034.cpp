@@ -65,7 +65,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 		} else if (((fighter_id >= 50) ||
 				((fighter_id >= 10) && (fighter_id < 30) && g_enemy_sheets[fighter_id - 10].flags.dead) ||
 				((fighter_id >= 30) && (fighter_id < 50) && g_enemy_sheets[fighter_id - 30].flags.dead) ||
-				((fighter_id < 10) && ((struct struct_hero*)get_hero(fighter_id - 1))->flags.dead))
+				((fighter_id < 10) && (get_hero(fighter_id - 1))->flags.dead))
 				&&
 				((fighter_id_target >= 0) &&
 				 ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))))
@@ -803,8 +803,8 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 					} else if (cb_entry_bak > 0) {
 
 						/* target square contains a hero */
-						if (!((struct struct_hero*)get_hero(cb_entry_bak - 1))->flags.dead &&
-							!((struct struct_hero*)get_hero(cb_entry_bak - 1))->flags.unconscious &&
+						if (!(get_hero(cb_entry_bak - 1))->flags.dead &&
+							!(get_hero(cb_entry_bak - 1))->flags.unconscious &&
 							(cb_entry_bak != hero_pos + 1))
 						{
 							/* hero is not dead, not unconscious, and not the active hero */
@@ -824,7 +824,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 						/* target square contains a non-dead monster (including the tail of a two-squares monster) */
 						problem = 3;
 
-					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !((struct struct_hero*)get_hero(cb_entry_bak - 1))->flags.dead && !((struct struct_hero*)get_hero(cb_entry_bak - 1))->flags.unconscious && (cb_entry_bak != hero_pos + 1)) {
+					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !(get_hero(cb_entry_bak - 1))->flags.dead && !(get_hero(cb_entry_bak - 1))->flags.unconscious && (cb_entry_bak != hero_pos + 1)) {
 
 						/* target square contains a non-dead and non-unconscious hero different from the active hero */
 						problem = 3;

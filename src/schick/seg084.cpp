@@ -50,7 +50,7 @@ signed short DNG09_handler(void)
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	/* TODO: not the leader ? */
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	if (gs_dng09_pit_flag && !(gs_day_timer / 90 * 20))
 	{
@@ -266,7 +266,7 @@ signed short DNG09_handler(void)
 		{
 			if ((i = select_hero_ok(get_tx(44))) != -1)
 			{
-				hero = (struct struct_hero*)get_hero(i);
+				hero = get_hero(i);
 
 				sprintf(g_dtp2, get_tx(45), hero->alias);
 				GUI_output(g_dtp2);
@@ -524,7 +524,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 
 			} else if (answer == 2)
 			{
-				hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
+				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 				if (test_spell(hero, SP_DESTRUCTIBO_ARCANITAS, 0) > 0)
 				{
 					sub_ae_splash(hero, 20);
@@ -547,7 +547,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 
 			} else if (answer == 3)
 			{
-				hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
+				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 				if (test_spell(hero, SP_IGNIFAXIUS_FLAMMENSTRAHL, 0) > 0)
 				{
 					sub_ae_splash(hero, 35);

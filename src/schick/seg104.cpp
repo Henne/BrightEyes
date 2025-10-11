@@ -234,7 +234,7 @@ signed short plan_alchemy(struct struct_hero *hero)
 								 * See https://www.crystals-dsa-foren.de/showthread.php?tid=98&pid=166399#pid166399 and the following posts. */
 								(gs_total_hero_counter > 1) &&
 #else
-								((hero == (struct struct_hero*)get_hero(6)) || (count_heroes_available_in_group_ignore_npc() > 1)) && /* still allow to single out the NPC if he is the brewing hero */
+								((hero == get_hero(6)) || (count_heroes_available_in_group_ignore_npc() > 1)) && /* still allow to single out the NPC if he is the brewing hero */
 #endif
 								(gs_current_loctype != LOCTYPE_WILDCAMP) &&
 								(g_alchemy_recipes[recipe_index].duration > 8)
@@ -265,7 +265,7 @@ signed short plan_alchemy(struct struct_hero *hero)
 
 								if (gs_current_loctype != LOCTYPE_WILDCAMP) {
 
-									hero_p = (struct struct_hero*)get_hero(0);
+									hero_p = get_hero(0);
 									for (i = 0; i <= 6; i++, hero_p++) {
 										if ((hero_p->typus != HERO_TYPE_NONE) && (hero_p->group_no == gs_current_group))
 										{
@@ -477,7 +477,7 @@ struct struct_hero* get_heaviest_hero(void)
 	signed short i;
 
 	w_max = 0;
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -510,7 +510,7 @@ signed short get_skilled_hero_pos(const signed short skill_id)
 
 	max = -100;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 

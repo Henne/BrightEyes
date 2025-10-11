@@ -543,7 +543,7 @@ void show_outro(void)
 	sub_light_timers(100);
 
 	/* give the heroes the reward and restore them */
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i < 6; i++, hero++) {
 
 		if (hero->typus) {

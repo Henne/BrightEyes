@@ -259,7 +259,7 @@ void char_add(signed short temple_id)
 
 				if (l_si != -1) {
 
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 
 					for (i = 0; i < 6; i++, hero++) {
 
@@ -318,7 +318,7 @@ void char_letgo(signed short temple_id)
 				} else {
 
 					/* let go a hero */
-					hero = (struct struct_hero*)get_hero(hero_pos);
+					hero = get_hero(hero_pos);
 					gs_total_hero_counter--;
 					gs_group_member_counts[gs_current_group]--;
 
@@ -418,7 +418,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 	/* search for the hero with the largest LE-difference */
 	for (i = 0; i <= 6; i++) {
 
-		hero = (struct struct_hero*)get_hero(i);
+		hero = get_hero(i);
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 			!hero->flags.dead && !hero->flags.gods_pissed && !hero->flags.dead &&
@@ -436,7 +436,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 			le_in = le;
 		}
 
-		add_hero_le((struct struct_hero*)get_hero(hero_pos), le_in);
+		add_hero_le(get_hero(hero_pos), le_in);
 
 		/* prepare a message */
 		strcpy(g_text_output_buf, get_ttx(392));
@@ -445,7 +445,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
-		sprintf(g_dtp2, (char*)str, ((struct struct_hero*)get_hero(hero_pos))->alias, le_in, g_text_output_buf);
+		sprintf(g_dtp2, (char*)str, (get_hero(hero_pos))->alias, le_in, g_text_output_buf);
 	}
 }
 
@@ -455,7 +455,7 @@ void miracle_resurrect(char *str)
 
 	for (i = 0; i <= 6; i++) {
 
-		struct struct_hero *hero = (struct struct_hero*)get_hero(i);
+		struct struct_hero *hero = get_hero(i);
 
 		if (hero->flags.dead && (hero->group_no == gs_current_group) && !hero->flags.gods_pissed)
 		{
@@ -488,7 +488,7 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 	int i;
 	int slot;
 	HugePt ptr;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
@@ -519,7 +519,7 @@ void miracle_weapon(char *str, signed short mode)
 
 	for (j = done = 0; (j <= 6) && (!done); j++) {
 
-		struct struct_hero *hero = (struct struct_hero*)get_hero(j);
+		struct struct_hero *hero = get_hero(j);
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead && !hero->flags.gods_pissed)
 		{

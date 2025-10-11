@@ -68,7 +68,7 @@ void city_event_1(void)
 	signed short answer;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_hero(get_random_hero());
+	hero = get_hero(get_random_hero());
 
 	randval = random_schick(20);
 
@@ -126,7 +126,7 @@ void city_event_2(void)
 	signed short answer;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_hero(get_random_hero());
+	hero = get_hero(get_random_hero());
 
 	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
@@ -265,7 +265,7 @@ void city_event_6(void)
 
 		sprintf(g_dtp2 + 0x400,
 			get_tx(random_schick(4) + 102),
-		       ((struct struct_hero*)get_hero(get_random_hero()))->alias);
+		       (get_hero(get_random_hero()))->alias);
 
 		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 3,
 			get_tx(random_schick(4) + 106),
@@ -310,7 +310,7 @@ void city_event_7(void)
 	struct struct_hero *hero;
 
 	randval = random_schick(4) - 1;
-	hero = (struct struct_hero*)get_hero(get_random_hero());
+	hero = get_hero(get_random_hero());
 
 	if (!randval) {
 
@@ -357,7 +357,7 @@ void city_event_8(void)
 	struct struct_hero *hero;
 
 	randval = random_schick(4) - 1;
-	hero = (struct struct_hero*)get_hero(get_random_hero());
+	hero = get_hero(get_random_hero());
 
 	if (!randval) {
 

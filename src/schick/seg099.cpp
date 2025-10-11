@@ -38,7 +38,7 @@ namespace M302de {
 
 void spell_beherrschung(void)
 {
-	g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 	if (!get_spelltarget()->flags.renegade) {
 		g_spell_special_aecost = -2;
@@ -143,7 +143,7 @@ void spell_verwandlung(void)
 	signed short i;
 
 	/* set spelltarget */
-	g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 	if (get_spelltarget()->flags.petrified) {
 
@@ -214,7 +214,7 @@ void spell_band(void)
 		/* cast hero */
 
 		/* Set pointer to hero target */
-		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -406,7 +406,7 @@ void spell_somnigravis(void)
 	/* cast hero */
 
 	/* Set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 	if (get_spelltarget() == get_spelluser()) {
 
@@ -624,7 +624,7 @@ void spell_axxeleratus(void)
 	hero_pos = get_spelluser()->enemy_id - 1;
 
 	/* Set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
+	g_spelltarget = get_hero(hero_pos);
 
 	if (!get_spelltarget()->axxeleratus) {
 
@@ -755,7 +755,7 @@ void spell_balsam(void)
 	signed short le_to_heal;
 
 	/* Set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 	g_spell_special_aecost = 0;
 
@@ -809,7 +809,7 @@ void spell_hexenspeichel(void)
 	signed short le;
 
 	/* Set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 	/* set costs to 0 */
 	g_spell_special_aecost = 0;
@@ -852,7 +852,7 @@ void spell_klarum_purum(void)
 	signed short poison_id;
 
 	/* Set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 	poison_id = hero_is_poisoned(get_spelltarget());
 
@@ -883,7 +883,7 @@ void spell_klarum_purum(void)
 void spell_ruhe_koerper(void)
 {
 	/* Set pointer to hero target */
-	g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->ruhe_koerper = 1;

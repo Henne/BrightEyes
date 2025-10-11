@@ -138,7 +138,7 @@ signed short FIG_choose_next_hero(void)
 			 * search by hand for a hero and dump the
 			 * interesting bits
 			 */
-			struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+			struct struct_hero *hero = get_hero(0);
 			for (int i = 0; i < 7; i++, hero++) {
 
 				D1_ERR("Hero %d typus = %x group=%x current_group=%x actions=%x\n",
@@ -164,9 +164,9 @@ signed short FIG_choose_next_hero(void)
 
 	/* search for a hero who has a class, is in the current group and
 		something still unknown */
-	} while ((((struct struct_hero*)get_hero(retval))->typus == HERO_TYPE_NONE) ||
-			(((struct struct_hero*)get_hero(retval))->group_no != gs_current_group) ||
-			(((struct struct_hero*)get_hero(retval))->actions  == 0));
+	} while (((get_hero(retval))->typus == HERO_TYPE_NONE) ||
+			((get_hero(retval))->group_no != gs_current_group) ||
+			((get_hero(retval))->actions  == 0));
 
 	return retval;
 }
@@ -289,7 +289,7 @@ signed short FIG_get_first_active_hero(void)
 	struct struct_hero *hero_i;
 	signed short i;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -319,7 +319,7 @@ unsigned short FIG_all_heroes_escaped(void)
 
 	if (FIG_get_first_active_hero() == -1) {
 
-		hero_i = (struct struct_hero*)get_hero(0);
+		hero_i = get_hero(0);
 
 		for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -403,7 +403,7 @@ void FIG_do_round(void)
 	/* initialize heroes' #action phases and BP */
 	for (i = 0; i <= 6; (g_hero_is_target[i] = 0), i++) {
 
-		hero = (struct struct_hero*)get_hero(i);
+		hero = get_hero(i);
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && (hero->action_id != FIG_ACTION_FLEE))
 		{
@@ -538,7 +538,7 @@ void FIG_do_round(void)
 			/* heroes on turn */
 			actor_id = FIG_choose_next_hero();
 
-			hero = (struct struct_hero*)get_hero(actor_id);
+			hero = get_hero(actor_id);
 
 			hero->actions--;
 
@@ -910,7 +910,7 @@ signed short do_fight(signed short fight_id)
 	signed short tw_bak;
 	signed short escape_positions[6];
 
-	if ((gs_group_member_counts[gs_current_group] == 1) && (((struct struct_hero*)get_hero(0))->invisible != 0))
+	if ((gs_group_member_counts[gs_current_group] == 1) && ((get_hero(0))->invisible != 0))
 	{
 		/* group consists of a single hero with an active Visibili spell */
 		/* TODO: potential Original-Bug: what about groups with >= 2 heroes where all have an active Visibili? */
@@ -1077,7 +1077,7 @@ signed short do_fight(signed short fight_id)
 
 	if (g_game_state != GAME_STATE_FIGQUIT) {
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -1106,7 +1106,7 @@ signed short do_fight(signed short fight_id)
 
 					gs_travel_detour = 99;
 
-					ptr = (struct struct_hero*)get_hero(0);
+					ptr = get_hero(0);
 					for (j = 0; j <= 6; j++, ptr++) {
 
 						if ((ptr->typus != HERO_TYPE_NONE) && (ptr->group_no == gs_current_group))
@@ -1167,7 +1167,7 @@ signed short do_fight(signed short fight_id)
 
 			for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
 
-				hero = (struct struct_hero*)get_hero(i);
+				hero = get_hero(i);
 
 				if (hero->escape_position) {
 
@@ -1208,7 +1208,7 @@ signed short do_fight(signed short fight_id)
 
 					for (j = 0; j < group_size; j++) {
 
-						hero = (struct struct_hero*)get_hero(j);
+						hero = get_hero(j);
 
 						if (escape_positions[i] == hero->escape_position) {
 
@@ -1229,7 +1229,7 @@ signed short do_fight(signed short fight_id)
 				group_size = gs_group_member_counts[gs_current_group];
 
 				for (j = 0; j < group_size; j++) {
-					((struct struct_hero*)get_hero(j))->escape_position = 0;
+					(get_hero(j))->escape_position = 0;
 				}
 
 				gs_x_target = ((escape_positions[i] >> 8) & 0x0f);

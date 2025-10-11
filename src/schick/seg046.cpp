@@ -191,7 +191,7 @@ void status_show(Bit16u index)
 	txt_tabpos3_bak = g_txt_tabpos[2];
 	txt_tabpos4_bak = g_txt_tabpos[3];
 
-	hero = (struct struct_hero*)get_hero(index);
+	hero = get_hero(index);
 
 	set_var_to_zero();
 	update_mouse_cursor();

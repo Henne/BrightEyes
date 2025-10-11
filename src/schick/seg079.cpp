@@ -64,7 +64,7 @@ signed short DNG03_handler(void)
 			gs_y_target = 8;
 			DNG_inc_level();
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
@@ -88,7 +88,7 @@ signed short DNG03_handler(void)
 
 		DNG_update_pos();
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
@@ -119,7 +119,7 @@ signed short DNG03_handler(void)
 	{
 		GUI_output(get_tx(5));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
@@ -149,7 +149,7 @@ signed short DNG03_handler(void)
 			gs_direction = SOUTH;
 			DNG_update_pos();
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
@@ -307,7 +307,7 @@ signed short DNG03_handler(void)
 			i = get_first_hero_with_item(ITEM_CRYSTAL);
 
 			do {
-				hero = (struct struct_hero*)get_hero(i);
+				hero = get_hero(i);
 
 				drop_item(hero, get_item_pos(hero, ITEM_CRYSTAL), 1);
 
@@ -351,7 +351,7 @@ signed short DNG03_handler(void)
 		DNG_dec_level();
 		gs_direction = NORTH;
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae) {
@@ -559,7 +559,7 @@ void DNG03_chest11_loot(Bit8u*)
 		GUI_output(get_tx(25));
 
 	} else {
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (l_di = counter = l_si = 0; l_di <= 6; l_di++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&

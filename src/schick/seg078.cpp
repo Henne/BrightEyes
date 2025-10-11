@@ -131,7 +131,7 @@ signed short DNG02_handler(void)
 
 	} else if ((target_pos == DNG_POS(0,10,12) || target_pos == DNG_POS(0,10,10)) && target_pos != gs_dng_handled_pos)
 	{
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -169,7 +169,7 @@ signed short DNG02_handler(void)
 			/* Sphaerenriss */
 			GUI_output(get_tx(41));
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
@@ -181,7 +181,7 @@ signed short DNG02_handler(void)
 			}
 
 		} else {
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = mod_slot = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
@@ -220,7 +220,7 @@ signed short DNG02_handler(void)
 
 	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos)
 	{
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
@@ -246,7 +246,7 @@ signed short DNG02_handler(void)
 				gs_groups_dng_level[i] == gs_dungeon_level &&
 				gs_groups_dng_index[i] == gs_dungeon_index)
 			{
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (mod_slot = 0; mod_slot <= 6; mod_slot++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == i))
@@ -307,7 +307,7 @@ signed short DNG02_handler(void)
 		/* petrification trap */
 		GUI_output(get_tx(25));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -402,7 +402,7 @@ signed short DNG02_handler(void)
 			(gs_dng02_secret_door1 != 2))
 	{
 		/* Original-Bug: this should be the leader, not hero no 0 */
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		if (gs_dng02_secret_door1 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0)
 		{
@@ -435,7 +435,7 @@ signed short DNG02_handler(void)
 			(gs_dng02_secret_door2 != 2))
 	{
 		/* Original-Bug: this should be the leader, not hero no 0 */
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 
 		if (gs_dng02_secret_door2 || test_skill(hero, TA_SINNESSCHAERFE, 2) > 0)
 		{
@@ -591,7 +591,7 @@ void DNG02_chest04_loot(Bit8u*)
 
 			gs_dng02_apparature_destroyed = 1;
 
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))

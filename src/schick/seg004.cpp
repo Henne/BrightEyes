@@ -333,7 +333,7 @@ void update_status_bars(void)
 		if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 			/* in the status menu */
 
-			hero = (struct struct_hero*)get_hero(g_status_page_hero);
+			hero = get_hero(g_status_page_hero);
 
 			/* adjust hunger to 100% */
 			if (hero->hunger >= 100) {
@@ -430,9 +430,9 @@ void update_status_bars(void)
 
 			for (i = 0; i <= 6; i++) {
 
-				if (((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) {
+				if ((get_hero(i))->typus != HERO_TYPE_NONE) {
 
-					hero = (struct struct_hero*)get_hero(i);
+					hero = get_hero(i);
 
 					/* draw LE bars */
 					if ((g_char_status_bars[i][1] != hero->le) ||

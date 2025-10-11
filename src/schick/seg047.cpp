@@ -33,7 +33,7 @@ signed short get_hero_CH_best(void)
 	signed short i;
 	signed short ch_val = -1;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -63,7 +63,7 @@ signed short get_hero_KK_best(void)
 	signed short i;
 	signed short kk_val = -1;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -203,7 +203,7 @@ void hero_disease_test(struct struct_hero *hero, const signed short disease, con
  */
 signed short check_hero_KK_unused(const signed short val)
 {
-	return ((struct struct_hero*)get_hero(0))->attrib[ATTRIB_KK].current + ((struct struct_hero*)get_hero(0))->attrib[ATTRIB_KK].mod >= val ? 1 : 0;
+	return (get_hero(0))->attrib[ATTRIB_KK].current + (get_hero(0))->attrib[ATTRIB_KK].mod >= val ? 1 : 0;
 }
 
 /**
@@ -218,12 +218,12 @@ signed short check_heroes_KK(const signed short val)
 	struct struct_hero *hero;
 	signed short sum;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	/* Orig-BUG: not checked if hero is valid */
 	sum = hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod;
 
-	hero = (struct struct_hero*)get_hero(1);
+	hero = get_hero(1);
 
 	/* check class, group and dead status of hero in slot 2*/
 	if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
@@ -406,7 +406,7 @@ signed short select_hero_from_group(char *title)
 
 	for (i = 0; i <= 6; i++) {
 
-		hero = (struct struct_hero*)get_hero(i);
+		hero = get_hero(i);
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && (g_hero_sel_exclude != i)) {
 			/* TODO: find out what that means */
@@ -475,7 +475,7 @@ signed short select_hero_ok(char *title)
 	g_textbox_width = 3;
 	cnt = 0;
 
-	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++) {
+	for (hero = get_hero(0), i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
 
@@ -544,7 +544,7 @@ signed short select_hero_ok_forced(char *title)
 	g_textbox_width = 3;
 	cnt = 0;
 
-	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++) {
+	for (hero = get_hero(0), i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
 
@@ -599,7 +599,7 @@ signed short count_heroes_in_group(void)
 
 	retval = 0;
 
-	for (hero_i = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero_i++) {
+	for (hero_i = get_hero(0), i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group and dead */
 		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) && !hero_i->flags.dead) {

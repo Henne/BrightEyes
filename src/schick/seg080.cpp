@@ -96,7 +96,7 @@ signed short DNG04_handler(void)
 		/* the ceiling may drop on your head */
 		GUI_output(get_tx(9));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6 ; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
@@ -132,7 +132,7 @@ signed short DNG04_handler(void)
 
 			/* Original-BUG: assumption the leader is at pos 0 */
 			/* CH-5 for 1 day */
-			set_mod_slot(i, DAYS(1), (Bit8u*)&((struct struct_hero*)get_hero(0))->attrib[ATTRIB_CH].current, -5, 0);
+			set_mod_slot(i, DAYS(1), (Bit8u*)&(get_hero(0))->attrib[ATTRIB_CH].current, -5, 0);
 		}
 
 	} else if (pos == DNG_POS(0,14,14) && pos != gs_dng_handled_pos)
@@ -140,7 +140,7 @@ signed short DNG04_handler(void)
 		/* the ceiling may drop on your head */
 		GUI_output(get_tx(9));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6 ; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
@@ -214,7 +214,7 @@ signed short DNG04_handler(void)
 		/* Probability of 5% to get bitten by a rat */
 		if (mod_day_timer(MINUTES(10)))
 		{
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6 ; i++, hero++)
 			{
 				if ((random_schick(100) <= 5) &&
@@ -235,7 +235,7 @@ signed short DNG04_handler(void)
 		/* Probability of 10% to get bitten by a rat */
 		if (mod_day_timer(MINUTES(10)))
 		{
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6 ; i++, hero++)
 			{
 				/* Original-Bug: forgot to check if the hero is dead */

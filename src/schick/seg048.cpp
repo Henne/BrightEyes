@@ -84,7 +84,7 @@ void status_menu(signed short hero_pos)
 	flag4 = 0;
 	g_mouse1_doubleclick = 0;
 
-	hero1 = hero2 = (struct struct_hero*)get_hero(hero_pos);
+	hero1 = hero2 = get_hero(hero_pos);
 
 	if (!hero2->typus || !g_statusmenu_allowed) {
 		return;
@@ -176,9 +176,9 @@ void status_menu(signed short hero_pos)
 
 				if (hero_pos > 6) hero_pos = 0;
 
-			} while (!(((struct struct_hero*)get_hero(hero_pos))->typus) ||
-					(((struct struct_hero*)get_hero(hero_pos))->group_no != gs_current_group) ||
-					((((struct struct_hero*)get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
+			} while (!((get_hero(hero_pos))->typus) ||
+					((get_hero(hero_pos))->group_no != gs_current_group) ||
+					(((get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -187,12 +187,12 @@ void status_menu(signed short hero_pos)
 					hero1 = hero2;
 				}
 
-				hero2 = (struct struct_hero*)get_hero(hero_pos);
+				hero2 = get_hero(hero_pos);
 				flag4 = 1;
 			} else {
 				flag4 = 0;
 
-				hero1 = hero2 = (struct struct_hero*)get_hero(hero_pos);
+				hero1 = hero2 = get_hero(hero_pos);
 
 				reset_item_selector();
 			}
@@ -209,9 +209,9 @@ void status_menu(signed short hero_pos)
 
 				if (hero_pos < 0) hero_pos = 6;
 
-			} while (!(((struct struct_hero*)get_hero(hero_pos))->typus) ||
-					(((struct struct_hero*)get_hero(hero_pos))->group_no != gs_current_group) ||
-					((((struct struct_hero*)get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
+			} while (!((get_hero(hero_pos))->typus) ||
+					((get_hero(hero_pos))->group_no != gs_current_group) ||
+					(((get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -220,12 +220,12 @@ void status_menu(signed short hero_pos)
 					hero1 = hero2;
 				}
 
-				hero2 = (struct struct_hero*)get_hero(hero_pos);
+				hero2 = get_hero(hero_pos);
 				flag4 = 1;
 			} else {
 				flag4 = 0;
 
-				hero1 = hero2 = (struct struct_hero*)get_hero(hero_pos);
+				hero1 = hero2 = get_hero(hero_pos);
 
 				reset_item_selector();
 			}

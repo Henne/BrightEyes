@@ -151,8 +151,8 @@ void do_tavern(void)
 
 					gs_food_message[i] = g_food_message_shown[i] = 0;
 
-					if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) &&
-						(((struct struct_hero*)get_hero(i))->group_no == gs_current_group))
+					if (((get_hero(i))->typus != HERO_TYPE_NONE) &&
+						((get_hero(i))->group_no == gs_current_group))
 					{
 
 						l3 = (21 - tavern->quality) * 20;
@@ -160,10 +160,10 @@ void do_tavern(void)
 							l3 = 100;
 						}
 
-						((struct struct_hero*)get_hero(i))->hunger -= (unsigned char)l3;
+						(get_hero(i))->hunger -= (unsigned char)l3;
 
-						if (((struct struct_hero*)get_hero(i))->hunger < 0) {
-							((struct struct_hero*)get_hero(i))->hunger = 0;
+						if ((get_hero(i))->hunger < 0) {
+							(get_hero(i))->hunger = 0;
 						}
 
 						l3 = (21 - tavern->quality) * 30;
@@ -171,10 +171,10 @@ void do_tavern(void)
 							l3 = 100;
 						}
 
-						((struct struct_hero*)get_hero(i))->thirst -= (unsigned char)l3;
+						(get_hero(i))->thirst -= (unsigned char)l3;
 
-						if (((struct struct_hero*)get_hero(i))->thirst < 0) {
-							((struct struct_hero*)get_hero(i))->thirst = 0;
+						if ((get_hero(i))->thirst < 0) {
+							(get_hero(i))->thirst = 0;
 						}
 					}
 				}

@@ -109,7 +109,7 @@ signed short DNG01_handler(void)
 		/* TRAP: heroes may loose 2 LE with probability 10% */
 		if (mod_day_timer(MINUTES(10)))
 		{
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((random_schick(100) <= 10) &&
@@ -165,7 +165,7 @@ signed short DNG01_handler(void)
 			if (get_first_hero_with_item(ITEM_ROPE) != -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
 			{
 				/* Original-Bug: better get_first_hero_available_in_group() */
-				if (test_skill((struct struct_hero*)get_hero(0), TA_KLETTERN, 0) > 0)
+				if (test_skill(get_hero(0), TA_KLETTERN, 0) > 0)
 				{
 					/* Original-Bug: '32 * ' should probably be '16 *'. */
 					g_dng_map[32 * gs_y_target + gs_x_target] = DNG_TILE_PIT_IN_CEILING << 4;

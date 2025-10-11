@@ -90,7 +90,7 @@ void TRV_swim2(signed char mod, signed short percent)
 	signed short i;
 	struct struct_hero *hero;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -355,7 +355,7 @@ void tevent_029(void)
 	GUI_dialog_na(0, get_tx2(74));
 	GUI_dialog_na(0, get_tx2(75));
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
@@ -369,7 +369,7 @@ void tevent_029(void)
 		GUI_dialog_na(0, get_tx2(76));
 	} else {
 		/* skill test failed */
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)

@@ -59,7 +59,7 @@ void magic_heal_ani(const struct struct_hero *hero)
 	close(handle);
 
 	target_no = hero->enemy_id - 1;
-	target = (struct struct_hero*)get_hero(target_no);
+	target = get_hero(target_no);
 
 	g_pic_copy.v1 = 0;
 	g_pic_copy.v2 = 0;
@@ -111,7 +111,7 @@ void FIG_do_spell_damage(signed short le)
 		/* attack hero */
 
 		/* set pointer */
-		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 		/* ensure the spelluser does not attack himself */
 		if (get_spelltarget() != get_spelluser()) {
@@ -158,7 +158,7 @@ signed short get_attackee_parade(void)
 	if (get_spelluser()->enemy_id < 10) {
 
 		/* attacked a hero */
-		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 		/* calculate PA  */
 
@@ -190,7 +190,7 @@ signed short get_attackee_rs(void)
 
 		/* attacked a hero */
 
-		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 		return get_spelltarget()->rs_bonus1; /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
@@ -606,7 +606,7 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 				return 0;
 			}
 		} else {
-			handicap += ((struct struct_hero*)get_hero(hero->enemy_id - 1))->mr;
+			handicap += (get_hero(hero->enemy_id - 1))->mr;
 		}
 	}
 
@@ -636,7 +636,7 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 signed short test_spell_group(signed short spell, signed char handicap)
 {
 
-	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero_i = get_hero(0);
 	signed int i;
 
 	for (i = 0; i <= 6; i++, hero_i++) {
@@ -670,7 +670,7 @@ signed short select_magic_user(void)
 
 	if (answer != -1) {
 		/* valid answer => cast spell */
-		return use_spell((struct struct_hero*)get_hero(answer), 1, 0);
+		return use_spell(get_hero(answer), 1, 0);
 	}
 
 	/* abort with error message */

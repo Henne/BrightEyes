@@ -113,7 +113,7 @@ void buy_screen(void)
 		if (g_request_refresh != 0) {
 
 			free_slots = 0;
-			hero2 = (struct struct_hero*)get_hero(0);
+			hero2 = get_hero(0);
 			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
 				if ((hero2->typus) && (hero2->group_no == gs_current_group))
@@ -260,7 +260,7 @@ void buy_screen(void)
 
 			GUI_print_loc_line(g_dtp2);
 
-			hero1 = (struct struct_hero*)get_hero(0);
+			hero1 = get_hero(0);
 
 			for (l_di = 0; l_di < 7; l_di++, hero1++) {
 
@@ -497,7 +497,7 @@ void buy_screen(void)
 						break;
 					}
 
-					hero1 = (struct struct_hero*)get_hero(l3);
+					hero1 = get_hero(l3);
 
 					offended = bargain(hero1, nice, price, percent, 0) > 0 ? 1 : 0;
 				}

@@ -48,7 +48,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 	/* set global variables for item usage */
 	g_used_item_pos = item_pos;
 
-	g_itemuser = (struct struct_hero*)get_hero(hero_pos);
+	g_itemuser = get_hero(hero_pos);
 
 	g_used_item_id = get_itemuser()->inventory[g_used_item_pos].item_id;
 

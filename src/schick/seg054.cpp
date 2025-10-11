@@ -45,7 +45,7 @@ struct struct_hero* get_first_brewing_hero(void)
 	struct struct_hero *hero;
 	signed short i;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 11: If NPC Curian got separated from the group for brewing a recipe at an inn,
 	 * he is stuck in the inn. When the group enters the inn where they left him, no dialog appears.
@@ -233,7 +233,7 @@ void do_inn(void)
 			do_alchemy(hero, hero->recipe_id, 0);
 		}
 	} else {
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i < 7; i++, hero++) {
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no != gs_current_group) &&
 				hero->flags.brewing && (hero->alchemy_inn_id == gs_current_typeindex))
@@ -392,7 +392,7 @@ void do_inn(void)
 
 					GUI_output(inn->quality < 5 ? get_ttx(475) : (inn->quality < 15 ? get_ttx(476) : get_ttx(477)));
 
-					for (i = 0, hero2 = (struct struct_hero*)get_hero(0); i <= 6; i++, hero2++) {
+					for (i = 0, hero2 = get_hero(0); i <= 6; i++, hero2++) {
 
 						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) && !hero2->flags.dead)
 						{
@@ -499,7 +499,7 @@ void do_inn(void)
 
 				if (answer != -1) {
 
-					hero = (struct struct_hero*)get_hero(answer);
+					hero = get_hero(answer);
 
 					if (hero->typus >= HERO_TYPE_WITCH) {
 
@@ -546,7 +546,7 @@ void do_inn(void)
 
 					g_food_mod = 0;
 
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero++) {
 
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))

@@ -104,7 +104,7 @@ void do_citycamp(void)
 
 			for (l_si = 0; l_si <= 6; l_si++) {
 
-				if (!g_citycamp_magicstatus[l_si] && check_hero((struct struct_hero*)get_hero(l_si))) {
+				if (!g_citycamp_magicstatus[l_si] && check_hero(get_hero(l_si))) {
 					g_citycamp_guardstatus[l_si] = 0;
 					answer = 0;
 				}
@@ -127,7 +127,7 @@ void do_citycamp(void)
 							answer = -1;
 						}
 
-						if (answer != -1 && ((struct struct_hero*)get_hero(answer))->flags.brewing) {
+						if (answer != -1 && (get_hero(answer))->flags.brewing) {
 							GUI_output(get_ttx(730));
 							answer = -1;
 						}
@@ -147,7 +147,7 @@ void do_citycamp(void)
 
 			answer = select_hero_ok(get_ttx(317));
 
-			if (answer != -1 && ((struct struct_hero*)get_hero(answer))->flags.brewing) {
+			if (answer != -1 && (get_hero(answer))->flags.brewing) {
 
 				GUI_output(get_ttx(730));
 				answer = -1;
@@ -155,7 +155,7 @@ void do_citycamp(void)
 
 			if (answer != -1) {
 
-				hero = (struct struct_hero*)get_hero(answer);
+				hero = get_hero(answer);
 
 				if (hero->typus >= HERO_TYPE_WITCH) {
 
@@ -263,7 +263,7 @@ void do_citycamp(void)
 						} else {
 							/* in a town */
 							done = 0;
-							loose_random_item((struct struct_hero*)get_hero(get_random_hero()), 100, get_ttx(832));
+							loose_random_item(get_hero(get_random_hero()), 100, get_ttx(832));
 						}
 
 						if (l7 > 0) {
@@ -275,7 +275,7 @@ void do_citycamp(void)
 
 					if (done == 0) {
 
-						hero = (struct struct_hero*)get_hero(0);
+						hero = get_hero(0);
 						for (l_si = 0; l_si <= 6; l_si++, hero++) {
 
 							if ((hero->typus != HERO_TYPE_NONE) &&

@@ -46,7 +46,7 @@ void tevent_110(void)
 	if (answer == 1)
 	{
 		/* try to climb */
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -115,7 +115,7 @@ void tevent_111(void)
 
 		GUI_output(get_tx2(0));
 
-		hero = (struct struct_hero*)get_hero(0);
+		hero = get_hero(0);
 		for (i = counter = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -145,7 +145,7 @@ void tevent_111(void)
 
 		} else {
 
-			hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_tx2(2)));
+			hero = get_hero(select_hero_ok_forced(get_tx2(2)));
 
 			if (test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 			{
@@ -222,7 +222,7 @@ void tevent_111(void)
 
 						timewarp(HOURS(4));
 
-						hero = (struct struct_hero*)get_hero(0);
+						hero = get_hero(0);
 						for (i = 0; i <= 6; i++, hero++)
 						{
 							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -376,7 +376,7 @@ void tevent_114(void)
 			/* walk through the swamp */
 			for (j = 0; j < 2; j++)
 			{
-				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
+				for (i = 0, hero = get_hero(0); i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_no == gs_current_group) &&
@@ -412,14 +412,14 @@ void tevent_114(void)
 				get_item(ITEM_RECIPE_STRONG_LE_POTION, 1, 1);
 
 				/* TODO: ORIGINAL-BUG: this item could have been not taken => get_hero(-1) => SEGFAULT */
-				hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_RECIPE_STRONG_LE_POTION));
+				hero = get_hero(get_first_hero_with_item(ITEM_RECIPE_STRONG_LE_POTION));
 
 				sprintf(g_dtp2,	get_tx2(27), hero->alias);
 				GUI_output(g_dtp2);
 
 				timewarp(HOURS(8));
 
-				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
+				for (i = 0, hero = get_hero(0); i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 					{
@@ -434,7 +434,7 @@ void tevent_114(void)
 
 				timewarp(HOURS(8));
 
-				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
+				for (i = 0, hero = get_hero(0); i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
 					{
@@ -469,7 +469,7 @@ void tevent_117(void)
 	GUI_output(get_tx2(31));
 	GUI_output(get_tx2(32));
 
-	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++)
+	for (hero = get_hero(0), i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 			!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
@@ -566,7 +566,7 @@ void tevent_123(void)
 		if (answer == 1)
 		{
 			/* go over the bridge */
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = counter = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
@@ -602,7 +602,7 @@ void tevent_123(void)
 
 			if (answer == 1)
 			{
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = counter = 0; i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -640,7 +640,7 @@ void tevent_123(void)
 			} else if (answer == 2)
 			{
 				/* cast a spell */
-				hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
+				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 
 				if (test_spell(hero, SP_MU_STEIGERN, 0) > 0)
 				{
@@ -654,7 +654,7 @@ void tevent_123(void)
 					/* failed */
 					sub_ae_splash(hero, get_spell_cost(SP_MU_STEIGERN, 1));
 
-					hero = (struct struct_hero*)get_hero(0);
+					hero = get_hero(0);
 					for (i = counter = 0; i <= 6; i++, hero++)
 					{
 						if ((hero->typus != HERO_TYPE_NONE) &&
@@ -668,7 +668,7 @@ void tevent_123(void)
 					}
 				}
 			} else {
-				hero = (struct struct_hero*)get_hero(0);
+				hero = get_hero(0);
 				for (i = counter = 0; i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)

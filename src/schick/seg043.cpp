@@ -90,7 +90,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 		if (monster->enemy_id < 10) {
 
 			/* monster attacks hero */
-			hero = (struct struct_hero*)get_hero(monster->enemy_id - 1);
+			hero = get_hero(monster->enemy_id - 1);
 
 			g_fig_target_grammar.type = 2;
 			g_fig_target_grammar.id = monster->enemy_id - 1;
@@ -141,7 +141,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 					if (fighter_id != 0) {
 
 						if ((fighter_id >= 50) ||
-							((fighter_id < 10) && !((struct struct_hero*)get_hero(fighter_id - 1))->flags.dead) ||
+							((fighter_id < 10) && !(get_hero(fighter_id - 1))->flags.dead) ||
 							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags.dead) ||
 							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags.dead))
 						{

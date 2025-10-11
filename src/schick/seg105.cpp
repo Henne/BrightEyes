@@ -623,7 +623,7 @@ signed int get_item(signed int item_id, const signed int unused, signed int quan
 	if (item_id == ITEM_20_CLIMBING_HOOKS) { item_id = ITEM_CLIMBING_HOOKS; quantity = 20;}
 
 	do {
-		hero_i = (struct struct_hero*)get_hero(0);
+		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i++) {
 
 			if ((hero_i->typus) && (hero_i->group_no == gs_current_group))
@@ -647,7 +647,7 @@ signed int get_item(signed int item_id, const signed int unused, signed int quan
 				dropper_pos = select_hero_ok(get_ttx(550));
 
 				if (dropper_pos != -1) {
-					hero_i = (struct struct_hero*)get_hero(dropper_pos);
+					hero_i = get_hero(dropper_pos);
 					g_prevent_drop_equipped_items = 1;
 					vc = select_item_to_drop(hero_i);
 					g_prevent_drop_equipped_items = 0;
@@ -703,7 +703,7 @@ signed int group_count_item(const signed int item_id)
 	signed int i;
 	signed int ret = 0;
 
-	hero_i = (struct struct_hero*)get_hero(0);
+	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if (hero_i->typus && (hero_i->group_no == gs_current_group)) {

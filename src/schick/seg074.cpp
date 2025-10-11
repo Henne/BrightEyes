@@ -181,7 +181,7 @@ unsigned short get_mapval_large(signed short x, signed short y)
  */
 signed short is_group_in_prison(signed short group_no)
 {
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 	signed short i;
 
 	for (i = 0; i < 6; i++, hero++) {

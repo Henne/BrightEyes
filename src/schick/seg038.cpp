@@ -380,7 +380,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 			cb_or_dist_entry = *(g_chessboard_cpy + (y * 25) + x);
 
 			if (cb_or_dist_entry > 0) {
-				if ((cb_or_dist_entry < 10) && (((struct struct_hero*)get_hero(cb_or_dist_entry - 1))->flags.dead || ((struct struct_hero*)get_hero(cb_or_dist_entry - 1))->flags.unconscious))
+				if ((cb_or_dist_entry < 10) && ((get_hero(cb_or_dist_entry - 1))->flags.dead || (get_hero(cb_or_dist_entry - 1))->flags.unconscious))
 				{
 					/* cb_or_dist_entry is a dead or unsonscious hero */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
@@ -411,7 +411,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 		for (i = 0; i <= 6; i++) { /* loop over all heroes */
 			if ((mode != 8) || (i != actor_id)) { /* hero should not attack himself */
 
-				hero_ptr = (struct struct_hero*)get_hero(i);
+				hero_ptr = get_hero(i);
 
 				if ((hero_ptr->typus != HERO_TYPE_NONE) &&
 					(hero_ptr->group_no == gs_current_group) &&

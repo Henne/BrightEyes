@@ -309,7 +309,7 @@ void spell_blitz(void)
 		/* cast a hero */
 
 		/* set the spell target */
-		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -377,7 +377,7 @@ void spell_eisenrost(void)
 		/* target is a hero */
 
 		/* set the spell target */
-		g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -440,7 +440,7 @@ void spell_fulminictus(void)
 	signed short damage;
 
 	if ((get_spelluser()->enemy_id < 10) &&
-		(struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
+		get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
 
 		/* do not attack yourself */
 
@@ -482,7 +482,7 @@ void spell_ignifaxius(void)
 
 	if (get_spelluser()->enemy_id < 10) {
 
-		if ((struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
+		if (get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
 
 			/* don't attack yourself */
 			g_spell_special_aecost = 0;
@@ -548,7 +548,7 @@ void spell_ignifaxius(void)
 		hero_pos = get_spelluser()->enemy_id - 1;
 
 		/* set the spell target */
-		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
+		g_spelltarget = get_hero(hero_pos);
 
 		/* get a pointer to the armor */
 		p_armor = (struct inventory*)&(get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY]);
@@ -613,7 +613,7 @@ void spell_plumbumbarum(void)
 		hero_pos = get_spelluser()->enemy_id - 1;
 
 		/* set the spell target */
-		g_spelltarget = (struct struct_hero*)get_hero(hero_pos);
+		g_spelltarget = get_hero(hero_pos);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -668,7 +668,7 @@ void spell_saft_kraft(void)
 	target = get_spelluser()->enemy_id - 1;
 
 	/* set a pointer to the target */
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* +5 on AT of the current weapon */
 	slot = get_free_mod_slot();
@@ -716,7 +716,7 @@ void spell_scharfes_auge(void)
 	target = get_spelluser()->enemy_id - 1;
 
 	/* set a pointer to the target */
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* all range skills are boosted + 3 */
 

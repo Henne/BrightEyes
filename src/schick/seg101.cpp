@@ -44,7 +44,7 @@ void spell_arcano(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* get a free mod_slot */
 	slot = get_free_mod_slot();
@@ -117,7 +117,7 @@ void spell_inc_ch(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -178,7 +178,7 @@ void spell_inc_ff(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -217,7 +217,7 @@ void spell_inc_ge(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -255,7 +255,7 @@ void spell_inc_in(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -293,7 +293,7 @@ void spell_inc_kk(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -331,7 +331,7 @@ void spell_inc_kl(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -369,7 +369,7 @@ void spell_inc_mu(void)
 	/* get the spell target */
 	target = get_spelluser()->enemy_id - 1;
 
-	g_spelltarget = (struct struct_hero*)get_hero(target);
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -426,7 +426,7 @@ void spell_paralue(void)
 		if (get_spelltarget() != get_spelluser()) {
 
 			/* set the target  */
-			g_spelltarget = (struct struct_hero*)get_hero(get_spelluser()->enemy_id - 1);
+			g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
 
 			/* check again */
 			if (get_spelltarget() == get_spelluser()) {
@@ -701,7 +701,7 @@ void spell_silentium(void)
 {
 	signed int i;
 	signed int slot;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 

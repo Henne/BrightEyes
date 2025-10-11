@@ -159,7 +159,7 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 			g_dialog_next_state = (get_first_hero_with_item(ITEM_BONE_WITH_RUNE) != -1 ? 16 : 17);
 		} else if (state == 19) {
 			/* give the RUNENKNOCHEN / BONE WITH RUNE to UMBRIK */
-			hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_BONE_WITH_RUNE));
+			hero = get_hero(get_first_hero_with_item(ITEM_BONE_WITH_RUNE));
 			drop_item(hero, get_item_pos(hero, ITEM_BONE_WITH_RUNE), 1);
 		} else if (state == 23) {
 			/* mark UMBRIK SIEBENSTEIN as done */
@@ -264,7 +264,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 		} else if (state == 22) {
 
 			/* test the group leader on KL+5, to get the map */
-			if (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_KL, 5) > 0) {
+			if (test_attrib(get_hero(0), ATTRIB_KL, 5) > 0) {
 				/* check if the party already has this map piece */
 				if (gs_treasure_maps[3] == 2) g_tmap_double2 = 1;
 				/* get the map piece */
@@ -297,11 +297,11 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				g_dialog_next_state = (gs_informer_flags[INFORMER_BEORN] == 2 ? 1 : 2);
 			} else if (state == 2) {
 				/* is ERWO in the group ? */
-				g_dialog_next_state = (((struct struct_hero*)get_hero(6))->npc_id == NPC_ERWO && is_hero_available_in_group((struct struct_hero*)get_hero(6)) ? 3 : 15);
+				g_dialog_next_state = ((get_hero(6))->npc_id == NPC_ERWO && is_hero_available_in_group(get_hero(6)) ? 3 : 15);
 			} else if (state == 6) {
 
 				/* copy the name */
-				strcpy(g_str_beorn_hjall, ((struct struct_hero*)get_hero(6))->alias);
+				strcpy(g_str_beorn_hjall, (get_hero(6))->alias);
 				/* set a pointer */
 				g_dialog_title = g_str_beorn_hjall;
 				/* copy the picture of the NPC */
@@ -369,7 +369,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 					beorn_ch_malus = 0;
 				}
 
-				g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_CH, beorn_ch_malus) > 0 ? 26 : 28);
+				g_dialog_next_state = (test_attrib(get_hero(0), ATTRIB_CH, beorn_ch_malus) > 0 ? 26 : 28);
 			}
 	} else if (informer == 2) {
 		/* ALGRID TRONDESDOTTER */
@@ -466,10 +466,10 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		} else if (state == 20) {
 			/* drink with TIOMAR */
 			timewarp(HOURS(1));
-			g_dialog_next_state = (test_skill((struct struct_hero*)get_hero((gs_tiomar_drinkmate = (unsigned char)get_random_hero())), TA_ZECHEN, 0) > 0 ? 21 : 22);
+			g_dialog_next_state = (test_skill(get_hero((gs_tiomar_drinkmate = (unsigned char)get_random_hero())), TA_ZECHEN, 0) > 0 ? 21 : 22);
 		} else if (state == 22) {
 			/* TIOMARS drinkmate gets drunken */
-			hero_get_drunken((struct struct_hero*)get_hero(gs_tiomar_drinkmate));
+			hero_get_drunken(get_hero(gs_tiomar_drinkmate));
 		} else if (state == 31) {
 			/* mark JURGE TORFINSSON as known */
 			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
@@ -562,7 +562,7 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 		} else if (state == 7) {
 			signed short i;
 			/* ASGRIMM takes a meal with the heroes */
-			hero = (struct struct_hero*)get_hero(0);
+			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
@@ -771,14 +771,14 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			if (!gs_informer_flags[INFORMER_TIOMAR]) gs_informer_flags[INFORMER_TIOMAR] = 1;
 		} else if (state == 18) {
 			/* test CH+5 */
-			g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_CH, 5) > 0 ? 19 : 20);
+			g_dialog_next_state = (test_attrib(get_hero(0), ATTRIB_CH, 5) > 0 ? 19 : 20);
 		} else if (state == 21) {
 			/* mark SWAFNILD EGILSDOTTER as done */
 			gs_informer_flags[INFORMER_SWAFNILD] = 2;
 			gs_swafnild_nomap = 1;
 		} else if (state == 22) {
 			/* test CH+3 */
-			g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_CH, 3) > 0 ? 24 : 23);
+			g_dialog_next_state = (test_attrib(get_hero(0), ATTRIB_CH, 3) > 0 ? 24 : 23);
 		} else if (state == 24 || state == 41) {
 			/* mark SWAFNILD EGILSDOTTER as done */
 			gs_informer_flags[INFORMER_SWAFNILD] = 2;

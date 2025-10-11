@@ -409,17 +409,17 @@ void FIG_init_heroes(void)
 
 	for (l_si = 0; l_si <= 6; l_si++) {
 
-		if (((struct struct_hero*)get_hero(l_si))->fighter_id != -1) {
+		if ((get_hero(l_si))->fighter_id != -1) {
 
-			FIG_remove_from_list(((struct struct_hero*)get_hero(l_si))->fighter_id, 0);
+			FIG_remove_from_list((get_hero(l_si))->fighter_id, 0);
 
-			((struct struct_hero*)get_hero(l_si))->fighter_id = -1;
+			(get_hero(l_si))->fighter_id = -1;
 		}
 	}
 
 	for (l_si = 0; l_si <= 6; l_si++) {
 
-		hero = (struct struct_hero*)get_hero(l_si);
+		hero = get_hero(l_si);
 
 		if (hero->typus == HERO_TYPE_NONE)
 			continue;
@@ -521,7 +521,7 @@ void FIG_init_heroes(void)
 		g_fig_list_elem.visible = 1;
 		g_fig_list_elem.twofielded = -1;
 
-		((struct struct_hero*)get_hero(l_si))->fighter_id = FIG_add_to_list(-1);
+		(get_hero(l_si))->fighter_id = FIG_add_to_list(-1);
 	}
 }
 

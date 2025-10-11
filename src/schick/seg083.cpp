@@ -168,7 +168,7 @@ signed short DNG08_handler(void)
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), (Bit8u*)&((struct struct_hero*)get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (Bit8u*)&(get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}
@@ -191,7 +191,7 @@ signed short DNG08_handler(void)
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), (Bit8u*)&((struct struct_hero*)get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (Bit8u*)&(get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}
@@ -250,7 +250,7 @@ signed short DNG08_handler(void)
 
 		} else if (i == 3)
 		{
-			hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_tx(18)));
+			hero = get_hero(select_hero_ok_forced(get_tx(18)));
 
 			sprintf(g_dtp2, get_tx(19), hero->alias);
 
