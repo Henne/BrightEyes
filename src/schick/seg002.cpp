@@ -1834,8 +1834,7 @@ void handle_gui_input(void)
 			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
-				if (((get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
-						(get_hero(l_si - 241))->group_no == gs_current_group)
+				if ((get_hero(l_si - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_si - 241)->group_no == gs_current_group))
 				{
 					status_menu(l_si - 241);
 					l_si = 0;
@@ -1845,8 +1844,7 @@ void handle_gui_input(void)
 			} else {
 				/* swap heroes by click - move mouse - click */
 				if (g_heroswap_allowed &&
-					((get_hero(l_si - 241))->typus != HERO_TYPE_NONE) &&
-						(get_hero(l_si - 241))->group_no == gs_current_group)
+					(get_hero(l_si - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_si - 241)->group_no == gs_current_group))
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
 					GRP_move_hero(l_si - 241);
@@ -2050,7 +2048,7 @@ void game_loop(void)
 
 		}
 
-		if ((host_readbs((Bit8u*)get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
+		if ((get_hero(6)->typus != HERO_TYPE_NONE) &&
 			((gs_current_town != TOWNS_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
 			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
@@ -2141,8 +2139,7 @@ void timers_daily(void)
 	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if (((get_hero(i))->typus != HERO_TYPE_NONE) &&
-			(hero_i->recipe_timer > 0))
+		if ((get_hero(i)->typus != HERO_TYPE_NONE) && (hero_i->recipe_timer > 0))
 		{
 			hero_i->recipe_timer--;
 		}
@@ -2637,7 +2634,7 @@ void do_timers(void)
 			}
 
 			/* increment the months the NPC is in the group */
-			if (host_readb((Bit8u*)get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) {
+			if (get_hero(6)->typus != HERO_TYPE_NONE) {
 				gs_npc_months++;
 			}
 
@@ -2770,7 +2767,7 @@ void sub_mod_timers(Bit32s val)
 				/* get the hero index from the target */
 				target = sp->target;
 				for (j = 0; j <= 6; j++) {
-					if ((get_hero(j))->timer_id == target) {
+					if (get_hero(j)->timer_id == target) {
 						h_index = j;
 						break;
 					}
@@ -2802,7 +2799,7 @@ void sub_mod_timers(Bit32s val)
 					}
 
 					if (reset_target) {
-						(get_hero(h_index))->timer_id = 0;
+						get_hero(h_index)->timer_id = 0;
 					}
 				} else {
 #if !defined(__BORLANDC__)
@@ -2884,9 +2881,9 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 		/* mod slot is on a hero/npc */
 		mod_ptr = (Bit8u*)get_hero(who);
 
-		if ((get_hero(who))->timer_id != 0) {
+		if (get_hero(who)->timer_id != 0) {
 			/* hero/npc has a target number */
-			target = (get_hero(who))->timer_id;
+			target = get_hero(who)->timer_id;
 		} else {
 			/* hero/npc has no target number */
 
@@ -2894,7 +2891,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 
 				new_target = 1;
 				for (j = 0; j <= 6; j++) {
-					if ((get_hero(j))->timer_id == i) {
+					if (get_hero(j)->timer_id == i) {
 						new_target = 0;
 						break;
 					}
@@ -2906,7 +2903,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 				}
 			}
 
-			(get_hero(who))->timer_id = target;
+			get_hero(who)->timer_id = target;
 		}
 
 		gs_modification_timers[slot_no].target = target;
@@ -3062,7 +3059,7 @@ void magical_chainmail_damage(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if ((get_hero(i))->typus != HERO_TYPE_NONE) {
+		if (get_hero(i)->typus != HERO_TYPE_NONE) {
 
 			hero_i = get_hero(i);
 
@@ -3791,10 +3788,10 @@ void dec_splash(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if (!g_dialogbox_lock && (g_hero_splash_timer[i]) && !(--g_hero_splash_timer[i]) &&
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !(get_hero(i))->flags.dead) {
+		if (!g_dialogbox_lock && g_hero_splash_timer[i] && !(--g_hero_splash_timer[i]) &&
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !get_hero(i)->flags.dead) {
 
-			restore_rect(g_vga_memstart, (get_hero(i))->pic, g_hero_pic_posx[i], 157, 32, 32);
+			restore_rect(g_vga_memstart, get_hero(i)->pic, g_hero_pic_posx[i], 157, 32, 32);
 		}
 	}
 }
@@ -4842,11 +4839,11 @@ void do_starve_damage(struct struct_hero *hero, const signed int index, const si
 /* unused */
 signed short compare_name(char *name)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 6; i++) {
 
-		if (!strcmp((get_hero(i))->alias, name)) {
+		if (!strcmp(get_hero(i)->alias, name)) {
 			return 1;
 		}
 	}
@@ -5068,7 +5065,7 @@ signed short unused_cruft(void)
 	do {
 		l_si = random_schick(6) - 1;
 
-	} while (!(host_readbs((Bit8u*)get_hero(l_si) + HERO_TYPE)) || (host_readbs((Bit8u*)get_hero(l_si) + HERO_GROUP_NO) != gs_current_group));
+	} while (!get_hero(l_si)->typus || (get_hero(l_si)->group_no != gs_current_group));
 
 	return l_si;
 }
@@ -5082,7 +5079,7 @@ signed short unused_cruft(void)
 	number of heroes in the group */
 signed short get_random_hero(void)
 {
-	signed short cur_hero;
+	signed int cur_hero;
 
 	do {
 		/* get number of current group */
@@ -5110,11 +5107,7 @@ signed short get_random_hero(void)
 		cur_hero = pos;
 #endif
 
-	} while (
-		!(get_hero(cur_hero))->typus ||
-		((get_hero(cur_hero))->group_no != gs_current_group) ||
-		(get_hero(cur_hero))->flags.dead
-	);
+	} while (!get_hero(cur_hero)->typus || (get_hero(cur_hero)->group_no != gs_current_group) || get_hero(cur_hero)->flags.dead);
 
 	return cur_hero;
 }

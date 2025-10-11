@@ -242,7 +242,7 @@ void char_add(signed short temple_id)
 	ptr = g_renderbuf_ptr + 50000;
 	l_di = copy_chr_names(ptr, temple_id);
 
-	if (gs_total_hero_counter == 7 || (gs_total_hero_counter == 6 && !host_readbs((Bit8u*)get_hero(6) + HERO_TYPE)))
+	if (gs_total_hero_counter == 7 || (gs_total_hero_counter == 6 && !get_hero(6)->typus))
 	{
 		GUI_output(get_ttx(288));
 
@@ -289,7 +289,7 @@ void char_add(signed short temple_id)
 				l_di = copy_chr_names(ptr, temple_id);
 			}
 
-		} while ((l_si != -1) && (gs_total_hero_counter < (host_readbs((Bit8u*)get_hero(6) + HERO_TYPE) ? 7 : 6)));
+		} while ((l_si != -1) && (gs_total_hero_counter < (get_hero(6)->typus ? 7 : 6)));
 	}
 }
 
@@ -338,7 +338,7 @@ void char_letgo(signed short temple_id)
 				}
 			}
 
-		} while ((hero_pos != -1) && (gs_group_member_counts[gs_current_group] > (host_readbs((Bit8u*)get_hero(6) + HERO_TYPE) ? 1 : 0)));
+		} while ((hero_pos != -1) && (gs_group_member_counts[gs_current_group] > (get_hero(6)->typus ? 1 : 0)));
 	}
 }
 

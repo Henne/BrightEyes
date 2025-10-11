@@ -138,11 +138,9 @@ signed short DNG01_handler(void)
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(9), 0);
 
-			if (host_readbs((Bit8u*)get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE)
+			if (get_hero(6)->typus != HERO_TYPE_NONE)
 			{
-				remove_npc(host_readbs((Bit8u*)get_hero(6) + HERO_NPC_ID) + 19,	31,
-						host_readbs((Bit8u*)get_hero(6) + HERO_NPC_ID) + ARCHIVE_FILE_NSC_LTX,
-						NULL, NULL);
+				remove_npc(get_hero(6)->npc_id + 19, 31, get_hero(6)->npc_id + ARCHIVE_FILE_NSC_LTX, NULL, NULL);
 			}
 
 			add_npc(ARCHIVE_FILE_NSC_LTX + 4);

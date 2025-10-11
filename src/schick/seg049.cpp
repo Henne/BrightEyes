@@ -118,7 +118,7 @@ void GRP_sort_heroes(void)
 	qsort((void*)get_hero(0), 6, sizeof(struct struct_hero), GRP_compare_heroes);
 
 	for (i = 0; i < 6; i++) {
-		(get_hero(i))->group_pos = i + 1;
+		get_hero(i)->group_pos = i + 1;
 	}
 }
 
@@ -167,7 +167,7 @@ void GRP_split(void)
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 13:
 	 * Split group does not work if the active group consists of 2 available heroes and there is an NPC in another group. */
-	if (count_heroes_available_in_group() <= (host_readbs((Bit8u*)get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE ? 2 : 1))
+	if (count_heroes_available_in_group() <= (get_hero(6)->typus != HERO_TYPE_NONE ? 2 : 1))
 #else
 	if (count_heroes_available_in_group_ignore_npc() <= 1)
 #endif
@@ -193,7 +193,7 @@ void GRP_split(void)
 			} else {
 
 				not_empty = 1;
-				(get_hero(answer))->group_no = (signed char)new_group_id;
+				get_hero(answer)->group_no = (signed char)new_group_id;
 				gs_group_member_counts[new_group_id]++;
 				gs_group_member_counts[gs_current_group]--;
 			}
@@ -202,7 +202,7 @@ void GRP_split(void)
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 14:
 	 * Split group does not allow to select all but one available hero of the active group if there is an NPC in another group. */
-		while (count_heroes_available_in_group() > (host_readbs((Bit8u*)get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE ? 2 : 1));
+		while (count_heroes_available_in_group() > (get_hero(6)->typus != HERO_TYPE_NONE ? 2 : 1));
 #else
 		while (count_heroes_available_in_group_ignore_npc() > 1);
 #endif
@@ -239,10 +239,9 @@ void GRP_merge(void)
 
 			for (i = 0; i <= 6; i++) {
 
-				if ((host_readbs((Bit8u*)get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
-					host_readbs((Bit8u*)get_hero(i) + HERO_GROUP_NO) == answer)
+				if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_no == answer))
 				{
-					(get_hero(i))->group_no = gs_current_group;
+					get_hero(i)->group_no = gs_current_group;
 					gs_group_member_counts[gs_current_group]++;
 				}
 			}
@@ -281,11 +280,9 @@ void GRP_switch_to_next(signed short mode)
 
 			for (i = 0; i < 6; i++) {
 
-				if ((host_readbs((Bit8u*)get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs((Bit8u*)get_hero(i) + HERO_GROUP_NO) == group) &&
-					check_hero(get_hero(i)))
+				if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_no == group) && check_hero(get_hero(i)))
 				{
-					if (host_readbs((Bit8u*)get_hero(i) + HERO_JAIL) != 0) {
+					if (get_hero(i)->jail) {
 						/* hero is in prison */
 						state = 2;
 					} else {
@@ -372,9 +369,9 @@ void GRP_switch_to_next(signed short mode)
 			load_area_description(1);
 		}
 
-		gs_direction_bak = (gs_groups_direction_bak[group]);
-		gs_x_target_bak = (gs_groups_x_target_bak[group]);
-		gs_y_target_bak = (gs_groups_y_target_bak[group]);
+		gs_direction_bak = gs_groups_direction_bak[group];
+		gs_x_target_bak = gs_groups_x_target_bak[group];
+		gs_y_target_bak = gs_groups_y_target_bak[group];
 		gs_current_loctype_bak = gs_groups_current_loctype_bak[group];
 		gs_current_town_bak = gs_groups_town_bak[group];
 		gs_dungeon_index_bak = gs_groups_dng_index_bak[group];
@@ -421,37 +418,37 @@ void GRP_swap_heroes(void)
 			}
 
 			/* save hero1 in tmp */
-			tmp = *get_hero(hero1_no);
+			tmp = *get_hero(hero1_no);	/* struct_copy */
 
 			l2 = g_wildcamp_guardstatus[hero1_no];
 			l3 = g_wildcamp_magicstatus[hero1_no];
 			l4 = g_wildcamp_replstatus[hero1_no];
 			l5 = g_wildcamp_herbstatus[hero1_no];
 
-			*(get_hero(hero1_no)) = *(get_hero(hero2_no));
+			*(get_hero(hero1_no)) = *(get_hero(hero2_no)); /* struct_copy */
 
 			g_wildcamp_guardstatus[hero1_no] = g_wildcamp_guardstatus[hero2_no];
 			g_wildcamp_magicstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
 			g_wildcamp_replstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
 			g_wildcamp_herbstatus[hero1_no] = g_wildcamp_herbstatus[hero2_no];
 
-			*(get_hero(hero2_no)) = tmp;
+			*(get_hero(hero2_no)) = tmp; /* struct_copy */
 
 			g_wildcamp_guardstatus[hero2_no] = l2;
 			g_wildcamp_magicstatus[hero2_no] = l3;
 			g_wildcamp_replstatus[hero2_no] = l4;
 			g_wildcamp_herbstatus[hero2_no] = l5;
 
-			if (host_readbs((Bit8u*)get_hero(hero1_no) + HERO_TYPE)) {
-				(get_hero(hero1_no))->action_id = FIG_ACTION_UNKNOWN2;
+			if (get_hero(hero1_no)->typus) {
+				get_hero(hero1_no)->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			if (host_readbs((Bit8u*)get_hero(hero2_no) + HERO_TYPE)) {
-				(get_hero(hero2_no))->action_id = FIG_ACTION_UNKNOWN2;
+			if (get_hero(hero2_no)->typus) {
+				get_hero(hero2_no)->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			(get_hero(hero1_no))->group_pos = hero1_no + 1;
-			(get_hero(hero2_no))->group_pos = hero2_no + 1;
+			get_hero(hero1_no)->group_pos = hero1_no + 1;
+			get_hero(hero2_no)->group_pos = hero2_no + 1;
 		}
 	}
 
