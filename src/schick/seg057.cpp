@@ -202,7 +202,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 						if (g_itemsdat[j].flags.stackable) {
 
-							if ((nice = hero1->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
+							if ((nice = hero1->inventory[g_sellitems[answer].item_pos].quantity) > 1)
 							{
 								my_itoa(nice, g_dtp2, 10);
 

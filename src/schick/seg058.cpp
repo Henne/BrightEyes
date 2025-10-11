@@ -267,7 +267,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 							if (g_itemsdat[j].flags.stackable) {
 
-								if ((val = hero2->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
+								if ((val = hero2->inventory[g_sellitems[answer].item_pos].quantity) > 1)
 								{
 									my_itoa(val, g_dtp2, 10);
 

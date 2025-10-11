@@ -312,8 +312,8 @@ char* get_informer_name2(void)
  */
 char* load_current_town_gossip(void)
 {
-	signed short gossip_id;
-	Bit8u *ptr;
+	signed int gossip_id;
+	char **ptr;
 
 	/* load TOWN.LTX */
 	load_ltx(gs_current_town + ARCHIVE_FILE_CITY_LTX);
@@ -322,13 +322,13 @@ char* load_current_town_gossip(void)
 	g_area_prepared = g_current_ani = -1;
 
 	/* get the pointer to the ltx buffer */
-	ptr = (Bit8u*)g_buffer9_ptr3;
+	ptr = (char**)g_buffer9_ptr3;
 
 	/* get some gossip */
 	gossip_id = get_tavern_gossip();
 
 	/* return the pointer to the gossip (pointers are stored in the first 1000 bytes) */
-	return (char*)host_readd(ptr + 4 * gossip_id);
+	return ptr[gossip_id];
 }
 
 char* get_random_tavern_message(void)
