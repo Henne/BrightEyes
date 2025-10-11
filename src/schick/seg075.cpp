@@ -753,7 +753,7 @@ void DNG_stub6(void)
 
 			if (l_si) {
 
-				sprintf(g_dtp2, get_ttx(768), ((struct struct_hero*)get_hero(l_si - 1))->alias);
+				sprintf(g_dtp2, get_ttx(768), get_hero(l_si - 1)->alias);
 			}
 
 			if (l_di == 2) {
@@ -776,7 +776,7 @@ void DNG_stub6(void)
 				}
 			} else {
 
-				hero_auto = (struct struct_hero*)get_hero((l1 = get_hero_KK_best()));
+				hero_auto = get_hero((l1 = get_hero_KK_best()));
 
 				l_di--;
 
@@ -788,7 +788,7 @@ void DNG_stub6(void)
 						l_si++;
 					}
 
-					strcat(g_dtp2, ((struct struct_hero*)get_hero(l_si++))->alias);
+					strcat(g_dtp2, get_hero(l_si++)->alias);
 
 					if (--l_di) {
 
@@ -818,7 +818,7 @@ void DNG_stub6(void)
 signed short DNG_check_climb_tools(void)
 {
 	signed short i;
-	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
 	/* check for a mage with staffspell > 2 */
 	for (i = 0; i <= 6; i++, hero++) {
@@ -835,13 +835,13 @@ signed short DNG_check_climb_tools(void)
 	return ((get_first_hero_with_item(ITEM_ROPE) != -1) || (get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)) ? 0 : -1;
 }
 
-signed short DNG_fallpit(signed short max_damage)
+signed int DNG_fallpit(const signed int max_damage)
 {
-	signed short hero_id;
-	signed short i;
-	signed short nr_fallen_heroes;
-	signed short new_group;
-	signed short retval;
+	signed int hero_pos;
+	signed int i;
+	signed int nr_fallen_heroes;
+	signed int new_group;
+	signed int retval;
 
 	new_group = 0;
 	retval = 0;
@@ -867,16 +867,15 @@ signed short DNG_fallpit(signed short max_damage)
 		for (i = 0; i < nr_fallen_heroes; i++) {
 
 			do {
-				hero_id = random_schick(7) - 1;
+				hero_pos = random_schick(7) - 1;
 
-			} while ( (!host_readbs((Bit8u*)get_hero(hero_id) + HERO_TYPE)) ||
-					(host_readbs((Bit8u*)get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group) ||
-					((nr_fallen_heroes == 1) && (hero_id == 6))); /* avoid that the NPC gets separated into a single group */
+			} while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_no != gs_current_group) ||
+					((nr_fallen_heroes == 1) && (hero_pos == 6))); /* avoid that the NPC gets separated into a single group */
 
-			((struct struct_hero*)get_hero(hero_id))->group_no = (unsigned char)new_group;
+			get_hero(hero_pos)->group_no = (unsigned char)new_group;
 			gs_group_member_counts[new_group]++;
 			gs_group_member_counts[gs_current_group]--;
-			sub_hero_le((struct struct_hero*)get_hero(hero_id), random_schick(max_damage));
+			sub_hero_le(get_hero(hero_pos), random_schick(max_damage));
 		}
 
 		GRP_save_pos(new_group);
@@ -886,17 +885,16 @@ signed short DNG_fallpit(signed short max_damage)
 
 	} else {
 
-		hero_id = 0;
+		hero_pos = 0;
 
 		for (i = 0; i < nr_fallen_heroes; i++) {
 
-			while (!host_readbs((Bit8u*)get_hero(hero_id) + HERO_TYPE) ||
-				(host_readbs((Bit8u*)get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group))
+			while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_no != gs_current_group))
 			{
-				hero_id++;
+				hero_pos++;
 			}
 
-			sub_hero_le((struct struct_hero*)get_hero(hero_id++), random_schick(max_damage));
+			sub_hero_le(get_hero(hero_pos++), random_schick(max_damage));
 		}
 
 		DNG_inc_level();

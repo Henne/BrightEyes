@@ -83,7 +83,7 @@ void ask_miracle(void)
 							/* MU+1 for 1 day */
 							if (!gs_ingame_timers[INGAME_TIMER_PRAIOS_MU]) {
 
-								miracle_modify(get_hero(0) + (HERO_ATTRIB + 3 * ATTRIB_MU) - get_hero(0), DAYS(1), 1);
+								miracle_modify((Bit8u*)&get_hero(0)->attrib[ATTRIB_MU].current - (Bit8u*)get_hero(0), DAYS(1), 1);
 								strcpy(g_dtp2, get_tx2(1));
 
 								gs_ingame_timers[INGAME_TIMER_PRAIOS_MU] = DAYS(1);
@@ -142,8 +142,8 @@ void ask_miracle(void)
 					if (l_si <= 5) {
 						if (!gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS]) {
 
-							miracle_modify(get_hero(0) + (HERO_TALENTS + TA_SCHWERTER) - get_hero(0), DAYS(3), 1); /* for 3 days: skill 'Schwerter' + 1 */
-							miracle_modify(get_hero(0) + (HERO_AT + WEAPON_TYPE_SCHWERT) - get_hero(0), DAYS(3), 1); /* for 3 days: AT + 1 */
+							miracle_modify((Bit8u*)&get_hero(0)->skills[TA_SCHWERTER] - (Bit8u*)get_hero(0), DAYS(3), 1); /* for 3 days: skill 'Schwerter' + 1 */
+							miracle_modify((Bit8u*)&get_hero(0)->at_weapon[WEAPON_TYPE_SCHWERT] - (Bit8u*)get_hero(0), DAYS(3), 1); /* for 3 days: AT + 1 */
 							gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS] = DAYS(3);
 
 							strcpy(g_dtp2, get_tx2(4));
@@ -178,8 +178,9 @@ void ask_miracle(void)
 						strcpy(g_dtp2, get_tx2(8));
 					} else if (l_si <= 9) {
 						if (!gs_ingame_timers[INGAME_TIMER_EFFERD_SWIM]) {
+
 							/* Schwimmen +2 for 4 days */
-							miracle_modify(get_hero(0) + (HERO_TALENTS + TA_SCHWIMMEN) - get_hero(0), DAYS(4), 2);
+							miracle_modify((Bit8u*)&get_hero(0)->skills[TA_SCHWIMMEN] - (Bit8u*)get_hero(0), DAYS(4), 2);
 							strcpy(g_dtp2, get_tx2(9));
 
 							gs_ingame_timers[INGAME_TIMER_EFFERD_SWIM] = DAYS(4);
@@ -221,7 +222,8 @@ void ask_miracle(void)
 						miracle_resurrect(get_tx2(14));
 					} else if (l_si <= 5) {
 						if (!gs_ingame_timers[INGAME_TIMER_BORON_TA]) {
-							miracle_modify(get_hero(0) + (HERO_ATTRIB + 3 * ATTRIB_TA) - get_hero(0), DAYS(4), -1);
+
+							miracle_modify((Bit8u*)&get_hero(0)->attrib[ATTRIB_TA].current - (Bit8u*)get_hero(0), DAYS(4), -1);
 							strcpy(g_dtp2, get_tx2(15));
 							gs_ingame_timers[INGAME_TIMER_BORON_TA] = DAYS(4);
 						}
@@ -231,7 +233,8 @@ void ask_miracle(void)
 				case GOD_HESINDE: {
 					if (l_si <= 3) {
 						if (!gs_ingame_timers[INGAME_TIMER_HESINDE_ANALUES]) {
-							miracle_modify(get_hero(0) + (HERO_SPELLS + SP_ANALUES_ARCANSTRUKTUR) - get_hero(0), DAYS(4), 1);
+
+							miracle_modify((Bit8u*)&get_hero(0)->spells[SP_ANALUES_ARCANSTRUKTUR] - (Bit8u*)get_hero(0), DAYS(4), 1);
 							strcpy(g_dtp2, get_tx2(16));
 							gs_ingame_timers[INGAME_TIMER_HESINDE_ANALUES] = DAYS(4);
 						}
@@ -262,7 +265,8 @@ void ask_miracle(void)
 					} else if (l_si <= 7) {
 
 						if (!gs_ingame_timers[INGAME_TIMER_HESINDE_MR]) {
-							miracle_modify(get_hero(0) + HERO_MR - get_hero(0), DAYS(3), 5);
+
+							miracle_modify((Bit8u*)&get_hero(0)->mr - (Bit8u*)get_hero(0), DAYS(3), 5);
 							strcpy(g_dtp2, get_tx2(18));
 							gs_ingame_timers[INGAME_TIMER_HESINDE_MR] = DAYS(3);
 						}
@@ -331,23 +335,23 @@ void ask_miracle(void)
 						if (l_si <= 5) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_THIEF]) {
 								/* Taschendiebstahl +1 for 3 days */
-								miracle_modify(get_hero(0) + (HERO_TALENTS + TA_TASCHENDIEBSTAHL) - get_hero(0), DAYS(3), 1);
+								miracle_modify((Bit8u*)&get_hero(0)->skills[TA_TASCHENDIEBSTAHL] - (Bit8u*)get_hero(0), DAYS(3), 1);
 								/* Schloesser knacken +1 for 3 days */
-								miracle_modify(get_hero(0) + (HERO_TALENTS + TA_SCHLOESSER) - get_hero(0), DAYS(3), 1);
+								miracle_modify((Bit8u*)&get_hero(0)->skills[TA_SCHLOESSER] - (Bit8u*)get_hero(0), DAYS(3), 1);
 								strcpy(g_dtp2, get_tx2(24));
 								gs_ingame_timers[INGAME_TIMER_PHEX_THIEF] = DAYS(3);
 							}
 						} else if (l_si <= 8) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_FEILSCHEN]) {
 								/* Feilschen +1 for 3 days */
-								miracle_modify(get_hero(0) + (HERO_TALENTS + TA_FEILSCHEN) - get_hero(0), DAYS(3), 1);
+								miracle_modify((Bit8u*)&get_hero(0)->skills[TA_FEILSCHEN] - (Bit8u*)get_hero(0), DAYS(3), 1);
 								strcpy(g_dtp2, get_tx2(25));
 								gs_ingame_timers[INGAME_TIMER_PHEX_FEILSCHEN] = DAYS(3);
 							}
 						} else if (l_si <= 9) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_FF]) {
 								/* FF +1 for 3 days */
-								miracle_modify(get_hero(0) + (HERO_ATTRIB + 3 * ATTRIB_FF) - get_hero(0), DAYS(3), 1);
+								miracle_modify((Bit8u*)&get_hero(0)->attrib[ATTRIB_FF].current - (Bit8u*)get_hero(0), DAYS(3), 1);
 								strcpy(g_dtp2, get_tx2(26));
 								gs_ingame_timers[INGAME_TIMER_PHEX_FF] = DAYS(3);
 							}
@@ -422,16 +426,16 @@ void ask_miracle(void)
 					if (l_si <= 8) {
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS]) {
 							/* Betören +2 for 7 days */
-							miracle_modify(get_hero(0) + (HERO_TALENTS + TA_BETOEREN) - get_hero(0), DAYS(7), 2);
+							miracle_modify((Bit8u*)&get_hero(0)->skills[TA_BETOEREN] - (Bit8u*)get_hero(0), DAYS(7), 2);
 							/* Tanzen +2 for 7 days */
-							miracle_modify(get_hero(0) + (HERO_TALENTS + TA_TANZEN) - get_hero(0), DAYS(7), 2);
+							miracle_modify((Bit8u*)&get_hero(0)->skills[TA_TANZEN] - (Bit8u*)get_hero(0), DAYS(7), 2);
 							strcpy(g_dtp2, get_tx2(32));
 							gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS] = DAYS(7);
 						}
 					} else if (l_si <= 13) {
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_CH]) {
 							/* CH +1 for 3 days */
-							miracle_modify(get_hero(0) + (HERO_ATTRIB + 3 * ATTRIB_CH) - get_hero(0), DAYS(3), 1);
+							miracle_modify((Bit8u*)&get_hero(0)->attrib[ATTRIB_CH].current - (Bit8u*)get_hero(0), DAYS(3), 1);
 							strcpy(g_dtp2, get_tx2(33));
 							gs_ingame_timers[INGAME_TIMER_RAHJA_CH] = DAYS(3);
 						}

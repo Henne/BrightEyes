@@ -313,7 +313,7 @@ static inline char* get_itemname(unsigned short item)
 
 #define my_itoa itoa
 
-#define get_hero(no) (((unsigned char*)g_heroes + sizeof(struct struct_hero) * (no)))
+#define get_hero(no) ((struct struct_hero*)(((unsigned char*)g_heroes) + sizeof(struct struct_hero) * (no)))
 
 #ifdef M302de_ORIGINAL_BUGFIX
 #define update_informer_cond(informer) (if (gs_informer_flags[informer] == 0) gs_informer_flags[informer] = 1)

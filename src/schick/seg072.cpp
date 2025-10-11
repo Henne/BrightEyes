@@ -305,7 +305,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				/* set a pointer */
 				g_dialog_title = g_str_beorn_hjall;
 				/* copy the picture of the NPC */
-				memcpy(g_dtp2, get_hero(6) + HERO_PORTRAIT, 0x400);
+				memcpy(g_dtp2, get_hero(6)->pic, 0x400);
 				/* remove the NPC from the group */
 				remove_npc(24, 31, 0xe7, get_ttx(758), NULL);
 

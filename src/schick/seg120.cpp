@@ -177,11 +177,11 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 	}
 
 	hero_pos = 0;
-	while (((struct struct_hero*)get_hero(hero_pos))->sex != 50) {
+	while (get_hero(hero_pos)->sex != 50) {
 		hero_pos++;
 	}
 
-	hero = (struct struct_hero*)get_hero(hero_pos);
+	hero = get_hero(hero_pos);
 	hero->sex = sex_bak;
 
 	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
@@ -221,7 +221,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 
 				if (answer != -1) {
 
-					skill_cure_disease((struct struct_hero*)get_hero(answer), hero, 10, 1);
+					skill_cure_disease(get_hero(answer), hero, 10, 1);
 				}
 
 				done = 1;
@@ -232,9 +232,8 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 				for (l_di = 0; l_di <= 6; l_di++) {
 
 					/* one of the other heroes must pass CH+0 */
-					if ((l_di != hero_pos) &&
-						(test_attrib((struct struct_hero*)get_hero(l_di), ATTRIB_CH, 0) != 0))
-						/* Original-Bug: should be 'test_attrib((struct struct_hero*)get_hero(l_di), ATTRIB_CH, 0) > 0'
+					if ((l_di != hero_pos) && (test_attrib(get_hero(l_di), ATTRIB_CH, 0) != 0))
+						/* Original-Bug: should be 'test_attrib(get_hero(l_di), ATTRIB_CH, 0) > 0'
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
@@ -247,7 +246,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 						answer = select_hero_ok(get_ttx(395));
 
 						if (answer != -1) {
-							skill_cure_disease((struct struct_hero*)get_hero(answer), hero, 10, 1);
+							skill_cure_disease(get_hero(answer), hero, 10, 1);
 						}
 						break;
 					}
@@ -261,7 +260,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 
 				if (answer != -1) {
 
-					hero2 = (struct struct_hero*)get_hero(answer);
+					hero2 = get_hero(answer);
 
 					/* check that hero2 is a magic user */
 					if (hero2->typus >= HERO_TYPE_WITCH) {
@@ -285,7 +284,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 								answer = select_hero_ok(get_ttx(395));
 
 								if ((answer != -1) && (answer != hero_pos)) {
-									skill_cure_disease((struct struct_hero*)get_hero(answer), hero, 10, 1);
+									skill_cure_disease(get_hero(answer), hero, 10, 1);
 								}
 							}
 						} else {
@@ -306,7 +305,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 
 		if (done == 0) {
 			/* every other hero in the group looses 1W6+2 LE */
-			hero2 = (struct struct_hero*)get_hero(0);
+			hero2 = get_hero(0);
 			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
 				if ((l_di != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&

@@ -29,7 +29,7 @@ void poison_effect(void)
 
 	g_check_poison = 0;
 
-	hero = (struct struct_hero*)get_hero(0);
+	hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
