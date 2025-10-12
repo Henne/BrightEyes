@@ -459,7 +459,7 @@ signed short DNG_step(void)
 	}
 
 	/* TODO: potential bug: g_dng_level_changed is set to 1, but never back to 0 */
-	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak) || g_dng_level_changed)
+	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak) || (signed char)g_dng_level_changed)
 	{
 		g_can_merge_group = can_merge_group();
 		g_lockpick_try_counter = 0;
