@@ -547,7 +547,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short 
 		GUI_print_string(name, g_textline_posx, g_textline_posy);
 
 		/* set text color */
-		g_textcolor_index = 1;
+		g_textcolor_index = 0;
 
 		g_textline_posy += 14;
 		g_dialogbox_indent_height -= 2;
