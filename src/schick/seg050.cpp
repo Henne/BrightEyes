@@ -767,15 +767,13 @@ void level_up(signed short hero_pos)
 
 							if (hero->spells[g_autoinc_spells_mage_index[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero,
-									g_autoinc_spells_mage_index[hero->spell_school][i]);
+								inc_spell_novice(hero, g_autoinc_spells_mage_index[hero->spell_school][i]);
 							}
 							i++;
 						}
 
 						i = 0;
-						while ((hero->spell_incs) != 0 &&
-							(g_magic_schools_index[hero->spell_school][i] != -1)) {
+						while ((hero->spell_incs) != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
 
 							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
 							{

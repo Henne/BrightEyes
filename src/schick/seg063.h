@@ -11,7 +11,7 @@ void sea_travel(signed short, signed short);
 /* 0x2f */
 void mod_clock_pos(signed short);
 /* 0x34 */
-signed short get_srout_len(Bit8u*);
+signed int get_srout_len(struct struct_point*);
 
 #if !defined(__BORLANDC__)
 }

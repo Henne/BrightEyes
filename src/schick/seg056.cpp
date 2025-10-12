@@ -103,7 +103,7 @@ void buy_screen(void)
 	struct nvf_desc nvf;
 
 	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
-	g_buy_shopping_cart = (struct struct_shopping_cart*)g_fig_figure1_buf + 2800;
+	g_buy_shopping_cart = (struct struct_shopping_cart*)g_fig_figure1_buf + 2800 / 4;
 	memset((Bit8u*)g_buy_shopping_cart, 0, 250);
 
 	g_request_refresh = 1;

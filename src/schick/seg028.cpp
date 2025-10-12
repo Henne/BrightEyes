@@ -112,12 +112,6 @@ void load_dungeon_ddt(void)
 	read_archive_file(handle, (Bit8u*)&low, 2);
 	read_archive_file(handle, (Bit8u*)&high, 2);
 
-#if !defined(__BORLANDC__)
-	/* BE-Fix: */
-	low = host_readws((Bit8u*)&low);
-	high = host_readws((Bit8u*)&high);
-#endif
-
 	read_archive_file(handle, g_dungeon_fights_buf, low);
 	read_archive_file(handle, (Bit8u*)g_dungeon_doors_buf, high - low);
 	read_archive_file(handle, g_dungeon_stairs_buf, 0x7d0);
