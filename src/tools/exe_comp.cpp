@@ -366,6 +366,7 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 	/* detect Overlays */
 	const char ovr_sig[4] = {'F','B','O','V'};
 	unsigned long start_ovr[2] = {0, 0};
+	unsigned long OVR_LEN[2] = {0, 0};
 
 	if (start_ds[0] + DS_LEN[0] < len_orig) {
 
@@ -373,7 +374,10 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		long end = len_orig - 4;
 
 		while ((off < end) && (start_ovr[0] == 0)) {
-			if (!memcmp(&orig[off], ovr_sig, 4)) start_ovr[0] = off;
+			if (!memcmp(&orig[off], ovr_sig, 4)) {
+				start_ovr[0] = off;
+				OVR_LEN[0] = readd(&orig[off] + 4);
+			}
 			off++;
 		}
 	}
@@ -384,12 +388,17 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		long end = len_rewrite - 4;
 
 		while ((off < end) && (start_ovr[1] == 0)) {
-			if (!memcmp(&rewrite[off], ovr_sig, 4)) start_ovr[1] = off;
+			if (!memcmp(&rewrite[off], ovr_sig, 4)) {
+				start_ovr[1] = off;
+				OVR_LEN[1] = readd(&rewrite[off] + 4);
+			}
+
 			off++;
 		}
 	}
 	if (start_ovr[0] && start_ovr[1]) {
 		fprintf(stdout, "OVR:         orig = 0x%06lx, rewrite = 0x%06lx\n", start_ovr[0], start_ovr[1]);
+		fprintf(stdout, "OVR_LEN:     orig = %06ld, rewrite = %06ld\n", OVR_LEN[0], OVR_LEN[1]);
 	}
 
 	/* compare initialized DATA only, BSS content is either 0 or not existent in the file */
