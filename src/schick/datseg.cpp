@@ -4622,7 +4622,7 @@ struct struct_chest g_dng03_specialchests[14] = {
 	{ DNG_POS(0,11,12),	4, use_lockpicks_on_chest,	chest_protected_heavy,	DNG03_chest06_loot, 0, 0, 0 },
 	{ DNG_POS(1,14,14),	0, NULL,			NULL,			DNG03_chest07_loot, 0, 0, 0 },
 	{ DNG_POS(1,1,14),	1, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG03_chest08_loot, 0, 0, 0 },
-	{ DNG_POS(1,1,3),	6, use_lockpicks_on_chest,	chest_protected_normal, DNG03_chest09_loot, 0, 20000, 0 },
+	{ DNG_POS(1,1,3),	6, use_lockpicks_on_chest,	chest_protected_brutal, DNG03_chest09_loot, 0, 20000, 0 },
 	{ DNG_POS(1,14,0),	0, NULL,			NULL,			DNG03_chest10_loot, 0, 0, 0 },
 	{ DNG_POS(1,9,11),	0, NULL,			NULL,			DNG03_chest11_loot, 0, 0, 0 },
 	{ DNG_POS(1,10,7),	6, use_lockpicks_on_chest,	DNG03_chest12_trap,	DNG03_chest12_loot, 0, 0, 0 },
@@ -4640,7 +4640,7 @@ Bit16s g_dng05_trash_flag = 0; // ds:0x960e
 
 struct struct_chest g_dng06_specialchests[3] = {
 	{ DNG_POS(0,7,3), 0, NULL,			NULL,			DNG06_chest00_loot, 0, 0, 40, },
-	{ DNG_POS(1,9,4), 0, use_lockpicks_on_chest,	chest_poisoned1,	DNG06_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(1,9,4), 0, use_lockpicks_on_chest,	chest_poisoned2,	DNG06_chest01_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9610
 const char g_str_s_war[8] = "%s WAR "; // ds:0x964f
