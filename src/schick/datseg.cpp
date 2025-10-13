@@ -2522,10 +2522,10 @@ void (*g_location_handlers[19])(void) = {
 	do_location1, /* empty function */
 	do_temple,
 	do_tavern,
-	do_healer,	/* TODO: should be 0x1362:0x20 but is 0x1362:0x25*/
+	do_healer,
 	do_merchant,
 	do_wildcamp,
-	do_inn,		/* TODO: */
+	do_inn,
 	do_smith,
 	do_market,
 	show_citizen,
@@ -2535,7 +2535,7 @@ void (*g_location_handlers[19])(void) = {
 	show_entrance,
 	NULL,
 	do_house,
-	do_special_buildings, /* TODO: 0x1392:0x20 should be 0x1392:0x2f */
+	do_special_buildings,
 	do_citycamp,
 };  // ds:0x4c3b, (void (*)(void))[19];
 
@@ -4618,7 +4618,7 @@ struct struct_chest g_dng03_specialchests[14] = {
 	{ DNG_POS(0,11,1),	0, NULL,			NULL,			DNG03_chest02_loot, 0, 0, 48 },
 	{ DNG_POS(0,10,6),	6, use_lockpicks_on_chest,	chest_protected_heavy,	DNG03_chest03_loot, 0, 0, 0 },
 	{ DNG_POS(0,11,11),	4, use_lockpicks_on_chest,	chest_poisoned2,	DNG03_chest04_loot, 0, 0, 0 },
-	{ DNG_POS(0,4,12),	5, use_lockpicks_on_chest,	chest_ignifax_normal,	DNG03_chest05_loot, 0, 0, 0 },
+	{ DNG_POS(0,9,12),	5, use_lockpicks_on_chest,	chest_ignifax_normal,	DNG03_chest05_loot, 0, 0, 0 },
 	{ DNG_POS(0,11,12),	4, use_lockpicks_on_chest,	chest_protected_heavy,	DNG03_chest06_loot, 0, 0, 0 },
 	{ DNG_POS(1,14,14),	0, NULL,			NULL,			DNG03_chest07_loot, 0, 0, 0 },
 	{ DNG_POS(1,1,14),	1, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG03_chest08_loot, 0, 0, 0 },
@@ -4666,7 +4666,7 @@ struct struct_chest g_dng09_specialchests[8] = {
 	{ DNG_POS(0,12,8),	0, NULL,			NULL,			DNG09_chest00_loot, 0, 0, 8 },
 	{ DNG_POS(0,13,4),	0, NULL,			NULL,			DNG09_chest01_loot, 0, 0, 0 },
 	{ DNG_POS(0,14,5),	4, use_lockpicks_on_chest,	NULL,			DNG09_chest02_loot, 0, 0, 0 },
-	{ DNG_POS(1,12,11),	0, NULL,			NULL,			DNG09_chest03_loot, 0, 10, 0 },
+	{ DNG_POS(1,12,11),	0, NULL,			NULL,			DNG09_chest03_loot, 0, 160, 0 },
 	{ DNG_POS(1,9,8),	8, use_lockpicks_on_chest,	DNG09_chest04_trap,	DNG09_chest04_loot, 0, 0, 0 },
 	{ DNG_POS(1,1,1),	4, use_lockpicks_on_chest,	NULL,			DNG09_chest05_loot, 0, 1500, 0 },
 	{ DNG_POS(1,1,5),	8, use_lockpicks_on_chest,	chest_poisoned3,	DNG09_chest06_loot, 0, 25000, 0 },
