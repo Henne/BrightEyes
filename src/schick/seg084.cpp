@@ -23,6 +23,7 @@
 #include "seg075.h"
 #include "seg081.h"
 #include "seg082.h"
+#include "seg084.h"
 #include "seg092.h"
 #include "seg096.h"
 #include "seg097.h"

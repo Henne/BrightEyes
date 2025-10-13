@@ -23,6 +23,7 @@
 #include "seg096.h"
 #include "seg097.h"
 #include "seg105.h"
+#include "seg106.h"
 
 #if !defined(__BORLANDC__)
 namespace M302de {

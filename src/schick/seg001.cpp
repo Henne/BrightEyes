@@ -75,7 +75,7 @@ static unsigned long g_cd_audio_pos; // ds:0xbc4e
 static unsigned short g_cd_drive_no; // ds:0xbc52
 static unsigned char g_unkn_072[4]; // ds:0xbc54
 
-/* static prototpyes */
+/* static prototypes */
 static void CD_audio_stop_hsg(void);
 
 #if !defined(__BORLANDC__)

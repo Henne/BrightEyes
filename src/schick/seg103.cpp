@@ -20,6 +20,7 @@
 #include "seg047.h"
 #include "seg053.h"
 #include "seg097.h"
+#include "seg103.h"
 #include "seg104.h"
 
 #if !defined(__BORLANDC__)

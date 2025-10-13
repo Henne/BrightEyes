@@ -19,6 +19,7 @@
 #include "seg027.h"
 #include "seg032.h"
 #include "seg047.h"
+#include "seg080.h"
 #include "seg092.h"
 #include "seg096.h"
 #include "seg097.h"

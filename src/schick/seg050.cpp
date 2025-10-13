@@ -20,6 +20,7 @@
 #include "seg026.h"
 #include "seg046.h"
 #include "seg047.h"
+#include "seg050.h"
 #include "seg097.h"
 #include "seg098.h"
 #include "seg103.h"

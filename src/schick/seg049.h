@@ -8,7 +8,6 @@ void GRP_swap_heroes(void);
 void GRP_move_hero(signed short);
 /* 0x2a */
 void GRP_hero_sleep(struct struct_hero*, const signed int);
-
 /* 0x2f */
 void GRP_sort_heroes(void);
 /* 0x34 */
@@ -21,6 +20,7 @@ void GRP_switch_to_next(signed short);
 int GRP_compare_heroes(const void*, const void*);
 /* 0x48 */
 void GRP_save_pos(signed short);
+
 #if !defined(__BORLANDC__)
 }
 #endif

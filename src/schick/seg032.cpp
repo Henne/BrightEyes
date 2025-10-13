@@ -26,6 +26,7 @@
 #include "seg026.h"
 #include "seg027.h"
 #include "seg028.h"
+#include "seg032.h"
 #include "seg033.h"
 #include "seg034.h"
 #include "seg035.h"

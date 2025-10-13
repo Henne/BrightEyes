@@ -22,6 +22,7 @@
 #include "seg002.h"
 #include "seg004.h"
 #include "seg009.h"
+#include "seg027.h"
 
 #if !defined(__BORLANDC__)
 namespace M302de {

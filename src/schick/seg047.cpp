@@ -14,6 +14,7 @@
 
 #include "seg002.h"
 #include "seg007.h"
+#include "seg047.h"
 #include "seg097.h"
 
 #if !defined(__BORLANDC__)
