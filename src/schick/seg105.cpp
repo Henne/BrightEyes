@@ -300,6 +300,7 @@ signed int has_hero_stacked(struct struct_hero *hero, const signed int item_id)
 
 		/* has the hero the item */
 		/* is the number of items < 99 */
+		/* REMARK: should check if item is stackable */
 		if ((hero->inventory[i].item_id == item_id) && (hero->inventory[i].quantity < 99)) {
 
 			return i;

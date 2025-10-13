@@ -8,10 +8,8 @@ signed int use_magic(struct struct_hero*);
 signed short test_spell(struct struct_hero*, signed short, signed char);
 /* 0x2a */
 signed int use_spell(struct struct_hero*, const signed int, signed char);
-
 /* 0x2f */
 signed int select_spell(struct struct_hero*, signed int);
-
 /* 0x34 */
 /* static */
 void magic_heal_ani(const struct struct_hero*);
@@ -19,6 +17,8 @@ void magic_heal_ani(const struct struct_hero*);
 void FIG_do_spell_damage(signed short);
 /* 0x3e */
 signed short get_attackee_parade(void);
+/* 0x43 */
+signed short get_attackee_rs(void);
 /* 0x48 */
 signed short get_spell_cost(signed short, signed short);
 /* 0x4d */

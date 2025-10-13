@@ -6,6 +6,8 @@ namespace M302de {
 void unequip(struct struct_hero*, const signed int, const signed int);
 /* 0x25 */
 void add_equip_boni(struct struct_hero*, struct struct_hero*, const signed int, const signed int, const signed int);
+/* 0x2a */
+signed int has_hero_equipped(struct struct_hero*, const signed int);
 /* 0x2f */
 signed int give_hero_new_item(struct struct_hero*, const signed int, const signed int, const signed int);
 /* 0x34 */
@@ -17,7 +19,7 @@ signed int can_hero_use_item(const struct struct_hero*, const signed int);
 /* 0x43 */
 signed int can_item_at_pos(const signed int, const signed int);
 /* 0x48 */
-signed short has_hero_stacked(Bit8u *, unsigned short);
+signed int has_hero_stacked(struct struct_hero*, const signed int);
 /* 0x4d */
 /* static */
 signed int item_pleasing_ingerimm(const signed int);
