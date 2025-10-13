@@ -163,7 +163,7 @@ void tevent_037(void)
 							if (strcmp(g_text_input_buf, g_str_rad3))
 							{
 								sprintf(g_dtp2, get_tx2(50),
-									hero->alias, GUI_get_ptr(hero->sex, 0),
+									hero->alias, GUI_get_ptr2(hero->sex, 0),
 									hero->alias, GUI_get_ptr(hero->sex, 2));
 
 								GUI_output(g_dtp2);

@@ -14,10 +14,8 @@ char* GUI_name_singular(char*);
 Bit8u* GUI_2f2(signed short, signed short, signed short);
 //39
 char* GUI_get_ptr(const int, const int);
-#if defined(__BORLANDC__)
 //3e
 char* GUI_get_ptr2(signed short, signed short);
-#endif
 //43
 void GUI_print_string(char*, signed short, signed short);
 //48
@@ -40,6 +38,7 @@ void GUI_font_to_buf(Bit8u*);
 void GUI_write_char_to_screen_xy(unsigned short, unsigned short, unsigned short, unsigned short);
 //75
 void set_textcolor(signed short, signed short);
+/* 0x7a */
 void get_textcolor(signed short*, signed short*);
 //7f
 void GUI_print_loc_line(char*);

@@ -176,7 +176,6 @@ char* GUI_get_ptr(const int genus, const int causus)
 	}
 }
 
-#if defined(__BORLANDC__)
 //394
 /**
  */
@@ -192,7 +191,6 @@ char* GUI_get_ptr2(signed short genus, signed short causus)
 			((causus == 3) ? (g_grammar_article_der) : (g_grammar_article_die)));
 	}
 }
-#endif
 
 //3f8
 void GUI_write_char_to_screen(Bit8u *dst, signed short char_width, signed short char_height)

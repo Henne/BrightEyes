@@ -233,7 +233,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
+							(GUI_get_ptr2(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
 							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1)),
 							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2)));
 
