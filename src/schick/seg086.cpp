@@ -331,134 +331,134 @@ void DNG11_chest01_loot(struct struct_chest*)
 
 void DNG11_chest02_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest3;
+        chest->content = gs_dng11_chest3;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest03_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest4;
+        chest->content = gs_dng11_chest4;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest04_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest5;
+        chest->content = gs_dng11_chest5;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest05_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest6;
+        chest->content = gs_dng11_chest6;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest06_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = &gs_dng11_chest7;
+        chest->content = &gs_dng11_chest7;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest07_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest8;
+        chest->content = gs_dng11_chest8;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest08_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest9;
+        chest->content = gs_dng11_chest9;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest09_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest10;
+        chest->content = gs_dng11_chest10;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest10_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest11;
+        chest->content = gs_dng11_chest11;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest11_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest12;
+        chest->content = gs_dng11_chest12;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest12_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest13;
+        chest->content = gs_dng11_chest13;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 void DNG11_chest13_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+        Bit8u* ptr_bak = chest->content;
 
-        ((struct struct_chest*)chest)->content = gs_dng11_chest14;
+        chest->content = gs_dng11_chest14;
 
-        loot_simple_chest((struct struct_chest*)chest);
+        loot_simple_chest(chest);
 
-        ((struct struct_chest*)chest)->content = ptr_bak;
+        chest->content = ptr_bak;
 }
 
 /**

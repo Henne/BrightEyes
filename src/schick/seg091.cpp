@@ -216,13 +216,13 @@ void DNG13_chest00_open(struct struct_chest* chest)
 
 void DNG13_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* bak = ((struct struct_chest*)chest)->content;
+	Bit8u* bak = chest->content;
 
-	((struct struct_chest*)chest)->content = gs_dng13_chest0_content;
+	chest->content = gs_dng13_chest0_content;
 
-	loot_chest((struct struct_chest*)chest, get_tx(10), get_tx(11));
+	loot_chest(chest, get_tx(10), get_tx(11));
 
-	((struct struct_chest*)chest)->content = bak;
+	chest->content = bak;
 }
 
 void DNG13_chest01_open(struct struct_chest* chest)
@@ -232,13 +232,13 @@ void DNG13_chest01_open(struct struct_chest* chest)
 
 void DNG13_chest01_loot(struct struct_chest* chest)
 {
-	Bit8u* bak = ((struct struct_chest*)chest)->content;
+	Bit8u* bak = chest->content;
 
-	((struct struct_chest*)chest)->content = gs_dng13_chest1_content;
+	chest->content = gs_dng13_chest1_content;
 
-	loot_chest((struct struct_chest*)chest, get_tx(10), get_tx(11));
+	loot_chest(chest, get_tx(10), get_tx(11));
 
-	((struct struct_chest*)chest)->content = bak;
+	chest->content = bak;
 }
 
 /**

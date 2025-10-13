@@ -206,14 +206,14 @@ void loot_simple_chest(struct struct_chest *chest)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	((struct struct_chest*)chest)->key = 0;
+	chest->key = 0;
 
 	do {
 
 		item_no = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while((item_id = ((struct struct_chest*)chest)->content[item_no]) != 0xff) {
+		while((item_id = chest->content[item_no]) != 0xff) {
 
 			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
 		}
@@ -236,10 +236,10 @@ void loot_simple_chest(struct struct_chest *chest)
 			if (item_no != -2) {
 
 				/* if not pressed ESC */
-				if (get_item(((struct struct_chest*)chest)->content[item_no], 1, 1)) {
+				if (get_item(chest->content[item_no], 1, 1)) {
 
 					/* got the item in inventory => remove from chest */
-					delete_chest_item((struct struct_chest*)chest, item_no);
+					delete_chest_item(chest, item_no);
 				} else {
 					/* group has not taken the item */
 					item_no = -2;
@@ -460,7 +460,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 
 		if (item_pos != -2) {
 
-			test_val = test_skill(hero, TA_SCHLOESSER, ((struct struct_chest*)chest_ptr)->mod);
+			test_val = test_skill(hero, TA_SCHLOESSER, (chest_ptr)->mod);
 
 			if (test_val == -99) {
 
@@ -470,15 +470,15 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 				hero->inventory[item_pos].flags.broken = 1;
 
 				/* ... and you trigger the trap */
-				if (((struct struct_chest*)chest_ptr)->trap) {
-					((struct struct_chest*)chest_ptr)->trap();
+				if ((chest_ptr)->trap) {
+					(chest_ptr)->trap();
 				}
 
 			} else if (test_val <= 0) {
 
 				/* trigger the trap */
-				if (((struct struct_chest*)chest_ptr)->trap) {
-					((struct struct_chest*)chest_ptr)->trap();
+				if ((chest_ptr)->trap) {
+					(chest_ptr)->trap();
 				}
 
 			} else {
@@ -487,11 +487,11 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 				add_hero_ap(hero, 1);
 
 
-				if (((struct struct_chest*)chest_ptr)->loot) {
+				if ((chest_ptr)->loot) {
 
-					((struct struct_chest*)chest_ptr)->loot(chest_ptr);
+					(chest_ptr)->loot(chest_ptr);
 
-					if (((struct struct_chest*)chest_ptr)->trap == chest_protected_heavy) {
+					if ((chest_ptr)->trap == chest_protected_heavy) {
 						add_hero_ap(hero, 5);
 					}
 				}
@@ -513,18 +513,18 @@ void use_key_on_chest(struct struct_chest* chest)
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
-	if ((key_pos = get_item_pos(hero, ((struct struct_chest*)chest)->key)) != -1) {
+	if ((key_pos = get_item_pos(hero, chest->key)) != -1) {
 
 		if (!hero->inventory[key_pos].flags.broken) {
 
-			((struct struct_chest*)chest)->loot(chest);
+			chest->loot(chest);
 
 			g_get_extra_loot = 1;
 		}
 
 	} else {
 
-		((struct struct_chest*)chest)->trap();
+		chest->trap();
 	}
 }
 
