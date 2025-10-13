@@ -126,7 +126,7 @@ signed short do_travel_mode(void)
 					tw_bak = g_textbox_width;
 					g_textbox_width = 4;
 
-					answer = GUI_radio(g_text_output_buf, (signed char)i,
+					answer = GUI_radio(g_text_output_buf, i,
 								destinations_tab[0], destinations_tab[1], destinations_tab[2],
 								destinations_tab[3], destinations_tab[4], destinations_tab[5]) - 1;
 
@@ -181,10 +181,10 @@ signed short do_travel_mode(void)
 
 					if (!gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 					{
-						gs_current_town = ((signed char)gs_travel_destination_town_id);
+						gs_current_town = gs_travel_destination_town_id;
 						gs_x_target_bak = gs_travel_destination_x;
 						gs_y_target_bak = gs_travel_destination_y;
-						gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
+						gs_direction = (gs_travel_destination_viewdir + 2) & 3;
 
 					} else if (g_game_state == GAME_STATE_MAIN && gs_travel_detour != 99)
 					{
