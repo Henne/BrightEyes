@@ -160,7 +160,7 @@ signed short do_travel_mode(void)
 					g_wallclock_update = 1;
 
 					TM_func1(signpost_ptr->end_points[answer],
-						(g_land_routes[signpost_ptr->end_points[answer]].town1_id == gs_current_town ? 0 : 1));
+						(g_land_routes[signpost_ptr->end_points[answer] - 1].town1_id == gs_current_town ? 0 : 1));
 					g_wallclock_update = 0;
 
 					if (g_route59_flag)
@@ -199,8 +199,8 @@ signed short do_travel_mode(void)
 					for (i = 0, l4 = -1; i < 52; i++)
 					{
 						if (is_mouse_in_rect(l_di - 4, answer - 4,
-								(l_di = g_town_positions[i + 1].x),
-								(answer = g_town_positions[i + 1].y)))
+								(l_di = g_town_positions[i].x) + 4,
+								(answer = g_town_positions[i].y) + 4))
 						{
 							l4 = i;
 							break;
