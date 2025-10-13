@@ -602,7 +602,7 @@ void tevent_043(void)
 	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent043_flag) ||
 		gs_tevent043_flag)
 	{
-		TRV_found_replenish_place(0);
+		TRV_found_camp_place(0);
 		gs_tevent043_flag = 1;
 	}
 }
