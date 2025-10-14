@@ -203,13 +203,6 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 {
 	signed char cb_val = get_cb_val(x + dx, y + dy);
 
-#if defined(__BORLANDC__)
-	/* Sync-Point */
-	asm { db 0x66, 0x90; }
-	asm { db 0x66, 0x90; }
-	asm { db 0x66, 0x90; }
-#endif
-
 	if (mode == 0) {
 
 		if ( ((cb_val > 0) && (cb_val < 10) && !(get_hero(cb_val - 1))->flags.dead && !(get_hero(cb_val - 1))->flags.unconscious) || (
@@ -222,6 +215,13 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 
 	} else if (mode == 1) {
 
+#if defined(__BORLANDC__)
+		/* Sync-Point */
+		asm { db 0x66, 0x90; }
+		asm { nop; }
+		asm { nop; }
+#endif
+
 		/* is a living enemy */
 		if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)
 		{
@@ -233,7 +233,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	} else if (mode == 2) {
 
 		/* is a living, conscious hero */
-		if ((cb_val > 0) && (cb_val < 10) && !(get_hero(cb_val - 1))->flags.dead && !(get_hero(cb_val - 1))->flags.unconscious)
+		if ((cb_val > 0) && (cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious)
 		{
 			return 1;
 		} else {
@@ -312,6 +312,14 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 					}
 				}
 
+#if defined(__BORLANDC__)
+				/* Sync-Point */
+				asm { db 0x66, 0x90; }
+				asm { db 0x66, 0x90; }
+				asm { db 0x66, 0x90; }
+	//			asm { nop; }
+	//			asm { nop; }
+#endif
 			} else if (mode == 1) {
 				/* attack foe first */
 				if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)

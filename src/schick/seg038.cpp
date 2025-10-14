@@ -380,12 +380,13 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 			cb_or_dist_entry = *(g_chessboard_cpy + (y * 25) + x);
 
 			if (cb_or_dist_entry > 0) {
-				if ((cb_or_dist_entry < 10) && ((get_hero(cb_or_dist_entry - 1))->flags.dead || (get_hero(cb_or_dist_entry - 1))->flags.unconscious))
+				if ((cb_or_dist_entry < 10) && (get_hero(cb_or_dist_entry - 1)->flags.dead || get_hero(cb_or_dist_entry - 1)->flags.unconscious))
 				{
 					/* cb_or_dist_entry is a dead or unsonscious hero */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
 
-				} else if ((cb_or_dist_entry >= 10) && (cb_or_dist_entry < 30) && g_enemy_sheets[cb_or_dist_entry - 10].flags.dead) {
+				} else if ((cb_or_dist_entry >= 10) && (cb_or_dist_entry < 30) && ((struct enemy_flags)g_enemy_sheets[cb_or_dist_entry - 10].flags).dead) {
+
 					/* test 'dead' flag */
 					/* cb_or_dist_entry is a dead enemy. tail parts of two-squares enemies are not considered. */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;

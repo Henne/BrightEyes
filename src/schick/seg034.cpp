@@ -64,9 +64,9 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 			}
 
 		} else if (((fighter_id >= 50) ||
-				((fighter_id >= 10) && (fighter_id < 30) && g_enemy_sheets[fighter_id - 10].flags.dead) ||
-				((fighter_id >= 30) && (fighter_id < 50) && g_enemy_sheets[fighter_id - 30].flags.dead) ||
-				((fighter_id < 10) && (get_hero(fighter_id - 1))->flags.dead))
+				((fighter_id >= 10) && (fighter_id < 30) && ((struct enemy_flags)g_enemy_sheets[fighter_id - 10].flags).dead) ||
+				((fighter_id >= 30) && (fighter_id < 50) && ((struct enemy_flags)g_enemy_sheets[fighter_id - 30].flags).dead) ||
+				((fighter_id < 10) && get_hero(fighter_id - 1)->flags.dead))
 				&&
 				((fighter_id_target >= 0) &&
 				 ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))))
@@ -167,7 +167,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 	update_mouse_cursor();
 
 	g_mouse_posx_bak = g_mouse_posx = x_screen = cb_base_x + 10 * (*px + *py);
-	g_mouse_posy_bak = g_mouse_posy = y_screen = cb_base_y + 5 * (*px + *py);
+	g_mouse_posy_bak = g_mouse_posy = y_screen = cb_base_y + 5 * (*px - *py);
 
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
@@ -265,25 +265,25 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 		if (g_action == ACTION_ID_RIGHT) {
 
 			if (seg034_000(x, y, *px, *py, 1, 0, max_range)) {
-				*px++;
+				(*px)++;
 			}
 
 		} else if (g_action == ACTION_ID_LEFT) {
 
 			if (seg034_000(x, y, *px, *py, -1, 0, max_range)) {
-				*px--;
+				(*px)--;
 			}
 
 		} else if (g_action == ACTION_ID_UP) {
 
 			if (seg034_000(x, y, *px, *py, 0, 1, max_range)) {
-				*py++;
+				(*py)++;
 			}
 
 		} else if (g_action == ACTION_ID_DOWN) {
 
 			if (seg034_000(x, y, *px, *py, 0, -1, max_range)) {
-				*py--;
+				(*py)--;
 			}
 		}
 
@@ -468,7 +468,7 @@ void FIG_latecomers(void)
 						FIG_add_to_list(p_enemy->fighter_id);
 					}
 
-					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, (signed short)g_current_fight->monsters[i].viewdir);
+					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, (signed short)g_current_fight->monsters[i].viewdir); /* BAE-TODO: linker error */
 
 					FIG_make_visible(p_enemy->fighter_id);
 
