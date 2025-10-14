@@ -239,10 +239,10 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							GUI_output(get_tx(3));
 						} else if (((target_id < 10) && (get_hero(target_id - 1))->flags.dead) ||
 								//((target_id >= 10) && (target_id < 30) && (g_enemy_sheets[target_id - 10].flags.dead || g_enemy_sheets[target_id - 10].flags.dead)) ||
-								((target_id >= 10) && (target_id < 30) && (g_enemy_sheets[target_id].flags.dead || g_enemy_sheets[target_id].flags.mushroom)) ||
+								((target_id >= 10) && (target_id < 30) && (((struct enemy_flags)g_enemy_sheets[target_id - 10].flags).dead || ((struct enemy_flags)g_enemy_sheets[target_id - 10].flags).mushroom)) ||
 								/* TODO: check target_id < 50 */
 								//((target_id >= 30) && (g_enemy_sheets[target_id - 30].flags.dead || g_enemy_sheets[target_id - 30].flags.mushroom)))
-								((target_id >= 30) && (g_enemy_sheets[target_id].flags.dead || g_enemy_sheets[target_id].flags.mushroom)))
+								((target_id >= 30) && (((struct enemy_flags)g_enemy_sheets[target_id - 30].flags).dead || ((struct enemy_flags)g_enemy_sheets[target_id - 30].flags).mushroom)))
 						{
 							GUI_output(get_tx(29));
 
@@ -794,8 +794,8 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 					/* TODO: check fighter_id upper bound */
 					//if (((hero->enemy_id >= 10) && g_enemy_sheets[hero->enemy_id - 10].flags.dead) || /* check 'dead' flag */
-					if (((hero->enemy_id >= 10) && g_enemy_sheets[hero->enemy_id].flags.dead) || /* check 'dead' flag */
-						((hero->enemy_id < 10) && (get_hero(hero->enemy_id - 1))->flags.dead))
+					if (((hero->enemy_id >= 10) && ((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).dead) || /* check 'dead' flag */
+						((hero->enemy_id < 10) && get_hero(hero->enemy_id - 1)->flags.dead))
 					{
 
 						GUI_output(get_tx(29));
@@ -804,7 +804,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						done = 0;
 
 					/* TODO: check fighter_id upper bound */
-					} else if (((hero->enemy_id >= 10) && ((struct enemy_sheet*)(&g_enemy_sheets[hero->enemy_id] - 10))->flags.scared) || /* check 'scared' flag */
+					} else if (((hero->enemy_id >= 10) && ((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).scared) || /* check 'scared' flag */
 						((hero->enemy_id < 10) && ((get_hero(hero->enemy_id - 1))->flags.scared)))
 					{
 
@@ -813,7 +813,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						hero->enemy_id = 0;
 						done = 0;
 
-					} else if (((hero->action_id == FIG_ACTION_SPELL) ||	(hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, hero_pos))
+					} else if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, hero_pos))
 					{
 						/* GUI_output(get_tx(29)); */
 						hero->action_id = FIG_ACTION_WAIT;

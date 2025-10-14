@@ -297,7 +297,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					} else if (txt_id == 20) {
 
-						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_ISLEIF+1));
+						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_ISLEIF+1));
 
 					} else {
 

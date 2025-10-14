@@ -601,12 +601,12 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 
 			handicap += g_enemy_sheets[hero->enemy_id - 10].mr;
 
-			//if (g_enemy_sheets[hero->enemy_id - 10].flags.mushroom) {
-			if (g_enemy_sheets[hero->enemy_id].flags.mushroom) {
+			//if (g_enemy_sheets[hero->enemy_id - 10].flags.mushroom) {	/* BAE-TODO: different code */
+			if (((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).mushroom) { /* BAE-TODO: good */
 				return 0;
 			}
 		} else {
-			handicap += (get_hero(hero->enemy_id - 1))->mr;
+			handicap += get_hero(hero->enemy_id - 1)->mr;
 		}
 	}
 

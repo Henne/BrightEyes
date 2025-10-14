@@ -599,7 +599,7 @@ void FIG_do_round(void)
 
 							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
 							//if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead)
-							if (g_enemy_sheets[hero->enemy_id].flags.dead)
+							if (((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).dead)
 							{
 								/* attacked enemy is dead */
 								if (is_in_byte_array(g_enemy_sheets[hero->enemy_id - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
@@ -622,7 +622,7 @@ void FIG_do_round(void)
 									if (fighter_ptr->obj_id >= 0) {
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
-										/* TODO: passing of the 3rd parameter is different */
+										/* BAE-TODO: passing of the 3rd parameter is different */
 										FIG_set_cb_field(y, x, ((unsigned char)fighter_ptr->obj_id));
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
@@ -639,6 +639,7 @@ void FIG_do_round(void)
 					g_fig_char_pic = 0;
 				}
 			}
+#if !defined(__BORLANDC__)	// SYNC-Point
 
 			if (!FIG_fight_continues()) {
 
@@ -647,6 +648,16 @@ void FIG_do_round(void)
 			}
 
 			nr_hero_action_phases_left_in_round--;
+#else
+//			asm { nop; };
+			asm { db 0x0f, 0x1f, 0x40, 0x00; }
+			asm { db 0x0f, 0x1f, 0x40, 0x00; }
+			asm { db 0x0f, 0x1f, 0x00; }
+//			asm { nop; };
+//			asm { nop; };
+			asm { nop; };
+			asm { nop; };
+#endif
 
 		} else {
 			/* enemies on turn */
@@ -690,7 +701,7 @@ void FIG_do_round(void)
 
 							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
 							//if (g_enemy_sheets[enemy->enemy_id - 10].flags.dead)
-							if (g_enemy_sheets[enemy->enemy_id].flags.dead) /* check 'dead' flag */
+							if (((struct enemy_flags)(g_enemy_sheets[enemy->enemy_id -10].flags)).dead) /* check 'dead' flag */
 							{
 
 								/* attacked enemy is dead */
@@ -758,7 +769,12 @@ void FIG_do_round(void)
 						}
 #endif
 
+
+#if !defined(__BORLANDC__)	// SYNC-Point
 						herokeeping();
+#else
+						asm { db 0x0f, 0x1f, 0x40, 0x00; }
+#endif
 					}
 
 					g_fig_enemy_pic = 0;
@@ -772,9 +788,9 @@ void FIG_do_round(void)
 
 			nr_enemy_action_phases_left_in_round--;
 		}
-#if 0
+
 		nr_action_phases_left_in_turn--;
-#endif
+
 
 		if (g_fig_cb_marker_id != -1) {
 

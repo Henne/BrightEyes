@@ -296,7 +296,7 @@ void spell_hexenknoten(void)
 
 	FIG_add_to_list(-1);
 
-	place_obj_on_cb(x, y, 127, 127, 0);
+	place_obj_on_cb(x, y, 127, 127, 0); /* BAE-TODO: not linked correctly: 2xBit16, 3xBit8 */
 }
 
 
