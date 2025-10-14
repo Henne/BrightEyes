@@ -668,22 +668,22 @@ signed short TM_enter_target_town_viewdir(signed short coordinates)
 void TM_draw_track(signed short a1, signed short length, signed short direction, signed short restore)
 {
 	signed short i;
-	struct struct_point *ptr;
+	signed short *ptr;
 	Bit8u* fb_start;
 
 	fb_start = g_vga_memstart;
-	ptr = (struct struct_point*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (a1 - 1))) + 0xecL);
+	ptr = (signed short*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (a1 - 1))) + 0xecL);
 	ptr++;
 
 	if (direction)
 	{
 		/* move ptr to the last valid value */
-		while (ptr->x != -1)
+		while (ptr[0] != -1)
 		{
-			ptr++;
+			ptr+=2;
 		}
 
-		ptr--;
+		ptr-=2;
 	}
 
 	for (i = 0; i < length; i++)
@@ -691,10 +691,10 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 		if (restore == 0)
 		{
 			/* save the old pixel from the map */
-			g_trv_detour_pixel_bak[i] = *(fb_start + ptr->y * 320 + ptr->x);
+			g_trv_detour_pixel_bak[i] = *(fb_start + ptr[1] * 320 + ptr[0]);
 
 			/* write a new one */
-			*(fb_start + ptr->y * 320 + ptr->x) = 0x1c;
+			*(fb_start + ptr[1] * 320 + ptr[0]) = 0x1c;
 
 			/* move the pointer */
 			ptr += (!direction ? 2 : -2);
@@ -703,7 +703,7 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 			ptr += (!direction ? 2 : -2);
 
 			/* restore the pixel from the map */
-			*(fb_start + ptr->y * 320 + ptr->x) = g_trv_detour_pixel_bak[i];
+			*(fb_start + ptr[1] * 320 + ptr[0]) = g_trv_detour_pixel_bak[i];
 		}
 	}
 }

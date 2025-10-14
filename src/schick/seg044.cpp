@@ -713,7 +713,7 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 			dir = 0;
 	}
 
-	if (caster == target)
+	if ((signed char)caster == (signed char)target)
 		dir = enemy->viewdir;
 
 	/* this is true if a monster attacks a hero */
