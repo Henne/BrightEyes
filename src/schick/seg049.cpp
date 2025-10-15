@@ -430,7 +430,7 @@ void GRP_swap_heroes(void)
 
 			g_wildcamp_guardstatus[hero1_no] = g_wildcamp_guardstatus[hero2_no];
 			g_wildcamp_magicstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
-			g_wildcamp_replstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
+			g_wildcamp_replstatus[hero1_no] = g_wildcamp_replstatus[hero2_no];
 			g_wildcamp_herbstatus[hero1_no] = g_wildcamp_herbstatus[hero2_no];
 
 			*(get_hero(hero2_no)) = tmp; /* struct_copy */
