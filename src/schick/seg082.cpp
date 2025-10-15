@@ -297,7 +297,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 
 	amap_ptr = g_dng_map;
 
-	if (amap_ptr[MAP_POS(gs_x_target, gs_y_target)] == 4)
+	if (*(amap_ptr + MAP_POS(gs_x_target, gs_y_target)) == 4)
 	{
 		/* TODO: no forced decision here ? */
 		i = GUI_radio(get_tx(4), 3, get_tx(5), get_tx(6), get_tx(7));
