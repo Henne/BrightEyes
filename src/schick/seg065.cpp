@@ -540,7 +540,7 @@ void show_outro(void)
 	/* reset the timers */
 	sub_ingame_timers(DAYS(30));
 	sub_mod_timers(DAYS(30));
-	sub_light_timers(100);
+	sub_light_timers(100);	/* BAE-TODO: not linked correctly, argument is Byte */
 
 	/* give the heroes the reward and restore them */
 	hero = get_hero(0);
