@@ -429,8 +429,9 @@ void mod_clock_pos(signed short town_id)
 	signed short map_x;
 	signed short map_y;
 
-	map_x = g_town_positions[town_id].x;
-	map_y = g_town_positions[town_id].y;
+	map_x = g_town_positions[town_id - 1].x;
+	//map_y = g_town_positions[town_id - 1].y;
+	map_y = *(signed short*)((Bit8u*)g_town_positions - sizeof(signed short) + 2 * sizeof(signed short) * town_id);
 
 	val = map_x >= 0 && map_x <= 159 ?
 		(map_y >= 0 && map_y <= 99 ? 3 : 1) :
