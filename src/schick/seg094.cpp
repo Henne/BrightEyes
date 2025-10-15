@@ -113,9 +113,9 @@ void TM_func1(signed short route_no, signed short backwards)
 	g_traveling = 1;
 
 	last_tevent_no = -1;
-	gs_route_course_ptr = (Bit8u*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))) + 0xecL);
+	gs_route_course_ptr = (Bit16s*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
-	gs_route_course_ptr += 4;
+	gs_route_course_ptr += 2;
 
 	memset((void*)g_trv_track_pixel_bak, 0xaa, 500);
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
@@ -135,11 +135,11 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	if (backwards)
 	{
-		while (((struct struct_point*)gs_route_course_ptr)->x != -1)
+		while (gs_route_course_ptr[0] != -1)
 		{
-			gs_route_course_ptr += 4;
+			gs_route_course_ptr += 2;
 		}
-		gs_route_course_ptr -= 4;
+		gs_route_course_ptr -= 2;
 	}
 
 	memset((void*)gs_route_tevents, (gs_route_stepcount = 0), 15 * sizeof(struct_route_tevent));
@@ -200,14 +200,12 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	gs_route_stepcount = gs_route_progress = gs_travel_detour = 0;
 
-	while (host_readws(gs_route_course_ptr + 2 * (gs_route_mousehover = 0)) != -1 &&
+	while (gs_route_course_ptr[(gs_route_mousehover = 0)] != -1 &&
 		!gs_travel_detour &&
 		g_game_state == GAME_STATE_MAIN)
 	{
-		if (is_mouse_in_rect(((struct struct_point*)gs_route_course_ptr)->x - 16,
-					((struct struct_point*)gs_route_course_ptr)->y - 16,
-					((struct struct_point*)gs_route_course_ptr)->x + 16,
-					((struct struct_point*)gs_route_course_ptr)->y + 16))
+		if (is_mouse_in_rect(gs_route_course_ptr[0] - 16, gs_route_course_ptr[1] - 16,
+					gs_route_course_ptr[0] + 16, gs_route_course_ptr[1] + 16))
 		{
 			update_mouse_cursor();
 			gs_route_mousehover = 1;
@@ -218,20 +216,19 @@ void TM_func1(signed short route_no, signed short backwards)
 			gs_route_stepcount--;
 
 			/* restore the pixel from the map */
-			*(fb_start + ((struct struct_point*)gs_route_course_ptr)->y * 320
-				+ ((struct struct_point*)gs_route_course_ptr)->x) =
+			*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
 				g_trv_track_pixel_bak[gs_route_stepcount];
 
 			g_trv_track_pixel_bak[gs_route_stepcount] = 0xaa;
 		} else {
 			/* save the old pixel from the map */
 			g_trv_track_pixel_bak[gs_route_stepcount] =
-				*(fb_start + ((struct struct_point*)gs_route_course_ptr)->y * 320 + ((struct struct_point*)gs_route_course_ptr)->x);
+				*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]);
 
 			gs_route_stepcount++;
 
 			/* write a new pixel */
-			*(fb_start + ((struct struct_point*)gs_route_course_ptr)->y * 320 + ((struct struct_point*)gs_route_course_ptr)->x) = 0x1c;
+			*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) = 0x1c;
 		}
 
 		if (gs_route_mousehover) {
@@ -426,7 +423,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			g_pp20_index = 5;
 			gs_trv_i = 0;
-			gs_route_course_ptr2 = (Bit16s*)gs_route_course_start;
+			gs_route_course_ptr2 = gs_route_course_start;
 
 			if (route_no == 59)
 			{
@@ -465,10 +462,10 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			gs_trv_return = (gs_trv_return == 1 ? 2: 0);
 
-			gs_route_course_ptr += 2 * ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? -2 : 2);
+			gs_route_course_ptr += ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? -2 : 2);
 		}
 
-		gs_route_course_ptr += 2 * ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? 2 : -2);
+		gs_route_course_ptr += ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? 2 : -2);
 	}
 
 	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_trv_return != 2)
@@ -476,12 +473,12 @@ void TM_func1(signed short route_no, signed short backwards)
 		update_mouse_cursor();
 
 		do {
-			gs_route_course_ptr += 2 * (!backwards ? -2 : 2);
+			gs_route_course_ptr += (!backwards ? -2 : 2);
 			gs_route_stepcount--;
-			*(fb_start + ((struct struct_point*)gs_route_course_ptr)->y * 320 + ((struct struct_point*)gs_route_course_ptr)->x) =
+			*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
 				g_trv_track_pixel_bak[gs_route_stepcount];
 
-		} while (((struct struct_point*)gs_route_course_ptr)->x != -1);
+		} while (gs_route_course_ptr[0] != -1);
 
 		if (route_no == 59)
 		{

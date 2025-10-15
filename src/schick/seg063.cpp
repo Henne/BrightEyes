@@ -465,10 +465,10 @@ void sea_travel(signed short passage, signed short dir)
 	gs_sea_travel_passage_no = passage < 7 ? passage : passage - 7;
 
 	off = host_readd(gs_sea_travel_courses + 4 * gs_sea_travel_passage_no);
-	gs_route_course_ptr = gs_sea_travel_courses + off + 4 * gs_route_mousehover;
+	gs_route_course_ptr = (Bit16s*)(gs_sea_travel_courses + off + 4 * gs_route_mousehover);
 	ptr = g_vga_memstart;
 
-	gs_route_course_ptr += 4;
+	gs_route_course_ptr += 2;
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	gs_travel_speed = 10 * gs_sea_travel_passage_speed1; /* speed [unit: 10m per hour] */
@@ -489,11 +489,11 @@ void sea_travel(signed short passage, signed short dir)
 	if (dir) {
 		/* for reverse direction, point gs_route_course_ptr to end of route */
 
-		while (((struct struct_point*)gs_route_course_ptr)->x != -1) {
-			gs_route_course_ptr += 4;
+		while (gs_route_course_ptr[0] != -1) {
+			gs_route_course_ptr += 2;
 		}
 
-		gs_route_course_ptr -= 4;
+		gs_route_course_ptr -= 2;
 	}
 
 	gs_route_course_start = gs_route_course_ptr;
@@ -534,24 +534,22 @@ void sea_travel(signed short passage, signed short dir)
 	gs_route_stepcount = gs_route_progress = gs_route_dayprogress = gs_travel_detour = 0;
 	g_travel_herokeeping = 1;
 
-	while (host_readws(gs_route_course_ptr + 2 * (gs_route_mousehover = 0)) != -1 && !gs_travel_detour)
+	while (gs_route_course_ptr[(gs_route_mousehover = 0)] != -1 && !gs_travel_detour)
 	{
 
-		if (is_mouse_in_rect(((struct struct_point*)gs_route_course_ptr)->x - 16,
-					((struct struct_point*)gs_route_course_ptr)->y - 16,
-					((struct struct_point*)gs_route_course_ptr)->x + 16,
-					((struct struct_point*)gs_route_course_ptr)->y + 16))
+		if (is_mouse_in_rect(gs_route_course_ptr[0] - 16, gs_route_course_ptr[1] - 16,
+					gs_route_course_ptr[0] + 16, gs_route_course_ptr[1] + 16))
 		{
 			update_mouse_cursor();
 			gs_route_mousehover = 1;
 		}
 
 		g_trv_track_pixel_bak[gs_route_stepcount] =
-			*(ptr + ((struct struct_point*)gs_route_course_ptr)->y * 320 + ((struct struct_point*)gs_route_course_ptr)->x);
+			*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]);
 
 		gs_route_stepcount++;
 
-		*(ptr + ((struct struct_point*)gs_route_course_ptr)->y * 320 + ((struct struct_point*)gs_route_course_ptr)->x) = 0x1f;
+		*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) = 0x1f;
 
 		if (gs_route_mousehover) {
 			refresh_screen_size();
@@ -642,7 +640,7 @@ void sea_travel(signed short passage, signed short dir)
 
 			gs_trv_i = 0;
 
-			for (gs_route_course_ptr2 = (Bit16s*)gs_route_course_start;
+			for (gs_route_course_ptr2 = gs_route_course_start;
 					g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
 					gs_route_course_ptr2 += (!dir ? 2 : -2))
 			{
@@ -657,7 +655,7 @@ void sea_travel(signed short passage, signed short dir)
 			g_request_refresh = 0;
 		}
 
-		gs_route_course_ptr += 2 * (!dir ? 2 : -2);
+		gs_route_course_ptr += (!dir ? 2 : -2);
 	}
 
 	g_travel_herokeeping = 0;
@@ -668,16 +666,16 @@ void sea_travel(signed short passage, signed short dir)
 
 		do {
 			if (!dir) {
-				gs_route_course_ptr -= 4;
+				gs_route_course_ptr -= 2;
 			} else {
-				gs_route_course_ptr += 4;
+				gs_route_course_ptr += 2;
 			}
 			gs_route_stepcount--;
 
-			*(ptr + ((struct struct_point*)gs_route_course_ptr)->y * 320 + ((struct struct_point*)gs_route_course_ptr)->x) =
+			*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
 				g_trv_track_pixel_bak[gs_route_stepcount];
 
-		} while (((struct struct_point*)gs_route_course_ptr)->x != -1);
+		} while (gs_route_course_ptr[0] != -1);
 
 		refresh_screen_size();
 	}

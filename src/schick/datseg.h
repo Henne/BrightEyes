@@ -1295,8 +1295,8 @@ extern Bit16s gs_passage_octopus_flag;			//ds:0x4252; seg063
 extern Bit16s gs_passage_octopus_position;		//ds:0x4254; seg063
 extern Bit16s gs_passage_pirates_flag;			//ds:0x4256; seg063
 extern Bit16s gs_passage_pirates_position;		//ds:0x4258; seg063
-extern Bit8u *gs_route_course_ptr;			//ds:0x425a; seg063, seg094
-extern Bit8u *gs_route_course_start;			//ds:0x425e; seg063, seg094
+extern Bit16s *gs_route_course_ptr;			//ds:0x425a; seg063, seg094
+extern Bit16s *gs_route_course_start;			//ds:0x425e; seg063, seg094
 extern Bit16s *gs_route_course_ptr2;			//ds:0x4262; seg063, seg094
 extern Bit8u *gs_sea_travel_courses;			//ds:0x4266; seg063
 extern struct struct_tevent *gs_tevents_tab_ptr;	//ds:0x426a; seg094
