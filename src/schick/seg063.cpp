@@ -642,11 +642,11 @@ void sea_travel(signed short passage, signed short dir)
 
 			gs_trv_i = 0;
 
-			for (gs_route_course_ptr2 = gs_route_course_start;
+			for (gs_route_course_ptr2 = (Bit16s*)gs_route_course_start;
 					g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
-					gs_route_course_ptr += 2 * (!dir ? 2 : -2))
+					gs_route_course_ptr2 += (!dir ? 2 : -2))
 			{
-				*(ptr + ((struct struct_point*)gs_route_course_ptr2)->y * 320 + ((struct struct_point*)gs_route_course_ptr2)->x) = 0x1f;
+				*(ptr + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) = 0x1f;
 			}
 
 			refresh_screen_size();

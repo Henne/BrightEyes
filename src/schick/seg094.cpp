@@ -426,7 +426,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			g_pp20_index = 5;
 			gs_trv_i = 0;
-			gs_route_course_ptr2 = gs_route_course_start;
+			gs_route_course_ptr2 = (Bit16s*)gs_route_course_start;
 
 			if (route_no == 59)
 			{
@@ -436,8 +436,8 @@ void TM_func1(signed short route_no, signed short backwards)
 			/* Redraw the track on the map */
 			while (g_trv_track_pixel_bak[gs_trv_i++] != 0xaa)
 			{
-				*(fb_start + ((struct struct_point*)gs_route_course_ptr2)->y * 320 + ((struct struct_point*)gs_route_course_ptr2)->x) =  0x1c;
-				gs_route_course_ptr2 += 2 * (!backwards ? 2 : -2);
+				*(fb_start + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) =  0x1c;
+				gs_route_course_ptr2 += (!backwards ? 2 : -2);
 			}
 
 			refresh_screen_size();

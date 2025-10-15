@@ -2019,7 +2019,7 @@ Bit16s gs_passage_pirates_position = 0; // ds:0x4258
 #if defined (__BORLANDC__)
 Bit8u  *gs_route_course_ptr = NULL;			// ds:0x425a;
 Bit8u  *gs_route_course_start = NULL;			// ds:0x425e;
-Bit8u  *gs_route_course_ptr2 = NULL;			// ds:0x4262;
+Bit16s *gs_route_course_ptr2 = NULL;			// ds:0x4262;
 Bit8u  *gs_sea_travel_courses = NULL;			// ds:0x4266
 struct struct_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr = NULL;	// ds:0x426e
@@ -5990,7 +5990,7 @@ struct struct_hero *gs_ruin_hero;			// ds:0x3e1c;
 struct struct_hero *gs_main_acting_hero;		// ds:0x3e20;
 Bit8u  *gs_route_course_ptr;				// ds:0x425a;
 Bit8u  *gs_route_course_start;				// ds:0x425e;
-Bit8u  *gs_route_course_ptr2;				// ds:0x4262;
+Bit16s *gs_route_course_ptr2;				// ds:0x4262;
 Bit8u *gs_sea_travel_courses;				// ds:0x4266
 struct struct_tevent *gs_tevents_tab_ptr;		// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e
