@@ -50,7 +50,7 @@ void passages_init(void)
 
 	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
 
-		route->frequency = (unsigned char)random_interval(0, route->frequency);
+		route->passage_timer = (unsigned char)random_interval(0, route->frequency);
 		route->price_mod = (unsigned char)random_interval(70, 130);
 
 		si = random_schick(100);
