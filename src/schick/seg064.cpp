@@ -286,7 +286,7 @@ unsigned short passage_arrival(void)
 	/* find the harbor of the destination town. */
 
 	do {
-		if (harbor_ptr->town == gs_travel_destination_town_id) {
+		if ((unsigned char)harbor_ptr->town == gs_travel_destination_town_id) {
 			si = 0;
 			do {
 				/* tmp ranges over the IDs of the linked sea routes, diminished by 1. */
@@ -298,7 +298,7 @@ unsigned short passage_arrival(void)
 
 				si++;
 
-			} while (harbor_ptr->end_points[si] != -1);
+			} while (harbor_ptr->end_points[si] != 0xff);
 		}
 
 		harbor_ptr++;
