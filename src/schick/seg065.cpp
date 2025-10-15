@@ -268,7 +268,7 @@ void show_hyggelik_ani(void)
 
 	g_wallclock_update = 0;
 	ptr1 = g_buffer9_ptr;
-	ptr2 = g_buffer9_ptr + 1300000L;
+	ptr2 = g_buffer9_ptr + 130000L;
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGBACK_NVF);
 	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);
@@ -292,7 +292,7 @@ void show_hyggelik_ani(void)
 	ani[0].ptr = ptr1;
 
 	for (i = 0; i < 26; i++) {
-		ani[i].ptr = hyg_ani_1(i, &ani[i]);
+		ani[i + 1].ptr = hyg_ani_1(i, &ani[i]);
 	}
 
 	update_mouse_cursor();
