@@ -284,12 +284,12 @@ void DNG04_chest00_open(struct struct_chest* chest)
 
 void DNG04_chest01_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(1), (Bit8s*)&gs_dng04_corpse1_flag);
+	loot_corpse(chest, get_tx(8), (Bit8s*)&gs_dng04_corpse1_flag);
 }
 
 void DNG04_chest02_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(1), (Bit8s*)&gs_dng04_corpse2_flag);
+	loot_corpse(chest, get_tx(20), (Bit8s*)&gs_dng04_corpse2_flag);
 }
 
 void DNG04_chest00_loot(struct struct_chest* chest)
@@ -309,7 +309,7 @@ void DNG04_chest01_loot(struct struct_chest* chest)
 
 	chest->content = gs_dng04_chest_corpse1;
 
-	loot_chest(chest, get_tx(22), get_tx(6));
+	loot_chest(chest, get_tx(23), get_tx(6));
 
 	chest->content = bak;
 }
@@ -320,7 +320,7 @@ void DNG04_chest02_loot(struct struct_chest* chest)
 
 	chest->content = gs_dng04_chest_corpse2;
 
-	loot_chest(chest, get_tx(22), get_tx(6));
+	loot_chest(chest, get_tx(24), get_tx(6));
 
 	chest->content = bak;
 }
