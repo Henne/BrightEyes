@@ -74,7 +74,7 @@ void do_market(void)
 
 			/* set up parameters for this merchant */
 			g_shop_descr_table[90].price_mod = g_market_descr_table[gs_current_typeindex].price_mod;
-			g_shop_descr_table[90].sortiment = g_market_descr_table[gs_current_typeindex].market_day;
+			g_shop_descr_table[90].sortiment = g_market_descr_table[gs_current_typeindex].size;
 			g_shop_descr_table[90].type = (signed char)answer;
 			type_bak = gs_current_typeindex;
 			gs_current_typeindex = 90;
