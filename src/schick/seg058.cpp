@@ -197,7 +197,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 				if (l10 != 0) {
 
-					hero_pos = select_hero_ok(get_ttx(495));
+					hero_pos = select_hero_ok_forced(get_ttx(495));
 
 					hero2 = get_hero(hero_pos);
 
