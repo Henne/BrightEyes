@@ -87,21 +87,21 @@ void GUI_unused1(char *a1, signed short a2, signed short a3)
 		} else if ((c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3)) {
 			g_textcolor_index = (unsigned char)c + 0xff10;
 		} else {
-			a2 += GUI_unused2(c, (Bit8u*)MK_FP(a3, a2));
+			a2 += GUI_unused2(c, a3, a2);
 		}
 	}
 
 	refresh_screen_size();
 }
 
-signed short GUI_unused2(signed short c, Bit8u* p)
+signed short GUI_unused2(const int c, const int x, const int y)
 {
 	signed short v1;
 	signed short v2;
 
 	v2 = GUI_lookup_char_height((signed char)c, &v1);
 
-	GUI_1c2(v2, v1, p);
+	GUI_1c2(v2, v1, x, y);
 
 	return v1;
 }
@@ -130,12 +130,12 @@ signed short GUI_lookup_char_height(signed char c, signed short *p)
 }
 
 #if defined(__BORLANDC__)
-void GUI_1c2(signed short index, signed short v2, Bit8u* v3)
+void GUI_1c2(const int index, const int v2, const int x, const int y)
 {
 
 	GUI_blank_char();
 	GUI_font_to_buf(g_splash_buffer + index * 8);
-	GUI_write_char_to_screen(v3, 8, v2);
+	GUI_write_char_to_screen_xy(x, y, 8, v2);
 }
 #endif
 

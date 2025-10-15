@@ -112,7 +112,7 @@
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG094.CPP
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG095.CPP
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG096.CPP
-@REM BCC.EXE -mlarge -O- -c -1 -Yo SEG097.CPP
+ BCC.EXE -mlarge -O- -c -1 -Yo SEG097.CPP
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG098.CPP
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG099.CPP
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG100.CPP
