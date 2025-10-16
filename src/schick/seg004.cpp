@@ -306,7 +306,7 @@ void interrupt timer_isr(void)
 		g_pic_copy_rect.x2 = 320 - 1;
 
 		/* enable interrupts */
-		asm {sti; }
+		asm { sti; }
 	}
 
 	/* call the old timer ISR */

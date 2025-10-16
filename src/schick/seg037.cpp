@@ -317,8 +317,6 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 				asm { db 0x66, 0x90; }
 				asm { db 0x66, 0x90; }
 				asm { db 0x66, 0x90; }
-	//			asm { nop; }
-	//			asm { nop; }
 #endif
 			} else if (mode == 1) {
 				/* attack foe first */
@@ -406,12 +404,6 @@ signed short get_foe_attack_mode(signed short mspell_id, signed short a2)
 			retval = 3;
 		}
 	}
-
-#if defined(__BORLANDC__)
-	/* Sync-Point */
-//	asm {db 0x0f, 0x1f, 0x00; };
-//	asm {db 0x0f, 0x1f, 0x00; };
-#endif
 
 	return retval;
 }

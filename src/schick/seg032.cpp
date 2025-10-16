@@ -649,12 +649,9 @@ void FIG_do_round(void)
 
 			nr_hero_action_phases_left_in_round--;
 #else
-//			asm { nop; };
 			asm { db 0x0f, 0x1f, 0x40, 0x00; }
 			asm { db 0x0f, 0x1f, 0x40, 0x00; }
 			asm { db 0x0f, 0x1f, 0x00; }
-//			asm { nop; };
-//			asm { nop; };
 			asm { nop; };
 			asm { nop; };
 #endif
