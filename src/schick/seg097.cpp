@@ -87,7 +87,7 @@ void GUI_unused1(char *a1, signed short a2, signed short a3)
 		} else if ((c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3)) {
 			g_textcolor_index = (unsigned char)c + 0xff10;
 		} else {
-			a2 += GUI_unused2(c, a3, a2);
+			a2 += GUI_unused2(c, a2, a3);
 		}
 	}
 
