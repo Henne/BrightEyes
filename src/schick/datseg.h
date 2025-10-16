@@ -286,7 +286,7 @@ struct struct_dialog_partner {
 	Bit16s head_id;
 };
 
-/* REMARK: Can stay in the game state, since it's protable, but should be mouved out of it */
+/* REMARK: Can stay in the game state, since it's portable, but should be moved out of it */
 struct struct_dialog_state {
 	Bit16s txt_id;	/* main txt_id >= 0 */
 	Bit8u txt_id1;

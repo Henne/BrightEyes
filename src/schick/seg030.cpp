@@ -159,7 +159,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	signed short txt_offset;
 	signed short answer;
 	signed short optioncount;
-	Bit8u *state_ptr;
+	struct struct_dialog_state *state_ptr;
 	Bit8u *states_tab;
 	struct struct_dialog_partner *partners_tab;
 	char *dst;
@@ -193,15 +193,15 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 	do {
 		answer = optioncount = 0;
-		state_ptr = 8 * g_dialog_state + states_tab;
+		state_ptr = &((struct struct_dialog_state*)states_tab)[g_dialog_state];
 
-		if (host_readb(state_ptr + 2)) optioncount++;
-		if (host_readb(state_ptr + 3)) optioncount++;
-		if (host_readb(state_ptr + 4)) optioncount++;
+		if (state_ptr->txt_id1) optioncount++;
+		if (state_ptr->txt_id2) optioncount++;
+		if (state_ptr->txt_id3) optioncount++;
 
-		if (host_readws(state_ptr) != -1) {
+		if (state_ptr->txt_id != -1) {
 
-			txt_id = host_readws(state_ptr) & 0x7fff;
+			txt_id = state_ptr->txt_id & 0x7fff;
 
 			fmt = get_tx2(txt_id + txt_offset);
 
@@ -472,12 +472,12 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				}
 			}
 
-			options[0].txt = host_readb(state_ptr + 2) + txt_offset;
-			options[0].goto_state = host_readb(state_ptr + 5);
-			options[1].txt = host_readb(state_ptr + 3) + txt_offset;
-			options[1].goto_state = host_readb(state_ptr + 6);
-			options[2].txt = host_readb(state_ptr + 4) + txt_offset;
-			options[2].goto_state = host_readb(state_ptr + 7);
+			options[0].txt = state_ptr->txt_id1 + txt_offset;
+			options[0].goto_state = state_ptr->state1;
+			options[1].txt = state_ptr->txt_id2 + txt_offset;
+			options[1].goto_state = state_ptr->state2;
+			options[2].txt = state_ptr->txt_id3 + txt_offset;
+			options[2].goto_state = state_ptr->state3;
 			shuffle_count = random_schick(5);
 
 			/* shuffle options by pairwise interchanging */
@@ -499,19 +499,19 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 			}
 
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, g_dialog_title, (char*)dst, optioncount,
-					get_tx2(host_readb(state_ptr + 2) + txt_offset),
-					get_tx2(host_readb(state_ptr + 3) + txt_offset),
-					get_tx2(host_readb(state_ptr + 4) + txt_offset));
+					get_tx2(state_ptr->txt_id1 + txt_offset),
+					get_tx2(state_ptr->txt_id2 + txt_offset),
+					get_tx2(state_ptr->txt_id3 + txt_offset));
 		}
 
 
 		g_dialog_next_state = -1;
 
-		if (host_readws(state_ptr) & 0x8000 || host_readws(state_ptr) == -1) {
+		if ((state_ptr->txt_id & 0x8000) || (state_ptr->txt_id == -1)) {
 			talk_switch();
 		}
 
-		g_dialog_state = (g_dialog_next_state == -1 ? host_readb(state_ptr + 5) : g_dialog_next_state);
+		g_dialog_state = (g_dialog_next_state == -1 ? state_ptr->state1 : g_dialog_next_state);
 
 		if (g_dialog_done == 0) {
 
@@ -521,11 +521,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				if (answer == -1) {
 					g_dialog_done = 1;
 				} else if (answer == 1) {
-					g_dialog_state = (host_readb(state_ptr + 5));
+					g_dialog_state = state_ptr->state1;
 				} else if (answer == 2) {
-					g_dialog_state = (host_readb(state_ptr + 6));
+					g_dialog_state = state_ptr->state2;
 				} else if (answer == 3) {
-					g_dialog_state = (host_readb(state_ptr + 7));
+					g_dialog_state = state_ptr->state3;
 				}
 			}
 
