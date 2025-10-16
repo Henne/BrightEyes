@@ -626,7 +626,7 @@ void draw_mouse_cursor(void)
 
 	for (i = 0; i < height; dst += 320, i++) {
 
-		mask = host_readw((Bit8u*)mouse_cursor++);
+		mask = *(mouse_cursor++);
 
 		for (j = 0; j < width; j++)
 			if ((0x8000 >> j) & mask)

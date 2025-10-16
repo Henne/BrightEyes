@@ -37,10 +37,10 @@ static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
 	if (p[0] == 'P' && p[1] == 'P' && p[2] == '2' && p[3] == '0')
 		return val(p+plen-4);
 
-	if (host_readd((Bit8u*)p) == plen)
+	if (*((Bit32u*)p) == plen)
 		return val(p+plen-4);
 
-	if (host_readd((Bit8u*)p) + 8 == plen)
+	if (*((Bit32u*)p) + 8 == plen)
 		return val(p+plen-4);
 
 	return 0; /* not a powerpacker file */
