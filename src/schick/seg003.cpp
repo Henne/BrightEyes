@@ -107,15 +107,16 @@ void move(void)
 	}
 
 	if (g_dng_map_size == 0x10) {
+		/* REMARK: MAP_POS could be used here */
 		/* dungeon mode */
-		g_steptarget_front = host_readb(p_map_small + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 1)) << 4) + gs_x_target + host_readbs((Bit8u*)p_vis_field));
+		g_steptarget_front = *(p_map_small + ((gs_y_target + p_vis_field[0].y) << 4) + gs_x_target + p_vis_field[0].x);
 
-		g_steptarget_back = host_readb(p_map_small + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 3)) << 4) + gs_x_target + host_readbs((Bit8u*)p_vis_field + 2));
+		g_steptarget_back  = *(p_map_small + ((gs_y_target + p_vis_field[1].y) << 4) + gs_x_target + p_vis_field[1].x);
 	} else {
 		/* city mode */
-		g_steptarget_front = host_readb(p_map_large + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 1)) << 5) + gs_x_target + host_readbs((Bit8u*)p_vis_field));
+		g_steptarget_front = *(p_map_large + ((gs_y_target + p_vis_field[0].y) << 5) + gs_x_target + p_vis_field[0].x);
 
-		g_steptarget_back = host_readb(p_map_large + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 3)) << 5) + gs_x_target + host_readbs((Bit8u*)p_vis_field + 2));
+		g_steptarget_back  = *(p_map_large + ((gs_y_target + p_vis_field[1].y) << 5) + gs_x_target + p_vis_field[1].x);
 	}
 }
 
