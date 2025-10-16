@@ -306,7 +306,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 		p1 += copy_ani_seq(p1, p3[20], 2);
 	}
 
-	if (check_hero(hero) ||	(!g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
+	if (check_hero(hero) ||	(g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
 		FIG_set_sheet(hero->fighter_id, (signed char)a1);
 		*p1 = -1;
@@ -534,6 +534,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	}
 
 	if (weapon_type != -1) {
+
 		FIG_set_weapon_sheet(enemy->fighter_id, a1 + 4);
 
 		/* terminate weapon animation array */
