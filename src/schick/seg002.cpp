@@ -97,7 +97,7 @@ static Bit32s g_archive_file_length;	// ds:0xbce7
 static Bit8u *g_ail_digi_driver_buf2;		// ds:0xbceb, to buffer of size 5016
 static Bit8u *g_ail_voc_buffer;		// ds:0xbcef
 static Bit8u *g_ail_digi_driver_buf;		// ds:0xbcf3
-static Bit8u *g_ail_digi_driver_descr;		// ds:0xbcf7
+static Bit16s *g_ail_digi_driver_descr;		// ds:0xbcf7
 static signed short g_ail_digi_driver_id;	// ds:0xbcfb
 #endif
 
@@ -113,7 +113,7 @@ static Bit8u *g_ail_midi_buffer;		// ds:0xbd0d
 static Bit8u *g_ail_timbre_cache;		// ds:0xbd11
 static Bit8u *g_ail_state_table;		// ds:0xbd15
 static Bit8u *g_ail_music_driver_buf;		// ds:0xbd19
-static Bit8u *g_ail_music_driver_descr;	// ds:0xbd1d
+static Bit16s *g_ail_music_driver_descr;	// ds:0xbd1d
 static signed short g_ail_sequence;		// ds:0xbd21
 static signed short g_ail_music_driver_id;	// ds:0xbd23
 #endif
@@ -635,23 +635,23 @@ signed short load_music_driver(Bit8u* fname, signed short type, signed short por
 	if (port && (g_ail_music_driver_buf = (Bit8u*)read_music_driver(fname)) &&
 		((g_ail_music_driver_id = AIL_register_driver(g_ail_music_driver_buf)) != -1))
 	{
-		g_ail_music_driver_descr = (Bit8u*)AIL_describe_driver(g_ail_music_driver_id);
+		g_ail_music_driver_descr = (Bit16s*)AIL_describe_driver(g_ail_music_driver_id);
 
-		if (host_readws(g_ail_music_driver_descr + 2) == type)
+		if (g_ail_music_driver_descr[1] == type)
 		{
 			if (port == -1) {
-				port = host_readws(g_ail_music_driver_descr + 0xc);
+				port = g_ail_music_driver_descr[6];
 			}
 
 			if (AIL_detect_device(g_ail_music_driver_id, port,
-				host_readws(g_ail_music_driver_descr + 0x0e),
-				host_readws(g_ail_music_driver_descr + 0x10),
-				host_readws(g_ail_music_driver_descr + 0x12)))
+				g_ail_music_driver_descr[7],
+				g_ail_music_driver_descr[8],
+				g_ail_music_driver_descr[9]))
 			{
 				AIL_init_driver(g_ail_music_driver_id, port,
-					host_readws(g_ail_music_driver_descr + 0x0e),
-					host_readws(g_ail_music_driver_descr + 0x10),
-					host_readws(g_ail_music_driver_descr + 0x12));
+					g_ail_music_driver_descr[7],
+					g_ail_music_driver_descr[8],
+					g_ail_music_driver_descr[9]);
 
 				if (type == 3) {
 					g_ail_state_table_size = AIL_state_table_size(g_ail_music_driver_id);
@@ -687,7 +687,7 @@ signed short load_music_driver(Bit8u* fname, signed short type, signed short por
 void do_play_music_file(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (!g_load_sound_driver && (host_readws(g_ail_music_driver_descr + 2) == 3)) {
+	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3)) {
 
 		stop_midi_playback();
 		load_midi_file(index);
@@ -700,7 +700,7 @@ void do_play_music_file(signed short index)
 void stop_midi_playback(void)
 {
 #if defined(__BORLANDC__)
-	if (!g_load_sound_driver && (host_readws(g_ail_music_driver_descr + 2) == 3))
+	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3))
 	{
 		AIL_stop_sequence(g_ail_music_driver_id, g_ail_sequence);
 		AIL_release_sequence_handle(g_ail_music_driver_id, g_ail_sequence);
@@ -711,7 +711,7 @@ void stop_midi_playback(void)
 void start_midi_playback_IRQ(void)
 {
 #if defined(__BORLANDC__)
-	if (!g_load_sound_driver && g_music_enabled && (host_readws(g_ail_music_driver_descr + 2) == 3))
+	if (!g_load_sound_driver && g_music_enabled && (g_ail_music_driver_descr[1] == 3))
 	{
 		if (AIL_sequence_status(g_ail_music_driver_id, g_ail_sequence) == 2) {
 			AIL_start_sequence(g_ail_music_driver_id, g_ail_sequence);
@@ -724,7 +724,7 @@ void start_midi_playback_IRQ(void)
 void cruft_1(void)
 /* This function is never called */
 {
-	if (!g_load_sound_driver && (host_readws(g_ail_music_driver_descr + 2) == 3))
+	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3))
 	{
 		AIL_stop_sequence(g_ail_music_driver_id, g_ail_sequence);
 	}
@@ -735,7 +735,7 @@ void cruft_2(signed short volume)
 {
 	if (!g_load_sound_driver) {
 
-		if (host_readw(g_ail_music_driver_descr + 2) == 3) {
+		if (g_ail_music_driver_descr[1] == 3) {
 			AIL_set_relative_volume(g_ail_music_driver_id, g_ail_sequence, volume, 0);
 		}
 
@@ -906,26 +906,25 @@ void SND_set_volume(unsigned short volume)
 signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, signed short irq)
 {
 #if defined(__BORLANDC__)
-	if (io && ((g_ail_digi_driver_buf = (Bit8u*)read_digi_driver(fname))) &&
+	if (io && (g_ail_digi_driver_buf = (Bit8u*)read_digi_driver(fname)) &&
 		((g_ail_digi_driver_id = AIL_register_driver(g_ail_digi_driver_buf)) != -1))
 	{
 
-		g_ail_digi_driver_descr = (Bit8u*)AIL_describe_driver(g_ail_digi_driver_id);
+		g_ail_digi_driver_descr = (Bit16s*)AIL_describe_driver(g_ail_digi_driver_id);
 
-		if (host_readws(g_ail_digi_driver_descr + 2) == type) {
+		if (g_ail_digi_driver_descr[1] == type) {
 
 			if (io == -1) {
-				io = host_readws(g_ail_digi_driver_descr + 0xc);
-				irq = host_readws(g_ail_digi_driver_descr + 0xe);
+				io = g_ail_digi_driver_descr[6];
+				irq = g_ail_digi_driver_descr[7];
 			}
 
 			if (AIL_detect_device(g_ail_digi_driver_id, io, irq,
-				host_readws(g_ail_digi_driver_descr + 0x10),
-				host_readws(g_ail_digi_driver_descr + 0x12)))
+				g_ail_digi_driver_descr[8], g_ail_digi_driver_descr[9]))
 			{
 				AIL_init_driver(g_ail_digi_driver_id, io, irq,
-					host_readws(g_ail_digi_driver_descr + 0x10),
-					host_readws(g_ail_digi_driver_descr + 0x12));
+					g_ail_digi_driver_descr[8],
+					g_ail_digi_driver_descr[9]);
 
 				g_snd_effects_enabled = 1;
 				return 1;
@@ -994,12 +993,6 @@ signed short open_and_seek_dat(unsigned short fileindex)
 
 		/* read the start offset of the next file */
 		_read(handle, (Bit8u*)&end, 4);
-
-#if !defined(__BORLANDC__)
-		/* BE-Fix */
-		start = host_readd((Bit8u*)&start);
-		end = host_readd((Bit8u*)&end);
-#endif
 
 		/* seek to the desired file */
 		lseek(handle, start, SEEK_SET);
