@@ -408,14 +408,6 @@ signed short get_foe_attack_mode(signed short mspell_id, signed short a2)
 	return retval;
 }
 
-struct coords {
-	signed short x,y;
-};
-
-struct dummy {
-	struct coords d[4];
-};
-
 signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signed short attack_foe, signed short x, signed short y)
 {
 	signed short available_spells;
@@ -425,11 +417,10 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 	signed short mode;
 	signed short l6;
 	signed short l7;
-	struct dummy diff;
+	struct viewdir_offsets diff = g_viewdir_offsets5;
+
 	signed short l_si;
 	signed short l_di;
-
-	struct viewdir_offsets a = g_viewdir_offsets5;
 
 	retval = 0;
 
@@ -481,8 +472,8 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 
 						while (!enemy->enemy_id && (l_di < 4)) {
 
-							if (test_foe_melee_attack(x, y, diff.d[l_si].x, diff.d[l_si].y, mode)) {
-								enemy->enemy_id = get_cb_val(x + diff.d[l_si].x, y + diff.d[l_si].y);
+							if (test_foe_melee_attack(x, y, diff.a[l_si].x, diff.a[l_si].y, mode)) {
+								enemy->enemy_id = get_cb_val(x + diff.a[l_si].x, y + diff.a[l_si].y);
 							}
 
 							l_di++;
@@ -660,16 +651,13 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 	signed short attack_foe;
 	signed short dir;
 	signed short l3;
-	signed short done;
+	signed short done = 0;
 	signed short l5;
 	signed short x_bak;
 	signed short y_bak;
-	struct dummy diff;
 	signed short l_di;
 
-	done = 0;
-
-	struct viewdir_offsets a = g_viewdir_offsets6;
+	struct viewdir_offsets diff = g_viewdir_offsets6;
 
 	/* check if we are in a special fight */
 
@@ -782,14 +770,14 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 			l3 = 0;
 			while (!enemy->enemy_id && (l3 < 4)) {
 
-				if (test_foe_melee_attack(x, y, diff.d[dir].x, diff.d[dir].y, attack_foe)) {
+				if (test_foe_melee_attack(x, y, diff.a[dir].x, diff.a[dir].y, attack_foe)) {
 
 					l5 = 1;
 
 					if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id))
 					{
 
-						l_di = get_cb_val(x - diff.d[dir].x, y - diff.d[dir].y);
+						l_di = get_cb_val(x - diff.a[dir].x, y - diff.a[dir].y);
 
 						if (l_di && (enemy_no + 30 != l_di)) {
 
@@ -803,7 +791,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 					}
 
 					if (l5 != 0) {
-						enemy->enemy_id = get_cb_val(x + diff.d[dir].x, y + diff.d[dir].y);
+						enemy->enemy_id = get_cb_val(x + diff.a[dir].x, y + diff.a[dir].y);
 					}
 				}
 

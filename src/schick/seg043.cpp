@@ -29,14 +29,6 @@
 namespace M302de {
 #endif
 
-struct coords {
-	signed char x, y;
-};
-
-struct dummy {
-	struct coords a[4];
-};
-
 /**
  * \brief   execute the fight action of a monster
  *

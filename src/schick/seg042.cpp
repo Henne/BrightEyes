@@ -30,14 +30,6 @@
 namespace M302de {
 #endif
 
-struct coords {
-	signed char x,y;
-};
-
-struct dummy {
-	struct coords a[4];
-};
-
 signed short g_spell_illusionen;	// ds:0xe3a4, 1 = spell has effect
 signed short g_defender_dead;		// ds:0xe3a6
 signed short g_attacker_dead;		// ds:0xe3a8

@@ -26,10 +26,6 @@
 namespace M302de {
 #endif
 
-struct dummy5 {
-	char a[5];
-};
-
 /**
  * \brief   compress monsters
  */

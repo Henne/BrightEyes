@@ -513,15 +513,6 @@ signed short KI_get_spell(signed short spell, signed short renegade)
 	return retval;
 }
 
-struct coord {
-	signed short x;
-	signed short y;
-};
-
-struct dummy {
-	struct coord a[4];
-};
-
 /**
  * \brief   TODO
  *
