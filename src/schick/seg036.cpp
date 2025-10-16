@@ -55,7 +55,7 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 		p_datbuffer = g_buffer_weapanidat;
 
 	/* read how many ani sequences are in the file */
-	ani_max_no = host_readw(p_datbuffer);
+	ani_max_no = *(Bit16s*)p_datbuffer;
 
 	/* check if the desired ani_no is in the range */
 	if (ani_no < 0)
@@ -68,12 +68,12 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 	p_datitem = p_datbuffer;
 	p_datitem += ani_max_no + 2;
 	/* set len to the lenght first (0) ani sequence */
-	len = host_readb(p_datbuffer + 2);
+	len = p_datbuffer[2];
 
 	/* forward to the desired ani sequence */
 	for (i = 1; i <= ani_no; i++) {
 		p_datitem += len;
-		len = host_readb(p_datbuffer + i + 2);
+		len = *(p_datbuffer + i + 2);
 	}
 
 	p_datitem++;

@@ -598,7 +598,7 @@ void FIG_do_round(void)
 							}
 
 							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
-							//if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead)
+							//if (g_enemy_sheets[hero->enemy_id - 10].flags.dead)
 							if (((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).dead)
 							{
 								/* attacked enemy is dead */
@@ -616,7 +616,7 @@ void FIG_do_round(void)
 
 									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
-									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
+									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
 									if (fighter_ptr->obj_id >= 0) {
@@ -710,7 +710,7 @@ void FIG_do_round(void)
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
 									FIG_search_obj_on_cb(enemy->enemy_id + 20, &x, &y);
-									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
+									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr->cbx, fighter_ptr->cby could have been used later. */
 
 
 									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->enemy_id - 10].fighter_id);
@@ -718,7 +718,7 @@ void FIG_do_round(void)
 
 									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the killed enemy */
-									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
+									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
 									if (fighter_ptr->obj_id >= 0) {
@@ -761,7 +761,7 @@ void FIG_do_round(void)
 
 								fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
 								/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
-								/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
+								/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
 								/* restore the cb_entry stored at FIGHTER_OBJ_ID (meaning that the tail part is standing on it). */
 								FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, fighter_ptr->obj_id);

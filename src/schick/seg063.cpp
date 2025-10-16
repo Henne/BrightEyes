@@ -464,7 +464,7 @@ void sea_travel(signed short passage, signed short dir)
 	/* convert costal route ids to range 0..37 */
 	gs_sea_travel_passage_no = passage < 7 ? passage : passage - 7;
 
-	off = host_readd(gs_sea_travel_courses + 4 * gs_sea_travel_passage_no);
+	off = ((Bit32s*)gs_sea_travel_courses)[gs_sea_travel_passage_no];
 	gs_route_course_ptr = (Bit16s*)(gs_sea_travel_courses + off + 4 * gs_route_mousehover);
 	ptr = g_vga_memstart;
 

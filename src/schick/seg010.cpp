@@ -21,7 +21,7 @@ static unsigned short EMS_installed(void)
 	char *sig;
 
 	/* get interrupt vector of interrupt 0x67 */
-	IRQ_67 = host_readd(0x67 * 4);
+	IRQ_67 = *(unsigned char*)MK_FP(0x0000, 0x67 * 4);
 
 	/* Make a pointer to where "EMMXXXX0" stands if EMS is enabled */
 	sig = (char*)MK_FP(FP_SEG(IRQ_67), 0x0a);

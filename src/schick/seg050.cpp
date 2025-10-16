@@ -674,9 +674,9 @@ void level_up(signed short hero_pos)
 
 		while (hero->skill_incs > 0) {
 
-			l_si = host_readws(g_skills_buffer + 100 * hero->typus + 4 * i);
+			l_si = *(Bit16s*)(g_skills_buffer + 100 * hero->typus + 4 * i);
 
-			if (hero->skills[l_si] < host_readws(g_skills_buffer + 100 * hero->typus + 4 * i + 2))
+			if (hero->skills[l_si] < *(Bit16s*)(g_skills_buffer + 100 * hero->typus + 4 * i + 2))
 			{
 				inc_skill_novice(hero, l_si);
 			}

@@ -186,7 +186,7 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 
 				if ((backtrack_y < 24) && (backtrack_y >= 0) && (backtrack_x < 24) && (backtrack_x >= 0))
 				{
-					cb_or_dist_entry = host_readbs(dist_table_ptr + (25 * backtrack_y) + backtrack_x);
+					cb_or_dist_entry = *((Bit8s*)(dist_table_ptr + 25 * backtrack_y + backtrack_x));
 
 					if ((cb_or_dist_entry == dist)	&&
 						((!two_squares) ||
@@ -534,7 +534,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 					break;
 				}
 
-				if (host_readbs(dist_table_ptr + (y * 25) + x) == (dist - 1)) {
+				if (*((Bit8s*)(dist_table_ptr + (y * 25) + x)) == (dist - 1)) {
 
 					for (i = 0; i < 4; i++) {
 
@@ -545,7 +545,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 						if ((new_y < 24) && (new_y >= 0) && (new_x < 24) && (new_x >= 0)) {
 
-							cb_or_dist_entry = host_readbs(dist_table_ptr + (new_y * 25) + new_x);
+							cb_or_dist_entry = *((Bit8s*)(dist_table_ptr + new_y * 25 + new_x));
 							cb_entry = *(g_chessboard_cpy + (new_y * 25) + new_x);
 
 							if (cb_or_dist_entry < 0) { /* square has not been reached before */
