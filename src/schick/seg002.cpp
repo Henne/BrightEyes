@@ -391,14 +391,6 @@ void read_sound_cfg(void)
 		_close(handle);
 
 #if !defined(__BORLANDC__)
-		/* be byte-ordering independent */
-		midi_port = host_readws((Bit8u*)&midi_port);
-		dummy = host_readws((Bit8u*)&dummy);
-		digi_port = host_readws((Bit8u*)&digi_port);
-		digi_irq = host_readws((Bit8u*)&digi_irq);
-#endif
-
-#if !defined(__BORLANDC__)
 		/* menu to select the music source */
 		const Bit16s tw_bak = g_textbox_width;
 		char question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
