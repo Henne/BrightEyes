@@ -113,7 +113,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	g_traveling = 1;
 
 	last_tevent_no = -1;
-	gs_route_course_ptr = (Bit16s*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))) + 0xecL);
+	gs_route_course_ptr = (Bit16s*)((g_buffer9_ptr + *(Bit16s*)((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
 	gs_route_course_ptr += 2;
 
@@ -662,14 +662,14 @@ signed short TM_enter_target_town_viewdir(signed short coordinates)
 	return retval;
 }
 
-void TM_draw_track(signed short a1, signed short length, signed short direction, signed short restore)
+void TM_draw_track(signed short route_id, signed short length, signed short direction, signed short restore)
 {
 	signed short i;
 	signed short *ptr;
 	Bit8u* fb_start;
 
 	fb_start = g_vga_memstart;
-	ptr = (signed short*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (a1 - 1))) + 0xecL);
+	ptr = (Bit16s*)((g_buffer9_ptr + *(Bit16s*)((Bit8u*)g_buffer9_ptr + 4 * (route_id - 1))) + 0xecL);
 	ptr += 2;
 
 	if (direction)
