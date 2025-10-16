@@ -951,7 +951,7 @@ signed short do_fight(signed short fight_id)
 
 	/* set some pointers */
 	g_scenario_buf = (signed char*)(((HugePt)g_buffer8_ptr) + 64100L);
-	g_monster_dat_buf = (struct enemy_sheet*)(((HugePt)g_scenario_buf) + 621L);
+	g_monster_dat_buf = (struct struct_monster*)(((HugePt)g_scenario_buf) + 621L);
 	g_current_fight = (struct fight*)(((HugePt)g_monster_dat_buf) + 3476L);
 
 	read_fight_lst(fight_id);

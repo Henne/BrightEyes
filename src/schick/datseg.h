@@ -297,6 +297,33 @@ struct struct_dialog_state {
 	Bit8u state3;
 };
 
+struct struct_monster {
+	Bit8s mon_id;
+	Bit8s gfx_id;
+	Bit8s rs;
+	Bit16u attrib[7];	/* dice template */
+	Bit16u le;		/* dice template */
+	Bit16u ae;		/* dice template */
+	Bit16u mr;		/* dice_template */
+	Bit8s first_ap;
+	Bit8s attacks;
+	Bit8s at;
+	Bit8s pa;
+	Bit16s dam1;
+	Bit16s dam2;
+	Bit8s bp;
+	Bit8s magic;
+	Bit8s mag_id;
+	Bit8s level;
+	Bit8s size;
+	Bit8s is_animal;
+	Bit8s shots;
+	Bit16s shot_dam;
+	Bit8s throws;
+	Bit16s throw_dam;
+	Bit8s le_flee;
+};
+
 struct struct_fighter {
 	signed short figure;
 	signed char nvf_no;
@@ -1866,7 +1893,7 @@ extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern struct item_stats *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
-extern struct enemy_sheet *g_monster_dat_buf;// ds:0xe125; seg032, seg039
+extern struct struct_monster *g_monster_dat_buf;// ds:0xe125; seg032, seg039
 extern struct struct_memslot_ani *g_memslots_anis;	// ds:0xe121; seg027, seg120
 extern struct struct_memslot_fig *g_memslots_mfig;	// ds:0xe11d; seg027, seg120
 extern struct struct_memslot_fig *g_memslots_wfig;	// ds:0xe119; seg027, seg120

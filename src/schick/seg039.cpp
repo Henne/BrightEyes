@@ -88,7 +88,7 @@ signed int FIG_get_range_weapon_type(struct struct_hero *hero)
  */
 void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char round)
 {
-	struct enemy_sheet *monster;
+	struct struct_monster *monster;
 	struct enemy_sheet *sheet;
 	signed short i;
 
@@ -108,7 +108,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 	for (i = 0; i < 7; i++) {
 
 		/* UGLY: a = b = dice_template() */
-		sheet->attrib[i * 2] = sheet->attrib[i * 2 + 1] = dice_template(host_readw((Bit8u*)monster + i * 2 + MONSTER_ATTRIB));
+		sheet->attrib[i * 2] = sheet->attrib[i * 2 + 1] = dice_template(monster->attrib[i]);
 	}
 
 	/* roll out LE and save it to the sheet */
@@ -127,7 +127,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 	sheet->ae_orig = sheet->ae = dice_template(monster->ae);
 
 	/* roll out MR  and save it */
-	sheet->mr = (signed char)dice_template(host_readw((Bit8u*)monster + MONSTER_MR));
+	sheet->mr = (signed char)dice_template(monster->mr);
 
 	/* Terrible hack:
 		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
