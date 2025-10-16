@@ -169,7 +169,7 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 
 	FIG_set_sheet(enemy->fighter_id, 1);
 
-	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
 
 		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 0xf3);
 
@@ -794,7 +794,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 					l5 = 1;
 
-					if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id))
+					if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id))
 					{
 
 						l_di = get_cb_val(x - diff.d[dir].x, y - diff.d[dir].y);

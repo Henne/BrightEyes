@@ -2336,11 +2336,11 @@ void nightfall(void)
  */
 signed short get_current_season(void)
 {
-	if (is_in_byte_array(gs_month, (Bit8u*)g_months_winter)) {
+	if (is_in_byte_array(gs_month, g_months_winter)) {
 		return SEASON_WINTER;
-	} else if (is_in_byte_array(gs_month, (Bit8u*)g_months_summer)) {
+	} else if (is_in_byte_array(gs_month, g_months_summer)) {
 		return SEASON_SUMMER;
-	} else if (is_in_byte_array(gs_month, (Bit8u*)g_months_spring)) {
+	} else if (is_in_byte_array(gs_month, g_months_spring)) {
 		return SEASON_SPRING;
 	} else {
 		return SEASON_AUTUMN;

@@ -114,7 +114,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 			target_is_hero = 0;
 
-			if ((is_in_byte_array(target_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) && (l17 == 0))
+			if ((is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) && (l17 == 0))
 			{
 				FIG_search_obj_on_cb(monster->enemy_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(monster_pos + 10, &hero_x, &hero_y);
@@ -687,7 +687,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							FIG_set_sheet(target_enemy->fighter_id, 1);
 
 
-							if (is_in_byte_array(target_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+							if (is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) {
 
 								fighter = FIG_get_fighter(target_enemy->fighter_id);
 
@@ -720,7 +720,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							g_fig_list_elem.offsetx = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].x;
 							g_fig_list_elem.offsety = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].y;
 
-							if (is_in_byte_array(target_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+							if (is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) {
 
 								g_fig_list_elem.x1 = g_gfxtab_twofielded_x1[target_enemy->viewdir];
 								g_fig_list_elem.x2 = g_gfxtab_twofielded_x2[target_enemy->viewdir];
@@ -748,7 +748,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								FIG_make_invisible(target_enemy->fighter_id);
 
-								if (is_in_byte_array(target_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+								if (is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) {
 
 									fighter = FIG_get_fighter(target_enemy->fighter_id);
 

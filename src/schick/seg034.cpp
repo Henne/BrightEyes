@@ -430,7 +430,7 @@ void FIG_latecomers(void)
 
 				if (!p_enemy->flags.scared) {
 
-					if (is_in_byte_array(p_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+					if (is_in_byte_array(p_enemy->gfx_id, g_two_fielded_sprite_id)) {
 
 						seg034_718(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
 								&x, &y,	g_current_fight->monsters[i].viewdir, 1);

@@ -127,7 +127,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				return;
 			}
 
-			if ((is_in_byte_array(target_monster->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) && (l16 == 0))
+			if ((is_in_byte_array(target_monster->gfx_id, g_two_fielded_sprite_id)) && (l16 == 0))
 			{
 				FIG_search_obj_on_cb(hero->enemy_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);
@@ -833,7 +833,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_set_sheet(target_monster->fighter_id, 1);
 
-								if (is_in_byte_array(target_monster->gfx_id, (Bit8u*)g_two_fielded_sprite_id))
+								if (is_in_byte_array(target_monster->gfx_id, g_two_fielded_sprite_id))
 								{
 									fighter_add = FIG_get_fighter(target_monster->fighter_id);
 
@@ -863,7 +863,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_make_invisible(target_monster->fighter_id);
 
-								if (is_in_byte_array(target_monster->gfx_id, (Bit8u*)g_two_fielded_sprite_id))
+								if (is_in_byte_array(target_monster->gfx_id, g_two_fielded_sprite_id))
 								{
 									fighter_add = FIG_get_fighter(target_monster->fighter_id);
 

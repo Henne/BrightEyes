@@ -602,7 +602,7 @@ void FIG_do_round(void)
 							if (((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).dead)
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[hero->enemy_id - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[hero->enemy_id - 10].gfx_id, g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
@@ -701,11 +701,11 @@ void FIG_do_round(void)
 
 							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
 							//if (g_enemy_sheets[enemy->enemy_id - 10].flags.dead)
-							if (((struct enemy_flags)(g_enemy_sheets[enemy->enemy_id -10].flags)).dead) /* check 'dead' flag */
+							if (((struct enemy_flags)(g_enemy_sheets[enemy->enemy_id - 10].flags)).dead) /* check 'dead' flag */
 							{
 
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[enemy->enemy_id - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[enemy->enemy_id - 10].gfx_id, g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
@@ -752,7 +752,7 @@ void FIG_do_round(void)
 						if (enemy->flags.dead) { /* check 'dead' flag */
 
 							/* attacking enemy is dead because of critical attack failure */
-							if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+							if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
 								/* attacking dead enemy is two-squares */
 								/* goal: remove tail part */
 

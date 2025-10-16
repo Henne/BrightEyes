@@ -40,7 +40,6 @@ int random_schick(const int val)
 {
 	signed short retval;
 
-
 	if (val == 0) {
 		return 0;
 	}
@@ -94,11 +93,10 @@ void calc_damage_range(const int n, const int m, const int x, signed short *min,
  */
 int is_in_word_array(const int val, signed short *p)
 {
-
 	int i;
 
-	for (i = 1; host_readws((Bit8u*)p) >= 0; i++) {
-		if (host_readws((Bit8u*)(p++)) == val)
+	for (i = 1; *p >= 0; i++) {
+		if (*(p++) == val)
 			return i;
 	}
 
@@ -108,12 +106,12 @@ int is_in_word_array(const int val, signed short *p)
 /**
  * \brief   checks if val is in a byte array
  */
-int is_in_byte_array(const signed char val, Bit8u *p)
+int is_in_byte_array(const signed char val, Bit8s *p)
 {
 	int i;
 
-	for (i = 1; host_readbs(p) != -1; i++) {
-		if (host_readbs(p++) == val)
+	for (i = 1; *p != -1; i++) {
+		if (*(p++) == val)
 			return i;
 	}
 

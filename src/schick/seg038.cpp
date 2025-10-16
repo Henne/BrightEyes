@@ -356,7 +356,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) /* actor is an enemy */
 	{
 		actor_enemy_ptr = actor_ptr;
-		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->gfx_id, (Bit8u*)g_two_fielded_sprite_id))
+		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->gfx_id, g_two_fielded_sprite_id))
 		{
 			two_squares = 1;
 		}

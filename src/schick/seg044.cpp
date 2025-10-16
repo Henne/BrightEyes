@@ -524,7 +524,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	*p1 = -1;
 
 	/* does this sprite need two fields */
-	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id))	{
+	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id))	{
 
 		memcpy(&g_fig_anisheets[a1 + 2], &g_fig_anisheets[a1], 0xf3);
 
@@ -788,7 +788,7 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 	*lp1 = -1;
 
 	/* check if the moster sprite ID needs two fields */
-	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
 		memcpy(&g_fig_anisheets[v1 + 2], &g_fig_anisheets[v1], 0xf3);
 	}
 }

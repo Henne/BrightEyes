@@ -62,7 +62,7 @@ void do_temple(void)
 			/* search which god owns this temple */
 			g_temple_god = 1;
 			for (l_si = 1; l_si < 15; l_si++) {
-				if (is_in_byte_array((signed char)gs_current_typeindex, (Bit8u*)g_god_temples_index[l_si]))
+				if (is_in_byte_array(gs_current_typeindex, g_god_temples_index[l_si]))
 				{
 					g_temple_god = l_si;
 					break;
@@ -79,7 +79,7 @@ void do_temple(void)
 			g_pic_copy.x1 = g_pic_copy.y1 = 0;
 			g_pic_copy.x2 = 40;
 			g_pic_copy.y2 = 22;
-			g_pic_copy.dst = g_vga_memstart + 28259;
+			g_pic_copy.dst = g_vga_memstart + 88 * 320 + 99;
 			g_pic_copy.src = g_buffer8_ptr + 7000;
 
 			update_mouse_cursor();
