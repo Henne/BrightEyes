@@ -670,17 +670,17 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 
 	fb_start = g_vga_memstart;
 	ptr = (signed short*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (a1 - 1))) + 0xecL);
-	ptr++;
+	ptr += 2;
 
 	if (direction)
 	{
 		/* move ptr to the last valid value */
 		while (ptr[0] != -1)
 		{
-			ptr+=2;
+			ptr += 2;
 		}
 
-		ptr-=2;
+		ptr -= 2;
 	}
 
 	for (i = 0; i < length; i++)
