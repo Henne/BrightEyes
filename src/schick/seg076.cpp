@@ -310,7 +310,7 @@ void DNG_door(signed short action)
 							sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
 
 							/* success => the door opens */
-							*(g_dng_map_ptr + MAP_POS(x,y)) = 0x0f; /* clear higher 4 bits */
+							*(g_dng_map_ptr + MAP_POS(x,y)) &= 0x0f; /* clear higher 4 bits */
 							*(g_dng_map_ptr + MAP_POS(x,y)) |= (DNG_TILE_OPEN_DOOR << 4);
 							/* note that the 'unlocked' flag ......1. is not explicitly set. It will be set if the party closes the door. */
 							g_steptarget_front = *(g_dng_map_ptr + MAP_POS(x,y));
