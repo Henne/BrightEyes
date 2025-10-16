@@ -298,7 +298,7 @@ void do_special_buildings(void)
 
 void TLK_eremit(signed short state)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	if (!state) {
@@ -397,7 +397,7 @@ void seg066_0692(void)
 
 void seg066_06c1(void)
 {
-	signed short bi;
+	signed int bi;
 
 	if ((bi = get_border_index(g_visual_field_vals[3])) >= 2 && bi <= 5) {
 		g_visual_field_vals[3] = 0;
@@ -574,7 +574,7 @@ void seg066_06c1(void)
 
 signed short get_border_index(unsigned char val)
 {
-	signed short i;
+	signed int i;
 
 	i = 0;
 	while (g_mapval_to_loctype[i] < val) {
@@ -593,8 +593,8 @@ signed short get_border_index(unsigned char val)
 
 void seg066_0bad(void)
 {
-	signed short i;
-	signed short bi;
+	signed int i;
+	signed int bi;
 
 	for (i = 28; i >= 0; i--) {
 
@@ -623,14 +623,14 @@ void seg066_0bad(void)
  */
 void city_water_and_grass(void)
 {
-	signed short i;
-	signed short nvf_no;
-	signed short x;
-	signed short y;
+	signed int i;
+	signed int nvf_no;
+	signed int x;
+	signed int y;
 	signed char c1;
 	signed char bi;
 	unsigned char c2;
-	Bit8u *ptr;
+	Bit16s *ptr;
 
 	for (i = 0; i < 29; i++) {
 
@@ -639,29 +639,29 @@ void city_water_and_grass(void)
 
 		if (c2 != 0) {
 
-			bi = (signed char)get_border_index(c2);
+			bi = get_border_index(c2);
 
 			if (bi == 6 || bi == 7) {
+
 				/* water or grass */
+				ptr = (Bit16s*)&g_visual_field_offsets_grass[c1];
 
-				ptr = (Bit8u*)&g_visual_field_offsets_grass[c1];
-
-				x = host_readws(ptr);
-				y = host_readws(ptr + 2);
+				x = ptr[0];
+				y = ptr[1];
 
 				c1 = g_visual_fields_tex[c1];
 
 				if (c1 != -1) {
 
-					ptr = &g_tex_descr_table[c1 - 1][0];
+					ptr = (Bit16s*)&g_tex_descr_table[c1 - 1][0];
 
-					if ((nvf_no = host_readws(ptr + 4)) != -1) {
+					if ((nvf_no = ptr[2]) != -1) {
 
 						if (bi == 7) {
 							nvf_no += 15;
 						}
 
-						load_city_texture(x + host_readws(ptr), y + host_readws(ptr + 2), nvf_no, 184);
+						load_city_texture(x + ptr[0], y + ptr[1], nvf_no, 184);
 					}
 				}
 			}
@@ -682,7 +682,7 @@ void city_building_textures(void)
 	signed char c1;
 	signed char bi;
 	unsigned char c2;
-	Bit8u *ptr;
+	Bit16s *ptr;
 
 	for (i = 0; i < 29; i++) {
 
@@ -691,29 +691,29 @@ void city_building_textures(void)
 
 		if (c2 != 0) {
 
-			bi = (signed char)get_border_index(c2);
+			bi = get_border_index(c2);
 
 			if (bi != 7 && bi != 6) {
 			    /* if not grass or water */
 
-				ptr = (Bit8u*)&g_visual_field_offsets_std[c1];
+				ptr = (Bit16s*)&g_visual_field_offsets_std[c1];
 
 				if (bi == 8) {
 					/* direction sign */
-					ptr = (Bit8u*)&g_visual_field_offsets_sign[c1];
+					ptr = (Bit16s*)&g_visual_field_offsets_sign[c1];
 				} else if (bi == 9 || bi == 10) {
 					/* tavern/inn or shop */
-					ptr = (Bit8u*)&g_visual_field_offsets_inn[c1];
+					ptr = (Bit16s*)&g_visual_field_offsets_inn[c1];
 				}
 
-				x = host_readws(ptr);
-				y = host_readws(ptr + 2);
+				x = ptr[0];
+				y = ptr[1];
 
 				c1 = g_visual_fields_tex[c1];
 
 				if (c1 != -1) {
 
-					ptr = &g_tex_descr_table[c1 - 1][0];
+					ptr = (Bit16s*)&g_tex_descr_table[c1 - 1][0];
 
 					l4 =	bi == 2 ? 186 : (
 						bi == 3 ? 187 : (
@@ -723,7 +723,7 @@ void city_building_textures(void)
 						bi == 9 ? 232 : (
 						bi == 10 ? 233 : 185))))));
 
-					if ((nvf_no = host_readws(ptr + 4)) != -1) {
+					if ((nvf_no = ptr[2]) != -1) {
 
 						if (g_entrance_angle == 2 && bi >= 1 && bi <= 5) {
 
@@ -739,14 +739,14 @@ void city_building_textures(void)
 							load_special_textures(bi);
 						}
 
-						load_city_texture(x + host_readws(ptr), y + host_readws(ptr + 2), nvf_no, l4);
+						load_city_texture(x + ptr[0], y + ptr[1], nvf_no, l4);
 
 						if (bi == 9 || bi == 10) {
 							call_load_buffer();
 						}
 					}
 
-					if ((nvf_no = host_readws(ptr + 10)) != -1) {
+					if ((nvf_no = ptr[5]) != -1) {
 
 						if (bi == 1) {
 							l4 = 188;
@@ -762,11 +762,11 @@ void city_building_textures(void)
 							nvf_no = ((unsigned short)(nvf_no & 0x7fff) - 10) | 0x8000;
 						}
 
-						load_city_texture(x + host_readws(ptr + 6), y + host_readws(ptr + 8), nvf_no, l4);
+						load_city_texture(x + ptr[3], y + ptr[4], nvf_no, l4);
 					}
 
-					if ((nvf_no = host_readws(ptr + 0x10)) != -1) {
-						load_city_texture(x + host_readws(ptr + 12), y + host_readws(ptr + 14), nvf_no, l4);
+					if ((nvf_no = ptr[8]) != -1) {
+						load_city_texture(x + ptr[6], y + ptr[7], nvf_no, l4);
 					}
 				}
 			}
@@ -1167,16 +1167,16 @@ void city_fade_and_colors(void)
 
 void seg066_172b(void)
 {
-	signed short l_si;
-	signed short l_di;
-	Bit8u *ptr = g_dng_map;
+	signed int l_si;
+	signed int i;
+	Bit8u *map_ptr = g_dng_map;
 
 	g_city_house_count[0] = g_city_house_count[1]
 				= g_city_house_count[2] = g_city_house_count[3] = 0;
 
-	for (l_di = 0; g_dng_map_size * 16 > l_di; l_di++) {
+	for (i = 0; g_dng_map_size * 16 > i; i++) {
 
-		l_si = get_border_index(host_readb(ptr + l_di));
+		l_si = get_border_index(map_ptr[i]);
 
 		/* count number of houses of certain kind */
 		if (l_si == 2) {
@@ -1190,29 +1190,29 @@ void seg066_172b(void)
 		}
 	}
 
-	l_di = 5;
+	i = 5;
 	l_si = 2000;
 
 	/* find house with lowest count on current map */
 	if (g_city_house_count[0] < l_si) {
-		l_si = g_city_house_count[(l_di = 0)];
+		l_si = g_city_house_count[(i = 0)];
 	}
 
 	if (g_city_house_count[1] < l_si) {
-		l_si = g_city_house_count[(l_di = 1)];
+		l_si = g_city_house_count[(i = 1)];
 	}
 
 	if (g_city_house_count[2] < l_si) {
-		l_si = g_city_house_count[(l_di = 2)];
+		l_si = g_city_house_count[(i = 2)];
 	}
 
 	if (g_city_house_count[3] < l_si) {
-		l_si = g_city_house_count[(l_di = 3)];
+		l_si = g_city_house_count[(i = 3)];
 	}
 
 	/* the kind of house with lowest count is deactivated, i.e. it's texture is
 	 * not loaded and replaced by another texture in seg028_0224 */
-	g_city_house_count[l_di] = 0;
+	g_city_house_count[i] = 0;
 }
 
 #if !defined(__BORLANDC__)
