@@ -16,9 +16,6 @@
 #include "v302de.h"
 #include "common.h"
 
-/* we need an own prototype of div16 */
-#define DONT_DEF_DIV16
-
 #include "seg002.h"
 #include "seg003.h"
 #include "seg007.h"
@@ -51,10 +48,6 @@
 #include "seg097.h"
 #include "seg098.h"
 #include "seg103.h"
-
-#if defined(__BORLANDC__)
-signed short div16(signed char);
-#endif
 
 #if !defined(__BORLANDC__)
 namespace M302de {

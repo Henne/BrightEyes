@@ -31,10 +31,6 @@
 namespace M302de {
 #endif
 
-#if defined(__BORLANDC__)
-signed short div16(unsigned char);
-#endif
-
 /* static */
 void DNG_floor_ceil(void)
 {

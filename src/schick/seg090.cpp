@@ -257,7 +257,14 @@ signed short DNG12_handler(void)
 #if !defined(__BORLANDC__)
 		D1_INFO("In Wasserfalle gefangen\n");
 #endif
-		if (div16(cast_u16(ptr[MAP_POS(3,11)])) == DNG_TILE_OPEN_DOOR) {
+
+#if !defined(__BORLANDC__)
+		if (div16((Bit16u)ptr[MAP_POS(3,11)]) == DNG_TILE_OPEN_DOOR)
+#else
+		/* REMARK: enforce cast to Bit16u */
+		if (div16((_AL = ptr[MAP_POS(3,11)], _AH = 0, _AX)) == DNG_TILE_OPEN_DOOR)
+#endif
+		{
 			ptr[MAP_POS(3,11)] &= 0xf;
 			ptr[MAP_POS(3,11)] |= DNG_TILE_CLOSED_DOOR << 4;
 		}
@@ -266,7 +273,14 @@ signed short DNG12_handler(void)
 #if !defined(__BORLANDC__)
 		D1_INFO("In Wasserfalle gefangen\n");
 #endif
-		if (div16(cast_u16(ptr[MAP_POS(3,6)])) == 2) {
+
+#if !defined(__BORLANDC__)
+		if (div16((Bit16u)ptr[MAP_POS(3,6)]) == 2)
+#else
+		/* REMARK: enforce cast to Bit16u */
+		if (div16((_AL = ptr[MAP_POS(3,6)], _AH = 0, _AX)) == 2)
+#endif
+		{
 			ptr[MAP_POS(3,6)] &= 0xf;
 			ptr[MAP_POS(3,6)] |= DNG_TILE_CLOSED_DOOR << 4;
 		}

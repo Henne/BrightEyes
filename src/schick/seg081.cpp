@@ -213,9 +213,16 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos && gs_dng06_countdown_timer)
 	{
+#if !defined(__BORLANDC__)
 		if (div16(amap_ptr[MAP_POS(11,1)]) != DNG_TILE_CLOSED_DOOR ||
 			div16(amap_ptr[MAP_POS(2,6)]) != DNG_TILE_CLOSED_DOOR ||
 			div16(amap_ptr[MAP_POS(11,4)]) != DNG_TILE_CLOSED_DOOR)
+#else
+		/* REMARK: enforce cast to Bit16u */
+		if (div16((_AL = amap_ptr[MAP_POS(11,1)], _AH = 0, _AX)) != DNG_TILE_CLOSED_DOOR ||
+			div16((_AL = amap_ptr[MAP_POS(2,6)], _AH = 0, _AX)) != DNG_TILE_CLOSED_DOOR ||
+			div16((_AL = amap_ptr[MAP_POS(11,4)], _AH = 0, _AX)) != DNG_TILE_CLOSED_DOOR)
+#endif
 		{
 			gs_dng06_countdown_timer--;
 

@@ -143,9 +143,7 @@ void draw_loc_icons(signed short, ...);
 signed short mod_day_timer(signed short);
 void draw_compass(void);
 signed short can_merge_group(void);
-#if !defined(__BORLANDC__) || !defined DONT_DEF_DIV16
-unsigned short div16(unsigned short);
-#endif
+unsigned short div16(unsigned char);
 void select_with_mouse(signed short*, struct shop_item*);
 void select_with_keyboard(signed short*, struct shop_item*);
 void set_automap_tile(signed short, signed short);

@@ -4255,7 +4255,7 @@ signed short can_merge_group(void)
 	return retval;
 }
 
-unsigned short div16(unsigned short val)
+unsigned short div16(unsigned char val)
 {
 	return ((unsigned char)val) >> 4;
 }

@@ -49,7 +49,12 @@ signed short DNG07_handler(void)
 
 	if (target_pos == DNG_POS(0,13,2) && target_pos != gs_dng_handled_pos)
 	{
-		if (div16(amap_ptr[MAP_POS(13,2)]) != DNG_TILE_STAIR_DOWN)
+#if !defined(__BORLANDC__)
+		if (div16((Bit16u)amap_ptr[MAP_POS(13,2)]) != DNG_TILE_STAIR_DOWN)
+#else
+		/* REMARK: enforce a cast to Bit16u */
+		if (div16((_AL = amap_ptr[MAP_POS(13,2)], _AH = 0, _AX)) != DNG_TILE_STAIR_DOWN)
+#endif
 		{
 			do {
 				i = GUI_radio(get_tx(8), 3, get_tx(9), get_tx(10), get_tx(11));

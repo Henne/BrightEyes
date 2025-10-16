@@ -470,7 +470,9 @@ void draw_automap_to_screen(void)
 signed short select_teleport_dest(void)
 {
 	signed short l_si;
+#if !defined(__BORLANDC__)
 	signed short l_di;
+#endif
 
 	signed short answer;
 	signed short done;
@@ -583,6 +585,7 @@ signed short select_teleport_dest(void)
 
 	} while (done == 0);
 
+#if !defined(__BORLANDC__)
 	l_di = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
 	if (gs_current_town != TOWNS_NONE) {
@@ -590,6 +593,16 @@ signed short select_teleport_dest(void)
 	} else {
 		l_di = div16(l_di);
 	}
+#else
+	/* REMARK: enforce the use of register DI */
+	_DI = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
+
+	if (gs_current_town != TOWNS_NONE) {
+		_DI = get_border_index(_DI);
+	} else {
+		_DI = div16(_DI);
+	}
+#endif
 
 	ae_costs = 0;
 
@@ -598,7 +611,13 @@ signed short select_teleport_dest(void)
 		ae_costs = 0;
 		*g_dtp2 = '\0';
 
-	} else if ((gs_dungeon_index && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
+	} else
+#if !defined(__BORLANDC__)
+		if ((gs_dungeon_index && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
+#else
+		/* REMARK: enforce the use of register DI */
+		if ((gs_dungeon_index && (_DI == 15)) || ((gs_current_town != TOWNS_NONE) && ((((Bit16s)_DI >= 2) && ((Bit16s)_DI <= 5)) || (_DI == 6))))
+#endif
 	{
 		strcpy(g_dtp2, get_ttx(611));
 		ae_costs = -2;
