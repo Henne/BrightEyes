@@ -194,7 +194,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
  * \param   dir         looking direction
  * \return              1 if the placement was successful or 0 if not.
  */
-signed int place_obj_on_cb(const signed int x, const signed int y, const signed int object, const signed char type, const signed char dir)
+signed int place_obj_on_cb(const signed int x, const signed int y, const signed int object, const signed int type, const signed char dir)
 {
 	signed int i;
 
@@ -206,30 +206,30 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 
 	/* check if the object is decoration */
 	if (object >= 50) {
-		if (type == 57 || type == 56 || type == 62) {
+		if ((signed char)type == 57 || (signed char)type == 56 || (signed char)type == 62) {
 
 			FIG_set_cb_field(y + 1, x, object);
 			FIG_set_cb_field(y + 1, x - 1, object);
 			FIG_set_cb_field(y, x - 1, object);
 
-		} else if (type == 9) {
+		} else if ((signed char)type == 9) {
 
 			FIG_set_cb_field(y, x + 1, object);
 			FIG_set_cb_field(y - 1, x, object);
 
-		} else if (type == 43 || type == 44 || type == 48 ||
-				type == 49 || type == 50 || type == 51 ||
-				type == 52 || type == 53 || type == 54 ||
-				type == 55) {
+		} else if ((signed char)type == 43 || (signed char)type == 44 || (signed char)type == 48 ||
+				(signed char)type == 49 || (signed char)type == 50 || (signed char)type == 51 ||
+				(signed char)type == 52 || (signed char)type == 53 || (signed char)type == 54 ||
+				(signed char)type == 55) {
 
 			FIG_set_cb_field(y + 1, x, object);
 
-		} else if (type == 60) {
+		} else if ((signed char)type == 60) {
 
 			for (i = 0; i < 7; i++)
 				FIG_set_cb_field(y + i, x, object);
 
-		} else if (type == 61) {
+		} else if ((signed char)type == 61) {
 
 			for (i = 0; i < 7; i++)
 				FIG_set_cb_field(y, x + i, object);
@@ -389,8 +389,11 @@ void FIG_init_enemies(void)
 
 		/* place only the enemies from round 0 */
 		if (!g_current_fight->monsters[i].round_appear) {
-
+#if !defined(__BORLANDC__)
 			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,	g_current_fight->monsters[i].viewdir);
+#else
+			place_obj_on_cb(x, y, i + 10, (_AL = g_enemy_sheets[i].gfx_id, _AX), g_current_fight->monsters[i].viewdir);
+#endif
 		}
 
 		/* load the sprites */
@@ -465,7 +468,11 @@ void FIG_init_heroes(void)
 			}
 		}
 
+#if !defined(__BORLANDC__)
 		place_obj_on_cb(cb_x, cb_y, l_si + 1, hero->typus, hero->viewdir);
+#else
+		place_obj_on_cb(cb_x, cb_y, l_si + 1, (_AL = hero->typus, _AX), hero->viewdir);
+#endif
 
 		l_di = FIG_get_range_weapon_type(hero);
 

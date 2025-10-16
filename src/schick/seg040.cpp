@@ -277,11 +277,8 @@ void FIG_draw_scenario(void)
 
 					g_fightobj_list[g_fightobj_count] = FIG_add_to_list(-1);
 					g_fightobj_count++;
-#if !defined(__BORLANDC__)
-					place_obj_on_cb(cb_x, cb_y, obj_id + 50, (signed char)obj_id, 0);
-#else
+
 					place_obj_on_cb(cb_x, cb_y, obj_id + 50, obj_id, 0);
-#endif
 				}
 			}
 		}
