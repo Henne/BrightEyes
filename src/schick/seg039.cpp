@@ -194,10 +194,9 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
  * \param   dir         looking direction
  * \return              1 if the placement was successful or 0 if not.
  */
-unsigned short place_obj_on_cb(signed short x, signed short y, signed short object, signed char type, signed char dir)
+signed int place_obj_on_cb(const signed int x, const signed int y, const signed int object, const signed char type, const signed char dir)
 {
-
-	signed short i;
+	signed int i;
 
 	/* check if an object is already on that field
 		check if the object no is valid */

@@ -468,8 +468,11 @@ void FIG_latecomers(void)
 						FIG_add_to_list(p_enemy->fighter_id);
 					}
 
-					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, (signed short)g_current_fight->monsters[i].viewdir); /* BAE-TODO: linker error */
-
+#if !defined(__BORLANDC__)
+					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, (signed short)g_current_fight->monsters[i].viewdir);
+#else
+					place_obj_on_cb(x, y, i + 10, (_AX = (Bit16s)p_enemy->gfx_id), (_AX = (Bit16s)g_current_fight->monsters[i].viewdir));
+#endif
 					FIG_make_visible(p_enemy->fighter_id);
 
 				} else {

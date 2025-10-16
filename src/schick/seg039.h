@@ -8,21 +8,12 @@ signed short calc_beeline(signed short, signed short, signed short, signed short
 signed int FIG_get_range_weapon_type(struct struct_hero*);
 /* 0x2a */
 void fill_enemy_sheet(signed short, signed char, signed char);
-
-
 /* 0x2f */
-#if !defined(__BORLANDC__)
-unsigned short place_obj_on_cb(signed short, signed short, signed short, signed char, signed char);
-#else
-unsigned short place_obj_on_cb(signed short, signed short, signed short, signed short, signed short);
-#endif
-
+signed int place_obj_on_cb(const signed int, const signed int, const signed int, const signed char, const signed char);
 /* 0x34 */
 void FIG_load_enemy_sprites(struct enemy_sheet*, signed short, signed short);
-
 /* 0x39 */
 void FIG_init_enemies(void);
-
 /* 0x3e */
 void FIG_init_heroes(void);
 #if !defined(__BORLANDC__)
