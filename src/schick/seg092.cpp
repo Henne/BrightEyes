@@ -420,9 +420,7 @@ void seg092_06b4(signed short a1)
 			break;
 		}
 
-		chest_ptr++;
-
-	} while (chest_ptr->pos != -1);
+	} while ((chest_ptr++)->pos != -1);
 
 	if (l4 == 0 && g_get_extra_loot) {
 
