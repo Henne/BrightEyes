@@ -30,10 +30,6 @@
 namespace M302de {
 #endif
 
-#if defined(__BORLANDC__)
-void sub_light_timers(signed short);
-#endif
-
 struct struct_ani {
 	Bit8u* ptr;
 	signed short width;
@@ -540,7 +536,16 @@ void show_outro(void)
 	/* reset the timers */
 	sub_ingame_timers(DAYS(30));
 	sub_mod_timers(DAYS(30));
-	sub_light_timers(100);	/* BAE-TODO: not linked correctly, argument is Byte */
+#if !defined(__BORLANDC__)
+	sub_light_timers(HOURS(25)/MINUTES(15));		/* BAE-TODO: not linked correctly, argument is Byte */
+#else
+	asm {
+		push 0x64;
+		call far ptr sub_light_timers;
+		pop cx;
+	};
+	//sub_light_timers(HOURS(25)/MINUTES(15));	/* BAE-TODO: not linked correctly, argument is Byte */
+#endif
 
 	/* give the heroes the reward and restore them */
 	hero = get_hero(0);

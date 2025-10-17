@@ -35,10 +35,6 @@
 namespace M302de {
 #endif
 
-#if defined(__BORLANDC__)
-void sub_light_timers(signed short);
-#endif
-
 void tevent_130(void)
 {
 	signed short answer;
@@ -556,7 +552,16 @@ void tevent_144(void)
 				sub_mod_timers(MONTHS(1));
 				sub_heal_staffspell_timers(MONTHS(1)/MINUTES(5)); /* note that the argument is given in units of 5 minutes */
 				/* BAE-TODO: argument ist given here as unsigned char + not linked correctly */
+#if !defined(__BORLANDC__)
 				sub_light_timers(HOURS(25)/MINUTES(15)); /* note that the argument is given in units of 15 minutes */
+#else
+				asm {
+					push 0x64;
+					call far ptr sub_light_timers;
+					pop cx;
+				};
+				//sub_light_timers(HOURS(25)/MINUTES(15)); /* note that the argument is given in units of 15 minutes */
+#endif
 				right_time_flag = 1;
 			}
 		}
