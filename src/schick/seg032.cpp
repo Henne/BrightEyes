@@ -165,9 +165,9 @@ signed short FIG_choose_next_hero(void)
 
 	/* search for a hero who has a class, is in the current group and
 		something still unknown */
-	} while (((get_hero(retval))->typus == HERO_TYPE_NONE) ||
-			((get_hero(retval))->group_no != gs_current_group) ||
-			((get_hero(retval))->actions  == 0));
+	} while ((get_hero(retval)->typus == HERO_TYPE_NONE) ||
+			(get_hero(retval)->group_no != gs_current_group) ||
+			(get_hero(retval)->actions == 0));
 
 	return retval;
 }
@@ -623,7 +623,11 @@ void FIG_do_round(void)
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
 										/* BAE-TODO: passing of the 3rd parameter is different */
+#if !defined(__BORLANDC__)
 										FIG_set_cb_field(y, x, ((unsigned char)fighter_ptr->obj_id));
+#else
+										FIG_set_cb_field(y, x, (_AL = fighter_ptr->obj_id, _AX));
+#endif
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
 										FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, 0);
@@ -639,7 +643,6 @@ void FIG_do_round(void)
 					g_fig_char_pic = 0;
 				}
 			}
-#if !defined(__BORLANDC__)	// SYNC-Point
 
 			if (!FIG_fight_continues()) {
 
@@ -648,13 +651,6 @@ void FIG_do_round(void)
 			}
 
 			nr_hero_action_phases_left_in_round--;
-#else
-			asm { db 0x0f, 0x1f, 0x40, 0x00; }
-			asm { db 0x0f, 0x1f, 0x40, 0x00; }
-			asm { db 0x0f, 0x1f, 0x00; }
-			asm { nop; };
-			asm { nop; };
-#endif
 
 		} else {
 			/* enemies on turn */
@@ -721,7 +717,11 @@ void FIG_do_round(void)
 									if (fighter_ptr->obj_id >= 0) {
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
+#if !defined(__BORLANDC__)
 										FIG_set_cb_field(y, x, fighter_ptr->obj_id);
+#else
+										FIG_set_cb_field(y, x, (_AL = fighter_ptr->obj_id, _AX));
+#endif
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
 										FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, 0);
@@ -766,12 +766,7 @@ void FIG_do_round(void)
 						}
 #endif
 
-
-#if !defined(__BORLANDC__)	// SYNC-Point
 						herokeeping();
-#else
-						asm { db 0x0f, 0x1f, 0x40, 0x00; }
-#endif
 					}
 
 					g_fig_enemy_pic = 0;
