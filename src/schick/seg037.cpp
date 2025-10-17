@@ -205,8 +205,12 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 
 	if (mode == 0) {
 
-		if ( ((cb_val > 0) && (cb_val < 10) && !(get_hero(cb_val - 1))->flags.dead && !(get_hero(cb_val - 1))->flags.unconscious) || (
-			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && /* */g_enemy_sheets[cb_val - 10].flags.renegade))
+		if ( ((cb_val > 0) && (cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious) ||
+			(
+			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead &&
+			//g_enemy_sheets[cb_val - 10].flags.renegade
+				((struct enemy_flags*)(cb_val * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
+			))
 		{
 			return 1;
 		} else {
@@ -214,13 +218,6 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 		}
 
 	} else if (mode == 1) {
-
-#if defined(__BORLANDC__)
-		/* Sync-Point */
-		asm { db 0x66, 0x90; }
-		asm { nop; }
-		asm { nop; }
-#endif
 
 		/* is a living enemy */
 		if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)
@@ -294,7 +291,10 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 			if (mode == 0) {
 				/* hero or enemy reacheable from enemies position */
 				if ( ((cb_val > 0) && (cb_val < 10) && !(get_hero(cb_val - 1))->flags.dead && !(get_hero(cb_val - 1))->flags.unconscious) ||
-					((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && g_enemy_sheets[cb_val - 10].flags.renegade))
+					((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead &&
+					// g_enemy_sheets[cb_val - 10].flags.renegade
+					((struct enemy_flags*)(cb_val * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
+					))
 				{
 					can_attack = 1;
 					done = 1;
@@ -312,12 +312,6 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 					}
 				}
 
-#if defined(__BORLANDC__)
-				/* Sync-Point */
-				asm { db 0x66, 0x90; }
-				asm { db 0x66, 0x90; }
-				asm { db 0x66, 0x90; }
-#endif
 			} else if (mode == 1) {
 				/* attack foe first */
 				if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)

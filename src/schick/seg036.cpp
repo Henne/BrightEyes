@@ -252,9 +252,11 @@ signed short KI_can_attack_neighbour(signed short start_x, signed short start_y,
 
 	if (mode == 1) {
 		/* target is hero or enemy */
-		if ( ( (target > 0) && (target < 10) &&	!get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) || (
-
-			((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead && g_enemy_sheets[target - 10].flags.renegade)))
+		if ( ( (target > 0) && (target < 10) &&	!get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
+			((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
+				//g_enemy_sheets[target - 10].flags.renegade
+				((struct enemy_flags*)(target * sizeof(struct enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
+			))
 		{
 			return 1;
 		} else {
@@ -279,11 +281,6 @@ signed short KI_can_attack_neighbour(signed short start_x, signed short start_y,
 		}
 	}
 
-#if defined(__BORLANDC__)	// SYNC-Point
-		asm { db 0x0f, 0x1f, 0x00; };
-		asm { nop; };
-		asm { nop; };
-#endif
 	return 0;
 }
 
@@ -338,14 +335,14 @@ signed short KI_search_spell_target(signed short x, signed short y,
 
 			/* attack only heroes and renegade enemies */
 			if ( ((obj_id > 0) && (obj_id < 10) && !(get_hero(obj_id - 1))->flags.dead && !(get_hero(obj_id - 1))->flags.unconscious) ||
-				((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead && g_enemy_sheets[obj_id - 10].flags.renegade))
-			{
-#if defined(__BORLANDC__)	// SYNC-Point
-				asm { db 0x0f, 0x1f, 0x00; };
-				asm { db 0x0f, 0x1f, 0x00; };
-#endif
-				will_attack = 1;
-				done = 1;
+				((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead &&
+				// g_enemy_sheets[obj_id - 10].flags.renegade
+				((struct enemy_flags*)(obj_id * sizeof(struct enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
+				))
+				{
+
+					will_attack = 1;
+					done = 1;
 
 			} else if ( (obj_id != 0) && (((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead) || ((obj_id >= 50) && !is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle))))
 				{
