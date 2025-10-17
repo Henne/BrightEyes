@@ -278,8 +278,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 			}
 
 			p2 += copy_ani_seq(p2,
-				g_weaponani_table[(g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
-				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir], 3);
+				*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
+				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 		}
 	}
 
@@ -292,8 +292,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 				(hero->typus != HERO_TYPE_DRUID))
 			{
 				p2 += copy_ani_seq(p2,
-					g_weaponani_table[(g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
-					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir], 3);
+					*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
+					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 			}
 	}
 
@@ -491,7 +491,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 
 			/* copy the weapon ani */
 			p2 += copy_ani_seq(p2,
-				g_weaponani_table[g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir], 3);
+				*(Bit16s*)((Bit8u*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 		}
 	}
 
@@ -504,7 +504,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 
 				/* copy the weapon ani */
 				p2 += copy_ani_seq(p2,
-					g_weaponani_table[(g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16) + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir], 3);
+					*(Bit16s*)((Bit8u*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 			}
 	}
 
