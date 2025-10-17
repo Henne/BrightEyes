@@ -662,7 +662,7 @@ signed short GUI_use_skill2(signed short handicap, char *msg)
 
 		hero_pos = select_hero_ok(msg);
 
-		if ((hero_pos != -1) && ((get_hero(hero_pos))->flags.brewing)) {
+		if ((hero_pos != -1) && get_hero(hero_pos)->flags.brewing) {
 			GUI_output(get_ttx(730));
 			hero_pos = -1;
 		}
@@ -692,7 +692,7 @@ signed int bargain(struct struct_hero *hero, const signed int items, const Bit32
 	signed char mod = mod_init;
 
 	/* NPC Harika gets a bonus on bargain */
-	if ((get_hero(6))->npc_id == NPC_HARIKA) {
+	if (get_hero(6)->npc_id == NPC_HARIKA) {
 		mod -= 2;
 	}
 

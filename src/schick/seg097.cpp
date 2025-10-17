@@ -728,7 +728,6 @@ signed short GUI_radio(char *text, signed char options, ...)
 		return 0;
 	}
 
-
 	g_dialogbox_lock = 1;
 	l7 = g_textline_posx;
 	l8 = g_textline_posy;
@@ -783,7 +782,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	g_textline_posy = l8;
 	g_textline_maxlen = l9;
 	g_txt_tabpos[0] = l10;
-	g_action = (g_dialogbox_lock = 0);
+	g_action = g_dialogbox_lock = 0;
 	g_update_statusline = l12;
 
 	return retval;
