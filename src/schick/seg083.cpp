@@ -168,7 +168,7 @@ signed short DNG08_handler(void)
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), (Bit8u*)&(get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (Bit8u*)&get_hero(i)->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}
@@ -191,7 +191,7 @@ signed short DNG08_handler(void)
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), (Bit8u*)&(get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (Bit8u*)&get_hero(i)->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}

@@ -382,7 +382,7 @@ signed short load_game_state(void)
 
 			load_npc(i);
 
-			if ((get_hero(6))->group_pos != 7) {
+			if (get_hero(6)->group_pos != 7) {
 
 				memset(get_hero(6), 0, sizeof(struct struct_hero));
 			} else {
@@ -522,15 +522,15 @@ signed short save_game_state(void)
 		/* create a CHR-file for each hero in TEMP */
 		for (tw_bak = 0; tw_bak < 6; tw_bak++) {
 
-			if ((get_hero(tw_bak))->typus != HERO_TYPE_NONE) {
+			if (get_hero(tw_bak)->typus != HERO_TYPE_NONE) {
 
 				/* save position on the playmask */
-				(get_hero(tw_bak))->group_pos = tw_bak + 1;
+				get_hero(tw_bak)->group_pos = tw_bak + 1;
 
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
 				 * Here, the actual decrease is executed */
-				if (g_game_state != GAME_STATE_VICTORY && gs_current_loctype != LOCTYPE_TEMPLE && (get_hero(tw_bak))->ap > 0)
+				if ((g_game_state != GAME_STATE_VICTORY) && (gs_current_loctype != LOCTYPE_TEMPLE) && (get_hero(tw_bak)->ap > 0))
 				{
 					add_hero_ap(get_hero(tw_bak), -1L);
 				}
@@ -541,10 +541,10 @@ signed short save_game_state(void)
 		}
 
 		/* save the current NPC in TEMP */
-		if ((get_hero(6))->typus != HERO_TYPE_NONE) {
+		if (get_hero(6)->typus != HERO_TYPE_NONE) {
 
-			(get_hero(6))->group_pos = 7;
-			save_npc((get_hero(6))->npc_id + 225);
+			get_hero(6)->group_pos = 7;
+			save_npc(get_hero(6)->npc_id + 225);
 		}
 
 		load_area_description(1);
@@ -729,7 +729,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 
 			startup_equipment(hero);
 
-			(get_hero(hero_pos))->start_gear = 1; /* it would be more consistent to set only bit 0 and leave the others untouched, see above. */
+			get_hero(hero_pos)->start_gear = 1; /* it would be more consistent to set only bit 0 and leave the others untouched, see above. */
 
 			write_chr_temp(hero_pos);
 		}
@@ -752,7 +752,7 @@ void write_chr_temp(unsigned short hero_pos)
 	char fname[20];
 	unsigned short fd;
 
-	prepare_chr_name(fname, (char*)get_hero(hero_pos));
+	prepare_chr_name(fname, get_hero(hero_pos)->name);
 
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, fname);
 

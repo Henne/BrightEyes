@@ -145,7 +145,7 @@ void do_wildcamp(void)
 						}
 
 						if (answer != -1) {
-							if ((get_hero(answer))->flags.brewing) {
+							if (get_hero(answer)->flags.brewing) {
 								GUI_output(get_ttx(730));
 								answer = -1;
 							}
@@ -180,7 +180,7 @@ void do_wildcamp(void)
 
 			if (answer != -1) {
 
-				if ((get_hero(answer))->flags.brewing) {
+				if (get_hero(answer)->flags.brewing) {
 					GUI_output(get_ttx(730));
 					answer = -1;
 				}
@@ -315,8 +315,7 @@ void do_wildcamp(void)
 
 						if (g_wildcamp_guards[l_si] != -1) {
 
-							sprintf(g_dtp2,	get_ttx(774),
-								get_hero(g_wildcamp_guards[l_si])->alias);
+							sprintf(g_dtp2,	get_ttx(774), get_hero(g_wildcamp_guards[l_si])->alias);
 							GUI_print_loc_line(g_dtp2);
 						}
 					}

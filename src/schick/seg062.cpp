@@ -71,7 +71,7 @@ void ask_miracle(void)
 					l5 = 1;
 
 					for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
-						if ((get_hero(i))->typus >= HERO_TYPE_WITCH) {
+						if (get_hero(i)->typus >= HERO_TYPE_WITCH) {
 							l5 = 1;
 						}
 					}
@@ -96,12 +96,12 @@ void ask_miracle(void)
 
 								i = get_random_hero();
 
-								if ((i != -1) && !(get_hero(i))->flags.gods_pissed) {
+								if ((i != -1) && !get_hero(i)->flags.gods_pissed) {
 
 									slot = get_free_mod_slot();
-									set_mod_slot(slot, DAYS(3), (Bit8u*)&(get_hero(i))->mr, 99, (signed char)i);
+									set_mod_slot(slot, DAYS(3), (Bit8u*)&get_hero(i)->mr, 99, (signed char)i);
 
-									sprintf(g_dtp2, get_tx2(2), (get_hero(i))->alias);
+									sprintf(g_dtp2, get_tx2(2), get_hero(i)->alias);
 									gs_ingame_timers[INGAME_TIMER_PRAIOS_MR] = DAYS(3);
 								}
 							}
@@ -288,14 +288,14 @@ void ask_miracle(void)
 
 							i = get_random_hero();
 
-							if (i != -1 && !(get_hero(i))->flags.gods_pissed) {
+							if (i != -1 && !get_hero(i)->flags.gods_pissed) {
 
 								slot = get_free_mod_slot();
-								set_mod_slot(slot, DAYS(7), (Bit8u*)&(get_hero(i))->hunger_timer, 1, (signed char)i);
+								set_mod_slot(slot, DAYS(7), (Bit8u*)&get_hero(i)->hunger_timer, 1, (signed char)i);
 
-								(get_hero(i))->hunger = (get_hero(i))->thirst = 0;
+								get_hero(i)->hunger = get_hero(i)->thirst = 0;
 
-								sprintf(g_dtp2, get_tx2(20), (get_hero(i))->alias);
+								sprintf(g_dtp2, get_tx2(20), get_hero(i)->alias);
 								gs_ingame_timers[INGAME_TIMER_FIRUN_SATED] = DAYS(7);
 							}
 						}

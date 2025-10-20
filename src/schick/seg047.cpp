@@ -204,7 +204,7 @@ void hero_disease_test(struct struct_hero *hero, const signed short disease, con
  */
 signed short check_hero_KK_unused(const signed short val)
 {
-	return (get_hero(0))->attrib[ATTRIB_KK].current + (get_hero(0))->attrib[ATTRIB_KK].mod >= val ? 1 : 0;
+	return get_hero(0)->attrib[ATTRIB_KK].current + get_hero(0)->attrib[ATTRIB_KK].mod >= val ? 1 : 0;
 }
 
 /**

@@ -266,7 +266,7 @@ signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id,
 	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : (get_hero(monster->enemy_id - 1))->mr);
+		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : get_hero(monster->enemy_id - 1)->mr);
 	}
 
 	/* check if the monster spell has a valid ID */

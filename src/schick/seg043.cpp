@@ -133,7 +133,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 					if (fighter_id != 0) {
 
 						if ((fighter_id >= 50) ||
-							((fighter_id < 10) && !(get_hero(fighter_id - 1))->flags.dead) ||
+							((fighter_id < 10) && !get_hero(fighter_id - 1)->flags.dead) ||
 							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags.dead) ||
 							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags.dead))
 						{

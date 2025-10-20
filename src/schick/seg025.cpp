@@ -170,10 +170,10 @@ void do_house(void)
 					{
 						i = 0;
 
-						while ((get_hero(i))->group_no == gs_current_group)
+						while (get_hero(i)->group_no == gs_current_group)
 						{
 							/* imprison hero */
-							(get_hero(i))->jail = 1;
+							get_hero(i)->jail = 1;
 							i++;
 						}
 
@@ -346,7 +346,7 @@ void show_treasure_map(void)
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
 
-			sprintf(g_text_output_buf, get_ttx(727), (get_hero(get_random_hero()))->alias);
+			sprintf(g_text_output_buf, get_ttx(727), get_hero(get_random_hero())->alias);
 			GUI_output(g_text_output_buf);
 
 			g_textbox_width = tw_bak;

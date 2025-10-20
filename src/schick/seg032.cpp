@@ -919,7 +919,7 @@ signed short do_fight(signed short fight_id)
 	signed short tw_bak;
 	signed short escape_positions[6];
 
-	if ((gs_group_member_counts[gs_current_group] == 1) && ((get_hero(0))->invisible != 0))
+	if ((gs_group_member_counts[gs_current_group] == 1) && (get_hero(0)->invisible != 0))
 	{
 		/* group consists of a single hero with an active Visibili spell */
 		/* TODO: potential Original-Bug: what about groups with >= 2 heroes where all have an active Visibili? */
@@ -1238,7 +1238,7 @@ signed short do_fight(signed short fight_id)
 				group_size = gs_group_member_counts[gs_current_group];
 
 				for (j = 0; j < group_size; j++) {
-					(get_hero(j))->escape_position = 0;
+					get_hero(j)->escape_position = 0;
 				}
 
 				gs_x_target = ((escape_positions[i] >> 8) & 0x0f);

@@ -807,8 +807,8 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 					} else if (cb_entry_bak > 0) {
 
 						/* target square contains a hero */
-						if (!(get_hero(cb_entry_bak - 1))->flags.dead &&
-							!(get_hero(cb_entry_bak - 1))->flags.unconscious &&
+						if (!get_hero(cb_entry_bak - 1)->flags.dead &&
+							!get_hero(cb_entry_bak - 1)->flags.unconscious &&
 							(cb_entry_bak != hero_pos + 1))
 						{
 							/* hero is not dead, not unconscious, and not the active hero */
@@ -828,7 +828,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 						/* target square contains a non-dead monster (including the tail of a two-squares monster) */
 						problem = 3;
 
-					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !(get_hero(cb_entry_bak - 1))->flags.dead && !(get_hero(cb_entry_bak - 1))->flags.unconscious && (cb_entry_bak != hero_pos + 1)) {
+					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !get_hero(cb_entry_bak - 1)->flags.dead && !get_hero(cb_entry_bak - 1)->flags.unconscious && (cb_entry_bak != hero_pos + 1)) {
 
 						/* target square contains a non-dead and non-unconscious hero different from the active hero */
 						problem = 3;

@@ -430,7 +430,7 @@ void update_status_bars(void)
 
 			for (i = 0; i <= 6; i++) {
 
-				if ((get_hero(i))->typus != HERO_TYPE_NONE) {
+				if (get_hero(i)->typus != HERO_TYPE_NONE) {
 
 					hero = get_hero(i);
 

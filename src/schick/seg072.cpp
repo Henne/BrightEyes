@@ -297,11 +297,11 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				g_dialog_next_state = (gs_informer_flags[INFORMER_BEORN] == 2 ? 1 : 2);
 			} else if (state == 2) {
 				/* is ERWO in the group ? */
-				g_dialog_next_state = ((get_hero(6))->npc_id == NPC_ERWO && is_hero_available_in_group(get_hero(6)) ? 3 : 15);
+				g_dialog_next_state = (get_hero(6)->npc_id == NPC_ERWO && is_hero_available_in_group(get_hero(6)) ? 3 : 15);
 			} else if (state == 6) {
 
 				/* copy the name */
-				strcpy(g_str_beorn_hjall, (get_hero(6))->alias);
+				strcpy(g_str_beorn_hjall, get_hero(6)->alias);
 				/* set a pointer */
 				g_dialog_title = g_str_beorn_hjall;
 				/* copy the picture of the NPC */

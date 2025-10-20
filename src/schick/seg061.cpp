@@ -445,7 +445,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
-		sprintf(g_dtp2, (char*)str, (get_hero(hero_pos))->alias, le_in, g_text_output_buf);
+		sprintf(g_dtp2, (char*)str, get_hero(hero_pos)->alias, le_in, g_text_output_buf);
 	}
 }
 

@@ -388,10 +388,10 @@ void hero_disappear(struct struct_hero *hero, const signed int pos, const signed
 
 	if (pos == 6) {
 		/* NPC */
-		save_npc(ARCHIVE_FILE_NPCS + (get_hero(6))->npc_id);
+		save_npc(ARCHIVE_FILE_NPCS + get_hero(6)->npc_id);
 
 		/* reset NPC timer */
-		gs_npc_timers[(get_hero(6))->npc_id + 1] = -1;
+		gs_npc_timers[get_hero(6)->npc_id + 1] = -1;
 	} else {
 		/* Regular Hero */
 		write_chr_temp(pos);

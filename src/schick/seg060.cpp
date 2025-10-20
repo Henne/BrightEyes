@@ -99,9 +99,7 @@ void talk_tavern(void)
 
 				hero = get_hero(gs_tlk_tav_testdrunk - 1);
 
-				sprintf(text_buffer, format, hero->alias,
-					GUI_get_ptr(hero->sex, 3),
-					GUI_get_ptr(hero->sex, 1));
+				sprintf(text_buffer, format, hero->alias, GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 1));
 ;
 			} else if (txt_id == 18 || txt_id == 31) {
 
@@ -535,9 +533,7 @@ void TLK_tavern(signed short answer)
 
 		g_dialog_next_state = (108);
 
-		if (((get_hero(gs_tlk_tav_testdrunk))->typus) &&
-			!(get_hero(gs_tlk_tav_testdrunk))->flags.dead &&
-			gs_tlk_tav_drinkcount)
+		if ((get_hero(gs_tlk_tav_testdrunk)->typus) && !get_hero(gs_tlk_tav_testdrunk)->flags.dead && gs_tlk_tav_drinkcount)
 		{
 			g_dialog_next_state = (test_skill(get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
 		}

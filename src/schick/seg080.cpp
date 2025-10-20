@@ -133,7 +133,7 @@ signed short DNG04_handler(void)
 
 			/* Original-BUG: assumption the leader is at pos 0 */
 			/* CH-5 for 1 day */
-			set_mod_slot(i, DAYS(1), (Bit8u*)&(get_hero(0))->attrib[ATTRIB_CH].current, -5, 0);
+			set_mod_slot(i, DAYS(1), (Bit8u*)&get_hero(0)->attrib[ATTRIB_CH].current, -5, 0);
 		}
 
 	} else if (pos == DNG_POS(0,14,14) && pos != gs_dng_handled_pos)

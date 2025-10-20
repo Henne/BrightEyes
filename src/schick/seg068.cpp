@@ -598,7 +598,7 @@ void THO_academy(void)
 
 							gs_academy_daily_curse = 1;
 
-							(get_hero(cursed_hero_pos))->flags.renegade = 0;
+							get_hero(cursed_hero_pos)->flags.renegade = 0;
 
 						} else {
 							GUI_input(get_tx2(70), 0);
@@ -615,7 +615,7 @@ void THO_academy(void)
 
 					gs_academy_daily_curse = 1;
 
-					(get_hero(cursed_hero_pos))->flags.renegade = 0;
+					get_hero(cursed_hero_pos)->flags.renegade = 0;
 
 				} else {
 					GUI_input(get_ttx(401), 0);

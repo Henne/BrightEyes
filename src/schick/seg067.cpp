@@ -263,9 +263,7 @@ void city_event_6(void)
 
 		load_in_head(4);
 
-		sprintf(g_dtp2 + 0x400,
-			get_tx(random_schick(4) + 102),
-		       (get_hero(get_random_hero()))->alias);
+		sprintf(g_dtp2 + 0x400, get_tx(random_schick(4) + 102), get_hero(get_random_hero())->alias);
 
 		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 3,
 			get_tx(random_schick(4) + 106),

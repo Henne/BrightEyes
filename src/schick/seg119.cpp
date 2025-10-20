@@ -50,7 +50,7 @@ void disease_effect(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if (((get_hero(i))->typus != HERO_TYPE_NONE) && !(get_hero(i))->flags.dead) {
+		if ((get_hero(i)->typus != HERO_TYPE_NONE) && !get_hero(i)->flags.dead) {
 
 			hero = get_hero(i);
 

@@ -168,7 +168,7 @@ struct struct_hero* FIG_get_hero_ptr(const signed short fighter_id)
 	signed int i;
 
 	for (i = 0; i <= 6; i++) {
-		if ((get_hero(i))->fighter_id == fighter_id)
+		if (get_hero(i)->fighter_id == fighter_id)
 			return get_hero(i);
 	}
 

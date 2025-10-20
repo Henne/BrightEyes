@@ -598,7 +598,7 @@ void DNG09_pitfall(void)
 				*g_dtp2 = '\0';
 
 				if (i) {
-					sprintf(g_dtp2, get_ttx(768), (get_hero(i - 1))->alias);
+					sprintf(g_dtp2, get_ttx(768), get_hero(i - 1)->alias);
 				}
 
 				strcat(g_dtp2, (char*)(gs_dng09_pit_flag == 2 ? get_tx(36) : get_tx(37)));

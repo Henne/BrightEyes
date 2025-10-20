@@ -334,7 +334,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
 		if (renegade == 1) {
 
 			/* attack only heroes and renegade enemies */
-			if ( ((obj_id > 0) && (obj_id < 10) && !(get_hero(obj_id - 1))->flags.dead && !(get_hero(obj_id - 1))->flags.unconscious) ||
+			if ( ((obj_id > 0) && (obj_id < 10) && !get_hero(obj_id - 1)->flags.dead && !get_hero(obj_id - 1)->flags.unconscious) ||
 				((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead &&
 				// g_enemy_sheets[obj_id - 10].flags.renegade
 				((struct enemy_flags*)(obj_id * sizeof(struct enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
@@ -361,10 +361,8 @@ signed short KI_search_spell_target(signed short x, signed short y,
 #ifdef M302de_ORIGINAL_BUGFIX
 						(obj_id > 0) &&
 #endif
-						 (((obj_id < 10) && !(get_hero(obj_id - 1))->flags.dead &&	!(get_hero(obj_id - 1))->flags.unconscious
-						) || (
-							(obj_id >= 50) &&
-							!is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle)
+						 (((obj_id < 10) && !get_hero(obj_id - 1)->flags.dead && !get_hero(obj_id - 1)->flags.unconscious
+						) || ( (obj_id >= 50) && !is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle)
 						))
 					)
 				)

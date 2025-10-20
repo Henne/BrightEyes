@@ -599,9 +599,9 @@ void tevent_144(void)
 
 				if (grimring_hero_pos == 6) {
 
-					sprintf(g_dtp2, get_tx2(38), (get_hero(6))->alias);
+					sprintf(g_dtp2, get_tx2(38), get_hero(6)->alias);
 
-					GUI_dialogbox((get_hero(6))->pic, (get_hero(6))->alias, g_dtp2, 0);
+					GUI_dialogbox(get_hero(6)->pic, get_hero(6)->alias, g_dtp2, 0);
 				}
 
 			} while (grimring_hero_pos == 6);

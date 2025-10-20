@@ -411,11 +411,11 @@ void FIG_init_heroes(void)
 
 	for (l_si = 0; l_si <= 6; l_si++) {
 
-		if ((get_hero(l_si))->fighter_id != -1) {
+		if (get_hero(l_si)->fighter_id != -1) {
 
-			FIG_remove_from_list((get_hero(l_si))->fighter_id, 0);
+			FIG_remove_from_list(get_hero(l_si)->fighter_id, 0);
 
-			(get_hero(l_si))->fighter_id = -1;
+			get_hero(l_si)->fighter_id = -1;
 		}
 	}
 
@@ -527,7 +527,7 @@ void FIG_init_heroes(void)
 		g_fig_list_elem.visible = 1;
 		g_fig_list_elem.twofielded = -1;
 
-		(get_hero(l_si))->fighter_id = FIG_add_to_list(-1);
+		get_hero(l_si)->fighter_id = FIG_add_to_list(-1);
 	}
 }
 
