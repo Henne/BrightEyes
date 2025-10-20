@@ -754,8 +754,9 @@ signed short have_mem_for_sound(void)
 	struct ffblk blk;
 
 	if (!findfirst(g_fname_sound_adv, &blk, 0)) {
+
 		/* SOUND.ADV was found */
-		size = host_readd((Bit8u*)(&blk) + 26);
+		size = blk.ff_fsize;
 		size += 4000L;
 
 		if ((Bit32u)size < farcoreleft()) {

@@ -625,7 +625,7 @@ void prepare_dirs(void)
 		do {
 			sprintf(g_text_output_buf,
 				g_str_temp_xx_ptr2,
-				((char*)&blk) + 30);			/* contains a filename */
+				blk.ff_name);			/* contains a filename */
 
 			unlink(g_text_output_buf);
 
@@ -640,14 +640,14 @@ void prepare_dirs(void)
 	while (!l_si) {
 
 		/* open CHR-file and copy it into TEMP-dir */
-		l_di = open(((char*)&blk) + 30, O_BINARY | O_RDWR);
+		l_di = open(blk.ff_name, O_BINARY | O_RDWR);
 
 		/* REMARK: size of CHR files differs from floppy to CD version */
 		_read(l_di, g_renderbuf_ptr, sizeof(struct struct_hero));
 
 		close(l_di);
 
-		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30); /* contains a filename */
+		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name); /* contains a filename */
 
 		l_di = _creat(g_text_output_buf, 0);
 
@@ -737,7 +737,7 @@ void cleanup_game(void)
 			/* delete each found file */
 			sprintf(g_text_output_buf,
 				g_str_temp_xx_ptr2,	/* contains "TEMP\\%s" */
-				((char*)(&blk)) + 30);			/* contains a filename */
+				blk.ff_name);			/* contains a filename */
 
 			unlink(g_text_output_buf);
 

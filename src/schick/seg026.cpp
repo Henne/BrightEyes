@@ -361,7 +361,7 @@ signed short load_game_state(void)
 			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
 
 			if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
-				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
+				handle = open(blk.ff_name, O_BINARY | O_RDWR);
 				_read(handle, g_renderbuf_ptr, sizeof(struct struct_hero));
 				close(handle);
 
@@ -641,7 +641,7 @@ signed short save_game_state(void)
 		l1 = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
@@ -788,7 +788,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 
 		do {
 			/* create the CHR filename */
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
