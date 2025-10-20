@@ -45,7 +45,7 @@ void reset_item_selector(void)
 				30);
 
 		/* mark the actual selected item */
-		g_statuspage_selitem1_no = (g_statuspage_selitem3_no = (7));
+		g_statuspage_selitem1_no = g_statuspage_selitem3_no = 7;
 
 		/* set the new red border */
 		do_border(g_vga_memstart,
@@ -56,7 +56,7 @@ void reset_item_selector(void)
 				9);
 
 		g_statuspage_selitem4_no = -1;
-		g_statuspage_selitem2_no = 23;
+		g_statuspage_selitem2_no = HERO_INVENTORY_SLOT_EYE;
 	}
 
 	g_current_cursor = g_current_cursor_bak = &g_default_mouse_cursor;
@@ -178,8 +178,8 @@ void status_menu(signed short hero_pos)
 				if (hero_pos > 6) hero_pos = 0;
 
 			} while (!((get_hero(hero_pos))->typus) ||
-					((get_hero(hero_pos))->group_no != gs_current_group) ||
-					(((get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
+					(get_hero(hero_pos)->group_no != gs_current_group) ||
+					((get_hero(hero_pos)->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -210,9 +210,9 @@ void status_menu(signed short hero_pos)
 
 				if (hero_pos < 0) hero_pos = 6;
 
-			} while (!((get_hero(hero_pos))->typus) ||
-					((get_hero(hero_pos))->group_no != gs_current_group) ||
-					(((get_hero(hero_pos))->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
+			} while (!(get_hero(hero_pos)->typus) ||
+					(get_hero(hero_pos)->group_no != gs_current_group) ||
+					((get_hero(hero_pos)->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -242,13 +242,13 @@ void status_menu(signed short hero_pos)
 				if (g_statuspage_selitem4_no != -1) {
 
 					if (!g_statuspage_selitem4_no) {
-						g_statuspage_selitem4_no = 24;
+						g_statuspage_selitem4_no = HERO_INVENTORY_SLOT_MOUTH;
 					} else {
 						g_statuspage_selitem4_no--;
 					}
 				} else {
 					if (g_statuspage_selitem3_no == 0) {
-						g_statuspage_selitem3_no = 22;
+						g_statuspage_selitem3_no = HERO_INVENTORY_SLOT_KNAPSACK_16;
 					} else {
 						g_statuspage_selitem3_no--;
 					}
@@ -262,20 +262,20 @@ void status_menu(signed short hero_pos)
 
 					if (hero1 != hero2) {
 
-						if (g_statuspage_selitem4_no == 24) {
+						if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_MOUTH) {
 							g_statuspage_selitem4_no = 0;
 						} else {
 							g_statuspage_selitem4_no++;
 						}
 					} else {
-						if (g_statuspage_selitem4_no == 24) {
+						if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_MOUTH) {
 							g_statuspage_selitem4_no = 0;
 						} else {
 							g_statuspage_selitem4_no++;
 						}
 					}
 				} else {
-					if (g_statuspage_selitem3_no == 22) {
+					if (g_statuspage_selitem3_no == HERO_INVENTORY_SLOT_KNAPSACK_16) {
 						g_statuspage_selitem3_no = 0;
 					} else {
 						g_statuspage_selitem3_no++;
@@ -294,7 +294,7 @@ void status_menu(signed short hero_pos)
 				}
 			}
 
-			if (g_statuspage_selitem1_no != g_statuspage_selitem3_no && hero1 == hero2) {
+			if ((g_statuspage_selitem1_no != g_statuspage_selitem3_no) && (hero1 == hero2)) {
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
@@ -444,15 +444,11 @@ void status_menu(signed short hero_pos)
 		}
 
 		/* check if the hero is diseased and print a message */
-		if (g_status_page_mode == 1 &&
-			g_action == ACTION_ID_240 &&
-			hero_is_diseased(hero2))
+		if ((g_status_page_mode == 1) && (g_action == ACTION_ID_240) &&	hero_is_diseased(hero2))
 		{
-			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), hero2->alias,
-				GUI_get_ptr(hero2->sex, 1));
+			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), hero2->alias, GUI_get_ptr(hero2->sex, 1));
 
 			GUI_output(g_dtp2);
-
 		}
 
 		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
@@ -465,6 +461,7 @@ void status_menu(signed short hero_pos)
 				/* from start-page */
 
 				if (g_game_mode == GAME_MODE_ADVANCED) {
+
 					g_radio_name_list[0] = get_tx2(19);
 					g_radio_name_list[1] = get_tx2(20);
 					g_radio_name_list[2] = get_tx2(21);
@@ -557,11 +554,8 @@ void status_menu(signed short hero_pos)
 							flag1 = 1;
 							reset_item_selector();
 						} else if (l1 == 7) {
-
-							sprintf(g_dtp2, get_tx2(25 + flag3),
-								hero2->alias, GUI_get_ptr(hero2->sex, 1));
-
-								GUI_output(g_dtp2);
+							sprintf(g_dtp2, get_tx2(25 + flag3), hero2->alias, GUI_get_ptr(hero2->sex, 1));
+							GUI_output(g_dtp2);
 						} else {
 							g_status_page_mode = 2;
 							g_request_refresh = 1;
@@ -595,10 +589,9 @@ void status_menu(signed short hero_pos)
 					case 9: {
 						if (flag3) {
 
-							sprintf(g_dtp2, get_tx2(25 + flag3),
-								hero2->alias, GUI_get_ptr(hero2->sex, 1));
-
+							sprintf(g_dtp2, get_tx2(25 + flag3), hero2->alias, GUI_get_ptr(hero2->sex, 1));
 							GUI_output(g_dtp2);
+
 							break;
 						}
 					}
@@ -615,7 +608,7 @@ void status_menu(signed short hero_pos)
 			case 2: {
 				/* from ATPA-page */
 
-				l_di = GUI_radio((char*)0, 8,
+				l_di = GUI_radio((char*)NULL, 8,
 						get_tx2(16),
 						get_tx2(17),
 						get_ttx(212),
@@ -756,7 +749,7 @@ void status_menu(signed short hero_pos)
 			case 4:
 			case 5:{
 				/* from spells-page */
-				l_di = GUI_radio((char*)0, 6,
+				l_di = GUI_radio((char*)NULL, 6,
 						get_ttx(213),    // Zauber sprechen
 						get_tx2(24),     // Grundwerte
 						get_tx2(19),     // AT PA Werte
@@ -812,10 +805,8 @@ void status_menu(signed short hero_pos)
 	}
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
-	if (file_bak != -1 &&
-		file_bak != ARCHIVE_FILE_CHARTEXT_LTX &&
-		file_bak != ARCHIVE_FILE_TAVERN_TLK &&
-		(file_bak < 156 || file_bak > 176))
+	if ((file_bak != -1) &&	(file_bak != ARCHIVE_FILE_CHARTEXT_LTX) &&
+		(file_bak != ARCHIVE_FILE_TAVERN_TLK) && (file_bak < 156 || file_bak > 176))
 	{
 		load_tx2(file_bak);
 	}
