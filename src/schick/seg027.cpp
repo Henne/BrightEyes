@@ -383,34 +383,34 @@ void load_ani(const signed short no)
 	ani_buffer = g_buffer9_ptr;
 
 	/* set start of picture data */
-	g_ani_main_ptr = ani_buffer + host_readd(g_buffer9_ptr);
+	g_ani_main_ptr = ani_buffer + *(Bit32u*)g_buffer9_ptr;
 	/* set start of palette */
-	g_ani_palette = (ani_buffer + host_readd(g_buffer9_ptr + 4L)) + 6L;
+	g_ani_palette = (ani_buffer + *(Bit32u*)(g_buffer9_ptr + 4L)) + 6L;
 
 	/* read some bytes between data and palette */
-	g_ani_unknown1 = host_readw(g_ani_palette - 6L);
-	g_ani_unknown2 = host_readw(g_ani_palette - 4L);
+	g_ani_unknown1 = *(Bit16u*)(g_ani_palette - 6L);
+	g_ani_unknown2 = *(Bit16u*)(g_ani_palette - 4L);
 	/* compression type */
-	g_ani_compr_flag = host_readb(g_ani_palette - 1L);
-	g_ani_palette_size = host_readb(g_ani_palette - 2L);
+	g_ani_compr_flag = *(g_ani_palette - 1L);
+	g_ani_palette_size = *(g_ani_palette - 2L);
 
 	ani_end_ptr = g_ani_palette + 3 * g_ani_palette_size;
 
 	/* set picture size */
-	g_ani_width = host_readws(g_buffer9_ptr + 8L);
-	g_ani_height = host_readb(g_buffer9_ptr + 10L);
+	g_ani_width = *(Bit16s*)(g_buffer9_ptr + 8L);
+	g_ani_height = *(g_buffer9_ptr + 10L);
 	/* set number of areas */
-	g_ani_areacount = host_readb(g_buffer9_ptr + 11L);
+	g_ani_areacount = *(g_buffer9_ptr + 11L);
 
 	/* Process Main Picture */
 	if (g_ani_compr_flag) {
 
-		plen = host_readd((Bit8u*)g_ani_main_ptr);
-		unplen_ptr = (Bit8u*)g_ani_main_ptr;
+		plen = *(Bit32u*)g_ani_main_ptr;
+		unplen_ptr = g_ani_main_ptr;
 
 		unplen_ptr += (plen - 4);
 
-		unplen = host_readd(unplen_ptr);
+		unplen = *(Bit32u*)unplen_ptr;
 		unplen = swap_u32(unplen) >> 8;
 
 		decomp_pp20((Bit8u*)g_ani_main_ptr, g_renderbuf_ptr,
@@ -440,7 +440,7 @@ void load_ani(const signed short no)
 	for (i_area = 0; g_ani_areacount > i_area; i_area++) {
 
 		p_area2 = &g_ani_area_table[i_area];
-		area_offset = host_readd((g_buffer9_ptr + 4 * i_area) + 0xc);
+		area_offset = *(Bit32u*)((g_buffer9_ptr + 4 * i_area) + 0xc);
 		p_area = (struct ani_area_in*)(g_buffer9_ptr + area_offset);
 		strncpy(p_area2->name, (char*)p_area, 4);
 
@@ -453,13 +453,13 @@ void load_ani(const signed short no)
 
 		if (g_ani_compr_flag) {
 
-			area_data_offset = host_readd((Bit8u*)p_area + 0xc);
+			area_data_offset = *(Bit32u*)((Bit8u*)p_area + 0xc);
 			area_data_offset += packed_delta;
 			unplen_ptr = g_buffer9_ptr + area_data_offset;
 
-			plen = host_readd(unplen_ptr);
+			plen = *(Bit32u*)unplen_ptr;
 			unplen_ptr += (plen - 4);
-			area_size = host_readd(unplen_ptr);
+			area_size = *(Bit32u*)unplen_ptr;
 			area_size = swap_u32(area_size) >> 8;
 
 			decomp_pp20(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr,
@@ -494,18 +494,18 @@ void load_ani(const signed short no)
 			}
 		} else {
 			for (j = 0; j < area_pics; j++) {
-				area_data_offset = host_readd((Bit8u*)p_area + j * 4 + 0xc);
+				area_data_offset = *(Bit32u*)((Bit8u*)p_area + j * 4 + 0xc);
 				p_area2->pics_tab[j] = g_buffer9_ptr + area_data_offset;
 			}
 		}
 
-		p_area2->changes = area_changes = host_readw((Bit8u*)p_area + area_pics * 4 + 0x0c);
+		p_area2->changes = area_changes = *(Bit16u*)((Bit8u*)p_area + area_pics * 4 + 0x0c);
 
 		area_changes_ptr = (((Bit8u*)p_area) + area_pics * 4 + 0x0e);
 
 		for (j = 0; j < area_changes; j++) {
-			p_area2->changes_tb[j].pic = host_readws(area_changes_ptr + ((j << 1) << 1));
-			p_area2->changes_tb[j].duration = host_readws(area_changes_ptr + ((j << 1) << 1) + 2);
+			p_area2->changes_tb[j].pic = *(Bit16s*)(area_changes_ptr + ((j << 1) << 1));
+			p_area2->changes_tb[j].duration = *(Bit16s*)(area_changes_ptr + ((j << 1) << 1) + 2);
 		}
 	}
 
