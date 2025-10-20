@@ -1,6 +1,3 @@
-.186
-.model large
-.code
 ;
 ;	Rewrite of DSA1 v3.02_de functions of seg010 (EMS)
 ;	Functions rewritten: 8/8 (complete)
@@ -13,22 +10,23 @@
 ;	TODO:	- Two calls to F_LXULSH
 ;		- Adresses of variables
 
+SEG010_TEXT	segment byte public 'CODE'
+SEG010_TEXT	ends
+
+DGROUP	group _DATA
+	assume cs:SEG010_TEXT, ds:DGROUP
+
+_DATA	segment word public 'DATA'
+_DATA	ends
+
+SEG010_TEXT	segment byte public 'CODE'
+
+	assume cs:SEG010_TEXT
+
 
 EMM_SIG EQU 4BA2h
 EMS_OFF EQU 4BAAh
 EMS_SEG EQU 4BACh
-
-	public _EMS_get_num_pages_unalloced
-	public _EMS_alloc_pages
-	public _EMS_free_pages
-	public _EMS_map_memory
-	public _EMS_norm_ptr
-	public _EMS_init
-	;extrn _g_emm_sig:byte; 0x4ba2
-	;extrn _g_ems_frame_ptr:dword; off (0x4baa), seg (0x4bac)
-	;extrn F_LXLSH@:far
-
-	assume cs:@code,ds:@data
 
 EMS_installed PROC NEAR
 	push bp
@@ -182,18 +180,14 @@ _EMS_norm_ptr PROC FAR
 	mov ax, [bp+8h]
 	mov cx, 4
 
-	db 09ah, 0, 0, 0, 0
-	;call 0x0:0x0	;F_LXULSH
-	;call far ptr F_LXLSH@
+	call far ptr F_LXLSH@
 
 	mov [bp+8], word ptr 0h
 	add ax,[bp+6]
 	adc dx,[bp+8]
 	mov cx, 0ch
 
-	db 09ah, 0, 0, 0, 0
-	;call 0x0:0x0	;F_LXULSH
-	;call far ptr F_LXLSH@
+	call far ptr F_LXLSH@
 
 	mov ax,[bp+6]
 	and ax, 0fh
@@ -235,4 +229,16 @@ _done4:
 	retf
 _EMS_init ENDP
 
-	END
+SEG010_TEXT ends
+
+	public _EMS_get_num_pages_unalloced
+	public _EMS_alloc_pages
+	public _EMS_free_pages
+	public _EMS_map_memory
+	public _EMS_norm_ptr
+	public _EMS_init
+	;extrn _g_emm_sig:byte; 0x4ba2
+	;extrn _g_ems_frame_ptr:dword; off (0x4baa), seg (0x4bac)
+	extrn F_LXLSH@:far
+
+	end
