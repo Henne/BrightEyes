@@ -334,7 +334,7 @@ void draw_fight_screen(Bit16u val)
 	signed char twofielded_move_tail_first;
 	struct struct_fighter *p_fighter_tmp;
 	signed short viewdir_unconsc;
-	Bit8u *sheet;
+	Bit8s *sheet;
 	Bit8s *p_weapon_anisheet;
 	signed short handle;
 	struct nvf_desc nvf;
@@ -472,9 +472,9 @@ void draw_fight_screen(Bit16u val)
 
 			if ((list_ii->sheet != -1) && (g_fig_ani_state[list_ii->sheet] != -1)) {
 
-				sheet = (Bit8u*)g_fig_anisheets[list_ii->sheet];
+				sheet = (Bit8s*)g_fig_anisheets[list_ii->sheet];
 
-				if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -1) {
+				if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -1) {
 
 					p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
 					g_fig_ani_state[list_ii->sheet] = -1;
@@ -482,23 +482,23 @@ void draw_fight_screen(Bit16u val)
 
 				} else {
 
-					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -7)
+					if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -7)
 					{
-						list_ii->z = (host_readbs(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3));
+						list_ii->z = (*(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3));
 
 						g_fig_ani_state[list_ii->sheet]++;
 
 						g_fig_figlist_readd[list_ii->sheet] = list_ii->id;
 					}
 
-					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
+					if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
 					{
-						play_voc(0xc8 + host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+						play_voc(0xc8 + *(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
 						g_fig_ani_state[list_ii->sheet]++;
 					}
 
 
-					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -5) {
+					if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -5) {
 
 						if (list_ii->wsheet != -1) {
 
@@ -512,25 +512,25 @@ void draw_fight_screen(Bit16u val)
 
 						g_fig_ani_state[list_ii->sheet]++;
 
-					} else if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -4) {
+					} else if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -4) {
 
 						*sheet = *(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]);
 
 						g_fig_ani_state[list_ii->sheet]++;
 
-					} else if ((host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) ||
-							(host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -6)) {
+					} else if ((*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) ||
+							(*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -6)) {
 
 						/* get nvf no */
 						viewdir_before = list_ii->nvf_no;
 
-						if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) {
+						if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) {
 
-							list_ii->nvf_no += host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
+							list_ii->nvf_no += *(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
 						} else {
 
-							list_ii->figure = g_gfxtab_figures_main[list_ii->sprite_no][host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet])];
-							list_ii->nvf_no = host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
+							list_ii->figure = g_gfxtab_figures_main[list_ii->sprite_no][*(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet])];
+							list_ii->nvf_no = *(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
 						}
 
 						if (list_ii->figure >= 88) {
@@ -581,7 +581,7 @@ void draw_fight_screen(Bit16u val)
 						obj_x += list_ii->offsetx;
 						obj_y += list_ii->offsety;
 
-						if ((list_ii->sheet < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
+						if ((list_ii->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
 							nvf.src = (Bit8u*)load_fight_figs(list_ii->figure);
 						} else {
 							nvf.src = g_spellobj_nvf_buf;
@@ -657,7 +657,7 @@ void draw_fight_screen(Bit16u val)
 					} else {
 
 						/* move a hero/enemy */
-						if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -2) {
+						if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -2) {
 
 							if (list_ii->sheet < 6) {
 
@@ -666,9 +666,9 @@ void draw_fight_screen(Bit16u val)
 								/* copy FIGHTER_OBJ_ID back to the chessboard */
 								FIG_set_cb_field(list_ii->cby, list_ii->cbx, list_ii->obj_id);
 
-								list_ii->cbx = (list_ii->cbx + host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+								list_ii->cbx = (list_ii->cbx + *(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
 
-								list_ii->cby = (list_ii->cby + host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]));
+								list_ii->cby = (list_ii->cby + *(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]));
 
 								twofielded_move_tail_first = 0;
 
@@ -766,10 +766,10 @@ void draw_fight_screen(Bit16u val)
 								}
 							} else {
 								list_ii->cbx = (list_ii->cbx +
-									host_readbs(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 2));
+									*(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 2));
 
 								list_ii->cby = (list_ii->cby +
-									host_readbs(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 3));
+									*(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 3));
 							}
 
 							g_fig_figlist_readd[list_ii->sheet] = list_ii->id;
@@ -777,7 +777,7 @@ void draw_fight_screen(Bit16u val)
 							g_fig_ani_state[list_ii->sheet]++;
 						}
 
-						if (host_readbs(sheet + 1 + (g_fig_ani_state[list_ii->sheet] * 3)) == -1) {
+						if (*(sheet + 1 + (g_fig_ani_state[list_ii->sheet] * 3)) == -1) {
 
 							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
 							g_fig_ani_state[list_ii->sheet] = -1;
@@ -792,20 +792,20 @@ void draw_fight_screen(Bit16u val)
 
 							obj_y += list_ii->offsety;
 
-							obj_x += host_readbs(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
+							obj_x += *(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
 
-							obj_y -= host_readbs(sheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
+							obj_y -= *(sheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
 
-							i = g_gfxtab_figures_main[list_ii->sprite_no][host_readbs(sheet)];
+							i = g_gfxtab_figures_main[list_ii->sprite_no][*(sheet)];
 
-							if ((list_ii->sheet < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
+							if ((list_ii->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
 								nvf.src = (Bit8u*)load_fight_figs(i);
 							} else {
 								nvf.src = g_spellobj_nvf_buf;
 							}
 
 							nvf.dst = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
-							nvf.no = host_readbs(sheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
+							nvf.no = *(sheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
 							nvf.type = 0;
 							nvf.width = &width;
 							nvf.height = &obj_id;
