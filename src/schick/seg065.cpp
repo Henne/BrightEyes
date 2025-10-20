@@ -168,9 +168,9 @@ void final_intro(void)
 
 	for (i = 0; i < 0x40; i++) {
 
-		pal_fade(ptr1, g_renderbuf_ptr);
-		pal_fade(ptr1 + 0x60, g_renderbuf_ptr + 0x60);
-		pal_fade(ptr1 + 0xc0, g_renderbuf_ptr + 0xc0);
+		pal_fade((Bit8s*)ptr1, (Bit8s*)g_renderbuf_ptr);
+		pal_fade((Bit8s*)ptr1 + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
+		pal_fade((Bit8s*)ptr1 + 0xc0, (Bit8s*)g_renderbuf_ptr + 0xc0);
 
 		wait_for_vsync();
 
@@ -368,8 +368,8 @@ void show_hyggelik_ani(void)
 	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
-		pal_fade(src, g_renderbuf_ptr);
-		pal_fade(src + 0x60, g_renderbuf_ptr + 0x60);
+		pal_fade((Bit8s*)src, (Bit8s*)g_renderbuf_ptr);
+		pal_fade((Bit8s*)src + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(src, 0, 0x40);
 	}

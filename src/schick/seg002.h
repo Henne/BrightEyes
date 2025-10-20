@@ -98,8 +98,8 @@ void game_loop(void);
 void timers_daily(void);
 /* static */
 void seg002_2177(void);
-void pal_fade(Bit8u*, Bit8u*);
-void pal_fade_in(Bit8u*, Bit8u*, signed short, signed short);
+void pal_fade(Bit8s*, Bit8s*);
+void pal_fade_in(Bit8s*, Bit8s*, const signed int, const signed int);
 void dawning(void);
 void nightfall(void);
 signed short get_current_season(void);

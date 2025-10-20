@@ -268,8 +268,8 @@ signed short do_travel_mode(void)
 
 		for (i = 0; i < 64; i++)
 		{
-			pal_fade((Bit8u*)g_dtp2 + 0xc0, (Bit8u*)g_dtp2);
-			pal_fade((Bit8u*)g_dtp2 + 0x120, (Bit8u*)g_dtp2 + 0x60);
+			pal_fade((Bit8s*)g_dtp2 + 0xc0, (Bit8s*)g_dtp2);
+			pal_fade((Bit8s*)g_dtp2 + 0x120, (Bit8s*)g_dtp2 + 0x60);
 			wait_for_vsync();
 			set_palette((Bit8u*)g_dtp2 + 0xc0, 0x00, 0x20);
 			set_palette((Bit8u*)g_dtp2 + 0x120, 0xe0, 0x20);

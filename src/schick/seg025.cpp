@@ -739,8 +739,8 @@ void leave_dungeon(void)
 
 	for (i = 0; i < 64; i++) {
 
-		pal_fade(ptr, g_renderbuf_ptr);
-		pal_fade(ptr + 0x60, g_renderbuf_ptr + 0x60);
+		pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
+		pal_fade((Bit8s*)ptr + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(ptr, 0x80, 0x40);
 	}
@@ -816,9 +816,9 @@ void fade_into(void)
 
 	for (i = 0; i < 0x20; i++) {
 
-		pal_fade(ptr, g_renderbuf_ptr);
+		pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
 
-		pal_fade(ptr, g_renderbuf_ptr);
+		pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
 
 		wait_for_vsync();
 

@@ -2172,43 +2172,42 @@ void seg002_2177(void)
 	}
 }
 
-void pal_fade(Bit8u *dst, Bit8u *p2)
+void pal_fade(Bit8s *dst, Bit8s *p2)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 32; i++) {
 
-		if ((host_readbs(p2 + 3 * i) < host_readbs(dst + 3 * i)) && (host_readbs(dst + 3 * i) > 0))
+		if ((p2[3 * i] < dst[3 * i]) && (dst[3 * i] > 0))
 		{
-
-			(*(dst + i * 3))--;
+			dst[i * 3]--;
 
 		} else {
-			if ((host_readbs(p2 + 3 * i) > host_readbs(dst + 3 * i)) && (host_readbs(dst + 3 * i) < 0x3f))
+			if ((*(p2 + 3 * i) > *(dst + 3 * i)) && (*(dst + 3 * i) < 0x3f))
 			{
 				(*(dst + i * 3))++;
 			}
 		}
 
-		if ((host_readbs((p2 + 1) + 3 * i) < host_readbs((dst + 1) + 3 * i)) && (host_readbs((dst + 1) + 3 * i) > 0))
+		if ((*((p2 + 1) + 3 * i) < *((dst + 1) + 3 * i)) && (*((dst + 1) + 3 * i) > 0))
 		{
 
 			(*((dst + 1) + i * 3))--;
 
 		} else {
-			if ((host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)) &&	(host_readbs((dst + 1) + 3 * i) < 0x3f))
+			if ((*((p2 + 1) + 3 * i) > *((dst + 1) + 3 * i)) &&	(*((dst + 1) + 3 * i) < 0x3f))
 			{
 				(*((dst + 1) + i * 3))++;
 			}
 		}
 
-		if ((host_readbs((p2 + 2) + 3 * i) < host_readbs((dst + 2) + 3 * i)) && (host_readbs((dst + 2) + 3 * i) > 0))
+		if ((*((p2 + 2) + 3 * i) < *((dst + 2) + 3 * i)) && (*((dst + 2) + 3 * i) > 0))
 		{
 
 			(*((dst + 2) + i * 3))--;
 
 		} else {
-			if ((host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)) &&	(host_readbs((dst + 2) + 3 * i) < 0x3f))
+			if ((*((p2 + 2) + 3 * i) > *((dst + 2) + 3 * i)) &&	(*((dst + 2) + 3 * i) < 0x3f))
 			{
 				(*((dst + 2) + i * 3))++;
 			}
@@ -2216,25 +2215,26 @@ void pal_fade(Bit8u *dst, Bit8u *p2)
 	}
 }
 
-void pal_fade_in(Bit8u *dst, Bit8u *p2, signed short v3, signed short colors)
+void pal_fade_in(Bit8s *dst, Bit8s *p2, const signed int v3, const signed int colors)
 {
-	signed short i, si;
+	signed int i;
+	signed int si;
 
 	si = 0x40 - v3;
 
 	for (i = 0; i < colors; i++) {
 
-		if ((host_readbs((p2 + 0) + 3 * i) >= si) && (host_readbs((p2 + 0) + 3 * i) > host_readbs((dst + 0) + 3 * i)))
+		if ((*((p2 + 0) + 3 * i) >= si) && (*((p2 + 0) + 3 * i) > *((dst + 0) + 3 * i)))
 		{
 			(*((dst + 0) + i * 3))++;
 		}
 
-		if ((host_readbs((p2 + 1) + 3 * i) >= si) && (host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)))
+		if ((*((p2 + 1) + 3 * i) >= si) && (*((p2 + 1) + 3 * i) > *((dst + 1) + 3 * i)))
 		{
 			(*((dst + 1) + i * 3))++;
 		}
 
-		if ((host_readbs((p2 + 2) + 3 * i) >= si) && (host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)))
+		if ((*((p2 + 2) + 3 * i) >= si) && (*((p2 + 2) + 3 * i) > *((dst + 2) + 3 * i)))
 		{
 			(*((dst + 2) + i * 3))++;
 		}
@@ -2253,11 +2253,11 @@ void dawning(void)
 	{
 
 		/* floor */
-		pal_fade(gs_palette_floor, g_townpal_buf);
+		pal_fade((Bit8s*)gs_palette_floor, (Bit8s*)g_townpal_buf);
 		/* buildings */
-		pal_fade(gs_palette_buildings, g_townpal_buf + 0x60);
+		pal_fade((Bit8s*)gs_palette_buildings, (Bit8s*)g_townpal_buf + 0x60);
 		/* sky */
-		pal_fade(gs_palette_sky, g_townpal_buf + 0xc0);
+		pal_fade((Bit8s*)gs_palette_sky, (Bit8s*)g_townpal_buf + 0xc0);
 
 		/* in a town */
 		if (gs_current_town &&
@@ -2294,11 +2294,11 @@ void nightfall(void)
 	{
 
 		/* floor */
-		pal_fade(gs_palette_floor, (Bit8u*)&g_floor_fade_palette[0][0]);
+		pal_fade((Bit8s*)gs_palette_floor, (Bit8s*)&g_floor_fade_palette[0][0]);
 		/* buildings */
-		pal_fade(gs_palette_buildings, (Bit8u*)&g_building_fade_palette[0][0]);
+		pal_fade((Bit8s*)gs_palette_buildings, (Bit8s*)&g_building_fade_palette[0][0]);
 		/* sky */
-		pal_fade(gs_palette_sky, (Bit8u*)&g_sky_fade_palette[0][0]);
+		pal_fade((Bit8s*)gs_palette_sky, (Bit8s*)&g_sky_fade_palette[0][0]);
 
 		/* in a town */
 		if (gs_current_town &&

@@ -979,9 +979,9 @@ mark2:			   goto mark1;
 
 		for (i = 0; i < 0x40; i++) {
 
-			pal_fade(ptr, g_renderbuf_ptr);
-			pal_fade(ptr + 0x60, g_renderbuf_ptr + 0x60);
-			pal_fade(ptr + 0xc0, g_renderbuf_ptr + 0xc0);
+			pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
+			pal_fade((Bit8s*)ptr + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
+			pal_fade((Bit8s*)ptr + 0xc0, (Bit8s*)g_renderbuf_ptr + 0xc0);
 
 			wait_for_vsync();
 

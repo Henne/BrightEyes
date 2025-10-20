@@ -1145,8 +1145,8 @@ void city_fade_and_colors(void)
 
 		for (i = 0; i < 64; i += 2) {
 
-			pal_fade_in(pal_ptr, dst, i, 0x60);
-			pal_fade_in(pal_ptr, dst, i + 1, 0x60);
+			pal_fade_in((Bit8s*)pal_ptr, (Bit8s*)dst, i, 0x60);
+			pal_fade_in((Bit8s*)pal_ptr, (Bit8s*)dst, i + 1, 0x60);
 
 			wait_for_vsync();
 
