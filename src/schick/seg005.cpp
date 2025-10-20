@@ -335,7 +335,7 @@ void draw_fight_screen(Bit16u val)
 	struct struct_fighter *p_fighter_tmp;
 	signed short viewdir_unconsc;
 	Bit8u *sheet;
-	Bit8u *p_weapon_anisheet;
+	Bit8s *p_weapon_anisheet;
 	signed short handle;
 	struct nvf_desc nvf;
 	signed short figlist_remove[8];
@@ -502,11 +502,11 @@ void draw_fight_screen(Bit16u val)
 
 						if (list_ii->wsheet != -1) {
 
-							p_weapon_anisheet = (Bit8u*)&g_fig_anisheets[list_ii->wsheet];
+							p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[list_ii->wsheet];
 
-							if (host_readbs(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
+							if (*(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
 							{
-								play_voc(0xc8 + host_readbs(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+								play_voc(0xc8 + *(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
 							}
 						}
 
@@ -814,9 +814,9 @@ void draw_fight_screen(Bit16u val)
 
 							if (list_ii->wsheet != -1) {
 
-								p_weapon_anisheet = (Bit8u*)&g_fig_anisheets[list_ii->wsheet];
+								p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[list_ii->wsheet];
 
-								if (host_readbs(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3) == -1)
+								if (*(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3) == -1)
 								{
 									list_ii->wsheet = -1;
 								} else {
@@ -825,10 +825,10 @@ void draw_fight_screen(Bit16u val)
 
 									p_weapon_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->wsheet];
 
-									if (host_readbs(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[list_ii->sheet])) != -5) {
+									if (*(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[list_ii->sheet])) != -5) {
 										nvf.dst = (Bit8u*)g_fig_gfxbuffers[list_ii->wsheet];
 										nvf.src = g_weapons_nvf_buf;
-										nvf.no = host_readb(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
+										nvf.no = *(Bit8u*)(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
 										nvf.type = 0;
 										nvf.width = &width;
 										nvf.height = &obj_id;
@@ -836,8 +836,8 @@ void draw_fight_screen(Bit16u val)
 										process_nvf(&nvf);
 
 										current_x1 += list_ii->width - 14;
-										current_x1 += host_readbs(p_weapon_anisheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
-										current_y1 -= host_readbs(p_weapon_anisheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
+										current_x1 += *(p_weapon_anisheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
+										current_y1 -= *(p_weapon_anisheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
 									}
 								}
 							}
