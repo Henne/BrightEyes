@@ -23,11 +23,6 @@ SEG010_TEXT	segment byte public 'CODE'
 
 	assume cs:SEG010_TEXT
 
-
-EMM_SIG EQU 4BA2h
-EMS_OFF EQU 4BAAh
-EMS_SEG EQU 4BACh
-
 EMS_installed PROC NEAR
 	push bp
 	mov bp,sp
@@ -38,8 +33,7 @@ EMS_installed PROC NEAR
 	mov ax, 03567h
 	int 21h
 	mov di, 0ah
-	mov si, EMM_SIG
-	;mov si, OFFSET _g_emm_sig
+	mov si, OFFSET _g_emm_sig
 	mov cx, 9
 _comp:	cmpsb
 	loope _comp
@@ -56,7 +50,6 @@ _done:
 	pop bp
 	ret
 EMS_installed ENDP
-
 
 EMS_get_frame_ptr PROC NEAR
 	push bp
@@ -212,11 +205,9 @@ _EMS_init PROC FAR
 	jz _done4
 	call EMS_get_frame_ptr
 
-	db 089h, 016h, 0ach, 04bh
-;	mov word ptr [_g_ems_frame_ptr + 2], dx
+	mov word ptr [_g_ems_frame_ptr + 2], dx
 
-	db 0c7h, 06h,0aah, 04bh, 0, 0
-;	mov word ptr [_g_ems_frame_ptr], word ptr 0h
+	mov word ptr [_g_ems_frame_ptr], word ptr 0h
 
 	mov ax, 1
 _done4:
@@ -237,8 +228,8 @@ SEG010_TEXT ends
 	public _EMS_map_memory
 	public _EMS_norm_ptr
 	public _EMS_init
-	;extrn _g_emm_sig:byte; 0x4ba2
-	;extrn _g_ems_frame_ptr:dword; off (0x4baa), seg (0x4bac)
+	extrn _g_emm_sig:byte; 0x4ba2
+	extrn _g_ems_frame_ptr:dword; off (0x4baa), seg (0x4bac)
 	extrn F_LXLSH@:far
 
 	end
