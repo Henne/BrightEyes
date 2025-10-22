@@ -37,16 +37,35 @@
 namespace M302de {
 #endif
 
+/* REMARK: valid values for this array are in {0, ..., 6} */
+static unsigned char g_random_encounter_index[59] = { 1, 1, 1, 1, 1, 1, 3, 0, 2, 3, 3, 4, 4, 4, 1, 1, 1, 3, 0, 3, 0, 5, 5, 5, 4, 4, 1, 1, 1, 3, 7, 4, 4, 1, 1, 4, 3, 4, 4, 4, 6, 4, 3, 1, 5, 5, 6, 7, 7, 7, 1, 1, 1, 1, 1, 7, 5, 7, 7 }; // ds:0xb17e
+static const Bit8u g_random_encounter_descr[14][7] = {
+	{  40,  40,  30,  25,  30,  25,  20 },
+	{   0,  45,   0,   0,  40,  30,   0 },
+	{   0,  50,   0,   0,  45,   0,   0 },
+	{  45,  55,  35,  30,  55,  40,  30 },
+	{  60,   0,  45,  40,   0,  45,  40 },
+	{  70,  65,  50,  50,  65,  65,  45 },
+	{  85,  70,  60,  65,   0,  80,  60 },
+	{   0,  85,   0,   0,  85,   0,   0 },
+	{   0,  95,   0,   0,  95,   0,   0 },
+	{  95, 100,  85,  85,   0,  85,  80 },
+	{   0,   0,  95,  95,   0,   0,  90 },
+	{ 100,   0, 100, 100,   0,   0,  95 },
+	{   0,   0,   0,   0, 100,  95,   0 },
+	{   0,   0,   0,   0,   0, 100, 100 }
+}; // ds:0xb1b9
+static signed int g_tlk_ruin_hero_counter = 0; // ds:0xb21b
+static unsigned char g_unkn_068[1] = { 0x00 }; // ds:0xb21d
+
+
 unsigned char g_event_ani_busy;			//ds:0xe5d2
 static signed short g_wallclock_update_bak;	//ds:0xe5d3
 static signed short g_textbox_width_bak;	//ds:0xe5d5
 static signed short g_basepos_y_bak;		//ds:0xe5d7
 static signed short g_basepos_x_bak;		//ds:0xe5d9
 
-#if defined(__BORLANDC__)
-static
-#endif
-void pause_traveling(signed short ani_no)
+static void pause_traveling(signed short ani_no)
 {
 	g_event_ani_busy = 1;
 
@@ -73,10 +92,7 @@ void pause_traveling(signed short ani_no)
 	g_textbox_width = 9;
 }
 
-#if defined(__BORLANDC__)
-static
-#endif
-void resume_traveling(void)
+static void resume_traveling(void)
 {
 	g_basepos_x = g_basepos_x_bak;
 	g_basepos_y = g_basepos_y_bak;

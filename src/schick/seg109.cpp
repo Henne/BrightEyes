@@ -42,6 +42,181 @@
 namespace M302de {
 #endif
 
+static void (*g_travel_event_handlers[146])(void) = {
+	NULL,
+	tevent_001,
+	tevent_002,
+	tevent_003,
+	tevent_004,
+	tevent_005,
+	tevent_006,
+	tevent_007,
+	tevent_008,
+	tevent_009,
+	tevent_010,
+	tevent_011,
+	tevent_012,
+	tevent_013,
+	tevent_014,
+	tevent_015,
+	tevent_016,
+	tevent_017,
+	tevent_018,
+	tevent_019,
+	tevent_020,
+	tevent_021,
+	tevent_022,
+	tevent_023,
+	tevent_024,
+	tevent_025,
+	tevent_026,
+	tevent_027,
+	tevent_028,
+	tevent_029,
+	tevent_030,
+	tevent_031,
+	tevent_032,
+	tevent_033,
+	tevent_034,
+	tevent_035,
+	tevent_036,
+	tevent_037,
+	tevent_038,
+	tevent_039,
+	tevent_040,
+	tevent_041,
+	tevent_042,
+	tevent_043,
+	tevent_044,
+	tevent_045,
+	tevent_046,
+	tevent_047,
+	tevent_048,
+	tevent_049,
+	tevent_050,
+	tevent_051,
+	tevent_052,
+	tevent_053,
+	tevent_054,
+	tevent_055,
+	tevent_056,
+	tevent_057,
+	tevent_058,
+	tevent_059,
+	tevent_060,
+	tevent_061,
+	tevent_062,
+	tevent_063,
+	tevent_064,
+	tevent_065,
+	tevent_066,
+	tevent_067,
+	tevent_068,
+	tevent_069,
+	tevent_070,
+	tevent_071,
+	tevent_072,
+	tevent_073,
+	tevent_074,
+	tevent_075,
+	tevent_076,
+	tevent_077,
+	tevent_078,
+	tevent_079,
+	tevent_080,
+	tevent_081,
+	tevent_082,
+	tevent_083,
+	tevent_084,
+	tevent_085,
+	tevent_086,
+	tevent_087,
+	tevent_088,
+	tevent_089,
+	tevent_090,
+	tevent_091,
+	tevent_092,
+	tevent_093,
+	tevent_094,
+	tevent_095,
+	tevent_096,
+	tevent_097,
+	tevent_098,
+	tevent_099,
+	tevent_100,
+	tevent_101,
+	tevent_102,
+	tevent_103,
+	tevent_104,
+	tevent_105,
+	tevent_106,
+	tevent_107,
+	tevent_108,
+	tevent_109,
+	tevent_110,
+	tevent_111,
+	tevent_112,
+	tevent_113,
+	tevent_114,
+	tevent_115,
+	tevent_116,
+	tevent_117,
+	tevent_118,
+	tevent_119,
+	tevent_120,
+	tevent_121,
+	tevent_122,
+	tevent_123,
+	tevent_124,
+	tevent_125,
+	tevent_126,
+	tevent_127,
+	tevent_128,
+	tevent_129,
+	tevent_130,
+	tevent_131,
+	tevent_132,
+	tevent_133,
+	tevent_134,
+	tevent_135,
+	tevent_136,
+	tevent_137,
+	tevent_138,
+	tevent_139,
+	tevent_140,
+	tevent_141,
+	tevent_142,
+	tevent_143,
+	tevent_144,
+	tevent_145,
+}; // ds:0xaeea,
+
+signed char g_travel_event_active = 0; // ds:0xb132
+static signed short g_travel_event_tx2 = -1; // ds:0xb133
+#ifndef M302de_ORIGINAL_BUGFIX
+/* Original-Bug 33:
+ * In certain travel events, an axe is needed as a tool.
+ * (These are: bridge building Breida <-> Tjoila, bridge building Auplog <-> Varnheim, path blocked by a tree Skjal <-> Ottarje)
+ * The list of accepted axes is a bit arbitrary (The common pattern is that all have "...axt" or "...beil" in their name.
+ * Other more or less sensible options would be: ITEM_SKRAJA, ITEM_ORKNASE, ITEM_SCHNEIDZAHN, ITEM_ORKNASE_MAGIC, ITEM_HELLEBARDE. */
+Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_THROWING_AXE, ITEM_FRANCESCA, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+#else
+Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE_MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+/* rationale:
+ * - don't allow throwing axes (ITEM_THROWING_AXE, ITEM_FRANCESCA, ITEM_SCHNEIDZAHN), as they are pretty light and designed for a completely different purpose.
+ * - don't allow ITEM_HELLEBARDE, as it is a polearm with a different purpose. (Note that surprisingliy, it is classified as WEAPON_TYPE_AXT in Schicksalsklinge)
+ * - don't allow ITEM_SKRAJA, as it is a small axe with a very short shaft, which won't produce too much momentum.
+   (Note that while being an axe, ITEM_SKRAJA is classified as WEAPON_TYPE_HIEBWAFFEN in Schicksalsklinge -- which might be a bug on its own.)
+ * - allow all other axes in the game.
+ * In this way, we get again a list of 5 possible items.
+ * See discussion at https://www.crystals-dsa-foren.de/showthread.php?tid=6036&pid=170066#pid170066
+ */
+#endif
+static char g_empty_string10[1] = ""; // ds:0xb13b
+static char g_empty_string11[1] = ""; // ds:0xb13c
+static char g_empty_string12[1] = ""; // ds:0xb13d
+
+
 void TRV_load_textfile(signed short travel_event)
 {
 	load_tx(ARCHIVE_FILE_FEATURE_LTX);
@@ -59,6 +234,7 @@ void TRV_load_textfile(signed short travel_event)
 			( travel_event < 111 ? ARCHIVE_FILE_FEATURE5_LTX :
 			( travel_event < 126 ? ARCHIVE_FILE_FEATURE6_LTX :
 			( travel_event < 143 ? ARCHIVE_FILE_FEATURE7_LTX : ARCHIVE_FILE_FEATURE8_LTX)))))))));
+
 	g_travel_event_tx2 = travel_event;
 }
 

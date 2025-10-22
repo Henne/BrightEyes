@@ -2,14 +2,6 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-/* static */
-void pause_traveling(signed short);
-
-/* static */
-void resume_traveling(void);
-#endif
-
 /* 0x20 */
 void hunt_karen(void);
 

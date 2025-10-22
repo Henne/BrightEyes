@@ -28,6 +28,14 @@
 namespace M302de {
 #endif
 
+static Bit8u g_tevent067_chest[10] = {
+	ITEM_BASTARD_SWORD, 1,
+	ITEM_BRANDY, 1,
+	ITEM_RECIPE_VOMICUM, 1,
+	ITEM_BOLTS, 2,
+	0xff, 0
+}; // ds:0xb16a
+
 void tevent_067(void)
 {
 	signed short i;

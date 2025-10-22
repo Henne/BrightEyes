@@ -35,6 +35,8 @@
 namespace M302de {
 #endif
 
+static struct struct_chest g_tevent014_corpse = {0, 1, NULL, NULL, tevent_014_chest, 0, 0, 0}; // ds:0xb13e
+
 void tevent_011(void)
 {
 	signed short answer;

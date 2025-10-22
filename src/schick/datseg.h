@@ -1765,21 +1765,21 @@ extern signed short g_hero_startup_items[12][4];	// ds:0xae48; seg106
 extern signed short g_hero_startup_items_all[4];	// ds:0xaea8; seg106
 extern void (*g_use_special_item_handlers[14])(void);	//ds:0xaeb0; seg107
 extern int g_light_type;			// ds:0xaee8; seg101, seg107
-extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109
+//extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109
 
 extern signed char g_travel_event_active;		// ds:0xb132; seg002, seg109, seg117
-extern signed short g_travel_event_tx2;			// ds:0xb133; seg109
+//extern signed short g_travel_event_tx2;			// ds:0xb133; seg109
 extern Bit8u g_travel_event_axes[6];			// ds:0xb135; seg109, seg118
-extern char g_empty_string10[1];			// ds:0xb13b; seg109
-extern char g_empty_string11[1];			// ds:0xb13c; seg109
-extern char g_empty_string12[1];			// ds:0xb13d; seg109
-extern struct struct_chest g_tevent014_corpse;		// ds:0xb13e; seg110
-extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
-extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
-extern const struct climb_damage_range g_tevent135_climb_damage[5];	// ds:0xb174; seg116
-extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
-extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
-extern signed int g_tlk_ruin_hero_counter;	// ds:0xb21b; seg117
+//extern char g_empty_string10[1];			// ds:0xb13b; seg109
+//extern char g_empty_string11[1];			// ds:0xb13c; seg109
+//extern char g_empty_string12[1];			// ds:0xb13d; seg109
+//extern struct struct_chest g_tevent014_corpse;	// ds:0xb13e; seg110
+//extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
+//extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
+//extern const struct climb_damage_range g_tevent135_climb_damage[5];	// ds:0xb174; seg116
+//extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
+//extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
+//extern signed int g_tlk_ruin_hero_counter;	// ds:0xb21b; seg117
 //extern char g_str_rad1[4];			// ds:0xb21e; seg118
 //extern char g_str_rad2[4];			// ds:0xb222; seg118
 //extern char g_str_rad3[4];			// ds:0xb226; seg118

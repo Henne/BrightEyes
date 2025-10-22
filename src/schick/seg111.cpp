@@ -31,6 +31,8 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_tevent064_chest_descr = {0, 12, use_lockpicks_on_chest, chest_poisoned3, tevent_064_chest, 0, 0, 0}; // ds:0xb154
+
 /* Ottarje <-> Skjal: alte Feuerstelle. idealer Rastplatz */
 void tevent_053(void)
 {
