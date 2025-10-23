@@ -27,6 +27,10 @@
 namespace M302de {
 #endif
 
+signed char g_tmap_double1 = 0; // ds:0x7c9a, 1 = unicorn brought a piece you already have
+signed char g_tmap_double2 = 0; // ds:0x7c9b, 1 = you got a piece you already have from the unicorn
+signed char g_swafnild_traveled = 0; // ds:0x7c9c
+
 static char g_str_beorn_hjall[20]; // ds:0xe42e
 
 /**

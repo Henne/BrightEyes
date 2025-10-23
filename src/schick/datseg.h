@@ -1638,27 +1638,27 @@ extern const Bit8u g_hyg_ani_x5;		//ds:0x71c2; seg065
 extern const Bit8u g_hyg_ani_x6;		//ds:0x71c3; seg065
 extern const Bit8u g_hyg_ani_x7[3];		//ds:0x71c4; seg065
 extern const Bit8u g_hyg_ani_x9[3];		//ds:0x71c7; seg065
-extern const Bit8u g_towns_cityindex_table[52];	//ds:0x71ca; seg066
-extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
-extern unsigned char g_mapval_to_loctype[12];	//ds:0x7246; seg066
-extern signed char g_seg066_0bad_unkn0[29];	//ds:0x7252; seg066
-extern signed char g_seg066_0bad_unkn1[29];	//ds:0x726f; seg066
-extern signed char g_seg066_0bad_unkn2[29];	//ds:0x728c; seg066
-extern signed char g_seg066_0bad_unkn3[29];	//ds:0x72a9; seg066
-extern signed char g_seg066_0bad_unkn4[29];	//ds:0x72c6; seg066
-extern signed char g_seg066_0bad_unkn5[29];	//ds:0x72e3; seg066
-extern signed char g_seg066_0bad_unkn6[29];	//ds:0x7300; seg066
-extern signed char g_seg066_0bad_unkn7[29];	//ds:0x731d; seg066
-extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
-extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066
-extern const struct struct_point g_visual_field_offsets_inn[29];	//ds:0x7422; seg066
-extern const struct struct_point g_visual_field_offsets_grass[29];	//ds:0x7496; seg066
-extern unsigned char g_tex_descr_table[101][18];		//ds:0x750a; seg066
-extern const signed char g_visual_field_draw_order[29];		//ds:0x7c24; seg066
+//extern const Bit8u g_towns_cityindex_table[52];	//ds:0x71ca; seg066
+//extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
+//extern unsigned char g_mapval_to_loctype[12];	//ds:0x7246; seg066
+//extern signed char g_seg066_0bad_unkn0[29];	//ds:0x7252; seg066
+//extern signed char g_seg066_0bad_unkn1[29];	//ds:0x726f; seg066
+//extern signed char g_seg066_0bad_unkn2[29];	//ds:0x728c; seg066
+//extern signed char g_seg066_0bad_unkn3[29];	//ds:0x72a9; seg066
+//extern signed char g_seg066_0bad_unkn4[29];	//ds:0x72c6; seg066
+//extern signed char g_seg066_0bad_unkn5[29];	//ds:0x72e3; seg066
+//extern signed char g_seg066_0bad_unkn6[29];	//ds:0x7300; seg066
+//extern signed char g_seg066_0bad_unkn7[29];	//ds:0x731d; seg066
+//extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
+//extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066
+//extern const struct struct_point g_visual_field_offsets_inn[29];	//ds:0x7422; seg066
+//extern const struct struct_point g_visual_field_offsets_grass[29];	//ds:0x7496; seg066
+//extern unsigned char g_tex_descr_table[101][18];		//ds:0x750a; seg066
+//extern const signed char g_visual_field_draw_order[29];		//ds:0x7c24; seg066
 extern signed char g_can_merge_group;				//ds:0x7c41; seg066, seg076
 extern signed char g_c_event_active;				//ds:0x7c42; seg002, seg067
-extern const char g_str_bank_deposit_to_big[57];		//ds:0x7c44; seg068
-extern const char g_str_obviously_closed[28];			//ds:0x7c7d; seg068
+//extern const char g_str_bank_deposit_to_big[57];		//ds:0x7c44; seg068
+//extern const char g_str_obviously_closed[28];			//ds:0x7c7d; seg068
 extern signed char g_tmap_double1;				//ds:0x7c9a; seg025, seg072
 extern signed char g_tmap_double2;				//ds:0x7c9b; seg025, seg072, seg082
 extern signed char g_swafnild_traveled;				//ds:0x7c9c; seg063, seg072

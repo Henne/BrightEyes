@@ -24,6 +24,8 @@
 #if !defined(__BORLANDC__)
 namespace M302de {
 #endif
+signed char g_c_event_active = 0; // ds:0x7c42, 0 = default, 1 = city event active
+//unsigned char g_unkn_052[1] = { 0x00 }; // ds:0x7c43
 
 /**
  * \brief   select a random city event type
