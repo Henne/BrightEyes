@@ -31,6 +31,14 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng04_specialchests[4] = {
+	{ DNG_POS(0,6,7),	1, DNG04_chest00_open, NULL, DNG04_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,12),	1, DNG04_chest01_open, NULL, DNG04_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,6,1),	1, DNG04_chest02_open, NULL, DNG04_chest02_loot, 0, 0, 0 },
+	{     -1,		0, NULL, 	       NULL, NULL,		0, 0, 0 }
+}; // ds:0x95ba
+Bit16s g_dng05_trash_flag = 0; // ds:0x960e
+
 /**
  * \brief   dungeon handler of the wolfcave
  */

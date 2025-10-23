@@ -31,6 +31,15 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng06_specialchests[3] = {
+	{ DNG_POS(0,7,3), 0, NULL,			NULL,			DNG06_chest00_loot, 0, 0, 40, },
+	{ DNG_POS(1,9,4), 0, use_lockpicks_on_chest,	chest_poisoned2,	DNG06_chest01_loot, 0, 0, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+}; // ds:0x9610
+static const char g_str_s_war[8] = "%s WAR "; // ds:0x964f
+static const char g_str_s_und_s_waren[17] = "%s UND %s WAREN "; // ds:0x9657
+
+
 signed short DNG06_handler(void)
 {
 	signed short i;

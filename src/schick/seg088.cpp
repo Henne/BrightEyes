@@ -14,6 +14,7 @@
 #include "seg002.h"
 #include "seg007.h"
 #include "seg076.h"
+#include "seg088.h"
 #include "seg092.h"
 #include "seg096.h"
 #include "seg097.h"
@@ -22,6 +23,20 @@
 #if !defined(__BORLANDC__)
 namespace M302de {
 #endif
+
+struct struct_chest g_dng14_specialchests[9] = {
+	{ DNG_POS(0,1,1),	0, NULL,			NULL,			DNG14_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,10,2),	0, NULL,			NULL,			DNG14_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(1,3,6),	4, use_lockpicks_on_chest,	chest_protected_normal,	DNG14_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(1,4,6),	4, use_lockpicks_on_chest,	chest_protected_normal,	DNG14_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(1,10,11),	0, NULL,			NULL,			DNG14_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(1,5,8),	6, use_lockpicks_on_chest,	chest_protected_heavy,	DNG14_chest05_loot, 0, 10300, 0 },
+	{ DNG_POS(2,13,2),	8, use_lockpicks_on_chest,	NULL,			DNG14_chest06_loot, 0, 0, 0 },
+	{ DNG_POS(2,13,12),	6, use_lockpicks_on_chest,	DNG14_chest07_trap,	DNG14_chest07_loot, 0, 0, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+}; // ds:0x9990
+//unsigned char g_unkn_060[1] = { 0x00 }; // ds:0x9a4d
+
 
 
 void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)

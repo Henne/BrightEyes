@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+extern struct struct_chest g_dng12_specialchests[3];
+
 /* 0x20 */
 void DNG_clear_corridor(Bit8s*);
 /* 0x25 */

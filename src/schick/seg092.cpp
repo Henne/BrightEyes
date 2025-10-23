@@ -17,6 +17,20 @@
 #include "seg007.h"
 #include "seg047.h"
 #include "seg076.h"
+#include "seg077.h"
+#include "seg078.h"
+#include "seg079.h"
+#include "seg080.h"
+#include "seg081.h"
+#include "seg082.h"
+#include "seg083.h"
+#include "seg084.h"
+#include "seg085.h"
+#include "seg086.h"
+#include "seg088.h"
+#include "seg089.h"
+#include "seg090.h"
+#include "seg091.h"
 #include "seg092.h"
 #include "seg096.h"
 #include "seg097.h"
@@ -26,6 +40,25 @@
 #if !defined(__BORLANDC__)
 namespace M302de {
 #endif
+
+static struct struct_chest *g_dng_specialchest_index[15] = {
+	g_dng01_specialchests,
+	g_dng02_specialchests,
+	g_dng03_specialchests,
+	g_dng04_specialchests,
+	NULL,
+	g_dng06_specialchests,
+	g_dng07_specialchests,
+	g_dng08_specialchests,
+	g_dng09_specialchests,
+	g_dng10_specialchests,
+	g_dng11_specialchests,
+	g_dng12_specialchests,
+	g_dng13_specialchests,
+	g_dng14_specialchests,
+	g_dng15_specialchests
+}; // ds:0x9d84; Bit8u*
+static const char g_str_single_space[2] = " "; // ds:0x9dc4
 
 void chest_protected_normal(void)
 {

@@ -32,6 +32,26 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng11_specialchests[15] = {
+	{ DNG_POS(0,11,12),	0, NULL,			NULL,			DNG11_chest00_loot, 0, 0, 50 },
+	{ DNG_POS(0,12,12),	0, NULL,			NULL,			DNG11_chest01_loot, 0, 0, 21 },
+	{ DNG_POS(0,14,12),	6, use_lockpicks_on_chest,	chest_crossbow_bolts,	DNG11_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(0,14,14),	6, use_lockpicks_on_chest,	chest_crossbow_bolts,	DNG11_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,13),	0, NULL,			NULL,			DNG11_chest04_loot, 0, 230, 0 },
+	{ DNG_POS(0,1,10),	3, use_lockpicks_on_chest,	NULL,			DNG11_chest05_loot, 0, 680, 0 },
+	{ DNG_POS(0,1,7),	0, NULL,			NULL,			DNG11_chest06_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,4),	4, use_lockpicks_on_chest,	NULL,			DNG11_chest07_loot, 0, 440, 0 },
+	{ DNG_POS(0,1,1),	0, NULL,			NULL,			DNG11_chest08_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,2),	0, NULL,			NULL,			DNG11_chest09_loot, 0, 0, 0 },
+	{ DNG_POS(0,6,10),	4, use_lockpicks_on_chest,	chest_ignifax_heavy,	DNG11_chest10_loot, 0, 2000, 0 },
+	{ DNG_POS(0,11,5),	6, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG11_chest11_loot, 0, 10000, 0 },
+	{ DNG_POS(0,12,5),	6, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG11_chest12_loot, 0, 0, 0 },
+	{ DNG_POS(0,9,5),	4, use_lockpicks_on_chest,	NULL,			DNG11_chest13_loot, 0, 0, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+}; // ds:0x9854
+//unsigned char g_unkn_059[1] = { 0x00 }; // ds:0x998f
+
+
 signed short DNG11_handler(void)
 {
 	signed short target_pos;

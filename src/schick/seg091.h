@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+extern struct struct_chest g_dng13_specialchests[3];
+
 /* 0x20 */
 void DNG13_unblock_passage(char*, Bit8u*);
 /* 0x25 */

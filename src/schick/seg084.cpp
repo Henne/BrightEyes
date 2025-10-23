@@ -35,6 +35,17 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng09_specialchests[8] = {
+	{ DNG_POS(0,12,8),	0, NULL,			NULL,			DNG09_chest00_loot, 0, 0, 8 },
+	{ DNG_POS(0,13,4),	0, NULL,			NULL,			DNG09_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,14,5),	4, use_lockpicks_on_chest,	NULL,			DNG09_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(1,12,11),	0, NULL,			NULL,			DNG09_chest03_loot, 0, 160, 0 },
+	{ DNG_POS(1,9,8),	8, use_lockpicks_on_chest,	DNG09_chest04_trap,	DNG09_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,1),	4, use_lockpicks_on_chest,	NULL,			DNG09_chest05_loot, 0, 1500, 0 },
+	{ DNG_POS(1,1,5),	8, use_lockpicks_on_chest,	chest_poisoned3,	DNG09_chest06_loot, 0, 25000, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+}; // ds:0x972e
+
 signed short DNG09_handler(void)
 {
 	signed short target_pos;

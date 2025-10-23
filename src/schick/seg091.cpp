@@ -27,6 +27,13 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng13_specialchests[3] = {
+	{ DNG_POS(0,11,5),	1, DNG13_chest00_open, NULL, DNG13_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,4,1),	1, DNG13_chest01_open, NULL, DNG13_chest01_loot, 0, 0, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0}
+}; // ds:0x9d48
+//unsigned char g_unkn_063[1] = { 0x00 }; // ds:0x9d57
+
 signed short DNG13_handler(void)
 {
 	signed short pos;

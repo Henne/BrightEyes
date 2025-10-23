@@ -38,6 +38,43 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng15_specialchests[33] = {
+	{ DNG_POS(0,4,11),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(0,8,14),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(0,14,13),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(1,2,3),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(1,3,3),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,14,8),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,14,9),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,11,8),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,11,9),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,14,14),	8, use_lockpicks_on_chest,	chest_poisoned1,	DNG15_figures_chest, 0, 0, 0 },
+	{ DNG_POS(1,5,10),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,6,14),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,6,3),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,6,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,14,12),	0, NULL,			NULL,			DNG15_cursed_money_chest, 0, 0, 0 },
+	{ DNG_POS(2,14,9),	0, NULL,			NULL,			DNG15_cursed_money_chest, 0, 0, 0 },
+	{ DNG_POS(2,13,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,13,6),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,13,5),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,7,14),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,4,10),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,5,10),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,6,10),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(3,7,10),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,7,7),	0, NULL,			NULL,			DNG15_smelling_chest, 0, 0, 0 },
+	{ DNG_POS(3,5,3),	0, NULL,			NULL,			DNG15_smelling_chest, 0, 0, 0 },
+	{ DNG_POS(3,5,4),	0, NULL,			NULL,			DNG15_smelling_chest, 0, 0, 0 },
+	{ DNG_POS(3,11,1),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,9,6),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,9,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,14,6),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,14,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+}; // ds:0x9a4e
+//unsigned char g_unkn_061[1] = { 0x00 }; // ds:0x9d03
+
 signed short DNG15_handler(void)
 {
 	signed short target_pos;

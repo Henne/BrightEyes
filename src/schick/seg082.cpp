@@ -28,6 +28,12 @@
 namespace M302de {
 #endif
 
+/* REMARK: These 500 D might result in an integer overflow. */
+struct struct_chest g_dng07_specialchests[2] = {
+	{ DNG_POS(2,8,5), 5, use_lockpicks_on_chest, chest_ignifax_normal, NULL, 0, 50000L, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+}; // ds:0x9668
+
 signed short DNG07_handler(void)
 {
 	signed short target_pos;

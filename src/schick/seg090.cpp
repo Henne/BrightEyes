@@ -28,6 +28,16 @@
 namespace M302de {
 #endif
 
+/* REMARK: These 400 D might result in an integer overflow. */
+struct struct_chest g_dng12_specialchests[3] = {
+	{ DNG_POS(0,8,10), 6, use_lockpicks_on_chest,	chest_crossbow_bolts,	DNG12_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(1,14,7), 0, NULL,			NULL,			NULL, 0, 40000L, 0 },
+	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+}; // ds:0x9d04
+signed int g_dng12_obstacle_tries = 0; // ds:0x9d43 SHOULD BE IN GAME STATE
+signed int g_dng12_watertrap_bak = 0;  // ds:0x9d45 SHOULD BE IN GAME STATE
+//unsigned char g_unkn_062[1] = { 0x00 }; // ds:0x9d47
+
 signed short DNG12_handler(void)
 {
 	signed short target_pos;

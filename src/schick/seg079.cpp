@@ -29,6 +29,26 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng03_specialchests[14] = {
+	{ DNG_POS(0,5,3),	0, NULL,			NULL,			DNG03_chest00_loot, 15, 0, 0 },
+	{ DNG_POS(0,9,1),	0, NULL,			NULL,			DNG03_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,11,1),	0, NULL,			NULL,			DNG03_chest02_loot, 0, 0, 48 },
+	{ DNG_POS(0,10,6),	6, use_lockpicks_on_chest,	chest_protected_heavy,	DNG03_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(0,11,11),	4, use_lockpicks_on_chest,	chest_poisoned2,	DNG03_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(0,9,12),	5, use_lockpicks_on_chest,	chest_ignifax_normal,	DNG03_chest05_loot, 0, 0, 0 },
+	{ DNG_POS(0,11,12),	4, use_lockpicks_on_chest,	chest_protected_heavy,	DNG03_chest06_loot, 0, 0, 0 },
+	{ DNG_POS(1,14,14),	0, NULL,			NULL,			DNG03_chest07_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,14),	1, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG03_chest08_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,3),	6, use_lockpicks_on_chest,	chest_protected_brutal, DNG03_chest09_loot, 0, 20000, 0 },
+	{ DNG_POS(1,14,0),	0, NULL,			NULL,			DNG03_chest10_loot, 0, 0, 0 },
+	{ DNG_POS(1,9,11),	0, NULL,			NULL,			DNG03_chest11_loot, 0, 0, 0 },
+	{ DNG_POS(1,10,7),	6, use_lockpicks_on_chest,	DNG03_chest12_trap,	DNG03_chest12_loot, 0, 0, 0 },
+	{     -1,		0, NULL,			NULL,			NULL, 0, 0, 0 }
+}; // ds:0x9480
+const char g_dng03_str_spinnennetz[12] = "SPINNENNETZ"; // ds:0x95a6
+const char g_dng03_str_mactans[8] = "MACTANS"; // ds:0x95b2
+
+
 signed short DNG03_handler(void)
 {
 	signed short target_pos;

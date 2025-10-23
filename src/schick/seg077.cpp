@@ -34,6 +34,21 @@
 namespace M302de {
 #endif
 
+struct struct_chest g_dng01_specialchests[9] = {
+	{ DNG_POS(0,12,9), (signed char)ITEM_KEY_GOLDEN_2, use_key_on_chest,		chest_protected_normal, DNG01_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(1,5,8),				2, use_lockpicks_on_chest,	chest_closed,		DNG01_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(1,14,8),    				3, use_lockpicks_on_chest,	chest_protected_heavy,	DNG01_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(3,5,5),    				0, NULL,			NULL,			DNG01_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(3,13,4),    				6, use_lockpicks_on_chest,	chest_cursed, 		NULL,		0, 5000, 0 },
+	{ DNG_POS(3,14,6),    				3, use_lockpicks_on_chest,	chest_fulminictus,	DNG01_chest05_loot,  0, 0, 0 },
+	{ DNG_POS(3,13,11),    				1, DNG01_chest06_open,		DNG01_chest06_trap,	DNG01_chest06_loot, 10, 0, 0 },
+	{ DNG_POS(4,13,6),    				1, DNG01_chest07_open,		NULL,			DNG01_chest07_loot, 0, 0, 0 },
+	{ -1,						0, NULL,			NULL,			NULL,		0, 0, 0 }
+}; // ds:0x9314
+const char g_dng01_str_marbo[6] = "MARBO"; // ds:0x93d1
+//unsigned char g_unkn_057[1] = { 0x00 }; // ds:0x93d7
+
+
 /**
  * \brief   dungeon handler of the death ship
  */

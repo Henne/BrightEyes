@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+extern struct struct_chest g_dng15_specialchests[33];
+
 /* 0x20 */
 void DNG15_debris(signed short);
 /* 0x25 */

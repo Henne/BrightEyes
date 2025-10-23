@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+extern struct struct_chest g_dng08_specialchests[7];
+
 /* 0x20 */
 void DNG08_chest01_trap(void);
 /* 0x25 */

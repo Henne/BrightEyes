@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+extern struct struct_chest g_dng14_specialchests[9];
+
 /* 0x20 */
 void DNG14_dive(signed short, signed char, signed short);
 /* 0x25 */

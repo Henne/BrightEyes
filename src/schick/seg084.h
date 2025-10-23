@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+extern struct struct_chest g_dng09_specialchests[8];
+
 /* 0x20 */
 void DNG09_chest00_loot(struct struct_chest*);
 /* 0x25 */
