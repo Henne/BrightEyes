@@ -31,6 +31,9 @@ struct dummy {
 	char a[6];
 };
 
+static char g_select_skill_lvlup[6] = "%s~%d"; // ds:0xacce
+static signed char g_select_skill_defaults[6] = { TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1 }; // ds:0xacd4, {44, 45, 46, -1, -1, -1}
+
 signed int LVL_select_skill(struct struct_hero *hero, const signed int show_values)
 {
 	signed short i;

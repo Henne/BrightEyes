@@ -36,6 +36,14 @@
 namespace M302de {
 #endif
 
+signed short g_spell_special_aecost = -1; // ds:0xac0e
+static struct Bit16s_5 g_ani_heal_picstars = { 0, 1, 2, 1, 0 };	// ds:0xac10
+static struct c_str_6 g_spell_select_str_keyval = { "%s~%d" };		// ds:0xac1a
+static struct c_str_5 g_spell_select_str_key = { "\xf2%s\xf0"};	// ds:0xac20
+static struct c_str_3 g_spell_select_str_key_color = { "%s" };		// ds:0xac25
+static struct c_str_8 g_spell_select_str_keyval_color = { "\xf2%s~%d\xf0" }; // ds:0xac28
+static struct Bit8s_12 g_spell_select_ones = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // ds:0xac30
+
 /**
  * \brief   show some stars on the picture of a healed hero
  *

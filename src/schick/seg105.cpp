@@ -27,6 +27,9 @@
 namespace M302de {
 #endif
 
+static signed char g_prevent_drop_equipped_items = 0; // ds:0xae46
+unsigned char g_unkn_067[1] = { 0x00 }; // ds:0xae47
+
 /**
  * \brief   TODO
  *

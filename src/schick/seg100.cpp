@@ -30,6 +30,8 @@
 namespace M302de {
 #endif
 
+static unsigned char *g_hexenknoten_gfx_buf = NULL; // ds:0xacc8;
+
 /* Clairvoyance / Hellsicht */
 
 void spell_eigenschaften(void)

@@ -36,6 +36,38 @@
 namespace M302de {
 #endif
 
+static const struct analues_item g_analues_items[28] = {
+	{ ITEM_AMULET_UNKNOWN_1      ,  2, 0x36 },
+	{ ITEM_RING_RED              ,  3, 0x38 },
+	{ ITEM_CORONET_SILVER        ,  4, 0x39 },
+	{ ITEM_CORONET_GREEN         ,  4, 0x39 },
+	{ ITEM_SABER_MAGIC           ,  3, 0x3a },
+	{ ITEM_AMULET_RED            ,  6, 0x3b },
+	{ ITEM_AMULET_GREEN          ,  0, 0x3c },
+	{ ITEM_TRAVIA_AMULET         ,  6, 0x3d },
+	{ ITEM_TWO_HANDED_SWORD_MAGIC,  0, 0x3e },
+	{ ITEM_SILVER_JEWELRY_MAGIC  ,  3, 0x3f },
+	{ ITEM_SPEAR_MAGIC           ,  3, 0x40 },
+	{ ITEM_CORONET_BLUE          ,  4, 0x41 },
+	{ ITEM_BASTARD_SWORD_MAGIC   ,  4, 0x42 },
+	{ ITEM_ORKNASE_MAGIC         ,  4, 0x43 },
+	{ ITEM_SHORT_SWORD_MAGIC     ,  4, 0x44 },
+	{ ITEM_SICKLE_MAGIC          ,  6, 0x45 },
+	{ ITEM_AMULET_BLUE           ,  2, 0x46 },
+	{ ITEM_AMULET_UNKNOWN_2      ,  0, 0x47 },
+	{ ITEM_CHAIN_MAIL_MAGIC      , 15, 0x48 },
+	{ ITEM_GIRDLE_MIGHT          ,  7, 0x49 },
+	{ ITEM_SWORD_MAGIC           ,  5, 0x4a },
+	{ ITEM_CHAIN_MAIL_CURSED     ,  5, 0x4b },
+	{ ITEM_ANTI_SICKNESS_ELIXIR  , 15, 0x4c },
+	{ ITEM_RING_GREEN            ,  5, 0x4d },
+	{ ITEM_THROWING_DAGGER_MAGIC ,  6, 0x4e },
+	{ ITEM_CRYSTAL_BALL          ,  2, 0x4f },
+	{ ITEM_BAG                   ,  0, 0x50 },
+	{ -0x0001                    ,  0, 0x00 }
+}; // ds:0xac3c
+
+
 void spell_beherrschung(void)
 {
 	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);

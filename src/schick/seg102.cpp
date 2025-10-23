@@ -25,6 +25,8 @@
 namespace M302de {
 #endif
 
+static signed short g_monster_spell_ae_cost = -1; // ds:0xaccc
+
 signed int g_spelltest_result;			// ds:0xe5b2
 struct enemy_sheet *g_spelltarget_e;		// ds:0xe5b4, Pointer to enemy
 struct struct_hero *g_spelltarget;		// ds:0xe5b8

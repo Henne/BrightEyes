@@ -1709,80 +1709,92 @@ extern struct struct_chest *g_dng_specialchest_index[15];	//ds:0x9d57; seg092
 extern const char g_str_single_space[2];	//ds:0x9dc4; seg092
 
 extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
-
-extern struct trv_start_point g_signposts[106];			//ds:0xa0b4; seg093, se094
+extern struct trv_start_point g_signposts[106];			//ds:0xa0b4; seg093, seg094
 extern struct trv_start_point g_harbors[26];			//ds:0xa3a3; seg064
 extern struct struct_point g_town_positions[52];		//ds:0xa43f; seg002, seg063, seg094, seg094
-extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
+//extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 
-extern struct struct_tevent g_tevents_tab[156]; //ds:0xa66d; seg094
+extern struct struct_tevent g_tevents_tab[156];		//ds:0xa66d; seg094
 extern signed char g_traveling;				//ds:0xa842; seg002, seg032, seg063, seg094
-extern const signed char g_tevents_repeatable[145];	//ds:0xa843; seg094
-extern char g_grammar_article_der[4];		//ds:0xa8d4; seg096
-extern char g_grammar_article_die[4];		//ds:0xa8d8; seg096
-extern char g_grammar_article_des[4];		//ds:0xa8e0; seg096
-extern char g_grammar_article_den[4];		//ds:0xa8e4; seg096
-extern char g_grammar_article_dem[4];		//ds:0xa8e8; seg096
+//extern const signed char g_tevents_repeatable[145];	//ds:0xa843; seg094
 
-extern char *g_grammar_articles_index[15];	//ds:0xa917; seg096
-extern signed short g_grammar_def_table[24];	//ds:0xa953; seg096
-extern signed short g_grammar_indef_table[24];	//ds:0xa983; seg096
-extern signed short g_grammar_noarticle_table[24];	//ds:0xa9b3; seg096
+//extern char g_grammar_article_der[4];		//ds:0xa8d4; seg096
+//extern char g_grammar_article_die[4];		//ds:0xa8d8; seg096
+//extern char g_grammar_article_des[4];		//ds:0xa8e0; seg096
+//extern char g_grammar_article_den[4];		//ds:0xa8e4; seg096
+//extern char g_grammar_article_dem[4];		//ds:0xa8e8; seg096
+//extern char *g_grammar_articles_index[15];	//ds:0xa917; seg096
+//extern signed short g_grammar_def_table[24];	//ds:0xa953; seg096
+//extern signed short g_grammar_indef_table[24];	//ds:0xa983; seg096
+//extern signed short g_grammar_noarticle_table[24];	//ds:0xa9b3; seg096
+//extern signed short g_grammar_buf_no;		//ds:0xa9eb; seg096
+//extern struct Bit16s_3 g_grammar_gender_bitmasks;	//ds:0xa9ed; seg096
+//extern char g_grammar_pronouns_er[3];			//ds:0xa9f3; seg096
+//extern char g_grammar_pronouns_sie[4];			//ds:0xa9f6; seg096
+//extern char g_grammar_pronouns_sein[5];			//ds:0xa9fd; seg096
+//extern char g_grammar_pronouns_ihr[4];			//ds:0xaa02; seg096
+//extern char g_grammar_pronouns_ihn[4];			//ds:0xaa06; seg096
+//extern char g_grammar_pronouns_ihm[4];			//ds:0xaa0a; seg096
+//extern char *g_grammar_pronouns_index[7];		//ds:0xaa14; seg096
+//extern const signed char g_grammar_pronouns_table2[33];	//ds:0xaa30; seg096
+//extern struct struct_char_width g_gui_char_width[75];	//ds:0xaa51; seg096
+//extern char *g_str_s_s_ptr;				//ds:0xabe3; seg096
+//extern char *g_str_von_s_s_ptr;				//ds:0xabe7; seg096
 
-extern char *g_str_s_s_ptr;			//ds:0xabe3; seg096
-extern char *g_str_von_s_s_ptr;			//ds:0xabe7; seg096
-extern signed short g_grammar_buf_no;		//ds:0xa9eb; seg096
-extern struct Bit16s_3 g_grammar_gender_bitmasks;	//ds:0xa9ed; seg096
+//extern struct struct_char_height g_gui_char_height[67];	//ds:0xab42; seg097
+//extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
 
-extern char g_grammar_pronouns_er[3];		//ds:0xa9f3; seg096
-extern char g_grammar_pronouns_sie[4];		//ds:0xa9f6; seg096
-extern char g_grammar_pronouns_sein[5];		//ds:0xa9fd; seg096
-extern char g_grammar_pronouns_ihr[4];		//ds:0xaa02; seg096
-extern char g_grammar_pronouns_ihn[4];		//ds:0xaa06; seg096
-extern char g_grammar_pronouns_ihm[4];		//ds:0xaa0a; seg096
-
-extern char *g_grammar_pronouns_index[7];		//ds:0xaa14; seg096
-extern const signed char g_grammar_pronouns_table2[33];	//ds:0xaa30; seg096
-extern struct struct_char_width g_gui_char_width[75];	//ds:0xaa51; seg096
-extern struct struct_char_height g_gui_char_height[67];	//ds:0xab42; seg097
-
-extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
 extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
-extern struct Bit16s_5 g_ani_heal_picstars;	// ds:0xac10; seg098
-extern struct c_str_6 g_spell_select_str_keyval;// ds:0xac1a; seg098
-extern struct c_str_5 g_spell_select_str_key;	// ds:0xac20; seg098
-extern struct c_str_3 g_spell_select_str_key_color;	// ds:0xac25; seg098
-extern struct c_str_8 g_spell_select_str_keyval_color;	// ds:0xac28; seg098
-extern struct Bit8s_12 g_spell_select_ones;		// ds:0xac30; seg098
-extern const struct analues_item g_analues_items[28];	// ds:0xac3c; seg099
-extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
-extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
-extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103
-extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
-extern struct_recipe g_alchemy_recipes[13];	//ds:0xacda; seg104
-extern signed char g_prevent_drop_equipped_items;	// ds:0xae46; seg106
-extern signed short g_hero_startup_items[12][4];	// ds:0xae48; seg106
-extern signed short g_hero_startup_items_all[4];	// ds:0xaea8; seg106
-extern void (*g_use_special_item_handlers[14])(void);	//ds:0xaeb0; seg107
-extern int g_light_type;			// ds:0xaee8; seg101, seg107
-//extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109
+//extern struct Bit16s_5 g_ani_heal_picstars;	// ds:0xac10; seg098
+//extern struct c_str_6 g_spell_select_str_keyval;// ds:0xac1a; seg098
+//extern struct c_str_5 g_spell_select_str_key;	// ds:0xac20; seg098
+//extern struct c_str_3 g_spell_select_str_key_color;	// ds:0xac25; seg098
+//extern struct c_str_8 g_spell_select_str_keyval_color;	// ds:0xac28; seg098
+//extern struct Bit8s_12 g_spell_select_ones;		// ds:0xac30; seg098
 
+//extern const struct analues_item g_analues_items[28];	// ds:0xac3c; seg099
+
+//extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
+
+//extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
+
+//extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103
+//extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
+
+//extern struct_recipe g_alchemy_recipes[13];	//ds:0xacda; seg104
+
+//extern signed char g_prevent_drop_equipped_items;	// ds:0xae46; seg105
+
+//extern signed short g_hero_startup_items[12][4];	// ds:0xae48; seg106
+//extern signed short g_hero_startup_items_all[4];	// ds:0xaea8; seg106
+
+//extern void (*g_use_special_item_handlers[14])(void);	//ds:0xaeb0; seg107
+extern int g_light_type;			// ds:0xaee8; seg101, seg107
+
+//extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109
 extern signed char g_travel_event_active;		// ds:0xb132; seg002, seg109, seg117
 //extern signed short g_travel_event_tx2;			// ds:0xb133; seg109
 extern Bit8u g_travel_event_axes[6];			// ds:0xb135; seg109, seg118
 //extern char g_empty_string10[1];			// ds:0xb13b; seg109
 //extern char g_empty_string11[1];			// ds:0xb13c; seg109
 //extern char g_empty_string12[1];			// ds:0xb13d; seg109
+
 //extern struct struct_chest g_tevent014_corpse;	// ds:0xb13e; seg110
+
 //extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
+
 //extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
+
 //extern const struct climb_damage_range g_tevent135_climb_damage[5];	// ds:0xb174; seg116
+
 //extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
 //extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
 //extern signed int g_tlk_ruin_hero_counter;	// ds:0xb21b; seg117
+
 //extern char g_str_rad1[4];			// ds:0xb21e; seg118
 //extern char g_str_rad2[4];			// ds:0xb222; seg118
 //extern char g_str_rad3[4];			// ds:0xb226; seg118
+
 //extern Bit8u g_color_white[3];			// ds:0xb22a; seg120
 extern Bit8u g_color_black[3];			// ds:0xb22d; seg029, seg120
 //extern Bit8u g_palette_unknown2[8][3];		// ds:0xb230; seg120

@@ -28,6 +28,25 @@
 namespace M302de {
 #endif
 
+static void (*g_use_special_item_handlers[14])(void) = {
+	NULL,
+	item_arcano,
+	item_read_recipe,
+	item_read_document,
+	item_armatrutz,
+	item_flimflam,
+	item_debtbook,
+	item_orcdocument,
+	item_weapon_poison,
+	item_myastmatic,
+	item_hylailic,
+	item_magic_book,
+	item_brenne,
+	item_bag
+}; // ds:0xaeb0
+
+int g_light_type = 0; // ds:0xaee8, 0 = none, 1 = torch, 2 = lantern
+
 static struct item_stats *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
 static signed int g_used_item_id;	// ds:0xe5ca, used_item ID
 static signed int g_used_item_pos;	// ds:0xe5cc, used_item position
