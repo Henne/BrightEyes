@@ -53,6 +53,25 @@
 namespace M302de {
 #endif
 
+static signed short (*g_dng_handlers[15])(void) = {
+	DNG01_handler,
+	DNG02_handler,
+	DNG03_handler,
+	DNG04_handler,
+	DNG05_handler,
+	DNG06_handler,
+	DNG07_handler,
+	DNG08_handler,
+	DNG09_handler,
+	DNG10_handler,
+	DNG11_handler,
+	DNG12_handler,
+	DNG13_handler,
+	DNG14_handler,
+	DNG15_handler
+}; // ds:0x92d6
+signed short g_dng_level_changed = 0; // ds:0x9312
+
 signed short g_dng_refresh_direction;	// ds:0xe482
 signed short g_dng_refresh_y_target;	// ds:0xe484
 signed short g_dng_refresh_x_target;	// ds:0xe486

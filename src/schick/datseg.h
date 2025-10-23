@@ -1662,37 +1662,37 @@ extern const char g_str_obviously_closed[28];			//ds:0x7c7d; seg068
 extern signed char g_tmap_double1;				//ds:0x7c9a; seg025, seg072
 extern signed char g_tmap_double2;				//ds:0x7c9b; seg025, seg072, seg082
 extern signed char g_swafnild_traveled;				//ds:0x7c9c; seg063, seg072
-extern unsigned char g_towns_gossip_max[52];			//ds:0x7c9d; seg073
-extern unsigned char g_towns_gossip_off[52];			//ds:0x7cd1; seg073
-extern const char g_gossip_str_triple_wildcard[8];		//ds:0x7d06;
-extern Bit8u g_palette_fight2[20][3];				//ds:0x7d0e; seg032, seg047
+//extern unsigned char g_towns_gossip_max[52];			//ds:0x7c9d; seg073
+//extern unsigned char g_towns_gossip_off[52];			//ds:0x7cd1; seg073
+//extern const char g_gossip_str_triple_wildcard[8];		//ds:0x7d06; seg073
+extern Bit8u g_palette_fight2[20][3];				//ds:0x7d0e; seg032, seg074
 extern const unsigned char g_automap_bitmask[8];		//ds:0x7d4a; seg002, seg074
-extern const unsigned char g_automap_tile_arrowup[49];		//ds:0x7d52; seg074
-extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
-extern const unsigned char g_automap_tile_cross[49];		//ds:0x7d4b; seg074
+//extern const unsigned char g_automap_tile_arrowup[49];	//ds:0x7d52; seg074
+//extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
+//extern const unsigned char g_automap_tile_cross[49];		//ds:0x7d4b; seg074
 extern signed short g_automap_selx;				//ds:0x7de5; seg074, seg099
 extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
 extern struct dng_gfxtab g_dng_gfxtab_wood[88];			//ds:0x7dea; seg067
 extern struct dng_gfxtab g_dng_gfxtab_stone[88];			//ds:0x841a; seg067
 extern struct dng_gfxtab g_dng_gfxtab_marble[88];			//ds:0x8a4a; seg067
-extern unsigned char g_dng_stub3_unkn0[22];			//ds:0x907a; seg075
-extern unsigned char g_dng_stub3_unkn1[22];			//ds:0x9090; seg075
-extern unsigned char g_dng_stub3_unkn2[22];			//ds:0x90a6; seg075
-extern unsigned char g_dng_stub3_unkn3[22];			//ds:0x90bc; seg075
-extern unsigned char g_dng_stub3_unkn4[22];			//ds:0x90d2; seg075
-extern unsigned char g_dng_stub3_unkn5[22];			//ds:0x90e8; seg075
-extern unsigned char g_dng_stub3_unkn6[22];			//ds:0x90fe; seg075
-extern unsigned char g_dng_stub3_unkn7[22];			//ds:0x9114; seg075
-extern unsigned char g_dng_stub3_unkn8[22];			//ds:0x912a; seg075
-extern unsigned char g_dng_stub3_unkn9[22];			//ds:0x9140; seg075
-extern struct struct_point g_dng_stub4_unkn0[22];		//ds:0x9156; seg075
-extern struct struct_point g_dng_stub4_unkn1[22];		//ds:0x91ae; seg075
-extern struct struct_point g_dng_stub4_unkn2[22];		//ds:0x9206; seg075
-extern struct struct_point g_dng_stub4_unkn3[22];		//ds:0x925e; seg075
-extern signed char g_dng_stub4_unkn4[22];			//ds:0x92b6; seg075
-extern char g_dng_stub6_str_comma[3];			//ds:0x92cc; seg075
-extern char g_dng_stub6_str_and[6];			//ds:0x92cf; seg075
-extern signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076
+//extern unsigned char g_dng_stub3_unkn0[22];			//ds:0x907a; seg075
+//extern unsigned char g_dng_stub3_unkn1[22];			//ds:0x9090; seg075
+//extern unsigned char g_dng_stub3_unkn2[22];			//ds:0x90a6; seg075
+//extern unsigned char g_dng_stub3_unkn3[22];			//ds:0x90bc; seg075
+//extern unsigned char g_dng_stub3_unkn4[22];			//ds:0x90d2; seg075
+//extern unsigned char g_dng_stub3_unkn5[22];			//ds:0x90e8; seg075
+//extern unsigned char g_dng_stub3_unkn6[22];			//ds:0x90fe; seg075
+//extern unsigned char g_dng_stub3_unkn7[22];			//ds:0x9114; seg075
+//extern unsigned char g_dng_stub3_unkn8[22];			//ds:0x912a; seg075
+//extern unsigned char g_dng_stub3_unkn9[22];			//ds:0x9140; seg075
+//extern struct struct_point g_dng_stub4_unkn0[22];		//ds:0x9156; seg075
+//extern struct struct_point g_dng_stub4_unkn1[22];		//ds:0x91ae; seg075
+//extern struct struct_point g_dng_stub4_unkn2[22];		//ds:0x9206; seg075
+//extern struct struct_point g_dng_stub4_unkn3[22];		//ds:0x925e; seg075
+//extern signed char g_dng_stub4_unkn4[22];			//ds:0x92b6; seg075
+//extern char g_dng_stub6_str_comma[3];			//ds:0x92cc; seg075
+//extern char g_dng_stub6_str_and[6];			//ds:0x92cf; seg075
+//extern signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
 //extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
