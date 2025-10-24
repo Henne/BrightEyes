@@ -372,7 +372,7 @@ unsigned short FIG_fight_continues(void)
 void FIG_do_round(void)
 {
 	signed short i;
-	signed short nr_hero_action_phases_left_in_round; /* total number over all heroes */
+	signed short nr_hero_act_phases_left_in_round; /* total number over all heroes */
 	signed short nr_enemy_action_phases_left_in_round; /* total number over all enemies */
 	signed short actor_id;
 	signed short x_coord;
@@ -405,7 +405,7 @@ void FIG_do_round(void)
 	D1_INFO("Kampfrunde %d beginnt\n", g_fight_round);
 #endif
 
-	nr_hero_action_phases_left_in_round = 0;
+	nr_hero_act_phases_left_in_round = 0;
 
 	/* initialize heroes' #action phases and BP */
 	for (i = 0; i <= 6; (g_hero_is_target[i] = 0), i++) {
@@ -440,7 +440,7 @@ void FIG_do_round(void)
 
 			hero->escape_position = 0;
 
-			nr_hero_action_phases_left_in_round++;
+			nr_hero_act_phases_left_in_round++;
 
 			if (hero->axxeleratus) {
 
@@ -450,7 +450,7 @@ void FIG_do_round(void)
 				/* ... and one extra action phase */
 				hero->actions++;
 
-				nr_hero_action_phases_left_in_round++;
+				nr_hero_act_phases_left_in_round++;
 			}
 
 			if (hero->attrib[ATTRIB_KK].current * 110 <= hero->load) {
@@ -482,7 +482,7 @@ void FIG_do_round(void)
 	 * as it will be flipped in the first run */
 	is_enemies_turn = (g_fig_initiative == 2 ? 1 : (g_fig_initiative == 1 ? 0 : random_interval(0, 1)));
 
-	while ((g_in_fight) && (nr_hero_action_phases_left_in_round + nr_enemy_action_phases_left_in_round > 0)) {
+	while ((g_in_fight) && (nr_hero_act_phases_left_in_round + nr_enemy_action_phases_left_in_round > 0)) {
 
 		if (g_autofight == 2) {
 
@@ -500,23 +500,23 @@ void FIG_do_round(void)
 
 				/* this might be an Original-Bug:
 				 * The code block here is similar, but not equivalent to to the corresponding block for the enemies' turn below.
-				 * I'd expect first to check nr_hero_action_phases_left_in_round == 0 -> switch turn to enemies
-				 * and then check nr_hero_action_phases_left_in_round <= nr_enemy_action_phases_left_in_round
+				 * I'd expect first to check nr_hero_act_phases_left_in_round == 0 -> switch turn to enemies
+				 * and then check nr_hero_act_phases_left_in_round <= nr_enemy_action_phases_left_in_round
 				 * as below in the corresponding lines for the enemies. */
-				if (nr_hero_action_phases_left_in_round <= nr_enemy_action_phases_left_in_round) {
+				if (nr_hero_act_phases_left_in_round <= nr_enemy_action_phases_left_in_round) {
 
 					nr_action_phases_left_in_turn = 1;
 
-				} else if (nr_hero_action_phases_left_in_round == 0) {
+				} else if (nr_hero_act_phases_left_in_round == 0) {
 
 					is_enemies_turn = 1;
 
 				} else if (nr_enemy_action_phases_left_in_round) {
 
-					nr_action_phases_left_in_turn = nr_hero_action_phases_left_in_round / nr_enemy_action_phases_left_in_round;
+					nr_action_phases_left_in_turn = nr_hero_act_phases_left_in_round / nr_enemy_action_phases_left_in_round;
 				} else {
 
-					nr_action_phases_left_in_turn = nr_hero_action_phases_left_in_round;
+					nr_action_phases_left_in_turn = nr_hero_act_phases_left_in_round;
 				}
 			}
 
@@ -528,13 +528,13 @@ void FIG_do_round(void)
 					is_enemies_turn = 0;
 					nr_action_phases_left_in_turn = 1;
 
-				} else if (nr_enemy_action_phases_left_in_round <= nr_hero_action_phases_left_in_round) {
+				} else if (nr_enemy_action_phases_left_in_round <= nr_hero_act_phases_left_in_round) {
 
 					nr_action_phases_left_in_turn = 1;
 
 				} else {
-					nr_action_phases_left_in_turn = (nr_hero_action_phases_left_in_round ?
-							nr_enemy_action_phases_left_in_round / nr_hero_action_phases_left_in_round :
+					nr_action_phases_left_in_turn = (nr_hero_act_phases_left_in_round ?
+							nr_enemy_action_phases_left_in_round / nr_hero_act_phases_left_in_round :
 							nr_enemy_action_phases_left_in_round);
 				}
 			}
@@ -656,7 +656,7 @@ void FIG_do_round(void)
 				g_in_fight = 0;
 			}
 
-			nr_hero_action_phases_left_in_round--;
+			nr_hero_act_phases_left_in_round--;
 
 		} else {
 			/* enemies on turn */
