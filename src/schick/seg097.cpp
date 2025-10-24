@@ -109,7 +109,6 @@ static struct struct_char_height g_gui_char_height[67] = {
 	{ -0x27, 0x42, 0x06 }
 }; // ds:0xab42
 static signed short g_gui_bool_flag = 0; // ds:0xac0b
-//unsigned char g_unkn_066[1] = { 0x00 }; // ds:0xac0d
 
 
 signed int g_menu_default_select;	// ds:0xe5ac

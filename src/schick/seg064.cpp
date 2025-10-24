@@ -22,7 +22,6 @@ namespace M302de {
 
 static char g_sea_travel_str_heller[10] = "%d^HELLER"; // ds:0x7096
 static char g_sea_travel_str_nothing[7] = "NICHTS"; // ds:0x70a0
-//unsigned char g_unkn_051[1] = { 0x00 }; // ds:0x70a7
 
 /**
  * \brief   returns a pointer to the name of a ship

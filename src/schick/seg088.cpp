@@ -35,8 +35,6 @@ struct struct_chest g_dng14_specialchests[9] = {
 	{ DNG_POS(2,13,12),	6, use_lockpicks_on_chest,	DNG14_chest07_trap,	DNG14_chest07_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9990
-//unsigned char g_unkn_060[1] = { 0x00 }; // ds:0x9a4d
-
 
 
 void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)

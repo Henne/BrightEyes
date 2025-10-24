@@ -87,7 +87,6 @@ static void (*g_location_handlers[19])(void) = {
 	do_special_buildings,
 	do_citycamp,
 };  // ds:0x4c3b, (void (*)(void))[19];
-//unsigned char g_unkn_037[1] = { 0x00 }; // ds:0x4c87
 
 void show_entrance(void)
 {

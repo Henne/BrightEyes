@@ -30,8 +30,6 @@ namespace M302de {
 static signed char g_af_spell_list[11] = { 0x34, 0x0c, 0x35, 0x21, 0x08, 0x1b, 0x2e, 0x31, 0x36, 0x38, 0x48 }; // ds:0x5fac
 static struct viewdir_offsets g_viewdir_offsets3 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fb7
 static struct viewdir_offsets g_viewdir_offsets4 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fc7
-//unsigned char g_unkn_044[1] = { 0x00 }; // ds:0x5fd7
-
 
 /**
  * \brief   copies an ani sequence

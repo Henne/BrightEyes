@@ -31,7 +31,6 @@ namespace M302de {
 
 static const char g_str_bank_deposit_to_big[57] = "TUT MIR LEID, ICH AKZEPTIERE MAXIMAL 30000 SILBERM\x9aNZEN!"; // ds:0x7c44
 static const char g_str_obviously_closed[28] = "OFFENSICHTLICH GESCHLOSSEN!"; // ds:0x7c7d
-//unsigned char g_unkn_053[1] = { 0x00 }; // ds:0x7c99
 
 void THO_eisenhof(void)
 {

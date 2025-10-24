@@ -86,7 +86,6 @@ static struct c_str_5 g_smith_str_money_s = { "S %d" }; // ds:0x6c69
 static struct c_str_5 g_smith_str_money_d = { "D %d" }; // ds:0x6c6e
 static struct Bit16s_3 g_smith_items_posx = { 30, 95, 160 }; // ds:0x6c73
 static struct Bit16s_5 g_smith_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c79
-//unsigned char g_unkn_048[1] = { 0x00 }; // ds:0x6c83
 
 signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
 

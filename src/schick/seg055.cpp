@@ -127,7 +127,6 @@ struct shop_descr g_shop_descr_table[95] = {
 	{ 0x00, 0x03, 0x06, 0x0000, 0x0000, 0x0000 },
 	{ -1, 0, 0, 0, 0, 0 }
 }; // ds:0x6870
-//unsigned char g_unkn_046[1] = { 0x00 }; // ds:0x6bc7
 
 /**
  * \brief   add an item to the shop

@@ -46,8 +46,6 @@ struct struct_chest g_dng01_specialchests[9] = {
 	{ -1,						0, NULL,			NULL,			NULL,		0, 0, 0 }
 }; // ds:0x9314
 const char g_dng01_str_marbo[6] = "MARBO"; // ds:0x93d1
-//unsigned char g_unkn_057[1] = { 0x00 }; // ds:0x93d7
-
 
 /**
  * \brief   dungeon handler of the death ship

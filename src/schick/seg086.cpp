@@ -49,8 +49,6 @@ struct struct_chest g_dng11_specialchests[15] = {
 	{ DNG_POS(0,9,5),	4, use_lockpicks_on_chest,	NULL,			DNG11_chest13_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9854
-//unsigned char g_unkn_059[1] = { 0x00 }; // ds:0x998f
-
 
 signed short DNG11_handler(void)
 {

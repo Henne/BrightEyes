@@ -46,7 +46,6 @@ static signed char g_fig_star_last_count = -1; // ds:0x4b7b
 static signed short g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
 signed char g_fig_star_printed = 0; // ds:0x4b94
 char g_str_temp_xx[8] = "TEMP\\XX"; // ds:0x4b95
-//unsigned char g_unkn_036[1] = { 0x00 }; // ds:0x4b9d
 
 static unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
 static signed short g_fig_figlist_readd[8];	// ds:0xe298

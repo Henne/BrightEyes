@@ -30,8 +30,6 @@ signed short g_cb_obj_nonobstacle[27] = { 0x0017, 0x0018, 0x0019, 0x001a, 0x001b
 static struct viewdir_offsets g_viewdir_offsets1 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5f7c
 static struct viewdir_offsets g_viewdir_offsets2 = { { { 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } }; // ds:0x5f8c
 static char g_string_14spaces[15] = "              "; // ds:0x5f9c
-//unsigned char g_unkn_043[1] = { 0x00 }; // ds:0x5fab
-
 
 /**
  * \brief   TODO

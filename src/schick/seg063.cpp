@@ -120,8 +120,6 @@ static struct Bit16s_7 g_sea_travel_sleepbonus_table2 = { -2, 0, 5, 4, 3, 1, 0 }
 static char g_sea_travel_str_t[2] = "T"; // ds:0x708d
 static char g_sea_travel_str_en[3] = "EN"; // ds:0x708f
 static char g_sea_travel_str_comma[3] = ", "; // ds:0x7092
-//unsigned char g_unkn_050[1] = { 0x00 }; // ds:0x7095
-
 
 
 static signed char g_sea_travel_sleep_quality; // ds:0xe3fa

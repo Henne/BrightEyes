@@ -72,7 +72,6 @@ static Bit8s* g_god_temples_index[15] = {
 }; // ds:0x6e36; Bit8s*
 static char g_str_temp_file_wildcard[8] = "TEMP\\%s"; // ds:0x6e72
 static char g_str_no_save_in_temple[41] = "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!"; // ds:0x6e7a
-//unsigned char g_unkn_049[1] = { 0x00 }; // ds:0x6ea3
 
 
 /* REMARK: should be passed as a parameter to asm_miracles() */

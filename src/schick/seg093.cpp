@@ -635,7 +635,7 @@ struct struct_tevent g_tevents_tab[156] = {
 	{ 59, 43, 143 },
 	{ -1,  0,   0 },
 }; // ds:0xa66d
-//unsigned char g_unkn_064[1] = { 0x00 }; // ds:0xa841
+
 signed short do_travel_mode(void)
 {
 	signed short l_di;

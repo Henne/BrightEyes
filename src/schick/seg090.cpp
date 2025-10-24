@@ -36,7 +36,6 @@ struct struct_chest g_dng12_specialchests[3] = {
 }; // ds:0x9d04
 signed int g_dng12_obstacle_tries = 0; // ds:0x9d43 SHOULD BE IN GAME STATE
 signed int g_dng12_watertrap_bak = 0;  // ds:0x9d45 SHOULD BE IN GAME STATE
-//unsigned char g_unkn_062[1] = { 0x00 }; // ds:0x9d47
 
 signed short DNG12_handler(void)
 {

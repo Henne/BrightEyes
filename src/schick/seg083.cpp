@@ -41,7 +41,6 @@ extern struct struct_chest g_dng08_specialchests[7] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9692
 static const char g_dng08_str_tairach[8] = "TAIRACH"; // ds:0x9725
-//unsigned char g_unkn_058[1] = { 0x00 }; // ds:0x972d
 
 signed short DNG08_handler(void)
 {

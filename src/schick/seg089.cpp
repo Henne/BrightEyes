@@ -73,7 +73,6 @@ struct struct_chest g_dng15_specialchests[33] = {
 	{ DNG_POS(3,14,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9a4e
-//unsigned char g_unkn_061[1] = { 0x00 }; // ds:0x9d03
 
 signed short DNG15_handler(void)
 {

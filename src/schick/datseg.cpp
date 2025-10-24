@@ -60,23 +60,6 @@ namespace M302de {
 char ds[1];
 #endif
 
-//unsigned char g_unkn_001[1] = { 0x02 }; // ds:0x0094
-//unsigned short g_cd_init_successful = 0; // ds:0x0095
-//unsigned char g_unkn_002[4] = { 0x00, 0x00, 0x00, 0x00 }; // ds:0x0097
-//unsigned short g_cd_audio_repeat = 0; // ds:0x009b
-//unsigned char g_unkn_003[4] = { 0x00, 0x00, 0x00, 0x00 }; // ds:0x009d
-//unsigned short g_cd_audio_paused = 0; // ds:0x00a1
-//unsigned short g_cd_audio_track_bak = 0x7fff; // ds:0x00a3
-//signed short g_cd_audio_tracklist[15] = { 0x7fff, 0x7fff, 0x7fff, 0x7fff, 0x008f, 0x008e, 0x0090, 0x0091, 0x0092, 0x0093, 0x0094, 0x0095, 0x0096, 0x00d5, 0x00d4 }; // ds:0x00a5
-//unsigned long g_cd_check_skipmagic = 0; // ds:0x00c3
-//unsigned short g_cd_check_err_countdown = 5; // ds:0x00c7
-//char g_str_insert_cd[142] = "BITTE LEGEN SIE DIE \xf2SCHICKSALSKLINGE-CD\xf0 IN LAUFWERK %c: EIN. DIESE WIRD BEN\x99TIGT, DA DATEN W\x8eHREND DES SPIELS VON CD GELADEN WERDEN M\x9aSSEN."; // ds:0x00c9
-//char g_str_repeat[12] = "WIEDERHOLEN"; // ds:0x0157
-//char g_str_quit[8] = "BEENDEN"; // ds:0x0163
-//char g_str_cd_exepath[19] = "X:\\DSA\\SCHICKM.EXE"; // ds:0x016b
-//char g_str_cd_missing[204] = "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NICHT LAUFF\x8eHIG. BITTE INSTALLIEREN SIE DIE GER\x8eTETREIBER F\x9aR DAS CD-ROM-LAUFWERK GEM\x8eSS IHRER CD-ROM-DOKUMENTATION UND STARTEN SIE DIE 'SCHICKSALSKLINGE' ERNEUT."; // ds:0x017e
-//char g_str_cd_init[37] = "INITIALISIERE CD-ROM IN LAUFWERK %c:"; // ds:0x024a
-//unsigned char g_unkn_004[1] = { 0x00 }; // ds:0x026f
 signed short g_items_noplural[23] = {
 	ITEM_LICORICE,
 	ITEM_BONBONS,

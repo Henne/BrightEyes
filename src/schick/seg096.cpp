@@ -178,7 +178,6 @@ static struct struct_char_width g_gui_char_width[75] = {
 }; // ds:0xaa51
 char g_str_s_s[6] = "%s %s"; // ds:0xab32
 char g_str_von_s_s[9] = "VON%s %s"; // ds:0xab38
-//unsigned char g_unkn_065[1] = { 0x00 }; // ds:0xab41
 
 
 static char g_gui_print_char;		// ds:0xe4d8
