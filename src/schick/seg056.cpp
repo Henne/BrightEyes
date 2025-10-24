@@ -31,6 +31,14 @@
 namespace M302de {
 #endif
 
+static struct c_str_5 g_buy_screen_str_money_h = { "H %d" }; // ds:0x6bc8
+static struct c_str_5 g_buy_screen_str_money_s = { "S %d" }; // ds:0x6bcd
+static struct c_str_5 g_buy_screen_str_money_d = { "D %d" }; // ds:0x6bd2
+static struct Bit16s_3 g_buy_screen_items_posx = { 30, 95, 160 }; // ds:0x6bd7
+static struct Bit16s_5 g_buy_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6bdd
+static struct c_str_6 g_buy_screen_str_d_s = { "%d %s" }; // ds:0x6be7
+static char g_buy_screen_str_comma_space[3] = ", "; // ds:0x6bed
+
 static struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
 
 /**

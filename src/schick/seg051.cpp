@@ -33,6 +33,29 @@
 namespace M302de {
 #endif
 
+static const signed short g_campfights[4] = { 0x00d9, 0x00da, 0x00db, 0x00e8 }; // ds:0x6694
+struct gather_herbs g_gather_herbs_table[13] = {
+	{ ITEM_ALRAUNE      ,  5, 1, 15 },
+	{ ITEM_BELMART      , 12, 3,  8 },
+	{ ITEM_DONF_SPRING  , 10, 2,  9 },
+	{ ITEM_GULMOND_LEAF , 15, 3,  8 },
+	{ ITEM_JORUGA_ROOT  , 15, 1, 10 },
+	{ ITEM_KAIRANHALM   ,  1, 1, 18 },
+	{ ITEM_SHURIN       , 12, 2,  8 },
+	{ ITEM_TARNELE      , 45, 5,  4 },
+	{ ITEM_THONNYS      ,  3, 1, 15 },
+	{ ITEM_EINBEERE     , 40, 4,  8 },
+	{ ITEM_WHIRLWEED    , 30, 2,  4 },
+	{ ITEM_KROTENSCHEMEL, 20, 2,  4 },
+	{ 0xff              ,  0, 0,  0 }
+}; // ds:0x669c
+signed char g_gather_herbs_special = -1; // ds:0x66d0
+static char g_gather_herbs_str_found[6] = "%d^%s"; // ds:0x66d1
+static char g_gather_herbs_str_comma[3] = ", "; // ds:0x66d7
+static char g_gather_herbs_str_and[6] = " UND "; // ds:0x66da
+static char g_gather_herbs_str_dot[2] = "."; // ds:0x66e0
+
+
 signed char g_wildcamp_guards[3];	// ds:0xe3be
 signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1
 signed char g_wildcamp_replstatus[7];	// ds:0xe3c8

@@ -30,6 +30,8 @@
 namespace M302de {
 #endif
 
+static const signed short g_dcampfights[4] = { 254, 255, 256, 257 }; // ds:0x66e2
+
 static signed char g_citycamp_guards[3];	// ds:0xe3de
 static signed char g_citycamp_magicstatus[7];	// ds:0xe3e1
 static signed char g_citycamp_guardstatus[8];	// ds:0xe3e8

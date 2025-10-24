@@ -21,6 +21,12 @@
 namespace M302de {
 #endif
 
+signed char g_hero_sel_exclude = -1; // ds:0x64a2
+static struct Bit16s_7 g_seg047_init1 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64a3, filled with zeroes
+static struct Bit16s_7 g_seg047_init2 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64b1, filled with zeroes
+static struct Bit16s_7 g_seg047_init3 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64bf, filled with zeroes
+//unsigned char g_unkn_045[1] = { 0x00 }; // ds:0x64cd
+
 /**
  * \brief   get index of the first hero with the highest CH value
  *

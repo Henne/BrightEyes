@@ -37,6 +37,57 @@
 namespace M302de {
 #endif
 
+static struct smith_descr g_smith_descr_table[42] = { /* 'quality' is apparently unused. */
+	{  50,  1 },
+	{  20,  4 },
+	{   0, 10 },
+	{ -20, 15 },
+	{   0, 10 },
+	{  30, 12 },
+	{ -10,  9 },
+	{  30, 10 },
+	{  20,  2 },
+	{   0,  9 },
+	{ -40, 16 },
+	{   0,  9 },
+	{   0, 11 },
+	{  50,  1 },
+	{  70,  1 },
+	{  10,  4 },
+	{ -20,  9 },
+	{  40,  6 },
+	{ -10, 15 },
+	{   0,  5 },
+	{  50,  4 },
+	{  10, 16 },
+	{  30,  3 },
+	{ -30, 11 },
+	{  20,  1 },
+	{ -50, 14 },
+	{   0,  9 },
+	{   0,  5 },
+	{  20, 17 },
+	{  10, 13 },
+	{   0,  3 },
+	{  10, 12 },
+	{  30,  4 },
+	{   0, 11 },
+	{  10,  6 },
+	{ -20, 13 },
+	{  20,  2 },
+	{   0, 13 },
+	{ -10, 15 },
+	{  30,  4 },
+	{  30,  4 },
+	{  -1,  0 }
+}; // ds:0x6c10
+static struct c_str_5 g_smith_str_money_h = { "H %d" }; // ds:0x6c64
+static struct c_str_5 g_smith_str_money_s = { "S %d" }; // ds:0x6c69
+static struct c_str_5 g_smith_str_money_d = { "D %d" }; // ds:0x6c6e
+static struct Bit16s_3 g_smith_items_posx = { 30, 95, 160 }; // ds:0x6c73
+static struct Bit16s_5 g_smith_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c79
+//unsigned char g_unkn_048[1] = { 0x00 }; // ds:0x6c83
+
 signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
 
 /**

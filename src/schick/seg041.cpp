@@ -27,6 +27,26 @@
 namespace M302de {
 #endif
 
+static signed short g_force_weapons[9] = {
+	ITEM_CLUB,
+	ITEM_MORNING_STAR,
+	ITEM_MACE,
+	ITEM_QUARTERSTAFF,
+	ITEM_WHIP, /* wtf?? */
+	ITEM_WAR_HAMMER,
+	ITEM_WITCHES_BROOM,
+	ITEM_MAGIC_WAND,
+	-1
+}; // ds:0x615c, terminated with -1
+static signed short g_knive_weapons[5] = {
+	ITEM_KNIFE,
+	ITEM_DAGGER,
+	ITEM_VOLCANIC_GLASS_DAGGER,
+	ITEM_WOLFSMESSER,
+	-1
+}; // ds:0x616e, terminated with -1
+
+
 #if 0
 static signed short msg_counter;
 #endif

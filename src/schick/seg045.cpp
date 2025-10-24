@@ -18,6 +18,87 @@
 namespace M302de {
 #endif
 
+static const signed short g_gfxtab_shotbolt_ox[6][4] = {
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3
+}; // ds:0x6198
+static const signed short g_gfxtab_shotbolt_oy[6][4] = {
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20
+}; // ds:0x61c8
+static signed short g_gfxtab_shotbolt_nvfno[6] = { 0, 4, 8, 12, 16, 20 }; // ds:0x61f8
+static signed short g_gfxtab_shotbolt_height[6] = { 15, 15, 15, 5, 5, 8 }; // ds:0x6204
+static signed short g_gfxtab_shotbolt_width[6] = { 25, 25, 25, 9, 9, 16 }; // ds:0x6210
+static signed char g_anitab_shotbolt_data[24][7] = {
+
+	{-2,  1,  0,  0, 0, 0, -1},
+	{-2,  0, -1,  1, 0, 0, -1},
+	{-2, -1,  0,  2, 0, 0, -1},
+	{-2,  0,  1,  3, 0, 0, -1},
+
+	{-2,  1,  0,  4, 0, 0, -1},
+	{-2,  0, -1,  5, 0, 0, -1},
+	{-2, -1,  0,  6, 0, 0, -1},
+	{-2,  0,  1,  7, 0, 0, -1},
+
+	{-2,  1,  0,  8, 0, 0, -1},
+	{-2,  0, -1,  8, 0, 0, -1},
+	{-2, -1,  0,  8, 0, 0, -1},
+	{-2,  0,  1,  8, 0, 0, -1},
+
+	{-2,  1,  0, 12, 0, 0, -1},
+	{-2,  0, -1, 13, 0, 0, -1},
+	{-2, -1,  0, 14, 0, 0, -1},
+	{-2,  0,  1, 15, 0, 0, -1},
+
+	{-2,  1,  0, 16, 0, 0, -1},
+	{-2,  0, -1, 17, 0, 0, -1},
+	{-2, -1,  0, 18, 0, 0, -1},
+	{-2,  0,  1, 19, 0, 0, -1},
+
+	{-2,  1,  0, 20, 0, 0, -1},
+	{-2,  0, -1, 21, 0, 0, -1},
+	{-2, -1,  0, 22, 0, 0, -1},
+	{-2,  0,  1, 23, 0, 0, -1}
+}; // ds:0x621c, arrays, each terminated by -1
+static signed char *g_anitab_shotbolt_index2[6][4] = {
+	{g_anitab_shotbolt_data[0],  g_anitab_shotbolt_data[1],  g_anitab_shotbolt_data[2],  g_anitab_shotbolt_data[3]},
+	{g_anitab_shotbolt_data[4],  g_anitab_shotbolt_data[5],  g_anitab_shotbolt_data[6],  g_anitab_shotbolt_data[7]},
+	{g_anitab_shotbolt_data[8],  g_anitab_shotbolt_data[9],  g_anitab_shotbolt_data[10], g_anitab_shotbolt_data[11]},
+	{g_anitab_shotbolt_data[12], g_anitab_shotbolt_data[13], g_anitab_shotbolt_data[14], g_anitab_shotbolt_data[15]},
+	{g_anitab_shotbolt_data[16], g_anitab_shotbolt_data[17], g_anitab_shotbolt_data[18], g_anitab_shotbolt_data[19]},
+	{g_anitab_shotbolt_data[20], g_anitab_shotbolt_data[21], g_anitab_shotbolt_data[22], g_anitab_shotbolt_data[23]}
+}; // ds:0x62c4, 6 long arrays of length 4 (viewdir); Bit8u*
+static signed char **g_anitab_shotbolt_index[6] = {
+	g_anitab_shotbolt_index2[0],
+	g_anitab_shotbolt_index2[1],
+	g_anitab_shotbolt_index2[2],
+	g_anitab_shotbolt_index2[3],
+	g_anitab_shotbolt_index2[4],
+	g_anitab_shotbolt_index2[5]
+}; // ds:0x6324; Bit8u*
+
+static signed char g_anitab_spell_nvfno[2] = { 0x09, 0x1b }; // ds:0x633c
+static signed short g_anitab_spell_ox[2] = { 0, 0 }; // ds:0x633e
+static signed short g_anitab_spell_oy[2] = { 0, 0 }; // ds:0x6342
+static signed char g_anitab_spell_data[2][16] = {
+	{  9, 0, 0, 10, 0, 0, 11, 0, 0, 10, 0, 0,  9, 0, 0, -1},
+	{ 27, 0, 0, 28, 0, 0, 29, 0, 0, 28, 0, 0, 27, 0, 0, -1},
+}; // ds:0x6346, 2 arrays, each terminated by -1
+static signed char* g_anitab_spell_index[2] = {
+	(signed char*)&g_anitab_spell_data[0],
+	(signed char*)&g_anitab_spell_data[1],
+}; // ds:0x6366; Bit8u*
+
+
 void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 {
 	signed short obj_x;

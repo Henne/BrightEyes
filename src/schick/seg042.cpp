@@ -30,6 +30,9 @@
 namespace M302de {
 #endif
 
+static struct viewdir_offsets8s g_viewdir_invoffsets2 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6178
+static char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
+
 signed short g_spell_illusionen;	// ds:0xe3a4, 1 = spell has effect
 signed short g_defender_dead;		// ds:0xe3a6
 signed short g_attacker_dead;		// ds:0xe3a8

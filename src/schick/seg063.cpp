@@ -39,6 +39,91 @@
 namespace M302de {
 #endif
 
+static signed short g_passage_type_to_name[7] = {
+	/* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
+	0x001d, /* HEUER */
+	0x001e, /* BEGLEITSCHUTZFAHRT */
+	0x001f, /* LUXUSPASSAGE */
+	0x0020, /* KOMFORTABLE PASSAGE */
+	0x0021, /* KABINENPASSAGE */
+	0x0022, /* DECKPASSAGE */
+	0x0023  /* MITFAHRGELEGENHEIT */
+}; // ds:0x6ec2/*
+static const struct ship g_ship_table[8] = {
+	{ 0, 1,  0, 120 },
+	{ 3, 1, 35, 100 },
+	{ 1, 1,  0, (signed char)150 }, //BUG
+	{ 2, 1, 45, (signed char)150 }, //BUG
+	{ 0, 1,  0,  90 },
+	{ 4, 1, 20,  80 },
+	{ 5, 0, 10,  60 },
+	{ 6, 0,  0,  40 }
+}; // ds:0x6ed0
+static signed short g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
+struct sea_route g_sea_routes[46] = {
+	{ TOWNS_THORWAL    , TOWNS_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
+	{ TOWNS_PREM       , TOWNS_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
+#ifndef M302de_ORIGINAL_BUGFIX
+	 /* Original-Bug 25: According to the map, the route Prem <-> Manrin should be the longest ship route by far. Distance 54 is way too short. Maybe the original intention was a value of 310, which after a byte overflow results in 54. */
+	{ TOWNS_PREM       , TOWNS_MANRIN          ,  54,  7, 0, 0, 0, 0 }, //  3
+#else
+	{ TOWNS_PREM       , TOWNS_MANRIN          , 255,  7, 0, 0, 0, 0 }, //  3
+	/* set the distance to maximum possible value 255. Still too short, but much better than 54 */
+#endif
+	{ TOWNS_PREM       , TOWNS_KORD            , 135,  7, 0, 0, 0, 0 }, //  4
+	{ TOWNS_KORD       , TOWNS_HJALSINGOR      ,  80,  6, 0, 0, 0, 0 }, //  5
+	{ TOWNS_HJALSINGOR , TOWNS_OVERTHORN       , 115,  4, 0, 0, 0, 0 }, //  6
+	{ TOWNS_HJALSINGOR , TOWNS_MANRIN          , 110,  5, 0, 0, 0, 0 }, //  7
+	{ TOWNS_THORWAL    , TOWNS_VAERMHAG        ,  30,  7, 0, 1, 0, 0 }, //  8
+	{ TOWNS_VAERMHAG   , TOWNS_VARNHEIM        ,  37,  5, 0, 1, 0, 0 }, //  9
+	{ TOWNS_VARNHEIM   , TOWNS_LJASDAHL        ,  25,  3, 0, 1, 0, 0 }, // 10
+	{ TOWNS_VARNHEIM   , TOWNS_OTTARJE         ,  25,  8, 0, 1, 0, 0 }, // 11
+	{ TOWNS_LJASDAHL   , TOWNS_OTTARJE         ,  10,  1, 0, 1, 0, 0 }, // 12
+	{ TOWNS_SKJAL      , TOWNS_OTTARJE         ,  52,  3, 0, 1, 0, 0 }, // 13
+	{ TOWNS_SKJAL      , TOWNS_PREM            ,  28,  4, 0, 1, 0, 0 }, // 14
+	{ TOWNS_PREM       , TOWNS_ARYN            ,  28,  6, 0, 1, 0, 0 }, // 15
+	{ TOWNS_PREM       , TOWNS_RUNINSHAVEN     ,  35,  7, 0, 1, 0, 0 }, // 16
+	{ TOWNS_ARYN       , TOWNS_RUNINSHAVEN     ,  25,  4, 0, 1, 0, 0 }, // 17
+	{ TOWNS_RUNINSHAVEN, TOWNS_TREBAN          ,  50,  7, 0, 1, 0, 0 }, // 18
+	{ TOWNS_TREBAN     , TOWNS_KORD            ,  40,  2, 0, 1, 0, 0 }, // 19
+	{ TOWNS_KORD       , TOWNS_GUDDASUNDEN     ,  65,  2, 0, 1, 0, 0 }, // 20
+	{ TOWNS_GUDDASUNDEN, TOWNS_HJALSINGOR      ,  20,  1, 0, 1, 0, 0 }, // 21
+	{ TOWNS_HJALSINGOR , TOWNS_ROVIK           ,  46,  2, 0, 1, 0, 0 }, // 22
+	{ TOWNS_ROVIK      , TOWNS_OVERTHORN       ,  67,  2, 0, 1, 0, 0 }, // 23
+	{ TOWNS_ROVIK      , TOWNS_ORVIL           ,  18,  1, 0, 1, 0, 0 }, // 24
+	{ TOWNS_OVERTHORN  , TOWNS_TJANSET         ,  40,  3, 0, 1, 0, 0 }, // 25
+	{ TOWNS_OVERTHORN  , TOWNS_VIDSAND         ,  48,  1, 0, 1, 0, 0 }, // 26
+	{ TOWNS_TJANSET    , TOWNS_LISKOR          ,  22,  6, 0, 1, 0, 0 }, // 27
+	{ TOWNS_LISKOR     , TOWNS_VIDSAND         ,  22,  1, 0, 1, 0, 0 }, // 28
+	{ TOWNS_TJANSET    , TOWNS_VIDSAND         ,  36,  2, 0, 1, 0, 0 }, // 29
+	{ TOWNS_OVERTHORN  , TOWNS_BRENDHIL        ,  32,  3, 0, 1, 0, 0 }, // 30
+	{ TOWNS_BRENDHIL   , TOWNS_MANRIN          ,  57,  5, 0, 1, 0, 0 }, // 31
+	{ TOWNS_ROVIK      , TOWNS_MANRIN          ,  83,  7, 0, 1, 0, 0 }, // 32
+	{ TOWNS_THORWAL    , TOWNS_MERSKE          ,  30,  7, 0, 1, 0, 0 }, // 33
+	{ TOWNS_MERSKE     , TOWNS_EFFERDUN        ,  18,  8, 0, 1, 0, 0 }, // 34
+	{ TOWNS_THORWAL    , TOWNS_EFFERDUN        ,  47,  3, 0, 1, 0, 0 }, // 35
+	{ TOWNS_SERSKE     , TOWNS_MERSKE          ,  24,  7, 0, 1, 0, 0 }, // 36
+	{ TOWNS_SERSKE     , TOWNS_EFFERDUN        ,  41,  5, 0, 1, 0, 0 }, // 37
+	{ TOWNS_OVERTHORN  , TOWNS_LISKOR          ,  51,  3, 0, 1, 0, 0 }, // 38
+	{ TOWNS_THORWAL    , TOWNS_VARNHEIM        ,  67,  4, 0, 1, 0, 0 }, // 39
+	{ TOWNS_OTTARJE    , TOWNS_PREM            ,  62,  4, 0, 1, 0, 0 }, // 40
+	{ TOWNS_OTTARJE    , TOWNS_RUNINSHAVEN     ,  73,  7, 0, 1, 0, 0 }, // 41
+	{ TOWNS_SKJAL      , TOWNS_RUNINSHAVEN     ,  55,  6, 0, 1, 0, 0 }, // 42
+	{ TOWNS_RUNINSHAVEN, TOWNS_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
+	{ TOWNS_TREBAN     , TOWNS_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
+	{ TOWNS_MANRIN     , TOWNS_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
+	{ (unsigned char)-1             , 0x00                  ,   0,  0, 0, 0, 0, 0 } //TODO: towns should be signed
+}; // ds:0x6f00
+signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
+static struct Bit16s_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
+static struct Bit16s_7 g_sea_travel_sleepbonus_table2 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
+static char g_sea_travel_str_t[2] = "T"; // ds:0x708d
+static char g_sea_travel_str_en[3] = "EN"; // ds:0x708f
+static char g_sea_travel_str_comma[3] = ", "; // ds:0x7092
+//unsigned char g_unkn_050[1] = { 0x00 }; // ds:0x7095
+
+
+
 static signed char g_sea_travel_sleep_quality; // ds:0xe3fa
 
 void passages_init(void)

@@ -31,6 +31,13 @@
 namespace M302de {
 #endif
 
+static struct c_str_5 g_sell_screen_str_money_h = { "H %d" }; // ds:0x6bf0
+static struct c_str_5 g_sell_screen_str_money_s = { "S %d" }; // ds:0x6bf5
+static struct c_str_5 g_sell_screen_str_money_d = { "D %d" }; // ds:0x6bfa
+static struct Bit16s_3 g_sell_screen_items_posx = { 30, 95, 160 }; // ds:0x6bff
+static struct Bit16s_5 g_sell_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c05
+//unsigned char g_unkn_047[1] = { 0x00 }; // ds:0x6c0f
+
 /**
  * \brief   shows the sell-screen an provides interaction
  */

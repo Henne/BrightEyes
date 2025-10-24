@@ -29,6 +29,9 @@
 namespace M302de {
 #endif
 
+signed short g_mspell_awake_flag = 0; // ds:0x618e
+static struct viewdir_offsets8s g_viewdir_invoffsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
+
 /**
  * \brief   execute the fight action of a monster
  *
