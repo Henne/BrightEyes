@@ -1433,32 +1433,37 @@ extern struct point8s g_visual_field_dir1[31];	//ds:0x49ae; seg003
 extern struct point8s g_visual_field_dir2[31];	//ds:0x49ec; seg003
 extern struct point8s g_visual_field_dir3[31];	//ds:0x492a; seg003
 extern char   g_noway_string[40];		//ds:0x4a68; seg003
-extern Bit16s g_ani_busy;			//ds:0x4a90; seg004
+
+//extern Bit16s g_ani_busy;			//ds:0x4a90; seg004
 extern Bit16s g_pic_copy_flag;			//ds:0x4a92; seg004, seg008, seg074
-extern Bit16u g_status_bar_colors[2];		//ds:0x4a94; seg004
-extern Bit8s  g_status_page_hunger_max_counter;	//ds:0x4a9a; seg004
-extern Bit8s  g_status_page_hunger_max_color;	//ds:0x4a9c; seg004
-extern Bit8s  g_status_page_thirst_max_counter;	//ds:0x4a9d; seg004
-extern Bit8s  g_status_page_thirst_max_color;	//ds:0x4a9e; seg004
-extern Bit16s g_wallclock_pos;			//ds:0x4a9e; seg004;
-extern Bit8s  g_wallclock_pos_y[81];		//ds:0x4aa0; seg004;
-extern Bit8u  g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
-extern Bit8u  g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
-extern struct Bit8u_3 g_color_pal_white;	//ds:0x4b03; seg004
-extern struct Bit8u_32_3 g_palette_allblack;	//ds:0x4b06; seg004
+//extern Bit16u g_status_bar_colors[2];		//ds:0x4a94; seg004
+//extern Bit8s  g_status_page_hunger_max_counter;	//ds:0x4a9a; seg004
+//extern Bit8s  g_status_page_hunger_max_color;	//ds:0x4a9c; seg004
+//extern Bit8s  g_status_page_thirst_max_counter;	//ds:0x4a9d; seg004
+//extern Bit8s  g_status_page_thirst_max_color;	//ds:0x4a9e; seg004
+//extern Bit16s g_wallclock_pos;			//ds:0x4a9e; seg004;
+//extern Bit8s  g_wallclock_pos_y[81];		//ds:0x4aa0; seg004;
+//extern Bit8u  g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
+//extern Bit8u  g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
+//extern struct Bit8u_3 g_color_pal_white;	//ds:0x4b03; seg004
+//extern struct Bit8u_32_3 g_palette_allblack;	//ds:0x4b06; seg004
+
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
-extern char *g_str_temp_xx_ptr;			//ds:0x4b68; seg005
-extern signed char g_fig_star_colors[12];	//ds:0x4b6c; seg005
-extern signed char g_fig_star_counter;		//ds:0x4b78; seg005
+//extern char *g_str_temp_xx_ptr;			//ds:0x4b68; seg005
+//extern signed char g_fig_star_colors[12];	//ds:0x4b6c; seg005
+//extern signed char g_fig_star_counter;		//ds:0x4b78; seg005
 extern signed short g_fig_star_timer;		//ds:0x4b79; seg004, seg005
-extern signed char g_fig_star_last_count;	//ds:0x4b7b; seg005
-extern signed short g_fig_msg_dtps[12];		//ds:0x4b7c; seg005
-extern char g_str_temp_xx[8];			//ds:0x4b95; seg005
+//extern signed char g_fig_star_last_count;	//ds:0x4b7b; seg005
+//extern signed short g_fig_msg_dtps[12];		//ds:0x4b7c; seg005
+//extern char g_str_temp_xx[8];			//ds:0x4b95; seg005
 extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
+
 extern signed short g_fight_figs_index;		//ds:0x4b9e; seg006, seg032
+
 extern unsigned short g_random_schick_seed;	//ds:0x4ba0; seg007
 
 extern Bit8u* g_ems_frame_ptr;			//ds:0x4baa; seg002, seg010, seg028
+
 //extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
 
 //extern signed short g_tmap_x[10];		//ds:0x4c12; seg025

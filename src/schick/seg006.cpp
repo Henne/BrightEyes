@@ -23,6 +23,8 @@
 namespace M302de {
 #endif
 
+signed short g_fight_figs_index = -1; // ds:0x4b9e
+
 /**
  * \brief   get the pointer to the fighter with id fighter_id
  *

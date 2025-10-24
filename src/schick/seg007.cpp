@@ -17,6 +17,12 @@
 namespace M302de {
 #endif
 
+unsigned short g_random_schick_seed = 0x327b; // ds:0x4ba0
+
+/* REMARK: belong to seg010.cpp */
+char g_emm_sig[8] = { 'E', 'M', 'M', 'X', 'X', 'X', 'X', '0'}; // ds:0x4ba2
+Bit8u *g_ems_frame_ptr = NULL; // ds:0x4baa; Bit8u*
+
 #if !defined(__BORLANDC__)
 static inline
 unsigned short _rotl(unsigned short op, unsigned char count) {
