@@ -46,6 +46,12 @@
 namespace M302de {
 #endif
 
+signed int g_fig_dropped_counter = 0;	// ds:0x5f12
+static signed int g_fig_all_heroes_withdrawn = 0; // ds:0x5f14
+signed int g_max_enemies = 0; // ds:0x5f16, an upper bound for the number of enemies
+static const char g_str_error_on_obj_malloc[23] = "ERROR ON OBJECT MALLOC"; // ds:0x5f18
+//unsigned char g_unkn_041[1] = { 0x00 }; // ds:0x5f2f
+
 signed int g_current_fight_no;		// ds:0xe316
 signed int g_autofight;			// ds:0xe318
 signed int g_fig_dropped_weapons[30];	// ds:0xe31a

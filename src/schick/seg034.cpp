@@ -26,6 +26,13 @@
 namespace M302de {
 #endif
 
+signed short g_cb_obj_nonobstacle[27] = { 0x0017, 0x0018, 0x0019, 0x001a, 0x001b, 0x0024, 0x0025, 0x0026, 0x0027, 0x0028, 0x0029, 0x002a, 0x002b, 0x002c, 0x002d, 0x002e, 0x002f, 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, -1 }; // ds:0x5f46, { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 }
+static struct viewdir_offsets g_viewdir_offsets1 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5f7c
+static struct viewdir_offsets g_viewdir_offsets2 = { { { 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } }; // ds:0x5f8c
+static char g_string_14spaces[15] = "              "; // ds:0x5f9c
+//unsigned char g_unkn_043[1] = { 0x00 }; // ds:0x5fab
+
+
 /**
  * \brief   TODO
  *

@@ -22,6 +22,9 @@
 namespace M302de {
 #endif
 
+static struct viewdir_offsets g_viewdir_invoffsets1 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } };	// ds:0x5ff8
+static struct viewdir_offsets g_viewdir_offsets7 = { {	{ 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } };	// ds:0x6008
+
 /**
  * \brief   searches an object on the chessboard
  *

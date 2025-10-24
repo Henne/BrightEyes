@@ -34,6 +34,16 @@
 namespace M302de {
 #endif
 
+static signed short g_locations_tab_size = 0;	// ds:0x5eb8
+static signed short g_areadescr_dng_level = 0;	// ds:0x5eba
+static signed short g_areadescr_fileid = 0;	// ds:0x5ebc
+static signed short g_areadescr_dng_flag = 0;	// ds:0x5ebe
+#if defined(__BORLANDC__)
+static unsigned short g_ems_unused_lpage = 0;	// ds:0x5ec0
+static signed short g_ems_unused_offset = 0x0300; // ds:0x5ec2
+#endif
+static const unsigned char g_unkn_039[8] = { 0x0b, 0xc0, 0x75, 0x06, 0xb8, 0x01, 0x00, 0x00 }; // ds:0x5ec4
+
 void prepare_dungeon_area(void)
 {
 	signed short index;

@@ -22,6 +22,17 @@
 namespace M302de {
 #endif
 
+
+static struct struct_point g_gfxtab_twofielded_extra_cb[4] = {
+	{ -1,  0 }, {  0,  1 }, {  1,  0 }, {  0, -1 } }; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
+signed char g_gfxtab_twofielded_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
+signed char g_gfxtab_twofielded_extra_oy[4] = { 5, 5, -5, -5 }; // ds:0x602c, { 10,-10,-5,-5 }
+signed char g_gfxtab_twofielded_x1[4] = { 16, 0, 0, 16 }; // ds:0x6030
+signed char g_gfxtab_twofielded_x2[4] = { 31, 15, 15, 31 }; // ds:0x6034
+signed char g_gfxtab_twofielded_extra_x1[4] = { 0, 16, 16, 0 }; // ds:0x6038
+signed char g_gfxtab_twofielded_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0x603c
+
+
 /**
  * \brief   calculates the beeline
  *

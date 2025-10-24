@@ -22,6 +22,9 @@
 namespace M302de {
 #endif
 
+static struct viewdir_offsets g_viewdir_offsets5 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fd8
+static struct viewdir_offsets g_viewdir_offsets6 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fe8
+
 /**
  * \brief   copies something from ANI.DAT
  *

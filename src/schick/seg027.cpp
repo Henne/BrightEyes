@@ -28,6 +28,11 @@
 namespace M302de {
 #endif
 
+static Bit8u *g_pp20_buffers[9] = { 0 };			// ds:0x5e6a; Bit8u*
+static signed long g_pp20_buffer_lengths[9] = {0};		// ds:0x5e8e
+static signed short g_current_fight_id = 0;			// ds:0x5eb2
+static unsigned char g_unkn_038[4] = { 0xb8, 0x14, 0x00, 0x50 }; // ds:0x5eb4
+
 void load_pp20(signed short index)
 {
 	volatile signed short fd;

@@ -26,6 +26,9 @@
 namespace M302de {
 #endif
 
+static signed char g_loaded_menu_icons[9] = { -2, -2, -2, -2, -2, -2, -2, -2, -2 }; // ds:0x5ecc
+//unsigned char g_unkn_040[1] = { 0x00 }; // ds:0x5ed5
+
 #if 0
 struct coord {
 	unsigned short x,y;

@@ -1459,65 +1459,67 @@ extern signed short g_fight_figs_index;		//ds:0x4b9e; seg006, seg032
 extern unsigned short g_random_schick_seed;	//ds:0x4ba0; seg007
 
 extern Bit8u* g_ems_frame_ptr;			//ds:0x4baa; seg002, seg010, seg028
-extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
+//extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
 
-extern signed short g_tmap_x[10];		//ds:0x4c12; seg025
-extern signed short g_tmap_y[10];		//ds:0x4c26; seg025
+//extern signed short g_tmap_x[10];		//ds:0x4c12; seg025
+//extern signed short g_tmap_y[10];		//ds:0x4c26; seg025
 extern unsigned char g_renderbuf_in_use_flag;	//ds:0x4c3a; seg025, seg061
-extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
+//extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
 extern char *g_str_temp_xx_ptr2;		//ds:0x4c88; seg002, seg026, seg120
 
 extern signed short g_loaded_head_id;		//ds:0x515c; seg026, seg029
-extern char g_str_temp_xx2[8];			//ds:0x515e;
+//extern char g_str_temp_xx2[8];		//ds:0x515e; seg026
 extern const char* g_fnames_v302de[];		//ds:0x4c8c; seg002, seg026
-extern char g_chr_file_suffix[5];		//ds:0x5e3e; seg026
-extern char g_savegame_suffix[5];		//ds:0x5e43; seg026
-extern char g_all_files_wildcard[4];		//ds:0x5e48; seg026
-extern char g_all_chr_wildcard[6];		//ds:0x5e4c; seg026
-extern char g_empty_string1[1];			//ds:0x5e52; seg026
-extern char g_empty_string2[1];			//ds:0x5e53; seg026
-extern char g_savegame_suffix2[5];		//ds:0x5e54; seg026
-extern char g_savegame_suffix3[5];		//ds:0x5e59; seg026
-extern char g_all_chr_wildcard2[6];		//ds:0x5e5e; seg026
-extern char g_all_chr_wildcard3[6];		//ds:0x5e64; seg026
-extern Bit8u *g_pp20_buffers[9];		//ds:0x5e6a; seg027
-extern signed long g_pp20_buffer_lengths[9];	//ds:0x5e8e; seg027
-extern signed short g_current_fight_id;		//ds:0x5eb2; seg027
-extern signed short g_locations_tab_size;	//ds:0x5eb8; seg028
-extern signed short g_areadescr_dng_level;	//ds:0x5ebc; seg028
-extern signed short g_areadescr_fileid;		//ds:0x5ebc; seg028
-extern signed short g_areadescr_dng_flag;	//ds:0x5ebe; seg028
+//extern char g_chr_file_suffix[5];		//ds:0x5e3e; seg026
+//extern char g_savegame_suffix[5];		//ds:0x5e43; seg026
+//extern char g_all_files_wildcard[4];		//ds:0x5e48; seg026
+//extern char g_all_chr_wildcard[6];		//ds:0x5e4c; seg026
+//extern char g_empty_string1[1];		//ds:0x5e52; seg026
+//extern char g_empty_string2[1];		//ds:0x5e53; seg026
+//extern char g_savegame_suffix2[5];		//ds:0x5e54; seg026
+//extern char g_savegame_suffix3[5];		//ds:0x5e59; seg026
+//extern char g_all_chr_wildcard2[6];		//ds:0x5e5e; seg026
+//extern char g_all_chr_wildcard3[6];		//ds:0x5e64; seg026
+
+//extern Bit8u *g_pp20_buffers[9];		//ds:0x5e6a; seg027
+//extern signed long g_pp20_buffer_lengths[9];	//ds:0x5e8e; seg027
+//extern signed short g_current_fight_id;	//ds:0x5eb2; seg027
+
+//extern signed short g_locations_tab_size;	//ds:0x5eb8; seg028
+//extern signed short g_areadescr_dng_level;	//ds:0x5ebc; seg028
+//extern signed short g_areadescr_fileid;	//ds:0x5ebc; seg028
+//extern signed short g_areadescr_dng_flag;	//ds:0x5ebe; seg028
 #if defined(__BORLANDC__)
-extern unsigned short g_ems_unused_lpage;	//ds:0x5ec0; seg028
-extern signed short g_ems_unused_offset;	//ds:0x5ec2; seg028
+//extern unsigned short g_ems_unused_lpage;	//ds:0x5ec0; seg028
+//extern signed short g_ems_unused_offset;	//ds:0x5ec2; seg028
 #endif
-extern signed char g_loaded_menu_icons[9];	//ds:0x5ecc; seg029
-extern struct_informer_tab g_informer_tab[15];	//ds:0x5ed6; seg031
+//extern signed char g_loaded_menu_icons[9];	//ds:0x5ecc; seg029
+//extern struct_informer_tab g_informer_tab[15];	//ds:0x5ed6; seg031
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
-extern signed int g_fig_all_heroes_withdrawn;	//ds:0x5f14; seg032
+//extern signed int g_fig_all_heroes_withdrawn;	//ds:0x5f14; seg032
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
-extern const char g_str_error_on_obj_malloc[23];//ds:0x5f18; seg032
+//extern const char g_str_error_on_obj_malloc[23];//ds:0x5f18; seg032
 extern signed char g_finalfight_tumult;		//ds:0x5f30; seg033, seg041
 extern signed char g_autofight_magic;		//ds:0x5f31; seg033, seg036
-extern const char g_red_string1[5];		//ds:0x5f32; seg033
-extern const char g_red_string2[5];		//ds:0x5f37; seg033
-extern const char g_space_separated_strings[6];	//ds:0x5f3c; seg033
-extern const char g_empty_string3[1];		//ds:0x5f42; seg033
-extern const char g_empty_string4[1];		//ds:0x5f43; seg033
-extern const char g_empty_string5[1];		//ds:0x5f44; seg033
+//extern const char g_red_string1[5];		//ds:0x5f32; seg033
+//extern const char g_red_string2[5];		//ds:0x5f37; seg033
+//extern const char g_space_separated_strings[6];	//ds:0x5f3c; seg033
+//extern const char g_empty_string3[1];		//ds:0x5f42; seg033
+//extern const char g_empty_string4[1];		//ds:0x5f43; seg033
+//extern const char g_empty_string5[1];		//ds:0x5f44; seg033
 extern signed short g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
-extern struct viewdir_offsets g_viewdir_offsets1;	//ds:0x5f7c; seg034
-extern struct viewdir_offsets g_viewdir_offsets2;	//ds:0x5f8c; seg034
-extern char g_string_14spaces[15];		//ds:0x5fab; seg034
-extern signed char g_af_spell_list[11];		//ds:0x5fac; seg036
-extern struct viewdir_offsets g_viewdir_offsets3;	//ds:0x5fb7; seg036
-extern struct viewdir_offsets g_viewdir_offsets4;	//ds:0x5fc7; seg036
-extern struct viewdir_offsets g_viewdir_offsets5;	//ds:0x5fd8; seg037
-extern struct viewdir_offsets g_viewdir_offsets6;	//ds:0x5fe8; seg037
-extern struct viewdir_offsets g_viewdir_invoffsets1;	//ds:0x5ff8; seg038
-extern struct viewdir_offsets g_viewdir_offsets7;	//ds:0x6008; seg038
-extern struct struct_point g_gfxtab_twofielded_extra_cb[4];	//ds:0x6018; seg039
+//extern struct viewdir_offsets g_viewdir_offsets1;	//ds:0x5f7c; seg034
+//extern struct viewdir_offsets g_viewdir_offsets2;	//ds:0x5f8c; seg034
+//extern char g_string_14spaces[15];		//ds:0x5fab; seg034
+//extern signed char g_af_spell_list[11];		//ds:0x5fac; seg036
+//extern struct viewdir_offsets g_viewdir_offsets3;	//ds:0x5fb7; seg036
+//extern struct viewdir_offsets g_viewdir_offsets4;	//ds:0x5fc7; seg036
+//extern struct viewdir_offsets g_viewdir_offsets5;	//ds:0x5fd8; seg037
+//extern struct viewdir_offsets g_viewdir_offsets6;	//ds:0x5fe8; seg037
+//extern struct viewdir_offsets g_viewdir_invoffsets1;	//ds:0x5ff8; seg038
+//extern struct viewdir_offsets g_viewdir_offsets7;	//ds:0x6008; seg038
+//extern struct struct_point g_gfxtab_twofielded_extra_cb[4];	//ds:0x6018; seg039
 extern signed char g_gfxtab_twofielded_extra_ox[4];		//ds:0x6028; seg005, seg039
 extern signed char g_gfxtab_twofielded_extra_oy[4];		//ds:0x602c; seg005, seg039
 extern signed char g_gfxtab_twofielded_x1[4];			//ds:0x6030; seg005, seg039, seg043
