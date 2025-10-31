@@ -695,8 +695,8 @@ void status_menu(signed short hero_pos)
 						}
 						break;
 					}
+#if !defined(__BORLANDC__)
 					case 5: {
-						/* TODO: different code is generated here */
 						g_status_page_mode = 1;
 						g_request_refresh = 1;
 						break;
@@ -707,6 +707,23 @@ void status_menu(signed short hero_pos)
 						g_request_refresh = 1;
 						break;
 					}
+#else
+					/* REMARK: BCC optimized somehow differently in the original,
+					 * 	   so the easiest way is to use inline assembly here. */
+					case 5: {
+						asm {
+							mov word ptr [g_status_page_mode], 0x01
+							jmp lab1
+						}
+					}
+					case 6: {
+						reset_item_selector();
+						g_status_page_mode = 3;
+lab1:
+						g_request_refresh = 1;
+						break;
+					}
+#endif
 					case 7: {
 						if (hero2->typus < HERO_TYPE_WITCH) {
 							/* not a spellcaster */
@@ -744,6 +761,7 @@ void status_menu(signed short hero_pos)
 						}
 						break;
 					}
+#if !defined(__BORLANDC__)
 					case 2: {
 						g_status_page_mode = 1;
 						g_request_refresh = 1;
@@ -754,6 +772,22 @@ void status_menu(signed short hero_pos)
 						g_request_refresh = 1;
 						break;
 					}
+#else
+					/* REMARK: BCC optimized somehow differently in the original,
+					 * 	   so the easiest way is to use inline assembly here. */
+					case 2: {
+						asm {
+							mov word ptr [g_status_page_mode], 0x01
+							jmp lab2
+						}
+					}
+					case 3: {
+						g_status_page_mode = 2;
+lab2:
+						g_request_refresh = 1;
+						break;
+					}
+#endif
 					case 4: {
 						if (hero2->typus < HERO_TYPE_WITCH) {
 							/* not a spellcaster */
@@ -801,18 +835,22 @@ void status_menu(signed short hero_pos)
 						}
 						break;
 					}
+#if !defined(__BORLANDC__)
 					case 2: {
 						g_status_page_mode = 1;
+
 						g_request_refresh = 1;
 						break;
 					}
 					case 3: {
 						g_status_page_mode = 2;
+
 						g_request_refresh = 1;
 						break;
 					}
 					case 4: {
 						g_status_page_mode = 3;
+
 						g_request_refresh = 1;
 						break;
 					}
@@ -821,9 +859,42 @@ void status_menu(signed short hero_pos)
 							g_status_page_mode = 5;
 						else
 							g_status_page_mode = 4;
+
 						g_request_refresh = 1;
 						break;
 					}
+#else
+					/* REMARK: BCC optimized somehow differently in the original,
+					 * 	   so the easiest way is to use inline assembly here. */
+					case 2: {
+						asm {
+							mov word ptr [g_status_page_mode], 0x01
+							jmp lab3
+						}
+					}
+					case 3: {
+						asm {
+							mov word ptr [g_status_page_mode], 0x02
+							jmp lab3
+						}
+					}
+					case 4: {
+						asm {
+							mov word ptr [g_status_page_mode], 0x03
+							jmp lab3
+						}
+					}
+					case 5: {
+						if (g_status_page_mode == 4)
+							g_status_page_mode = 5;
+						else
+							g_status_page_mode = 4;
+lab3:
+						g_request_refresh = 1;
+						break;
+					}
+
+#endif
 					case 6: {
 						flag1 = 1;
 						break;
