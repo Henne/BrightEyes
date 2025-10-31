@@ -332,6 +332,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	/* identical until here */
 	if (pos2 < 7) {
+
 		if (!can_hero_use_item(hero2, item1)) {
 
 			sprintf(g_dtp2,	get_ttx(221), hero2->alias, get_ttx((hero2->sex ? 593 : 9) + hero2->typus),
@@ -355,15 +356,18 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		} else if (two_hand_collision(hero2, item1, pos2)) {
 
 			sprintf(g_dtp2, get_tx2(67), hero2->alias);
+
 			GUI_output(g_dtp2);
 			return;
 		}
-	}
 #if defined(__BORLANDC__)
 	/* this assembler code here is only for comparization the disassemblies */
-		asm { db 0x9a, 0xff, 0xff, 0x00, 0x00 }
-		asm { db 0x9a, 0xff, 0xff, 0x00, 0x00 }
+		asm { db 0x9a, 0x00, 0x00, 0x00, 0x00 }
+		asm { db 0x9a, 0x00, 0x00, 0x00, 0x00 }
+		asm { db 0x0f, 0x1f, 0x00 }
+		asm { db 0x0f, 0x1f, 0x00 }
 #endif
+	}
 
 /* 0x8ff */
 
@@ -371,16 +375,67 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 		if (!can_hero_use_item(hero1, item2)) {
 
+#if !defined(__BORLANDC__)
 			sprintf(g_dtp2,	get_ttx(221), hero1->alias,
 				get_ttx((hero1->sex ? 593 : 9) + hero1->typus),
 				(char*)GUI_names_grammar(2, item2, 0));
 
-#if defined(__BORLANDC__)
-			desc1_5 = desc1_5;
-#endif
 
 			GUI_output(g_dtp2);
 			return;
+#else
+			/* REMARK: cant imagine that it was written that way. */
+			asm {
+				push 0
+				push word [item2]
+				push 2
+				call far ptr GUI_names_grammar
+				add sp, 0x06
+				push dx
+				push ax
+
+				les bx, [hero1]
+				mov al, es:[bx+0x21]
+				cbw
+				push ax
+				les bx, [hero1]
+				cmp byte ptr es:[bx+0x22], 0
+				jz lab01
+				mov ax, 593
+				jmp short lab02
+			}
+lab01:
+			asm {
+				mov ax, 9
+			}
+lab02:
+			asm {
+				pop dx
+				db 0x03, 0xc2 /* add ax, dx */
+				shl ax, 2
+				les bx, [g_text_ltx_index]
+				db 0x03, 0xd8 /* add bx, ax */
+				push word ptr es:[bx+2]
+				push word ptr es:[bx]
+
+				mov ax, word ptr [hero1]
+				add ax, 0x10
+				push word ptr[hero1 + 2]
+				push ax
+
+				les bx, [g_text_ltx_index]
+				push word ptr es:[bx+0x376]
+				push word ptr es:[bx+0x374]
+
+				push word ptr [g_dtp2 + 2]
+				push word ptr [g_dtp2]
+
+				call far ptr sprintf
+				add sp, 0x14
+				jmp lab04
+			}
+
+#endif
 
 		} else if (!can_item_at_pos(item2, pos1)) {
 
@@ -389,8 +444,11 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
 			} else {
 				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item2, 0), get_ttx(556));
-			}
 
+			}
+#if defined (__BORLANDC__)
+lab04:
+#endif
 			GUI_output(g_dtp2);
 			return;
 		}
