@@ -338,8 +338,14 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			sprintf(g_dtp2,	get_ttx(221), hero2->alias, get_ttx((hero2->sex ? 593 : 9) + hero2->typus),
 				GUI_names_grammar(2, item1, 0));
 
+#if !defined(__BORLANDC__)
 			GUI_output(g_dtp2);
 			return;
+#else
+			asm {
+				jmp lab04
+			}
+#endif
 
 		} else if (!can_item_at_pos(item1, pos2)) {
 
@@ -350,23 +356,28 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item1, 0), get_ttx(556));
 			}
 
+#if !defined(__BORLANDC__)
 			GUI_output(g_dtp2);
 			return;
+#else
+			asm {
+				jmp lab04
+			}
+#endif
 
 		} else if (two_hand_collision(hero2, item1, pos2)) {
 
 			sprintf(g_dtp2, get_tx2(67), hero2->alias);
 
+#if !defined(__BORLANDC__)
 			GUI_output(g_dtp2);
 			return;
-		}
-#if defined(__BORLANDC__)
-	/* this assembler code here is only for comparization the disassemblies */
-		asm { db 0x9a, 0x00, 0x00, 0x00, 0x00 }
-		asm { db 0x9a, 0x00, 0x00, 0x00, 0x00 }
-		asm { db 0x0f, 0x1f, 0x00 }
-		asm { db 0x0f, 0x1f, 0x00 }
+#else
+			asm {
+				jmp lab04
+			}
 #endif
+		}
 	}
 
 /* 0x8ff */
