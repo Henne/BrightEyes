@@ -117,7 +117,7 @@ void FIG_draw_figures(void)
 			do_pic_copy(2);
 		}
 
-	} while (list_i = list_i->next);
+	} while ((list_i = list_i->next));
 
 	/* restore two structures */
 	g_pic_copy_rect = rect_bak;

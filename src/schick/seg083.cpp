@@ -31,7 +31,7 @@
 namespace M302de {
 #endif
 
-extern struct struct_chest g_dng08_specialchests[7] = {
+struct struct_chest g_dng08_specialchests[7] = {
 	{ DNG_POS(0,14,1), 0, NULL,			NULL,			DNG08_chest00_loot, 0, 0, 0 },
 	{ DNG_POS(0,14,3), 4, use_lockpicks_on_chest,	DNG08_chest01_trap,	DNG08_chest01_loot, 0, 0, 0 },
 	{ DNG_POS(0,9,7),  0, DNG08_chest02_open,	NULL,			DNG08_chest02_loot, 0, 0, 0 },

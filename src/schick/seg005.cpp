@@ -372,7 +372,7 @@ void draw_fight_screen(Bit16u val)
 			list_ii->reload = 0;
 		}
 
-	} while (list_ii = list_ii->next);
+	} while ((list_ii = list_ii->next));
 
 	/* set elements array[0] of array[9] */
 	g_fig_gfxbuffers[0] = g_fightobj_buf_seek_ptr;
@@ -416,7 +416,7 @@ void draw_fight_screen(Bit16u val)
 		}
 
 
-	} while (list_ii = list_ii->next);
+	} while ((list_ii = list_ii->next));
 
 	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
@@ -917,7 +917,7 @@ void draw_fight_screen(Bit16u val)
 				}
 			}
 
-		} while (list_ii = list_ii->next);
+		} while ((list_ii = list_ii->next));
 
 		g_pic_copy_rect = rect_bak;
 		g_figobj_unkn_x2_bak = g_figobj_unkn_x2;

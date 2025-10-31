@@ -692,7 +692,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 				nr_dir_changes = FIG_count_direction_changes_of_path(g_fig_move_pathdir);
 
-				if ((nr_dir_changes == 0)) {
+				if (nr_dir_changes == 0) {
 					best_target = i;
 					break;
 				}
