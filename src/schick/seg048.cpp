@@ -96,7 +96,7 @@ void reset_item_selector(void)
 	g_current_cursor = g_current_cursor_bak = &g_default_mouse_cursor;
 }
 
-/* nearly identical, same length */
+/* Borlandified and identical */
 void status_menu(signed short hero_pos)
 {
 	signed short l_di;
