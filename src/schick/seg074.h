@@ -8,13 +8,13 @@ void show_automap(void);
 /* 0x25 */
 signed short select_teleport_dest(void);
 
-/* 0x2f */
-/* should be static */
-void render_automap(signed short);
-
 /* 0x2a */
 /* should be static */
 unsigned short is_discovered(signed short, signed short);
+
+/* 0x2f */
+/* should be static */
+void render_automap(signed short);
 
 /* 0x34 */
 /* should be static */
