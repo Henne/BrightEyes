@@ -9,7 +9,7 @@ void FIG_output(char*);
 //0x2a
 void FIG_clear_msgs();
 //0x2f
-void FIG_add_msg(unsigned short, unsigned short);
+void FIG_add_msg(const signed int, const signed int);
 //0x34
 void FIG_damage_enemy(struct enemy_sheet*, Bit16s, signed short);
 /* 0x39 */

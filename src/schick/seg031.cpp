@@ -29,26 +29,26 @@ struct tlk_option {
 	signed short txt, goto_state;
 };
 
-static struct struct_informer_tab g_informer_tab[15] = {
-	{ 0x02bc, 0x26, 0x00 },
-	{ 0x02bd, 0x25, 0x00 },
-	{ 0x02be, 0x19, 0x01 },
-	{ 0x02bf, 0x1c, 0x00 },
-	{ 0x02c0, 0x14, 0x00 },
-	{ 0x02c1, 0x2e, 0x01 },
-	{ 0x02c2, 0x0d, 0x00 },
-	{ 0x02c3, 0x03, 0x00 },
-	{ 0x02c4, 0x2b, 0x01 },
-	{ 0x02c5, -0x01, 0x00 },
-	{ 0x02c6, -0x01, 0x01 },
-	{ 0x02c7, -0x01, 0x00 },
-	{ 0x02c8, -0x01, 0x00 },
-	{ 0x02c9, 0x1f, 0x01 },
-	{ 0x02ca, 0x30, 0x00 }
+static const struct struct_informer_tab g_informer_tab[15] = {
+/* { name_id, town_id, unkn} */
+	{ 700, 38, 0 },
+	{ 701, 37, 0 },
+	{ 702, 25, 1 },
+	{ 703, 28, 0 },
+	{ 704, 20, 0 },
+	{ 705, 46, 1 },
+	{ 706, 13, 0 },
+	{ 707,  3, 0 },
+	{ 708, 43, 1 },
+	{ 709, -1, 0 },
+	{ 710, -1, 1 },
+	{ 711, -1, 0 },
+	{ 712, -1, 0 },
+	{ 713, 31, 1 },
+	{ 714, 48, 0 }
 }; // ds:0x5ed6
 
-
-void do_random_talk(signed short talk_id, signed short informer_id)
+void do_random_talk(const signed int talk_id, const signed int informer_id)
 {
 	signed short optioncount;
 	signed short answer = 0;
@@ -231,16 +231,14 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 /* This function is dead code */
 char* get_informer_forename(void)
 {
-	signed short i;
+	signed int i;
 	char tmp;
-	struct struct_informer_tab *p_info;
+	const struct struct_informer_tab *p_info = &g_informer_tab[0];
 	char *informer_name;
-
-	p_info = &g_informer_tab[0];
 
 	for (i = 0; i < 15; i++, p_info += 1) {
 
-		if (p_info->town == gs_current_town) {
+		if (p_info->town_id == gs_current_town) {
 
 			i = 0;
 			informer_name = get_ttx(p_info->name_id);
@@ -249,6 +247,7 @@ char* get_informer_forename(void)
 				tmp = *informer_name;
 				informer_name++;
 				i++;	// TODO: setting i to 0 in a for loop is not a good idea
+
 			} while (tmp != ' ');
 
 			strncpy(g_text_output_buf, get_ttx(p_info->name_id), i);
@@ -266,14 +265,14 @@ char* get_informer_forename(void)
  *
  * \return              a value between 0 and 15
  */
-signed short get_town_lookup_entry(void)
+signed int get_town_lookup_entry(void)
 {
-	struct struct_informer_tab *p_info;
-	signed short i;
+	const struct struct_informer_tab *p_info = &g_informer_tab[0];
+	signed int i;
 
-	p_info = &g_informer_tab[0];
 	for (i = 0; i < 15; i++, p_info++) {
-		if (p_info->town == gs_current_town) {
+
+		if (p_info->town_id == gs_current_town) {
 			return i;
 		}
 	}
@@ -291,12 +290,12 @@ signed short get_town_lookup_entry(void)
  */
 char* get_informer_hint(void)
 {
-	signed short i;
-	struct struct_informer_tab *p_info;
+	signed int i;
+	const struct struct_informer_tab *p_info = &g_informer_tab[0];
 
-	p_info = &g_informer_tab[0];
 	for (i = 0; i < 15; i++, p_info++) {
-		if (p_info->town == gs_current_town) {
+
+		if (p_info->town_id == gs_current_town) {
 			return get_ttx(i + 715);
 		}
 	}
@@ -352,7 +351,7 @@ char* load_current_town_gossip(void)
 
 char* get_random_tavern_message(void)
 {
-	const signed short randval = random_schick(20) - 1;
+	const signed int randval = random_schick(20) - 1;
 	char *ptr = get_tx(randval + 147);
 
 	if (!randval || randval == 19) {
@@ -383,12 +382,11 @@ char* get_random_tavern_message(void)
  *          Also this function is called in taverns with amount = 10,
  *          and in the thorwalian dungeon with 100.
  */
-void drink_while_drinking(signed short amount)
+void drink_while_drinking(const signed int amount)
 {
-	struct struct_hero *hero;
-	signed short i;
+	struct struct_hero *hero = get_hero(0);
+	signed int i;
 
-	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead) {
@@ -414,12 +412,11 @@ void drink_while_drinking(signed short amount)
  *          Also this function is called only at one play with amount = 100,
  *          so there is space for tuning.
  */
-void eat_while_drinking(signed short amount)
+void eat_while_drinking(const signed int amount)
 {
-	struct struct_hero *hero;
-	signed short i;
+	struct struct_hero *hero = get_hero(0);
+	signed int i;
 
-	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead) {

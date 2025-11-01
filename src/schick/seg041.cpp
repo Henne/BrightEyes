@@ -38,6 +38,7 @@ static signed short g_force_weapons[9] = {
 	ITEM_MAGIC_WAND,
 	-1
 }; // ds:0x615c, terminated with -1
+ 
 static signed short g_knive_weapons[5] = {
 	ITEM_KNIFE,
 	ITEM_DAGGER,
@@ -183,7 +184,7 @@ void FIG_clear_msgs(void)
 	g_fig_msg_counter = 0;
 }
 
-void FIG_add_msg(unsigned short f_action, unsigned short damage)
+void FIG_add_msg(const signed int f_action, const signed int damage)
 {
 	g_fig_msg_data[g_fig_msg_counter].f_action = f_action;
 	g_fig_msg_data[g_fig_msg_counter].damage = damage;

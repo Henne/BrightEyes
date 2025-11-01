@@ -406,7 +406,7 @@ struct struct_smith_repairitems {
 
 struct struct_informer_tab {
 	Bit16s name_id;		/* in TEXT.LTX */
-	Bit8s town;		/* -1 = no city, else city id */
+	Bit8s town_id;		/* -1 = no city, else city id */
 	Bit8s unkn;		/* {0, 1} */
 };
 
