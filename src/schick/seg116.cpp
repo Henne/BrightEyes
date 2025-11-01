@@ -39,7 +39,7 @@ static const struct climb_damage_range g_tevent135_climb_damage[5] = { { 1, 5 },
 
 void tevent_130(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (TRV_enter_hut_question()) {
 
@@ -82,7 +82,7 @@ void tevent_130(void)
 /* Manrek: entrance to the dungeon "pirate cave" */
 void tevent_131(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent131_flag) {
 
@@ -137,8 +137,8 @@ void tevent_132(void)
 
 void tevent_133(void)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct struct_hero *hero;
 
 	do {

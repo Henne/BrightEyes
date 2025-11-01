@@ -60,10 +60,10 @@ static unsigned char g_unkn_068[1] = { 0x00 }; // ds:0xb21d
 
 
 unsigned char g_event_ani_busy;			//ds:0xe5d2
-static signed short g_wallclock_update_bak;	//ds:0xe5d3
-static signed short g_textbox_width_bak;	//ds:0xe5d5
-static signed short g_basepos_y_bak;		//ds:0xe5d7
-static signed short g_basepos_x_bak;		//ds:0xe5d9
+static signed int g_wallclock_update_bak;	//ds:0xe5d3
+static signed int g_textbox_width_bak;		//ds:0xe5d5
+static signed int g_basepos_y_bak;		//ds:0xe5d7
+static signed int g_basepos_x_bak;		//ds:0xe5d9
 
 static void pause_traveling(signed short ani_no)
 {
@@ -190,10 +190,10 @@ void hunt_karen(void)
 
 void hunt_wildboar(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
-	signed short i;
-	signed short passed;
+	signed int i;
+	signed int passed;
 
 	pause_traveling(25);
 
@@ -264,8 +264,8 @@ void hunt_wildboar(void)
 void hunt_cavebear(void)
 {
 	struct struct_hero *hero;
-	signed short answer;
-	signed short i;
+	signed int answer;
+	signed int i;
 
 	pause_traveling(32);
 
@@ -322,10 +322,10 @@ void hunt_cavebear(void)
 /* should be static */
 void hunt_viper(void)
 {
-	signed short choosen_hero;
+	signed int choosen_hero;
 	struct struct_hero *hero_i;
-	signed short l_di;
-	signed short i;
+	signed int l_di;
+	signed int i;
 
 	/* load snake picture */
 	pause_traveling(30);
@@ -342,7 +342,7 @@ void hunt_viper(void)
 		/* check GE+0 */
 		/* Original-Bug: something was forgotten */
 		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
-			(!hero_i->flags.dead) &&	(test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
+			(!hero_i->flags.dead) && (test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
 		{
 			/* remember the hero */
 			choosen_hero = i;
@@ -379,9 +379,9 @@ void hunt_viper(void)
 
 void octopus_attack(void)
 {
-	signed short i;
-	signed short hits;
-	signed short tmp;
+	signed int i;
+	signed int hits;
+	signed int tmp;
 	char overboard[7];
 	struct struct_hero *hero;
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -493,7 +493,7 @@ void octopus_attack(void)
 
 void hunt_bison(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	pause_traveling(29);
@@ -524,7 +524,7 @@ void hunt_bison(void)
 
 void hunt_rhino(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	pause_traveling(33);
@@ -574,11 +574,11 @@ void pirates_attack(void)
 
 void do_wild8_fight(void)
 {
-	signed short bak1;
-	signed short bak2;
+	signed int x_bak;
+	signed int y_bak;
 
-	bak1 = g_basepos_x;
-	bak2 = g_basepos_y;
+	x_bak = g_basepos_x;
+	y_bak = g_basepos_y;
 	g_wallclock_update_bak = g_wallclock_update;
 	g_basepos_x = 0;
 	g_basepos_y = 0;
@@ -591,18 +591,18 @@ void do_wild8_fight(void)
 
 	gs_route_fight_flag = 0;
 	gs_show_travel_map = 1;
-	g_basepos_x = bak1;
-	g_basepos_y = bak2;
+	g_basepos_x = x_bak;
+	g_basepos_y = y_bak;
 }
 
 void random_encounter(signed short arg)
 {
-	signed short l_si;
-	signed short i;
-	signed short randval;
-	signed short bak1;
-	signed short bak2;
-	signed short wallclock_update_bak;
+	signed int l_si;
+	signed int i;
+	signed int randval;
+	signed int x_bak;
+	signed int y_bak;
+	signed int wallclock_update_bak;
 
 	l_si = 0;
 
@@ -610,8 +610,8 @@ void random_encounter(signed short arg)
 		l_si = 1;
 	}
 
-	bak1 = g_basepos_x;
-	bak2 = g_basepos_y;
+	x_bak = g_basepos_x;
+	y_bak = g_basepos_y;
 	wallclock_update_bak = g_wallclock_update;
 	g_basepos_x = 0;
 	g_basepos_y = 0;
@@ -718,8 +718,8 @@ void random_encounter(signed short arg)
 		}
 	}
 
-	g_basepos_x = bak1;
-	g_basepos_y = bak2;
+	g_basepos_x = x_bak;
+	g_basepos_y = y_bak;
 	g_wallclock_update = wallclock_update_bak;
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 }
@@ -744,7 +744,7 @@ void tevent_115(void)
 
 void TLK_way_to_ruin(signed short state)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 	struct struct_hero *hero2;
 

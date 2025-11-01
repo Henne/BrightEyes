@@ -295,9 +295,9 @@ static inline void dump_cb(void)
 	fclose(fd);
 }
 
-static inline char* get_itemname(unsigned short item)
+static inline char* get_itemname(unsigned short item_id)
 {
-	return (char*)M302de::g_itemsname[item];
+	return (char*)M302de::g_itemsname[item_id];
 }
 
 #define DUMMY_WARNING() D1_ERR("Error: %s is not implemented\n", __func__)
@@ -337,7 +337,7 @@ static inline char* get_itemname(unsigned short item)
 #define get_tx(no) ((char*)(g_tx_index[(no)]))
 #define get_tx2(no) ((char*)(g_tx2_index[(no)]))
 #define get_monname(no) ((char*)g_monnames_index[no])
-#define get_itemname(no) ((char*)g_itemsname[(no)])
+#define get_itemname(item_id) ((char*)g_itemsname[(item_id)])
 
 #define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))
 

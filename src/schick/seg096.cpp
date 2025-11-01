@@ -191,8 +191,9 @@ static char g_grammar_bufs[5][40];	// ds:0xe4e3
 /**
  * \brief   makes a grammatical wordgroup
  *
- * \param   flag        * \param   index        index of the word of which a worgroup should be made
- * \param   type        if index is true the index is an enemy, if not it is an item
+ * \param   flag
+ * \param   index	index of the word of which a worgroup should be made
+ * \param   type	if index is true the index is an enemy, if not it is an item
  */
 Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short type)
 {

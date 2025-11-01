@@ -618,7 +618,7 @@ void prepare_sg_name(char *dst, char *src)
 signed short load_game_state(void)
 {
 #if defined(__BORLANDC__)
-	register signed int handle_gs;
+	register signed int handle_sg;
 	signed short i;
 	signed int handle;
 	signed short answer;
@@ -651,7 +651,7 @@ signed short load_game_state(void)
 		strcat(g_text_output_buf, g_savegame_suffix);
 
 		/* open the game state file */
-		if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDONLY)) == -1)
+		if ((handle_sg = open(g_text_output_buf, O_BINARY | O_RDONLY)) == -1)
 		{
 			GUI_output(get_ttx(635));
 			retval = -1;
@@ -690,13 +690,13 @@ signed short load_game_state(void)
 		memset(g_saved_files_buf, 0, 286 * sizeof(Bit32u));
 
 		/* read version info */
-		_read(handle_gs, (Bit8u*)g_text_output_buf, 12);
-		_read(handle_gs, (Bit8u*)&version[3], 1);
-		_read(handle_gs, (Bit8u*)&version[2], 1);
-		_read(handle_gs, (Bit8u*)&version[0], 1);
-		_read(handle_gs, (Bit8u*)&version[1], 1);
+		_read(handle_sg, (Bit8u*)g_text_output_buf, 12);
+		_read(handle_sg, (Bit8u*)&version[3], 1);
+		_read(handle_sg, (Bit8u*)&version[2], 1);
+		_read(handle_sg, (Bit8u*)&version[0], 1);
+		_read(handle_sg, (Bit8u*)&version[1], 1);
 
-		_read(handle_gs, &gs_datseg_status_start, 4);
+		_read(handle_sg, &gs_datseg_status_start, 4);
 
 		/* read game status */
 		/* TODO: check pointer arithmetics work with other pointers */
@@ -704,12 +704,12 @@ signed short load_game_state(void)
 		p_status_end = (HugePt)&gs_datseg_status_end;
 		status_length = (signed short)(p_status_end - p_status_start);
 
-		_read(handle_gs, &gs_datseg_status_start, status_length);
+		_read(handle_sg, &gs_datseg_status_start, status_length);
 
 		g_special_screen = 1;
 
 		/* read file table */
-		_read(handle_gs, g_saved_files_buf, 286 * sizeof(Bit32u));
+		_read(handle_sg, g_saved_files_buf, 286 * sizeof(Bit32u));
 
 		/* create for each saved file in gam a file in TEMP */
 		for (i = 0; i < 286; i++) {
@@ -722,7 +722,7 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
 
-				_read(handle_gs, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[i]);
+				_read(handle_sg, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[i]);
 				write(handle, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[i]);
 				close(handle);
 			}
@@ -737,7 +737,7 @@ signed short load_game_state(void)
 		hero_i = (struct struct_hero*)g_renderbuf_ptr;
 
 		do {
-			l3 = _read(handle_gs, (Bit8u*)hero_i, sizeof(struct struct_hero));
+			l3 = _read(handle_sg, (Bit8u*)hero_i, sizeof(struct struct_hero));
 
 			if (l3 != 0) {
 
@@ -762,7 +762,7 @@ signed short load_game_state(void)
 
 		} while (l3 != 0);
 
-		close(handle_gs);
+		close(handle_sg);
 
 #if defined(__BORLANDC__)
 		/* search for "*.CHR" */
@@ -772,19 +772,19 @@ signed short load_game_state(void)
 
 			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
 
-			if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
+			if ((handle_sg = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 				handle = open(blk.ff_name, O_BINARY | O_RDWR);
 				_read(handle, g_renderbuf_ptr, sizeof(struct struct_hero));
 				close(handle);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
-				handle_gs = _creat(g_text_output_buf, 0);
-				write(handle_gs, g_renderbuf_ptr, sizeof(struct struct_hero));
+				handle_sg = _creat(g_text_output_buf, 0);
+				write(handle_sg, g_renderbuf_ptr, sizeof(struct struct_hero));
 			} else {
 				/* Yes, indeed! */
 			}
 
-			close(handle_gs);
+			close(handle_sg);
 
 			l2 = findnext(&blk);
 		}
@@ -834,7 +834,7 @@ signed short load_game_state(void)
 signed short save_game_state(void)
 {
 #if defined(__BORLANDC__)
-	signed short l_di;
+	signed short handle_sg;
 	HugePt p_status_start;
 	HugePt p_status_end;
 	unsigned short status_len;
@@ -970,7 +970,7 @@ signed short save_game_state(void)
 		strcat(g_text_output_buf, g_savegame_suffix3);
 
 		/* TODO: should be O_BINARY | O_RWONLY */
-		while ((l_di = _creat(g_text_output_buf, 0)) == -1) {
+		while ((handle_sg = _creat(g_text_output_buf, 0)) == -1) {
 			GUI_output(get_ttx(348));
 			return 0;
 		}
@@ -980,35 +980,35 @@ signed short save_game_state(void)
 		filepos = 0;
 
 		/* write version identifier 16 bytes */
-		filepos += write(l_di, &g_dsa_version_string, 12);
-		filepos += write(l_di, &g_version_token4, 1);
-		filepos += write(l_di, &g_version_token3, 1);
-		filepos += write(l_di, &g_version_token1, 1);
-		filepos += write(l_di, &g_version_token2, 1);
+		filepos += write(handle_sg, &g_dsa_version_string, 12);
+		filepos += write(handle_sg, &g_version_token4, 1);
+		filepos += write(handle_sg, &g_version_token3, 1);
+		filepos += write(handle_sg, &g_version_token1, 1);
+		filepos += write(handle_sg, &g_version_token2, 1);
 
 		/* write fileposition 4 bytes */
 		/* this will be updated later to find the data of the CHR files */
-		filepos += write(l_di, &filepos, 4);
+		filepos += write(handle_sg, &filepos, 4);
 
 		/* save the status section 5952 bytes */
-		filepos += write(l_di, p_status_start, status_len);
+		filepos += write(handle_sg, p_status_start, status_len);
 
 		/* check if enough bytes were written */
 		if (status_len + 16 + 4L != filepos) {
 
 			GUI_output(get_ttx(348));
-			close(l_di);
+			close(handle_sg);
 			return 0;
 		}
 
 		filepos2 = filepos;
-		len = (Bit16u)write(l_di, g_saved_files_buf, 286 * sizeof(Bit32u));
+		len = (Bit16u)write(handle_sg, g_saved_files_buf, 286 * sizeof(Bit32u));
 		filepos += len;
 
 		if (len != 4 * 286) {
 
 			GUI_output(get_ttx(348));
-			close(l_di);
+			close(handle_sg);
 			return 0;
 		}
 
@@ -1027,27 +1027,27 @@ signed short save_game_state(void)
 				_read(handle, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
 				close(handle);
 
-				len = (Bit16u)write(l_di, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
+				len = (Bit16u)write(handle_sg, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
 				filepos += len;
 
 				if ((Bit16u)g_saved_files_buf[tw_bak] != len) {
 					GUI_output(get_ttx(348));
-					close(l_di);
+					close(handle_sg);
 					return 0;
 				}
 			}
 		}
 
 		/* skip back to the start of the offset of the CHR data */
-		lseek(l_di, 16, 0);
-		write(l_di, &filepos, 4);
+		lseek(handle_sg, 16, 0);
+		write(handle_sg, &filepos, 4);
 
 		/* write the file table */
-		lseek(l_di, filepos2, 0);
-		write(l_di, g_saved_files_buf, 286 * sizeof(Bit32u));
+		lseek(handle_sg, filepos2, 0);
+		write(handle_sg, g_saved_files_buf, 286 * sizeof(Bit32u));
 
 		/* append all CHR files */
-		lseek(l_di, filepos, 0);
+		lseek(handle_sg, filepos, 0);
 		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard2);
 
 		l1 = findfirst(g_text_output_buf, &blk, 0);
@@ -1061,12 +1061,12 @@ signed short save_game_state(void)
 			close(handle);
 
 			/* append it */
-			len = write(l_di, g_renderbuf_ptr, sizeof(struct struct_hero));
+			len = write(handle_sg, g_renderbuf_ptr, sizeof(struct struct_hero));
 
 			if (len != sizeof(struct struct_hero)) {
 
 				GUI_output(get_ttx(348));
-				close(l_di);
+				close(handle_sg);
 				return 0;
 			}
 
@@ -1074,12 +1074,12 @@ signed short save_game_state(void)
 
 		} while (l1 == 0);
 
-		close(l_di);
+		close(handle_sg);
 
 		/* rewrite GAMES.NAM */
-		l_di = _creat(g_fnames_v302de[207], 0);
-		write(l_di, &g_savegame_names[0][0], 45);
-		close(l_di);
+		handle_sg = _creat(g_fnames_v302de[207], 0);
+		write(handle_sg, &g_savegame_names[0][0], 45);
+		close(handle_sg);
 
 		return 1;
 	}

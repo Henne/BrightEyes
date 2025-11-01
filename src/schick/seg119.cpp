@@ -40,8 +40,8 @@ namespace M302de {
  */
 void disease_effect(void)
 {
-	signed short i;
-	signed short j;
+	signed int i;
+	signed int j;
 	struct struct_hero *hero;
 	struct struct_hero *hero2;
 	Bit8s *disease_ptr;

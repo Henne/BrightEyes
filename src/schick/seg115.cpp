@@ -34,7 +34,7 @@ namespace M302de {
 /* the raft */
 void tevent_016(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	if (!gs_tevent016_flag)
@@ -147,7 +147,7 @@ void tevent_016(void)
 /* falling rocks */
 void tevent_090(void)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	GUI_output(get_tx2(0));
@@ -220,14 +220,12 @@ void tevent_094(void)
 /* Arete */
 void tevent_095(void)
 {
-	signed short counter_failed;
-	signed short done;
-	signed short i;
-	signed short counter_heroes;
+	signed int counter_failed;
+	signed int done = 0;
+	signed int i;
+	signed int counter_heroes;
 	struct struct_hero *hero;
-	signed short ret_spell_test;
-
-	done = 0;
+	signed int ret_spell_test;
 
 	do {
 
@@ -364,7 +362,7 @@ void tevent_095(void)
 
 void tevent_096(void)
 {
-	signed short answer;
+	signed int answer;
 
 	do {
 		answer = GUI_radio(get_tx2(17), 2, get_tx2(18),	get_tx2(19));
@@ -434,7 +432,7 @@ void tevent_096(void)
 /* Hjalland: entrance to the dungeon "temple of the one without name" */
 void tevent_126(void)
 {
-	signed short answer;
+	signed int answer;
 
 	do {
 		answer = GUI_radio(get_tx2(0), 2, get_tx2(1), get_tx2(2));
@@ -457,7 +455,7 @@ void tevent_126(void)
 
 void tevent_127(void)
 {
-	signed short answer;
+	signed int answer;
 
 	load_in_head(14);
 
@@ -495,7 +493,7 @@ void tevent_128(void)
 /* Runin: entrance to the dungeon "dragon cave" */
 void tevent_129(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 4) > 0 && !gs_tevent129_flag)
 	{
@@ -533,8 +531,8 @@ void tevent_129(void)
 /* Daspota <-> Ottarje: a cutter */
 void tevent_047(void)
 {
-	signed short answer;
-	signed short l_di;
+	signed int answer;
+	signed int l_di;
 
 	l_di = 0;
 
@@ -653,7 +651,7 @@ void tevent_047(void)
 /* Rybon <-> Thoss: entrance to the dungeon "ruin of the black wizard" */
 void tevent_100(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (gs_tevent100_flag) {
 

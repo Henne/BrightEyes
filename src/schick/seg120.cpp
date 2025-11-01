@@ -46,7 +46,9 @@ namespace M302de {
 #endif
 
 static Bit8u g_color_white[3] = { 0x3f, 0x3f, 0x3f }; // ds:0xb22a
+
 Bit8u g_color_black[3] = { 0, 0, 0 }; // ds:0xb22d
+
 static Bit8u g_palette_unknown2[8][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x38, 0x30, 0x28 },
@@ -57,11 +59,13 @@ static Bit8u g_palette_unknown2[8][3] = {
 	{ 0x18, 0x14, 0x00 },
 	{ 0x0b, 0x19, 0x0c }
 }; // ds:0xb230
+
 static Bit8u g_palette_unknown3[3][3] = {
 	{ 0x30, 0x00, 0x00 },
 	{ 0x30, 0x30, 0x00 },
 	{ 0x00, 0x00, 0x30 }
 }; // ds:0xb248
+
 static Bit8u g_palette_unknown4[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x38, 0x30, 0x28 },
@@ -96,6 +100,7 @@ static Bit8u g_palette_unknown4[32][3] = {
 	{ 0x30, 0x30, 0x30 },
 	{ 0x3c, 0x3c, 0x3c }
 }; // ds:0xb251
+
 static Bit8u g_palette_general[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x3f },
@@ -130,13 +135,14 @@ static Bit8u g_palette_general[32][3] = {
 	{ 0x10, 0x08, 0x04 },
 	{ 0x3c, 0x3c, 0x3c }
 }; // ds:0xb2b1
-static char g_str_backslash_temp[6] = "\\TEMP"; // ds:0xb311
-static char g_str_not_enough_mem[124] = "\x0a\x0aNot enough memory!\x0a\"Realms of Arkania - Blade of Destiny\" needs %ld Byte more memory!\x0aPlease uninstall resident programs!"; // ds:0xb317
-static char g_str_drive_x[4] = "X:\\"; // ds:0xb393
+
+static const char g_str_backslash_temp[6] = "\\TEMP"; // ds:0xb311
+static const char g_str_not_enough_mem[124] = "\x0a\x0aNot enough memory!\x0a\"Realms of Arkania - Blade of Destiny\" needs %ld Byte more memory!\x0aPlease uninstall resident programs!"; // ds:0xb317
+static const char g_str_drive_x[4] = "X:\\"; // ds:0xb393
 static char g_str_temp_dir_fail[280] = "\xf2!!!!! ACHTUNG !!!!!\xf0\x40\x40""DAS SCHWARZE AUGE\x40KANN KEIN TEMPOR\x8eRES VERZEICHNIS ANLEGEN UND IST DAHER NICHT LAUFF\x8eHIG. WAHRSCHEINLICH VERSUCHEN SIE, DAS SPIEL AUF EINEM\xf2 SCHREIBGESCH\x9aTZTEN LAUFWERK\xf0\x40ZU STARTEN. BITTE INSTALLIEREN SIE DAS SPIEL AUF EINE FESTPLATTE.\x40\x40-TASTE ZUM BEENDEN-"; // ds:0xb397
-static char g_all_files_wildcard2[4] = "*.*"; // ds:0xb4af
-static char g_all_chr_wildcard4[6] = "*.CHR"; // ds:0xb4b3
-static char g_all_files_wildcard3[4] = "*.*"; // ds:0xb4b9
+static const char g_all_files_wildcard2[4] = "*.*"; // ds:0xb4af
+static const char g_all_chr_wildcard4[6] = "*.CHR"; // ds:0xb4b3
+static const char g_all_files_wildcard3[4] = "*.*"; // ds:0xb4b9
 static char g_str_gen_exe[8] = "gen.exe"; // ds:0xb4bd
 static char g_str_gen_exe2[8] = "gen.exe"; // ds:0xb4c5
 static const char g_str_gen_b[2] = "b"; // ds:0xb4cd
@@ -153,16 +159,14 @@ signed char g_large_buf; 		// ds:0xe5e4
 /* Borlandified and identical */
 void rabies(struct struct_hero* hero, signed short hero_pos)
 {
-	signed short answer;
-	signed short l_di;
-	signed short done;
-	signed short tw_bak;
+	signed int answer;
+	signed int l_di;
+	signed int done = 0;
+	signed int tw_bak;
 	struct struct_hero *hero2;
-	signed short group_bak;
-	signed short group_no;
+	signed int group_bak;
+	signed int group_no;
 	signed char sex_bak;
-
-	done = 0;
 
 	group_bak = gs_current_group;
 	sex_bak = hero->sex;
@@ -215,7 +219,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 
 				GUI_output(g_dtp2);
 
-				g_hero_sel_exclude = (signed char)hero_pos;
+				g_hero_sel_exclude = hero_pos;
 
 				answer = select_hero_ok(get_ttx(395));
 
@@ -241,7 +245,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 
 						GUI_output(g_dtp2);
 
-						g_hero_sel_exclude = (signed char)hero_pos;
+						g_hero_sel_exclude = hero_pos;
 
 						answer = select_hero_ok(get_ttx(395));
 
@@ -254,7 +258,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 			} else if (answer == 3) {
 				/* cast a spell */
 
-				g_hero_sel_exclude = (signed char)hero_pos;
+				g_hero_sel_exclude = hero_pos;
 
 				answer = select_hero_ok(get_ttx(213));
 
@@ -279,7 +283,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 
 								GUI_output(g_dtp2);
 
-								g_hero_sel_exclude = (signed char)hero_pos;
+								g_hero_sel_exclude = hero_pos;
 
 								answer = select_hero_ok(get_ttx(395));
 
@@ -337,7 +341,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 void init_global_buffer(void)
 {
 	g_global_buffer_ptr = (HugePt)schick_alloc(g_buffersize);
-	g_renderbuf_ptr = g_global_buffer_ptr + 8L;
+	g_renderbuf_ptr = (unsigned char*)(g_global_buffer_ptr + 8L);
 
 	g_text_ltx_buffer = (char*)(((HugePt)g_renderbuf_ptr) + 65000L);
 
@@ -345,7 +349,7 @@ void init_global_buffer(void)
 	g_tx_index = &g_text_ltx_index[840];
 	g_tx2_index = &g_text_ltx_index[990];
 
-	g_objects_nvf_buf = (((HugePt)g_text_ltx_index) + 4760L);
+	g_objects_nvf_buf = (unsigned char*)(((HugePt)g_text_ltx_index) + 4760L);
 	g_dtp2 = (char*)(((HugePt)g_objects_nvf_buf) + 3400L);
 	g_text_input_buf = (char*)(g_dtp2 + 1500);
 	g_text_output_buf = (char*)(((HugePt)g_dtp2) + 1524L);
@@ -362,7 +366,7 @@ void init_global_buffer(void)
 /* Borlandified and identical */
 signed short init_memory(void)
 {
-	signed short error = 0;
+	signed int error = 0;
 	Bit32u freemem;
 
 	/* disable EMS memory */
@@ -489,7 +493,7 @@ Bit32s get_diskspace(void)
 /* Borlandified and identical */
 void init_game_state(void)
 {
-	signed short i;
+	signed int i;
 
 	refresh_colors();
 
@@ -554,7 +558,7 @@ void prepare_dirs(void)
 {
 #if defined(__BORLANDC__)
 	signed short l_si;
-	signed short l_di;
+	signed int handle;
 	signed short drive;
 	signed short drive_bak;
 	signed short errorval;
@@ -640,20 +644,20 @@ void prepare_dirs(void)
 	while (!l_si) {
 
 		/* open CHR-file and copy it into TEMP-dir */
-		l_di = open(blk.ff_name, O_BINARY | O_RDWR);
+		handle = open(blk.ff_name, O_BINARY | O_RDWR);
 
 		/* REMARK: size of CHR files differs from floppy to CD version */
-		_read(l_di, g_renderbuf_ptr, sizeof(struct struct_hero));
+		_read(handle, g_renderbuf_ptr, sizeof(struct struct_hero));
 
-		close(l_di);
+		close(handle);
 
 		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name); /* contains a filename */
 
-		l_di = _creat(g_text_output_buf, 0);
+		handle = _creat(g_text_output_buf, 0);
 
-		write(l_di, g_renderbuf_ptr, sizeof(struct struct_hero));
+		write(handle, g_renderbuf_ptr, sizeof(struct struct_hero));
 
-		close(l_di);
+		close(handle);
 
 		l_si = findnext(&blk);
 	}
@@ -668,8 +672,8 @@ void cleanup_game(void)
 #if defined(__BORLANDC__)
 	struct ffblk blk;
 #endif
-	signed short l_si;
-	signed short l_di;
+	signed int i;
+	signed int l_di;
 
 #if defined(__BORLANDC__)
 	/* disable AIL */
@@ -683,33 +687,33 @@ void cleanup_game(void)
 	/* free EMS memory */
 	if (g_ems_enabled != 0) {
 
-		for (l_si = 0; l_si < 37; l_si++) {
+		for (i = 0; i < 37; i++) {
 			/* TODO: test for ems_handle missing */
-			if (g_memslots_anis[l_si].figure) {
-				EMS_free_pages(g_memslots_anis[l_si].ems_handle);
+			if (g_memslots_anis[i].figure) {
+				EMS_free_pages(g_memslots_anis[i].ems_handle);
 			}
 		}
 
 		/* free male and female figures */
-		for (l_si = 0; l_si < 43; l_si++) {
+		for (i = 0; i < 43; i++) {
 
-			if (g_memslots_mfig[l_si].figure && g_memslots_mfig[l_si].ems_handle)
+			if (g_memslots_mfig[i].figure && g_memslots_mfig[i].ems_handle)
 			{
-				EMS_free_pages(g_memslots_mfig[l_si].ems_handle);
+				EMS_free_pages(g_memslots_mfig[i].ems_handle);
 			}
 
-			if (g_memslots_wfig[l_si].figure && g_memslots_wfig[l_si].ems_handle)
+			if (g_memslots_wfig[i].figure && g_memslots_wfig[i].ems_handle)
 			{
-				EMS_free_pages(g_memslots_wfig[l_si].ems_handle);
+				EMS_free_pages(g_memslots_wfig[i].ems_handle);
 			}
 		}
 
 		/* free monster figures */
-		for (l_si = 0; l_si < 36; l_si++) {
+		for (i = 0; i < 36; i++) {
 
-			if (g_memslots_mon[l_si].figure && g_memslots_mon[l_si].ems_handle)
+			if (g_memslots_mon[i].figure && g_memslots_mon[i].ems_handle)
 			{
-				EMS_free_pages(g_memslots_mon[l_si].ems_handle);
+				EMS_free_pages(g_memslots_mon[i].ems_handle);
 			}
 		}
 
@@ -725,9 +729,7 @@ void cleanup_game(void)
 
 	/* delete all files in TEMP */
 
-	sprintf(g_text_output_buf,
-		g_str_temp_xx_ptr2,	/* contains "TEMP\\%s" */
-		g_all_files_wildcard3);			/* contains "*.*" */
+	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard3);
 
 	l_di = findfirst(g_text_output_buf, &blk, 0);
 
@@ -735,9 +737,7 @@ void cleanup_game(void)
 
 		do {
 			/* delete each found file */
-			sprintf(g_text_output_buf,
-				g_str_temp_xx_ptr2,	/* contains "TEMP\\%s" */
-				blk.ff_name);			/* contains a filename */
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
 
 			unlink(g_text_output_buf);
 
@@ -816,7 +816,7 @@ void game_over_screen(void)
 void call_gen(void)
 {
 	Bit32u freemem;
-	signed short ret;
+	signed int retval;
 
 	update_mouse_cursor();
 
@@ -829,14 +829,14 @@ void call_gen(void)
 	freemem = farcoreleft();
 
 	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
-	ret = spawnl(0, g_str_gen_exe, g_str_gen_exe2, g_str_gen_b,
+	retval = spawnl(0, g_str_gen_exe, g_str_gen_exe2, g_str_gen_b,
 			(g_game_mode == GAME_MODE_ADVANCED ? g_str_gen_a : g_str_gen_n),
 			g_str_gen_1, NULL);
 
 #endif
 	refresh_screen_size();
 
-	if (ret == -1) {
+	if (retval == -1) {
 
 		/* perror("Generation") */
 		perror(g_str_gen_generation);

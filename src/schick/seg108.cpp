@@ -34,7 +34,7 @@ namespace M302de {
 void consume(struct struct_hero *owner, struct struct_hero *consumer, const signed short pos)
 {
 	struct item_stats *item_p;
-	signed short item;
+	signed int item_id;
 
 	signed short id_bad_elex;
 	signed short le_diff;
@@ -54,10 +54,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	consumer_idx = get_hero_index(consumer);
 
 	/* get item id */
-	item = owner->inventory[pos].item_id;
+	item_id = owner->inventory[pos].item_id;
 
 	/* get pointer to ITEMS.DAT */
-	item_p = &g_itemsdat[item];
+	item_p = &g_itemsdat[item_id];
 
 	/* is food */
 	if (item_p->flags.food) {
@@ -69,7 +69,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				int diff = consumer->hunger - item_p->table_index;
 
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item)),	item_p->table_index,
+					consumer->alias, GUI_name_singular(get_itemname(item_id)),
+					item_p->table_index,
 					consumer->hunger, (diff >= 0) ? diff : 0);
 #endif
 
@@ -97,7 +98,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 #if !defined(__BORLANDC__)
 				int diff = consumer->thirst - item_p->table_index;
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item)), item_p->table_index,
+					consumer->alias, GUI_name_singular(get_itemname(item_id)), item_p->table_index,
 					consumer->thirst, (diff >= 0) ? diff : 0);
 #endif
 
@@ -115,7 +116,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 
 
-				if (item == ITEM_WATERSKIN) {
+				if (item_id == ITEM_WATERSKIN) {
 					/* water */
 
 					if (owner->inventory[pos].flags.half_empty) {
@@ -124,7 +125,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						owner->inventory[pos].flags.half_empty = 1;
 					}
 
-				} else if (item == ITEM_BRANDY || item == ITEM_WINE) {
+				} else if (item_id == ITEM_BRANDY || item_id == ITEM_WINE) {
 					/* wine or snaps */
 					hero_get_drunken(consumer);
 					drop_item(owner, pos, 1);
@@ -133,7 +134,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					drop_item(owner, pos, 1);
 
 					/* That does not happen */
-					if (item != ITEM_BEER) {
+					if (item_id != ITEM_BEER) {
 						/* get an empty glass bottle */
 						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 					}
@@ -150,11 +151,14 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 		if (item_p->subtype == 0) {
 
-			if (is_in_word_array(item, g_herbs_uneatable)) {
+			if (is_in_word_array(item_id, g_herbs_uneatable)) {
+
 				GUI_output(get_ttx(499));
-			} else if (is_in_word_array(item, g_herbs_toxic) || is_in_word_array(item, g_poison_potions)) {
+
+			} else if (is_in_word_array(item_id, g_herbs_toxic) || is_in_word_array(item_id, g_poison_potions)) {
 				/* herbs and poisons */
 				GUI_output(get_ttx(500));
+
 			} else {
 				/* consume with effects */
 
@@ -164,7 +168,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* terminate output string */
 				*g_dtp2 = '\0';
 
-				switch (item) {
+				switch (item_id) {
 				case ITEM_GULMOND_LEAF: {
 					/* Gulmond Blatt */
 
@@ -268,8 +272,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 		} else {
 
 			/* check if item is an elexire */
-			l_si = is_in_word_array(item, g_elixir_potions);
-			id_bad_elex = is_in_word_array(item, g_bad_elixirs);
+			l_si = is_in_word_array(item_id, g_elixir_potions);
+			id_bad_elex = is_in_word_array(item_id, g_bad_elixirs);
 
 			if (l_si != 0) {
 				/* handle good elexires */
@@ -315,7 +319,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* drop the item */
 				drop_item(owner, pos, 1);
 
-				switch (item) {
+				switch (item_id) {
 				case 0x91 : {
 					/* Heiltrank */
 

@@ -3,21 +3,21 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short TRV_found_camp_place(signed short);
+signed int TRV_found_camp_place(const signed int);
 /* 0x25 */
-void TRV_found_replenish_place(signed short);
+void TRV_found_replenish_place(const signed int);
 /* 0x2a */
-signed short TRV_follow_trail_question(void);
+signed int TRV_follow_trail_question(void);
 /* 0x2f */
-void TRV_found_herb_place(signed short);
+void TRV_found_herb_place(const signed int);
 /* 0x34 */
 void TRV_inside_herb_place(void);
 /* 0x39 */
-signed short TRV_cross_a_ford(char*, signed short, signed short);
+signed int TRV_cross_a_ford(char*, const signed int, const signed int);
 /* 0x3e */
-void TRV_ford_test(signed short, signed short);
+void TRV_ford_test(const signed int, const signed int);
 /* 0x43 */
-signed short TRV_ferry(char*, signed short);
+signed int TRV_ferry(char*, signed int);
 /* 0x48 */
 void TRV_barrier(signed short);
 /* 0x4d */
@@ -55,15 +55,15 @@ void tevent_023(void);
 /* 0x98 */
 void tevent_092(void);
 /* 0x9d */
-void TRV_load_textfile(signed short);
+void TRV_load_textfile(signed int);
 /* 0xa2 */
-void TRV_event(signed short);
+void TRV_event(const signed int);
 /* 0xa7 */
-signed short TRV_fight_event(signed short, signed short);
+signed int TRV_fight_event(const signed int, const signed int);
 /* 0xac */
-void TRV_found_inn(signed short, signed short);
+void TRV_found_inn(const signed int, const signed int);
 /* 0xb1 */
-signed short TRV_enter_hut_question(void);
+signed int TRV_enter_hut_question(void);
 
 #if !defined(__BORLANDC__)
 }

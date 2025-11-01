@@ -44,155 +44,41 @@ namespace M302de {
 
 static void (*g_travel_event_handlers[146])(void) = {
 	NULL,
-	tevent_001,
-	tevent_002,
-	tevent_003,
-	tevent_004,
-	tevent_005,
-	tevent_006,
-	tevent_007,
-	tevent_008,
-	tevent_009,
-	tevent_010,
-	tevent_011,
-	tevent_012,
-	tevent_013,
-	tevent_014,
-	tevent_015,
-	tevent_016,
-	tevent_017,
-	tevent_018,
-	tevent_019,
-	tevent_020,
-	tevent_021,
-	tevent_022,
-	tevent_023,
-	tevent_024,
-	tevent_025,
-	tevent_026,
-	tevent_027,
-	tevent_028,
-	tevent_029,
-	tevent_030,
-	tevent_031,
-	tevent_032,
-	tevent_033,
-	tevent_034,
-	tevent_035,
-	tevent_036,
-	tevent_037,
-	tevent_038,
-	tevent_039,
-	tevent_040,
-	tevent_041,
-	tevent_042,
-	tevent_043,
-	tevent_044,
-	tevent_045,
-	tevent_046,
-	tevent_047,
-	tevent_048,
-	tevent_049,
-	tevent_050,
-	tevent_051,
-	tevent_052,
-	tevent_053,
-	tevent_054,
-	tevent_055,
-	tevent_056,
-	tevent_057,
-	tevent_058,
-	tevent_059,
-	tevent_060,
-	tevent_061,
-	tevent_062,
-	tevent_063,
-	tevent_064,
-	tevent_065,
-	tevent_066,
-	tevent_067,
-	tevent_068,
-	tevent_069,
-	tevent_070,
-	tevent_071,
-	tevent_072,
-	tevent_073,
-	tevent_074,
-	tevent_075,
-	tevent_076,
-	tevent_077,
-	tevent_078,
-	tevent_079,
-	tevent_080,
-	tevent_081,
-	tevent_082,
-	tevent_083,
-	tevent_084,
-	tevent_085,
-	tevent_086,
-	tevent_087,
-	tevent_088,
-	tevent_089,
-	tevent_090,
-	tevent_091,
-	tevent_092,
-	tevent_093,
-	tevent_094,
-	tevent_095,
-	tevent_096,
-	tevent_097,
-	tevent_098,
-	tevent_099,
-	tevent_100,
-	tevent_101,
-	tevent_102,
-	tevent_103,
-	tevent_104,
-	tevent_105,
-	tevent_106,
-	tevent_107,
-	tevent_108,
-	tevent_109,
-	tevent_110,
-	tevent_111,
-	tevent_112,
-	tevent_113,
-	tevent_114,
-	tevent_115,
-	tevent_116,
-	tevent_117,
-	tevent_118,
-	tevent_119,
-	tevent_120,
-	tevent_121,
-	tevent_122,
-	tevent_123,
-	tevent_124,
-	tevent_125,
-	tevent_126,
-	tevent_127,
-	tevent_128,
-	tevent_129,
-	tevent_130,
-	tevent_131,
-	tevent_132,
-	tevent_133,
-	tevent_134,
-	tevent_135,
-	tevent_136,
-	tevent_137,
-	tevent_138,
-	tevent_139,
-	tevent_140,
-	tevent_141,
-	tevent_142,
-	tevent_143,
-	tevent_144,
-	tevent_145,
+	tevent_001, tevent_002, tevent_003, tevent_004, tevent_005,
+	tevent_006, tevent_007, tevent_008, tevent_009, tevent_010,
+	tevent_011, tevent_012, tevent_013, tevent_014, tevent_015,
+	tevent_016, tevent_017,	tevent_018, tevent_019,	tevent_020,
+	tevent_021, tevent_022,	tevent_023, tevent_024,	tevent_025,
+	tevent_026, tevent_027,	tevent_028, tevent_029,	tevent_030,
+	tevent_031, tevent_032,	tevent_033, tevent_034,	tevent_035,
+	tevent_036, tevent_037,	tevent_038, tevent_039,	tevent_040,
+	tevent_041, tevent_042, tevent_043, tevent_044,	tevent_045,
+	tevent_046, tevent_047,	tevent_048, tevent_049,	tevent_050,
+	tevent_051, tevent_052,	tevent_053, tevent_054,	tevent_055,
+	tevent_056, tevent_057,	tevent_058, tevent_059,	tevent_060,
+	tevent_061, tevent_062, tevent_063, tevent_064,	tevent_065,
+	tevent_066, tevent_067,	tevent_068, tevent_069,	tevent_070,
+	tevent_071, tevent_072,	tevent_073, tevent_074,	tevent_075,
+	tevent_076, tevent_077,	tevent_078, tevent_079,	tevent_080,
+	tevent_081, tevent_082,	tevent_083, tevent_084,	tevent_085,
+	tevent_086, tevent_087,	tevent_088, tevent_089,	tevent_090,
+	tevent_091, tevent_092,	tevent_093, tevent_094,	tevent_095,
+	tevent_096, tevent_097,	tevent_098, tevent_099,	tevent_100,
+	tevent_101, tevent_102,	tevent_103, tevent_104,	tevent_105,
+	tevent_106, tevent_107,	tevent_108, tevent_109,	tevent_110,
+	tevent_111, tevent_112,	tevent_113, tevent_114,	tevent_115,
+	tevent_116, tevent_117,	tevent_118, tevent_119,	tevent_120,
+	tevent_121, tevent_122,	tevent_123, tevent_124,	tevent_125,
+	tevent_126, tevent_127,	tevent_128, tevent_129,	tevent_130,
+	tevent_131, tevent_132,	tevent_133, tevent_134,	tevent_135,
+	tevent_136, tevent_137,	tevent_138, tevent_139,	tevent_140,
+	tevent_141, tevent_142,	tevent_143, tevent_144,	tevent_145,
 }; // ds:0xaeea,
 
 signed char g_travel_event_active = 0; // ds:0xb132
+
 static signed short g_travel_event_tx2 = -1; // ds:0xb133
+
 #ifndef M302de_ORIGINAL_BUGFIX
 /* Original-Bug 33:
  * In certain travel events, an axe is needed as a tool.
@@ -212,46 +98,47 @@ Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_O
  * See discussion at https://www.crystals-dsa-foren.de/showthread.php?tid=6036&pid=170066#pid170066
  */
 #endif
-static char g_empty_string10[1] = ""; // ds:0xb13b
-static char g_empty_string11[1] = ""; // ds:0xb13c
-static char g_empty_string12[1] = ""; // ds:0xb13d
 
+static const char g_empty_string10[1] = ""; // ds:0xb13b
+static const char g_empty_string11[1] = ""; // ds:0xb13c
+static const char g_empty_string12[1] = ""; // ds:0xb13d
 
-void TRV_load_textfile(signed short travel_event)
+void TRV_load_textfile(signed int travel_event_id)
 {
 	load_tx(ARCHIVE_FILE_FEATURE_LTX);
 
-	if (travel_event == -1) {
-		travel_event = g_travel_event_tx2;
+	if (travel_event_id == -1) {
+		travel_event_id = g_travel_event_tx2;
 	}
 
-	load_tx2( (travel_event == 37 || travel_event == 47 || travel_event == 100) ? ARCHIVE_FILE_FEATURE9_LTX :
-			( travel_event == 16 ? ARCHIVE_FILE_FEATURE8_LTX :
-			( travel_event < 30 ? ARCHIVE_FILE_FEATURE1_LTX :
-			( travel_event < 54 ? ARCHIVE_FILE_FEATURE2_LTX :
-			( travel_event < 70 ? ARCHIVE_FILE_FEATURE3_LTX :
-			( travel_event < 90 ? ARCHIVE_FILE_FEATURE4_LTX :
-			( travel_event < 111 ? ARCHIVE_FILE_FEATURE5_LTX :
-			( travel_event < 126 ? ARCHIVE_FILE_FEATURE6_LTX :
-			( travel_event < 143 ? ARCHIVE_FILE_FEATURE7_LTX : ARCHIVE_FILE_FEATURE8_LTX)))))))));
+	load_tx2( (travel_event_id == 37 || travel_event_id == 47 || travel_event_id == 100) ? ARCHIVE_FILE_FEATURE9_LTX :
+			( travel_event_id == 16 ? ARCHIVE_FILE_FEATURE8_LTX :
+			( travel_event_id < 30 ? ARCHIVE_FILE_FEATURE1_LTX :
+			( travel_event_id < 54 ? ARCHIVE_FILE_FEATURE2_LTX :
+			( travel_event_id < 70 ? ARCHIVE_FILE_FEATURE3_LTX :
+			( travel_event_id < 90 ? ARCHIVE_FILE_FEATURE4_LTX :
+			( travel_event_id < 111 ? ARCHIVE_FILE_FEATURE5_LTX :
+			( travel_event_id < 126 ? ARCHIVE_FILE_FEATURE6_LTX :
+			( travel_event_id < 143 ? ARCHIVE_FILE_FEATURE7_LTX : ARCHIVE_FILE_FEATURE8_LTX)))))))));
 
-	g_travel_event_tx2 = travel_event;
+	g_travel_event_tx2 = travel_event_id;
 }
 
-void TRV_event(signed short travel_event)
+void TRV_event(const signed int travel_event_id)
 {
-	signed short tw_bak;
-	signed short bak1;
-	signed short bak2;
-	signed short traveling_bak;
+	signed int tw_bak;
+	signed int x_bak;
+	signed int y_bak;
+	signed int traveling_bak;
 	void (*event_handler)(void);
 
-	TRV_load_textfile(travel_event);
+	TRV_load_textfile(travel_event_id);
 
 	tw_bak = g_textbox_width;
-	bak1 = g_basepos_x;
-	bak2 = g_basepos_y;
+	x_bak = g_basepos_x;
+	y_bak = g_basepos_y;
 	traveling_bak = gs_show_travel_map;
+
 	g_basepos_x = 0;
 	g_basepos_y = 0;
 	gs_show_travel_map = 0;
@@ -260,15 +147,17 @@ void TRV_event(signed short travel_event)
 	g_travel_event_active = 1;
 
 #if !defined(__BORLANDC__)
-	D1_INFO("Reisebegegnung %d\n", travel_event);
+	D1_INFO("Reisebegegnung %d\n", travel_event_id);
 #endif
-	event_handler = g_travel_event_handlers[travel_event];
-	if (event_handler) event_handler();
+	event_handler = g_travel_event_handlers[travel_event_id];
+	if (event_handler) {
+		event_handler();
+	}
 
 	g_travel_event_active = 0;
 	gs_show_travel_map = traveling_bak;
-	g_basepos_x = bak1;
-	g_basepos_y = bak2;
+	g_basepos_x = x_bak;
+	g_basepos_y = y_bak;
 	g_textbox_width = tw_bak;
 	g_dialogbox_lock = 0;
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
@@ -282,21 +171,20 @@ void TRV_event(signed short travel_event)
  * \param   travel_event ID of the travel event
  * \return              return value of the fight
  */
-signed short TRV_fight_event(signed short fight_id, signed short travel_event)
+signed int TRV_fight_event(const signed int fight_id, const signed int travel_event_id)
 {
-	signed short retval;
+	const signed int retval = do_fight(fight_id);
 
-	retval = do_fight(fight_id);
-	TRV_load_textfile(travel_event);
+	TRV_load_textfile(travel_event_id);
 
 	return retval;
 }
 
-void TRV_found_herb_place(signed short a0)
+void TRV_found_herb_place(const signed int a0)
 {
-	signed short answer;
-	signed short randval;
-	struct struct_hero *hero = get_first_hero_available_in_group();
+	signed int answer;
+	signed int randval;
+	const struct struct_hero *hero = get_first_hero_available_in_group();
 
 	randval = random_schick(5) + 2;
 
@@ -314,26 +202,27 @@ void TRV_found_herb_place(signed short a0)
 
 void TRV_inside_herb_place(void)
 {
-	signed short hero_pos;
-	signed short hours;
-	signed short bak;
+	signed int hero_pos;
 
 	load_ani(1);
 	draw_main_screen();
 	init_ani(0);
+
 	hero_pos = select_hero_ok(get_ttx(326));
 
 	if (hero_pos != -1) {
 
-		hours = GUI_input(get_ttx(327), 1);
+		const signed int hours = GUI_input(get_ttx(327), 1);
 
 		if (hours > 0) {
-			bak = g_special_screen;
+
+			const signed int screen_bak = g_special_screen;
+
 			g_special_screen = 1;
 
 			gather_herbs(get_hero(hero_pos), hours - 1, -3);
 
-			g_special_screen = (signed char)bak;
+			g_special_screen = screen_bak;
 		}
 	}
 
@@ -341,14 +230,14 @@ void TRV_inside_herb_place(void)
 	g_request_refresh = 1;
 }
 
-signed short TRV_found_camp_place(signed short a0)
+signed int TRV_found_camp_place(const signed int a0)
 {
-	signed short answer;
-	signed short randval;
+	signed int answer;
+	const signed short randval = random_schick(5) + 10;
 
-	randval = random_schick(5) + 10;
 	sprintf(g_dtp2, get_tx(8), get_tx(randval),
 		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : g_empty_string11)));
+
 	do {
 		answer = GUI_radio(g_dtp2, 2, get_tx(9), get_tx(10));
 
@@ -385,10 +274,10 @@ signed short TRV_found_camp_place(signed short a0)
 	return 0;
 }
 
-void TRV_found_replenish_place(signed short a0)
+void TRV_found_replenish_place(const signed int a0)
 {
-	signed short hero_pos;
-	signed short answer;
+	signed int hero_pos;
+	signed int answer;
 
 	sprintf(g_dtp2,	get_tx(16), get_tx(random_schick(5) + 11), (a0 != 0 ? get_tx(45) : g_empty_string12));
 
@@ -440,7 +329,7 @@ void TRV_found_replenish_place(signed short a0)
 	}
 }
 
-void TRV_found_inn(signed short town_id, signed short type)
+void TRV_found_inn(const signed int town_id, const signed int type)
 /* strange: why does an inn in the countryside need a town_id?
  * This feels like a dirty hack... */
 {
@@ -449,6 +338,7 @@ void TRV_found_inn(signed short town_id, signed short type)
 	init_ani(0);
 
 	if (GUI_bool(get_tx(23))) {
+
 		gs_current_locdata = town_id;
 		gs_current_typeindex = type;
 		gs_current_loctype = LOCTYPE_INN;
@@ -469,9 +359,9 @@ void TRV_found_inn(signed short town_id, signed short type)
  *
  * \return              the answer 0 = no, 1 = yes
  */
-signed short TRV_enter_hut_question(void)
+signed int TRV_enter_hut_question(void)
 {
-	signed short answer;
+	signed int answer;
 
 	load_ani(8);
 	draw_main_screen();
@@ -485,10 +375,10 @@ signed short TRV_enter_hut_question(void)
 	return answer;
 }
 
-signed short TRV_follow_trail_question(void)
+signed int TRV_follow_trail_question(void)
 {
-	signed short answer;
-	struct struct_hero *hero = get_first_hero_available_in_group();
+	signed int answer;
+	const struct struct_hero *hero = get_first_hero_available_in_group();
 
 	sprintf(g_dtp2, get_tx(25), hero->alias);
 
@@ -500,12 +390,11 @@ signed short TRV_follow_trail_question(void)
 	return answer - 1;
 }
 
-signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
+signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int mod)
 {
-	signed short answer;
-	signed short done;
+	signed int answer;
+	signed int done = 0;
 
-	done = 0;
 	g_event_ani_busy = 1;
 
 	load_ani(7);
@@ -542,9 +431,9 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 	return 1;
 }
 
-void TRV_ford_test(signed short mod, signed short time)
+void TRV_ford_test(const signed int mod, const signed int time)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
@@ -578,15 +467,12 @@ void TRV_ford_test(signed short mod, signed short time)
 	}
 }
 
-signed short TRV_ferry(char *msg, signed short price)
+signed int TRV_ferry(char *msg, signed int price)
 {
-	signed short done;
-	signed short answer;
-	signed short nr_heroes;
+	signed int done = 0;
+	signed int answer;
+	const signed int heroes_num = count_heroes_in_group();
 	Bit32u p_money;
-
-	done = 0;
-	nr_heroes = count_heroes_in_group();
 
 	do {
 
@@ -599,8 +485,8 @@ signed short TRV_ferry(char *msg, signed short price)
 
 		if (answer == 1) {
 
-			/* Original-Bug: If party doesn't have enough money, the price will stay at *5*nr_heroes (typically *30) afterwards... */
-			price *= 5 * nr_heroes;
+			/* Original-Bug: If party doesn't have enough money, the price will stay at *5*heroes_num (typically *30) afterwards... */
+			price *= 5 * heroes_num;
 			p_money = get_party_money();
 
 			if ((Bit32u)price > p_money) {
@@ -614,7 +500,7 @@ signed short TRV_ferry(char *msg, signed short price)
 
 		} else if (answer == 2) {
 
-			price *= nr_heroes;
+			price *= heroes_num;
 			p_money = get_party_money();
 
 			if ((Bit32u)price > p_money) {
@@ -652,7 +538,7 @@ void tevent_001(void)
 /* Varnheim <-> Daspota: hunter */
 void tevent_002(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* load dialog head */
 	load_in_head(10);
@@ -695,10 +581,10 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 			signed short mod3, signed short ap_all1, signed short ap_hero, signed short ap_all2,
 			signed short ap_all3, signed short foods1, signed short foods2)
 {
-	signed short l_di;
-	signed short i;
+	signed int failed_sneaks_num;
+	signed int i;
 	signed short l4;
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	g_event_ani_busy = 1;
@@ -710,16 +596,16 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	GUI_output(get_tx2(city_index));
 
 	hero = get_hero(0);
-	for (i = l_di = 0; i <= 6; i++, hero++) {
+	for (i = failed_sneaks_num = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 			!hero->flags.dead && (test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
 		{
-			l_di++;
+			failed_sneaks_num++;
 		}
 	}
 
-	if (l_di) {
+	if (failed_sneaks_num) {
 
 		do {
 			answer = GUI_radio(get_tx2(city_index + 1), 2, get_tx2(city_index + 7), get_tx2(city_index + 8));
@@ -742,17 +628,17 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 		} else {
 
 			sprintf(g_dtp2,	get_tx2(city_index + 3), hero->alias);
-			GUI_input(g_dtp2, l_di = 0);
+			GUI_input(g_dtp2, failed_sneaks_num = 0);
 
 			if ((i = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
-				l_di++;
+				failed_sneaks_num++;
 			}
 
 			if ((l4 = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
-				l_di++;
+				failed_sneaks_num++;
 			}
 
-			if (l_di == 2 || i == 99 || l4 == 99) {
+			if (failed_sneaks_num == 2 || i == 99 || l4 == 99) {
 
 				sprintf(g_dtp2, get_tx2(city_index + 4), hero->alias);
 				GUI_output(g_dtp2);
@@ -767,7 +653,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 				answer = 0;
 			} else {
 
-				sprintf(g_dtp2,	get_tx2(l_di == 1 ? city_index + 5 : city_index + 6), hero->alias);
+				sprintf(g_dtp2,	get_tx2(failed_sneaks_num == 1 ? city_index + 5 : city_index + 6), hero->alias);
 
 				do {
 					answer = GUI_radio(g_dtp2, 2, get_tx2(city_index + 7), get_tx2(city_index + 8));
@@ -819,7 +705,7 @@ void tevent_006(void)
 void tevent_007(void)
 /* Tjeula <-> Breida: bridge building */
 {
-	signed short season = get_current_season();
+	const signed int season = get_current_season();
 
 	if (season == SEASON_AUTUMN || season == SEASON_SPRING) {
 		TRV_barrier(16);
@@ -828,13 +714,11 @@ void tevent_007(void)
 
 void TRV_barrier(signed short text_start)
 {
-	signed short i;
-	signed short l_di;
-	signed short answer;
-	signed short done;
+	signed int i;
+	signed int tools_num;
+	signed int answer;
+	signed int done = 0;
 	struct struct_hero *hero;
-
-	done = 0;
 
 	load_in_head(54);
 
@@ -857,43 +741,45 @@ void TRV_barrier(signed short text_start)
 
 			/* count ropes and rope ladders in the active group */
 			hero = get_hero(0);
-			for (i = l_di = 0; i <= 6; i++, hero++) {
+			for (i = tools_num = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 				{
-					l_di += hero_count_item(hero, ITEM_ROPE);
-					l_di += hero_count_item(hero, ITEM_ROPE_LADDER);
+					tools_num += hero_count_item(hero, ITEM_ROPE);
+					tools_num += hero_count_item(hero, ITEM_ROPE_LADDER);
 				}
 			}
 
-			if (l_di >= 2) {
+			if (tools_num >= 2) {
 				/* at least 2 ropes or rope ladders: enough */
 
 				i = 0;
-				l_di = 1;
+				tools_num = 1;
 
 				do {
 					/* look for a suitable axe */
 					if (get_first_hero_with_item(g_travel_event_axes[i]) != -1)
 					{
-						l_di = 0;
+						tools_num = 0;
 					}
 
 					i++;
 
-				} while (l_di && g_travel_event_axes[i] != 0xff);
+				} while (tools_num && g_travel_event_axes[i] != 0xff);
 
-				if (l_di || get_first_hero_with_item(ITEM_HAMMER) == -1)
-				{
+				if (tools_num || get_first_hero_with_item(ITEM_HAMMER) == -1) {
 
 					GUI_dialog_na(0, get_tx2(text_start + 4));
 
 				} else {
+
 					hero = get_hero(0);
 
-					for (i = l_di = 0; i <= 6; i++, hero++)
+					for (i = tools_num = 0; i <= 6; i++, hero++)
 					{
-						if (test_skill(hero, TA_WILDNISLEBEN, 0) > 0) l_di++;
+						if (test_skill(hero, TA_WILDNISLEBEN, 0) > 0) {
+							tools_num++;
+						}
 					}
 
 					add_hero_ap_all(10);
@@ -910,9 +796,10 @@ void TRV_barrier(signed short text_start)
 					}
 					drop_item(hero, i, 1);
 
-					if (l_di >= 3) {
+					if (tools_num >= 3) {
 
 						GUI_dialog_na(0, get_tx2(text_start + 6));
+
 					} else {
 
 						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));

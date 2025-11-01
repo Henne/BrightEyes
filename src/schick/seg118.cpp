@@ -41,12 +41,10 @@ static const char g_str_rad3[4] = "RAD"; // ds:0xb226
 /* The griffon */
 void tevent_037(void)
 {
-	signed short answer;
-	signed short done;
-	signed short hours;
+	signed int answer;
+	signed int done = 0;
+	signed int hours;
 	struct struct_hero *hero;
-
-	done = 0;
 
 	if (!gs_tevent037_flag)
 	{
@@ -240,10 +238,10 @@ void tevent_038(void)
 
 void tevent_078(void)
 {
-	signed short tmp;
-	signed short answer;
-	signed short found_path;
-	signed short days;
+	signed int tmp;
+	signed int answer;
+	signed int found_path;
+	signed int days;
 	struct struct_hero *hero;
 
 	/* This event happens only in winter */
@@ -371,7 +369,7 @@ void tevent_079(void)
 /* Ottarje <-> Skal: entrance to spider cave */
 void tevent_051(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent051_flag)
 	{
@@ -415,11 +413,9 @@ void tevent_051(void)
 /* Ottarje <-> Skjal: narrow pass blocked by a tree */
 void tevent_052(void)
 {
-	signed short done;
-	signed short i;
-	signed short answer;
-
-	done = 0;
+	signed int done = 0;
+	signed int i;
+	signed int answer;
 
 	load_in_head(52);
 
@@ -479,11 +475,11 @@ void tevent_121(void)
 
 void tevent_124(void)
 {
-	signed short i;
-	signed short counter;
-	signed short answer;
-	signed short have_climb_tools;
-	signed short skill_ret;
+	signed int i;
+	signed int counter;
+	signed int answer;
+	signed int have_climb_tools;
+	signed int skill_ret;
 	struct struct_hero *hero;
 
 	have_climb_tools = 0;
@@ -550,7 +546,7 @@ void tevent_124(void)
 
 void tevent_125(void)
 {
-	signed short answer;
+	signed int answer;
 
 	load_in_head(17);
 
@@ -570,7 +566,7 @@ void tevent_125(void)
 /* Reach street (either Kravik-Skelellen or Peilinen-Rovamund). */
 void tevent_145(void)
 {
-	signed short answer;
+	signed int answer;
 
 	load_area_description(0);
 

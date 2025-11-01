@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void use_item(signed short, signed short);
+void use_item(const signed int, const signed int);
 
 /* 0x25 */
 void item_arcano(void);

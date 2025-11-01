@@ -31,9 +31,9 @@ namespace M302de {
  */
 void FIG_tidy_monsters(void)
 {
-	signed short i;
-	signed short j;
-	signed short monsters = FIG_count_active_enemies();
+	signed int i;
+	signed int j;
+	signed int monsters = FIG_count_active_enemies();
 
 	i = 0;
 	while (i < 20) {
@@ -43,7 +43,6 @@ void FIG_tidy_monsters(void)
 			(g_enemy_sheets[i].flags.dead || g_enemy_sheets[i].flags.mushroom || g_enemy_sheets[i].flags.petrified ||
 			(g_current_fight->monsters[i].round_appear && (monsters == 0))))
 		{
-
 			if (i == 19) {
 				/* just clear the last one */
 				memset(&g_current_fight->monsters[i], 0, sizeof(struct fight_monster));
@@ -63,6 +62,7 @@ void FIG_tidy_monsters(void)
 					g_enemy_sheets[j + 1].flags.dead = 1;
 				}
 			}
+
 		} else {
 			i++;
 		}
@@ -71,68 +71,69 @@ void FIG_tidy_monsters(void)
 
 void FIG_loot_monsters(void)
 {
-	signed short l_si;
-	signed short l_di; /* loot number */
-	signed short l1;
-	signed short l3;
+	signed int l_si = 0;
+	signed int loot_num;
+	signed int item_id;
+	signed int item_cnt;
 	signed short l4;
 	signed short l5;
 	signed short l6;
 	Bit32s money;
-	signed short autofight_bak;
-	signed short tw_bak;
+	const signed int autofight_bak = g_autofight;
+	signed int tw_bak;
 
-	char *a[31];
+	char *loot_names[31];
 
-	l_si = 0;
-
-	autofight_bak = g_autofight;
 	g_autofight = 0;
 
-	for (l_di = 0; l_di < 30; l_di++) {
+	for (loot_num = 0; loot_num < 30; loot_num++) {
 
-		a[l_di] = (char*)(g_buffer9_ptr + 40 * l_di);
+		loot_names[loot_num] = (char*)(g_buffer9_ptr + 40 * loot_num);
 	}
 
 	do {
+		loot_num = item_cnt = 0;
 
-		l_di = l3 = 0;
-
-		while ((l1 = g_current_fight->loot[l_di]) && (l_di < 30) && (l1 != ITEM_BONE_WITH_RUNE))
+		while ((item_id = g_current_fight->loot[loot_num]) && (loot_num < 30) && (item_id != ITEM_BONE_WITH_RUNE))
 			/* Apparently a quick "fix" for an unwanted bone with runes in fight THOR8,
 			 * see https://www.crystals-dsa-foren.de/showthread.php?tid=453&pid=172221#pid172221 */
 		{
-			strcpy(a[l_di++], GUI_name_plural(0, get_itemname(l1)));
-			l3++;
+			strcpy(loot_names[loot_num++], GUI_name_plural(0, get_itemname(item_id)));
+			item_cnt++;
 		}
 
-		if (l3 != 0) {
+		if (item_cnt != 0) {
 
-			if (l3 > 15) {
+			if (item_cnt > 15) {
 
 				if (l_si == 0) {
 					l5 = 15;
 					l6 = 16;
 				} else {
-					l5 = l3;
-					l6 = l3 - 14;
+					l5 = item_cnt;
+					l6 = item_cnt - 14;
 				}
 
-				strcpy(a[l5], get_ttx(751));
+				strcpy(loot_names[l5], get_ttx(751));
+
 			} else {
 				l_si = 0;
 				l5 = 0;
-				l6 = l3;
+				l6 = item_cnt;
 			}
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 6;
 
 			l4 = GUI_radio(get_tx(14), l6,
-						a[0 + l_si], a[1 + l_si], a[2 + l_si], a[3 + l_si],
-						a[4 + l_si], a[5 + l_si], a[6 + l_si], a[7 + l_si],
-						a[8 + l_si], a[9 + l_si], a[10 + l_si], a[11 + l_si],
-						a[12 + l_si], a[13 + l_si], a[14 + l_si], a[15 + l_si]) - 1;
+				loot_names[0 + l_si], loot_names[1 + l_si],
+				loot_names[2 + l_si], loot_names[3 + l_si],
+				loot_names[4 + l_si], loot_names[5 + l_si],
+				loot_names[6 + l_si], loot_names[7 + l_si],
+				loot_names[8 + l_si], loot_names[9 + l_si],
+				loot_names[10 + l_si], loot_names[11 + l_si],
+				loot_names[12 + l_si], loot_names[13 + l_si],
+				loot_names[14 + l_si], loot_names[15 + l_si]) - 1;
 
 			g_textbox_width = tw_bak;
 
@@ -149,13 +150,14 @@ void FIG_loot_monsters(void)
 				if (!get_item(g_current_fight->loot[l4 + l_si], 1, 1))
 				{
 					l4 = -2;
+
 				} else {
 					g_current_fight->loot[l4 + l_si] = 0;
 
-					for (l_di = l4 + l_si; l_di < 29; l_di++) {
+					for (loot_num = l4 + l_si; loot_num < 29; loot_num++) {
 
-						g_current_fight->loot[l_di] = g_current_fight->loot[l_di + 1];
-						g_current_fight->loot[l_di + 1] = 0;
+						g_current_fight->loot[loot_num] = g_current_fight->loot[loot_num + 1];
+						g_current_fight->loot[loot_num + 1] = 0;
 					}
 				}
 			}
@@ -163,6 +165,7 @@ void FIG_loot_monsters(void)
 		} else {
 			l4 = -2;
 		}
+
 	} while (l4 != -2);
 
 	money = g_current_fight->ducats * 100;

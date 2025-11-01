@@ -57,7 +57,7 @@ static const signed short g_hero_startup_items_all[4] = {
  *          If such a collision is detected this function returns 1 else 0.
  *
  * \param   hero        the hero
- * \param   item        the item which should be equipped
+ * \param   item_id     the item which should be equipped
  * \param   pos         the position the item should be placed
  */
 /* Borlandified and identical */
@@ -94,8 +94,8 @@ signed int two_hand_collision(struct struct_hero* hero, const signed int item_id
 /* is it pos2 -> pos1 or pos1 -> pos2 ? */
 void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 {
-	signed short item1;
-	signed short item2;
+	signed int item_id1;
+	signed int item_id2;
 	signed short v3 = 0;
 	signed short temp;
 	struct inventory tmp;
@@ -107,16 +107,16 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 		if ((pos2 > HERO_INVENTORY_SLOT_KNAPSACK_1 - 1) && (pos1 > HERO_INVENTORY_SLOT_KNAPSACK_1 - 1)) {
 			/* Both items are in knapsacks */
 			v3 = 1;
-			item1 = hero->inventory[pos1].item_id;
-			item2 = hero->inventory[pos2].item_id;
+			item_id1 = hero->inventory[pos1].item_id;
+			item_id2 = hero->inventory[pos2].item_id;
 		} else {
-			item1 = hero->inventory[pos1].item_id;
-			item2 = hero->inventory[pos2].item_id;
+			item_id1 = hero->inventory[pos1].item_id;
+			item_id2 = hero->inventory[pos2].item_id;
 
 			if ((pos2 < pos1) || ((pos1 < HERO_INVENTORY_SLOT_KNAPSACK_1) && (pos2 < HERO_INVENTORY_SLOT_KNAPSACK_1))) {
 
 				if (pos1 < HERO_INVENTORY_SLOT_KNAPSACK_1) {
-					if (item1 != 0)
+					if (item_id1 != ITEM_NONE)
 						v3 = 1;
 				} else {
 					v3 = 1;
@@ -129,20 +129,23 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 					pos2 = temp;
 
 					/* exchange ids */
-					temp = item1;
-					item1 = item2;
-					item2 = temp;
+					temp = item_id1;
+					item_id1 = item_id2;
+					item_id2 = temp;
 				}
 			}
 
 			v3 = 0;
 
-			if ((item1 == 0) && (item2 == 0)) {
+			if ((item_id1 == 0) && (item_id2 == 0)) {
+
 				GUI_output(get_ttx(209));
+
 			} else {
-				if (item2 != 0) {
+				if (item_id2 != ITEM_NONE) {
+
 					/* item have the same ids and are stackable */
-					if ((item2 == item1) && g_itemsdat[item1].flags.stackable) {
+					if ((item_id2 == item_id1) && g_itemsdat[item_id1].flags.stackable) {
 						/* merge them */
 
 						/* add quantity of item at pos2 to item at pos1 */
@@ -155,45 +158,45 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 						hero->items_num--;
 #endif
 					} else {
-						if (!can_hero_use_item(hero, item2)) {
+						if (!can_hero_use_item(hero, item_id2)) {
 
 							sprintf(g_dtp2, get_ttx(221), hero->alias,
 								get_ttx((hero->sex != 0 ? 593 : 9) + hero->typus),
-								GUI_names_grammar(2, item2, 0));
+								GUI_names_grammar(2, item_id2, 0));
 
 							GUI_output(g_dtp2);
 
 						} else {
-							if (!can_item_at_pos(item2, pos1)) {
+							if (!can_item_at_pos(item_id2, pos1)) {
 
-								if (is_in_word_array(item2, g_items_pluralwords))
+								if (is_in_word_array(item_id2, g_items_pluralwords))
 
 									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
+										GUI_names_grammar(0x4000, item_id2, 0), get_ttx(557));
 								else
 									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0, item2, 0), get_ttx(556));
+										GUI_names_grammar(0, item_id2, 0), get_ttx(556));
 
 								GUI_output(g_dtp2);
 							} else {
-								if (two_hand_collision(hero, item2, pos1)) {
+								if (two_hand_collision(hero, item_id2, pos1)) {
 
 									sprintf(g_dtp2, get_ttx(829), hero->alias);
 									GUI_output(g_dtp2);
 
 								} else {
-									if (item1 != 0) {
-										unequip(hero, item1, pos1);
+									if (item_id1 != 0) {
+										unequip(hero, item_id1, pos1);
 									}
 
-									add_equip_boni(hero, hero, item2, pos2, pos1);
+									add_equip_boni(hero, hero, item_id2, pos2, pos1);
 									v3 = 1;
 								}
 							}
 						}
 					}
 				} else {
-					unequip(hero, item1, pos1);
+					unequip(hero, item_id1, pos1);
 					v3 = 1;
 				}
 			}
@@ -202,7 +205,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 		if (v3 != 0) {
 
 			/* item have the same ids and are stackable */
-			if ((item2 == item1) && g_itemsdat[item1].flags.stackable) {
+			if ((item_id2 == item_id1) && g_itemsdat[item_id1].flags.stackable) {
 				/* merge them */
 
 				/* add quantity of item at pos2 to item at pos1 */
@@ -287,36 +290,33 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 /* Borlandified and nearly identical */
 void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct struct_hero *hero2, const signed int pos2)
 {
-	signed short l_di;
+	signed short stackable_quant;
 	register signed short pos1 = old_pos1;
 
-	signed short item1;
-	signed short item2;
+	const signed int item_id1 = hero1->inventory[pos1].item_id;
+	signed int item_id2;
 	struct item_stats *item1_desc;
 	struct item_stats *item2_desc;
 	signed short flag;
-	signed short desc1_5;
-	signed short desc2_5;
+	signed short item_weight1;
+	signed short item_weight2;
 	struct inventory tmp;
 
-
-	item1 = hero1->inventory[pos1].item_id;
-
-	/* check if item1 is an item */
-	if (item1 == 0) {
+	/* check if item_id1 is an item */
+	if (item_id1 == 0) {
 
 		GUI_output(get_ttx(209));
 		return;
 	}
 
-	item2 = hero2->inventory[pos2].item_id;
+	item_id2 = hero2->inventory[pos2].item_id;
 
-	item1_desc = &g_itemsdat[item1];
-	item2_desc = &g_itemsdat[item2];
+	item1_desc = &g_itemsdat[item_id1];
+	item2_desc = &g_itemsdat[item_id2];
 
 	if (item1_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item1, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item_id1, 0));
 
 		GUI_output(g_dtp2);
 		return;
@@ -324,7 +324,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	if (item2_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item2, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item_id2, 0));
 		GUI_output(g_dtp2);
 		return;
 
@@ -333,10 +333,10 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 	/* identical until here */
 	if (pos2 < 7) {
 
-		if (!can_hero_use_item(hero2, item1)) {
+		if (!can_hero_use_item(hero2, item_id1)) {
 
 			sprintf(g_dtp2,	get_ttx(221), hero2->alias, get_ttx((hero2->sex ? 593 : 9) + hero2->typus),
-				GUI_names_grammar(2, item1, 0));
+				GUI_names_grammar(2, item_id1, 0));
 
 #if !defined(__BORLANDC__)
 			GUI_output(g_dtp2);
@@ -347,13 +347,13 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			}
 #endif
 
-		} else if (!can_item_at_pos(item1, pos2)) {
+		} else if (!can_item_at_pos(item_id1, pos2)) {
 
-			if (is_in_word_array(item1, g_items_pluralwords)) {
+			if (is_in_word_array(item_id1, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item1, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id1, 0), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item1, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item_id1, 0), get_ttx(556));
 			}
 
 #if !defined(__BORLANDC__)
@@ -365,7 +365,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			}
 #endif
 
-		} else if (two_hand_collision(hero2, item1, pos2)) {
+		} else if (two_hand_collision(hero2, item_id1, pos2)) {
 
 			sprintf(g_dtp2, get_tx2(67), hero2->alias);
 
@@ -382,14 +382,14 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 /* 0x8ff */
 
-	if ((item2 != 0) && (pos1 < 7)) {
+	if ((item_id2 != 0) && (pos1 < 7)) {
 
-		if (!can_hero_use_item(hero1, item2)) {
+		if (!can_hero_use_item(hero1, item_id2)) {
 
 #if !defined(__BORLANDC__)
 			sprintf(g_dtp2,	get_ttx(221), hero1->alias,
 				get_ttx((hero1->sex ? 593 : 9) + hero1->typus),
-				(char*)GUI_names_grammar(2, item2, 0));
+				(char*)GUI_names_grammar(2, item_id2, 0));
 
 
 			GUI_output(g_dtp2);
@@ -398,7 +398,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			/* REMARK: cant imagine that it was written that way. */
 			asm {
 				push 0
-				push word [item2]
+				push word [item_id2]
 				push 2
 				call far ptr GUI_names_grammar
 				add sp, 0x06
@@ -448,13 +448,13 @@ lab02:
 
 #endif
 
-		} else if (!can_item_at_pos(item2, pos1)) {
+		} else if (!can_item_at_pos(item_id2, pos1)) {
 
-			if (is_in_word_array(item2, g_items_pluralwords)) {
+			if (is_in_word_array(item_id2, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id2, 0), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item2, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item_id2, 0), get_ttx(556));
 
 			}
 #if defined (__BORLANDC__)
@@ -468,41 +468,41 @@ lab04:
 /* 0xa14 */
 
 	/* identical from here */
-	if (item2 != 0) {
+	if (item_id2 != ITEM_NONE) {
 
 		flag = 1;
-		if ((item2 == item1) && item2_desc->flags.stackable) {
+		if ((item_id2 == item_id1) && item2_desc->flags.stackable) {
 
 			flag = 0;
-			l_di = 1;
+			stackable_quant = 1;
 
 			if (hero1->inventory[pos1].quantity > 1) {
 
 				sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
-					(char*)GUI_names_grammar(6, item1, 0), hero2->alias);
+					(char*)GUI_names_grammar(6, item_id1, 0), hero2->alias);
 
 
-				l_di = GUI_input(g_dtp2, 2);
+				stackable_quant = GUI_input(g_dtp2, 2);
 			}
 
-			if (hero1->inventory[pos1].quantity < l_di) {
-				l_di = hero1->inventory[pos1].quantity;
+			if (hero1->inventory[pos1].quantity < stackable_quant) {
+				stackable_quant = hero1->inventory[pos1].quantity;
 			}
 
-			if ((l_di > 0) && (hero2->inventory[pos2].quantity < 99)) {
+			if ((stackable_quant > 0) && (hero2->inventory[pos2].quantity < 99)) {
 
-				if (hero2->inventory[pos2].quantity + l_di > 99) {
-					l_di = 99 - hero2->inventory[pos2].quantity;
+				if (hero2->inventory[pos2].quantity + stackable_quant > 99) {
+					stackable_quant = 99 - hero2->inventory[pos2].quantity;
 				}
 
-				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight * l_di) && (l_di > 0)) {
-					l_di--;
+				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight * stackable_quant) && (stackable_quant > 0)) {
+					stackable_quant--;
 				}
 
-				if (l_di > 0) {
-					hero2->load += item1_desc->weight * l_di;
-					hero2->inventory[pos2].quantity += l_di;
-					drop_item(hero1, pos1, l_di);
+				if (stackable_quant > 0) {
+					hero2->load += item1_desc->weight * stackable_quant;
+					hero2->inventory[pos2].quantity += stackable_quant;
+					drop_item(hero1, pos1, stackable_quant);
 				} else {
 					sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 					GUI_output(g_dtp2);
@@ -512,95 +512,96 @@ lab04:
 
 		if (flag != 0) {
 
-			desc1_5 = item1_desc->flags.stackable ?
+			item_weight1 = item1_desc->flags.stackable ?
 				hero1->inventory[pos1].quantity * item1_desc->weight :
 				item1_desc->weight;
 
-			desc2_5 = item2_desc->flags.stackable ?
+			item_weight2 = item2_desc->flags.stackable ?
 				hero2->inventory[pos2].quantity * item2_desc->weight :
 				item2_desc->weight;
 
-			if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + desc1_5 - desc2_5) {
+			if (hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item_weight1 - item_weight2) {
 
 				sprintf(g_dtp2,	get_ttx(779), hero2->alias);
 				GUI_output(g_dtp2);
 
 			} else {
 				if (pos1 < 7) {
-					unequip(hero1, item1, pos1);
-					add_equip_boni(hero2, hero1, item2, pos2, pos1);
+					unequip(hero1, item_id1, pos1);
+					add_equip_boni(hero2, hero1, item_id2, pos2, pos1);
 				}
 
 				if (pos2 < 7) {
-					unequip(hero2, item2, pos2);
-					add_equip_boni(hero1, hero2, item1, pos1, pos2);
+					unequip(hero2, item_id2, pos2);
+					add_equip_boni(hero1, hero2, item_id1, pos1, pos2);
 				}
 
 				/* exchange two items */
 				tmp = hero2->inventory[pos2]; /* struct_copy */
 
-				hero2->load -= desc2_5;
+				hero2->load -= item_weight2;
 
 				hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
 
-				hero2->load += desc1_5;
-				hero1->load -= desc1_5;
+				hero2->load += item_weight1;
+				hero1->load -= item_weight1;
 
 				hero1->inventory[pos1] = tmp; /* struct_copy */
 
-				hero1->load += desc2_5;
+				hero1->load += item_weight2;
 
 				/* item counter */
 				hero1->items_num--;
 				hero2->items_num++;
 
 				/* special items */
-				if (item2 == ITEM_SICKLE_MAGIC) {
+				if (item_id2 == ITEM_SICKLE_MAGIC) {
 					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] + 3;
 					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] - 3;
 				}
-				if (item2 == ITEM_AMULET_BLUE) {
+				if (item_id2 == ITEM_AMULET_BLUE) {
 					hero1->mr = hero1->mr + 5;
 					hero2->mr = hero2->mr - 5;
 				}
-				if (item1 == ITEM_SICKLE_MAGIC) {
+				if (item_id1 == ITEM_SICKLE_MAGIC) {
 					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
 					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
 				}
-				if (item1 == ITEM_AMULET_BLUE) {
+				if (item_id1 == ITEM_AMULET_BLUE) {
 					hero1->mr = hero1->mr - 5;
 					hero2->mr = hero2->mr + 5;
 				}
 			}
 		}
+
 	} else if (item1_desc->flags.stackable) {
 
-		l_di = 1;
+		stackable_quant = 1;
 
 		if (hero1->inventory[pos1].quantity > 1) {
 
 			sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
-				(char*)GUI_names_grammar(6, item1, 0), hero2->alias);
+				(char*)GUI_names_grammar(6, item_id1, 0), hero2->alias);
 
 
-			l_di = GUI_input(g_dtp2, 2);
+			stackable_quant = GUI_input(g_dtp2, 2);
 		}
 
-		if (hero1->inventory[pos1].quantity < l_di) {
-			l_di = hero1->inventory[pos1].quantity;
+		if (hero1->inventory[pos1].quantity < stackable_quant) {
+			stackable_quant = hero1->inventory[pos1].quantity;
 		}
 
-		while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight * l_di) && (l_di > 0)) {
-			l_di--;
+		while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight * stackable_quant) && (stackable_quant > 0)) {
+			stackable_quant--;
 		}
 
-		if (l_di > 0) {
+		if (stackable_quant > 0) {
 
 			hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
 
-			hero2->load += item1_desc->weight * l_di;
-			hero2->inventory[pos2].quantity = l_di;
-			drop_item(hero1, pos1, l_di);
+			hero2->load += item1_desc->weight * stackable_quant;
+			hero2->inventory[pos2].quantity = stackable_quant;
+			drop_item(hero1, pos1, stackable_quant);
 
 		} else {
 			sprintf(g_dtp2,	get_ttx(779), hero2->alias);
@@ -617,11 +618,11 @@ lab04:
 		/* do the change */
 
 		if (pos1 < 7) {
-			unequip(hero1, item1, pos1);
+			unequip(hero1, item_id1, pos1);
 		}
 
 		if (pos2 < 7) {
-			add_equip_boni(hero1, hero2, item1, pos1, pos2);
+			add_equip_boni(hero1, hero2, item_id1, pos1, pos2);
 		}
 
 		hero2->inventory[pos2] = hero1->inventory[pos1]; /* struct_copy */
@@ -638,11 +639,11 @@ lab04:
 		memset(&hero1->inventory[pos1], 0, sizeof(inventory));
 
 		/* special items */
-		if (item1 == ITEM_SICKLE_MAGIC) {
+		if (item_id1 == ITEM_SICKLE_MAGIC) {
 			hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
 			hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
 		}
-		if (item1 == ITEM_AMULET_BLUE) {
+		if (item_id1 == ITEM_AMULET_BLUE) {
 			hero1->mr = hero1->mr - 5;
 			hero2->mr = hero2->mr + 5;
 		}
@@ -656,7 +657,7 @@ struct items_all {
 /* Borlandified and identical */
 void startup_equipment(struct struct_hero *hero)
 {
-	signed short i;
+	signed int i;
 	struct items_all all;
 
 	*(struct items_all*)&all = *(struct items_all*)g_hero_startup_items_all;
@@ -708,11 +709,9 @@ void startup_equipment(struct struct_hero *hero)
 signed short get_max_light_time(void)
 {
 	struct struct_hero *hero;
-	signed short i;
-	signed short j;
-	signed short retval;
-
-	retval = -1;
+	signed int i;
+	signed int j;
+	signed int retval = -1;
 
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
@@ -753,7 +752,7 @@ signed short get_max_light_time(void)
 /* Borlandified and identical */
 void equip_belt_ani(void)
 {
-	signed short i;
+	signed int i;
 	signed int handle;
 
 	signed short width;
@@ -855,8 +854,8 @@ void equip_belt_ani(void)
 /* Borlandified and identical */
 signed short get_full_waterskin_pos(const struct struct_hero *hero)
 {
-	signed short pos = -1;
-	signed short i;
+	signed int inv_pos = -1;
+	signed int i;
 
 	/* Original-BUG: should start from inventory pos 0 */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++) {
@@ -864,12 +863,12 @@ signed short get_full_waterskin_pos(const struct struct_hero *hero)
 		/* look for a non-empty waterskin */
 		if ((hero->inventory[i].item_id == ITEM_WATERSKIN) && !hero->inventory[i].flags.empty)
 		{
-			pos = i;
+			inv_pos = i;
 			break;
 		}
 	}
 
-	return pos;
+	return inv_pos;
 }
 
 #if !defined(__BORLANDC__)

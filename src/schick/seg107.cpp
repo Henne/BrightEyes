@@ -60,7 +60,7 @@ static inline struct struct_hero* get_itemuser() { return g_itemuser; }
 #endif
 
 /* Borlandified and identical */
-void use_item(signed short item_pos, signed short hero_pos)
+void use_item(const signed int item_pos, const signed int hero_pos)
 {
 	void (*func)(void);
 
@@ -110,10 +110,9 @@ void use_item(signed short item_pos, signed short hero_pos)
 void item_arcano(void)
 {
 	/* RING ID 165 */
-	signed short tx_index_bak;
 
 	/* save index of TX_FILE_INDEX */
-	tx_index_bak = g_tx_file_index;
+	const signed int tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -124,13 +123,16 @@ void item_arcano(void)
 	g_spelluser->enemy_id = select_hero_from_group(get_ttx(637)) + 1;
 
 	if (g_spelluser->enemy_id > 0) {
+
 		/* use it */
 		spell_arcano();
+
 		/* decrement usage counter */
 		get_itemuser()->inventory[g_used_item_pos].quantity--;
 	}
 
 	if ((tx_index_bak != -1) && (tx_index_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
+
 		/* need to reload buffer1 */
 		load_tx(tx_index_bak);
 	}
@@ -143,19 +145,19 @@ void item_read_recipe(void)
 
 	/* TODO: replace magic numbers */
 	switch (g_used_item_id) {
-	case 0xa7: str = get_ttx(639); break;
-	case 0xa9: str = get_ttx(640); break;
-	case 0xca: str = get_ttx(649); break;
-	case 0xcb: str = get_ttx(650); break;
-	case 0xcc: str = get_ttx(651); break;
-	case 0xcd: str = get_ttx(652); break;
-	case 0xce: str = get_ttx(653); break;
-	case 0xba: str = get_ttx(681); break;
-	case 0xf0: str = get_ttx(682); break;
-	case 0xf2: str = get_ttx(684); break;
-	case 0xf3: str = get_ttx(685); break;
-	case 0xf4: str = get_ttx(686); break;
-	case 0xf1: str = get_ttx(683); break;
+		case 0xa7: str = get_ttx(639); break;
+		case 0xa9: str = get_ttx(640); break;
+		case 0xca: str = get_ttx(649); break;
+		case 0xcb: str = get_ttx(650); break;
+		case 0xcc: str = get_ttx(651); break;
+		case 0xcd: str = get_ttx(652); break;
+		case 0xce: str = get_ttx(653); break;
+		case 0xba: str = get_ttx(681); break;
+		case 0xf0: str = get_ttx(682); break;
+		case 0xf2: str = get_ttx(684); break;
+		case 0xf3: str = get_ttx(685); break;
+		case 0xf4: str = get_ttx(686); break;
+		case 0xf1: str = get_ttx(683); break;
 	}
 
 	/* prepare message */
@@ -168,19 +170,20 @@ void item_read_recipe(void)
 void item_read_document(void)
 {
 	char *str;
-	signed short tw_bak;
+	signed int tw_bak;
 
 	/* TODO: replace magic numbers */
 	switch (g_used_item_id) {
-	case 0xaa: str = get_ttx(641); break;
-	case 0xbb: str = get_ttx(645); break;
-	case 0xbd: str = get_ttx(646); break;
-	case 0xbe: str = get_ttx(647); break;
-	case 0xc0: str = get_ttx(648); break;
-	case 0xde: str = get_ttx(654); break;
-	case 0xe0: str = get_ttx(655); break;
-	case 0xeb: str = get_ttx(657); break;
-	case 0xf7: str = get_ttx(759); break;
+
+		case 0xaa: str = get_ttx(641); break;
+		case 0xbb: str = get_ttx(645); break;
+		case 0xbd: str = get_ttx(646); break;
+		case 0xbe: str = get_ttx(647); break;
+		case 0xc0: str = get_ttx(648); break;
+		case 0xde: str = get_ttx(654); break;
+		case 0xe0: str = get_ttx(655); break;
+		case 0xeb: str = get_ttx(657); break;
+		case 0xf7: str = get_ttx(759); break;
 	}
 
 	tw_bak = g_textbox_width;
@@ -193,10 +196,8 @@ void item_read_document(void)
 void item_armatrutz(void)
 {
 	/* ID 171 = ITEM_CORONET_SILVER, 245 = ITEM_CORONET_GREEN */
-	signed short tx_index_bak;
 
-	/* save index off buffer1 */
-	tx_index_bak = g_tx_file_index;
+	const signed int tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT */
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -225,10 +226,7 @@ void item_armatrutz(void)
 void item_flimflam(void)
 {
 	/* ID 174 = ITEM_AMULET_GREEN */
-	signed short tx_index_bak;
-
-	/* save index off buffer1 */
-	tx_index_bak = g_tx_file_index;
+	const signed int tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -241,6 +239,7 @@ void item_flimflam(void)
 	get_itemuser()->inventory[g_used_item_pos].quantity--;
 
 	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
+
 		/* need to reload buffer1 */
 		load_tx(tx_index_bak);
 	}
@@ -252,6 +251,7 @@ void item_flimflam(void)
 void item_debtbook(void)
 {
 	/* DEBTBOOK, ID 176 */
+
 	if (gs_debtbook_read_flag) {
 
 		/* mark this event (1 = unread, 0 = read) */
@@ -293,7 +293,7 @@ void item_weapon_poison(void)
 	/*	WEAPON POISON, EXPURGICUM, VOMICUM
 		ID 55-59, 141-144, 166, 168 */
 
-	signed short bottle;
+	signed int bottle_id;
 
 	if ((get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_NONE) &&
 		(get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_SHORTBOW) &&
@@ -309,7 +309,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_VOMICUM), 1);
 
-			bottle = ITEM_FLASK_BRONZE;
+			bottle_id = ITEM_FLASK_BRONZE;
 			break;
 		}
 		case ITEM_EXPURGICUM : {
@@ -318,7 +318,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_EXPURGICUM), 1);
 
-			bottle = ITEM_FLASK_BRONZE;
+			bottle_id = ITEM_FLASK_BRONZE;
 			break;
 		}
 		case ITEM_SHURIN_POISON: {
@@ -328,7 +328,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SHURIN_POISON), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_ARAX_POISON: {
@@ -338,7 +338,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ARAX_POISON), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_ANGST_POISON: {
@@ -348,7 +348,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ANGST_POISON), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_SLEEP_POISON: {
@@ -358,7 +358,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SLEEP_POISON), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_GOLDLEIM: {
@@ -368,7 +368,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_GOLDLEIM), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_LOTUS_POISON: {
@@ -378,7 +378,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_LOTUS_POISON), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_KUKRIS: {
@@ -388,7 +388,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KUKRIS), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_BANNSTAUB: {
@@ -398,7 +398,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BANNSTAUB), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		case ITEM_KROETEN_POISON: {
@@ -407,15 +407,15 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KROETEN_POISON), 1);
 
-			bottle = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_FLASK_GLASS;
 			break;
 		}
 		}
 
-		give_hero_new_item(get_itemuser(), bottle, 1, 1);
+		give_hero_new_item(get_itemuser(), bottle_id, 1, 1);
 
 		sprintf(g_dtp2, get_ttx(739),
-			(char*)(GUI_names_grammar((signed short)0x8000, get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0)));
+			(char*)GUI_names_grammar((signed short)0x8000, get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
 
 	} else {
 		sprintf(g_dtp2, get_ttx(805), get_itemuser()->alias);
@@ -427,6 +427,7 @@ void item_weapon_poison(void)
 void item_myastmatic(void)
 {
 	/* MYASTMATIC, ID 238 */
+
 	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
 		return;
@@ -436,6 +437,7 @@ void item_myastmatic(void)
 void item_hylailic(void)
 {
 	/* HYLAILIC FIRE, ID 239 */
+
 	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
 		return;
@@ -461,17 +463,15 @@ void item_brenne(void)
 {
 	/*	LANTERN, TORCH, TINDERBOX, LANTERN
 		ID 25, 65, 85, 249 */
-	signed short tx_index_bak;
-	signed short pos;
-	signed short refill_pos;
-
-	/* save index off buffer1 */
-	tx_index_bak = g_tx_file_index;
+	signed int tx_index_bak = g_tx_file_index;
+	signed int pos;
+	signed int refill_pos;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
 	if (g_used_item_id == ITEM_LANTERN_ON) {
+
 		/* refill burning lantern */
 
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -540,7 +540,6 @@ void item_brenne(void)
 void item_bag(void)
 {
 	/* MAGIC BREADBAG, BAG: ID 184, 221 */
-
 
 	if ((gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
 
