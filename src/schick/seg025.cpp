@@ -627,7 +627,7 @@ signed short game_options(void)
 
 void draw_icon(signed short id, signed short x, signed short y)
 {
-	signed short handle;
+	signed int handle;
 	Bit8u* dst_bak;
 
 	handle = load_archive_file(ARCHIVE_FILE_ICONS);
@@ -841,7 +841,7 @@ void tumult(void)
 void fade_into(void)
 {
 	Bit8u *ptr;
-	signed short i;
+	signed int i;
 
 	ptr = g_renderbuf_ptr + 0xfa00;
 

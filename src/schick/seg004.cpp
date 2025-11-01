@@ -718,16 +718,16 @@ void restore_mouse_bg(void)
 void load_wallclock_nvf(void)
 {
 	struct nvf_desc nvf;
-	signed short fd;
+	signed short handle; /* REMARK: reused differently */
 
-	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, g_renderbuf_ptr, 2000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
+	read_archive_file(handle, g_renderbuf_ptr, 2000);
+	close(handle);
 
 	nvf.src = g_renderbuf_ptr;
 	nvf.type = 0;
-	nvf.width = &fd;
-	nvf.height = &fd;
+	nvf.width = &handle;
+	nvf.height = &handle;
 
 	/* sky background */
 	nvf.dst = g_objects_nvf_buf;

@@ -123,7 +123,7 @@ void FIG_preload_gfx(void)
 	struct struct_fighter *fighter;
 	signed short i;
 	struct nvf_desc nvf;
-	signed short handle;
+	signed int handle;
 
 	g_fig_list_head = NULL;
 

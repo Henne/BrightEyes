@@ -450,7 +450,7 @@ char g_savegame_names[5][9];			// ds:0xe2da
 void init_text(void)
 {
 	Bit32s len;
-	signed short handle;
+	signed int handle;
 
 	handle = load_archive_file(ARCHIVE_FILE_FONT6);
 	read_archive_file(handle, g_buf_font6, 1000);
@@ -497,15 +497,15 @@ void load_tx(signed short index)
 void load_tx2(signed short index)
 {
 	Bit32s len;
-	register signed short fd;
+	register signed int handle;
 
 	if (index == -1)
 		return;
 
 	g_text_file_index = index;
-	fd = load_archive_file(index);
-	len = (signed short)read_archive_file(fd, g_buffer8_ptr, 12000);
-	close(fd);
+	handle = load_archive_file(index);
+	len = (signed short)read_archive_file(handle, g_buffer8_ptr, 12000);
+	close(handle);
 
 	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, len);
 }
@@ -515,7 +515,7 @@ void load_tx2(signed short index)
 void load_ltx(unsigned short index)
 {
 	Bit32s len;
-	signed short handle;
+	signed int handle;
 
 	handle = load_archive_file(index);
 
@@ -549,14 +549,16 @@ void split_textbuffer(char **dst, char *src, Bit32u len)
 
 void load_ggsts_nvf(void)
 {
-	Bit16u fd;
+	signed int handle;
 
 	/* seek to GGSTS.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_GGSTS_NVF);
+	handle = load_archive_file(ARCHIVE_FILE_GGSTS_NVF);
+
 	/* read it */
-	read_archive_file(fd, g_buffer10_ptr, 16771);
+	read_archive_file(handle, g_buffer10_ptr, 16771);
+
 	/* close it */
-	close(fd);
+	close(handle);
 
 	g_area_prepared = -1;
 }
@@ -616,9 +618,9 @@ void prepare_sg_name(char *dst, char *src)
 signed short load_game_state(void)
 {
 #if defined(__BORLANDC__)
-	register signed short handle_gs;
+	register signed int handle_gs;
 	signed short i;
-	signed short handle;
+	signed int handle;
 	signed short answer;
 	signed short l1;
 	HugePt p_status_start;
@@ -836,7 +838,7 @@ signed short save_game_state(void)
 	HugePt p_status_start;
 	HugePt p_status_end;
 	unsigned short status_len;
-	signed short handle;
+	signed int handle;
 	signed short tw_bak;
 	signed short l1;
 	signed short slot;
@@ -1097,7 +1099,7 @@ signed short save_game_state(void)
 signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 {
 #if defined(__BORLANDC__)
-	signed short handle;
+	signed int handle;
 	signed short hero_size = sizeof(struct struct_hero);
 	struct struct_hero *hero;
 
@@ -1160,16 +1162,18 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 void write_chr_temp(unsigned short hero_pos)
 {
 	char fname[20];
-	unsigned short fd;
+	signed int handle;
 
 	prepare_chr_name(fname, get_hero(hero_pos)->name);
 
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
-	fd = _creat(g_text_output_buf, 0);
-	write(fd, get_hero(hero_pos), sizeof(struct struct_hero));
-	close(fd);
+	handle = _creat(g_text_output_buf, 0);
+
+	write(handle, get_hero(hero_pos), sizeof(struct struct_hero));
+
+	close(handle);
 }
 
 /**
@@ -1184,7 +1188,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 #if defined(__BORLANDC__)
 	signed short count = 0;
 	signed short l_di;
-	signed short handle;
+	signed int handle;
 	struct struct_hero *hero;
 	struct ffblk blk;
 
@@ -1233,7 +1237,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
  */
 void load_in_head(signed short head)
 {
-	signed short handle;
+	signed int handle;
 
 	if (head >= 0) {
 
@@ -1257,7 +1261,7 @@ void load_in_head(signed short head)
 void load_tempicon(signed short no)
 {
 	struct nvf_desc nvf;
-	signed short handle;
+	signed short handle; /* REMARK: reused differently */
 
 	if (no == 14) {
 		no = 7;

@@ -100,7 +100,7 @@ void do_market(void)
 void final_intro(void)
 {
 	signed short i;
-	signed short handle;
+	signed int handle;
 	signed short width;
 	signed short height;
 	Bit32u len;
@@ -255,7 +255,7 @@ void hyg_ani_4(void)
 void show_hyggelik_ani(void)
 {
 	signed short i;
-	signed short handle;
+	signed int handle;
 	Bit32s filelen;
 	Bit8u *src;
 	Bit8u* ptr1;
@@ -424,7 +424,7 @@ void show_times_up(void)
 void show_outro(void)
 {
 	signed short j;
-	signed short handle;
+	signed int handle;
 	signed short width;
 	signed short height;
 	unsigned short len;

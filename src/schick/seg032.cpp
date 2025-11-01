@@ -908,7 +908,7 @@ signed short do_fight(signed short fight_id)
 {
 	signed short i;
 
-	signed short fd;
+	signed int handle;
 	signed short j;
 	signed short new_escape_position_found;
 	signed short group_nr;
@@ -986,9 +986,9 @@ signed short do_fight(signed short fight_id)
 	g_wallclock_update = 0;
 
 	/* open MONSTER.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);
-	read_archive_file(fd, (Bit8u*)g_monster_dat_buf, 3476);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);
+	read_archive_file(handle, (Bit8u*)g_monster_dat_buf, 3476);
+	close(handle);
 
 	/* clear all dropped weapons */
 	g_fig_dropped_counter = 0;
@@ -999,18 +999,18 @@ signed short do_fight(signed short fight_id)
 	load_tx(ARCHIVE_FILE_FIGHTTXT_LTX);
 
 	/* open OBJECTS.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, g_objects_nvf_buf, 3000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
+	read_archive_file(handle, g_objects_nvf_buf, 3000);
+	close(handle);
 
 	FIG_chessboard_init();
 
 	FIG_preload_gfx();
 
 	/* open FIGHTOBJ.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_FIGHTOBJ_NVF);
-	read_archive_file(fd, g_fightobj_buf, 16919);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_FIGHTOBJ_NVF);
+	read_archive_file(handle, g_fightobj_buf, 16919);
+	close(handle);
 
 	set_var_to_zero();
 	update_mouse_cursor();
@@ -1030,14 +1030,14 @@ signed short do_fight(signed short fight_id)
 	FIG_draw_scenario();
 
 	/* open WEAPONS.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_WEAPONS_NVF);
-	read_archive_file(fd, g_weapons_nvf_buf, 6483);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_WEAPONS_NVF);
+	read_archive_file(handle, g_weapons_nvf_buf, 6483);
+	close(handle);
 
 	/* open SPELLOBJ.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_SPELLOBJ_NVF);
-	read_archive_file(fd, g_spellobj_nvf_buf, 3935);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_SPELLOBJ_NVF);
+	read_archive_file(handle, g_spellobj_nvf_buf, 3935);
+	close(handle);
 
 	FIG_init_enemies();
 

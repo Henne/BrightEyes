@@ -754,7 +754,7 @@ signed short get_max_light_time(void)
 void equip_belt_ani(void)
 {
 	signed short i;
-	signed short handle;
+	signed int handle;
 
 	signed short width;
 	signed short height;

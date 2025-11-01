@@ -771,7 +771,7 @@ void cleanup_game(void)
 /* Borlandified and identical */
 void game_over_screen(void)
 {
-	signed short handle;
+	signed int handle;
 
 	set_var_to_zero();
 

@@ -52,7 +52,7 @@ void prepare_dungeon_area(void)
 	HugePt buf;
 
 	signed short l_si;
-	signed short handle;
+	signed int handle;
 
 	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DTX;
 
@@ -115,7 +115,7 @@ void load_dungeon_ddt(void)
 	signed short index;
 	signed short low;
 	signed short high;
-	signed short handle;
+	signed int handle;
 
 	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DDT;
 	handle = load_archive_file(index);
@@ -127,7 +127,6 @@ void load_dungeon_ddt(void)
 	read_archive_file(handle, g_dungeon_stairs_buf, 0x7d0);
 
 	close(handle);
-
 }
 
 void seg028_0224(void)
@@ -209,19 +208,19 @@ void seg028_0224(void)
 
 Bit8u* seg028_0444(signed short index, signed short firstcol, signed short colors, signed short ref)
 {
-	signed short fd;
+	signed int handle;
 	Bit32s v1;
 	Bit32s v2;
 	Bit8u* ptr;
 
 	ptr = (Bit8u*)g_buffer9_ptr4;
 
-	fd = load_archive_file(index);
+	handle = load_archive_file(index);
 
 	v1 = v2 = 0L;
 
 	do {
-		v1 = read_archive_file(fd, (Bit8u*)g_buffer9_ptr4, 65000);
+		v1 = read_archive_file(handle, (Bit8u*)g_buffer9_ptr4, 65000);
 
 		g_buffer9_ptr4 += v1;
 
@@ -229,7 +228,7 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 
 	} while (v1);
 
-	close(fd);
+	close(handle);
 
 	if (colors) {
 
@@ -244,12 +243,11 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 	}
 
 	return ptr;
-
 }
 
 void load_special_textures(signed short arg)
 {
-	signed short handle;
+	signed int handle;
 
 	handle = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
 
@@ -284,24 +282,24 @@ void seg028_0555(signed short town)
 void load_area_description(signed short type)
 {
 	signed short f_index;
-	signed short fd;
+	signed int handle;
 
 	if (g_areadescr_fileid) {
 		if (type != 2) {
-			fd = load_archive_file(g_areadescr_fileid + 0x8000);
+			handle = load_archive_file(g_areadescr_fileid + 0x8000);
 
 			if (!g_areadescr_dng_flag && (g_dng_map_size == 0x20)) {
-				write(fd, (void*)g_dng_map, 512);
+				write(handle, (void*)g_dng_map, 512);
 			} else {
-				lseek(fd, g_areadescr_dng_level * 0x140, 0);
-				write(fd, (void*)g_dng_map, 256);
+				lseek(handle, g_areadescr_dng_level * 0x140, 0);
+				write(handle, (void*)g_dng_map, 256);
 			}
 			/* write automap tiles */
-			write(fd, (void*)g_automap_buf, 64);
+			write(handle, (void*)g_automap_buf, 64);
 			/* write location information */
-			write(fd, (void*)g_locations_tab, g_locations_tab_size);
+			write(handle, (void*)g_locations_tab, g_locations_tab_size);
 
-			close(fd);
+			close(handle);
 
 			g_areadescr_fileid = g_areadescr_dng_level = g_locations_tab_size = g_areadescr_dng_flag = 0;
 		}
@@ -325,39 +323,39 @@ void load_area_description(signed short type)
 		g_areadescr_dng_flag = (gs_dungeon_index != 0 ? 1 : 0);
 
 		/* load DAT or DNG file */
-		fd = load_archive_file(f_index + 0x8000);
+		handle = load_archive_file(f_index + 0x8000);
 
 		if (!gs_dungeon_index && (gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER))
 		{
 			/* path taken in THORWAL PREM and PHEXCAER */
-			_read(fd, g_dng_map, 512);
+			_read(handle, g_dng_map, 512);
 			/* read automap tiles */
-			_read(fd, g_automap_buf, 64);
+			_read(handle, g_automap_buf, 64);
 
 			/* TODO: is that neccessary ? */
 			memset(g_locations_tab, -1, 900);
 
-			g_locations_tab_size = _read(fd, g_locations_tab, 1000);
+			g_locations_tab_size = _read(handle, g_locations_tab, 1000);
 
 			g_dng_map_size = 32;
 		} else {
 			/* Seek to Dungeon Level * 320 */
-			lseek(fd, gs_dungeon_level * 320, 0);
-			_read(fd, g_dng_map, 256);
+			lseek(handle, gs_dungeon_level * 320, 0);
+			_read(handle, g_dng_map, 256);
 
 			/* read automap tiles */
-			_read(fd, g_automap_buf, 64);
+			_read(handle, g_automap_buf, 64);
 			g_locations_tab_size = 0;
 
 			if (!gs_dungeon_index) {
 				/* TODO: is that neccessary ? */
 				memset(g_locations_tab, -1, 900);
-				g_locations_tab_size = _read(fd, g_locations_tab, 1000);
+				g_locations_tab_size = _read(handle, g_locations_tab, 1000);
 			}
 
 			g_dng_map_size = 16;
 		}
-		close(fd);
+		close(handle);
 	}
 }
 
@@ -420,7 +418,7 @@ Bit8u* unused_load(signed short no)
 
 void load_map(void)
 {
-	signed short fd;
+	signed short handle;	/* REMARK: reused differently */
 	signed short wallclock_update_bak;
 	struct nvf_desc nvf;
 
@@ -432,15 +430,15 @@ void load_map(void)
 	g_current_ani = -1;
 
 	/* open OBJECTS.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, g_renderbuf_ptr, 2000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
+	read_archive_file(handle, g_renderbuf_ptr, 2000);
+	close(handle);
 
 	/* load the grey border for the wallclock overlay */
 	nvf.src = g_renderbuf_ptr;
 	nvf.type = 0;
-	nvf.width = &fd;
-	nvf.height = &fd;
+	nvf.width = &handle;
+	nvf.height = &handle;
 	nvf.dst = (Bit8u*)(g_buffer9_ptr + 18000L);
 	nvf.no = 16;
 
@@ -463,10 +461,10 @@ void load_map(void)
 	} else {
 #endif
 		/* or read KARTE.DAT from file */
-		fd = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
+		handle = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
 
-		read_archive_file(fd, (gs_travel_map_ptr = g_renderbuf_ptr), 64098);
-		close(fd);
+		read_archive_file(handle, (gs_travel_map_ptr = g_renderbuf_ptr), 64098);
+		close(handle);
 
 #if defined(__BORLANDC__)
 		if (g_ems_enabled) {
@@ -487,19 +485,19 @@ void load_map(void)
 #endif
 
 	/* load LROUT.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_LROUT_DAT);
-	read_archive_file(fd, g_buffer9_ptr, 7600);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_LROUT_DAT);
+	read_archive_file(handle, g_buffer9_ptr, 7600);
+	close(handle);
 
 	/* load HSROUT.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
-	read_archive_file(fd, g_buffer9_ptr + 7600L, 3800);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
+	read_archive_file(handle, g_buffer9_ptr + 7600L, 3800);
+	close(handle);
 
 	/* load SROUT.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
-	read_archive_file(fd, g_buffer9_ptr + 11400L, 5900);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
+	read_archive_file(handle, g_buffer9_ptr + 11400L, 5900);
+	close(handle);
 
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
@@ -509,7 +507,7 @@ void load_map(void)
 void load_npc(signed short index)
 {
 	struct struct_hero *npc;
-	signed short handle;
+	signed int handle;
 
 	npc = get_hero(6);
 
@@ -533,7 +531,7 @@ void load_npc(signed short index)
 
 void save_npc(signed short index)
 {
-	signed short handle = load_archive_file(index | 0x8000);
+	signed int handle = load_archive_file(index | 0x8000);
 
 	write(handle, get_hero(6), sizeof(struct struct_hero));
 
@@ -542,15 +540,15 @@ void save_npc(signed short index)
 
 void load_splashes(void)
 {
-	signed short fd;
+	signed int handle;
 	signed short width;
 	signed short height;
 	struct nvf_desc nvf;
 
 	/* read SPLASHES.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
-	read_archive_file(fd, g_renderbuf_ptr, 3000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
+	read_archive_file(handle, g_renderbuf_ptr, 3000);
+	close(handle);
 
 	nvf.dst = g_splash_le = g_splash_buffer;
 	nvf.src = g_renderbuf_ptr;
@@ -558,9 +556,10 @@ void load_splashes(void)
 	nvf.type = 1;
 	nvf.width = &width;
 	nvf.height = &height;
-	fd = (signed short)process_nvf(&nvf);
+	/* REMARK: use another variable instead of handle */
+	handle = (signed short)process_nvf(&nvf);
 
-	nvf.dst = g_splash_ae = g_splash_buffer + fd;
+	nvf.dst = g_splash_ae = g_splash_buffer + handle;
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = 1;
 	nvf.type = 1;
@@ -572,7 +571,7 @@ void load_splashes(void)
 void load_informer_tlk(signed short index)
 {
 	signed short i;
-	signed short fd;
+	signed int handle;
 
 	Bit32s text_len;
 	Bit32s off;
@@ -581,22 +580,22 @@ void load_informer_tlk(signed short index)
 
 	g_text_file_index = index;
 
-	fd = load_archive_file(index);
+	handle = load_archive_file(index);
 
 	/* read the header */
-	read_archive_file(fd, (Bit8u*)&off, 4);
-	read_archive_file(fd, (Bit8u*)&partners, 2);
+	read_archive_file(handle, (Bit8u*)&off, 4);
+	read_archive_file(handle, (Bit8u*)&partners, 2);
 
 	/* read the partner structures */
-	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(fd, (Bit8u*)&gs_dialog_states, (Bit16u)(off - partners * sizeof(struct struct_dialog_partner)));
+	read_archive_file(handle, (Bit8u*)&gs_dialog_states, (Bit16u)(off - partners * sizeof(struct struct_dialog_partner)));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, g_buffer8_ptr, 10000);
+	text_len = (signed short)read_archive_file(handle, g_buffer8_ptr, 10000);
 
-	close(fd);
+	close(handle);
 
 	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, text_len);
 
@@ -612,7 +611,7 @@ void load_informer_tlk(signed short index)
 void load_tlk(signed short index)
 {
 	signed short i;
-	signed short fd;
+	signed int handle;
 	Bit32s text_len;
 	Bit32s off;
 	signed short partners;
@@ -620,22 +619,22 @@ void load_tlk(signed short index)
 
 	g_text_file_index = index;
 
-	fd = load_archive_file(index);
+	handle = load_archive_file(index);
 
 	/* read the header */
-	read_archive_file(fd, (Bit8u*)&off, 4);
-	read_archive_file(fd, (Bit8u*)&partners, 2);
+	read_archive_file(handle, (Bit8u*)&off, 4);
+	read_archive_file(handle, (Bit8u*)&partners, 2);
 
 	/* read the partner structures */
-	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(fd, (Bit8u*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (Bit8u*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
+	text_len = (signed short)read_archive_file(handle, (Bit8u*)g_buffer7_ptr, 64000);
 
-	close(fd);
+	close(handle);
 
 	split_textbuffer((char**)g_tx_index, g_buffer7_ptr, text_len);
 
@@ -651,7 +650,7 @@ void load_tlk(signed short index)
 #if defined(__BORLANDC__)
 void unused_load_archive_file(signed short index, unsigned short off, Bit32u seg)
 {
-	signed short handle = load_archive_file(index);
+	signed int handle = load_archive_file(index);
 
 	read_archive_file(handle, (Bit8u*)MK_FP(seg, off), 64000);
 
@@ -661,7 +660,7 @@ void unused_load_archive_file(signed short index, unsigned short off, Bit32u seg
 
 void load_fightbg(signed short index)
 {
-	signed short handle = load_archive_file(index);
+	signed int handle = load_archive_file(index);
 
 	read_archive_file(handle, g_renderbuf_ptr, 30000);
 

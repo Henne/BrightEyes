@@ -115,7 +115,6 @@ void draw_playmask(void)
  */
 void copy_forename(char *dst, char *name)
 {
-
 	int i;
 
 	for (i = 0; i < 7; i++) {
@@ -274,7 +273,7 @@ void clear_hero_icon(unsigned short pos)
 //static
 void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
 {
-	signed short handle;
+	signed int handle;
 
 	handle = load_archive_file(fileindex);
 

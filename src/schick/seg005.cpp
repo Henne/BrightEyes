@@ -347,7 +347,7 @@ void draw_fight_screen(Bit16u val)
 	signed short viewdir_unconsc;
 	Bit8s *sheet;
 	Bit8s *p_weapon_anisheet;
-	signed short handle;
+	signed int handle;
 	struct nvf_desc nvf;
 	signed short figlist_remove[8];
 

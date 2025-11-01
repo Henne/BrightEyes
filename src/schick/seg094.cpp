@@ -52,17 +52,17 @@ static unsigned char g_route_tevent_flags[15];	// ds:0xe4c9
 
 void prepare_map_marker(void)
 {
-	signed short i;
-	signed short fd;
+	signed int i;
+	signed int handle;
 	signed short dummy;
 	struct nvf_desc nvf;
 
 	/* load OBJECTS.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
+	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
 
-	read_archive_file(fd, g_buffer6_ptr, 2000);
+	read_archive_file(handle, g_buffer6_ptr, 2000);
 
-	close(fd);
+	close(handle);
 
 	for (i = 0; i < 10; i++) {
 		nvf.dst = g_buffer6_ptr + 100 * i + 1000;

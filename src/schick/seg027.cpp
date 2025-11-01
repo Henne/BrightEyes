@@ -35,7 +35,7 @@ static unsigned char g_unkn_038[4] = { 0xb8, 0x14, 0x00, 0x50 }; // ds:0x5eb4
 
 void load_pp20(signed short index)
 {
-	volatile signed short fd;
+	volatile signed int handle;
 	Bit8u* buffer_ptr;
 	signed short bi;
 
@@ -65,19 +65,19 @@ void load_pp20(signed short index)
 				g_pp20_buffer_lengths[bi]);
 
 		} else {
-			fd = load_archive_file(index);
+			handle = load_archive_file(index);
 
-			if ((buffer_ptr = schick_alloc(get_readlength2(fd)))) {
+			if ((buffer_ptr = schick_alloc(get_readlength2(handle)))) {
 				/* successful allocation */
 
 				/* save pointer */
 				g_pp20_buffers[bi] = buffer_ptr;
 
 				/* save length */
-				g_pp20_buffer_lengths[bi] = get_readlength2(fd);
+				g_pp20_buffer_lengths[bi] = get_readlength2(handle);
 
 				/* read pic */
-				read_archive_file(fd, g_pp20_buffers[bi], g_pp20_buffer_lengths[bi]);
+				read_archive_file(handle, g_pp20_buffers[bi], g_pp20_buffer_lengths[bi]);
 
 				/* decompress */
 				decomp_pp20(g_pp20_buffers[bi], g_renderbuf_ptr,
@@ -89,12 +89,12 @@ void load_pp20(signed short index)
 #endif
 					g_pp20_buffer_lengths[bi]);
 
-				close(fd);
+				close(handle);
 			} else {
 				/* failed allocation */
 
 				/* read it directly */
-				read_archive_file(fd, g_renderbuf_ptr - 8, 64000);
+				read_archive_file(handle, g_renderbuf_ptr - 8, 64000);
 
 				/* decompress it */
 				decomp_pp20(g_renderbuf_ptr - 8, g_renderbuf_ptr,
@@ -104,18 +104,18 @@ void load_pp20(signed short index)
 					FP_OFF(g_renderbuf_ptr -8) +4,
 					FP_SEG(g_renderbuf_ptr -8),
 #endif
-					get_readlength2(fd));
+					get_readlength2(handle));
 
-				close(fd);
+				close(handle);
 			}
 		}
 
 	} else {
 
 		/* unbuffered picture */
-		fd = load_archive_file(index);
+		handle = load_archive_file(index);
 
-		read_archive_file(fd, g_renderbuf_ptr - 8, 64000);
+		read_archive_file(handle, g_renderbuf_ptr - 8, 64000);
 
 		/* decompress it */
 		decomp_pp20(g_renderbuf_ptr - 8, g_renderbuf_ptr,
@@ -125,9 +125,9 @@ void load_pp20(signed short index)
 			FP_OFF(g_renderbuf_ptr - 8) + 4,
 			FP_SEG(g_renderbuf_ptr - 8),
 #endif
-			get_readlength2(fd));
+			get_readlength2(handle));
 
-		close(fd);
+		close(handle);
 	}
 }
 
@@ -146,7 +146,7 @@ Bit8u* load_fight_figs(signed short fig)
 	unsigned short ems_handle;
 	Bit32u offset;
 	Bit32u len;
-	unsigned short fd;
+	signed int handle;
 	signed short max_entries;
 	struct struct_memslot_fig *memslots;
 	Bit32u *p_tab;
@@ -228,13 +228,13 @@ Bit8u* load_fight_figs(signed short fig)
 		offset = p_tab[fig - 1];
 		len = p_tab[fig] - offset;
 
-		fd = load_archive_file(index);
+		handle = load_archive_file(index);
 
-		seek_archive_file(fd, offset, 0);
+		seek_archive_file(handle, offset, 0);
 
-		read_archive_file(fd, (Bit8u*)src, (unsigned short)len);
+		read_archive_file(handle, (Bit8u*)src, (unsigned short)len);
 
-		close(fd);
+		close(handle);
 
 		if ((dst = schick_alloc(len))) {
 #if !defined(__BORLANDC__)
@@ -292,7 +292,7 @@ void load_ani(const signed short no)
 	signed short i_area;
 	signed short area_pics;
 	signed short area_changes;
-	unsigned short fd;
+	signed int handle;
 	signed short i;
 	struct ani_area_in *p_area;
 	unsigned short ems_handle;
@@ -358,11 +358,11 @@ void load_ani(const signed short no)
 		ani_len = g_buffer_anis_tab[no]- ani_off;
 
 		/* load ANIS */
-		fd = load_archive_file(ARCHIVE_FILE_ANIS);
+		handle = load_archive_file(ARCHIVE_FILE_ANIS);
 
 		/* seek to ordered ani */
-		seek_archive_file(fd, ani_off, 0);
-		read_archive_file(fd, (Bit8u*)g_buffer9_ptr, (unsigned short)ani_len);
+		seek_archive_file(handle, ani_off, 0);
+		read_archive_file(handle, (Bit8u*)g_buffer9_ptr, (unsigned short)ani_len);
 
 		/* if EMS is enabled buffer it */
 		if ((g_ems_enabled != 0) && (ems_handle = alloc_EMS(ani_len))) {
@@ -382,7 +382,7 @@ void load_ani(const signed short no)
 			to_EMS(ems_handle, (Bit8u*)g_buffer9_ptr, ani_len);
 		}
 
-		close(fd);
+		close(handle);
 	}
 
 	ani_buffer = g_buffer9_ptr;
@@ -529,27 +529,27 @@ void load_ani(const signed short no)
  */
 void load_scenario(signed short scenario_id)
 {
-	signed short scenario_lst_handle;
+	signed int handle;
 	signed short scenario_lst_buf;
 
 	/* load SCENARIO.LST */
-	scenario_lst_handle = load_archive_file(ARCHIVE_FILE_SCENARIO_LST);
+	handle = load_archive_file(ARCHIVE_FILE_SCENARIO_LST);
 
 	/* read the first two bytes == scenario_id of scenarios */
-	read_archive_file(scenario_lst_handle, (Bit8u*)&scenario_lst_buf, 2);
+	read_archive_file(handle, (Bit8u*)&scenario_lst_buf, 2);
 
 	/* check if scenario_id is valid */
 	if ((scenario_id > scenario_lst_buf) || (scenario_id < 1))
 		scenario_id = 1;
 
 	/* seek to the scenario */
-	seek_archive_file(scenario_lst_handle, 621L * (scenario_id - 1) + 2, 0);
+	seek_archive_file(handle, 621L * (scenario_id - 1) + 2, 0);
 
 	/* read scenario */
-	read_archive_file(scenario_lst_handle, (Bit8u*)g_scenario_buf, 621);
+	read_archive_file(handle, (Bit8u*)g_scenario_buf, 621);
 
 	/* close archive */
-	close(scenario_lst_handle);
+	close(handle);
 }
 
 /**
@@ -565,7 +565,7 @@ signed short count_fight_enemies(signed short fight_id)
 	signed short enemy_i;
 	signed short enemy_count;
 	struct fight *fight_lst_buf;
-	unsigned short fight_lst_handle;
+	signed int handle;
 	signed short fight_count;
 
 	enemy_count = 0;
@@ -573,23 +573,23 @@ signed short count_fight_enemies(signed short fight_id)
 	fight_lst_buf = (struct fight*)g_dtp2;
 
 	/* load FIGHT.LST from TEMP dir */
-	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
+	handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* read the first 2 bytes (fight_count number of fights) */
-	_read(fight_lst_handle, (void*)&fight_count, 2);
+	_read(handle, (void*)&fight_count, 2);
 
 	/* sanity check for parameter fight_id */
 	if ((fight_id > (fight_count - 1)) || (fight_id < 0))
 		fight_id = 0;
 
 	/* seek to file position */
-	lseek(fight_lst_handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
+	lseek(handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(fight_lst_handle, (void*)fight_lst_buf, sizeof(struct fight));
+	_read(handle, (void*)fight_lst_buf, sizeof(struct fight));
 
 	/* close FIGHT.LST */
-	close(fight_lst_handle);
+	close(handle);
 
 	/* check all enemies */
 	for (enemy_i = 0; enemy_i < 20; enemy_i++) {
@@ -612,14 +612,14 @@ signed short count_fight_enemies(signed short fight_id)
  */
 void read_fight_lst(signed short fight_id)
 {
-	unsigned short fight_lst_handle;
+	signed int handle;
 	signed short fight_count;
 
 	/* load FIGHT.LST from TEMP dir */
-	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
+	handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* read the first 2 bytes (fight_count number of fights) */
-	_read(fight_lst_handle, (void*)&fight_count, 2);
+	_read(handle, (void*)&fight_count, 2);
 
 	/* sanity check for parameter fight_id */
 	if ((fight_count - 1) < fight_id || fight_id < 0)
@@ -629,10 +629,13 @@ void read_fight_lst(signed short fight_id)
 	g_current_fight_id = fight_id;
 
 	/* seek to file position */
-	lseek(fight_lst_handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
+	lseek(handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(fight_lst_handle, (Bit8u*)g_current_fight, sizeof(struct fight));
+	_read(handle, (Bit8u*)g_current_fight, sizeof(struct fight));
+
+	/* close FIGHT.LST */
+	close(handle);
 
 #if !defined(__BORLANDC__)
 	char fight_name[21];
@@ -643,8 +646,6 @@ void read_fight_lst(signed short fight_id)
 	/* Improvement end */
 #endif
 
-	/* close FIGHT.LST */
-	close(fight_lst_handle);
 }
 
 /**
@@ -653,31 +654,31 @@ void read_fight_lst(signed short fight_id)
 void write_fight_lst(void)
 {
 	signed short fight_id;
-	signed short fight_lst_handle;
+	signed int handle;
 
 	fight_id = g_current_fight_id;
 
 	/* load FIGHT.LST from TEMP dir */
-	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
+	handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* seek to the entry */
-	lseek(fight_lst_handle, (Bit32s)fight_id * sizeof(struct fight) + 2, SEEK_SET);
+	lseek(handle, (Bit32s)fight_id * sizeof(struct fight) + 2, SEEK_SET);
 
 	/* write it */
-	write(fight_lst_handle, g_current_fight, sizeof(struct fight));
+	write(handle, g_current_fight, sizeof(struct fight));
 
 	/* close the file */
-	close(fight_lst_handle);
+	close(handle);
 }
 
 void init_common_buffers(void)
 {
-	unsigned short fd;
+	signed int handle;
 	signed short bytes;
 
-	fd = load_archive_file(ARCHIVE_FILE_POPUP_DAT);
-	bytes = read_archive_file(fd, g_popup - 8, 500);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_POPUP_DAT);
+	bytes = read_archive_file(handle, g_popup - 8, 500);
+	close(handle);
 
 	/* decompress POPUP.DAT */
 	decomp_pp20(g_popup - 8, g_popup,
@@ -689,37 +690,37 @@ void init_common_buffers(void)
 #endif
 		bytes);
 
-	fd = load_archive_file(ARCHIVE_FILE_COMPASS);
-	bytes = read_archive_file(fd, g_buffer6_ptr, 5000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_COMPASS);
+	bytes = read_archive_file(handle, g_buffer6_ptr, 5000);
+	close(handle);
 
-	fd = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);
-	bytes = read_archive_file(fd, (Bit8u*)g_itemsdat, 255 * sizeof(item_stats));
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);
+	bytes = read_archive_file(handle, (Bit8u*)g_itemsdat, 255 * sizeof(item_stats));
+	close(handle);
 
-	fd = load_archive_file(ARCHIVE_FILE_ANIS_TAB);
-	read_archive_file(fd, (Bit8u*)&g_buffer_anis_tab, 148);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_ANIS_TAB);
+	read_archive_file(handle, (Bit8u*)&g_buffer_anis_tab, 148);
+	close(handle);
 
-	fd = load_archive_file(ARCHIVE_FILE_MFIGS_TAB);
-	read_archive_file(fd, (Bit8u*)&g_buffer_mfigs_tab, 172);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_MFIGS_TAB);
+	read_archive_file(handle, (Bit8u*)&g_buffer_mfigs_tab, 172);
+	close(handle);
 
-	fd = load_archive_file(ARCHIVE_FILE_WFIGS_TAB);
-	read_archive_file(fd, (Bit8u*)&g_buffer_wfigs_tab, 172);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_WFIGS_TAB);
+	read_archive_file(handle, (Bit8u*)&g_buffer_wfigs_tab, 172);
+	close(handle);
 
-	fd = load_archive_file(ARCHIVE_FILE_MONSTER_TAB);
-	read_archive_file(fd, (Bit8u*)&g_buffer_monster_tab, 144);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_MONSTER_TAB);
+	read_archive_file(handle, (Bit8u*)&g_buffer_monster_tab, 144);
+	close(handle);
 
-	fd = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
-	_read(fd, (Bit8u*)&g_savegame_names, 45);
-	close(fd);
+	handle = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
+	_read(handle, (Bit8u*)&g_savegame_names, 45);
+	close(handle);
 
-	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
-	read_archive_file(fd, g_townpal_buf, 288);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
+	read_archive_file(handle, g_townpal_buf, 288);
+	close(handle);
 }
 
 #if !defined(__BORLANDC__)

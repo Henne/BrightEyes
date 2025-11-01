@@ -379,7 +379,7 @@ void read_sound_cfg(void)
 	signed short dummy;
 	signed short digi_port;
 	signed short digi_irq;
-	signed short handle;
+	signed int handle;
 
 	/* try to open SOUND.CFG */
 	if ( (handle = open(g_fname_sound_cfg, O_BINARY | O_RDONLY)) != -1) {
@@ -508,7 +508,7 @@ Bit8u* read_music_driver(Bit8u* fname)
 	Bit8u* buf;
 	Bit32u ptr;
 
-	signed short handle;
+	signed int handle;
 
 	if ( (handle = open((char*)fname, O_BINARY | O_RDONLY)) != -1) {
 
@@ -617,7 +617,7 @@ signed short load_midi_file(signed short index)
 signed short do_load_midi_file(signed short index)
 {
 #if defined(__BORLANDC__)
-	signed short handle;
+	signed int handle;
 
 	if ((handle = load_archive_file(index)) != -1) {
 		read_archive_file(handle, g_ail_midi_buffer, 0x7fff);
@@ -856,7 +856,7 @@ signed short read_new_voc_file(signed short index)
 signed short read_voc_file(signed short index)
 {
 #if defined(__BORLANDC__)
-	signed short handle;
+	signed int handle;
 
 	if ( (handle = load_archive_file(index)) != -1) {
 		read_archive_file(handle, g_ail_voc_buffer, 0x7fff);
@@ -948,7 +948,7 @@ unsigned char* read_digi_driver(char *fname)
 	Bit8u *buf;
 	Bit32u ptr;
 
-	signed short handle;
+	signed int handle;
 
 	if ( (handle = open(fname, O_BINARY | O_RDONLY)) != -1) {
 
@@ -977,7 +977,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 {
 	Bit32u start;
 	Bit32u end;
-	signed short handle;
+	signed int handle;
 
 	/* open SCHICK.DAT */
 #if defined(__BORLANDC__) || defined(_WIN32)
@@ -1061,7 +1061,7 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 
 signed short load_regular_file(Bit16u index)
 {
-	signed short handle;
+	signed int handle;
 
 #if defined(__BORLANDC__) || defined(_WIN32)
 	if ( (handle = open(g_fnames_v302de[index], O_BINARY | O_RDWR)) == -1) {
@@ -1097,7 +1097,7 @@ signed short load_archive_file(Bit16u index)
 signed short open_temp_file(unsigned short index)
 {
 	char tmppath[40];
-	signed short handle;
+	signed int handle;
 
 	sprintf((char*)tmppath, g_str_temp_xx_ptr2, g_fnames_v302de[index]);
 
@@ -1122,8 +1122,8 @@ signed short open_temp_file(unsigned short index)
 
 void copy_from_archive_to_temp(unsigned short index, char* fname)
 {
-	signed short handle1;
-	signed short handle2;
+	signed int handle1;
+	signed int handle2;
 	signed short len;
 
 	if ( (handle1 = load_archive_file(index)) != -1) {
@@ -1145,8 +1145,8 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 
 void copy_file_to_temp(char* src_file, char* fname)
 {
-	signed short handle1;
-	signed short handle2;
+	signed int handle1;
+	signed int handle2;
 	signed short len;
 
 #if defined(__BORLANDC__) || defined(_WIN32)
@@ -4034,7 +4034,7 @@ Bit32u swap_u32_unused(Bit32u v)
  */
 signed short alloc_EMS(Bit32s bytes)
 {
-	signed short handle;
+	signed int handle;
 
 	/* calculate the number of needes EMS pages */
 	handle = (signed short)((bytes / 0x4000) + 1);
@@ -4107,7 +4107,7 @@ void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
 
 void clear_menu_icons(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 9; i++) {
 		g_new_menu_icons[i] = MENU_ICON_NONE;
@@ -4124,9 +4124,8 @@ void draw_loc_icons(signed short icons, ...)
 {
 	signed short icons_bak[9];
 	va_list arguments;
-	signed short i, changed;
-
-	changed = 0;
+	signed int i;
+	signed int changed = 0;
 
 	/* save icon ids in local variable */
 	for (i = 0; i < 9; i++) {
