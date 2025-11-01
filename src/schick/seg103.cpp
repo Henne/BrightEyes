@@ -32,15 +32,14 @@ struct dummy {
 };
 
 static char g_select_skill_lvlup[6] = "%s~%d"; // ds:0xacce
-static signed char g_select_skill_defaults[6] = { TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1 }; // ds:0xacd4, {44, 45, 46, -1, -1, -1}
+static signed char g_select_skill_defaults[6] = { TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1 }; // ds:0xacd4
 
-signed int LVL_select_skill(struct struct_hero *hero, const signed int show_values)
+signed int LVL_select_skill(const struct struct_hero *hero, const signed int show_values)
 {
-	signed short i;
-
-	signed short answer;
-	signed short l1;
-	signed short retval = -1;
+	signed int i;
+	signed int answer;
+	signed int first_skill;
+	signed int retval = -1;
 	/* string on stack "%s~%d" */
 	struct dummy format_str = *(struct dummy*)g_select_skill_lvlup;
 
@@ -65,20 +64,20 @@ signed int LVL_select_skill(struct struct_hero *hero, const signed int show_valu
 
 	if (answer != -2) {
 
-		l1 = g_skills_index[answer].first;
+		first_skill = g_skills_index[answer].first;
 
 		if (show_values != 0) {
 
 			for (i = 0; g_skills_index[answer].length > i; i++) {
 
-				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(l1 + i + 48), hero->skills[l1 + i]);
+				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(first_skill + i + 48), hero->skills[first_skill + i]);
 
 				g_radio_name_list[i] = g_dtp2 + 50 * i;
 			}
 		} else {
 
 			for (i = 0; g_skills_index[answer].length > i; i++) {
-				g_radio_name_list[i] = get_ttx(l1 + i + 48);
+				g_radio_name_list[i] = get_ttx(first_skill + i + 48);
 			}
 		}
 
@@ -93,8 +92,9 @@ signed int LVL_select_skill(struct struct_hero *hero, const signed int show_valu
 				g_radio_name_list[14], g_radio_name_list[15]);
 
 		if (retval != -1) {
-			retval += l1 - 1;
+			retval += first_skill - 1;
 		}
+
 	} else {
 		retval = -2;
 	}
@@ -110,15 +110,15 @@ signed int LVL_select_skill(struct struct_hero *hero, const signed int show_valu
 struct struct_hero* get_proper_hero(const signed int skill_id)
 /* called from only a single position, namely test_skill((struct struct_hero*)..), and only if game is in 'easy' mode and the tested skill is TA_SINNESSCHAERFE */
 {
-	signed short i;
-	signed short cur;
+	signed int i;
+	signed int cur;
 
-	signed short max = -1;
+	signed int max = -1;
 	struct struct_hero *hero_i;
-	struct struct_hero* retval;
+	struct struct_hero *retval;
 
 #if !defined(__BORLANDC__)
-	retval = 0;
+	retval = NULL;
 #endif
 
 	hero_i = get_hero(0);
@@ -164,10 +164,10 @@ struct struct_hero* get_proper_hero(const signed int skill_id)
  * \param   skill       the skill to test
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
-signed short test_skill(struct struct_hero* hero, const signed int skill_id, signed char handicap)
+signed int test_skill(const struct struct_hero* hero, const signed int skill_id, signed char handicap)
 {
-	signed short randval;
-	signed short e_skillval;
+	signed int randval;
+	signed int e_skillval;
 
 	/* dont test for melee weapon skills */
 	if ((skill_id >= TA_SCHUSSWAFFEN) && (skill_id <= TA_SINNESSCHAERFE)) {
@@ -249,10 +249,11 @@ struct dummy2 {
 	signed char a[6];
 };
 
-signed short select_skill(void)
+signed int select_skill(void)
 {
-	signed short l_si = -1;
-	signed short nr_skills = 3;
+	signed int retval = -1;
+	signed int nr_skills = 3;
+
 	/* available skills {TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1} */
 	struct dummy2 a = *(struct dummy2*)g_select_skill_defaults;
 
@@ -281,7 +282,7 @@ signed short select_skill(void)
 		nr_skills++;
 	}
 
-	l_si = GUI_radio(get_ttx(218), (signed char)nr_skills,
+	retval = GUI_radio(get_ttx(218), (signed char)nr_skills,
 				get_ttx(a.a[0] + 48),
 				get_ttx(a.a[1] + 48),
 				get_ttx(a.a[2] + 48),
@@ -290,38 +291,36 @@ signed short select_skill(void)
 				get_ttx(a.a[5] + 48),
 				get_ttx(a.a[6] + 48));
 
-	if (l_si != -1) {
-		return a.a[l_si - 1];
+	if (retval != -1) {
+		return a.a[retval - 1];
 	}
 
-	return l_si;
+	return retval;
 }
 
-signed short use_skill(signed short hero_pos, signed char handicap, signed short skill)
+signed int use_skill(const signed int hero_pos, signed char handicap, const signed int skill_id)
 {
-	signed short l_si;
-	signed short le_damage;
+	signed int retval = 1;
+	signed int le_damage;
 
-	signed short patient_pos;
-	signed short le;
-	struct struct_hero *hero;
+	signed int patient_pos;
+	signed int le;
+	struct struct_hero *hero = get_hero(hero_pos);
 	struct struct_hero *patient;
 	Bit32s money;
-	signed short poison_id;
-	signed short tx_file_bak;
+	signed int poison_id;
+	signed int tx_file_bak;
 
-	l_si = 1;
-
-	hero = get_hero(hero_pos);
-
-	if (skill != -1) {
+	if (skill_id != -1) {
 
 		tx_file_bak = g_tx_file_index;
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-		switch(skill) {
+		switch (skill_id) {
+
 		case TA_HEILEN_GIFT: {
+
 			g_hero_sel_exclude = (signed char)hero_pos;
 
 			patient_pos = select_hero_from_group(get_ttx(460));
@@ -371,7 +370,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 									} while (le <= 0);
 
-									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
+									if ((retval = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
 										sprintf(g_dtp2,	get_ttx(691), hero->alias, patient->alias, le);
 
@@ -393,7 +392,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 										sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 										GUI_output(g_dtp2);
 
-										l_si = 0;
+										retval = 0;
 									}
 								}
 							} else {
@@ -412,6 +411,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			break;
 		}
 		case  TA_HEILEN_KRANKHEITEN : {
+
 			g_hero_sel_exclude = (signed char)hero_pos;
 
 			patient_pos = select_hero_from_group(get_ttx(460));
@@ -425,6 +425,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			break;
 		}
 		case TA_HEILEN_WUNDEN : {
+
 			g_hero_sel_exclude = (signed char)hero_pos;
 
 			patient_pos = select_hero_from_group(get_ttx(460));
@@ -454,11 +455,11 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 							if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
-								l_si = hero->skills[TA_HEILEN_WUNDEN] > 1 ? hero->skills[TA_HEILEN_WUNDEN] : 1;
+								retval = hero->skills[TA_HEILEN_WUNDEN] > 1 ? hero->skills[TA_HEILEN_WUNDEN] : 1;
 
-								add_hero_le(patient, l_si);
+								add_hero_le(patient, retval);
 
-								sprintf(g_dtp2, get_ttx(691), hero->alias, patient->alias, l_si);
+								sprintf(g_dtp2, get_ttx(691), hero->alias, patient->alias, retval);
 								GUI_output(g_dtp2);
 
 							} else {
@@ -476,7 +477,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 								GUI_output(g_dtp2);
 
-								l_si = 0;
+								retval = 0;
 
 								patient->staffspell_timer = DAYS(1); /* TODO: Why STAFFSPELL ?? BUG! */
 								//patient->heal_timer = DAYS(1);
@@ -531,7 +532,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					gs_ingame_timers[INGAME_TIMER_AKROBATIK] = HOURS(8);
 
-					l_si = -1;
+					retval = -1;
 				}
 			}
 			break;
@@ -564,7 +565,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					gs_ingame_timers[INGAME_TIMER_MUSIZIEREN] = HOURS(8);
 
-					l_si = -1;
+					retval = -1;
 				}
 			}
 			break;
@@ -589,7 +590,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				gs_tav_cheated_flags[gs_current_typeindex] = 1;
 
-				l_si = -1;
+				retval = -1;
 			}
 
 			break;
@@ -618,13 +619,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				g_request_refresh = 1;
 
-				l_si = -1;
+				retval = -1;
 			}
 
 			break;
 		}
 		case TA_ALCHIMIE : {
-			l_si = plan_alchemy(hero);
+			retval = plan_alchemy(hero);
 			break;
 		}
 		}
@@ -634,15 +635,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 		}
 	}
 
-	return l_si;
+	return retval;
 }
 
-signed short GUI_use_skill(signed short hero_pos, signed char handicap)
+signed int GUI_use_skill(const signed int hero_pos, const signed char handicap)
 {
-	signed short skill_id;
-	struct struct_hero *hero;
-
-	hero = get_hero(hero_pos);
+	signed int skill_id;
+	const struct struct_hero *hero = get_hero(hero_pos);
 
 	if (!check_hero(hero)) {
 		return -1;
@@ -652,25 +651,24 @@ signed short GUI_use_skill(signed short hero_pos, signed char handicap)
 	return use_skill(hero_pos, handicap, skill_id);
 }
 
-signed short GUI_use_skill2(signed short handicap, char *msg)
+signed int GUI_use_skill2(const signed int handicap, char *msg)
 {
-	signed short hero_pos;
-	signed short skill;
+	signed int hero_pos;
+	const signed int skill_id = select_skill();
 
-	skill = select_skill();
+	if (skill_id != -1) {
 
-	if (skill != -1) {
-
-		g_skilled_hero_pos = get_skilled_hero_pos(skill);
+		g_skilled_hero_pos = get_skilled_hero_pos(skill_id);
 
 		hero_pos = select_hero_ok(msg);
 
 		if ((hero_pos != -1) && get_hero(hero_pos)->flags.brewing) {
+
 			GUI_output(get_ttx(730));
 			hero_pos = -1;
 		}
 		if (hero_pos != -1) {
-			return use_skill(hero_pos, (signed char)handicap, skill);
+			return use_skill(hero_pos, (signed char)handicap, skill_id);
 		}
 	}
 
@@ -688,7 +686,7 @@ signed short GUI_use_skill2(signed short handicap, char *msg)
  * \return              the result of the throw. A value greater than zero
  *	means success, below or zero means failed.
  */
-signed int bargain(struct struct_hero *hero, const signed int items, const Bit32s price,
+signed int bargain(const struct struct_hero *hero, const signed int items, const Bit32s price,
 	const signed int percent, const signed char mod_init)
 {
 

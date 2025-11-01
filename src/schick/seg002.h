@@ -148,10 +148,10 @@ void set_automap_tile(signed short, signed short);
 void set_automap_tiles(signed short, signed short);
 void seg002_47e2(void);
 void seg002_484f(void);
-signed short check_hero(struct struct_hero*);
-signed short check_hero_no2(struct struct_hero*);
-signed short check_hero_no3(struct struct_hero*);
-signed short is_hero_available_in_group(struct struct_hero*);
+signed int check_hero(const struct struct_hero*);
+signed int check_hero_no2(const struct struct_hero*);
+signed int check_hero_no3(const struct struct_hero*);
+signed int is_hero_available_in_group(const struct struct_hero*);
 void sub_ae_splash(struct struct_hero*, signed int);
 void add_hero_ae(struct struct_hero*, const signed int);
 void sub_hero_le(struct struct_hero*, const signed short);
@@ -162,8 +162,8 @@ void do_starve_damage(struct struct_hero*, const signed int, const signed int);
 #if defined(__BORLANDC__)
 signed short compare_name(char*);
 #endif
-signed short test_attrib(struct struct_hero*, const signed int, const signed int);
-signed short test_attrib3(struct struct_hero*, const signed int, const signed int, const signed int, signed char);
+signed int test_attrib(const struct struct_hero*, const signed int, const signed int);
+signed int test_attrib3(const struct struct_hero*, const signed int, const signed int, const signed int, signed char);
 signed short unused_cruft(void);
 signed short get_random_hero(void);
 Bit32s get_party_money(void);

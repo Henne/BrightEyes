@@ -49,31 +49,31 @@ void mspell_paralue(void);
 
 /* 0x6b */
 /* should be static */
-void MON_do_spell_damage(signed short);
+void MON_do_spell_damage(const signed int);
 
 /* 0x70 */
 /* unused */
-signed short MON_get_target_PA(void);
+signed int MON_get_target_PA(void);
 
 /* 0x75 */
 /* unused */
-signed short MON_get_target_RS(void);
+signed int MON_get_target_RS(void);
 
 /* 0x7a */
 /* should be static */
-signed short MON_get_spell_cost(signed short, signed short);
+signed int MON_get_spell_cost(const signed int, const signed int);
 
 /* 0x7f */
 /* should be static */
-signed short MON_test_attrib3(struct enemy_sheet*, signed short, signed short, signed short, signed char);
+signed int MON_test_attrib3(const struct enemy_sheet*, const signed int, const signed int, const int, signed char);
 
 /* 0x84 */
 /* should be static */
-signed short MON_test_skill(struct enemy_sheet*, signed short, signed char);
+signed int MON_test_skill(const struct enemy_sheet*, const signed int, signed char);
 
 /* 0x89 */
 /* should be static */
-void MON_sub_ae(struct enemy_sheet*, signed short);
+void MON_sub_ae(struct enemy_sheet*, signed int);
 
 #if !defined(__BORLANDC__)
 }

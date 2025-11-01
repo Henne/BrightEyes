@@ -4436,7 +4436,7 @@ void seg002_484f(void)
  * \param   hero        pointer to the hero
  * \return              {0, 1}
  */
-signed short check_hero(struct struct_hero *hero)
+signed int check_hero(const struct struct_hero *hero)
 {
 	if (!hero->typus || hero->flags.asleep || hero->flags.dead || hero->flags.petrified ||
 		hero->flags.unconscious || hero->flags.renegade || (hero->action_id == FIG_ACTION_FLEE))
@@ -4451,7 +4451,7 @@ signed short check_hero(struct struct_hero *hero)
  * \brief   returns true if the hero is not dead, petrified, unconscious or renegade
  */
 /* should be static */
-signed short check_hero_no2(struct struct_hero *hero)
+signed int check_hero_no2(const struct struct_hero *hero)
 {
 
 	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious || hero->flags.renegade)
@@ -4469,7 +4469,7 @@ signed short check_hero_no2(struct struct_hero *hero)
  * \return              {0, 1}
  */
 /* should be static */
-signed short check_hero_no3(struct struct_hero *hero)
+signed int check_hero_no3(const struct struct_hero *hero)
 {
 	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious)
 	{
@@ -4479,7 +4479,7 @@ signed short check_hero_no3(struct struct_hero *hero)
 	return 1;
 }
 
-signed short is_hero_available_in_group(struct struct_hero *hero)
+signed int is_hero_available_in_group(const struct struct_hero *hero)
 {
 	if (check_hero(hero) &&	(hero->group_no == gs_current_group)) {
 
@@ -4845,32 +4845,32 @@ signed short compare_name(char *name)
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  * \return              the result of the test. > 0: success; <= 0: failure; -99: critical failure
  */
-signed short test_attrib(struct struct_hero* hero, const signed int attrib_id, const signed int handicap)
+signed int test_attrib(const struct struct_hero* hero, const signed int attrib_id, const signed int handicap)
 {
-	signed short si = random_schick(20);
-	signed short tmp;
+	signed int randval = random_schick(20);
+	signed int att_val;
 
 #if !defined(__BORLANDC__)
-	D1_INFO("Eigenschaftsprobe %s auf %s %+d: W20 = %d", hero->alias, names_attrib[attrib_id], handicap, si);
+	D1_INFO("Eigenschaftsprobe %s auf %s %+d: W20 = %d", hero->alias, names_attrib[attrib_id], handicap, randval);
 #endif
 
-	if (si == 20) {
+	if (randval == 20) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Ungluecklich\n");
 #endif
 		return -99;
 	} else {
 
-		si += handicap;
+		randval += handicap;
 	}
 
-	tmp = hero->attrib[attrib_id].current + hero->attrib[attrib_id].mod;
+	att_val = hero->attrib[attrib_id].current + hero->attrib[attrib_id].mod;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" -> %s mit %d\n", (tmp - si + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - si + 1));
+	D1_INFO(" -> %s mit %d\n", (att_val - randval + 1) > 0 ? "bestanden" : "nicht bestanden", (att_val - randval + 1));
 #endif
 
-	return tmp - si + 1;
+	return att_val - randval + 1;
 }
 
 /**
@@ -4889,7 +4889,7 @@ signed short test_attrib(struct struct_hero* hero, const signed int attrib_id, c
  *                      ordinary success: any value between 1 and 98.
  */
 
-signed short test_attrib3(struct struct_hero* hero, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
+signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
 {
 #ifndef M302de_FEATURE_MOD
 	/* Feature mod 6: The implementation of the skill test logic differs from the original DSA2/3 rules.

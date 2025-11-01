@@ -33,7 +33,7 @@ struct struct_hero *g_spelltarget;		// ds:0xe5b8
 struct struct_hero *g_spelluser;		// ds:0xe5bc
 static struct enemy_sheet *g_spelluser_e;	// ds:0xe5c0
 
-void MON_do_spell_damage(signed short damage)
+void MON_do_spell_damage(const signed int damage)
 {
 	if (damage > 0) {
 
@@ -75,7 +75,7 @@ void MON_do_spell_damage(signed short damage)
 }
 
 /* unused */
-signed short MON_get_target_PA(void)
+signed int MON_get_target_PA(void)
 {
 	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
@@ -98,7 +98,7 @@ signed short MON_get_target_PA(void)
 }
 
 /* unused */
-signed short MON_get_target_RS(void)
+signed int MON_get_target_RS(void)
 {
 	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
@@ -120,15 +120,13 @@ signed short MON_get_target_RS(void)
 	}
 }
 
-signed short MON_get_spell_cost(signed short mspell_id, signed short flag)
+signed int MON_get_spell_cost(const signed int mspell_id, const signed int flag)
 {
-	signed char cost;
-
-	cost = g_mon_spell_descriptions[mspell_id].ae_cost;
+	signed char cost = g_mon_spell_descriptions[mspell_id].ae_cost;
 
 	if (flag != 0) {
 
-		cost = (cost == -1) ? random_interval(5, 10) : cost / 2;
+		cost = (cost == -1 ? random_interval(5, 10) : cost / 2);
 	}
 
 	return cost;
@@ -144,17 +142,18 @@ signed short MON_get_spell_cost(signed short mspell_id, signed short flag)
  * \param   attrib3     no of 3rd attribute
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
-signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1, signed short attrib2, signed short attrib3, signed char handicap)
+signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
 /* called only from a single position, in MON_test_skill((struct struct_hero*)..) */
 {
+
 #ifndef M302de_FEATURE_MOD
 	/* Feature mod 6: The implementation of the skill test logic differs from the original DSA2/3 rules.
 	 * It is sometimes called the 'pool' variant, where '3W20 + handicap' is compared to the sum of the attributes.
 	 * It is significantly easier than the original rule, where each individuall roll must be at most the corresponding attribute,
 	 * where positive handicap must be used up during the process, and negative handicap may be used for compensation. */
 
-	signed short randval;
-	signed short attr_sum;
+	signed int randval;
+	signed int attr_sum;
 
 	randval = dice_roll(3, 20, handicap);
 
@@ -165,12 +164,12 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 	/* Here, the original DSA2/3 skill test logic is implemented.
 	 * WARNING: This makes skill tests and spell casting (on both sides), and thus the game, significantly harder!
 	 * Note that we are not implementing the DSA4 rules, where tests with a positive handicap are yet harder. */
-	signed short i;
-	signed short tmp;
-	signed short nr_rolls_1 = 0;
-	signed short nr_rolls_20 = 0;
-	signed short fail = 0;
-	signed char attrib [3];
+	signed int randval;
+	signed int i;
+	signed int nr_rolls_1 = 0;
+	signed int nr_rolls_20 = 0;
+	signed int fail = 0;
+	signed int attrib[3];
 
 	attrib[0] = monster->attrib[2 * attrib1 + 1];
 	attrib[1] = monster->attrib[2 * attrib2 + 1];
@@ -178,24 +177,20 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
-		names_attrib[attrib1],
-		attrib[0],
-		names_attrib[attrib2],
-		attrib[1],
-		names_attrib[attrib3],
-		attrib[2]
-	);
+		names_attrib[attrib1], attrib[0],
+		names_attrib[attrib2], attrib[1],
+		names_attrib[attrib3], attrib[2]);
 #endif
 
 	for (i = 0; i < 3; i++) {
 
-		tmp = random_schick(20);
+		randval = random_schick(20);
 
 #if !defined(__BORLANDC__)
-		D1_INFO(" W20 = %d;", tmp);
+		D1_INFO(" W20 = %d;", randval);
 #endif
 
-		if (tmp == 20) {
+		if (randval == 20) {
 			if (++nr_rolls_20 == 2) {
 #if !defined(__BORLANDC__)
 				D1_INFO(" -> UNGLUECKLICH nicht bestanden\n");
@@ -204,7 +199,7 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 			}
 		}
 
-		if (tmp == 1) {
+		if (randval == 1) {
 			if (++nr_rolls_1 == 2) {
 #if !defined(__BORLANDC__)
 				D1_INFO(" -> GLUECKLICH bestanden\n");
@@ -214,27 +209,27 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 		}
 
 		if (!fail) {
-			tmp -= attrib[i];
+			randval -= attrib[i];
 			if (handicap <= 0) {
-				if (tmp > 0) {
-					if (tmp > -handicap) {
+				if (randval > 0) {
+					if (randval > -handicap) {
 						fail = 1;
 #if !defined(__BORLANDC__)
 						D1_INFO(" zu hoch!");
 #endif
 					} else  {
-						handicap += tmp;
+						handicap += randval;
 					}
 				}
 			}
 			if (handicap > 0) {
-				if (tmp > 0) {
+				if (randval > 0) {
 					fail = 1;
 #if !defined(__BORLANDC__)
 					D1_INFO(" zu hoch!");
 #endif
 				} else {
-					handicap += tmp;
+					handicap += randval;
 					if (handicap < 0) {
 						handicap = 0;
 					}
@@ -258,11 +253,9 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 
 
 /* called only from a single position, in MON_cast_spell(..) */
-signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id, signed char handicap)
+signed int MON_test_skill(const struct enemy_sheet *monster, const signed int mspell_id, signed char handicap)
 {
-	struct mon_spell_description *desc;
-
-	desc = &g_mon_spell_descriptions[mspell_id];
+	struct mon_spell_description *desc = &g_mon_spell_descriptions[mspell_id];
 
 	/* depends on MR */
 	if (desc->vs_mr) {
@@ -285,7 +278,7 @@ signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id,
 	return 0;
 }
 
-void MON_sub_ae(struct enemy_sheet *monster, signed short ae)
+void MON_sub_ae(struct enemy_sheet *monster, signed int ae)
 {
 	if (!monster->flags.dead) {
 
@@ -299,29 +292,29 @@ void MON_sub_ae(struct enemy_sheet *monster, signed short ae)
 
 signed short MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short cost;
+	signed int mspell_id;
+	signed int retval;
+	signed int cost;
 	void (*func)(void);
-	signed short tx_file_bak;
+	signed int tx_file_bak;
 
-	l_si = monster->cur_spell;
+	mspell_id = monster->cur_spell;
 
-	if (l_si > 0) {
+	if (mspell_id > 0) {
 
-		cost = MON_get_spell_cost(l_si, 0);
+		cost = MON_get_spell_cost(mspell_id, 0);
 
 		/* check AE */
 		if (monster->ae < cost) {
 			return -1;
 		}
 
-		g_spelltest_result = MON_test_skill(monster, l_si, handicap);
+		g_spelltest_result = MON_test_skill(monster, mspell_id, handicap);
 
 		if ((g_spelltest_result <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
 
 			/* spell failed */
-			MON_sub_ae(monster, MON_get_spell_cost(l_si, 1));
+			MON_sub_ae(monster, MON_get_spell_cost(mspell_id, 1));
 
 			return 0;
 
@@ -338,27 +331,35 @@ signed short MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 
 			load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-			func = g_mon_spellhandlers[l_si];
+			func = g_mon_spellhandlers[mspell_id];
 			func();
 
 			if ((tx_file_bak != -1) && (tx_file_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
+
 				load_tx(tx_file_bak);
 			}
 
-			l_di = 1;
+			retval = 1;
 
 			if (!g_monster_spell_ae_cost) {
-				l_di = -1;
+
+				retval = -1;
+
 			} else if (g_monster_spell_ae_cost == -2) {
-				MON_sub_ae(monster, MON_get_spell_cost(l_si, 1));
-				l_di = 0;
+
+				MON_sub_ae(monster, MON_get_spell_cost(mspell_id, 1));
+
+				retval = 0;
+
 			} else if (g_monster_spell_ae_cost != -1) {
+
 				MON_sub_ae(monster, g_monster_spell_ae_cost);
+
 			} else {
 				MON_sub_ae(monster, cost);
 			}
 
-			return l_di;
+			return retval;
 		}
 	} else {
 		return 0;
@@ -466,7 +467,7 @@ void mspell_axxeleratus(void)
 
 void mspell_balsam(void)
 {
-	signed short le;
+	signed int le;
 
 	/* set pointer to monster target */
 	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
@@ -595,7 +596,7 @@ void mspell_eisenrost(void)
 
 void mspell_fulminictus(void)
 {
-	signed short damage;
+	signed int damage;
 
 	/* roll 3W6 */
 	damage = dice_roll(3, 6, 0);
@@ -617,11 +618,11 @@ void mspell_fulminictus(void)
 
 void mspell_ignifaxius(void)
 {
-	signed short damage;
-	signed short level;
-	signed short rs_malus;
-	signed short hero_pos;
-	signed short slot;
+	signed int damage;
+	signed int level;
+	signed int rs_malus;
+	signed int hero_pos;
+	signed int slot;
 	struct inventory *p_armor;
 
 	/* get the level of the spelluser */
@@ -697,8 +698,8 @@ void mspell_ignifaxius(void)
 
 void mspell_plumbumbarum(void)
 {
-	signed short slot;
-	signed short hero_pos;
+	signed int slot;
+	signed int hero_pos;
 
 	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
@@ -749,8 +750,8 @@ void mspell_saft_kraft(void)
 
 void mspell_armatrutz(void)
 {
-	signed short i;
-	signed short rs_bonus;
+	signed int i;
+	signed int rs_bonus;
 
 	i = 0;
 	while ((i * i) < g_spelluser_e->ae) {
