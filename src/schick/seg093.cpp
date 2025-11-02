@@ -654,7 +654,7 @@ signed short do_travel_mode(void)
 	g_route59_flag = g_wallclock_update = gs_travel_detour = 0;
 	gs_current_town = gs_current_typeindex;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < 6; i++)
 	{
@@ -685,7 +685,7 @@ signed short do_travel_mode(void)
 	do {
 		if (g_request_refresh)
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 
 			if (g_travel_map_loaded != gs_show_travel_map)
 			{

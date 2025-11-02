@@ -98,7 +98,7 @@ void init_ani(Bit16u v1)
 		else
 			g_ani_unknown_flag = 1;
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		clear_ani_pal();
 
@@ -295,7 +295,7 @@ void interrupt timer_isr(void)
 						(g_ani_posy + g_ani_height >= g_mouse_posy))
 					{
 						flag = 1;
-						update_mouse_cursor();
+						call_mouse_bg();
 					}
 
 					/* set screen coordinates */
@@ -379,7 +379,7 @@ void update_status_bars(void)
 
 					g_status_page_hunger_max_color ^= 1;
 
-					update_mouse_cursor();
+					call_mouse_bg();
 
 					for (i = 0; i < 6; i++) {
 						do_h_line(g_vga_memstart, 260, 310, i + 36, g_status_page_hunger_max_color ? 9 : 10);
@@ -394,7 +394,7 @@ void update_status_bars(void)
 
 				g_status_page_hunger = hero->hunger;
 
-				update_mouse_cursor();
+				call_mouse_bg();
 
 				for (i = 0; i < 6; i++) {
 						do_h_line(g_vga_memstart, 260, g_status_page_hunger / 2 + 260, i + 36, 9);
@@ -410,7 +410,7 @@ void update_status_bars(void)
 
 					g_status_page_thirst_max_color ^= 1;
 
-					update_mouse_cursor();
+					call_mouse_bg();
 
 					for (i = 0; i < 6; i++) {
 						do_h_line(g_vga_memstart, 260, 310, i + 43, g_status_page_thirst_max_color ? 11 : 12);
@@ -425,7 +425,7 @@ void update_status_bars(void)
 
 				g_status_page_thirst = hero->thirst;
 
-				update_mouse_cursor();
+				call_mouse_bg();
 
 				for (i = 0; i < 6; i++) {
 					do_h_line(g_vga_memstart, 260, g_status_page_thirst / 2 + 260, i + 43, 11);
@@ -505,7 +505,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	Bit8u* dst;
 
 	if (mode == 0)
-		update_mouse_cursor();
+		call_mouse_bg();
 
 	if (mode == 0) {
 		x = g_hero_pic_posx[hero] + type * 4 + 34;
@@ -561,7 +561,7 @@ void restore_rect(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, si
 	signed char c;
 	Bit8u* p;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	p = dst;
 	p += y * 320 + x;
@@ -588,7 +588,7 @@ void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y
 	Bit8u *p = dst;
 
 	p += y * 320 + x;
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < height; p += 320, i++) {
 
@@ -832,7 +832,7 @@ void draw_wallclock(signed short pos, signed short night)
 				g_wallclock_x + 85,
 				g_wallclock_y + 28)) {
 
-			update_mouse_cursor();
+			call_mouse_bg();
 			mouse_updated = 1;
 	}
 
@@ -1033,7 +1033,7 @@ void do_v_line(Bit8u* ptr, signed short y, signed short x1, signed short x2, sig
 
 void do_border(Bit8u* dst, signed short x1, signed short y1, signed short x2, signed short y2, signed char color)
 {
-	update_mouse_cursor();
+	call_mouse_bg();
 	do_h_line(dst, x1, x2, y1, color);
 	do_h_line(dst, x1, x2, y2, color);
 	do_v_line(dst, x1, y1, y2, color);
@@ -1106,7 +1106,7 @@ void do_fill_rect(Bit8u* dst, signed short x, signed short y, signed short w, si
 
 	dst += y * 320 + x;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 #if defined(__BORLANDC__)
 	fill_rect(FP_SEG(dst), FP_OFF(dst), color, width, height);
 #else
@@ -1161,7 +1161,7 @@ void map_effect(Bit8u *src)
 
 	wait_for_vsync();
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < 64000; i++) {
 

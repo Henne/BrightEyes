@@ -623,7 +623,7 @@ void sea_travel(signed short passage, signed short dir)
 		if (is_mouse_in_rect(gs_route_course_ptr[0] - 16, gs_route_course_ptr[1] - 16,
 					gs_route_course_ptr[0] + 16, gs_route_course_ptr[1] + 16))
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			gs_route_mousehover = 1;
 		}
 
@@ -708,7 +708,7 @@ void sea_travel(signed short passage, signed short dir)
 
 		if (g_request_refresh && !gs_travel_detour) {
 
-			update_mouse_cursor();
+			call_mouse_bg();
 
 			load_map();
 
@@ -745,7 +745,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	if (!gs_travel_detour) {
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		do {
 			if (!dir) {

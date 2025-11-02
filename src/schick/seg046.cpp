@@ -286,7 +286,7 @@ void status_show(Bit16u index)
 	hero = get_hero(index);
 
 	set_var_to_zero();
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	if (g_pp20_index != ARCHIVE_FILE_ZUSTA_UK) {
 		g_update_statusline = 0;

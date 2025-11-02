@@ -119,7 +119,7 @@ void do_temple(void)
 			g_pic_copy.dst = g_vga_memstart + 88 * 320 + 99;
 			g_pic_copy.src = g_buffer8_ptr + 7000;
 
-			update_mouse_cursor();
+			call_mouse_bg();
 			do_pic_copy(0);
 			call_mouse();
 			g_pic_copy.dst = g_vga_memstart;

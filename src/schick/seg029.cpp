@@ -69,7 +69,7 @@ void draw_playmask(void)
 
 	set_palette(g_palette_allblack2, 0xe0, 0x20);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
@@ -167,7 +167,7 @@ void draw_status_line(void)
 
 		wait_for_vsync();
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		if (!get_hero(i)->typus) {
 
@@ -297,7 +297,7 @@ void draw_icons(void)
 	if (g_pp20_index != ARCHIVE_FILE_PLAYM_UK)
 		return;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < 9; i++) {
 
@@ -350,7 +350,7 @@ void draw_main_screen(void)
 
 void clear_loc_line(void)
 {
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	do_fill_rect(g_vga_memstart, 3, 140, 316, 153, 0);
 

@@ -315,6 +315,7 @@ static void mouse_bg(void);
 static void mouse_cursor(void);
 static void game_loop(void);
 static void magical_chainmail_damage(void);
+static void check_level_up(void);
 static void passages_recalc(void);
 static void passages_reset(void);
 static void ul_save(void);
@@ -1636,12 +1637,12 @@ void seg002_1880(signed short a1)
 /**
  * \brief   makes a mouse cursor from a selected item
  *
- * \param   p pointer to the icon of the item
+ * \param icon	pointer to the icon of the item 16x16
  */
 void make_ggst_cursor(Bit8u *icon)
 {
-	signed short y;
-	signed short x;
+	signed int y;
+	signed int x;
 
 	/* clear the bitmask */
 	for (y = 0; y < 16; y++) {
@@ -1664,7 +1665,7 @@ void make_ggst_cursor(Bit8u *icon)
 	}
 }
 
-void update_mouse_cursor(void)
+void call_mouse_bg(void)
 {
 	mouse_bg();
 }
@@ -1803,10 +1804,7 @@ void handle_gui_input(void)
 		}
 
 		/* Ctrl + P -> pause game */
-		if ((g_bioskey_event == 0x10) &&
-			(g_bioskey_event10 == 0) &&
-			!g_dialogbox_lock &&
-			!g_pregame_state)
+		if ((g_bioskey_event == 0x10) && (g_bioskey_event10 == 0) && !g_dialogbox_lock && !g_pregame_state)
 		{
 			g_bioskey_event10 = 1;
 			g_timers_disabled++;
@@ -1828,7 +1826,7 @@ void handle_gui_input(void)
 			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_in_key_ext && (g_action_table_primary)) {
+		if (!l_in_key_ext && g_action_table_primary) {
 			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
@@ -1912,9 +1910,9 @@ void handle_gui_input(void)
  * \return  if (x,y) is in one of the rectangles, return the return value of the first fitting rectangle.
  *          otherwise, return 0.
  */
-signed short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
+signed int get_mouse_action(const signed int x, const signed int y, const struct mouse_action *act)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; act[i].x1 != -1; i++) {
 
@@ -1922,7 +1920,6 @@ signed short get_mouse_action(signed short x, signed short y, struct mouse_actio
 		{
 			return act[i].action;
 		}
-
 	}
 
 	return 0;
@@ -2195,9 +2192,9 @@ static void timers_daily(void)
 	}
 }
 
-static void seg002_2177(void)
+static void set_market_size(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; g_market_descr_table[i].min_size != -1; i++) {
 
@@ -2280,32 +2277,20 @@ void pal_fade_in(Bit8s *dst, Bit8s *p2, const signed int v3, const signed int co
 static void dawning(void)
 {
 	/* Between 6 and 7, in 64 steps (i.e. each 56 seconds) */
-	if ((gs_day_timer >= HOURS(6)) &&
-		(gs_day_timer <= HOURS(7)) &&
-		!((gs_day_timer - HOURS(6)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(6)) && (gs_day_timer <= HOURS(7)) && !((gs_day_timer - HOURS(6)) % SECONDS(56)))
 	{
-
 		/* floor */
 		pal_fade((Bit8s*)gs_palette_floor, (Bit8s*)g_townpal_buf);
+
 		/* buildings */
 		pal_fade((Bit8s*)gs_palette_buildings, (Bit8s*)g_townpal_buf + 0x60);
+
 		/* sky */
 		pal_fade((Bit8s*)gs_palette_sky, (Bit8s*)g_townpal_buf + 0xc0);
 
 		/* in a town */
-		if (gs_current_town &&
-			/* not in a dungeon */
-			!gs_dungeon_index &&
-			/* not in a location */
-			!gs_current_loctype &&
-			/* not in a travel mode */
-			!gs_show_travel_map &&
-			/* no event animation */
-			!g_event_ani_busy &&
-			/* unknown */
-			!g_special_screen &&
-			/* unknown */
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+		if (gs_current_town && !gs_dungeon_index && !gs_current_loctype && !gs_show_travel_map &&
+			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
@@ -2321,32 +2306,20 @@ static void dawning(void)
 static void nightfall(void)
 {
 	/* Between 20 and 21, in 64 steps (i.e. each 56 seconds) */
-	if ((gs_day_timer >= HOURS(20)) &&
-		(gs_day_timer <= HOURS(21)) &&
-		!((gs_day_timer - HOURS(20)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(20)) && (gs_day_timer <= HOURS(21)) && !((gs_day_timer - HOURS(20)) % SECONDS(56)))
 	{
-
 		/* floor */
 		pal_fade((Bit8s*)gs_palette_floor, (Bit8s*)&g_floor_fade_palette[0][0]);
+
 		/* buildings */
 		pal_fade((Bit8s*)gs_palette_buildings, (Bit8s*)&g_building_fade_palette[0][0]);
+
 		/* sky */
 		pal_fade((Bit8s*)gs_palette_sky, (Bit8s*)&g_sky_fade_palette[0][0]);
 
 		/* in a town */
-		if (gs_current_town &&
-			/* not in a dungeon */
-			!gs_dungeon_index &&
-			/* not in a location */
-			!gs_current_loctype &&
-			/* not in a travel mode */
-			!gs_show_travel_map &&
-			/* no event animation */
-			!g_event_ani_busy &&
-			/* unknown */
-			!g_special_screen &&
-			/* unknown */
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+		if (gs_current_town && !gs_dungeon_index && !gs_current_loctype && !gs_show_travel_map &&
+			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
@@ -2361,7 +2334,7 @@ static void nightfall(void)
  *
  * \return              number of the season {0 = WINTER, 1,2,3}
  */
-signed short get_current_season(void)
+signed int get_current_season(void)
 {
 	if (is_in_byte_array(gs_month, g_months_winter)) {
 		return SEASON_WINTER;
@@ -2378,8 +2351,8 @@ signed short get_current_season(void)
 /**
  * \brief   calc census for the bank depot
  *
- *          If you put money on the bank, you get 5%.
- *          If you borrowed money you pay 15%.
+ *  If you put money on the bank, you get 5%.
+ *  If you borrowed money you pay 15%.
  */
 static void do_census(void)
 {
@@ -2389,7 +2362,7 @@ static void do_census(void)
 	if (gs_bank_deposit > 0) {
 		sign = 1;
 	} else if (gs_bank_deposit < 0) {
-			sign = -1;
+		sign = -1;
 	}
 
 	/* bank transactions, no census */
@@ -2424,7 +2397,6 @@ static void do_census(void)
 	} else if ((gs_bank_deposit > 0) && (sign == -1)) {
 		gs_bank_deposit = -32760;
 	}
-
 }
 
 /* called from timewarp(..), timewarp_until_time_of_day(..),
@@ -2434,7 +2406,8 @@ void do_timers(void)
 	struct struct_hero *hero_i;
 	signed char afternoon;
 	struct struct_hero *ptr;
-	signed short i, di;
+	signed int i;
+	signed int group_num;
 
 	afternoon = 0;
 
@@ -2475,6 +2448,7 @@ void do_timers(void)
 		if (!(gs_day_timer % MINUTES(15))) {
 			sub_light_timers(1L);
 		}
+
 		/* every hour ingame */
 		if (!(gs_day_timer % HOURS(1))) {
 
@@ -2563,10 +2537,10 @@ void do_timers(void)
 
 				if (ptr->typus != HERO_TYPE_NONE) {
 
-					di = ptr->group_no;
+					group_num = ptr->group_no;
 
 					/* hero is in group and in mage dungeon */
-					if ((gs_current_group == di) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
+					if ((gs_current_group == group_num) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
 					{
 
 						if (gs_dungeon_level == 1) {
@@ -2580,13 +2554,13 @@ void do_timers(void)
 						}
 
 					} else {
-						if (gs_groups_dng_index[di] == 7) {
+						if (gs_groups_dng_index[group_num] == 7) {
 
-							if (gs_groups_dng_level[di] == 1) {
+							if (gs_groups_dng_level[group_num] == 1) {
 								/* 1W6-1 */
 								sub_hero_le(ptr, dice_roll(1, 6, -1));
 
-							} else if (gs_groups_dng_level[di] == 2) {
+							} else if (gs_groups_dng_level[group_num] == 2) {
 								/* 1W6+1 */
 								sub_hero_le(ptr, dice_roll(1, 6, 1));
 							}
@@ -2606,7 +2580,7 @@ void do_timers(void)
 
 		timers_daily();
 
-		seg002_2177();
+		set_market_size();
 
 		/* reset day timer */
 		gs_day_timer = 0L;
@@ -2712,7 +2686,7 @@ void do_timers(void)
  * \param   val         vaule to subtract from the ingame timers
  * \note improvable
  */
-void sub_ingame_timers(Bit32s val)
+void sub_ingame_timers(const Bit32s val)
 {
 	signed int i = 0;
 
@@ -2739,11 +2713,11 @@ void sub_ingame_timers(Bit32s val)
  *
  * \param   val         vaule to subtract from the modification timers
  */
-void sub_mod_timers(Bit32s val)
+void sub_mod_timers(const Bit32s val)
 {
-	signed short i;
-	signed short j;
-	signed short h_index;
+	signed int i;
+	signed int j;
+	signed int h_index;
 	HugePt mp;
 	signed char target;
 	unsigned char reset_target;
@@ -2851,9 +2825,9 @@ void sub_mod_timers(Bit32s val)
  *
  * \return              number of the modification slot
  */
-signed short get_free_mod_slot(void)
+signed int get_free_mod_slot(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 100; i++) {
 
@@ -2877,9 +2851,9 @@ signed short get_free_mod_slot(void)
 	return i;
 }
 
-void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed char mod, signed char who)
+void set_mod_slot(const signed int slot_no, const Bit32s timer_value, const Bit8u *ptr, const signed char mod, const signed char who)
 {
-	signed short j;
+	signed int j;
 
 #if !defined (__BORLANDC__)
 	Bit8u *mod_ptr;
@@ -2887,8 +2861,8 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 	Bit8u huge *mod_ptr;
 #endif
 	signed char target;
-	signed short i;
-	signed short new_target;
+	signed int i;
+	signed int new_target;
 
 
 	if (who == -1) {
@@ -2938,9 +2912,9 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
  *	This function decrements the timers for the healing and staffspell timeouts.
  *	Furthermore, the g_check_poison flag is set.
  */
-void sub_heal_staffspell_timers(Bit32s fmin)
+void sub_heal_staffspell_timers(const Bit32s fmin)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero_i;
 
 	if (g_timers_disabled)
@@ -3001,10 +2975,10 @@ void sub_heal_staffspell_timers(Bit32s fmin)
  *	If the time of the lightsource is up the torch is removed from the
  *	inventory and the lantern is turned off.
  */
-void sub_light_timers(Bit32s quarter)
+void sub_light_timers(const Bit32s quarter)
 {
-	signed short j;
-	signed short i;
+	signed int j;
+	signed int i;
 
 	struct struct_hero *hero_i;
 	signed char tmp;
@@ -3020,7 +2994,7 @@ void sub_light_timers(Bit32s quarter)
 			if (quarter > 120) {
 				tmp = 120;
 			} else {
-				tmp = (signed char)quarter;
+				tmp = quarter;
 			}
 
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
@@ -3065,7 +3039,7 @@ void sub_light_timers(Bit32s quarter)
  */
 static void magical_chainmail_damage(void)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero_i;
 
 	if (g_timers_disabled) {
@@ -3097,8 +3071,8 @@ static void magical_chainmail_damage(void)
  */
 void herokeeping(void)
 {
-	signed short i;
-	signed short pos;
+	signed int i;
+	signed int pos;
 	struct struct_hero *hero;
 	char buffer[100];
 
@@ -3315,10 +3289,10 @@ void herokeeping(void)
 	g_herokeeping_flag = 0;
 }
 
-void check_level_up(void)
+static void check_level_up(void)
 {
-	signed short i;
-	signed short not_done;
+	signed int i;
+	signed int not_done;
 	struct struct_hero *hero;
 
 	if (g_timers_disabled) {
@@ -3377,7 +3351,7 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			l_si = 1;
 		}
 
@@ -3400,7 +3374,7 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			l_si = 1;
 		}
 
@@ -3425,7 +3399,7 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			l_si = 1;
 		}
 
@@ -3453,7 +3427,7 @@ void seg002_37c4(void)
 
 			if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 			{
-				update_mouse_cursor();
+				call_mouse_bg();
 				l_si = 1;
 			}
 
@@ -3478,7 +3452,7 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			l_si = 1;
 		}
 
@@ -4230,7 +4204,7 @@ void draw_compass(void)
 		/* set source */
 		g_pic_copy.src = g_icon;
 
-		update_mouse_cursor();
+		call_mouse_bg();
 		do_pic_copy(2);
 		call_mouse();
 	}

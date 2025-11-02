@@ -84,7 +84,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed short bg_bak;
 	struct nvf_desc nvf;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	if (g_in_fight) {
 

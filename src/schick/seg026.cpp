@@ -658,7 +658,7 @@ signed short load_game_state(void)
 			return retval;
 		}
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		/* something ani related */
 		l1 = g_update_statusline;

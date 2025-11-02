@@ -808,7 +808,7 @@ void DNG_stub5(void)
 	g_pic_copy.y2 = g_ani_posy + 134;
 	g_pic_copy.src = g_renderbuf_ptr;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_special_screen = 0;
 
@@ -1028,7 +1028,7 @@ void DNG_open_door(void)
 
 	play_voc(ARCHIVE_FILE_FX15_VOC);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < iters; i++) {
 
@@ -1073,7 +1073,7 @@ void DNG_close_door(void)
 
 	play_voc(ARCHIVE_FILE_FX15_VOC);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = iters; i >= 0; i--) {
 
@@ -1360,7 +1360,7 @@ mark2:			   goto mark1;
 		g_pic_copy.x2 = 240;
 		g_pic_copy.y2 = 136;
 		g_pic_copy.src = g_renderbuf_ptr;
-		update_mouse_cursor();
+		call_mouse_bg();
 		do_pic_copy(1);
 		call_mouse();
 	}

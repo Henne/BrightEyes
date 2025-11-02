@@ -748,7 +748,7 @@ void cleanup_game(void)
 #endif
 
 	/* misc cleanups */
-	update_mouse_cursor();
+	call_mouse_bg();
 	disable_mouse();
 	reset_timer();
 	schick_reset_video();
@@ -784,7 +784,7 @@ void game_over_screen(void)
 
 	close(handle);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_wallclock_update = 0;
 
@@ -818,7 +818,7 @@ void call_gen(void)
 	Bit32u freemem;
 	signed int retval;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	exit_AIL();
 

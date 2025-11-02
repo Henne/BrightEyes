@@ -110,7 +110,7 @@ void final_intro(void)
 
 	g_pp20_index = ARCHIVE_FILE_DNGS + 12;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_wallclock_update = 0;
 
@@ -291,7 +291,7 @@ void show_hyggelik_ani(void)
 		ani[i + 1].ptr = hyg_ani_1(i, &ani[i]);
 	}
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	hyg_ani_3();
 	hyg_ani_2(&ani[0], 145, 39);

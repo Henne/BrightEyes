@@ -70,7 +70,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 	struct viewdir_offsets8s dst = g_viewdir_invoffsets3;
 	struct struct_msg tmp;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	if (g_in_fight) {
 

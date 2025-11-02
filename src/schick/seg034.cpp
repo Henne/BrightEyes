@@ -169,7 +169,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 
 	g_mouse_leftclick_event = g_mouse_rightclick_event = 0;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_mouse_posx_bak = g_mouse_posx = x_screen = cb_base_x + 10 * (*px + *py);
 	g_mouse_posy_bak = g_mouse_posy = y_screen = cb_base_y + 5 * (*px - *py);
@@ -294,7 +294,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 
 		if ((g_fig_list_elem.cbx != *px) || (g_fig_list_elem.cby != *py)) {
 
-			update_mouse_cursor();
+			call_mouse_bg();
 
 			x_screen = cb_base_x + 10 * (*px + *py);
 			y_screen = cb_base_y + 5 * (*px - *py);
@@ -537,7 +537,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 	signed short mouse_cb_x;
 	signed short mouse_cb_y;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_mouse_posx_bak = g_mouse_posx = x_screen = base_x + 10 * (*px + *py);
 
@@ -640,7 +640,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 
 		if ((sel_x != curr_x) || (sel_y != curr_y)) {
 
-			update_mouse_cursor();
+			call_mouse_bg();
 
 			x_screen = base_x + 10 * (sel_x + sel_y);
 			y_screen = base_y + 5 * (sel_x - sel_y);

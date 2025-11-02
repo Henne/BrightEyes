@@ -351,7 +351,7 @@ void draw_fight_screen(Bit16u val)
 	struct nvf_desc nvf;
 	signed short figlist_remove[8];
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	list_ii = (struct struct_fighter*)g_fig_list_head;
 

@@ -210,7 +210,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		if (is_mouse_in_rect(gs_route_course_ptr[0] - 16, gs_route_course_ptr[1] - 16,
 					gs_route_course_ptr[0] + 16, gs_route_course_ptr[1] + 16))
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			gs_route_mousehover = 1;
 		}
 
@@ -416,7 +416,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 		if (g_request_refresh != 0 && !gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			load_map();
 			/* TODO: update window */
 			memmove((void*)g_vga_memstart, (void*)gs_travel_map_ptr, 320 * 200);
@@ -473,7 +473,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_trv_return != 2)
 	{
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		do {
 			gs_route_course_ptr += (!backwards ? -2 : 2);

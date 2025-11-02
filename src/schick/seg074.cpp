@@ -477,7 +477,7 @@ void draw_automap_to_screen(void)
 
 	g_pic_copy.dst = g_vga_memstart + g_ani_posx + 320 * g_ani_posy;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_pic_copy_flag = 1;
 	do_pic_copy(1);

@@ -82,24 +82,25 @@ void seg002_1838(signed short, signed short, signed short, signed short);
 void seg002_1880(signed short);
 #endif
 void make_ggst_cursor(Bit8u *icon);
-void update_mouse_cursor(void);
+void call_mouse_bg(void);
 void call_mouse(void);
 void handle_gui_input(void);
-signed short get_mouse_action(signed short, signed short, struct mouse_action*);
+signed int get_mouse_action(const signed int, const signed int, const struct mouse_action*);
 void handle_input(void);
 void flush_keyboard_queue_alt(void);
 void pal_fade(Bit8s*, Bit8s*);
 void pal_fade_in(Bit8s*, Bit8s*, const signed int, const signed int);
-signed short get_current_season(void);
+
+signed int get_current_season(void);
 void do_timers(void);
-void sub_ingame_timers(Bit32s);
-void sub_mod_timers(Bit32s);
-signed short get_free_mod_slot(void);
-void set_mod_slot(signed short, Bit32s, Bit8u*, signed char, signed char);
-void sub_heal_staffspell_timers(Bit32s);
-void sub_light_timers(Bit32s);
+void sub_ingame_timers(const Bit32s);
+void sub_mod_timers(const Bit32s);
+signed int get_free_mod_slot(void);
+void set_mod_slot(const signed int, const Bit32s, const Bit8u*, const signed char, const signed char);
+void sub_heal_staffspell_timers(const Bit32s);
+void sub_light_timers(const Bit32s);
 void herokeeping(void);
-void check_level_up(void);
+
 void seg002_37c4(void);
 void set_and_spin_lock(void);
 void timewarp(const Bit32s);

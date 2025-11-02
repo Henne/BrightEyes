@@ -150,7 +150,7 @@ void status_menu(signed short hero_pos)
 
 			g_status_page_hero = hero_pos;
 
-			update_mouse_cursor();
+			call_mouse_bg();
 
 			status_show(hero_pos);
 

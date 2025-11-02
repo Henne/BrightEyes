@@ -152,7 +152,7 @@ void buy_screen(void)
 			g_pic_copy.x2 = 131;
 			g_pic_copy.y2 = 28;
 			g_pic_copy.src = g_icon;
-			update_mouse_cursor();
+			call_mouse_bg();
 			do_pic_copy(0);
 			call_mouse();
 
@@ -169,7 +169,7 @@ void buy_screen(void)
 
 		if (l8 != 0) {
 			/* refresh goods */
-			update_mouse_cursor();
+			call_mouse_bg();
 
 			do_fill_rect(g_vga_memstart, 135, 26, 214, 33, 0);
 

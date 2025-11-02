@@ -320,7 +320,7 @@ void show_treasure_map(void)
 
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		for (l_si = 0; l_si < 10; l_si++) {
 
@@ -403,7 +403,7 @@ void show_treasure_map(void)
 			g_pic_copy.src = g_renderbuf_ptr;
 			g_pic_copy.dst = g_vga_memstart;
 
-			update_mouse_cursor();
+			call_mouse_bg();
 			wait_for_vsync();
 
 			set_palette(g_renderbuf_ptr + 64000 + 2, 0, 0x20);
@@ -513,7 +513,7 @@ signed short game_options(void)
 	g_pic_copy.src = g_renderbuf_ptr;
 	g_pic_copy.dst = g_vga_memstart;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 	wait_for_vsync();
 
 	set_palette(g_renderbuf_ptr + 64002, 0, 32);
@@ -797,7 +797,7 @@ void leave_dungeon(void)
 	g_pic_copy.y2 = 136;
 	g_pic_copy.src = g_renderbuf_ptr;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	do_pic_copy(1);
 	call_mouse();

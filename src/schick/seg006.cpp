@@ -138,7 +138,7 @@ void FIG_set_gfx(void)
 	g_pic_copy.y2 = 199;
 	g_pic_copy.src = g_renderbuf_ptr;
 	g_pic_copy.dst = g_vga_memstart;
-	update_mouse_cursor();
+	call_mouse_bg();
 	do_pic_copy(0);
 	call_mouse();
 

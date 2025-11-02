@@ -446,7 +446,7 @@ signed short DNG15_handler(void)
 				draw_main_screen();
 				DNG_update_pos();
 				do_talk(19, 0);
-				update_mouse_cursor();
+				call_mouse_bg();
 				show_hyggelik_ani();
 
 				if (1) { } else { }

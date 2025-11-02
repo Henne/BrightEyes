@@ -1437,7 +1437,7 @@ void city_fade_and_colors(void)
 
 	g_special_screen = 0;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 	wait_for_vsync();
 
 	do_pic_copy(1);

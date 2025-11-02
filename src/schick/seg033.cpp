@@ -159,7 +159,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							get_tx(51),
 							get_tx(27));
 
-				update_mouse_cursor();
+				call_mouse_bg();
 				g_txt_tabpos[0] = txt_tabpos_bak;
 				g_basepos_x = 0;
 				g_basepos_y = 0;
@@ -198,7 +198,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 						FIG_move_hero(hero, hero_pos, &x, &y);
 
-						update_mouse_cursor();
+						call_mouse_bg();
 
 						/* Moving destroys an active 'Chamaelioni' spell */
 						hero->flags.chamaelioni = 0; /* unset 'chamaelioni' flag.  (???) */
@@ -228,7 +228,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 						target_id = FIG_cb_select_target(&target_x, &target_y, 1);
 
-						update_mouse_cursor();
+						call_mouse_bg();
 					} else {
 						if (range_attack_check_ammo(hero, 1)) {
 
@@ -237,7 +237,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
 
-							update_mouse_cursor();
+							call_mouse_bg();
 						}
 					}
 
@@ -282,7 +282,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 									selected = GUI_radio(get_ttx(584), 3, get_ttx(585), get_ttx(586), get_ttx(587));
 
-									update_mouse_cursor();
+									call_mouse_bg();
 
 								} while (selected == -1);
 
@@ -331,7 +331,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 						call_mouse();
 						hero->spell_id = select_spell(hero, 0);
-						update_mouse_cursor();
+						call_mouse_bg();
 
 						if (hero->spell_id > 0) {
 
@@ -361,7 +361,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 									target_id = FIG_cb_select_target(&target_x, &target_y, weapon_id);
 
-									update_mouse_cursor();
+									call_mouse_bg();
 
 									if (target_id != -99) {
 
@@ -425,7 +425,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
 
-							update_mouse_cursor();
+							call_mouse_bg();
 							hero->target_id = target_id;
 						} else {
 							hero->target_id = 0;
@@ -495,7 +495,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 							g_textbox_width = tw_bak;
 
-							update_mouse_cursor();
+							call_mouse_bg();
 
 							if (selected != -1) {
 
@@ -558,7 +558,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 							g_textbox_width = tw_bak;
 
-							update_mouse_cursor();
+							call_mouse_bg();
 
 							if (selected != -1) {
 
@@ -713,7 +713,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					/* use magic in autofight */
 					g_autofight_magic = GUI_bool(get_tx(53));
 
-					update_mouse_cursor();
+					call_mouse_bg();
 
 					g_autofight = 1;
 				}
@@ -763,7 +763,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 						g_textbox_width = tw_bak;
 
-						update_mouse_cursor();
+						call_mouse_bg();
 
 						if (selected != -1) {
 
@@ -790,7 +790,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					g_game_state = GAME_STATE_FIGQUIT;
 				}
 
-				update_mouse_cursor();
+				call_mouse_bg();
 
 			} else if (selected == FIG_ACTION_REPEAT_OPTION) {
 				/* REPEAT OPTIONS / ALTE OPTION */

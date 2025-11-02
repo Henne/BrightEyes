@@ -834,7 +834,7 @@ void equip_belt_ani(void)
 		wait_for_vsync();
 		wait_for_vsync();
 		wait_for_vsync();
-		update_mouse_cursor();
+		call_mouse_bg();
 		wait_for_vsync();
 
 		do_pic_copy(0);

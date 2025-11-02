@@ -89,7 +89,7 @@ void draw_fight_screen_pal(signed short mode)
 	/* check for palette update */
 	if (g_pp20_index != -1) {
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		/* clear framebuffer */
 		/* TODO: add update */
@@ -1013,7 +1013,7 @@ signed short do_fight(signed short fight_id)
 	close(handle);
 
 	set_var_to_zero();
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	if (g_scenario_buf[0x14] > 3) {
 
@@ -1278,7 +1278,7 @@ signed short do_fight(signed short fight_id)
 	g_textbox_width = tw_bak;
 	g_pp20_index = (ARCHIVE_FILE_DNGS + 12);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	/* clear the screen */
 	/* TODO: add update */

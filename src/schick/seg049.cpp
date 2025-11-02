@@ -476,7 +476,7 @@ void GRP_move_hero(signed short src_pos)
 		g_mouse_posx_min = 1;
 		g_mouse_posx_max = 260;
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		g_mouse_locked = 1;
 		g_mouse_posy = 157;
@@ -506,7 +506,7 @@ void GRP_move_hero(signed short src_pos)
 
 		g_mouse_locked = 0;
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		g_mouse_posx_bak = g_mouse_posx;
 		g_mouse_posy_bak = g_mouse_posy;

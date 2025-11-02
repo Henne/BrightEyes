@@ -466,7 +466,7 @@ signed short GUI_print_header(char *str)
 {
 	signed short retval = 1;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 	retval = GUI_count_lines(str);
 	GUI_print_string(str, g_textline_posx, g_textline_posy);
 	call_mouse();
@@ -515,7 +515,7 @@ void GUI_print_string(char *str, signed short x, signed short y)
 	l1 = 0;
 	l2 = 0;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	if (g_gui_text_centered == 1) {
 		x = GUI_get_first_pos_centered(str, x, g_textline_maxlen, 0);

@@ -124,7 +124,7 @@ void GUI_unused1(char *a1, signed short a2, signed short a3)
 
 	l1 = 0;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	if (g_gui_text_centered == 1) {
 		a2 = GUI_get_first_pos_centered(a1, a2, g_textline_maxlen, 1);
@@ -222,7 +222,7 @@ signed short GUI_enter_text(char* dst, signed short x, signed short y, signed sh
 	signed short length;
 
 	dst_start = dst;
-	update_mouse_cursor();
+	call_mouse_bg();
 	di = x;
 	pos = 0;
 	length = strlen((char*)dst);
@@ -442,7 +442,7 @@ signed short GUI_input(char *str, unsigned short num)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	GUI_draw_radio_bg(l_si, 0, l_di, l2);
 
@@ -474,7 +474,7 @@ signed short GUI_input(char *str, unsigned short num)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	GUI_copy_smth(l_di, l2);
 
@@ -521,7 +521,7 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 	signed short x;
 	signed short y;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	y = g_textbox_pos_x + 6;
 
@@ -592,7 +592,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short 
 	g_textbox_pos_y = (200 - (l5 + 2)) >> 1;
 	g_textline_posy = (g_textbox_pos_y + 5);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 	get_textcolor(&fg_bak, &bg_bak);
 
 	GUI_draw_radio_bg(l_si, (signed char)options, l_di, l5);
@@ -755,7 +755,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 			}
 		}
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		g_mouse_posx_bak = g_mouse_posx = l3;
 		g_mouse_posy_bak = g_mouse_posy = l4;
@@ -819,7 +819,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	g_textbox_pos_y = ((200 - l6 + 2) >> 1) + g_basepos_y;
 	g_textline_posy = (g_textbox_pos_y + 7);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 	get_textcolor(&fg_bak, &bg_bak);
 
 	GUI_draw_radio_bg(l_di, options, l11, l6);

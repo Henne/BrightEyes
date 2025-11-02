@@ -282,7 +282,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 					GUI_print_string(g_dtp2, 104 - GUI_get_space_for_string(g_dtp2, 0), 26);
 				}
 
-				update_mouse_cursor();
+				call_mouse_bg();
 
 				do_fill_rect(g_vga_memstart, 29, 34, 214, 133, 0);
 

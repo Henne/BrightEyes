@@ -90,7 +90,7 @@ void diary_show(void)
 	g_pic_copy.src = g_renderbuf_ptr;
 	g_pic_copy.dst = g_vga_memstart;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	set_palette(g_renderbuf_ptr + 0xfa02, 0, 0x20);
 
