@@ -28,23 +28,23 @@ static struct Bit8s_15 g_temple_miracle_dice = { 0, 9, 9, 10, 17, 6, 10, 10, 18,
 
 void ask_miracle(void)
 {
-	signed short randval;
+	signed short miracle_dice_roll;
 	signed short j;
 	struct struct_hero *hero;
 	signed short disease;
 	signed short fi_bak;
-	signed short l3;
+	signed short const_zero; // always zero
 	signed short bonus;
-	signed short l5;
+	signed short no_spellcaster_in_group;
 	signed short i;
-	signed short slot;
+	signed short mod_slot;
 	signed short item_id;
-	struct Bit8s_15 ga1 = g_temple_miracle_bonus;
-	//struct dummy15 ga1 = {{0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0}};
+	struct Bit8s_15 god_bonus = g_temple_miracle_bonus;
+	//struct dummy15 god_bonus = {{0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0, 1}};
 	struct Bit8s_15 god_dice = g_temple_miracle_dice;
 	//struct dummy15 god_dice = {{0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10}};
 
-	l3 = 0;
+	const_zero = 0;
 	fi_bak = g_text_file_index;
 
 	load_tx2(ARCHIVE_FILE_WONDER_LTX);
@@ -54,7 +54,7 @@ void ask_miracle(void)
 	/* check gods estimation */
 	if (gs_gods_estimation[g_temple_god] >= 100) {
 
-		bonus = (signed short)((ga1.a[g_temple_god] * (gs_gods_estimation[g_temple_god] / 100) / 10) - l3);
+		bonus = (signed short)((god_bonus.a[g_temple_god] * (gs_gods_estimation[g_temple_god] / 100) / 10) - const_zero);
 
 		if (gs_current_town == TOWNS_CLANEGH) {
 			bonus += 2;
@@ -64,24 +64,36 @@ void ask_miracle(void)
 
 		if (random_schick(100) <= god_dice.a[g_temple_god] + bonus) {
 
-			randval = random_schick(god_dice.a[g_temple_god]);
+			miracle_dice_roll = random_schick(god_dice.a[g_temple_god]);
 
-			if (god_dice.a[g_temple_god] == randval) {
+			if (god_dice.a[g_temple_god] == miracle_dice_roll) {
+				// For all gods: Highest possible dice roll -> resurrect a hero
 				miracle_resurrect(get_tx2(35));
 			} else {
 				switch (g_temple_god) {
 				case GOD_PRAIOS: {
-					l5 = 1;
+					no_spellcaster_in_group = 1;
 
 					for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
-						if (get_hero(i)->typus >= HERO_TYPE_WITCH) {
-							l5 = 1;
+						if ((get_hero(i))->typus >= HERO_TYPE_WITCH) {
+#ifndef M302de_ORIGINAL_BUGFIX
+							/* Original-Bug 43:
+								The implementation of Praios miracles suggests that Praios only grants miracles to groups without spellcasters.
+								This fits the lore that Praios hates magic.
+								However, the way is implemented, the check does not make any difference.
+								In principle, this bug is irrelevant, since there is no regular Praios temple in the game (but see Original-Bug 24).
+							*/
+							no_spellcaster_in_group = 1;
+#else
+							no_spellcaster_in_group = 0;
+#endif
 						}
 					}
 
-					if (l5 != 0) {
+					// Praios doesn't like groups with spellcasters.
+					if (no_spellcaster_in_group != 0) {
 
-						if (randval <= 5) {
+						if (miracle_dice_roll <= 5) {
 
 							/* MU+1 for 1 day */
 							if (!gs_ingame_timers[INGAME_TIMER_PRAIOS_MU]) {
@@ -92,24 +104,24 @@ void ask_miracle(void)
 								gs_ingame_timers[INGAME_TIMER_PRAIOS_MU] = DAYS(1);
 							}
 
-						} else if (randval <= 7) {
+						} else if (miracle_dice_roll <= 7) {
 
 							/* MR+99 for 3 days */
 							if (!gs_ingame_timers[INGAME_TIMER_PRAIOS_MR]) {
 
 								i = get_random_hero();
 
-								if ((i != -1) && !get_hero(i)->flags.gods_pissed) {
+								if ((i != -1) && !(get_hero(i))->flags.gods_pissed) {
 
-									slot = get_free_mod_slot();
-									set_mod_slot(slot, DAYS(3), (Bit8u*)&get_hero(i)->mr, 99, (signed char)i);
+									mod_slot = get_free_mod_slot();
+									set_mod_slot(mod_slot, DAYS(3), (Bit8u*)&(get_hero(i))->mr, 99, (signed char)i);
 
-									sprintf(g_dtp2, get_tx2(2), get_hero(i)->alias);
+									sprintf(g_dtp2, get_tx2(2), (get_hero(i))->alias);
 									gs_ingame_timers[INGAME_TIMER_PRAIOS_MR] = DAYS(3);
 								}
 							}
 
-						} else if (randval <= 8) {
+						} else if (miracle_dice_roll <= 8) {
 
 							/* remove a transformation or a curse of one hero */
 							for (i = 0; i <= 6; i++) {
@@ -142,7 +154,7 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_RONDRA: {
-					if (randval <= 5) {
+					if (miracle_dice_roll <= 5) {
 						if (!gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS]) {
 
 							miracle_modify((Bit8u*)&get_hero(0)->skills[TA_SCHWERTER] - (Bit8u*)get_hero(0), DAYS(3), 1); /* for 3 days: skill 'Schwerter' + 1 */
@@ -151,14 +163,14 @@ void ask_miracle(void)
 
 							strcpy(g_dtp2, get_tx2(4));
 						}
-					} else if (randval <= 7) {
+					} else if (miracle_dice_roll <= 7) {
 						/* "Rondra breitet ihre Aura ueber euch aus, so dass keine Magie mehr wirken kann. */
 						/* spellcasting is blocked (heroes and foes) */
 						gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] = HOURS(6);
 
 						strcpy(g_dtp2, get_tx2(5));
 
-					} else if (randval <= 8) {
+					} else if (miracle_dice_roll <= 8) {
 
 						if (!gs_ingame_timers[INGAME_TIMER_RONDRA_MAGIC_WEAPON]) {
 
@@ -170,16 +182,16 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_EFFERD: {
-					if (randval <= 5) {
+					if (miracle_dice_roll <= 5) {
 						/* "Efferd verleiht euch die Gabe, Wasser zu finden." */
 						/* searching for water in a wildcamp will always be successful */
 						gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER] = DAYS(3);
 						strcpy(g_dtp2, get_tx2(7));
-					} else if (randval <= 8) {
+					} else if (miracle_dice_roll <= 8) {
 						/* "Efferd gewaehrt euch seinen Schutz auf Wasser." */
 						gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE] = DAYS(3);
 						strcpy(g_dtp2, get_tx2(8));
-					} else if (randval <= 9) {
+					} else if (miracle_dice_roll <= 9) {
 						if (!gs_ingame_timers[INGAME_TIMER_EFFERD_SWIM]) {
 
 							/* Schwimmen +2 for 4 days */
@@ -192,7 +204,7 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_TRAVIA: {
-					if (randval <= 10) {
+					if (miracle_dice_roll <= 10) {
 						/* "Die ganze Gruppe wird von Travia goettlich gesaettigt." */
 						for (i = 0; i <= 6; i++) {
 
@@ -206,9 +218,9 @@ void ask_miracle(void)
 
 						strcpy(g_dtp2, get_tx2(10));
 
-					} else if (randval <= 15) {
+					} else if (miracle_dice_roll <= 15) {
 						miracle_heal_hero(dice_roll(1, 6, 2), get_tx2(11));
-					} else if (randval <= 16) {
+					} else if (miracle_dice_roll <= 16) {
 						/* "Travia gewaehrt der Gruppe ihren Schutz in der Nacht */
 						gs_ingame_timers[INGAME_TIMER_TRAVIA_SAFE_REST] = DAYS(7);
 						strcpy(g_dtp2, get_tx2(12));
@@ -216,14 +228,14 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_BORON: {
-					if (randval <= 3) {
+					if (miracle_dice_roll <= 3) {
 						/* "Boron gewaehrt euch Schutz vor Untoten" */
 						/* apparently, does not have an impact anywhere */
 						gs_ingame_timers[INGAME_TIMER_BORON_UNDEAD] = DAYS(3);
 						strcpy(g_dtp2, get_tx2(13));
-					} else if (randval <= 4) {
+					} else if (miracle_dice_roll <= 4) {
 						miracle_resurrect(get_tx2(14));
-					} else if (randval <= 5) {
+					} else if (miracle_dice_roll <= 5) {
 						if (!gs_ingame_timers[INGAME_TIMER_BORON_TA]) {
 
 							miracle_modify((Bit8u*)&get_hero(0)->attrib[ATTRIB_TA].current - (Bit8u*)get_hero(0), DAYS(4), -1);
@@ -234,14 +246,14 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_HESINDE: {
-					if (randval <= 3) {
+					if (miracle_dice_roll <= 3) {
 						if (!gs_ingame_timers[INGAME_TIMER_HESINDE_ANALUES]) {
 
 							miracle_modify((Bit8u*)&get_hero(0)->spells[SP_ANALUES_ARCANSTRUKTUR] - (Bit8u*)get_hero(0), DAYS(4), 1);
 							strcpy(g_dtp2, get_tx2(16));
 							gs_ingame_timers[INGAME_TIMER_HESINDE_ANALUES] = DAYS(4);
 						}
-					} else if (randval <= 6) {
+					} else if (miracle_dice_roll <= 6) {
 						/* unset transformation or renegade state of the first feasible hero */
 						for (i = 0; i <= 6; i++) {
 
@@ -265,7 +277,7 @@ void ask_miracle(void)
 								break;
 							}
 						}
-					} else if (randval <= 7) {
+					} else if (miracle_dice_roll <= 7) {
 
 						if (!gs_ingame_timers[INGAME_TIMER_HESINDE_MR]) {
 
@@ -277,28 +289,28 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_FIRUN: case GOD_IFIRN: {
-					if (randval <= 5) {
+					if (miracle_dice_roll <= 5) {
 						/* hunting in a wildcamp will always be successful */
 						gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT] = DAYS(3);
 						strcpy(g_dtp2, get_tx2(19));
-					} else if (randval <= 8) {
+					} else if (miracle_dice_roll <= 8) {
 						gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT] = DAYS(7);
 						strcpy(g_dtp2, get_tx2(19));
-					} else if (randval <= 9) {
+					} else if (miracle_dice_roll <= 9) {
 						/* "Ihr verspuert keinen Hunger oder Durst mehr." */
-						/* +1 for 7 days */
+						/* sated for 7 days */
 						if (!gs_ingame_timers[INGAME_TIMER_FIRUN_SATED]) {
 
 							i = get_random_hero();
 
-							if (i != -1 && !get_hero(i)->flags.gods_pissed) {
+							if (i != -1 && !(get_hero(i))->flags.gods_pissed) {
 
-								slot = get_free_mod_slot();
-								set_mod_slot(slot, DAYS(7), (Bit8u*)&get_hero(i)->hunger_timer, 1, (signed char)i);
+								mod_slot = get_free_mod_slot();
+								set_mod_slot(mod_slot, DAYS(7), (Bit8u*)&(get_hero(i))->hunger_timer, 1, (signed char)i);
 
-								get_hero(i)->hunger = get_hero(i)->thirst = 0;
+								(get_hero(i))->hunger = (get_hero(i))->thirst = 0;
 
-								sprintf(g_dtp2, get_tx2(20), get_hero(i)->alias);
+								sprintf(g_dtp2, get_tx2(20), (get_hero(i))->alias);
 								gs_ingame_timers[INGAME_TIMER_FIRUN_SATED] = DAYS(7);
 							}
 						}
@@ -306,10 +318,10 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_TSA: {
-					if (randval <= 10) {
+					if (miracle_dice_roll <= 10) {
 						/* heal 2D6 LE of a hero */
 						miracle_heal_hero(dice_roll(2, 6, 0), get_tx2(21));
-					} else if (randval <= 15) {
+					} else if (miracle_dice_roll <= 15) {
 						/* completely heal all heroes */
 
 						hero = get_hero(0);
@@ -326,7 +338,7 @@ void ask_miracle(void)
 
 						strcpy(g_dtp2, get_tx2(22));
 
-					} else if (randval <= 18) {
+					} else if (miracle_dice_roll <= 18) {
 						miracle_resurrect(get_tx2(23));
 					}
 					break;
@@ -335,7 +347,7 @@ void ask_miracle(void)
 					/* PHEX wants a bit more estimation */
 					if (gs_gods_estimation[g_temple_god] > 500L) {
 
-						if (randval <= 5) {
+						if (miracle_dice_roll <= 5) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_THIEF]) {
 								/* Taschendiebstahl +1 for 3 days */
 								miracle_modify((Bit8u*)&get_hero(0)->skills[TA_TASCHENDIEBSTAHL] - (Bit8u*)get_hero(0), DAYS(3), 1);
@@ -344,14 +356,14 @@ void ask_miracle(void)
 								strcpy(g_dtp2, get_tx2(24));
 								gs_ingame_timers[INGAME_TIMER_PHEX_THIEF] = DAYS(3);
 							}
-						} else if (randval <= 8) {
+						} else if (miracle_dice_roll <= 8) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_FEILSCHEN]) {
 								/* Feilschen +1 for 3 days */
 								miracle_modify((Bit8u*)&get_hero(0)->skills[TA_FEILSCHEN] - (Bit8u*)get_hero(0), DAYS(3), 1);
 								strcpy(g_dtp2, get_tx2(25));
 								gs_ingame_timers[INGAME_TIMER_PHEX_FEILSCHEN] = DAYS(3);
 							}
-						} else if (randval <= 9) {
+						} else if (miracle_dice_roll <= 9) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_FF]) {
 								/* FF +1 for 3 days */
 								miracle_modify((Bit8u*)&get_hero(0)->attrib[ATTRIB_FF].current - (Bit8u*)get_hero(0), DAYS(3), 1);
@@ -363,11 +375,11 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_PERAINE: {
-					if (randval <= 10) {
+					if (miracle_dice_roll <= 10) {
 						miracle_heal_hero(dice_roll(1, 6, 0), get_tx2(27));
-					} else if (randval <= 16) {
+					} else if (miracle_dice_roll <= 16) {
 						miracle_heal_hero(dice_roll(2, 6, 0), get_tx2(27));
-					} else if (randval <= 18) {
+					} else if (miracle_dice_roll <= 18) {
 
 						for (i = 0; i <= 6; i++) {
 							hero = get_hero(i);
@@ -386,7 +398,7 @@ void ask_miracle(void)
 					break;
 				}
 				case GOD_INGERIMM: {
-					if (randval <= 5) {
+					if (miracle_dice_roll <= 5) {
 						/* "Ingerimm segnet alle eure Waffen." */
 						/* decrease BF of all weapons of all heroes by 2, but not below 0 */
 
@@ -415,18 +427,18 @@ void ask_miracle(void)
 
 						strcpy(g_dtp2, get_tx2(29));
 
-					} else if (randval <= 6) {
+					} else if (miracle_dice_roll <= 6) {
 						if (!gs_ingame_timers[INGAME_TIMER_INGERIMM_MAGIC_WEAPON]) {
 							miracle_weapon(get_tx2(30), 0);
 							gs_ingame_timers[INGAME_TIMER_INGERIMM_MAGIC_WEAPON] = DAYS(1);
 						}
-					} else if (randval <= 7) {
+					} else if (miracle_dice_roll <= 7) {
 						miracle_weapon(get_tx2(31), 1);
 					}
 					break;
 				}
 				case GOD_RAHJA: {
-					if (randval <= 8) {
+					if (miracle_dice_roll <= 8) {
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS]) {
 							/* Betören +2 for 7 days */
 							miracle_modify((Bit8u*)&get_hero(0)->skills[TA_BETOEREN] - (Bit8u*)get_hero(0), DAYS(7), 2);
@@ -435,14 +447,14 @@ void ask_miracle(void)
 							strcpy(g_dtp2, get_tx2(32));
 							gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS] = DAYS(7);
 						}
-					} else if (randval <= 13) {
+					} else if (miracle_dice_roll <= 13) {
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_CH]) {
 							/* CH +1 for 3 days */
 							miracle_modify((Bit8u*)&get_hero(0)->attrib[ATTRIB_CH].current - (Bit8u*)get_hero(0), DAYS(3), 1);
 							strcpy(g_dtp2, get_tx2(33));
 							gs_ingame_timers[INGAME_TIMER_RAHJA_CH] = DAYS(3);
 						}
-					} else if (randval <= 14) {
+					} else if (miracle_dice_roll <= 14) {
 
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS_PERMANENT]) {
 
