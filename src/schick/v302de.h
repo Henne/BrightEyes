@@ -162,37 +162,6 @@ static inline void D1_GFX(...) { }
 	#define __func__ __FUNCTION__
 #endif
 
-
-static inline Bit8u host_readb(Bit8u* p)
-{
-	return ((Bit8u)*p);
-}
-
-static inline Bit8s host_readbs(Bit8u* p)
-{
-	return ((Bit8s)*p);
-}
-
-static inline Bit16u host_readw(Bit8u* p)
-{
-	return ((Bit16u)(host_readb(p + 1) << 8) | (host_readb(p)));
-}
-
-static inline Bit16s host_readws(Bit8u* p)
-{
-	return (Bit16s)host_readw(p);
-}
-
-static inline Bit32s host_readd(Bit8u* p)
-{
-	return ((Bit32s)(host_readw(p + 2) << 16) | host_readw(p));
-}
-
-static inline Bit32s host_readds(Bit8u* p)
-{
-	return (Bit32s)host_readd(p);
-}
-
 /**
  * \brief mark informer only as known iff unknown
  * \param informer the index of the informer
@@ -320,14 +289,6 @@ static inline char* get_itemname(unsigned short item_id)
 #else
 #define update_informer_cond(informer) (gs_informer_flags[informer] = 1)
 #endif
-
-#define host_readb(p) (*(Bit8u*)(p))
-#define host_readw(p) (*(Bit16u*)(p))
-#define host_readd(p) (*(Bit32u*)(p))
-
-#define host_readbs(p) (*(Bit8s*)(p))
-#define host_readws(p) (*(Bit16s*)(p))
-#define host_readds(p) (*(Bit32s*)(p))
 
 #define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
 #define get_spelltarget()	((struct struct_hero*)g_spelltarget)

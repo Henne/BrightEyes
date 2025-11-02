@@ -286,8 +286,28 @@ struct item_stats *g_itemsdat; // ds:0xe22b
 char **g_itemsname; // ds:0xe22f
 
 
-#if defined(__BORLANDC__)
-void sub_light_timers(Bit32s);
+#if !defined(__BORLANDC__)
+static inline Bit8u readb(Bit8u *p)
+{
+	return ((Bit8u)*p);
+}
+
+static inline Bit16s readws(Bit8u *p)
+{
+	return ((Bit16s)(readb(p + 1) << 8) | (readb(p)));
+}
+
+static inline Bit32s readds(Bit8u *p)
+{
+	return ((Bit32s)(readws(p + 2) << 16) | readws(p));
+}
+
+#else
+
+#define readb(p) (*(Bit8u*)(p))
+#define readws(p) (*(Bit16u*)(p))
+#define readds(p) (*(Bit32u*)(p))
+
 #endif
 
 
@@ -1190,11 +1210,11 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 #endif
 	Bit8u *dst;
 
-	nvf_type = host_readb(nvf->src);
+	nvf_type = *(signed char*)(nvf->src);
 	va = nvf_type & 0x80;
 	nvf_type &= 0x7f;
 
-	pics = host_readws(nvf->src + 1L);
+	pics = readws(nvf->src + 1L);
 
 	if (nvf->no < 0)
 		nvf->no = 0;
@@ -1205,8 +1225,8 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(nvf->src + 3L);
-		height = host_readws(nvf->src + 5L);
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
 		p_size = width * height;
 		src =  nvf->src + nvf->no * p_size + 7L;
 		break;
@@ -1215,38 +1235,38 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		offs = pics * 4 + 3L;
 		for (i = 0; i < nvf->no; i++) {
 #if !defined(__BORLANDC__)
-			width = host_readw(nvf->src + i * 4 + 3L);
-			height = host_readw(nvf->src + i * 4 + 5L);
+			width = readws(nvf->src + i * 4 + 3L);
+			height = readws(nvf->src + i * 4 + 5L);
 #endif
 			offs += width * height;
 		}
 
-		width = host_readw(nvf->src + nvf->no * 4 + 3L);
-		height = host_readw(nvf->src + nvf->no * 4 + 5L);
+		width = readws(nvf->src + nvf->no * 4 + 3L);
+		height = readws(nvf->src + nvf->no * 4 + 5L);
 		p_size = width * height;
 		src = nvf->src + offs;
 		break;
 
 	case 0x02: case 0x04:
-		width = host_readw(nvf->src + 3L);
-		height = host_readw(nvf->src + 5L);
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
 		offs = pics * 4 + 7L;
 		for (i = 0; i < nvf->no; i++) {
-			offs += host_readd(nvf->src + (i * 4) + 7L);
+			offs += readds(nvf->src + (i * 4) + 7L);
 		}
 
-		p_size = host_readd(nvf->src + nvf->no * 4 + 7L);
+		p_size = readds(nvf->src + nvf->no * 4 + 7L);
 		src = nvf->src + offs;
 		break;
 
 	case 0x03: case 0x05:
 		offs = pics * 8 + 3L;
 		for (i = 0; i < nvf->no; i++)
-			offs += host_readd(nvf->src + (i * 8) + 7L);
+			offs += readds(nvf->src + (i * 8) + 7L);
 
-		width = host_readw(nvf->src + nvf->no * 8 + 3L);
-		height = host_readw(nvf->src +  nvf->no * 8 + 5L);
-		p_size = host_readd(nvf->src + i * 8 + 7L);
+		width = readws(nvf->src + nvf->no * 8 + 3L);
+		height = readws(nvf->src +  nvf->no * 8 + 5L);
+		p_size = readds(nvf->src + i * 8 + 7L);
 		src = nvf->src + offs;
 		break;
 	}
@@ -1258,10 +1278,10 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		if (va != 0) {
 
 			/* get size from unpacked picture */
-			retval = host_readd(src);
+			retval = readds(src);
 			nvf_no = src;
 			nvf_no += (retval + (-4L));
-			retval = host_readd(nvf_no);
+			retval = readds(nvf_no);
 			retval = swap_u32(retval) >> 8;
 
 		} else {
@@ -4002,13 +4022,13 @@ Bit32s swap_u32(Bit32u v)
 	signed short a[2];
 	Bit32s *ptr = (Bit32s*)(&a[0]);
 
-	*ptr = host_readd((Bit8u*)&v);
+	*ptr = readds((Bit8u*)&v);
 
 	tmp = a[0];
 	a[0] = swap_u16(a[1]);
 	a[1] = swap_u16(tmp);
 
-	return host_readd((Bit8u*)ptr);
+	return readds((Bit8u*)ptr);
 }
 
 /* unused */
@@ -4018,12 +4038,12 @@ Bit32u swap_u32_unused(Bit32u v)
 	signed short tmp;
 	Bit32s *ptr = (Bit32s*)(&a[0]);
 
-	tmp = (signed short)(*ptr = host_readd((Bit8u*)&v));
+	tmp = (signed short)(*ptr = readds((Bit8u*)&v));
 
 	a[0] = a[1];
 	a[1] = tmp;
 
-	return host_readd((Bit8u*)ptr);
+	return readds((Bit8u*)ptr);
 }
 
 /**
