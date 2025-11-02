@@ -332,7 +332,7 @@ void do_merchant(void)
 					if (party_money < 5000) {
 
 						GUI_output(get_ttx(763));
-						g_mouse2_event = g_action = 0;
+						g_mouse_rightclick_event = g_action = 0;
 						done = 1;
 
 					} else {
@@ -347,13 +347,13 @@ void do_merchant(void)
 				} else {
 
 					GUI_output(get_ttx(763));
-					g_mouse2_event = g_action = 0;
+					g_mouse_rightclick_event = g_action = 0;
 					done = 1;
 				}
 			}
 		}
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			answer = GUI_radio(get_ttx(430), 4, get_ttx(431), get_ttx(432),	get_ttx(343), get_ttx(434)) - 1;
 

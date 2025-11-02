@@ -469,7 +469,7 @@ signed short GUI_print_header(char *str)
 	update_mouse_cursor();
 	retval = GUI_count_lines(str);
 	GUI_print_string(str, g_textline_posx, g_textline_posy);
-	refresh_screen_size();
+	call_mouse();
 
 	return retval;
 }
@@ -572,7 +572,7 @@ void GUI_print_string(char *str, signed short x, signed short y)
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 //7f0

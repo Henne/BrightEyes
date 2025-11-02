@@ -134,7 +134,7 @@ void show_citizen(void)
 			} else {
 				GUI_print_loc_line(g_text_output_buf);
 #ifdef M302de_SPEEDFIX
-				delay_or_keypress(200);
+				vsync_or_key(200);
 #endif
 			}
 		}
@@ -351,7 +351,7 @@ void show_treasure_map(void)
 
 		set_palette((Bit8u*)((g_buffer9_ptr + length) -0x60L), 0, 0x20);
 
-		refresh_screen_size();
+		call_mouse();
 
 		if (g_tmap_double1) {
 
@@ -391,7 +391,7 @@ void show_treasure_map(void)
 			gs_find_hyggelik = 1;
 		}
 
-		delay_or_keypress(1000);
+		vsync_or_key(1000);
 
 		if (g_renderbuf_in_use_flag) {
 
@@ -410,7 +410,7 @@ void show_treasure_map(void)
 
 			do_pic_copy(0);
 
-			refresh_screen_size();
+			call_mouse();
 
 			g_renderbuf_in_use_flag = 0;
 
@@ -519,7 +519,7 @@ signed short game_options(void)
 	set_palette(g_renderbuf_ptr + 64002, 0, 32);
 
 	do_pic_copy(0);
-	refresh_screen_size();
+	call_mouse();
 
 	set_textcolor(fg_bak, bg_bak);
 
@@ -534,7 +534,7 @@ signed short game_options(void)
 		handle_input();
 		g_action_table_secondary = NULL;
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			/* use the radio menu */
 			answer = GUI_radio(get_ttx(590), 9,
@@ -800,7 +800,7 @@ void leave_dungeon(void)
 	update_mouse_cursor();
 
 	do_pic_copy(1);
-	refresh_screen_size();
+	call_mouse();
 	wait_for_vsync();
 	set_palette(g_renderbuf_ptr, 0 , 0x20);
 

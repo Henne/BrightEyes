@@ -220,7 +220,7 @@ void do_harbor(void)
 
 		handle_gui_input();
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			answer = GUI_radio(get_tx(9), 4,get_tx(10), get_tx(11), get_tx(12), get_tx(13)) - 1;
 
@@ -635,7 +635,7 @@ void sea_travel(signed short passage, signed short dir)
 		*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) = 0x1f;
 
 		if (gs_route_mousehover) {
-			refresh_screen_size();
+			call_mouse();
 		}
 
 		/* the following loop will be executed Floor(gs_route_timedelta / 2) times.
@@ -730,7 +730,7 @@ void sea_travel(signed short passage, signed short dir)
 				*(ptr + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) = 0x1f;
 			}
 
-			refresh_screen_size();
+			call_mouse();
 
 			g_wallclock_x = g_basepos_x + 120;
 			g_wallclock_y = g_basepos_y + 87;
@@ -760,7 +760,7 @@ void sea_travel(signed short passage, signed short dir)
 
 		} while (gs_route_course_ptr[0] != -1);
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	g_traveling = 0;

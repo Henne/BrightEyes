@@ -973,7 +973,7 @@ void draw_fight_screen(Bit16u val)
 			list_ii->visible = 1;
 	}
 
-	refresh_screen_size();
+	call_mouse();
 
 	if (!val) {
 

@@ -492,7 +492,7 @@ void GRP_move_hero(signed short src_pos)
 
 		g_mouse_locked = 0;
 
-		refresh_screen_size();
+		call_mouse();
 
 		g_mouse_locked = 1;
 
@@ -614,7 +614,7 @@ void GRP_move_hero(signed short src_pos)
 		g_mouse_posx_min = 0;
 		g_mouse_posx_max = 320 - 1;
 
-		refresh_screen_size();
+		call_mouse();
 		draw_status_line();
 	}
 }
@@ -694,7 +694,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 						if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
 							GUI_print_loc_line(g_dtp2);
-							delay_or_keypress(200);
+							vsync_or_key(200);
 
 						} else {
 
@@ -728,7 +728,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 							if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
 								GUI_print_loc_line(g_dtp2);
-								delay_or_keypress(200);
+								vsync_or_key(200);
 
 							} else {
 								if (g_travel_by_ship) {

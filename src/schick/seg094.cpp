@@ -235,7 +235,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
 		if (gs_route_mousehover) {
-			refresh_screen_size();
+			call_mouse();
 		}
 
 		gs_trv_i = 0;
@@ -256,7 +256,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		gs_route_progress += (gs_trv_return == 2 ? -gs_route_stepsize : gs_route_stepsize);
 		gs_route_dayprogress += gs_route_stepsize;
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP)
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP)
 		{
 			if (!gs_forcedmarch_timer)
 			{
@@ -440,7 +440,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				gs_route_course_ptr2 += (!backwards ? 2 : -2);
 			}
 
-			refresh_screen_size();
+			call_mouse();
 
 			if (g_request_refresh == 2 && route_no != 59)
 			{
@@ -488,7 +488,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			TM_func8(1);
 		}
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	g_traveling = 0;

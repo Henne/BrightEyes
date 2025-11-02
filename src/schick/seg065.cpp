@@ -156,13 +156,13 @@ void final_intro(void)
 
 	do_pic_copy(2);
 
-	delay_or_keypress(100);
+	vsync_or_key(100);
 
 	map_effect(g_renderbuf_ptr);
 
 	g_pic_copy.dst = g_vga_memstart;
 
-	delay_or_keypress(250);
+	vsync_or_key(250);
 
 	memset(g_renderbuf_ptr, 0, 96 * 3);
 
@@ -181,7 +181,7 @@ void final_intro(void)
 	memset((void*)g_vga_memstart, 0, 320 * 200);
 
 	refresh_colors();
-	refresh_screen_size();
+	call_mouse();
 }
 
 #if defined(__BORLANDC__)
@@ -308,10 +308,10 @@ void show_hyggelik_ani(void)
 		hyg_ani_2(&ani[10], 82, 67);
 		hyg_ani_2(&ani[20], 186, 67);
 		hyg_ani_4();
-		delay_or_keypress(3);
+		vsync_or_key(3);
 	}
 
-	delay_or_keypress(6);
+	vsync_or_key(6);
 
 	for (i = 0; i < 5; i++) {
 		hyg_ani_3();
@@ -320,7 +320,7 @@ void show_hyggelik_ani(void)
 		hyg_ani_2(&ani[20], 186, 67);
 		hyg_ani_2(&ani[10 + i], g_hyg_ani_x0[i], 67);
 		hyg_ani_4();
-		delay_or_keypress(3);
+		vsync_or_key(3);
 	}
 
 	hyg_ani_3();
@@ -329,7 +329,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_2(&ani[15], g_hyg_ani_x1, 67);
 	hyg_ani_2(&ani[20], g_hyg_ani_x5, 67);
 	hyg_ani_4();
-	delay_or_keypress(3);
+	vsync_or_key(3);
 
 	hyg_ani_3();
 	hyg_ani_2(&ani[5], 145, 39);
@@ -337,7 +337,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_2(&ani[16], g_hyg_ani_x2, 67);
 	hyg_ani_2(&ani[21], g_hyg_ani_x6, 67);
 	hyg_ani_4();
-	delay_or_keypress(3);
+	vsync_or_key(3);
 
 	for (i = 0; i < 3; i++) {
 		hyg_ani_3();
@@ -346,7 +346,7 @@ void show_hyggelik_ani(void)
 		hyg_ani_2(&ani[17 + i], g_hyg_ani_x3[i], 67);
 		hyg_ani_2(&ani[22 + i], g_hyg_ani_x7[i], 67);
 		hyg_ani_4();
-		delay_or_keypress(3);
+		vsync_or_key(3);
 	}
 
 	hyg_ani_3();
@@ -355,7 +355,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_2(&ani[19], g_hyg_ani_x3[2], 67);
 	hyg_ani_2(&ani[24], g_hyg_ani_x7[2], 67);
 	hyg_ani_4();
-	delay_or_keypress(100);
+	vsync_or_key(100);
 
 	/* clear the screen */
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
@@ -363,7 +363,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_2(&ani[25], 100, 0);
 	g_pic_copy.dst = g_vga_memstart;
 	map_effect(g_renderbuf_ptr);
-	delay_or_keypress(500);
+	vsync_or_key(500);
 
 	memset(g_renderbuf_ptr, 0, 0xc0);
 
@@ -374,7 +374,7 @@ void show_hyggelik_ani(void)
 		set_palette(src, 0, 0x40);
 	}
 
-	refresh_screen_size();
+	call_mouse();
 	/* TODO: update window */
 	memset((void*)g_vga_memstart, 0, 320 * 200);
 	refresh_colors();
@@ -395,7 +395,7 @@ void show_times_up(void)
 	load_ani(35);
 	init_ani(0);
 
-	delay_or_keypress(200);
+	vsync_or_key(200);
 
 	tw_bak = g_textbox_width;
 	bak1 = g_basepos_x;
@@ -466,7 +466,7 @@ void show_outro(void)
 	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
-	delay_or_keypress(200);
+	vsync_or_key(200);
 
 	GUI_output(get_tx2(58));
 
@@ -495,7 +495,7 @@ void show_outro(void)
 	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
-	delay_or_keypress(200);
+	vsync_or_key(200);
 
 	GUI_output(get_tx2(59));
 
@@ -524,7 +524,7 @@ void show_outro(void)
 	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
-	delay_or_keypress(200);
+	vsync_or_key(200);
 
 	GUI_output(get_tx2(60));
 	GUI_output(get_tx2(61));

@@ -839,7 +839,7 @@ void equip_belt_ani(void)
 
 		do_pic_copy(0);
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	g_current_ani = g_dng_area_loaded = g_city_area_loaded = -1;

@@ -154,7 +154,7 @@ void do_healer(void)
 
 		handle_gui_input();
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			g_textbox_width = 4;
 

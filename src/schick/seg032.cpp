@@ -102,7 +102,7 @@ void draw_fight_screen_pal(signed short mode)
 
 		g_pp20_index = -1;
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	draw_fight_screen(mode);
@@ -1077,13 +1077,13 @@ signed short do_fight(signed short fight_id)
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 
 	if (g_have_mouse == 2) {
 
 		while (g_mouse_refresh_flag < 0) {
 
-			refresh_screen_size();
+			call_mouse();
 		}
 	}
 
@@ -1293,7 +1293,7 @@ signed short do_fight(signed short fight_id)
 	}
 
 	load_wallclock_nvf();
-	refresh_screen_size();
+	call_mouse();
 
 	if ((gs_current_town != TOWNS_NONE) && !gs_show_travel_map) {
 		g_fading_state = 3;

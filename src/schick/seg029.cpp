@@ -102,7 +102,7 @@ void draw_playmask(void)
 
 	g_update_statusline = 1;
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 /**
@@ -237,7 +237,7 @@ void draw_status_line(void)
 			}
 		}
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	set_textcolor(fg_bak, bg_bak);
@@ -318,7 +318,7 @@ void draw_icons(void)
 		do_pic_copy(0);
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 /**
@@ -354,7 +354,7 @@ void clear_loc_line(void)
 
 	do_fill_rect(g_vga_memstart, 3, 140, 316, 153, 0);
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 /**

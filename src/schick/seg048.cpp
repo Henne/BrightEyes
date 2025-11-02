@@ -195,7 +195,7 @@ void status_menu(signed short hero_pos)
 				}
 			}
 
-			refresh_screen_size();
+			call_mouse();
 
 			g_request_refresh = flag2 = 0;
 		}
@@ -485,7 +485,7 @@ void status_menu(signed short hero_pos)
 			GUI_output(g_dtp2);
 		}
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			g_current_cursor_bak = g_current_cursor;
 			g_current_cursor = &g_default_mouse_cursor;

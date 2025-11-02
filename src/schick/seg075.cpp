@@ -818,7 +818,7 @@ void DNG_stub5(void)
 
 	DNG_lights();
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 /**
@@ -1039,7 +1039,7 @@ void DNG_open_door(void)
 		memmove(g_renderbuf_ptr, g_renderbuf_ptr + 30000, 28080);
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 void DNG_close_door(void)
@@ -1084,7 +1084,7 @@ void DNG_close_door(void)
 		memmove(g_renderbuf_ptr, g_renderbuf_ptr + 30000, 28080);
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 void DNG_stub6(void)
@@ -1362,7 +1362,7 @@ mark2:			   goto mark1;
 		g_pic_copy.src = g_renderbuf_ptr;
 		update_mouse_cursor();
 		do_pic_copy(1);
-		refresh_screen_size();
+		call_mouse();
 	}
 }
 

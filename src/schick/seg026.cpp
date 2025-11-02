@@ -817,7 +817,7 @@ signed short load_game_state(void)
 		g_update_statusline = l1;
 		g_ani_enabled = l4;
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	return retval;

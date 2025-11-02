@@ -337,7 +337,7 @@ signed short DNG09_handler(void)
 	{
 		load_ani(26);
 		init_ani(0);
-		delay_or_keypress(100);
+		vsync_or_key(100);
 
 		if (GUI_bool(get_tx(46))) {
 

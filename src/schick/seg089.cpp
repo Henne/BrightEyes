@@ -462,7 +462,7 @@ signed short DNG15_handler(void)
 				g_pp20_index = -2;
 
 				draw_main_screen();
-				refresh_screen_size();
+				call_mouse();
 			}
 		}
 

@@ -674,11 +674,11 @@ signed short do_travel_mode(void)
 
 	set_palette(gs_travel_map_ptr + 64000 + 2, 0, 0x20);
 
-	refresh_screen_size();
+	call_mouse();
 
 	prepare_map_marker();
 
-	g_mouse1_event1 = 0;
+	g_mouse_leftclick_event = 0;
 
 	signpost_ptr = &g_signposts[0];
 
@@ -701,7 +701,7 @@ signed short do_travel_mode(void)
 
 			set_palette(gs_travel_map_ptr + 64000 + 2, 0, 0x20);
 
-			refresh_screen_size();
+			call_mouse();
 
 			g_request_refresh = 0;
 		}
@@ -711,7 +711,7 @@ signed short do_travel_mode(void)
 			while (1) {
 				handle_input();
 
-				if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP)
+				if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP)
 				{
 					i = 0;
 					while ((l_di = signpost_ptr->end_points[i]) != 0xff)
@@ -799,7 +799,7 @@ signed short do_travel_mode(void)
 
 					break;
 
-				} else if (g_mouse1_event1)
+				} else if (g_mouse_leftclick_event)
 				{
 
 					for (i = 0, l4 = -1; i < 52; i++)
@@ -836,7 +836,7 @@ signed short do_travel_mode(void)
 						g_current_town_anix = answer;
 					}
 
-					g_mouse1_event1 = 0;
+					g_mouse_leftclick_event = 0;
 				}
 			}
 			break;

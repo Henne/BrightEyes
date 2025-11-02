@@ -167,7 +167,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 	signed short cb_base_x = 9;
 	signed short cb_base_y = 116;
 
-	g_mouse1_event1 = g_mouse2_event = 0;
+	g_mouse_leftclick_event = g_mouse_rightclick_event = 0;
 
 	update_mouse_cursor();
 
@@ -177,7 +177,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-	refresh_screen_size();
+	call_mouse();
 
 	x = *px;
 	y = *py;
@@ -216,11 +216,11 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 	do {
 		handle_input();
 
-		if ((g_action == ACTION_ID_ESC) || g_mouse2_event) {
+		if ((g_action == ACTION_ID_ESC) || g_mouse_rightclick_event) {
 
 			/* cancel */
 
-			g_mouse2_event = 0;
+			g_mouse_rightclick_event = 0;
 
 			FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
@@ -261,10 +261,10 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 			}
 		}
 
-		if (g_mouse1_event1) {
+		if (g_mouse_leftclick_event) {
 
 			g_action = ACTION_ID_RETURN;
-			g_mouse1_event1 = 0;
+			g_mouse_leftclick_event = 0;
 		}
 
 		if (g_action == ACTION_ID_RIGHT) {
@@ -307,7 +307,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 				mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 			}
 
-			refresh_screen_size();
+			call_mouse();
 			FIG_call_draw_pic();
 			fighter_id = get_cb_val(*px, *py);
 
@@ -545,9 +545,9 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-	refresh_screen_size();
+	call_mouse();
 
-	g_mouse1_event1 = g_mouse2_event = 0;
+	g_mouse_leftclick_event = g_mouse_rightclick_event = 0;
 
 	sel_x = *px;
 	sel_y = *py;
@@ -611,9 +611,9 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 			}
 		}
 
-		if (g_mouse1_event1) {
+		if (g_mouse_leftclick_event) {
 
-			g_mouse1_event1 = 0;
+			g_mouse_leftclick_event = 0;
 			g_action = ACTION_ID_RETURN;
 		}
 
@@ -652,7 +652,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 				mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 			}
 
-			refresh_screen_size();
+			call_mouse();
 
 			FIG_call_draw_pic();
 
@@ -873,9 +873,9 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 			set_textcolor(fg_bak, bg_bak);
 		}
 
-		if ((g_mouse2_event) || (g_action == ACTION_ID_ESC)) {
+		if ((g_mouse_rightclick_event) || (g_action == ACTION_ID_ESC)) {
 
-			g_mouse2_event = 0;
+			g_mouse_rightclick_event = 0;
 			g_action = ACTION_ID_RETURN;
 			problem = 5;
 		}

@@ -122,7 +122,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 				txt_tabpos_bak = g_txt_tabpos[0];
 				g_txt_tabpos[0] = g_basepos_x + 204;
 
-				refresh_screen_size();
+				call_mouse();
 
 				weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
@@ -194,7 +194,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					if (hero->bp_left > 0) {
 						/* let the player select a move destination */
 
-						refresh_screen_size();
+						call_mouse();
 
 						FIG_move_hero(hero, hero_pos, &x, &y);
 
@@ -224,7 +224,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					target_id = -5;
 					if ((range_weapon = FIG_get_range_weapon_type(hero)) == -1) {
 						/* not a range weapon */
-						refresh_screen_size();
+						call_mouse();
 
 						target_id = FIG_cb_select_target(&target_x, &target_y, 1);
 
@@ -233,7 +233,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						if (range_attack_check_ammo(hero, 1)) {
 
 							/* a range weapon */
-							refresh_screen_size();
+							call_mouse();
 
 							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
 
@@ -278,7 +278,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 								selected = -1;
 
 								do {
-									refresh_screen_size();
+									call_mouse();
 
 									selected = GUI_radio(get_ttx(584), 3, get_ttx(585), get_ttx(586), get_ttx(587));
 
@@ -329,7 +329,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 					if (hero->bp_left >= 5) {
 
-						refresh_screen_size();
+						call_mouse();
 						hero->spell_id = select_spell(hero, 0);
 						update_mouse_cursor();
 
@@ -357,7 +357,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 										weapon_id = 99;
 									}
 
-									refresh_screen_size();
+									call_mouse();
 
 									target_id = FIG_cb_select_target(&target_x, &target_y, weapon_id);
 
@@ -421,7 +421,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						{
 							target_x = x;
 							target_y = y;
-							refresh_screen_size();
+							call_mouse();
 
 							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
 
@@ -479,7 +479,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 									GUI_names_grammar((signed short)0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
 							}
 
-							refresh_screen_size();
+							call_mouse();
 							tw_bak = g_textbox_width;
 							g_textbox_width = 6;
 
@@ -542,7 +542,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							sprintf(g_text_output_buf, get_tx(2), hero->alias,
 								GUI_names_grammar((signed short)0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
 
-							refresh_screen_size();
+							call_mouse();
 							tw_bak = g_textbox_width;
 							g_textbox_width = 6;
 
@@ -708,7 +708,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 				if (g_current_fight_no != FIGHTS_F144) {
 
-					refresh_screen_size();
+					call_mouse();
 
 					/* use magic in autofight */
 					g_autofight_magic = GUI_bool(get_tx(53));
@@ -747,7 +747,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 					} else {
 						sprintf(g_text_output_buf, get_tx(47), hero->alias);
 
-						refresh_screen_size();
+						call_mouse();
 						tw_bak = g_textbox_width;
 						g_textbox_width = 6;
 
@@ -782,7 +782,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			} else if (selected == FIG_ACTION_QUIT_AND_LOAD) {
 				/* QUIT AND RELOAD / VERLASSEN / LADEN */
 
-				refresh_screen_size();
+				call_mouse();
 
 				if (GUI_bool(get_tx(52))) {
 					done = 1;

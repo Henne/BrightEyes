@@ -96,7 +96,7 @@ void diary_show(void)
 
 	do_pic_copy(0);
 
-	refresh_screen_size();
+	call_mouse();
 
 	set_textcolor(fg_bak, bg_bak);
 
@@ -108,7 +108,7 @@ void diary_show(void)
 	g_txt_tabpos[1] = txt_tabpos2_bak;
 	g_textbox_width = tw_bak;
 
-	delay_or_keypress(5000);
+	vsync_or_key(5000);
 }
 
 void diary_new_entry(void)

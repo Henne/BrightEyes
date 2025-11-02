@@ -117,7 +117,7 @@ void do_wildcamp(void)
 
 		handle_gui_input();
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			i = !g_good_camp_place ? 6 : 7;
 
@@ -569,7 +569,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					}
 
 					GUI_print_loc_line(g_dtp2);
-					delay_or_keypress(200);
+					vsync_or_key(200);
 
 					/* search for food */
 					if ((test_skill(hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
@@ -599,7 +599,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					}
 
 					GUI_print_loc_line(g_dtp2);
-					delay_or_keypress(200);
+					vsync_or_key(200);
 
 				} else {
 					GUI_output(get_ttx(323));

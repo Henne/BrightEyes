@@ -140,7 +140,7 @@ void FIG_set_gfx(void)
 	g_pic_copy.dst = g_vga_memstart;
 	update_mouse_cursor();
 	do_pic_copy(0);
-	refresh_screen_size();
+	call_mouse();
 
 	g_pic_copy.dst = dst_bak;
 }

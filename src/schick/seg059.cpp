@@ -87,17 +87,17 @@ void do_tavern(void)
 
 			GUI_output(get_ttx(472));
 			done = 1;
-			g_mouse2_event = (g_action = 0);
+			g_mouse_rightclick_event = (g_action = 0);
 		}
 
 		if (gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
 			GUI_output(get_ttx(9));
 			done = 1;
-			g_mouse2_event = (g_action = 0);
+			g_mouse_rightclick_event = (g_action = 0);
 		}
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			answer = GUI_radio(get_ttx(469), g_combo_mode == 0 ? 4 : 5,
 						get_ttx(343),

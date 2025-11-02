@@ -431,7 +431,7 @@ void do_inn(void)
 
 		handle_gui_input();
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			answer = GUI_radio(get_ttx(345), g_combo_mode == 0 ? 7 : 8,
 						get_ttx(343), get_ttx(470),

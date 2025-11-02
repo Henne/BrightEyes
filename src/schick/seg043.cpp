@@ -781,7 +781,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 /**

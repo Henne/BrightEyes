@@ -121,7 +121,7 @@ void do_temple(void)
 
 			update_mouse_cursor();
 			do_pic_copy(0);
-			refresh_screen_size();
+			call_mouse();
 			g_pic_copy.dst = g_vga_memstart;
 
 			/* location string */
@@ -137,7 +137,7 @@ void do_temple(void)
 		handle_gui_input();
 
 		/* input window */
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			l_di = GUI_radio(get_ttx(225), 9,
 						get_ttx(226), get_ttx(227), get_ttx(293),

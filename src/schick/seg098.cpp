@@ -98,7 +98,7 @@ void magic_heal_ani(const struct struct_hero *hero)
 		g_pic_copy.dst = g_vga_memstart;
 		do_pic_copy(3);
 
-		delay_or_keypress(10);
+		vsync_or_key(10);
 	}
 
 	draw_status_line();

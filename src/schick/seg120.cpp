@@ -807,7 +807,7 @@ void game_over_screen(void)
 	set_palette(g_palette_allblack2, 0x00, 0x20);
 	set_palette(g_palette_allblack2, 0x20, 0x20);
 
-	refresh_screen_size();
+	call_mouse();
 
 	g_pp20_index = -1;
 }
@@ -834,7 +834,7 @@ void call_gen(void)
 			g_str_gen_1, NULL);
 
 #endif
-	refresh_screen_size();
+	call_mouse();
 
 	if (retval == -1) {
 

@@ -83,28 +83,14 @@ void seg002_1880(signed short);
 #endif
 void make_ggst_cursor(Bit8u *icon);
 void update_mouse_cursor(void);
-void refresh_screen_size(void);
-void update_mouse_cursor1(void);
-void refresh_screen_size1(void);
-//static
-void mouse_19dc(void);
+void call_mouse(void);
 void handle_gui_input(void);
 signed short get_mouse_action(signed short, signed short, struct mouse_action*);
 void handle_input(void);
-void wait_for_keyboard1(void);
-/* static */
-void game_loop(void);
-//static
-void timers_daily(void);
-/* static */
-void seg002_2177(void);
+void flush_keyboard_queue_alt(void);
 void pal_fade(Bit8s*, Bit8s*);
 void pal_fade_in(Bit8s*, Bit8s*, const signed int, const signed int);
-void dawning(void);
-void nightfall(void);
 signed short get_current_season(void);
-/* static */
-void do_census(void);
 void do_timers(void);
 void sub_ingame_timers(Bit32s);
 void sub_mod_timers(Bit32s);
@@ -112,87 +98,81 @@ signed short get_free_mod_slot(void);
 void set_mod_slot(signed short, Bit32s, Bit8u*, signed char, signed char);
 void sub_heal_staffspell_timers(Bit32s);
 void sub_light_timers(Bit32s);
-//static
-void magical_chainmail_damage(void);
 void herokeeping(void);
 void check_level_up(void);
 void seg002_37c4(void);
 void set_and_spin_lock(void);
-/* static */
-void passages_recalc(void);
-//static
-void passages_reset();
-void timewarp(Bit32s);
-void timewarp_until_time_of_day(Bit32s);
+void timewarp(const Bit32s);
+void timewarp_until_time_of_day(const Bit32s);
 void dec_splash(void);
 void timewarp_until_midnight(void);
-void wait_for_keyboard2(void);
+void flush_keyboard_queue(void);
 void wait_for_keypress(void);
-void delay_or_keypress(signed short);
-void unused_delay(signed short);
-void unused_spinlock(void);
+void vsync_or_key(const signed int);
+
 Bit32s swap_u32(Bit32u);
-Bit32u swap_u32_unused(Bit32u);
-signed short alloc_EMS(Bit32s);
-void from_EMS(Bit8u*, signed short, Bit32s);
-void to_EMS(signed short, Bit8u*, Bit32s);
+
+#if defined(__BORLANDC__)
+signed int alloc_EMS(const Bit32s);
+void from_EMS(const Bit8u*, const signed int, Bit32s);
+void to_EMS(const signed int, const Bit8u*, Bit32s);
+#endif
+
 void clear_menu_icons(void);
-void draw_loc_icons(signed short, ...);
-signed short mod_day_timer(signed short);
+void draw_loc_icons(const signed int, ...);
+
+signed int mod_day_timer(const signed int);
 void draw_compass(void);
-signed short can_merge_group(void);
+signed int can_merge_group(void);
 unsigned short div16(unsigned char);
-void select_with_mouse(signed short*, struct shop_item*);
-void select_with_keyboard(signed short*, struct shop_item*);
-void set_automap_tile(signed short, signed short);
-void set_automap_tiles(signed short, signed short);
-void seg002_47e2(void);
-void seg002_484f(void);
+
+void select_with_mouse(signed short*, const struct shop_item*);
+void select_with_keyboard(signed short*, const struct shop_item*);
+
+void set_automap_tile(const signed int, const signed int);
+void set_automap_tiles(const signed int, const signed int);
+
 signed int check_hero(const struct struct_hero*);
-signed int check_hero_no2(const struct struct_hero*);
-signed int check_hero_no3(const struct struct_hero*);
 signed int is_hero_available_in_group(const struct struct_hero*);
 void sub_ae_splash(struct struct_hero*, signed int);
 void add_hero_ae(struct struct_hero*, const signed int);
-void sub_hero_le(struct struct_hero*, const signed short);
-void add_hero_le(struct struct_hero*, const signed short);
-void add_group_le(signed short);
-/* static */
-void do_starve_damage(struct struct_hero*, const signed int, const signed int);
-#if defined(__BORLANDC__)
-signed short compare_name(char*);
-#endif
+void sub_hero_le(struct struct_hero*, const signed int);
+void add_hero_le(struct struct_hero*, const signed int);
+void add_group_le(const signed int);
 signed int test_attrib(const struct struct_hero*, const signed int, const signed int);
 signed int test_attrib3(const struct struct_hero*, const signed int, const signed int, const signed int, signed char);
-signed short unused_cruft(void);
-signed short get_random_hero(void);
+signed int get_random_hero(void);
 Bit32s get_party_money(void);
 void set_party_money(Bit32s);
-void add_party_money(Bit32s);
-void add_hero_ap(struct struct_hero*, Bit32s);
+void add_party_money(const Bit32s);
+void add_hero_ap(struct struct_hero*, const Bit32s);
 void add_group_ap(Bit32s);
-void add_hero_ap_all(signed short);
-void sub_hero_ap_all(signed short);
+void add_hero_ap_all(const signed int);
+void sub_hero_ap_all(const signed int);
 signed int get_hero_index(const struct struct_hero*);
-signed int get_item_pos(struct struct_hero*, const signed int);
-signed short get_first_hero_with_item(signed short);
-signed short get_first_hero_with_item_in_group(signed short, signed short);
-void sub_group_le(signed short);
+signed int get_item_pos(const struct struct_hero*, const signed int);
+
+signed int get_first_hero_with_item(const signed int);
+signed int get_first_hero_with_item_in_group(const signed int, const signed int);
+
+void sub_group_le(const signed int);
+
 struct struct_hero* get_first_hero_available_in_group(void);
 struct struct_hero* get_second_hero_available_in_group(void);
-signed short count_heroes_available(void);
+
+signed int count_heroes_available(void);
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows cleaner fixes for Original-Bug 15 */
-signed short count_heroes_available_ignore_npc(void);
+signed int count_heroes_available_ignore_npc(void);
 #endif
-signed short count_heroes_available_in_group(void);
+signed int count_heroes_available_in_group(void);
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows cleaner fixes for Original-Bug 12, 13, 14 and 15 */
-signed short count_heroes_available_in_group_ignore_npc(void);
+signed int count_heroes_available_in_group_ignore_npc(void);
 #endif
+
 void check_group(void);
 Bit8u* schick_alloc(Bit32u);
-signed short copy_protection(void);
 
 #if !defined(__BORLANDC__)
 }

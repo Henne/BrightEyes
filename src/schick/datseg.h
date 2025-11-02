@@ -1717,8 +1717,8 @@ extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
 extern signed short g_action;		// ds:0xc3d9; seg002, seg025-seg097
 extern signed short g_bioskey_event;	// ds:0xc3d7; seg002, seg097
 extern signed short g_mouse1_event2;	// ds:0xc3d5; seg002, seg004, seg025, seg049, seg066, seg097
-extern signed short g_mouse2_event;	// ds:0xc3d3; seg002, seg025-seg097
-extern signed short g_mouse1_event1;	// ds:0xc3d1; seg002, seg034, seg093, seg097
+extern signed short g_mouse_rightclick_event;	// ds:0xc3d3; seg002, seg025-seg097
+extern signed short g_mouse_leftclick_event;	// ds:0xc3d1; seg002, seg034, seg093, seg097
 extern signed short g_mouse1_doubleclick;	// ds:0xc3cf; seg002, seg048
 extern signed short g_update_statusline;	// ds:0xc3cb; seg002, seg004, seg026, seg029, seg046, seg097
 extern signed short g_unused_spinlock_flag;	// ds:0xc3cb; seg002, seg004

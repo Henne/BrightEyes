@@ -86,7 +86,7 @@ void do_citycamp(void)
 
 		handle_gui_input();
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			/* open citycamp radio menu */
 			answer = GUI_radio(get_ttx(307), 5,

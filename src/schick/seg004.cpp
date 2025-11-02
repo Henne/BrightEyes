@@ -124,7 +124,7 @@ void init_ani(Bit16u v1)
 		/* reset flag for pic_copy() */
 		g_pic_copy_flag = 0;
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	if ((v1 & 0x7f) != 1) {
@@ -308,7 +308,7 @@ void interrupt timer_isr(void)
 					do_pic_copy(1);
 
 					if (flag != 0) {
-						refresh_screen_size();
+						call_mouse();
 						flag = 0;
 					}
 				}
@@ -385,7 +385,7 @@ void update_status_bars(void)
 						do_h_line(g_vga_memstart, 260, 310, i + 36, g_status_page_hunger_max_color ? 9 : 10);
 					}
 
-					refresh_screen_size();
+					call_mouse();
 
 					g_status_page_hunger_max_counter = 0;
 				}
@@ -401,7 +401,7 @@ void update_status_bars(void)
 						do_h_line(g_vga_memstart, g_status_page_hunger / 2 + 260, 310, i + 36, 10);
 				}
 
-				refresh_screen_size();
+				call_mouse();
 			}
 
 			if (g_status_page_thirst == 100) {
@@ -416,7 +416,7 @@ void update_status_bars(void)
 						do_h_line(g_vga_memstart, 260, 310, i + 43, g_status_page_thirst_max_color ? 11 : 12);
 					}
 
-					refresh_screen_size();
+					call_mouse();
 
 					g_status_page_thirst_max_counter = 0;
 				}
@@ -432,7 +432,7 @@ void update_status_bars(void)
 					do_h_line(g_vga_memstart, g_status_page_thirst / 2 + 260, 310, i + 43, 12);
 				}
 
-				refresh_screen_size();
+				call_mouse();
 			}
 
 #if !defined(__BORLANDC__)
@@ -550,7 +550,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	}
 
 	if (mode == 0) {
-		refresh_screen_size();
+		call_mouse();
 	}
 }
 
@@ -574,7 +574,7 @@ void restore_rect(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, si
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, signed char width, signed char height, unsigned short v1)
@@ -609,10 +609,10 @@ void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
-void draw_mouse_cursor(void)
+void mouse_cursor_draw(void)
 {
 	register signed short mask;
 	signed short x;
@@ -650,7 +650,7 @@ void draw_mouse_cursor(void)
 	}
 }
 
-void save_mouse_bg(void)
+void mouse_save_bg(void)
 {
 	Bit8u *src;
 	signed short realpos_x;
@@ -885,7 +885,7 @@ void draw_wallclock(signed short pos, signed short night)
 	}
 
 	if (mouse_updated != 0) {
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	/* restore gfx */
@@ -1038,7 +1038,7 @@ void do_border(Bit8u* dst, signed short x1, signed short y1, signed short x2, si
 	do_h_line(dst, x1, x2, y2, color);
 	do_v_line(dst, x1, y1, y2, color);
 	do_v_line(dst, x2, y1, y2, color);
-	refresh_screen_size();
+	call_mouse();
 }
 
 void do_pic_copy(unsigned short mode)
@@ -1112,7 +1112,7 @@ void do_fill_rect(Bit8u* dst, signed short x, signed short y, signed short w, si
 #else
 	fill_rect(dst, color, width, height);
 #endif
-	refresh_screen_size();
+	call_mouse();
 }
 
 void wait_for_vsync(void)
@@ -1182,7 +1182,7 @@ void map_effect(Bit8u *src)
 #endif
 	}
 
-	refresh_screen_size();
+	call_mouse();
 
 	g_wallclock_update = wallclock_update_bak;
 }

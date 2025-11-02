@@ -338,7 +338,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 					}
 				}
 
-				refresh_screen_size();
+				call_mouse();
 				l6 = 1;
 				item_pos = 0;
 				l8 = 0;
@@ -378,7 +378,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 				GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[item_pos + item].item_id)));
 			}
 
-			if (g_mouse2_event  || g_action == ACTION_ID_PAGE_UP) {
+			if (g_mouse_rightclick_event  || g_action == ACTION_ID_PAGE_UP) {
 
 				answer = GUI_radio(NULL, 5, get_ttx(433), get_ttx(435), get_ttx(436), get_ttx(446), get_ttx(437)) - 1;
 
@@ -573,7 +573,7 @@ void do_smith(void)
 
 		handle_gui_input();
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			g_textbox_width = 4;
 

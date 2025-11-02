@@ -137,7 +137,7 @@ void load_pp20(signed short index)
  * \param   fig_old     the fig number
  * \return              a pointer to the location where the data is.
  */
-/* Original-Bug: when using EMS for caching something strage happens. */
+/* Original-Bug: when using EMS for caching something strange happens. */
 Bit8u* load_fight_figs(signed short fig)
 {
 	signed short i;
@@ -209,9 +209,11 @@ Bit8u* load_fight_figs(signed short fig)
 		/* Yes, it is */
 
 		if (memslots[i].ems_handle) {
+#if defined(__BORLANDC__)
 			/* is in EMS */
 			ems_handle = memslots[i].ems_handle;
 			from_EMS(src, ems_handle, memslots[i].length);
+#endif
 		} else {
 			/* is in HEAP */
 #if !defined(__BORLANDC__)
@@ -254,10 +256,9 @@ Bit8u* load_fight_figs(signed short fig)
 
 			memcpy((Bit8u*)dst, (Bit8u*)src, (unsigned short)len);
 
-		} else if (g_ems_enabled != 0) {
-#if !defined(__BORLANDC__)
-			D1_LOG("use EMS for fig %d\n", fig);
-#endif
+		}
+#if defined(__BORLANDC__)
+	       	else if (g_ems_enabled != 0) {
 
 			if ((ems_handle = alloc_EMS(len))) {
 
@@ -277,6 +278,7 @@ Bit8u* load_fight_figs(signed short fig)
 				to_EMS(ems_handle, src, len);
 			}
 		}
+#endif
 	}
 
 	return src;
@@ -347,11 +349,11 @@ void load_ani(const signed short no)
 	}
 
 	if (i != 37) {
-
+#if defined(__BORLANDC__)
 		/* already buffered in EMS, get from there */
 		ems_handle = g_memslots_anis[i].ems_handle;
 		from_EMS((Bit8u*)g_buffer9_ptr, ems_handle, g_memslots_anis[i].length);
-
+#endif
 	} else {
 		/* load it from file */
 		ani_off = g_buffer_anis_tab[no - 1];
@@ -364,6 +366,7 @@ void load_ani(const signed short no)
 		seek_archive_file(handle, ani_off, 0);
 		read_archive_file(handle, (Bit8u*)g_buffer9_ptr, (unsigned short)ani_len);
 
+#if defined(__BORLANDC__)
 		/* if EMS is enabled buffer it */
 		if ((g_ems_enabled != 0) && (ems_handle = alloc_EMS(ani_len))) {
 
@@ -381,6 +384,7 @@ void load_ani(const signed short no)
 			/* copy data to EMS */
 			to_EMS(ems_handle, (Bit8u*)g_buffer9_ptr, ani_len);
 		}
+#endif
 
 		close(handle);
 	}

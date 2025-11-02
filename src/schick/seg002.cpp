@@ -167,8 +167,8 @@ signed short g_unused_spinlock_flag; // ds:0xc3c9
 signed short g_update_statusline; // ds:0xc3cb
 unsigned char g_unkn_079[2]; // ds:0xc3cd
 signed short g_mouse1_doubleclick; // ds:0xc3cf
-signed short g_mouse1_event1; // ds:0xc3d1
-signed short g_mouse2_event; // ds:0xc3d3
+signed short g_mouse_leftclick_event; // ds:0xc3d1
+signed short g_mouse_rightclick_event; // ds:0xc3d3
 signed short g_mouse1_event2; // ds:0xc3d5
 signed short g_bioskey_event; // ds:0xc3d7
 signed short g_action; // ds:0xc3d9
@@ -310,6 +310,18 @@ static inline Bit32s readds(Bit8u *p)
 
 #endif
 
+/* static prototypes */
+static void mouse_bg(void);
+static void mouse_cursor(void);
+static void game_loop(void);
+static void magical_chainmail_damage(void);
+static void passages_recalc(void);
+static void passages_reset(void);
+static void ul_save(void);
+static void ul_blit(void);
+static signed int check_hero_no3(const struct struct_hero *hero);
+static void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type);
+static signed int copy_protection(void);
 
 /* static */
 void play_music_file(signed short index)
@@ -344,7 +356,7 @@ void set_audio_track(Bit16u index)
 
 void sound_menu(void)
 {
-	signed short answer;
+	signed int answer;
 
 	answer = GUI_radio(g_snd_menu_title, 4,
 				g_snd_menu_radio1, g_snd_menu_radio2,
@@ -1291,11 +1303,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 #if !defined(__BORLANDC__)
 		decomp_pp20(src, nvf->dst, src + (signed char)4, p_size);
 #else
-		decomp_pp20(src,
-			nvf->dst,
-			FP_OFF(src) + 4,
-			FP_SEG(src),
-			p_size);
+		decomp_pp20(src, nvf->dst, FP_OFF(src) + 4, FP_SEG(src), p_size);
 #endif
 
 	} else if (nvf->type >= 2 && nvf->type <= 5) {
@@ -1400,11 +1408,11 @@ void interrupt mouse_isr(void)
 
 		if (l_si & 0x2) {
 			g_mouse1_event2 = 1;
-			g_mouse1_event1 = 1;
+			g_mouse_leftclick_event = 1;
 		}
 
 		if (l_si & 0x8) {
-			g_mouse2_event = 1;
+			g_mouse_rightclick_event = 1;
 		}
 
 		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
@@ -1658,19 +1666,19 @@ void make_ggst_cursor(Bit8u *icon)
 
 void update_mouse_cursor(void)
 {
-	update_mouse_cursor1();
+	mouse_bg();
 }
 
-void refresh_screen_size(void)
+void call_mouse(void)
 {
-	refresh_screen_size1();
+	mouse_cursor();
 }
 
-void update_mouse_cursor1(void)
+static void mouse_bg(void)
 {
 	if (!g_mouse_locked) {
 
-		if  (!g_mouse_refresh_flag) {
+		if (!g_mouse_refresh_flag) {
 
 			g_mouse_locked = 1;
 			restore_mouse_bg();
@@ -1681,7 +1689,7 @@ void update_mouse_cursor1(void)
 	}
 }
 
-void refresh_screen_size1(void)
+static void mouse_cursor(void)
 {
 	/* check lock */
 	if (!g_mouse_locked) {
@@ -1705,12 +1713,14 @@ void refresh_screen_size1(void)
 			if (g_mouse_posy > 195)
 				g_mouse_posy = 195;
 
-			save_mouse_bg();
+			mouse_save_bg();
+
 			g_mouse_posx_bak = g_mouse_posx;
 			g_mouse_posy_bak = g_mouse_posy;
 			g_mouse_pointer_offsetx_bak = g_mouse_pointer_offsetx;
 			g_mouse_pointer_offsety_bak = g_mouse_pointer_offsety;
-			draw_mouse_cursor();
+
+			mouse_cursor_draw();
 
 			/* put lock */
 			g_mouse_locked = 0;
@@ -1718,7 +1728,7 @@ void refresh_screen_size1(void)
 	}
 }
 
-void mouse_19dc(void)
+static void mouse_motion(void)
 {
 	/* return if mouse was not moved and the cursor remains */
 	if (g_mouse_moved || (g_last_cursor != g_current_cursor)) {
@@ -1737,28 +1747,27 @@ void mouse_19dc(void)
 
 		/* reset mouse was moved */
 		g_mouse_moved = 0;
-		update_mouse_cursor1();
-		refresh_screen_size1();
+		mouse_bg();
+		mouse_cursor();
 	}
 }
 
 void handle_gui_input(void)
 {
-	signed short l_si;
-	signed short tw_bak;
-	signed short l1;
+	signed int l_in_key_ext;
+	signed int tw_bak;
 
-	g_bioskey_event = g_action = l_si = 0;
+	g_bioskey_event = g_action = l_in_key_ext = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		l_in_key_ext = (g_bioskey_event = bioskey(0)) >> 8;
 		g_bioskey_event &= 0xff;
 
-		if (l_si == 0x24) {
-			l_si = 0x2c;
+		if (l_in_key_ext == 0x24) {
+			l_in_key_ext = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
@@ -1779,13 +1788,13 @@ void handle_gui_input(void)
 		/* Ctrl + E */
 		if (g_bioskey_event == 5) {
 			status_select_hero();
-			l_si = 0;
+			l_in_key_ext = 0;
 		}
 
 		/* Ctrl + O -> swap heroes */
 		if (g_bioskey_event == 15) {
 			GRP_swap_heroes();
-			l_si = 0;
+			l_in_key_ext = 0;
 		}
 
 		/* Ctrl + S -> sound menu */
@@ -1807,25 +1816,27 @@ void handle_gui_input(void)
 			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = tw_bak;
 			g_gui_text_centered = 0;
-			g_bioskey_event10 = l_si = g_bioskey_event = 0;
+			g_bioskey_event10 = l_in_key_ext = g_bioskey_event = 0;
 			g_timers_disabled--;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
 		g_mouse1_event2 = 0;
-		l_si = 0;
+		l_in_key_ext = 0;
 
 		if (g_action_table_secondary) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && (g_action_table_primary)) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
+		if (!l_in_key_ext && (g_action_table_primary)) {
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
 		if (g_have_mouse == 2) {
 
-			for (l1 = 0; l1 < 15; l1++) {
+			signed int i;
+
+			for (i = 0; i < 15; i++) {
 				wait_for_vsync();
 			}
 
@@ -1835,34 +1846,36 @@ void handle_gui_input(void)
 			}
 		}
 
-		if ((l_si >= 0xf1) && (l_si <= 0xf8)) {
+		if ((l_in_key_ext >= 0xf1) && (l_in_key_ext <= 0xf8)) {
 
 			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
-				if ((get_hero(l_si - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_si - 241)->group_no == gs_current_group))
+				if ((get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_no == gs_current_group))
 				{
-					status_menu(l_si - 241);
-					l_si = 0;
+					status_menu(l_in_key_ext - 241);
+					l_in_key_ext = 0;
 					g_mouse1_doubleclick = 0;
 					g_mouse1_event2 = 0;
 				}
+
 			} else {
 				/* swap heroes by click - move mouse - click */
 				if (g_heroswap_allowed &&
-					(get_hero(l_si - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_si - 241)->group_no == gs_current_group))
+					(get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_no == gs_current_group))
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
-					GRP_move_hero(l_si - 241);
-					l_si = 0;
+					GRP_move_hero(l_in_key_ext - 241);
+					l_in_key_ext = 0;
 					g_mouse1_doubleclick = 0;
 					g_mouse1_event2 = 0;
 				}
 			}
-		} else if (l_si == 0xfd) {
+
+		} else if (l_in_key_ext == 0xfd) {
 			/* Credits */
 
-			l_si = 0;
+			l_in_key_ext = 0;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
 			g_gui_text_centered = 1;
@@ -1870,9 +1883,9 @@ void handle_gui_input(void)
 			g_gui_text_centered = 0;
 			g_textbox_width = tw_bak;
 
-		} else if (l_si == 0xfc) {
+		} else if (l_in_key_ext == 0xfc) {
 			/* Clock */
-			l_si = 0;
+			l_in_key_ext = 0;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
 			g_gui_text_centered = 1;
@@ -1884,8 +1897,8 @@ void handle_gui_input(void)
 		}
 	}
 
-	mouse_19dc();
-	g_action = (l_si);
+	mouse_motion();
+	g_action = l_in_key_ext;
 }
 
 /**
@@ -1917,20 +1930,19 @@ signed short get_mouse_action(signed short x, signed short y, struct mouse_actio
 
 void handle_input(void)
 {
-	signed short l_si;
-	signed short l_di;
+	signed int l_in_key_ext;
 
-	g_bioskey_event = g_action = l_si = 0;
+	g_bioskey_event = g_action = l_in_key_ext = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		l_in_key_ext = (g_bioskey_event = bioskey(0)) >> 8;
 		g_bioskey_event &= 0xff;
 
-		if (l_si == 0x24) {
-			l_si = 0x2c;
+		if (l_in_key_ext == 0x24) {
+			l_in_key_ext = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
@@ -1965,24 +1977,26 @@ void handle_input(void)
 			g_gui_text_centered = 0;
 			g_timers_disabled--;
 
-			g_bioskey_event10 = l_si = g_bioskey_event = 0;
+			g_bioskey_event10 = l_in_key_ext = g_bioskey_event = 0;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
 		g_mouse1_event2 = 0;
-		l_si = 0;
+		l_in_key_ext = 0;
 
 		if (g_action_table_secondary) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && g_action_table_primary) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
+		if (!l_in_key_ext && g_action_table_primary) {
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
 		if (g_have_mouse == 2) {
 
-			for (l_di = 0; l_di < 25; l_di++) {
+			signed int i;
+
+			for (i = 0; i < 25; i++) {
 
 				wait_for_vsync();
 
@@ -1995,21 +2009,22 @@ void handle_input(void)
 		}
 	}
 
-	mouse_19dc();
-	g_action = (l_si);
+	mouse_motion();
+	g_action = l_in_key_ext;
 }
 
-void wait_for_keyboard1(void)
+void flush_keyboard_queue_alt(void)
 {
+#if defined(__BORLANDC__)
 	while (CD_bioskey(1)) {
-
 		bioskey(0);
 	}
+#endif
 }
 
-void game_loop(void)
+static void game_loop(void)
 {
-	signed short answer;
+	signed int answer;
 
 	while (g_game_state == GAME_STATE_MAIN) {
 
@@ -2118,15 +2133,14 @@ void game_loop(void)
 	}
 }
 
-//static
 /*
  *	This function does daily accounting stuff.
- *	The g_check_disease flag is set here, indicating that the disease status should be updated. */
-
-void timers_daily(void)
+ *	The g_check_disease flag is set here, indicating that the disease status should be updated.
+ **/
+static void timers_daily(void)
 {
 	struct struct_hero *hero_i;
-	signed short i = 0;
+	signed int i = 0;
 
 	/* Smith / items to repair */
 	for (i = 0; i < 50; i++) {
@@ -2181,8 +2195,7 @@ void timers_daily(void)
 	}
 }
 
-/* static */
-void seg002_2177(void)
+static void seg002_2177(void)
 {
 	signed short i;
 
@@ -2264,7 +2277,7 @@ void pal_fade_in(Bit8s *dst, Bit8s *p2, const signed int v3, const signed int co
 /**
  * \brief   adjusts palettes in the morning
  */
-void dawning(void)
+static void dawning(void)
 {
 	/* Between 6 and 7, in 64 steps (i.e. each 56 seconds) */
 	if ((gs_day_timer >= HOURS(6)) &&
@@ -2305,7 +2318,7 @@ void dawning(void)
 /**
  * \brief   adjusts palettes in the evening
  */
-void nightfall(void)
+static void nightfall(void)
 {
 	/* Between 20 and 21, in 64 steps (i.e. each 56 seconds) */
 	if ((gs_day_timer >= HOURS(20)) &&
@@ -2368,21 +2381,19 @@ signed short get_current_season(void)
  *          If you put money on the bank, you get 5%.
  *          If you borrowed money you pay 15%.
  */
-/* static */
-void do_census(void)
+static void do_census(void)
 {
-
-	signed short si = 0;
+	signed int sign = 0;	/* {-1, 0, 1} */
 	Bit32s val;
 
 	if (gs_bank_deposit > 0) {
-		si = 1;
+		sign = 1;
 	} else if (gs_bank_deposit < 0) {
-			si = -1;
+			sign = -1;
 	}
 
 	/* bank transactions, no census */
-	if (si == 0)
+	if (sign == 0)
 		return;
 
 	/* convert to heller */
@@ -2408,9 +2419,9 @@ void do_census(void)
 	gs_bank_deposit = val / 10;
 
 	/* fixup over- and underflows */
-	if ((gs_bank_deposit < 0) && (si == 1)) {
+	if ((gs_bank_deposit < 0) && (sign == 1)) {
 		gs_bank_deposit = 32760;
-	} else if ((gs_bank_deposit > 0) && (si == -1)) {
+	} else if ((gs_bank_deposit > 0) && (sign == -1)) {
 		gs_bank_deposit = -32760;
 	}
 
@@ -2703,7 +2714,7 @@ void do_timers(void)
  */
 void sub_ingame_timers(Bit32s val)
 {
-	signed short i = 0;
+	signed int i = 0;
 
 	if (g_timers_disabled) return;
 
@@ -3052,7 +3063,7 @@ void sub_light_timers(Bit32s quarter)
 /**
  * \brief   damage if a cursed chainmail is worn
  */
-void magical_chainmail_damage(void)
+static void magical_chainmail_damage(void)
 {
 	signed short i;
 	struct struct_hero *hero_i;
@@ -3347,7 +3358,7 @@ void seg002_37c4(void)
 	Bit8u* p1;
 	Bit8u* p2;
 	Bit8u* p3;
-	struct struct_pic_copy pic_copy_bak = g_pic_copy;
+	struct struct_pic_copy pic_copy_bak = g_pic_copy; /* struct copy */
 
 	p1 = g_buffer6_ptr + 2000;
 	p2 = g_buffer6_ptr + 2100;
@@ -3373,7 +3384,7 @@ void seg002_37c4(void)
 		do_pic_copy(0);
 
 		if (l_si) {
-			refresh_screen_size();
+			call_mouse();
 		}
 
 		g_trv_menu_selection = l_si = 0;
@@ -3398,7 +3409,7 @@ void seg002_37c4(void)
 		}
 
 		if (l_si) {
-			refresh_screen_size();
+			call_mouse();
 		}
 
 		l_si = g_current_town_over = 0;
@@ -3421,7 +3432,7 @@ void seg002_37c4(void)
 		do_save_rect();
 
 		if (l_si) {
-			refresh_screen_size();
+			call_mouse();
 		}
 
 		g_current_town_over = 1;
@@ -3451,7 +3462,7 @@ void seg002_37c4(void)
 			do_pic_copy(2);
 
 			if (l_si) {
-				refresh_screen_size();
+				call_mouse();
 			}
 
 			g_trv_menu_selection = g_menu_selected;
@@ -3474,7 +3485,7 @@ void seg002_37c4(void)
 		do_pic_copy(2);
 
 		if (l_si) {
-			refresh_screen_size();
+			call_mouse();
 		}
 
 		g_current_town_over = 1;
@@ -3511,7 +3522,7 @@ void set_and_spin_lock(void)
 /**
  * \brief   called once every day at midnight
  */
-void passages_recalc(void)
+static void passages_recalc(void)
 {
 	signed short i;
 	signed short di;
@@ -3566,7 +3577,7 @@ void passages_recalc(void)
 /**
  * \brief   called once every day at 9 o'clock when the ships leave the harbors
  */
-void passages_reset(void)
+static void passages_reset(void)
 {
 	signed short i;
 	struct sea_route *route = &g_sea_routes[0];
@@ -3595,7 +3606,7 @@ void passages_reset(void)
  *
  * \param   time        ticks to forward
  */
-void timewarp(Bit32s time)
+void timewarp(const Bit32s time)
 {
 	signed short hour_old;
 	signed short hour_new;
@@ -3712,7 +3723,7 @@ void timewarp(Bit32s time)
  *
  * \param   time        ticks to forward to, e.g to 6 AM. If the passed time agrees with the current time of the day, 24 hours will be forwarded.
  */
-void timewarp_until_time_of_day(Bit32s time)
+void timewarp_until_time_of_day(const Bit32s time)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* The code of the function replicates the one of timewarp(..)
@@ -3808,7 +3819,7 @@ void dec_splash(void)
  * \param   hero_pos    on which slot the splash is drawn
  * \param   type        kind of damage (0 = red,LE / !0 = yellow,AE)
  */
-static void draw_splash(signed short hero_pos, signed short type)
+static void draw_splash(const signed int hero_pos, const signed int type)
 {
 	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
@@ -3859,28 +3870,27 @@ void timewarp_until_midnight(void)
 	g_timers_disabled = td_bak;
 }
 
-void wait_for_keyboard2(void)
+void flush_keyboard_queue(void)
 {
+#if defined(__BORLANDC__)
 	while (CD_bioskey(1)) {
-#if !defined(__BORLANDC__)
-		D1_LOG("loop in %s\n", __func__);
-#endif
 		bioskey(0);
 	}
+#endif
 }
 
 
 /* unused */
 #if defined(__BORLANDC__)
-static void seg002_4031(char *ptr)
+static void error_msg(char *msg)
 {
-	delay_or_keypress(150 * GUI_print_header(ptr));
+	vsync_or_key(150 * GUI_print_header(msg));
 }
 #endif
 
 void wait_for_keypress(void)
 {
-	signed short si;
+	signed int l_key;
 
 #if defined(__BORLANDC__)
 	flushall();
@@ -3891,16 +3901,16 @@ void wait_for_keypress(void)
 	do {
 		if (CD_bioskey(1)) {
 
-			si = bioskey(0);
+			l_key = bioskey(0);
 
-			if (((si & 0xff) == 0x20) && (g_bioskey_event10 == 0))
+			if (((l_key & 0xff) == 0x20) && (g_bioskey_event10 == 0))
 			{
 
-				seg002_47e2();
+				ul_save();
 
 				while (!CD_bioskey(1)) {;}
 
-				seg002_484f();
+				ul_blit();
 				break;
 			}
 		}
@@ -3908,7 +3918,7 @@ void wait_for_keypress(void)
 	} while (!CD_bioskey(1) && g_mouse1_event2 == 0);
 
 	if (CD_bioskey(1))
-		si = bioskey(0);
+		l_key = bioskey(0);
 
 	g_mouse1_event2 = 0;
 }
@@ -3918,10 +3928,10 @@ void wait_for_keypress(void)
  *
  * \param   duration    the maximal time to wait (1 = 15ms, 66 = 1s)
  */
-void delay_or_keypress(signed short duration)
+void vsync_or_key(const signed int duration)
 {
-	signed short done = 0;
-	signed short counter = 0;
+	signed int done = 0;
+	signed int counter = 0;
 
 	while (counter < duration) {
 
@@ -3935,9 +3945,9 @@ void delay_or_keypress(signed short duration)
 
 				if (g_action == ACTION_ID_SPACE) {
 
-					seg002_47e2();
+					ul_save();
 					while (!CD_bioskey(1)) { ; }
-					seg002_484f();
+					ul_blit();
 					done = 1;
 
 				} else {
@@ -3952,7 +3962,7 @@ void delay_or_keypress(signed short duration)
 				}
 			} else {
 
-				if (g_mouse2_event) {
+				if (g_mouse_rightclick_event) {
 					done = 1;
 				}
 			}
@@ -3962,16 +3972,16 @@ void delay_or_keypress(signed short duration)
 
 				if (g_action == ACTION_ID_SPACE) {
 
-					seg002_47e2();
+					ul_save();
 					while (!CD_bioskey(1)) { ; }
-					seg002_484f();
+					ul_blit();
 				}
 
 				done = 1;
 
 			} else {
 
-				if (g_mouse2_event) {
+				if (g_mouse_rightclick_event) {
 					done = 1;
 				}
 			}
@@ -3979,8 +3989,8 @@ void delay_or_keypress(signed short duration)
 
 
 		if (done) {
-			g_mouse2_event = 0;
-			g_action = (ACTION_ID_RETURN);
+			g_mouse_rightclick_event = 0;
+			g_action = ACTION_ID_RETURN;
 			break;
 		}
 
@@ -3990,6 +4000,7 @@ void delay_or_keypress(signed short duration)
 	}
 }
 
+#if defined(__BORLANDC__)
 /* unused */
 void unused_delay(signed short no)
 {
@@ -4009,6 +4020,7 @@ void unused_spinlock(void)
 	while (g_unused_spinlock_flag) {
 	}
 }
+#endif
 
 /**
  * \brief   calculates a 32bit BigEndian value into LittleEndian
@@ -4031,6 +4043,7 @@ Bit32s swap_u32(Bit32u v)
 	return readds((Bit8u*)ptr);
 }
 
+#if defined(__BORLANDC__)
 /* unused */
 Bit32u swap_u32_unused(Bit32u v)
 {
@@ -4045,18 +4058,20 @@ Bit32u swap_u32_unused(Bit32u v)
 
 	return readds((Bit8u*)ptr);
 }
+#endif
 
+#if defined(__BORLANDC__)
 /**
  * \brief   allocates EMS memory
  *
  * \param   bytes       bytes to allocate
  * \return              an EMS handle, to access the memory.
  */
-signed short alloc_EMS(Bit32s bytes)
+signed int alloc_EMS(const Bit32s bytes)
 {
 	signed int handle;
 
-	/* calculate the number of needes EMS pages */
+	/* calculate the number of needed EMS pages */
 	handle = (signed short)((bytes / 0x4000) + 1);
 
 	/* check if enought EMS is free */
@@ -4071,59 +4086,56 @@ signed short alloc_EMS(Bit32s bytes)
 	return 0;
 }
 
-void from_EMS(Bit8u* dst, signed short handle, Bit32s bytes)
+void from_EMS(const Bit8u* dst, const signed int handle, Bit32s bytes)
 {
-#if defined(__BORLANDC__)
-	signed short si;
-	signed short di;
-	signed short v1;
-	signed short len;
+	signed int pages_copied;
+	signed int pages_left;
+	signed int pages_copied2;
+	signed int len;
 	Bit8u* ptr;
 
-	di = (signed short)(bytes / 0x4000 + 1);
-	v1 = si = 0;
+	pages_left = bytes / 0x4000 + 1;
+	pages_copied2 = pages_copied = 0;
 
 	do {
-		EMS_map_memory(handle, v1++, 0);
-		ptr = (Bit8u*)((HugePt)dst + (((Bit32s)si) << 0x0e));
-		si++;
+		EMS_map_memory(handle, pages_copied2++, 0);
+		ptr = (Bit8u*)((HugePt)dst + (((Bit32s)pages_copied) << 0x0e));
+		pages_copied++;
 
-		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
+		len = (bytes - 0x4000 > 0) ? 0x4000 : bytes;
 
 		bytes -= 0x4000;
 
 		memmove((void*)EMS_norm_ptr(ptr), (void*)g_ems_frame_ptr, len);
 
-	} while (--di != 0);
-#endif
+	} while (--pages_left != 0);
 }
 
-void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
+void to_EMS(const signed int handle, const Bit8u* src, Bit32s bytes)
 {
-#if defined(__BORLANDC__)
-	signed short si;
-	signed short di;
-	signed short v1;
-	signed short len;
+	signed int pages_copied;
+	signed int pages_left;
+	signed int pages_copied2;
+	signed int len;
 	Bit8u* ptr;
 
-	di = (signed short)(bytes / 0x4000 + 1);
-	v1 = si = 0;
+	pages_left = bytes / 0x4000 + 1;
+	pages_copied2 = pages_copied = 0;
 
 	do {
-		EMS_map_memory(handle, v1++, 0);
-		ptr = (Bit8u*)((HugePt)src + (((Bit32s)si) << 0x0e));
-		si++;
+		EMS_map_memory(handle, pages_copied2++, 0);
+		ptr = (Bit8u*)((HugePt)src + (((Bit32s)pages_copied) << 0x0e));
+		pages_copied++;
 
-		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
+		len = (bytes - 0x4000 > 0) ? 0x4000 : bytes;
 
 		bytes -= 0x4000;
 
 		memmove((void*)g_ems_frame_ptr, (void*)EMS_norm_ptr(ptr), len);
 
-	} while (--di != 0);
-#endif
+	} while (--pages_left != 0);
 }
+#endif
 
 void clear_menu_icons(void)
 {
@@ -4140,7 +4152,7 @@ void clear_menu_icons(void)
  * \param   icons       number of icons
  * \param   ...         icon ids
  */
-void draw_loc_icons(signed short icons, ...)
+void draw_loc_icons(const signed int icons, ...)
 {
 	signed short icons_bak[9];
 	va_list arguments;
@@ -4173,7 +4185,7 @@ void draw_loc_icons(signed short icons, ...)
 	}
 }
 
-signed short mod_day_timer(signed short val)
+signed int mod_day_timer(const signed int val)
 {
 	return ((gs_day_timer % val) == 0) ? 1 : 0;
 }
@@ -4220,14 +4232,14 @@ void draw_compass(void)
 
 		update_mouse_cursor();
 		do_pic_copy(2);
-		refresh_screen_size();
+		call_mouse();
 	}
 }
 
-signed short can_merge_group(void)
+signed int can_merge_group(void)
 {
-	signed short i;
-	signed short retval = -1;
+	signed int i;
+	signed int retval = -1;
 
 	if (gs_group_member_counts[gs_current_group] == gs_total_hero_counter) {
 
@@ -4239,17 +4251,11 @@ signed short can_merge_group(void)
 
 			if ((i != gs_current_group) &&
 				(0 != gs_group_member_counts[i]) &&
-				/* check XTarget */
 				(gs_groups_x_target[i] == gs_x_target) &&
-				/* check YTarget */
 				(gs_groups_y_target[i] == gs_y_target) &&
-				/* check Location */
 				(gs_groups_current_loctype[i] == gs_current_loctype) &&
-				/* check currentTown */
 				(gs_groups_town[i] == gs_current_town) &&
-				/* check DungeonIndex */
 				(gs_groups_dng_index[i] == gs_dungeon_index) &&
-				/* check DungeonLevel */
 				(gs_groups_dng_level[i] == gs_dungeon_level))
 			{
 				retval = i;
@@ -4262,13 +4268,13 @@ signed short can_merge_group(void)
 
 unsigned short div16(unsigned char val)
 {
-	return ((unsigned char)val) >> 4;
+	return val >> 4;
 }
 
-void select_with_mouse(signed short *item_pos, struct shop_item *shop_item)
+void select_with_mouse(signed short *item_pos, const struct shop_item *shop_item)
 /* This function is called in shops at sell/buy screens */
 {
-	signed short i;
+	signed int i;
 
 	if (g_have_mouse != 2) {
 		return;
@@ -4287,9 +4293,9 @@ void select_with_mouse(signed short *item_pos, struct shop_item *shop_item)
 	}
 }
 
-void select_with_keyboard(signed short *item_pos, struct shop_item *shop_item)
+void select_with_keyboard(signed short *item_pos, const struct shop_item *shop_item)
 {
-	signed short pos = *item_pos;
+	signed int pos = *item_pos;
 
 	if (g_action == ACTION_ID_UP) {
 
@@ -4348,7 +4354,7 @@ void select_with_keyboard(signed short *item_pos, struct shop_item *shop_item)
  * \param   x           X coordinate
  * \param   y           Y coordinate
  */
-void set_automap_tile(signed short x, signed short y)
+void set_automap_tile(const signed int x, const signed int y)
 {
 	g_automap_buf[4 * y + (x >> 3)] |= g_automap_bitmask[x & 0x07];
 }
@@ -4359,7 +4365,7 @@ void set_automap_tile(signed short x, signed short y)
  * \param   x           X xoordinate
  * \param   y           Y xoordinate
  */
-void set_automap_tiles(signed short x, signed short y)
+void set_automap_tiles(const signed int x, const signed int y)
 {
 	/* set upper line */
 	if (y > 0) {
@@ -4402,7 +4408,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 /**
  * \brief   */
-void seg002_47e2(void)
+static void ul_save(void)
 {
 	/* save gfx settings to stack */
 	struct struct_pic_copy pic_copy_bak = g_pic_copy;
@@ -4428,7 +4434,7 @@ void seg002_47e2(void)
 
 /**
  */
-void seg002_484f(void)
+static void ul_blit(void)
 {
 	/* save gfx settings to stack */
 	struct struct_pic_copy pic_copy_bak = g_pic_copy;
@@ -4470,8 +4476,7 @@ signed int check_hero(const struct struct_hero *hero)
 /**
  * \brief   returns true if the hero is not dead, petrified, unconscious or renegade
  */
-/* should be static */
-signed int check_hero_no2(const struct struct_hero *hero)
+static signed int check_hero_no2(const struct struct_hero *hero)
 {
 
 	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious || hero->flags.renegade)
@@ -4488,8 +4493,7 @@ signed int check_hero_no2(const struct struct_hero *hero)
  * \param   hero        pointer to the hero
  * \return              {0, 1}
  */
-/* should be static */
-signed int check_hero_no3(const struct struct_hero *hero)
+static signed int check_hero_no3(const struct struct_hero *hero)
 {
 	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious)
 	{
@@ -4582,7 +4586,7 @@ void add_hero_ae(struct struct_hero* hero, const signed int ae)
  * \param   hero        pointer to the hero
  * \param   le          LE the hero looses
  */
-void sub_hero_le(struct struct_hero *hero, const signed short le)
+void sub_hero_le(struct struct_hero *hero, const signed int le)
 {
 	signed short i;
 	signed short bak;
@@ -4730,11 +4734,11 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
  * \param   hero        pointer to the hero
  * \param   le          LE to be regenerated
  */
-void add_hero_le(struct struct_hero *hero, const signed short le)
+void add_hero_le(struct struct_hero *hero, const signed int le)
 {
-	signed short val_bak;
+	signed int val_bak;
 	struct struct_fighter *fighter;
-	signed short ret;
+	signed int ret;
 
 	/* dead heroes never get LE */
 	if (!hero->flags.dead && (le > 0)) {
@@ -4786,10 +4790,10 @@ void add_hero_le(struct struct_hero *hero, const signed short le)
  *
  * \param   le          LE to be regenerated
  */
-void add_group_le(signed short le)
+void add_group_le(const signed int le)
 {
 	struct struct_hero *hero;
-	signed short i;
+	signed int i;
 
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
@@ -4808,7 +4812,7 @@ void add_group_le(signed short le)
  * \param   index       the index number of the hero
  * \param   type        the type of message which should be printed (0 = hunger / 1 = thirst)
  */
-void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type)
+static void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type)
 {
 	/* check if the hero is dead */
 	if (!hero->flags.dead) {
@@ -4842,7 +4846,7 @@ void do_starve_damage(struct struct_hero *hero, const signed int index, const si
 
 #if defined(__BORLANDC__)
 /* unused */
-signed short compare_name(char *name)
+static signed int compare_name(const char *name)
 {
 	signed int i;
 
@@ -5058,6 +5062,7 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 #endif
 }
 
+#if defined(__BORLANDC__)
 signed short unused_cruft(void)
 {
 
@@ -5074,6 +5079,7 @@ signed short unused_cruft(void)
 
 	return l_si;
 }
+#endif
 
 /**
  * \brief   selects a hero randomly
@@ -5082,7 +5088,7 @@ signed short unused_cruft(void)
  */
 /* Original-Bug: can loop forever if the position is greater than the
 	number of heroes in the group */
-signed short get_random_hero(void)
+signed int get_random_hero(void)
 {
 	signed int cur_hero;
 
@@ -5124,7 +5130,7 @@ signed short get_random_hero(void)
  */
 Bit32s get_party_money(void)
 {
-	signed short i;
+	signed int i;
 	Bit32s sum = 0;
 	struct struct_hero *hero = get_hero(0);
 
@@ -5200,7 +5206,7 @@ void set_party_money(Bit32s money)
  *
  * \param   money       money to add
  */
-void add_party_money(Bit32s money)
+void add_party_money(const Bit32s money)
 {
 	set_party_money(get_party_money() + money);
 }
@@ -5211,7 +5217,7 @@ void add_party_money(Bit32s money)
  * \param   hero        pointer to the hero
  * \param   ap          AP the hero should get
  */
-void add_hero_ap(struct struct_hero *hero, Bit32s ap)
+void add_hero_ap(struct struct_hero *hero, const Bit32s ap)
 {
 	hero->ap += ap;
 }
@@ -5223,7 +5229,7 @@ void add_hero_ap(struct struct_hero *hero, Bit32s ap)
  */
 void add_group_ap(Bit32s ap)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	if (ap < 0) {
@@ -5248,10 +5254,10 @@ void add_group_ap(Bit32s ap)
  *
  * \param   ap          AP to add
  */
-void add_hero_ap_all(signed short ap)
+void add_hero_ap_all(const signed int ap)
 {
 	struct struct_hero *hero;
-	signed short i;
+	signed int i;
 
 	if (ap < 0)
 		return;
@@ -5275,9 +5281,9 @@ void add_hero_ap_all(signed short ap)
  *
  * \param   ap          AP to subtract
  */
-void sub_hero_ap_all(signed short ap)
+void sub_hero_ap_all(const signed int ap)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	if (ap < 0)
@@ -5330,7 +5336,7 @@ signed int get_hero_index(const struct struct_hero *hero)
  * \param   item        item ID to look for
  * \return              position of the item or -1 if the item is not in the inventory.
  */
-signed int get_item_pos(struct struct_hero *hero, const signed int item_id)
+signed int get_item_pos(const struct struct_hero *hero, const signed int item_id)
 {
 	signed int i;
 
@@ -5349,7 +5355,7 @@ signed int get_item_pos(struct struct_hero *hero, const signed int item_id)
  * \param   item_id     item ID to look for
  * \return              position of the hero or -1 if nobody of the group has this item
  */
-signed short get_first_hero_with_item(signed short item_id)
+signed int get_first_hero_with_item(const signed int item_id)
 {
 	signed int j;
 	signed int i;
@@ -5378,7 +5384,7 @@ signed short get_first_hero_with_item(signed short item_id)
  * \param   group       group number
  * \return              position of the hero or -1 if nobody in the specified group has this item
  */
-signed short get_first_hero_with_item_in_group(signed short item_id, signed short group)
+signed int get_first_hero_with_item_in_group(const signed int item_id, const signed int group)
 {
 	signed int j;
 	signed int i;
@@ -5406,14 +5412,13 @@ signed short get_first_hero_with_item_in_group(signed short item_id, signed shor
  *
  * \param   le          LE to subtract
  */
-void sub_group_le(signed short le)
+void sub_group_le(const signed int le)
 {
-	signed short i;
-	struct struct_hero *hero_i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++) {
 
-		hero_i = get_hero(i);
+		struct struct_hero *hero_i = get_hero(i);
 
 		if (hero_i->typus && (hero_i->group_no == gs_current_group))
 		{
@@ -5429,7 +5434,7 @@ void sub_group_le(signed short le)
  */
 struct struct_hero* get_first_hero_available_in_group(void)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
@@ -5452,11 +5457,9 @@ struct struct_hero* get_first_hero_available_in_group(void)
  */
 struct struct_hero* get_second_hero_available_in_group(void)
 {
-	signed short i;
-	signed short tmp;
-	struct struct_hero *hero_i;
-
-	hero_i = get_hero(0);
+	signed int i;
+	signed int tmp;
+	struct struct_hero *hero_i = get_hero(0);
 
 	for (i = tmp = 0; i <= 6; i++, hero_i++) {
 
@@ -5479,14 +5482,11 @@ struct struct_hero* get_second_hero_available_in_group(void)
  *
  * \return              number of available heroes in all groups, including NPC
  */
-signed short count_heroes_available(void)
+signed int count_heroes_available(void)
 {
-	signed short i;
-	signed short retval;
-	struct struct_hero *hero;
-
-	retval = 0;
-	hero = get_hero(0);
+	signed int i;
+	signed int retval = 0;
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
 
@@ -5502,14 +5502,11 @@ signed short count_heroes_available(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows a cleaner fix for Original-Bug 15 */
-signed short count_heroes_available_ignore_npc(void)
+signed int count_heroes_available_ignore_npc(void)
 {
-	signed short i;
-	signed short retval;
-	struct struct_hero *hero;
-
-	retval = 0;
-	hero = get_hero(0);
+	signed int i;
+	signed int retval = 0;
+	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i < 6; i++, hero++) {
 		/* Check if hero is available */
@@ -5528,7 +5525,7 @@ signed short count_heroes_available_ignore_npc(void)
  *
  * \return   number of available (= not dead, petrified, unconscious, renegade) heroes in current group, including NPC
  */
-signed short count_heroes_available_in_group(void)
+signed int count_heroes_available_in_group(void)
 {
 	signed short heroes = 0;
 	signed short i;
@@ -5547,10 +5544,10 @@ signed short count_heroes_available_in_group(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows cleaner fixes for Original-Bug 12, 13, 14 and 15 */
-signed short count_heroes_available_in_group_ignore_npc(void)
+signed int count_heroes_available_in_group_ignore_npc(void)
 {
-	signed short heroes = 0;
-	signed short i;
+	signed int heroes = 0;
+	signed int i;
 	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i < 6; i++, hero++) {
@@ -5583,7 +5580,7 @@ void check_group(void)
 #endif
 	{
 		/* game over */
-		g_game_state = (GAME_STATE_DEAD);
+		g_game_state = GAME_STATE_DEAD;
 
 	} else if
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -5592,9 +5589,7 @@ void check_group(void)
 		(!count_heroes_available_in_group_ignore_npc())
 #endif
 	{
-
 		GRP_switch_to_next(2);
-
 	}
 }
 
@@ -5642,7 +5637,7 @@ int main(int argc, char** argv)
 
 		g_textbox_width = 3;
 
-		refresh_screen_size();
+		call_mouse();
 
 		if (argc == 2) {
 
@@ -5719,7 +5714,7 @@ int main(int argc, char** argv)
 					call_gen();
 				}
 
-				wait_for_keyboard2();
+				flush_keyboard_queue();
 
 
 				/* load a savegame */
@@ -5762,12 +5757,12 @@ Bit8u* schick_alloc(Bit32u size)
 #endif
 }
 
-signed short copy_protection(void)
+static signed int copy_protection(void)
 {
-	signed short i;
-	signed short randval;
-	signed short tries;
-	signed short len;
+	signed int i;
+	signed int randval;
+	signed int tries;
+	signed int len;
 
 #ifndef M302de_FEATURE_MOD
 	load_tx(ARCHIVE_FILE_FIGHTTXT_LTX);
@@ -5853,7 +5848,7 @@ signed short copy_protection(void)
 #endif
 
 #if !defined(__BORLANDC__)
-/* REAMARK: reason == namespaces */
+/* REMARK: reason == namespaces */
 int main(int argc, char** argv)
 {
 	return M302de::main(argc, argv);

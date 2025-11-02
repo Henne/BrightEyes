@@ -118,7 +118,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			if (!target_monster->mon_id || (target_monster->flags.dead && ((hero->action_id != FIG_ACTION_SPELL) || (hero->spell_id != SP_SKELETTARIUS_KRYPTADUFT))))
 			{
-				refresh_screen_size();
+				call_mouse();
 				return;
 			}
 
@@ -181,7 +181,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				}
 
 				if (target_hero->flags.dead || !target_hero->typus) {
-					refresh_screen_size();
+					call_mouse();
 					return;
 				}
 
@@ -711,7 +711,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					set_textcolor(fg_bak, bg_bak);
 
-					delay_or_keypress(50);
+					vsync_or_key(50);
 				}
 
 				if (hero->enemy_id != 0) {
@@ -898,7 +898,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 
 	if (l17 != 0) {
 		hero->enemy_id += 20;

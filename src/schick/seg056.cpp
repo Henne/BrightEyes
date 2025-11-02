@@ -154,7 +154,7 @@ void buy_screen(void)
 			g_pic_copy.src = g_icon;
 			update_mouse_cursor();
 			do_pic_copy(0);
-			refresh_screen_size();
+			call_mouse();
 
 			get_textcolor(&fg_bak, &bg_bak);
 			set_textcolor(255, 0);
@@ -217,7 +217,7 @@ void buy_screen(void)
 				}
 			}
 
-			refresh_screen_size();
+			call_mouse();
 			l6 = 1;
 			item_pos = 0;
 			l8 = 0;
@@ -301,12 +301,12 @@ void buy_screen(void)
 			l15 = 0;
 		}
 
-		if (g_mouse2_event && get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_merchant)) {
+		if (g_mouse_rightclick_event && get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_merchant)) {
 
 			g_action = ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK;
 		}
 
-		if ((g_mouse2_event && g_action != ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) || g_action == ACTION_ID_PAGE_UP) {
+		if ((g_mouse_rightclick_event && g_action != ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) || g_action == ACTION_ID_PAGE_UP) {
 
 			l3 = GUI_radio(NULL, 4,	get_ttx(433), get_ttx(435), get_ttx(436), get_ttx(437)) - 1;
 
@@ -321,8 +321,8 @@ void buy_screen(void)
 
 			if (g_action == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) {
 
-				if (g_mouse2_event) {
-					g_mouse2_event = 0;
+				if (g_mouse_rightclick_event) {
+					g_mouse_rightclick_event = 0;
 					l3 = 2;
 				}
 			} else {

@@ -163,7 +163,7 @@ void GUI_unused1(char *a1, signed short a2, signed short a3)
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 signed short GUI_unused2(const int c, const int x, const int y)
@@ -248,8 +248,8 @@ signed short GUI_enter_text(char* dst, signed short x, signed short y, signed sh
 		GUI_print_char(0x5f, di, y);
 	}
 
-	wait_for_keyboard2();
-	g_mouse1_event1 = 0;
+	flush_keyboard_queue();
+	g_mouse_leftclick_event = 0;
 
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
@@ -258,11 +258,11 @@ signed short GUI_enter_text(char* dst, signed short x, signed short y, signed sh
 dummy:
 
 			/* This loop is evil */
-			do {;} while ((CD_bioskey(1) == 0) && !g_mouse1_event1);
+			do {;} while ((CD_bioskey(1) == 0) && !g_mouse_leftclick_event);
 
-			if (g_mouse1_event1) {
+			if (g_mouse_leftclick_event) {
 				g_bioskey_event = 0x0d;
-				g_mouse1_event1 = g_mouse1_event2 = 0;
+				g_mouse_leftclick_event = g_mouse1_event2 = 0;
 			} else {
 				g_action = (g_bioskey_event = bioskey(0)) >> 8;
 				g_bioskey_event &= 0xff;
@@ -276,7 +276,7 @@ dummy:
 
 		} else if (g_action == ACTION_ID_ESC) {
 			*dst_start = 0;
-			refresh_screen_size();
+			call_mouse();
 			g_action = 0;
 			return -1;
 		} else if (c == 8) {
@@ -339,7 +339,7 @@ dummy:
 	}
 
 	*dst = 0;
-	refresh_screen_size();
+	call_mouse();
 
 	return 0;
 }
@@ -375,7 +375,7 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 	GUI_draw_popup_line(header + options + 1, 3);
 
 	set_textcolor(0xff, 0xdf);
-	wait_for_keyboard1();
+	flush_keyboard_queue_alt();
 }
 
 void GUI_copy_smth(unsigned short width, unsigned short height)
@@ -448,9 +448,9 @@ signed short GUI_input(char *str, unsigned short num)
 
 	GUI_print_header(str);
 
-	g_mouse2_event = 0;
+	g_mouse_rightclick_event = 0;
 
-	refresh_screen_size();
+	call_mouse();
 
 	if (num != 0) {
 		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed short)(l_di - num * 6) >> 1), g_textbox_pos_y + l_si * 8 -2, num, 0) != -1) {
@@ -465,7 +465,7 @@ signed short GUI_input(char *str, unsigned short num)
 		if (g_bioskey_event10 != 0) {
 			wait_for_keypress();
 		} else {
-			delay_or_keypress(l_si * g_textbox_width * 50);
+			vsync_or_key(l_si * g_textbox_width * 50);
 		}
 
 		/* delete action table */
@@ -478,7 +478,7 @@ signed short GUI_input(char *str, unsigned short num)
 
 	GUI_copy_smth(l_di, l2);
 
-	refresh_screen_size();
+	call_mouse();
 
 	g_textline_posx = l3;
 	g_textline_posy = l4;
@@ -540,7 +540,7 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 	for (i = 0; i < 4; i++)
 		do_v_line(g_vga_memstart, y + i, x, x + 3, (signed char)0xd9);
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short options, ...)
@@ -648,7 +648,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short 
 
 	GUI_copy_smth(l_di, l5);
 
-	refresh_screen_size();
+	call_mouse();
 	set_textcolor(fg_bak, bg_bak);
 
 	g_textline_posx = l7;
@@ -700,9 +700,9 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 		g_mouse_posy_min = g_textbox_pos_y + l6;
 
 		g_mouse_posy_max = l6 + g_textbox_pos_y - 1 + positions * 8;
-		refresh_screen_size();
+		call_mouse();
 
-		g_mouse1_event2 = g_mouse1_event1 = g_mouse2_event = 0;
+		g_mouse1_event2 = g_mouse_leftclick_event = g_mouse_rightclick_event = 0;
 
 		while (!done) {
 			g_action_table_secondary = &g_action_table_menu[0];
@@ -714,12 +714,12 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 				l5 = g_menu_selected;
 			}
 
-			if (g_mouse2_event || g_action == ACTION_ID_ESC || g_action == ACTION_ID_PAGE_DOWN) {
+			if (g_mouse_rightclick_event || g_action == ACTION_ID_ESC || g_action == ACTION_ID_PAGE_DOWN) {
 				/* close menu */
 
 				retval = -1;
 				done = 1;
-				g_mouse2_event = 0;
+				g_mouse_rightclick_event = 0;
 			}
 
 			if (g_action == ACTION_ID_RETURN) {
@@ -768,7 +768,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 
 	} else {
 		do {
-			delay_or_keypress(10000);
+			vsync_or_key(10000);
 
 		} while (g_action == 0);
 
@@ -847,7 +847,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	retval = GUI_menu_input(options, l_di + 1, l11);
 
 	GUI_copy_smth(l11, l6);
-	refresh_screen_size();
+	call_mouse();
 	set_textcolor(fg_bak, bg_bak);
 
 	g_textline_posx = l7;

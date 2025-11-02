@@ -116,7 +116,7 @@ void show_automap(void)
 
 			handle_gui_input();
 
-			if ((g_mouse2_event) || (g_action == ACTION_ID_PAGE_UP)) {
+			if ((g_mouse_rightclick_event) || (g_action == ACTION_ID_PAGE_UP)) {
 
 				if (g_dng_map_size == 16) {
 
@@ -483,7 +483,7 @@ void draw_automap_to_screen(void)
 	do_pic_copy(1);
 	g_pic_copy_flag = 0;
 
-	refresh_screen_size();
+	call_mouse();
 
 	g_pic_copy.dst = g_vga_memstart;
 
@@ -546,7 +546,7 @@ signed short select_teleport_dest(void)
 	do {
 		handle_input();
 
-		if ((g_mouse2_event) || (g_action == ACTION_ID_PAGE_UP)) {
+		if ((g_mouse_rightclick_event) || (g_action == ACTION_ID_PAGE_UP)) {
 
 			if (g_dng_map_size == 16) {
 				answer = GUI_radio(get_ttx(616), 1, get_ttx(617)) - 1;

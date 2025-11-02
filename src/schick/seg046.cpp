@@ -801,7 +801,7 @@ void status_show(Bit16u index)
 
 	g_vga_backbuffer = g_vga_memstart;
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 #if !defined(__BORLANDC__)

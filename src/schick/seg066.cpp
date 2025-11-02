@@ -1218,7 +1218,7 @@ signed short city_step(void)
 
 	handle_gui_input();
 
-	if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+	if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 		for (i = options = 0; i < 9; i++) {
 			if (g_new_menu_icons[i] != MENU_ICON_NONE) {
@@ -1442,7 +1442,7 @@ void city_fade_and_colors(void)
 
 	do_pic_copy(1);
 
-	refresh_screen_size();
+	call_mouse();
 
 	if (g_fading_state != 0) {
 
