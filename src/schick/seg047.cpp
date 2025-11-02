@@ -43,7 +43,7 @@ signed short get_hero_CH_best(void)
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_current_group) &&
 			(!hero_i->flags.dead) &&	(hero_i->attrib[ATTRIB_CH].current > ch_val))
 		{
 			/* check if CH value is higher */
@@ -73,7 +73,7 @@ signed short get_hero_KK_best(void)
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_current_group) &&
 			(!hero_i->flags.dead) &&	(hero_i->attrib[ATTRIB_KK].current > kk_val))
 		{
 			/* check if KK is higher */
@@ -232,7 +232,7 @@ signed short check_heroes_KK(const signed short val)
 	hero = get_hero(1);
 
 	/* check class, group and dead status of hero in slot 2*/
-	if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
+	if (hero->typus && (hero->group_id == gs_current_group) && !hero->flags.dead) {
 		sum += hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod;
 	}
 
@@ -414,7 +414,7 @@ signed short select_hero_from_group(char *title)
 
 		hero = get_hero(i);
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && (g_hero_sel_exclude != i)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && (g_hero_sel_exclude != i)) {
 			/* TODO: find out what that means */
 
 			/* save pointer to the name of the hero */
@@ -483,7 +483,7 @@ signed short select_hero_ok(char *title)
 
 	for (hero = get_hero(0), i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
 
 			/* save pointer to the name of the hero */
 			g_radio_name_list[cnt] = hero->alias;
@@ -552,7 +552,7 @@ signed short select_hero_ok_forced(char *title)
 
 	for (hero = get_hero(0), i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && check_hero(hero) && (g_hero_sel_exclude != i)) {
 
 			/* save pointer to the name of the hero */
 			g_radio_name_list[cnt] = hero->alias;
@@ -608,7 +608,7 @@ signed short count_heroes_in_group(void)
 	for (hero_i = get_hero(0), i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group and dead */
-		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) && !hero_i->flags.dead) {
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_current_group) && !hero_i->flags.dead) {
 
 			retval++;
 		}

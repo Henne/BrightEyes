@@ -705,7 +705,7 @@ void spell_silentium(void)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !(hero->flags.dead))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !(hero->flags.dead))
 		{
 			/* get a free mod_slot */
 			slot = get_free_mod_slot();

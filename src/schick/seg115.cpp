@@ -156,7 +156,7 @@ void tevent_090(void)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
-		if ((hero->typus) && (hero->group_no == gs_current_group) && !hero->flags.dead &&
+		if ((hero->typus) && (hero->group_id == gs_current_group) && !hero->flags.dead &&
 			test_skill(hero, TA_GEFAHRENSINN, 0) <= 0)
 		{
 			/* failed */
@@ -236,7 +236,7 @@ void tevent_095(void)
 		for (i = counter_failed = counter_heroes = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
-				(hero->group_no == gs_current_group) &&
+				(hero->group_id == gs_current_group) &&
 				!hero->flags.dead)
 			{
 				counter_heroes++;

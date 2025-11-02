@@ -105,7 +105,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -136,7 +136,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -156,7 +156,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -180,7 +180,7 @@ signed short DNG09_handler(void)
 	{
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_skill(hero, TA_GEFAHRENSINN, 2) > 0)
 			{
 				l3 = 1;
@@ -205,7 +205,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -233,7 +233,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -296,7 +296,7 @@ signed short DNG09_handler(void)
 						l3++;
 					}
 
-					hero->group_no = (signed char)l3;
+					hero->group_id = (signed char)l3;
 					gs_group_member_counts[l3]++;
 					gs_group_member_counts[gs_current_group]--;
 					GRP_save_pos(l3);

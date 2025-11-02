@@ -279,7 +279,7 @@ void do_citycamp(void)
 						for (l_si = 0; l_si <= 6; l_si++, hero++) {
 
 							if ((hero->typus != HERO_TYPE_NONE) &&
-								(hero->group_no == gs_current_group) &&
+								(hero->group_id == gs_current_group) &&
 								(g_citycamp_guardstatus[l_si] < 2) &&
 								(g_citycamp_magicstatus[l_si] != 1))
 							{

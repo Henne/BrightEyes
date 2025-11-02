@@ -834,7 +834,7 @@ signed short is_staff_lvl2_in_group(void)
 	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) &&
+		if ((hero_i->typus) && (hero_i->group_id == gs_current_group) &&
 			check_hero(hero_i) && (hero_i->staff_level >= 2))
 		{
 			return 1;
@@ -1185,7 +1185,7 @@ signed short DNG_check_climb_tools(void)
 	for (i = 0; i <= 6; i++, hero++) {
 
 		/* TODO: potential Original-Bug: What if petrified / unconscious etc.? Compare to is_staff_lvl2_in_group where check_hero is called */
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 			!hero->flags.dead && (hero->typus == HERO_TYPE_MAGE) && (hero->staff_level > 2))
 		{
 			return i + 1;
@@ -1230,10 +1230,10 @@ signed int DNG_fallpit(const signed int max_damage)
 			do {
 				hero_pos = random_schick(7) - 1;
 
-			} while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_no != gs_current_group) ||
+			} while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_current_group) ||
 					((nr_fallen_heroes == 1) && (hero_pos == 6))); /* avoid that the NPC gets separated into a single group */
 
-			get_hero(hero_pos)->group_no = (unsigned char)new_group;
+			get_hero(hero_pos)->group_id = (unsigned char)new_group;
 			gs_group_member_counts[new_group]++;
 			gs_group_member_counts[gs_current_group]--;
 			sub_hero_le(get_hero(hero_pos), random_schick(max_damage));
@@ -1250,7 +1250,7 @@ signed int DNG_fallpit(const signed int max_damage)
 
 		for (i = 0; i < nr_fallen_heroes; i++) {
 
-			while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_no != gs_current_group))
+			while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_current_group))
 			{
 				hero_pos++;
 			}

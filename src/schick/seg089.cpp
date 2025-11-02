@@ -113,7 +113,7 @@ signed short DNG15_handler(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 			{
 				tmp = random_schick(3);
@@ -513,7 +513,7 @@ void DNG15_small_wounds(void)
 
 	for (i = 0; i <= 6; i++, hero++)
 	{
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 			!hero->flags.dead && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 		{
 			randval = random_schick(3);
@@ -630,7 +630,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			/* count failed GE-3 test */
 			for (i = cnt = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 				{
 					cnt++;
@@ -656,7 +656,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			/* each hero gets 1W6 damage on a failed GE test */
 			for (i = cnt = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
 					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
@@ -715,7 +715,7 @@ void DNG15_clear_way(Bit8u* ptr)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{
 				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));

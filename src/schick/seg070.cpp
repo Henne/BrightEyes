@@ -154,7 +154,7 @@ void PHX_spielhaus(void)
 
 		for (pos = counter = answer = 0; pos <= 6; pos++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && (test_skill(hero, TA_FALSCHSPIEL, 3) > 0))
 			{
 				/* Gambling +3 */

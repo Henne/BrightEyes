@@ -161,7 +161,7 @@ struct struct_hero {
 	signed char action_id;
 	signed char spell_id;
 	signed char target_id;
-	signed char group_no;
+	signed char group_id;
 	signed char temple_id;
 	signed char npc_id;
 	signed char group_pos;

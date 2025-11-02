@@ -168,7 +168,7 @@ signed short DNG08_handler(void)
 
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 					!hero->flags.dead)
 				{
 					gs_dng08_timer1 = 24;
@@ -192,7 +192,7 @@ signed short DNG08_handler(void)
 
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
 				{
 					gs_dng08_timer2 = 24;
 
@@ -277,7 +277,7 @@ signed short DNG08_handler(void)
 
 				for (tmp = 0; gs_group_member_counts[tmp] != 0; tmp++); /* find empty group */
 
-				hero->group_no = (signed char)tmp;
+				hero->group_id = (signed char)tmp;
 				gs_group_member_counts[tmp]++;
 				gs_group_member_counts[gs_current_group]--;
 
@@ -316,7 +316,7 @@ signed short DNG08_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
 				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_ptr(hero->sex, 0));

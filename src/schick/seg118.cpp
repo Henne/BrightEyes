@@ -343,7 +343,7 @@ void tevent_078(void)
 					hero_disappear(hero, tmp, -1);
 #else
 					if ((hero->typus != HERO_TYPE_NONE) &&
-						(hero->group_no == gs_current_group))
+						(hero->group_id == gs_current_group))
 					{
 						hero_disappear(hero, tmp, -1);
 					}
@@ -508,7 +508,7 @@ void tevent_124(void)
 		for (i = counter = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
-				(hero->group_no == gs_current_group) &&
+				(hero->group_id == gs_current_group) &&
 				!hero->flags.dead &&
 				(skill_ret = test_skill(hero, TA_KLETTERN, -2)) <= 0)
 			{

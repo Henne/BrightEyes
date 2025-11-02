@@ -128,7 +128,7 @@ signed short DNG01_handler(void)
 			{
 				if ((random_schick(100) <= 10) &&
 					(hero->typus != HERO_TYPE_NONE) &&
-					(hero->group_no == gs_current_group))
+					(hero->group_id == gs_current_group))
 				{
 					sub_hero_le(hero, 2);
 

@@ -630,7 +630,7 @@ signed int get_item(signed int item_id, const signed int unused, signed int quan
 		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i++) {
 
-			if ((hero_i->typus) && (hero_i->group_no == gs_current_group))
+			if ((hero_i->typus) && (hero_i->group_id == gs_current_group))
 			{
 				while ((quantity > 0) && (quant_hero = give_hero_new_item(hero_i, item_id, 0, quantity)) > 0) {
 					quantity -= quant_hero;
@@ -710,7 +710,7 @@ signed int group_count_item(const signed int item_id)
 	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if (hero_i->typus && (hero_i->group_no == gs_current_group)) {
+		if (hero_i->typus && (hero_i->group_id == gs_current_group)) {
 
 			ret += hero_count_item(hero_i, item_id);
 		}

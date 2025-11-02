@@ -350,7 +350,7 @@ signed short plan_alchemy(struct struct_hero *hero)
 
 									hero_p = get_hero(0);
 									for (i = 0; i <= 6; i++, hero_p++) {
-										if ((hero_p->typus != HERO_TYPE_NONE) && (hero_p->group_no == gs_current_group))
+										if ((hero_p->typus != HERO_TYPE_NONE) && (hero_p->group_id == gs_current_group))
 										{
 											GRP_hero_sleep(hero_p, g_sleep_quality);
 										}
@@ -370,7 +370,7 @@ signed short plan_alchemy(struct struct_hero *hero)
 								/* Original-Bug: only 6 groups, but 7 heroes might cause an 'out of boundary' here */
 								for (l5 = 0; gs_group_member_counts[l5] != 0; l5++);
 
-								hero->group_no = (signed char)l5;
+								hero->group_id = (signed char)l5;
 								gs_group_member_counts[l5]++;
 								gs_group_member_counts[gs_current_group]--;
 
@@ -563,7 +563,7 @@ struct struct_hero* get_heaviest_hero(void)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 		{
 			weight = hero->weight + hero->load;
 
@@ -597,7 +597,7 @@ signed short get_skilled_hero_pos(const signed short skill_id)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 		{
 
 			cur =	hero->attrib[g_skill_descriptions[skill_id].attrib1].current +

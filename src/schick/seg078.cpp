@@ -146,7 +146,7 @@ signed short DNG02_handler(void)
 		hero = get_hero(0);
 		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 			{
 				weight_sum += get_hero_weight(hero);
 			}
@@ -185,7 +185,7 @@ signed short DNG02_handler(void)
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
-					(hero->group_no == gs_current_group) &&
+					(hero->group_id == gs_current_group) &&
 					!hero->flags.dead) /* TODO: Why !dead? */
 				{
 					hero_disappear(hero, i, -1);
@@ -197,7 +197,7 @@ signed short DNG02_handler(void)
 			for (i = mod_slot = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
-					(hero->group_no == gs_current_group) &&
+					(hero->group_id == gs_current_group) &&
 					!hero->flags.dead &&
 					!hero->flags.seen_phantom)
 				{
@@ -235,7 +235,7 @@ signed short DNG02_handler(void)
 		hero = get_hero(0);
 		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 			{
 				weight_sum += get_hero_weight(hero);
 			}
@@ -261,7 +261,7 @@ signed short DNG02_handler(void)
 				hero = get_hero(0);
 				for (mod_slot = 0; mod_slot <= 6; mod_slot++, hero++)
 				{
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == i))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == i))
 					{
 						weight_sum += get_hero_weight(hero);
 					}
@@ -322,7 +322,7 @@ signed short DNG02_handler(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && (hero->mr < 8))
 			{
 				hero->flags.petrified = 1;
@@ -606,7 +606,7 @@ void DNG02_chest04_loot(struct struct_chest*)
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 				{
 					sub_hero_le(hero, random_schick(6));
 				}

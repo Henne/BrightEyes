@@ -1849,7 +1849,7 @@ void handle_gui_input(void)
 			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
-				if ((get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_no == gs_current_group))
+				if ((get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_id == gs_current_group))
 				{
 					status_menu(l_in_key_ext - 241);
 					l_in_key_ext = 0;
@@ -1860,7 +1860,7 @@ void handle_gui_input(void)
 			} else {
 				/* swap heroes by click - move mouse - click */
 				if (g_heroswap_allowed &&
-					(get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_no == gs_current_group))
+					(get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_id == gs_current_group))
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
 					GRP_move_hero(l_in_key_ext - 241);
@@ -2407,7 +2407,7 @@ void do_timers(void)
 	signed char afternoon;
 	struct struct_hero *ptr;
 	signed int i;
-	signed int group_num;
+	signed int group_id;
 
 	afternoon = 0;
 
@@ -2496,14 +2496,14 @@ void do_timers(void)
 			{
 				hero_i->jail = 0;
 
-				gs_groups_current_loctype[hero_i->group_no] =
-					gs_groups_current_loctype_bak[hero_i->group_no];
+				gs_groups_current_loctype[hero_i->group_id] =
+					gs_groups_current_loctype_bak[hero_i->group_id];
 
-				gs_groups_x_target[hero_i->group_no] =
-					gs_groups_x_target_bak[hero_i->group_no];
+				gs_groups_x_target[hero_i->group_id] =
+					gs_groups_x_target_bak[hero_i->group_id];
 
-				gs_groups_y_target[hero_i->group_no] =
-					gs_groups_y_target_bak[hero_i->group_no];
+				gs_groups_y_target[hero_i->group_id] =
+					gs_groups_y_target_bak[hero_i->group_id];
 			}
 		}
 	}
@@ -2537,10 +2537,10 @@ void do_timers(void)
 
 				if (ptr->typus != HERO_TYPE_NONE) {
 
-					group_num = ptr->group_no;
+					group_id = ptr->group_id;
 
 					/* hero is in group and in mage dungeon */
-					if ((gs_current_group == group_num) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
+					if ((gs_current_group == group_id) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
 					{
 
 						if (gs_dungeon_level == 1) {
@@ -2554,13 +2554,13 @@ void do_timers(void)
 						}
 
 					} else {
-						if (gs_groups_dng_index[group_num] == 7) {
+						if (gs_groups_dng_index[group_id] == 7) {
 
-							if (gs_groups_dng_level[group_num] == 1) {
+							if (gs_groups_dng_level[group_id] == 1) {
 								/* 1W6-1 */
 								sub_hero_le(ptr, dice_roll(1, 6, -1));
 
-							} else if (gs_groups_dng_level[group_num] == 2) {
+							} else if (gs_groups_dng_level[group_id] == 2) {
 								/* 1W6+1 */
 								sub_hero_le(ptr, dice_roll(1, 6, 1));
 							}
@@ -3095,7 +3095,7 @@ void herokeeping(void)
 			/* Do the eating */
 
 			/* check for magic bread bag in the group */
-			if (get_first_hero_with_item_in_group(ITEM_MAGIC_BREADBAG, hero->group_no) == -1) {
+			if (get_first_hero_with_item_in_group(ITEM_MAGIC_BREADBAG, hero->group_id) == -1) {
 
 				/* if not, check if the hero has the food amulet */
 				if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
@@ -3165,10 +3165,10 @@ void herokeeping(void)
 
 			/* check if someone in the group of the hero has the magic bread bag */
 			/* check for magic waterskin in group */
-			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, hero->group_no) == -1) &&
-				(((hero->group_no == gs_current_group) &&
+			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, hero->group_id) == -1) &&
+				(((hero->group_id == gs_current_group) &&
 					(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
-				((hero->group_no != gs_current_group) && !gs_groups_town[hero->group_no])))
+				((hero->group_id != gs_current_group) && !gs_groups_town[hero->group_id])))
 			{
 					/* check for food amulett */
 					if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
@@ -3244,7 +3244,7 @@ void herokeeping(void)
 		/* print hero message */
 		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !g_freeze_timers)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead &&
 				(!gs_show_travel_map || (g_food_message_shown[i] != gs_food_message[i]))) {
 
 					sprintf(buffer,	 (gs_food_message[i] == 1) ? get_ttx(224):
@@ -3271,7 +3271,7 @@ void herokeeping(void)
 		/* print unconscious message */
 		if (gs_unconscious_message[i] && !g_dialogbox_lock) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
 			{
 					sprintf(buffer, get_ttx(789), hero->alias);
 					GUI_output(buffer);
@@ -4479,7 +4479,7 @@ static signed int check_hero_no3(const struct struct_hero *hero)
 
 signed int is_hero_available_in_group(const struct struct_hero *hero)
 {
-	if (check_hero(hero) &&	(hero->group_no == gs_current_group)) {
+	if (check_hero(hero) &&	(hero->group_id == gs_current_group)) {
 
 		return 1;
 	}
@@ -4644,7 +4644,7 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 				hero_i = get_hero(0);
 				for (i = 0; i <= 6; i++, hero_i++) {
 
-					if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group))
+					if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_current_group))
 					{
 						hero_disappear(hero_i, i, -1);
 					}
@@ -4772,7 +4772,7 @@ void add_group_le(const signed int le)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 		{
 			add_hero_le(hero, le);
 		}
@@ -5049,7 +5049,7 @@ signed short unused_cruft(void)
 	do {
 		l_si = random_schick(6) - 1;
 
-	} while (!get_hero(l_si)->typus || (get_hero(l_si)->group_no != gs_current_group));
+	} while (!get_hero(l_si)->typus || (get_hero(l_si)->group_id != gs_current_group));
 
 	return l_si;
 }
@@ -5079,7 +5079,7 @@ signed int get_random_hero(void)
 			if (hero->typus == HERO_TYPE_NONE)
 				continue;
 			/* Check if in current group */
-			if (hero->group_no != gs_current_group)
+			if (hero->group_id != gs_current_group)
 				continue;
 
 			if (pos == cur_hero) {
@@ -5092,7 +5092,7 @@ signed int get_random_hero(void)
 		cur_hero = pos;
 #endif
 
-	} while (!get_hero(cur_hero)->typus || (get_hero(cur_hero)->group_no != gs_current_group) || get_hero(cur_hero)->flags.dead);
+	} while (!get_hero(cur_hero)->typus || (get_hero(cur_hero)->group_id != gs_current_group) || get_hero(cur_hero)->flags.dead);
 
 	return cur_hero;
 }
@@ -5110,7 +5110,7 @@ Bit32s get_party_money(void)
 
 	for (i = 0; i < 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group))
+		if (hero->typus && (hero->group_id == gs_current_group))
 		{
 			sum += hero->money;
 		}
@@ -5143,7 +5143,7 @@ void set_party_money(Bit32s money)
 	hero = get_hero(6);
 
 	/* if we have an NPC in current group and alive */
-	if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
+	if (hero->typus && (hero->group_id == gs_current_group) && !hero->flags.dead) {
 
 		/* If only the NPC is in that group give him all the money */
 		if (heroes > 1) {
@@ -5162,12 +5162,12 @@ void set_party_money(Bit32s money)
 
 		for (i = 0; i < 6; i++, hero++) {
 
-			if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead) {
+			if (hero->typus && (hero->group_id == gs_current_group) && !hero->flags.dead) {
 
 				/* account the money to hero */
 				hero->money = hero_money;
 			} else {
-				if (hero->group_no == gs_current_group) {
+				if (hero->group_id == gs_current_group) {
 					hero->money = 0;
 				}
 			}
@@ -5216,7 +5216,7 @@ void add_group_ap(Bit32s ap)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
+		if (hero->typus && (hero->group_id == gs_current_group) && !hero->flags.dead)
 		{
 			add_hero_ap(hero, ap);
 		}
@@ -5239,7 +5239,7 @@ void add_hero_ap_all(const signed int ap)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
+		if (hero->typus && (hero->group_id == gs_current_group) && !hero->flags.dead)
 		{
 #if !defined(__BORLANDC__)
 			D1_INFO("%s erhaelt %d AP\n", hero->alias, ap);
@@ -5266,7 +5266,7 @@ void sub_hero_ap_all(const signed int ap)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && !hero->flags.dead)
+		if (hero->typus && (hero->group_id == gs_current_group) && !hero->flags.dead)
 		{
 			if ((Bit32u)ap <= hero->ap) {
 #if !defined(__BORLANDC__)
@@ -5337,7 +5337,7 @@ signed int get_first_hero_with_item(const signed int item_id)
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus) && (hero_i->group_no == gs_current_group))
+		if ((hero_i->typus) && (hero_i->group_id == gs_current_group))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
@@ -5366,7 +5366,7 @@ signed int get_first_hero_with_item_in_group(const signed int item_id, const sig
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus) && (hero_i->group_no == (signed char)group))
+		if ((hero_i->typus) && (hero_i->group_id == (signed char)group))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
@@ -5394,7 +5394,7 @@ void sub_group_le(const signed int le)
 
 		struct struct_hero *hero_i = get_hero(i);
 
-		if (hero_i->typus && (hero_i->group_no == gs_current_group))
+		if (hero_i->typus && (hero_i->group_id == gs_current_group))
 		{
 			sub_hero_le(hero_i, le);
 		}
@@ -5414,7 +5414,7 @@ struct struct_hero* get_first_hero_available_in_group(void)
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group, deadness and check_hero() */
-		if (hero_i->typus && (hero_i->group_no == gs_current_group) &&
+		if (hero_i->typus && (hero_i->group_id == gs_current_group) &&
 			!hero_i->flags.dead && check_hero(hero_i))
 		{
 			return hero_i;
@@ -5438,7 +5438,7 @@ struct struct_hero* get_second_hero_available_in_group(void)
 	for (i = tmp = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group and check_hero() */
-		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && check_hero(hero_i))
+		if ((hero_i->typus) && (hero_i->group_id == gs_current_group) && check_hero(hero_i))
 		{
 			if (tmp) {
 				return hero_i;
@@ -5506,7 +5506,7 @@ signed int count_heroes_available_in_group(void)
 	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
-		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2(hero))
+		if (hero->typus && (hero->group_id == gs_current_group) && check_hero_no2(hero))
 		{
 			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;
@@ -5526,7 +5526,7 @@ signed int count_heroes_available_in_group_ignore_npc(void)
 
 	for (i = 0; i < 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2(hero))
+		if (hero->typus && (hero->group_id == gs_current_group) && check_hero_no2(hero))
 		{
 			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;

@@ -368,7 +368,7 @@ signed short DNG14_handler(void)
 			for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) &&
-					(hero->group_no == gs_current_group) &&
+					(hero->group_id == gs_current_group) &&
 					!hero->flags.dead &&
 					(hero->typus == HERO_TYPE_MAGE) &&
 					(hero->staff_level > 2))
@@ -388,7 +388,7 @@ signed short DNG14_handler(void)
 				hero = get_hero(0);
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 						!hero->flags.dead && (test_skill(hero, TA_KLETTERN, 0) <= 0))
 					{
 						sprintf(g_dtp2, get_tx(26), hero->alias, GUI_get_ptr(hero->sex, 2));
@@ -408,7 +408,7 @@ signed short DNG14_handler(void)
 				hero = get_hero(0);
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 						!hero->flags.dead && (test_skill(hero, TA_KLETTERN, 4) <= 0))
 					{
 						sprintf(g_dtp2, get_tx(27), hero->alias);
@@ -442,7 +442,7 @@ signed short DNG14_handler(void)
 		hero = get_hero(0);
 		for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_TA, 0) <= 0)
 			{
 				l_di = get_free_mod_slot();

@@ -95,7 +95,7 @@ void npc_farewell(void)
 		return;
 
 	/* no NPC in that group */
-	if (get_hero(6)->group_no != gs_current_group)
+	if (get_hero(6)->group_id != gs_current_group)
 		return;
 
 	/* Unconscious or dead NPCs cannot be removed automatically (99 means manual). */
@@ -124,7 +124,7 @@ void npc_farewell(void)
 
 					hero_i = get_hero(0);
 					for (i = 0; i < 6; i++, hero_i++) {
-						if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && (!hero_i->flags.dead))
+						if ((hero_i->typus) && (hero_i->group_id == gs_current_group) && (!hero_i->flags.dead))
 						{
 							/* Original-Bug 42:
 							 * When NPC Harika leaves the party, all non-dead heroes in the same group get up to
@@ -528,7 +528,7 @@ void add_npc(signed short index)
 	get_hero(6)->npc_id = index - 0xe1;
 
 	/* set the group the NPC contains in */
-	get_hero(6)->group_no = gs_current_group;
+	get_hero(6)->group_id = gs_current_group;
 
 	draw_status_line();
 }
