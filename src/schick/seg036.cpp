@@ -409,7 +409,7 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 	while ((done == 0) && (hero->bp_left > 0)) {
 
 		/* reset target fight-id */
-		hero->enemy_id = 0;
+		hero->target_id = 0;
 
 		if (hero->bp_left >= 3) {
 
@@ -418,9 +418,9 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 			count = 0;
 
 			/* try to find a target clockwise from current direction */
-			while (!hero->enemy_id && (count < 4)) {
+			while (!hero->target_id && (count < 4)) {
 
-				hero->enemy_id = (signed char)KI_search_spell_target(x, y, dir, renegade);
+				hero->target_id = (signed char)KI_search_spell_target(x, y, dir, renegade);
 
 				count++;
 
@@ -431,11 +431,11 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 		}
 
 		/* check if a target was found */
-		if (hero->enemy_id != 0) {
+		if (hero->target_id != 0) {
 
 			/* yes */
 
-			FIG_search_obj_on_cb(hero->enemy_id, &target_x, &target_y);
+			FIG_search_obj_on_cb(hero->target_id, &target_x, &target_y);
 
 			if (calc_beeline(target_x, target_y, x, y) < 2) {
 				retval = 2;
@@ -564,14 +564,14 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 		}
 
 		/* reset the target of the hero */
-		hero->enemy_id = 0;
+		hero->target_id = 0;
 
 		if ((spell_mode = KI_get_spell(spell, renegade)) != -1) {
 
 			if (spell_mode == 2) {
 
 				/* set target to hero */
-				hero->enemy_id = hero_pos + 1;
+				hero->target_id = hero_pos + 1;
 
 				/* set spell */
 				hero->spell_id = (signed char)spell;
@@ -587,10 +587,10 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 						l_si = hero->viewdir;
 
 						count = 0;
-						while ((!hero->enemy_id) && (count < 4)) {
+						while ((!hero->target_id) && (count < 4)) {
 
 							if (KI_can_attack_neighbour(x, y, a.a[l_si].x, a.a[l_si].y, spell_mode)) {
-								hero->enemy_id = get_cb_val(x + a.a[l_si].x, y + a.a[l_si].y);
+								hero->target_id = get_cb_val(x + a.a[l_si].x, y + a.a[l_si].y);
 							}
 
 							count++;
@@ -600,7 +600,7 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 							}
 						}
 
-						if (hero->enemy_id != 0) {
+						if (hero->target_id != 0) {
 
 							if (hero->bp_left >= 5) {
 
@@ -644,9 +644,9 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 
 						count = 0;
 
-						while (!hero->enemy_id && (count < 4)) {
+						while (!hero->target_id && (count < 4)) {
 
-							hero->enemy_id = (signed char)KI_search_spell_target(x, y, l_si, spell_mode);
+							hero->target_id = (signed char)KI_search_spell_target(x, y, l_si, spell_mode);
 
 							count++;
 
@@ -655,7 +655,7 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 							}
 						}
 
-						if (hero->enemy_id != 0) {
+						if (hero->target_id != 0) {
 
 							if (hero->bp_left >= 5) {
 
@@ -862,7 +862,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 					seg036_00ae(hero, hero_pos);
 
-					hero->enemy_id = 0;
+					hero->target_id = 0;
 
 					if (FIG_search_obj_on_cb(hero_pos + 1, &x, &y)) {
 
@@ -931,18 +931,18 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 						}
 					}
 				} else {
-					hero->enemy_id = 0;
+					hero->target_id = 0;
 
 					if (hero->bp_left >= 3) {
 
 						l_di = hero->viewdir;
 						l1 = 0;
 
-						while (!hero->enemy_id && (l1 < 4)) {
+						while (!hero->target_id && (l1 < 4)) {
 
 							if (KI_can_attack_neighbour(x, y, a.a[l_di].x, a.a[l_di].y, hero->flags.renegade))
 							{
-								hero->enemy_id = get_cb_val(x + a.a[l_di].x, y + a.a[l_di].y);
+								hero->target_id = get_cb_val(x + a.a[l_di].x, y + a.a[l_di].y);
 							}
 
 							l1++;
@@ -952,7 +952,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 						}
 					}
 
-					if (hero->enemy_id != 0) {
+					if (hero->target_id != 0) {
 
 						hero->action_id = FIG_ACTION_MELEE_ATTACK;
 						hero->bp_left = 0;
@@ -974,7 +974,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 								seg036_00ae(hero, hero_pos);
 
 								hero->action_id = FIG_ACTION_MOVE;
-								hero->enemy_id = 0;
+								hero->target_id = 0;
 
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 

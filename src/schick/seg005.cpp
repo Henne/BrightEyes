@@ -620,7 +620,7 @@ void draw_fight_screen(Bit16u val)
 							list_ii->x1 = g_gfxtab_twofielded_extra_x1[viewdir_after];
 							list_ii->x2 = g_gfxtab_twofielded_extra_x2[viewdir_after];
 
-							obj_id = get_cb_val(list_ii->cbx, list_ii->cby); /* enemy_id + 30 of the enemy the tail belongs to */
+							obj_id = get_cb_val(list_ii->cbx, list_ii->cby); /* target_id + 30 of the enemy the tail belongs to */
 
 							FIG_set_cb_field(list_ii->cby, list_ii->cbx, list_ii->obj_id);
 
@@ -654,7 +654,7 @@ void draw_fight_screen(Bit16u val)
 
 							target_id = get_cb_val(list_ii->cbx, list_ii->cby); /* object id of the square the tail moves to */
 							list_ii->obj_id = (signed char)target_id; /* move it to FIGHTER_OBJ_ID */
-							FIG_set_cb_field(list_ii->cby, list_ii->cbx, obj_id); /* set object id of the target square to enemy_id + 30 */
+							FIG_set_cb_field(list_ii->cby, list_ii->cbx, obj_id); /* set object id of the target square to target_id + 30 */
 
 							obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
 

@@ -92,19 +92,19 @@ signed int FIG_get_range_weapon_type(struct struct_hero *hero)
  * \brief   fills an enemies sheet from a template
  *
  * \param   sheet_no    the number of the sheet
- * \param   enemy_id    the ID of the enemy (MONSTER.DAT)
+ * \param   target_id    the ID of the enemy (MONSTER.DAT)
  * \param   round       the fight round the enemy appears
  *
  * \remark: special fight situations should be handled elsewhere
  */
-void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char round)
+void fill_enemy_sheet(signed short sheet_no, signed char target_id, signed char round)
 {
 	struct struct_monster *monster;
 	struct enemy_sheet *sheet;
 	signed short i;
 
 	/* calculate the pointers */
-	monster = &g_monster_dat_buf[enemy_id];
+	monster = &g_monster_dat_buf[target_id];
 	sheet = &g_enemy_sheets[sheet_no];
 
 	/* erease the sheet */
@@ -442,7 +442,7 @@ void FIG_init_heroes(void)
 			continue;
 
 		hero->action_id = FIG_ACTION_WAIT;
-		hero->enemy_id = 0;
+		hero->target_id = 0;
 
 		/* FINAL FIGHT */
 		if (g_current_fight_no == FIGHTS_F144) {

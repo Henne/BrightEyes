@@ -70,7 +70,7 @@ static const struct analues_item g_analues_items[28] = {
 
 void spell_beherrschung(void)
 {
-	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 	if (!get_spelltarget()->flags.renegade) {
 		g_spell_special_aecost = -2;
@@ -139,7 +139,7 @@ void spell_gardanium(void)
 void spell_illusionen(void)
 {
 	/* Set pointer to enemy target */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* check if enemy is an illusion */
 	if (g_spelltarget_e->flags.illusion) {
@@ -175,7 +175,7 @@ void spell_verwandlung(void)
 	signed short i;
 
 	/* set spelltarget */
-	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 	if (get_spelltarget()->flags.petrified) {
 
@@ -226,11 +226,11 @@ void spell_verwandlung(void)
  */
 void spell_band(void)
 {
-	if (get_spelluser()->enemy_id >= 10) {
+	if (get_spelluser()->target_id >= 10) {
 		/* cast enemy */
 
 		/* Set pointer to enemy target */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 		if (g_spelltarget_e->gfx_id == 0x1c) {
 			/* does not work on skeletons */
@@ -246,7 +246,7 @@ void spell_band(void)
 		/* cast hero */
 
 		/* Set pointer to hero target */
-		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -270,7 +270,7 @@ void spell_band(void)
 void spell_bannbaladin(void)
 {
 	/* Set pointer to enemy target */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	if (g_spelltarget_e->is_animal) {
 
@@ -296,7 +296,7 @@ void spell_bannbaladin(void)
 void spell_boeser_blick(void)
 {
 	/* set attacked foe */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
@@ -326,7 +326,7 @@ void spell_grosse_gier(void)
 
 void spell_grosse_ver(void)
 {
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
@@ -349,7 +349,7 @@ void spell_herrdertiere(void)
 {
 
 	/* Set pointer to enemy target */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	if (!g_spelltarget_e->is_animal) {
 		/* spell does not work on animals */
@@ -376,7 +376,7 @@ void spell_herrdertiere(void)
 void spell_horriphobus(void)
 {
 	/* Set pointer to enemy target */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
@@ -415,11 +415,11 @@ void spell_sanftmut(void)
 void spell_somnigravis(void)
 {
 
-	if (get_spelluser()->enemy_id >= 10) {
+	if (get_spelluser()->target_id >= 10) {
 		/* cast an enemy */
 
 		/* Set pointer to enemy target */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 		/* this spell does not work on all kind of skeletons */
 		if (g_spelltarget_e->gfx_id == 0x1c) {
@@ -438,7 +438,7 @@ void spell_somnigravis(void)
 	/* cast hero */
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 	if (get_spelltarget() == get_spelluser()) {
 
@@ -461,7 +461,7 @@ void spell_somnigravis(void)
 void spell_zwingtanz(void)
 {
 	/* Set pointer to enemy target */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
@@ -545,7 +545,7 @@ void spell_skelettarius(void)
 	signed char unk;
 
 	/* Set pointer to enemy target */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* check if the enemy is dead */
 	if (!g_spelltarget_e->flags.dead) {
@@ -597,7 +597,7 @@ void spell_skelettarius(void)
 
 		unk = g_spelltarget_e->attacks_left;
 
-		fill_enemy_sheet(get_spelluser()->enemy_id - 10, 0x10, 0);
+		fill_enemy_sheet(get_spelluser()->target_id - 10, 0x10, 0);
 
 		FIG_load_enemy_sprites(g_spelltarget_e, x, y);
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -653,7 +653,7 @@ void spell_axxeleratus(void)
 	signed short hero_pos;
 	signed short slot;
 
-	hero_pos = get_spelluser()->enemy_id - 1;
+	hero_pos = get_spelluser()->target_id - 1;
 
 	/* Set pointer to hero target */
 	g_spelltarget = get_hero(hero_pos);
@@ -787,7 +787,7 @@ void spell_balsam(void)
 	signed short le_to_heal;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 	g_spell_special_aecost = 0;
 
@@ -841,7 +841,7 @@ void spell_hexenspeichel(void)
 	signed short le;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 	/* set costs to 0 */
 	g_spell_special_aecost = 0;
@@ -884,7 +884,7 @@ void spell_klarum_purum(void)
 	signed short poison_id;
 
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 	poison_id = hero_is_poisoned(get_spelltarget());
 
@@ -915,7 +915,7 @@ void spell_klarum_purum(void)
 void spell_ruhe_koerper(void)
 {
 	/* Set pointer to hero target */
-	g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+	g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->ruhe_koerper = 1;

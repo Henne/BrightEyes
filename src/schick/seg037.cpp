@@ -449,12 +449,12 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 			l2 = g_mon_spell_repertoire[enemy->mag_id][random_interval(0, available_spells - 1)];
 		}
 
-		enemy->enemy_id = 0;
+		enemy->target_id = 0;
 
 		if ( (mode = get_foe_attack_mode(l2, attack_foe)) > 0) {
 
 			if (mode == 3) {
-				enemy->enemy_id = enemy_no + 10;
+				enemy->target_id = enemy_no + 10;
 				enemy->cur_spell = (signed char)l2;
 				retval = 1;
 				done = 1;
@@ -467,10 +467,10 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 						l_si = enemy->viewdir;
 						l_di = 0;
 
-						while (!enemy->enemy_id && (l_di < 4)) {
+						while (!enemy->target_id && (l_di < 4)) {
 
 							if (test_foe_melee_attack(x, y, diff.a[l_si].x, diff.a[l_si].y, mode)) {
-								enemy->enemy_id = get_cb_val(x + diff.a[l_si].x, y + diff.a[l_si].y);
+								enemy->target_id = get_cb_val(x + diff.a[l_si].x, y + diff.a[l_si].y);
 							}
 
 							l_di++;
@@ -479,7 +479,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 							}
 						}
 
-						if (enemy->enemy_id) {
+						if (enemy->target_id) {
 
 							enemy->cur_spell = (signed char)l2;
 							retval = 1;
@@ -516,9 +516,9 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 						l_si = enemy->viewdir;
 						l_di = 0;
 
-						while (!enemy->enemy_id && (l_di < 4)) {
+						while (!enemy->target_id && (l_di < 4)) {
 
-							enemy->enemy_id = test_foe_range_attack(x, y, l_si, mode);
+							enemy->target_id = test_foe_range_attack(x, y, l_si, mode);
 
 							l_di++;
 							if (++l_si == 4) {
@@ -526,7 +526,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 							}
 						}
 
-						if (enemy->enemy_id) {
+						if (enemy->target_id) {
 
 							enemy->cur_spell =(signed char)l2;
 							retval = 1;
@@ -589,7 +589,7 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 	while ((done == 0) && (enemy->bp > 0)) {
 
 		/* reset the attackee ID */
-		enemy->enemy_id = 0;
+		enemy->target_id = 0;
 
 		while ( (done == 0) && (enemy->bp > 0) ) {
 
@@ -597,16 +597,16 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 			cnt = 0;
 
 			/* check clockwise for someone to attack */
-			while (!enemy->enemy_id && (cnt < 4)) {
+			while (!enemy->target_id && (cnt < 4)) {
 
-				enemy->enemy_id = test_foe_range_attack(x, y, dir, attack_foe);
+				enemy->target_id = test_foe_range_attack(x, y, dir, attack_foe);
 				cnt++;
 				if (++dir == 4) {
 					dir = 0;
 				}
 			}
 
-			if (enemy->enemy_id) {
+			if (enemy->target_id) {
 
 				/* found someone to attack */
 				retval = 1;
@@ -704,7 +704,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 		draw_fight_screen_pal(0);
 
-		enemy->enemy_id = 0;
+		enemy->target_id = 0;
 		enemy->action_id = 1;
 
 		/* LE threshold reached */
@@ -762,10 +762,10 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 				return;
 			}
 
-			enemy->enemy_id = 0;
+			enemy->target_id = 0;
 			dir = enemy->viewdir;
 			l3 = 0;
-			while (!enemy->enemy_id && (l3 < 4)) {
+			while (!enemy->target_id && (l3 < 4)) {
 
 				if (test_foe_melee_attack(x, y, diff.a[dir].x, diff.a[dir].y, attack_foe)) {
 
@@ -788,7 +788,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 					}
 
 					if (l5 != 0) {
-						enemy->enemy_id = get_cb_val(x + diff.a[dir].x, y + diff.a[dir].y);
+						enemy->target_id = get_cb_val(x + diff.a[dir].x, y + diff.a[dir].y);
 					}
 				}
 
@@ -799,7 +799,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 			}
 		}
 
-		if (enemy->enemy_id != 0) {
+		if (enemy->target_id != 0) {
 
 			enemy->action_id = 2;
 			enemy->bp = enemy->bp - 3;

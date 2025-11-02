@@ -39,7 +39,7 @@ void spell_eigenschaften(void)
 	signed short min;
 	signed short max;
 
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	damage_range_template(g_spelltarget_e->dam1, &min, &max);
 
@@ -307,11 +307,11 @@ void spell_hexenknoten(void)
 void spell_blitz(void)
 {
 
-	if (get_spelluser()->enemy_id < 10) {
+	if (get_spelluser()->target_id < 10) {
 		/* cast a hero */
 
 		/* set the spell target */
-		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -329,7 +329,7 @@ void spell_blitz(void)
 		/* cast an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 		/* set the rounds counter */
 		g_spelltarget_e->blind = 3;
@@ -375,11 +375,11 @@ void spell_eisenrost(void)
 {
 	signed short id;
 
-	if (get_spelluser()->enemy_id < 10) {
+	if (get_spelluser()->target_id < 10) {
 		/* target is a hero */
 
 		/* set the spell target */
-		g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -415,7 +415,7 @@ void spell_eisenrost(void)
 		}
 	} else {
 		/* target is an enemy */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 		/* check if target is an animal */
 		if (g_spelltarget_e->is_animal)
@@ -441,8 +441,8 @@ void spell_fulminictus(void)
 {
 	signed short damage;
 
-	if ((get_spelluser()->enemy_id < 10) &&
-		get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
+	if ((get_spelluser()->target_id < 10) &&
+		get_hero(get_spelluser()->target_id - 1) == get_spelluser()) {
 
 		/* do not attack yourself */
 
@@ -482,9 +482,9 @@ void spell_ignifaxius(void)
 	signed short damage;
 	signed short level;
 
-	if (get_spelluser()->enemy_id < 10) {
+	if (get_spelluser()->target_id < 10) {
 
-		if (get_hero(get_spelluser()->enemy_id - 1) == get_spelluser()) {
+		if (get_hero(get_spelluser()->target_id - 1) == get_spelluser()) {
 
 			/* don't attack yourself */
 			g_spell_special_aecost = 0;
@@ -532,8 +532,8 @@ void spell_ignifaxius(void)
 	}
 
 	/* damage doubles if the target is a mummy */
-	if ((get_spelluser()->enemy_id >= 10) &&
-			(g_enemy_sheets[get_spelluser()->enemy_id - 10].gfx_id == 0x1e))
+	if ((get_spelluser()->target_id >= 10) &&
+			(g_enemy_sheets[get_spelluser()->target_id - 10].gfx_id == 0x1e))
 	{
 		damage *= 2;
 		mummy = 1;
@@ -544,10 +544,10 @@ void spell_ignifaxius(void)
 
 	rs_malus = damage / 10;
 
-	if (get_spelluser()->enemy_id < 10) {
+	if (get_spelluser()->target_id < 10) {
 
 		/* target is a hero */
-		hero_pos = get_spelluser()->enemy_id - 1;
+		hero_pos = get_spelluser()->target_id - 1;
 
 		/* set the spell target */
 		g_spelltarget = get_hero(hero_pos);
@@ -583,7 +583,7 @@ void spell_ignifaxius(void)
 		/* target is an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 		g_spelltarget_e->rs = g_spelltarget_e->rs - rs_malus;
 		g_spelltarget_e->at -= level / 2;
@@ -608,11 +608,11 @@ void spell_plumbumbarum(void)
 	signed short slot;
 	signed short hero_pos;
 
-	if (get_spelluser()->enemy_id < 10) {
+	if (get_spelluser()->target_id < 10) {
 
 		/* target is a hero */
 
-		hero_pos = get_spelluser()->enemy_id - 1;
+		hero_pos = get_spelluser()->target_id - 1;
 
 		/* set the spell target */
 		g_spelltarget = get_hero(hero_pos);
@@ -644,7 +644,7 @@ void spell_plumbumbarum(void)
 	/* target is an enemy */
 
 	/* set a pointer to the enemy */
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* AT-malus of -3 (permanent) */
 	g_spelltarget_e->at -= 3;
@@ -667,7 +667,7 @@ void spell_saft_kraft(void)
 	rounds = random_schick(20);
 
 	/* get the index of the hero on whom the spell is cast */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	/* set a pointer to the target */
 	g_spelltarget = get_hero(target);
@@ -715,7 +715,7 @@ void spell_scharfes_auge(void)
 	signed short slot;
 
 	/* get the index of the hero on whom the spell is cast */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	/* set a pointer to the target */
 	g_spelltarget = get_hero(target);

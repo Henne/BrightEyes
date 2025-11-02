@@ -287,7 +287,7 @@ void seg045_0394(const signed int a1, const struct struct_hero *hero, const sign
 	signed short y;
 
 	/* search the target on the chessboard */
-	FIG_search_obj_on_cb(hero->enemy_id, &x, &y);
+	FIG_search_obj_on_cb(hero->target_id, &x, &y);
 
 	ptr = &g_fig_anisheets[a1][1];
 
@@ -308,7 +308,7 @@ void seg045_041b(signed short a1, struct enemy_sheet *enemy, signed short spell_
 	signed short y;
 
 	/* search the target on the chessboard */
-	FIG_search_obj_on_cb(enemy->enemy_id, &x, &y);
+	FIG_search_obj_on_cb(enemy->target_id, &x, &y);
 
 	ptr = &g_fig_anisheets[a1][1];
 
