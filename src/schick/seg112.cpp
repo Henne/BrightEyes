@@ -64,7 +64,7 @@ void tevent_067(void)
 			hero = get_hero(0);
 			for (i = count = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) > 0)
 				{
 					count++;
@@ -91,7 +91,7 @@ void tevent_067(void)
 				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 					{
 						sub_hero_le(hero, random_schick(8));
 					}
@@ -295,7 +295,7 @@ void TRV_swimm(signed short mod, signed short percent)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 			!hero->flags.dead)
 		{
 
@@ -464,7 +464,7 @@ void tevent_074(void)
 				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 						!hero->flags.dead)
 					{
 						answer = i;
@@ -571,7 +571,7 @@ void tevent_075(void)
 				hero = get_hero(0);
 				for (i = answer = 0; i <= 6; i++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 						!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
 						answer++;
@@ -690,7 +690,7 @@ void tevent_077(void)
 				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 						!hero->flags.dead)
 					{
 						answer = i;

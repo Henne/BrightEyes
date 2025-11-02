@@ -279,7 +279,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				hero = get_hero(0);
 				for (gs_trv_i = 0; gs_trv_i <= 6; gs_trv_i++, hero++)
 				{
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 						!hero->flags.dead)
 					{
 						sub_hero_le(hero, gs_forcedmarch_le_cost);

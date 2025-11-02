@@ -205,17 +205,17 @@ unsigned short get_mapval_large(signed short x, signed short y)
 /**
  * \brief   checks if the group is in prison
  *
- * \param   group_no    number of the group
+ * \param   group_id    number of the group
  * \return              the value of the "in_prison" flag
  */
-signed short is_group_in_prison(signed short group_no)
+signed short is_group_in_prison(signed short group_id)
 {
 	struct struct_hero *hero = get_hero(0);
 	signed short i;
 
 	for (i = 0; i < 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == group_no))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == group_id))
 		{
 			return hero->jail;
 		}

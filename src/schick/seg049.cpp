@@ -35,9 +35,9 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 	struct struct_hero *hero2 = (struct struct_hero*)p2;
 
 	if ((hero1->typus != HERO_TYPE_NONE) &&
-		(hero1->group_no == gs_current_group) &&
+		(hero1->group_id == gs_current_group) &&
 		(hero2->typus != HERO_TYPE_NONE) &&
-		(hero2->group_no == gs_current_group))
+		(hero2->group_id == gs_current_group))
 	{
 		if (hero1->group_pos < hero2->group_pos)
 		{
@@ -48,25 +48,25 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 	}
 
 	if ((hero1->typus != HERO_TYPE_NONE) &&
-		(hero1->group_no == gs_current_group) &&
+		(hero1->group_id == gs_current_group) &&
 		(hero2->typus != HERO_TYPE_NONE) &&
-		(hero2->group_no != gs_current_group))
+		(hero2->group_id != gs_current_group))
 	{
 		return -1;
 	}
 
 	if ((hero1->typus != HERO_TYPE_NONE) &&
-		(hero1->group_no != gs_current_group) &&
+		(hero1->group_id != gs_current_group) &&
 		(hero2->typus != HERO_TYPE_NONE) &&
-		(hero2->group_no == gs_current_group))
+		(hero2->group_id == gs_current_group))
 	{
 		return 1;
 	}
 
 	if ((hero1->typus != HERO_TYPE_NONE) &&
-		(hero1->group_no != gs_current_group) &&
+		(hero1->group_id != gs_current_group) &&
 		(hero2->typus != HERO_TYPE_NONE) &&
-		(hero2->group_no != gs_current_group))
+		(hero2->group_id != gs_current_group))
 	{
 		if (hero1->group_pos < hero2->group_pos)
 		{
@@ -78,14 +78,14 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 
 	if (!(hero1->typus) &&
 		(hero2->typus != HERO_TYPE_NONE) &&
-		(hero2->group_no == gs_current_group))
+		(hero2->group_id == gs_current_group))
 	{
 		return 1;
 	}
 
 	if (!(hero1->typus) &&
 		(hero2->typus != HERO_TYPE_NONE) &&
-		(hero2->group_no != gs_current_group))
+		(hero2->group_id != gs_current_group))
 	{
 		return -1;
 	}
@@ -96,14 +96,14 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 	}
 
 	if ((hero1->typus != HERO_TYPE_NONE) &&
-		(hero1->group_no == gs_current_group) &&
+		(hero1->group_id == gs_current_group) &&
 		!(hero2->typus))
 	{
 		return -1;
 	}
 
 	if ((hero1->typus != HERO_TYPE_NONE) &&
-		(hero1->group_no != gs_current_group) &&
+		(hero1->group_id != gs_current_group) &&
 		!(hero2->typus))
 	{
 		return 1;
@@ -194,7 +194,7 @@ void GRP_split(void)
 			} else {
 
 				not_empty = 1;
-				get_hero(answer)->group_no = (signed char)new_group_id;
+				get_hero(answer)->group_id = (signed char)new_group_id;
 				gs_group_member_counts[new_group_id]++;
 				gs_group_member_counts[gs_current_group]--;
 			}
@@ -240,9 +240,9 @@ void GRP_merge(void)
 
 			for (i = 0; i <= 6; i++) {
 
-				if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_no == answer))
+				if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_id == answer))
 				{
-					get_hero(i)->group_no = gs_current_group;
+					get_hero(i)->group_id = gs_current_group;
 					gs_group_member_counts[gs_current_group]++;
 				}
 			}
@@ -281,7 +281,7 @@ void GRP_switch_to_next(signed short mode)
 
 			for (i = 0; i < 6; i++) {
 
-				if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_no == group) && check_hero(get_hero(i)))
+				if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_id == group) && check_hero(get_hero(i)))
 				{
 					if (get_hero(i)->jail) {
 						/* hero is in prison */
@@ -572,7 +572,7 @@ void GRP_move_hero(signed short src_pos)
 			dst = get_hero(dst_pos);
 			src = get_hero(src_pos);
 
-			if (!dst->typus || (dst->group_no == gs_current_group)) {
+			if (!dst->typus || (dst->group_id == gs_current_group)) {
 
 				for (i = 0; i < 3; i++) {
 					if (g_wildcamp_guards[i] == src_pos) {

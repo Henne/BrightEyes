@@ -418,7 +418,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 				hero_ptr = get_hero(i);
 
 				if ((hero_ptr->typus != HERO_TYPE_NONE) &&
-					(hero_ptr->group_no == gs_current_group) &&
+					(hero_ptr->group_id == gs_current_group) &&
 					!hero_ptr->flags.dead)
 				{
 					/* hero_ptr points to an actual alive hero in the current group */

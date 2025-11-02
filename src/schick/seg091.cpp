@@ -272,7 +272,7 @@ void DNG13_collapsing_ceiling(void)
 	hero = get_hero(0);
 	for (i = fails = 0; i <= 6; i++, hero++)
 	{
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 			!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -4) <= 0)
 		{
 			fails++;
@@ -319,7 +319,7 @@ void DNG13_collapsing_ceiling_easy(void)
 	hero = get_hero(0);
 	for (i = fails = 0; i <= 6; i++, hero++)
 	{
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
 			!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -1) <= 0)
 		{
 			fails++;

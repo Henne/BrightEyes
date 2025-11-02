@@ -165,18 +165,18 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 	signed int tw_bak;
 	struct struct_hero *hero2;
 	signed int group_bak;
-	signed int group_no;
+	signed int group_id;
 	signed char sex_bak;
 
 	group_bak = gs_current_group;
 	sex_bak = hero->sex;
-	group_no = hero->group_no;
+	group_id = hero->group_id;
 
 	/* TODO : Sex = 50, what means 50 ? */
 	hero->sex = 50;
 
 	/* switch to the group of the hero */
-	while (gs_current_group != group_no) {
+	while (gs_current_group != group_id) {
 		GRP_switch_to_next(1);
 	}
 
@@ -313,7 +313,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
 				if ((l_di != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&
-					(hero2->group_no == gs_current_group) && !hero2->flags.dead)
+					(hero2->group_id == gs_current_group) && !hero2->flags.dead)
 				{
 					sub_hero_le(hero2, dice_roll(1, 6, 2));
 				}

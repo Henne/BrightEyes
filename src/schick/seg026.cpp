@@ -756,7 +756,7 @@ signed short load_game_state(void)
 
 					prepare_chr_name(name, (char*)hero_i);
 
-					read_chr_temp(name, hero_i->group_pos - 1, hero_i->group_no);
+					read_chr_temp(name, hero_i->group_pos - 1, hero_i->group_id);
 				}
 			}
 
@@ -1116,7 +1116,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 		_read(handle, hero, hero_size);
 		close(handle);
 
-		hero->group_no = (signed char)a2;
+		hero->group_id = (signed char)a2;
 
 		if (hero->sex == 1) {
 

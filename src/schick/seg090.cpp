@@ -111,7 +111,7 @@ signed short DNG12_handler(void)
 					for (i = 0; i <= 6; i++, hero++) {
 
 						if ((hero->typus != HERO_TYPE_NONE) &&
-							(hero->group_no == gs_current_group) &&
+							(hero->group_id == gs_current_group) &&
 							!hero->flags.dead)
 						{
 							hero_disappear(hero, i, -1);

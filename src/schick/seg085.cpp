@@ -248,7 +248,7 @@ signed short DNG10_handler(void)
 			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
 				{
 					sub_hero_le(hero, random_schick(6));
 				}
@@ -323,7 +323,7 @@ signed short DNG10_handler(void)
 				for (answer = result = 0; answer <= 6; answer++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) &&
-						(hero->group_no == gs_current_group) &&
+						(hero->group_id == gs_current_group) &&
 						!hero->flags.dead &&
 						(test_skill(hero, TA_SCHLEICHEN, hero->rs_bonus1 + 3) <= 0))
 					{

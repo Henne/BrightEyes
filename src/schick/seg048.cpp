@@ -212,7 +212,7 @@ void status_menu(signed short hero_pos)
 				if (hero_pos > 6) hero_pos = 0;
 
 			} while (!(get_hero(hero_pos)->typus) ||
-					(get_hero(hero_pos)->group_no != gs_current_group) ||
+					(get_hero(hero_pos)->group_id != gs_current_group) ||
 					((get_hero(hero_pos)->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 
@@ -245,7 +245,7 @@ void status_menu(signed short hero_pos)
 				if (hero_pos < 0) hero_pos = 6;
 
 			} while (!(get_hero(hero_pos)->typus) ||
-					(get_hero(hero_pos)->group_no != gs_current_group) ||
+					(get_hero(hero_pos)->group_id != gs_current_group) ||
 					((get_hero(hero_pos)->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
 
 

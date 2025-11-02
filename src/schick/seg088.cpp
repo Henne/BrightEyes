@@ -45,7 +45,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
-		if ((i != diver_pos) && (hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero->flags.dead)
+		if ((i != diver_pos) && (hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
 		{
 
 			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
