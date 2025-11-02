@@ -37,11 +37,11 @@ void MON_do_spell_damage(const signed int damage)
 {
 	if (damage > 0) {
 
-		if (g_spelluser_e->enemy_id < 10) {
+		if (g_spelluser_e->target_id < 10) {
 			/* target is a hero */
 
 			/* set the pointer to the target */
-			g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+			g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 			/* do the damage */
 			sub_hero_le(get_spelltarget(), damage);
@@ -58,7 +58,7 @@ void MON_do_spell_damage(const signed int damage)
 			/* target is a monster */
 
 			/* set the pointer to the target */
-			g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+			g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 			/* do the damage */
 			FIG_damage_enemy(g_spelltarget_e, damage, 1);
@@ -77,11 +77,11 @@ void MON_do_spell_damage(const signed int damage)
 /* unused */
 signed int MON_get_target_PA(void)
 {
-	if (g_spelluser_e->enemy_id < 10) {
+	if (g_spelluser_e->target_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget =  get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget =  get_hero(g_spelluser_e->target_id - 1);
 
 		/* calc and return PA-value */
 		return get_spelltarget()->pa_weapon[get_spelltarget()->w_type] - get_spelltarget()->atpa_mod;
@@ -90,7 +90,7 @@ signed int MON_get_target_PA(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 		/* calc and return PA-value */
 		return g_spelltarget_e->pa;
@@ -100,11 +100,11 @@ signed int MON_get_target_PA(void)
 /* unused */
 signed int MON_get_target_RS(void)
 {
-	if (g_spelluser_e->enemy_id < 10) {
+	if (g_spelluser_e->target_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 		/* return RS-value */
 		return get_spelltarget()->rs_bonus1;
@@ -113,7 +113,7 @@ signed int MON_get_target_RS(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 		/* return PA-value */
 		return g_spelltarget_e->rs;
@@ -261,7 +261,7 @@ signed int MON_test_skill(const struct enemy_sheet *monster, const signed int ms
 	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : get_hero(monster->enemy_id - 1)->mr);
+		handicap += (monster->target_id >= 10 ?	g_enemy_sheets[monster->target_id - 10].mr : get_hero(monster->target_id - 1)->mr);
 	}
 
 	/* check if the monster spell has a valid ID */
@@ -372,7 +372,7 @@ signed short MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 void mspell_verwandlung(void)
 {
 	/* set pointer to monster target */
-	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 	if (g_spelltarget_e->flags.petrified) {
 
@@ -412,7 +412,7 @@ void mspell_verwandlung(void)
 void mspell_bannbaladin(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->flags.tame = 1;
@@ -424,7 +424,7 @@ void mspell_bannbaladin(void)
 void mspell_boeser_blick(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->flags.renegade = 1;
@@ -436,7 +436,7 @@ void mspell_boeser_blick(void)
 void mspell_horriphobus(void)
 {
 	/* set pointer to hero target */
-	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+	g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 	/* set the flag */
 	get_spelltarget()->flags.scared = 1; /* set 'scared' flag */
@@ -449,7 +449,7 @@ void mspell_horriphobus(void)
 void mspell_axxeleratus(void)
 {
 	/* set pointer to monster target */
-	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 	/* #Attacks + 1 */
 	g_spelltarget_e->attacks++;
@@ -470,7 +470,7 @@ void mspell_balsam(void)
 	signed int le;
 
 	/* set pointer to monster target */
-	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug:
@@ -520,11 +520,11 @@ void mspell_balsam(void)
 
 void mspell_blitz(void)
 {
-	if (g_spelluser_e->enemy_id < 10) {
+	if (g_spelluser_e->target_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 		/* set blitz timer to 3 rounds */
 		get_spelltarget()->blind_timer = 3;
@@ -535,7 +535,7 @@ void mspell_blitz(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 		/* set blitz timer to 3 rounds */
 		g_spelltarget_e->blind = 3;
@@ -549,11 +549,11 @@ void mspell_eisenrost(void)
 {
 	signed int item_id;
 
-	if (g_spelluser_e->enemy_id < 10) {
+	if (g_spelluser_e->target_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 		item_id = get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
@@ -580,7 +580,7 @@ void mspell_eisenrost(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 		/* if weapon is not broken */
 		if (!g_spelltarget_e->weapon_broken) {
@@ -642,11 +642,11 @@ void mspell_ignifaxius(void)
 	/* calc RS malus */
 	rs_malus = damage / 10;
 
-	if (g_spelluser_e->enemy_id < 10) {
+	if (g_spelluser_e->target_id < 10) {
 		/* target is a hero */
 
 		/* get the position of the target hero */
-		hero_pos = g_spelluser_e->enemy_id - 1;
+		hero_pos = g_spelluser_e->target_id - 1;
 
 		/* set the pointer to the target */
 		g_spelltarget = get_hero(hero_pos);
@@ -679,7 +679,7 @@ void mspell_ignifaxius(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 		/* subtract RS malus */
 		g_spelltarget_e->rs = g_spelltarget_e->rs - rs_malus;
@@ -701,11 +701,11 @@ void mspell_plumbumbarum(void)
 	signed int slot;
 	signed int hero_pos;
 
-	if (g_spelluser_e->enemy_id < 10) {
+	if (g_spelluser_e->target_id < 10) {
 		/* target is a hero */
 
 		/* get the position of the target hero */
-		hero_pos = g_spelluser_e->enemy_id - 1;
+		hero_pos = g_spelluser_e->target_id - 1;
 
 		/* set the pointer to the target */
 		g_spelltarget = get_hero(hero_pos);
@@ -720,7 +720,7 @@ void mspell_plumbumbarum(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 		/* AT - 3 */
 		g_spelltarget_e->at = g_spelltarget_e->at - 3;
@@ -733,7 +733,7 @@ void mspell_plumbumbarum(void)
 void mspell_saft_kraft(void)
 {
 	/* set the pointer to the target */
-	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 	/* AT + 5 */
 	g_spelltarget_e->at = g_spelltarget_e->at + 5;
@@ -769,11 +769,11 @@ void mspell_armatrutz(void)
 
 void mspell_paralue(void)
 {
-	if (g_spelluser_e->enemy_id >= 10) {
+	if (g_spelluser_e->target_id >= 10) {
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_id - 10];
 
 		/* set 'petrified' flag */
 		g_spelltarget_e->flags.petrified = 1;
@@ -784,7 +784,7 @@ void mspell_paralue(void)
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
+		g_spelltarget = get_hero(g_spelluser_e->target_id - 1);
 
 		/* set the flag */
 		get_spelltarget()->flags.petrified = 1;

@@ -259,7 +259,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							hero->action_id = FIG_ACTION_MOVE;
 
 							/* set target id to 0 */
-							hero->enemy_id = 0;
+							hero->target_id = 0;
 
 						} else if ((range_weapon != -1) && (calc_beeline(x, y, target_x, target_y) < 2)) {
 
@@ -268,7 +268,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							hero->action_id = FIG_ACTION_MOVE;
 
 							/* set target id to 0 */
-							hero->enemy_id = 0;
+							hero->target_id = 0;
 
 						} else {
 							hero->atpa_mod = 0;
@@ -290,7 +290,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							}
 
 							/* set target id */
-							hero->enemy_id = target_id;
+							hero->target_id = target_id;
 							/* set BP to 0 */
 							hero->bp_left = 0;
 							hero->action_id = (range_weapon > 0 ? FIG_ACTION_RANGE_ATTACK : FIG_ACTION_MELEE_ATTACK);
@@ -336,7 +336,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						if (hero->spell_id > 0) {
 
 							hero->action_id = FIG_ACTION_MOVE;
-							hero->enemy_id = 0;
+							hero->target_id = 0;
 
 							spell_description = &g_spell_descriptions[hero->spell_id];
 
@@ -386,13 +386,13 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 										} else {
 											hero->action_id = FIG_ACTION_SPELL;
-											hero->enemy_id = target_id;
+											hero->target_id = target_id;
 											done = 1;
 										}
 									}
 								} else {
 									hero->action_id = FIG_ACTION_SPELL;
-									hero->enemy_id = 0;
+									hero->target_id = 0;
 									done = 1;
 								}
 							}
@@ -426,13 +426,13 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
 
 							update_mouse_cursor();
-							hero->enemy_id = target_id;
+							hero->target_id = target_id;
 						} else {
-							hero->enemy_id = 0;
+							hero->target_id = 0;
 						}
 
-						if ((hero->enemy_id < 0) || hero->enemy_id >= 50) {
-							hero->enemy_id = 0;
+						if ((hero->target_id < 0) || hero->target_id >= 50) {
+							hero->target_id = 0;
 							GUI_output(get_tx(28));
 						} else {
 							/* set BP to 0 */
@@ -701,7 +701,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 				/* set BP to 0 */
 				hero->bp_left = 0;
 				/* set target id to 0 */
-				hero->enemy_id = 0;
+				hero->target_id = 0;
 
 			} else if (selected == FIG_ACTION_COMPUTER_FIGHT) {
 				/* COMPUTER FIGHT / COMPUTERKAMPF */
@@ -799,35 +799,35 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 				/* check last action and target_id */
 				if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
-					(hero->action_id == FIG_ACTION_RANGE_ATTACK)) && (hero->enemy_id > 0))
+					(hero->action_id == FIG_ACTION_RANGE_ATTACK)) && (hero->target_id > 0))
 				{
 
 					/* TODO: check fighter_id upper bound */
-					//if (((hero->enemy_id >= 10) && g_enemy_sheets[hero->enemy_id - 10].flags.dead) || /* check 'dead' flag */
-					if (((hero->enemy_id >= 10) && ((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).dead) || /* check 'dead' flag */
-						((hero->enemy_id < 10) && get_hero(hero->enemy_id - 1)->flags.dead))
+					//if (((hero->target_id >= 10) && g_enemy_sheets[hero->target_id - 10].flags.dead) || /* check 'dead' flag */
+					if (((hero->target_id >= 10) && ((struct enemy_flags)g_enemy_sheets[hero->target_id - 10].flags).dead) || /* check 'dead' flag */
+						((hero->target_id < 10) && get_hero(hero->target_id - 1)->flags.dead))
 					{
 
 						GUI_output(get_tx(29));
 						hero->action_id = FIG_ACTION_WAIT;
-						hero->enemy_id = 0;
+						hero->target_id = 0;
 						done = 0;
 
 					/* TODO: check fighter_id upper bound */
-					} else if (((hero->enemy_id >= 10) && ((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).scared) || /* check 'scared' flag */
-						((hero->enemy_id < 10) && get_hero(hero->enemy_id - 1)->flags.scared))
+					} else if (((hero->target_id >= 10) && ((struct enemy_flags)g_enemy_sheets[hero->target_id - 10].flags).scared) || /* check 'scared' flag */
+						((hero->target_id < 10) && get_hero(hero->target_id - 1)->flags.scared))
 					{
 
 						/* GUI_output(get_tx(29)); */
 						hero->action_id = FIG_ACTION_WAIT;
-						hero->enemy_id = 0;
+						hero->target_id = 0;
 						done = 0;
 
 					} else if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, hero_pos))
 					{
 						/* GUI_output(get_tx(29)); */
 						hero->action_id = FIG_ACTION_WAIT;
-						hero->enemy_id = 0;
+						hero->target_id = 0;
 						done = 0;
 					}
 				}

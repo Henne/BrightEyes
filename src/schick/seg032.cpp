@@ -591,32 +591,32 @@ void FIG_do_round(void)
 
 						FIG_do_hero_action(hero, actor_id);
 
-						if (hero->enemy_id >= 10) {
+						if (hero->target_id >= 10) {
 
 							/* hero did attack some enemy (by weapon/spell/item etc.) */
 
 							/* if the tail of a two-squares enemy has been attacked,
 							 * replace HERO_ENEMY_ID by the main id of that enemy */
-							if (hero->enemy_id >= 30) {
+							if (hero->target_id >= 30) {
 
-								hero->enemy_id -= 20;
+								hero->target_id -= 20;
 							}
 
-							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
-							//if (g_enemy_sheets[hero->enemy_id - 10].flags.dead)
-							if (((struct enemy_flags)g_enemy_sheets[hero->enemy_id - 10].flags).dead)
+							/* TODO: seems that (hero->target_id) gives better results than (hero->target_id - 10) */
+							//if (g_enemy_sheets[hero->target_id - 10].flags.dead)
+							if (((struct enemy_flags)g_enemy_sheets[hero->target_id - 10].flags).dead)
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[hero->enemy_id - 10].gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[hero->target_id - 10].gfx_id, g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
 
-									FIG_search_obj_on_cb(hero->enemy_id + 20, &x, &y);
+									FIG_search_obj_on_cb(hero->target_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
 
-									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->enemy_id - 10].fighter_id);
+									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->target_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
 									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
@@ -686,32 +686,32 @@ void FIG_do_round(void)
 
 						FIG_do_enemy_action(enemy, actor_id);
 
-						if (enemy->enemy_id >= 10) {
+						if (enemy->target_id >= 10) {
 
 							/* enemy attacks another enemy (by weapon/spell etc.) */
 
 							/* if the tail of a two-squares enemy has been attacked,
-							 * replace enemy->enemy_id by the main id of that enemy */
-							if (enemy->enemy_id >= 30) {
+							 * replace enemy->target_id by the main id of that enemy */
+							if (enemy->target_id >= 30) {
 
-								enemy->enemy_id -= 20;
+								enemy->target_id -= 20;
 							}
 
-							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
-							//if (g_enemy_sheets[enemy->enemy_id - 10].flags.dead)
-							if (((struct enemy_flags)(g_enemy_sheets[enemy->enemy_id - 10].flags)).dead) /* check 'dead' flag */
+							/* TODO: seems that (hero->target_id) gives better results than (hero->target_id - 10) */
+							//if (g_enemy_sheets[enemy->target_id - 10].flags.dead)
+							if (((struct enemy_flags)(g_enemy_sheets[enemy->target_id - 10].flags)).dead) /* check 'dead' flag */
 							{
 
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[enemy->enemy_id - 10].gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[enemy->target_id - 10].gfx_id, g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
-									FIG_search_obj_on_cb(enemy->enemy_id + 20, &x, &y);
+									FIG_search_obj_on_cb(enemy->target_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr->cbx, fighter_ptr->cby could have been used later. */
 
 
-									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->enemy_id - 10].fighter_id);
+									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->target_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
 
 									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);

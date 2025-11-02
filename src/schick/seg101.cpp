@@ -42,7 +42,7 @@ void spell_arcano(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -115,7 +115,7 @@ void spell_inc_ch(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -176,7 +176,7 @@ void spell_inc_ff(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -215,7 +215,7 @@ void spell_inc_ge(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -253,7 +253,7 @@ void spell_inc_in(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -291,7 +291,7 @@ void spell_inc_kk(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -329,7 +329,7 @@ void spell_inc_kl(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -367,7 +367,7 @@ void spell_inc_mu(void)
 	signed int slot;
 
 	/* get the spell target */
-	target = get_spelluser()->enemy_id - 1;
+	target = get_spelluser()->target_id - 1;
 
 	g_spelltarget = get_hero(target);
 
@@ -410,11 +410,11 @@ void spell_mutabili(void)
 
 void spell_paralue(void)
 {
-	if (get_spelluser()->enemy_id >= 10) {
+	if (get_spelluser()->target_id >= 10) {
 		/* cast at an enemy */
 
 		/* BC-TODO: calculation of ptr could be better */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 		/* set 'petrified' flag */
 		g_spelltarget_e->flags.petrified = 1;
@@ -426,7 +426,7 @@ void spell_paralue(void)
 		if (get_spelltarget() != get_spelluser()) {
 
 			/* set the target  */
-			g_spelltarget = get_hero(get_spelluser()->enemy_id - 1);
+			g_spelltarget = get_hero(get_spelluser()->target_id - 1);
 
 			/* check again */
 			if (get_spelltarget() == get_spelluser()) {
@@ -458,7 +458,7 @@ void spell_salander(void)
 	/* TODO: Original-Bug: Strange effect when cast on a two-squared monster */
 	signed int ae_cost;
 
-	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->enemy_id - 10];
+	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
 
 	/* read a value from that struct */
 	ae_cost = g_spelltarget_e->mr * 3;

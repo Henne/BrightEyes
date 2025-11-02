@@ -281,7 +281,7 @@ struct enemy_sheet {
 	Bit8s  dummy3;
 	Bit8s  action_id;
 	Bit8s  cur_spell;
-	Bit8s  enemy_id;
+	Bit8s  target_id;
 	Bit8s  saftkraft;		/* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
 	Bit8s  blind;			/* blind rounds remaining from 'Blitz' spell */
 	Bit8s  weapon_broken;	/* weapon broken? 0	= no, 1	= yes */
