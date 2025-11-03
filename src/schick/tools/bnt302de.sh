@@ -8,6 +8,9 @@ TMP=TEMP
 
 mkdir -p ${TMP}
 
+#clear bin files and old builds
+rm -f ${TMP}/*.bin build/BLADEM.*
+
 # build a new BINARY in temp
 ./tools/build.sh
 
