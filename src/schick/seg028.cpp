@@ -150,7 +150,7 @@ void seg028_0224(void)
 
 		g_current_ani = -1;
 
-		seg066_172b();
+		city_update_house_count();
 
 		g_buffer9_ptr4 = g_buffer9_ptr3;
 

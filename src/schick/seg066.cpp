@@ -78,19 +78,19 @@ struct market g_market_descr_table[34] = {
 	{  4,  30,  4, 0 },
 	{ -1,   0,  0, 0 }
 }; // ds:0x70a8
-const Bit8u  g_hyg_ani_x0[5] = { 0x52, 0x58, 0x59, 0x5a, 0x5a }; // ds:0x71b8
-const Bit8u  g_hyg_ani_x1 = 0x5a; // ds:0x71bd
-const Bit8u  g_hyg_ani_x2 = 0x5a; // ds:0x71be
-const Bit8u  g_hyg_ani_x3[3] = { 0x5a, 0x5a, 0x5a }; // ds:0x71bf
-const Bit8u  g_hyg_ani_x5 = 0xba; // ds:0x71c2
-const Bit8u  g_hyg_ani_x6 = 0xba; // ds:0x71c3
-const Bit8u  g_hyg_ani_x7[3] = { 0xb1, 0xa8, 0xa4 }; // ds:0x71c4
-const Bit8u  g_hyg_ani_x9[3] = { 0x30, 0x26, 0x26 }; // ds:0x71c7
+const Bit8u g_hyg_ani_x0[5] = { 0x52, 0x58, 0x59, 0x5a, 0x5a }; // ds:0x71b8
+const Bit8u g_hyg_ani_x1 = 0x5a; // ds:0x71bd
+const Bit8u g_hyg_ani_x2 = 0x5a; // ds:0x71be
+const Bit8u g_hyg_ani_x3[3] = { 0x5a, 0x5a, 0x5a }; // ds:0x71bf
+const Bit8u g_hyg_ani_x5 = 0xba; // ds:0x71c2
+const Bit8u g_hyg_ani_x6 = 0xba; // ds:0x71c3
+const Bit8u g_hyg_ani_x7[3] = { 0xb1, 0xa8, 0xa4 }; // ds:0x71c4
+const Bit8u g_hyg_ani_x9[3] = { 0x30, 0x26, 0x26 }; // ds:0x71c7
 
 
-const Bit8u  g_towns_cityindex_table[52] = { 0x36, 0x04, 0x08, 0x07, 0x0a, 0x04, 0x02, 0x04, 0x04, 0x0c, 0x03, 0x04, 0x06, 0x03, 0x0c, 0x02, 0x12, 0x18, 0x03, 0x06, 0x01, 0x07, 0x0a, 0x07, 0x06, 0x08, 0x03, 0x0b, 0x0a, 0x03, 0x08, 0x04, 0x0c, 0x03, 0x05, 0x04, 0x08, 0x09, 0x16, 0x13, 0x03, 0x0a, 0x0a, 0x07, 0x06, 0x0a, 0x03, 0x0c, 0x02, 0x01, 0x01, 0x03 }; // ds:0x71ca
+static const Bit8u  g_towns_cityindex_table[52] = { 0x36, 0x04, 0x08, 0x07, 0x0a, 0x04, 0x02, 0x04, 0x04, 0x0c, 0x03, 0x04, 0x06, 0x03, 0x0c, 0x02, 0x12, 0x18, 0x03, 0x06, 0x01, 0x07, 0x0a, 0x07, 0x06, 0x08, 0x03, 0x0b, 0x0a, 0x03, 0x08, 0x04, 0x0c, 0x03, 0x05, 0x04, 0x08, 0x09, 0x16, 0x13, 0x03, 0x0a, 0x0a, 0x07, 0x06, 0x0a, 0x03, 0x0c, 0x02, 0x01, 0x01, 0x03 }; // ds:0x71ca
 
-Bit8u* g_daspota_locloot_index[18] = {
+static Bit8u* g_daspota_locloot_index[18] = {
 	gs_daspota_location01_loot,
 	gs_daspota_location02_loot,
 	gs_daspota_location03_loot,
@@ -111,16 +111,16 @@ Bit8u* g_daspota_locloot_index[18] = {
 	gs_daspota_location18_loot
 }; // ds:0x71fe; Bit8u*
 
-unsigned char g_mapval_to_loctype[12] = { 0x00, 0x0f, 0x1f, 0x3f, 0x5f, 0x7f, 0x9f, 0xaf, 0xbf, 0xcf, 0xdf, 0xef }; // ds:0x7246
-signed char g_seg066_0bad_unkn0[29] = { 0x01, -0x01, 0x02, -0x01, 0x03, 0x04, 0x05, -0x01, 0x06, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0a, -0x01, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, -0x01, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 }; // ds:0x7252
-signed char g_seg066_0bad_unkn1[29] = { 0x2a, -0x01, 0x2b, -0x01, 0x2c, 0x2d, 0x2e, -0x01, 0x2f, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x33, -0x01, 0x34, 0x35, 0x36, 0x37, 0x38, -0x01, 0x39, 0x39, 0x39, 0x39, 0x39, 0x39, 0x39 }; // ds:0x726f
-signed char g_seg066_0bad_unkn2[29] = { 0x3a, -0x01, 0x3b, -0x01, 0x3c, 0x3d, 0x3e, -0x01, 0x3f, 0x3f, 0x40, 0x41, 0x42, 0x43, 0x43, -0x01, 0x44, 0x45, 0x46, 0x47, 0x48, -0x01, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49 }; // ds:0x728c
-signed char g_seg066_0bad_unkn3[29] = { 0x4e, -0x01, 0x4f, -0x01, 0x50, 0x51, 0x52, -0x01, 0x53, 0x53, 0x54, 0x55, 0x56, 0x57, 0x57, -0x01, 0x58, 0x59, 0x5a, 0x5b, 0x5c, -0x01, 0x5d, 0x5d, 0x5d, 0x5d, 0x5d, 0x5d, 0x5d }; // ds:0x72a9
-signed char g_seg066_0bad_unkn4[29] = { 0x11, 0x12, 0x13, -0x01, 0x14, 0x15, 0x16, -0x01, -0x01, 0x17, 0x18, 0x19, 0x1a, 0x1b, -0x01, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29 }; // ds:0x72c6
-signed char g_seg066_0bad_unkn5[29] = { -0x01, -0x01, -0x01, -0x01, 0x4a, 0x4a, 0x4a, -0x01, -0x01, -0x01, 0x4b, 0x4b, 0x4b, -0x01, -0x01, -0x01, 0x4c, 0x4c, 0x4c, 0x4c, 0x4c, -0x01, 0x4d, 0x4d, 0x4d, 0x4d, 0x4d, 0x4d, 0x4d }; // ds:0x72e3
-signed char g_seg066_0bad_unkn6[29] = { -0x01, -0x01, -0x01, -0x01, 0x5e, 0x5e, 0x5e, -0x01, -0x01, -0x01, 0x5f, 0x5f, 0x5f, -0x01, -0x01, -0x01, 0x60, 0x60, 0x60, 0x60, 0x60, -0x01, 0x61, 0x61, 0x61, 0x61, 0x61, 0x61, 0x61 }; // ds:0x7300
-signed char g_seg066_0bad_unkn7[29] = { -0x01, -0x01, -0x01, -0x01, 0x62, 0x62, 0x62, -0x01, -0x01, -0x01, 0x63, 0x63, 0x63, -0x01, -0x01, -0x01, 0x64, 0x64, 0x64, 0x64, 0x64, -0x01, 0x65, 0x65, 0x65, 0x65, 0x65, 0x65, 0x65 }; // ds:0x731d
-const struct struct_point g_visual_field_offsets_std[29] = {
+static const unsigned char g_mapval_to_loctype[12] = { 0x00, 0x0f, 0x1f, 0x3f, 0x5f, 0x7f, 0x9f, 0xaf, 0xbf, 0xcf, 0xdf, 0xef }; // ds:0x7246
+static const signed char g_seg066_0bad_unkn0[29] = { 0x01, -0x01, 0x02, -0x01, 0x03, 0x04, 0x05, -0x01, 0x06, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0a, -0x01, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, -0x01, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 }; // ds:0x7252
+static const signed char g_seg066_0bad_unkn1[29] = { 0x2a, -0x01, 0x2b, -0x01, 0x2c, 0x2d, 0x2e, -0x01, 0x2f, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x33, -0x01, 0x34, 0x35, 0x36, 0x37, 0x38, -0x01, 0x39, 0x39, 0x39, 0x39, 0x39, 0x39, 0x39 }; // ds:0x726f
+static const signed char g_seg066_0bad_unkn2[29] = { 0x3a, -0x01, 0x3b, -0x01, 0x3c, 0x3d, 0x3e, -0x01, 0x3f, 0x3f, 0x40, 0x41, 0x42, 0x43, 0x43, -0x01, 0x44, 0x45, 0x46, 0x47, 0x48, -0x01, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49 }; // ds:0x728c
+static const signed char g_seg066_0bad_unkn3[29] = { 0x4e, -0x01, 0x4f, -0x01, 0x50, 0x51, 0x52, -0x01, 0x53, 0x53, 0x54, 0x55, 0x56, 0x57, 0x57, -0x01, 0x58, 0x59, 0x5a, 0x5b, 0x5c, -0x01, 0x5d, 0x5d, 0x5d, 0x5d, 0x5d, 0x5d, 0x5d }; // ds:0x72a9
+static const signed char g_seg066_0bad_unkn4[29] = { 0x11, 0x12, 0x13, -0x01, 0x14, 0x15, 0x16, -0x01, -0x01, 0x17, 0x18, 0x19, 0x1a, 0x1b, -0x01, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29 }; // ds:0x72c6
+static const signed char g_seg066_0bad_unkn5[29] = { -0x01, -0x01, -0x01, -0x01, 0x4a, 0x4a, 0x4a, -0x01, -0x01, -0x01, 0x4b, 0x4b, 0x4b, -0x01, -0x01, -0x01, 0x4c, 0x4c, 0x4c, 0x4c, 0x4c, -0x01, 0x4d, 0x4d, 0x4d, 0x4d, 0x4d, 0x4d, 0x4d }; // ds:0x72e3
+static const signed char g_seg066_0bad_unkn6[29] = { -0x01, -0x01, -0x01, -0x01, 0x5e, 0x5e, 0x5e, -0x01, -0x01, -0x01, 0x5f, 0x5f, 0x5f, -0x01, -0x01, -0x01, 0x60, 0x60, 0x60, 0x60, 0x60, -0x01, 0x61, 0x61, 0x61, 0x61, 0x61, 0x61, 0x61 }; // ds:0x7300
+static const signed char g_seg066_0bad_unkn7[29] = { -0x01, -0x01, -0x01, -0x01, 0x62, 0x62, 0x62, -0x01, -0x01, -0x01, 0x63, 0x63, 0x63, -0x01, -0x01, -0x01, 0x64, 0x64, 0x64, 0x64, 0x64, -0x01, 0x65, 0x65, 0x65, 0x65, 0x65, 0x65, 0x65 }; // ds:0x731d
+static const struct struct_point g_visual_field_offsets_std[29] = {
 	{ 0x0000, 0x0001 },
 	{ -0x0001, -1 },
 	{ 0x00bd, 0x0001 },
@@ -151,7 +151,7 @@ const struct struct_point g_visual_field_offsets_std[29] = {
 	{ 0x009c, 0x0039 },
 	{ 0x00be, 0x0039 }
 }; // ds:0x733a
-const struct struct_point g_visual_field_offsets_sign[29] = {
+static const struct struct_point g_visual_field_offsets_sign[29] = {
 	{ 0x0014, 0x0001 },
 	{ -0x0001, -1 },
 	{ 0x00a9, 0x0001 },
@@ -182,7 +182,7 @@ const struct struct_point g_visual_field_offsets_sign[29] = {
 	{ 0x009c, 0x0039 },
 	{ 0x00be, 0x0039 }
 }; // ds:0x73ae
-const struct struct_point g_visual_field_offsets_inn[29] = {
+static const struct struct_point g_visual_field_offsets_inn[29] = {
 	{ 0x0000, 0x0001 },
 	{ -0x0001, -1 },
 	{ 0x00bd, 0x0001 },
@@ -213,7 +213,7 @@ const struct struct_point g_visual_field_offsets_inn[29] = {
 	{ 0x009c, 0x000e },
 	{ 0x00be, 0x000e }
 }; // ds:0x7422
-const struct struct_point g_visual_field_offsets_grass[29] = {
+static const struct struct_point g_visual_field_offsets_grass[29] = {
 	{ 0x0000, 0x007a },
 	{ 0x0000, 0x007a },
 	{ 0x00bd, 0x007a },
@@ -244,7 +244,9 @@ const struct struct_point g_visual_field_offsets_grass[29] = {
 	{ 0x006b, 0x0043 },
 	{ 0x006d, 0x0043 }
 }; // ds:0x7496
-unsigned char g_tex_descr_table[101][18] = {
+
+/* REMARK: this is signed short */
+static const unsigned char g_tex_descr_table[101][18] = {
 	{ 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff },
 	{ 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x0e, 0x80, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff },
 	{ 0x00, 0x00, 0xff, 0xff, 0x0a, 0x00, 0xaa, 0x00, 0xff, 0xff, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff },
@@ -347,7 +349,7 @@ unsigned char g_tex_descr_table[101][18] = {
 	{ 0xfe, 0xff, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff },
 	{ 0x00, 0x00, 0xf3, 0xff, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff }
 }; // ds:0x750a
-const signed char g_visual_field_draw_order[29] = { 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x0f, 0x10, 0x15, 0x14, 0x11, 0x13, 0x12, 0x08, 0x09, 0x0e, 0x0d, 0x0a, 0x0c, 0x0b, 0x03, 0x04, 0x07, 0x06, 0x05, 0x00, 0x02, 0x01 }; // ds:0x7c24
+static const signed char g_visual_field_draw_order[29] = { 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x0f, 0x10, 0x15, 0x14, 0x11, 0x13, 0x12, 0x08, 0x09, 0x0e, 0x0d, 0x0a, 0x0c, 0x0b, 0x03, 0x04, 0x07, 0x06, 0x05, 0x00, 0x02, 0x01 }; // ds:0x7c24
 signed char g_can_merge_group = -1; // ds:0x7c41, {-1,1}
 
 
@@ -363,10 +365,10 @@ static signed short g_entrance_angle;		// ds:0xe412
 unsigned char *g_tex_floor[6];			// ds:0xe414
 
 
-signed short enter_location(signed short town_id)
+signed int enter_location(const signed int town_id)
 {
-	signed short map_pos;
-	signed short b_index;
+	signed int map_pos;
+	signed int b_index;
 	struct location *locations_tab_ptr;
 
 	if (town_id == TOWNS_DASPOTA) {
@@ -400,7 +402,7 @@ signed short enter_location(signed short town_id)
 
 	move();
 
-	if ((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2 && b_index <= 5) {
+	if (((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2) && (b_index <= 5)) {
 
 		gs_current_loctype_bak = LOCTYPE_NONE;
 		gs_current_locdata = g_towns_cityindex_table[town_id - 1];
@@ -418,10 +420,10 @@ signed short enter_location(signed short town_id)
 	return 0;
 }
 
-signed short enter_location_daspota(void)
+signed int enter_location_daspota(void)
 {
-	signed short map_pos;
-	signed short b_index;
+	signed int map_pos;
+	signed int b_index;
 	struct location *locations_tab_ptr;
 
 	if (g_game_state == GAME_STATE_FIGQUIT) {
@@ -447,6 +449,7 @@ signed short enter_location_daspota(void)
 					do_talk(locations_tab_ptr->loctype, locations_tab_ptr->typeindex - 1);
 
 					if (!gs_daspota_fightflags[locations_tab_ptr->locdata]) {
+
 						leave_location();
 						return 1;
 					}
@@ -511,10 +514,9 @@ signed short enter_location_daspota(void)
 
 void do_special_buildings(void)
 {
-	signed short type;
-	signed short tw_bak;
+	signed int type;
+	const signed int tw_bak = g_textbox_width;
 
-	tw_bak = g_textbox_width;
 	type = gs_current_typeindex;
 
 	if (gs_current_town == TOWNS_THORWAL) {
@@ -605,18 +607,17 @@ void do_special_buildings(void)
 	leave_location();
 }
 
-void TLK_eremit(signed short state)
+void TLK_eremit(const signed int state)
 {
-	signed int i;
-	struct struct_hero *hero;
-
 	if (!state) {
 
 		g_dialog_next_state = (gs_hermit_visited ? 1 : 2);
 
 	} else if (state == 6) {
 
-		hero = get_hero(0);
+		signed int i;
+		struct struct_hero *hero = get_hero(0);
+
 		for (i = 0 ; i <= 6; i++, hero++) {
 
 			/* remove hunger and thirst */
@@ -643,7 +644,7 @@ void TLK_eremit(signed short state)
 
 void do_town(void)
 {
-	if ((g_city_area_loaded != gs_current_town) ||	(g_area_prepared != 1))
+	if ((g_city_area_loaded != gs_current_town) || (g_area_prepared != 1))
 	{
 		seg028_0555(1);
 
@@ -661,10 +662,7 @@ void do_town(void)
 	city_step();
 }
 
-#if defined(__BORLANDC__)
-static
-#endif
-void refresh_floor_and_sky(void)
+static void refresh_floor_and_sky(void)
 {
 	signed short width;
 	signed short height;
@@ -693,8 +691,8 @@ void seg066_0692(void)
 {
 	refresh_floor_and_sky();
 	move();
-	seg066_06c1();
-	seg066_0bad();
+	city_set_vis_field_vals();
+	city_set_vis_field_tex();
 
 	/* TODO: these are write only variables */
 	g_always_zero2 = g_always_zero1 = 0;
@@ -704,7 +702,7 @@ void seg066_0692(void)
 	city_fade_and_colors();
 }
 
-void seg066_06c1(void)
+void city_set_vis_field_vals(void)
 {
 	signed int bi;
 
@@ -881,7 +879,7 @@ void seg066_06c1(void)
 	}
 }
 
-signed short get_border_index(unsigned char val)
+signed int get_border_index(const unsigned char val)
 {
 	signed int i;
 
@@ -900,7 +898,7 @@ signed short get_border_index(unsigned char val)
 	return i;
 }
 
-void seg066_0bad(void)
+void city_set_vis_field_tex(void)
 {
 	signed int i;
 	signed int bi;
@@ -983,11 +981,11 @@ void city_water_and_grass(void)
  */
 void city_building_textures(void)
 {
-	signed short nvf_no;
-	signed short i;
-	signed short x;
-	signed short y;
-	signed short l4;
+	signed int nvf_no;
+	signed int i;
+	signed int x;
+	signed int y;
+	signed int l4;
 	signed char c1;
 	signed char bi;
 	unsigned char c2;
@@ -1083,8 +1081,7 @@ void city_building_textures(void)
 	}
 }
 
-void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
-		signed short v4)
+void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int v4)
 {
 	signed short width;
 	signed short height;
@@ -1113,7 +1110,7 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 	}
 
 	nvf.no = nvf_no;
-	nvf.type = (direction == 0 ? 3: 5);
+	nvf.type = (direction == 0 ? 3 : 5);
 	nvf.width = &width;
 	nvf.height = &height;
 	process_nvf(&nvf);
@@ -1121,34 +1118,33 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 	copy_width = width;
 	copy_height = height;
 
-	if (v1 < 0) {
-		if (v1 + copy_width > 0) {
-			copy_width += v1;
-			src += __abs__(v1);
-			v1 = 0;
+	if (x < 0) {
+		if (x + copy_width > 0) {
+			copy_width += x;
+			src += __abs__(x);
+			x = 0;
 		}
 	}
 
-	if (v2 < 0) {
-		if (v2 + copy_height > 0) {
-			copy_height -= v2;
-			src += __abs__(v2) * width;
-			v2 = 0;
+	if (y < 0) {
+		if (y + copy_height > 0) {
+			copy_height -= y;
+			src += __abs__(y) * width;
+			y = 0;
 		}
 	}
 
+	if ((x < 208) && (y < 135) && (x >= 0) && (y >= 0)) {
 
-	if (v1 < 208 && v2 < 135 && v1 >= 0 && v2 >= 0) {
-
-		if (v1 + copy_width > 208) {
-			copy_width = 208 - v1;
+		if (x + copy_width > 208) {
+			copy_width = 208 - x;
 		}
 
-		if (v2 + copy_height > 135) {
-			copy_height = 135 - v2;
+		if (y + copy_height > 135) {
+			copy_height = 135 - y;
 		}
 
-		dst = ((Bit8u*)g_renderbuf_ptr) + v2 * 208 + v1;
+		dst = ((Bit8u*)g_renderbuf_ptr) + y * 208 + x;
 
 		copy_solid(dst, src, copy_width, copy_height, 208, width, v4 == 0 ? 0 : 128);
 	}
@@ -1163,18 +1159,18 @@ void seg066_10c8(void)
 	g_city_refresh_direction = gs_direction;
 }
 
-signed short city_step(void)
+signed int city_step(void)
 {
-	signed short i;
-	signed short bi;
-	signed short options;
-	signed short l4;
+	signed int i;
+	signed int bi;
+	signed int options;
+	signed int icon1_bak;
 
 	g_new_menu_icons[0] = MENU_ICON_SPLIT_GROUP;
-	l4 = g_new_menu_icons[1];
+	icon1_bak = g_new_menu_icons[1];
 	g_new_menu_icons[1] = (g_can_merge_group == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
 
-	if (g_new_menu_icons[1] != l4) {
+	if (g_new_menu_icons[1] != icon1_bak) {
 		g_redraw_menuicons = 1;
 	}
 
@@ -1193,7 +1189,7 @@ signed short city_step(void)
 		g_city_refresh_x_target = -1;
 	}
 
-	if (g_redraw_menuicons && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_redraw_menuicons && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK)) {
 		draw_icons();
 		g_redraw_menuicons = 0;
 	}
@@ -1206,8 +1202,7 @@ signed short city_step(void)
 		seg066_10c8();
 	}
 
-	if (gs_x_target != gs_x_target_bak ||
-		gs_y_target != gs_y_target_bak)
+	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak))
 	{
 		g_can_merge_group = can_merge_group();
 		set_automap_tiles(gs_x_target, gs_y_target);
@@ -1232,7 +1227,7 @@ signed short city_step(void)
 				get_ttx(306), get_ttx(569)) - 1;
 
 		if (i != -2) {
-			g_action = (i + ACTION_ID_ICON_1);
+			g_action = i + ACTION_ID_ICON_1;
 		}
 	}
 
@@ -1289,9 +1284,9 @@ signed short city_step(void)
 		bi = get_border_index(g_steptarget_front);
 
 		if (!bi || bi == 7 || bi == 8) {
-			seg066_14dd(1);
+			city_do_step(1);
 		} else if (bi >= 1 && bi <= 5 && g_entrance_angle == 2) {
-			seg066_14dd(1);
+			city_do_step(1);
 		} else {
 			no_way();
 		}
@@ -1301,13 +1296,13 @@ signed short city_step(void)
 		bi = get_border_index(g_steptarget_back);
 
 		if (!bi || bi == 7 || bi == 8) {
-			seg066_14dd(-1);
+			city_do_step(-1);
 		} else {
 			no_way();
 		}
 	}
 
-	if (gs_current_town != TOWNS_NONE && g_city_area_loaded != -1) {
+	if ((gs_current_town != TOWNS_NONE) && (g_city_area_loaded != -1)) {
 
 		if (!i) {
 			options = enter_location(gs_current_town);
@@ -1315,16 +1310,15 @@ signed short city_step(void)
 
 		/* random city event? */
 		/* check if the party has moved to another square */
-		if ((gs_y_target != gs_y_target_bak || (gs_x_target != gs_x_target_bak)) &&
+		if (((gs_y_target != gs_y_target_bak) || (gs_x_target != gs_x_target_bak)) &&
 
 			/* only in big town */
 			(gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM ||
 			gs_current_town == TOWNS_PHEXCAER || gs_current_town == TOWNS_OBERORKEN))
 		{
 
-			if (random_schick(100) <= 1 && /* 1% chance */
-				gs_day_timer > HOURS(8) && /* only between 8:00 and 20:00 o'clock */
-				gs_day_timer < HOURS(20))
+		       	/* 1% chance only between 8:00 and 20:00 o'clock */
+			if ((random_schick(100) <= 1) && (gs_day_timer > HOURS(8)) && (gs_day_timer < HOURS(20)))
 			{
 				city_event_switch();
 			}
@@ -1339,7 +1333,7 @@ signed short city_step(void)
 				draw_icons();
 			}
 
-		} else if (!g_location_market_flag && g_new_menu_icons[7] == MENU_ICON_MARKET) {
+		} else if (!g_location_market_flag && (g_new_menu_icons[7] == MENU_ICON_MARKET)) {
 
 			g_new_menu_icons[7] = MENU_ICON_NONE;
 			draw_icons();
@@ -1349,9 +1343,13 @@ signed short city_step(void)
 	return 0;
 }
 
-void seg066_14dd(signed short forward)
+/*
+ * \brief execute a step if possible
+ * \param[in] forward {-1 = no, 1 = yes}
+ */
+void city_do_step(const signed int forward)
 {
-	signed short dir;
+	signed int dir;
 
 	timewarp(MINUTES(2));
 
@@ -1387,7 +1385,7 @@ void seg066_14dd(signed short forward)
 		gs_x_target = 0;
 		no_way();
 
-	} else if (g_dng_map_size - 1 < gs_x_target) {
+	} else if ((g_dng_map_size - 1) < gs_x_target) {
 
 		gs_x_target = g_dng_map_size - 1;
 		no_way();
@@ -1407,7 +1405,7 @@ void seg066_14dd(signed short forward)
 
 void city_fade_and_colors(void)
 {
-	signed short i;
+	signed int i;
 	Bit8u *dst;
 	Bit8u *pal_ptr;
 
@@ -1474,7 +1472,7 @@ void city_fade_and_colors(void)
 	}
 }
 
-void seg066_172b(void)
+void city_update_house_count(void)
 {
 	signed int l_si;
 	signed int i;
