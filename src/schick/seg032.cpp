@@ -1289,7 +1289,7 @@ signed short do_fight(signed short fight_id)
 	g_gui_buffer_unkn = g_renderbuf_ptr;
 
 	if (!gs_show_travel_map) {
-		seg028_0555(gs_dungeon_index != DUNGEONS_NONE ? 0 : 1);
+		prepare_area(gs_dungeon_index != DUNGEONS_NONE ? 0 : 1);
 	}
 
 	load_wallclock_nvf();

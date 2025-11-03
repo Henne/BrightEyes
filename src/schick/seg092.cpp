@@ -246,7 +246,7 @@ void loot_simple_chest(struct struct_chest *chest)
 		item_num = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while((item_id = chest->content[item_num]) != 0xff) {
+		while ((item_id = chest->content[item_num]) != 0xff) {
 
 			strcpy(names[item_num++], GUI_name_plural(0, get_itemname(item_id)));
 		}

@@ -784,7 +784,7 @@ void do_dungeon(void)
 	{
 		g_dng_map_ptr = g_dng_map;
 
-		seg028_0555(0);
+		prepare_area(0);
 
 		set_audio_track(ARCHIVE_FILE_DUNGEON_XMI);
 #if defined(__BORLANDC__)

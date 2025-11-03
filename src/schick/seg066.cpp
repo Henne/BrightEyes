@@ -646,7 +646,7 @@ void do_town(void)
 {
 	if ((g_city_area_loaded != gs_current_town) || (g_area_prepared != 1))
 	{
-		seg028_0555(1);
+		prepare_area(1);
 
 		set_audio_track(ARCHIVE_FILE_THORWAL_XMI);
 
@@ -1518,7 +1518,7 @@ void city_update_house_count(void)
 	}
 
 	/* the kind of house with lowest count is deactivated, i.e. it's texture is
-	 * not loaded and replaced by another texture in seg028_0224 */
+	 * not loaded and replaced by another texture in prepare_city_area */
 	g_city_house_count[i] = 0;
 }
 

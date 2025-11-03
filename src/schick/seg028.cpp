@@ -46,15 +46,15 @@ static const unsigned char g_unkn_039[8] = { 0x0b, 0xc0, 0x75, 0x06, 0xb8, 0x01,
 
 void prepare_dungeon_area(void)
 {
-	signed short index;
-	Bit32u v1;
-	Bit32u v2;
+	signed int dtx_index;
+	Bit32u file_len;
+	Bit32u offset;
 	HugePt buf;
 
-	signed short l_si;
+	signed int nvf_index;
 	signed int handle;
 
-	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DTX;
+	dtx_index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DTX;
 
 	if (g_dng_area_loaded != gs_dungeon_index) {
 
@@ -63,14 +63,14 @@ void prepare_dungeon_area(void)
 		load_dungeon_ddt();
 	}
 
-	load_tx(index);
+	load_tx(dtx_index);
 
 	if ((g_area_prepared == -1) || (g_area_prepared == 1)) {
 
 		disable_ani();
 		g_current_ani = -1;
 
-		l_si = (gs_dungeon_index == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
+		nvf_index = (gs_dungeon_index == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
 			(((gs_dungeon_index == DUNGEONS_VERFALLENE_HERBERGE) ||
 				(gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) ||
 				(gs_dungeon_index == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) ||
@@ -80,10 +80,10 @@ void prepare_dungeon_area(void)
 				(gs_dungeon_index == DUNGEONS_ZWINGFESTE) ||
 				(gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
 
-		gs_dungeon_gfx_style = (l_si == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((l_si == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2);
+		gs_dungeon_gfx_style = (nvf_index == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((nvf_index == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2);
 
-		handle = load_archive_file(l_si);
-		v1 = v2 = 0;
+		handle = load_archive_file(nvf_index);
+		file_len = offset = 0;
 
 		/* clear palette */
 		buf = g_buffer9_ptr3;
@@ -92,15 +92,15 @@ void prepare_dungeon_area(void)
 		set_palette((Bit8u*)buf, 0x80, 0x40);
 
 		do {
-			v1 = read_archive_file(handle, (Bit8u*)buf, 65000);
-			buf += v1;
-			v2 += v1;
+			file_len = read_archive_file(handle, (Bit8u*)buf, 65000);
+			buf += file_len;
+			offset += file_len;
 
-		} while (v1);
+		} while (file_len);
 
 		close(handle);
 
-		g_buffer11_ptr = (g_buffer9_ptr3 + v2) - 0xc0L;
+		g_buffer11_ptr = (g_buffer9_ptr3 + offset) - 0xc0L;
 
 		g_area_prepared = !gs_dungeon_index;
 	}
@@ -112,7 +112,7 @@ void prepare_dungeon_area(void)
 
 void load_dungeon_ddt(void)
 {
-	signed short index;
+	signed int index;
 	signed short low;
 	signed short high;
 	signed int handle;
@@ -129,20 +129,19 @@ void load_dungeon_ddt(void)
 	close(handle);
 }
 
-void seg028_0224(void)
+void prepare_city_area(void)
 {
-	signed short l_si;
-	signed short l1;
+	signed int i;
+	const signed int ltx_index = gs_current_town + ARCHIVE_FILE_CITY_LTX;
 	Bit8u* arr[4];
 
-	l1 = gs_current_town + 77;
 
 	if (g_city_area_loaded != gs_current_town) {
 		load_area_description(1);
 		g_dng_area_loaded = -1;
 	}
 
-	load_tx(l1);
+	load_tx(ltx_index);
 
 	if ((g_area_prepared == -1) || (g_area_prepared == 0)) {
 
@@ -154,24 +153,24 @@ void seg028_0224(void)
 
 		g_buffer9_ptr4 = g_buffer9_ptr3;
 
-		for (l_si = 0; l_si < 4; l_si++) {
+		for (i = 0; i < 4; i++) {
 
-			if (g_city_house_count[l_si]) {
+			if (g_city_house_count[i]) {
 
-				arr[l_si] = seg028_0444(!l_si ? ARCHIVE_FILE_HOUSE1_NVF :
-				    (l_si == 1 ? ARCHIVE_FILE_HOUSE2_NVF :
-				        (l_si == 2 ? ARCHIVE_FILE_HOUSE3_NVF :
+				arr[i] = load_city_textures(!i ? ARCHIVE_FILE_HOUSE1_NVF :
+				    (i == 1 ? ARCHIVE_FILE_HOUSE2_NVF :
+				        (i == 2 ? ARCHIVE_FILE_HOUSE3_NVF :
 				            ARCHIVE_FILE_HOUSE4_NVF)), 0, 0, 0);
 
 
 			}
 		}
 
-		for (l_si = 0; l_si < 4; l_si++) {
+		for (i = 0; i < 4; i++) {
 
-			if (!g_city_house_count[l_si]) {
+			if (!g_city_house_count[i]) {
 
-				arr[l_si] = (!l_si ? arr[l_si + 1] : arr[l_si - 1]);
+				arr[i] = (!i ? arr[i + 1] : arr[i - 1]);
 			}
 		}
 
@@ -183,14 +182,14 @@ void seg028_0224(void)
 		/* load tex_sky */
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
-			g_tex_floor[1] = seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
+			g_tex_floor[1] = load_city_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 
 			memcpy(gs_palette_buildings, g_buffer11_ptr, 0xc0);
 		} else {
-			g_tex_floor[1] = seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
+			g_tex_floor[1] = load_city_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 		}
 
-		g_tex_floor[0] = seg028_0444(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0);
+		g_tex_floor[0] = load_city_textures(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0);
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
@@ -206,35 +205,33 @@ void seg028_0224(void)
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
 
-Bit8u* seg028_0444(signed short index, signed short firstcol, signed short colors, signed short ref)
+Bit8u* load_city_textures(const signed int index, const signed int firstcol, const signed int colors, const signed int ref)
 {
 	signed int handle;
-	Bit32s v1;
-	Bit32s v2;
-	Bit8u* ptr;
-
-	ptr = (Bit8u*)g_buffer9_ptr4;
+	Bit32s file_len;
+	Bit32s offset;
+	Bit8u* ptr = (Bit8u*)g_buffer9_ptr4;
 
 	handle = load_archive_file(index);
 
-	v1 = v2 = 0L;
+	file_len = offset = 0L;
 
 	do {
-		v1 = read_archive_file(handle, (Bit8u*)g_buffer9_ptr4, 65000);
+		file_len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr4, 65000);
 
-		g_buffer9_ptr4 += v1;
+		g_buffer9_ptr4 += file_len;
 
-		v2 += v1;
+		offset += file_len;
 
-	} while (v1);
+	} while (file_len);
 
 	close(handle);
 
 	if (colors) {
 
-		g_buffer11_ptr = ptr + v2 - 3 * colors;
+		g_buffer11_ptr = ptr + offset - 3 * colors;
 
-		if ((ref != 0) && (!g_fading_state)) {
+		if ((ref != 0) && !g_fading_state) {
 
 			wait_for_vsync();
 
@@ -245,7 +242,7 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 	return ptr;
 }
 
-void load_special_textures(signed short arg)
+void load_special_textures(const signed int arg)
 {
 	signed int handle;
 
@@ -261,10 +258,14 @@ void call_load_buffer(void)
 	load_tx(g_tx_file_index);
 }
 
-void seg028_0555(signed short town)
+/**
+ * \brief prepares a town- or a dungeon-area
+ * \param[in] town { 1 = town, otherwise dungeon }
+ */
+void prepare_area(const signed int town)
 {
 	if (town == 1) {
-		seg028_0224();
+		prepare_city_area();
 	} else {
 		prepare_dungeon_area();
 	}
@@ -279,7 +280,7 @@ void seg028_0555(signed short town)
  *	1 = do both
  *	2 = only read new area (loading a savegame)
  */
-void load_area_description(signed short type)
+void load_area_description(const signed int type)
 {
 	signed short f_index;
 	signed int handle;
@@ -359,7 +360,7 @@ void load_area_description(signed short type)
 	}
 }
 
-void call_load_area(signed short type)
+void call_load_area(const signed int type)
 {
 	load_area_description(type);
 }
@@ -504,7 +505,7 @@ void load_map(void)
 	g_wallclock_update = wallclock_update_bak;
 }
 
-void load_npc(signed short index)
+void load_npc(const signed int index)
 {
 	struct struct_hero *npc;
 	signed int handle;
@@ -529,7 +530,7 @@ void load_npc(signed short index)
 	}
 }
 
-void save_npc(signed short index)
+void save_npc(const signed int index)
 {
 	signed int handle = load_archive_file(index | 0x8000);
 
@@ -568,14 +569,14 @@ void load_splashes(void)
 	process_nvf(&nvf);
 }
 
-void load_informer_tlk(signed short index)
+void load_informer_tlk(const signed int index)
 {
-	signed short i;
+	signed int i;
 	signed int handle;
 
 	Bit32s text_len;
 	Bit32s off;
-	signed short partners;
+	signed int partners;
 	struct struct_dialog_partner *partner;
 
 	g_text_file_index = index;
@@ -608,9 +609,9 @@ void load_informer_tlk(signed short index)
 #endif
 }
 
-void load_tlk(signed short index)
+void load_tlk(const signed int index)
 {
-	signed short i;
+	signed int i;
 	signed int handle;
 	Bit32s text_len;
 	Bit32s off;
@@ -648,9 +649,9 @@ void load_tlk(signed short index)
 }
 
 #if defined(__BORLANDC__)
-void unused_load_archive_file(signed short index, unsigned short off, Bit32u seg)
+void unused_load_archive_file(const signed int index, const unsigned short off, const Bit32u seg)
 {
-	signed int handle = load_archive_file(index);
+	const signed int handle = load_archive_file(index);
 
 	read_archive_file(handle, (Bit8u*)MK_FP(seg, off), 64000);
 
@@ -658,19 +659,18 @@ void unused_load_archive_file(signed short index, unsigned short off, Bit32u seg
 }
 #endif
 
-void load_fightbg(signed short index)
+void load_fightbg(const signed int index)
 {
-	signed int handle = load_archive_file(index);
+	const signed int handle = load_archive_file(index);
 
 	read_archive_file(handle, g_renderbuf_ptr, 30000);
 
-	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr,
 #if !defined(__BORLANDC__)
-			g_renderbuf_ptr + 4,
+	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr, g_renderbuf_ptr + 4, get_readlength2(handle));
 #else
-			FP_OFF(g_renderbuf_ptr) + 4, FP_SEG(g_renderbuf_ptr),
+	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr, FP_OFF(g_renderbuf_ptr) + 4, FP_SEG(g_renderbuf_ptr), get_readlength2(handle));
 #endif
-			get_readlength2(handle));
+
 	close(handle);
 }
 
