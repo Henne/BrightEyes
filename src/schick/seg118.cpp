@@ -218,7 +218,7 @@ void tevent_037(void)
 
 		} while (!done);
 
-		set_var_to_zero();
+		disable_ani();
 
 		g_event_ani_busy = 0;
 		g_request_refresh = 1;

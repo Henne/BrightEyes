@@ -2,12 +2,11 @@
 namespace M302de {
 #endif
 
-
 void save_and_set_timer(void);
 void set_timer(void);
 void reset_timer(void);
 void init_ani(Bit16u);
-void set_var_to_zero(void);
+void disable_ani(void);
 void init_ani_busy_loop(unsigned short);
 void clear_ani(void);
 #if defined(__BORLANDC__)

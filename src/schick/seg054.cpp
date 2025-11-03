@@ -409,7 +409,7 @@ void do_inn(void)
 
 			draw_main_screen();
 
-			set_var_to_zero();
+			disable_ani();
 
 			load_ani(4);
 

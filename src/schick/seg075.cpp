@@ -971,7 +971,7 @@ void DNG_timestep(signed short forward)
 
 void DNG_update_pos(void)
 {
-	set_var_to_zero();
+	disable_ani();
 
 	DNG_stub1();
 

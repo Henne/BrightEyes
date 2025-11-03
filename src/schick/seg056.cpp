@@ -135,7 +135,7 @@ void buy_screen(void)
 				}
 			}
 
-			set_var_to_zero();
+			disable_ani();
 
 			g_pp20_index = -1;
 			draw_loc_icons(4, MENU_ICON_BARGAIN, MENU_ICON_SCROLL_RIGHT, MENU_ICON_SCROLL_LEFT, MENU_ICON_LEAVE);

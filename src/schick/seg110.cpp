@@ -736,7 +736,7 @@ void tevent_046(void)
 		}
 	}
 
-	set_var_to_zero();
+	disable_ani();
 	/* resume traveling */
 	g_event_ani_busy = 0;
 	g_request_refresh = 1;

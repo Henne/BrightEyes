@@ -190,7 +190,7 @@ signed short DNG11_handler(void)
 				}
 			}
 
-			set_var_to_zero();
+			disable_ani();
 
 		} else {
 			gs_x_target = gs_x_target_bak;

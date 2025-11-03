@@ -288,7 +288,7 @@ void do_merchant(void)
 
 			draw_main_screen();
 
-			set_var_to_zero();
+			disable_ani();
 
 			load_ani(shop->type == 1 ? 15 : (shop->type == 2 ? 22 : 14));
 

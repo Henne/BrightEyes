@@ -135,7 +135,7 @@ void init_ani(Bit16u v1)
 	wait_for_vsync();
 }
 
-void set_var_to_zero(void)
+void disable_ani(void)
 {
 	g_ani_enabled = 0;
 }

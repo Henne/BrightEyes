@@ -320,7 +320,7 @@ void tevent_135(void)
 	}
 	/* potential Original-Bug: Can it happen that only the NPC survives? What then? */
 
-	set_var_to_zero();
+	disable_ani();
 	g_request_refresh = 1;
 }
 

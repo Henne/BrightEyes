@@ -91,7 +91,7 @@ static void (*g_location_handlers[19])(void) = {
 void show_entrance(void)
 {
 	draw_main_screen();
-	set_var_to_zero();
+	disable_ani();
 	load_ani(34);
 	init_ani(1);
 
@@ -118,7 +118,7 @@ void show_citizen(void)
 		if (g_request_refresh != 0) {
 
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(20);
 			init_ani(g_request_refresh = 0);
 
@@ -142,7 +142,7 @@ void show_citizen(void)
 	} while ((g_action == 0) && (g_mouse1_event2 == 0));
 
 	g_mouse1_event2 = 0;
-	set_var_to_zero();
+	disable_ani();
 	copy_palette();
 	leave_location();
 }
@@ -167,7 +167,7 @@ void do_house(void)
 
 		/* break into the house */
 
-		set_var_to_zero();
+		disable_ani();
 		load_ani(10);
 		init_ani(0);
 
@@ -232,7 +232,7 @@ void do_house(void)
 			}
 		}
 
-		set_var_to_zero();
+		disable_ani();
 
 		leave_location();
 
@@ -302,7 +302,7 @@ void show_treasure_map(void)
 		g_special_screen = 1;
 		pp20_index_bak = g_pp20_index;
 		g_pp20_index = -1;
-		set_var_to_zero();
+		disable_ani();
 
 		/* load SKARTE.NVF */
 		l_si = load_archive_file(ARCHIVE_FILE_SKARTE_NVF);
@@ -747,7 +747,7 @@ void do_location(void)
  */
 void leave_location(void)
 {
-	set_var_to_zero();
+	disable_ani();
 
 	/* reset location */
 	gs_current_loctype = gs_current_loctype_bak;

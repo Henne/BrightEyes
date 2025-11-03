@@ -330,7 +330,7 @@ void draw_main_screen(void)
 	g_wallclock_y = 31;
 	g_wallclock_update = 0;
 
-	set_var_to_zero();
+	disable_ani();
 
 	if (g_pp20_index)
 		draw_playmask();

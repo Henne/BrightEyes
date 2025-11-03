@@ -71,7 +71,7 @@ void do_citycamp(void)
 
 		if (g_request_refresh != 0) {
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(36);
 			init_ani(0);
 			GUI_print_loc_line(get_ttx(306));
@@ -252,7 +252,7 @@ void do_citycamp(void)
 
 							if (g_game_state == GAME_STATE_MAIN) {
 								draw_main_screen();
-								set_var_to_zero();
+								disable_ani();
 								load_ani(36);
 								init_ani(0);
 								GUI_print_loc_line(get_ttx(306));

@@ -432,7 +432,7 @@ signed short DNG05_handler(void)
 
 		GUI_output(get_tx(14));
 
-		set_var_to_zero();
+		disable_ani();
 
 		gs_x_target = 5;
 		g_area_prepared = -1;

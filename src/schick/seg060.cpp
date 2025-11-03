@@ -152,7 +152,7 @@ void talk_tavern(void)
 		= gs_tlk_tav_followinformer = 0;
 	gs_tlk_tav_drinkcount = 0;
 
-	set_var_to_zero();
+	disable_ani();
 	load_ani(13);
 	init_ani(0);
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
@@ -338,7 +338,7 @@ void talk_tavern(void)
 	g_textbox_width = 3;
 	g_text_file_index = -1;
 	load_tx(g_tx_file_index);
-	set_var_to_zero();
+	disable_ani();
 }
 
 void TLK_tavern(signed short answer)

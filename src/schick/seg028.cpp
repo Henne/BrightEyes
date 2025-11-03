@@ -67,7 +67,7 @@ void prepare_dungeon_area(void)
 
 	if ((g_area_prepared == -1) || (g_area_prepared == 1)) {
 
-		set_var_to_zero();
+		disable_ani();
 		g_current_ani = -1;
 
 		l_si = (gs_dungeon_index == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
@@ -146,7 +146,7 @@ void seg028_0224(void)
 
 	if ((g_area_prepared == -1) || (g_area_prepared == 0)) {
 
-		set_var_to_zero();
+		disable_ani();
 
 		g_current_ani = -1;
 

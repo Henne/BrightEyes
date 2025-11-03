@@ -102,7 +102,7 @@ void do_wildcamp(void)
 
 		if (g_request_refresh) {
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(2);
 			init_ani(0);
 			GUI_print_loc_line(get_ttx(306));
@@ -370,7 +370,7 @@ void do_wildcamp(void)
 					if (gs_travel_detour != 99 && g_game_state == GAME_STATE_MAIN) {
 
 						draw_main_screen();
-						set_var_to_zero();
+						disable_ani();
 						load_ani(2);
 						init_ani(0);
 						GUI_print_loc_line(get_ttx(306));

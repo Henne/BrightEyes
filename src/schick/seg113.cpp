@@ -807,7 +807,7 @@ void tevent_107(void)
 		}
 	}
 
-	set_var_to_zero();
+	disable_ani();
 	g_request_refresh = 1;
 }
 

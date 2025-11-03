@@ -189,7 +189,7 @@ void do_harbor(void)
 		if (g_request_refresh) {
 
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(6);
 			init_ani(0);
 			g_request_refresh = 0;
@@ -404,7 +404,7 @@ void do_harbor(void)
 
 			} else {
 
-				set_var_to_zero();
+				disable_ani();
 
 				GUI_output(get_tx(21));
 				/* "Ihr begebt euch an Bord. <Macht's euch gemuetlich!> brummelt der Kapitaen. <Wir legen bald ab!>" */
@@ -490,7 +490,7 @@ void do_harbor(void)
 	read_archive_file(i, g_buffer6_ptr, 5000);
 	close(i);
 
-	set_var_to_zero();
+	disable_ani();
 
 	if (!gs_travel_detour) {
 

@@ -54,7 +54,7 @@ void do_market(void)
 		if (g_request_refresh) {
 
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(16);
 			init_ani(0);
 			g_request_refresh = 0;
@@ -390,7 +390,7 @@ void show_times_up(void)
 	fi_bak = g_text_file_index;
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 	set_audio_track(ARCHIVE_FILE_VICTORY_XMI);
-	set_var_to_zero();
+	disable_ani();
 	draw_main_screen();
 	load_ani(35);
 	init_ani(0);
@@ -439,7 +439,7 @@ void show_outro(void)
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 	set_audio_track(ARCHIVE_FILE_VICTORY_XMI);
-	set_var_to_zero();
+	disable_ani();
 
 	/* load OUTRO1.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO1_NVF);

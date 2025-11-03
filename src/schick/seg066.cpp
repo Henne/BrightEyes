@@ -456,7 +456,7 @@ signed int enter_location_daspota(void)
 				}
 
 				draw_main_screen();
-				set_var_to_zero();
+				disable_ani();
 
 				load_ani(10);
 				GUI_print_loc_line(get_tx(locations_tab_ptr->locdata));
@@ -476,7 +476,7 @@ signed int enter_location_daspota(void)
 					g_mouse1_event2 = 0;
 				}
 
-				set_var_to_zero();
+				disable_ani();
 
 				if (locations_tab_ptr->locdata == 6) {
 					do_fight(FIGHTS_DASP6B);
@@ -599,7 +599,7 @@ void do_special_buildings(void)
 			load_ani(8);
 			init_ani(1);
 			do_talk(18, 0);
-			set_var_to_zero();
+			disable_ani();
 		}
 	}
 
@@ -1152,7 +1152,7 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 
 void seg066_10c8(void)
 {
-	set_var_to_zero();
+	disable_ani();
 	seg066_0692();
 	g_city_refresh_x_target = gs_x_target;
 	g_city_refresh_y_target = gs_y_target;

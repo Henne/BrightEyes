@@ -192,7 +192,7 @@ void THO_tav_inn_combi(void)
 	signed short answer;
 	signed short type_bak;
 
-	set_var_to_zero();
+	disable_ani();
 	load_ani(4);
 	init_ani(0);
 
@@ -251,13 +251,13 @@ void THO_tav_inn_combi(void)
 			}
 
 		} else {
-			set_var_to_zero();
+			disable_ani();
 			return;
 		}
 
 	} while (answer != 0);
 
-	set_var_to_zero();
+	disable_ani();
 	leave_location();
 }
 

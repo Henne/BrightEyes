@@ -125,7 +125,7 @@ void do_healer(void)
 
 		if (g_request_refresh != 0) {
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(23);
 			init_ani(0);
 

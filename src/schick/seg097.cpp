@@ -559,7 +559,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short 
 	l12 = g_update_statusline;
 	g_update_statusline = 0;
 
-	set_var_to_zero();
+	disable_ani();
 
 	l11 = g_wallclock_update;
 	g_wallclock_update = 0;

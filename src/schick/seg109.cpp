@@ -226,7 +226,7 @@ void TRV_inside_herb_place(void)
 		}
 	}
 
-	set_var_to_zero();
+	disable_ani();
 	g_request_refresh = 1;
 }
 
@@ -323,7 +323,7 @@ void TRV_found_replenish_place(const signed int a0)
 
 		timewarp(HOURS(1));
 
-		set_var_to_zero();
+		disable_ani();
 
 		g_request_refresh = 1;
 	}
@@ -350,7 +350,7 @@ void TRV_found_inn(const signed int town_id, const signed int type)
 		TRV_load_textfile(-1);
 	}
 
-	set_var_to_zero();
+	disable_ani();
 	g_request_refresh = 1;
 }
 
@@ -369,7 +369,7 @@ signed int TRV_enter_hut_question(void)
 
 	answer = GUI_bool(get_tx(24));
 
-	set_var_to_zero();
+	disable_ani();
 	g_request_refresh = 1;
 
 	return answer;
@@ -424,7 +424,7 @@ signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int m
 
 	} while (!done);
 
-	set_var_to_zero();
+	disable_ani();
 	g_event_ani_busy = 0;
 	g_request_refresh = 1;
 
@@ -680,7 +680,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 		add_hero_ap_all(ap_all3);
 	}
 
-	set_var_to_zero();
+	disable_ani();
 	g_event_ani_busy = 0;
 	g_request_refresh = 1;
 }

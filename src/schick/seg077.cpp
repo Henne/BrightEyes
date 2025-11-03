@@ -224,7 +224,7 @@ signed short DNG01_handler(void)
 			{
 				load_ani(18);
 				init_ani(1);
-				set_var_to_zero();
+				disable_ani();
 				GUI_output(get_tx(16));
 			} else {
 				GUI_output(get_tx(17));

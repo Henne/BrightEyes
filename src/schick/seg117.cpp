@@ -100,7 +100,7 @@ static void resume_traveling(void)
 	g_textbox_width = g_textbox_width_bak;
 	g_wallclock_update = g_wallclock_update_bak;
 
-	set_var_to_zero();
+	disable_ani();
 
 	g_request_refresh = gs_show_travel_map = 1;
 
@@ -727,7 +727,7 @@ void random_encounter(signed short arg)
 void search_ruin1(void)
 {
 	do_talk(17, 0);
-	set_var_to_zero();
+	disable_ani();
 }
 
 void tevent_115(void)
@@ -738,7 +738,7 @@ void tevent_115(void)
 
 		do_talk(17, 0);
 
-		set_var_to_zero();
+		disable_ani();
 	}
 }
 

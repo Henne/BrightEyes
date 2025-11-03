@@ -281,7 +281,7 @@ void PHX_bordell(void)
 		GUI_input(get_tx2(50), 0);
 	}
 
-	set_var_to_zero();
+	disable_ani();
 }
 
 /**
@@ -415,7 +415,7 @@ void PHX_apotheke(void)
 		}
 	}
 
-	set_var_to_zero();
+	disable_ani();
 }
 
 /**
@@ -520,7 +520,7 @@ void PHX_healer(void)
 		}
 	}
 
-	set_var_to_zero();
+	disable_ani();
 }
 
 #if !defined(__BORLANDC__)

@@ -773,7 +773,7 @@ void game_over_screen(void)
 {
 	signed int handle;
 
-	set_var_to_zero();
+	disable_ani();
 
 	set_audio_track(ARCHIVE_FILE_VICTORY_XMI);
 

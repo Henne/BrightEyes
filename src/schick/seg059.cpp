@@ -73,7 +73,7 @@ void do_tavern(void)
 		if (g_request_refresh != 0) {
 
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(27);
 			init_ani(0);
 			GUI_print_loc_line(get_tx(gs_current_locdata));
@@ -278,7 +278,7 @@ void prolog_ghostship(void)
 		g_request_refresh = 1;
 	}
 
-	set_var_to_zero();
+	disable_ani();
 	g_textbox_width = tw_bak;
 	g_basepos_x = bak1;
 	g_basepos_y = bak2;

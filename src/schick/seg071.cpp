@@ -173,7 +173,7 @@ void PHX_drogentempel(void)
 		}
 	}
 
-	set_var_to_zero();
+	disable_ani();
 }
 
 /**

@@ -1012,7 +1012,7 @@ signed short do_fight(signed short fight_id)
 	read_archive_file(handle, g_fightobj_buf, 16919);
 	close(handle);
 
-	set_var_to_zero();
+	disable_ani();
 	call_mouse_bg();
 
 	if (g_scenario_buf[0x14] > 3) {

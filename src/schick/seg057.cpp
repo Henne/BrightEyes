@@ -90,7 +90,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 		if (g_request_refresh != 0) {
 
-			set_var_to_zero();
+			disable_ani();
 			g_pp20_index = -1;
 			memset((Bit8u*)g_sellitems, 0, 300 * sizeof(struct shop_item));
 

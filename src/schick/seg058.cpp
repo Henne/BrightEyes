@@ -212,7 +212,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 		}
 	} else {
 
-		set_var_to_zero();
+		disable_ani();
 		g_pp20_index = -1;
 
 		draw_loc_icons(5, MENU_ICON_BARGAIN, MENU_ICON_SCROLL_RIGHT, MENU_ICON_SCROLL_LEFT, MENU_ICON_HERO, MENU_ICON_LEAVE);
@@ -563,7 +563,7 @@ void do_smith(void)
 
 			draw_loc_icons(3, MENU_ICON_TALK, MENU_ICON_REPAIR, MENU_ICON_LEAVE);
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(5);
 			init_ani(0);
 			GUI_print_loc_line(get_tx(gs_current_locdata));
