@@ -197,7 +197,7 @@ void chest_cursed(void)
 {
 	/* cursed chest on the Totenschiff. 50D, but each good attribute of the group leader is decreased by 1.
 	 * can be cured by 'Verwandlung beenden' spell or a Praios/Hesinde miracle */
-	signed short i;
+	signed int i;
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (!hero->flags.transformed) {
@@ -231,9 +231,9 @@ void chest_fulminictus(void)
  */
 void loot_simple_chest(struct struct_chest *chest)
 {
-	signed short item_no;
-	signed short item_id;
-	signed short tw_bak;
+	signed int item_num;
+	signed int item_id;
+	signed int tw_bak;
 	char names[20][30];
 
 	tw_bak = g_textbox_width;
@@ -243,15 +243,15 @@ void loot_simple_chest(struct struct_chest *chest)
 
 	do {
 
-		item_no = 0;
+		item_num = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while((item_id = chest->content[item_no]) != 0xff) {
+		while((item_id = chest->content[item_num]) != 0xff) {
 
-			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
+			strcpy(names[item_num++], GUI_name_plural(0, get_itemname(item_id)));
 		}
 
-		if (item_no == 0) {
+		if (item_num == 0) {
 
 			/* this chest is empty */
 			GUI_output(get_ttx(522));
@@ -259,28 +259,28 @@ void loot_simple_chest(struct struct_chest *chest)
 		} else {
 
 			/* show radio menu with item names */
-			item_no = GUI_radio(get_ttx(521), (signed char)item_no,
+			item_num = GUI_radio(get_ttx(521), (signed char)item_num,
 						names[0], names[1], names[2], names[3],
 						names[4], names[5], names[6], names[7],
 						names[8], names[9], names[10], names[11],
 						names[12], names[13], names[14], names[15],
 						names[16], names[17], names[18], names[19]) - 1;
 
-			if (item_no != -2) {
+			if (item_num != -2) {
 
 				/* if not pressed ESC */
-				if (get_item(chest->content[item_no], 1, 1)) {
+				if (get_item(chest->content[item_num], 1, 1)) {
 
 					/* got the item in inventory => remove from chest */
-					delete_chest_item(chest, item_no);
+					delete_chest_item(chest, item_num);
 				} else {
 					/* group has not taken the item */
-					item_no = -2;
+					item_num = -2;
 				}
 			}
 		}
 
-	} while (item_no != -2);
+	} while (item_num != -2);
 
 	g_textbox_width = tw_bak;
 }
@@ -289,19 +289,18 @@ void loot_simple_chest(struct struct_chest *chest)
  * \brief   deletes an item from a chest
  *
  * \param   chest       pointer to the chest
- * \param   item_no     the number of the item to be deleted
+ * \param   item_num    the number of the item to be deleted
  */
-void delete_chest_item(struct struct_chest *chest, signed short item_no)
+void delete_chest_item(struct struct_chest *chest, signed int item_num)
 {
 	signed char tmp;
 
 	do {
-		chest->content[item_no] = tmp = chest->content[item_no + 1];
+		chest->content[item_num] = tmp = chest->content[item_num + 1];
 
-		item_no++;
+		item_num++;
 
 	} while (tmp != -1);
-
 }
 
 /**
@@ -313,9 +312,9 @@ void delete_chest_item(struct struct_chest *chest, signed short item_no)
  */
 void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_empty)
 {
-	signed short item_no;
-	signed short item_id;
-	signed short tw_bak;
+	signed int item_num;
+	signed int item_id;
+	signed int tw_bak;
 	char names[20][20];
 
 	chest->key = 0;
@@ -324,43 +323,43 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
 	g_textbox_width = 7;
 
 	do {
-		item_no = 0;
+		item_num = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while ((item_id = chest->content[item_no]) != 0xff) {
+		while ((item_id = chest->content[item_num]) != 0xff) {
 
-			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
+			strcpy(names[item_num++], GUI_name_plural(0, get_itemname(item_id)));
 		}
 
-		if (item_no == 0) {
+		if (item_num == 0) {
 			/* this chest is empty */
 			GUI_output(text_empty);
 			break;
 		} else {
 
 			/* show radio menu with item names */
-			item_no = GUI_radio(text_non_empty, (signed char)item_no,
+			item_num = GUI_radio(text_non_empty, (signed char)item_num,
 						names[0], names[1], names[2], names[3],
 						names[4], names[5], names[6], names[7],
 						names[8], names[9], names[10], names[11],
 						names[12], names[13], names[14], names[15],
 						names[16], names[17], names[18], names[19]) - 1;
 
-			if (item_no != -2) {
+			if (item_num != -2) {
 
 				/* if not pressed ESC */
-				if (get_item(chest->content[item_no], 1, 1)) {
+				if (get_item(chest->content[item_num], 1, 1)) {
 
 					/* got the item in inventory => remove from chest */
-					delete_chest_item(chest, item_no);
+					delete_chest_item(chest, item_num);
 				} else {
 					/* group has not taken the item */
-					item_no = -2;
+					item_num = -2;
 				}
 			}
 		}
 
-	} while (item_no != -2);
+	} while (item_num != -2);
 
 	g_textbox_width = tw_bak;
 }
@@ -373,8 +372,8 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
  */
 signed short hero_has_lockpicks(const struct struct_hero *hero)
 {
-	signed short retval = -1;
-	signed short i;
+	signed int retval = -1;
+	signed int i;
 
 	/* in each inventory slot... */
 	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
@@ -394,23 +393,24 @@ signed short hero_has_lockpicks(const struct struct_hero *hero)
 	return retval;
 }
 
-/* handle special chest */
-void seg092_06b4(signed short a1)
+/*
+ * \brief handle special chests
+ * \param[in] check_dir {0 = no, 1 = yes}
+ **/
+void loot_special_chest(const signed int check_dir)
 {
-	signed short x;
-	signed short y;
-	signed short pos;
-	signed short l4;
-	struct struct_chest *chest_ptr;
-	Bit8u *ptr;
+	signed int x;
+	signed int y;
+	signed int pos;
+	signed int mapflag;
+	struct struct_chest *chest_ptr = g_dng_specialchest_index[gs_dungeon_index - 1];
+	Bit8u *ptr = g_dng_map;
 
-	chest_ptr = g_dng_specialchest_index[gs_dungeon_index - 1];
-	ptr = g_dng_map;
 	g_get_extra_loot = 0;
 	x = gs_x_target;
 	y = gs_y_target;
 
-	if (a1 != 0) {
+	if (check_dir != 0) {
 		switch (gs_direction) {
 			case NORTH: y--; break;
 			case EAST: x++; break;
@@ -419,7 +419,7 @@ void seg092_06b4(signed short a1)
 		}
 	}
 
-	l4 = *(ptr + MAP_POS(x,y)) & 0x02;
+	mapflag = *(ptr + MAP_POS(x,y)) & 0x02;
 	pos = DNG_POS(gs_dungeon_level, x, y);
 
 	play_voc(ARCHIVE_FILE_FX13_VOC);
@@ -428,7 +428,7 @@ void seg092_06b4(signed short a1)
 
 		if (chest_ptr->pos == pos) {
 
-			if (l4 != 0 && chest_ptr->loot) {
+			if (mapflag != 0 && chest_ptr->loot) {
 
 				chest_ptr->loot(chest_ptr);
 
@@ -455,7 +455,7 @@ void seg092_06b4(signed short a1)
 
 	} while ((chest_ptr++)->pos != -1);
 
-	if (l4 == 0 && g_get_extra_loot) {
+	if ((mapflag == 0) && g_get_extra_loot) {
 
 		if (chest_ptr->ap) {
 
@@ -483,8 +483,8 @@ void seg092_06b4(signed short a1)
 
 void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 {
-	signed short item_pos;
-	signed short test_val;
+	signed int item_pos;
+	signed int test_val;
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if ((item_pos = hero_has_lockpicks(hero)) != -1) {
@@ -540,7 +540,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 
 void use_key_on_chest(struct struct_chest* chest)
 {
-	signed short key_pos;
+	signed int key_pos;
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
@@ -571,12 +571,12 @@ void use_key_on_chest(struct struct_chest* chest)
  */
 void loot_multi_chest(Bit8u *content, char *msg)
 {
-	unsigned short item_cnt;
-	signed short item_no;
-	signed short i;
-	signed short tw_bak;
+	unsigned int item_cnt;
+	signed int item_no;
+	signed int i;
+	signed int tw_bak;
 	char temp_str[10];
-	signed short len;
+	signed int len;
 	char names[20][25];
 
 	tw_bak = g_textbox_width;

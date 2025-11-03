@@ -116,7 +116,7 @@ signed short DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(4,13,6)) && (target_pos != gs_dng_handled_pos))
 	{
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if (g_visual_field_vals[1] == 2)
 	{

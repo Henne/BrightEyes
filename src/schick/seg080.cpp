@@ -57,7 +57,7 @@ signed short DNG04_handler(void)
 	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !gs_dng04_corpse0_flag)
 	{
 		/* DNG04_corpse0 */
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if (pos == DNG_POS(0,8,8) && pos != gs_dng_handled_pos && !gs_dng04_gap_flag)
 	{
@@ -98,7 +98,7 @@ signed short DNG04_handler(void)
 	} else if (pos == DNG_POS(0,1,12) && pos != gs_dng_handled_pos)
 	{
 		/* DNG04_corpse1 */
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if (pos == DNG_POS(0,8,3) && pos != gs_dng_handled_pos)
 	{
@@ -216,7 +216,7 @@ signed short DNG04_handler(void)
 	if (pos == DNG_POS(0,6,1) && pos != gs_dng_handled_pos && !gs_dng04_corpse2_flag)
 	{
 		/* DNG04_corpse2 */
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if ((pos == DNG_POS(0,13,6) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,14,5)) && pos != gs_dng_handled_pos)
 	{

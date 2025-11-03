@@ -76,7 +76,7 @@ signed short DNG10_handler(void)
 	} else if (target_pos == DNG_POS(0,5,2) && target_pos != gs_dng_handled_pos)
 	{
 		/* a dead dwarf */
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if (target_pos == DNG_POS(0,8,1) && target_pos != gs_dng_handled_pos)
 	{

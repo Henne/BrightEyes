@@ -626,7 +626,7 @@ signed short DNG_step(void)
 			DNG_door(g_action);
 		} else if (g_action == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_OPEN_CHEST)
 		{
-			seg092_06b4(1);
+			loot_special_chest(1);
 
 			if (g_get_extra_loot)
 			{

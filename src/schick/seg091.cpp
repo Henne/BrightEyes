@@ -107,7 +107,7 @@ signed short DNG13_handler(void)
 
 	} else if (pos == DNG_POS(0,11,5) && pos != gs_dng_handled_pos)
 	{
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if (pos == DNG_POS(0,10,10) && pos != gs_dng_handled_pos)
 	{
@@ -123,7 +123,7 @@ signed short DNG13_handler(void)
 
 	} else if (pos == DNG_POS(0,4,1) && pos != gs_dng_handled_pos)
 	{
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if (pos == DNG_POS(0,5,5) && pos != gs_dng_handled_pos)
 	{

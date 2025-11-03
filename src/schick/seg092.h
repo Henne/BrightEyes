@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void delete_chest_item(struct struct_chest*, signed short);
+void delete_chest_item(struct struct_chest*, signed int);
 
 /* 0x25 */
 void chest_protected_normal(void);
@@ -27,7 +27,7 @@ void loot_simple_chest(struct struct_chest*);
 void loot_chest(struct struct_chest*, char*, char*);
 
 /* 0x48 */
-void seg092_06b4(signed short);
+void loot_special_chest(const signed int);
 
 /* 0x4d */
 void use_lockpicks_on_chest(struct struct_chest*);

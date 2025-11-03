@@ -402,7 +402,7 @@ signed short DNG02_handler(void)
 
 	} else if (target_pos == DNG_POS(1,1,1) && target_pos != gs_dng_handled_pos)
 	{
-		seg092_06b4(0);
+		loot_special_chest(0);
 
 	} else if (target_pos == DNG_POS(1,9,14) && target_pos != gs_dng_handled_pos && gs_direction == EAST)
 	{
