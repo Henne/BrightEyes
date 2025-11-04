@@ -910,7 +910,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 				FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 				g_fig_cb_selector_id[0] = -1;
 
-				seg036_00ae(hero, hero_pos);
+				FIG_prepare_hero_ani(hero, hero_pos);
 
 				if (hero->action_id == FIG_ACTION_FLEE) {
 

@@ -95,7 +95,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			hero->flags.petrified = 0; /* unset 'petrified' flag (why???) */
 
 			if (FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5) != -1) {
-				seg036_00ae(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
+				FIG_prepare_hero_ani(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
 
@@ -106,7 +106,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
 				(hero->bp_left >= 3))
 			{
-				KI_hero(hero, hero_pos, x, y);
+				AFIG_hero(hero, hero_pos, x, y);
 			}
 			done = 1;
 		} else {

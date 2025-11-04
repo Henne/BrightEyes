@@ -1,5 +1,5 @@
 /**
- *	Rewrite of DSA1 v3.02_de functions of seg036 (Fight Hero KI)
+ *	Rewrite of DSA1 v3.02_de functions of seg036 (Auto FIGht Hero)
  *	Functions rewritten: 10/10 (complete)
  *	Borlandified and identical
  *
@@ -27,28 +27,39 @@
 namespace M302de {
 #endif
 
-static signed char g_af_spell_list[11] = { 0x34, 0x0c, 0x35, 0x21, 0x08, 0x1b, 0x2e, 0x31, 0x36, 0x38, 0x48 }; // ds:0x5fac
+static const signed char g_af_spell_list[11] = {
+	SP_FULMINICTUS_DONNERKEIL,
+	SP_HORRIPHOBUS,
+	SP_IGNIFAXIUS_FLAMMENSTRAHL,
+	SP_BALSAM_SALABUNDE,
+	SP_BOESER_BLICK,
+	SP_AXXELERATUS_BLITZGESCHWIND,
+	SP_DUPLICATUS_DOPPELPEIN,
+	SP_BLITZ_DICH_FIND,
+	SP_PLUMBUMBARUM_UND_NARRETEI,
+	SP_SAFT_KRAFT_MONSTERMACHT,
+	SP_PARALUE_PARALEIN
+}; // ds:0x5fac
+
 static struct viewdir_offsets g_viewdir_offsets3 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fb7
 static struct viewdir_offsets g_viewdir_offsets4 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fc7
 
 /**
  * \brief   copies an ani sequence
  *
- * \param   dst         destination pointer for data
- * \param   ani_no      * \param mode	DAT-File to use 3 = WEAPANI.DAT, else ANI.DAT
- * \return              the length of the sequence in bytes.
+ * \param dst         destination pointer for data
+ * \param ani_num
+ * \param mode	DAT-File to use 3 = WEAPANI.DAT, else ANI.DAT
+ * \return   the length of the sequence in bytes.
  */
-#if defined(__BORLANDC__)
-static
-#endif
-signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short mode)
+static signed int AFIG_copy_ani_sequence(Bit8s *dst, const signed int ani_num, const signed int mode)
 {
 	Bit8u *p_datbuffer;
 	Bit8u *p_datitem;
 	signed char len;
 
-	signed short i;
-	signed short ani_max_no;
+	signed int i;
+	signed int ani_max_num;
 
 
 	/* set the right buffer */
@@ -59,23 +70,23 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 		p_datbuffer = g_buffer_weapanidat;
 
 	/* read how many ani sequences are in the file */
-	ani_max_no = *(Bit16s*)p_datbuffer;
+	ani_max_num = *(Bit16s*)p_datbuffer;
 
 	/* check if the desired ani_no is in the range */
-	if (ani_no < 0)
+	if (ani_num < 0)
 		return 0;
 
-	if (ani_no > ani_max_no)
+	if (ani_num > ani_max_num)
 		return 0;
 
 	/* set p_datitem to the first (0) ani sequence */
 	p_datitem = p_datbuffer;
-	p_datitem += ani_max_no + 2;
+	p_datitem += ani_max_num + 2;
 	/* set len to the lenght first (0) ani sequence */
 	len = p_datbuffer[2];
 
 	/* forward to the desired ani sequence */
-	for (i = 1; i <= ani_no; i++) {
+	for (i = 1; i <= ani_num; i++) {
 		p_datitem += len;
 		len = *(p_datbuffer + i + 2);
 	}
@@ -94,20 +105,20 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 	return len;
 }
 
-void seg036_00ae(struct struct_hero *hero, const signed int hero_pos)
+void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 {
-	signed short i;
+	signed int i;
 	signed char dir1;
 	signed char dir2;
-	Bit8s *ptr1;
+	Bit8s *sheet_ptr;
 	signed char dir3;
-	Bit16s *ptr2;
+	Bit16s *ani_index_ptr;
 
 	g_fig_anisheets[0][0] = 0;
 	g_fig_anisheets[0][242] = hero->sprite_no;
 
-	ptr1 = (Bit8s*)&g_fig_anisheets[0][1];
-	ptr2 = g_gfx_ani_index[hero->sprite_no];
+	sheet_ptr = (Bit8s*)&g_fig_anisheets[0][1];
+	ani_index_ptr = g_gfx_ani_index[hero->sprite_no];
 
 	i = 0;
 
@@ -143,28 +154,28 @@ void seg036_00ae(struct struct_hero *hero, const signed int hero_pos)
 			/* set heroes looking direction */
 			hero->viewdir = g_fig_move_pathdir[i];
 
-			ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[dir2], 2);
+			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[dir2], 2);
 
 			if (dir1 != -1) {
-				ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[dir1], 2);
+				sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[dir1], 2);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[(g_fig_move_pathdir[i] + 12)], 2);
+			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[(g_fig_move_pathdir[i] + 12)], 2);
 			i += 2;
 			/* BP - 2 */
 			hero->bp_left = hero->bp_left - 2;
 		} else {
-			ptr1 += KI_copy_ani_sequence((Bit8u*)ptr1, ptr2[(g_fig_move_pathdir[i] + 8)], 2);
+			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[(g_fig_move_pathdir[i] + 8)], 2);
 			i++;
 			/* BP - 1 */
 			hero->bp_left--;
 		}
 	}
 
-	*ptr1 = -1;
+	*sheet_ptr = -1;
 	FIG_call_draw_pic();
 	FIG_remove_from_list(g_fig_cb_marker_id, 0);
 	g_fig_cb_marker_id = -1;
@@ -180,12 +191,12 @@ void seg036_00ae(struct struct_hero *hero, const signed int hero_pos)
  * \param   hero        pointer to the hero with a broken weapon
  * \return              1 if a weapon was found, 0 if the hero fights now with bare hands
  */
-signed int KI_change_hero_weapon(struct struct_hero *hero)
+signed int AFIG_change_hero_weapon(struct struct_hero *hero)
 {
-	signed short pos;
-	signed short has_new_weapon = 0;
+	signed int pos;
+	signed int has_new_weapon = 0;
 	struct item_stats *item_p;
-	signed short item_id;
+	signed int item_id;
 	struct struct_fighter *fighter;
 
 	for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
@@ -245,16 +256,16 @@ signed int KI_change_hero_weapon(struct struct_hero *hero)
  * \param   start_y     Y-Coordinate of the hero
  * \param   offset_x    X-Direction -1/0/+1
  * \param   offset_y    Y-Direction -1/0/+1
- * \param   mode        0 = Attack only Enemies / 1 = Attack heroes and enemies / 2 = Attack only Heros
+ * \param   mode        0 = Attack only enemies / 1 = Attack heroes and enemies / 2 = Attack only Heros
  * \return              1 if an attack is possible in that mode, else 0.
  */
-signed short KI_can_attack_neighbour(signed short start_x, signed short start_y,
-			signed short offset_x, signed short offset_y,
-			signed short mode)
+signed int AFIG_can_attack_neighbour(const signed int start_x, const signed int start_y,
+			const signed int offset_x, const signed int offset_y, const signed int mode)
 {
-	signed char target = get_cb_val(start_x + offset_x, start_y + offset_y);
+	const signed char target = get_cb_val(start_x + offset_x, start_y + offset_y);
 
 	if (mode == 1) {
+
 		/* target is hero or enemy */
 		if ( ( (target > 0) && (target < 10) &&	!get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
 			((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
@@ -268,14 +279,16 @@ signed short KI_can_attack_neighbour(signed short start_x, signed short start_y,
 		}
 
 	} else if (!mode) {
+
 		/* target is an enemy */
-		if ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead)
-		{
+		if ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead) {
 			return 1;
 		} else {
 			return 0;
 		}
+
 	} else if (mode == 2) {
+
 		/* target is a hero */
 		if ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) {
 
@@ -297,14 +310,13 @@ signed short KI_can_attack_neighbour(signed short start_x, signed short start_y,
  * \param   renegade    0 = hero is normal, 1 = hero is renegade
  * \return              0 = no target found, fight-id of the target
  */
-signed short KI_search_spell_target(signed short x, signed short y,
-				signed short dir, signed short renegade)
+signed int AFIG_search_spell_target(const signed int x, const signed int y, const signed int dir, const signed int renegade)
 {
-	signed short x_diff;
-	signed short y_diff;
-	signed char obj_id;
-	signed short done;
-	signed short will_attack;
+	signed int x_diff;
+	signed int y_diff;
+	signed char target;
+	signed int done;
+	signed int will_attack;
 
 	done = 0;
 	x_diff = 0;
@@ -333,22 +345,22 @@ signed short KI_search_spell_target(signed short x, signed short y,
 		}
 
 		/* get the fight object ID of the object on that field */
-		obj_id = get_cb_val(x + x_diff, y + y_diff);
+		target = get_cb_val(x + x_diff, y + y_diff);
 
 		if (renegade == 1) {
 
 			/* attack only heroes and renegade enemies */
-			if ( ((obj_id > 0) && (obj_id < 10) && !get_hero(obj_id - 1)->flags.dead && !get_hero(obj_id - 1)->flags.unconscious) ||
-				((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead &&
-				// g_enemy_sheets[obj_id - 10].flags.renegade
-				((struct enemy_flags*)(obj_id * sizeof(struct enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
+			if ( ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
+				((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
+				// g_enemy_sheets[target - 10].flags.renegade
+				((struct enemy_flags*)(target * sizeof(struct enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
 				))
 				{
 
 					will_attack = 1;
 					done = 1;
 
-			} else if ( (obj_id != 0) && (((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead) || ((obj_id >= 50) && !is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle))))
+			} else if ( (target != 0) && (((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead) || ((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle))))
 				{
 					done = 1;
 				}
@@ -356,17 +368,17 @@ signed short KI_search_spell_target(signed short x, signed short y,
 		} else if (renegade == 0) {
 
 			/* attack only enemies */
-			if ((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead)
+			if ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead)
 			{
 				will_attack = 1;
 				done = 1;
-			} else if ((obj_id != 0) &&
+			} else if ((target != 0) &&
 					 (
 #ifdef M302de_ORIGINAL_BUGFIX
-						(obj_id > 0) &&
+						(target > 0) &&
 #endif
-						 (((obj_id < 10) && !get_hero(obj_id - 1)->flags.dead && !get_hero(obj_id - 1)->flags.unconscious
-						) || ( (obj_id >= 50) && !is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle)
+						 (((target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious
+						) || ( (target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)
 						))
 					)
 				)
@@ -379,7 +391,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
 	if (will_attack == 0) {
 		return 0;
 	} else {
-		return obj_id;
+		return target;
 	}
 }
 
@@ -393,13 +405,13 @@ signed short KI_search_spell_target(signed short x, signed short y,
  * \param   y           y-coordinate of the hero
  * \return              0 = no target found, 1 = target found (long distance), 2 = target found (short distance)
  */
-signed int KI_select_spell_target(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
+signed int AFIG_select_range_target(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
 {
-	signed short dir;
-	signed short count;
-	signed short done;
-	signed short retval;
-	signed short l5;
+	signed int dir;
+	signed int count;
+	signed int done;
+	signed int retval;
+	signed int target_found;
 	signed short target_x;
 	signed short target_y;
 
@@ -411,6 +423,7 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 		/* reset target fight-id */
 		hero->target_id = 0;
 
+		/* REMARK: spells usually require 5 BP */
 		if (hero->bp_left >= 3) {
 
 			dir = hero->viewdir;
@@ -420,7 +433,7 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 			/* try to find a target clockwise from current direction */
 			while (!hero->target_id && (count < 4)) {
 
-				hero->target_id = (signed char)KI_search_spell_target(x, y, dir, renegade);
+				hero->target_id = AFIG_search_spell_target(x, y, dir, renegade);
 
 				count++;
 
@@ -451,16 +464,18 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 			if (!hero->flags.tied) {
 
 				if (renegade == 0) {
-					l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
+					target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
 				} else {
-					l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
+					target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
 				}
 
-				if (l5 != -1) {
-					seg036_00ae(hero, hero_pos);
+				if (target_found != -1) {
+
+					FIG_prepare_hero_ani(hero, hero_pos);
 
 					FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 
+					/* REMARK: spells usually require 5 BP */
 					if (hero->bp_left < 3) {
 
 						/* set BP to 0 */
@@ -483,17 +498,17 @@ signed int KI_select_spell_target(struct struct_hero *hero, const signed int her
 /**
  * \brief   TODO
  *
- * \param   spell       spell index
+ * \param   spell_id       spell index
  * \param   renegade    0 = hero normal, 1 = hero renegade
  * \return              TODO	{-1, 0, 1, 2}
  */
-signed short KI_get_spell(signed short spell, signed short renegade)
+signed int AFIG_get_spell(const signed int spell_id, const signed int renegade)
 {
 	struct spell_descr *spell_description;
 	signed short retval = -1;
 
 	/* make a pointer to the spell description */
-	spell_description = &g_spell_descriptions[spell];
+	spell_description = &g_spell_descriptions[spell_id];
 
 	if (renegade == 0) {
 		if (spell_description->target_type == 2)
@@ -522,16 +537,16 @@ signed short KI_get_spell(signed short spell, signed short renegade)
  * \param   y           y-coordinate of the hero
  * \return              {0, 1}
  */
-signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
+signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
 {
-	signed short l_si;
-	signed short count;
-	signed short spell;
-	signed short done;
-	signed short retval;
-	signed short spell_mode;
-	signed short l5;
-	signed short decided;
+	signed int i;
+	signed int count;
+	signed int spell_id;
+	signed int done;
+	signed int retval;
+	signed int spell_mode;
+	signed int target_found;
+	signed int decided;
 
 	struct viewdir_offsets a = g_viewdir_offsets3;
 
@@ -542,12 +557,12 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 
 		decided = 0;
 
-		for (l_si = 0; l_si <= 10; l_si++) {
+		for (i = 0; i <= 10; i++) {
 
 			/* get a spell from an array */
-			spell = g_af_spell_list[l_si];
+			spell_id = g_af_spell_list[i];
 
-			if ((g_spell_descriptions[spell].range == 1) && (random_schick(100) < 50))
+			if ((g_spell_descriptions[spell_id].range == 1) && (random_schick(100) < 50))
 			{
 				decided = 1;
 				break;
@@ -560,13 +575,13 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 
 		if (decided == 0) {
 
-			spell = g_af_spell_list[random_interval(0, 10)];
+			spell_id = g_af_spell_list[random_interval(0, 10)];
 		}
 
 		/* reset the target of the hero */
 		hero->target_id = 0;
 
-		if ((spell_mode = KI_get_spell(spell, renegade)) != -1) {
+		if ((spell_mode = AFIG_get_spell(spell_id, renegade)) != -1) {
 
 			if (spell_mode == 2) {
 
@@ -574,29 +589,29 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 				hero->target_id = hero_pos + 1;
 
 				/* set spell */
-				hero->spell_id = (signed char)spell;
+				hero->spell_id = spell_id;
 
 				retval = 1;
 				done = 1;
 			} else {
 
-				if (!g_spell_descriptions[spell].range) {
+				if (!g_spell_descriptions[spell_id].range) {
 
 					while ((hero->bp_left != 0) && (done == 0)) {
 
-						l_si = hero->viewdir;
+						i = hero->viewdir;
 
 						count = 0;
 						while ((!hero->target_id) && (count < 4)) {
 
-							if (KI_can_attack_neighbour(x, y, a.a[l_si].x, a.a[l_si].y, spell_mode)) {
-								hero->target_id = get_cb_val(x + a.a[l_si].x, y + a.a[l_si].y);
+							if (AFIG_can_attack_neighbour(x, y, a.a[i].x, a.a[i].y, spell_mode)) {
+								hero->target_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
 							}
 
 							count++;
 
-							if (++l_si == 4) {
-								l_si = 0;
+							if (++i == 4) {
+								i = 0;
 							}
 						}
 
@@ -605,7 +620,7 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 							if (hero->bp_left >= 5) {
 
 								/* enough BP */
-								hero->spell_id = (signed char)spell;
+								hero->spell_id = spell_id;
 								retval = 1;
 							} else {
 								/* set BP to 0 */
@@ -617,14 +632,14 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 						} else if (!hero->flags.tied) {
 
 							if (spell_mode == 0) {
-								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
+								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
 							} else {
-								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
+								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
 							}
 
-							if (l5 != -1) {
+							if (target_found != -1) {
 
-								seg036_00ae(hero, hero_pos);
+								FIG_prepare_hero_ani(hero, hero_pos);
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 
 							} else {
@@ -640,18 +655,18 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 				} else {
 					while ((done == 0) && (hero->bp_left > 0)) {
 
-						l_si = hero->viewdir;
+						i = hero->viewdir;
 
 						count = 0;
 
 						while (!hero->target_id && (count < 4)) {
 
-							hero->target_id = (signed char)KI_search_spell_target(x, y, l_si, spell_mode);
+							hero->target_id = AFIG_search_spell_target(x, y, i, spell_mode);
 
 							count++;
 
-							if (++l_si == 4) {
-								l_si = 0;
+							if (++i == 4) {
+								i = 0;
 							}
 						}
 
@@ -660,7 +675,7 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 							if (hero->bp_left >= 5) {
 
 								/* enough BP */
-								hero->spell_id = (signed char)spell;
+								hero->spell_id = spell_id;
 								retval = 1;
 							} else {
 								/* set BP to 0 */
@@ -672,14 +687,14 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
 						} else if (!hero->flags.tied) {
 
 							if (spell_mode == 0) {
-								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
+								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
 							} else {
-								l5 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
+								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
 							}
 
-							if (l5 != -1) {
+							if (target_found != -1) {
 
-								seg036_00ae(hero, hero_pos);
+								FIG_prepare_hero_ani(hero, hero_pos);
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 
 							} else {
@@ -706,10 +721,10 @@ signed int seg036_8cf(struct struct_hero *hero, const signed int hero_pos, const
  * \param   hero_pos    position of the calling hero
  * \return              number of heroes in the group - 1
  */
-signed short KI_count_heroes(signed short hero_pos)
+signed int AFIG_count_heroes(const signed int hero_pos)
 {
-	signed short cnt = 0;
-	signed short i;
+	signed int cnt = 0;
+	signed int i;
 
 	/* for each hero in this group */
 	for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
@@ -730,23 +745,23 @@ signed short KI_count_heroes(signed short hero_pos)
  * \param   x           x-coordinate of the hero
  * \param   y           y-coordinate of the hero
  */
-void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x, signed short y)
+void AFIG_hero(struct struct_hero *hero, const signed int hero_pos, signed short x, signed short y)
 {
-	signed short l_di;
-	signed short l1;
-	signed short done;
-	signed short l4;
-	signed short l5;
-	signed short x_bak;
-	signed short y_bak;
-	signed short l8;
+	signed int i;
+	signed int cnt;
+	signed int done;
+	signed int target_found;
+	signed int try_autospell;
+	signed int x_bak;
+	signed int y_bak;
+	signed int range_type;
 	signed short hero_x;
 	signed short hero_y;
 
 	struct viewdir_offsets a = g_viewdir_offsets4;
 
 	done = 0;
-	l5 = 1;
+	try_autospell = 1;
 
 	hero->action_id = FIG_ACTION_MOVE;
 
@@ -806,7 +821,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 		} else if (hero->npc_id == NPC_GARSVIK) {
 
-			if (!KI_count_heroes(hero_pos)) {
+			if (!AFIG_count_heroes(hero_pos)) {
 				hero->action_id = FIG_ACTION_FLEE;
 			}
 
@@ -847,20 +862,21 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 	while ((done == 0) && (hero->bp_left > 0)) {
 
+		/* REMARK: should be done in the timer */
 		CD_enable_repeat();
 
 		if ((hero->action_id == FIG_ACTION_FLEE) && (hero->bp_left > 0)) {
 
 			if (!hero->flags.tied) {
 
-				l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5);
+				target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5);
 
-				if (l4 != -1) {
+				if (target_found != -1) {
 
 					x_bak = x;
 					y_bak = y;
 
-					seg036_00ae(hero, hero_pos);
+					FIG_prepare_hero_ani(hero, hero_pos);
 
 					hero->target_id = 0;
 
@@ -891,17 +907,17 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 			if ((hero->typus >= HERO_TYPE_WITCH) &&		/* magic user */
 				(hero->ae > 10) &&	/* AE > 10 */
-				(l5 != 0) &&
+				(try_autospell != 0) &&
 				(g_current_fight_no != FIGHTS_F144) &&	/* not in the final fight */
 				g_autofight_magic) /* magic activated in auto fight */
 			{
-				if (seg036_8cf(hero, hero_pos, hero->flags.renegade, x, y))
+				if (AFIG_select_autospell(hero, hero_pos, hero->flags.renegade, x, y))
 				{
 					hero->action_id = FIG_ACTION_SPELL;
 					hero->bp_left = 0;
 
 				} else {
-					l5 = 0;
+					try_autospell = 0;
 				}
 			}
 
@@ -911,11 +927,11 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 					if (range_attack_check_ammo(hero, 2)) {
 
-						l8 = KI_select_spell_target(hero, hero_pos, hero->flags.renegade, x, y);
+						range_type = AFIG_select_range_target(hero, hero_pos, hero->flags.renegade, x, y);
 
-						if (l8 != 0) {
-							if (l8 == 2) {
-								if (!KI_change_hero_weapon(hero)) {
+						if (range_type != 0) {
+							if (range_type == 2) {
+								if (!AFIG_change_hero_weapon(hero)) {
 									done = 1;
 								}
 							} else {
@@ -926,7 +942,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 						/* set BP to 0 */
 						hero->bp_left = 0;
 					} else {
-						if (!KI_change_hero_weapon(hero)) {
+						if (!AFIG_change_hero_weapon(hero)) {
 							done = 1;
 						}
 					}
@@ -935,19 +951,19 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 					if (hero->bp_left >= 3) {
 
-						l_di = hero->viewdir;
-						l1 = 0;
+						i = hero->viewdir;
+						cnt = 0;
 
-						while (!hero->target_id && (l1 < 4)) {
+						while (!hero->target_id && (cnt < 4)) {
 
-							if (KI_can_attack_neighbour(x, y, a.a[l_di].x, a.a[l_di].y, hero->flags.renegade))
+							if (AFIG_can_attack_neighbour(x, y, a.a[i].x, a.a[i].y, hero->flags.renegade))
 							{
-								hero->target_id = get_cb_val(x + a.a[l_di].x, y + a.a[l_di].y);
+								hero->target_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
 							}
 
-							l1++;
-							if (++l_di == 4) {
-								l_di = 0;
+							cnt++;
+							if (++i == 4) {
+								i = 0;
 							}
 						}
 					}
@@ -962,16 +978,16 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 						if (!hero->flags.tied) {
 
 							if (!hero->flags.renegade) {
-								l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
+								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
 							} else {
-								l4 = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
+								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
 							}
 
-							if (l4 != -1) {
+							if (target_found != -1) {
 								x_bak = x;
 								y_bak = y;
 
-								seg036_00ae(hero, hero_pos);
+								FIG_prepare_hero_ani(hero, hero_pos);
 
 								hero->action_id = FIG_ACTION_MOVE;
 								hero->target_id = 0;
