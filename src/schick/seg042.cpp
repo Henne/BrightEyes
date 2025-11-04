@@ -629,7 +629,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							15, hero_pos + 1,
 							l17 == 0 ? hero->target_id : hero->target_id + 20, 0);
 
-					l13 = seg045_01a0(7, l12, hero_pos + 1,
+					l13 = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
 						l17 == 0 ? hero->target_id : hero->target_id + 20,
 						hero->viewdir);
 
@@ -665,7 +665,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						}
 					}
 
-					FIG_remove_smth();
+					FANI_remove_shotbolt();
 
 					draw_fight_screen(0);
 
@@ -739,7 +739,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						if (l6 > 0) {
 
 							if (l6 != 4) {
-								seg045_0394(6, hero, l6);
+								FANI_prepare_hero_spell_ani(6, hero, l6);
 							}
 
 						} else {
@@ -766,7 +766,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							(hero->target_id > 0 ))
 						{
 
-							l13 = seg045_01a0(7, l12, hero_pos + 1,
+							l13 = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
 								l17 == 0 ? hero->target_id : hero->target_id + 20,
 								hero->viewdir);
 						}
@@ -873,11 +873,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						}
 
 						if (l13 != 0) {
-							FIG_remove_smth();
+							FANI_remove_shotbolt();
 						}
 
 						if ((l6 > 0) && (l6 != 3) && (l6 != 4)) {
-							FIG_remove_smth2();
+							FANI_remove_spell();
 						}
 
 						FIG_draw_figures();

@@ -2,29 +2,28 @@
 namespace M302de {
 #endif
 
+/* should be static */
 /* 0x20 */
-void seg045_0000(signed short, signed short, signed short);
-
+void FANI_add_shotbolt(const signed int, const signed int, const signed int);
 /* 0x25 */
-void FIG_remove_smth(void);
-
+void FANI_remove_shotbolt(void);
+/* should be static */
 /* 0x2a */
-signed short FIG_copy_it(Bit8s*, Bit8s*, signed char);
-
+signed int FANI_copy_sequence(Bit8s*, Bit8s*, const signed char);
 /* 0x2f */
-signed short seg045_01a0(signed short, signed short, signed short, signed short, signed short);
+signed int FANI_prepare_shotbolt_ani(const signed int, const signed int, const signed int, const signed int, const signed int);
 
+/* should be static */
 /* 0x34 */
-void seg045_0273(signed short, signed short, signed short);
-
+void FANI_add_spell(const signed int, const signed int, const signed int);
 /* 0x39 */
-void FIG_remove_smth2(void);
+void FANI_remove_spell(void);
 
 /* 0x3e */
-void seg045_0394(const signed int, const struct struct_hero*, const signed int);
+void FANI_prepare_hero_spell_ani(const signed int, const struct struct_hero*, const signed int);
 
 /* 0x43 */
-void seg045_041b(signed short, struct enemy_sheet*, signed short);
+void FANI_prepare_enemy_spell_ani(const signed int, const struct enemy_sheet*, const signed int);
 
 #if !defined(__BORLANDC__)
 }

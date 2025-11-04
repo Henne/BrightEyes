@@ -1,5 +1,5 @@
 /*
- *	Rewrite of DSA1 v3.02_de functions of seg045 (fight helper)
+ *	Rewrite of DSA1 v3.02_de functions of seg045 (Fight ANImation: bolts and spells)
  *	Functions rewritten: 8/8 (complete)
  *
  *	Borlandified and identical
@@ -89,9 +89,17 @@ static signed char **g_anitab_shotbolt_index[6] = {
 static signed char g_anitab_spell_nvfno[2] = { 0x09, 0x1b }; // ds:0x633c
 static signed short g_anitab_spell_ox[2] = { 0, 0 }; // ds:0x633e
 static signed short g_anitab_spell_oy[2] = { 0, 0 }; // ds:0x6342
-static signed char g_anitab_spell_data[2][16] = {
-	{  9, 0, 0, 10, 0, 0, 11, 0, 0, 10, 0, 0,  9, 0, 0, -1},
-	{ 27, 0, 0, 28, 0, 0, 29, 0, 0, 28, 0, 0, 27, 0, 0, -1},
+static const signed char g_anitab_spell_data[2][16] = {
+	{	 9, 0, 0,
+		10, 0, 0,
+		11, 0, 0,
+		10, 0, 0, 
+		9, 0, 0, -1},
+	{	27, 0, 0,
+		28, 0, 0,
+		29, 0, 0,
+		28, 0, 0,
+		27, 0, 0, -1},
 }; // ds:0x6346, 2 arrays, each terminated by -1
 static signed char* g_anitab_spell_index[2] = {
 	(signed char*)&g_anitab_spell_data[0],
@@ -99,7 +107,13 @@ static signed char* g_anitab_spell_index[2] = {
 }; // ds:0x6366; Bit8u*
 
 
-void seg045_0000(signed short fighter_id, signed short type, signed short a3)
+/**
+ * \brief load sprites of arrows/shotbolts
+ * \param[in] fighter_id	fighter ID
+ * \param[in] type		arrow or shotbolt ???
+ * \param[in] dir		direction
+ **/
+void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const signed int dir)
 {
 	signed short obj_x;
 	signed short obj_y;
@@ -112,17 +126,17 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 	g_fig_list_elem.nvf_no = g_gfxtab_shotbolt_nvfno[type];
 
 	if (type != 2) {
-		g_fig_list_elem.nvf_no = g_fig_list_elem.nvf_no + a3;
+		g_fig_list_elem.nvf_no = g_fig_list_elem.nvf_no + dir;
 	}
 
-	if (a3 == 0) {
+	if (dir == 0) {
 		obj_x += 2;
 	}
 
-	g_fig_list_elem.cbx = (signed char)obj_x;
-	g_fig_list_elem.cby = (signed char)obj_y;
-	g_fig_list_elem.offsetx = g_gfxtab_shotbolt_ox[type][a3];
-	g_fig_list_elem.offsety = g_gfxtab_shotbolt_oy[type][a3];
+	g_fig_list_elem.cbx = obj_x;
+	g_fig_list_elem.cby = obj_y;
+	g_fig_list_elem.offsetx = g_gfxtab_shotbolt_ox[type][dir];
+	g_fig_list_elem.offsety = g_gfxtab_shotbolt_oy[type][dir];
 	g_fig_list_elem.height = g_gfxtab_shotbolt_height[type];
 	g_fig_list_elem.width = g_gfxtab_shotbolt_width[type];
 
@@ -152,7 +166,7 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 	g_fig_shot_bolt_id = FIG_add_to_list(-1);
 }
 
-void FIG_remove_smth(void)
+void FANI_remove_shotbolt(void)
 {
 	FIG_remove_from_list(g_fig_shot_bolt_id, 0);
 	g_fig_shot_bolt_id = -1;
@@ -165,7 +179,7 @@ void FIG_remove_smth(void)
  * \param   src         pointer to sources
  * \param   term        termination sign
  */
-signed short FIG_copy_it(Bit8s *dst, Bit8s *src, signed char term)
+signed short FANI_copy_sequence(Bit8s *dst, Bit8s *src, const signed char term)
 {
 	signed short i;
 
@@ -187,35 +201,35 @@ signed short FIG_copy_it(Bit8s *dst, Bit8s *src, signed char term)
 	return i;
 }
 
-signed short seg045_01a0(signed short a1, signed short a2, signed short fighter_id1, signed short fighter_id2, signed short a5)
+signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int type, const signed int fighter_id, const signed int target_id, const signed int dir)
 {
-	signed short i;
-	Bit8s *ptr;
-	signed short id1_x;
-	signed short id1_y;
-	signed short id2_x;
-	signed short id2_y;
+	signed int i;
+	Bit8s *sheet_ptr;
+	signed short fighter_x;
+	signed short fighter_y;
+	signed short target_x;
+	signed short target_y;
 	signed short beeline;
 
-	FIG_search_obj_on_cb(fighter_id2, &id2_x, &id2_y);
-	FIG_search_obj_on_cb(fighter_id1, &id1_x, &id1_y);
+	FIG_search_obj_on_cb(target_id, &target_x, &target_y);
+	FIG_search_obj_on_cb(fighter_id, &fighter_x, &fighter_y);
 
-	beeline = calc_beeline(id1_x, id1_y, id2_x, id2_y);
+	beeline = calc_beeline(fighter_x, fighter_y, target_x, target_y);
 
 	if (beeline <= 1) {
 		return 0;
 	}
 
-	ptr = &g_fig_anisheets[a1][1];
-	g_fig_anisheets[a1][0] = 0;
-	g_fig_anisheets[a1][242] = 0;
+	sheet_ptr = &g_fig_anisheets[sheet_id][1];
+	g_fig_anisheets[sheet_id][0] = 0;
+	g_fig_anisheets[sheet_id][242] = 0;
 
 	for (i = 0; beeline - 1 > i; i++) {
-		ptr += FIG_copy_it(ptr, g_anitab_shotbolt_index[a2][a5], -1);
+		sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_shotbolt_index[type][dir], -1);
 	}
-	*ptr = -1;
+	*sheet_ptr = -1;
 
-	seg045_0000(fighter_id1, a2, a5);
+	FANI_add_shotbolt(fighter_id, type, dir);
 
 	return 1;
 }
@@ -228,7 +242,7 @@ struct dummy4 {
 	signed short a[2];
 };
 
-void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
+void FANI_add_spell(const signed int x, const signed int y, const signed int spell_ani_id)
 {
 	signed short height;
 	signed short width;
@@ -274,52 +288,52 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 	g_fig_spellgfx_id = FIG_add_to_list(-1);
 }
 
-void FIG_remove_smth2(void)
+void FANI_remove_spell(void)
 {
 	FIG_remove_from_list(g_fig_spellgfx_id, 0);
 	g_fig_spellgfx_id = -1;
 }
 
-void seg045_0394(const signed int a1, const struct struct_hero *hero, const signed int spell_ani_id)
+void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_hero *hero, const signed int spell_ani_id)
 {
-	Bit8s *ptr;
+	Bit8s *sheet_ptr;
 	signed short x;
 	signed short y;
 
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(hero->target_id, &x, &y);
 
-	ptr = &g_fig_anisheets[a1][1];
+	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
-	g_fig_anisheets[a1][0] = 0;
-	g_fig_anisheets[a1][242] = -1;
+	g_fig_anisheets[sheet_id][0] = 0;
+	g_fig_anisheets[sheet_id][242] = -1;
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
-	*ptr = -1;
+	sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
+	*sheet_ptr = -1;
 
-	seg045_0273(x, y, spell_ani_id);
+	FANI_add_spell(x, y, spell_ani_id);
 }
 
-void seg045_041b(signed short a1, struct enemy_sheet *enemy, signed short spell_ani_id)
+void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_sheet *enemy, const signed int spell_ani_id)
 {
-	Bit8s *ptr;
+	Bit8s *sheet_ptr;
 	signed short x;
 	signed short y;
 
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(enemy->target_id, &x, &y);
 
-	ptr = &g_fig_anisheets[a1][1];
+	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
-	g_fig_anisheets[a1][0] = 0;
-	g_fig_anisheets[a1][242] = -1;
+	g_fig_anisheets[sheet_id][0] = 0;
+	g_fig_anisheets[sheet_id][242] = -1;
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
-	*ptr = -1;
+	sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
+	*sheet_ptr = -1;
 
-	seg045_0273(x, y, spell_ani_id);
+	FANI_add_spell(x, y, spell_ani_id);
 }
 
 #if !defined(__BORLANDC__)

@@ -563,7 +563,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				FIG_prepare_enemy_fight_ani(0, monster, 15, monster_pos + 10, monster->target_id, 0);
 
-				l12 = seg045_01a0(7, l11, monster_pos + 10, monster->target_id, monster->viewdir);
+				l12 = FANI_prepare_shotbolt_ani(7, l11, monster_pos + 10, monster->target_id, monster->viewdir);
 
 				FIG_set_sheet(monster->fighter_id, 0);
 
@@ -591,7 +591,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 					}
 				}
 
-				FIG_remove_smth();
+				FANI_remove_shotbolt();
 				draw_fight_screen(0);
 				clear_anisheets();
 
@@ -630,7 +630,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						if (l14 > 0) {
 
-							seg045_041b(6, monster, l14);
+							FANI_prepare_enemy_spell_ani(6, monster, l14);
 
 						} else {
 
@@ -651,7 +651,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						if ((monster->gfx_id != 0x12) && (monster->gfx_id != 7) && (monster->target_id > 0)) {
 
-							l12 = seg045_01a0(7, l11, monster_pos + 10, monster->target_id, monster->viewdir);
+							l12 = FANI_prepare_shotbolt_ani(7, l11, monster_pos + 10, monster->target_id, monster->viewdir);
 						}
 
 					}
@@ -759,11 +759,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 						}
 
 						if (l12 != 0) {
-							FIG_remove_smth();
+							FANI_remove_shotbolt();
 						}
 
 						if (l14 > 0) {
-							FIG_remove_smth2();
+							FANI_remove_spell();
 						}
 
 						FIG_draw_figures();
@@ -899,7 +899,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 		l3 = 0;
 
 		if (hylailic != 0) {
-			seg045_0394(6, hero, 2);
+			FANI_prepare_hero_spell_ani(6, hero, 2);
 		} else {
 			g_fig_continue_print = 1;
 		}
@@ -918,7 +918,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 		}
 
 		if (l3 != 0) {
-			FIG_remove_smth2();
+			FANI_remove_spell();
 		}
 
 		if (g_defender_dead != 0) {
