@@ -2,24 +2,17 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-/* static */
-Bit16s copy_ani_seq(Bit8u*, Bit16s, Bit16u);
-/* static */
-Bit8s get_seq_header(Bit16s);
-#endif
-
 /* 0x20 */
-void FIG_prepare_hero_fight_ani(signed short, struct struct_hero*, signed short, signed short, signed short, signed short, signed short);
+void FANI_prepare_fight_hero_ani(signed short, struct struct_hero*, signed short, signed short, signed short, signed short, signed short);
 
 /* 0x25 */
-void FIG_prepare_enemy_fight_ani(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);
+void FANI_prepare_fight_enemy_ani(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);
 
 /* 0x2a */
-void seg044_002a(Bit16u, struct struct_hero*, Bit16u, Bit16s, Bit16s, Bit16u, Bit16u);
+void FANI_prepare_spell_hero(Bit16u, struct struct_hero*, Bit16u, Bit16s, Bit16s, Bit16u, Bit16u);
 
 /* 0x2f */
-void seg044_002f(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);
+void FANI_prepare_spell_enemy(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);
 
 #if !defined(__BORLANDC__)
 }

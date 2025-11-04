@@ -1,5 +1,5 @@
 /*
- *	Rewrite of DSA1 v3.02_de functions of seg044 (Fightsystem)
+ *	Rewrite of DSA1 v3.02_de functions of seg044 (Fight ANImation: Figures)
  *	Functions rewritten: 6/6 (complete)
  *
  *	Borlandified and identical
@@ -30,57 +30,55 @@ namespace M302de {
  * \return              the number of copied bytes
  */
 /* Borlandified and identical */
-#if defined(__BORLANDC__)
-static
-#endif
-Bit16s copy_ani_seq(Bit8s *dst, Bit16s ani, Bit16u type)
+static signed int copy_ani_seq(Bit8s *dst, const signed int ani_num, const signed int type)
 {
-	Bit8s *p_start, *p_seq;
-	signed short nr_anis;
-	signed short i;
-	signed char length;
+	Bit8s *p_datbuffer;
+	Bit8s *p_datitem;
+	signed int ani_max_num;
+	signed int i;
+	signed char len;
 
 	/* get pointer from ANI.DAT */
-	p_start = (Bit8s*)g_buffer_anidat;
+	p_datbuffer = (Bit8s*)g_buffer_anidat;
 
 	/* check if we must use WEAPANI.DAT */
 	if (type == 3)
-		p_start = (Bit8s*)g_buffer_weapanidat;
+		p_datbuffer = (Bit8s*)g_buffer_weapanidat;
 
 	/* get number of animation sequences */
-	nr_anis = *(Bit16s*)p_start;
+	ani_max_num = *(Bit16s*)p_datbuffer;
 
 	/* sanity check */
-	if (ani < 0)
+	if (ani_num < 0)
 		return 0;
 
-	if (ani > nr_anis)
+	if (ani_num > ani_max_num)
 		return 0;
 
-	/* set p_seq to the first sequence */
-	p_seq = p_start;
-	p_seq += nr_anis + 2;
+	/* set p_datitem to the first sequence */
+	p_datitem = p_datbuffer;
+	p_datitem += ani_max_num + 2;
 
 	/* set length to the length of the first sequence */
-	length = p_start[2];
+	len = p_datbuffer[2];
 
 	/* fast forward to the requestet sequence */
-	for (i = 1; i <= ani; i++) {
-		p_seq += length;
-		length = *(p_start + i + 2);
+	for (i = 1; i <= ani_num; i++) {
+		p_datitem += len;
+		len = *(p_datbuffer + i + 2);
 	}
 
 	/* skip the first byte */
-	p_seq++;
+	p_datitem++;
 	/* calc the length of the sequence */
-	length -= 2;
-	/* REMARK: the first an the last byte of the sequence are skipped */
+	len -= 2;
+	/* REMARK: the first and the last byte of the sequence are skipped */
 
 	/* copy them */
-	for (i = 0; i < length; i++)
-		*dst++ = *p_seq++;
+	for (i = 0; i < len; i++)
+		*dst++ = *p_datitem++;
 
-	return length;
+	return len;
 }
 
 /**
@@ -90,55 +88,53 @@ Bit16s copy_ani_seq(Bit8s *dst, Bit16s ani, Bit16u type)
  * \return              the first byte of the sequence from ANI.DAT {0,1,2,3,4}
  */
 /* Borlandified and identical */
-#if defined(__BORLANDC__)
-static
-#endif
-Bit8s get_seq_header(Bit16s ani)
+static signed char get_seq_header(const signed int ani_num)
 {
-	Bit8s *p_start, *p_seq;
+	Bit8s *p_datbuffer;
+	Bit8s *p_datitem;
 	Bit8s length;
-	Bit16s nr_anis;
-	Bit16s i;
+	signed int ani_max_num;
+	signed int i;
 
 	/* get pointer from ANI.DAT */
-	p_start = (Bit8s*)g_buffer_anidat;
+	p_datbuffer = (Bit8s*)g_buffer_anidat;
 
 	/* get number of ani seqences in ANI.DAT */
-	nr_anis = *(Bit16s*)p_start;
+	ani_max_num = *(Bit16s*)p_datbuffer;
 
-	if (ani < 0) {
+	if (ani_num < 0) {
 		return 0;
 	}
 
-	if (ani > nr_anis) {
+	if (ani_num > ani_max_num) {
 		return 0;
 	}
 
-	p_seq = p_start;
-	p_seq += nr_anis + 2;
+	p_datitem = p_datbuffer;
+	p_datitem += ani_max_num + 2;
 
-	length = p_start[2];
+	length = p_datbuffer[2];
 
-	for (i = 1; i <= ani; i++) {
+	for (i = 1; i <= ani_num; i++) {
 		/* set pointer to the start of the next sequence */
-		p_seq += length;
+		p_datitem += length;
 		/* set length to the length of the next sequence */
-		length = *(p_start + i + 2);
+		length = *(p_datbuffer + i + 2);
 	}
 
-	return *p_seq;
+	return *p_datitem;
 }
 
 /**
  * \brief   prepares the animation sequence of a hero in fights
  *
- * \param   a1          [0, 1]
+ * \param   sheet_id          [0, 1]
  * \param   hero        pointer to hero
  * \param   weapon_type the type of weapon for the animation [-1, 5], 3,4,5 are range weapons
  * \param   action_type {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_UNKNOWN2 = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
  */
 /* Borlandified and identical */
-void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signed short weapon_type, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
+void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero, signed short weapon_type, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
 {
 	signed short l1;
 	signed short attacker_x;
@@ -149,14 +145,14 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 	signed short l7;
 	signed short l8;
 	signed short l9;
-	signed short l10;
-	Bit8s *p1;
-	Bit8s *p2;
-	signed short weapon;
-	Bit16s *p3;
+	signed short i;
+	Bit8s *sheet_ptr1;
+	Bit8s *sheet_ptr2;
+	signed int weapon_id;
+	Bit16s *ani_index_ptr;
 
-	p3 = g_gfx_ani_index[hero->sprite_no];
-	weapon = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
+	ani_index_ptr = g_gfx_ani_index[hero->sprite_no];
+	weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
 	if ((signed char)fid_target) {
 
@@ -180,7 +176,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 		dir = hero->viewdir;
 	}
 
-	if ((weapon_type == -1) || ((hero->typus == HERO_TYPE_MAGE) && (weapon == ITEM_MAGIC_WAND))) {
+	if ((weapon_type == -1) || ((hero->typus == HERO_TYPE_MAGE) && (weapon_id == ITEM_MAGIC_WAND))) {
 
 		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 :		/* melee attack */
 			(f_action == FIG_ACTION_UNKNOWN3) ? 41 :		/* drink potion */
@@ -198,11 +194,11 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 	}
 
 	l1 += dir;
-	p1 = (Bit8s*)&g_fig_anisheets[a1][1];
-	p2 = (Bit8s*)&g_fig_anisheets[a1 + 4][1];
+	sheet_ptr1 = (Bit8s*)&g_fig_anisheets[sheet_id][1];
+	sheet_ptr2 = (Bit8s*)&g_fig_anisheets[sheet_id + 4][1];
 
-	g_fig_anisheets[a1][0] = get_seq_header(p3[l1]);
-	g_fig_anisheets[a1][242] = hero->sprite_no;
+	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
+	g_fig_anisheets[sheet_id][242] = hero->sprite_no;
 
 	if (check_hero(hero) && (hero->viewdir != dir) &&
 
@@ -211,7 +207,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
 			((g_defender_attacks != 0) && (a7 == 1))))
 	{
-			g_fig_anisheets[a1][0] = 0;
+			g_fig_anisheets[sheet_id][0] = 0;
 			l8 = l7 = -1;
 			l9 = hero->viewdir;
 			l8 = l9;
@@ -234,30 +230,30 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 				}
 			}
 
-			hero->viewdir = (signed char)dir;
+			hero->viewdir = dir;
 
 			if (l7 == -1) {
-				for (l10 = 0; l10 < 2; l10++) {
-					*p1++ = -5;
-					*p1++ = 0;
-					*p1++ = 0;
+				for (i = 0; i < 2; i++) {
+					*sheet_ptr1++ = -5;
+					*sheet_ptr1++ = 0;
+					*sheet_ptr1++ = 0;
 				}
 			}
 
-			p1 += copy_ani_seq(p1, p3[l8], 2);
+			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l8], 2);
 
 			if (l7 != -1) {
-				p1 += copy_ani_seq(p1, p3[l7], 2);
+				sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l7], 2);
 			}
 
-			*p1++ = -4;
-			*p1++ = get_seq_header(p3[l1]);
-			*p1++ = 0;
+			*sheet_ptr1++ = -4;
+			*sheet_ptr1++ = get_seq_header(ani_index_ptr[l1]);
+			*sheet_ptr1++ = 0;
 	} else {
-		for (l10 = 0; l10 < 5; l10++) {
-			*p1++ = -5;
-			*p1++ = 0;
-			*p1++ = 0;
+		for (i = 0; i < 5; i++) {
+			*sheet_ptr1++ = -5;
+			*sheet_ptr1++ = 0;
+			*sheet_ptr1++ = 0;
 		}
 	}
 
@@ -265,19 +261,19 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 		((f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN3) || (f_action == FIG_ACTION_UNKNOWN4) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1])))
 	{
-		p1 += copy_ani_seq(p1, p3[l1], 2);
+		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
 		if ((weapon_type != -1) && (weapon_type < 3) &&
 			(hero->typus != HERO_TYPE_MAGE) &&
 			(hero->typus != HERO_TYPE_DRUID))
 		{
-			for (l10 = 0; l10 < 5; l10++) {
-				*p2++ = -5;
-				*p2++ = 0;
-				*p2++ = 0;
+			for (i = 0; i < 5; i++) {
+				*sheet_ptr2++ = -5;
+				*sheet_ptr2++ = 0;
+				*sheet_ptr2++ = 0;
 			}
 
-			p2 += copy_ani_seq(p2,
+			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
 				*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
 				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 		}
@@ -285,13 +281,11 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 
 	if ((check_hero(hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
 
-			p1 += copy_ani_seq(p1, p3[l1], 2);
+			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
-			if ((weapon_type != -1) && (weapon_type < 3) &&
-				(hero->typus != HERO_TYPE_MAGE) &&
-				(hero->typus != HERO_TYPE_DRUID))
+			if ((weapon_type != -1) && (weapon_type < 3) &&	(hero->typus != HERO_TYPE_MAGE) && (hero->typus != HERO_TYPE_DRUID))
 			{
-				p2 += copy_ani_seq(p2,
+				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
 					*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
 					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 			}
@@ -299,28 +293,26 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
 
 	if ((g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
-		*p1++ = -4;
-		*p1++ = get_seq_header(p3[20]);
-		*p1++ = 0;
+		*sheet_ptr1++ = -4;
+		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
+		*sheet_ptr1++ = 0;
 
-		p1 += copy_ani_seq(p1, p3[20], 2);
+		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[20], 2);
 	}
 
 	if (check_hero(hero) ||	(g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
-		FIG_set_sheet(hero->fighter_id, (signed char)a1);
-		*p1 = -1;
+		FIG_set_sheet(hero->fighter_id, (signed char)sheet_id);
+		*sheet_ptr1 = -1;
 
-		if ( (weapon_type != -1) && (weapon_type < 3) &&
-			(hero->typus != HERO_TYPE_MAGE) &&
-			(hero->typus != HERO_TYPE_DRUID))
+		if ( (weapon_type != -1) && (weapon_type < 3) && (hero->typus != HERO_TYPE_MAGE) && (hero->typus != HERO_TYPE_DRUID))
 		{
-			FIG_set_weapon_sheet(hero->fighter_id, a1 + 4);
-			*p2 = -1;
+			FIG_set_weapon_sheet(hero->fighter_id, sheet_id + 4);
+			*sheet_ptr2 = -1;
 		}
 	}
 
-	*p1 = -1;
+	*sheet_ptr1 = -1;
 	if (f_action == FIG_ACTION_UNKNOWN2) {
 		g_hero_is_target[(signed char)fid_attacker - 1] = 1;
 	}
@@ -330,7 +322,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, struct struct_hero *hero, signe
  * \brief   prepares the animation sequence of a hero in fights
  */
 /* Borlandified and identical */
-void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
+void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *enemy, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
 {
 	signed short l1;
 	signed short attacker_x;
@@ -342,10 +334,10 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	signed short l8;
 	signed short l9;
 	signed short i;
-	Bit8s *p1;
-	Bit8s *p2;
+	Bit8s *sheet_ptr1;
+	Bit8s *sheet_ptr2;
 	struct struct_fighter *fighter;			/* only user for two sprited figures */
-	Bit16s *p4;			/* read only */
+	Bit16s *ani_index_ptr;			/* read only */
 	signed short weapon_type;
 
 	/* initialize with bare hands */
@@ -362,7 +354,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	}
 
 	/* read a pointer from an array with the gfx_id as offset, read only */
-	p4 = g_gfx_ani_index[enemy->gfx_id];
+	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
 
 	/* find both actors on the chessboard */
 	FIG_search_obj_on_cb((signed char)fid_target, &target_x, &target_y);
@@ -401,12 +393,12 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 
 	l1 += dir;
 
-	p1 = (Bit8s*)&g_fig_anisheets[a1][1];
-	p2 = (Bit8s*)&g_fig_anisheets[a1 + 4][1];
+	sheet_ptr1 = (Bit8s*)&g_fig_anisheets[sheet_id][1];
+	sheet_ptr2 = (Bit8s*)&g_fig_anisheets[sheet_id + 4][1];
 
 
-	g_fig_anisheets[a1][0] = get_seq_header(p4[l1]);
-	g_fig_anisheets[a1][242] = enemy->gfx_id;
+	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
+	g_fig_anisheets[sheet_id][242] = enemy->gfx_id;
 
 	/* first the enemy may turn */
 	if ((enemy->viewdir != dir) &&
@@ -416,7 +408,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 			(g_defender_attacks && (a7 == 1))))
 		{
 
-		g_fig_anisheets[a1][0] = 0;
+		g_fig_anisheets[sheet_id][0] = 0;
 
 		/* find out the new direction */
 		l8 = l7 = -1;
@@ -451,46 +443,46 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 		if (l7 == -1) {
 			/* do not move for 2 frames */
 			for (i = 0; i < 2; i++) {
-				*p1++ = -5;
-				*p1++ = 0;
-				*p1++ = 0;
+				*sheet_ptr1++ = -5;
+				*sheet_ptr1++ = 0;
+				*sheet_ptr1++ = 0;
 			}
 		}
 
-		p1 += copy_ani_seq(p1, p4[l8], 1);
+		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l8], 1);
 
 		if (l7 != -1) {
-			p1 += copy_ani_seq(p1, p4[l7], 1);
+			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l7], 1);
 		}
 
-		*p1++ = -4;
-		*p1++ = get_seq_header(p4[l1]);
-		*p1++ = 0;
+		*sheet_ptr1++ = -4;
+		*sheet_ptr1++ = get_seq_header(ani_index_ptr[l1]);
+		*sheet_ptr1++ = 0;
 	} else {
 		/* do not move for 5 frames */
 		for (i = 0; i < 5; i++) {
-			*p1++ = -5;
-			*p1++ = 0;
-			*p1++ = 0;
+			*sheet_ptr1++ = -5;
+			*sheet_ptr1++ = 0;
+			*sheet_ptr1++ = 0;
 		}
 	}
 
 	if ((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
 		((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)fid_attacker]))
 	{
-		p1 += copy_ani_seq(p1, p4[l1], 1);
+		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 
 		if (weapon_type != -1) {
 
 			/* do not move for 5 frames */
 			for (i = 0; i < 5; i++) {
-				*p2++ = -5;
-				*p2++ = 0;
-				*p2++ = 0;
+				*sheet_ptr2++ = -5;
+				*sheet_ptr2++ = 0;
+				*sheet_ptr2++ = 0;
 			}
 
 			/* copy the weapon ani */
-			p2 += copy_ani_seq(p2,
+			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
 				*(Bit16s*)((Bit8u*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 		}
 	}
@@ -498,12 +490,12 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	if (((g_attacker_attacks_again != 0) && (a7 == 0)) ||
 		((g_defender_attacks != 0) && (a7 == 1))) {
 
-			p1 += copy_ani_seq(p1, p4[l1], 1);
+			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 
 			if (weapon_type != -1) {
 
 				/* copy the weapon ani */
-				p2 += copy_ani_seq(p2,
+				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
 					*(Bit16s*)((Bit8u*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 			}
 	}
@@ -511,34 +503,34 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	if ( ((g_attacker_dead != 0) && (a7 == 0)) ||
 		((g_defender_dead != 0) && (a7 == 1)))
 	{
-		*p1++ = -4;
-		*p1++ = get_seq_header(p4[20]);
-		*p1++ = 0;
+		*sheet_ptr1++ = -4;
+		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
+		*sheet_ptr1++ = 0;
 
-		p1 += copy_ani_seq(p1, p4[20], 1);
+		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[20], 1);
 	}
 
-	FIG_set_sheet(enemy->fighter_id, (signed char)a1);
+	FIG_set_sheet(enemy->fighter_id, (signed char)sheet_id);
 
 	/* terminate figure animation array */
-	*p1 = -1;
+	*sheet_ptr1 = -1;
 
 	/* does this sprite need two fields */
 	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id))	{
 
-		memcpy(&g_fig_anisheets[a1 + 2], &g_fig_anisheets[a1], 0xf3);
+		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 0xf3);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
-		FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], a1 + 2);
+		FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], sheet_id + 2);
 	}
 
 	if (weapon_type != -1) {
 
-		FIG_set_weapon_sheet(enemy->fighter_id, a1 + 4);
+		FIG_set_weapon_sheet(enemy->fighter_id, sheet_id + 4);
 
 		/* terminate weapon animation array */
-		*p2 = -1;
+		*sheet_ptr2 = -1;
 	}
 
 	if (f_action == FIG_ACTION_UNKNOWN2) {
@@ -552,27 +544,28 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
  * \param   v1          0 or 1
  * \param   hero        pointer to a hero
  * \param   v2          99 or 4
- * \param   obj1        * \param obj2	* \param v5	-1 or a var
+ * \param   obj1
+ * \param   obj2
+ * \param   v5		-1 or a var
  * \param   v6          0 or 1
  */
 
 /* Borlandified and identical */
-void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
-			Bit16u v5, Bit16u v6)
+void FANI_prepare_spell_hero(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bit16s obj2, Bit16u v5, Bit16u v6)
 {
 	signed short x_obj1, y_obj1;
 	signed short x_obj2, y_obj2;
 	signed short dir;
 	signed short l2;
 	signed short l3;
-	Bit8s *lp1;
-	Bit16s *lp2;
+	Bit8s *sheet_ptr;
+	Bit16s *ani_index_ptr;
 
 	signed short l_di;
 	signed short l_si;
 
 	/* get a pointer from an array where the Monster-ID serves as index */
-	lp2 = g_gfx_ani_index[hero->sprite_no];
+	ani_index_ptr = g_gfx_ani_index[hero->sprite_no];
 
 	FIG_search_obj_on_cb((signed char)obj2, &x_obj2, &y_obj2);
 	FIG_search_obj_on_cb((signed char)obj1, &x_obj1, &y_obj1);
@@ -597,9 +590,9 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
 
 	l_di += (v2 == 4) ? dir : hero->viewdir;
 
-	lp1 = (Bit8s*)&g_fig_anisheets[v1][1];
+	sheet_ptr = (Bit8s*)&g_fig_anisheets[v1][1];
 
-	g_fig_anisheets[v1][0] = get_seq_header(lp2[l_di]);
+	g_fig_anisheets[v1][0] = get_seq_header(ani_index_ptr[l_di]);
 
 	g_fig_anisheets[v1][242] = hero->sprite_no;
 
@@ -626,46 +619,46 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
 			}
 		}
 
-		hero->viewdir = (signed char)dir;
-		lp1 += copy_ani_seq(lp1, lp2[l3], 2);
+		hero->viewdir = dir;
+		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l3], 2);
 
 		if (l2 != -1) {
-			lp1 += copy_ani_seq(lp1, lp2[l2], 2);
+			sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l2], 2);
 		}
 
-		*lp1 = -4;
-		lp1++;
+		*sheet_ptr = -4;
+		sheet_ptr++;
 
-		*lp1 = get_seq_header(lp2[l_di]);
-		lp1++;
+		*sheet_ptr = get_seq_header(ani_index_ptr[l_di]);
+		sheet_ptr++;
 
-		*lp1 = 0x00;
-		lp1++;
+		*sheet_ptr = 0x00;
+		sheet_ptr++;
 	}
 
 	if ((v2 == 4) || check_hero(hero) ||
 		((g_attacker_dead != 0) && (v6 == 0)) ||
 		((g_defender_dead != 0) && (v6 == 1))) {
 
-		lp1 += copy_ani_seq(lp1, lp2[l_di], 2);
+		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l_di], 2);
 	}
 
 	if (((g_attacker_dead != 0) && (v6 == 0)) ||
 		((g_defender_dead != 0) && (v6 == 1))) {
 
-		*lp1 = -4;
-		lp1++;
+		*sheet_ptr = -4;
+		sheet_ptr++;
 
-		*lp1 = get_seq_header(lp2[20]);
-		lp1++;
+		*sheet_ptr = get_seq_header(ani_index_ptr[20]);
+		sheet_ptr++;
 
-		*lp1 = 0;
-		lp1++;
+		*sheet_ptr = 0;
+		sheet_ptr++;
 
-		lp1 += copy_ani_seq(lp1, lp2[20], 2);
+		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[20], 2);
 	}
 
-	*lp1 = -1;
+	*sheet_ptr = -1;
 }
 
 
@@ -682,22 +675,23 @@ void seg044_002a(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bi
  * \param   v5          0 or 1
  */
 /* Borlandified and identical */
-void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, signed short target, signed short caster,
+void FANI_prepare_spell_enemy(signed short v1, struct enemy_sheet *enemy, signed short v2, signed short target, signed short caster,
 								signed short v5)
 {
-	signed short l1;
+	signed int l1;
 	signed short x_target, y_target;
 	signed short x_caster, y_caster;
-	signed short dir;
-	signed short l2, l3;	/* indicees to lp2 */
-	Bit8s *lp1;		/* mostly written */
-	Bit16s *lp2;		/* read only */
+	signed int dir;
+	signed int l2;
+	signed int l3;		/* indicees to ani_index_ptr */
+	Bit8s *sheet_ptr;	/* mostly written */
+	Bit16s *ani_index_ptr;	/* read only */
 
 	signed short dir2;
 
 
 	/* get a pointer from an array where the gfx_id of the enemy serves as index */
-	lp2 = g_gfx_ani_index[enemy->gfx_id];
+	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
 
 	FIG_search_obj_on_cb((signed char)caster, &x_caster, &y_caster);
 	FIG_search_obj_on_cb((signed char)target, &x_target, &y_target);
@@ -720,12 +714,12 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 	/* this is true if a monster attacks a hero */
 	l1 = (v2 == 4) ? 29 : 16;
 
-	lp1 = (Bit8s*)&g_fig_anisheets[v1][1];
+	sheet_ptr = (Bit8s*)&g_fig_anisheets[v1][1];
 
 	/* this is true if a monster attacks a hero */
 	l1 += (v2 == 4) ? dir : enemy->viewdir;
 
-	g_fig_anisheets[v1][0] = get_seq_header(lp2[l1]);
+	g_fig_anisheets[v1][0] = get_seq_header(ani_index_ptr[l1]);
 
 	g_fig_anisheets[v1][242] = enemy->gfx_id;
 
@@ -755,38 +749,38 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 
 		enemy->viewdir = dir;
 
-		lp1 += copy_ani_seq(lp1, lp2[l3], 1);
+		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l3], 1);
 
 		if (l2 != -1)
-			lp1 += copy_ani_seq(lp1, lp2[l2], 1);
+			sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l2], 1);
 
-		*lp1 = -4;
-		lp1++;
+		*sheet_ptr = -4;
+		sheet_ptr++;
 
-		*lp1 = get_seq_header(lp2[l1]);
-		lp1++;
+		*sheet_ptr = get_seq_header(ani_index_ptr[l1]);
+		sheet_ptr++;
 
-		*lp1 = 0;
-		lp1++;
+		*sheet_ptr = 0;
+		sheet_ptr++;
 	}
 
-	lp1 += copy_ani_seq(lp1, lp2[l1], 1);
+	sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l1], 1);
 
 	if ((g_attacker_dead && !v5) || (g_defender_dead && (v5 == 1))) {
 
-		*lp1 = -4;
-		lp1++;
+		*sheet_ptr = -4;
+		sheet_ptr++;
 
-		*lp1 = get_seq_header(lp2[20]);
-		lp1++;
+		*sheet_ptr = get_seq_header(ani_index_ptr[20]);
+		sheet_ptr++;
 
-		*lp1 = 0;
-		lp1++;
+		*sheet_ptr = 0;
+		sheet_ptr++;
 
-		lp1 += copy_ani_seq(lp1, lp2[20], 1);
+		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[20], 1);
 	}
 
-	*lp1 = -1;
+	*sheet_ptr = -1;
 
 	/* check if the moster sprite ID needs two fields */
 	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {

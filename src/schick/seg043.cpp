@@ -489,16 +489,16 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				if (check_hero(hero) || (g_defender_dead != 0)) {
 
-					FIG_prepare_hero_fight_ani(0, hero, weapon_type, 100, monster->target_id, monster_pos + 10, 1);
+					FANI_prepare_fight_hero_ani(0, hero, weapon_type, 100, monster->target_id, monster_pos + 10, 1);
 				}
 
 			} else if (l17 == 0) {
-				FIG_prepare_enemy_fight_ani(0, target_enemy, 100, monster->target_id, monster_pos + 10, 1);
+				FANI_prepare_fight_enemy_ani(0, target_enemy, 100, monster->target_id, monster_pos + 10, 1);
 			} else if (g_defender_dead != 0) {
-				FIG_prepare_enemy_fight_ani(0, target_enemy, 0, monster->target_id, monster_pos + 10, 1);
+				FANI_prepare_fight_enemy_ani(0, target_enemy, 0, monster->target_id, monster_pos + 10, 1);
 			}
 
-			FIG_prepare_enemy_fight_ani(1, monster, 2, monster_pos + 10, monster->target_id, 0);
+			FANI_prepare_fight_enemy_ani(1, monster, 2, monster_pos + 10, monster->target_id, 0);
 			g_fig_continue_print = 1;
 			draw_fight_screen_pal(0);
 			clear_anisheets();
@@ -561,7 +561,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				FIG_call_draw_pic();
 
-				FIG_prepare_enemy_fight_ani(0, monster, 15, monster_pos + 10, monster->target_id, 0);
+				FANI_prepare_fight_enemy_ani(0, monster, 15, monster_pos + 10, monster->target_id, 0);
 
 				l12 = FANI_prepare_shotbolt_ani(7, l11, monster_pos + 10, monster->target_id, monster->viewdir);
 
@@ -584,10 +584,10 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 					if (target_is_hero != 0) {
 
-						FIG_prepare_hero_fight_ani(1, hero, -1, 0, monster->target_id, monster_pos + 10, 1);
+						FANI_prepare_fight_hero_ani(1, hero, -1, 0, monster->target_id, monster_pos + 10, 1);
 					} else {
 
-						FIG_prepare_enemy_fight_ani(1, target_enemy, 0, monster->target_id, monster_pos + 10, 1);
+						FANI_prepare_fight_enemy_ani(1, target_enemy, 0, monster->target_id, monster_pos + 10, 1);
 					}
 				}
 
@@ -623,7 +623,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 					if (l13 != -1) {
 
-						seg044_002f(0, monster, 4, monster_pos + 10, monster->target_id, 0);
+						FANI_prepare_spell_enemy(0, monster, 4, monster_pos + 10, monster->target_id, 0);
 					}
 
 					if (l13 > 0) {
@@ -638,12 +638,12 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								if (!target_is_hero) {
 
-									seg044_002f(1, target_enemy, 99, monster->target_id, monster_pos + 10, 1);
+									FANI_prepare_spell_enemy(1, target_enemy, 99, monster->target_id, monster_pos + 10, 1);
 								} else {
 
 									if (check_hero(hero) || (g_defender_dead != 0)) {
 
-										seg044_002a(1, hero, 99, monster->target_id, 0, -1, 1);
+										FANI_prepare_spell_hero(1, hero, 99, monster->target_id, 0, -1, 1);
 									}
 								}
 							}
@@ -894,7 +894,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 
 		clear_anisheets();
 
-		FIG_prepare_hero_fight_ani(0, hero, -1, usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4, hero_pos + 1, hero->target_id, 0);
+		FANI_prepare_fight_hero_ani(0, hero, -1, usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4, hero_pos + 1, hero->target_id, 0);
 
 		l3 = 0;
 
@@ -924,9 +924,9 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 		if (g_defender_dead != 0) {
 
 			if (flag != 0) {
-				FIG_prepare_hero_fight_ani(1, target_hero, -1, 0, hero->target_id, hero_pos + 1, 1);
+				FANI_prepare_fight_hero_ani(1, target_hero, -1, 0, hero->target_id, hero_pos + 1, 1);
 			} else {
-				FIG_prepare_enemy_fight_ani(1, target_monster, 0, hero->target_id, hero_pos + 1, 1);
+				FANI_prepare_fight_enemy_ani(1, target_monster, 0, hero->target_id, hero_pos + 1, 1);
 			}
 
 		}

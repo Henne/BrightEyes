@@ -523,23 +523,23 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			clear_anisheets();
 
-			FIG_prepare_hero_fight_ani(0, hero, weapon_type, 2, hero_pos + 1,
+			FANI_prepare_fight_hero_ani(0, hero, weapon_type, 2, hero_pos + 1,
 							l17 == 0 ? hero->target_id : hero->target_id + 20, 0);
 
 			if (target_is_hero != 0) {
 
 				if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
-					FIG_prepare_hero_fight_ani(1, target_hero, weapon_type_target,
+					FANI_prepare_fight_hero_ani(1, target_hero, weapon_type_target,
 								100, hero->target_id, hero_pos + 1, 1);
 				}
 			} else {
 
 				if (l16 == 0) {
-					FIG_prepare_enemy_fight_ani(1, target_monster, 100, hero->target_id, hero_pos + 1, 1);
+					FANI_prepare_fight_enemy_ani(1, target_monster, 100, hero->target_id, hero_pos + 1, 1);
 				} else {
 					if (g_defender_dead != 0) {
-						FIG_prepare_enemy_fight_ani(1, target_monster, 0, hero->target_id, hero_pos + 1, 1);
+						FANI_prepare_fight_enemy_ani(1, target_monster, 0, hero->target_id, hero_pos + 1, 1);
 					}
 				}
 			}
@@ -625,7 +625,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					FIG_call_draw_pic();
 
-					FIG_prepare_hero_fight_ani(0, hero, weapon_type,
+					FANI_prepare_fight_hero_ani(0, hero, weapon_type,
 							15, hero_pos + 1,
 							l17 == 0 ? hero->target_id : hero->target_id + 20, 0);
 
@@ -659,9 +659,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (g_defender_dead != 0) {
 
 						if (target_is_hero != 0) {
-							FIG_prepare_hero_fight_ani(1, target_hero, -1, 0, hero->target_id, hero_pos + 1, 1);
+							FANI_prepare_fight_hero_ani(1, target_hero, -1, 0, hero->target_id, hero_pos + 1, 1);
 						} else {
-							FIG_prepare_enemy_fight_ani(1, target_monster, 0, hero->target_id, hero_pos + 1, 1);
+							FANI_prepare_fight_enemy_ani(1, target_monster, 0, hero->target_id, hero_pos + 1, 1);
 						}
 					}
 
@@ -730,7 +730,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					if (l15 != -1) {
 
-						seg044_002a(0, hero, 4, hero_pos + 1,
+						FANI_prepare_spell_hero(0, hero, 4, hero_pos + 1,
 								l17 == 0 ? hero->target_id : hero->target_id + 20, l12, 0);
 					}
 
@@ -748,14 +748,14 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								if (target_is_hero == 0) {
 
-									seg044_002f(1, target_monster, 99,
+									FANI_prepare_spell_enemy(1, target_monster, 99,
 											l17 == 0 ? hero->target_id : hero->target_id + 20,
 											hero_pos + 1, 1);
 								} else {
 
 									if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
-										seg044_002a(1, target_hero, 99, hero->target_id, 0 , -1, 1);
+										FANI_prepare_spell_hero(1, target_hero, 99, hero->target_id, 0 , -1, 1);
 									}
 								}
 							}
