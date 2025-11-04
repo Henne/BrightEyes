@@ -29,132 +29,126 @@ static struct viewdir_offsets g_viewdir_offsets6 = { { { 1, 0 }, { 0, -1 }, { -1
  * \brief   copies something from ANI.DAT
  *
  * \param   dst         destination
- * \param   no          which record to copy
- * \param   mode        3 for WEAPANI.DAT, anything else is ANI.DAT
+ * \param[in]   ani_num animation seqence to copy
+ * \param[in]   mode    3 for WEAPANI.DAT, anything else is ANI.DAT
  * \return              the number of copied bytes.
  */
-#if defined(__BORLANDC__)
-static
-#endif
-signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
+static signed int copy_ani_sequence(Bit8s *dst, const signed int ani_num, const signed int mode)
 {
-	Bit8u *buffer;
-	Bit8s *src;
-	signed char retval;
-	signed short i;
-	signed short max_no;
+	Bit8u *p_datbuffer;
+	Bit8s *p_datitem;
+	signed char len;
+	signed int i;
+	signed int ani_max_num;
 
 	/* ANI.DAT */
-	buffer = g_buffer_anidat;
+	p_datbuffer = g_buffer_anidat;
 
 	/* WEAPANI.DAT */
 	if (mode == 3)
-		buffer = g_buffer_weapanidat;
+		p_datbuffer = g_buffer_weapanidat;
 
-	max_no = *(Bit16s*)buffer;
+	ani_max_num = *(Bit16s*)p_datbuffer;
 
 	/* Sanity check of no */
-	if (no < 0)
+	if (ani_num < 0)
 		return 0;
 
-	if (no > max_no)
+	if (ani_num > ani_max_num)
 		return 0;
 
-	/* set src to the requested data entry */
-	src = (Bit8s*)buffer;
-	src += max_no + 2;
+	/* set p_datitem to the requested data entry */
+	p_datitem = (Bit8s*)p_datbuffer;
+	p_datitem += ani_max_num + 2;
 
-	retval = (Bit8s)buffer[2];
+	len = (Bit8s)p_datbuffer[2];
 
-	for (i = 1; i <= no; i++) {
-		src += retval;
-		retval = *(Bit8s*)(buffer + i + 2);
+	for (i = 1; i <= ani_num; i++) {
+		p_datitem += len;
+		len = *(Bit8s*)(p_datbuffer + i + 2);
 	}
 
-	src++;
+	p_datitem++;
 
-	retval = retval - 2;
+	len = len - 2;
 
-	/* copy some bytes from ANI.DAT */
-
-	for (i = 0; retval > i; i++) {
-		*dst = *src;
-		src++;
+	/* copy the ani sequence to dst */
+	for (i = 0; len > i; i++) {
+		*dst = *p_datitem;
+		p_datitem++;
 		dst++;
 	}
 
-	/* return the number of copied bytes */
-
-	return retval;
+	return len;
 }
 
-void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
+void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 {
-	signed char b1;
-	signed char b2;
-	signed char b3;
-	Bit8s *p1;
+	signed char dir1;
+	signed char dir2;
+	signed char dir3;
+	Bit8s *sheet_ptr;
 	struct struct_fighter *fighter;
-	Bit16s *p3;
+	Bit16s *ani_index_ptr;
 
-	signed short i;
+	signed int i;
 
 	g_fig_anisheets[1][0] = 0;
 	g_fig_anisheets[1][242] = enemy->gfx_id;
-	p1 = (Bit8s*)&g_fig_anisheets[1][1];
 
+	sheet_ptr = (Bit8s*)&g_fig_anisheets[1][1];
 	i = 0;
-	p3 = g_gfx_ani_index[enemy->gfx_id];
+	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
 
 	while (g_fig_move_pathdir[i] != -1) {
 
 		if (enemy->viewdir != g_fig_move_pathdir[i]) {
 
-			b2 = b1 = -1;
-			b3 = enemy->viewdir;
-			b2 = b3;
+			dir2 = dir1 = -1;
+			dir3 = enemy->viewdir;
+			dir2 = dir3;
+			dir3++;
 
-			b3++;
-
-			if (b3 == 4) {
-				b3 = 0;
+			if (dir3 == 4) {
+				dir3 = 0;
 			}
 
-			if (g_fig_move_pathdir[i] != b3) {
+			if (g_fig_move_pathdir[i] != dir3) {
 
-				b1 = b3;
-				b3++;
+				dir1 = dir3;
+				dir3++;
 
-				if (b3 == 4) {
-					b3 = 0;
+				if (dir3 == 4) {
+					dir3 = 0;
 				}
 
-				if (g_fig_move_pathdir[i] != b3) {
-					b2 = enemy->viewdir + 4;
-					b1 = -1;
+				if (g_fig_move_pathdir[i] != dir3) {
+
+					dir2 = enemy->viewdir + 4;
+					dir1 = -1;
 				}
 
 			}
 
 			enemy->viewdir = g_fig_move_pathdir[i];
 
-			p1 += copy_ani_stuff((Bit8u*)p1, p3[b2], 1);
+			sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[dir2], 1);
 
-			if (b1 != -1) {
+			if (dir1 != -1) {
 
-				p1 += copy_ani_stuff((Bit8u*)p1, p3[b1], 1);
+				sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[dir1], 1);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			p1 += copy_ani_stuff((Bit8u*)p1, p3[g_fig_move_pathdir[i] + 0x0c], 1);
+			sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[g_fig_move_pathdir[i] + 0x0c], 1);
 			i += 2;
 			/* BP - 2 */
 			enemy->bp = enemy->bp - 2;
 
 		} else {
-			p1 += copy_ani_stuff((Bit8u*)p1, p3[g_fig_move_pathdir[i] + 0x08], 1);
+			sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[g_fig_move_pathdir[i] + 0x08], 1);
 			i++;
 			/* BP - 1 */
 			enemy->bp--;
@@ -162,14 +156,10 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 	}
 
 	/* terminate array */
-	*p1 = -1;
-
+	*sheet_ptr = -1;
 	FIG_call_draw_pic();
-
 	FIG_remove_from_list(g_fig_cb_marker_id, 0);
-
 	g_fig_cb_marker_id = -1;
-
 	FIG_set_sheet(enemy->fighter_id, 1);
 
 	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
@@ -183,10 +173,8 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 
 	/* draw_fight_screen */
 	draw_fight_screen(0);
-
 	memset(&g_fig_anisheets[1], -1, 0xf3);
 	memset(&g_fig_anisheets[3], -1, 0xf3);
-
 	FIG_init_list_elem(enemy_no + 10);
 }
 
@@ -201,18 +189,17 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
  * \param   mode        0 = common, 1 = attack enemies only, 2 = attack heroes only
  * \return              0 if theres nothing to attack else 1
  */
-unsigned short test_foe_melee_attack(signed short x, signed short y,
-		signed short dx, signed short dy, signed short mode)
+signed int FIG_enemy_can_attack_neighbour(const signed int x, const signed int y, const signed int dx, const signed int dy, const signed int mode)
 {
-	signed char cb_val = get_cb_val(x + dx, y + dy);
+	const signed char target = get_cb_val(x + dx, y + dy);
 
 	if (mode == 0) {
 
-		if ( ((cb_val > 0) && (cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious) ||
+		if ( ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
 			(
-			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead &&
-			//g_enemy_sheets[cb_val - 10].flags.renegade
-				((struct enemy_flags*)(cb_val * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
+			(target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
+			//g_enemy_sheets[target - 10].flags.renegade
+				((struct enemy_flags*)(target * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
 			))
 		{
 			return 1;
@@ -223,7 +210,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	} else if (mode == 1) {
 
 		/* is a living enemy */
-		if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)
+		if ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead)
 		{
 			return 1;
 		} else {
@@ -233,7 +220,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	} else if (mode == 2) {
 
 		/* is a living, conscious hero */
-		if ((cb_val > 0) && (cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious)
+		if ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious)
 		{
 			return 1;
 		} else {
@@ -255,48 +242,48 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
  *                      or the ID of the attackee.
  */
 /*
- * Original-Bug: range attack of foes is possible with direct contact
+ * Original-Bug: range attack of enemies is possible with direct contact
  */
-signed short test_foe_range_attack(signed short x, signed short y, const signed short dir, signed short mode)
+signed short FIG_search_range_target(const signed int x, const signed int y, const signed int dir, const signed int mode)
 {
-	signed short done;
-	signed short di;	/* run variables in dir */
-	signed char cb_val;
-	signed short dy;	/* run variables in dir */
-	signed short can_attack;
+	signed int done;
+	signed int x_diff;	/* run variables in dir */
+	signed char target;
+	signed int y_diff;	/* run variables in dir */
+	signed int can_attack;
 
 	done = 0;
-	di = 0;
-	dy = 0;
+	x_diff = 0;
+	y_diff = 0;
 	can_attack = 0;
 
 	while (!done) {
 
 		/* go one field further */
 		if (dir == 0) {		/* RIGHT-BOTTOM */
-			di++;
+			x_diff++;
 		} else if (dir == 1) {	/* LEFT-BOTTOM */
-			dy--;
+			y_diff--;
 		} else if (dir == 2) {	/* LEFT-UP */
-			di--;
+			x_diff--;
 		} else {		/* RIGHT-UP */
-			dy++;
+			y_diff++;
 		}
 
 		/* out of chessboard */
-		if (y + dy < 0 || y + dy > 23 || x + di < 0 || x + di > 23) {
+		if (y + y_diff < 0 || y + y_diff > 23 || x + x_diff < 0 || x + x_diff > 23) {
 			done = 1;
 		} else {
 
 			/* get value from current field */
-			cb_val = get_cb_val(x + di, y + dy);
+			target = get_cb_val(x + x_diff, y + y_diff);
 
 			if (mode == 0) {
 				/* hero or enemy reacheable from enemies position */
-				if ( ((cb_val > 0) && (cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious) ||
-					((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead &&
-					// g_enemy_sheets[cb_val - 10].flags.renegade
-					((struct enemy_flags*)(cb_val * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
+				if ( ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
+					((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
+					// g_enemy_sheets[target - 10].flags.renegade
+					((struct enemy_flags*)(target * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
 					))
 				{
 					can_attack = 1;
@@ -305,11 +292,11 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 				} else
 
 				/* if field is not empty */
-				if (cb_val != 0) {
+				if (target != 0) {
 
 					/* an enemy or another object */
-					if ( ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead) ||
-						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)))
+					if ( ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead) ||
+						((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)))
 					{
 							done = 1;
 					}
@@ -317,25 +304,25 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 			} else if (mode == 1) {
 				/* attack foe first */
-				if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)
+				if ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead)
 				{
 					can_attack = 1;
 					done = 1;
 				} else
 				/* skip zeros */
-				if (cb_val != 0) {
+				if (target != 0) {
 
 #ifdef M302de_ORIGINAL_BUGFIX
 					/* Original-Bugfix: the next if assumes
-						that a negative cb_val is a hero -> SEGFAULT*/
-					if (cb_val < 0) {
+						that a negative target is a hero -> SEGFAULT*/
+					if (target < 0) {
 						done = 1;
 					} else
 #endif
 
 					/* handle heroes or walls */
-					if (((cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious) ||
-						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)))
+					if (((target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
+						((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)))
 					{
 						done = 1;
 					}
@@ -343,24 +330,24 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 			} else if (mode == 2) {
 				/* attack hero */
-				if ((cb_val > 0) && (cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious)
+				if ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious)
 				{
 					can_attack = 1;
 					done = 1;
 				} else
 
 				/* skip zeros */
-				if (cb_val != 0) {
+				if (target != 0) {
 
 #ifdef M302de_ORIGINAL_BUGFIX
-					if (cb_val < 0) {
+					if (target < 0) {
 						done = 1;
 					} else
 #endif
 
-					if ( ((cb_val < 10) && !get_hero(cb_val - 1)->flags.dead && !get_hero(cb_val - 1)->flags.unconscious) ||
-						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)) ||
-						((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead))
+					if ( ((target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
+						((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)) ||
+						((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead))
 					{
 						done = 1;
 					}
@@ -373,16 +360,16 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 	if (can_attack == 0)
 		return 0;
 	else
-		return cb_val;
+		return target;
 }
 
 
-signed short get_foe_attack_mode(signed short mspell_id, signed short a2)
+signed int FIG_get_mspell(const signed int mspell_id, const signed int mode)
 {
-	signed short retval = 0;
+	signed int retval = 0;
 	struct mon_spell_description *desc = &g_mon_spell_descriptions[mspell_id];
 
-	if (a2 == 0) {
+	if (mode == 0) {
 
 		if ((desc->mode == 3) || (desc->mode == 2)) {
 			retval = 2;
@@ -405,24 +392,24 @@ signed short get_foe_attack_mode(signed short mspell_id, signed short a2)
 	return retval;
 }
 
-signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signed short attack_foe, signed short x, signed short y)
+signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_no, const signed int attack_foe, signed short x, signed short y)
 {
-	signed short available_spells;
-	signed short l2;
-	signed short done;
-	signed short retval;
-	signed short mode;
-	signed short l6;
-	signed short l7;
+	signed int available_spells;
+	signed int mspell_id;
+	signed int done;
+	signed int retval;
+	signed int mode;
+	signed int target_found;
+	signed int decided;
 	struct viewdir_offsets diff = g_viewdir_offsets5;
 
-	signed short l_si;
-	signed short l_di;
+	signed int i;
+	signed int cnt;
 
 	retval = 0;
 
-	available_spells = l_si = 0;
-	while ((l_si < 5) && (g_mon_spell_repertoire[enemy->mag_id][l_si++] != -1))
+	available_spells = i = 0;
+	while ((i < 5) && (g_mon_spell_repertoire[enemy->mag_id][i++] != -1))
 	{
 		available_spells++;
 	}
@@ -430,58 +417,58 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 	done = 0;
 	while ((done == 0) && (enemy->bp > 0)) {
 
-		l7 = 0;
+		decided = 0;
 
-		for (l_si = 0; l_si < available_spells; l_si++) {
+		for (i = 0; i < available_spells; i++) {
 
-			l2 = g_mon_spell_repertoire[enemy->mag_id][l_si];
+			mspell_id = g_mon_spell_repertoire[enemy->mag_id][i];
 
-			if (g_mon_spell_descriptions[l2].unkn1 == 1) {
+			if (g_mon_spell_descriptions[mspell_id].unkn1 == 1) {
 
 				if (random_schick(100) < 75) {
-					l7 = 1;
+					decided = 1;
 					break;
 				}
 			}
 		}
 
-		if (l7 == 0) {
-			l2 = g_mon_spell_repertoire[enemy->mag_id][random_interval(0, available_spells - 1)];
+		if (decided == 0) {
+			mspell_id = g_mon_spell_repertoire[enemy->mag_id][random_interval(0, available_spells - 1)];
 		}
 
 		enemy->target_id = 0;
 
-		if ( (mode = get_foe_attack_mode(l2, attack_foe)) > 0) {
+		if ( (mode = FIG_get_mspell(mspell_id, attack_foe)) > 0) {
 
 			if (mode == 3) {
 				enemy->target_id = enemy_no + 10;
-				enemy->cur_spell = (signed char)l2;
+				enemy->cur_spell = mspell_id;
 				retval = 1;
 				done = 1;
 			} else {
 
-				if (!g_mon_spell_descriptions[l2].unkn1) {
+				if (!g_mon_spell_descriptions[mspell_id].unkn1) {
 
 					while (enemy->bp && (done == 0)) {
 
-						l_si = enemy->viewdir;
-						l_di = 0;
+						i = enemy->viewdir;
+						cnt = 0;
 
-						while (!enemy->target_id && (l_di < 4)) {
+						while (!enemy->target_id && (cnt < 4)) {
 
-							if (test_foe_melee_attack(x, y, diff.a[l_si].x, diff.a[l_si].y, mode)) {
-								enemy->target_id = get_cb_val(x + diff.a[l_si].x, y + diff.a[l_si].y);
+							if (FIG_enemy_can_attack_neighbour(x, y, diff.a[i].x, diff.a[i].y, mode)) {
+								enemy->target_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
 							}
 
-							l_di++;
-							if (++l_si == 4) {
-								l_si = 0;
+							cnt++;
+							if (++i == 4) {
+								i = 0;
 							}
 						}
 
 						if (enemy->target_id) {
 
-							enemy->cur_spell = (signed char)l2;
+							enemy->cur_spell = mspell_id;
 							retval = 1;
 							done = 1;
 
@@ -490,12 +477,12 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 							if (!enemy->flags.tied) {
 
 								if (mode == 1)
-									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 2);
+									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 2);
 								else
-									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 0);
+									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 0);
 
-								if (l6 != -1) {
-									seg037_00ae(enemy, enemy_no);
+								if (target_found != -1) {
+									prepare_enemy_ani(enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 									if (enemy->bp < 3) {
@@ -513,22 +500,22 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 
 					while ((done == 0) && (enemy->bp > 0)) {
 
-						l_si = enemy->viewdir;
-						l_di = 0;
+						i = enemy->viewdir;
+						cnt = 0;
 
-						while (!enemy->target_id && (l_di < 4)) {
+						while (!enemy->target_id && (cnt < 4)) {
 
-							enemy->target_id = test_foe_range_attack(x, y, l_si, mode);
+							enemy->target_id = FIG_search_range_target(x, y, i, mode);
 
-							l_di++;
-							if (++l_si == 4) {
-								l_si = 0;
+							cnt++;
+							if (++i == 4) {
+								i = 0;
 							}
 						}
 
 						if (enemy->target_id) {
 
-							enemy->cur_spell =(signed char)l2;
+							enemy->cur_spell =mspell_id;
 							retval = 1;
 							done = 1;
 
@@ -537,12 +524,12 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 							if (!enemy->flags.tied) {
 
 								if (mode == 1)
-									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
+									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
 								else
-									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
+									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
 
-								if (l6 != -1) {
-									seg037_00ae(enemy, enemy_no);
+								if (target_found != -1) {
+									prepare_enemy_ani(enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 									if (enemy->bp < 5) {
@@ -572,15 +559,14 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 }
 
 
-/* REMARK: range weapon attack */
-signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signed short attack_foe, signed short x, signed short y)
+signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int enemy_no, const signed int attack_foe, signed short x, signed short y)
 {
 
-	signed short cnt;
-	signed short done;
-	signed short retval;
-	signed short l4;
-	signed short dir;
+	signed int cnt;
+	signed int done;
+	signed int retval;
+	signed int target_found;
+	signed int dir;
 
 	retval = 0;
 
@@ -599,7 +585,7 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 			/* check clockwise for someone to attack */
 			while (!enemy->target_id && (cnt < 4)) {
 
-				enemy->target_id = test_foe_range_attack(x, y, dir, attack_foe);
+				enemy->target_id = FIG_search_range_target(x, y, dir, attack_foe);
 				cnt++;
 				if (++dir == 4) {
 					dir = 0;
@@ -617,12 +603,12 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 					if (!enemy->flags.tied) {
 
 						if (attack_foe == 0)
-							l4 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
+							target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
 						else
-							l4 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
+							target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
 
-						if (l4 != -1) {
-							seg037_00ae(enemy, enemy_no);
+						if (target_found != -1) {
+							prepare_enemy_ani(enemy, enemy_no);
 							FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 							if (enemy->bp < 3) {
@@ -642,17 +628,17 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 }
 
 
-void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x, signed short y)
+void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x, signed short y)
 {
-	signed short target_reachable;
-	signed short attack_foe;
-	signed short dir;
-	signed short l3;
-	signed short done = 0;
-	signed short l5;
+	signed int target_reachable;
+	signed int attack_foe;
+	signed int i;
+	signed int cnt;
+	signed int done = 0;
+	signed int flag;
 	signed short x_bak;
 	signed short y_bak;
-	signed short l_di;
+	signed int target;
 
 	struct viewdir_offsets diff = g_viewdir_offsets6;
 
@@ -733,7 +719,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 			}
 
 			/* enemy can cast spells and has AE >= 5 left */
-			if ((enemy->mag_id != -1) && (enemy->ae >= 5) && seg037_0791(enemy, enemy_no, attack_foe, x, y))
+			if ((enemy->mag_id != -1) && (enemy->ae >= 5) && FIG_select_mspell(enemy, enemy_no, attack_foe, x, y))
 			{
 				/* REMARK: enemy can still cast a spell with less than 5 BP. */
 				enemy->action_id = FIG_ACTION_SPELL;
@@ -748,7 +734,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 			}
 
 			/* enemy has range weapons */
-			if ( ((enemy->shots > 0) || (enemy->throws > 0)) && seg037_0b3e(enemy, enemy_no, attack_foe, x, y))
+			if ( ((enemy->shots > 0) || (enemy->throws > 0)) && FIG_enemy_range_attack(enemy, enemy_no, attack_foe, x, y))
 			{
 				/* REMARK: enemy can still attack with less than 3 BP. */
 				enemy->action_id = FIG_ACTION_RANGE_ATTACK;
@@ -763,38 +749,38 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 			}
 
 			enemy->target_id = 0;
-			dir = enemy->viewdir;
-			l3 = 0;
-			while (!enemy->target_id && (l3 < 4)) {
+			i = enemy->viewdir;
+			cnt = 0;
+			while (!enemy->target_id && (cnt < 4)) {
 
-				if (test_foe_melee_attack(x, y, diff.a[dir].x, diff.a[dir].y, attack_foe)) {
+				if (FIG_enemy_can_attack_neighbour(x, y, diff.a[i].x, diff.a[i].y, attack_foe)) {
 
-					l5 = 1;
+					flag = 1;
 
 					if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id))
 					{
 
-						l_di = get_cb_val(x - diff.a[dir].x, y - diff.a[dir].y);
+						target = get_cb_val(x - diff.a[i].x, y - diff.a[i].y);
 
-						if (l_di && (enemy_no + 30 != l_di)) {
+						if (target && (enemy_no + 30 != target)) {
 
-							if ((l_di < 0) || (l_di >= 50) || (l_di >= 30) ||
-								((l_di > 0) && (l_di < 10) && !get_hero(l_di - 1)->flags.dead) ||
-								((l_di < 30) && (l_di >= 10) && !g_enemy_sheets[l_di - 10].flags.dead))
+							if ((target < 0) || (target >= 50) || (target >= 30) ||
+								((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead) ||
+								((target < 30) && (target >= 10) && !g_enemy_sheets[target - 10].flags.dead))
 							{
-								l5 = 0;
+								flag = 0;
 							}
 						}
 					}
 
-					if (l5 != 0) {
-						enemy->target_id = get_cb_val(x + diff.a[dir].x, y + diff.a[dir].y);
+					if (flag != 0) {
+						enemy->target_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
 					}
 				}
 
-				l3++;
-				if (++dir == 4) {
-					dir = 0;
+				cnt++;
+				if (++i == 4) {
+					i = 0;
 				}
 			}
 		}
@@ -823,7 +809,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 					x_bak = x;
 					y_bak = y;
-					seg037_00ae(enemy, enemy_no);
+					prepare_enemy_ani(enemy, enemy_no);
 					FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 					if ((x_bak == x) && (y_bak == y)) {

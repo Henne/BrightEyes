@@ -34,7 +34,7 @@ signed int AFIG_select_autospell(struct struct_hero*, const signed int, const si
 signed int AFIG_count_heroes(const signed int);
 
 /* 0x48 */
-void AFIG_hero(struct struct_hero*, const signed int, signed short, signed short);
+void AFIG_hero_turn(struct struct_hero*, const signed int, signed short, signed short);
 
 #if !defined(__BORLANDC__)
 }

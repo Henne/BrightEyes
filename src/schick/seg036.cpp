@@ -57,15 +57,13 @@ static signed int AFIG_copy_ani_sequence(Bit8s *dst, const signed int ani_num, c
 	Bit8u *p_datbuffer;
 	Bit8u *p_datitem;
 	signed char len;
-
 	signed int i;
 	signed int ani_max_num;
-
 
 	/* set the right buffer */
 	p_datbuffer = g_buffer_anidat;
 
-	/* This function is never calld with mode == 3 */
+	/* This function is never called with mode == 3 */
 	if (mode == 3)
 		p_datbuffer = g_buffer_weapanidat;
 
@@ -95,7 +93,7 @@ static signed int AFIG_copy_ani_sequence(Bit8s *dst, const signed int ani_num, c
 
 	len = len - 2;
 
-	/* copy the ani sequenecs to dst */
+	/* copy the ani sequence to dst */
 	for (i = 0; len > i; i++) {
 		*dst = *p_datitem;
 		p_datitem++;
@@ -180,6 +178,7 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	FIG_remove_from_list(g_fig_cb_marker_id, 0);
 	g_fig_cb_marker_id = -1;
 	FIG_set_sheet(hero->fighter_id, 0);
+
 	draw_fight_screen(0);
 	memset(&g_fig_anisheets[0], -1, 0xf3);
 	FIG_init_list_elem(hero_pos + 1);
@@ -745,7 +744,7 @@ signed int AFIG_count_heroes(const signed int hero_pos)
  * \param   x           x-coordinate of the hero
  * \param   y           y-coordinate of the hero
  */
-void AFIG_hero(struct struct_hero *hero, const signed int hero_pos, signed short x, signed short y)
+void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed short x, signed short y)
 {
 	signed int i;
 	signed int cnt;
@@ -905,6 +904,7 @@ void AFIG_hero(struct struct_hero *hero, const signed int hero_pos, signed short
 
 		} else {
 
+			/* REMARK: hero->bp should be >= 5 */
 			if ((hero->typus >= HERO_TYPE_WITCH) &&		/* magic user */
 				(hero->ae > 10) &&	/* AE > 10 */
 				(try_autospell != 0) &&

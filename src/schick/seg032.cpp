@@ -678,7 +678,7 @@ void FIG_do_round(void)
 
 					enemy->action_id = 1;
 
-					enemy_turn(enemy, actor_id, x_coord, y_coord);
+					FIG_enemy_turn(enemy, actor_id, x_coord, y_coord);
 
 					if ((enemy->action_id == FIG_ACTION_MELEE_ATTACK) || (enemy->action_id == FIG_ACTION_SPELL) ||
 						(enemy->action_id == FIG_ACTION_USE_ITEM) || (enemy->action_id == FIG_ACTION_RANGE_ATTACK))

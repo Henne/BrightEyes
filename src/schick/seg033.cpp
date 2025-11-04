@@ -106,7 +106,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
 				(hero->bp_left >= 3))
 			{
-				AFIG_hero(hero, hero_pos, x, y);
+				AFIG_hero_turn(hero, hero_pos, x, y);
 			}
 			done = 1;
 		} else {
