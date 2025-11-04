@@ -67,19 +67,19 @@ void interrupt mouse_isr(void);
 #endif
 //static
 void mouse_action(unsigned short*, unsigned short*, unsigned short*, unsigned short*, unsigned short*);
-signed short is_mouse_in_rect(signed short, signed short, signed short, signed short);
+signed int is_mouse_in_rect(const signed int, const signed int, const signed int, const signed int);
 void mouse_init(void);
 void disable_mouse(void);
-void seg002_170e(void);
 #if defined(__BORLANDC__)
+void mouse_get_button_press_info(unsigned short*, unsigned short*, unsigned short*, unsigned short*);
 void call_mouse_isr(void);
 void mouse_irq_init(signed short, void interrupt *);
 #endif
 void mouse_reset_ehandler(void);
-void mouse_move_cursor(signed short, signed short);
+void mouse_move_cursor(const signed int, const signed int);
 #if defined(__BORLANDC__)
-void seg002_1838(signed short, signed short, signed short, signed short);
-void seg002_1880(signed short);
+void mouse_setGMask(const unsigned int, const unsigned int, signed short, signed short);
+void mouse_setCRTpage(const unsigned int);
 #endif
 void make_ggst_cursor(Bit8u *icon);
 void call_mouse_bg(void);
@@ -101,7 +101,7 @@ void sub_heal_staffspell_timers(const Bit32s);
 void sub_light_timers(const Bit32s);
 void herokeeping(void);
 
-void seg002_37c4(void);
+void update_travelmap(void);
 void set_and_spin_lock(void);
 void timewarp(const Bit32s);
 void timewarp_until_time_of_day(const Bit32s);

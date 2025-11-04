@@ -1034,7 +1034,7 @@ static void set_delay_timer(void)
 
 static void fight_delay(void)
 {
-	seg001_02c4();
+	CD_enable_repeat();
 
 	while (g_delay_timer > 0) {
 		g_delay_timer--;

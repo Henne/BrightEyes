@@ -229,7 +229,7 @@ void interrupt timer_isr(void)
 	}
 
 	update_status_bars();
-	seg002_37c4();
+	update_travelmap();
 	update_wallclock();
 	dec_splash();
 

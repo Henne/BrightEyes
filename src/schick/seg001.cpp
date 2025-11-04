@@ -86,7 +86,7 @@ namespace M302de {
 /**
  * \brief   check if cdrom-drives are installed
  *
- * \return              0 - no drive, 1 - at least one drive
+ * \return  {0 = no drive, 1 = at least one drive}
  */
 /* Borlandified and identical */
 static unsigned short CD_has_drives(void)
@@ -186,7 +186,7 @@ leave_tod:
 }
 
 /* Borlandified and nearly identical */
-static void seg001_00c1(signed short track_no)
+static void CD_audio_track_start(signed short track_no)
 {
 	Bit32s track_start;
 	Bit32s track_end;
@@ -231,7 +231,7 @@ static void seg001_00c1(signed short track_no)
 #endif
 
 /* Borlandified and identical */
-void seg001_02c4(void)
+void CD_enable_repeat(void)
 {
 #if defined(__BORLANDC__)
 	if (!g_cd_init_successful) return;
@@ -243,7 +243,7 @@ void seg001_02c4(void)
 	{
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
-		seg001_00c1(g_cd_audio_track);
+		CD_audio_track_start(g_cd_audio_track);
 		g_cd_audio_repeat = 1;
 	}
 #endif
@@ -253,7 +253,7 @@ void seg001_02c4(void)
 int CD_bioskey(const int cmd)
 {
 #if defined(__BORLANDC__)
-	seg001_02c4();
+	CD_enable_repeat();
 	return bioskey(cmd);
 #else
 	return 0;
@@ -333,7 +333,7 @@ void CD_audio_play(void)
 }
 
 #if defined(__BORLANDC__)
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 static void CD_0432(void)
 {
 	signed short track_no;
@@ -385,7 +385,7 @@ void CD_set_track(const int index)
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
 
-		seg001_00c1(g_cd_audio_track);
+		CD_audio_track_start(g_cd_audio_track);
 
 		g_cd_audio_repeat = 1;
 

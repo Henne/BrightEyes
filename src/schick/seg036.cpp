@@ -847,7 +847,7 @@ void KI_hero(struct struct_hero *hero, const signed int hero_pos, signed short x
 
 	while ((done == 0) && (hero->bp_left > 0)) {
 
-		seg001_02c4();
+		CD_enable_repeat();
 
 		if ((hero->action_id == FIG_ACTION_FLEE) && (hero->bp_left > 0)) {
 

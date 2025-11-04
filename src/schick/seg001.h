@@ -2,7 +2,7 @@
 namespace M302de {
 #endif
 
-void seg001_02c4(void);
+void CD_enable_repeat(void);
 int CD_bioskey(const int);
 void CD_audio_stop(void);
 void CD_audio_pause(void);

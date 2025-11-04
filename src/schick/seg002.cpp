@@ -1474,14 +1474,10 @@ void interrupt mouse_isr(void)
  * \param   y2          bottom right y coordinate
  * \return              1 if the pointer is in this rectangle, otherwise 0
  */
-signed short is_mouse_in_rect(signed short x1, signed short y1,
-				signed short x2, signed short y2)
+signed int is_mouse_in_rect(const signed int x1, const signed int y1, const signed int x2, const signed int y2)
 {
-	signed short m_x;
-	signed short m_y;
-
-	m_x = g_mouse_posx;
-	m_y = g_mouse_posy;
+	const signed int m_x = g_mouse_posx;
+	const signed int m_y = g_mouse_posy;
 
 	return ((m_x >= x1) && (m_x <= x2) && (m_y >= y1) && (m_y <= y2)) ? 1 : 0;
 }
@@ -1527,7 +1523,8 @@ void disable_mouse(void)
 	}
 }
 
-void seg002_170e(unsigned short *a1, unsigned short *a2, unsigned short *a3, unsigned short *a4)
+#if defined(__BORLANDC__)
+void mouse_get_button_press_info(unsigned short *a1, unsigned short *a2, unsigned short *a3, unsigned short *a4)
 {
 	unsigned short tmp;
 
@@ -1536,7 +1533,6 @@ void seg002_170e(unsigned short *a1, unsigned short *a2, unsigned short *a3, uns
 	mouse_action(a1, a2, a3, a4, &tmp);
 }
 
-#if defined(__BORLANDC__)
 void call_mouse_isr(void)
 {
 	mouse_isr();
@@ -1594,7 +1590,7 @@ void mouse_reset_ehandler(void)
  * \param   x           X - coordinate
  * \param   y           Y - coordinate
  */
-void mouse_move_cursor(signed short x, signed short y)
+void mouse_move_cursor(const signed int x, const signed int y)
 {
 #if defined(__BORLANDC__)
 	unsigned short l1 = 4;
@@ -1609,11 +1605,11 @@ void mouse_move_cursor(signed short x, signed short y)
 
 #if defined(__BORLANDC__)
 /* unused */
-void seg002_1838(signed short a1, signed short a2, signed short a3, signed short a4)
+void mouse_setGMask(const unsigned int h_spot, const unsigned int v_spot, signed short a3, signed short a4)
 {
 	unsigned short l1 = 9;
-	unsigned short l3 = a1;
-	unsigned short l4 = a2;
+	unsigned short l3 = h_spot;
+	unsigned short l4 = v_spot;
 	unsigned short l5 = a3;
 	unsigned short l6 = a4;
 
@@ -1621,10 +1617,10 @@ void seg002_1838(signed short a1, signed short a2, signed short a3, signed short
 }
 
 /* unused */
-void seg002_1880(signed short a1)
+void mouse_setCRTpage(const unsigned int page)
 {
 	unsigned short l1 = 29;
-	unsigned short l3 = a1;
+	unsigned short l3 = page;
 	unsigned short l4;
 	unsigned short l5;
 	unsigned short l6;
@@ -3326,9 +3322,9 @@ static void check_level_up(void)
 	} while (not_done);
 }
 
-void seg002_37c4(void)
+void update_travelmap(void)
 {
-	signed short l_si = 0;
+	signed int l_si = 0;
 	Bit8u* p1;
 	Bit8u* p2;
 	Bit8u* p3;
@@ -3498,12 +3494,10 @@ void set_and_spin_lock(void)
  */
 static void passages_recalc(void)
 {
-	signed short i;
-	signed short di;
-	signed short frequency_modifier; /* passages are rarer in summer and still rarer in winter */
-	struct sea_route *route;
-
-	route = &g_sea_routes[0];
+	signed int i;
+	signed int di;
+	signed int frequency_modifier; /* passages are rarer in summer and still rarer in winter */
+	struct sea_route *route = &g_sea_routes[0];
 
 	i = get_current_season();
 
