@@ -333,7 +333,7 @@ void draw_fight_screen(Bit16u val)
 
 	Bit8u* p_figure_gfx;
 	Bit8u* p_weapon_gfx;
-	struct struct_fighter *list_ii;
+	struct struct_fighter *p_fighter;
 
 	struct struct_rect rect_bak;
 	struct struct_hero *hero;
@@ -353,26 +353,26 @@ void draw_fight_screen(Bit16u val)
 
 	call_mouse_bg();
 
-	list_ii = (struct struct_fighter*)g_fig_list_head;
+	p_fighter = (struct struct_fighter*)g_fig_list_head;
 
 	do {
 		/* Check for each list entry if a sprite is needed */
 
-		if (list_ii->reload == -1) {
+		if (p_fighter->reload == -1) {
 
-			nvf.src = (Bit8u*)load_fight_figs(list_ii->figure);
-			nvf.dst = list_ii->gfxbuf;
-			nvf.no = list_ii->nvf_no;
+			nvf.src = (Bit8u*)load_fight_figs(p_fighter->figure);
+			nvf.dst = p_fighter->gfxbuf;
+			nvf.no = p_fighter->nvf_no;
 			nvf.type = 0;
 			nvf.width = &width;
 			nvf.height = &obj_id;
 
 			process_nvf(&nvf);
 
-			list_ii->reload = 0;
+			p_fighter->reload = 0;
 		}
 
-	} while ((list_ii = list_ii->next));
+	} while ((p_fighter = p_fighter->next));
 
 	/* set elements array[0] of array[9] */
 	g_fig_gfxbuffers[0] = g_fightobj_buf_seek_ptr;
@@ -384,39 +384,39 @@ void draw_fight_screen(Bit16u val)
 		g_fig_ani_state[i] = -1;
 	}
 
-	list_ii = (struct struct_fighter*)g_fig_list_head;
+	p_fighter = (struct struct_fighter*)g_fig_list_head;
 	flag = 0;
 
 	do {
 
 #if !defined(__BORLANDC__)
 		D1_LOG(" loop Figure = %3d Sheet_ID : %d 0xf : %d 0x12: %d object: %d\n",
-				list_ii->figure, list_ii->sheet, list_ii->wsheet,
-				list_ii->visible, list_ii->obj_id);
+				p_fighter->figure, p_fighter->sheet, p_fighter->wsheet,
+				p_fighter->visible, p_fighter->obj_id);
 #endif
 
-		if (list_ii->sheet != -1) {
+		if (p_fighter->sheet != -1) {
 			/* Has a sheet id */
 
-			if (list_ii->visible) {
-				list_ii->visible = 3;
+			if (p_fighter->visible) {
+				p_fighter->visible = 3;
 			}
 
 			flag = 1;
 
-			g_fig_ani_state[list_ii->sheet] = 0;
+			g_fig_ani_state[p_fighter->sheet] = 0;
 
-			memcpy((Bit8u*)g_fig_gfxbuffers[list_ii->sheet],
-				list_ii->gfxbuf,
-				list_ii->width * list_ii->height);
+			memcpy((Bit8u*)g_fig_gfxbuffers[p_fighter->sheet],
+				p_fighter->gfxbuf,
+				p_fighter->width * p_fighter->height);
 		}
 
-		if (list_ii->wsheet != -1) {
-			memset((Bit8u*)g_fig_gfxbuffers[list_ii->wsheet], 0, 0x508);
+		if (p_fighter->wsheet != -1) {
+			memset((Bit8u*)g_fig_gfxbuffers[p_fighter->wsheet], 0, 0x508);
 		}
 
 
-	} while ((list_ii = list_ii->next));
+	} while ((p_fighter = p_fighter->next));
 
 	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
@@ -441,9 +441,9 @@ void draw_fight_screen(Bit16u val)
 
 		g_pic_copy.dst = g_vga_backbuffer = g_renderbuf_ptr;
 
-		for (list_ii = (struct struct_fighter*)g_fig_list_head; list_ii; list_ii = list_ii->next) {
-			if (list_ii->visible == 2)
-				list_ii->visible = 1;
+		for (p_fighter = (struct struct_fighter*)g_fig_list_head; p_fighter; p_fighter = p_fighter->next) {
+			if (p_fighter->visible == 2)
+				p_fighter->visible = 1;
 		}
 
 		for (i = 0; i < 8; i++) {
@@ -466,234 +466,234 @@ void draw_fight_screen(Bit16u val)
 		g_pic_copy.src = g_buffer8_ptr;
 		do_pic_copy(3);
 
-		list_ii = (struct struct_fighter*)g_fig_list_head;
+		p_fighter = (struct struct_fighter*)g_fig_list_head;
 
 		do {
 			p_weapon_gfx = 0;	/* NULL */
 
-			obj_x = 10 - (list_ii->width / 2) +
-				(10 * (list_ii->cbx + list_ii->cby));
+			obj_x = 10 - (p_fighter->width / 2) +
+				(10 * (p_fighter->cbx + p_fighter->cby));
 
-			obj_y = 118 - list_ii->height + (list_ii->cbx - list_ii->cby) * 5;
+			obj_y = 118 - p_fighter->height + (p_fighter->cbx - p_fighter->cby) * 5;
 
-			obj_x += list_ii->offsetx;
-			obj_y += list_ii->offsety;
+			obj_x += p_fighter->offsetx;
+			obj_y += p_fighter->offsety;
 
-			p_figure_gfx = list_ii->gfxbuf;
+			p_figure_gfx = p_fighter->gfxbuf;
 
-			if ((list_ii->sheet != -1) && (g_fig_ani_state[list_ii->sheet] != -1)) {
+			if ((p_fighter->sheet != -1) && (g_fig_ani_state[p_fighter->sheet] != -1)) {
 
-				sheet = (Bit8s*)g_fig_anisheets[list_ii->sheet];
+				sheet = (Bit8s*)g_fig_anisheets[p_fighter->sheet];
 
-				if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -1) {
+				if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -1) {
 
-					p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
-					g_fig_ani_state[list_ii->sheet] = -1;
-					list_ii->sheet = (list_ii->wsheet = (-1));
+					p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
+					g_fig_ani_state[p_fighter->sheet] = -1;
+					p_fighter->sheet = (p_fighter->wsheet = (-1));
 
 				} else {
 
-					if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -7)
+					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -7)
 					{
-						list_ii->z = (*(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3));
+						p_fighter->z = (*(sheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3));
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-						g_fig_figlist_readd[list_ii->sheet] = list_ii->id;
+						g_fig_figlist_readd[p_fighter->sheet] = p_fighter->id;
 					}
 
-					if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
+					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
 					{
-						play_voc(0xc8 + *(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
-						g_fig_ani_state[list_ii->sheet]++;
+						play_voc(0xc8 + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
+						g_fig_ani_state[p_fighter->sheet]++;
 					}
 
 
-					if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -5) {
+					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -5) {
 
-						if (list_ii->wsheet != -1) {
+						if (p_fighter->wsheet != -1) {
 
-							p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[list_ii->wsheet];
+							p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[p_fighter->wsheet];
 
-							if (*(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
+							if (*(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
 							{
-								play_voc(0xc8 + *(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+								play_voc(0xc8 + *(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
 							}
 						}
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-					} else if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -4) {
+					} else if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -4) {
 
-						*sheet = *(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]);
+						*sheet = *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]);
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-					} else if ((*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) ||
-							(*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -6)) {
+					} else if ((*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -3) ||
+							(*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -6)) {
 
 						/* get nvf no */
-						viewdir_before = list_ii->nvf_no;
+						viewdir_before = p_fighter->nvf_no;
 
-						if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) {
+						if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -3) {
 
-							list_ii->nvf_no += *(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
+							p_fighter->nvf_no += *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						} else {
 
-							list_ii->figure = g_gfxtab_figures_main[list_ii->sprite_no][*(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet])];
-							list_ii->nvf_no = *(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
+							p_fighter->figure = g_gfxtab_figures_main[p_fighter->sprite_no][*(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet])];
+							p_fighter->nvf_no = *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						}
 
-						if (list_ii->figure >= 88) {
+						if (p_fighter->figure >= 88) {
 							/* fighter uses figure from MONSTER file */
 
-							if (list_ii->nvf_no > 3) {
+							if (p_fighter->nvf_no > 3) {
 
 								/* not standing still */
-								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][4].x;
-								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][4].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_no][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_no][4].y;
 
-								if (list_ii->double_size != -1) {
-									list_ii->x1 = g_gfxtab_double_size_x1[1];
-									list_ii->x2 = g_gfxtab_double_size_x2[1];
+								if (p_fighter->double_size != -1) {
+									p_fighter->x1 = g_gfxtab_double_size_x1[1];
+									p_fighter->x2 = g_gfxtab_double_size_x2[1];
 								}
 
 							} else {
-								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][list_ii->nvf_no].x;
-								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][list_ii->nvf_no].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_no][p_fighter->nvf_no].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_no][p_fighter->nvf_no].y;
 
-								if (list_ii->double_size != -1) {
-									list_ii->x1 = g_gfxtab_double_size_x1[list_ii->nvf_no];
-									list_ii->x2 = g_gfxtab_double_size_x2[list_ii->nvf_no];
+								if (p_fighter->double_size != -1) {
+									p_fighter->x1 = g_gfxtab_double_size_x1[p_fighter->nvf_no];
+									p_fighter->x2 = g_gfxtab_double_size_x2[p_fighter->nvf_no];
 								}
 							}
 
 						} else {
-							if (list_ii->nvf_no == g_nvftab_figures_dead[list_ii->sprite_no]) {
+							if (p_fighter->nvf_no == g_nvftab_figures_dead[p_fighter->sprite_no]) {
 
-								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][4].x;
-								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][4].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_no][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_no][4].y;
 
 							} else {
-								viewdir_unconsc = list_ii->nvf_no - g_nvftab_figures_unconscious[list_ii->sprite_no];
+								viewdir_unconsc = p_fighter->nvf_no - g_nvftab_figures_unconscious[p_fighter->sprite_no];
 
 								if (viewdir_unconsc >= 0) {
 
-									list_ii->offsetx = g_gfxtab_offsets_unconscious[list_ii->sprite_no][viewdir_unconsc].x;
-									list_ii->offsety = g_gfxtab_offsets_unconscious[list_ii->sprite_no][viewdir_unconsc].y;
+									p_fighter->offsetx = g_gfxtab_offsets_unconscious[p_fighter->sprite_no][viewdir_unconsc].x;
+									p_fighter->offsety = g_gfxtab_offsets_unconscious[p_fighter->sprite_no][viewdir_unconsc].y;
 								}
 							}
 						}
 
-						obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
+						obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
 
-						obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
+						obj_y = 118 - p_fighter->height + ((p_fighter->cbx - p_fighter->cby) * 5);
 
-						obj_x += list_ii->offsetx;
-						obj_y += list_ii->offsety;
+						obj_x += p_fighter->offsetx;
+						obj_y += p_fighter->offsety;
 
-						if ((list_ii->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
-							nvf.src = (Bit8u*)load_fight_figs(list_ii->figure);
+						if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
+							nvf.src = (Bit8u*)load_fight_figs(p_fighter->figure);
 						} else {
 							nvf.src = g_spellobj_nvf_buf;
 						}
 
-						nvf.dst = list_ii->gfxbuf;
-						nvf.no = list_ii->nvf_no;
+						nvf.dst = p_fighter->gfxbuf;
+						nvf.no = p_fighter->nvf_no;
 						nvf.type = 0;
 						nvf.width = &width;
 						nvf.height = &obj_id;
 
 						process_nvf(&nvf);
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-						p_figure_gfx = list_ii->gfxbuf;
+						p_figure_gfx = p_fighter->gfxbuf;
 
-						if (list_ii->double_size > 20) {
+						if (p_fighter->double_size > 20) {
 							/* list_i is the fighter entry of the tail of a double_size enemy */
 
-							viewdir_after = (list_ii->nvf_no > 3) ? 1 : list_ii->nvf_no;
+							viewdir_after = (p_fighter->nvf_no > 3) ? 1 : p_fighter->nvf_no;
 
-							list_ii->offsetx += g_gfxtab_double_size_extra_ox[viewdir_after];
-							list_ii->offsety += g_gfxtab_double_size_extra_oy[viewdir_after];
-							list_ii->x1 = g_gfxtab_double_size_extra_x1[viewdir_after];
-							list_ii->x2 = g_gfxtab_double_size_extra_x2[viewdir_after];
+							p_fighter->offsetx += g_gfxtab_double_size_extra_ox[viewdir_after];
+							p_fighter->offsety += g_gfxtab_double_size_extra_oy[viewdir_after];
+							p_fighter->x1 = g_gfxtab_double_size_extra_x1[viewdir_after];
+							p_fighter->x2 = g_gfxtab_double_size_extra_x2[viewdir_after];
 
-							obj_id = get_cb_val(list_ii->cbx, list_ii->cby); /* enemy_id + 30 of the enemy the tail belongs to */
+							obj_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* enemy_id + 30 of the enemy the tail belongs to */
 
-							FIG_set_cb_field(list_ii->cby, list_ii->cbx, list_ii->obj_id);
+							FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, p_fighter->obj_id);
 
 							/* update CBX depending on the view direction */
 							if ( ((viewdir_after == 2) && ((viewdir_before == 1) || (viewdir_before == 3))) ||
 								(((viewdir_after == 3) || (viewdir_after == 1)) && (viewdir_before == 0)))
 							{
-								list_ii->cbx++;
+								p_fighter->cbx++;
 
 							} else if ( ((viewdir_after == 0) && ((viewdir_before == 1) || (viewdir_before == 3))) ||
 									(((viewdir_after == 3) || (viewdir_after == 1)) && (viewdir_before == 2)))
 							{
-								list_ii->cbx--;
+								p_fighter->cbx--;
 							}
 
 							/* update CBY depending on the view direction */
 							if ( ((viewdir_after == 3) && ((viewdir_before == 0) || (viewdir_before == 2))) ||
 								(((viewdir_after == 0) || (viewdir_after == 2)) && (viewdir_before == 1)))
 							{
-								list_ii->cby--;
+								p_fighter->cby--;
 
 							} else	if ( ((viewdir_after == 1) && ((viewdir_before == 0) || (viewdir_before == 2))) ||
 									(((viewdir_after == 0) || (viewdir_after == 2)) && (viewdir_before == 3)))
 							{
-								list_ii->cby++;
+								p_fighter->cby++;
 
 							} else if ((viewdir_after == 1) && (viewdir_before == 3))
 							{
-								list_ii->cby = (list_ii->cby + 2);
+								p_fighter->cby = (p_fighter->cby + 2);
 							}
 
-							target_id = get_cb_val(list_ii->cbx, list_ii->cby); /* object id of the square the tail moves to */
-							list_ii->obj_id = (signed char)target_id; /* move it to FIGHTER_OBJ_ID */
-							FIG_set_cb_field(list_ii->cby, list_ii->cbx, obj_id); /* set object id of the target square to target_id + 30 */
+							target_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* object id of the square the tail moves to */
+							p_fighter->obj_id = (signed char)target_id; /* move it to FIGHTER_OBJ_ID */
+							FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, obj_id); /* set object id of the target square to target_id + 30 */
 
-							obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
+							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
 
-							obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
+							obj_y = 118 - p_fighter->height + ((p_fighter->cbx - p_fighter->cby) * 5);
 
-							obj_x += list_ii->offsetx;
+							obj_x += p_fighter->offsetx;
 
-							obj_y += list_ii->offsety;
+							obj_y += p_fighter->offsety;
 
 						}
 					} else {
 
 						/* move a hero/enemy */
-						if (*(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -2) {
+						if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -2) {
 
-							if (list_ii->sheet < 6) {
+							if (p_fighter->sheet < 6) {
 
-								obj_id = get_cb_val(list_ii->cbx, list_ii->cby);
+								obj_id = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
 								/* copy FIGHTER_OBJ_ID back to the chessboard */
-								FIG_set_cb_field(list_ii->cby, list_ii->cbx, list_ii->obj_id);
+								FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, p_fighter->obj_id);
 
-								list_ii->cbx = (list_ii->cbx + *(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+								p_fighter->cbx = (p_fighter->cbx + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
 
-								list_ii->cby = (list_ii->cby + *(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]));
+								p_fighter->cby = (p_fighter->cby + *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]));
 
 								double_size_move_tail_first = 0;
 
 								/* get the value from the cb where the actor wants to move to */
-								target_id = get_cb_val(list_ii->cbx, list_ii->cby);
+								target_id = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
-								if ((list_ii->double_size > 20) && (obj_id - 20 == target_id)) {
+								if ((p_fighter->double_size > 20) && (obj_id - 20 == target_id)) {
 									/* for a double-size enemy, either the head part or the tail part is moved first.
 									 * This is the case that the tail part is moved first (the target square is the head part). */
 
 #ifndef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
 									/* the removal of the following line is not strictly necessary, but it is not needed as a replacement is added further below. */
-									list_ii->obj_id = 0;
+									p_fighter->obj_id = 0;
 #endif
 									double_size_move_tail_first = 1;
 
@@ -705,46 +705,46 @@ void draw_fight_screen(Bit16u val)
 									/* The FIGHTER_OBJ_ID entry of the head part will be overwritten by the next line in the original code.
 									 * In this way, sometimes dead bodies are lost from the chessboard after a double-size enemy walks over it.
 									 * The right thing is to copy it to the FIGHTER_OBJ_ID of tail part. */
-									list_ii->obj_id = ((signed char)(p_fighter_tmp->obj_id));
+									p_fighter->obj_id = ((signed char)(p_fighter_tmp->obj_id));
 #endif
 									p_fighter_tmp->obj_id = (signed char)obj_id;
 									/* write cb_id of the tail part at FIGHTER_OBJ_ID of the head part.
 									 * when the head part moves lated, it will be written to the cb.
 									 * possible bug: the overwritten FIGHTER_OBJ_ID is lost! */
 								} else {
-									list_ii->obj_id = ((signed char)target_id);
+									p_fighter->obj_id = ((signed char)target_id);
 								}
 
 								/* check chessboard bounds */
-								if ( (list_ii->cbx >= 24) || (list_ii->cby >= 24)
-									|| (list_ii->cbx < 0) || (list_ii->cby < 0)
-									|| (list_ii->obj_id < 0))
+								if ( (p_fighter->cbx >= 24) || (p_fighter->cby >= 24)
+									|| (p_fighter->cbx < 0) || (p_fighter->cby < 0)
+									|| (p_fighter->obj_id < 0))
 								{
 									/* hero/enemy escapes */
 
-										if (list_ii->is_enemy == 1) {
+										if (p_fighter->is_enemy == 1) {
 											/* enemy escapes */
-											p_enemy_sheet = FIG_get_enemy_sheet(list_ii->id);
+											p_enemy_sheet = FIG_get_enemy_sheet(p_fighter->id);
 											if (p_enemy_sheet) {
 												p_enemy_sheet->flags.dead = 1;
 												p_enemy_sheet->bp = 0;
-												figlist_remove[list_ii->sheet] = p_enemy_sheet->fighter_id;
+												figlist_remove[p_fighter->sheet] = p_enemy_sheet->fighter_id;
 
-												if (list_ii->double_size != -1) {
+												if (p_fighter->double_size != -1) {
 #ifdef M302de_ORIGINAL_BUGFIX
 													/* Original-Bug 4:
 													 * remove tail of the escaped double-size enemy from the chessboard
 													 * For more on this bug, see Original-Bug 3 at seg032.cpp */
-													p_fighter_tmp = FIG_get_fighter(g_fig_double_size_fighter_id_table[list_ii->double_size]);
+													p_fighter_tmp = FIG_get_fighter(g_fig_double_size_fighter_id_table[p_fighter->double_size]);
 													FIG_set_cb_field(p_fighter_tmp->cby, p_fighter_tmp->cbx, p_fighter_tmp->obj_id);
 #endif
-													figlist_remove[2 + list_ii->sheet] = g_fig_double_size_fighter_id_table[list_ii->double_size];
+													figlist_remove[2 + p_fighter->sheet] = g_fig_double_size_fighter_id_table[p_fighter->double_size];
 												}
 											}
 										} else {
 											/* hero escapes */
 											/* REMARK: hero is always != NULL */
-											hero = FIG_get_hero_ptr(list_ii->id);
+											hero = FIG_get_hero_ptr(p_fighter->id);
 											if (hero) {
 												hero->action_id = FIG_ACTION_FLEE;
 												hero->flags.scared = 1;
@@ -755,120 +755,120 @@ void draw_fight_screen(Bit16u val)
 												 * The distinction is done only later. */
 												hero->escape_position =
 													g_fig_flee_position[hero->viewdir == 3 ? NORTH : (hero->viewdir + 1)];
-												figlist_remove[list_ii->sheet] = hero->fighter_id;
+												figlist_remove[p_fighter->sheet] = hero->fighter_id;
 
 											}
 										}
 
-										list_ii->obj_id = 0;
-										*((Bit8s*)(sheet + 1 + 3 * (1 + g_fig_ani_state[list_ii->sheet]))) = -1;
+										p_fighter->obj_id = 0;
+										*((Bit8s*)(sheet + 1 + 3 * (1 + g_fig_ani_state[p_fighter->sheet]))) = -1;
 
-										if (list_ii->double_size != -1) {
+										if (p_fighter->double_size != -1) {
 
-											g_fig_anisheets[list_ii->sheet + 2][4 + 3 * g_fig_ani_state[2 + list_ii->sheet]] = -1;
+											g_fig_anisheets[p_fighter->sheet + 2][4 + 3 * g_fig_ani_state[2 + p_fighter->sheet]] = -1;
 
-											g_fig_ani_state[2 + list_ii->sheet] = -1;
+											g_fig_ani_state[2 + p_fighter->sheet] = -1;
 										}
 
 								} else {
 									if (!double_size_move_tail_first) {
-										FIG_set_cb_field(list_ii->cby, list_ii->cbx, obj_id);
+										FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, obj_id);
 									}
 								}
 							} else {
-								list_ii->cbx = (list_ii->cbx +
-									*(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 2));
+								p_fighter->cbx = (p_fighter->cbx +
+									*(sheet + g_fig_ani_state[p_fighter->sheet] * 3 + 2));
 
-								list_ii->cby = (list_ii->cby +
-									*(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 3));
+								p_fighter->cby = (p_fighter->cby +
+									*(sheet + g_fig_ani_state[p_fighter->sheet] * 3 + 3));
 							}
 
-							g_fig_figlist_readd[list_ii->sheet] = list_ii->id;
+							g_fig_figlist_readd[p_fighter->sheet] = p_fighter->id;
 
-							g_fig_ani_state[list_ii->sheet]++;
+							g_fig_ani_state[p_fighter->sheet]++;
 						}
 
-						if (*(sheet + 1 + (g_fig_ani_state[list_ii->sheet] * 3)) == -1) {
+						if (*(sheet + 1 + (g_fig_ani_state[p_fighter->sheet] * 3)) == -1) {
 
-							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
-							g_fig_ani_state[list_ii->sheet] = -1;
-							list_ii->sheet = list_ii->wsheet = -1;
+							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
+							g_fig_ani_state[p_fighter->sheet] = -1;
+							p_fighter->sheet = p_fighter->wsheet = -1;
 
 						} else {
-							obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
+							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
 
-							obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
+							obj_y = 118 - p_fighter->height + ((p_fighter->cbx - p_fighter->cby) * 5);
 
-							obj_x += list_ii->offsetx;
+							obj_x += p_fighter->offsetx;
 
-							obj_y += list_ii->offsety;
+							obj_y += p_fighter->offsety;
 
-							obj_x += *(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
+							obj_x += *(sheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3);
 
-							obj_y -= *(sheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
+							obj_y -= *(sheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
 
-							i = g_gfxtab_figures_main[list_ii->sprite_no][*(sheet)];
+							i = g_gfxtab_figures_main[p_fighter->sprite_no][*(sheet)];
 
-							if ((list_ii->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
+							if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
 								nvf.src = (Bit8u*)load_fight_figs(i);
 							} else {
 								nvf.src = g_spellobj_nvf_buf;
 							}
 
-							nvf.dst = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
-							nvf.no = *(sheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
+							nvf.dst = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
+							nvf.no = *(sheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
 							nvf.type = 0;
 							nvf.width = &width;
 							nvf.height = &obj_id;
 
 							process_nvf(&nvf);
 
-							if (list_ii->wsheet != -1) {
+							if (p_fighter->wsheet != -1) {
 
-								p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[list_ii->wsheet];
+								p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[p_fighter->wsheet];
 
-								if (*(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3) == -1)
+								if (*(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3) == -1)
 								{
-									list_ii->wsheet = -1;
+									p_fighter->wsheet = -1;
 								} else {
 									current_x1 = obj_x;
 									current_y1 = obj_y;
 
-									p_weapon_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->wsheet];
+									p_weapon_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->wsheet];
 
-									if (*(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[list_ii->sheet])) != -5) {
-										nvf.dst = (Bit8u*)g_fig_gfxbuffers[list_ii->wsheet];
+									if (*(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[p_fighter->sheet])) != -5) {
+										nvf.dst = (Bit8u*)g_fig_gfxbuffers[p_fighter->wsheet];
 										nvf.src = g_weapons_nvf_buf;
-										nvf.no = *(Bit8u*)(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
+										nvf.no = *(Bit8u*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
 										nvf.type = 0;
 										nvf.width = &width;
 										nvf.height = &obj_id;
 
 										process_nvf(&nvf);
 
-										current_x1 += list_ii->width - 14;
-										current_x1 += *(p_weapon_anisheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
-										current_y1 -= *(p_weapon_anisheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
+										current_x1 += p_fighter->width - 14;
+										current_x1 += *(p_weapon_anisheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3);
+										current_y1 -= *(p_weapon_anisheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
 									}
 								}
 							}
 
-							g_fig_ani_state[list_ii->sheet]++;
+							g_fig_ani_state[p_fighter->sheet]++;
 						}
 
-						if (list_ii->sheet != -1) {
-							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
+						if (p_fighter->sheet != -1) {
+							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
 						}
 					}
 				}
 			}
 /* 0x17e5 */
 
-			if (FIG_obj_needs_refresh(list_ii, obj_x, obj_y)) {
+			if (FIG_obj_needs_refresh(p_fighter, obj_x, obj_y)) {
 
-				if ((list_ii->sheet == -1) || (figlist_remove[list_ii->sheet] == -1)) {
+				if ((p_fighter->sheet == -1) || (figlist_remove[p_fighter->sheet] == -1)) {
 
-					if (list_ii->sheet != -1) {
+					if (p_fighter->sheet != -1) {
 
 						g_figobj_unkn_x1 = g_figobj_unkn_x2;
 						g_figobj_unkn_y1 = g_figobj_unkn_y2;
@@ -878,25 +878,25 @@ void draw_fight_screen(Bit16u val)
 					}
 
 					/* set Y1 */
-					g_pic_copy_rect.y1 = obj_y + list_ii->y1;
+					g_pic_copy_rect.y1 = obj_y + p_fighter->y1;
 					if (g_pic_copy_rect.y1 < 0) g_pic_copy_rect.y1 = 0;
 
 					/* set X1 */
-					g_pic_copy_rect.x1 = obj_x + list_ii->x1;
+					g_pic_copy_rect.x1 = obj_x + p_fighter->x1;
 					if (g_pic_copy_rect.x1 < 0) g_pic_copy_rect.x1 = 0;
 
 					/* set Y2 */
-					g_pic_copy_rect.y2 = obj_y + list_ii->y2;
+					g_pic_copy_rect.y2 = obj_y + p_fighter->y2;
 					if (g_pic_copy_rect.y2 > (200 - 1)) g_pic_copy_rect.y2 = (200 - 1);
 
 					/* set X2 */
-					g_pic_copy_rect.x2 = obj_x + list_ii->x2;
+					g_pic_copy_rect.x2 = obj_x + p_fighter->x2;
 					if (g_pic_copy_rect.x2 > (320 - 2)) g_pic_copy_rect.x2 = (320 - 2);
 
 					g_pic_copy.x1 = obj_x;
 					g_pic_copy.y1 = obj_y;
-					g_pic_copy.x2 = obj_x + list_ii->width - 1;
-					g_pic_copy.y2 = obj_y + list_ii->height - 1;
+					g_pic_copy.x2 = obj_x + p_fighter->width - 1;
+					g_pic_copy.y2 = obj_y + p_fighter->height - 1;
 					g_pic_copy.src = p_figure_gfx;
 
 					do_pic_copy(2);	/* Critical */
@@ -917,7 +917,7 @@ void draw_fight_screen(Bit16u val)
 				}
 			}
 
-		} while ((list_ii = list_ii->next));
+		} while ((p_fighter = p_fighter->next));
 
 		g_pic_copy_rect = rect_bak;
 		g_figobj_unkn_x2_bak = g_figobj_unkn_x2;
@@ -968,9 +968,9 @@ void draw_fight_screen(Bit16u val)
 		g_pic_copy.dst = g_renderbuf_ptr;
 	}
 
-	for (list_ii = (struct struct_fighter*)g_fig_list_head; list_ii; list_ii = list_ii->next) {
-		if (list_ii->visible != 0)
-			list_ii->visible = 1;
+	for (p_fighter = (struct struct_fighter*)g_fig_list_head; p_fighter; p_fighter = p_fighter->next) {
+		if (p_fighter->visible != 0)
+			p_fighter->visible = 1;
 	}
 
 	call_mouse();
