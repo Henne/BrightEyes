@@ -13,7 +13,7 @@ signed short FIG_check_hero_attack(signed short, signed short, signed short, sig
 signed char FIG_cb_select_target(signed short*, signed short*, const signed short);
 
 /* 0x2f */
-void seg034_718(signed short, signed short, signed short*, signed short*, signed short, signed short);
+void FIG_find_latecomer_position(signed short, signed short, signed short*, signed short*, signed short, signed short);
 
 /* 0x34 */
 void FIG_latecomers(void);

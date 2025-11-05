@@ -352,7 +352,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
  * close as possible to this position.
  * mode is 1 if the enemy has a double-size sprite (such as wolves)
  */
-void seg034_718(signed short x, signed short y, signed short *px, signed short *py, signed short dir, signed short mode)
+void FIG_find_latecomer_position(signed short x, signed short y, signed short *px, signed short *py, signed short dir, signed short mode)
 {
 	signed short new_dir;
 	signed short dist;
@@ -438,7 +438,7 @@ void FIG_latecomers(void)
 
 					if (is_in_byte_array(p_enemy->gfx_id, g_double_size_gfx_id_table)) {
 
-						seg034_718(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
+						FIG_find_latecomer_position(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
 								&x, &y,	g_current_fight->monsters[i].viewdir, 1);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
@@ -461,7 +461,7 @@ void FIG_latecomers(void)
 
 						FIG_add_to_list((signed char)l4);
 					} else {
-						seg034_718(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
+						FIG_find_latecomer_position(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
 								&x, &y, g_current_fight->monsters[i].viewdir, 0);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
