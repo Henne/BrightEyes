@@ -102,7 +102,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			/* attack monster */
 			if (hero->target_id >= 30) {
-				/* tail part of two-fielded enemy */
+				/* tail part of double-size enemy */
 				hero->target_id -= 20;
 				l16 = 1;
 				l17 = 1;
@@ -122,7 +122,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				return;
 			}
 
-			if ((is_in_byte_array(target_monster->gfx_id, g_two_fielded_sprite_id)) && (l16 == 0))
+			if ((is_in_byte_array(target_monster->gfx_id, g_double_size_gfx_id_table)) && (l16 == 0))
 			{
 				FIG_search_obj_on_cb(hero->target_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);
@@ -828,11 +828,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_set_sheet(target_monster->fighter_id, 1);
 
-								if (is_in_byte_array(target_monster->gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(target_monster->gfx_id, g_double_size_gfx_id_table))
 								{
 									fighter_add = FIG_get_fighter(target_monster->fighter_id);
 
-									FIG_set_sheet(g_fig_twofielded_table[fighter_add->twofielded], 3);
+									FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter_add->double_size], 3);
 								}
 
 							} else {
@@ -858,11 +858,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_make_invisible(target_monster->fighter_id);
 
-								if (is_in_byte_array(target_monster->gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(target_monster->gfx_id, g_double_size_gfx_id_table))
 								{
 									fighter_add = FIG_get_fighter(target_monster->fighter_id);
 
-									FIG_make_invisible(g_fig_twofielded_table[fighter_add->twofielded]);
+									FIG_make_invisible(g_fig_double_size_fighter_id_table[fighter_add->double_size]);
 								}
 							} else {
 								if (hero->target_id > 0) {

@@ -23,14 +23,14 @@ namespace M302de {
 #endif
 
 
-static struct struct_point g_gfxtab_twofielded_extra_cb[4] = {
+static struct struct_point g_gfxtab_double_size_extra_cb[4] = {
 	{ -1,  0 }, {  0,  1 }, {  1,  0 }, {  0, -1 } }; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
-signed char g_gfxtab_twofielded_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
-signed char g_gfxtab_twofielded_extra_oy[4] = { 5, 5, -5, -5 }; // ds:0x602c, { 10,-10,-5,-5 }
-signed char g_gfxtab_twofielded_x1[4] = { 16, 0, 0, 16 }; // ds:0x6030
-signed char g_gfxtab_twofielded_x2[4] = { 31, 15, 15, 31 }; // ds:0x6034
-signed char g_gfxtab_twofielded_extra_x1[4] = { 0, 16, 16, 0 }; // ds:0x6038
-signed char g_gfxtab_twofielded_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0x603c
+signed char g_gfxtab_double_size_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
+signed char g_gfxtab_double_size_extra_oy[4] = { 5, 5, -5, -5 }; // ds:0x602c, { 10,-10,-5,-5 }
+signed char g_gfxtab_double_size_x1[4] = { 16, 0, 0, 16 }; // ds:0x6030
+signed char g_gfxtab_double_size_x2[4] = { 31, 15, 15, 31 }; // ds:0x6034
+signed char g_gfxtab_double_size_extra_x1[4] = { 0, 16, 16, 0 }; // ds:0x6038
+signed char g_gfxtab_double_size_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0x603c
 
 
 /**
@@ -248,20 +248,20 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 
 	} else {
 		/* if object is an enemy and needs 2 fields */
-		if (object >= 10 && is_in_byte_array(type, g_two_fielded_sprite_id))
+		if (object >= 10 && is_in_byte_array(type, g_double_size_gfx_id_table))
 		{
 
 			/* check if field is empty */
-			if ((get_cb_val(x + g_gfxtab_twofielded_extra_cb[dir].x, y + g_gfxtab_twofielded_extra_cb[dir].y)) ||
-				(y + g_gfxtab_twofielded_extra_cb[dir].y < 0) ||
-				(y + g_gfxtab_twofielded_extra_cb[dir].y > 23) ||
-				(x + g_gfxtab_twofielded_extra_cb[dir].x < 0 ||
-				(x + g_gfxtab_twofielded_extra_cb[dir].x > 23)))
+			if ((get_cb_val(x + g_gfxtab_double_size_extra_cb[dir].x, y + g_gfxtab_double_size_extra_cb[dir].y)) ||
+				(y + g_gfxtab_double_size_extra_cb[dir].y < 0) ||
+				(y + g_gfxtab_double_size_extra_cb[dir].y > 23) ||
+				(x + g_gfxtab_double_size_extra_cb[dir].x < 0 ||
+				(x + g_gfxtab_double_size_extra_cb[dir].x > 23)))
 			{
 				return 0;
 			}
 
-			FIG_set_cb_field(y + g_gfxtab_twofielded_extra_cb[dir].y, x + g_gfxtab_twofielded_extra_cb[dir].x, object + 20);
+			FIG_set_cb_field(y + g_gfxtab_double_size_extra_cb[dir].y, x + g_gfxtab_double_size_extra_cb[dir].x, object + 20);
 		}
 	}
 
@@ -291,19 +291,19 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 	g_fig_list_elem.offsetx = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].x;
 	g_fig_list_elem.offsety = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].y;
 
-	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
 
 		/* sprite uses two fields */
-		g_fig_list_elem.x1 = g_gfxtab_twofielded_x1[enemy->viewdir];
-		g_fig_list_elem.x2 = g_gfxtab_twofielded_x2[enemy->viewdir];
+		g_fig_list_elem.x1 = g_gfxtab_double_size_x1[enemy->viewdir];
+		g_fig_list_elem.x2 = g_gfxtab_double_size_x2[enemy->viewdir];
 
 		/* TODO: b = ++a; */
-		g_fig_list_elem.twofielded = g_fig_twofielded_count = g_fig_twofielded_count + 1;
+		g_fig_list_elem.double_size = g_fig_double_size_count = g_fig_double_size_count + 1;
 	} else {
 		/* sprite uses one field */
 		g_fig_list_elem.x1 = 0;
 		g_fig_list_elem.x2 = 0x1f;
-		g_fig_list_elem.twofielded = -1;
+		g_fig_list_elem.double_size = -1;
 	}
 
 	g_fig_list_elem.y1 = 0;
@@ -326,7 +326,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 	/* check presence in the first round */
 	g_fig_list_elem.visible = (enemy->round_appear == 0 ? 1 : 0);
 
-	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
 
 		nvf.src = (Bit8u*)load_fight_figs(g_fig_list_elem.figure);
 		nvf.dst = g_fig_list_elem.gfxbuf;
@@ -340,23 +340,23 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 
 	enemy->fighter_id = FIG_add_to_list(-1);
 
-	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
 
-		/* create fighter entry for the tail of a two-fielded enemy */
+		/* create fighter entry for the tail of a double-size enemy */
 
-		g_fig_list_elem.cbx = x + g_gfxtab_twofielded_extra_cb[enemy->viewdir].x;
-		g_fig_list_elem.cby = y + g_gfxtab_twofielded_extra_cb[enemy->viewdir].y;
+		g_fig_list_elem.cbx = x + g_gfxtab_double_size_extra_cb[enemy->viewdir].x;
+		g_fig_list_elem.cby = y + g_gfxtab_double_size_extra_cb[enemy->viewdir].y;
 
-		g_fig_list_elem.offsetx += g_gfxtab_twofielded_extra_ox[enemy->viewdir];
-		g_fig_list_elem.offsety += g_gfxtab_twofielded_extra_oy[enemy->viewdir];
-		g_fig_list_elem.x1 = g_gfxtab_twofielded_extra_x1[enemy->viewdir];
-		g_fig_list_elem.x2 = g_gfxtab_twofielded_extra_x2[enemy->viewdir];
+		g_fig_list_elem.offsetx += g_gfxtab_double_size_extra_ox[enemy->viewdir];
+		g_fig_list_elem.offsety += g_gfxtab_double_size_extra_oy[enemy->viewdir];
+		g_fig_list_elem.x1 = g_gfxtab_double_size_extra_x1[enemy->viewdir];
+		g_fig_list_elem.x2 = g_gfxtab_double_size_extra_x2[enemy->viewdir];
 		g_fig_list_elem.y1 = 0;
 		g_fig_list_elem.y2 = 0x27;
 		g_fig_list_elem.is_enemy = 1;
 		g_fig_list_elem.z = 10;
-		g_fig_list_elem.twofielded = g_fig_twofielded_count + 20;
-		g_fig_twofielded_table[g_fig_twofielded_count] = FIG_add_to_list(-1);
+		g_fig_list_elem.double_size = g_fig_double_size_count + 20;
+		g_fig_double_size_fighter_id_table[g_fig_double_size_count] = FIG_add_to_list(-1);
 	}
 }
 
@@ -536,7 +536,7 @@ void FIG_init_heroes(void)
 		g_fightobj_buf_freespace -= 0x508L;
 		g_fig_list_elem.z = 99;
 		g_fig_list_elem.visible = 1;
-		g_fig_list_elem.twofielded = -1;
+		g_fig_list_elem.double_size = -1;
 
 		get_hero(l_si)->fighter_id = FIG_add_to_list(-1);
 	}

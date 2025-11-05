@@ -595,7 +595,7 @@ void FIG_do_round(void)
 
 							/* hero did attack some enemy (by weapon/spell/item etc.) */
 
-							/* if the tail of a two-squares enemy has been attacked,
+							/* if the tail of a double-size enemy has been attacked,
 							 * replace HERO_ENEMY_ID by the main id of that enemy */
 							if (hero->target_id >= 30) {
 
@@ -607,9 +607,9 @@ void FIG_do_round(void)
 							if (((struct enemy_flags)g_enemy_sheets[hero->target_id - 10].flags).dead)
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[hero->target_id - 10].gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[hero->target_id - 10].gfx_id, g_double_size_gfx_id_table))
 								{
-									/* attacked dead enemy is two-squares */
+									/* attacked dead enemy is double-size */
 									/* goal: remove tail part */
 
 									FIG_search_obj_on_cb(hero->target_id + 20, &x, &y);
@@ -619,7 +619,7 @@ void FIG_do_round(void)
 									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->target_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
+									fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
@@ -690,7 +690,7 @@ void FIG_do_round(void)
 
 							/* enemy attacks another enemy (by weapon/spell etc.) */
 
-							/* if the tail of a two-squares enemy has been attacked,
+							/* if the tail of a double-size enemy has been attacked,
 							 * replace enemy->target_id by the main id of that enemy */
 							if (enemy->target_id >= 30) {
 
@@ -703,9 +703,9 @@ void FIG_do_round(void)
 							{
 
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[enemy->target_id - 10].gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[enemy->target_id - 10].gfx_id, g_double_size_gfx_id_table))
 								{
-									/* attacked dead enemy is two-squares */
+									/* attacked dead enemy is double-size */
 									/* goal: remove tail part */
 									FIG_search_obj_on_cb(enemy->target_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr->cbx, fighter_ptr->cby could have been used later. */
@@ -714,7 +714,7 @@ void FIG_do_round(void)
 									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->target_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
 
-									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
+									fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the killed enemy */
 									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
@@ -754,14 +754,14 @@ void FIG_do_round(void)
 						if (enemy->flags.dead) { /* check 'dead' flag */
 
 							/* attacking enemy is dead because of critical attack failure */
-							if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
-								/* attacking dead enemy is two-squares */
+							if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+								/* attacking dead enemy is double-size */
 								/* goal: remove tail part */
 
 								fighter_ptr = FIG_get_fighter(enemy->fighter_id);
 								/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-								fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
+								fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
 								/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 								/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 

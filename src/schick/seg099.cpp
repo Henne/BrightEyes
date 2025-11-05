@@ -565,8 +565,8 @@ void spell_skelettarius(void)
 		x = fighter->cbx;
 		y = fighter->cby;
 
-		if (fighter->twofielded != -1) {
-			FIG_remove_from_list(g_fig_twofielded_table[fighter->twofielded], 0);
+		if (fighter->double_size != -1) {
+			FIG_remove_from_list(g_fig_double_size_fighter_id_table[fighter->double_size], 0);
 		}
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:

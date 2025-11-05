@@ -47,8 +47,8 @@ const signed short g_gfxtab_obj_offset_x[63] = { -0x0001, 0x0005, 0x0004, 0x0005
 const signed short g_gfxtab_obj_offset_y[63] = { 0x0006, 0x0006, 0x0006, 0x0008, 0x000a, 0x0005, 0x0005, 0x0005, 0x0004, 0x000a, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003, 0x0004, 0x0003, 0x0002, 0x0002, 0x0002, 0x0003, 0x0003, 0x0003, 0x0004, 0x0003, 0x0003, 0x0003, 0x0003, 0x0005, 0x0004, 0x0002, 0x0004, 0x0002, 0x0003, 0x0003, 0x0004, 0x0003, 0x0003, 0x0004, 0x0002, 0x0004, 0x0002, 0x0007, 0x0006, 0x0003, 0x0007, 0x0004, 0x0005, 0x0003, 0x0001, 0x000b, 0x0003, 0x0003, 0x0028, 0x0001 }; // ds:0x60de
 
 
-signed char g_fig_twofielded_table[21]; // ds:0xe35a
-signed char g_fig_twofielded_count;	// ds:0xe36f
+signed char g_fig_double_size_fighter_id_table[21]; // ds:0xe35a
+signed char g_fig_double_size_count;	// ds:0xe36f
 Bit32s g_fightobj_buf_freespace;	// ds:0xe370
 unsigned char *g_buffer_weapanidat;	// ds:0xe374, pointer to WEAPANI.DAT
 unsigned char *g_buffer_anidat;		// ds:0xe378, pointer to ANI.DAT buffer
@@ -228,7 +228,7 @@ void FIG_preload_gfx(void)
 	g_fightobj_buf_freespace = (Bit32s)((HugePt)g_fightobj_buf - (Bit8u*)g_fightobj_buf_seek_ptr);
 
 	g_fightobj_count = 0;
-	g_fig_twofielded_count = 0;
+	g_fig_double_size_count = 0;
 }
 
 void FIG_draw_scenario(void)
@@ -295,7 +295,7 @@ void FIG_draw_scenario(void)
 					g_fig_list_elem.gfxbuf = ptr;
 					g_fig_list_elem.z = (obj_id >= 58 && obj_id <= 61 ? -1 : 50);
 					g_fig_list_elem.visible = 1;
-					g_fig_list_elem.twofielded = -1;
+					g_fig_list_elem.double_size = -1;
 
 					g_fightobj_list[g_fightobj_count] = FIG_add_to_list(-1);
 					g_fightobj_count++;

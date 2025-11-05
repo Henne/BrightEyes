@@ -77,7 +77,7 @@ void FIG_init_list_elem(signed short obj)
 	g_fig_list_elem.gfxbuf = g_fig_cb_marker_buf;
 	g_fig_list_elem.z = 0;
 	g_fig_list_elem.visible = 1;
-	g_fig_list_elem.twofielded = -1;
+	g_fig_list_elem.double_size = -1;
 
 	g_fig_cb_marker_id = FIG_add_to_list(-1);
 }
@@ -104,11 +104,11 @@ static signed char *g_chessboard_cpy; // ds:0xe356
  * \param   dist              distance to the target
  * \param   bp_avail          left BP of the actor
  * \param   mode              mode (see FIG_find_path_to_target)
- * \param   two_squares       actor occupies two squares on the map (wolves, dogs, lions)
+ * \param   double_size       actor occupies two squares on the map (wolves, dogs, lions)
  */
 void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short target_x, signed short target_y,
 			signed short dist, signed char bp_avail,
-			signed short mode, signed short two_squares, signed short actor_id)
+			signed short mode, signed short double_size, signed short actor_id)
 {
 	signed short i;
 	signed short dist_duplicate; /* duplicates the dist variable. apparently redundant */
@@ -192,11 +192,11 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 					cb_or_dist_entry = *((Bit8s*)(dist_table_ptr + 25 * backtrack_y + backtrack_x));
 
 					if ((cb_or_dist_entry == dist)	&&
-						((!two_squares) ||
+						((!double_size) ||
 						/* Original-Bug
-						 * A fight with two-squares enemies may freeze in an infinite loop here.
-						 * The following check of the tail-condition (space for the tail part of a two-squares monster) is executed for every single backtracking step.
-						 * However, in the function FIG_find_path_to_target this check is not applied for the last step to the target of a fleeing two-squares monster.
+						 * A fight with double-size enemies may freeze in an infinite loop here.
+						 * The following check of the tail-condition (space for the tail part of a double-size monster) is executed for every single backtracking step.
+						 * However, in the function FIG_find_path_to_target this check is not applied for the last step to the target of a fleeing double-size monster.
 						 * Fix: don't apply the check in the last step, i.e. the first step of the backtracking.
 						 * (another, maybe better fix would be to add the missing tests of the tail-condition in FIG_find_path_to_target)
 						 * See discussion at https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=165957#pid165957
@@ -205,7 +205,7 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 						(dist == dist_bak-1) ||
 #endif
 						(
-							two_squares && /* this check is redundant, as we had (!two_squares) || ... before */
+							double_size && /* this check is redundant, as we had (!double_size) || ... before */
 							(!*(g_chessboard_cpy + (tail_y * 25) + tail_x) || /* square is empty */
 							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (actor_id + 10)) || /* head of active enemy is on square */
 							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (actor_id + 30))) && /* tail of active enemy is on square */
@@ -346,7 +346,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	signed short done;
 	signed short ranged_dist;
 	Bit8u *actor_enemy_ptr; /* not needed, in principal. is only used for tests with NOT_NULL at a few places to determine wether the actor is an enemy. could also be done based on mode. */
-	signed char two_squares;
+	signed char double_size;
 	signed short target_reached_x[10];
 	signed short target_reached_y[10];
 	signed short unused[10]; /* array gets only written, but never read */
@@ -354,14 +354,14 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	struct viewdir_offsets coordinate_offset = g_viewdir_offsets7;
 
 	actor_enemy_ptr = NULL;
-	two_squares = 0;
+	double_size = 0;
 
 	if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) /* actor is an enemy */
 	{
 		actor_enemy_ptr = actor_ptr;
-		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->gfx_id, g_two_fielded_sprite_id))
+		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->gfx_id, g_double_size_gfx_id_table))
 		{
-			two_squares = 1;
+			double_size = 1;
 		}
 	}
 
@@ -391,12 +391,12 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 				} else if ((cb_or_dist_entry >= 10) && (cb_or_dist_entry < 30) && ((struct enemy_flags)g_enemy_sheets[cb_or_dist_entry - 10].flags).dead) {
 
 					/* test 'dead' flag */
-					/* cb_or_dist_entry is a dead enemy. tail parts of two-squares enemies are not considered. */
+					/* cb_or_dist_entry is a dead enemy. tail parts of double-size enemies are not considered. */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
-					/* Original-Bug: The tail parts of dead two-squares enemies have been forgotten,
+					/* Original-Bug: The tail parts of dead double-size enemies have been forgotten,
 					 * meaning that they are not walkable.
 					 * The fact that they are invisible does not make things better.
-					 * However, in the target selection of the hero movement, tail parts of two-squares monsters are allowed.
+					 * However, in the target selection of the hero movement, tail parts of double-size monsters are allowed.
 					 * The weird outcome is that dead tail-parts can be entered, but not crossed by heroes.
 					 * For enemies, squares with dead tail-parts are blocked completely. */
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -500,7 +500,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 								{
 									/* sqare empty and may be used as base square for launching the ranged attack. set target marker */
 									*(g_chessboard_cpy + (25 * new_y) + new_x) = 49;
-									/* DANGER: The id 49 is in the range [30..49] which is typically considered as the tail of a two-squares enemy.
+									/* DANGER: The id 49 is in the range [30..49] which is typically considered as the tail of a double-size enemy.
 									 * However, presumably there is no fight involving the last id 49 in this range.
 									 * So hopefully, there is no collision. */
 								} else {
@@ -543,8 +543,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 						new_y = y + coordinate_offset.a[i].y;
 						new_x = x + coordinate_offset.a[i].x;
-						tail_y = y - coordinate_offset.a[i].y; /* for movement of two-squares actors */
-						tail_x = x - coordinate_offset.a[i].x; /* for movement of two-squares actors */
+						tail_y = y - coordinate_offset.a[i].y; /* for movement of double-size actors */
+						tail_x = x - coordinate_offset.a[i].x; /* for movement of double-size actors */
 
 						if ((new_y < 24) && (new_y >= 0) && (new_x < 24) && (new_x >= 0)) {
 
@@ -556,8 +556,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 								if (cb_entry == 0) { /* square is empty */
 
 									if (!actor_enemy_ptr ||
-										(actor_enemy_ptr && (!two_squares ||
-													((two_squares != 0) &&
+										(actor_enemy_ptr && (!double_size ||
+													((double_size != 0) &&
 														((!*(g_chessboard_cpy + (tail_y * 25) + tail_x)) || /* square is empty */
 														(*(g_chessboard_cpy + (tail_y * 25) + tail_x))  == (actor_id + 10) || /* head of active enemy is on square */
 														(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 30)) && /* tail of active enemy is on square */
@@ -570,7 +570,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 									if (cb_entry < 0) { /* escape square */
 
 										if ((mode == 4) || (mode == 5)) { /* actor is fleeing */
-											/* it is not tested if there is space for the tail of a two-squares monster! */
+											/* it is not tested if there is space for the tail of a double-size monster! */
 											unused[nr_targets_reached] = 1;
 											target_reached_x[nr_targets_reached] = new_x;
 											target_reached_y[nr_targets_reached] = new_y;
@@ -595,7 +595,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 									} else if (cb_entry < 10) {
 
 										if (cb_entry == 9) { /* target marker for ranged attack to some hero (implies mode == 6 or mode == 8) */
-											/* test of the tail-condition not needed here, as two-squares enemies don't have ranged attacks */
+											/* test of the tail-condition not needed here, as double-size enemies don't have ranged attacks */
 											unused[nr_targets_reached] = 1;
 											target_reached_x[nr_targets_reached] = new_x;
 											target_reached_y[nr_targets_reached] = new_y;
@@ -605,8 +605,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 											}
 										} else { /* some hero on square */
 											if (((mode == 0) || (mode == 1)) /* melee attack */
-												&& (!actor_enemy_ptr || (actor_enemy_ptr && (!two_squares ||
-															((two_squares != 0) &&
+												&& (!actor_enemy_ptr || (actor_enemy_ptr && (!double_size ||
+															((double_size != 0) &&
 																((!*(g_chessboard_cpy + (tail_y * 25) + tail_x)) ||
 																(*(g_chessboard_cpy + (tail_y * 25) + tail_x))  == (actor_id + 10) ||
 																(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 30)) &&
@@ -619,12 +619,12 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 												if (nr_targets_reached == 10) {
 													break;
 												}
-											} /* if a two-squares monster cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
+											} /* if a double-size monster cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
 											     In this way, later the hero may be considered again as a target from a different direction. */
 										}
 									} else if (cb_entry < 50) {
 										if (cb_entry == 49) { /* target marker for ranged attack to enemy (implies mode == 7 or mode == 9) */
-											/* test of the tail-condition not needed here, as two-squares enemies don't have ranged attacks */
+											/* test of the tail-condition not needed here, as double-size enemies don't have ranged attacks */
 											unused[nr_targets_reached] = 1;
 											target_reached_x[nr_targets_reached] = new_x;
 											target_reached_y[nr_targets_reached] = new_y;
@@ -634,8 +634,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 											}
 										} else { /* enemy on square */
 											if (((mode == 2) || (mode == 3)) && /* melee attack */
-												(cb_entry < 30) && (!actor_enemy_ptr || (actor_enemy_ptr && (!two_squares ||
-															((two_squares != 0) &&
+												(cb_entry < 30) && (!actor_enemy_ptr || (actor_enemy_ptr && (!double_size ||
+															((double_size != 0) &&
 																((!*(g_chessboard_cpy + (tail_y * 25) + tail_x)) ||
 																(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 10) ||
 																(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 30)) &&
@@ -648,7 +648,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 												if (nr_targets_reached == 10) {
 													break;
 												}
-											} /* if a two-squares monster cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
+											} /* if a double-size monster cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
 											     In this way, later the enemy may be considered again as a target from a different direction. */
 
 										}
@@ -660,7 +660,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 								((g_scenario_buf[0x14] > 3) ||
 									((g_scenario_buf[0x14] <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
 							{
-								/* it is not tested if there is space for the tail of a two-squares monster! */
+								/* it is not tested if there is space for the tail of a double-size monster! */
 								unused[nr_targets_reached] = 1;
 								target_reached_x[nr_targets_reached] = new_x;
 								target_reached_y[nr_targets_reached] = new_y;
@@ -685,9 +685,9 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 			for (i = 0; i < nr_targets_reached; i++) {
 
 				if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) { /* actor is an enemy */
-					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct enemy_sheet*)actor_ptr)->bp, mode, two_squares, actor_id);
+					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct enemy_sheet*)actor_ptr)->bp, mode, double_size, actor_id);
 				} else { /* actor is a hero */
-					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct struct_hero*)actor_ptr)->bp_left, mode, two_squares, actor_id);
+					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct struct_hero*)actor_ptr)->bp_left, mode, double_size, actor_id);
 				}
 
 				nr_dir_changes = FIG_count_direction_changes_of_path(g_fig_move_pathdir);
@@ -704,9 +704,9 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 			}
 
 			if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) { /* actor is an enemy */
-				FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[best_target], target_reached_y[best_target], dist, ((struct enemy_sheet*)actor_ptr)->bp, mode, two_squares, actor_id);
+				FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[best_target], target_reached_y[best_target], dist, ((struct enemy_sheet*)actor_ptr)->bp, mode, double_size, actor_id);
 			} else { /* actor is a hero */
-				FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[best_target], target_reached_y[best_target], dist, ((struct struct_hero*)actor_ptr)->bp_left, mode, two_squares, actor_id);
+				FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[best_target], target_reached_y[best_target], dist, ((struct struct_hero*)actor_ptr)->bp_left, mode, double_size, actor_id);
 			}
 		}
 	}

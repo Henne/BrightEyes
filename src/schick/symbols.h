@@ -953,13 +953,13 @@
 //#define VIEWDIR_OFFSETS6                (0x5fe8)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 //#define VIEWDIR_INVOFFSETS1             (0x5ff8)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
 //#define VIEWDIR_OFFSETS7                (0x6008)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
-//#define GFXTAB_TWOFIELDED_EXTRA_CB      (0x6018)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
-//#define GFXTAB_TWOFIELDED_EXTRA_OX      (0x6028)    /* signed char[4]; { 10,-10,-10,10 } */
-//#define GFXTAB_TWOFIELDED_EXTRA_OY      (0x602c)    /* signed char[4]; { 10,-10,-5,-5 } */
-//#define GFXTAB_TWOFIELDED_X1            (0x6030)    /* signed char[4] */
-//#define GFXTAB_TWOFIELDED_X2            (0x6034)    /* signed char[4] */
-//#define GFXTAB_TWOFIELDED_EXTRA_X1      (0x6038)    /* signed char[4] */
-//#define GFXTAB_TWOFIELDED_EXTRA_X2      (0x603c)    /* signed char[4] */
+//#define GFXTAB_DOUBLE_SIZE_EXTRA_CB      (0x6018)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
+//#define GFXTAB_DOUBLE_SIZE_EXTRA_OX      (0x6028)    /* signed char[4]; { 10,-10,-10,10 } */
+//#define GFXTAB_DOUBLE_SIZE_EXTRA_OY      (0x602c)    /* signed char[4]; { 10,-10,-5,-5 } */
+//#define GFXTAB_DOUBLE_SIZE_X1            (0x6030)    /* signed char[4] */
+//#define GFXTAB_DOUBLE_SIZE_X2            (0x6034)    /* signed char[4] */
+//#define GFXTAB_DOUBLE_SIZE_EXTRA_X1      (0x6038)    /* signed char[4] */
+//#define GFXTAB_DOUBLE_SIZE_EXTRA_X2      (0x603c)    /* signed char[4] */
 //#define CB_REAR_BORDER                  (0x6040)    /* struct(2)[15]; struct{signed char x,y;}; { {0,16}, {1,16}, {2,16}, {3,16}, {3,17}, {3,18}, {3,19}, {4,20}, {5,20}, {6,20}, {7,20}, {7,21}, {7,22}, {7,23}, {-1,0} } */
 //#define FIGHTOBJ_COUNT                  (0x605e)    /* unsigned short */
 //#define GFXTAB_OBJ_OFFSET_X             (0x6060)    /* signed short[63] */
@@ -1544,8 +1544,8 @@
 //#define AUTOFIGHT                       (0xe318)    /* signed short */
 //#define FIG_DROPPED_WEAPONS             (0xe31a)    /* signed short[30] */
 //#define CHESSBOARD_CPY                  (0xe356)    /* Bit8u* */
-//#define FIG_TWOFIELDED_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the twofielded enemies */
-//#define FIG_TWOFIELDED_COUNT            (0xe36f)    /* signed char */
+//#define FIG_DOUBLE_SIZE_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the double_size enemies */
+//#define FIG_DOUBLE_SIZE_COUNT            (0xe36f)    /* signed char */
 //#define FIGHTOBJ_BUF_FREESPACE          (0xe370)    /* signed long */
 //#define BUFFER_WEAPANIDAT               (0xe374)    /* Bit8u*; pointer to WEAPANI.DAT */
 //#define BUFFER_ANIDAT                   (0xe378)    /* Bit8u*; pointer to ANI.DAT buffer */

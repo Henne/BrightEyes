@@ -342,7 +342,7 @@ void draw_fight_screen(Bit16u val)
 	signed short viewdir_before;
 	signed short viewdir_after;
 	signed short target_id;
-	signed char twofielded_move_tail_first;
+	signed char double_size_move_tail_first;
 	struct struct_fighter *p_fighter_tmp;
 	signed short viewdir_unconsc;
 	Bit8s *sheet;
@@ -553,18 +553,18 @@ void draw_fight_screen(Bit16u val)
 								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][4].x;
 								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][4].y;
 
-								if (list_ii->twofielded != -1) {
-									list_ii->x1 = g_gfxtab_twofielded_x1[1];
-									list_ii->x2 = g_gfxtab_twofielded_x2[1];
+								if (list_ii->double_size != -1) {
+									list_ii->x1 = g_gfxtab_double_size_x1[1];
+									list_ii->x2 = g_gfxtab_double_size_x2[1];
 								}
 
 							} else {
 								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][list_ii->nvf_no].x;
 								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][list_ii->nvf_no].y;
 
-								if (list_ii->twofielded != -1) {
-									list_ii->x1 = g_gfxtab_twofielded_x1[list_ii->nvf_no];
-									list_ii->x2 = g_gfxtab_twofielded_x2[list_ii->nvf_no];
+								if (list_ii->double_size != -1) {
+									list_ii->x1 = g_gfxtab_double_size_x1[list_ii->nvf_no];
+									list_ii->x2 = g_gfxtab_double_size_x2[list_ii->nvf_no];
 								}
 							}
 
@@ -610,17 +610,17 @@ void draw_fight_screen(Bit16u val)
 
 						p_figure_gfx = list_ii->gfxbuf;
 
-						if (list_ii->twofielded > 20) {
-							/* list_i is the fighter entry of the tail of a twofielded enemy */
+						if (list_ii->double_size > 20) {
+							/* list_i is the fighter entry of the tail of a double_size enemy */
 
 							viewdir_after = (list_ii->nvf_no > 3) ? 1 : list_ii->nvf_no;
 
-							list_ii->offsetx += g_gfxtab_twofielded_extra_ox[viewdir_after];
-							list_ii->offsety += g_gfxtab_twofielded_extra_oy[viewdir_after];
-							list_ii->x1 = g_gfxtab_twofielded_extra_x1[viewdir_after];
-							list_ii->x2 = g_gfxtab_twofielded_extra_x2[viewdir_after];
+							list_ii->offsetx += g_gfxtab_double_size_extra_ox[viewdir_after];
+							list_ii->offsety += g_gfxtab_double_size_extra_oy[viewdir_after];
+							list_ii->x1 = g_gfxtab_double_size_extra_x1[viewdir_after];
+							list_ii->x2 = g_gfxtab_double_size_extra_x2[viewdir_after];
 
-							obj_id = get_cb_val(list_ii->cbx, list_ii->cby); /* target_id + 30 of the enemy the tail belongs to */
+							obj_id = get_cb_val(list_ii->cbx, list_ii->cby); /* enemy_id + 30 of the enemy the tail belongs to */
 
 							FIG_set_cb_field(list_ii->cby, list_ii->cbx, list_ii->obj_id);
 
@@ -681,13 +681,13 @@ void draw_fight_screen(Bit16u val)
 
 								list_ii->cby = (list_ii->cby + *(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]));
 
-								twofielded_move_tail_first = 0;
+								double_size_move_tail_first = 0;
 
 								/* get the value from the cb where the actor wants to move to */
 								target_id = get_cb_val(list_ii->cbx, list_ii->cby);
 
-								if ((list_ii->twofielded > 20) && (obj_id - 20 == target_id)) {
-									/* for a two-fielded enemy, either the head part or the tail part is moved first.
+								if ((list_ii->double_size > 20) && (obj_id - 20 == target_id)) {
+									/* for a double-size enemy, either the head part or the tail part is moved first.
 									 * This is the case that the tail part is moved first (the target square is the head part). */
 
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -695,7 +695,7 @@ void draw_fight_screen(Bit16u val)
 									/* the removal of the following line is not strictly necessary, but it is not needed as a replacement is added further below. */
 									list_ii->obj_id = 0;
 #endif
-									twofielded_move_tail_first = 1;
+									double_size_move_tail_first = 1;
 
 									/* create pointer to the head part of the enemy */
 									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[target_id - 10].fighter_id);
@@ -703,7 +703,7 @@ void draw_fight_screen(Bit16u val)
 #ifdef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
 									/* The FIGHTER_OBJ_ID entry of the head part will be overwritten by the next line in the original code.
-									 * In this way, sometimes dead bodies are lost from the chessboard after a two-fielded enemy walks over it.
+									 * In this way, sometimes dead bodies are lost from the chessboard after a double-size enemy walks over it.
 									 * The right thing is to copy it to the FIGHTER_OBJ_ID of tail part. */
 									list_ii->obj_id = ((signed char)(p_fighter_tmp->obj_id));
 #endif
@@ -730,15 +730,15 @@ void draw_fight_screen(Bit16u val)
 												p_enemy_sheet->bp = 0;
 												figlist_remove[list_ii->sheet] = p_enemy_sheet->fighter_id;
 
-												if (list_ii->twofielded != -1) {
+												if (list_ii->double_size != -1) {
 #ifdef M302de_ORIGINAL_BUGFIX
 													/* Original-Bug 4:
-													 * remove tail of the escaped two-fielded enemy from the chessboard
+													 * remove tail of the escaped double-size enemy from the chessboard
 													 * For more on this bug, see Original-Bug 3 at seg032.cpp */
-													p_fighter_tmp = FIG_get_fighter(g_fig_twofielded_table[list_ii->twofielded]);
+													p_fighter_tmp = FIG_get_fighter(g_fig_double_size_fighter_id_table[list_ii->double_size]);
 													FIG_set_cb_field(p_fighter_tmp->cby, p_fighter_tmp->cbx, p_fighter_tmp->obj_id);
 #endif
-													figlist_remove[2 + list_ii->sheet] = g_fig_twofielded_table[list_ii->twofielded];
+													figlist_remove[2 + list_ii->sheet] = g_fig_double_size_fighter_id_table[list_ii->double_size];
 												}
 											}
 										} else {
@@ -763,7 +763,7 @@ void draw_fight_screen(Bit16u val)
 										list_ii->obj_id = 0;
 										*((Bit8s*)(sheet + 1 + 3 * (1 + g_fig_ani_state[list_ii->sheet]))) = -1;
 
-										if (list_ii->twofielded != -1) {
+										if (list_ii->double_size != -1) {
 
 											g_fig_anisheets[list_ii->sheet + 2][4 + 3 * g_fig_ani_state[2 + list_ii->sheet]] = -1;
 
@@ -771,7 +771,7 @@ void draw_fight_screen(Bit16u val)
 										}
 
 								} else {
-									if (!twofielded_move_tail_first) {
+									if (!double_size_move_tail_first) {
 										FIG_set_cb_field(list_ii->cby, list_ii->cbx, obj_id);
 									}
 								}

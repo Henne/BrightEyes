@@ -152,7 +152,7 @@ void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const
 	g_fig_list_elem.gfxbuf = g_fig_shot_bolt_buf;
 	g_fig_list_elem.z = 100;
 	g_fig_list_elem.visible = 0;
-	g_fig_list_elem.twofielded = -1;
+	g_fig_list_elem.double_size = -1;
 
 	nvf.dst = g_fig_shot_bolt_buf;
 	nvf.src = g_spellobj_nvf_buf;
@@ -284,7 +284,7 @@ void FANI_add_spell(const signed int x, const signed int y, const signed int spe
 	g_fig_list_elem.gfxbuf = g_fig_spellgfx_buf;
 	g_fig_list_elem.z = 99;
 	g_fig_list_elem.visible = 0;
-	g_fig_list_elem.twofielded = -1;
+	g_fig_list_elem.double_size = -1;
 	g_fig_spellgfx_id = FIG_add_to_list(-1);
 }
 

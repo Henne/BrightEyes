@@ -162,13 +162,13 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	g_fig_cb_marker_id = -1;
 	FIG_set_sheet(enemy->fighter_id, 1);
 
-	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
 
 		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 0xf3);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
-		FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], 3);
+		FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], 3);
 	}
 
 	/* draw_fight_screen */
@@ -757,7 +757,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed sho
 
 					flag = 1;
 
-					if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id))
+					if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table))
 					{
 
 						target = get_cb_val(x - diff.a[i].x, y - diff.a[i].y);

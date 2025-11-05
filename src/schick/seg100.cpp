@@ -294,7 +294,7 @@ void spell_hexenknoten(void)
 	g_fig_list_elem.gfxbuf = rp;
 	g_fig_list_elem.z = 50;
 	g_fig_list_elem.visible = 1;
-	g_fig_list_elem.twofielded = -1;
+	g_fig_list_elem.double_size = -1;
 
 	FIG_add_to_list(-1);
 

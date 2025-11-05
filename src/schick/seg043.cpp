@@ -109,7 +109,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 			target_is_hero = 0;
 
-			if ((is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) && (l17 == 0))
+			if ((is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) && (l17 == 0))
 			{
 				FIG_search_obj_on_cb(monster->target_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(monster_pos + 10, &hero_x, &hero_y);
@@ -682,11 +682,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							FIG_set_sheet(target_enemy->fighter_id, 1);
 
 
-							if (is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) {
+							if (is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) {
 
 								fighter = FIG_get_fighter(target_enemy->fighter_id);
 
-								FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], 3);
+								FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], 3);
 							}
 						} else {
 
@@ -715,14 +715,14 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							g_fig_list_elem.offsetx = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].x;
 							g_fig_list_elem.offsety = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].y;
 
-							if (is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) {
+							if (is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) {
 
-								g_fig_list_elem.x1 = g_gfxtab_twofielded_x1[target_enemy->viewdir];
-								g_fig_list_elem.x2 = g_gfxtab_twofielded_x2[target_enemy->viewdir];
+								g_fig_list_elem.x1 = g_gfxtab_double_size_x1[target_enemy->viewdir];
+								g_fig_list_elem.x2 = g_gfxtab_double_size_x2[target_enemy->viewdir];
 							} else {
 								g_fig_list_elem.x1 = 0;
 								g_fig_list_elem.x2 = 31;
-								g_fig_list_elem.twofielded = -1;
+								g_fig_list_elem.double_size = -1;
 							}
 
 							g_fig_list_elem.y1 = 0;
@@ -743,11 +743,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								FIG_make_invisible(target_enemy->fighter_id);
 
-								if (is_in_byte_array(target_enemy->gfx_id, g_two_fielded_sprite_id)) {
+								if (is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) {
 
 									fighter = FIG_get_fighter(target_enemy->fighter_id);
 
-									FIG_make_invisible(g_fig_twofielded_table[fighter->twofielded]);
+									FIG_make_invisible(g_fig_double_size_fighter_id_table[fighter->double_size]);
 								}
 							} else {
 

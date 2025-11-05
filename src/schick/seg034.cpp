@@ -207,7 +207,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 	g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
 	g_fig_list_elem.z = 1;
 	g_fig_list_elem.visible = 1;
-	g_fig_list_elem.twofielded = -1;
+	g_fig_list_elem.double_size = -1;
 
 	g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
@@ -349,7 +349,7 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 /* determine free position (*px,*py) for new enemy to appear on chessboard
  * if the desired position (x,y) is occupied, a free position is determined as
  * close as possible to this position.
- * mode is 1 if the enemy has a two-fielded sprite (such as wolves)
+ * mode is 1 if the enemy has a double-size sprite (such as wolves)
  */
 void seg034_718(signed short x, signed short y, signed short *px, signed short *py, signed short dir, signed short mode)
 {
@@ -435,7 +435,7 @@ void FIG_latecomers(void)
 
 				if (!p_enemy->flags.scared) {
 
-					if (is_in_byte_array(p_enemy->gfx_id, g_two_fielded_sprite_id)) {
+					if (is_in_byte_array(p_enemy->gfx_id, g_double_size_gfx_id_table)) {
 
 						seg034_718(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
 								&x, &y,	g_current_fight->monsters[i].viewdir, 1);
@@ -445,7 +445,7 @@ void FIG_latecomers(void)
 						fighter->cbx = x;
 						fighter->cby = y;
 
-						l4 = g_fig_twofielded_table[fighter->twofielded];
+						l4 = g_fig_double_size_fighter_id_table[fighter->double_size];
 
 						fighter_add = FIG_get_fighter((signed char)l4);
 
@@ -579,7 +579,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 	g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
 	g_fig_list_elem.z = 1;
 	g_fig_list_elem.visible = 1;
-	g_fig_list_elem.twofielded = -1;
+	g_fig_list_elem.double_size = -1;
 
 	g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
@@ -661,7 +661,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 			g_fig_list_elem.cbx = sel_x;
 			g_fig_list_elem.cby = sel_y;
 			g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
-			g_fig_list_elem.twofielded = -1;
+			g_fig_list_elem.double_size = -1;
 			g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
 			FIG_draw_figures();
@@ -796,7 +796,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 #ifndef M302de_ORIGINAL_BUGFIX
 					} else if (cb_entry_bak >= 10) {
 
-						/* target square contains a monster (including the tail of a two-squares monster) */
+						/* target square contains a monster (including the tail of a double-size monster) */
 						if (!g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) /* check 'dead' flag */
 						{
 							/* monster is not dead */
@@ -830,7 +830,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 						 * flatten the nested if branches. */
 
 					} else if ((cb_entry_bak >= 10) && !g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) { /* check 'dead' flag */
-						/* target square contains a non-dead monster (including the tail of a two-squares monster) */
+						/* target square contains a non-dead monster (including the tail of a double-size monster) */
 						problem = 3;
 
 					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !get_hero(cb_entry_bak - 1)->flags.dead && !get_hero(cb_entry_bak - 1)->flags.unconscious && (cb_entry_bak != hero_pos + 1)) {
