@@ -16,12 +16,12 @@ void TLK_eremit(const signed int);
 void do_town(void);
 /* should be static */
 /* 0x3e */
-void seg066_0692(void);
+void city_update_view(void);
 /* 0x43 */
 void city_building_textures(void);
 /* should be static */
 /* 0x48 */
-void seg066_10c8(void);
+void city_direction_change(void);
 /* 0x4d */
 void load_city_texture(signed int, signed int, signed int, signed int);
 /* 0x52 */

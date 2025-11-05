@@ -687,7 +687,7 @@ static void refresh_floor_and_sky(void)
 	process_nvf(&nvf);
 }
 
-void seg066_0692(void)
+void city_update_view(void)
 {
 	refresh_floor_and_sky();
 	move();
@@ -1150,10 +1150,10 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 	}
 }
 
-void seg066_10c8(void)
+void city_direction_change(void)
 {
 	disable_ani();
-	seg066_0692();
+	city_update_view();
 	g_city_refresh_x_target = gs_x_target;
 	g_city_refresh_y_target = gs_y_target;
 	g_city_refresh_direction = gs_direction;
@@ -1199,7 +1199,7 @@ signed int city_step(void)
 		gs_x_target != g_city_refresh_x_target ||
 		gs_y_target != g_city_refresh_y_target)
 	{
-		seg066_10c8();
+		city_direction_change();
 	}
 
 	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak))
