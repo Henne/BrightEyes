@@ -56,8 +56,8 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 	signed short l1;
 	signed short txt_tabpos_bak;
 	signed short done;
-	signed short target_x;
-	signed short target_y;
+	signed int target_x;
+	signed int target_y;
 	signed short range_weapon;
 	signed char target_object_id;
 	signed short rwt1;

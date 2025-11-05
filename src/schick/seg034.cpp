@@ -43,14 +43,14 @@ static char g_string_14spaces[15] = "              "; // ds:0x5f9c
  * \param   max_range   maximal range for the weapon
  * \return              TODO {0, 1}
  **/
-signed short FIG_check_hero_attack(signed short x_hero, signed short y_hero,
-			signed short x, signed short y,
-			signed short x_diff, signed short y_diff,
-			signed short max_range)
+signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_hero,
+			const signed int x, const signed int y,
+			const signed int x_diff, const signed int y_diff,
+			const signed int max_range)
 {
-	signed short fighter_id_target;
-	signed short fighter_id;
-	signed short beeline;
+	signed int fighter_id_target;
+	signed int fighter_id;
+	signed int beeline;
 
 	fighter_id = get_cb_val(x, y);
 	fighter_id_target = get_cb_val(x + x_diff, y + y_diff);
@@ -91,6 +91,7 @@ signed short FIG_check_hero_attack(signed short x_hero, signed short y_hero,
 			}
 	}
 
+	/* 4 near actions */
 	if (x_diff == 1) {
 		if ((fighter_id_target >= 0) &&
 			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
@@ -154,19 +155,19 @@ signed short FIG_check_hero_attack(signed short x_hero, signed short y_hero,
  * \param   max_range   maximal range for the weapon
  * \return              fight-id of the target
  */
-signed char FIG_cb_select_target(signed short *px, signed short *py, const signed short max_range)
+signed char FIG_cb_select_target(signed int *px, signed int *py, const signed short max_range)
 {
-	signed short x_diff;
-	signed short y_diff;
-	signed short x;
-	signed short y;
-	signed short fighter_id;
-	signed short x_screen;
-	signed short y_screen;
-	signed short from_kbd;
+	signed int x_diff;
+	signed int y_diff;
+	signed int x;
+	signed int y;
+	signed int fighter_id;
+	signed int x_screen;
+	signed int y_screen;
+	signed int from_kbd;
 	/* TODO: the next two variables are constants */
-	signed short cb_base_x = 9;
-	signed short cb_base_y = 116;
+	signed int cb_base_x = 9;
+	signed int cb_base_y = 116;
 
 	g_mouse_leftclick_event = g_mouse_rightclick_event = 0;
 
@@ -352,12 +353,12 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
  * close as possible to this position.
  * mode is 1 if the enemy has a double-size sprite (such as wolves)
  */
-void FIG_find_latecomer_position(signed short x, signed short y, signed short *px, signed short *py, signed short dir, signed short mode)
+void FIG_find_latecomer_position(const signed int x, const signed int y, signed int *px, signed int *py, const signed int dir, const signed int mode)
 {
-	signed short new_dir;
-	signed short dist;
-	signed short new_x;
-	signed short new_y;
+	signed int new_dir;
+	signed int dist;
+	signed int new_x;
+	signed int new_y;
 	signed char done;
 
 	struct viewdir_offsets a = g_viewdir_offsets1;
@@ -409,10 +410,10 @@ void FIG_find_latecomer_position(signed short x, signed short y, signed short *p
  */
 void FIG_latecomers(void)
 {
-	signed short i;
-	signed short x;
-	signed short y;
-	signed short l4;
+	signed int i;
+	signed int x;
+	signed int y;
+	signed int l4;
 	struct enemy_sheet *p_enemy;		/* pointer to a monster sheet */
 	struct struct_fighter *fighter;
 	struct struct_fighter *fighter_add;
@@ -466,8 +467,8 @@ void FIG_latecomers(void)
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
-						fighter->cbx = (signed char)x;
-						fighter->cby = (signed char)y;
+						fighter->cbx = x;
+						fighter->cby = y;
 
 						FIG_remove_from_list(p_enemy->fighter_id, 1);
 
@@ -490,9 +491,9 @@ void FIG_latecomers(void)
 	}
 }
 
-signed short FIG_move_pathlen(void)
+signed int FIG_move_pathlen(void)
 {
-	signed short i = 0;
+	signed int i = 0;
 
 	/* count everything till the end marker -1 of the path */
 	while (g_fig_move_pathdir[i] != -1) {
@@ -517,26 +518,26 @@ signed short FIG_move_pathlen(void)
  */
 void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short *px, signed short *py)
 {
-	signed short problem;
-	signed short path_end;
-	signed short sel_x;
-	signed short sel_y;
-	signed short target_reachable;
-	signed short curr_x;
-	signed short curr_y;
+	signed int problem;
+	signed int path_end;
+	signed int sel_x;
+	signed int sel_y;
+	signed int target_reachable;
+	signed int curr_x;
+	signed int curr_y;
 	signed short fg_bak;
 	signed short bg_bak;
-	signed short x_screen;
-	signed short y_screen;
-	signed short from_kbd;
-	signed short base_x = 9;
-	signed short base_y = 116;
+	signed int x_screen;
+	signed int y_screen;
+	signed int from_kbd;
+	signed int base_x = 9;
+	signed int base_y = 116;
 	signed char cb_entry_bak;
 	signed char bp_cost;
 	signed char cb_entry_bak_escape;
-	signed short escape_dir; /* 0: no escape; 1: left; 2: down; 3: up. not compatible with the directions in the path! */
-	signed short mouse_cb_x;
-	signed short mouse_cb_y;
+	signed int escape_dir; /* 0: no escape; 1: left; 2: down; 3: up. not compatible with the directions in the path! */
+	signed int mouse_cb_x;
+	signed int mouse_cb_y;
 
 	call_mouse_bg();
 
