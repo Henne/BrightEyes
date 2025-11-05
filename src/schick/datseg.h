@@ -343,10 +343,10 @@ struct struct_fighter {
 	signed char id;		/* position in g_fig_list_array */
 	signed char z;
 	signed char visible;	/* {0, 1, 2, 3} */
-	signed char twofielded;	/* -1 if fighter is not twofielded. for twofielded fighter:
-				 * head part: FIGHTER_TWOFIELDED can be used as index for FIG_TWOFIELDED_TABLE which contains the FIGHTER_ID);
-				 * tail part: entry is FIGHTER_TWOFIELDED+20 of the head part. */
-	signed char obj_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
+	signed char double_size;/* -1 if fighter is not double_size (occupies only one square). for double_size fighter:
+				 * head part: value can be used as index for g_fig_double_size_fighter_id_table which contains the fighter id);
+				 * tail part: entry is +20 of the double_size entry of the head part. */
+	signed char object_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
 	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
 	signed char sprite_no;	/* 0x12c0, 0x1531, 0x1210 */
 	Bit8u* gfxbuf;
@@ -690,7 +690,7 @@ extern const Bit8s g_gfxtab_figures_main[125][5];			//ds:0x12c0; seg005, seg006,
 extern const struct point8s g_gfxtab_offsets_main[125][5];		//ds:0x1531; seg005, seg039, seg043
 extern signed short g_nvftab_figures_dead[22];		//ds:0x1a13; seg005, seg039
 extern Bit16s *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
-extern signed char g_two_fielded_sprite_id[5];		//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
+extern signed char g_double_size_gfx_id_table[5];		//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
 extern signed short g_weaponani_table[72];		//ds:0x25fe; seg044
 extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093
@@ -1460,12 +1460,12 @@ extern signed char g_finalfight_tumult;		//ds:0x5f30; seg033, seg041
 extern signed char g_autofight_magic;		//ds:0x5f31; seg033, seg036
 extern signed short g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
 
-extern signed char g_gfxtab_twofielded_extra_ox[4];		//ds:0x6028; seg005, seg039
-extern signed char g_gfxtab_twofielded_extra_oy[4];		//ds:0x602c; seg005, seg039
-extern signed char g_gfxtab_twofielded_x1[4];			//ds:0x6030; seg005, seg039, seg043
-extern signed char g_gfxtab_twofielded_x2[4];			//ds:0x6034; seg005, seg039, seg043
-extern signed char g_gfxtab_twofielded_extra_x1[4];		//ds:0x6038; seg005, seg039
-extern signed char g_gfxtab_twofielded_extra_x2[4];		//ds:0x603c; seg005, seg039
+extern signed char g_gfxtab_double_size_extra_ox[4];		//ds:0x6028; seg005, seg039
+extern signed char g_gfxtab_double_size_extra_oy[4];		//ds:0x602c; seg005, seg039
+extern signed char g_gfxtab_double_size_x1[4];			//ds:0x6030; seg005, seg039, seg043
+extern signed char g_gfxtab_double_size_x2[4];			//ds:0x6034; seg005, seg039, seg043
+extern signed char g_gfxtab_double_size_extra_x1[4];		//ds:0x6038; seg005, seg039
+extern signed char g_gfxtab_double_size_extra_x2[4];		//ds:0x603c; seg005, seg039
 extern const signed short g_gfxtab_obj_offset_x[63];	//ds:0x6060; seg032, seg040
 extern const signed short g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
 
@@ -1596,8 +1596,8 @@ extern struct struct_fighter *g_fig_list_buffer;	// ds:0xe37c; seg006, seg040
 extern unsigned char *g_buffer_anidat;		// ds:0xe378; seg036, seg037, seg040, seg044
 extern unsigned char *g_buffer_weapanidat;	// ds:0xe374; seg036, seg037, seg040, seg044
 extern Bit32s g_fightobj_buf_freespace;		// ds:0xe370; seg032-seg100
-extern signed char g_fig_twofielded_count;	// ds:0xe356; seg039, seg040
-extern signed char g_fig_twofielded_table[21];	// ds:0xe35a; seg005-seg099
+extern signed char g_fig_double_size_count;	// ds:0xe356; seg039, seg040
+extern signed char g_fig_double_size_fighter_id_table[21];	// ds:0xe35a; seg005-seg099
 //extern signed char *g_chessboard_cpy;		// ds:0xe356; seg038
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105

@@ -516,13 +516,13 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
 	*sheet_ptr1 = -1;
 
 	/* does this sprite need two fields */
-	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id))	{
+	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table))	{
 
 		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 0xf3);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
-		FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], sheet_id + 2);
+		FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], sheet_id + 2);
 	}
 
 	if (weapon_type != -1) {
@@ -783,7 +783,7 @@ void FANI_prepare_spell_enemy(signed short v1, struct enemy_sheet *enemy, signed
 	*sheet_ptr = -1;
 
 	/* check if the moster sprite ID needs two fields */
-	if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
 		memcpy(&g_fig_anisheets[v1 + 2], &g_fig_anisheets[v1], 0xf3);
 	}
 }

@@ -5,7 +5,7 @@ namespace M302de {
 //0x20
 signed short do_fight(signed short);
 //0x25
-void FIG_set_cb_field(signed short, signed short, signed short);
+void FIG_set_cb_object(signed short, signed short, signed short);
 //0x2a
 void draw_fight_screen_pal(signed short);
 //0x2f

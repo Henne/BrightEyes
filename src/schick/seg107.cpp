@@ -120,9 +120,9 @@ void item_arcano(void)
 	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	g_spelluser->target_id = select_hero_from_group(get_ttx(637)) + 1;
+	g_spelluser->target_object_id = select_hero_from_group(get_ttx(637)) + 1;
 
-	if (g_spelluser->target_id > 0) {
+	if (g_spelluser->target_object_id > 0) {
 
 		/* use it */
 		spell_arcano();
@@ -205,9 +205,9 @@ void item_armatrutz(void)
 	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	g_spelluser->target_id = select_hero_from_group(get_ttx(637)) + 1;
+	g_spelluser->target_object_id = select_hero_from_group(get_ttx(637)) + 1;
 
-	if (get_spelluser()->target_id > 0) {
+	if (get_spelluser()->target_object_id > 0) {
 		/* use it */
 		spell_armatrutz();
 		/* decrement usage counter */

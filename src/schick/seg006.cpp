@@ -232,11 +232,11 @@ void FIG_make_invisible(signed char fighter_id)
 
 	list_i->visible = 0;
 
-	if (list_i->twofielded != -1) {
+	if (list_i->double_size != -1) {
 
 		ptr2 = g_fig_list_head;
 
-		while (g_fig_twofielded_table[list_i->twofielded] != ptr2->id) {
+		while (g_fig_double_size_fighter_id_table[list_i->double_size] != ptr2->id) {
 			ptr2 = ptr2->next;
 		}
 		ptr2->visible = 0;
@@ -266,11 +266,11 @@ void FIG_make_visible(signed short fighter_id)
 
 	list_i->visible = 1;
 
-	if (list_i->twofielded != -1) {
+	if (list_i->double_size != -1) {
 
 		ptr2 = g_fig_list_head;
 
-		while (g_fig_twofielded_table[list_i->twofielded] != ptr2->id) {
+		while (g_fig_double_size_fighter_id_table[list_i->double_size] != ptr2->id) {
 
 			ptr2 = ptr2->next;
 		}

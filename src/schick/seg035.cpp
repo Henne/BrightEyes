@@ -266,7 +266,7 @@ signed short check_hero_range_attack(const struct struct_hero *hero, const signe
 	retval = 1;
 
 	/* get position of the target */
-	FIG_search_obj_on_cb(hero->target_id, &target_x, &target_y);
+	FIG_search_obj_on_cb(hero->target_object_id, &target_x, &target_y);
 
 	/* get position of the hero */
 	FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);

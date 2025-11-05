@@ -61,7 +61,8 @@ signed int g_fig_dropped_weapons[30];	// ds:0xe31a
  * \param   y           the Y-Coordinate on the chessboard
  * \param   x           the X-Coordinate on the chessboard
  * \param   object      number of the object
- *			0=free, 1-6=heroes, >10=enemies,
+ *			0=free, 1-7=heroes, 10-29=enemies,
+ *			30-49=tails of double-size enemies,
  *			>50walls, trees, etc
  *			-3 = flee
  *
@@ -72,13 +73,13 @@ signed int g_fig_dropped_weapons[30];	// ds:0xe31a
 /* The functions in this file need object to be signed short.
  * All other callers use signed short from the header.
  */
-void FIG_set_cb_field(signed short y, signed short x, signed short object)
+void FIG_set_cb_object(signed short y, signed short x, signed short object_id)
 {
 	/* check that the object is in the borders */
 	if (!((y >= 0) && (y <= 24) && (x >= 0) && (x <= 24)))
 	{
 	} else {
-		*(y * 25 + g_chessboard + x) = ((signed char)object);
+		*(y * 25 + g_chessboard + x) = ((signed char)object_id);
 	}
 }
 
@@ -591,51 +592,51 @@ void FIG_do_round(void)
 
 						FIG_do_hero_action(hero, actor_id);
 
-						if (hero->target_id >= 10) {
+						if (hero->target_object_id >= 10) {
 
 							/* hero did attack some enemy (by weapon/spell/item etc.) */
 
-							/* if the tail of a two-squares enemy has been attacked,
-							 * replace HERO_ENEMY_ID by the main id of that enemy */
-							if (hero->target_id >= 30) {
+							/* if the tail of a double-size enemy has been attacked, ... */
+							if (hero->target_object_id >= 30) {
 
-								hero->target_id -= 20;
+								/* write the target_object_id of the head to target_object_id */
+								hero->target_object_id -= 20;
 							}
 
-							/* TODO: seems that (hero->target_id) gives better results than (hero->target_id - 10) */
-							//if (g_enemy_sheets[hero->target_id - 10].flags.dead)
-							if (((struct enemy_flags)g_enemy_sheets[hero->target_id - 10].flags).dead)
+							/* TODO: seems that (hero->target_object_id) gives better results than (hero->target_object_id - 10) */
+							//if (g_enemy_sheets[hero->target_object_id - 10].flags.dead)
+							if (((struct enemy_flags)g_enemy_sheets[hero->target_object_id - 10].flags).dead)
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[hero->target_id - 10].gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[hero->target_object_id - 10].gfx_id, g_double_size_gfx_id_table))
 								{
-									/* attacked dead enemy is two-squares */
+									/* attacked dead enemy is double-size */
 									/* goal: remove tail part */
 
-									FIG_search_obj_on_cb(hero->target_id + 20, &x, &y);
+									FIG_search_obj_on_cb(hero->target_object_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
 
-									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->target_id - 10].fighter_id);
+									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->target_object_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
+									fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
-									if (fighter_ptr->obj_id >= 0) {
+									if (fighter_ptr->object_id >= 0) {
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
 										/* BAE-TODO: passing of the 3rd parameter is different */
 #if !defined(__BORLANDC__)
-										FIG_set_cb_field(y, x, ((unsigned char)fighter_ptr->obj_id));
+										FIG_set_cb_object(y, x, ((unsigned char)fighter_ptr->object_id));
 #else
-										FIG_set_cb_field(y, x, (_AL = fighter_ptr->obj_id, _AX));
+										FIG_set_cb_object(y, x, (_AL = fighter_ptr->object_id, _AX));
 #endif
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
-										FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, 0);
+										FIG_set_cb_object(fighter_ptr->cby, fighter_ptr->cbx, 0);
 									}
 								}
 							}
@@ -686,50 +687,50 @@ void FIG_do_round(void)
 
 						FIG_do_enemy_action(enemy, actor_id);
 
-						if (enemy->target_id >= 10) {
+						if (enemy->target_object_id >= 10) {
 
 							/* enemy attacks another enemy (by weapon/spell etc.) */
 
-							/* if the tail of a two-squares enemy has been attacked,
-							 * replace enemy->target_id by the main id of that enemy */
-							if (enemy->target_id >= 30) {
+							/* if the tail of a double-size enemy has been attacked,
+							 * replace enemy->target_object_id by the main id of that enemy */
+							if (enemy->target_object_id >= 30) {
 
-								enemy->target_id -= 20;
+								enemy->target_object_id -= 20;
 							}
 
-							/* TODO: seems that (hero->target_id) gives better results than (hero->target_id - 10) */
-							//if (g_enemy_sheets[enemy->target_id - 10].flags.dead)
-							if (((struct enemy_flags)(g_enemy_sheets[enemy->target_id - 10].flags)).dead) /* check 'dead' flag */
+							/* TODO: seems that (hero->target_object_id) gives better results than (hero->target_object_id - 10) */
+							//if (g_enemy_sheets[enemy->target_object_id - 10].flags.dead)
+							if (((struct enemy_flags)(g_enemy_sheets[enemy->target_object_id - 10].flags)).dead) /* check 'dead' flag */
 							{
 
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[enemy->target_id - 10].gfx_id, g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[enemy->target_object_id - 10].gfx_id, g_double_size_gfx_id_table))
 								{
-									/* attacked dead enemy is two-squares */
+									/* attacked dead enemy is double-size */
 									/* goal: remove tail part */
-									FIG_search_obj_on_cb(enemy->target_id + 20, &x, &y);
+									FIG_search_obj_on_cb(enemy->target_object_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr->cbx, fighter_ptr->cby could have been used later. */
 
 
-									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->target_id - 10].fighter_id);
+									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->target_object_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
 
-									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
+									fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the killed enemy */
 									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
-									if (fighter_ptr->obj_id >= 0) {
+									if (fighter_ptr->object_id >= 0) {
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
 #if !defined(__BORLANDC__)
-										FIG_set_cb_field(y, x, fighter_ptr->obj_id);
+										FIG_set_cb_object(y, x, fighter_ptr->object_id);
 #else
-										FIG_set_cb_field(y, x, (_AL = fighter_ptr->obj_id, _AX));
+										FIG_set_cb_object(y, x, (_AL = fighter_ptr->object_id, _AX));
 #endif
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
-										FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, 0);
+										FIG_set_cb_object(fighter_ptr->cby, fighter_ptr->cbx, 0);
 									}
 								}
 							}
@@ -754,19 +755,19 @@ void FIG_do_round(void)
 						if (enemy->flags.dead) { /* check 'dead' flag */
 
 							/* attacking enemy is dead because of critical attack failure */
-							if (is_in_byte_array(enemy->gfx_id, g_two_fielded_sprite_id)) {
-								/* attacking dead enemy is two-squares */
+							if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+								/* attacking dead enemy is double-size */
 								/* goal: remove tail part */
 
 								fighter_ptr = FIG_get_fighter(enemy->fighter_id);
 								/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-								fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
+								fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
 								/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 								/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
 								/* restore the cb_entry stored at FIGHTER_OBJ_ID (meaning that the tail part is standing on it). */
-								FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, fighter_ptr->obj_id);
+								FIG_set_cb_object(fighter_ptr->cby, fighter_ptr->cbx, fighter_ptr->object_id);
 							}
 						}
 #endif
