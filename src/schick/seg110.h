@@ -2,8 +2,9 @@
 namespace M302de {
 #endif
 
+/* should be static */
 /* 0x20 */
-void TRV_swim2(signed char, signed short);
+void TRV_swim2(const signed int, const signed int);
 /* 0x25 */
 void tevent_014_chest(struct struct_chest*);
 /* 0x2a */

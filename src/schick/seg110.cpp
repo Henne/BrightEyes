@@ -39,7 +39,7 @@ static struct struct_chest g_tevent014_corpse = {0, 1, NULL, NULL, tevent_014_ch
 
 void tevent_011(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	if ((test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent011_flag) ||
@@ -87,9 +87,9 @@ void tevent_011(void)
  * \param   percent     probability to loose an item
  */
 /* should be static */
-void TRV_swim2(signed char mod, signed short percent)
+void TRV_swim2(const signed int mod, const signed int percent)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	hero = get_hero(0);
@@ -125,7 +125,7 @@ void TRV_swim2(signed char mod, signed short percent)
 /* should be static */
 void TRV_a_path(void)
 {
-	signed short answer;
+	signed int answer;
 
 	do {
 		answer = GUI_radio(get_tx2(33), 2, get_tx2(34), get_tx2(35));
@@ -180,7 +180,7 @@ void tevent_013(void)
 
 void tevent_014(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_tevent014_flag)
 	{
@@ -224,7 +224,7 @@ void tevent_017(void)
 /* Path west from the route Kravik <-> Skelellen. */
 void tevent_020(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	if ((test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 7) > 0 && !gs_tevent020_flag) ||
@@ -278,7 +278,7 @@ void tevent_021(void)
 void tevent_022(void)
 	/* Rukian <-> Faehrstation Angbodirtal: windgeschuetzte Stelle */
 {
-	signed short answer;
+	signed int answer;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent022_flag) ||
 		gs_tevent022_flag)
@@ -348,8 +348,8 @@ void tevent_028(void)
 
 void tevent_029(void)
 {
-	signed short i;
-	signed short item_pos;
+	signed int i;
+	signed int item_pos;
 	struct struct_hero *hero;
 
 	load_in_head(51);
@@ -412,7 +412,7 @@ void tevent_030(void)
 
 void tevent_031(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (gs_find_hyggelik) {
 
@@ -466,7 +466,7 @@ void tevent_032(void)
 
 void tevent_033(void)
 {
-	signed short answer;
+	signed int answer;
 
 	load_in_head(9);
 
@@ -496,7 +496,7 @@ void tevent_034(void)
 
 void tevent_035(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_tevent035_flag)
 	{
@@ -566,7 +566,7 @@ void tevent_040(void)
 /* Auplog <-> Varnheim: kleiner aber reissender Bach, ueber den sich urspruenglich einmal eine Haengebruecke spannte. bridge building */
 void tevent_041(void)
 {
-	signed short answer;
+	signed int answer;
 
 	TRV_barrier(12);
 
@@ -612,7 +612,7 @@ void tevent_043(void)
 /* dying adventuress */
 void tevent_044(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	if (!gs_tevent094_flag) {
@@ -645,7 +645,7 @@ void tevent_044(void)
 /* Ottarje -> Daspota: a farmer */
 void tevent_045(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (gs_trv_destination == TOWNS_DASPOTA)
 	{
@@ -669,8 +669,8 @@ void tevent_045(void)
 /* Daspota <-> Ottarje: entrance to the dungeon "verlassene Herberge"("abandoned inn") */
 void tevent_046(void)
 {
-	signed short answer;
-	signed short enter_inn;
+	signed int answer;
+	signed int enter_inn;
 	struct struct_hero *hero;
 
 	enter_inn = 0;
@@ -745,7 +745,7 @@ void tevent_046(void)
 /* Daspota <-> Ottarje: alte Feuerstelle. idealer Rastplatz. */
 void tevent_048(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent048_flag) ||
 		gs_tevent048_flag)
