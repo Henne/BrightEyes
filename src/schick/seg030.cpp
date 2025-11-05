@@ -52,8 +52,8 @@ struct struct_hero *gs_random_tlk_hero;	/* REMARK: scope has changed drastically
  * */
 char* get_random_known_informer_name(const int informer_math)
 {
-	signed short i;
-	signed short counter;
+	signed int i;
+	signed int counter;
 
 	for (i = counter = 0; i < 15; i++) {
 
@@ -82,8 +82,8 @@ char* get_random_known_informer_name(const int informer_math)
 /* get random unknown informer */
 char* get_random_unknown_informer_name(const int informer_math)
 {
-	signed short i;
-	signed short counter;
+	signed int i;
+	signed int counter;
 
 	for (i = counter = 0; i < 15; i++) {
 
@@ -114,23 +114,22 @@ char* get_random_unknown_informer_name(const int informer_math)
 /* unused in the game */
 void print_date(void)
 {
-	signed short tw_bak;
+	signed int tw_bak;
 
 	prepare_date_str();
+
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
+
 	GUI_input(g_dtp2, 0);
+
 	g_textbox_width = tw_bak;
 }
 
 void prepare_date_str(void)
 {
-	unsigned short unused;
-	signed short hour;
-
-	unused = 0;
-
-	hour = (signed short)(gs_day_timer / HOURS(1));
+	unsigned short unused = 0;
+	signed short hour = gs_day_timer / HOURS(1);
 
 	if (gs_day_of_month < 0) {
 
@@ -153,24 +152,24 @@ struct tlk_option {
 	signed short txt, goto_state;
 };
 
-void do_talk(signed short talk_id, signed short tlk_informer)
+void do_talk(const signed int talk_id, const signed int tlk_informer)
 {
-	signed short txt_id;
-	signed short txt_offset;
-	signed short answer;
-	signed short optioncount;
+	signed int txt_id;
+	signed int txt_offset;
+	signed int answer;
+	signed int optioncount;
 	struct struct_dialog_state *state_ptr;
 	Bit8u *states_tab;
 	struct struct_dialog_partner *partners_tab;
 	char *dst;
 	char *fmt;
 	struct struct_hero *hero;
-	signed short shufflepair_1;
-	signed short shufflepair_2;
-	signed short shuffle_count;
-	signed short i;
-	signed short tmp1;
-	signed short tmp2;
+	signed int shufflepair_1;
+	signed int shufflepair_2;
+	signed int shuffle_count;
+	signed int i;
+	signed int tmp1;
+	signed int tmp2;
 
 	struct tlk_option options[3];
 
@@ -228,32 +227,32 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2)));
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2));
 					} else if (txt_id == 29) {
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							(GUI_get_ptr2(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1)),
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2)));
+							GUI_get_ptr2(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0),
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1),
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2));
 
 					} else if (txt_id == 30) {
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1)),
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2)));
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1),
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2));
 
 					} else if (txt_id == 31) {
 
 						sprintf(dst, fmt,
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 3)));
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 3));
 
 					} else if (txt_id == 32) {
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
+							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0),
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 					} else {
@@ -543,9 +542,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 /* Borlandified and identical */
 void talk_switch(void)
 {
-	signed short state;
-
-	state = g_dialog_state;
+	signed int state = g_dialog_state;
 
 	if (g_tlk_id == 3) {
 		/* DASPOTA1.TLK */

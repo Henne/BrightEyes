@@ -38,11 +38,11 @@ struct struct_ani {
 
 void do_market(void)
 {
-	signed short done;
-	signed short answer;
-	signed short type_bak;
-	signed short dir_bak;
-	signed short bak1;
+	signed int done;
+	signed int answer;
+	signed int type_bak;
+	signed int dir_bak;
+	signed int bak1;
 
 	done = 0;
 	g_request_refresh = 1;
@@ -242,7 +242,7 @@ static void hyg_ani_4(void)
 
 void show_hyggelik_ani(void)
 {
-	signed short i;
+	signed int i;
 	signed int handle;
 	Bit32s filelen;
 	Bit8u *src;
@@ -370,10 +370,10 @@ void show_hyggelik_ani(void)
 
 void show_times_up(void)
 {
-	signed short fi_bak;
-	signed short tw_bak;
-	signed short bak1;
-	signed short bak2;
+	signed int fi_bak;
+	signed int tw_bak;
+	signed int bak1;
+	signed int bak2;
 
 	fi_bak = g_text_file_index;
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
