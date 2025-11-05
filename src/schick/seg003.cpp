@@ -122,8 +122,8 @@ void move(void)
 
 void door_frame(signed short no, signed short x, signed short y, signed short frame)
 {
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short l1;
 	Bit8u *p1;
 	Bit8u *p2;

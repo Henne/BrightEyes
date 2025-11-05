@@ -221,15 +221,15 @@ void spell_hexenknoten(void)
 {
 	struct struct_fighter *fighter;
 	Bit8u *rp;
-	signed short x;
-	signed short y;
-	signed short no;
-	signed short height;
-	signed short width;
+	signed int x;
+	signed int y;
+	signed int no;
+	signed int height;
+	signed int width;
 	struct nvf_desc nvf;
 
 	if (g_fightobj_buf_freespace < 0x240L) {
-		g_spell_special_aecost = (-2);
+		g_spell_special_aecost = -2;
 		return;
 	}
 

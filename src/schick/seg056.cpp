@@ -97,8 +97,8 @@ void buy_screen(void)
 	signed short offended = 0;
 	struct struct_hero *hero1;
 	struct struct_hero *hero2;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short given_items;
 	signed short l12;
 	signed short l13;

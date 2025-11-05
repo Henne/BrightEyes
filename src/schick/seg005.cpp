@@ -323,8 +323,8 @@ unsigned short fight_printer(void)
 void draw_fight_screen(Bit16u val)
 {
 	signed short i;
-	signed short object_id_bak;
-	signed short width;
+	signed int object_id_bak;
+	signed int width;
 	signed short flag;
 	signed short current_x1;
 	signed short current_y1;

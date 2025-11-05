@@ -500,7 +500,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
  */
 void FIG_draw_enemy_pic(signed short loc, signed short id)
 {
-	signed short height_width;
+	signed int height_width;
 	struct enemy_sheet *p_enemy;
 	signed int fg_bak;
 	signed int bg_bak;

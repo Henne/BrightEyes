@@ -19,7 +19,7 @@ signed int AFIG_search_spell_target(const signed int, const signed int, const si
 
 /* 0x34 */
 /* should be static */
-signed int AFIG_select_range_target(struct struct_hero*, const signed int, const signed int, signed short, signed short);
+signed int AFIG_select_range_target(struct struct_hero*, const signed int, const signed int, signed int, signed int);
 
 /* 0x39 */
 /* should be static */
@@ -27,14 +27,14 @@ signed int AFIG_get_spell(const signed int, const signed int);
 
 /* 0x34 */
 /* should be static */
-signed int AFIG_select_autospell(struct struct_hero*, const signed int, const signed int, signed short, signed short);
+signed int AFIG_select_autospell(struct struct_hero*, const signed int, const signed int, signed int, signed int);
 
 /* 0x43 */
 /* should be static */
 signed int AFIG_count_heroes(const signed int);
 
 /* 0x48 */
-void AFIG_hero_turn(struct struct_hero*, const signed int, signed short, signed short);
+void AFIG_hero_turn(struct struct_hero*, const signed int, signed int, signed int);
 
 #if !defined(__BORLANDC__)
 }

@@ -62,10 +62,10 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 	struct struct_fighter *fighter;
 	signed short l17 = 0;
 	signed short fighter_id;
-	signed short hero_x;
-	signed short hero_y;
-	signed short target_x;
-	signed short target_y;
+	signed int hero_x;
+	signed int hero_y;
+	signed int target_x;
+	signed int target_y;
 	signed short dir;
 	struct viewdir_offsets8s dst = g_viewdir_invoffsets3;
 	struct struct_msg tmp;

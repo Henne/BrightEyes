@@ -4160,8 +4160,8 @@ signed int mod_day_timer(const signed int val)
 
 void draw_compass(void)
 {
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	struct nvf_desc n;
 
 	/* No compass in a location */

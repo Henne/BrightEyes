@@ -102,8 +102,8 @@ void status_menu(signed short hero_pos)
 	signed short l_di;
 	signed short flag1;
 	signed short flag2;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short file_bak;
 	struct struct_hero *hero2;
 	struct struct_hero *hero1;

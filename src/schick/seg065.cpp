@@ -32,8 +32,8 @@ namespace M302de {
 
 struct struct_ani {
 	Bit8u* ptr;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 };
 
 void do_market(void)
@@ -99,10 +99,10 @@ void do_market(void)
 
 void final_intro(void)
 {
-	signed short i;
+	signed int i;
 	signed int handle;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	Bit32u len;
 	Bit8u *ptr1;
 	Bit8u *ptr2;
@@ -423,14 +423,14 @@ void show_times_up(void)
 
 void show_outro(void)
 {
-	signed short j;
+	signed int j;
 	signed int handle;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	unsigned short len;
 	Bit8u *pal_ptr;
 	struct struct_hero *hero;
-	signed short i;
+	signed int i;
 	struct nvf_desc nvf;
 
 	g_textbox_width = 7;

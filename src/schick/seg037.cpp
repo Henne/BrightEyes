@@ -392,7 +392,7 @@ signed int FIG_get_mspell(const signed int mspell_id, const signed int mode)
 	return retval;
 }
 
-signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_no, const signed int attack_foe, signed short x, signed short y)
+signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_no, const signed int attack_foe, signed int x, signed int y)
 {
 	signed int available_spells;
 	signed int mspell_id;
@@ -559,7 +559,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 }
 
 
-signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int enemy_no, const signed int attack_foe, signed short x, signed short y)
+signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int enemy_no, const signed int attack_foe, signed int x, signed int y)
 {
 
 	signed int cnt;
@@ -628,7 +628,7 @@ signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int en
 }
 
 
-void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x, signed short y)
+void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed int x, signed int y)
 {
 	signed int target_reachable;
 	signed int attack_foe;
@@ -636,8 +636,8 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed sho
 	signed int cnt;
 	signed int done = 0;
 	signed int flag;
-	signed short x_bak;
-	signed short y_bak;
+	signed int x_bak;
+	signed int y_bak;
 	signed int target;
 
 	struct viewdir_offsets diff = g_viewdir_offsets6;

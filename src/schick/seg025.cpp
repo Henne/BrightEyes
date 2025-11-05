@@ -282,8 +282,8 @@ void show_treasure_map(void)
 	signed short l_si;
 	signed short tw_bak;
 	signed short count;	/* #collected treasure map parts */
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short pp20_index_bak;
 	Bit32s length;
 	struct nvf_desc nvf;

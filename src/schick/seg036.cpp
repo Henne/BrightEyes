@@ -404,15 +404,15 @@ signed int AFIG_search_spell_target(const signed int x, const signed int y, cons
  * \param   y           y-coordinate of the hero
  * \return              0 = no target found, 1 = target found (long distance), 2 = target found (short distance)
  */
-signed int AFIG_select_range_target(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
+signed int AFIG_select_range_target(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed int x, signed int y)
 {
 	signed int dir;
 	signed int count;
 	signed int done;
 	signed int retval;
 	signed int target_found;
-	signed short target_x;
-	signed short target_y;
+	signed int target_x;
+	signed int target_y;
 
 	retval = 0;
 	done = 0;
@@ -536,7 +536,7 @@ signed int AFIG_get_spell(const signed int spell_id, const signed int renegade)
  * \param   y           y-coordinate of the hero
  * \return              {0, 1}
  */
-signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed short x, signed short y)
+signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero_pos, const signed int renegade, signed int x, signed int y)
 {
 	signed int i;
 	signed int count;
@@ -744,7 +744,7 @@ signed int AFIG_count_heroes(const signed int hero_pos)
  * \param   x           x-coordinate of the hero
  * \param   y           y-coordinate of the hero
  */
-void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed short x, signed short y)
+void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed int x, signed int y)
 {
 	signed int i;
 	signed int cnt;
@@ -754,8 +754,8 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 	signed int x_bak;
 	signed int y_bak;
 	signed int range_type;
-	signed short hero_x;
-	signed short hero_y;
+	signed int hero_x;
+	signed int hero_y;
 
 	struct viewdir_offsets a = g_viewdir_offsets4;
 

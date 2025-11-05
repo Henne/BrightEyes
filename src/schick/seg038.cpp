@@ -34,7 +34,7 @@ static struct viewdir_offsets g_viewdir_offsets7 = { {	{ 1, 0 }, { 0, -1 }, { -1
  * \return              0 if the object was not found. If the object was
  * found it returns 1 and stores the coordinates at the pointers.
  */
-signed int FIG_search_obj_on_cb(const signed short obj, signed short *px, signed short *py)
+signed int FIG_search_obj_on_cb(const signed int obj, signed int *px, signed int *py)
 {
 	/* This is the Endian save version */
 	for (*px = 0; *px < 25; (*px)++) {
@@ -50,8 +50,8 @@ signed int FIG_search_obj_on_cb(const signed short obj, signed short *px, signed
 
 void FIG_init_list_elem(signed short obj)
 {
-
-	signed short x, y;
+	signed int x;
+	signed int y;
 
 	FIG_search_obj_on_cb(obj, &x, &y);
 
@@ -330,8 +330,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	signed short new_squares_reached;
 	signed short new_x;
 	signed short new_y;
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 	signed short tail_x;
 	signed short tail_y;
 	signed short dir;

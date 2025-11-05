@@ -368,11 +368,11 @@ void call_load_area(const signed int type)
 #if defined(__BORLANDC__)
 void unused_store(signed short no)
 {
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	struct ems_tab *ptr;
 	struct nvf_desc nvf;
-	signed short size;
+	signed int size;
 
 	nvf.dst = g_renderbuf_ptr + 30000;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
@@ -419,8 +419,8 @@ Bit8u* unused_load(signed short no)
 
 void load_map(void)
 {
-	signed short handle;	/* REMARK: reused differently */
-	signed short wallclock_update_bak;
+	signed int handle;	/* REMARK: reused differently */
+	signed int wallclock_update_bak;
 	struct nvf_desc nvf;
 
 	wallclock_update_bak = g_wallclock_update;
@@ -542,8 +542,8 @@ void save_npc(const signed int index)
 void load_splashes(void)
 {
 	signed int handle;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	struct nvf_desc nvf;
 
 	/* read SPLASHES.DAT */

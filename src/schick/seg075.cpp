@@ -400,8 +400,8 @@ static char g_dng_stub6_str_and[6] = " UND "; // ds:0x92cf
 void DNG_floor_ceil(void)
 {
 	struct nvf_desc nvf;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 
 	/* Load ceiling */
 	nvf.dst = g_renderbuf_ptr;
@@ -672,8 +672,8 @@ void DNG_stub3(void)
 
 void DNG_draw_walls(signed short x, signed short y, signed short a3)
 {
-	signed short nvf_width;
-	signed short nvf_height;
+	signed int nvf_width;
+	signed int nvf_height;
 	signed short width2;
 	signed short height2;
 	signed short flag;

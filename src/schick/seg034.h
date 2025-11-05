@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void FIG_move_hero(struct struct_hero*, signed short, signed short*, signed short*);
+void FIG_move_hero(struct struct_hero*, const signed int, signed int*, signed int*);
 /* 0x25 */
 signed int FIG_check_hero_attack(const signed int, const signed int, const signed int, const signed int,
                         const signed int, const signed int, const signed int);

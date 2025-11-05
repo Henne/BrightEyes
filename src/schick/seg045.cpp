@@ -115,8 +115,8 @@ static signed char* g_anitab_spell_index[2] = {
  **/
 void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const signed int dir)
 {
-	signed short obj_x;
-	signed short obj_y;
+	signed int obj_x;
+	signed int obj_y;
 	struct nvf_desc nvf;
 
 	FIG_search_obj_on_cb(fighter_id, &obj_x, &obj_y);
@@ -205,11 +205,11 @@ signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int
 {
 	signed int i;
 	Bit8s *sheet_ptr;
-	signed short fighter_x;
-	signed short fighter_y;
-	signed short target_x;
-	signed short target_y;
-	signed short beeline;
+	signed int fighter_x;
+	signed int fighter_y;
+	signed int target_x;
+	signed int target_y;
+	signed int beeline;
 
 	FIG_search_obj_on_cb(target_object_id, &target_x, &target_y);
 	FIG_search_obj_on_cb(fighter_id, &fighter_x, &fighter_y);
@@ -244,8 +244,8 @@ struct dummy4 {
 
 void FANI_add_spell(const signed int x, const signed int y, const signed int spell_ani_id)
 {
-	signed short height;
-	signed short width;
+	signed int height;
+	signed int width;
 
 	/* TODO: some kind of initialized structure */
 	struct dummy2 a = *(struct dummy2*)&g_anitab_spell_nvfno;
@@ -297,8 +297,8 @@ void FANI_remove_spell(void)
 void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_hero *hero, const signed int spell_ani_id)
 {
 	Bit8s *sheet_ptr;
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(hero->target_object_id, &x, &y);
@@ -318,8 +318,8 @@ void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_
 void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_sheet *enemy, const signed int spell_ani_id)
 {
 	Bit8s *sheet_ptr;
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(enemy->target_object_id, &x, &y);

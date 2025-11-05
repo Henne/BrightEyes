@@ -664,8 +664,8 @@ void do_town(void)
 
 static void refresh_floor_and_sky(void)
 {
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	struct nvf_desc nvf;
 
 	nvf.dst = g_renderbuf_ptr;
@@ -1083,8 +1083,8 @@ void city_building_textures(void)
 
 void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int v4)
 {
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short copy_width;
 	signed short copy_height;
 	signed short direction;

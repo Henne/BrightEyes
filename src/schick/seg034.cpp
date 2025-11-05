@@ -512,11 +512,11 @@ signed int FIG_move_pathlen(void)
  * \brief   Moves a hero on the chessboard
  *
  * \param   hero        pointer to the hero
- * \param   hero_pos    position of the hero in the group
+ * \param   actor_id    position of the hero in the group
  * \param   px          pointer to the x-coordinate on the chessboard
  * \param   py          pointer to the y-coordinate on the chessboard
  */
-void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short *px, signed short *py)
+void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed int *px, signed int *py)
 {
 	signed int problem;
 	signed int path_end;
@@ -733,7 +733,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 					} else {
 
 						FIG_set_cb_object(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
-						target_reachable = FIG_find_path_to_target((Bit8u*)hero, hero_pos, *px, *py, 10);
+						target_reachable = FIG_find_path_to_target((Bit8u*)hero, actor_id, *px, *py, 10);
 						/* target_reachable = 1: there is a path of length < 50 to the target square; target_reachable = -1: there is no such path */
 						bp_cost = FIG_move_pathlen();
 #if !defined(__BORLANDC__)
@@ -816,7 +816,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 						/* target square contains a hero */
 						if (!get_hero(cb_entry_bak - 1)->flags.dead &&
 							!get_hero(cb_entry_bak - 1)->flags.unconscious &&
-							(cb_entry_bak != hero_pos + 1))
+							(cb_entry_bak != actor_id + 1))
 						{
 							/* hero is not dead, not unconscious, and not the active hero */
 							problem = 3;
@@ -835,7 +835,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 						/* target square contains a non-dead monster (including the tail of a double-size monster) */
 						problem = 3;
 
-					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !get_hero(cb_entry_bak - 1)->flags.dead && !get_hero(cb_entry_bak - 1)->flags.unconscious && (cb_entry_bak != hero_pos + 1)) {
+					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !get_hero(cb_entry_bak - 1)->flags.dead && !get_hero(cb_entry_bak - 1)->flags.unconscious && (cb_entry_bak != actor_id + 1)) {
 
 						/* target square contains a non-dead and non-unconscious hero different from the active hero */
 						problem = 3;
@@ -912,14 +912,14 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 				FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 				g_fig_cb_selector_id[0] = -1;
 
-				FIG_prepare_hero_ani(hero, hero_pos);
+				FIG_prepare_hero_ani(hero, actor_id);
 
 				if (hero->action_id == FIG_ACTION_FLEE) {
 
 					hero->bp_left = 0;
 
 				} else {
-					FIG_search_obj_on_cb(hero_pos + 1, px, py);
+					FIG_search_obj_on_cb(actor_id + 1, px, py);
 				}
 			}
 

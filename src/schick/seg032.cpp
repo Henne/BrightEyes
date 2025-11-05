@@ -371,18 +371,18 @@ unsigned short FIG_fight_continues(void)
 
 void FIG_do_round(void)
 {
-	signed short i;
-	signed short nr_hero_act_phases_left_in_round; /* total number over all heroes */
-	signed short nr_enemy_action_phases_left_in_round; /* total number over all enemies */
-	signed short actor_id;
-	signed short x_coord;
-	signed short y_coord;
-	signed short nr_action_phases_left_in_turn; /* number of action phases left in the turn of an actor */
+	signed int i;
+	signed int nr_hero_act_phases_left_in_round; /* total number over all heroes */
+	signed int nr_enemy_action_phases_left_in_round; /* total number over all enemies */
+	signed int actor_id;
+	signed int x_coord;
+	signed int y_coord;
+	signed int nr_action_phases_left_in_turn; /* number of action phases left in the turn of an actor */
 	signed char is_enemies_turn; /* 0: enemies' turn; 1: heroes' turn */
 	struct struct_hero *hero;
 	struct enemy_sheet *enemy;
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 	struct struct_fighter *fighter_ptr;
 
 	/* A round is the phase of a fight where all heroes and enemies get their number of BP (Bewegungspunkte; depending on load, enemy type etc.) and use them to perform a series of actions.
@@ -818,8 +818,8 @@ void FIG_load_ship_sprites(void)
 	signed short l_si;
 	signed short l_di;	// REMARK: rename to x (chessboard)
 	signed short i;		// REMARK: rename to y (chessboard)
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short const1 = 10;
 	signed short const2 = 118;
 	signed short l3;	// REMARK: rename to x (screen)

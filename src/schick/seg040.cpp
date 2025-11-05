@@ -121,7 +121,7 @@ void FIG_chessboard_init(void)
 void FIG_preload_gfx(void)
 {
 	struct struct_fighter *fighter;
-	signed short i;
+	signed int i;
 	struct nvf_desc nvf;
 	signed int handle;
 
@@ -233,11 +233,11 @@ void FIG_preload_gfx(void)
 
 void FIG_draw_scenario(void)
 {
-	signed short cb_x;
-	signed short cb_y;
-	signed short object_id;
-	signed short width;
-	signed short height;
+	signed int cb_x;
+	signed int cb_y;
+	signed int object_id;
+	signed int width;
+	signed int height;
 	Bit8u *ptr;
 	struct nvf_desc nvf;
 

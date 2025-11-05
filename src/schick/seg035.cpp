@@ -190,10 +190,10 @@ void FIG_loot_monsters(void)
  */
 void FIG_split_ap(void)
 {
-	signed short i;
-	signed short ap;
-	signed short known_ap;
-	signed short autofight_bak;
+	signed int i;
+	signed int ap;
+	signed int known_ap;
+	signed int autofight_bak;
 
 	ap = 0;
 	autofight_bak = g_autofight;
@@ -256,12 +256,12 @@ void FIG_split_ap(void)
  */
 signed short check_hero_range_attack(const struct struct_hero *hero, const signed int hero_pos)
 {
-	signed short i;
-	signed short retval;	/* retval */
-	signed short target_x;
-	signed short target_y;
-	signed short hero_x;
-	signed short hero_y;
+	signed int i;
+	signed int retval;	/* retval */
+	signed int target_x;
+	signed int target_y;
+	signed int hero_x;
+	signed int hero_y;
 
 	retval = 1;
 

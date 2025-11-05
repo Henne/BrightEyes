@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed int FIG_search_obj_on_cb(const signed short, signed short*, signed short*);
+signed int FIG_search_obj_on_cb(const signed int, signed int*, signed int*);
 /* 0x25 */
 void FIG_init_list_elem(signed short);
 /* 0x2a */

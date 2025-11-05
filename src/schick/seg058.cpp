@@ -189,8 +189,8 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 	signed short l12 = 0;
 	struct struct_hero *hero2;
 	struct struct_hero *hero_bargain;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	struct nvf_desc nvf;
 
 	/* check if this smith has an item in repair */

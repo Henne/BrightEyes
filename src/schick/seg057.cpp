@@ -75,8 +75,8 @@ void sell_screen(struct shop_descr *shop_descr)
 	struct struct_hero *hero1;
 	struct struct_hero *hero2;
 	struct struct_hero *hero3;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short l15;
 	struct nvf_desc nvf;
 	signed short tmp[7][23];

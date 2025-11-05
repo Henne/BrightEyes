@@ -255,10 +255,10 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	signed short right_hand;
 	signed short beeline;
 	signed short distance;
-	signed short x_hero;
-	signed short y_hero;
-	signed short x_target;
-	signed short y_target;
+	signed int x_hero;
+	signed int y_hero;
+	signed int x_target;
+	signed int y_target;
 	signed short hero_idx;
 	signed char enemy_gfx_id;
 	struct enemy_sheet* enemy_p;

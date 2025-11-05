@@ -267,8 +267,8 @@ void status_show(Bit16u index)
 	struct struct_hero *hero;
 	Bit16s txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
 	Bit8s val;
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	signed short at;
 	signed short pa;
 	signed short l1;

@@ -46,11 +46,11 @@ static const char g_empty_string5[1] = ""; // ds:0x5f44
  * \brief   combat menu
  *
  * \param   hero        pointer to the hero
- * \param   hero_pos    position of the hero
+ * \param   actor_id    position of the hero
  * \param   x           x-coordinate on the chessboard
  * \param   y           y-coordinate on the chessboard
  */
-void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, signed short y)
+void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x, signed int y)
 {
 	signed short selected;
 	signed short l1;
@@ -86,7 +86,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			g_fig_cb_marker_id = -1;
 		}
 
-		FIG_init_list_elem(hero_pos + 1);
+		FIG_init_list_elem(actor_id + 1);
 		draw_fight_screen_pal(0);
 
 		if (hero->flags.scared || (hero->action_id == FIG_ACTION_FLEE)) {
@@ -94,8 +94,8 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			hero->flags.tied = 0; /* unset 'tied' flag (why??) */
 			hero->flags.petrified = 0; /* unset 'petrified' flag (why???) */
 
-			if (FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5) != -1) {
-				FIG_prepare_hero_ani(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
+			if (FIG_find_path_to_target((Bit8u*)hero, actor_id, x, y, 5) != -1) {
+				FIG_prepare_hero_ani(hero, actor_id); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
 
@@ -106,7 +106,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
 				(hero->bp_left >= 3))
 			{
-				AFIG_hero_turn(hero, hero_pos, x, y);
+				AFIG_hero_turn(hero, actor_id, x, y);
 			}
 			done = 1;
 		} else {
@@ -183,7 +183,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						/* Failure */
 						/* MU - 2 for 7 hours */
 						slot_no = get_free_mod_slot();
-						set_mod_slot(slot_no, HOURS(7), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)hero_pos);
+						set_mod_slot(slot_no, HOURS(7), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)actor_id);
 					}
 				}
 
@@ -196,7 +196,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 						call_mouse();
 
-						FIG_move_hero(hero, hero_pos, &x, &y);
+						FIG_move_hero(hero, actor_id, &x, &y);
 
 						call_mouse_bg();
 
@@ -245,7 +245,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 						if ((target_object_id <= 0) || (target_object_id >= 50)) {
 							GUI_output(get_tx(28));
-						} else if (target_object_id == (hero_pos + 1)) {
+						} else if (target_object_id == (actor_id + 1)) {
 							GUI_output(get_tx(3));
 						} else if (((target_object_id < 10) && get_hero(target_object_id - 1)->flags.dead) ||
 								//((target_object_id >= 10) && (target_object_id < 30) && (g_enemy_sheets[target_object_id - 10].flags.dead || g_enemy_sheets[target_object_id - 10].flags.dead)) ||
@@ -823,7 +823,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 						hero->target_object_id = 0;
 						done = 0;
 
-					} else if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, hero_pos))
+					} else if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, actor_id))
 					{
 						/* GUI_output(get_tx(29)); */
 						hero->action_id = FIG_ACTION_WAIT;
@@ -837,7 +837,7 @@ void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, s
 
 	/* final fight vs. Orkchampion */
 	if ((g_current_fight_no == FIGHTS_F144) &&
-		(get_hero_index(gs_main_acting_hero) != hero_pos) &&
+		(get_hero_index(gs_main_acting_hero) != actor_id) &&
 		((hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_RANGE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_SPELL) ||

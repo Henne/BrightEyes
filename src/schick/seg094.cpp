@@ -54,7 +54,7 @@ void prepare_map_marker(void)
 {
 	signed int i;
 	signed int handle;
-	signed short dummy;
+	signed int dummy;
 	struct nvf_desc nvf;
 
 	/* load OBJECTS.NVF */

@@ -755,8 +755,8 @@ void equip_belt_ani(void)
 	signed int i;
 	signed int handle;
 
-	signed short width;
-	signed short height;
+	signed int width;
+	signed int height;
 	Bit32s nvf_length;
 	Bit8u *p_pal;
 	struct nvf_desc nvf;

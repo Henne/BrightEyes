@@ -1261,7 +1261,7 @@ void load_in_head(signed short head)
 void load_tempicon(signed short no)
 {
 	struct nvf_desc nvf;
-	signed short handle; /* REMARK: reused differently */
+	signed int handle; /* REMARK: reused differently */
 
 	if (no == 14) {
 		no = 7;

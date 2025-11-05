@@ -281,7 +281,7 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed short y)
 {
 	struct nvf_desc nvf;
-	signed short l1;
+	signed int l1;
 
 	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->gfx_id][0];
 	g_fig_list_elem.nvf_no = enemy->viewdir;

@@ -137,10 +137,10 @@ static signed char get_seq_header(const signed int ani_num)
 void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero, signed short weapon_type, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
 {
 	signed short l1;
-	signed short attacker_x;
-	signed short attacker_y;
-	signed short target_x;
-	signed short target_y;
+	signed int attacker_x;
+	signed int attacker_y;
+	signed int target_x;
+	signed int target_y;
 	signed short dir;
 	signed short l7;
 	signed short l8;
@@ -325,10 +325,10 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *enemy, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
 {
 	signed short l1;
-	signed short attacker_x;
-	signed short attacker_y;
-	signed short target_x;
-	signed short target_y;
+	signed int attacker_x;
+	signed int attacker_y;
+	signed int target_x;
+	signed int target_y;
 	signed short dir;
 	signed short l7;
 	signed short l8;
@@ -553,8 +553,10 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
 /* Borlandified and identical */
 void FANI_prepare_spell_hero(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bit16s obj2, Bit16u v5, Bit16u v6)
 {
-	signed short x_obj1, y_obj1;
-	signed short x_obj2, y_obj2;
+	signed int x_obj1;
+	signed int y_obj1;
+	signed int x_obj2;
+	signed int y_obj2;
 	signed short dir;
 	signed short l2;
 	signed short l3;
@@ -679,15 +681,17 @@ void FANI_prepare_spell_enemy(signed short v1, struct enemy_sheet *enemy, signed
 								signed short v5)
 {
 	signed int l1;
-	signed short x_target, y_target;
-	signed short x_caster, y_caster;
+	signed int x_target;
+	signed int y_target;
+	signed int x_caster;
+	signed int y_caster;
 	signed int dir;
 	signed int l2;
 	signed int l3;		/* indicees to ani_index_ptr */
 	Bit8s *sheet_ptr;	/* mostly written */
 	Bit16s *ani_index_ptr;	/* read only */
 
-	signed short dir2;
+	signed int dir2;
 
 
 	/* get a pointer from an array where the gfx_id of the enemy serves as index */

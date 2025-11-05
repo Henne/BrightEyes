@@ -718,7 +718,7 @@ void restore_mouse_bg(void)
 void load_wallclock_nvf(void)
 {
 	struct nvf_desc nvf;
-	signed short handle; /* REMARK: reused differently */
+	signed int handle; /* REMARK: reused differently */
 
 	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
 	read_archive_file(handle, g_renderbuf_ptr, 2000);
