@@ -135,10 +135,13 @@ void copy_forename(char *dst, char *name)
  */
 void draw_status_line(void)
 {
-	signed short fg_bak, bg_bak;
-	Bit8u *src, *dst;
-	Bit16s head_bak;
-	signed short i, j;
+	signed int fg_bak;
+	signed int bg_bak;
+	Bit8u *src;
+	Bit8u *dst;
+	signed int head_bak;
+	signed int i;
+	signed int j;
 
 	g_update_statusline = 0;
 
@@ -364,9 +367,10 @@ void clear_loc_line(void)
  *
  * \param   pos         position of the hero
  */
-void select_hero_icon(unsigned short pos) {
-
-	signed short fg_bak, bg_bak;
+void select_hero_icon(unsigned short pos)
+{
+	signed int fg_bak;
+	signed int bg_bak;
 
 	/* paint a blue border for the pic and bars */
 	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 156, g_hero_pic_posx[pos] + 42, 189, (signed char)0xfc);
@@ -400,7 +404,8 @@ void select_hero_icon(unsigned short pos) {
 /* TODO: this function an select_hero_icon() can be merged into one. */
 void deselect_hero_icon(unsigned short pos) {
 
-	signed short fg_bak, bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 
 	/* paint a gray border for the pic and bars */
 	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 156, g_hero_pic_posx[pos] + 42, 189, (signed char)0xe6);

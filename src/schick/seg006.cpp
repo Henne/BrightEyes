@@ -451,7 +451,8 @@ signed char FIG_add_to_list(signed char fighter_id)
 void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 {
 	struct struct_hero *hero;
-	signed short fg_bak, bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 
 	hero = get_hero(hero_pos - 1);
 	g_pic_copy.src = hero->pic;
@@ -501,8 +502,8 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 {
 	signed short height_width;
 	struct enemy_sheet *p_enemy;
-	signed short fg_bak;
-	signed short bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	Bit8u* p1;
 	struct nvf_desc nvf;
 

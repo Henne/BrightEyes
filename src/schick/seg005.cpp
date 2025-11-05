@@ -187,8 +187,8 @@ static char *FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 
 unsigned short fight_printer(void)
 {
-	signed short fg_bak;
-	signed short bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	Bit8u* gfx_pos_bak;
 	Bit16u x;
 	char str[6];

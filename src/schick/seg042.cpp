@@ -80,8 +80,8 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed short dir;
 	struct struct_fighter *fighter;
 	struct struct_msg tmp;
-	signed short fg_bak;
-	signed short bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	struct nvf_desc nvf;
 
 	call_mouse_bg();

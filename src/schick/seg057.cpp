@@ -45,8 +45,8 @@ void sell_screen(struct shop_descr *shop_descr)
 	signed short l_di;
 	signed short j;
 	signed short items_x;
-	signed short fg_bak;
-	signed short bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	signed short answer;
 	signed short nice;
 	signed short percent;

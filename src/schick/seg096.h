@@ -37,9 +37,9 @@ void GUI_font_to_buf(Bit8u*);
 //70
 void GUI_write_char_to_screen_xy(unsigned short, unsigned short, unsigned short, unsigned short);
 //75
-void set_textcolor(signed short, signed short);
+void set_textcolor(const signed int, const signed int);
 /* 0x7a */
-void get_textcolor(signed short*, signed short*);
+void get_textcolor(signed int*, signed int*);
 //7f
 void GUI_print_loc_line(char*);
 //84

@@ -428,15 +428,15 @@ void show_treasure_map(void)
 
 signed short game_options(void)
 {
-	signed short done;
-	signed short answer;
-	signed short fg_bak;
-	signed short bg_bak;
-	signed short bak1;
-	signed short bak2;
-	signed short tw_bak;
-	signed short game_state;
-	signed short new_delay;
+	signed int done;
+	signed int answer;
+	signed int fg_bak;
+	signed int bg_bak;
+	signed int bak1;
+	signed int bak2;
+	signed int tw_bak;
+	signed int game_state;
+	signed int new_delay;
 
 	done = 0;
 

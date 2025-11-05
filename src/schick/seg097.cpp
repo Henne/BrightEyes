@@ -397,8 +397,8 @@ signed short GUI_input(char *str, unsigned short num)
 {
 	signed short retval;
 	signed short l2;
-	signed short fg_bak;
-	signed short bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	signed short l3;
 	signed short l4;
 	signed short l5;
@@ -549,7 +549,8 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short 
 	signed short i;
 	signed short l2, l3, l4, l5;
 	signed short tw_bak;
-	signed short fg_bak, bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	signed short l7, l8, l9, l10;
 	signed short retval;
 	signed short l11, l12, l13;
@@ -782,12 +783,13 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 
 signed short GUI_radio(char *text, signed char options, ...)
 {
-	signed short i;
+	signed int i;
 	signed short l_di;
 
 	va_list arguments;
 	signed short l3, l4, l5, l6;
-	signed short fg_bak, bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	signed short l7, l8, l9, l10, l11;
 	signed short retval;
 	signed short l12;

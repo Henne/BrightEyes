@@ -477,31 +477,31 @@ signed short GUI_print_header(char *str)
 //614
 void GUI_print_loc_line(char *str)
 {
-	signed short tmp1;
-	signed short tmp2;
-	signed short l1;
-	signed short l2;
-	signed short l3;
+	signed int fg_bak;
+	signed int bg_bak;
+	signed int tlx_bak;
+	signed int tly_bak;
+	signed int ml_bak;
 
-	get_textcolor(&tmp1, &tmp2);
+	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0);
 
-	l1 = g_textline_posx;
-	l2 = g_textline_posy;
-	l3 = g_textline_maxlen;
+	tlx_bak = g_textline_posx;
+	tly_bak = g_textline_posy;
+	ml_bak = g_textline_maxlen;
 
-	g_textline_posx = (6);
-	g_textline_posy = (143);
-	g_textline_maxlen = (307);
+	g_textline_posx = 6;
+	g_textline_posy = 143;
+	g_textline_maxlen = 307;
 
 	clear_loc_line();
 	GUI_print_header(str);
 
-	g_textline_posx = (l1);
-	g_textline_posy = (l2);
-	g_textline_maxlen = (l3);
+	g_textline_posx = tlx_bak;
+	g_textline_posy = tly_bak;
+	g_textline_maxlen = ml_bak;
 
-	set_textcolor(tmp1, tmp2);
+	set_textcolor(fg_bak, bg_bak);
 }
 
 //691
@@ -678,7 +678,7 @@ void GUI_write_char_to_screen_xy(unsigned short x, unsigned short y, unsigned sh
  * \param   fg          foreground color index
  * \param   bg          background color index
  */
-void set_textcolor(signed short fg, signed short bg)
+void set_textcolor(const signed int fg, const signed int bg)
 {
 	g_textcolor_fg[0] = fg;
 	g_textcolor_bg = bg;
@@ -690,7 +690,7 @@ void set_textcolor(signed short fg, signed short bg)
  * \param   fg          foreground color index
  * \param   bg          background color index
  */
-void get_textcolor(signed short *fg, signed short *bg)
+void get_textcolor(signed int *fg, signed int *bg)
 {
 	*fg = g_textcolor_fg[0];
 	*bg = g_textcolor_bg;

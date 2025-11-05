@@ -159,8 +159,8 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 	signed short l_si;
 	signed short j;
 	signed short items_x;
-	signed short fg_bak;
-	signed short bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	signed short answer;
 	signed short val;
 	signed short percent;

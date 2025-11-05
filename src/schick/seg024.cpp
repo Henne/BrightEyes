@@ -41,14 +41,14 @@ static const char diary_fmt[][30] = {
 
 void diary_show(void)
 {
-	signed short fg_bak;
-	signed short bg_bak;
-	signed short bak1;
-	signed short bak2;
-	signed short txt_tabpos1_bak;
-	signed short txt_tabpos2_bak;
-	signed short tw_bak;
-	signed short i;
+	signed int fg_bak;
+	signed int bg_bak;
+	signed int bak1;
+	signed int bak2;
+	signed int txt_tabpos1_bak;
+	signed int txt_tabpos2_bak;
+	signed int tw_bak;
+	signed int i;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;

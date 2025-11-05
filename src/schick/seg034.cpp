@@ -525,8 +525,8 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 	signed int target_reachable;
 	signed int curr_x;
 	signed int curr_y;
-	signed short fg_bak;
-	signed short bg_bak;
+	signed int fg_bak;
+	signed int bg_bak;
 	signed int x_screen;
 	signed int y_screen;
 	signed int from_kbd;
@@ -735,7 +735,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 						FIG_set_cb_object(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
 						target_reachable = FIG_find_path_to_target((Bit8u*)hero, hero_pos, *px, *py, 10);
 						/* target_reachable = 1: there is a path of length < 50 to the target square; target_reachable = -1: there is no such path */
-						bp_cost = (signed char)FIG_move_pathlen();
+						bp_cost = FIG_move_pathlen();
 #if !defined(__BORLANDC__)
 						D1_INFO("x: %d, y: %d, target id: %d, reachable: %d, distance: %d\n",
 								escape_dir?cb_entry_bak_escape:sel_x, sel_y,
