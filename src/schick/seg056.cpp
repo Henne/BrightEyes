@@ -76,7 +76,7 @@ void buy_screen(void)
 	signed short percent;
 	signed short percent_old = 100;
 	signed short l6 = 1;
-	signed short item_pos = 0;
+	signed int item_pos = 0;
 	signed short done = 0;
 	signed short item = 0;
 	signed short l8;

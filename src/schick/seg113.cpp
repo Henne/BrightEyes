@@ -36,7 +36,7 @@ namespace M302de {
 /* The Tatzelwurm */
 void tevent_080(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	hero = get_first_hero_available_in_group();
@@ -122,7 +122,7 @@ void tevent_083(void)
 
 void tevent_084(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_tevent084_flag) {
 
@@ -177,8 +177,8 @@ void tevent_085(void)
 
 void tevent_086(void)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct struct_hero *hero;
 
 	load_in_head(58);
@@ -251,10 +251,10 @@ void tevent_097(void)
  */
 void tevent_098(void)
 {
-	signed short answer;
-	signed short repeat;
-	signed short i;
-	signed short hero_pos;
+	signed int answer;
+	signed int repeat;
+	signed int i;
+	signed int hero_pos;
 	struct struct_hero *hero;
 
 	/* TODO: this may not be correct */
@@ -413,7 +413,7 @@ void hero_disappear(struct struct_hero *hero, const signed int pos, const signed
 /* fight with 4 harpyes */
 void tevent_099(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_tevent099_flag) {
 
@@ -455,8 +455,8 @@ void tevent_099(void)
 /* fight with 2-6 harpyes */
 void tevent_101(void)
 {
-	signed short answer;
-	signed short mod;
+	signed int answer;
+	signed int mod;
 
 	if (!gs_tevent101_flag) {
 
@@ -508,7 +508,7 @@ void tevent_102(void)
 
 void tevent_103(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	/* Original-Bug: save the address instead the return value of a function as a hero */
@@ -581,12 +581,12 @@ void tevent_103(void)
 
 void tevent_104(void)
 {
-	signed short l_si;
-	signed short done;
-	signed short i;
-	signed short nr_heroes;
+	signed int l_si;
+	signed int done;
+	signed int i;
+	signed int nr_heroes;
 	struct struct_hero *hero;
-	signed short spell_result;
+	signed int spell_result;
 
 	done = 0;
 
@@ -750,8 +750,8 @@ void tevent_106(void)
 
 void tevent_107(void)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct struct_hero *hero;
 
 	load_ani(1);
@@ -814,7 +814,7 @@ void tevent_107(void)
 /* Phexcaer <-> Skelellen: entrance to the dungeon 'orc cave' */
 void tevent_108(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
 	{

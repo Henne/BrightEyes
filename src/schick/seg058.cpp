@@ -97,9 +97,9 @@ signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and 
  * \param   item_pos    the position of the item in the inventory
  * \param   smith_pos   the position of the item in the repair list
  */
-void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, const signed int item_pos, signed short smith_pos)
+void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, const signed int item_pos, const signed int smith_pos)
 {
-	const signed short item_id = hero->inventory[item_pos].item_id;
+	const signed int item_id = hero->inventory[item_pos].item_id;
 
 	g_sellitems[smith_pos].item_id = item_id;
 
@@ -154,39 +154,39 @@ void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, cons
  * \param   smith_ptr   pointer to the smith descriptor
  * \param   smith_id    ID of the smith [0,...,49]
  */
-void repair_screen(struct smith_descr *smith, signed short smith_id)
+void repair_screen(struct smith_descr *smith, const signed int smith_id)
 {
-	signed short l_si;
-	signed short j;
-	signed short items_x;
+	signed int i; /* REMARK: also used as handle */
+	signed int j;
+	signed int items_x;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed short answer;
-	signed short val;
-	signed short percent;
-	signed short percent_old = 100;
-	signed short item_id;
-	signed short l6;
-	signed short item_pos;
-	signed short done = 0;
-	signed short item = 0;
-	signed short l8;
-	signed short smith_pos;
-	signed short l10 = 1;
-	signed short l11 = 1;
-	signed short hero_pos_old = 1;
-	signed short hero_pos = -1;
+	signed int answer;
+	signed int val;
+	signed int percent;
+	signed int percent_old = 100;
+	signed int item_id;
+	signed int l6;
+	signed int item_pos;
+	signed int done = 0;
+	signed int item = 0;
+	signed int l8;
+	signed int smith_pos;
+	signed int l10 = 1;
+	signed int l11 = 1;
+	signed int hero_pos_old = 1;
+	signed int hero_pos = -1;
 	struct c_str_5 fmt_h = g_smith_str_money_h;
 	struct c_str_5 fmt_s = g_smith_str_money_s;
 	struct c_str_5 fmt_d = g_smith_str_money_d;
 	struct Bit16s_3 array3 = g_smith_items_posx;
-	//signed short array3[3] = { { 30, 95, 160 } };
+	//signed int array3[3] = { { 30, 95, 160 } };
 	struct Bit16s_5 array5 = g_smith_items_posy;
-	//signed short array5[5] = { { 35, 55, 75, 95, 115 } };
+	//signed int array5[5] = { { 35, 55, 75, 95, 115 } };
 
 	Bit32s price;
 	Bit32s p_money;
-	signed short l12 = 0;
+	signed int l12 = 0;
 	struct struct_hero *hero2;
 	struct struct_hero *hero_bargain;
 	signed int width;
@@ -203,7 +203,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 		} else if (get_item(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
-			sprintf(g_dtp2, get_ttx(486), GUI_names_grammar((signed short)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
+			sprintf(g_dtp2, get_ttx(486), GUI_names_grammar((signed int)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
 
 			GUI_output(g_dtp2);
 
@@ -219,10 +219,10 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 		draw_main_screen();
 
 		/* ICONS */
-		l_si = load_archive_file(ARCHIVE_FILE_ICONS);
-		seek_archive_file(l_si, 18 * 576L);
-		read_archive_file(l_si, g_icon, 576L);
-		close(l_si);
+		i = load_archive_file(ARCHIVE_FILE_ICONS);
+		seek_archive_file(i, 18 * 576L);
+		read_archive_file(i, g_icon, 576L);
+		close(i);
 
 		g_pic_copy.x1 = 108;
 		g_pic_copy.y1 = 5;
@@ -261,14 +261,14 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 				if (l11 != 0) {
 
 					smith_pos = 0;
-					for (l_si = 0; l_si < NR_HERO_INVENTORY_SLOTS; l_si++) {
-						if (hero2->inventory[l_si].item_id != ITEM_NONE) {
-							add_item_to_smith(smith, hero2, l_si, smith_pos++);
+					for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
+						if (hero2->inventory[i].item_id != ITEM_NONE) {
+							add_item_to_smith(smith, hero2, i, smith_pos++);
 						}
 					}
 
-					for (l_si = smith_pos; l_si < 23; l_si++) {
-						g_sellitems[l_si].item_id = 0;
+					for (i = smith_pos; i < 23; i++) {
+						g_sellitems[i].item_id = 0;
 					}
 
 					l11 = 0;
@@ -297,16 +297,16 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 				for (items_x = 0; items_x < 3; items_x++) {
 
-					for (l_si = 0; l_si < 5; l_si++) {
+					for (i = 0; i < 5; i++) {
 
-						answer = 5 * items_x + l_si + item;
+						answer = 5 * items_x + i + item;
 
 						if ((j = g_sellitems[answer].item_id)) {
 
 							g_pic_copy.x1 = array3.a[items_x];
-							g_pic_copy.y1 = array5.a[l_si];
+							g_pic_copy.y1 = array5.a[i];
 							g_pic_copy.x2 = array3.a[items_x] + 15;
-							g_pic_copy.y2 = array5.a[l_si] + 15;
+							g_pic_copy.y2 = array5.a[i] + 15;
 							g_pic_copy.src = g_renderbuf_ptr;
 
 							nvf.no = g_itemsdat[j].gfx;
@@ -323,7 +323,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 									GUI_print_string(g_dtp2,
 										array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
-										array5.a[l_si] + 9);
+										array5.a[i] + 9);
 
 								}
 							}
@@ -333,7 +333,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 									g_sellitems[answer].shop_price);
 
 
-							GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_si] + 5);
+							GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[i] + 5);
 						}
 					}
 				}
@@ -422,7 +422,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 						make_valuta_str(g_text_output_buf, price);
 
-						sprintf(g_dtp2, get_ttx(488), GUI_names_grammar((signed short)0x8002, item_id, 0), g_text_output_buf);
+						sprintf(g_dtp2, get_ttx(488), GUI_names_grammar((signed int)0x8002, item_id, 0), g_text_output_buf);
 
 						do {
 							percent = GUI_input(g_dtp2, 2);
@@ -501,7 +501,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 				}
 			}
 
-			if (g_action >= 241 && g_action <= 247) {
+			if ((g_action >= 241) && (g_action <= 247)) {
 
 				hero_pos = g_action - 241;
 				hero2 = get_hero(hero_pos);
@@ -532,8 +532,8 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
  */
 void do_smith(void)
 {
-	signed short done = 0;
-	signed short answer;
+	signed int done = 0;
+	signed int answer;
 	struct smith_descr *smith;
 
 	if (gs_day_timer < HOURS(6) || gs_day_timer > HOURS(20)) {
@@ -614,7 +614,7 @@ void talk_smith(void)
 	do_random_talk(13, 0);
 }
 
-void TLK_schmied(signed short state)
+void TLK_schmied(const signed int state)
 {
 	if (!state) {
 		g_dialog_next_state = (gs_smith_kicked_flags[gs_current_typeindex] ? 1 :

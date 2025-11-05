@@ -42,26 +42,26 @@ static struct Bit16s_5 g_sell_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds
  */
 void sell_screen(struct shop_descr *shop_descr)
 {
-	signed short l_di;
-	signed short j;
-	signed short items_x;
+	signed int l_di;
+	signed int j;
+	signed int items_x;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed short answer;
-	signed short nice;
-	signed short percent;
-	signed short percent_old = 100;
-	signed short item_id;
-	signed short l5;
-	signed short item_pos;
-	signed short done = 0;
-	signed short item = 0;
-	signed short l8;
-	signed short l20;
-	signed short l10 = 1;
-	signed short l11 = 1;
-	signed short hero_pos_old = 1;
-	signed short hero_pos = -1;
+	signed int answer;
+	signed int nice;
+	signed int percent;
+	signed int percent_old = 100;
+	signed int item_id;
+	signed int l5;
+	signed int item_pos;
+	signed int done = 0;
+	signed int item = 0;
+	signed int l8;
+	signed int l20;
+	signed int l10 = 1;
+	signed int l11 = 1;
+	signed int hero_pos_old = 1;
+	signed int hero_pos = -1;
 	struct c_str_5 fmt_h = g_sell_screen_str_money_h;
 	struct c_str_5 fmt_s = g_sell_screen_str_money_s;
 	struct c_str_5 fmt_d = g_sell_screen_str_money_d;
@@ -71,15 +71,15 @@ void sell_screen(struct shop_descr *shop_descr)
 	//struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
 	Bit32s p_money;
 	Bit32s price = 0;
-	signed short l12 = 0;
+	signed int l12 = 0;
 	struct struct_hero *hero1;
 	struct struct_hero *hero2;
 	struct struct_hero *hero3;
 	signed int width;
 	signed int height;
-	signed short l15;
+	signed int l15;
 	struct nvf_desc nvf;
-	signed short tmp[7][23];
+	signed int tmp[7][23];
 
 
 	g_heroswap_allowed = 0;
@@ -323,7 +323,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 				if (g_itemsdat[item_id].flags.undropable) {
 
-					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
+					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar((signed int)0x8002, item_id, 0));
 					GUI_output(g_dtp2);
 
 				} else {

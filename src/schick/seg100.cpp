@@ -36,8 +36,8 @@ static unsigned char *g_hexenknoten_gfx_buf = NULL; // ds:0xacc8;
 
 void spell_eigenschaften(void)
 {
-	signed short min;
-	signed short max;
+	signed int min;
+	signed int max;
 
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
@@ -64,13 +64,13 @@ void spell_eigenschaften(void)
 
 void spell_exposami(void)
 {
-	signed short j;
-	signed short id;
-	signed short changed;
+	signed int j;
+	signed int id;
+	signed int changed;
 	int arr[20][2];
 
-	signed short i;
-	signed short count;
+	signed int i;
+	signed int count;
 
 	count = 0;
 
@@ -158,20 +158,20 @@ void spell_odem_arcanum(void)
 
 		if (get_spelluser()->inventory[inv_pos].flags.magic) {
 
-			sprintf(g_dtp2, get_tx(81), GUI_names_grammar((signed short)0x8000, item_id, 0));
+			sprintf(g_dtp2, get_tx(81), GUI_names_grammar((signed int)0x8000, item_id, 0));
 
 			get_spelluser()->inventory[inv_pos].flags.magic_revealed = 1;
 
 		} else {
-			sprintf(g_dtp2, get_tx(82), GUI_names_grammar((signed short)0x8000, item_id, 0));
+			sprintf(g_dtp2, get_tx(82), GUI_names_grammar((signed int)0x8000, item_id, 0));
 		}
 	}
 }
 
 void spell_penetrizzel(void)
 {
-	signed short y;
-	signed short x;
+	signed int y;
+	signed int x;
 
 	for (y = -2;  y <= 2; y++) {
 		for (x = -2;  x <= 2; x++) {
@@ -335,14 +335,14 @@ void spell_blitz(void)
 		g_spelltarget_e->blind = 3;
 
 		/* prepare the message */
-		sprintf(g_dtp2, get_tx(85), GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(85), GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
 void spell_ecliptifactus(void)
 {
-	signed short rounds;
-	signed short ae;
+	signed int rounds;
+	signed int ae;
 
 	/* ask how many rounds */
 	rounds = GUI_input(get_tx(87), 1);
@@ -373,7 +373,7 @@ void spell_ecliptifactus(void)
 
 void spell_eisenrost(void)
 {
-	signed short id;
+	signed int id;
 
 	if (get_spelluser()->target_object_id < 10) {
 		/* target is a hero */
@@ -405,7 +405,7 @@ void spell_eisenrost(void)
 
 						get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
 
-						sprintf(g_dtp2, get_tx(92), GUI_names_grammar((signed short)0x8000, id, 0),
+						sprintf(g_dtp2, get_tx(92), GUI_names_grammar((signed int)0x8000, id, 0),
 							(char*)get_spelltarget()->alias);
 					} else {
 						g_spell_special_aecost = -2;
@@ -431,7 +431,7 @@ void spell_eisenrost(void)
 				g_spelltarget_e->weapon_broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2, get_tx(91), GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+				sprintf(g_dtp2, get_tx(91), GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 			}
 		}
 	}
@@ -439,7 +439,7 @@ void spell_eisenrost(void)
 
 void spell_fulminictus(void)
 {
-	signed short damage;
+	signed int damage;
 
 	if ((get_spelluser()->target_object_id < 10) &&
 		get_hero(get_spelluser()->target_object_id - 1) == get_spelluser()) {
@@ -474,13 +474,13 @@ void spell_fulminictus(void)
 
 void spell_ignifaxius(void)
 {
-	signed short rs_malus;
-	signed short hero_pos;
-	signed short slot;
-	signed short mummy = 0;
+	signed int rs_malus;
+	signed int hero_pos;
+	signed int slot;
+	signed int mummy = 0;
 	struct inventory *p_armor;
-	signed short damage;
-	signed short level;
+	signed int damage;
+	signed int level;
 
 	if (get_spelluser()->target_object_id < 10) {
 
@@ -605,8 +605,8 @@ void spell_ignifaxius(void)
 
 void spell_plumbumbarum(void)
 {
-	signed short slot;
-	signed short hero_pos;
+	signed int slot;
+	signed int hero_pos;
 
 	if (get_spelluser()->target_object_id < 10) {
 
@@ -650,7 +650,7 @@ void spell_plumbumbarum(void)
 	g_spelltarget_e->at -= 3;
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(95), GUI_names_grammar((signed short)0x8001, g_spelltarget_e->mon_id, 1));
+	sprintf(g_dtp2, get_tx(95), GUI_names_grammar((signed int)0x8001, g_spelltarget_e->mon_id, 1));
 }
 
 void spell_radau(void)
@@ -660,9 +660,9 @@ void spell_radau(void)
 
 void spell_saft_kraft(void)
 {
-	signed short target;
-	signed short slot;
-	signed short rounds;
+	signed int target;
+	signed int slot;
+	signed int rounds;
 
 	rounds = random_schick(20);
 
@@ -711,8 +711,8 @@ void spell_saft_kraft(void)
 
 void spell_scharfes_auge(void)
 {
-	signed short target;
-	signed short slot;
+	signed int target;
+	signed int slot;
 
 	/* get the index of the hero on whom the spell is cast */
 	target = get_spelluser()->target_object_id - 1;

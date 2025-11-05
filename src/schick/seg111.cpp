@@ -53,7 +53,7 @@ void tevent_054(void)
 /* Path ??? */
 void tevent_055(void)
 {
-	signed short season;
+	signed int season;
 
 	season = get_current_season();
 
@@ -74,8 +74,8 @@ void tevent_056(void)
 
 void tevent_057(void)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct struct_hero *hero;
 
 	do {
@@ -151,7 +151,7 @@ void tevent_058(void)
 
 void tevent_059(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (TRV_enter_hut_question())
 	{
@@ -203,11 +203,11 @@ void tevent_059(void)
 
 void tevent_060(void)
 {
-	signed short answer;
-	signed short i;
-	signed short done;
-	signed short nr_items;
-	signed short has_magic_rope;
+	signed int answer;
+	signed int i;
+	signed int done;
+	signed int nr_items;
+	signed int has_magic_rope;
 	struct struct_hero *hero;
 
 	done = 0;
@@ -352,7 +352,7 @@ void tevent_060(void)
 /* Ottarje <-> Orvil: entrance to the dungeon "wolf cave" */
 void tevent_061(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* TODO: not needed here */
 	answer = 0;
@@ -409,10 +409,10 @@ void tevent_062(void)
 /* Orvil <-> Skjal: dead animal */
 void tevent_063(void)
 {
-	signed short i;
-	signed short max;
-	signed short proof;
-	signed short vomiter;
+	signed int i;
+	signed int max;
+	signed int proof;
+	signed int vomiter;
 	struct struct_hero *hero;
 
 	max = 9999;
@@ -456,11 +456,11 @@ void tevent_063(void)
 /* Gorahs place */
 void tevent_064(void)
 {
-	signed short answer;
-	signed short result;
-	signed short i;
-	signed short approach_flag;
-	signed short silentium_flag;
+	signed int answer;
+	signed int result;
+	signed int i;
+	signed int approach_flag;
+	signed int silentium_flag;
 	struct struct_hero *hero;
 
 	approach_flag = 0;
@@ -631,7 +631,7 @@ void tevent_064_chest(struct struct_chest*)
 /* Orvil <-> Ala: rider */
 void tevent_065(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* load dialog head */
 	load_in_head(56);
@@ -661,9 +661,9 @@ void tevent_065(void)
 
 void tevent_066(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short count;
+	signed int l_si;
+	signed int l_di;
+	signed int count;
 	struct struct_hero *hero;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent066_flag) ||

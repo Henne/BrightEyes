@@ -4239,7 +4239,7 @@ unsigned short div16(unsigned char val)
 	return val >> 4;
 }
 
-void select_with_mouse(signed short *item_pos, const struct shop_item *shop_item)
+void select_with_mouse(signed int *item_pos, const struct shop_item *shop_item)
 /* This function is called in shops at sell/buy screens */
 {
 	signed int i;
@@ -4261,7 +4261,7 @@ void select_with_mouse(signed short *item_pos, const struct shop_item *shop_item
 	}
 }
 
-void select_with_keyboard(signed short *item_pos, const struct shop_item *shop_item)
+void select_with_keyboard(signed int *item_pos, const struct shop_item *shop_item)
 {
 	signed int pos = *item_pos;
 

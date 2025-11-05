@@ -35,8 +35,8 @@ namespace M302de {
 /* wall of rock */
 void tevent_110(void)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct struct_hero *hero;
 
 	do {
@@ -96,12 +96,12 @@ void tevent_110(void)
 /* hunt a rhino */
 void tevent_111(void)
 {
-	signed short counter;
-	signed short answer;
-	signed short i;
-	signed short ret_skill_test2;
-	signed short ret_skill_test3;
-	signed short unlucky_tests;
+	signed int counter;
+	signed int answer;
+	signed int i;
+	signed int ret_skill_test2;
+	signed int ret_skill_test3;
+	signed int unlucky_tests;
 	struct struct_hero *hero;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 1) > 0 && !gs_tevent111_flag) ||
@@ -292,7 +292,7 @@ void tevent_112(void)
 /* FIRUN-temple in the wilderness */
 void tevent_113(void)
 {
-	signed short answer;
+	signed int answer;
 	Bit32s est_old;
 	Bit32s est_diff;
 
@@ -334,10 +334,10 @@ void tevent_113(void)
 /* Phexcaer <-> Skelellen: a swamp */
 void tevent_114(void)
 {
-	signed short i;
-	signed short answer;
-	signed short done;
-	signed short j;
+	signed int i;
+	signed int answer;
+	signed int done;
+	signed int j;
 	struct struct_hero *hero;
 
 	done = 0;
@@ -464,7 +464,7 @@ void tevent_116(void)
 /* an avalance */
 void tevent_117(void)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	GUI_output(get_tx2(31));
@@ -513,7 +513,7 @@ void tevent_119(void)
 /* Orvil - Rovik: wolves threaten a sheperd */
 void tevent_122(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_tevent122_flag)
 	{
@@ -546,12 +546,12 @@ void tevent_122(void)
 /* a bridge */
 void tevent_123(void)
 {
-	signed short i;
-	signed short counter;
-	signed short answer;
-	signed short done;
-	signed short attrib_result;
-	signed short skill_result;
+	signed int i;
+	signed int counter;
+	signed int answer;
+	signed int done;
+	signed int attrib_result;
+	signed int skill_result;
 	struct struct_hero *hero;
 
 	load_in_head(54);

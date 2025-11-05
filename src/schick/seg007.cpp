@@ -155,7 +155,7 @@ int dice_template(const unsigned short val)
 /**
  * \brief   writes damage range from enemy templates to mem
  */
-void damage_range_template(unsigned short val, signed short *min, signed short *max)
+void damage_range_template(const unsigned short val, signed int *min, signed int *max)
 {
 	signed short n, m;
 	signed char x;

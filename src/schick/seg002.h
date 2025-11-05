@@ -127,8 +127,8 @@ void draw_compass(void);
 signed int can_merge_group(void);
 unsigned short div16(unsigned char);
 
-void select_with_mouse(signed short*, const struct shop_item*);
-void select_with_keyboard(signed short*, const struct shop_item*);
+void select_with_mouse(signed int*, const struct shop_item*);
+void select_with_keyboard(signed int*, const struct shop_item*);
 
 void set_automap_tile(const signed int, const signed int);
 void set_automap_tiles(const signed int, const signed int);
