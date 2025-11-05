@@ -6,7 +6,7 @@ namespace M302de {
 void FIG_move_hero(struct struct_hero*, signed short, signed short*, signed short*);
 
 /* 0x25 */
-signed short seg034_000(signed short, signed short, signed short, signed short,
+signed short FIG_check_hero_attack(signed short, signed short, signed short, signed short,
                         signed short, signed short, signed short);
 
 /* 0x2a */

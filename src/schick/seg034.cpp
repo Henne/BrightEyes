@@ -43,7 +43,7 @@ static char g_string_14spaces[15] = "              "; // ds:0x5f9c
  * \param   max_range   maximal range for the weapon
  * \return              TODO {0, 1}
  **/
-signed short seg034_000(signed short x_hero, signed short y_hero,
+signed short FIG_check_hero_attack(signed short x_hero, signed short y_hero,
 			signed short x, signed short y,
 			signed short x_diff, signed short y_diff,
 			signed short max_range)
@@ -270,25 +270,25 @@ signed char FIG_cb_select_target(signed short *px, signed short *py, const signe
 
 		if (g_action == ACTION_ID_RIGHT) {
 
-			if (seg034_000(x, y, *px, *py, 1, 0, max_range)) {
+			if (FIG_check_hero_attack(x, y, *px, *py, 1, 0, max_range)) {
 				(*px)++;
 			}
 
 		} else if (g_action == ACTION_ID_LEFT) {
 
-			if (seg034_000(x, y, *px, *py, -1, 0, max_range)) {
+			if (FIG_check_hero_attack(x, y, *px, *py, -1, 0, max_range)) {
 				(*px)--;
 			}
 
 		} else if (g_action == ACTION_ID_UP) {
 
-			if (seg034_000(x, y, *px, *py, 0, 1, max_range)) {
+			if (FIG_check_hero_attack(x, y, *px, *py, 0, 1, max_range)) {
 				(*py)++;
 			}
 
 		} else if (g_action == ACTION_ID_DOWN) {
 
-			if (seg034_000(x, y, *px, *py, 0, -1, max_range)) {
+			if (FIG_check_hero_attack(x, y, *px, *py, 0, -1, max_range)) {
 				(*py)--;
 			}
 		}

@@ -297,7 +297,7 @@ signed short check_hero_range_attack(const struct struct_hero *hero, const signe
 
 			for (i = hero_x; i < target_x; i++) {
 
-				if (!seg034_000(hero_x, hero_y, i, hero_y, 1, 0, 99)) {
+				if (!FIG_check_hero_attack(hero_x, hero_y, i, hero_y, 1, 0, 99)) {
 					GUI_output(get_tx(45));
 					retval = 0;
 					break;
@@ -306,7 +306,7 @@ signed short check_hero_range_attack(const struct struct_hero *hero, const signe
 		} else {
 			for (i = hero_y; i < target_y; i++) {
 
-				if (!seg034_000(hero_x, hero_y, hero_x, i, 0, 1, 99)) {
+				if (!FIG_check_hero_attack(hero_x, hero_y, hero_x, i, 0, 1, 99)) {
 					GUI_output(get_tx(45));
 					retval = 0;
 					break;
