@@ -57,6 +57,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 
 	beeline = calc_beeline(x + x_diff, y + y_diff, x_hero, y_hero);
 
+	/* distance actions */
 	if ((fighter_id != 0) && (calc_beeline(x, y, x_hero, y_hero) < beeline) && (beeline <= max_range)) {
 
 		if ((x_hero == x) && (y_hero == y)) {

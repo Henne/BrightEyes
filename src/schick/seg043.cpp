@@ -599,7 +599,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				/* spellcast */
 
-				l14 = g_mon_spell_descriptions[monster->cur_spell].ani_id;
+				l14 = g_mon_spell_descriptions[monster->mspell_id].ani_id;
 
 				*g_dtp2 = '\0';
 
