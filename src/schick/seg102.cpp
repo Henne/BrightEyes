@@ -298,7 +298,7 @@ signed short MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 	void (*func)(void);
 	signed int tx_file_bak;
 
-	mspell_id = monster->cur_spell;
+	mspell_id = monster->mspell_id;
 
 	if (mspell_id > 0) {
 

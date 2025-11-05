@@ -442,7 +442,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 
 			if (mode == 3) {
 				enemy->target_object_id = enemy_no + 10;
-				enemy->cur_spell = mspell_id;
+ 				enemy->mspell_id = mspell_id;
 				retval = 1;
 				done = 1;
 			} else {
@@ -468,7 +468,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 
 						if (enemy->target_object_id) {
 
-							enemy->cur_spell = mspell_id;
+							enemy->mspell_id = mspell_id;
 							retval = 1;
 							done = 1;
 
@@ -515,7 +515,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 
 						if (enemy->target_object_id) {
 
-							enemy->cur_spell =mspell_id;
+							enemy->mspell_id = mspell_id;
 							retval = 1;
 							done = 1;
 
@@ -550,7 +550,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 
 #if !defined(__BORLANDC__)
 	if (retval)
-		D1_INFO("Zauberspruch %d\n", enemy->cur_spell);
+		D1_INFO("Zauberspruch %d\n", enemy->mspell_id);
 	else
 		D1_INFO("Kein Zauberspruch\n");
 #endif
