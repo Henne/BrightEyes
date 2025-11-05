@@ -92,19 +92,19 @@ signed int FIG_get_range_weapon_type(struct struct_hero *hero)
  * \brief   fills an enemies sheet from a template
  *
  * \param   sheet_no    the number of the sheet
- * \param   target_id    the ID of the enemy (MONSTER.DAT)
+ * \param   target_object_id    the ID of the enemy (MONSTER.DAT)
  * \param   round       the fight round the enemy appears
  *
  * \remark: special fight situations should be handled elsewhere
  */
-void fill_enemy_sheet(signed short sheet_no, signed char target_id, signed char round)
+void fill_enemy_sheet(signed short sheet_no, signed char target_object_id, signed char round)
 {
 	struct struct_monster *monster;
 	struct enemy_sheet *sheet;
 	signed short i;
 
 	/* calculate the pointers */
-	monster = &g_monster_dat_buf[target_id];
+	monster = &g_monster_dat_buf[target_object_id];
 	sheet = &g_enemy_sheets[sheet_no];
 
 	/* erease the sheet */
@@ -219,31 +219,31 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 	if (object >= 50) {
 		if ((signed char)type == 57 || (signed char)type == 56 || (signed char)type == 62) {
 
-			FIG_set_cb_field(y + 1, x, object);
-			FIG_set_cb_field(y + 1, x - 1, object);
-			FIG_set_cb_field(y, x - 1, object);
+			FIG_set_cb_object(y + 1, x, object);
+			FIG_set_cb_object(y + 1, x - 1, object);
+			FIG_set_cb_object(y, x - 1, object);
 
 		} else if ((signed char)type == 9) {
 
-			FIG_set_cb_field(y, x + 1, object);
-			FIG_set_cb_field(y - 1, x, object);
+			FIG_set_cb_object(y, x + 1, object);
+			FIG_set_cb_object(y - 1, x, object);
 
 		} else if ((signed char)type == 43 || (signed char)type == 44 || (signed char)type == 48 ||
 				(signed char)type == 49 || (signed char)type == 50 || (signed char)type == 51 ||
 				(signed char)type == 52 || (signed char)type == 53 || (signed char)type == 54 ||
 				(signed char)type == 55) {
 
-			FIG_set_cb_field(y + 1, x, object);
+			FIG_set_cb_object(y + 1, x, object);
 
 		} else if ((signed char)type == 60) {
 
 			for (i = 0; i < 7; i++)
-				FIG_set_cb_field(y + i, x, object);
+				FIG_set_cb_object(y + i, x, object);
 
 		} else if ((signed char)type == 61) {
 
 			for (i = 0; i < 7; i++)
-				FIG_set_cb_field(y, x + i, object);
+				FIG_set_cb_object(y, x + i, object);
 		}
 
 	} else {
@@ -261,12 +261,12 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 				return 0;
 			}
 
-			FIG_set_cb_field(y + g_gfxtab_double_size_extra_cb[dir].y, x + g_gfxtab_double_size_extra_cb[dir].x, object + 20);
+			FIG_set_cb_object(y + g_gfxtab_double_size_extra_cb[dir].y, x + g_gfxtab_double_size_extra_cb[dir].x, object + 20);
 		}
 	}
 
 	/* set the object to the chessboard */
-	FIG_set_cb_field(y, x, object);
+	FIG_set_cb_object(y, x, object);
 
 	return 1;
 }
@@ -316,7 +316,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 	g_fig_list_elem.wsheet = -1;
 	g_fig_list_elem.sheet = -1;
 	g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr; /* ->prev */
-	g_fig_list_elem.obj_id = 0; /* ->next */
+	g_fig_list_elem.object_id = 0; /* ->next */
 
 	g_fightobj_buf_seek_ptr += 0x508;
 
@@ -442,7 +442,7 @@ void FIG_init_heroes(void)
 			continue;
 
 		hero->action_id = FIG_ACTION_WAIT;
-		hero->target_id = 0;
+		hero->target_object_id = 0;
 
 		/* FINAL FIGHT */
 		if (g_current_fight_no == FIGHTS_F144) {
@@ -531,7 +531,7 @@ void FIG_init_heroes(void)
 		g_fig_list_elem.wsheet = -1;
 		g_fig_list_elem.sheet = -1;
 		g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr;
-		g_fig_list_elem.obj_id = 0;
+		g_fig_list_elem.object_id = 0;
 		g_fightobj_buf_seek_ptr += 0x508;
 		g_fightobj_buf_freespace -= 0x508L;
 		g_fig_list_elem.z = 99;

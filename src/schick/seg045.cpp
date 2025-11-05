@@ -201,7 +201,7 @@ signed short FANI_copy_sequence(Bit8s *dst, Bit8s *src, const signed char term)
 	return i;
 }
 
-signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int type, const signed int fighter_id, const signed int target_id, const signed int dir)
+signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int type, const signed int fighter_id, const signed int target_object_id, const signed int dir)
 {
 	signed int i;
 	Bit8s *sheet_ptr;
@@ -211,7 +211,7 @@ signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int
 	signed short target_y;
 	signed short beeline;
 
-	FIG_search_obj_on_cb(target_id, &target_x, &target_y);
+	FIG_search_obj_on_cb(target_object_id, &target_x, &target_y);
 	FIG_search_obj_on_cb(fighter_id, &fighter_x, &fighter_y);
 
 	beeline = calc_beeline(fighter_x, fighter_y, target_x, target_y);
@@ -301,7 +301,7 @@ void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_
 	signed short y;
 
 	/* search the target on the chessboard */
-	FIG_search_obj_on_cb(hero->target_id, &x, &y);
+	FIG_search_obj_on_cb(hero->target_object_id, &x, &y);
 
 	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
@@ -322,7 +322,7 @@ void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_
 	signed short y;
 
 	/* search the target on the chessboard */
-	FIG_search_obj_on_cb(enemy->target_id, &x, &y);
+	FIG_search_obj_on_cb(enemy->target_object_id, &x, &y);
 
 	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 

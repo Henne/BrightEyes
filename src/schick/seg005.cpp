@@ -323,7 +323,7 @@ unsigned short fight_printer(void)
 void draw_fight_screen(Bit16u val)
 {
 	signed short i;
-	signed short obj_id;
+	signed short object_id_bak;
 	signed short width;
 	signed short flag;
 	signed short current_x1;
@@ -341,7 +341,7 @@ void draw_fight_screen(Bit16u val)
 
 	signed short viewdir_before;
 	signed short viewdir_after;
-	signed short target_id;
+	signed short object_id;
 	signed char double_size_move_tail_first;
 	struct struct_fighter *p_fighter_tmp;
 	signed short viewdir_unconsc;
@@ -365,7 +365,7 @@ void draw_fight_screen(Bit16u val)
 			nvf.no = p_fighter->nvf_no;
 			nvf.type = 0;
 			nvf.width = &width;
-			nvf.height = &obj_id;
+			nvf.height = &object_id_bak;
 
 			process_nvf(&nvf);
 
@@ -392,7 +392,7 @@ void draw_fight_screen(Bit16u val)
 #if !defined(__BORLANDC__)
 		D1_LOG(" loop Figure = %3d Sheet_ID : %d 0xf : %d 0x12: %d object: %d\n",
 				p_fighter->figure, p_fighter->sheet, p_fighter->wsheet,
-				p_fighter->visible, p_fighter->obj_id);
+				p_fighter->visible, p_fighter->object_id);
 #endif
 
 		if (p_fighter->sheet != -1) {
@@ -602,7 +602,7 @@ void draw_fight_screen(Bit16u val)
 						nvf.no = p_fighter->nvf_no;
 						nvf.type = 0;
 						nvf.width = &width;
-						nvf.height = &obj_id;
+						nvf.height = &object_id_bak;
 
 						process_nvf(&nvf);
 
@@ -611,7 +611,7 @@ void draw_fight_screen(Bit16u val)
 						p_figure_gfx = p_fighter->gfxbuf;
 
 						if (p_fighter->double_size > 20) {
-							/* list_i is the fighter entry of the tail of a double_size enemy */
+							/* p_fighter point to the fighter entry of the tail of a double-size enemy */
 
 							viewdir_after = (p_fighter->nvf_no > 3) ? 1 : p_fighter->nvf_no;
 
@@ -620,9 +620,9 @@ void draw_fight_screen(Bit16u val)
 							p_fighter->x1 = g_gfxtab_double_size_extra_x1[viewdir_after];
 							p_fighter->x2 = g_gfxtab_double_size_extra_x2[viewdir_after];
 
-							obj_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* enemy_id + 30 of the enemy the tail belongs to */
+							object_id_bak = get_cb_val(p_fighter->cbx, p_fighter->cby); /* enemy_id + 30 of the enemy the tail belongs to */
 
-							FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, p_fighter->obj_id);
+							FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, p_fighter->object_id);
 
 							/* update CBX depending on the view direction */
 							if ( ((viewdir_after == 2) && ((viewdir_before == 1) || (viewdir_before == 3))) ||
@@ -652,9 +652,9 @@ void draw_fight_screen(Bit16u val)
 								p_fighter->cby = (p_fighter->cby + 2);
 							}
 
-							target_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* object id of the square the tail moves to */
-							p_fighter->obj_id = (signed char)target_id; /* move it to FIGHTER_OBJ_ID */
-							FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, obj_id); /* set object id of the target square to target_id + 30 */
+							object_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* object id of the square the tail moves to */
+							p_fighter->object_id = (signed char)object_id; /* move it to FIGHTER_OBJ_ID */
+							FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, object_id_bak); /* set object id of the target square to enemy_id + 30 */
 
 							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
 
@@ -672,10 +672,10 @@ void draw_fight_screen(Bit16u val)
 
 							if (p_fighter->sheet < 6) {
 
-								obj_id = get_cb_val(p_fighter->cbx, p_fighter->cby);
+								object_id_bak = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
 								/* copy FIGHTER_OBJ_ID back to the chessboard */
-								FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, p_fighter->obj_id);
+								FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, p_fighter->object_id);
 
 								p_fighter->cbx = (p_fighter->cbx + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
 
@@ -684,41 +684,41 @@ void draw_fight_screen(Bit16u val)
 								double_size_move_tail_first = 0;
 
 								/* get the value from the cb where the actor wants to move to */
-								target_id = get_cb_val(p_fighter->cbx, p_fighter->cby);
+								object_id = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
-								if ((p_fighter->double_size > 20) && (obj_id - 20 == target_id)) {
+								if ((p_fighter->double_size > 20) && (object_id_bak - 20 == object_id)) {
 									/* for a double-size enemy, either the head part or the tail part is moved first.
 									 * This is the case that the tail part is moved first (the target square is the head part). */
 
 #ifndef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
 									/* the removal of the following line is not strictly necessary, but it is not needed as a replacement is added further below. */
-									p_fighter->obj_id = 0;
+									p_fighter->object_id = 0;
 #endif
 									double_size_move_tail_first = 1;
 
 									/* create pointer to the head part of the enemy */
-									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[target_id - 10].fighter_id);
+									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[object_id - 10].fighter_id);
 
 #ifdef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
 									/* The FIGHTER_OBJ_ID entry of the head part will be overwritten by the next line in the original code.
 									 * In this way, sometimes dead bodies are lost from the chessboard after a double-size enemy walks over it.
 									 * The right thing is to copy it to the FIGHTER_OBJ_ID of tail part. */
-									p_fighter->obj_id = ((signed char)(p_fighter_tmp->obj_id));
+									p_fighter->object_id = ((signed char)(p_fighter_tmp->object_id));
 #endif
-									p_fighter_tmp->obj_id = (signed char)obj_id;
+									p_fighter_tmp->object_id = (signed char)object_id_bak;
 									/* write cb_id of the tail part at FIGHTER_OBJ_ID of the head part.
 									 * when the head part moves lated, it will be written to the cb.
 									 * possible bug: the overwritten FIGHTER_OBJ_ID is lost! */
 								} else {
-									p_fighter->obj_id = ((signed char)target_id);
+									p_fighter->object_id = ((signed char)object_id);
 								}
 
 								/* check chessboard bounds */
 								if ( (p_fighter->cbx >= 24) || (p_fighter->cby >= 24)
 									|| (p_fighter->cbx < 0) || (p_fighter->cby < 0)
-									|| (p_fighter->obj_id < 0))
+									|| (p_fighter->object_id < 0))
 								{
 									/* hero/enemy escapes */
 
@@ -736,7 +736,7 @@ void draw_fight_screen(Bit16u val)
 													 * remove tail of the escaped double-size enemy from the chessboard
 													 * For more on this bug, see Original-Bug 3 at seg032.cpp */
 													p_fighter_tmp = FIG_get_fighter(g_fig_double_size_fighter_id_table[p_fighter->double_size]);
-													FIG_set_cb_field(p_fighter_tmp->cby, p_fighter_tmp->cbx, p_fighter_tmp->obj_id);
+													FIG_set_cb_object(p_fighter_tmp->cby, p_fighter_tmp->cbx, p_fighter_tmp->object_id);
 #endif
 													figlist_remove[2 + p_fighter->sheet] = g_fig_double_size_fighter_id_table[p_fighter->double_size];
 												}
@@ -760,7 +760,7 @@ void draw_fight_screen(Bit16u val)
 											}
 										}
 
-										p_fighter->obj_id = 0;
+										p_fighter->object_id = 0;
 										*((Bit8s*)(sheet + 1 + 3 * (1 + g_fig_ani_state[p_fighter->sheet]))) = -1;
 
 										if (p_fighter->double_size != -1) {
@@ -772,7 +772,7 @@ void draw_fight_screen(Bit16u val)
 
 								} else {
 									if (!double_size_move_tail_first) {
-										FIG_set_cb_field(p_fighter->cby, p_fighter->cbx, obj_id);
+										FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, object_id_bak);
 									}
 								}
 							} else {
@@ -819,7 +819,7 @@ void draw_fight_screen(Bit16u val)
 							nvf.no = *(sheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
 							nvf.type = 0;
 							nvf.width = &width;
-							nvf.height = &obj_id;
+							nvf.height = &object_id_bak;
 
 							process_nvf(&nvf);
 
@@ -842,7 +842,7 @@ void draw_fight_screen(Bit16u val)
 										nvf.no = *(Bit8u*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
 										nvf.type = 0;
 										nvf.width = &width;
-										nvf.height = &obj_id;
+										nvf.height = &object_id_bak;
 
 										process_nvf(&nvf);
 

@@ -730,7 +730,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 
 					} else {
 
-						FIG_set_cb_field(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
+						FIG_set_cb_object(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
 						target_reachable = FIG_find_path_to_target((Bit8u*)hero, hero_pos, *px, *py, 10);
 						/* target_reachable = 1: there is a path of length < 50 to the target square; target_reachable = -1: there is no such path */
 						bp_cost = (signed char)FIG_move_pathlen();
@@ -744,7 +744,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 					if (escape_dir != 0) {
 
 						/* restore the original entry of the target square, which has been overwritten by the target marker. */
-						FIG_set_cb_field(sel_y, sel_x, cb_entry_bak_escape);
+						FIG_set_cb_object(sel_y, sel_x, cb_entry_bak_escape);
 
 						path_end = 0;
 						while (g_fig_move_pathdir[path_end] != -1) {
@@ -787,7 +787,7 @@ void FIG_move_hero(struct struct_hero *hero, signed short hero_pos, signed short
 
 					} else {
 						/* restore the original entry of the target square, which has been overwritten by the target marker. */
-						FIG_set_cb_field(sel_y, sel_x, cb_entry_bak);
+						FIG_set_cb_object(sel_y, sel_x, cb_entry_bak);
 					}
 
 					if (cb_entry_bak >= 50) {

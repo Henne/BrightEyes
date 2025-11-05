@@ -51,7 +51,7 @@ static struct Bit8s_12 g_spell_select_ones = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
  */
 void magic_heal_ani(const struct struct_hero *hero)
 {
-	signed int target_no;
+	signed int target_object_id;
 	struct Bit16s_5 a = g_ani_heal_picstars;
 	//signed short a[5] = { 0, 1, 2, 1, 0 };
 
@@ -66,8 +66,8 @@ void magic_heal_ani(const struct struct_hero *hero)
 	read_archive_file(handle, g_buffer8_ptr + 0x800, 0x400);
 	close(handle);
 
-	target_no = hero->target_id - 1;
-	target = get_hero(target_no);
+	target_object_id = hero->target_object_id - 1;
+	target = get_hero(target_object_id);
 
 	g_pic_copy.v1 = 0;
 	g_pic_copy.v2 = 0;
@@ -90,9 +90,9 @@ void magic_heal_ani(const struct struct_hero *hero)
 		do_pic_copy(2);
 
 		/* copy buffer content to screen */
-		g_pic_copy.x1 = g_hero_pic_posx[target_no];
+		g_pic_copy.x1 = g_hero_pic_posx[target_object_id];
 		g_pic_copy.y1 = 157;
-		g_pic_copy.x2 = g_hero_pic_posx[target_no] + 31;
+		g_pic_copy.x2 = g_hero_pic_posx[target_object_id] + 31;
 		g_pic_copy.y2 = 188;
 		g_pic_copy.src = g_renderbuf_ptr;
 		g_pic_copy.dst = g_vga_memstart;
@@ -115,11 +115,11 @@ void FIG_do_spell_damage(signed short le)
 	if (le <= 0)
 		return;
 
-	if (get_spelluser()->target_id < 10) {
+	if (get_spelluser()->target_object_id < 10) {
 		/* attack hero */
 
 		/* set pointer */
-		g_spelltarget = get_hero(get_spelluser()->target_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
 
 		/* ensure the spelluser does not attack himself */
 		if (get_spelltarget() != get_spelluser()) {
@@ -140,7 +140,7 @@ void FIG_do_spell_damage(signed short le)
 		/* attack enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 		/* do the damage */
 		FIG_damage_enemy(g_spelltarget_e, le, 0);
@@ -163,10 +163,10 @@ void FIG_do_spell_damage(signed short le)
 signed short get_attackee_parade(void)
 {
 	/* check if enemy or hero is attacked */
-	if (get_spelluser()->target_id < 10) {
+	if (get_spelluser()->target_object_id < 10) {
 
 		/* attacked a hero */
-		g_spelltarget = get_hero(get_spelluser()->target_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
 
 		/* calculate PA  */
 
@@ -180,7 +180,7 @@ signed short get_attackee_parade(void)
 		/* attacked an enemy */
 
 		/* set a global pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 		return g_spelltarget_e->pa;
 	}
@@ -194,11 +194,11 @@ signed short get_attackee_parade(void)
 signed short get_attackee_rs(void)
 {
 	/* check if enemy or hero is attacked */
-	if (get_spelluser()->target_id < 10) {
+	if (get_spelluser()->target_object_id < 10) {
 
 		/* attacked a hero */
 
-		g_spelltarget = get_hero(get_spelluser()->target_id - 1);
+		g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
 
 		return get_spelltarget()->rs_bonus1; /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
@@ -207,7 +207,7 @@ signed short get_attackee_rs(void)
 		/* attacked an enemy */
 
 		/* set a global pointer to the target */
-		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_id - 10];
+		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 		return g_spelltarget_e->rs;
 	}
@@ -605,16 +605,16 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 
 	if (spell_desc->fight) {
 
-		if (hero->target_id >= 10) {
+		if (hero->target_object_id >= 10) {
 
-			handicap += g_enemy_sheets[hero->target_id - 10].mr;
+			handicap += g_enemy_sheets[hero->target_object_id - 10].mr;
 
-			//if (g_enemy_sheets[hero->target_id - 10].flags.mushroom) {	/* BAE-TODO: different code */
-			if (((struct enemy_flags)g_enemy_sheets[hero->target_id - 10].flags).mushroom) { /* BAE-TODO: good */
+			//if (g_enemy_sheets[hero->target_object_id - 10].flags.mushroom) {	/* BAE-TODO: different code */
+			if (((struct enemy_flags)g_enemy_sheets[hero->target_object_id - 10].flags).mushroom) { /* BAE-TODO: good */
 				return 0;
 			}
 		} else {
-			handicap += get_hero(hero->target_id - 1)->mr;
+			handicap += get_hero(hero->target_object_id - 1)->mr;
 		}
 	}
 
@@ -727,7 +727,7 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 			spell_description = &g_spell_descriptions[spell_id];
 
 			/* reset the spelltarget of the hero */
-			hero->target_id = 0;
+			hero->target_object_id = 0;
 
 			if (spell_description->target_type && (spell_description->target_type != 4)) {
 
@@ -737,9 +737,9 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 
 				} else {
 
-					hero->target_id = select_hero_from_group(get_ttx(47)) + 1;
+					hero->target_object_id = select_hero_from_group(get_ttx(47)) + 1;
 
-					if (hero->target_id <= 0) {
+					if (hero->target_object_id <= 0) {
 						spell_id = -1;
 					}
 				}
@@ -877,7 +877,7 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 					if (retval > 0) {
 						play_voc(ARCHIVE_FILE_FX17_VOC);
 
-						if ((hero->target_id < 10) && (hero->target_id > 0) && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+						if ((hero->target_object_id < 10) && (hero->target_object_id > 0) && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 						{
 							magic_heal_ani(hero);
 						}

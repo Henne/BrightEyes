@@ -436,12 +436,12 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 			mspell_id = g_mon_spell_repertoire[enemy->mag_id][random_interval(0, available_spells - 1)];
 		}
 
-		enemy->target_id = 0;
+		enemy->target_object_id = 0;
 
 		if ( (mode = FIG_get_mspell(mspell_id, attack_foe)) > 0) {
 
 			if (mode == 3) {
-				enemy->target_id = enemy_no + 10;
+				enemy->target_object_id = enemy_no + 10;
 				enemy->cur_spell = mspell_id;
 				retval = 1;
 				done = 1;
@@ -454,10 +454,10 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 						i = enemy->viewdir;
 						cnt = 0;
 
-						while (!enemy->target_id && (cnt < 4)) {
+						while (!enemy->target_object_id && (cnt < 4)) {
 
 							if (FIG_enemy_can_attack_neighbour(x, y, diff.a[i].x, diff.a[i].y, mode)) {
-								enemy->target_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
+								enemy->target_object_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
 							}
 
 							cnt++;
@@ -466,7 +466,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 							}
 						}
 
-						if (enemy->target_id) {
+						if (enemy->target_object_id) {
 
 							enemy->cur_spell = mspell_id;
 							retval = 1;
@@ -503,9 +503,9 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 						i = enemy->viewdir;
 						cnt = 0;
 
-						while (!enemy->target_id && (cnt < 4)) {
+						while (!enemy->target_object_id && (cnt < 4)) {
 
-							enemy->target_id = FIG_search_range_target(x, y, i, mode);
+							enemy->target_object_id = FIG_search_range_target(x, y, i, mode);
 
 							cnt++;
 							if (++i == 4) {
@@ -513,7 +513,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 							}
 						}
 
-						if (enemy->target_id) {
+						if (enemy->target_object_id) {
 
 							enemy->cur_spell =mspell_id;
 							retval = 1;
@@ -575,7 +575,7 @@ signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int en
 	while ((done == 0) && (enemy->bp > 0)) {
 
 		/* reset the attackee ID */
-		enemy->target_id = 0;
+		enemy->target_object_id = 0;
 
 		while ( (done == 0) && (enemy->bp > 0) ) {
 
@@ -583,16 +583,16 @@ signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int en
 			cnt = 0;
 
 			/* check clockwise for someone to attack */
-			while (!enemy->target_id && (cnt < 4)) {
+			while (!enemy->target_object_id && (cnt < 4)) {
 
-				enemy->target_id = FIG_search_range_target(x, y, dir, attack_foe);
+				enemy->target_object_id = FIG_search_range_target(x, y, dir, attack_foe);
 				cnt++;
 				if (++dir == 4) {
 					dir = 0;
 				}
 			}
 
-			if (enemy->target_id) {
+			if (enemy->target_object_id) {
 
 				/* found someone to attack */
 				retval = 1;
@@ -690,7 +690,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed sho
 
 		draw_fight_screen_pal(0);
 
-		enemy->target_id = 0;
+		enemy->target_object_id = 0;
 		enemy->action_id = 1;
 
 		/* LE threshold reached */
@@ -748,10 +748,10 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed sho
 				return;
 			}
 
-			enemy->target_id = 0;
+			enemy->target_object_id = 0;
 			i = enemy->viewdir;
 			cnt = 0;
-			while (!enemy->target_id && (cnt < 4)) {
+			while (!enemy->target_object_id && (cnt < 4)) {
 
 				if (FIG_enemy_can_attack_neighbour(x, y, diff.a[i].x, diff.a[i].y, attack_foe)) {
 
@@ -774,7 +774,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed sho
 					}
 
 					if (flag != 0) {
-						enemy->target_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
+						enemy->target_object_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
 					}
 				}
 
@@ -785,7 +785,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed sho
 			}
 		}
 
-		if (enemy->target_id != 0) {
+		if (enemy->target_object_id != 0) {
 
 			enemy->action_id = 2;
 			enemy->bp = enemy->bp - 3;

@@ -420,7 +420,7 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 	while ((done == 0) && (hero->bp_left > 0)) {
 
 		/* reset target fight-id */
-		hero->target_id = 0;
+		hero->target_object_id = 0;
 
 		/* REMARK: spells usually require 5 BP */
 		if (hero->bp_left >= 3) {
@@ -430,9 +430,9 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 			count = 0;
 
 			/* try to find a target clockwise from current direction */
-			while (!hero->target_id && (count < 4)) {
+			while (!hero->target_object_id && (count < 4)) {
 
-				hero->target_id = AFIG_search_spell_target(x, y, dir, renegade);
+				hero->target_object_id = AFIG_search_spell_target(x, y, dir, renegade);
 
 				count++;
 
@@ -443,11 +443,11 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 		}
 
 		/* check if a target was found */
-		if (hero->target_id != 0) {
+		if (hero->target_object_id != 0) {
 
 			/* yes */
 
-			FIG_search_obj_on_cb(hero->target_id, &target_x, &target_y);
+			FIG_search_obj_on_cb(hero->target_object_id, &target_x, &target_y);
 
 			if (calc_beeline(target_x, target_y, x, y) < 2) {
 				retval = 2;
@@ -578,14 +578,14 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 		}
 
 		/* reset the target of the hero */
-		hero->target_id = 0;
+		hero->target_object_id = 0;
 
 		if ((spell_mode = AFIG_get_spell(spell_id, renegade)) != -1) {
 
 			if (spell_mode == 2) {
 
 				/* set target to hero */
-				hero->target_id = hero_pos + 1;
+				hero->target_object_id = hero_pos + 1;
 
 				/* set spell */
 				hero->spell_id = spell_id;
@@ -601,10 +601,10 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 						i = hero->viewdir;
 
 						count = 0;
-						while ((!hero->target_id) && (count < 4)) {
+						while ((!hero->target_object_id) && (count < 4)) {
 
 							if (AFIG_can_attack_neighbour(x, y, a.a[i].x, a.a[i].y, spell_mode)) {
-								hero->target_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
+								hero->target_object_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
 							}
 
 							count++;
@@ -614,7 +614,7 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 							}
 						}
 
-						if (hero->target_id != 0) {
+						if (hero->target_object_id != 0) {
 
 							if (hero->bp_left >= 5) {
 
@@ -658,9 +658,9 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 
 						count = 0;
 
-						while (!hero->target_id && (count < 4)) {
+						while (!hero->target_object_id && (count < 4)) {
 
-							hero->target_id = AFIG_search_spell_target(x, y, i, spell_mode);
+							hero->target_object_id = AFIG_search_spell_target(x, y, i, spell_mode);
 
 							count++;
 
@@ -669,7 +669,7 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 							}
 						}
 
-						if (hero->target_id != 0) {
+						if (hero->target_object_id != 0) {
 
 							if (hero->bp_left >= 5) {
 
@@ -877,7 +877,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 
 					FIG_prepare_hero_ani(hero, hero_pos);
 
-					hero->target_id = 0;
+					hero->target_object_id = 0;
 
 					if (FIG_search_obj_on_cb(hero_pos + 1, &x, &y)) {
 
@@ -947,18 +947,18 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 						}
 					}
 				} else {
-					hero->target_id = 0;
+					hero->target_object_id = 0;
 
 					if (hero->bp_left >= 3) {
 
 						i = hero->viewdir;
 						cnt = 0;
 
-						while (!hero->target_id && (cnt < 4)) {
+						while (!hero->target_object_id && (cnt < 4)) {
 
 							if (AFIG_can_attack_neighbour(x, y, a.a[i].x, a.a[i].y, hero->flags.renegade))
 							{
-								hero->target_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
+								hero->target_object_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
 							}
 
 							cnt++;
@@ -968,7 +968,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 						}
 					}
 
-					if (hero->target_id != 0) {
+					if (hero->target_object_id != 0) {
 
 						hero->action_id = FIG_ACTION_MELEE_ATTACK;
 						hero->bp_left = 0;
@@ -990,7 +990,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 								FIG_prepare_hero_ani(hero, hero_pos);
 
 								hero->action_id = FIG_ACTION_MOVE;
-								hero->target_id = 0;
+								hero->target_object_id = 0;
 
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 

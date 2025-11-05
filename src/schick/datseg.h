@@ -346,7 +346,7 @@ struct struct_fighter {
 	signed char double_size;/* -1 if fighter is not double_size (occupies only one square). for double_size fighter:
 				 * head part: value can be used as index for g_fig_double_size_fighter_id_table which contains the fighter id);
 				 * tail part: entry is +20 of the double_size entry of the head part. */
-	signed char obj_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
+	signed char object_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
 	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
 	signed char sprite_no;	/* 0x12c0, 0x1531, 0x1210 */
 	Bit8u* gfxbuf;
