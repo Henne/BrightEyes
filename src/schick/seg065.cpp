@@ -184,10 +184,7 @@ void final_intro(void)
 	call_mouse();
 }
 
-#if defined(__BORLANDC__)
-static
-#endif
-Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
+static Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 {
 	HugePt retval;
 	struct nvf_desc nvf;
@@ -206,10 +203,7 @@ Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 	return (Bit8u*)retval;
 }
 
-#if defined(__BORLANDC__)
-static
-#endif
-void hyg_ani_2(struct struct_ani *ani, signed short x, signed short y)
+static void hyg_ani_2(struct struct_ani *ani, signed short x, signed short y)
 {
 	g_pic_copy.x1 = x;
 	g_pic_copy.y1 = y;
@@ -222,10 +216,7 @@ void hyg_ani_2(struct struct_ani *ani, signed short x, signed short y)
 	do_pic_copy(2);
 }
 
-#if defined(__BORLANDC__)
-static
-#endif
-void hyg_ani_3(void)
+static void hyg_ani_3(void)
 {
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
@@ -237,10 +228,7 @@ void hyg_ani_3(void)
 	do_pic_copy(0);
 }
 
-#if defined(__BORLANDC__)
-static
-#endif
-void hyg_ani_4(void)
+static void hyg_ani_4(void)
 {
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
