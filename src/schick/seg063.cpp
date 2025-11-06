@@ -524,7 +524,7 @@ void mod_clock_pos(signed short town_id)
 	g_basepos_y = ((!val || val == 1) ? -40 : 40);
 }
 
-void sea_travel(signed short passage, signed short dir)
+void sea_travel(signed short passage_id, signed short reverse)
 {
 	signed short i;
 	struct struct_hero *hero;
@@ -536,18 +536,18 @@ void sea_travel(signed short passage, signed short dir)
 
 	g_traveling = 1;
 
-	gs_sea_travel_courses = (Bit8u*)(passage < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
+	gs_sea_travel_courses = (Bit8u*)(passage_id < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
 
 	/* high seas routes have id 0..6, costal routes id 7..44 */
 
 	/* if high seas route, write 7 (total number of high seas routes)
 	 * if costal route, write 38 (total number of costal routes) */
-	gs_route_mousehover = (passage < 7 ? 7 : 38);
+	gs_route_mousehover = (passage_id < 7 ? 7 : 38);
 
 	/* convert costal route ids to range 0..37 */
-	gs_sea_travel_passage_no = passage < 7 ? passage : passage - 7;
+	gs_sea_travel_passage_id = passage_id < 7 ? passage_id : passage_id - 7;
 
-	off = ((Bit32s*)gs_sea_travel_courses)[gs_sea_travel_passage_no];
+	off = ((Bit32s*)gs_sea_travel_courses)[gs_sea_travel_passage_id];
 	gs_route_course_ptr = (Bit16s*)(gs_sea_travel_courses + off + 4 * gs_route_mousehover);
 	ptr = g_vga_memstart;
 
@@ -556,7 +556,7 @@ void sea_travel(signed short passage, signed short dir)
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	gs_travel_speed = 10 * gs_sea_travel_passage_speed1; /* speed [unit: 10m per hour] */
 	gs_route_total_steps = get_srout_len((struct struct_point*)gs_route_course_ptr); /* a step for each pixel on the map. */
-	gs_route_length = 100 * g_sea_routes[passage].distance; /* length of sea route [unit: 10m] */
+	gs_route_length = 100 * g_sea_routes[passage_id].distance; /* length of sea route [unit: 10m] */
 	gs_route_duration = gs_route_length / gs_travel_speed * 60; /* duration [unit: minutes] */
 	gs_route_timedelta = gs_route_duration / gs_route_total_steps; /* duration of each step [unit: minutes] */
 	gs_route_stepsize = gs_route_length / gs_route_total_steps; /* length of a single step [unit: 10m] */
@@ -569,7 +569,7 @@ void sea_travel(signed short passage, signed short dir)
 	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", gs_route_total_steps, gs_route_stepsize, gs_route_timedelta);
 #endif
 
-	if (dir) {
+	if (reverse) {
 		/* for reverse direction, point gs_route_course_ptr to end of route */
 
 		while (gs_route_course_ptr[0] != -1) {
@@ -585,7 +585,7 @@ void sea_travel(signed short passage, signed short dir)
 	/* this is 19.8h * gs_travel_speed, which is the distance [unit: 10m] the ship travels in 19.8 h.
 	 * It is used as upper bound for the position of the random encounters. */
 
-	if (passage <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
+	if (passage_id <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
 		/* only on high seas routes */
 
 		if ((gs_passage_deadship_flag = random_schick(100) <= 20 ? 1 : 0)) {
@@ -725,7 +725,7 @@ void sea_travel(signed short passage, signed short dir)
 
 			for (gs_route_course_ptr2 = gs_route_course_start;
 					g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
-					gs_route_course_ptr2 += (!dir ? 2 : -2))
+					gs_route_course_ptr2 += (!reverse ? 2 : -2))
 			{
 				*(ptr + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) = 0x1f;
 			}
@@ -738,7 +738,7 @@ void sea_travel(signed short passage, signed short dir)
 			g_request_refresh = 0;
 		}
 
-		gs_route_course_ptr += (!dir ? 2 : -2);
+		gs_route_course_ptr += (!reverse ? 2 : -2);
 	}
 
 	g_travel_herokeeping = 0;
@@ -748,7 +748,7 @@ void sea_travel(signed short passage, signed short dir)
 		call_mouse_bg();
 
 		do {
-			if (!dir) {
+			if (!reverse) {
 				gs_route_course_ptr -= 2;
 			} else {
 				gs_route_course_ptr += 2;
