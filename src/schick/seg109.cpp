@@ -77,7 +77,7 @@ static void (*g_travel_event_handlers[146])(void) = {
 
 signed char g_travel_event_active = 0; // ds:0xb132
 
-static signed short g_travel_event_tx2 = -1; // ds:0xb133
+static signed int g_travel_event_tx2 = -1; // ds:0xb133
 
 #ifndef M302de_ORIGINAL_BUGFIX
 /* Original-Bug 33:
@@ -233,7 +233,7 @@ void TRV_inside_herb_place(void)
 signed int TRV_found_camp_place(const signed int a0)
 {
 	signed int answer;
-	const signed short randval = random_schick(5) + 10;
+	const signed int randval = random_schick(5) + 10;
 
 	sprintf(g_dtp2, get_tx(8), get_tx(randval),
 		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : g_empty_string11)));
@@ -577,13 +577,14 @@ void tevent_004(void)
 	}
 }
 
-void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short mod1, signed short mod2,
-			signed short mod3, signed short ap_all1, signed short ap_hero, signed short ap_all2,
-			signed short ap_all3, signed short foods1, signed short foods2)
+void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
+		const signed int mod1, const signed int mod2, const signed int mod3,
+		const signed int ap_all1, const signed int ap_hero, const signed int ap_all2,
+		const signed int ap_all3, const signed int foods1, const signed int foods2)
 {
 	signed int failed_sneaks_num;
 	signed int i;
-	signed short l4;
+	signed int l4;
 	signed int answer;
 	struct struct_hero *hero;
 
@@ -712,7 +713,7 @@ void tevent_007(void)
 	}
 }
 
-void TRV_barrier(signed short text_start)
+void TRV_barrier(const signed int text_start)
 {
 	signed int i;
 	signed int tools_num;

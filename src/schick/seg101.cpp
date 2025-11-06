@@ -419,7 +419,7 @@ void spell_paralue(void)
 		/* set 'petrified' flag */
 		g_spelltarget_e->flags.petrified = 1;
 
-		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
@@ -473,7 +473,7 @@ void spell_salander(void)
 		g_spelltarget_e->flags.mushroom = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set AE cost */
 		g_spell_special_aecost = ae_cost;
@@ -523,7 +523,7 @@ void spell_visibili(void)
 	if (rounds * 5 <= get_spelluser()->ae) {
 
 		g_spell_special_aecost = rounds * 5;
-		pos = (signed short)get_hero_index(get_spelluser());
+		pos = get_hero_index(get_spelluser());
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), (Bit8u*)&get_spelluser()->invisible, 1, (signed char)pos);
 

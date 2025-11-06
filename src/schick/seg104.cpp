@@ -111,12 +111,12 @@ static struct struct_recipe g_alchemy_recipes[13] = {
 
 static signed int g_alchemy_missing_item; // ds:0xe5c4
 
-signed short hero_has_ingrendients(struct struct_hero *hero, const signed short recipe_id)
+signed int hero_has_ingrendients(struct struct_hero *hero, const signed int recipe_id)
 {
-	signed short i = 0;
-	signed short retval = 1;
+	signed int i = 0;
+	signed int retval = 1;
 	struct struct_recipe *r_ptr = &g_alchemy_recipes[recipe_id];
-	signed short item_pos;
+	signed int item_pos;
 
 	/* loop over ingrendients */
 	while ((r_ptr->ingredients[i] != -1) && retval) {
@@ -153,11 +153,11 @@ signed short hero_has_ingrendients(struct struct_hero *hero, const signed short 
 	return retval;
 }
 
-void hero_use_ingrendients(struct struct_hero *hero, const signed short recipe_id)
+void hero_use_ingrendients(struct struct_hero *hero, const signed int recipe_id)
 {
-	signed short i = 0;
+	signed int i = 0;
 	struct struct_recipe *r_ptr = &g_alchemy_recipes[recipe_id];
-	signed short item_pos;
+	signed int item_pos;
 
 	/* loop over ingredients */
 	while (r_ptr->ingredients[i] != -1) {
@@ -183,7 +183,7 @@ void hero_use_ingrendients(struct struct_hero *hero, const signed short recipe_i
 	}
 }
 
-signed short do_alchemy(struct struct_hero* hero, const signed short recipe_id, const signed short flag_abort)
+signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, const signed int flag_abort)
 	/* flag_abort = 0: finalize running brewing process
 	 * flag_abort = 1: abort running brewing process */
 {
@@ -223,18 +223,18 @@ signed short do_alchemy(struct struct_hero* hero, const signed short recipe_id, 
 
 }
 
-signed short plan_alchemy(struct struct_hero *hero)
+signed int plan_alchemy(struct struct_hero *hero)
 {
-	signed short retval;
-	signed short item_pos;
-	signed short recipes;
-	signed short answer;
-	signed short decision;
-	signed short l5;
-	signed short i;
+	signed int retval;
+	signed int item_pos;
+	signed int recipes;
+	signed int answer;
+	signed int decision;
+	signed int l5;
+	signed int i;
 	signed char recipe_index;
 	struct struct_hero *hero_p;
-	signed short tw_bak;
+	signed int tw_bak;
 	signed char array[13];
 
 
@@ -405,9 +405,9 @@ signed short plan_alchemy(struct struct_hero *hero)
 	return retval;
 }
 
-signed short has_herb_for_disease(struct struct_hero *hero, const signed short disease_id)
+signed int has_herb_for_disease(const struct struct_hero *hero, const signed int disease_id)
 {
-	signed short retval = 0;
+	signed int retval = 0;
 
 	switch (disease_id) {
 
@@ -450,14 +450,14 @@ signed short has_herb_for_disease(struct struct_hero *hero, const signed short d
 	return retval;
 }
 
-signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *patient, const signed short handycap, const signed short flag)
+signed int skill_cure_disease(struct struct_hero *healer, struct struct_hero *patient, const signed int handycap, const signed int flag)
 {
-	signed short disease_id;
-	signed short retval;
+	signed int disease_id;
+	signed int retval;
 
-	signed short damage;
-	signed short tx_file_bak;
-	signed short herb;
+	signed int damage;
+	signed int tx_file_bak;
+	signed int herb;
 
 	retval = 0;
 
@@ -555,9 +555,9 @@ struct struct_hero* get_heaviest_hero(void)
 	struct struct_hero *hero;
 	struct struct_hero *retval;
 
-	signed short weight;
-	signed short w_max;
-	signed short i;
+	signed int weight;
+	signed int w_max;
+	signed int i;
 
 	w_max = 0;
 	hero = get_hero(0);
@@ -577,18 +577,18 @@ struct struct_hero* get_heaviest_hero(void)
 	return retval;
 }
 
-signed short get_hero_weight(struct struct_hero *hero)
+signed int get_hero_weight(const struct struct_hero *hero)
 {
 	return hero->weight + hero->load;
 }
 
-signed short get_skilled_hero_pos(const signed short skill_id)
+signed int get_skilled_hero_pos(const signed int skill_id)
 {
-	signed short i;
-	signed short cur;
+	signed int i;
+	signed int cur;
 
-	signed short max;
-	signed short pos;
+	signed int max;
+	signed int pos;
 	struct struct_hero *hero;
 
 	max = -100;

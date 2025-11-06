@@ -13,11 +13,11 @@ void startup_equipment(struct struct_hero*);
 /* 0x34 */
 signed int two_hand_collision(struct struct_hero*, const signed int, const signed int);
 /* 0x39 */
-signed short get_max_light_time(void);
+signed int get_max_light_time(void);
 /* 0x3e */
 void equip_belt_ani(void);
 /* 0x43 */
-signed short get_full_waterskin_pos(const struct struct_hero*);
+signed int get_full_waterskin_pos(const struct struct_hero*);
 
 #if !defined(__BORLANDC__)
 }

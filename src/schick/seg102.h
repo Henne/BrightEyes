@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short MON_cast_spell(struct enemy_sheet*, signed char);
+signed int MON_cast_spell(struct enemy_sheet*, signed char);
 
 /* 0x25 */
 void mspell_verwandlung(void);

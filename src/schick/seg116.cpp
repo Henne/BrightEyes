@@ -197,11 +197,11 @@ void tevent_134(void)
 void tevent_135(void)
 /* Einsiedlersee <-> Einsiedlersee: Monolith */
 {
-	signed short tmp; /* used for (1) fall_height; (2) LE of the hero after falling */
+	signed int tmp; /* used for (1) fall_height; (2) LE of the hero after falling */
 	signed short tmp2; /* used for (1) map tile position (2) falling damage */
-	signed short answer;
-	signed short done;
-	signed short count;
+	signed int answer;
+	signed int done;
+	signed int count;
 	struct struct_hero *hero;
 
 	load_ani(1);
@@ -326,9 +326,9 @@ void tevent_135(void)
 
 void tevent_137(void)
 {
-	signed short i;
-	signed short answer;
-	signed short item_pos;
+	signed int i;
+	signed int answer;
+	signed int item_pos;
 	struct struct_hero *hero;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !gs_tevent137_flag) ||
@@ -380,8 +380,8 @@ void tevent_138(void)
 
 void tevent_139(void)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct struct_hero *hero;
 
 	do {
@@ -474,8 +474,8 @@ void tevent_142(void)
 
 void tevent_143(void)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct struct_hero *hero;
 
 	do {
@@ -527,8 +527,8 @@ void tevent_143(void)
 /* Orcs' military camp */
 void tevent_144(void)
 {
-	signed short grimring_hero_pos;
-	signed short right_time_flag;
+	signed int grimring_hero_pos;
+	signed int right_time_flag;
 	struct struct_hero *hero;
 
 	right_time_flag = 0;
@@ -640,10 +640,10 @@ void tevent_144_unused(void)
 	GUI_output(get_tx2(16));
 }
 
-void TLK_old_woman(signed short state)
+void TLK_old_woman(const signed int state)
 {
-	signed short l_di;
-	signed short counter;
+	signed int l_di;
+	signed int counter;
 	struct struct_hero *hero;
 
 	if (state == 3) {

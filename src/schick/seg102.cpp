@@ -25,7 +25,7 @@
 namespace M302de {
 #endif
 
-static signed short g_monster_spell_ae_cost = -1; // ds:0xaccc
+static signed int g_monster_spell_ae_cost = -1; // ds:0xaccc
 
 signed int g_spelltest_result;			// ds:0xe5b2
 struct enemy_sheet *g_spelltarget_e;		// ds:0xe5b4, Pointer to enemy
@@ -290,7 +290,7 @@ void MON_sub_ae(struct enemy_sheet *monster, signed int ae)
 	}
 }
 
-signed short MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
+signed int MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 {
 	signed int mspell_id;
 	signed int retval;
@@ -387,7 +387,7 @@ void mspell_verwandlung(void)
 			g_spelltarget_e->flags.petrified = 0;
 
 			/* prepare message */
-			sprintf(g_dtp2,	get_tx(114), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+			sprintf(g_dtp2,	get_tx(114), (Bit8u*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 		}
 
 	} else if (g_spelltarget_e->flags.mushroom) {
@@ -541,7 +541,7 @@ void mspell_blitz(void)
 		g_spelltarget_e->blind = 3;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(85), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(85), (Bit8u*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -569,7 +569,7 @@ void mspell_eisenrost(void)
 				get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2,	get_tx(92), (Bit8u*)GUI_names_grammar((signed short)0x8000, item_id, 0), get_spelltarget()->alias);
+				sprintf(g_dtp2,	get_tx(92), (Bit8u*)GUI_names_grammar((signed int)0x8000, item_id, 0), get_spelltarget()->alias);
 
 			} else {
 				g_monster_spell_ae_cost = -2;
@@ -589,7 +589,7 @@ void mspell_eisenrost(void)
 			g_spelltarget_e->weapon_broken = 1;
 
 			/* prepare message */
-			sprintf(g_dtp2,	get_tx(91), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+			sprintf(g_dtp2,	get_tx(91), (Bit8u*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 		}
 	}
 }
@@ -726,7 +726,7 @@ void mspell_plumbumbarum(void)
 		g_spelltarget_e->at = g_spelltarget_e->at - 3;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(95), (Bit8u*)GUI_names_grammar((signed short)0x8001, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(95), (Bit8u*)GUI_names_grammar((signed int)0x8001, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -779,7 +779,7 @@ void mspell_paralue(void)
 		g_spelltarget_e->flags.petrified = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(103), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(103), (Bit8u*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
 		/* target is a hero */
 

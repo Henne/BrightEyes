@@ -31,20 +31,20 @@ namespace M302de {
  * \param   consumer    the consumer
  * \param   pos         the position in the inventory of the owner
  */
-void consume(struct struct_hero *owner, struct struct_hero *consumer, const signed short pos)
+void consume(struct struct_hero *owner, struct struct_hero *consumer, const signed int pos)
 {
 	struct item_stats *item_p;
 	signed int item_id;
 
-	signed short id_bad_elex;
-	signed short le_diff;
+	signed int id_bad_elex;
+	signed int le_diff;
 
-	signed short disease;
-	signed short poison;
-	signed short tw_bak;
-	signed short consumer_idx;
+	signed int disease;
+	signed int poison;
+	signed int tw_bak;
+	signed int consumer_idx;
 
-	signed short l_di, l_si;
+	signed int l_di, l_si;
 
 	/* this hero cannot consume */
 	if (check_hero(consumer) == 0) {

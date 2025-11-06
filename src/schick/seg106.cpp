@@ -29,7 +29,7 @@
 namespace M302de {
 #endif
 
-static const signed short g_hero_startup_items[12][4] = {
+static const signed int g_hero_startup_items[12][4] = {
 	{ ITEM_DAGGER, ITEM_THROWING_KNIFE, ITEM_THROWING_KNIFE, -1 }, /* Gaukler */
 	{ ITEM_LONGBOW, ITEM_DAGGER, -1, -1 }, /* Jaeger */
 	{ ITEM_SWORD, ITEM_DAGGER, ITEM_LEATHER_ARMOR, -1 }, /* Krieger */
@@ -44,7 +44,7 @@ static const signed short g_hero_startup_items[12][4] = {
 	{ ITEM_LONGBOW, ITEM_KNIFE, ITEM_FLUTE, -1 } /* Waldelf */
 }; // ds:0xae48
 
-static const signed short g_hero_startup_items_all[4] = {
+static const signed int g_hero_startup_items_all[4] = {
 	ITEM_WATERSKIN, ITEM_FOOD_PACKAGE, ITEM_FOOD_PACKAGE, ITEM_TROUSERS
 }; // ds:0xaea8
 
@@ -96,8 +96,8 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 {
 	signed int item_id1;
 	signed int item_id2;
-	signed short v3 = 0;
-	signed short temp;
+	signed int v3 = 0;
+	signed int temp;
 	struct inventory tmp;
 
 	if (!check_hero(hero) || (pos1 == pos2)) {
@@ -290,16 +290,16 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 /* Borlandified and nearly identical */
 void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct struct_hero *hero2, const signed int pos2)
 {
-	signed short stackable_quant;
-	register signed short pos1 = old_pos1;
+	signed int stackable_quant;
+	register signed int pos1 = old_pos1;
 
 	const signed int item_id1 = hero1->inventory[pos1].item_id;
 	signed int item_id2;
 	struct item_stats *item1_desc;
 	struct item_stats *item2_desc;
-	signed short flag;
-	signed short item_weight1;
-	signed short item_weight2;
+	signed int flag;
+	signed int item_weight1;
+	signed int item_weight2;
 	struct inventory tmp;
 
 	/* check if item_id1 is an item */
@@ -316,7 +316,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	if (item1_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item_id1, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed int)0x8002, item_id1, 0));
 
 		GUI_output(g_dtp2);
 		return;
@@ -324,7 +324,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	if (item2_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item_id2, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed int)0x8002, item_id2, 0));
 		GUI_output(g_dtp2);
 		return;
 
@@ -651,7 +651,7 @@ lab04:
 }
 
 struct items_all {
-	signed short a[4];
+	signed int a[4];
 };
 
 /* Borlandified and identical */
@@ -706,7 +706,7 @@ void startup_equipment(struct struct_hero *hero)
  * \brief   get the maximum time of a burning lightsource
  */
 /* Borlandified and identical */
-signed short get_max_light_time(void)
+signed int get_max_light_time(void)
 {
 	struct struct_hero *hero;
 	signed int i;
@@ -852,7 +852,7 @@ void equip_belt_ani(void)
  * \return              position of a non-empty waterskin
  */
 /* Borlandified and identical */
-signed short get_full_waterskin_pos(const struct struct_hero *hero)
+signed int get_full_waterskin_pos(const struct struct_hero *hero)
 {
 	signed int inv_pos = -1;
 	signed int i;

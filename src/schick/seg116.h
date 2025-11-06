@@ -35,7 +35,7 @@ void tevent_134(void);
 /* 0x6d */
 void tevent_144_unused(void);
 /* 0x70 */
-void TLK_old_woman(signed short);
+void TLK_old_woman(const signed int);
 
 #if !defined(__BORLANDC__)
 }

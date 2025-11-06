@@ -3,33 +3,33 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short do_alchemy(struct struct_hero*, const signed short, const signed short);
+signed int do_alchemy(struct struct_hero*, const signed int, const signed int);
 
 /* 0x25 */
-/* static */
-signed short hero_has_ingrendients(struct struct_hero*, const signed short);
+/* should be static */
+signed int hero_has_ingrendients(struct struct_hero*, const signed int);
 
 /* 0x2a */
 /* static */
-void hero_use_ingrendients(struct struct_hero*, const signed short);
+void hero_use_ingrendients(struct struct_hero*, const signed int);
 
 /* 0x2f */
-signed short plan_alchemy(struct struct_hero*);
+signed int plan_alchemy(struct struct_hero*);
 
 /* 0x34 */
-signed short has_herb_for_disease(struct struct_hero*, const signed short);
+signed int has_herb_for_disease(const struct struct_hero*, const signed int);
 
 /* 0x39 */
-signed short skill_cure_disease(struct struct_hero*, struct struct_hero*, const signed short, const signed short);
+signed int skill_cure_disease(struct struct_hero*, struct struct_hero*, const signed int, const signed int);
 
 /* 0x3e */
 struct struct_hero* get_heaviest_hero(void);
 
 /* 0x43 */
-signed short get_hero_weight(struct struct_hero*);
+signed int get_hero_weight(const struct struct_hero*);
 
 /* 0x48 */
-signed short get_skilled_hero_pos(const signed short);
+signed int get_skilled_hero_pos(const signed int);
 
 #if !defined(__BORLANDC__)
 }

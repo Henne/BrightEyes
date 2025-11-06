@@ -38,9 +38,9 @@ static Bit8u g_tevent067_chest[10] = {
 
 void tevent_067(void)
 {
-	signed short i;
-	signed short answer;
-	signed short count;
+	signed int i;
+	signed int answer;
+	signed int count;
 	struct struct_hero *hero;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 && !gs_tevent067_flag) ||
@@ -142,7 +142,7 @@ void tevent_069(void)
 
 void tevent_070(void)
 {
-	signed short l_si;
+	signed int l_si;
 
 	if (test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 ||
 		gs_tevent070_flag)
@@ -183,9 +183,9 @@ void tevent_070(void)
 /* Orc-Monolith */
 void tevent_071(void)
 {
-	signed short l_si;
-	signed short have_raft;
-	signed short i;
+	signed int l_si;
+	signed int have_raft;
+	signed int i;
 	struct struct_hero *hero;
 
 	have_raft = 0;
@@ -286,9 +286,9 @@ void tevent_071(void)
  * \param   mod         modificator for the swim test
  * \param   percent     probability to loose an item
  */
-void TRV_swimm(signed short mod, signed short percent)
+void TRV_swimm(const signed int mod, const signed int percent)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	hero = get_hero(0);
@@ -321,9 +321,9 @@ void TRV_swimm(signed short mod, signed short percent)
 /* a herb place you need to swim to */
 void tevent_unused01(void)
 {
-	signed short answer;
-	signed short has_raft;
-	signed short options;
+	signed int answer;
+	signed int has_raft;
+	signed int options;
 	struct struct_hero *hero;
 
 	has_raft = 0;
@@ -401,7 +401,7 @@ void tevent_072(void)
 /* a corpse with the unicorn letter */
 void tevent_073(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_tevent073_flag) {
 
@@ -426,8 +426,8 @@ void tevent_073(void)
 /* brigants */
 void tevent_074(void)
 {
-	signed short answer;
-	signed short i;
+	signed int answer;
+	signed int i;
 	Bit32s p_money;
 	struct struct_hero *hero;
 
@@ -524,9 +524,9 @@ void tevent_074(void)
 
 void tevent_075(void)
 {
-	signed short i;
-	signed short answer;
-	signed short ret;
+	signed int i;
+	signed int answer;
+	signed int ret;
 	struct struct_hero *hero;
 
 	ret = -1;
@@ -614,7 +614,7 @@ void tevent_075(void)
 /* Felsteyn <-> Orkanger: entrance to the dungeon "goblin cave" */
 void tevent_076(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_tevent076_flag) {
 
@@ -654,8 +654,8 @@ void tevent_076(void)
 /* brigants */
 void tevent_077(void)
 {
-	signed short answer;
-	signed short i;
+	signed int answer;
+	signed int i;
 	Bit32s p_money;
 	struct struct_hero *hero;
 

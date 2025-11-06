@@ -157,10 +157,10 @@ static HugePt g_global_buffer_ptr;	// ds:0xe5e0, points to the start of the glob
 signed char g_large_buf; 		// ds:0xe5e4
 
 /* Borlandified and identical */
-void rabies(struct struct_hero* hero, signed short hero_pos)
+void rabies(struct struct_hero* hero, signed int hero_pos)
 {
 	signed int answer;
-	signed int l_di;
+	signed int i;
 	signed int done = 0;
 	signed int tw_bak;
 	struct struct_hero *hero2;
@@ -233,11 +233,11 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 			} else if (answer == 2) {
 				/* calm the hero */
 
-				for (l_di = 0; l_di <= 6; l_di++) {
+				for (i = 0; i <= 6; i++) {
 
 					/* one of the other heroes must pass CH+0 */
-					if ((l_di != hero_pos) && (test_attrib(get_hero(l_di), ATTRIB_CH, 0) != 0))
-						/* Original-Bug: should be 'test_attrib(get_hero(l_di), ATTRIB_CH, 0) > 0'
+					if ((i != hero_pos) && (test_attrib(get_hero(i), ATTRIB_CH, 0) != 0))
+						/* Original-Bug: should be 'test_attrib(get_hero(i), ATTRIB_CH, 0) > 0'
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
@@ -310,9 +310,9 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 		if (done == 0) {
 			/* every other hero in the group looses 1W6+2 LE */
 			hero2 = get_hero(0);
-			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
+			for (i = 0; i <= 6; i++, hero2++) {
 
-				if ((l_di != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&
+				if ((i != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&
 					(hero2->group_id == gs_current_group) && !hero2->flags.dead)
 				{
 					sub_hero_le(hero2, dice_roll(1, 6, 2));
@@ -364,7 +364,7 @@ void init_global_buffer(void)
 }
 
 /* Borlandified and identical */
-signed short init_memory(void)
+signed int init_memory(void)
 {
 	signed int error = 0;
 	Bit32u freemem;
@@ -477,12 +477,12 @@ void refresh_colors(void)
 Bit32s get_diskspace(void)
 {
 #if defined(__BORLANDC__)
-	unsigned short a[4];
+	struct dfree df;
 	Bit32s space;
 
-	getdfree(getdisk() + 1, (struct dfree*)&a);
+	getdfree(getdisk() + 1, &df);
 
-	space = (Bit32s)a[0] * (Bit32s)a[2] * (Bit32s)a[3];
+	space = (Bit32s)df.df_avail * (Bit32s)df.df_bsec * df.df_sclus;
 
 	return space - 204800;
 #else
@@ -557,11 +557,11 @@ int err_handler(void)
 void prepare_dirs(void)
 {
 #if defined(__BORLANDC__)
-	signed short l_si;
+	signed int done;
 	signed int handle;
-	signed short drive;
-	signed short drive_bak;
-	signed short errorval;
+	signed int drive;
+	signed int drive_bak;
+	signed int errorval;
 	struct ffblk blk;
 	char gamepath[40];
 
@@ -622,26 +622,24 @@ void prepare_dirs(void)
 	/* delete *.* in TEMP-dir */
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard2);
 
-	l_si = findfirst(g_text_output_buf, &blk, 0);
+	done = findfirst(g_text_output_buf, &blk, 0);
 
-	if (!l_si) {
+	if (!done) {
 
 		do {
-			sprintf(g_text_output_buf,
-				g_str_temp_xx_ptr2,
-				blk.ff_name);			/* contains a filename */
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
 
 			unlink(g_text_output_buf);
 
-			l_si = findnext(&blk);
+			done = findnext(&blk);
 
-		} while (!l_si);
+		} while (!done);
 	}
 
 	/* search for "*.CHR" in the gamepath */
-	l_si = findfirst(g_all_chr_wildcard4, &blk, 0);
+	done = findfirst(g_all_chr_wildcard4, &blk, 0);
 
-	while (!l_si) {
+	while (!done) {
 
 		/* open CHR-file and copy it into TEMP-dir */
 		handle = open(blk.ff_name, O_BINARY | O_RDWR);
@@ -659,7 +657,7 @@ void prepare_dirs(void)
 
 		close(handle);
 
-		l_si = findnext(&blk);
+		done = findnext(&blk);
 	}
 
 	setdisk(drive_bak);
@@ -673,7 +671,7 @@ void cleanup_game(void)
 	struct ffblk blk;
 #endif
 	signed int i;
-	signed int l_di;
+	signed int done;
 
 #if defined(__BORLANDC__)
 	/* disable AIL */
@@ -731,9 +729,9 @@ void cleanup_game(void)
 
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard3);
 
-	l_di = findfirst(g_text_output_buf, &blk, 0);
+	done = findfirst(g_text_output_buf, &blk, 0);
 
-	if (l_di == 0) {
+	if (done == 0) {
 
 		do {
 			/* delete each found file */
@@ -741,9 +739,9 @@ void cleanup_game(void)
 
 			unlink(g_text_output_buf);
 
-			l_di = findnext(&blk);
+			done = findnext(&blk);
 
-		} while (!l_di);
+		} while (!done);
 	}
 #endif
 

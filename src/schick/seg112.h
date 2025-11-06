@@ -3,8 +3,8 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-/* static */
-void TRV_swimm(signed short, signed short);
+/* should be static */
+void TRV_swimm(const signed int, const signed int);
 /* 0x25 */
 void tevent_071(void);
 /* 0x2a */

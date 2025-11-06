@@ -65,11 +65,11 @@ static signed int g_textbox_width_bak;		//ds:0xe5d5
 static signed int g_basepos_y_bak;		//ds:0xe5d7
 static signed int g_basepos_x_bak;		//ds:0xe5d9
 
-static void pause_traveling(signed short ani_no)
+static void pause_traveling(const signed int ani_id)
 {
 	g_event_ani_busy = 1;
 
-	load_ani(ani_no);
+	load_ani(ani_id);
 
 	draw_main_screen();
 
@@ -88,7 +88,7 @@ static void pause_traveling(signed short ani_no)
 	/* c = b = a = 0 */
 	gs_show_travel_map = g_basepos_x = g_wallclock_update = 0;
 
-	g_basepos_y = (ani_no == 21 ? 60: 70);
+	g_basepos_y = (ani_id == 21 ? 60: 70);
 	g_textbox_width = 9;
 }
 
@@ -110,10 +110,10 @@ static void resume_traveling(void)
 
 void hunt_karen(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
-	signed short passed;
-	signed short i;
+	signed int passed;
+	signed int i;
 
 	pause_traveling(21);
 
@@ -595,7 +595,7 @@ void do_wild8_fight(void)
 	g_basepos_y = y_bak;
 }
 
-void random_encounter(signed short arg)
+void random_encounter(signed int arg)
 {
 	signed int l_si;
 	signed int i;
@@ -742,7 +742,7 @@ void tevent_115(void)
 	}
 }
 
-void TLK_way_to_ruin(signed short state)
+void TLK_way_to_ruin(const signed int state)
 {
 	signed int i;
 	struct struct_hero *hero;

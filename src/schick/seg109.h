@@ -19,11 +19,12 @@ void TRV_ford_test(const signed int, const signed int);
 /* 0x43 */
 signed int TRV_ferry(char*, signed int);
 /* 0x48 */
-void TRV_barrier(signed short);
+void TRV_barrier(const signed int);
 /* 0x4d */
-void TRV_hunt_generic(signed short, signed short, signed short, signed short,
-			signed short, signed short, signed short, signed short,
-			signed short, signed short, signed short);
+void TRV_hunt_generic(const signed int, const signed int, const signed int,
+		const signed int, const signed int, const signed int,
+		const signed int, const signed int, const signed int,
+		const signed int, const signed int);
 /* 0x52 */
 void tevent_001(void);
 /* 0x57 */

@@ -22,8 +22,8 @@ namespace M302de {
 
 void poison_effect(void)
 {
-	signed short i;
-	volatile signed short j;
+	signed int i;
+	volatile signed int j;
 	struct struct_hero *hero;
 	Bit8s *poison_ptr;
 

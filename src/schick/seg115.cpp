@@ -197,7 +197,7 @@ void tevent_094(void)
 {
 	if (gs_tevent094_flag != 0)
 	{
-		signed short answer;
+		signed int answer;
 
 		GUI_output(get_tx2(3));
 

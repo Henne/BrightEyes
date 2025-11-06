@@ -328,11 +328,11 @@ signed int has_hero_stacked(struct struct_hero *hero, const signed int item_id)
  */
 signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id, const signed int mode, const signed int quantity)
 {
-	signed short l1;
-	signed short retval;
-	signed short done;
+	signed int l1;
+	signed int retval;
+	signed int done;
 	struct item_stats *item_p;
-	signed short si, di;
+	signed int si, di;
 
 	si = quantity;
 
@@ -493,7 +493,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 {
 
 	struct item_stats *p_item;
-	signed short answer;
+	signed int answer;
 	signed int retval = 0;
 	signed int item_id;
 
@@ -507,7 +507,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 		if (p_item->flags.undropable) {
 
 			/* this item is not droppable */
-			sprintf(g_dtp2,get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
+			sprintf(g_dtp2,get_ttx(454), (char*)GUI_names_grammar((signed int)0x8002, item_id, 0));
 			GUI_output(g_dtp2);
 
 		} else {
@@ -612,14 +612,14 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
  */
 signed int get_item(signed int item_id, const signed int unused, signed int quantity)
 {
-	signed short i;
-	signed short retval = 0;
-	signed short quant_hero;
-	signed short done = 0;
-	signed short dropper_pos;
-	signed short vc;
+	signed int i;
+	signed int retval = 0;
+	signed int quant_hero;
+	signed int done = 0;
+	signed int dropper_pos;
+	signed int vc;
 	struct struct_hero *hero_i;
-	signed short autofight_bak;
+	signed int autofight_bak;
 
 	/* Special stacked items */
 	if (item_id == ITEM_200_ARROWS) { item_id = ITEM_ARROWS; quantity = 200;} else
@@ -760,53 +760,53 @@ void loose_random_item(struct struct_hero *hero, const signed int percent, char 
 
 signed int select_item_to_drop(struct struct_hero *hero)
 {
-	signed short i;
-	signed short v4 = 0;
-	signed short v6 = 0;
-	signed short item_id;
-	signed short va;
-	signed short tw_bak, bak2, bak3;
+	signed int i;
+	signed int answer = 0;
+	signed int item_cnt = 0;
+	signed int item_id;
+	signed int va;
+	signed int tw_bak, bak2, bak3;
 	char *ptr;
-	signed short str[23];
-	signed short di;
+	signed int str[23];
+	signed int di;
 
 	/* check if we drop equipped items or not */
 	i = g_prevent_drop_equipped_items ? HERO_INVENTORY_SLOT_KNAPSACK_1 : 0;
 	for (; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
 		if ((item_id = hero->inventory[i].item_id)) {
-			str[v6] = i;
-			g_radio_name_list[v6] = (g_dtp2 + v6 * 30);
-			strcpy(g_radio_name_list[v6], GUI_name_singular(get_itemname(item_id)));
-			v6++;
+			str[item_cnt] = i;
+			g_radio_name_list[item_cnt] = (g_dtp2 + item_cnt * 30);
+			strcpy(g_radio_name_list[item_cnt], GUI_name_singular(get_itemname(item_id)));
+			item_cnt++;
 		}
 	}
 
-	if (v6 == 0) {
+	if (item_cnt == 0) {
 		sprintf(g_dtp2, get_ttx(750), hero->alias);
 		GUI_output(g_dtp2);
 		return -1;
 	}
 
 	di = 0;
-	while (v4 != -1) {
+	while (answer != -1) {
 
 		va = -1;
-		if (v6 > 12) {
+		if (item_cnt > 12) {
 			if (!di) {
 				i = 13;
 				va = i - 1;
 				ptr = g_radio_name_list[va];
 				g_radio_name_list[va] = get_ttx(751);
 			} else {
-				i = v6 + 1;
+				i = item_cnt + 1;
 				va = i - 1;
 				ptr = g_radio_name_list[va];
 				g_radio_name_list[va] = get_ttx(751);
 				i -= di;
 			}
 		} else {
-			i = v6;
+			i = item_cnt;
 		}
 
 		tw_bak = g_textbox_width;
@@ -815,7 +815,7 @@ signed int select_item_to_drop(struct struct_hero *hero)
 		g_textbox_width = 6;
 		g_basepos_x = g_basepos_y = 0;
 
-		v4 = GUI_radio(get_ttx(752), (signed char)i,
+		answer = GUI_radio(get_ttx(752), (signed char)i,
 				g_radio_name_list[di + 0], g_radio_name_list[di + 1],
 				g_radio_name_list[di + 2], g_radio_name_list[di + 3],
 				g_radio_name_list[di + 4], g_radio_name_list[di + 5],
@@ -831,14 +831,14 @@ signed int select_item_to_drop(struct struct_hero *hero)
 		if (va != -1) {
 			g_radio_name_list[va] = ptr;
 		}
-		if ((v6 > 12) && (v4 == i)) {
+		if ((item_cnt > 12) && (answer == i)) {
 			di += 12;
-			if (di > v6) {
+			if (di > item_cnt) {
 				di = 0;
 			}
 		} else {
-			if (v4 != -1) {
-				return str[di + v4 - 1];
+			if (answer != -1) {
+				return str[di + answer - 1];
 			}
 		}
 	}

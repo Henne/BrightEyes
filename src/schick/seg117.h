@@ -31,7 +31,7 @@ void pirates_attack(void);
 void do_wild8_fight(void);
 
 /* 0x4d */
-void random_encounter(signed short);
+void random_encounter(signed int);
 
 /* 0x52 */
 void search_ruin1(void);
@@ -40,7 +40,7 @@ void search_ruin1(void);
 void tevent_115(void);
 
 /* 0x5c */
-void TLK_way_to_ruin(signed short);
+void TLK_way_to_ruin(const signed int);
 
 /* 0x61 */
 void tevent_087(void);
