@@ -55,7 +55,7 @@ void prepare_map_marker(void)
 	signed int i;
 	signed int handle;
 	signed int dummy;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	/* load OBJECTS.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
@@ -67,12 +67,12 @@ void prepare_map_marker(void)
 	for (i = 0; i < 10; i++) {
 		nvf.dst = g_buffer6_ptr + 100 * i + 1000;
 		nvf.src = g_buffer6_ptr;
-		nvf.no = i;
-		nvf.type = 0;
+		nvf.image_num = i;
+		nvf.compression_type = 0;
 		nvf.width = &dummy;
 		nvf.height = &dummy;
 
-		process_nvf(&nvf);
+		process_nvf_extraction(&nvf);
 	}
 
 	set_textbox_positions(gs_current_town);

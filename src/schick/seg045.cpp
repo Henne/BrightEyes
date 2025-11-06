@@ -117,7 +117,7 @@ void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const
 {
 	signed int obj_x;
 	signed int obj_y;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	FIG_search_obj_on_cb(fighter_id, &obj_x, &obj_y);
 
@@ -156,12 +156,12 @@ void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const
 
 	nvf.dst = g_fig_shot_bolt_buf;
 	nvf.src = g_spellobj_nvf_buf;
-	nvf.no = g_fig_list_elem.nvf_no;
-	nvf.type = 0;
+	nvf.image_num = g_fig_list_elem.nvf_no;
+	nvf.compression_type = 0;
 	nvf.width = &obj_x;
 	nvf.height = &obj_x;
 
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	g_fig_shot_bolt_id = FIG_add_to_list(-1);
 }
@@ -252,16 +252,16 @@ void FANI_add_spell(const signed int x, const signed int y, const signed int spe
 	struct dummy4 b = *(struct dummy4*)&g_anitab_spell_ox;
 	struct dummy4 c = *(struct dummy4*)&g_anitab_spell_oy;
 
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	nvf.dst = g_fig_spellgfx_buf;
 	nvf.src = g_spellobj_nvf_buf;
 
-	nvf.no = a.a[spell_ani_id - 1];
-	nvf.type = 0;
+	nvf.image_num = a.a[spell_ani_id - 1];
+	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = a.a[spell_ani_id - 1];

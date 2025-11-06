@@ -348,7 +348,7 @@ void draw_fight_screen(Bit16u val)
 	Bit8s *sheet;
 	Bit8s *p_weapon_anisheet;
 	signed int handle;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed short figlist_remove[8];
 
 	call_mouse_bg();
@@ -362,12 +362,12 @@ void draw_fight_screen(Bit16u val)
 
 			nvf.src = (Bit8u*)load_fight_figs(p_fighter->figure);
 			nvf.dst = p_fighter->gfxbuf;
-			nvf.no = p_fighter->nvf_no;
-			nvf.type = 0;
+			nvf.image_num = p_fighter->nvf_no;
+			nvf.compression_type = 0;
 			nvf.width = &width;
 			nvf.height = &object_id_bak;
 
-			process_nvf(&nvf);
+			process_nvf_extraction(&nvf);
 
 			p_fighter->reload = 0;
 		}
@@ -599,12 +599,12 @@ void draw_fight_screen(Bit16u val)
 						}
 
 						nvf.dst = p_fighter->gfxbuf;
-						nvf.no = p_fighter->nvf_no;
-						nvf.type = 0;
+						nvf.image_num = p_fighter->nvf_no;
+						nvf.compression_type = 0;
 						nvf.width = &width;
 						nvf.height = &object_id_bak;
 
-						process_nvf(&nvf);
+						process_nvf_extraction(&nvf);
 
 						g_fig_ani_state[p_fighter->sheet]++;
 
@@ -816,12 +816,12 @@ void draw_fight_screen(Bit16u val)
 							}
 
 							nvf.dst = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
-							nvf.no = *(sheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
-							nvf.type = 0;
+							nvf.image_num = *(sheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
+							nvf.compression_type = 0;
 							nvf.width = &width;
 							nvf.height = &object_id_bak;
 
-							process_nvf(&nvf);
+							process_nvf_extraction(&nvf);
 
 							if (p_fighter->wsheet != -1) {
 
@@ -839,12 +839,12 @@ void draw_fight_screen(Bit16u val)
 									if (*(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[p_fighter->sheet])) != -5) {
 										nvf.dst = (Bit8u*)g_fig_gfxbuffers[p_fighter->wsheet];
 										nvf.src = g_weapons_nvf_buf;
-										nvf.no = *(Bit8u*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
-										nvf.type = 0;
+										nvf.image_num = *(Bit8u*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
+										nvf.compression_type = 0;
 										nvf.width = &width;
 										nvf.height = &object_id_bak;
 
-										process_nvf(&nvf);
+										process_nvf_extraction(&nvf);
 
 										current_x1 += p_fighter->width - 14;
 										current_x1 += *(p_weapon_anisheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3);

@@ -111,7 +111,7 @@ void status_menu(signed short hero_pos)
 	signed short l1;
 	signed short tw_bak;
 	signed short flag4;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	flag1 = 0;
 	flag2 = 1;
@@ -463,11 +463,11 @@ void status_menu(signed short hero_pos)
 
 						nvf.dst = g_icon;
 						nvf.src = g_buffer10_ptr;
-						nvf.type = 0;
+						nvf.compression_type = 0;
 						nvf.width = &width;
 						nvf.height = &height;
-						nvf.no = g_itemsdat[hero2->inventory[g_statuspage_selitem3_no].item_id].gfx;
-						process_nvf(&nvf);
+						nvf.image_num = g_itemsdat[hero2->inventory[g_statuspage_selitem3_no].item_id].gfx;
+						process_nvf_extraction(&nvf);
 
 						make_ggst_cursor(g_icon);
 

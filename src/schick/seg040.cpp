@@ -122,7 +122,7 @@ void FIG_preload_gfx(void)
 {
 	struct struct_fighter *fighter;
 	signed int i;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed int handle;
 
 	g_fig_list_head = NULL;
@@ -195,29 +195,29 @@ void FIG_preload_gfx(void)
 
 	nvf.dst = g_fig_cb_marker_buf;
 	nvf.src = g_objects_nvf_buf;
-	nvf.no = 10;
-	nvf.type = 0;
+	nvf.image_num = 10;
+	nvf.compression_type = 0;
 	nvf.width = &i;
 	nvf.height = &i;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	g_fig_cb_selector_buf = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 300;
 
 	nvf.dst = g_fig_cb_selector_buf;
 	nvf.src = g_objects_nvf_buf;
-	nvf.no = 11;
-	nvf.type = 0;
-	process_nvf(&nvf);
+	nvf.image_num = 11;
+	nvf.compression_type = 0;
+	process_nvf_extraction(&nvf);
 
 	g_fig_star_gfx = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 0xe8c;
 
 	nvf.dst = g_fig_star_gfx;
 	nvf.src = g_objects_nvf_buf;
-	nvf.no = 17;
-	nvf.type = 0;
-	process_nvf(&nvf);
+	nvf.image_num = 17;
+	nvf.compression_type = 0;
+	process_nvf_extraction(&nvf);
 
 	g_fig_shot_bolt_buf = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 400;
@@ -239,7 +239,7 @@ void FIG_draw_scenario(void)
 	signed int width;
 	signed int height;
 	Bit8u *ptr;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 
 	for (cb_x = 0; cb_x < 24; cb_x++) {
@@ -260,11 +260,11 @@ void FIG_draw_scenario(void)
 
 						nvf.dst = ptr;
 						nvf.src = g_fightobj_buf;
-						nvf.no = object_id;
-						nvf.type = 0;
+						nvf.image_num = object_id;
+						nvf.compression_type = 0;
 						nvf.width = &width;
 						nvf.height = &height;
-						process_nvf(&nvf);
+						process_nvf_extraction(&nvf);
 
 						/* save sprite info */
 						g_figobj_gfxbuf_table[object_id] = g_fightobj_buf_seek_ptr;

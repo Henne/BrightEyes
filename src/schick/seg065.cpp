@@ -106,7 +106,7 @@ void final_intro(void)
 	Bit32u len;
 	Bit8u *ptr1;
 	Bit8u *ptr2;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	g_pp20_index = ARCHIVE_FILE_DNGS + 12;
 
@@ -131,21 +131,21 @@ void final_intro(void)
 
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)g_buffer9_ptr;
-	nvf.no = 0;
-	nvf.type = 3;
+	nvf.image_num = 0;
+	nvf.compression_type = 3;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	map_effect(g_renderbuf_ptr);
 
 	nvf.dst = ptr2;
 	nvf.src = (Bit8u*)g_buffer9_ptr;
-	nvf.no = 1;
-	nvf.type = 3;
+	nvf.image_num = 1;
+	nvf.compression_type = 3;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 20;
@@ -187,16 +187,16 @@ void final_intro(void)
 static Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 {
 	HugePt retval;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	nvf.dst = ani->ptr;
 	nvf.src = g_renderbuf_ptr;
-	nvf.no = nvf_no;
-	nvf.type = 3;
+	nvf.image_num = nvf_no;
+	nvf.compression_type = 3;
 	nvf.width = &ani->width;
 	nvf.height = &ani->height;
 
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	retval = (HugePt)ani->ptr + ani->width * ani->height;
 
@@ -419,7 +419,7 @@ void show_outro(void)
 	Bit8u *pal_ptr;
 	struct struct_hero *hero;
 	signed int i;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	g_textbox_width = 7;
 	g_basepos_x = 0;
@@ -441,11 +441,11 @@ void show_outro(void)
 
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)g_buffer9_ptr;
-	nvf.no = 0;
-	nvf.type = 0;
+	nvf.image_num = 0;
+	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	g_pic_copy.x1 = (320 - width) / 2;
 	g_pic_copy.y1 = 0;
@@ -470,11 +470,11 @@ void show_outro(void)
 
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)g_buffer9_ptr;
-	nvf.no = 0;
-	nvf.type = 0;
+	nvf.image_num = 0;
+	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	g_pic_copy.x1 = (320 - width) / 2;
 	g_pic_copy.y1 = 0;
@@ -499,11 +499,11 @@ void show_outro(void)
 
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)g_buffer9_ptr;
-	nvf.no = 0;
-	nvf.type = 0;
+	nvf.image_num = 0;
+	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	g_pic_copy.x1 = (320 - width) / 2;
 	g_pic_copy.y1 = 0;

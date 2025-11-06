@@ -108,7 +108,7 @@ void buy_screen(void)
 	signed short l15 = 0;
 	signed short l16;
 	signed short l17;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
 	g_buy_shopping_cart = (struct struct_shopping_cart*)g_fig_figure1_buf + 2800 / 4;
@@ -183,7 +183,7 @@ void buy_screen(void)
 
 			nvf.dst = g_renderbuf_ptr;
 			nvf.src = g_buffer10_ptr;
-			nvf.type = 0;
+			nvf.compression_type = 0;
 			nvf.width = &width;
 			nvf.height = &height;
 
@@ -201,9 +201,9 @@ void buy_screen(void)
 						g_pic_copy.y2 = array5.a[l_di] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.no = g_itemsdat[j].gfx;
+						nvf.image_num = g_itemsdat[j].gfx;
 
-						process_nvf(&nvf);
+						process_nvf_extraction(&nvf);
 
 						do_pic_copy(0);
 

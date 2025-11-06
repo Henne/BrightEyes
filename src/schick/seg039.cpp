@@ -280,7 +280,7 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
  */
 void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed short y)
 {
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed int l1;
 
 	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->gfx_id][0];
@@ -330,11 +330,11 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 
 		nvf.src = (Bit8u*)load_fight_figs(g_fig_list_elem.figure);
 		nvf.dst = g_fig_list_elem.gfxbuf;
-		nvf.no = g_fig_list_elem.nvf_no;
-		nvf.type = 0;
+		nvf.image_num = g_fig_list_elem.nvf_no;
+		nvf.compression_type = 0;
 		nvf.width = &l1;
 		nvf.height = &l1;
-		process_nvf(&nvf);
+		process_nvf_extraction(&nvf);
 		g_fig_list_elem.reload = 0;
 	}
 

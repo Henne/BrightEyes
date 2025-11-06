@@ -825,7 +825,7 @@ void FIG_load_ship_sprites(void)
 	signed short l3;	// REMARK: rename to x (screen)
 	signed short l4;	// REMARK: rename to y (screen)
 	Bit8u *ptr;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	for (i = 0; i < 24; i++) {
 
@@ -850,12 +850,12 @@ void FIG_load_ship_sprites(void)
 
 					nvf.dst = ptr;
 					nvf.src = g_fightobj_buf;
-					nvf.no = l_si;
-					nvf.type = 0;
+					nvf.image_num = l_si;
+					nvf.compression_type = 0;
 					nvf.width = &width;
 					nvf.height = &height;
 
-					process_nvf(&nvf);
+					process_nvf_extraction(&nvf);
 
 					/* buffer this picture */
 					g_figobj_gfxbuf_table[l_si] = g_fightobj_buf_seek_ptr;

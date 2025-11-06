@@ -191,7 +191,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 	struct struct_hero *hero_bargain;
 	signed int width;
 	signed int height;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	/* check if this smith has an item in repair */
 	if (gs_smith_repairitems[smith_id].item_id) {
@@ -291,7 +291,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 				nvf.dst = g_renderbuf_ptr;
 				nvf.src = g_buffer10_ptr;
-				nvf.type = 0;
+				nvf.compression_type = 0;
 				nvf.width =  &width;
 				nvf.height = &height;
 
@@ -309,9 +309,9 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 							g_pic_copy.y2 = array5.a[i] + 15;
 							g_pic_copy.src = g_renderbuf_ptr;
 
-							nvf.no = g_itemsdat[j].gfx;
+							nvf.image_num = g_itemsdat[j].gfx;
 
-							process_nvf(&nvf);
+							process_nvf_extraction(&nvf);
 
 							do_pic_copy(0);
 

@@ -276,7 +276,7 @@ void status_show(Bit16u index)
 	signed short i;
 	signed short j;
 
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	txt_tabpos1_bak = g_txt_tabpos[0];
 	txt_tabpos2_bak = g_txt_tabpos[1];
@@ -321,7 +321,7 @@ void status_show(Bit16u index)
 	if (g_status_page_mode < 3) {
 
 		nvf.src = g_buffer10_ptr;
-		nvf.type = 0;
+		nvf.compression_type = 0;
 
 		nvf.width = &width;
 		nvf.height = &height;
@@ -333,9 +333,9 @@ void status_show(Bit16u index)
 
 			nvf.dst = g_icon;
 			/* set no */
-			nvf.no = g_itemsdat[hero->inventory[i].item_id].gfx;
+			nvf.image_num = g_itemsdat[hero->inventory[i].item_id].gfx;
 
-			process_nvf(&nvf);
+			process_nvf_extraction(&nvf);
 
 			/* draw the item icon */
 			g_pic_copy.x1 = g_invslot_iconxy_table[i].x;

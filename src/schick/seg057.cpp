@@ -78,7 +78,7 @@ void sell_screen(struct shop_descr *shop_descr)
 	signed int width;
 	signed int height;
 	signed int l15;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed int tmp[7][23];
 
 
@@ -182,7 +182,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 			nvf.dst = g_renderbuf_ptr;
 			nvf.src = g_buffer10_ptr;
-			nvf.type = 0;
+			nvf.compression_type = 0;
 			nvf.width =  &width;
 			nvf.height = &height;
 
@@ -200,9 +200,9 @@ void sell_screen(struct shop_descr *shop_descr)
 						g_pic_copy.y2 = array5.a[l_di] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.no = g_itemsdat[j].gfx;
+						nvf.image_num = g_itemsdat[j].gfx;
 
-						process_nvf(&nvf);
+						process_nvf_extraction(&nvf);
 
 						do_pic_copy(0);
 
