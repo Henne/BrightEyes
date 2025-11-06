@@ -72,7 +72,7 @@ static unsigned short g_cd_audio_track; // ds:0xbc40
 static unsigned char g_unkn_071[8]; // ds:0xbc42
 static unsigned long g_cd_audio_tod; // ds:0xbc4a
 static unsigned long g_cd_audio_pos; // ds:0xbc4e
-static unsigned short g_cd_drive_no; // ds:0xbc52
+static unsigned short g_cd_drive_num; // ds:0xbc52
 static unsigned char g_unkn_072[4]; // ds:0xbc54
 
 /* static prototypes */
@@ -131,13 +131,13 @@ static unsigned short CD_get_first_drive(void)
 }
 
 /* Borlandified and identical */
-static unsigned short CD_set_drive_no(void)
+static unsigned short CD_set_drive_num(void)
 {
 	if (!CD_has_drives()) return 0;
 
 	if (!CD_count_drives()) return 0;
 
-	g_cd_drive_no = CD_get_first_drive();
+	g_cd_drive_num = CD_get_first_drive();
 
 	return 1;
 }
@@ -147,7 +147,7 @@ static void CD_driver_request(driver_request far* req)
 {
 	asm {
 		mov ax, 0x1510
-		mov cx, [g_cd_drive_no]
+		mov cx, [g_cd_drive_num]
 		les bx, req
 		int 0x2f
 	}
@@ -186,7 +186,7 @@ leave_tod:
 }
 
 /* Borlandified and nearly identical */
-static void CD_audio_track_start(signed short track_no)
+static void CD_audio_track_start(signed short track_num)
 {
 	Bit32s track_start;
 	Bit32s track_end;
@@ -195,25 +195,25 @@ static void CD_audio_track_start(signed short track_no)
 
 		req[5].status = 0;
 
-		req[5].ptr = MK_FP(cd_buf1[0x10 + track_no * 8],
-				(cd_buf1[0x0f + track_no * 8] << 8) +
-				(cd_buf1[0x0e + track_no * 8]));
+		req[5].ptr = MK_FP(cd_buf1[0x10 + track_num * 8],
+				(cd_buf1[0x0f + track_num * 8] << 8) +
+				(cd_buf1[0x0e + track_num * 8]));
 
 		/* calculate track_start */
-		track_start = (60L * (unsigned long)cd_buf1[0x10 + track_no * 8]
-			+ cd_buf1[0x0f + track_no * 8]) * 75L
-			+ cd_buf1[0x0e + track_no * 8];
+		track_start = (60L * (unsigned long)cd_buf1[0x10 + track_num * 8]
+			+ cd_buf1[0x0f + track_num * 8]) * 75L
+			+ cd_buf1[0x0e + track_num * 8];
 
 		/* calculate track_end */
-		if (cd_buf1[0x326] == track_no) {
+		if (cd_buf1[0x326] == track_num) {
 
 			track_end = (((unsigned long)cd_buf1[0x329] * 60
 					+ cd_buf1[0x328]) * 75
 					+ cd_buf1[0x327]);
 		} else {
-			track_end = (((unsigned long)cd_buf1[0x18 + track_no * 8] * 60
-					+ cd_buf1[0x17 + track_no * 8]) * 75
-					+ cd_buf1[0x16 + track_no * 8]);
+			track_end = (((unsigned long)cd_buf1[0x18 + track_num * 8] * 60
+					+ cd_buf1[0x17 + track_num * 8]) * 75
+					+ cd_buf1[0x16 + track_num * 8]);
 
 		}
 
@@ -336,7 +336,7 @@ void CD_audio_play(void)
 /* Borlandified and identical */
 static void CD_0432(void)
 {
-	signed short track_no;
+	signed short track_num;
 
 	if (!g_cd_init_successful) return;
 
@@ -345,17 +345,17 @@ static void CD_0432(void)
 	cd_buf1[0x324] = 0x0a;
 	CD_driver_request(&req[2]);
 
-	track_no = (unsigned short)cd_buf1[0x325];
+	track_num = (unsigned short)cd_buf1[0x325];
 
-	while (cd_buf1[0x326] >= track_no)
+	while (cd_buf1[0x326] >= track_num)
 	{
 		req[2].status = 0;
-		req[2].ptr = &cd_buf1[0x0c + 8 * track_no];
-		cd_buf1[0x0c + 8 * track_no] = 0x0b;
-		cd_buf1[0x0d + 8 * track_no] = track_no;
+		req[2].ptr = &cd_buf1[0x0c + 8 * track_num];
+		cd_buf1[0x0c + 8 * track_num] = 0x0b;
+		cd_buf1[0x0d + 8 * track_num] = track_num;
 		CD_driver_request(&req[2]);
 
-		track_no++;
+		track_num++;
 	}
 }
 #endif
@@ -428,7 +428,7 @@ static void CD_insert_msg(void)
 	signed short answer;
 	char str[160];
 
-	sprintf(str, g_str_insert_cd, g_cd_drive_no + 'A');
+	sprintf(str, g_str_insert_cd, g_cd_drive_num + 'A');
 
 	/* TODO: do {} while; would be better */
 	answer = -2;
@@ -473,7 +473,7 @@ void CD_check(void)
 
 	strcpy(text, g_str_cd_exepath);
 
-	text[0] = g_cd_drive_no + 'A';
+	text[0] = g_cd_drive_num + 'A';
 
 	while (CD_read_exe(text) <= 0)
 	{
@@ -488,14 +488,14 @@ int CD_init(void)
 #if defined(__BORLANDC__)
 	char str[80];
 
-	if (!CD_set_drive_no())
+	if (!CD_set_drive_num())
 	{
 		GUI_output((char*)g_str_cd_missing);
 
 		return 0;
 	}
 
-	sprintf(str, g_str_cd_init, g_cd_drive_no + 'A');
+	sprintf(str, g_str_cd_init, g_cd_drive_num + 'A');
 
 	GUI_output(str);
 
