@@ -4494,7 +4494,7 @@ void sub_ae_splash(struct struct_hero *hero, signed int ae_cost)
 		signed short tmp = g_update_statusline;
 		g_update_statusline = 0;
 
-		if ((hero->typus == HERO_TYPE_MAGE) && (hero->staff_level >= 4)) {
+		if ((hero->typus == HERO_TYPE_MAGIER) && (hero->staff_level >= 4)) {
 			/* 4th staff spell reduces AE cost by 2 */
 			ae_cost -= 2;
 			if (ae_cost < 0)

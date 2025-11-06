@@ -87,7 +87,7 @@ signed short DNG03_handler(void)
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
+				if ((hero->typus >= HERO_TYPE_HEXE) && hero->ae != 0) {
 
 					sub_ae_splash(hero, random_schick(6));
 
@@ -111,7 +111,7 @@ signed short DNG03_handler(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
+			if ((hero->typus >= HERO_TYPE_HEXE) && hero->ae != 0) {
 
 				sub_ae_splash(hero, random_schick(6));
 
@@ -172,7 +172,7 @@ signed short DNG03_handler(void)
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
+				if ((hero->typus >= HERO_TYPE_HEXE) && hero->ae != 0) {
 
 					sub_ae_splash(hero, random_schick(6));
 
@@ -374,7 +374,7 @@ signed short DNG03_handler(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae) {
+			if ((hero->typus >= HERO_TYPE_HEXE) && hero->ae) {
 
 				sub_ae_splash(hero, random_schick(6));
 

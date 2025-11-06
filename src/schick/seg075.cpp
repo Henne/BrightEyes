@@ -1186,7 +1186,7 @@ signed short DNG_check_climb_tools(void)
 
 		/* TODO: potential Original-Bug: What if petrified / unconscious etc.? Compare to is_staff_lvl2_in_group where check_hero is called */
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
-			!hero->flags.dead && (hero->typus == HERO_TYPE_MAGE) && (hero->staff_level > 2))
+			!hero->flags.dead && (hero->typus == HERO_TYPE_MAGIER) && (hero->staff_level > 2))
 		{
 			return i + 1;
 		}

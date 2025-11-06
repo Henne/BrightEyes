@@ -122,13 +122,13 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 	signed short randval;
 	struct mssr a = g_magic_school_spellranges;
 
-	if ((hero->typus == HERO_TYPE_WITCH) && (g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_WITCH))
+	if ((hero->typus == HERO_TYPE_HEXE) && (g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_WITCH))
 	{
 		/* witch spell */
 		max_incs = 2;
 	}
 
-	if ((hero->typus >= HERO_TYPE_GREEN_ELF) && /* hero is one of the three elven types */
+	if ((hero->typus >= HERO_TYPE_AUELF) && /* hero is one of the three elven types */
 		((g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_GELF) ||
 			(g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_SELF) ||
 			(g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_IELF)))
@@ -137,14 +137,14 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 		max_incs = 2;
 	}
 
-	if ((hero->typus == HERO_TYPE_DRUID) &&
+	if ((hero->typus == HERO_TYPE_DRUIDE) &&
 		(g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_DRUID))
 	{
 		/* druid spell */
 		max_incs = 2;
 	}
 
-	if (hero->typus == HERO_TYPE_MAGE) {
+	if (hero->typus == HERO_TYPE_MAGIER) {
 
 		/* mages */
 		if (g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_MAGE) {
@@ -677,7 +677,7 @@ void level_up(signed short hero_pos)
 	/* roll how many LE points the hero may get */
 	i = random_schick(6);
 
-	if (hero->typus >= HERO_TYPE_WITCH) {
+	if (hero->typus >= HERO_TYPE_HEXE) {
 		/* a magic user */
 
 		/* add spell increasements */
@@ -706,7 +706,7 @@ void level_up(signed short hero_pos)
 		add_hero_ae(hero, i - l_si);
 
 		/* change skill increasements into AE */
-		if ((hero->typus == HERO_TYPE_MAGE) && (g_game_mode == GAME_MODE_ADVANCED)) {
+		if ((hero->typus == HERO_TYPE_MAGIER) && (g_game_mode == GAME_MODE_ADVANCED)) {
 
 			if (GUI_bool(get_tx2(40))) {
 				/* trade 10 skill increasements into 1W6+2 AE */
@@ -766,7 +766,7 @@ void level_up(signed short hero_pos)
 			}
 		}
 
-		if (hero->typus >= HERO_TYPE_WITCH) {
+		if (hero->typus >= HERO_TYPE_HEXE) {
 			/* hero has magic type */
 
 			i = 1;
@@ -778,7 +778,7 @@ void level_up(signed short hero_pos)
 
 				switch (hero->typus) {
 
-					case HERO_TYPE_WITCH: {
+					case HERO_TYPE_HEXE: {
 
 						/* first try to increase all which-specific spells by 1,
 						 * up to skill value at most 11. */
@@ -801,7 +801,7 @@ void level_up(signed short hero_pos)
 
 						break;
 					}
-					case HERO_TYPE_DRUID: {
+					case HERO_TYPE_DRUIDE: {
 
 						while (hero->spell_incs != 0 && i < 86) {
 
@@ -820,7 +820,7 @@ void level_up(signed short hero_pos)
 
 						break;
 					}
-					case HERO_TYPE_MAGE: {
+					case HERO_TYPE_MAGIER: {
 
 						i = 0;
 
@@ -855,7 +855,7 @@ void level_up(signed short hero_pos)
 
 						break;
 					}
-					case HERO_TYPE_GREEN_ELF: {
+					case HERO_TYPE_AUELF: {
 
 						while (hero->spell_incs != 0 && i < 86) {
 
@@ -883,7 +883,7 @@ void level_up(signed short hero_pos)
 
 						break;
 					}
-					case HERO_TYPE_ICE_ELF: {
+					case HERO_TYPE_FIRNELF: {
 
 						while (hero->spell_incs != 0 && i < 86) {
 
@@ -910,7 +910,7 @@ void level_up(signed short hero_pos)
 						}
 						break;
 					}
-					case HERO_TYPE_SYLVAN_ELF: {
+					case HERO_TYPE_WALDELF: {
 
 						while (hero->spell_incs != 0 && i < 86) {
 
@@ -947,7 +947,7 @@ void level_up(signed short hero_pos)
 
 	} else {
 
-		if ((hero->typus >= HERO_TYPE_WITCH) && (l_di = g_levelup_spta_conv[hero->typus - 7]) && GUI_bool(get_tx2(45)))
+		if ((hero->typus >= HERO_TYPE_HEXE) && (l_di = g_levelup_spta_conv[hero->typus - 7]) && GUI_bool(get_tx2(45)))
 		{
 
 			sprintf(g_dtp2, get_tx2(46), l_di);

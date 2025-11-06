@@ -327,7 +327,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			p_rangedtab = &g_ranged_weapons_table[weapon->ranged_index];
 
 			if (attack_hero) {
-				if (target->typus == HERO_TYPE_DWARF) {
+				if (target->typus == HERO_TYPE_ZWERG) {
 					/* ZWERG / DWARF */
 					target_size = 2;
 				} else {
@@ -445,7 +445,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 		damage *= 2;
 	}
 
-	if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_DWARF) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
+	if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
 	{
 		damage++;
 	}

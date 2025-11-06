@@ -264,7 +264,7 @@ signed int use_magic(struct struct_hero *hero)
 		case 1: {
 			/* Meditation */
 
-			if (hero->typus != HERO_TYPE_MAGE) {
+			if (hero->typus != HERO_TYPE_MAGIER) {
 				/* not a mage, need thonnys */
 
 
@@ -320,7 +320,7 @@ signed int use_magic(struct struct_hero *hero)
 		case 2: {
 			/* Staffspell */
 
-			if (hero->typus != HERO_TYPE_MAGE) {
+			if (hero->typus != HERO_TYPE_MAGIER) {
 				/* only for mages */
 				GUI_output(get_ttx(403));
 				return 0;
@@ -443,7 +443,7 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 	}
 
 	/* only for magic users */
-	if (hero->typus < HERO_TYPE_WITCH) {
+	if (hero->typus < HERO_TYPE_HEXE) {
 		GUI_output(get_ttx(330));
 		return -2;
 	}
@@ -589,7 +589,7 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 	struct spell_descr *spell_desc;
 
 	/* check if class is magic user */
-	if ((hero->typus < HERO_TYPE_WITCH) || (check_hero(hero) == 0)) {
+	if ((hero->typus < HERO_TYPE_HEXE) || (check_hero(hero) == 0)) {
 		return 0;
 	}
 
@@ -650,7 +650,7 @@ signed short test_spell_group(signed short spell, signed char handicap)
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class is magicuser */
-		if ((hero_i->typus >= HERO_TYPE_WITCH) &&
+		if ((hero_i->typus >= HERO_TYPE_HEXE) &&
 			/* Check class  BOGUS */
 			(hero_i->typus != HERO_TYPE_NONE) &&
 			/* Check in group */

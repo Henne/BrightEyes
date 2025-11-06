@@ -217,7 +217,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a PA-bonus against orcs */
 			if (gs_tevent071_orcstatue &&
-				(hero->typus == HERO_TYPE_DWARF) &&
+				(hero->typus == HERO_TYPE_ZWERG) &&
 				!target_is_hero &&
 				(target_monster->gfx_id == 24))
 			{

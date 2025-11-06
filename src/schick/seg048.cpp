@@ -213,7 +213,7 @@ void status_menu(signed short hero_pos)
 
 			} while (!(get_hero(hero_pos)->typus) ||
 					(get_hero(hero_pos)->group_id != gs_current_group) ||
-					((get_hero(hero_pos)->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
+					((get_hero(hero_pos)->typus < HERO_TYPE_HEXE) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -246,7 +246,7 @@ void status_menu(signed short hero_pos)
 
 			} while (!(get_hero(hero_pos)->typus) ||
 					(get_hero(hero_pos)->group_id != gs_current_group) ||
-					((get_hero(hero_pos)->typus < HERO_TYPE_WITCH) && (g_status_page_mode > 3)));
+					((get_hero(hero_pos)->typus < HERO_TYPE_HEXE) && (g_status_page_mode > 3)));
 
 
 			if (g_statuspage_selitem4_no != -1) {
@@ -610,7 +610,7 @@ void status_menu(signed short hero_pos)
 					}
 					case 8: {
 						/* show spells */
-						if (hero2->typus < HERO_TYPE_WITCH) {
+						if (hero2->typus < HERO_TYPE_HEXE) {
 							/* not a spellcaster */
 							GUI_output(get_ttx(215));
 						} else {
@@ -725,7 +725,7 @@ lab1:
 					}
 #endif
 					case 7: {
-						if (hero2->typus < HERO_TYPE_WITCH) {
+						if (hero2->typus < HERO_TYPE_HEXE) {
 							/* not a spellcaster */
 							GUI_output(get_ttx(215));
 						} else {
@@ -789,7 +789,7 @@ lab2:
 					}
 #endif
 					case 4: {
-						if (hero2->typus < HERO_TYPE_WITCH) {
+						if (hero2->typus < HERO_TYPE_HEXE) {
 							/* not a spellcaster */
 							GUI_output(get_ttx(215));
 						} else {

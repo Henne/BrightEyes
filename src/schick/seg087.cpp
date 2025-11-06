@@ -370,7 +370,7 @@ signed short DNG14_handler(void)
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_id == gs_current_group) &&
 					!hero->flags.dead &&
-					(hero->typus == HERO_TYPE_MAGE) &&
+					(hero->typus == HERO_TYPE_MAGIER) &&
 					(hero->staff_level > 2))
 				{
 					/* mage with staffspell-level > 2 => can transform staff to rope */

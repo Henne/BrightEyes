@@ -173,7 +173,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 				}
 
 				/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a PA-bonus against orcs */
-				if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_DWARF) && (monster->gfx_id == 24))
+				if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (monster->gfx_id == 24))
 				{
 					defender_pa++;
 				}

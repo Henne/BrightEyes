@@ -668,7 +668,7 @@ void startup_equipment(struct struct_hero *hero)
 
 	move_item(HERO_INVENTORY_SLOT_LEGS, HERO_INVENTORY_SLOT_KNAPSACK_3, hero);
 
-	if ((hero->sex != 0) && (hero->typus != HERO_TYPE_WARRIOR) && (hero->typus != HERO_TYPE_MAGE))
+	if ((hero->sex != 0) && (hero->typus != HERO_TYPE_KRIEGER) && (hero->typus != HERO_TYPE_MAGIER))
        	{
 		/* female non-warriors and non-mages get a free shirt */
 		give_hero_new_item(hero, ITEM_SHIRT, 1, 1);
@@ -685,17 +685,17 @@ void startup_equipment(struct struct_hero *hero)
 		}
 	}
 
-	if (hero->typus == HERO_TYPE_WARRIOR) {
+	if (hero->typus == HERO_TYPE_KRIEGER) {
 		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_LEATHER_ARMOR), hero);
 	}
 
-	if (hero->typus == HERO_TYPE_MAGE) {
+	if (hero->typus == HERO_TYPE_MAGIER) {
 		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_ROBE_GREEN), hero);
 	}
 
-	if ((hero->typus == HERO_TYPE_HUNTER) ||
-		(hero->typus == HERO_TYPE_GREEN_ELF) ||
-		(hero->typus == HERO_TYPE_SYLVAN_ELF))
+	if ((hero->typus == HERO_TYPE_JAEGER) ||
+		(hero->typus == HERO_TYPE_AUELF) ||
+		(hero->typus == HERO_TYPE_WALDELF))
 	{
 		give_hero_new_item(hero, ITEM_ARROWS, 1, 20);
 		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);

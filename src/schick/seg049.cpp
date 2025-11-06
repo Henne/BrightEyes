@@ -660,7 +660,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 					}
 
 					/* swap LE and AE */
-					if ((hero->typus >= HERO_TYPE_WITCH) && (le_regen < ae_regen)) {
+					if ((hero->typus >= HERO_TYPE_HEXE) && (le_regen < ae_regen)) {
 						tmp = ae_regen;
 						ae_regen = le_regen;
 						le_regen = tmp;
@@ -705,7 +705,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 
 					}
 
-					if (hero->typus >= HERO_TYPE_WITCH) {
+					if (hero->typus >= HERO_TYPE_HEXE) {
 
 						diff = hero->ae_max - hero->ae;
 

@@ -75,7 +75,7 @@ void ask_miracle(void)
 					no_spellcaster_in_group = 1;
 
 					for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
-						if ((get_hero(i))->typus >= HERO_TYPE_WITCH) {
+						if ((get_hero(i))->typus >= HERO_TYPE_HEXE) {
 #ifndef M302de_ORIGINAL_BUGFIX
 							/* Original-Bug 43:
 								The implementation of Praios miracles suggests that Praios only grants miracles to groups without spellcasters.

@@ -330,7 +330,7 @@ void disease_effect(void)
 				if (disease_ptr[1] > 7) {
 
 					/* 30 % for elfes, 20% for the all other types */
-					if (random_schick(100) <= (hero->typus >= HERO_TYPE_GREEN_ELF ? 30 : 20)) {
+					if (random_schick(100) <= (hero->typus >= HERO_TYPE_AUELF ? 30 : 20)) {
 
 						sprintf(g_dtp2, get_ttx(580), hero->alias);
 						GUI_output(g_dtp2);
@@ -367,7 +367,7 @@ void disease_effect(void)
 							}
 						}
 
-						sub_hero_le(hero, dice_roll(hero->typus >= HERO_TYPE_GREEN_ELF ? 2 : 1, 6, disease_ptr[1] - 1));
+						sub_hero_le(hero, dice_roll(hero->typus >= HERO_TYPE_AUELF ? 2 : 1, 6, disease_ptr[1] - 1));
 					}
 				}
 			}
