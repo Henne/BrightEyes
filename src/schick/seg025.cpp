@@ -286,7 +286,7 @@ void show_treasure_map(void)
 	signed int height;
 	signed short pp20_index_bak;
 	Bit32s length;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	/* count the collected treasure map parts */
 	for (l_si = count = 0; l_si < 9; l_si++) {
@@ -329,12 +329,12 @@ void show_treasure_map(void)
 				/* decompress picture */
 				nvf.dst = (Bit8u*)(((HugePt)g_buffer9_ptr) + 30000L);
 				nvf.src = (Bit8u*)g_buffer9_ptr;
-				nvf.no = l_si;
-				nvf.type = 0;
+				nvf.image_num = l_si;
+				nvf.compression_type = 0;
 				nvf.width = &width;
 				nvf.height = &height;
 
-				process_nvf(&nvf);
+				process_nvf_extraction(&nvf);
 
 				/* copy to screen */
 				g_pic_copy.x1 = g_tmap_x[l_si];

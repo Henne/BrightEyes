@@ -759,7 +759,7 @@ void equip_belt_ani(void)
 	signed int height;
 	Bit32s nvf_length;
 	Bit8u *p_pal;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	/* open GUERTEL.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_GUERTEL_NVF);
@@ -818,12 +818,12 @@ void equip_belt_ani(void)
 
 		nvf.dst = g_renderbuf_ptr;
 		nvf.src = (Bit8u*)g_buffer9_ptr;
-		nvf.no = i;
-		nvf.type = 3;
+		nvf.image_num = i;
+		nvf.compression_type = 3;
 		nvf.width = &width;
 		nvf.height = &height;
 
-		process_nvf(&nvf);
+		process_nvf_extraction(&nvf);
 
 		g_pic_copy.x1 = 160;
 		g_pic_copy.y1 = 50;

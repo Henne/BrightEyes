@@ -82,7 +82,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	struct struct_msg tmp;
 	signed int fg_bak;
 	signed int bg_bak;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	call_mouse_bg();
 
@@ -802,12 +802,12 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								nvf.dst = g_fig_list_elem.gfxbuf;
 								nvf.src = g_spellobj_nvf_buf;
-								nvf.no = 26;
-								nvf.type = 0;
+								nvf.image_num = 26;
+								nvf.compression_type = 0;
 								nvf.width = &width;
 								nvf.height = &height;
 
-								process_nvf(&nvf);
+								process_nvf_extraction(&nvf);
 
 								g_fig_list_elem.offsetx = 0;
 								g_fig_list_elem.offsety = 0;

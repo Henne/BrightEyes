@@ -127,15 +127,15 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	signed short l1;
 	Bit8u *p1;
 	Bit8u *p2;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	nvf.dst = (Bit8u*)((HugePt)g_buffer9_ptr3 + 0x2e248L);
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
-	nvf.no = no;
-	nvf.type = 3;
+	nvf.image_num = no;
+	nvf.compression_type = 3;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	height -= frame;
 	l1 = width;

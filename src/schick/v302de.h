@@ -38,15 +38,15 @@ typedef Bit8u* HugePt;
 #endif
 
 /**
-	struct nvf_desc - nvf descriptor
+	struct nvf_extract_desc - descriptor for extracting an image from a nvf file
 	@src:	pointer to a buffer containing the nvf file
 	@dst:	pointer where to extract the picture
-	@no:	number of the picture to extract
-	@type:	kind of compression / direction (0 = PP20 / 2-5 RLE / copy)
+	@image_num:	number of the picture to extract
+	@compression_type:	kind of compression / direction (0 = PP20 / 2-5 RLE / copy)
 	@p_height:	pointer where the height of the picture must be stored
 	@p_width:	pointer where the width of the picture must be stored
 */
-struct nvf_desc {
+struct nvf_extract_desc {
 #if !defined(__BORLANDC__)
 	Bit8u *dst;
 	Bit8u *src;
@@ -54,8 +54,8 @@ struct nvf_desc {
 	Bit8u huge *dst;
 	Bit8u huge *src;
 #endif
-	signed int no;
-	signed char type;
+	signed int image_num;
+	signed char compression_type;
 	signed int *width;
 	signed int *height;
 };

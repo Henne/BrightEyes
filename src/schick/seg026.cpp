@@ -1260,7 +1260,7 @@ void load_in_head(signed short head)
  */
 void load_tempicon(signed short no)
 {
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed int handle; /* REMARK: reused differently */
 
 	if (no == 14) {
@@ -1274,12 +1274,12 @@ void load_tempicon(signed short no)
 
 	nvf.dst = g_buffer8_ptr + 7000;
 	nvf.src = g_buffer8_ptr;
-	nvf.no = no;
-	nvf.type = 0;
+	nvf.image_num = no;
+	nvf.compression_type = 0;
 	nvf.width = &handle;
 	nvf.height = &handle;
 
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 }
 
 #if !defined(__BORLANDC__)

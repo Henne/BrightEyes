@@ -371,16 +371,16 @@ void unused_store(signed short no)
 	signed int width;
 	signed int height;
 	struct ems_tab *ptr;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed int size;
 
 	nvf.dst = g_renderbuf_ptr + 30000;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
-	nvf.no = no;
-	nvf.type = 0;
+	nvf.image_num = no;
+	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage, 0);
 	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage + 1, 1);
@@ -421,7 +421,7 @@ void load_map(void)
 {
 	signed int handle;	/* REMARK: reused differently */
 	signed int wallclock_update_bak;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	wallclock_update_bak = g_wallclock_update;
 	g_wallclock_update = 0;
@@ -437,13 +437,13 @@ void load_map(void)
 
 	/* load the grey border for the wallclock overlay */
 	nvf.src = g_renderbuf_ptr;
-	nvf.type = 0;
+	nvf.compression_type = 0;
 	nvf.width = &handle;
 	nvf.height = &handle;
 	nvf.dst = (Bit8u*)(g_buffer9_ptr + 18000L);
-	nvf.no = 16;
+	nvf.image_num = 16;
 
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	array_add((Bit8u*)(g_buffer9_ptr + 18000L), 3003, 0xe0, 2);
 
@@ -544,7 +544,7 @@ void load_splashes(void)
 	signed int handle;
 	signed int width;
 	signed int height;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	/* read SPLASHES.DAT */
 	handle = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
@@ -553,20 +553,20 @@ void load_splashes(void)
 
 	nvf.dst = g_splash_le = g_splash_buffer;
 	nvf.src = g_renderbuf_ptr;
-	nvf.no = 0;
-	nvf.type = 1;
+	nvf.image_num = 0;
+	nvf.compression_type = 1;
 	nvf.width = &width;
 	nvf.height = &height;
 	/* REMARK: use another variable instead of handle */
-	handle = (signed short)process_nvf(&nvf);
+	handle = (signed short)process_nvf_extraction(&nvf);
 
 	nvf.dst = g_splash_ae = g_splash_buffer + handle;
 	nvf.src = g_renderbuf_ptr;
-	nvf.no = 1;
-	nvf.type = 1;
+	nvf.image_num = 1;
+	nvf.compression_type = 1;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 }
 
 void load_informer_tlk(const signed int index)

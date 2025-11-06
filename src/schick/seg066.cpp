@@ -666,25 +666,25 @@ static void refresh_floor_and_sky(void)
 {
 	signed int width;
 	signed int height;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = g_tex_floor[1]; // tex_sky
-	nvf.no = 0;
-	nvf.type = 3;
+	nvf.image_num = 0;
+	nvf.compression_type = 3;
 	nvf.width = &width;
 	nvf.height = &height;
 
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 208 * height;
 	nvf.src = g_tex_floor[0];
-	nvf.no = 0;
-	nvf.type = 3;
+	nvf.image_num = 0;
+	nvf.compression_type = 3;
 	nvf.width = &width;
 	nvf.height = &height;
 
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 }
 
 void city_update_view(void)
@@ -1090,7 +1090,7 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 	signed short direction;
 	Bit8u *src;
 	Bit8u *dst;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	direction = (nvf_no & 0x8000 ? 1: 0);
 	nvf_no &= 0x3fff;
@@ -1109,11 +1109,11 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 		nvf.src = (Bit8u*)g_buffer7_ptr;
 	}
 
-	nvf.no = nvf_no;
-	nvf.type = (direction == 0 ? 3 : 5);
+	nvf.image_num = nvf_no;
+	nvf.compression_type = (direction == 0 ? 3 : 5);
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 	copy_width = width;
 	copy_height = height;

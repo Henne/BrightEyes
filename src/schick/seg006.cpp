@@ -505,7 +505,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	signed int fg_bak;
 	signed int bg_bak;
 	Bit8u* p1;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	p1 = ((HugePt)g_buffer8_ptr) - 1288L;
 
@@ -515,12 +515,12 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 		nvf.src = (Bit8u*)load_fight_figs(g_gfxtab_figures_main[p_enemy->gfx_id][0]);
 		nvf.dst = p1;
-		nvf.no = 1;
-		nvf.type = 0;
+		nvf.image_num = 1;
+		nvf.compression_type = 0;
 		nvf.width = &height_width;
 		nvf.height = &height_width;
 
-		process_nvf(&nvf);
+		process_nvf_extraction(&nvf);
 
 		g_fight_figs_index = g_gfxtab_figures_main[p_enemy->gfx_id][0];
 	}

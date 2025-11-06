@@ -1203,7 +1203,7 @@ void copy_file_to_temp(char* src_file, char* fname)
 	}
 }
 
-Bit32s process_nvf(struct nvf_desc *nvf)
+Bit32s process_nvf_extraction(struct nvf_extract_desc *nvf)
 {
 	signed short i;
 	Bit32u offs;
@@ -1229,11 +1229,11 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 
 	pics = readws(nvf->src + 1L);
 
-	if (nvf->no < 0)
-		nvf->no = 0;
+	if (nvf->image_num < 0)
+		nvf->image_num = 0;
 
-	if (nvf->no > pics - 1)
-		nvf->no = pics - 1;
+	if (nvf->image_num > pics - 1)
+		nvf->image_num = pics - 1;
 
 	switch (nvf_type) {
 
@@ -1241,12 +1241,12 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		width = readws(nvf->src + 3L);
 		height = readws(nvf->src + 5L);
 		p_size = width * height;
-		src =  nvf->src + nvf->no * p_size + 7L;
+		src =  nvf->src + nvf->image_num * p_size + 7L;
 		break;
 
 	case 0x01:
 		offs = pics * 4 + 3L;
-		for (i = 0; i < nvf->no; i++) {
+		for (i = 0; i < nvf->image_num; i++) {
 #if !defined(__BORLANDC__)
 			width = readws(nvf->src + i * 4 + 3L);
 			height = readws(nvf->src + i * 4 + 5L);
@@ -1254,8 +1254,8 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 			offs += width * height;
 		}
 
-		width = readws(nvf->src + nvf->no * 4 + 3L);
-		height = readws(nvf->src + nvf->no * 4 + 5L);
+		width = readws(nvf->src + nvf->image_num * 4 + 3L);
+		height = readws(nvf->src + nvf->image_num * 4 + 5L);
 		p_size = width * height;
 		src = nvf->src + offs;
 		break;
@@ -1264,27 +1264,27 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		width = readws(nvf->src + 3L);
 		height = readws(nvf->src + 5L);
 		offs = pics * 4 + 7L;
-		for (i = 0; i < nvf->no; i++) {
+		for (i = 0; i < nvf->image_num; i++) {
 			offs += readds(nvf->src + (i * 4) + 7L);
 		}
 
-		p_size = readds(nvf->src + nvf->no * 4 + 7L);
+		p_size = readds(nvf->src + nvf->image_num * 4 + 7L);
 		src = nvf->src + offs;
 		break;
 
 	case 0x03: case 0x05:
 		offs = pics * 8 + 3L;
-		for (i = 0; i < nvf->no; i++)
+		for (i = 0; i < nvf->image_num; i++)
 			offs += readds(nvf->src + (i * 8) + 7L);
 
-		width = readws(nvf->src + nvf->no * 8 + 3L);
-		height = readws(nvf->src +  nvf->no * 8 + 5L);
+		width = readws(nvf->src + nvf->image_num * 8 + 3L);
+		height = readws(nvf->src +  nvf->image_num * 8 + 5L);
 		p_size = readds(nvf->src + i * 8 + 7L);
 		src = nvf->src + offs;
 		break;
 	}
 
-	if (!nvf->type) {
+	if (!nvf->compression_type) {
 
 		/* PP20 decompression */
 
@@ -1307,12 +1307,12 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		decomp_pp20(src, nvf->dst, FP_OFF(src) + 4, FP_SEG(src), p_size);
 #endif
 
-	} else if (nvf->type >= 2 && nvf->type <= 5) {
+	} else if (nvf->compression_type >= 2 && nvf->compression_type <= 5) {
 
 		dst = nvf->dst;
 
 		/* RLE decompression */
-		decomp_rle(width, height, dst, src, (Bit8u*)g_text_output_buf, nvf->type);
+		decomp_rle(width, height, dst, src, (Bit8u*)g_text_output_buf, nvf->compression_type);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* retval was originally neither set nor used here.
 			VC++2008 complains about an uninitialized variable
@@ -4162,7 +4162,7 @@ void draw_compass(void)
 {
 	signed int width;
 	signed int height;
-	struct nvf_desc n;
+	struct nvf_extract_desc nvf;
 
 	/* No compass in a location */
 	if (!gs_current_loctype &&
@@ -4175,19 +4175,19 @@ void draw_compass(void)
 	{
 
 		/* set src */
-		n.dst = g_icon;
+		nvf.dst = g_icon;
 		/* set dst */
-		n.src = g_buffer6_ptr;
+		nvf.src = g_buffer6_ptr;
 		/* set no */
-		n.no = gs_direction;
+		nvf.image_num = gs_direction;
 		/* set type*/
-		n.type = 0;
+		nvf.compression_type = 0;
 
-		n.width = &width;
-		n.height = &height;
+		nvf.width = &width;
+		nvf.height = &height;
 
 		/* process the nvf */
-		process_nvf(&n);
+		process_nvf_extraction(&nvf);
 
 		/* set x and y values */
 		g_pic_copy.x1 = 94;

@@ -226,7 +226,7 @@ void spell_hexenknoten(void)
 	signed int no;
 	signed int height;
 	signed int width;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	if (g_fightobj_buf_freespace < 0x240L) {
 		g_spell_special_aecost = -2;
@@ -264,11 +264,11 @@ void spell_hexenknoten(void)
 		rp = g_fightobj_buf_seek_ptr;
 		nvf.dst = rp;
 		nvf.src = g_spellobj_nvf_buf;
-		nvf.no = no;
-		nvf.type = 0;
+		nvf.image_num = no;
+		nvf.compression_type = 0;
 		nvf.width = &width;
 		nvf.height = &height;
-		process_nvf(&nvf);
+		process_nvf_extraction(&nvf);
 
 		g_hexenknoten_gfx_buf = g_fightobj_buf_seek_ptr;
 		/* move pointer further */

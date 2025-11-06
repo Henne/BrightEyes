@@ -399,28 +399,28 @@ static char g_dng_stub6_str_and[6] = " UND "; // ds:0x92cf
 /* static */
 void DNG_floor_ceil(void)
 {
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed int width;
 	signed int height;
 
 	/* Load ceiling */
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = g_buffer9_ptr3;
-	nvf.no = 0;
-	nvf.type = !g_dng_floor_tex ? 3 : 5;
+	nvf.image_num = 0;
+	nvf.compression_type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 
 	/* Load ceiling */
 	nvf.dst = g_renderbuf_ptr + 0x4030;
 	nvf.src = g_buffer9_ptr3;
-	nvf.no = (!(gs_direction&1)) ? 1 : 2;
-	nvf.type = !g_dng_floor_tex ? 3 : 5;
+	nvf.image_num = (!(gs_direction&1)) ? 1 : 2;
+	nvf.compression_type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = &width;
 	nvf.height = &height;
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
 }
 
@@ -679,7 +679,7 @@ void DNG_draw_walls(signed short x, signed short y, signed short a3)
 	signed short flag;
 	Bit8u *dst_ptr;
 	Bit8u *ptr2;
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 
 	flag = (a3 & 0x8000) ? 1 : 0;
 	a3 &= 0x3fff;
@@ -694,11 +694,11 @@ void DNG_draw_walls(signed short x, signed short y, signed short a3)
 
 	nvf.dst = dst_ptr = g_renderbuf_ptr + 0x7530;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
-	nvf.no = a3;
+	nvf.image_num = a3;
 	nvf.width = &nvf_width;
 	nvf.height = &nvf_height;
-	nvf.type = 3;
-	process_nvf(&nvf);
+	nvf.compression_type = 3;
+	process_nvf_extraction(&nvf);
 
 	width2 = nvf_width;
 	height2 = nvf_height;

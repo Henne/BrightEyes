@@ -717,7 +717,7 @@ void restore_mouse_bg(void)
 
 void load_wallclock_nvf(void)
 {
-	struct nvf_desc nvf;
+	struct nvf_extract_desc nvf;
 	signed int handle; /* REMARK: reused differently */
 
 	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
@@ -725,29 +725,29 @@ void load_wallclock_nvf(void)
 	close(handle);
 
 	nvf.src = g_renderbuf_ptr;
-	nvf.type = 0;
+	nvf.compression_type = 0;
 	nvf.width = &handle;
 	nvf.height = &handle;
 
 	/* sky background */
 	nvf.dst = g_objects_nvf_buf;
-	nvf.no = 12;
-	process_nvf(&nvf);
+	nvf.image_num = 12;
+	process_nvf_extraction(&nvf);
 
 	/* mountains */
 	nvf.dst = g_objects_nvf_buf + 0x683;
-	nvf.no = 13;
-	process_nvf(&nvf);
+	nvf.image_num = 13;
+	process_nvf_extraction(&nvf);
 
 	/* sun */
 	nvf.dst = g_objects_nvf_buf + 0xcaf;
-	nvf.no = 14;
-	process_nvf(&nvf);
+	nvf.image_num = 14;
+	process_nvf_extraction(&nvf);
 
 	/* moon */
 	nvf.dst = g_objects_nvf_buf + 0xcef;
-	nvf.no = 15;
-	process_nvf(&nvf);
+	nvf.image_num = 15;
+	process_nvf_extraction(&nvf);
 
 	/* shift palette by 0xe0 */
 	array_add(g_objects_nvf_buf, 0xd3f, 0xe0, 2);
