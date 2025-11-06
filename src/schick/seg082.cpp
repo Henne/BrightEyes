@@ -113,7 +113,7 @@ signed short DNG07_handler(void)
 
 				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 
-				if (hero->typus < HERO_TYPE_WITCH)
+				if (hero->typus < HERO_TYPE_HEXE)
 				{
 					GUI_output(get_ttx(330));
 				} else {

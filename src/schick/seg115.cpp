@@ -304,7 +304,7 @@ void tevent_095(void)
 					/* try a spell */
 					hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 
-					if (hero->typus < HERO_TYPE_WITCH)
+					if (hero->typus < HERO_TYPE_HEXE)
 					{
 						/* this hero is no magic-user */
 						GUI_output(get_ttx(330));

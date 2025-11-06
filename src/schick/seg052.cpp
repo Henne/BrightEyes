@@ -159,7 +159,7 @@ void do_citycamp(void)
 
 				hero = get_hero(answer);
 
-				if (hero->typus >= HERO_TYPE_WITCH) {
+				if (hero->typus >= HERO_TYPE_HEXE) {
 
 					if (g_citycamp_guardstatus[answer]) {
 

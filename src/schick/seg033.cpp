@@ -322,7 +322,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			} else if (selected == FIG_ACTION_SPELL) {
 				/* CAST SPELL / ZAUBERN */
 
-				if (hero->typus < HERO_TYPE_WITCH) {
+				if (hero->typus < HERO_TYPE_HEXE) {
 					/* not a magic user */
 					GUI_output(get_ttx(215));
 				} else {

@@ -267,7 +267,7 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 					hero2 = get_hero(answer);
 
 					/* check that hero2 is a magic user */
-					if (hero2->typus >= HERO_TYPE_WITCH) {
+					if (hero2->typus >= HERO_TYPE_HEXE) {
 
 						/* need 15 AE */
 						if (hero2->ae >= 15) {

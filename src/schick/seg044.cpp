@@ -176,7 +176,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 		dir = hero->viewdir;
 	}
 
-	if ((weapon_type == -1) || ((hero->typus == HERO_TYPE_MAGE) && (weapon_id == ITEM_MAGIC_WAND))) {
+	if ((weapon_type == -1) || ((hero->typus == HERO_TYPE_MAGIER) && (weapon_id == ITEM_MAGIC_WAND))) {
 
 		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 :		/* melee attack */
 			(f_action == FIG_ACTION_UNKNOWN3) ? 41 :		/* drink potion */
@@ -264,8 +264,8 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
 		if ((weapon_type != -1) && (weapon_type < 3) &&
-			(hero->typus != HERO_TYPE_MAGE) &&
-			(hero->typus != HERO_TYPE_DRUID))
+			(hero->typus != HERO_TYPE_MAGIER) &&
+			(hero->typus != HERO_TYPE_DRUIDE))
 		{
 			for (i = 0; i < 5; i++) {
 				*sheet_ptr2++ = -5;
@@ -283,7 +283,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 
 			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
-			if ((weapon_type != -1) && (weapon_type < 3) &&	(hero->typus != HERO_TYPE_MAGE) && (hero->typus != HERO_TYPE_DRUID))
+			if ((weapon_type != -1) && (weapon_type < 3) &&	(hero->typus != HERO_TYPE_MAGIER) && (hero->typus != HERO_TYPE_DRUIDE))
 			{
 				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
 					*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
@@ -305,7 +305,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 		FIG_set_sheet(hero->fighter_id, (signed char)sheet_id);
 		*sheet_ptr1 = -1;
 
-		if ( (weapon_type != -1) && (weapon_type < 3) && (hero->typus != HERO_TYPE_MAGE) && (hero->typus != HERO_TYPE_DRUID))
+		if ( (weapon_type != -1) && (weapon_type < 3) && (hero->typus != HERO_TYPE_MAGIER) && (hero->typus != HERO_TYPE_DRUIDE))
 		{
 			FIG_set_weapon_sheet(hero->fighter_id, sheet_id + 4);
 			*sheet_ptr2 = -1;

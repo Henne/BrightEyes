@@ -423,7 +423,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case 0x9a: {
 					/* Zaubertrank */
 
-					if (consumer->typus >= HERO_TYPE_WITCH) {
+					if (consumer->typus >= HERO_TYPE_HEXE) {
 						/* Magicuser */
 
 						l_si = consumer->ae_max - consumer->ae;
@@ -459,7 +459,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case 0x9b: {
 					/* Zaubertrank (stark) */
 
-					if (consumer->typus >= HERO_TYPE_WITCH) {
+					if (consumer->typus >= HERO_TYPE_HEXE) {
 						/* Magicuser */
 
 						l_si = consumer->ae_max - consumer->ae;

@@ -296,7 +296,7 @@ void DNG_door(signed short action)
 				{
 					hero = get_hero(hero_pos);
 
-					if (hero->typus < HERO_TYPE_WITCH)
+					if (hero->typus < HERO_TYPE_HEXE)
 					{
 						/* not a spellcaster */
 						GUI_output(get_ttx(330));

@@ -582,7 +582,7 @@ void do_inn(void)
 
 					hero = get_hero(answer);
 
-					if (hero->typus >= HERO_TYPE_WITCH) {
+					if (hero->typus >= HERO_TYPE_HEXE) {
 
 						if (magic_act[answer] != 0) {
 

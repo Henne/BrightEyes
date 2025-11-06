@@ -905,7 +905,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 		} else {
 
 			/* REMARK: hero->bp should be >= 5 */
-			if ((hero->typus >= HERO_TYPE_WITCH) &&		/* magic user */
+			if ((hero->typus >= HERO_TYPE_HEXE) &&		/* magic user */
 				(hero->ae > 10) &&	/* AE > 10 */
 				(try_autospell != 0) &&
 				(g_current_fight_no != FIGHTS_F144) &&	/* not in the final fight */
