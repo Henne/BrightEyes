@@ -112,101 +112,109 @@ struct hero_flags {
 };
 
 struct struct_hero {
+	/* see https://github.com/shihan42/BrightEyesWiki/wiki/CHR-NPC */
 	/* Offset 0x00 */
 	char name[16];
 	/* Offset 0x10 */
 	char alias[16];
 	/* Offset 0x20 */
-	signed char items_num;
-	signed char typus;
+	signed char num_inv_slots_used; /* number of occupied item slots in the inventory. (equipped items are not included (really??)) */
+	signed char typus; /* see enum HERO_TYPE_* */
 	signed char sex;
-	unsigned char height;
-	signed short weight;
-	signed char god;
+	unsigned char height; /* unit: cm */
+	signed short weight; /* unit: ounces */
+	signed char god; /* see enum GOD_* */
 	signed char level;
-	int32_t ap;
-	int32_t money;
+	int32_t ap; /* Abenteuerpunkte = experience points */
+	int32_t money; /* unit: heller */
 	/* Offset 0x30 */
-	signed char rs_bonus1;
-	signed char rs_bonus2;
-	signed char rs_be;
-	signed char bp_left;
-	struct struct_attribs attrib[14];
+	signed char rs_bonus; /* rs = Ruestungsschutz. */
+	signed char rs_bonus_dummy; /* read-only? */
+	signed char rs_be; /* Ruestungsschutzbehinderung */
+	signed char fight_bp_left; /* bp = Bewegungspunkte */
+	struct struct_attribs attrib[14]; /* see enum ATTRIB_* */
 	/* Offset 0x5e */
 	signed short le_max;
 	signed short le;
 	/* Offset 0x60 */
 	signed short ae_max;
 	signed short ae;
-	signed char mr;
+	signed char mr; /* mr = Magieresistenz */
 
-	signed char atpa_base;
-	signed char at_weapon[7];
-	signed char pa_weapon[7];
-	signed char w_at_mod;
-	signed char w_pa_mod;
-	signed char w_type;
-	signed char atpa_mod;
-	signed char le_malus;
+	signed char atpa_base; /* AT-PA-base value; at = Attacke, pa = Parade. */
+	signed char at_talent_bonus[7]; /* talent-based AT bonus in melee weapon categories as in enum WEAPON_TYPE_* */
+	signed char pa_talent_bonus[7]; /* talent-based PA bonus in melee weapon categories as in enum WEAPON_TYPE_* */
+	signed char weapon_at_mod; /* AT bonus the equipped weapon (may be negative) */
+	signed char weapon_pa_mod; /* PA bonus of the equipped weapon (may be negative) */
+	signed char weapon_type; /* type of the equipped weapon */
+	signed char fight_atpa_mod; /* last used attack mode in fight. +2: aggressive (AT+2, PA-2); 0: normal (AT+0, PA+0); -2: cautious (AT-2, PA+2) */
+	signed char le_max_malus; /* le_max lost from starvation */
 	signed char timer_id;
 	signed char start_gear;
-	signed char herbs;
-	signed char hunger_timer;
-	signed char hunger;
+	  /* has been picked up at a temple and therefore got the initial gear set: 1 = true, 0 = false. 
+	   * Bit1 is used as a flag if the hero got the IN attribute bonus at the black eye at the Monolith (Einsiedlersee <-> Einsiedlersee, tevent135).
+	   * Bits2--7 appear to be unused.
+	   * TODO: Better name? */
+	signed char herbs; /* none = 0, Belmart = 1, Menchalkaktus = 2 */
+	signed char hunger_timer; /* timer for no-hunger-miracle */
+	signed char hunger; /* percentage */
 	/* Offset 0x80 */
-	signed char thirst;
+	signed char thirst; /* percentage */
 	signed char fighter_id;
 	signed char viewdir;
-	signed char actions;
-	signed char action_id;
-	signed char spell_id;
-	signed char target_object_id;
-	signed char group_id;
+	signed char actions; /* corresponds to enemy_sheet.attacks */
+	signed char action_id; /* last fight action */
+	signed char spell_id; /* last spell in fight */
+	signed char target_object_id; /* last enemy in fight */
+	signed char group_id; /* id of the group the hero  */
 	signed char temple_id;
-	signed char npc_id;
-	signed char group_pos;
+	signed char npc_id; /* see enum NPC_* */
+	signed char slot_pos; /* position in the hero slots at the bottom, counted from 1. value 0: not in party (consisting of all groups) */
 	/* Offset 0x8b */
 	int32_t heal_timer;
 	int32_t staffspell_timer;
-	signed char recipe_id;
-	signed char recipe_timer;
-	signed char ruhe_koerper;
-	signed char blind_timer;
-	signed char ecliptifactus_timer;
-	signed char saftkraft;
-	signed char fireban;
-	signed char invisible;
-	signed char sprite_no;
-	signed char alchemy_inn_id;
-	signed short escape_position;
-	signed char jail;
+	signed char recipe_id; /* id of the alchemic recipe the hero is brewing */
+	signed char recipe_timer; /* timer till completion of alchemical brewing process, in days */
+	signed char ruhe_koerper; /* 1 = Ruhe Koerper spell is active */
+	signed char blind_timer; /* remaining fight rounds the hero is blinded from 'Blitz' spell */
+	signed char ecliptifactus_timer; /* remaining fight rounds the hero is shadowed from 'Ecliptifactus' spell */
+	signed char saftkraft; /* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
+	signed char fireban; /* 1 = 'Feuerbann' spell is active, 0 = inactive */
+	signed char invisible; /* 1 = 'Visibili' spell is active, 0 = inactive */
+	signed char sprite_id; /* fight gfx of hero, depending on typus and sex.
+                                * 1: Gaukler, male. 2: Jaeger, male, ..., 10: any Elf, male,
+				* 11: Gaukler, female, 12: Jaeger, female, ..., 20: any Elf, female. */
+	signed char alchemy_inn_id; /* the id of the inn where the hero is doing alchemy */
+	signed short escape_position; /* the dungeon square the hero escaped to in a fight. read from fig_escape_position */
+	signed char jail; /* 1 = true, i.e. hero is in prison (from breaking into a house), 0 = false */
 	/* Offset 0xa0 */
-	signed char axxeleratus;
-	signed char drunk;
+	signed char axxeleratus; /* 1 = 'Axxeleratus' spell is active, 0 = inactive */
+	signed char drunk; /* 1 = true (hero drunk), 0 = false */
 	signed char unkn10[8];
 	//signed char flags1;
 	//signed char flags2;
 	struct hero_flags flags;
 	signed short unkn11;
 	/* Not figured out yet, but reserve space */
-	signed char sick[8][5];
-	signed char poison[10][5];
+	signed char sick[8][5]; /* 40 = 8 * 5 bytes */ /* 5 bytes for each of the following illnesses: 0-none (these 5 bytes appear to be unused!) 1-Wundfieber, 2-Dumpfschädel, 3-Blaue Keuche, 4-Paralyse, 5-Schlachtenfieber, 6-Frostschäden, 7-Tollwut */
+	signed char poison[10][5]; /* 50 = 10 * 5 bytes */ /* 5 bytes for each of the following poisonings: 0-none (these 5 bytes appear to be unused!) 1-Shurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemel, 7-Lotusgift, 8-Kukris, 9-Bannstaubvergiftung */
 
 	/* Offset 0x108 */
-	signed char skills[52];
-	signed char skill_incs;
+	signed char skills[52]; /* see enum TA_* */ /* TODO: better name 'talents' (for DSA conformity)? */
+	/* The first entry does not belong to an actual spell talent and is apparently unused. */
+	signed char saved_skill_increases;
 	/* Offset 0x13d */
-	signed char spells[86];
-	signed char spell_incs;
-	signed char spell_school;
-	signed char staff_level;
+	signed char spells[86]; /* see enum SP_* */
+	signed char saved_spell_increases;
+	signed char spell_school; /* only for mages */
+	signed char staff_level; /* only for mages */
 
 	/* Offset 0x196 */
 	/* Not figured out yet, but reserve space */
-	struct inventory inventory[23];
+	struct inventory inventory[23]; /* 23 inventory slots according to enum HERO_INVENTORY_SLOT_* */
 	signed short load;
 
-	unsigned char pic[1024];
+	unsigned char pic[1024]; /* 32 x 32 pixels, 8 bpp */
 };
 
 STATIC_ASSERT(sizeof(struct struct_hero) == 1754, struct_hero_needs_to_be_1754_bytes);

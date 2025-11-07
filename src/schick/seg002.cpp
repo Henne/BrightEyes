@@ -246,7 +246,7 @@ static unsigned char g_unkn_083[4]; // ds:0xd30f
 
 signed short g_txt_tabpos[7]; // ds:0xd313
 unsigned char *g_townpal_buf; // ds:0xd321
-signed short g_fig_flee_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
+signed short g_fig_escape_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
 signed short g_wildcamp_sleep_quality; // ds:0xd32d
 signed short g_gather_herbs_mod; // ds:0xd32f
 signed short g_replenish_stocks_mod; // ds:0xd331
@@ -3003,7 +3003,7 @@ void sub_light_timers(const Bit32s quarter)
 					if (hero_i->inventory[j].lighting_timer <= 0)
 					{
 						/* decrement item counter */
-						hero_i->items_num--;
+						hero_i->num_inv_slots_used--;
 
 						/* subtract weight of a torch */
 						hero_i->load -= g_itemsdat[ITEM_FACKEL__LIT].weight;
@@ -4662,12 +4662,12 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 
 					fighter = FIG_get_fighter(hero->fighter_id);
 
-					fighter->nvf_no = g_nvftab_figures_unconscious[hero->sprite_no] + hero->viewdir;
+					fighter->nvf_no = g_nvftab_figures_unconscious[hero->sprite_id] + hero->viewdir;
 
 					fighter->reload = -1;
 
-					fighter->offsetx = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].x;
-					fighter->offsety = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].y;
+					fighter->offsetx = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].x;
+					fighter->offsety = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].y;
 
 
 					FIG_add_msg(7, 0);
@@ -4738,7 +4738,7 @@ void add_hero_le(struct struct_hero *hero, const signed int le)
 
 				if (ret != -1) {
 
-					fighter->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_no - 1][ret][hero->viewdir];
+					fighter->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][ret][hero->viewdir];
 				} else {
 					fighter->nvf_no = hero->viewdir;
 				}
@@ -4803,7 +4803,7 @@ static void do_starve_damage(struct struct_hero *hero, const signed int index, c
 			/* decrement the max LE and save them at 0x7a */
 			if (hero->le_max >= 2) {
 				hero->le_max--;
-				hero->le_malus++;
+				hero->le_max_malus++;
 			}
 		}
 

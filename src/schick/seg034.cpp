@@ -758,7 +758,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 
 							sel_x = -1;
 
-							if (hero->bp_left > bp_cost) {
+							if (hero->fight_bp_left > bp_cost) {
 
 								g_fig_move_pathdir[path_end] = 2;
 								g_fig_move_pathdir[path_end + 1] = -1;
@@ -768,7 +768,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 
 							sel_y = -1;
 
-							if (bp_cost < (hero->bp_left - 1)) {
+							if (bp_cost < (hero->fight_bp_left - 1)) {
 
 								g_fig_move_pathdir[path_end] = 1;
 								g_fig_move_pathdir[path_end + 1] = -1;
@@ -778,7 +778,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 
 							sel_y = 24;
 
-							if (bp_cost < (hero->bp_left - 1)) {
+							if (bp_cost < (hero->fight_bp_left - 1)) {
 
 								g_fig_move_pathdir[path_end] = 3;
 								g_fig_move_pathdir[path_end + 1] = -1;
@@ -844,7 +844,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 
 						problem = 4;
 
-					} else if (hero->bp_left < bp_cost) {
+					} else if (hero->fight_bp_left < bp_cost) {
 
 						problem = 2;
 
@@ -916,7 +916,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 
 				if (hero->action_id == FIG_ACTION_FLEE) {
 
-					hero->bp_left = 0;
+					hero->fight_bp_left = 0;
 
 				} else {
 					FIG_search_obj_on_cb(actor_id + 1, px, py);

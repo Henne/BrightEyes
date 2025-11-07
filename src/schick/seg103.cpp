@@ -47,13 +47,13 @@ signed int LVL_select_skill(const struct struct_hero *hero, const signed int sho
 
 		strcpy(g_text_output_buf, get_ttx(205));
 
-		if (hero->skill_incs > 1) {
+		if (hero->saved_skill_increases > 1) {
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
 		sprintf(g_dtp2, get_ttx(204),
-			(hero->skill_incs > 1) ? get_ttx(305) : get_ttx(304),	/* sind / ist */
-			hero->skill_incs, g_text_output_buf);
+			(hero->saved_skill_increases > 1) ? get_ttx(305) : get_ttx(304),	/* sind / ist */
+			hero->saved_skill_increases, g_text_output_buf);
 	} else {
 
 		strcpy(g_dtp2, get_ttx(216));

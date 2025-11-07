@@ -66,7 +66,7 @@ signed short DNG02_handler(void)
 		{
 		} else {
 
-			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,2,6,NORTH);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,6,NORTH);
 
 			do_fight(FIGHTS_F046_01);
 		}
@@ -389,7 +389,7 @@ signed short DNG02_handler(void)
 
 	} else if ((target_pos == DNG_POS(0,12,11) || target_pos == DNG_POS(0,14,11) || target_pos == DNG_POS(0,13,10) || target_pos == DNG_POS(0,13,12)) && target_pos != gs_dng_handled_pos)
 	{
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,12,11,NORTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,12,11,NORTH);
 
 		if (!do_fight(FIGHTS_F046_31))
 		{

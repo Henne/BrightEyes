@@ -348,7 +348,7 @@ struct struct_fighter {
 				 * tail part: entry is +20 of the double_size entry of the head part. */
 	signed char object_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
 	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
-	signed char sprite_no;	/* 0x12c0, 0x1531, 0x1210 */
+	signed char sprite_id;	/* 0x12c0, 0x1531, 0x1210 */
 	Bit8u* gfxbuf;
 	struct struct_fighter* next;	/* TODO: These should located at the start of the structure */
 	struct struct_fighter* prev;
@@ -1650,7 +1650,7 @@ extern struct fight_msg g_fig_msg_data[6];	// ds:0xd333; seg005, seg041
 extern signed short g_replenish_stocks_mod;	// ds:0xd331; seg051, seg109
 extern signed short g_gather_herbs_mod;		// ds:0xd32f; seg051, seg109
 extern signed short g_wildcamp_sleep_quality;	// ds:0xd32d; seg051, seg094, seg109, seg114, seg118
-extern signed short g_fig_flee_position[4];	// ds:0xd325; seg005, seg076-seg089
+extern signed short g_fig_escape_position[4];	// ds:0xd325; seg005, seg076-seg089
 extern unsigned char *g_townpal_buf;		// ds:0xd312; seg002, seg027, seg120
 extern signed short g_txt_tabpos[7];		// ds:0xd313; seg024, seg029, seg33, seg046, seg096, seg097
 #if defined (__BORLANDC__)

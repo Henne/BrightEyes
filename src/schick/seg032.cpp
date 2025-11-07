@@ -418,24 +418,24 @@ void FIG_do_round(void)
 			hero->actions = 1;
 
 			/* give this hero 8 BP */
-			hero->bp_left = 8;
+			hero->fight_bp_left = 8;
 
 			if (hero->attrib[ATTRIB_KK].current * 50 <= hero->load) {
 
 				/* load at least 50% of carrying capacity: give BP malus -1 */
-				hero->bp_left--;
+				hero->fight_bp_left--;
 			}
 
 			if (hero->attrib[ATTRIB_KK].current * 75 <= hero->load) {
 
 				/* load at least 75% of carrying capacity: give additional BP malus -2 */
-				hero->bp_left -= 2;
+				hero->fight_bp_left -= 2;
 			}
 
 			if (hero->attrib[ATTRIB_KK].current * 100 <= hero->load) {
 
 				/* load at least 100% of carrying capacity: give additional give BP malus -2 */
-				hero->bp_left -= 2;
+				hero->fight_bp_left -= 2;
 			}
 
 			hero->escape_position = 0;
@@ -445,7 +445,7 @@ void FIG_do_round(void)
 			if (hero->axxeleratus) {
 
 				/* Axxeleratus => BP + 4 ... */
-				hero->bp_left += 4;
+				hero->fight_bp_left += 4;
 
 				/* ... and one extra action phase */
 				hero->actions++;
@@ -456,7 +456,7 @@ void FIG_do_round(void)
 			if (hero->attrib[ATTRIB_KK].current * 110 <= hero->load) {
 
 				/* load at least 110% of carrying capacity: set BP to 1 */
-				hero->bp_left = 1;
+				hero->fight_bp_left = 1;
 			}
 		}
 	}

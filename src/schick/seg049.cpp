@@ -39,7 +39,7 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 		(hero2->typus != HERO_TYPE_NONE) &&
 		(hero2->group_id == gs_current_group))
 	{
-		if (hero1->group_pos < hero2->group_pos)
+		if (hero1->slot_pos < hero2->slot_pos)
 		{
 			return -1;
 		} else {
@@ -68,7 +68,7 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 		(hero2->typus != HERO_TYPE_NONE) &&
 		(hero2->group_id != gs_current_group))
 	{
-		if (hero1->group_pos < hero2->group_pos)
+		if (hero1->slot_pos < hero2->slot_pos)
 		{
 			return -1;
 		} else {
@@ -119,7 +119,7 @@ void GRP_sort_heroes(void)
 	qsort((void*)get_hero(0), 6, sizeof(struct struct_hero), GRP_compare_heroes);
 
 	for (i = 0; i < 6; i++) {
-		get_hero(i)->group_pos = i + 1;
+		get_hero(i)->slot_pos = i + 1;
 	}
 }
 
@@ -448,8 +448,8 @@ void GRP_swap_heroes(void)
 				get_hero(hero2_no)->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			get_hero(hero1_no)->group_pos = hero1_no + 1;
-			get_hero(hero2_no)->group_pos = hero2_no + 1;
+			get_hero(hero1_no)->slot_pos = hero1_no + 1;
+			get_hero(hero2_no)->slot_pos = hero2_no + 1;
 		}
 	}
 
@@ -603,8 +603,8 @@ void GRP_move_hero(signed short src_pos)
 
 				src->action_id = 100;
 				dst->action_id = 100;
-				dst->group_pos = src_pos + 1;
-				src->group_pos = dst_pos + 1;
+				dst->slot_pos = src_pos + 1;
+				src->slot_pos = dst_pos + 1;
 			}
 		}
 

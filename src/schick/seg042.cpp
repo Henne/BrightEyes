@@ -205,9 +205,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			if (weapon_type == -1) {
 				/* no valid weapon == bare hands */
-				atpa = hero->at_weapon[WEAPON_TYPE_WAFFENLOS] + hero->atpa_mod - hero->rs_be / 2;
+				atpa = hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + hero->fight_atpa_mod - hero->rs_be / 2;
 			} else {
-				atpa = hero->at_weapon[hero->w_type] + hero->atpa_mod + hero->w_at_mod - hero->rs_be / 2;
+				atpa = hero->at_talent_bonus[hero->weapon_type] + hero->fight_atpa_mod + hero->weapon_at_mod - hero->rs_be / 2;
 			}
 
 			if (hero->rs_be & 1) {
@@ -232,9 +232,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			if (target_is_hero) {
 
 				if (weapon_type_target == -1) {
-					l11 = target_hero->at_weapon[WEAPON_TYPE_WAFFENLOS] + target_hero->atpa_mod - hero->rs_be / 2;
+					l11 = target_hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + target_hero->fight_atpa_mod - hero->rs_be / 2;
 				} else {
-					l11 = target_hero->at_weapon[target_hero->w_type] + target_hero->atpa_mod - hero->rs_be / 2;
+					l11 = target_hero->at_talent_bonus[target_hero->weapon_type] + target_hero->fight_atpa_mod - hero->rs_be / 2;
 				}
 
 				if (hero->rs_be & 1) {
@@ -332,9 +332,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (target_is_hero != 0) {
 
 						if (weapon_type_target == -1) {
-							l10 = target_hero->pa_weapon[WEAPON_TYPE_WAFFENLOS] - target_hero->atpa_mod - target_hero->rs_be / 2;
+							l10 = target_hero->pa_talent_bonus[WEAPON_TYPE_WAFFENLOS] - target_hero->fight_atpa_mod - target_hero->rs_be / 2;
 						} else {
-							l10 = target_hero->pa_weapon[target_hero->w_type] - target_hero->atpa_mod - target_hero->rs_be / 2 + target_hero->w_at_mod;
+							l10 = target_hero->pa_talent_bonus[target_hero->weapon_type] - target_hero->fight_atpa_mod - target_hero->rs_be / 2 + target_hero->weapon_at_mod;
 						}
 
 						if (target_hero->action_id == FIG_ACTION_GUARD) {
@@ -761,8 +761,8 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							}
 						}
 
-						if ((hero->sprite_no != 7) &&
-							(hero->sprite_no != 18) &&
+						if ((hero->sprite_id != 7) &&
+							(hero->sprite_id != 18) &&
 							(hero->target_object_id > 0 ))
 						{
 

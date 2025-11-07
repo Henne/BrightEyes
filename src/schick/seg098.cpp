@@ -172,8 +172,8 @@ signed short get_attackee_parade(void)
 
 		/* PA = PA-Current-Weapon - AT-Modificator - 1/2 * RS-BE */
 
-		return get_spelltarget()->pa_weapon[get_spelltarget()->w_type]
-			- get_spelltarget()->atpa_mod
+		return get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type]
+			- get_spelltarget()->fight_atpa_mod
 			- get_spelltarget()->rs_be / 2;
 	} else {
 
@@ -200,7 +200,7 @@ signed short get_attackee_rs(void)
 
 		g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
 
-		return get_spelltarget()->rs_bonus1; /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
+		return get_spelltarget()->rs_bonus; /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
 	} else {
 
@@ -452,13 +452,13 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 
 		strcpy(g_text_output_buf, get_ttx(205));
 
-		if (hero->spell_incs > 1) {
+		if (hero->saved_spell_increases > 1) {
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
 		sprintf(g_dtp2,	get_ttx(204),
-			(hero->spell_incs > 1) ? get_ttx(305) : get_ttx(304),
-			hero->spell_incs, g_text_output_buf);
+			(hero->saved_spell_increases > 1) ? get_ttx(305) : get_ttx(304),
+			hero->saved_spell_increases, g_text_output_buf);
 
 		answer1 = GUI_radio(g_dtp2, 12,
 					get_ttx(192), get_ttx(193),

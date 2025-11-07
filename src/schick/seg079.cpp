@@ -243,7 +243,7 @@ signed short DNG03_handler(void)
 				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));
 
 				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += l4;
-				hero->rs_bonus1 -= l4;
+				hero->rs_bonus -= l4;
 			}
 		}
 
@@ -271,15 +271,15 @@ signed short DNG03_handler(void)
 				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));
 
 				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += l4;
-				hero->rs_bonus1 -= l4;
+				hero->rs_bonus -= l4;
 			}
 		}
 
 	} else if ((target_pos == DNG_POS(1,2,10) || target_pos == DNG_POS(1,3,13)) &&
 		target_pos != gs_dng_handled_pos)
 	{
-		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,2,8,NORTH);
-		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(1,5,13,NORTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,2,8,NORTH);
+		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,5,13,NORTH);
 
 		if (!gs_dng03_highpriest_killed)
 		{
@@ -291,8 +291,8 @@ signed short DNG03_handler(void)
 	} else if ((target_pos == DNG_POS(1,2,4) || target_pos == DNG_POS(1,5,2)) &&
 		target_pos != gs_dng_handled_pos)
 	{
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = DNG_POS_DIR(1,7,2,NORTH);
-		g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,2,6,NORTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(1,7,2,NORTH);
+		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,2,6,NORTH);
 
 		if (!gs_dng03_highpriest_killed)
 		{
@@ -321,7 +321,7 @@ signed short DNG03_handler(void)
 		{
 			GUI_output(get_tx(17));
 
-			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,5,13,NORTH);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,5,13,NORTH);
 
 			/* drop all crystals from the heroes of that group */
 			i = get_first_hero_with_item(ITEM_KRISTALL);

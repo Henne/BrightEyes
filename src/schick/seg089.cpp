@@ -379,8 +379,8 @@ signed short DNG15_handler(void)
 		/* FIGHT: */
 		if (random_schick(100) < 10) /* 9% chance */
 		{
-			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[WEST] = DNG_POS_DIR(3,9,2,WEST);
-			g_fig_flee_position[SOUTH] = DNG_POS_DIR(3,13,5,SOUTH);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,9,2,WEST);
+			g_fig_escape_position[SOUTH] = DNG_POS_DIR(3,13,5,SOUTH);
 
 			if (!do_fight(FIGHTS_DFIN26))
 			{
@@ -393,7 +393,7 @@ signed short DNG15_handler(void)
 		/* FIGHT: */
 		if (random_schick(100) < 10)
 		{
-			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(3,13,5,SOUTH);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,13,5,SOUTH);
 
 			if (!do_fight(FIGHTS_DFIN26))
 			{
@@ -404,9 +404,9 @@ signed short DNG15_handler(void)
 	} else if ((target_pos == DNG_POS(2,8,9) || target_pos == DNG_POS(2,9,9)) && target_pos != gs_dng_handled_pos)
 	{
 		/* FIGHT: */
-		g_fig_flee_position[NORTH] = DNG_POS_DIR(2,9,7,NORTH);
-		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(2,12,11,EAST);
-		g_fig_flee_position[WEST] = DNG_POS_DIR(2,6,9,WEST);
+		g_fig_escape_position[NORTH] = DNG_POS_DIR(2,9,7,NORTH);
+		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(2,12,11,EAST);
+		g_fig_escape_position[WEST] = DNG_POS_DIR(2,6,9,WEST);
 
 		do_fight(!gs_dng15_undead_fight ? 134 : 133);
 
@@ -415,10 +415,10 @@ signed short DNG15_handler(void)
 		/* FIGHT: */
 		if (gs_dng15_undead_fight != 2)
 		{
-			g_fig_flee_position[NORTH] = DNG_POS_DIR(3,13,3,NORTH);
-			g_fig_flee_position[EAST] = DNG_POS_DIR(3,14,5,EAST);
-			g_fig_flee_position[SOUTH] = DNG_POS_DIR(3,10,10,SOUTH);
-			g_fig_flee_position[WEST] = DNG_POS_DIR(3,9,3,NORTH);
+			g_fig_escape_position[NORTH] = DNG_POS_DIR(3,13,3,NORTH);
+			g_fig_escape_position[EAST] = DNG_POS_DIR(3,14,5,EAST);
+			g_fig_escape_position[SOUTH] = DNG_POS_DIR(3,10,10,SOUTH);
+			g_fig_escape_position[WEST] = DNG_POS_DIR(3,9,3,NORTH);
 
 			if (!do_fight(!gs_dng15_undead_fight ? 137 : 136))
 			{
@@ -438,7 +438,7 @@ signed short DNG15_handler(void)
 		} else if (!gs_got_grimring) {
 
 			/* fight the zombies */
-			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(3,10,10,NORTH);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,10,10,NORTH);
 
 			if (!do_fight(FIGHTS_DFIN28))
 			{

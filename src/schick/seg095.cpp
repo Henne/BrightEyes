@@ -134,13 +134,13 @@ void npc_farewell(void)
 							 * This does not make sense. */
 
 #ifdef M302de_ORIGINAL_BUGFIX
-							char ta_rise_bak = hero_i->skill_incs;
+							char ta_rise_bak = hero_i->saved_skill_increases;
 #endif
 							/* All non-dead heroes in the same group get a chance to increase TA_SCHLEICHEN */
 							inc_skill_novice(hero_i, TA_SCHLEICHEN);
 #ifdef M302de_ORIGINAL_BUGFIX
 							/* The unwanted reduction is done within the function inc_skill_novice(). We revert it. */
-							hero_i->skill_incs = ta_rise_bak;
+							hero_i->saved_skill_increases = ta_rise_bak;
 #endif
 						}
 					}
@@ -476,7 +476,7 @@ void remove_npc(signed short head_index, signed char days,
 
 	/* reset NPCs groups position */
 	/* TODO: this is bogus, since memset() will come */
-	get_hero(6)->group_pos = 0;
+	get_hero(6)->slot_pos = 0;
 
 	/* save the NPC */
 	save_npc(index);

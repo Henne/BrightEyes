@@ -311,7 +311,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 	g_fig_list_elem.height = 0x28;
 	g_fig_list_elem.width = 0x20;
 	g_fig_list_elem.is_enemy = 1;
-	g_fig_list_elem.sprite_no = enemy->gfx_id;
+	g_fig_list_elem.sprite_id = enemy->gfx_id;
 	g_fig_list_elem.reload = -1;
 	g_fig_list_elem.wsheet = -1;
 	g_fig_list_elem.sheet = -1;
@@ -488,12 +488,12 @@ void FIG_init_heroes(void)
 		l_di = FIG_get_range_weapon_type(hero);
 
 		if (l_di != -1) {
-			g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_no - 1][l_di][hero->viewdir];
+			g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][l_di][hero->viewdir];
 		} else {
 			g_fig_list_elem.nvf_no = hero->viewdir;
 		}
 
-		g_fig_list_elem.figure = g_gfxtab_figures_main[hero->sprite_no][0];
+		g_fig_list_elem.figure = g_gfxtab_figures_main[hero->sprite_id][0];
 		g_fig_list_elem.cbx = (signed char)cb_x;
 		g_fig_list_elem.cby = (signed char)cb_y;
 		g_fig_list_elem.offsetx = 0;
@@ -502,16 +502,16 @@ void FIG_init_heroes(void)
 		if (hero->flags.dead) {
 
 			/* hero is dead */
-			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->sprite_no];
-			g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->sprite_no][4].x;
-			g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->sprite_no][4].y;
+			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->sprite_id];
+			g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->sprite_id][4].x;
+			g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->sprite_id][4].y;
 
 		} else if (hero->flags.asleep || hero->flags.unconscious) {
 
 			/* hero is asleep or unconscious */
-			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->sprite_no] + hero->viewdir;
-			g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].x;
-			g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].y;
+			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->sprite_id] + hero->viewdir;
+			g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].x;
+			g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].y;
 		}
 
 
@@ -526,7 +526,7 @@ void FIG_init_heroes(void)
 		 * however, the apparently only read operation checks for ==1, so the value 2 does not make a difference */
 		g_fig_list_elem.is_enemy = 2;
 
-		g_fig_list_elem.sprite_no = hero->sprite_no;
+		g_fig_list_elem.sprite_id = hero->sprite_id;
 		g_fig_list_elem.reload = -1;
 		g_fig_list_elem.wsheet = -1;
 		g_fig_list_elem.sheet = -1;

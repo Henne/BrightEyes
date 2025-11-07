@@ -179,7 +179,7 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 	} else {
 		/* try to increase */
 
-		hero->spell_incs--;
+		hero->saved_spell_increases--;
 
 #ifndef M302de_FEATURE_MOD
 		if (hero->spells[spell_id] >= 11) {
@@ -246,7 +246,7 @@ void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 	} else {
 
 		/* try to increase */
-		hero->skill_incs--;
+		hero->saved_skill_increases--;
 
 #ifndef M302de_FEATURE_MOD
 		if (hero->skills[skill_id] >= 11) {
@@ -285,10 +285,10 @@ void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 				randval = -1;
 
 				/* AT - value */
-				sprintf(g_text_output_buf, get_ttx(427), hero->at_weapon[skill_id]);
+				sprintf(g_text_output_buf, get_ttx(427), hero->at_talent_bonus[skill_id]);
 
 				/* PA - value */
-				sprintf(g_text_output_buf + 50,	get_ttx(428), hero->pa_weapon[skill_id]);
+				sprintf(g_text_output_buf + 50,	get_ttx(428), hero->pa_talent_bonus[skill_id]);
 
 				do {
 					randval = GUI_radio(g_dtp2, 2, g_text_output_buf, g_text_output_buf + 50);
@@ -296,9 +296,9 @@ void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 				} while (randval == -1);
 
 				if (randval == 1) {
-					hero->at_weapon[skill_id]++;
+					hero->at_talent_bonus[skill_id]++;
 				} else {
-					hero->pa_weapon[skill_id]++;
+					hero->pa_talent_bonus[skill_id]++;
 				}
 			}
 
@@ -341,10 +341,10 @@ void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
 		} else {
 
 			/* dec available skill incs */
-			hero->skill_incs--;
+			hero->saved_skill_increases--;
 
 			/* check if available skill incs are 0 */
-			if (!hero->skill_incs) {
+			if (!hero->saved_skill_increases) {
 				done = 1;
 			}
 
@@ -378,10 +378,10 @@ void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
 
 				/* adjust AT PA values */
 				if (skill_id <= TA_ZWEIHAENDER) {
-					if (hero->at_weapon[skill_id] > hero->pa_weapon[skill_id]) {
-						hero->pa_weapon[skill_id]++;
+					if (hero->at_talent_bonus[skill_id] > hero->pa_talent_bonus[skill_id]) {
+						hero->pa_talent_bonus[skill_id]++;
 					} else {
-						hero->at_weapon[skill_id]++;
+						hero->at_talent_bonus[skill_id]++;
 					}
 				}
 
@@ -421,10 +421,10 @@ void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
 		} else {
 
 			/* dec available spell incs */
-			hero->spell_incs--;
+			hero->saved_spell_increases--;
 
 			/* check if available spell incs are 0 */
-			if (!hero->spell_incs) {
+			if (!hero->saved_spell_increases) {
 				done = 1;
 			}
 
@@ -672,7 +672,7 @@ void level_up(signed short hero_pos)
 
 
 	/* add skill increasements */
-	hero->skill_incs += g_levelup_ta_rise[hero->typus - 1];
+	hero->saved_skill_increases += g_levelup_ta_rise[hero->typus - 1];
 
 	/* roll how many LE points the hero may get */
 	i = random_schick(6);
@@ -681,7 +681,7 @@ void level_up(signed short hero_pos)
 		/* a magic user */
 
 		/* add spell increasements */
-		hero->spell_incs += g_levelup_sp_rise[hero->typus - 7];
+		hero->saved_spell_increases += g_levelup_sp_rise[hero->typus - 7];
 
 		i += 2;
 
@@ -710,7 +710,7 @@ void level_up(signed short hero_pos)
 
 			if (GUI_bool(get_tx2(40))) {
 				/* trade 10 skill increasements into 1W6+2 AE */
-				hero->spell_incs += -10;
+				hero->saved_spell_increases += -10;
 				i = random_interval(3, 8);
 				hero->ae_max += i;
 				hero->ae += i;
@@ -742,7 +742,7 @@ void level_up(signed short hero_pos)
 
 		i = v2 = 0;
 
-		while (hero->skill_incs > 0) {
+		while (hero->saved_skill_increases > 0) {
 
 			l_si = *(Bit16s*)(g_skills_buffer + 100 * hero->typus + 4 * i);
 
@@ -760,7 +760,7 @@ void level_up(signed short hero_pos)
 				v2++;
 
 				if (v2 > 5) {
-					hero->skill_incs = 0;
+					hero->saved_skill_increases = 0;
 				}
 
 			}
@@ -772,7 +772,7 @@ void level_up(signed short hero_pos)
 			i = 1;
 			v2 = 0;
 
-			while (hero->spell_incs != 0 && v2 < 3) {
+			while (hero->saved_spell_increases != 0 && v2 < 3) {
 
 				v2++;
 
@@ -782,7 +782,7 @@ void level_up(signed short hero_pos)
 
 						/* first try to increase all which-specific spells by 1,
 						 * up to skill value at most 11. */
-						while (hero->spell_incs != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_WITCH && hero->spells[i] < 11) {
 								inc_spell_novice(hero, i);
@@ -794,7 +794,7 @@ void level_up(signed short hero_pos)
 						 * up to max value 18 */
 						i = 0;
 
-						while (hero->spell_incs != 0 && (g_autoinc_spells_witch[i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_witch[i] != -1)) {
 							inc_spell_novice(hero, g_autoinc_spells_witch[i]);
 							i++;
 						}
@@ -803,7 +803,7 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_DRUIDE: {
 
-						while (hero->spell_incs != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_DRUID && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -813,7 +813,7 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (hero->spell_incs != 0 && (g_autoinc_spells_druid[i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_druid[i] != -1)) {
 							inc_spell_novice(hero, g_autoinc_spells_druid[i]);
 							i++;
 						}
@@ -824,7 +824,7 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (hero->spell_incs != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
 
 							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
 							{
@@ -834,7 +834,7 @@ void level_up(signed short hero_pos)
 						}
 
 						i = 0;
-						while (hero->spell_incs != 0 && (g_autoinc_spells_mage_index[hero->spell_school][i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_mage_index[hero->spell_school][i] != -1)) {
 
 							if (hero->spells[g_autoinc_spells_mage_index[hero->spell_school][i]] < 11)
 							{
@@ -844,7 +844,7 @@ void level_up(signed short hero_pos)
 						}
 
 						i = 0;
-						while ((hero->spell_incs) != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
+						while ((hero->saved_spell_increases) != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
 
 							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
 							{
@@ -857,7 +857,7 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_AUELF: {
 
-						while (hero->spell_incs != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -867,13 +867,13 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (hero->spell_incs != 0 && (g_autoinc_spells_gelf[i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_gelf[i] != -1)) {
 							inc_spell_novice(hero, g_autoinc_spells_gelf[i]);
 							i++;
 						}
 
 						i = 1;
-						while (hero->spell_incs != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -885,7 +885,7 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_FIRNELF: {
 
-						while (hero->spell_incs != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -895,13 +895,13 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (hero->spell_incs != 0 && (g_autoinc_spells_ielf[i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_ielf[i] != -1)) {
 							inc_spell_novice(hero, g_autoinc_spells_ielf[i]);
 							i++;
 						}
 
 						i = 1;
-						while (hero->spell_incs != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -912,7 +912,7 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_WALDELF: {
 
-						while (hero->spell_incs != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -922,13 +922,13 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while ((hero->spell_incs != 0) && (g_autoinc_spells_self[i] != -1)) {
+						while ((hero->saved_spell_increases != 0) && (g_autoinc_spells_self[i] != -1)) {
 							inc_spell_novice(hero, g_autoinc_spells_self[i]);
 							i++;
 						}
 
 						i = 1;
-						while ((hero->spell_incs != 0) && (i < 86)) {
+						while ((hero->saved_spell_increases != 0) && (i < 86)) {
 
 							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -940,7 +940,7 @@ void level_up(signed short hero_pos)
 				}
 			}
 
-			while (hero->spell_incs != 0) {
+			while (hero->saved_spell_increases != 0) {
 				inc_spell_novice(hero, random_schick(86));
 			}
 		}
@@ -961,8 +961,8 @@ void level_up(signed short hero_pos)
 				}
 				l_di -= i;
 
-				hero->spell_incs -= i;
-				hero->skill_incs += i;
+				hero->saved_spell_increases -= i;
+				hero->saved_skill_increases += i;
 
 			} else {
 
@@ -976,13 +976,13 @@ void level_up(signed short hero_pos)
 						i = l_di;
 					}
 
-					hero->spell_incs += i;
-					hero->skill_incs -= i;
+					hero->saved_spell_increases += i;
+					hero->saved_skill_increases -= i;
 				}
 			}
 		}
 
-		while (hero->skill_incs != 0) {
+		while (hero->saved_skill_increases != 0) {
 
 			l_si = LVL_select_skill(hero, 1);
 
@@ -998,7 +998,7 @@ void level_up(signed short hero_pos)
 			}
 		}
 
-		while (hero->spell_incs != 0) {
+		while (hero->saved_spell_increases != 0) {
 
 			l_si = select_spell(hero, 1);
 

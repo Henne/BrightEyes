@@ -81,7 +81,7 @@ signed short DNG07_handler(void)
 
 							hero->inventory[lockpick_pos].flags.broken = 1;
 
-							g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
+							g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = target_pos;
 
 							do_fight(FIGHTS_F100_03);
 
@@ -89,7 +89,7 @@ signed short DNG07_handler(void)
 
 							print_msg_with_first_hero(get_ttx(532));
 
-							g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
+							g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = target_pos;
 
 							do_fight(FIGHTS_F100_03);
 
@@ -132,7 +132,7 @@ signed short DNG07_handler(void)
 
 						sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
 
-						g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
+						g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = target_pos;
 
 						do_fight(FIGHTS_F100_03);
 

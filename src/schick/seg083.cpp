@@ -217,8 +217,8 @@ signed short DNG08_handler(void)
 
 			add_hero_ap_all(10);
 
-			g_fig_flee_position[NORTH] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,2,7,SOUTH);
-			g_fig_flee_position[EAST] = DNG_POS_DIR(0,6,3,EAST);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,7,SOUTH);
+			g_fig_escape_position[EAST] = DNG_POS_DIR(0,6,3,EAST);
 
 			do_fight(FIGHTS_F108_3B);
 		}
@@ -233,8 +233,8 @@ signed short DNG08_handler(void)
 
 			add_hero_ap_all(10);
 
-			g_fig_flee_position[NORTH] = (g_fig_flee_position[SOUTH] = ( g_fig_flee_position[WEST] = (DNG_POS_DIR(0,2,7,SOUTH))));
-			g_fig_flee_position[EAST] = (DNG_POS_DIR(0,6,3,EAST));
+			g_fig_escape_position[NORTH] = (g_fig_escape_position[SOUTH] = ( g_fig_escape_position[WEST] = (DNG_POS_DIR(0,2,7,SOUTH))));
+			g_fig_escape_position[EAST] = (DNG_POS_DIR(0,6,3,EAST));
 
 			do_fight(FIGHTS_F108_3B);
 		}

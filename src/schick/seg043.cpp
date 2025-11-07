@@ -160,11 +160,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				if (weapon_type == -1) {
 					/* no valid weapon == bare hands */
-					defender_at = hero->at_weapon[WEAPON_TYPE_WAFFENLOS] + hero->atpa_mod;
-					defender_pa = hero->pa_weapon[WEAPON_TYPE_WAFFENLOS] - hero->atpa_mod;
+					defender_at = hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + hero->fight_atpa_mod;
+					defender_pa = hero->pa_talent_bonus[WEAPON_TYPE_WAFFENLOS] - hero->fight_atpa_mod;
 				} else {
-					defender_at = hero->at_weapon[hero->w_type] + hero->atpa_mod + hero->w_at_mod;
-					defender_pa = hero->pa_weapon[hero->w_type] - hero->atpa_mod + hero->w_pa_mod;
+					defender_at = hero->at_talent_bonus[hero->weapon_type] + hero->fight_atpa_mod + hero->weapon_at_mod;
+					defender_pa = hero->pa_talent_bonus[hero->weapon_type] - hero->fight_atpa_mod + hero->weapon_pa_mod;
 				}
 
 				/* guarding heroes get a PA-bonus of 3 */
@@ -524,7 +524,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 					damage = (damage * 8) / 10;
 
 					/* RS */
-					damage -= hero->rs_bonus1;
+					damage -= hero->rs_bonus;
 
 					if (damage > 0) {
 

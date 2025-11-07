@@ -273,7 +273,7 @@ signed short DNG06_handler(void)
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_id == gs_current_group) &&
 					!hero->flags.dead &&
-					(test_skill(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus1) <= 0))
+					(test_skill(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus) <= 0))
 				{
 					sprintf(g_dtp2,	get_tx(20), hero->alias,
 						GUI_get_ptr(hero->sex, 0),
@@ -421,8 +421,8 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(1,8,14) && target_pos != gs_dng_handled_pos)
 	{
-		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,6,14,WEST);
-		g_fig_flee_position[SOUTH] = g_fig_flee_position[EAST] = DNG_POS_DIR(1,13,13,NORTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,6,14,WEST);
+		g_fig_escape_position[SOUTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(1,13,13,NORTH);
 
 		if (!do_fight(FIGHTS_F094_19))
 		{

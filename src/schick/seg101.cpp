@@ -95,7 +95,7 @@ void spell_armatrutz(void)
 		pos = get_hero_index(get_spelluser());
 		g_spell_special_aecost = (bonus * bonus);
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(5), (Bit8u*)&get_spelluser()->rs_bonus1, (signed char)bonus, (signed char)pos);
+		set_mod_slot(slot, MINUTES(5), (Bit8u*)&get_spelluser()->rs_bonus, (signed char)bonus, (signed char)pos);
 
 		/* prepare output message */
 		sprintf(g_dtp2,	get_tx(100), get_spelluser()->alias, bonus);

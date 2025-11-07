@@ -79,7 +79,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 	l1 = 1;
 	done = 0;
 
-	while ((done == 0) && (hero->bp_left > 0)) {
+	while ((done == 0) && (hero->fight_bp_left > 0)) {
 
 		if (g_fig_cb_marker_id != -1) {
 			FIG_remove_from_list(g_fig_cb_marker_id, 0);
@@ -104,7 +104,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			hero->action_id = FIG_ACTION_WAIT;
 
 			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
-				(hero->bp_left >= 3))
+				(hero->fight_bp_left >= 3))
 			{
 				AFIG_hero_turn(hero, actor_id, x, y);
 			}
@@ -117,7 +117,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 				g_basepos_y = ((x + y < 15) ? -30 : 30);
 
 				/* prepare question with BP */
-				sprintf(g_dtp2, get_tx(18), hero->bp_left);
+				sprintf(g_dtp2, get_tx(18), hero->fight_bp_left);
 
 				txt_tabpos_bak = g_txt_tabpos[0];
 				g_txt_tabpos[0] = g_basepos_x + 204;
@@ -191,7 +191,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 					hero->action_id = FIG_ACTION_MOVE;
 
-					if (hero->bp_left > 0) {
+					if (hero->fight_bp_left > 0) {
 						/* let the player select a move destination */
 
 						call_mouse();
@@ -217,7 +217,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			} else if (selected == FIG_ACTION_MELEE_ATTACK) {
 				/* ATTACK / ANGRIFF */
 
-				if (hero->bp_left >= 3) {
+				if (hero->fight_bp_left >= 3) {
 
 					target_x = x;
 					target_y = y;
@@ -271,7 +271,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							hero->target_object_id = 0;
 
 						} else {
-							hero->atpa_mod = 0;
+							hero->fight_atpa_mod = 0;
 
 							if (range_weapon == -1) {
 
@@ -286,13 +286,13 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 								} while (selected == -1);
 
-								hero->atpa_mod = selected == 1 ? 2 : (selected == 2) ? 0 : -2;
+								hero->fight_atpa_mod = selected == 1 ? 2 : (selected == 2) ? 0 : -2;
 							}
 
 							/* set target id */
 							hero->target_object_id = target_object_id;
 							/* set BP to 0 */
-							hero->bp_left = 0;
+							hero->fight_bp_left = 0;
 							hero->action_id = (range_weapon > 0 ? FIG_ACTION_RANGE_ATTACK : FIG_ACTION_MELEE_ATTACK);
 							done = 1;
 						}
@@ -305,10 +305,10 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			} else if (selected == FIG_ACTION_GUARD) {
 				/* GUARD / SICHERN */
 
-				if (hero->bp_left >= 3) {
+				if (hero->fight_bp_left >= 3) {
 
 					/* set BP to 0 */
-					hero->bp_left = 0;
+					hero->fight_bp_left = 0;
 
 					hero->action_id = FIG_ACTION_GUARD;
 
@@ -327,7 +327,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 					GUI_output(get_ttx(215));
 				} else {
 
-					if (hero->bp_left >= 5) {
+					if (hero->fight_bp_left >= 5) {
 
 						call_mouse();
 						hero->spell_id = select_spell(hero, 0);
@@ -415,7 +415,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			} else if (selected == FIG_ACTION_USE_ITEM) {
 				/* USE ITEM / GGST. BENUTZEN */
 
-					if (hero->bp_left >= 3) {
+					if (hero->fight_bp_left >= 3) {
 
 						if (is_in_word_array(hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, g_attack_items))
 						{
@@ -436,7 +436,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							GUI_output(get_tx(28));
 						} else {
 							/* set BP to 0 */
-							hero->bp_left = 0;
+							hero->fight_bp_left = 0;
 
 							hero->action_id = FIG_ACTION_USE_ITEM;
 							done = 1;
@@ -448,7 +448,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_ITEM) {
 				/* EXCHANGE ITEM / GGST. WECHSELN */
-					if (hero->bp_left >= 2) {
+					if (hero->fight_bp_left >= 2) {
 
 						radio_i = 0;
 
@@ -500,7 +500,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							if (selected != -1) {
 
 								/* subtract 2 BP */
-								hero->bp_left -= 2;
+								hero->fight_bp_left -= 2;
 								move_item(HERO_INVENTORY_SLOT_LEFT_HAND, slots[selected -1], hero);
 							}
 						}
@@ -512,7 +512,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 			} else if (selected == FIG_ACTION_EXCHANGE_WEAPON) {
 				/* CHANGE WEAPON / WAFFE WECHSELN */
-					if (hero->bp_left >= 2) {
+					if (hero->fight_bp_left >= 2) {
 
 						radio_i = 0;
 
@@ -563,7 +563,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							if (selected != -1) {
 
 								/* subtract 2 BP */
-								hero->bp_left -= 2;
+								hero->fight_bp_left -= 2;
 
 								rwt1 = FIG_get_range_weapon_type(hero);
 
@@ -576,7 +576,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 									ptr = FIG_get_fighter(hero->fighter_id);
 
 									if (rwt2 != -1) {
-										ptr->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_no - 1][rwt2][hero->viewdir];
+										ptr->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][rwt2][hero->viewdir];
 									} else {
 										ptr->nvf_no = hero->viewdir;
 									}
@@ -604,12 +604,12 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 					if (rwt1 == -1) {
 
 						/* calculate AT and PA values for "BARE HANDS" */
-						at = hero->at_weapon[0] - hero->rs_be / 2;
+						at = hero->at_talent_bonus[0] - hero->rs_be / 2;
 						if (hero->rs_be & 1) {
 							at--;
 						}
 
-						pa = hero->pa_weapon[0] - hero->rs_be / 2;
+						pa = hero->pa_talent_bonus[0] - hero->rs_be / 2;
 
 						/* set damage bounds: 1W6 */
 						damage_lo = 1;
@@ -618,12 +618,12 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 					} else {
 
 						/* calculate AT and PA values for range weapons */
-						at = hero->at_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_at_mod;
+						at = hero->at_talent_bonus[hero->weapon_type] - hero->rs_be / 2 + hero->weapon_at_mod;
 
 						if (hero->rs_be & 1) {
 							at--;
 						}
-						pa = hero->pa_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_pa_mod;
+						pa = hero->pa_talent_bonus[hero->weapon_type] - hero->rs_be / 2 + hero->weapon_pa_mod;
 
 
 						p_itemsdat = &g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id];
@@ -634,12 +634,12 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 					}
 				} else {
 					/* calculate AT and PA values for melee weapons */
-					at = hero->at_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_at_mod;
+					at = hero->at_talent_bonus[hero->weapon_type] - hero->rs_be / 2 + hero->weapon_at_mod;
 
 					if (hero->rs_be & 1) {
 						at--;
 					}
-					pa = hero->pa_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_pa_mod;
+					pa = hero->pa_talent_bonus[hero->weapon_type] - hero->rs_be / 2 + hero->weapon_pa_mod;
 
 
 					p_itemsdat = &g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id];
@@ -677,7 +677,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 					/* AT and PA value */
 					at, pa,
 					/* RS */
-					hero->rs_bonus1,
+					hero->rs_bonus,
 					/* weapon name */
 					GUI_name_singular(get_itemname(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id)),
 					/* damage bounds */
@@ -699,7 +699,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 				done = 1;
 				hero->action_id = FIG_ACTION_WAIT;
 				/* set BP to 0 */
-				hero->bp_left = 0;
+				hero->fight_bp_left = 0;
 				/* set target id to 0 */
 				hero->target_object_id = 0;
 
@@ -721,7 +721,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			} else if (selected == FIG_ACTION_DROP_ITEM) {
 
 				/* DROP ITEM / GGST. WEGWERFEN */
-				if (hero->bp_left >= 1) {
+				if (hero->fight_bp_left >= 1) {
 
 					radio_i = 0;
 
@@ -770,7 +770,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							drop_item(hero, slots[selected -1], -1);
 
 							/* subtract 1 BP */
-							hero->bp_left--;
+							hero->fight_bp_left--;
 						}
 					}
 				} else {

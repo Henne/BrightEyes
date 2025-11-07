@@ -219,7 +219,7 @@ signed short DNG10_handler(void)
 		/* FIGHT: scared heshtot */
 		if (GUI_bool(get_tx(22)))
 		{
-			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,10,13,NORTH);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,10,13,NORTH);
 			gs_dng_handled_pos = 0;
 
 			if (!do_fight(FIGHTS_F129_17)) {
@@ -270,8 +270,8 @@ signed short DNG10_handler(void)
 	} else if ((target_pos == DNG_POS(1,10,3) || target_pos == DNG_POS(1,7,3)) && target_pos != gs_dng_handled_pos && gs_dng10_mummy_lever)
 	{
 		/* FIGHT: four mummies again and again */
-		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,5,3,WEST);
-		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(1,12,3,EAST);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,5,3,WEST);
+		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,12,3,EAST);
 		g_fig_discard = 1;
 
 		do_fight(FIGHTS_F129_21);
@@ -284,8 +284,8 @@ signed short DNG10_handler(void)
 	} else if (target_pos == DNG_POS(1,9,12) && target_pos != gs_dng_handled_pos && gs_dng10_dragon_quest)
 	{
 		/* FIGHT: get PLATINKEY for the dragon */
-		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,9,10,NORTH);
-		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(1,9,10,NORTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,9,10,NORTH);
+		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,9,10,NORTH);
 
 		do_fight(FIGHTS_F129_29);
 
@@ -325,7 +325,7 @@ signed short DNG10_handler(void)
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_id == gs_current_group) &&
 						!hero->flags.dead &&
-						(test_skill(hero, TA_SCHLEICHEN, hero->rs_bonus1 + 3) <= 0))
+						(test_skill(hero, TA_SCHLEICHEN, hero->rs_bonus + 3) <= 0))
 					{
 						result++;
 					}
