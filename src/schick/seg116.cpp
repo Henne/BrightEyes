@@ -349,12 +349,12 @@ void tevent_137(void)
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
 				{
 					/* each hero gets five FOODPACKAGES */
-					give_hero_new_item(hero, ITEM_FOOD_PACKAGE, 1, 5);
+					give_hero_new_item(hero, ITEM_PROVIANTPAKET, 1, 5);
 
 					/* each hero gets his first WATERSKIN filled */
 					/* potential Original-Bug: Does it make sense that the further WATERSKINs are not filled? */
 
-					if ((item_pos = get_item_pos(hero, ITEM_WATERSKIN)) != -1)
+					if ((item_pos = get_item_pos(hero, ITEM_WASSERSCHLAUCH)) != -1)
 					{
 						/* fill waterskin */
 						hero->inventory[item_pos].flags.half_empty = hero->inventory[item_pos].flags.empty = 0;

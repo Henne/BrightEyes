@@ -61,35 +61,35 @@ char ds[1];
 #endif
 
 signed short g_items_noplural[23] = {
-	ITEM_LICORICE,
+	ITEM_LAKRITZE,
 	ITEM_BONBONS,
-	ITEM_SHURIN_POISON,
-	ITEM_ARAX_POISON,
-	ITEM_ANGST_POISON,
-	ITEM_SLEEP_POISON,
+	ITEM_SHURINKNOLLEKNOLLENGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ANGSTGIFT,
+	ITEM_SCHLAFGIFT,
 	ITEM_GOLDLEIM,
-	ITEM_LOTUS_POISON,
+	ITEM_LOTUSGIFT,
 	ITEM_KUKRIS,
 	ITEM_BANNSTAUB,
-	ITEM_KROETEN_POISON,
-	ITEM_OIL,
+	ITEM_KROETENSCHEMELGIFT,
+	ITEM_OEL,
 	ITEM_EXPURGICUM,
 	ITEM_VOMICUM,
-	ITEM_ANTIVENOM,
+	ITEM_GEGENGIFT,
 	ITEM_GRIMRING,
 	ITEM_LOBPREISUNGEN,
 	ITEM_PLATTENZEUG,
 	ITEM_LEDERZEUG,
 	ITEM_KETTENZEUG,
 	ITEM_MIASTHMATICUM,
-	ITEM_HYLAILIC_FIRE,
+	ITEM_HYLAILER_FEUER,
 	-1
 }; // ds:0x0270
 signed short g_items_pluralwords[7] = {
-	ITEM_PICKLOCKS,
-	ITEM_SHOES,
-	ITEM_BOOTS,
-	ITEM_LACEUP_SHOE,
+	ITEM_DIETRICHE,
+	ITEM_SCHUHE,
+	ITEM_STIEFEL,
+	ITEM_SCHNEESCHUH,
 	ITEM_BONBONS,
 	ITEM_LOBPREISUNGEN,
 	-1
@@ -125,110 +125,110 @@ signed short *g_wearable_items_index[12] = {
 }; // ds:0x0638, items wearable depending on hero type
 
 const struct ranged_weapon_descr g_ranged_weapons_table[9] = {
-	{  1,  0,  0, -1,-99,-99,-99,  6 }, /* 0 <- ITEM_THROWING_STAR, ITEM_THROWING_KNIFE */
-	{  1,  1,  0,  0, -1,-99,-99,  6 }, /* 1 <- ITEM_SPEAR, ITEM_SLING */
-	{  2,  1,  0,  0,  0,-99,-99,  7 }, /* 2 <- ITEM_FRANCESCA, ITEM_THROWING_AXE */
-	{  1,  1,  0,  0,  0, -1,-99,  4 }, /* 3 <- ITEM_SHORTBOW */
-	{  2,  2,  1,  0,  0, -1, -2,  4 }, /* 4 <- ITEM_LONGBOW */
-	{  2,  2,  1,  0, -1, -2, -3,  3 }, /* 5 <- ITEM_CROSSBOW */
-	{  2,  2,  1,  1,  0,  0, -1,  4 }, /* 6 <- ITEM_SPEAR_MAGIC */
-	{  9,  9,  9,  9,  9,  9,  9,  2 }, /* 7 <- ITEM_THROWING_DAGGER_MAGIC */
+	{  1,  0,  0, -1,-99,-99,-99,  6 }, /* 0 <- ITEM_WURFSTERN, ITEM_WURFMESSER */
+	{  1,  1,  0,  0, -1,-99,-99,  6 }, /* 1 <- ITEM_SPEER, ITEM_SCHLEUDER */
+	{  2,  1,  0,  0,  0,-99,-99,  7 }, /* 2 <- ITEM_WURFBEIL, ITEM_WURFAXT */
+	{  1,  1,  0,  0,  0, -1,-99,  4 }, /* 3 <- ITEM_KURZBOGEN */
+	{  2,  2,  1,  0,  0, -1, -2,  4 }, /* 4 <- ITEM_LANGBOGEN */
+	{  2,  2,  1,  0, -1, -2, -3,  3 }, /* 5 <- ITEM_ARMBRUST */
+	{  2,  2,  1,  1,  0,  0, -1,  4 }, /* 6 <- ITEM_SPEER__MAGIC */
+	{  9,  9,  9,  9,  9,  9,  9,  2 }, /* 7 <- ITEM_WURFDOLCH__MAGIC */
 	{ -1,  0,  0,  0,  0,  0,  0,  0 }
 }; // ds:0x0668
 
 struct weapon_descr g_weapons_table[65] = {
-	{ 1, 4, 14,  2, -1,  0,  0 }, /*  0 <- ITEM_SWORD */
-	{ 1, 1, 14,  6, -1, -1, -3 }, /*  1 <- ITEM_CLUB */
-	{ 1, 3, 15,  2, -1,  0,  0 }, /*  2 <- ITEM_SABER */
-	{ 1, 0, 16,  4, -1, -3, -4 }, /*  3 <- ITEM_KNIFE */
-	{ 1, 3, 99,  5,  1,  0, -3 }, /*  4 <- ITEM_SPEAR */
-	{ 1, 2, 15,  1, -1,  0, -1 }, /*  5 <- ITEM_SHORT_SWORD */
-	{ 1, 4, 14,  5, -1,  0, -3 }, /*  6 <- ITEM_KRIEGSBEIL_SPECIAL */
-	{ 1, 3, 99,  0,  3,  0,  0 }, /*  7 <- ITEM_SHORTBOW */
+	{ 1, 4, 14,  2, -1,  0,  0 }, /*  0 <- ITEM_SCHWERT */
+	{ 1, 1, 14,  6, -1, -1, -3 }, /*  1 <- ITEM_KNUEPPEL */
+	{ 1, 3, 15,  2, -1,  0,  0 }, /*  2 <- ITEM_SAEBEL */
+	{ 1, 0, 16,  4, -1, -3, -4 }, /*  3 <- ITEM_MESSER */
+	{ 1, 3, 99,  5,  1,  0, -3 }, /*  4 <- ITEM_SPEER */
+	{ 1, 2, 15,  1, -1,  0, -1 }, /*  5 <- ITEM_KURZSCHWERT */
+	{ 1, 4, 14,  5, -1,  0, -3 }, /*  6 <- ITEM_KRIEGSBEIL__SPECIAL */
+	{ 1, 3, 99,  0,  3,  0,  0 }, /*  7 <- ITEM_KURZBOGEN */
 	{ 2, 4, 14,  3, -1, -1, -4 }, /*  8 <- ITEM_STREITAXT */
-	{ 1, 6, 99,  0,  5,  0,  0 }, /*  9 <- ITEM_CROSSBOW */
-	{ 1, 1, 15,  3, -1, -2, -3 }, /* 10 <- ITEM_DAGGER, ITEM_KUKRIS_DAGGER */
-	{ 1, 3, 99,  4,  2, -1, -3 }, /* 11 <- ITEM_FRANCESCA */
-	{ 1, 1, 99,  0,  0,  0,  0 }, /* 12 <- ITEM_THROWING_STAR */
-	{ 2, 4, 14,  3, -1, -2, -3 }, /* 13 <- ITEM_TWO_HANDED_SWORD */
-	{ 1, 4, 99,  0,  4,  0,  0 }, /* 14 <- ITEM_LONGBOW */
-	{ 1, 5, 15,  5, -1, -1, -3 }, /* 15 <- ITEM_MORNING_STAR */
-	{ 1, 0, 16,  6, -1, -2, -3 }, /* 16 <- ITEM_VOLCANIC_GLASS_DAGGER */
-	{ 1, 3, 99,  4,  2, -1, -4 }, /* 17 <- ITEM_THROWING_AXE */
+	{ 1, 6, 99,  0,  5,  0,  0 }, /*  9 <- ITEM_ARMBRUST */
+	{ 1, 1, 15,  3, -1, -2, -3 }, /* 10 <- ITEM_DOLCH, ITEM_KUKRISDOLCH */
+	{ 1, 3, 99,  4,  2, -1, -3 }, /* 11 <- ITEM_WURFBEIL */
+	{ 1, 1, 99,  0,  0,  0,  0 }, /* 12 <- ITEM_WURFSTERN */
+	{ 2, 4, 14,  3, -1, -2, -3 }, /* 13 <- ITEM_ZWEIHAENDER */
+	{ 1, 4, 99,  0,  4,  0,  0 }, /* 14 <- ITEM_LANGBOGEN */
+	{ 1, 5, 15,  5, -1, -1, -3 }, /* 15 <- ITEM_MORGENSTERN */
+	{ 1, 0, 16,  6, -1, -2, -3 }, /* 16 <- ITEM_VULKANGLASDOLCH */
+	{ 1, 3, 99,  4,  2, -1, -4 }, /* 17 <- ITEM_WURFAXT */
 	{ 1, 3, 19,  7, -1, -1, -4 }, /* 18 <- ITEM_PIKE */
-	{ 1, 4, 13,  1, -1,  0, -2 }, /* 19 <- ITEM_MACE, ITEM_SILVER_MACE */
+	{ 1, 4, 13,  1, -1,  0, -2 }, /* 19 <- ITEM_STREITKOLBEN, ITEM_SILBERSTREITKOLBEN */
 	{ 1, 3, 16,  3, -1,  0, -1 }, /* 20 <- ITEM_DEGEN */
-	{ 1, 3, 16,  3, -1,  0, -1 }, /* 21 <- ITEM_FLORET */
-	{ 1, 1, 15,  5, -1,  0, -1 }, /* 22 <- ITEM_QUARTERSTAFF */
-	{ 1, 0, 19,  2, -1,  0, -6 }, /* 23 <- ITEM_WHIP */
-	{ 1, 0, 99,  4,  0, -3, -4 }, /* 24 <- ITEM_THROWING_KNIFE */
+	{ 1, 3, 16,  3, -1,  0, -1 }, /* 21 <- ITEM_FLORETT */
+	{ 1, 1, 15,  5, -1,  0, -1 }, /* 22 <- ITEM_KAMPFSTAB */
+	{ 1, 0, 19,  2, -1,  0, -6 }, /* 23 <- ITEM_PEITSCHE */
+	{ 1, 0, 99,  4,  0, -3, -4 }, /* 24 <- ITEM_WURFMESSER */
 	{ 1, 2, 17,  5, -1, -3, -4 }, /* 25 <- ITEM_SICKLE, ITEM_SICKLE_MAGIC */
-	{ 1, 3, 17,  6, -1, -3, -4 }, /* 26 <- ITEM_SCYTHE */
-	{ 2, 3, 15,  2, -1, -2, -4 }, /* 27 <- ITEM_WAR_HAMMER */
-	{ 1, 3, 15,  3, -1,  0, -3 }, /* 28 <- ITEM_TRIDENT */
-	{ 1, 4, 15,  5, -1, -1, -3 }, /* 29 <- ITEM_HALBERD */
-	{ 1, 2, 13,  6, -1, -2, -3 }, /* 30 <- ITEM_FLAIL */
+	{ 1, 3, 17,  6, -1, -3, -4 }, /* 26 <- ITEM_SENSE */
+	{ 2, 3, 15,  2, -1, -2, -4 }, /* 27 <- ITEM_KRIEGSHAMMER */
+	{ 1, 3, 15,  3, -1,  0, -3 }, /* 28 <- ITEM_DREIZACK */
+	{ 1, 4, 15,  5, -1, -1, -3 }, /* 29 <- ITEM_HELLEBARDE */
+	{ 1, 2, 13,  6, -1, -2, -3 }, /* 30 <- ITEM_DRESCHFLEGEL */
 	{ 1, 3, 18,  4, -1, -1, -1 }, /* 31 <- ITEM_ZWEILILIEN */
 	{ 3, 3, 17,  4, -1, -3, -4 }, /* 32 <- ITEM_OCHSENHERDE */
 	{ 1, 1, 16,  4, -1, -2, -3 }, /* 33 <- ITEM_BASILISKENZUNGE */
 	{ 1, 2, 15,  4, -1, -2, -3 }, /* 34 <- ITEM_OGERFAENGER */
 	{ 1, 1, 16,  7, -1, -3, -4 }, /* 35 <- ITEM_MENGBILAR, ITEM_KUKRIS_MENGBILAR */
-	{ 1, 2, 15,  2, -1, -1, -2 }, /* 36 <- ITEM_HEAVY_DAGGER */
+	{ 1, 2, 15,  2, -1, -1, -2 }, /* 36 <- ITEM_SCHWERER_DOLCH */
 	{ 2, 2, 15,  3, -1, -2, -2 }, /* 37 <- ITEM_RONDRAKAMM */
-	{ 1, 3, 15,  2, -1,  0, -1 }, /* 38 <- ITEM_CUTLASS */
-	{ 1, 5, 14,  2, -1, -1, -2 }, /* 39 <- ITEM_BASTARD_SWORD */
-	{ 1, 6, 15,  1, -1, -2, -2 }, /* 40 <- ITEM_TUZAK_KNIFE */
+	{ 1, 3, 15,  2, -1,  0, -1 }, /* 38 <- ITEM_ENTERMESSER */
+	{ 1, 5, 14,  2, -1, -1, -2 }, /* 39 <- ITEM_BASTARDSCHWERT */
+	{ 1, 6, 15,  1, -1, -2, -2 }, /* 40 <- ITEM_TUZAKMESSER */
 	{ 1, 4, 16,  3, -1, -1, -3 }, /* 41 <- ITEM_RABENSCHNABEL */
 	{ 1, 5, 14,  1, -1, -1, -2 }, /* 42 <- ITEM_BRABAKBENGEL */
 	{ 1, 3, 16,  4, -1,  0, -1 }, /* 43 <- ITEM_RAPIER */
 	{ 1, 4, 14,  2, -1,  0, -1 }, /* 44 <- ITEM_KUNCHOMER */
 	{ 1, 6, 15,  3, -1, -1, -3 }, /* 45 <- ITEM_DOPPELKUNCHOMER */
-	{ 1, 2, 99,  0,  1,  0,  0 }, /* 46 <- ITEM_SLING */
+	{ 1, 2, 99,  0,  1,  0,  0 }, /* 46 <- ITEM_SCHLEUDER */
 	{ 1, 3, 13,  4, -1,  0, -2 }, /* 47 <- ITEM_SKRAJA */
 	{ 1, 4, 13,  2, -1, -2, -4 }, /* 48 <- ITEM_KRIEGSBEIL_2 */
 	{ 1, 5, 14,  2, -1, -1, -3 }, /* 49 <- ITEM_ORKNASE */
 	{ 1, 4, 99,  0, -1,  0,  0 }, /* 50 <- ITEM_SCHNEIDZAHN */ /* Original-Bug: entry -1 for ranged_index is not o.k. for a throwing weapon */
 	{ 1, 3, 15,  2, -1,  0,  0 }, /* 51 <- ITEM_ROBBENTOETER */
 	{ 1, 3, 15,  2, -1,  0, -1 }, /* 52 <- ITEM_WOLFSMESSER */
-	{ 0, 0, 99,  0, -1,  0,  0 }, /* 53 <- ITEM_ARROWS, ITEM_BOLTS */
-	{ 1, 5, 14, -5, -1, -2, -3 }, /* 54 <- ITEM_BASTARD_SWORD_MAGIC */
-	{ 1,10, 14,-99, -1, -2, -8 }, /* 55 <- ITEM_ORKNASE_MAGIC */
-	{ 1, 2, 15,-99, -1,  2, -1 }, /* 56 <- ITEM_SHORT_SWORD_MAGIC */
-	{ 1, 3, 15,  0, -1,  0,  0 }, /* 57 <- ITEM_SABER_MAGIC */
-	{ 2, 4, 14,-99, -1, -3, -4 }, /* 58 <- ITEM_TWO_HANDED_SWORD_MAGIC */
+	{ 0, 0, 99,  0, -1,  0,  0 }, /* 53 <- ITEM_PFEIL, ITEM_BOLTS */
+	{ 1, 5, 14, -5, -1, -2, -3 }, /* 54 <- ITEM_BASTARDSCHWERT__MAGIC */
+	{ 1,10, 14,-99, -1, -2, -8 }, /* 55 <- ITEM_ORKNASE__MAGIC */
+	{ 1, 2, 15,-99, -1,  2, -1 }, /* 56 <- ITEM_KURZSCHWERT__MAGIC */
+	{ 1, 3, 15,  0, -1,  0,  0 }, /* 57 <- ITEM_SAEBEL__MAGIC */
+	{ 2, 4, 14,-99, -1, -3, -4 }, /* 58 <- ITEM_ZWEIHAENDER__MAGIC */
 	{ 1, 4, 14,-99, -1,  2,  2 }, /* 59 <- ITEM_GRIMRING */
-	{ 1, 4, 14,  0, -1,  2,  0 }, /* 60 <- ITEM_SWORD_MAGIC */
-	{ 1, 3, 99,  5,  6,  1,  1 }, /* 61 <- ITEM_SPEAR_MAGIC */
-	{ 1, 0, 99,  4,  7, -3, -4 }, /* 62 <- ITEM_THROWING_DAGGER_MAGIC */
-	{ 1, 1, 15,-99, -1,  0,  0 }, /* 63 <- ITEM_MAGIC_WAND, ITEM_WITCHES_BROOM */
+	{ 1, 4, 14,  0, -1,  2,  0 }, /* 60 <- ITEM_SCHWERT__MAGIC */
+	{ 1, 3, 99,  5,  6,  1,  1 }, /* 61 <- ITEM_SPEER__MAGIC */
+	{ 1, 0, 99,  4,  7, -3, -4 }, /* 62 <- ITEM_WURFDOLCH__MAGIC */
+	{ 1, 1, 15,-99, -1,  0,  0 }, /* 63 <- ITEM_ZAUBERSTAB, ITEM_HEXENBESEN */
 	{-1, 0,  0,  0,  0,  0,  0 }
 }; // ds:0x06b0
 
 struct armors_descr g_armors_table[25] = {
-	{ 1, 0 }, /*  0 <- ITEM_SHIELD */
-	{ 2, 1 }, /*  1 <- ITEM_IRON_SHIELD, ITEM_GOLDEN_SHIELD */
-	{ 3, 2 }, /*  2 <- ITEM_IRON_HELMET, ITEM_SILVER_HELMET */
-	{ 1, 0 }, /*  3 <- ITEM_SHIRT */
+	{ 1, 0 }, /*  0 <- ITEM_SCHILD */
+	{ 2, 1 }, /*  1 <- ITEM_IRON_SHIELD, ITEM_GOLDENER_SCHILD */
+	{ 3, 2 }, /*  2 <- ITEM_EISENHELM, ITEM_SILBERHELM */
+	{ 1, 0 }, /*  3 <- ITEM_HEMD */
 	{ 0, 0 }, /*  4 <- ITEM_TROWSERS */
-	{ 0, 0 }, /*  5 <- ITEM_SHOES */
-	{ 0, 0 }, /*  6 <- ITEM_BOOTS */
-	{ 0, 0 }, /*  7 <- ITEM_LACEUP_SHOE */
-	{ 3, 3 }, /*  8 <- ITEM_LEATHER_ARMOR */
-	{ 5, 4 }, /*  9 <- ITEM_SCALE_ARMOR */
-	{ 0, 0 }, /* 10 <- ITEM_ROBE_GREEN, ITEM_ROBE_GREEN_2 */
-	{ 0, 0 }, /* 11 <- ITEM_ROBE_RED */
-	{ 2, 1 }, /* 12 <- ITEM_POT_HELMET */
-	{ 1, 0 }, /* 13 <- ITEM_LEATHER_HELMET */
-	{ 2, 2 }, /* 14 <- ITEM_SURCOAT */
-	{ 4, 4 }, /* 15 <- ITEM_CHAIN_MAIL */
+	{ 0, 0 }, /*  5 <- ITEM_SCHUHE */
+	{ 0, 0 }, /*  6 <- ITEM_STIEFEL */
+	{ 0, 0 }, /*  7 <- ITEM_SCHNEESCHUH */
+	{ 3, 3 }, /*  8 <- ITEM_LEDERHARNISCH */
+	{ 5, 4 }, /*  9 <- ITEM_SCHUPPENRUESTUNG */
+	{ 0, 0 }, /* 10 <- ITEM_ROBE__GREEN_1, ITEM_ROBE__GREEN_1_2 */
+	{ 0, 0 }, /* 11 <- ITEM_ROBE__RED */
+	{ 2, 1 }, /* 12 <- ITEM_TOPFHELM */
+	{ 1, 0 }, /* 13 <- ITEM_LEDERHELM */
+	{ 2, 2 }, /* 14 <- ITEM_WAFFENROCK */
+	{ 4, 4 }, /* 15 <- ITEM_KETTENHEMD */
 	{ 3, 3 }, /* 16 <- ITEM_KROETENHAUT */
 	{ 2, 1 }, /* 17 <- ITEM_PLATTENZEUG */
 	{ 1, 1 }, /* 18 <- ITEM_KETTENZEUG */
 	{ 1, 0 }, /* 19 <- ITEM_LEDERZEUG */
-	{ 1, 1 }, /* 20 <- ITEM_WINTER_COAT */
-	{ 1, 0 }, /* 21 <- ITEM_HELMET_CURSED */
-	{ 2, 4 }, /* 22 <- ITEM_CHAIN_MAIL_CURSED */
-	{ 5, 3 }, /* 23 <- ITEM_CHAIN_MAIL_MAGIC */
+	{ 1, 1 }, /* 20 <- ITEM_WINTERMANTEL */
+	{ 1, 0 }, /* 21 <- ITEM_HELM__CURSED */
+	{ 2, 4 }, /* 22 <- ITEM_KETTENHEMD__CURSED */
+	{ 5, 3 }, /* 23 <- ITEM_KETTENHEMD__MAGIC */
 	{-1, 0 }
 }; // ds:0x0877
 
@@ -250,55 +250,55 @@ const struct specialitem_descr g_specialitems_table[14] = {
 }; // ds:0x08a9
 
 signed short g_poison_potions[10] = {
-	ITEM_SHURIN_POISON,
-	ITEM_ARAX_POISON,
-	ITEM_ANGST_POISON,
-	ITEM_SLEEP_POISON,
+	ITEM_SHURINKNOLLEKNOLLENGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ANGSTGIFT,
+	ITEM_SCHLAFGIFT,
 	ITEM_GOLDLEIM,
-	ITEM_LOTUS_POISON,
+	ITEM_LOTUSGIFT,
 	ITEM_KUKRIS,
 	ITEM_BANNSTAUB,
-	ITEM_KROETEN_POISON,
+	ITEM_KROETENSCHEMELGIFT,
 	-1
 }; // ds:0x08d3
 signed short g_herbs_toxic[5] = {
-	ITEM_SHURIN,
+	ITEM_SHURINKNOLLE,
 	ITEM_ALRAUNE,
-	ITEM_LOTUS,
-	ITEM_KROTENSCHEMEL,
+	ITEM_LOTUSBLUETE,
+	ITEM_EITRIGER_KROETENSCHEMEL,
 	-1
 }; // ds:0x08e7
 signed short g_herbs_uneatable[7] = {
 	ITEM_ILMENBLATT,
-	ITEM_FINAGE_TREE,
-	ITEM_JORUGA_ROOT,
+	ITEM_FINAGEBAEMCHEN,
+	ITEM_JORUGAWURZEL,
 	ITEM_KAIRANHALM,
-	ITEM_OLGIN_ROOT,
-	ITEM_DONF_SPRING,
+	ITEM_OLGINWURZEL,
+	ITEM_DONFSTENGEL,
 	-1
 }; // ds:0x08f1
 signed short g_elixir_potions[8] = {
-	ITEM_MU_ELIXIR,
-	ITEM_KL_ELIXIR,
-	ITEM_CH_ELIXIR,
-	ITEM_FF_ELIXIR,
-	ITEM_GE_ELIXIR,
-	ITEM_IN_ELIXIR,
-	ITEM_KK_ELIXIR,
+	ITEM_MU_ELIXIER,
+	ITEM_KL_ELIXIER,
+	ITEM_CH_ELIXIER,
+	ITEM_FF_ELIXIER,
+	ITEM_GE_ELIXIER,
+	ITEM_IN_ELIXIER,
+	ITEM_KK_ELIXIER,
 	-1
 }; // ds:0x08ff
 signed short g_bad_elixirs[8] = {
-	ITEM_MU_ELIXIR_BAD,
-	ITEM_KL_ELIXIR_BAD,
-	ITEM_CH_ELIXIR_BAD,
-	ITEM_FF_ELIXIR_BAD,
-	ITEM_GE_ELIXIR_BAD,
-	ITEM_IN_ELIXIR_BAD,
-	ITEM_KK_ELIXIR_BAD,
+	ITEM_MU_ELIXIER__BAD,
+	ITEM_KL_ELIXIER__BAD,
+	ITEM_CH_ELIXIER__BAD,
+	ITEM_FF_ELIXIER__BAD,
+	ITEM_GE_ELIXIER__BAD,
+	ITEM_IN_ELIXIER__BAD,
+	ITEM_KK_ELIXIER__BAD,
 	-1
 }; // ds:0x090f
 signed short g_attack_items[3] = {
-	ITEM_HYLAILIC_FIRE,
+	ITEM_HYLAILER_FEUER,
 	ITEM_MIASTHMATICUM,
 	-1
 }; // ds:0x091f
@@ -1750,18 +1750,18 @@ Bit8u  gs_dng13_passage4_flag = 0; // ds:0x3f80
 Bit8u  gs_dng13_passage5_flag = 0; // ds:0x3f81
 Bit8u  gs_dng13_money_flag = 0; // ds:0x3f82
 Bit8u  gs_dng13_chest_equips[13] = {
-	ITEM_PICKAXE,	 3,
-	ITEM_SHOVEL, 	 1,
-	ITEM_ROPE,	 3,
-	ITEM_HAMMER,	 3,
-	ITEM_TORCH_OFF, 15,
-	ITEM_POT_HELMET, 1,
+	ITEM_HACKE,		 3,
+	ITEM_SCHAUFEL,	 	 1,
+	ITEM_SEIL,		 3,
+	ITEM_HAMMER,		 3,
+	ITEM_FACKEL__UNLIT,	15,
+	ITEM_TOPFHELM,	 	 1,
 	0xff
 }; // ds:0x3f83
 Bit8u  gs_dng13_chest0_content[6] = {
-	ITEM_DAGGER, ITEM_TINDERBOX, ITEM_TORCH_OFF, ITEM_TORCH_OFF, ITEM_ROPE, 0xff }; // ds:0x3f90
+	ITEM_DOLCH, ITEM_ZUNDERKAESTCHEN, ITEM_FACKEL__UNLIT, ITEM_FACKEL__UNLIT, ITEM_SEIL, 0xff }; // ds:0x3f90
 Bit8u  gs_dng13_chest1_content[5] = {
-	ITEM_DAGGER, ITEM_SWORD, ITEM_TORCH_OFF, ITEM_TINDERBOX, 0xff }; // ds:0x3f96
+	ITEM_DOLCH, ITEM_SCHWERT, ITEM_FACKEL__UNLIT, ITEM_ZUNDERKAESTCHEN, 0xff }; // ds:0x3f96
 Bit8s  gs_dng12_tunnel1 = 45; // ds:0x3f9b
 Bit8s  gs_dng12_tunnel2 = 40; // ds:0x3f9c
 Bit8s  gs_dng12_tunnel3 = 35; // ds:0x3f9d
@@ -1775,17 +1775,17 @@ Bit8s  gs_dng12_obstacle_hp = 40; // ds:0x3fa7, {-25,...,40}
 Bit8u  gs_dng12_obstacle_active = 1; // ds:0x3fa8
 Bit8u  gs_dng12_speartrap_active = 1; // ds:0x3fa9
 Bit8u  gs_dng12_chest1_content[12] = {
-	ITEM_CHAIN_MAIL,
-	ITEM_CHAIN_MAIL,
+	ITEM_KETTENHEMD,
+	ITEM_KETTENHEMD,
 	ITEM_KRIEGSBEIL,
 	ITEM_KRIEGSBEIL,
-	ITEM_SHORT_SWORD,
-	ITEM_SHORT_SWORD,
-	ITEM_SHORT_SWORD,
-	ITEM_LEATHER_HELMET,
-	ITEM_LEATHER_HELMET,
-	ITEM_LE_POTION,
-	ITEM_AE_POTION,
+	ITEM_KURZSCHWERT,
+	ITEM_KURZSCHWERT,
+	ITEM_KURZSCHWERT,
+	ITEM_LEDERHELM,
+	ITEM_LEDERHELM,
+	ITEM_HEILTRANK,
+	ITEM_ZAUBERTRANK,
 	0xff }; // ds:0x3faa
 Bit8u  gs_dng14_money_flag = 0; // ds:0x3fb6
 Bit8u  gs_dng14_alarm_flag = 0; // ds:0x3fb7
@@ -1805,35 +1805,35 @@ Bit8u  gs_dng14_orknase_flag = 0; // ds:0x3fc4
 Bit8u  gs_dng14_spooky_flag = 0; // ds:0x3fc5
 Bit8u  gs_dng14_cellarexit_flag = 0; // ds:0x3fc6
 Bit8u  gs_dng14_chest_pantry[9] = {
-	ITEM_FOOD_PACKAGE, 50,
-	ITEM_BEER, 20,
-	ITEM_WINE, 20,
-	ITEM_BRANDY, 5,
+	ITEM_PROVIANTPAKET, 50,
+	ITEM_BIER, 20,
+	ITEM_WEINFLASCHE, 20,
+	ITEM_SCHNAPSFLASCHE, 5,
 	0xff
 }; // ds:0x3fc7
 Bit8u  gs_dng14_chest_gear[13] = {
-	ITEM_PICKAXE, 3,
-	ITEM_SHOVEL, 2,
-	ITEM_ROPE, 3,
-	ITEM_TORCH_OFF, 14,
-	ITEM_OIL, 20,
-	ITEM_CROWBAR, 3,
+	ITEM_HACKE, 3,
+	ITEM_SCHAUFEL, 2,
+	ITEM_SEIL, 3,
+	ITEM_FACKEL__UNLIT, 14,
+	ITEM_OEL, 20,
+	ITEM_BRECHEISEN, 3,
 	0xff
 }; // ds:0x3fd0
 Bit8u  gs_dng14_chest_barrel[7] = {
-	ITEM_SPEAR, 3,
-	ITEM_HALBERD, 3,
+	ITEM_SPEER, 3,
+	ITEM_HELLEBARDE, 3,
 	ITEM_ZWEILILIEN, 1,
 	0xff
 }; // ds:0x3fdd
 Bit8u gs_dng14_chest_x1[7] = { 0x5c, 0x9a, 0x9a, 0x0e, 0x9b, 0x9b, 0xff }; // ds:0x3fe4
 Bit8u gs_dng14_chest_x2[16] = { 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x9a, 0x9a, 0x9a, 0x9b, 0x9b, 0x9b, 0xff }; // ds:0x3feb
 Bit8u gs_dng14_chest_x3[11] = {
-	ITEM_SHORTBOW, 3,
-	ITEM_CROSSBOW, 1,
-	ITEM_THROWING_KNIFE, 4,
+	ITEM_KURZBOGEN, 3,
+	ITEM_ARMBRUST, 1,
+	ITEM_WURFMESSER, 4,
 	ITEM_BOLTS, 20,
-	ITEM_ARROWS, 50,
+	ITEM_PFEIL, 50,
 	0xff
 }; // ds:0x3ffb
 Bit8u gs_dng14_chest_x4[14] = { 0x03, 0x03, 0x03, 0x03, 0x01, 0x01, 0x0e, 0x0e, 0x0e, 0x0e, 0x87, 0x87, 0x92, 0xff }; // ds:0x4006
@@ -1867,23 +1867,23 @@ Bit8u  gs_dng04_chest_corpse2[10] = { 0x0e, 0x13, 0x54, 0x79, 0x48, 0x1e, 0x55, 
 
 Bit8u  gs_dng06_chest1_content[16] = { 0x70, 0x70, 0x01, 0x01, 0x35, 0x35, 0x4e, 0x4e, 0x07, 0x07, 0x0e, 0x0e, 0x0c, 0x0c, 0x50, 0xff }; // ds:0x40bf
 Bit8u  gs_dng06_chest_dasptreas[17] = {
-	ITEM_CHAIN_MAIL_MAGIC, 1,
-	ITEM_GOLD_JEWELRY, 1,
-	ITEM_GOLD_JEWELRY, 1,
-	ITEM_STRONG_LE_POTION, 1,
-	ITEM_STRONG_LE_POTION, 1,
-	ITEM_STRONG_AE_POTION, 1,
-	ITEM_STRONG_AE_POTION, 1,
-	ITEM_KK_ELIXIR, 1,
+	ITEM_KETTENHEMD__MAGIC, 1,
+	ITEM_GOLDSCHMUCK, 1,
+	ITEM_GOLDSCHMUCK, 1,
+	ITEM_STARKER_HEILTRANK, 1,
+	ITEM_STARKER_HEILTRANK, 1,
+	ITEM_ZAUBERTRANK_STARK, 1,
+	ITEM_ZAUBERTRANK_STARK, 1,
+	ITEM_KK_ELIXIER, 1,
 	0xff
 }; // ds:0x40cf
    //
 Bit8u  gs_dng08_chest1_content[11] = {
-	ITEM_SABER, 8,
-	ITEM_SPEAR, 3,
-	ITEM_MACE, 2,
-	ITEM_SHORTBOW, 1,
-	ITEM_ARROWS, 40,
+	ITEM_SAEBEL, 8,
+	ITEM_SPEER, 3,
+	ITEM_STREITKOLBEN, 2,
+	ITEM_KURZBOGEN, 1,
+	ITEM_PFEIL, 40,
 	0xff
 }; // ds:0x40e0
 Bit8u  gs_dng08_chest2_content[2] = { 0xb1, 0xff }; // ds:0x40eb
@@ -1964,9 +1964,9 @@ Bit8u  gs_dng15_undead_fight = 0; // ds:0x41e4
 Bit8u  gs_dng15_chest_equips[7] = { 0x5d, 0x02, 0x1b, 0x03, 0x65, 0x01, 0xff }; // ds:0x41e5
 Bit8u  gs_dng01_chest1_content[8] = { 0x70, 0x79, 0x79, 0x79, 0x1b, 0x08, 0x18, 0xff }; // ds:0x41ec
 Bit8u  gs_dng01_chest2_content[10] = { 0x03, 0x6d, 0x5c, 0x19, 0x29, 0x24, 0x1d, 0x27, 0x91, 0xff }; // ds:0x41f4
-Bit8u  gs_dng01_chest3_content[2] = { ITEM_DAGGER, 0xff }; // ds:0x41fe
+Bit8u  gs_dng01_chest3_content[2] = { ITEM_DOLCH, 0xff }; // ds:0x41fe
 Bit8u  gs_dng01_chest5_content[13] = { 0x6e, 0x6e, 0x03, 0x03, 0x70, 0x70, 0x43, 0x62, 0x62, 0x62, 0x10, 0x66, 0xff }; // ds:0x4200
-Bit8u  gs_dng01_chest7_content[5] = { ITEM_SWORD, ITEM_DAGGER, ITEM_GOLD_JEWELRY, ITEM_PICKLOCKS, 0xff }; // ds:0x420d
+Bit8u  gs_dng01_chest7_content[5] = { ITEM_SCHWERT, ITEM_DOLCH, ITEM_GOLDSCHMUCK, ITEM_DIETRICHE, 0xff }; // ds:0x420d
 Bit8s  gs_unconscious_message[7] = {0}; // ds:0x4212
 Bit8s  gs_food_message[7] = {0};	// ds:0x4219
 unsigned char g_unkn_026[2] = { 0, 0 }; // ds:0x4220

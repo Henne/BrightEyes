@@ -175,7 +175,7 @@ signed short DNG07_handler(void)
 
 			if (GUI_bool(get_tx(3)))
 			{
-				get_item(ITEM_MU_ELIXIR, 1, 1);
+				get_item(ITEM_MU_ELIXIER, 1, 1);
 
 				gs_dng07_muelixier_flag = 2;
 			}
@@ -193,7 +193,7 @@ signed short DNG07_handler(void)
 		} else {
 			if (GUI_bool(get_tx(5)))
 			{
-				get_item(ITEM_MU_ELIXIR, 1, 1);
+				get_item(ITEM_MU_ELIXIER, 1, 1);
 
 				gs_dng07_muelixier_flag = 2;
 			}
@@ -209,7 +209,7 @@ signed short DNG07_handler(void)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
-			get_item(ITEM_MU_ELIXIR_BAD, 1, 1);
+			get_item(ITEM_MU_ELIXIER__BAD, 1, 1);
 
 			gs_dng07_antimuelixier_flag = 1;
 		}

@@ -160,17 +160,17 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 			gs_umbrik_quest_gorah = 1;
 		} else if (state == 15) {
 			/* check if the heroes have the RUNENKNOCHEN / BONE WITH RUNE */
-			g_dialog_next_state = (get_first_hero_with_item(ITEM_BONE_WITH_RUNE) != -1 ? 16 : 17);
+			g_dialog_next_state = (get_first_hero_with_item(ITEM_KNOCHEN_MIT_RUNE) != -1 ? 16 : 17);
 		} else if (state == 19) {
 			/* give the RUNENKNOCHEN / BONE WITH RUNE to UMBRIK */
-			hero = get_hero(get_first_hero_with_item(ITEM_BONE_WITH_RUNE));
-			drop_item(hero, get_item_pos(hero, ITEM_BONE_WITH_RUNE), 1);
+			hero = get_hero(get_first_hero_with_item(ITEM_KNOCHEN_MIT_RUNE));
+			drop_item(hero, get_item_pos(hero, ITEM_KNOCHEN_MIT_RUNE), 1);
 		} else if (state == 23) {
 			/* mark UMBRIK SIEBENSTEIN as done */
 			gs_informer_flags[INFORMER_UMBRIK] = 2;
 
 			/* get EMPFEHLUNGSSCHREIBEN / LETTER OF INTRODUCTION */
-			get_item(ITEM_WRITING_OF_SIEBENSTEIN, 1, 1);
+			get_item(ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN, 1, 1);
 
 			/* make BEORN HJALLASSON known */
 			if (!gs_informer_flags[INFORMER_BEORN]) gs_informer_flags[INFORMER_BEORN] = 1;
@@ -438,7 +438,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 			if (!gs_informer_flags[INFORMER_ASGRIMM]) gs_informer_flags[INFORMER_ASGRIMM] = 1;
 		} else if (state == 24) {
 			/* the group has the SCHWARZE STATUETTE/BLACK FIGURINE */
-			g_dialog_next_state = (get_first_hero_with_item(ITEM_BLACK_FIGURINE) != -1 ? 27 : 28);
+			g_dialog_next_state = (get_first_hero_with_item(ITEM_SCHWARZE_STATUETTE) != -1 ? 27 : 28);
 		}
 	} else if (informer == 1) {
 		/* TIOMAR SWAFNILDSSON */
@@ -449,7 +449,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		} else if (state == 1) {
 			g_dialog_next_state = (gs_tiomar_awaits_letter ? 36 : 3);
 		} else if (state == 4) {
-			g_dialog_next_state = (get_first_hero_with_item(ITEM_WRITING_OF_SIEBENSTEIN) != -1 ? 6 : 7);
+			g_dialog_next_state = (get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN) != -1 ? 6 : 7);
 		} else if (state == 12 || state == 42) {
 				/* check if the party already has this map piece */
 				if (gs_treasure_maps[8] == 2) g_tmap_double2 = 1;
@@ -484,7 +484,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		} else if (state == 34) {
 			gs_tiomar_awaits_letter = 1;
 		} else if (state == 36) {
-			g_dialog_next_state = (get_first_hero_with_item(ITEM_WRITING_OF_SIEBENSTEIN) != -1 ? 37 : 2);
+			g_dialog_next_state = (get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN) != -1 ? 37 : 2);
 		} else if (state == 45) {
 			g_dialog_next_state = (gs_informer_flags[INFORMER_UMBRIK] == 2 ? 46 : 47);
 		}
@@ -873,7 +873,7 @@ signed short count_map_parts(void)
 signed short has_intro_letter(void)
 {
 	/* check for the introduction letter / Empfehlungsschreiben */
-	return (get_first_hero_with_item(ITEM_WRITING_OF_HETMAN) != -1) ? 1 : 0;
+	return (get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN) != -1) ? 1 : 0;
 }
 
 #if !defined(__BORLANDC__)

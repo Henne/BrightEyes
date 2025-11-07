@@ -124,10 +124,10 @@ void hunt_karen(void)
 
 	if (answer == 1) {
 		/* check for a hunting weapon, BOWS, CROSSBOWS or SPEAR */ /* TODO 2021-04-18: Original-Bug: What about magic spear? sling? (maybe not) */
-		if ((get_first_hero_with_item(ITEM_SHORTBOW) != -1) ||
-			(get_first_hero_with_item(ITEM_LONGBOW) != -1) ||
-			(get_first_hero_with_item(ITEM_CROSSBOW) != -1) ||
-			(get_first_hero_with_item(ITEM_SPEAR) != -1))
+		if ((get_first_hero_with_item(ITEM_KURZBOGEN) != -1) ||
+			(get_first_hero_with_item(ITEM_LANGBOGEN) != -1) ||
+			(get_first_hero_with_item(ITEM_ARMBRUST) != -1) ||
+			(get_first_hero_with_item(ITEM_SPEER) != -1))
 		{
 			hero = get_hero(0);
 			/* make a STEALTH+2 test and count the heroes who passed it */
@@ -163,14 +163,14 @@ void hunt_karen(void)
 
 					GUI_output(get_tx2(8));
 					/* get 80 FOOD PACKAGES */
-					get_item(ITEM_FOOD_PACKAGE, 1, 80);
+					get_item(ITEM_PROVIANTPAKET, 1, 80);
 
 				} else if (passed) {
 					/* at least one of the group passed MISSLE WEAPON+0 */
 
 					GUI_output(get_tx2(7));
 					/* get 40 FOOD PACKAGES */
-					get_item(ITEM_FOOD_PACKAGE, 1, 40);
+					get_item(ITEM_PROVIANTPAKET, 1, 40);
 				} else {
 					/* everybody failed MISSLE WEAPON+0 */
 					GUI_output(get_tx2(6));
@@ -204,10 +204,10 @@ void hunt_wildboar(void)
 
 	if (answer == 1) {
 		/* check for a hunting weapon, BOWS, CROSSBOWS or SPEAR */ /* TODO 2021-04-18: Original-Bug: What about magic spear? sling? (maybe not) */
-		if ((get_first_hero_with_item(ITEM_SHORTBOW) != -1) ||
-			(get_first_hero_with_item(ITEM_LONGBOW) != -1) ||
-			(get_first_hero_with_item(ITEM_CROSSBOW) != -1) ||
-			(get_first_hero_with_item(ITEM_SPEAR) != -1))
+		if ((get_first_hero_with_item(ITEM_KURZBOGEN) != -1) ||
+			(get_first_hero_with_item(ITEM_LANGBOGEN) != -1) ||
+			(get_first_hero_with_item(ITEM_ARMBRUST) != -1) ||
+			(get_first_hero_with_item(ITEM_SPEER) != -1))
 		{
 
 			hero = get_hero(0);
@@ -242,7 +242,7 @@ void hunt_wildboar(void)
 
 					GUI_output(get_tx2(17));
 					/* get 30 FOOD PACKAGES */
-					get_item(ITEM_FOOD_PACKAGE, 1, 30);
+					get_item(ITEM_PROVIANTPAKET, 1, 30);
 
 				} else {
 					/* everybody failed MISSLE WEAPON+0 */

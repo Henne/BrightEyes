@@ -30,8 +30,8 @@ STATIC_ASSERT(sizeof(struct struct_attribs) == 3, struct_attribs_needs_to_be_3_b
 struct inventory_flags {
 	/* inventory position + 0x04 */
 	unsigned short broken		:1;
-	unsigned short half_empty	:1; /* only used for ITEM_WATERSKIN */
-	unsigned short empty		:1; /* only used for ITEM_WATERSKIN. for an empty waterskin, both  'empty' and 'half_empty' flags are set */
+	unsigned short half_empty	:1; /* only used for ITEM_WASSERSCHLAUCH */
+	unsigned short empty		:1; /* only used for ITEM_WASSERSCHLAUCH. for an empty waterskin, both  'empty' and 'half_empty' flags are set */
 	unsigned short magic		:1;
 	unsigned short bit4		:1; /* unused */
 	unsigned short poison_expurgicum:1; /* flag set if a weapon is poisoned by Expurgicum */

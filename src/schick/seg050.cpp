@@ -645,15 +645,15 @@ void level_up(signed short hero_pos)
 		hero->mr = mr;
 
 		/* check for STIRNREIF [blau] / CORONET [blue] equipped => MR + 2 */
-		if (hero->inventory[HERO_INVENTORY_SLOT_HEAD].item_id == ITEM_CORONET_BLUE) {
+		if (hero->inventory[HERO_INVENTORY_SLOT_HEAD].item_id == ITEM_STIRNREIF__BLUE) {
 			hero->mr += 2;
 		}
 		/* check for RING / RING equipped => MR + 2 */
-		if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_RING_RED) {
+		if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_RING__RED) {
 			hero->mr += 2;
 		}
 		/* check for AMULETT / in inventory => MR + 5 */
-		if (get_item_pos(hero, ITEM_AMULET_BLUE) != -1) {
+		if (get_item_pos(hero, ITEM_AMULETT__BLUE) != -1) {
 			hero->mr += 5;
 		}
 

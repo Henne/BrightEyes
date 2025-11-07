@@ -30,22 +30,22 @@ namespace M302de {
 #endif
 
 static const signed int g_hero_startup_items[12][4] = {
-	{ ITEM_DAGGER, ITEM_THROWING_KNIFE, ITEM_THROWING_KNIFE, -1 }, /* Gaukler */
-	{ ITEM_LONGBOW, ITEM_DAGGER, -1, -1 }, /* Jaeger */
-	{ ITEM_SWORD, ITEM_DAGGER, ITEM_LEATHER_ARMOR, -1 }, /* Krieger */
-	{ ITEM_RAPIER, ITEM_DAGGER, ITEM_PICKLOCKS, -1 }, /* Streuner */
-	{ ITEM_SKRAJA, ITEM_SABER, ITEM_BRANDY, -1 }, /* Thorwaler */
-	{ ITEM_MACE, ITEM_CROWBAR, ITEM_HAMMER, -1 }, /* Zwerg */
-	{ ITEM_WITCHES_BROOM, ITEM_EINBEERE, ITEM_EINBEERE, -1 }, /* Hexe */
-	{ ITEM_VOLCANIC_GLASS_DAGGER, ITEM_WHIRLWEED, ITEM_JORUGA_ROOT, -1 }, /* Druide */
-	{ ITEM_MAGIC_WAND, ITEM_DAGGER, ITEM_SCHREIBZEUG, ITEM_ROBE_GREEN }, /* Magier */
-	{ ITEM_LONGBOW, ITEM_RAPIER, ITEM_HARP, -1 }, /* Auelf */
-	{ ITEM_ROBBENTOETER, ITEM_SPEAR, ITEM_FLUTE, -1 }, /* Firnelf */
-	{ ITEM_LONGBOW, ITEM_KNIFE, ITEM_FLUTE, -1 } /* Waldelf */
+	{ ITEM_DOLCH, ITEM_WURFMESSER, ITEM_WURFMESSER, -1 }, /* Gaukler */
+	{ ITEM_LANGBOGEN, ITEM_DOLCH, -1, -1 }, /* Jaeger */
+	{ ITEM_SCHWERT, ITEM_DOLCH, ITEM_LEDERHARNISCH, -1 }, /* Krieger */
+	{ ITEM_RAPIER, ITEM_DOLCH, ITEM_DIETRICHE, -1 }, /* Streuner */
+	{ ITEM_SKRAJA, ITEM_SAEBEL, ITEM_SCHNAPSFLASCHE, -1 }, /* Thorwaler */
+	{ ITEM_STREITKOLBEN, ITEM_BRECHEISEN, ITEM_HAMMER, -1 }, /* Zwerg */
+	{ ITEM_HEXENBESEN, ITEM_EINBEERE, ITEM_EINBEERE, -1 }, /* Hexe */
+	{ ITEM_VULKANGLASDOLCH, ITEM_WIRSELKRAUT, ITEM_JORUGAWURZEL, -1 }, /* Druide */
+	{ ITEM_ZAUBERSTAB, ITEM_DOLCH, ITEM_SCHREIBZEUG, ITEM_ROBE__GREEN_1 }, /* Magier */
+	{ ITEM_LANGBOGEN, ITEM_RAPIER, ITEM_HARFE, -1 }, /* Auelf */
+	{ ITEM_ROBBENTOETER, ITEM_SPEER, ITEM_FLOETE, -1 }, /* Firnelf */
+	{ ITEM_LANGBOGEN, ITEM_MESSER, ITEM_FLOETE, -1 } /* Waldelf */
 }; // ds:0xae48
 
 static const signed int g_hero_startup_items_all[4] = {
-	ITEM_WATERSKIN, ITEM_FOOD_PACKAGE, ITEM_FOOD_PACKAGE, ITEM_TROUSERS
+	ITEM_WASSERSCHLAUCH, ITEM_PROVIANTPAKET, ITEM_PROVIANTPAKET, ITEM_HOSE
 }; // ds:0xaea8
 
 /**
@@ -271,7 +271,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 	}
 
 	/* poisoned */
-	if (inventory_p->item_id == ITEM_KUKRIS_DAGGER || inventory_p->item_id == ITEM_KUKRIS_MENGBILAR ||
+	if (inventory_p->item_id == ITEM_KUKRISDOLCH || inventory_p->item_id == ITEM_KUKRIS_MENGBILAR ||
 		inventory_p->flags.poison_expurgicum || inventory_p->flags.poison_vomicum ||
 		hero->inventory[pos].poison_type != POISON_TYPE_NONE) {
 
@@ -279,7 +279,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 	}
 
 	/* magic wand */
-	if (inventory_p->item_id == ITEM_MAGIC_WAND) {
+	if (inventory_p->item_id == ITEM_ZAUBERSTAB) {
 		sprintf(g_text_output_buf, get_tx2(53), hero->staff_level);
 		strcat(g_dtp2, g_text_output_buf);
 	}
@@ -555,19 +555,19 @@ lab04:
 				hero2->items_num++;
 
 				/* special items */
-				if (item_id2 == ITEM_SICKLE_MAGIC) {
+				if (item_id2 == ITEM_SICHEL__MAGIC) {
 					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] + 3;
 					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] - 3;
 				}
-				if (item_id2 == ITEM_AMULET_BLUE) {
+				if (item_id2 == ITEM_AMULETT__BLUE) {
 					hero1->mr = hero1->mr + 5;
 					hero2->mr = hero2->mr - 5;
 				}
-				if (item_id1 == ITEM_SICKLE_MAGIC) {
+				if (item_id1 == ITEM_SICHEL__MAGIC) {
 					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
 					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
 				}
-				if (item_id1 == ITEM_AMULET_BLUE) {
+				if (item_id1 == ITEM_AMULETT__BLUE) {
 					hero1->mr = hero1->mr - 5;
 					hero2->mr = hero2->mr + 5;
 				}
@@ -639,11 +639,11 @@ lab04:
 		memset(&hero1->inventory[pos1], 0, sizeof(inventory));
 
 		/* special items */
-		if (item_id1 == ITEM_SICKLE_MAGIC) {
+		if (item_id1 == ITEM_SICHEL__MAGIC) {
 			hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
 			hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
 		}
-		if (item_id1 == ITEM_AMULET_BLUE) {
+		if (item_id1 == ITEM_AMULETT__BLUE) {
 			hero1->mr = hero1->mr - 5;
 			hero2->mr = hero2->mr + 5;
 		}
@@ -671,7 +671,7 @@ void startup_equipment(struct struct_hero *hero)
 	if ((hero->sex != 0) && (hero->typus != HERO_TYPE_KRIEGER) && (hero->typus != HERO_TYPE_MAGIER))
        	{
 		/* female non-warriors and non-mages get a free shirt */
-		give_hero_new_item(hero, ITEM_SHIRT, 1, 1);
+		give_hero_new_item(hero, ITEM_HEMD, 1, 1);
 		move_item(HERO_INVENTORY_SLOT_BODY, HERO_INVENTORY_SLOT_KNAPSACK_3, hero);
 	}
 
@@ -686,19 +686,19 @@ void startup_equipment(struct struct_hero *hero)
 	}
 
 	if (hero->typus == HERO_TYPE_KRIEGER) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_LEATHER_ARMOR), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_LEDERHARNISCH), hero);
 	}
 
 	if (hero->typus == HERO_TYPE_MAGIER) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_ROBE_GREEN), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_ROBE__GREEN_1), hero);
 	}
 
 	if ((hero->typus == HERO_TYPE_JAEGER) ||
 		(hero->typus == HERO_TYPE_AUELF) ||
 		(hero->typus == HERO_TYPE_WALDELF))
 	{
-		give_hero_new_item(hero, ITEM_ARROWS, 1, 20);
-		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);
+		give_hero_new_item(hero, ITEM_PFEIL, 1, 20);
+		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_PFEIL), hero);
 	}
 }
 
@@ -724,13 +724,13 @@ signed int get_max_light_time(void)
 		for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
 			/* search for a burning torch */
-			if (hero->inventory[j].item_id == ITEM_TORCH_ON) {
+			if (hero->inventory[j].item_id == ITEM_FACKEL__LIT) {
 
 				if (hero->inventory[j].lighting_timer > retval) {
 					retval = hero->inventory[j].lighting_timer;
 				}
 
-			} else if (hero->inventory[j].item_id == ITEM_LANTERN_ON) {
+			} else if (hero->inventory[j].item_id == ITEM_LATERNE__LIT) {
 
 				/* search for a burning lantern */
 
@@ -861,7 +861,7 @@ signed int get_full_waterskin_pos(const struct struct_hero *hero)
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
 		/* look for a non-empty waterskin */
-		if ((hero->inventory[i].item_id == ITEM_WATERSKIN) && !hero->inventory[i].flags.empty)
+		if ((hero->inventory[i].item_id == ITEM_WASSERSCHLAUCH) && !hero->inventory[i].flags.empty)
 		{
 			inv_pos = i;
 			break;

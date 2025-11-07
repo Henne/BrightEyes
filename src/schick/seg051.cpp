@@ -35,19 +35,19 @@ namespace M302de {
 
 static const signed short g_campfights[4] = { 0x00d9, 0x00da, 0x00db, 0x00e8 }; // ds:0x6694
 struct gather_herbs g_gather_herbs_table[13] = {
-	{ ITEM_ALRAUNE      ,  5, 1, 15 },
-	{ ITEM_BELMART      , 12, 3,  8 },
-	{ ITEM_DONF_SPRING  , 10, 2,  9 },
-	{ ITEM_GULMOND_LEAF , 15, 3,  8 },
-	{ ITEM_JORUGA_ROOT  , 15, 1, 10 },
-	{ ITEM_KAIRANHALM   ,  1, 1, 18 },
-	{ ITEM_SHURIN       , 12, 2,  8 },
-	{ ITEM_TARNELE      , 45, 5,  4 },
-	{ ITEM_THONNYS      ,  3, 1, 15 },
-	{ ITEM_EINBEERE     , 40, 4,  8 },
-	{ ITEM_WHIRLWEED    , 30, 2,  4 },
-	{ ITEM_KROTENSCHEMEL, 20, 2,  4 },
-	{ 0xff              ,  0, 0,  0 }
+	{ ITEM_ALRAUNE,			 5, 1, 15 },
+	{ ITEM_BELMART_BLATT,		12, 3,  8 },
+	{ ITEM_DONFSTENGEL,		10, 2,  9 },
+	{ ITEM_GULMOND_BLATT,		15, 3,  8 },
+	{ ITEM_JORUGAWURZEL,		15, 1, 10 },
+	{ ITEM_KAIRANHALM,		 1, 1, 18 },
+	{ ITEM_SHURINKNOLLE,		12, 2,  8 },
+	{ ITEM_TARNELE,			45, 5,  4 },
+	{ ITEM_THONNYSBLUETE,		 3, 1, 15 },
+	{ ITEM_EINBEERE,		40, 4,  8 },
+	{ ITEM_WIRSELKRAUT,		30, 2,  4 },
+	{ ITEM_EITRIGER_KROETENSCHEMEL,	20, 2,  4 },
+	{ 0xff,				 0, 0,  0 }
 }; // ds:0x669c
 signed char g_gather_herbs_special = -1; // ds:0x66d0
 static char g_gather_herbs_str_found[6] = "%d^%s"; // ds:0x66d1
@@ -555,7 +555,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 								for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-									if (hero2->inventory[j].item_id == ITEM_WATERSKIN) {
+									if (hero2->inventory[j].item_id == ITEM_WASSERSCHLAUCH) {
 
 										hero2->inventory[j].flags.empty = 0;
 										hero2->inventory[j].flags.half_empty = 0;
@@ -586,7 +586,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						}
 
 						/* the group may get three food packages */
-						if (!get_item(ITEM_FOOD_PACKAGE, 1, 3)) {
+						if (!get_item(ITEM_PROVIANTPAKET, 1, 3)) {
 							strcpy(g_dtp2, get_ttx(306));
 							g_request_refresh = 1;
 						} else {

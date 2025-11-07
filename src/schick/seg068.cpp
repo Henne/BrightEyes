@@ -276,7 +276,7 @@ void THO_arsenal(void)
 		load_in_head(13);
 
 		/* only show two options when the group has "LETTER FROM JADRA" or "LETTER OF INTRODUCTION" */
-		options = get_first_hero_with_item(ITEM_WRITING_OF_JARDA) != -1 || get_first_hero_with_item(ITEM_WRITING_OF_HETMAN) != -1 ? 2 : 1;
+		options = get_first_hero_with_item(ITEM_SCHREIBEN_VON_JARDA) != -1 || get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN) != -1 ? 2 : 1;
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), options, get_tx2(2), get_tx2(1));
@@ -350,7 +350,7 @@ void THO_magistracy(void)
 				GUI_output(get_tx2(14));
 
 				/* get "LETTER FROM JADRA" */
-				get_item(ITEM_WRITING_OF_JARDA, 1, 1);
+				get_item(ITEM_SCHREIBEN_VON_JARDA, 1, 1);
 
 			} else {
 				GUI_output(get_tx2(15));

@@ -26,7 +26,7 @@
 //#define STR_CD_MISSING                  (0x017e)    /* char[204]; "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NICHT LAUFF\x8eHIG. BITTE INSTALLIEREN SIE DIE GER\x8eTETREIBER F\x9aR DAS CD-ROM-LAUFWERK GEM\x8eSS IHRER CD-ROM-DOKUMENTATION UND STARTEN SIE DIE 'SCHICKSALSKLINGE' ERNEUT." */
 //#define STR_CD_INIT                     (0x024a)    /* char[37]; "INITIALISIERE CD-ROM IN LAUFWERK %c:" */
 // ?1
-//#define ITEMS_NOPLURAL                  (0x0270)    /* signed short[23]; { LAKRITZE (0x59), BONBONS (0x5a), SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), ÖL (0x29), EXPURGICUM (0xa6), VOMICUM (0xa8), GEGENGIFT (0xb4), ERZKLUMPEN (0xb5), LOBPREISUNGEN (0xbd), PLATTENZEUG (0x52), LEDERZEUG (0x54), KETTENZEUG (0x53), MIASTHMATICUM (0xee), HYLAILIC_FIRE (0xef), -1 } */
+//#define ITEMS_NOPLURAL                  (0x0270)    /* signed short[23]; { LAKRITZE (0x59), BONBONS (0x5a), SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), ÖL (0x29), EXPURGICUM (0xa6), VOMICUM (0xa8), GEGENGIFT (0xb4), ERZKLUMPEN (0xb5), LOBPREISUNGEN (0xbd), PLATTENZEUG (0x52), LEDERZEUG (0x54), KETTENZEUG (0x53), MIASTHMATICUM (0xee), HYLAILER_FEUER (0xef), -1 } */
 //#define ITEMS_PLURALWORDS               (0x029e)    /* signed short[7]; { DIETRICHE (0x23), SCHUHE (0x32), STIEFEL (0x33), SCHNURSCHUHE (0x34), BONBONS (0x5a), LOBPREISUNGEN (0xbd), -1 } */
 //#define ITEMS_GENDERS                   (0x02ac)    /* signed char[254] */
 //#define WEARABLE_ITEMS_JUGGLER          (0x03aa)    /* short[19]; array terminated by -1 */
@@ -49,9 +49,9 @@
 //#define POISON_POTIONS                  (0x08d3)    /* signed short[10]; { SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), 0xff } */
 //#define HERBS_TOXIC                     (0x08e7)    /* signed short[5]; { SHURINKNOLLE (0x7a), ALRAUNE (0x7e), LOTUSBLUTE (0x84), EITRIGER KROTENSCHEMEL (0x3e), 0xff } */
 //#define HERBS_UNEATABLE                 (0x08f1)    /* signed short[7]; { ILMENBLATT (0x80), FINAGEBÄUMCHEN (0x81), JORUGAWURZEL (0x82), KAIRANHALM (0x9d), OLGINWURZEL (0x9c), DONFSTENGEL (0x7c), 0xff } */
-//#define ELIXIR_POTIONS                  (0x08ff)    /* signed short[8]; { MU ELIXIER (0x93), KL ELIXIER (0x94), CH ELIXIER (0x95), FF ELIXIER (0x96), GE ELIXIER (0x97), IN ELIXIER (0x98), KK ELIXIER (0x99), 0xff } */
-//#define BAD_ELIXIRS                     (0x090f)    /* signed short[8]; { MU ELIXIER (0xe2), KL ELIXIER (0xe3), CH ELIXIER (0xe4), FF ELIXIER (0xe5), GE ELIXIER (0xe6), IN ELIXIER (0xe7), KK ELIXIER (0xe8), 0xff } */
-//#define ATTACK_ITEMS                    (0x091f)    /* signed short[3]; { ITEM_MIASTHMATICUM (0xee), ITEM_HYLAILIC_FIRE (0xef), -1 } */
+//#define ELIXIER_POTIONS                  (0x08ff)    /* signed short[8]; { MU ELIXIER (0x93), KL ELIXIER (0x94), CH ELIXIER (0x95), FF ELIXIER (0x96), GE ELIXIER (0x97), IN ELIXIER (0x98), KK ELIXIER (0x99), 0xff } */
+//#define BAD_ELIXIERS                     (0x090f)    /* signed short[8]; { MU ELIXIER (0xe2), KL ELIXIER (0xe3), CH ELIXIER (0xe4), FF ELIXIER (0xe5), GE ELIXIER (0xe6), IN ELIXIER (0xe7), KK ELIXIER (0xe8), 0xff } */
+//#define ATTACK_ITEMS                    (0x091f)    /* signed short[3]; { ITEM_MIASTHMATICUM (0xee), ITEM_HYLAILER_FEUER (0xef), -1 } */
 //#define MONNAME_GENDERS                 (0x0925)    /* signed char[78] */
 //#define STAFFSPELL_DESCRIPTIONS         (0x0973)    /* struct(6)[7]; struct{char attrib1, attrib2, attrib3, handicap, ae_cost, ae_mod;} */
 //#define SPELL_DESCRIPTIONS              (0x099d)    /* struct(10)[87]; struct{char herotype, attrib1, attrib2, attrib3, ae_cost, where_to_use, unkn6, target_type, range, fight;} */
@@ -703,14 +703,14 @@
 //#define DNG11_CHEST12                   (0x41ad)    /* unsigned char[13] */
 //#define DNG11_CHEST13                   (0x41ba)    /* unsigned char[6] */
 //#define DNG11_CHEST14                   (0x41c0)    /* unsigned char[6] */
-//#define DNG15_TOOK_CURSED_MONEY         (0x41c6)    /* unsigned char; {0,1} */
+//#define DNG15_TOOK__CURSED_MONEY         (0x41c6)    /* unsigned char; {0,1} */
 //#define DNG15_UNKNOWN_FLAG              (0x41c7)    /* unsigned char; {0,1} */
 //#define DNG15_REACHED_HANDS             (0x41c8)    /* unsigned char; {0,1} */
 //#define DNG15_LEVER_SOUTH               (0x41c9)    /* unsigned char; {0,1} */
 //#define DNG15_LEVER_NORTH               (0x41ca)    /* unsigned char; {0,1} */
 //#define DNG15_TOOK_HOE                  (0x41cb)    /* unsigned char; {0,1} */
 //#define DNG15_CEILINGS_A                (0x41cc)    /* unsigned char[18]; {0, 1, 2, 3, 4} */
-//#define DNG15_CURSED_MONEY_A            (0x41de)    /* unsigned char[6]; {0,1} */
+//#define DNG15__CURSED_MONEY_A            (0x41de)    /* unsigned char[6]; {0,1} */
 //#define DNG15_UNDEAD_FIGHT              (0x41e4)    /* unsigned char; {0,1} */
 //#define DNG15_CHEST_EQUIPS              (0x41e5)    /* unsigned char[7] */
 //#define DNG01_CHEST1_CONTENT            (0x41ec)    /* unsigned char[8] */

@@ -359,7 +359,7 @@ signed short DNG09_handler(void)
 
 			if (i == 1) {
 
-				get_item(ITEM_BLACK_FIGURINE, 1, 1);
+				get_item(ITEM_SCHWARZE_STATUETTE, 1, 1);
 
 			} else {
 

@@ -378,18 +378,18 @@ void tevent_029(void)
 			{
 				sub_hero_le(hero, 2);
 
-				item_pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
+				item_pos = get_item_pos(hero, ITEM_PROVIANTPAKET);
 
 				if (item_pos != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
 					drop_item(hero, item_pos, hero->inventory[item_pos].quantity);
 				}
 
-				item_pos = hero_count_item(hero, ITEM_WATERSKIN);
+				item_pos = hero_count_item(hero, ITEM_WASSERSCHLAUCH);
 
 				if (item_pos) {
 					/* hero looses the first WATERSKIN */
-					drop_item(hero, get_item_pos(hero, ITEM_WATERSKIN), item_pos - 1);
+					drop_item(hero, get_item_pos(hero, ITEM_WASSERSCHLAUCH), item_pos - 1);
 				}
 			}
 		}

@@ -195,7 +195,7 @@ void item_read_document(void)
 /* Borlandified and identical */
 void item_armatrutz(void)
 {
-	/* ID 171 = ITEM_CORONET_SILVER, 245 = ITEM_CORONET_GREEN */
+	/* ID 171 = ITEM_SILBERNER_STIRNREIF, 245 = ITEM_STIRNREIF__GREEN */
 
 	const signed int tx_index_bak = g_tx_file_index;
 
@@ -225,7 +225,7 @@ void item_armatrutz(void)
 /* Borlandified and identical */
 void item_flimflam(void)
 {
-	/* ID 174 = ITEM_AMULET_GREEN */
+	/* ID 174 = ITEM_AMULETT__GREEN */
 	const signed int tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT*/
@@ -296,9 +296,9 @@ void item_weapon_poison(void)
 	signed int bottle_id;
 
 	if ((get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_NONE) &&
-		(get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_SHORTBOW) &&
-		(get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LONGBOW) &&
-		(get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_CROSSBOW))
+		(get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_KURZBOGEN) &&
+		(get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LANGBOGEN) &&
+		(get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_ARMBRUST))
 		/* TODO: potential Original-Bug: What about sling? */
 	{
 
@@ -309,7 +309,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_VOMICUM), 1);
 
-			bottle_id = ITEM_FLASK_BRONZE;
+			bottle_id = ITEM_BRONZEFLASCHE;
 			break;
 		}
 		case ITEM_EXPURGICUM : {
@@ -318,47 +318,47 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_EXPURGICUM), 1);
 
-			bottle_id = ITEM_FLASK_BRONZE;
+			bottle_id = ITEM_BRONZEFLASCHE;
 			break;
 		}
-		case ITEM_SHURIN_POISON: {
+		case ITEM_SHURINKNOLLEKNOLLENGIFT: {
 			/* SHURIN-BULB POISON / SHURINKNOLLENGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SHURINKNOLLENGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SHURIN_POISON), 1);
+			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SHURINKNOLLEKNOLLENGIFT), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
-		case ITEM_ARAX_POISON: {
+		case ITEM_ARAXGIFT: {
 			/* ARAX POISON / ARAXGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ARAX;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ARAX_POISON), 1);
+			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ARAXGIFT), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
-		case ITEM_ANGST_POISON: {
+		case ITEM_ANGSTGIFT: {
 			/* FEAR POISON / ANGSTGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ANGSTGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ANGST_POISON), 1);
+			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ANGSTGIFT), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
-		case ITEM_SLEEP_POISON: {
+		case ITEM_SCHLAFGIFT: {
 			/* SLEPPING POISON / SCHALFGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SCHLAFGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SLEEP_POISON), 1);
+			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SCHLAFGIFT), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
 		case ITEM_GOLDLEIM: {
@@ -368,17 +368,17 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_GOLDLEIM), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
-		case ITEM_LOTUS_POISON: {
+		case ITEM_LOTUSGIFT: {
 			/* LOTUS POISON / LOTUSGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_LOTUSGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_LOTUS_POISON), 1);
+			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_LOTUSGIFT), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
 		case ITEM_KUKRIS: {
@@ -388,7 +388,7 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KUKRIS), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
 		case ITEM_BANNSTAUB: {
@@ -398,16 +398,16 @@ void item_weapon_poison(void)
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BANNSTAUB), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
-		case ITEM_KROETEN_POISON: {
+		case ITEM_KROETENSCHEMELGIFT: {
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_KROETENSCHEMEL;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KROETEN_POISON), 1);
+			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KROETENSCHEMELGIFT), 1);
 
-			bottle_id = ITEM_FLASK_GLASS;
+			bottle_id = ITEM_GLASFLASCHE;
 			break;
 		}
 		}
@@ -455,7 +455,7 @@ void item_magic_book(void)
 	get_itemuser()->spells[SP_HEPTAGON_UND_KROETENEI] += 2;
 
 	/* drop the book */
-	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BOOK_HEPTAGON), 1);
+	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BUCH__HEPTAGON), 1);
 }
 
 /* Borlandified and identical */
@@ -470,7 +470,7 @@ void item_brenne(void)
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	if (g_used_item_id == ITEM_LANTERN_ON) {
+	if (g_used_item_id == ITEM_LATERNE__LIT) {
 
 		/* refill burning lantern */
 
@@ -481,11 +481,11 @@ void item_brenne(void)
 #endif
 
 		/* look for oil at the spelluser() */
-		pos = get_item_pos(get_spelluser(), ITEM_OIL);
+		pos = get_item_pos(get_spelluser(), ITEM_OEL);
 
 		if (pos != -1) {
 			/* look for the burning lantern at the spelluser() ??? */
-			refill_pos = get_item_pos(get_spelluser(), ITEM_LANTERN_ON);
+			refill_pos = get_item_pos(get_spelluser(), ITEM_LATERNE__LIT);
 
 			/* reset the burning time of the lantern */
 			get_itemuser()->inventory[refill_pos].lighting_timer = 100;
@@ -494,7 +494,7 @@ void item_brenne(void)
 			drop_item(get_itemuser(), pos, 1);
 
 			/* give a bronze flask */
-			give_hero_new_item(get_itemuser(), ITEM_FLASK_BRONZE, 0, 1);
+			give_hero_new_item(get_itemuser(), ITEM_BRONZEFLASCHE, 0, 1);
 
 			/* prepare message */
 			sprintf(g_dtp2, get_tx(119), get_itemuser()->alias);
@@ -504,16 +504,16 @@ void item_brenne(void)
 		}
 	} else {
 
-		if (get_item_pos(get_itemuser(), ITEM_TINDERBOX) == -1) {
+		if (get_item_pos(get_itemuser(), ITEM_ZUNDERKAESTCHEN) == -1) {
 			/* No tinderbox */
 			sprintf(g_dtp2, get_tx(122), get_itemuser()->alias);
 		} else {
 
-			if (g_used_item_id == ITEM_TORCH_OFF) {
+			if (g_used_item_id == ITEM_FACKEL__UNLIT) {
 
 				g_light_type = LIGHTING_TORCH;
 
-			} else if (g_used_item_id == ITEM_LANTERN_OFF) {
+			} else if (g_used_item_id == ITEM_LATERNE__UNLIT) {
 
 				g_light_type = LIGHTING_LANTERN;
 
@@ -561,7 +561,7 @@ void item_bag(void)
 	GUI_output(get_ttx(775));
 
 	/* drop the BAG */
-	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BAG), 1);
+	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BEUTEL), 1);
 }
 
 #if !defined(__BORLANDC__)

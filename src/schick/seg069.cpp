@@ -60,7 +60,7 @@ void THO_hetmann(void)
 		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx(86), 0);
 
 		gs_got_letter_het = 1;
-		get_item(ITEM_WRITING_OF_HETMAN, 1, 1);
+		get_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN, 1, 1);
 
 	} else if (!gs_heard_announce || gs_got_main_quest != 0) {
 
@@ -127,7 +127,7 @@ void THO_hetmann(void)
 			gs_got_main_quest = 1;
 			gs_quested_months = 0;
 			gs_got_letter_het = 1;
-			get_item(ITEM_WRITING_OF_HETMAN, 1, 1);
+			get_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN, 1, 1);
 
 		} else if (answer == 3) {
 

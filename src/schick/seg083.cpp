@@ -419,7 +419,7 @@ void DNG08_search_bed(void)
 		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 92, 0));
 
 		/* a BRANDY BOTTLE */
-		get_item(ITEM_BRANDY, 1, 1);
+		get_item(ITEM_SCHNAPSFLASCHE, 1, 1);
 
 		GUI_output(g_dtp2);
 
@@ -431,7 +431,7 @@ void DNG08_search_bed(void)
 		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 14, 0));
 
 		/* a DAGGER */
-		get_item(ITEM_DAGGER, 1, 1);
+		get_item(ITEM_DOLCH, 1, 1);
 
 		GUI_output(g_dtp2);
 
@@ -479,7 +479,7 @@ void DNG08_chest00_loot(struct struct_chest* chest)
 		GUI_output(get_tx(32));
 
 		/* get 40 FOOD PACKAGES */
-		get_item(ITEM_FOOD_PACKAGE, 1, 40);
+		get_item(ITEM_PROVIANTPAKET, 1, 40);
 	}
 }
 
@@ -528,7 +528,7 @@ void DNG08_chest03_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0)
+	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0)
 	{
 		if (!(gs_dng08_chest35_looted & 1)) {
 
@@ -549,7 +549,7 @@ void DNG08_chest04_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot(chest);
 
@@ -563,7 +563,7 @@ void DNG08_chest05_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot(chest);
 

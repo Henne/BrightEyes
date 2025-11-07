@@ -258,7 +258,7 @@ void tevent_098(void)
 	struct struct_hero *hero;
 
 	/* TODO: this may not be correct */
-	i = get_first_hero_with_item(ITEM_ROPE) != -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1 ? 3 : 2; /* TODO: STAFFSPELL? */
+	i = get_first_hero_with_item(ITEM_SEIL) != -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1 ? 3 : 2; /* TODO: STAFFSPELL? */
 
 	do {
 		answer = GUI_radio(get_tx2(27), (signed char)i,	get_tx2(28), get_tx2(29), get_tx2(30));
@@ -771,7 +771,7 @@ void tevent_107(void)
 				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 1) <= 0)
 			{
 
-				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
+				if (get_first_hero_with_item(ITEM_SEIL) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
 					sprintf(g_dtp2, get_tx2(70), hero->alias);
 

@@ -62,7 +62,7 @@ signed short DNG06_handler(void)
 
 	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !gs_dng06_book_flag)
 	{
-		if (GUI_bool(get_tx(1)) && get_item(ITEM_BOOK_2, 1, 1))
+		if (GUI_bool(get_tx(1)) && get_item(ITEM_BUCH__2, 1, 1))
 		{
 			gs_dng06_book_flag = 1;
 		}
@@ -101,7 +101,7 @@ signed short DNG06_handler(void)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
-			get_item(ITEM_FOOD_PACKAGE, 1, 40);
+			get_item(ITEM_PROVIANTPAKET, 1, 40);
 			gs_dng06_proviant_flag = 1;
 		}
 
@@ -211,7 +211,7 @@ signed short DNG06_handler(void)
 			{
 				gs_dng06_goldkey_flag = 2;
 
-				get_item(ITEM_KEY_GOLDEN_1, 1, 1);
+				get_item(ITEM_GOLDENER_SCHLUESSEL, 1, 1);
 
 				/* TODO: This is not neccessary */
 				hero = get_first_hero_available_in_group();
@@ -599,8 +599,8 @@ void DNG09_pitfall(void)
 
 		if ((i = DNG_check_climb_tools()) != -1)
 		{
-			l3 = group_count_item(ITEM_ROPE);
-			l3 += group_count_item(ITEM_ROPE_LADDER);
+			l3 = group_count_item(ITEM_SEIL);
+			l3 += group_count_item(ITEM_STRICKLEITER);
 
 			if (l3 >= 2 || (l3 == 1 && i))
 			{
