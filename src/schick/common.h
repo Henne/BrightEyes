@@ -173,19 +173,19 @@ enum {
 
 enum {
 	HERO_TYPE_NONE		= 0,
-	HERO_TYPE_GAUKLER	= 1,	/* Gaukler */
-	HERO_TYPE_JAEGER	= 2,	/* Jaeger */
-	HERO_TYPE_KRIEGER	= 3,	/* Krieger */
-	HERO_TYPE_STREUNER	= 4,	/* Streuner */
-	HERO_TYPE_THORWALER	= 5,	/* Thorwaler */
-	HERO_TYPE_ZWERG		= 6,	/* Zwerg */
-	/* Magic users > 6 */
-	HERO_TYPE_HEXE		= 7,	/* Hexe */
-	HERO_TYPE_DRUIDE	= 8,	/* Druide */
-	HERO_TYPE_MAGIER	= 9,	/* Magier */
-	HERO_TYPE_AUELF		= 10,	/* Auelf */
-	HERO_TYPE_FIRNELF	= 11,	/* Firnelf */
-	HERO_TYPE_WALDELF	= 12,	/* Waldelf */
+	HERO_TYPE_GAUKLER	= 1,	/* juggler */
+	HERO_TYPE_JAEGER	= 2,	/* hunter */
+	HERO_TYPE_KRIEGER	= 3,	/* warrior */
+	HERO_TYPE_STREUNER	= 4,	/* stray */
+	HERO_TYPE_THORWALER	= 5,	/* Thorwalian */
+	HERO_TYPE_ZWERG		= 6,	/* dwarf */
+	/* magic users have id > 6 */
+	HERO_TYPE_HEXE		= 7,	/* witch */
+	HERO_TYPE_DRUIDE	= 8,	/* druid */
+	HERO_TYPE_MAGIER	= 9,	/* mage */
+	HERO_TYPE_AUELF		= 10,	/* green elf */
+	HERO_TYPE_FIRNELF	= 11,	/* ice elf */
+	HERO_TYPE_WALDELF	= 12,	/* sylvan elf */
 };
 
 enum {
