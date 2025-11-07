@@ -320,10 +320,10 @@ void status_menu(signed short hero_pos)
 			if (g_action >= 128 && g_action <= 152)
 			{
 				if (g_statuspage_sel_inv_slot_4 != -1) {
-					g_statuspage_sel_inv_slot_4 = g_action + 128;
+					g_statuspage_sel_inv_slot_4 = g_action - 128;
 					g_action = ACTION_ID_RETURN;
 				} else if (g_action <= 150) {
-					g_statuspage_sel_inv_slot_3 = g_action + 128;
+					g_statuspage_sel_inv_slot_3 = g_action - 128;
 					g_action = ACTION_ID_RETURN;
 				}
 			}
