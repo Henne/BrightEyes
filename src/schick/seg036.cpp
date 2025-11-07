@@ -113,10 +113,10 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	Bit16s *ani_index_ptr;
 
 	g_fig_anisheets[0][0] = 0;
-	g_fig_anisheets[0][242] = hero->sprite_no;
+	g_fig_anisheets[0][242] = hero->sprite_id;
 
 	sheet_ptr = (Bit8s*)&g_fig_anisheets[0][1];
-	ani_index_ptr = g_gfx_ani_index[hero->sprite_no];
+	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
 
 	i = 0;
 
@@ -164,12 +164,12 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[(g_fig_move_pathdir[i] + 12)], 2);
 			i += 2;
 			/* BP - 2 */
-			hero->bp_left = hero->bp_left - 2;
+			hero->fight_bp_left = hero->fight_bp_left - 2;
 		} else {
 			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[(g_fig_move_pathdir[i] + 8)], 2);
 			i++;
 			/* BP - 1 */
-			hero->bp_left--;
+			hero->fight_bp_left--;
 		}
 	}
 
@@ -243,7 +243,7 @@ signed int AFIG_change_hero_weapon(struct struct_hero *hero)
 
 	draw_fight_screen_pal(0);
 
-	hero->bp_left = hero->bp_left - 2;
+	hero->fight_bp_left = hero->fight_bp_left - 2;
 
 	return has_new_weapon;
 }
@@ -417,13 +417,13 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 	retval = 0;
 	done = 0;
 
-	while ((done == 0) && (hero->bp_left > 0)) {
+	while ((done == 0) && (hero->fight_bp_left > 0)) {
 
 		/* reset target fight-id */
 		hero->target_object_id = 0;
 
 		/* REMARK: spells usually require 5 BP */
-		if (hero->bp_left >= 3) {
+		if (hero->fight_bp_left >= 3) {
 
 			dir = hero->viewdir;
 
@@ -475,18 +475,18 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 					FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 
 					/* REMARK: spells usually require 5 BP */
-					if (hero->bp_left < 3) {
+					if (hero->fight_bp_left < 3) {
 
 						/* set BP to 0 */
-						hero->bp_left = 0;
+						hero->fight_bp_left = 0;
 					}
 				} else {
 					/* set BP to 0 */
-					hero->bp_left = 0;
+					hero->fight_bp_left = 0;
 				}
 			} else {
 				/* set BP to 0 */
-				hero->bp_left = 0;
+				hero->fight_bp_left = 0;
 			}
 		}
 	}
@@ -552,7 +552,7 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 	retval = 0;
 	done = 0;
 
-	while ((done == 0) && (hero->bp_left > 0)) {
+	while ((done == 0) && (hero->fight_bp_left > 0)) {
 
 		decided = 0;
 
@@ -596,7 +596,7 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 
 				if (!g_spell_descriptions[spell_id].range) {
 
-					while ((hero->bp_left != 0) && (done == 0)) {
+					while ((hero->fight_bp_left != 0) && (done == 0)) {
 
 						i = hero->viewdir;
 
@@ -616,14 +616,14 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 
 						if (hero->target_object_id != 0) {
 
-							if (hero->bp_left >= 5) {
+							if (hero->fight_bp_left >= 5) {
 
 								/* enough BP */
 								hero->spell_id = spell_id;
 								retval = 1;
 							} else {
 								/* set BP to 0 */
-								hero->bp_left = 0;
+								hero->fight_bp_left = 0;
 							}
 
 							done = 1;
@@ -643,16 +643,16 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 
 							} else {
 								/* set BP to 0 */
-								hero->bp_left = 0;
+								hero->fight_bp_left = 0;
 							}
 
 						} else {
 							/* set BP to 0 */
-							hero->bp_left = 0;
+							hero->fight_bp_left = 0;
 						}
 					}
 				} else {
-					while ((done == 0) && (hero->bp_left > 0)) {
+					while ((done == 0) && (hero->fight_bp_left > 0)) {
 
 						i = hero->viewdir;
 
@@ -671,14 +671,14 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 
 						if (hero->target_object_id != 0) {
 
-							if (hero->bp_left >= 5) {
+							if (hero->fight_bp_left >= 5) {
 
 								/* enough BP */
 								hero->spell_id = spell_id;
 								retval = 1;
 							} else {
 								/* set BP to 0 */
-								hero->bp_left = 0;
+								hero->fight_bp_left = 0;
 							}
 
 							done = 1;
@@ -698,12 +698,12 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 
 							} else {
 								/* set BP to 0 */
-								hero->bp_left = 0;
+								hero->fight_bp_left = 0;
 							}
 
 						} else {
 							/* set BP to 0 */
-							hero->bp_left = 0;
+							hero->fight_bp_left = 0;
 						}
 					}
 				}
@@ -854,17 +854,17 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 		}
 	}
 
-	if (hero->bp_left == 1) {
+	if (hero->fight_bp_left == 1) {
 		/* set BP to 0 */
-		hero->bp_left = 0;
+		hero->fight_bp_left = 0;
 	}
 
-	while ((done == 0) && (hero->bp_left > 0)) {
+	while ((done == 0) && (hero->fight_bp_left > 0)) {
 
 		/* REMARK: should be done in the timer */
 		CD_enable_repeat();
 
-		if ((hero->action_id == FIG_ACTION_FLEE) && (hero->bp_left > 0)) {
+		if ((hero->action_id == FIG_ACTION_FLEE) && (hero->fight_bp_left > 0)) {
 
 			if (!hero->flags.tied) {
 
@@ -885,21 +885,21 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 
 						if ((x_bak == x) && (y_bak == y)) {
 
-							hero->bp_left = 0;
+							hero->fight_bp_left = 0;
 						}
 					} else {
-						hero->bp_left = 0;
+						hero->fight_bp_left = 0;
 					}
 
-					if (hero->bp_left < 3) {
-						hero->bp_left = 0;
+					if (hero->fight_bp_left < 3) {
+						hero->fight_bp_left = 0;
 					}
 
 				} else {
-					hero->bp_left = 0;
+					hero->fight_bp_left = 0;
 				}
 			} else {
-				hero->bp_left = 0;
+				hero->fight_bp_left = 0;
 			}
 
 		} else {
@@ -914,14 +914,14 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 				if (AFIG_select_autospell(hero, hero_pos, hero->flags.renegade, x, y))
 				{
 					hero->action_id = FIG_ACTION_SPELL;
-					hero->bp_left = 0;
+					hero->fight_bp_left = 0;
 
 				} else {
 					try_autospell = 0;
 				}
 			}
 
-			if ((hero->action_id == FIG_ACTION_MOVE) && (hero->bp_left > 0)) {
+			if ((hero->action_id == FIG_ACTION_MOVE) && (hero->fight_bp_left > 0)) {
 
 				if (FIG_get_range_weapon_type(hero) != -1) {
 
@@ -940,7 +940,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 						}
 
 						/* set BP to 0 */
-						hero->bp_left = 0;
+						hero->fight_bp_left = 0;
 					} else {
 						if (!AFIG_change_hero_weapon(hero)) {
 							done = 1;
@@ -949,7 +949,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 				} else {
 					hero->target_object_id = 0;
 
-					if (hero->bp_left >= 3) {
+					if (hero->fight_bp_left >= 3) {
 
 						i = hero->viewdir;
 						cnt = 0;
@@ -971,7 +971,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 					if (hero->target_object_id != 0) {
 
 						hero->action_id = FIG_ACTION_MELEE_ATTACK;
-						hero->bp_left = 0;
+						hero->fight_bp_left = 0;
 
 					} else {
 
@@ -995,17 +995,17 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 								FIG_search_obj_on_cb(hero_pos + 1, &x, &y);
 
 								if ((x_bak == x) && (y_bak == y)) {
-									hero->bp_left = 0;
+									hero->fight_bp_left = 0;
 								}
 
-								if (hero->bp_left < 3) {
-									hero->bp_left = 0;
+								if (hero->fight_bp_left < 3) {
+									hero->fight_bp_left = 0;
 								}
 							} else {
-								hero->bp_left = 0;
+								hero->fight_bp_left = 0;
 							}
 						} else {
-							hero->bp_left = 0;
+							hero->fight_bp_left = 0;
 						}
 					}
 				}

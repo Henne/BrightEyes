@@ -158,7 +158,7 @@ void ask_miracle(void)
 						if (!gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS]) {
 
 							miracle_modify((Bit8u*)&get_hero(0)->skills[TA_SCHWERTER] - (Bit8u*)get_hero(0), DAYS(3), 1); /* for 3 days: skill 'Schwerter' + 1 */
-							miracle_modify((Bit8u*)&get_hero(0)->at_weapon[WEAPON_TYPE_SCHWERT] - (Bit8u*)get_hero(0), DAYS(3), 1); /* for 3 days: AT + 1 */
+							miracle_modify((Bit8u*)&get_hero(0)->at_talent_bonus[WEAPON_TYPE_SCHWERT] - (Bit8u*)get_hero(0), DAYS(3), 1); /* for 3 days: AT + 1 */
 							gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS] = DAYS(3);
 
 							strcpy(g_dtp2, get_tx2(4));

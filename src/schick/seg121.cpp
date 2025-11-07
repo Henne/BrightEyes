@@ -116,9 +116,9 @@ void poison_effect(void)
 
 					for (j = 0; j < 7; j++) {
 						/* all AT - 2 */
-						hero->at_weapon[j] -= 2;
+						hero->at_talent_bonus[j] -= 2;
 						/* all PA - 2 */
-						hero->pa_weapon[j] -= 2;
+						hero->pa_talent_bonus[j] -= 2;
 					}
 
 					/* GE - 2 */
@@ -147,9 +147,9 @@ void poison_effect(void)
 
 				for (j = 0; j < 7; j++) {
 					/* all AT + 2 */
-					hero->at_weapon[j] += 2;
+					hero->at_talent_bonus[j] += 2;
 					/* all PA + 2 */
-					hero->pa_weapon[j] += 2;
+					hero->pa_talent_bonus[j] += 2;
 				}
 
 				/* GE + 2 */

@@ -134,7 +134,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 				hero_pos = select_hero_ok(get_ttx(448));
 
-				if (hero_pos == -1 ||( get_hero(hero_pos)->items_num == 0)) {
+				if (hero_pos == -1 ||( get_hero(hero_pos)->num_inv_slots_used == 0)) {
 					break;
 				}
 
@@ -525,7 +525,7 @@ void sell_screen(struct shop_descr *shop_descr)
 			done = 1;
 		}
 
-		if (hero1->items_num == 0) {
+		if (hero1->num_inv_slots_used == 0) {
 			done = 1;
 		}
 	}

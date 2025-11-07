@@ -151,7 +151,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 	signed int weapon_id;
 	Bit16s *ani_index_ptr;
 
-	ani_index_ptr = g_gfx_ani_index[hero->sprite_no];
+	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
 	weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
 	if ((signed char)fid_target) {
@@ -198,7 +198,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 	sheet_ptr2 = (Bit8s*)&g_fig_anisheets[sheet_id + 4][1];
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
-	g_fig_anisheets[sheet_id][242] = hero->sprite_no;
+	g_fig_anisheets[sheet_id][242] = hero->sprite_id;
 
 	if (check_hero(hero) && (hero->viewdir != dir) &&
 
@@ -274,7 +274,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 			}
 
 			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-				*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
+				*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_id] * 48 + weapon_type * 16) +
 				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 		}
 	}
@@ -286,7 +286,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 			if ((weapon_type != -1) && (weapon_type < 3) &&	(hero->typus != HERO_TYPE_MAGIER) && (hero->typus != HERO_TYPE_DRUIDE))
 			{
 				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-					*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_no] * 48 + weapon_type * 16) +
+					*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_id] * 48 + weapon_type * 16) +
 					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 			}
 	}
@@ -567,7 +567,7 @@ void FANI_prepare_spell_hero(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit
 	signed short l_si;
 
 	/* get a pointer from an array where the Monster-ID serves as index */
-	ani_index_ptr = g_gfx_ani_index[hero->sprite_no];
+	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
 
 	FIG_search_obj_on_cb((signed char)obj2, &x_obj2, &y_obj2);
 	FIG_search_obj_on_cb((signed char)obj1, &x_obj1, &y_obj1);
@@ -596,7 +596,7 @@ void FANI_prepare_spell_hero(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit
 
 	g_fig_anisheets[v1][0] = get_seq_header(ani_index_ptr[l_di]);
 
-	g_fig_anisheets[v1][242] = hero->sprite_no;
+	g_fig_anisheets[v1][242] = hero->sprite_id;
 
 	if ((hero->viewdir != dir) && (v2 == 4)) {
 

@@ -839,10 +839,10 @@ void DNG_fight(void)
 		if (fight_ptr->pos == target_pos)
 		{
 			/* set positions of heroes which escape from the fight */
-			g_fig_flee_position[NORTH] = fight_ptr->flee_north;
-			g_fig_flee_position[EAST] = fight_ptr->flee_east;
-			g_fig_flee_position[SOUTH] = fight_ptr->flee_south;
-			g_fig_flee_position[WEST] = fight_ptr->flee_west;
+			g_fig_escape_position[NORTH] = fight_ptr->flee_north;
+			g_fig_escape_position[EAST] = fight_ptr->flee_east;
+			g_fig_escape_position[SOUTH] = fight_ptr->flee_south;
+			g_fig_escape_position[WEST] = fight_ptr->flee_west;
 
 			/* execute the fight */
 			if (!do_fight(fight_ptr->fight_id))

@@ -384,7 +384,7 @@ void hero_disappear(struct struct_hero *hero, const signed int pos, const signed
 	hero->temple_id = temple_id;
 
 	/* reset position in group */
-	hero->group_pos = 0;
+	hero->slot_pos = 0;
 
 	if (pos == 6) {
 		/* NPC */

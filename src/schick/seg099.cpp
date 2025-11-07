@@ -663,13 +663,13 @@ void spell_axxeleratus(void)
 		/* AT + 2 for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(1),
-			(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
+			(Bit8u*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 			2, (signed char)hero_pos);
 
 		/* PA + 2 for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(1),
-			(Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type],
+			(Bit8u*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 			2, (signed char)hero_pos);
 
 		/* set Axxeleratus flag (yields +4 BP, second action phase per round of fighting) for 1 minute (= 10 rounds of fighting) */

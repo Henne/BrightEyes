@@ -292,7 +292,7 @@ void hunt_cavebear(void)
 			{
 
 				/* AT of the current weapon - (RS-BE / 2) <= 1W20 */
-				if ((hero->at_weapon[hero->w_type] - (hero->rs_be / 2)) <= random_schick(20))
+				if ((hero->at_talent_bonus[hero->weapon_type] - (hero->rs_be / 2)) <= random_schick(20))
 				{
 #if !defined(__BORLANDC__)
 					D1_INFO("%-16s erhaelt 5 AP fuer eine gelungene Attacke.\n", hero->alias);
@@ -301,7 +301,7 @@ void hunt_cavebear(void)
 				}
 
 				/* PA of the current weapon - (RS-BE / 2) <= 1W20 */
-				if ((hero->pa_weapon[hero->w_type] - hero->rs_be / 2) > random_schick(20))
+				if ((hero->pa_talent_bonus[hero->weapon_type] - hero->rs_be / 2) > random_schick(20))
 				{
 #if !defined(__BORLANDC__)
 					D1_INFO("%-16s erhaelt 3 AP fuer eine misslungene Parade.\n", hero->alias);
@@ -459,7 +459,7 @@ void octopus_attack(void)
 
 					/* Original-Bug: The following is the wrong way round, should be ">= random_schick(20)" (found by siebenstreich 2021-08-12 https://www.crystals-dsa-foren.de/showthread.php?tid=4589&pid=167430#pid167430) */
 					/* Further dubiosity: Only the bare HERO_AT value of weapon type of the equipped weapon is taken into account. HERO_AT_MOD (modifier of the current weapon) and HERO_RS_BE are ignored. */
-					if (hero->at_weapon[hero->w_type] <= random_schick(20)) {
+					if (hero->at_talent_bonus[hero->weapon_type] <= random_schick(20)) {
 						hits++;
 					}
 				}

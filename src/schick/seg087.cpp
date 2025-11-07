@@ -59,8 +59,8 @@ signed short DNG14_handler(void)
 
 	if (pos == DNG_POS(0,2,11) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = DNG_POS_DIR(0,3,8,EAST);
-		g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,2,14,SOUTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(0,3,8,EAST);
+		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,14,SOUTH);
 
 		do_fight(FIGHTS_DTHO03);
 
@@ -93,7 +93,7 @@ signed short DNG14_handler(void)
 
 	} else if (pos == DNG_POS(0,6,2) && pos != gs_dng_handled_pos && gs_dng14_alarm_flag) {
 
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,5,4,SOUTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,5,4,SOUTH);
 
 		do_fight(FIGHTS_DTHO06);
 
@@ -107,15 +107,15 @@ signed short DNG14_handler(void)
 
 	} else if ((pos == DNG_POS(0,9,13) || pos == DNG_POS(0,9,9)) && pos != gs_dng_handled_pos && random_schick(100) <= 20) {
 
-		g_fig_flee_position[NORTH] = DNG_POS_DIR(0,9,8,NORTH);
-		g_fig_flee_position[EAST] = DNG_POS_DIR(0,11,11,EAST);
-		g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,9,14,SOUTH);
+		g_fig_escape_position[NORTH] = DNG_POS_DIR(0,9,8,NORTH);
+		g_fig_escape_position[EAST] = DNG_POS_DIR(0,11,11,EAST);
+		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,9,14,SOUTH);
 
 		do_fight(FIGHTS_DTHO09);
 
 	} else if (pos == DNG_POS(0,11,14) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,8,14,WEST);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,8,14,WEST);
 
 		do_fight(FIGHTS_DTHO10);
 
@@ -139,7 +139,7 @@ signed short DNG14_handler(void)
 
 	} else if (pos == DNG_POS(0,11,10) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,9,11,WEST);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,9,11,WEST);
 
 		do_fight(FIGHTS_DTHO13);
 
@@ -203,22 +203,22 @@ signed short DNG14_handler(void)
 
 	} else if (pos == DNG_POS(1,1,8) && pos != gs_dng_handled_pos && random_schick(100) <= 30) {
 
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,1,6,NORTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,6,NORTH);
 
 		do_fight(FIGHTS_DTHO18);
 
 	} else if (pos == DNG_POS(1,1,11) && pos != gs_dng_handled_pos && random_schick(100) <= 5) {
 
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = DNG_POS_DIR(1,1,9,NORTH);
-		g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,1,14,SOUTH);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(1,1,9,NORTH);
+		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,14,SOUTH);
 
 		do_fight(FIGHTS_DTHO19);
 
 	} else if (pos == DNG_POS(1,1,14) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
-		g_fig_flee_position[NORTH] = DNG_POS_DIR(1,1,12,NORTH);
-		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(1,5,14,EAST);
-		g_fig_flee_position[WEST] = DNG_POS_DIR(1,1,14,NORTH);
+		g_fig_escape_position[NORTH] = DNG_POS_DIR(1,1,12,NORTH);
+		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,5,14,EAST);
+		g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,14,NORTH);
 
 		do_fight(FIGHTS_DTHO20);
 
@@ -240,9 +240,9 @@ signed short DNG14_handler(void)
 
 		/* the main fight in Level 2 */
 
-		g_fig_flee_position[NORTH] = DNG_POS_DIR(1,10,6,NORTH);
-		g_fig_flee_position[EAST] = DNG_POS_DIR(1,11,10,EAST);
-		g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,9,14,SOUTH);
+		g_fig_escape_position[NORTH] = DNG_POS_DIR(1,10,6,NORTH);
+		g_fig_escape_position[EAST] = DNG_POS_DIR(1,11,10,EAST);
+		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,9,14,SOUTH);
 
 		if (!do_fight(random_schick(100) <= 50 ? FIGHTS_DTHO21A : FIGHTS_DTHO21B))
 		{
@@ -255,9 +255,9 @@ signed short DNG14_handler(void)
 
 	} else if (pos == DNG_POS(1,10,6) && pos != gs_dng_handled_pos && random_schick(100) <= 50) {
 
-		g_fig_flee_position[NORTH] = DNG_POS_DIR(1,10,1,NORTH);
-		g_fig_flee_position[EAST] = DNG_POS_DIR(1,12,6,EAST);
-		g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,10,9,SOUTH);
+		g_fig_escape_position[NORTH] = DNG_POS_DIR(1,10,1,NORTH);
+		g_fig_escape_position[EAST] = DNG_POS_DIR(1,12,6,EAST);
+		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,10,9,SOUTH);
 
 		do_fight(FIGHTS_DTHO23);
 

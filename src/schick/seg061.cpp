@@ -307,7 +307,7 @@ void char_add(signed short temple_id)
 							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
 								gs_total_hero_counter++;
 								gs_group_member_counts[gs_current_group]++;
-								hero->group_pos = i + 1;
+								hero->slot_pos = i + 1;
 								write_chr_temp(i);
 							}
 							break;
@@ -360,7 +360,7 @@ void char_letgo(signed short temple_id)
 					gs_group_member_counts[gs_current_group]--;
 
 					hero->temple_id = (signed char)temple_id;
-					hero->group_pos = 0;
+					hero->slot_pos = 0;
 
 					write_chr_temp(hero_pos);
 

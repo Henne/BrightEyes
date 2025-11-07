@@ -111,8 +111,8 @@ void disease_effect(void)
 					disease_ptr[4] = 1;
 
 					for (j = 0; j < 7; j++) {
-						hero->at_weapon[j] -= 2;
-						hero->pa_weapon[j] -= 2;
+						hero->at_talent_bonus[j] -= 2;
+						hero->pa_talent_bonus[j] -= 2;
 					}
 
 					hero->attrib[ATTRIB_GE].current -= 2;
@@ -151,8 +151,8 @@ void disease_effect(void)
 						disease_ptr[4] = 0;
 
 						for (j = 0; j < 7; j++) {
-							hero->at_weapon[j] += 2;
-							hero->pa_weapon[j] += 2;
+							hero->at_talent_bonus[j] += 2;
+							hero->pa_talent_bonus[j] += 2;
 						}
 
 						hero->attrib[ATTRIB_GE].current += 2;
@@ -180,8 +180,8 @@ void disease_effect(void)
 					disease_ptr[4] = 0;
 
 					for (j = 0; j < 7; j++) {
-						hero->at_weapon[j] += 2;
-						hero->pa_weapon[j] += 2;
+						hero->at_talent_bonus[j] += 2;
+						hero->pa_talent_bonus[j] += 2;
 					}
 
 					hero->attrib[ATTRIB_GE].current += 2;
@@ -203,8 +203,8 @@ void disease_effect(void)
 					disease_ptr[4] = 1;
 
 					for (j = 0; j < 7; j++) {
-						hero->at_weapon[j] -= 4;
-						hero->pa_weapon[j] -= 4;
+						hero->at_talent_bonus[j] -= 4;
+						hero->pa_talent_bonus[j] -= 4;
 					}
 
 					disease_ptr[2] = hero->attrib[ATTRIB_KK].current / 2;
@@ -258,8 +258,8 @@ void disease_effect(void)
 					disease_ptr[4] = 0;
 
 					for (j = 0; j < 7; j++) {
-						hero->at_weapon[j] += 4;
-						hero->pa_weapon[j] += 4;
+						hero->at_talent_bonus[j] += 4;
+						hero->pa_talent_bonus[j] += 4;
 					}
 
 					hero->attrib[ATTRIB_GE].current += disease_ptr[3];

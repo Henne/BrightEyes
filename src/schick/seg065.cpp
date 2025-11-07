@@ -572,10 +572,10 @@ void show_outro(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug: restore permanent LE-damage at the end of game */
 			/* Famous heroes get healed for free */
-			if (hero->le_malus > 0)
+			if (hero->le_max_malus > 0)
 			{
-				hero->le_max += hero->le_malus;
-				hero->le_malus = 0;
+				hero->le_max += hero->le_max_malus;
+				hero->le_max_malus = 0;
 			}
 #endif
 
@@ -586,7 +586,7 @@ void show_outro(void)
 
 			/* ??? */
 #ifndef M302de_ORIGINAL_BUGFIX
-			hero->le_malus = 0;
+			hero->le_max_malus = 0;
 #endif
 			hero->hunger = 0;
 			hero->thirst = 0;
@@ -610,7 +610,7 @@ void show_outro(void)
 			hero->heal_timer = 0;
 			hero->staffspell_timer = 0;
 
-			hero->group_pos = i + 1;
+			hero->slot_pos = i + 1;
 		}
 	}
 

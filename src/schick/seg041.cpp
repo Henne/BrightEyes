@@ -466,7 +466,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			damage = enemy_p->le + 1;
 		}
 	} else {
-		damage -= target->rs_bonus1;
+		damage -= target->rs_bonus;
 
 		if (target->flags.petrified) {
 			damage = 0;
@@ -511,7 +511,7 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 		hero = (struct struct_hero*)target;
 
 		/* subtract RS */
-		damage -= hero->rs_bonus1;
+		damage -= hero->rs_bonus;
 
 		/* armor bonus against skeletons and zombies */
 		if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_KETTENHEMD__CURSED && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c)))

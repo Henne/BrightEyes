@@ -402,7 +402,7 @@ signed short DNG05_handler(void)
 		if (random_schick(100) < 30)
 		{
 			g_max_enemies = (random_schick(100) < 10 ? 3 : 2);
-			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,8,7,SOUTH);
+			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,8,7,SOUTH);
 
 			do_fight(FIGHTS_F061_4B);
 		}

@@ -377,7 +377,7 @@ void DNG01_chest00_loot(struct struct_chest* chest)
 		gs_deathtrap = 1;
 
 		/* fight the demon */
-		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,13,10,WEST);
+		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,13,10,WEST);
 
 		if (!do_fight(FIGHTS_SHIP10_1))
 		{

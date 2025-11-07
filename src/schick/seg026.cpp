@@ -752,11 +752,11 @@ signed short load_game_state(void)
 				write(handle, (Bit8u*)hero_i, sizeof(struct struct_hero));
 				close(handle);
 
-				if (hero_i->group_pos != 0) {
+				if (hero_i->slot_pos != 0) {
 
 					prepare_chr_name(name, (char*)hero_i);
 
-					read_chr_temp(name, hero_i->group_pos - 1, hero_i->group_id);
+					read_chr_temp(name, hero_i->slot_pos - 1, hero_i->group_id);
 				}
 			}
 
@@ -794,7 +794,7 @@ signed short load_game_state(void)
 
 			load_npc(i);
 
-			if (get_hero(6)->group_pos != 7) {
+			if (get_hero(6)->slot_pos != 7) {
 
 				memset(get_hero(6), 0, sizeof(struct struct_hero));
 			} else {
@@ -937,7 +937,7 @@ signed short save_game_state(void)
 			if (get_hero(tw_bak)->typus != HERO_TYPE_NONE) {
 
 				/* save position on the playmask */
-				get_hero(tw_bak)->group_pos = tw_bak + 1;
+				get_hero(tw_bak)->slot_pos = tw_bak + 1;
 
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
@@ -955,7 +955,7 @@ signed short save_game_state(void)
 		/* save the current NPC in TEMP */
 		if (get_hero(6)->typus != HERO_TYPE_NONE) {
 
-			get_hero(6)->group_pos = 7;
+			get_hero(6)->slot_pos = 7;
 			save_npc(get_hero(6)->npc_id + 225);
 		}
 
@@ -1120,16 +1120,16 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 
 		if (hero->sex == 1) {
 
-			hero->sprite_no = hero->typus + 11;
+			hero->sprite_id = hero->typus + 11;
 
-			if (hero->sprite_no > 21) {
-				hero->sprite_no = 21;
+			if (hero->sprite_id > 21) {
+				hero->sprite_id = 21;
 			}
 		} else {
-			hero->sprite_no = hero->typus;
+			hero->sprite_id = hero->typus;
 
-			if (hero->sprite_no > 10) {
-				hero->sprite_no = 10;
+			if (hero->sprite_id > 10) {
+				hero->sprite_id = 10;
 			}
 		}
 
@@ -1209,8 +1209,8 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 			_read(handle, hero, sizeof(struct struct_hero));
 			close(handle);
 
-			if (((hero->temple_id == temple_id) && !hero->group_pos) ||
-				(!hero->group_pos && (temple_id == -1)))
+			if (((hero->temple_id == temple_id) && !hero->slot_pos) ||
+				(!hero->slot_pos && (temple_id == -1)))
 			{
 				strcpy((char*)ptr + 32 * count, hero->name);
 				strcpy((char*)ptr + 32 * count + 16, hero->alias);

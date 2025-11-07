@@ -565,18 +565,18 @@ void spell_ignifaxius(void)
 			/* add rs_malus to the armor */
 			p_armor->rs_lost = p_armor->rs_lost + rs_malus;
 			/* subtract rs_malus from RS1 */
-			get_spelltarget()->rs_bonus1 = get_spelltarget()->rs_bonus1 - rs_malus;
+			get_spelltarget()->rs_bonus = get_spelltarget()->rs_bonus - rs_malus;
 		}
 
 		/* get an AT/PA-Malus of -level / 2 for the current weapon and one hour */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, HOURS(1),
-			(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
+			(Bit8u*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 			-level / 2, (signed char)hero_pos);
 
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, HOURS(1),
-			(Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type],
+			(Bit8u*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 			-level / 2, (signed char)hero_pos);
 
 	} else {
@@ -630,7 +630,7 @@ void spell_plumbumbarum(void)
 			/* give a short AT-malus of -3 to the current weapon of the target */
 			slot = get_free_mod_slot();
 			set_mod_slot(slot, 0x2d,
-				(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
+				(Bit8u*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 				-3, (signed char)hero_pos);
 
 			/* prepare the message */
@@ -676,14 +676,14 @@ void spell_saft_kraft(void)
 	slot = get_free_mod_slot();
 
 	set_mod_slot(slot, rounds * 9L,
-		(Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type],
+		(Bit8u*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 		5, (signed char)target);
 
 	/* -5 on PA of the current weapon */
 	slot = get_free_mod_slot();
 
 	set_mod_slot(slot, rounds * 9L,
-		(Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type],
+		(Bit8u*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 		-5, (signed char)target);
 
 	/* +5 extra damage */

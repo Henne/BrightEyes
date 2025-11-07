@@ -375,8 +375,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					/* Wunderkur */
 
 					/* undo starvation damage */
-					consumer->le_max += consumer->le_malus;
-					consumer->le_malus = 0;
+					consumer->le_max += consumer->le_max_malus;
+					consumer->le_max_malus = 0;
 
 					/* fill up LE */
 					if (consumer->le < consumer->le_max) {

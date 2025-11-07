@@ -317,9 +317,9 @@ void update_atpa(struct struct_hero *hero)
 
 		for (i = 0; i < 7; i++) {
 			/* add diff to AT value */
-			hero->at_weapon[i] = hero->at_weapon[i] + diff;
+			hero->at_talent_bonus[i] = hero->at_talent_bonus[i] + diff;
 			/* add diff to PA value */
-			hero->pa_weapon[i] = hero->pa_weapon[i] + diff;
+			hero->pa_talent_bonus[i] = hero->pa_talent_bonus[i] + diff;
 		}
 	}
 }

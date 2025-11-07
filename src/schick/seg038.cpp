@@ -687,7 +687,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 				if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) { /* actor is an enemy */
 					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct enemy_sheet*)actor_ptr)->bp, mode, double_size, actor_id);
 				} else { /* actor is a hero */
-					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct struct_hero*)actor_ptr)->bp_left, mode, double_size, actor_id);
+					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct struct_hero*)actor_ptr)->fight_bp_left, mode, double_size, actor_id);
 				}
 
 				nr_dir_changes = FIG_count_direction_changes_of_path(g_fig_move_pathdir);
@@ -706,7 +706,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 			if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) { /* actor is an enemy */
 				FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[best_target], target_reached_y[best_target], dist, ((struct enemy_sheet*)actor_ptr)->bp, mode, double_size, actor_id);
 			} else { /* actor is a hero */
-				FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[best_target], target_reached_y[best_target], dist, ((struct struct_hero*)actor_ptr)->bp_left, mode, double_size, actor_id);
+				FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[best_target], target_reached_y[best_target], dist, ((struct struct_hero*)actor_ptr)->fight_bp_left, mode, double_size, actor_id);
 			}
 		}
 	}

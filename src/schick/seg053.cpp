@@ -185,7 +185,7 @@ void do_healer(void)
 				if (is_hero_healable(hero)) {
 
 					/* LEmax >= LE and no permanent LEdamage */
-					if ((hero->le >= hero->le_max) && !hero->le_malus) {
+					if ((hero->le >= hero->le_max) && !hero->le_max_malus) {
 
 						/* Hero seems OK */
 						sprintf(g_dtp2,	get_ttx(461), hero->alias);
@@ -193,8 +193,8 @@ void do_healer(void)
 					} else {
 
 						/* calculate price */
-						price = hero->le_malus * 50;
-						price += (hero->le_max + hero->le_malus - hero->le) * 5;
+						price = hero->le_max_malus * 50;
+						price += (hero->le_max + hero->le_max_malus - hero->le) * 5;
 						price += healer->price_mod * price / 100;
 
 						if (motivation == 2)
@@ -217,8 +217,8 @@ void do_healer(void)
 								set_party_money(money);
 
 								/* heal permanent damage TODO:LE += */
-								hero->le_max += hero->le_malus;
-								hero->le_malus = 0;
+								hero->le_max += hero->le_max_malus;
+								hero->le_max_malus = 0;
 
 								/* time passes by (number of missing LE) minutes */
 								timewarp(MINUTES((signed long)(hero->le_max - hero->le)));

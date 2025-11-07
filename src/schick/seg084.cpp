@@ -610,7 +610,7 @@ void DNG09_chest06_loot(struct struct_chest* chest)
 
 void DNG09_chest04_trap(void)
 {
-	g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,10,11,SOUTH);
+	g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,10,11,SOUTH);
 
 	do_fight(FIGHTS_F126_22);
 }

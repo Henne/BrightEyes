@@ -84,7 +84,7 @@ signed int MON_get_target_PA(void)
 		g_spelltarget =  get_hero(g_spelluser_e->target_object_id - 1);
 
 		/* calc and return PA-value */
-		return get_spelltarget()->pa_weapon[get_spelltarget()->w_type] - get_spelltarget()->atpa_mod;
+		return get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type] - get_spelltarget()->fight_atpa_mod;
 
 	} else {
 		/* target is a monster */
@@ -107,7 +107,7 @@ signed int MON_get_target_RS(void)
 		g_spelltarget = get_hero(g_spelluser_e->target_object_id - 1);
 
 		/* return RS-value */
-		return get_spelltarget()->rs_bonus1;
+		return get_spelltarget()->rs_bonus;
 
 	} else {
 		/* target is a monster */
@@ -664,16 +664,16 @@ void mspell_ignifaxius(void)
 
 			p_armor->rs_lost = p_armor->rs_lost + rs_malus;
 
-			get_spelltarget()->rs_bonus1 = get_spelltarget()->rs_bonus1 - rs_malus;
+			get_spelltarget()->rs_bonus = get_spelltarget()->rs_bonus - rs_malus;
 		}
 
 		/* AT - level / 2 */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type], -level / 2, (signed char)hero_pos);
+		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type], -level / 2, (signed char)hero_pos);
 
 		/* PA - level / 2 */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->pa_weapon[get_spelltarget()->w_type], -level / 2, (signed char)hero_pos);
+		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type], -level / 2, (signed char)hero_pos);
 
 	} else {
 		/* target is a monster */
@@ -712,7 +712,7 @@ void mspell_plumbumbarum(void)
 
 		/* AT - 3 */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->at_weapon[get_spelltarget()->w_type], -3, (signed char)hero_pos);
+		set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type], -3, (signed char)hero_pos);
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(94), get_spelltarget()->alias);

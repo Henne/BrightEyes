@@ -514,7 +514,7 @@ void status_show(Bit16u index)
 				char le_fix[10];
 				set_status_string(get_tx2(13));
 
-				if (hero->le_malus) {
+				if (hero->le_max_malus) {
 					/* print max LE in red if hero has permanent damage */
 					sprintf(le_fix, "%c%d%c", 0xf1, hero->le_max, 0xf0);
 				} else {
@@ -526,7 +526,7 @@ void status_show(Bit16u index)
 					hero->le, le_fix,			/* LE */
 					hero->ae, hero->ae_max,			/* AE */
 					hero->mr,				/* MR */
-					hero->rs_bonus1 + hero->rs_bonus2,	/* RS */
+					hero->rs_bonus + hero->rs_bonus_dummy,	/* RS */
 					hero->attrib[ATTRIB_KK].current + hero->le +
 						hero->attrib[ATTRIB_KK].mod,	/* Ausdauer*/
 					hero->load,				/* Last */
@@ -542,7 +542,7 @@ void status_show(Bit16u index)
 					hero->le, hero->le_max,			/* LE */
 					hero->ae, hero->ae_max,			/* AE */
 					hero->mr,				/* MR */
-					hero->rs_bonus1 + hero->rs_bonus2,	/* RS */
+					hero->rs_bonus + hero->rs_bonus_dummy,	/* RS */
 					hero->le +
 						hero->attrib[ATTRIB_KK].current +
 						hero->attrib[ATTRIB_KK].mod,	/* Ausdauer*/
@@ -562,19 +562,19 @@ void status_show(Bit16u index)
 					l1 = 0;
 				}
 
-				at = (hero->w_type < 7) ?
+				at = (hero->weapon_type < 7) ?
 					/* melee weapons */
-					(hero->at_weapon[hero->w_type] + hero->w_at_mod - hero->rs_be / 2) :
+					(hero->at_talent_bonus[hero->weapon_type] + hero->weapon_at_mod - hero->rs_be / 2) :
 					/* range weapons */
-					hero->at_weapon[0] - hero->rs_be / 2;
+					hero->at_talent_bonus[0] - hero->rs_be / 2;
 				at += l1;
 
 				/* calculate PA base value */
-				pa = (hero->w_type < 7) ?
+				pa = (hero->weapon_type < 7) ?
 					/* melee weapons */
-					(hero->pa_weapon[hero->w_type] + hero->w_pa_mod - hero->rs_be / 2) :
+					(hero->pa_talent_bonus[hero->weapon_type] + hero->weapon_pa_mod - hero->rs_be / 2) :
 					/* range weapons */
-					 (hero->pa_weapon[0] - hero->rs_be / 2);
+					 (hero->pa_talent_bonus[0] - hero->rs_be / 2);
 
 				if (at < 0)
 					at = 0;
@@ -584,7 +584,7 @@ void status_show(Bit16u index)
 				/* Original-Bugfix: show permanent damage in red */
 				set_status_string(get_tx2(52));
 
-				if (hero->le_malus) {
+				if (hero->le_max_malus) {
 					/* print max LE in red if hero has permanent damage */
 					sprintf(le_fix, "%c%d%c", 0xf1, hero->le_max, 0xf0);
 				} else {
@@ -598,7 +598,7 @@ void status_show(Bit16u index)
 					hero->ae, hero->ae_max,			/* AE */
 					at, pa,					/* AT PA */
 					hero->mr,				/* MR */
-					hero->rs_bonus1 + hero->rs_bonus2,	/* RS */
+					hero->rs_bonus + hero->rs_bonus_dummy,	/* RS */
 					hero->le + hero->attrib[ATTRIB_KK].current +
 						hero->attrib[ATTRIB_KK].mod,	/* Ausdauer */
 					hero->load,				/* Last */
@@ -612,7 +612,7 @@ void status_show(Bit16u index)
 					hero->ae, hero->ae_max,			/* AE */
 					at, pa,					/* AT PA */
 					hero->mr,				/* MR */
-					hero->rs_bonus1 + hero->rs_bonus2,	/* RS */
+					hero->rs_bonus + hero->rs_bonus_dummy,	/* RS */
 					hero->le + hero->attrib[ATTRIB_KK].current +
 				       		hero->attrib[ATTRIB_KK].mod,	/* Ausdauer */
 					hero->load,				/* Last */
@@ -642,15 +642,15 @@ void status_show(Bit16u index)
 			else
 				l1 = 0;
 
-			at = (hero->w_type < 7) ?
-				hero->at_weapon[hero->w_type] +	hero->w_at_mod - hero->rs_be / 2 :
-				hero->at_weapon[0] - hero->rs_be / 2;
+			at = (hero->weapon_type < 7) ?
+				hero->at_talent_bonus[hero->weapon_type] +	hero->weapon_at_mod - hero->rs_be / 2 :
+				hero->at_talent_bonus[0] - hero->rs_be / 2;
 
 			at += l1;
 
-			pa =  (hero->w_type < 7) ?
-				hero->pa_weapon[hero->w_type] +	hero->w_pa_mod - hero->rs_be / 2 :
-				hero->pa_weapon[0] - hero->rs_be / 2;
+			pa =  (hero->weapon_type < 7) ?
+				hero->pa_talent_bonus[hero->weapon_type] +	hero->weapon_pa_mod - hero->rs_be / 2 :
+				hero->pa_talent_bonus[0] - hero->rs_be / 2;
 
 			if (at < 0)
 				at = 0;
@@ -661,32 +661,32 @@ void status_show(Bit16u index)
 			sprintf(g_dtp2,	get_tx2(5),
 				hero->atpa_base,
 				get_ttx(48),
-				hero->at_weapon[0] - hero->rs_be / 2,
-				hero->pa_weapon[0] - hero->rs_be / 2,
+				hero->at_talent_bonus[0] - hero->rs_be / 2,
+				hero->pa_talent_bonus[0] - hero->rs_be / 2,
 				get_ttx(49),
 
-				hero->at_weapon[1] - hero->rs_be / 2,
-				hero->pa_weapon[1] - hero->rs_be / 2,
+				hero->at_talent_bonus[1] - hero->rs_be / 2,
+				hero->pa_talent_bonus[1] - hero->rs_be / 2,
 				get_ttx(50),
 
-				hero->at_weapon[2] - hero->rs_be / 2,
-				hero->pa_weapon[2] - hero->rs_be / 2,
+				hero->at_talent_bonus[2] - hero->rs_be / 2,
+				hero->pa_talent_bonus[2] - hero->rs_be / 2,
 				get_ttx(51),
 
-				hero->at_weapon[3] - hero->rs_be / 2,
-				hero->pa_weapon[3] - hero->rs_be / 2,
+				hero->at_talent_bonus[3] - hero->rs_be / 2,
+				hero->pa_talent_bonus[3] - hero->rs_be / 2,
 				get_ttx(52),
 
-				hero->at_weapon[4] - hero->rs_be / 2,
-				hero->pa_weapon[4] - hero->rs_be / 2,
+				hero->at_talent_bonus[4] - hero->rs_be / 2,
+				hero->pa_talent_bonus[4] - hero->rs_be / 2,
 				get_ttx(53),
 
-				hero->at_weapon[5] - hero->rs_be / 2,
-				hero->pa_weapon[5] - hero->rs_be / 2,
+				hero->at_talent_bonus[5] - hero->rs_be / 2,
+				hero->pa_talent_bonus[5] - hero->rs_be / 2,
 				get_ttx(54),
 
-				hero->at_weapon[6] - hero->rs_be / 2,
-				hero->pa_weapon[6] - hero->rs_be / 2,
+				hero->at_talent_bonus[6] - hero->rs_be / 2,
+				hero->pa_talent_bonus[6] - hero->rs_be / 2,
 				at,
 				pa,
 

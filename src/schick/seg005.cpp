@@ -540,7 +540,7 @@ void draw_fight_screen(Bit16u val)
 							p_fighter->nvf_no += *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						} else {
 
-							p_fighter->figure = g_gfxtab_figures_main[p_fighter->sprite_no][*(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet])];
+							p_fighter->figure = g_gfxtab_figures_main[p_fighter->sprite_id][*(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet])];
 							p_fighter->nvf_no = *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						}
 
@@ -550,8 +550,8 @@ void draw_fight_screen(Bit16u val)
 							if (p_fighter->nvf_no > 3) {
 
 								/* not standing still */
-								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_no][4].x;
-								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_no][4].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][4].y;
 
 								if (p_fighter->double_size != -1) {
 									p_fighter->x1 = g_gfxtab_double_size_x1[1];
@@ -559,8 +559,8 @@ void draw_fight_screen(Bit16u val)
 								}
 
 							} else {
-								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_no][p_fighter->nvf_no].x;
-								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_no][p_fighter->nvf_no].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][p_fighter->nvf_no].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][p_fighter->nvf_no].y;
 
 								if (p_fighter->double_size != -1) {
 									p_fighter->x1 = g_gfxtab_double_size_x1[p_fighter->nvf_no];
@@ -569,18 +569,18 @@ void draw_fight_screen(Bit16u val)
 							}
 
 						} else {
-							if (p_fighter->nvf_no == g_nvftab_figures_dead[p_fighter->sprite_no]) {
+							if (p_fighter->nvf_no == g_nvftab_figures_dead[p_fighter->sprite_id]) {
 
-								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_no][4].x;
-								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_no][4].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][4].y;
 
 							} else {
-								viewdir_unconsc = p_fighter->nvf_no - g_nvftab_figures_unconscious[p_fighter->sprite_no];
+								viewdir_unconsc = p_fighter->nvf_no - g_nvftab_figures_unconscious[p_fighter->sprite_id];
 
 								if (viewdir_unconsc >= 0) {
 
-									p_fighter->offsetx = g_gfxtab_offsets_unconscious[p_fighter->sprite_no][viewdir_unconsc].x;
-									p_fighter->offsety = g_gfxtab_offsets_unconscious[p_fighter->sprite_no][viewdir_unconsc].y;
+									p_fighter->offsetx = g_gfxtab_offsets_unconscious[p_fighter->sprite_id][viewdir_unconsc].x;
+									p_fighter->offsety = g_gfxtab_offsets_unconscious[p_fighter->sprite_id][viewdir_unconsc].y;
 								}
 							}
 						}
@@ -754,7 +754,7 @@ void draw_fight_screen(Bit16u val)
 												 * Note: Apparently, this is done in any fight, including seafights and wilderness fights where it doesn't make sense.
 												 * The distinction is done only later. */
 												hero->escape_position =
-													g_fig_flee_position[hero->viewdir == 3 ? NORTH : (hero->viewdir + 1)];
+													g_fig_escape_position[hero->viewdir == 3 ? NORTH : (hero->viewdir + 1)];
 												figlist_remove[p_fighter->sheet] = hero->fighter_id;
 
 											}
@@ -807,7 +807,7 @@ void draw_fight_screen(Bit16u val)
 
 							obj_y -= *(sheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
 
-							i = g_gfxtab_figures_main[p_fighter->sprite_no][*(sheet)];
+							i = g_gfxtab_figures_main[p_fighter->sprite_id][*(sheet)];
 
 							if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
 								nvf.src = (Bit8u*)load_fight_figs(i);

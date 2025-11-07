@@ -47,9 +47,9 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 		/* if item is an armor ? */
 		if (item_p->flags.armor) {
 
-			hero->rs_bonus1 -= g_armors_table[item_p->table_index].rs;
+			hero->rs_bonus -= g_armors_table[item_p->table_index].rs;
 
-			hero->rs_bonus1 += hero->inventory[inv_pos].rs_lost;
+			hero->rs_bonus += hero->inventory[inv_pos].rs_lost;
 
 			hero->rs_be -= g_armors_table[item_p->table_index].be;
 		}
@@ -57,9 +57,9 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 		/* if item is a weapon and in the right hand ? */
 		if (item_p->flags.weapon && (inv_pos == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
-			hero->w_type = 0;
+			hero->weapon_type = 0;
 
-			hero->w_at_mod = hero->w_pa_mod = 0;
+			hero->weapon_at_mod = hero->weapon_pa_mod = 0;
 		}
 
 		/* unequip Kraftguertel KK - 5 */
@@ -121,10 +121,10 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		if (item_p->flags.armor) {
 
 			/* add RS boni */
-			equipper->rs_bonus1 += g_armors_table[item_p->table_index].rs;
+			equipper->rs_bonus += g_armors_table[item_p->table_index].rs;
 
 			/* subtract degraded RS */
-			equipper->rs_bonus1 -= owner->inventory[inv_pos_owner].rs_lost;
+			equipper->rs_bonus -= owner->inventory[inv_pos_owner].rs_lost;
 
 			/* add RS-BE */
 			equipper->rs_be += g_armors_table[item_p->table_index].be;
@@ -135,13 +135,13 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		if (item_p->flags.weapon && (inv_pos_equipper == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
 			/* set weapon type */
-			equipper->w_type = item_p->subtype;
+			equipper->weapon_type = item_p->subtype;
 
 			/* set AT */
-			equipper->w_at_mod = g_weapons_table[item_p->table_index].at_mod;
+			equipper->weapon_at_mod = g_weapons_table[item_p->table_index].at_mod;
 
 			/* set PA */
-			equipper->w_pa_mod = g_weapons_table[item_p->table_index].pa_mod;
+			equipper->weapon_pa_mod = g_weapons_table[item_p->table_index].pa_mod;
 		}
 
 		/* Girdle of might / Kraftguertel */
@@ -370,13 +370,13 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 		} else {
 
 			/* Original-Bug: may lead to problems when the item counter is broken */
-			if (hero->items_num < NR_HERO_INVENTORY_SLOTS) {
+			if (hero->num_inv_slots_used < NR_HERO_INVENTORY_SLOTS) {
 
 				done = 0;
 
 				do {
 					/* Original-Bug: may lead to problems when the item counter is broken */
-					if (hero->items_num < NR_HERO_INVENTORY_SLOTS) {
+					if (hero->num_inv_slots_used < NR_HERO_INVENTORY_SLOTS) {
 
 						/* look for a free place : tricky */
 						di = HERO_INVENTORY_SLOT_KNAPSACK_1 - 1;
@@ -389,7 +389,7 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 							}
 
 							/* increment item counter */
-							hero->items_num++;
+							hero->num_inv_slots_used++;
 
 							/* write item id */
 							hero->inventory[di].item_id = item_id;
@@ -542,7 +542,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 					hero->load -= p_item->weight * hero->inventory[pos].quantity;
 
 					/* decrement item counter */
-					hero->items_num--;
+					hero->num_inv_slots_used--;
 
 					/* clear the inventory pos */
 					memset(&hero->inventory[pos], 0, sizeof(inventory));
@@ -559,7 +559,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 					}
 
 					/* decrement item counter */
-					hero->items_num--;
+					hero->num_inv_slots_used--;
 
 					/* subtract item weight */
 					hero->load -= p_item->weight;
