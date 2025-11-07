@@ -1471,10 +1471,10 @@ extern const signed short g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
 
 extern signed short g_mspell_awake_flag;		//ds:0x618e; seg043, seg102
 
-extern Bit8s g_statuspage_selitem1_no;		//ds:0x636e; seg048
-extern Bit8s g_statuspage_selitem2_no;		//ds:0x636f; seg048
-extern Bit8s g_statuspage_selitem3_no;		//ds:0x6370; seg048
-extern Bit8s g_statuspage_selitem4_no;		//ds:0x6371; seg048
+extern Bit8s g_statuspage_sel_inv_slot_1;		//ds:0x636e; seg048
+extern Bit8s g_statuspage_sel_inv_slot_2;		//ds:0x636f; seg048
+extern Bit8s g_statuspage_sel_inv_slot_3;		//ds:0x6370; seg048
+extern Bit8s g_statuspage_sel_inv_slot_4;		//ds:0x6371; seg048
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 

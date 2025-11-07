@@ -72,25 +72,25 @@ void reset_item_selector(void)
 
 		/* remove the previous border */
 		do_border(g_vga_memstart,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x + 17,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y + 17,
 				30);
 
 		/* mark the actual selected item */
-		g_statuspage_selitem1_no = g_statuspage_selitem3_no = 7;
+		g_statuspage_sel_inv_slot_1 = g_statuspage_sel_inv_slot_3 = 7;
 
 		/* set the new red border */
 		do_border(g_vga_memstart,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
-				g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x + 17,
+				g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y + 17,
 				9);
 
-		g_statuspage_selitem4_no = -1;
-		g_statuspage_selitem2_no = HERO_INVENTORY_SLOT_EYE;
+		g_statuspage_sel_inv_slot_4 = -1;
+		g_statuspage_sel_inv_slot_2 = HERO_INVENTORY_SLOT_EYE;
 	}
 
 	g_current_cursor = g_current_cursor_bak = &g_default_mouse_cursor;
@@ -163,34 +163,34 @@ void status_menu(signed short hero_pos)
 				if (hero1 == hero2) {
 					/* set the new red border */
 					do_border(g_vga_memstart,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y + 17,
 						9);
 				}
 
-				if (hero1->inventory[g_statuspage_selitem3_no].item_id != ITEM_NONE) {
+				if (hero1->inventory[g_statuspage_sel_inv_slot_3].item_id != ITEM_NONE) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings,
-						(char*)GUI_name_singular(get_itemname(hero1->inventory[g_statuspage_selitem3_no].item_id)),
-						!is_in_word_array(hero1->inventory[g_statuspage_selitem3_no].item_id,
+						(char*)GUI_name_singular(get_itemname(hero1->inventory[g_statuspage_sel_inv_slot_3].item_id)),
+						!is_in_word_array(hero1->inventory[g_statuspage_sel_inv_slot_3].item_id,
 							g_wearable_items_index[hero2->typus - 1]) ? g_empty_string8 : get_tx2(66));
 
-					if (g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].flags.weapon) {
-						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].subtype));
+					if (g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].flags.weapon) {
+						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].subtype));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
 				}
 
-				if (g_statuspage_selitem4_no != -1) {
+				if (g_statuspage_sel_inv_slot_4 != -1) {
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y + 17,
 						8);
 				}
 			}
@@ -216,7 +216,7 @@ void status_menu(signed short hero_pos)
 					((get_hero(hero_pos)->typus < HERO_TYPE_HEXE) && (g_status_page_mode > 3)));
 
 
-			if (g_statuspage_selitem4_no != -1) {
+			if (g_statuspage_sel_inv_slot_4 != -1) {
 
 				if (flag4 == 0) {
 					hero1 = hero2;
@@ -249,7 +249,7 @@ void status_menu(signed short hero_pos)
 					((get_hero(hero_pos)->typus < HERO_TYPE_HEXE) && (g_status_page_mode > 3)));
 
 
-			if (g_statuspage_selitem4_no != -1) {
+			if (g_statuspage_sel_inv_slot_4 != -1) {
 
 				if (flag4 == 0) {
 					hero1 = hero2;
@@ -273,18 +273,18 @@ void status_menu(signed short hero_pos)
 			/* UP_KEY */
 			if (g_action == ACTION_ID_UP) {
 
-				if (g_statuspage_selitem4_no != -1) {
+				if (g_statuspage_sel_inv_slot_4 != -1) {
 
-					if (!g_statuspage_selitem4_no) {
-						g_statuspage_selitem4_no = HERO_INVENTORY_SLOT_MOUTH;
+					if (!g_statuspage_sel_inv_slot_4) {
+						g_statuspage_sel_inv_slot_4 = HERO_INVENTORY_SLOT_MOUTH;
 					} else {
-						g_statuspage_selitem4_no--;
+						g_statuspage_sel_inv_slot_4--;
 					}
 				} else {
-					if (g_statuspage_selitem3_no == 0) {
-						g_statuspage_selitem3_no = HERO_INVENTORY_SLOT_KNAPSACK_16;
+					if (g_statuspage_sel_inv_slot_3 == 0) {
+						g_statuspage_sel_inv_slot_3 = HERO_INVENTORY_SLOT_KNAPSACK_16;
 					} else {
-						g_statuspage_selitem3_no--;
+						g_statuspage_sel_inv_slot_3--;
 					}
 				}
 			}
@@ -292,156 +292,156 @@ void status_menu(signed short hero_pos)
 			/* DOWN_KEY */
 			if (g_action == ACTION_ID_DOWN) {
 
-				if (g_statuspage_selitem4_no != -1) {
+				if (g_statuspage_sel_inv_slot_4 != -1) {
 
 					if (hero1 != hero2) {
 
-						if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_MOUTH) {
-							g_statuspage_selitem4_no = 0;
+						if (g_statuspage_sel_inv_slot_4 == HERO_INVENTORY_SLOT_MOUTH) {
+							g_statuspage_sel_inv_slot_4 = 0;
 						} else {
-							g_statuspage_selitem4_no++;
+							g_statuspage_sel_inv_slot_4++;
 						}
 					} else {
-						if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_MOUTH) {
-							g_statuspage_selitem4_no = 0;
+						if (g_statuspage_sel_inv_slot_4 == HERO_INVENTORY_SLOT_MOUTH) {
+							g_statuspage_sel_inv_slot_4 = 0;
 						} else {
-							g_statuspage_selitem4_no++;
+							g_statuspage_sel_inv_slot_4++;
 						}
 					}
 				} else {
-					if (g_statuspage_selitem3_no == HERO_INVENTORY_SLOT_KNAPSACK_16) {
-						g_statuspage_selitem3_no = 0;
+					if (g_statuspage_sel_inv_slot_3 == HERO_INVENTORY_SLOT_KNAPSACK_16) {
+						g_statuspage_sel_inv_slot_3 = 0;
 					} else {
-						g_statuspage_selitem3_no++;
+						g_statuspage_sel_inv_slot_3++;
 					}
 				}
 			}
 
 			if (g_action >= 128 && g_action <= 152)
 			{
-				if (g_statuspage_selitem4_no != -1) {
-					g_statuspage_selitem4_no = g_action + 128;
+				if (g_statuspage_sel_inv_slot_4 != -1) {
+					g_statuspage_sel_inv_slot_4 = g_action + 128;
 					g_action = ACTION_ID_RETURN;
 				} else if (g_action <= 150) {
-					g_statuspage_selitem3_no = g_action + 128;
+					g_statuspage_sel_inv_slot_3 = g_action + 128;
 					g_action = ACTION_ID_RETURN;
 				}
 			}
 
-			if ((g_statuspage_selitem1_no != g_statuspage_selitem3_no) && (hero1 == hero2)) {
+			if ((g_statuspage_sel_inv_slot_1 != g_statuspage_sel_inv_slot_3) && (hero1 == hero2)) {
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					g_invslot_borderxy_table[g_statuspage_selitem1_no].x,
-					g_invslot_borderxy_table[g_statuspage_selitem1_no].y,
-					g_invslot_borderxy_table[g_statuspage_selitem1_no].x + 17,
-					g_invslot_borderxy_table[g_statuspage_selitem1_no].y + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_1].x,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_1].y,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_1].x + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_1].y + 17,
 					30);
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
-					g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
-					g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
-					g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y + 17,
 					9);
 
-				g_statuspage_selitem1_no = g_statuspage_selitem3_no;
+				g_statuspage_sel_inv_slot_1 = g_statuspage_sel_inv_slot_3;
 
 				memset(g_dtp2, ' ', 60);
 				*(g_dtp2 + 60) = '\0';
 				GUI_print_string(g_dtp2, 16, 192);
 
-				if (hero2->inventory[g_statuspage_selitem3_no].item_id) {
+				if (hero2->inventory[g_statuspage_sel_inv_slot_3].item_id) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings2,
-						(char*)GUI_name_singular(get_itemname(hero2->inventory[g_statuspage_selitem3_no].item_id)),
+						(char*)GUI_name_singular(get_itemname(hero2->inventory[g_statuspage_sel_inv_slot_3].item_id)),
 						!is_in_word_array(
-						    hero2->inventory[g_statuspage_selitem3_no].item_id,
+						    hero2->inventory[g_statuspage_sel_inv_slot_3].item_id,
 						    g_wearable_items_index[hero2->typus - 1]) ? g_empty_string9 : get_tx2(66));
 
-					if (g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].flags.weapon) {
+					if (g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].flags.weapon) {
 
-						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_selitem3_no].item_id].subtype));
+						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].subtype));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
 				}
 			}
 
-			if (g_statuspage_selitem2_no != g_statuspage_selitem4_no && g_statuspage_selitem4_no != -1) {
+			if (g_statuspage_sel_inv_slot_2 != g_statuspage_sel_inv_slot_4 && g_statuspage_sel_inv_slot_4 != -1) {
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					g_invslot_borderxy_table[g_statuspage_selitem2_no].x,
-					g_invslot_borderxy_table[g_statuspage_selitem2_no].y,
-					g_invslot_borderxy_table[g_statuspage_selitem2_no].x + 17,
-					g_invslot_borderxy_table[g_statuspage_selitem2_no].y + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_2].x,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_2].y,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_2].x + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_2].y + 17,
 					30);
 
 				if (hero1 == hero2) {
 
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
-						g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].x + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_3].y + 17,
 						9);
 				}
 
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
-					g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
-					g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
-					g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x + 17,
+					g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y + 17,
 					8);
 
-				g_statuspage_selitem2_no = g_statuspage_selitem4_no;
+				g_statuspage_sel_inv_slot_2 = g_statuspage_sel_inv_slot_4;
 			}
 
 			if (g_action == ACTION_ID_RETURN) {
-				if (g_statuspage_selitem4_no != -1) {
+				if (g_statuspage_sel_inv_slot_4 != -1) {
 
 					if (flag4 != 0) {
 
-						if (g_statuspage_selitem4_no < 23) {
-							pass_item(hero1, g_statuspage_selitem3_no, hero2, g_statuspage_selitem4_no);
+						if (g_statuspage_sel_inv_slot_4 < 23) {
+							pass_item(hero1, g_statuspage_sel_inv_slot_3, hero2, g_statuspage_sel_inv_slot_4);
 							g_request_refresh = 1;
-						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
-							print_item_description(hero1, g_statuspage_selitem3_no);
-						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
-							consume(hero1, hero2, g_statuspage_selitem3_no);
+						} else if (g_statuspage_sel_inv_slot_4 == 23) { /* eye icon */
+							print_item_description(hero1, g_statuspage_sel_inv_slot_3);
+						} else if (g_statuspage_sel_inv_slot_4 == 24) { /* mouth icon */
+							consume(hero1, hero2, g_statuspage_sel_inv_slot_3);
 						}
 
 						/* set the new ??? border */
 						do_border(g_vga_memstart,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x + 17,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y + 17,
 							30);
 
 						flag4 = 0;
 						hero1 = hero2;
 
 					} else {
-						if (g_statuspage_selitem4_no < 23) {
-							move_item(g_statuspage_selitem3_no, g_statuspage_selitem4_no, hero2);
+						if (g_statuspage_sel_inv_slot_4 < 23) {
+							move_item(g_statuspage_sel_inv_slot_3, g_statuspage_sel_inv_slot_4, hero2);
 							g_request_refresh = 1;
-						} else if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_EYE) { /* eye icon */
-							print_item_description(hero2, g_statuspage_selitem3_no);
-						} else if (g_statuspage_selitem4_no == HERO_INVENTORY_SLOT_MOUTH) { /* mouth icon */
-							consume(hero2, hero2, g_statuspage_selitem3_no);
+						} else if (g_statuspage_sel_inv_slot_4 == HERO_INVENTORY_SLOT_EYE) { /* eye icon */
+							print_item_description(hero2, g_statuspage_sel_inv_slot_3);
+						} else if (g_statuspage_sel_inv_slot_4 == HERO_INVENTORY_SLOT_MOUTH) { /* mouth icon */
+							consume(hero2, hero2, g_statuspage_sel_inv_slot_3);
 						}
 
 						/* set the new ??? border */
 						do_border(g_vga_memstart,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
-							g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x + 17,
+							g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y + 17,
 							30);
 					}
 
@@ -449,24 +449,24 @@ void status_menu(signed short hero_pos)
 					flag2 = 1;
 				} else {
 
-					g_statuspage_selitem4_no = HERO_INVENTORY_SLOT_EYE;
+					g_statuspage_sel_inv_slot_4 = HERO_INVENTORY_SLOT_EYE;
 
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
-						g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].x + 17,
+						g_invslot_borderxy_table[g_statuspage_sel_inv_slot_4].y + 17,
 						8);
 
-					if (hero2->inventory[g_statuspage_selitem3_no].item_id) {
+					if (hero2->inventory[g_statuspage_sel_inv_slot_3].item_id) {
 
 						nvf.dst = g_icon;
 						nvf.src = g_buffer10_ptr;
 						nvf.compression_type = 0;
 						nvf.width = &width;
 						nvf.height = &height;
-						nvf.image_num = g_itemsdat[hero2->inventory[g_statuspage_selitem3_no].item_id].gfx;
+						nvf.image_num = g_itemsdat[hero2->inventory[g_statuspage_sel_inv_slot_3].item_id].gfx;
 						process_nvf_extraction(&nvf);
 
 						make_ggst_cursor(g_icon);
@@ -545,7 +545,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							use_item(g_statuspage_selitem3_no, hero_pos);
+							use_item(g_statuspage_sel_inv_slot_3, hero_pos);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -556,7 +556,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item(hero2, g_statuspage_selitem3_no, -1);
+							drop_item(hero2, g_statuspage_sel_inv_slot_3, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -659,7 +659,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							use_item(g_statuspage_selitem3_no, hero_pos);
+							use_item(g_statuspage_sel_inv_slot_3, hero_pos);
 							reset_item_selector();
 						}
 						break;
@@ -669,7 +669,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item(hero2, g_statuspage_selitem3_no, -1);
+							drop_item(hero2, g_statuspage_sel_inv_slot_3, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}

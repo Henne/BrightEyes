@@ -25,10 +25,10 @@
 namespace M302de {
 #endif
 
-Bit8s g_statuspage_selitem1_no = 1; // ds:0x636e
-Bit8s g_statuspage_selitem2_no = 1; // ds:0x636f
-Bit8s g_statuspage_selitem3_no = 7; // ds:0x6370
-Bit8s g_statuspage_selitem4_no = -1; // ds:0x6371
+Bit8s g_statuspage_sel_inv_slot_1 = 1; // ds:0x636e
+Bit8s g_statuspage_sel_inv_slot_2 = 1; // ds:0x636f
+Bit8s g_statuspage_sel_inv_slot_3 = 7; // ds:0x6370
+Bit8s g_statuspage_sel_inv_slot_4 = -1; // ds:0x6371
 Bit8u g_statuspage_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x06, 0x06, 0x06 },
