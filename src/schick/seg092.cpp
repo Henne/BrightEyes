@@ -572,7 +572,7 @@ void use_key_on_chest(struct struct_chest* chest)
 void loot_multi_chest(Bit8u *content, char *msg)
 {
 	unsigned int item_cnt;
-	signed int item_no;
+	signed int item_id;
 	signed int i;
 	signed int tw_bak;
 	char temp_str[10];
@@ -583,40 +583,40 @@ void loot_multi_chest(Bit8u *content, char *msg)
 	g_textbox_width = 7;
 
 	do {
-		item_no = 0;
-		while ((i = content[(item_no + item_no)]) != 0xff) {
+		item_id = 0;
+		while ((i = content[(item_id + item_id)]) != 0xff) {
 
-			names[item_no][0] = '\0';
+			names[item_id][0] = '\0';
 
-			if ((item_cnt = content[item_no + item_no + 1]) > 1)
+			if ((item_cnt = content[item_id + item_id + 1]) > 1)
 			{
-				my_itoa(item_cnt, names[item_no], 10);
+				my_itoa(item_cnt, names[item_id], 10);
 
-				strcat(names[item_no], g_str_single_space);
+				strcat(names[item_id], g_str_single_space);
 			}
 
-			strcat(names[item_no++], GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
+			strcat(names[item_id++], GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
 		}
 
-		if (item_no != 0) {
+		if (item_id != 0) {
 
-			item_no = GUI_radio(msg, (signed char)item_no,
+			item_id = GUI_radio(msg, (signed char)item_id,
 				names[0], names[1], names[2], names[3],
 				names[4], names[5], names[6], names[7],
 				names[8], names[9], names[10], names[11],
 				names[12], names[13], names[14], names[15],
 				names[16], names[17], names[18], names[19]) - 1;
 
-			if (item_no != -2) {
+			if (item_id != -2) {
 
-				item_no += item_no;
+				item_id += item_id;
 
-				my_itoa(content[item_no + 1], temp_str, 10);
+				my_itoa(content[item_id + 1], temp_str, 10);
 
 				len = strlen(temp_str);
 
 				do {
-					i = (item_cnt = content[item_no + 1]) > 1 ? GUI_input(get_ttx(593), len) : item_cnt;
+					i = (item_cnt = content[item_id + 1]) > 1 ? GUI_input(get_ttx(593), len) : item_cnt;
 
 				} while (i < 0);
 
@@ -626,37 +626,37 @@ void loot_multi_chest(Bit8u *content, char *msg)
 
 				if (i != 0) {
 
-					if (content[item_no] == ITEM_DUKATEN) {
+					if (content[item_id] == ITEM_DUKATEN) {
 
 						add_party_money(i * 100L);
 
 					} else {
-						i = get_item(content[item_no], 1, i);
+						i = get_item(content[item_id], 1, i);
 					}
 
 					if (i == item_cnt) {
 
 						do {
-							content[item_no] = (unsigned char)(i = content[item_no + 2]);
-							content[item_no + 1] = content[item_no + 3];
-							item_no += 2;
+							content[item_id] = (unsigned char)(i = content[item_id + 2]);
+							content[item_id + 1] = content[item_id + 3];
+							item_id += 2;
 
 						} while (i != 255);
 
 					} else if (i != 0) {
-						content[item_no + 1] -= i;
+						content[item_id + 1] -= i;
 					} else {
-						item_no = -2;
+						item_id = -2;
 					}
 				}
 			}
 
 
 		} else {
-			item_no = -2;
+			item_id = -2;
 		}
 
-	} while (item_no != -2);
+	} while (item_id != -2);
 
 	g_textbox_width = tw_bak;
 }
