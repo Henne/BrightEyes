@@ -100,10 +100,10 @@ void set_textbox_positions(signed short town_id)
 /**
  * \brief   ???
  *
- * \param   route_no    number of the route
+ * \param   route_id    number of the route
  * \param   backwards   0 = travel the route forwards, 1 = travel backwards
  */
-void TM_func1(signed short route_no, signed short backwards)
+void TM_func1(signed short route_id, signed short backwards)
 {
 	Bit8u* fb_start;
 	struct struct_hero *hero;
@@ -116,14 +116,14 @@ void TM_func1(signed short route_no, signed short backwards)
 	g_traveling = 1;
 
 	last_tevent_no = -1;
-	gs_route_course_ptr = (Bit16s*)((g_buffer9_ptr + *(Bit16s*)((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))) + 0xecL);
+	gs_route_course_ptr = (Bit16s*)((g_buffer9_ptr + *(Bit16s*)((Bit8u*)g_buffer9_ptr + 4 * (route_id - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
 	gs_route_course_ptr += 2;
 
 	memset((void*)g_trv_track_pixel_bak, 0xaa, 500);
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
 	 * 		Can be replaced by a locvar! */
-	gs_travel_route_ptr = &g_land_routes[route_no - 1];
+	gs_travel_route_ptr = &g_land_routes[route_id - 1];
 	gs_travel_speed = 166;
 	gs_route_total_steps = TM_get_track_length((struct struct_point*)gs_route_course_ptr);
 	gs_route_length = (gs_travel_route_ptr->distance * 100);
@@ -152,7 +152,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	 * 		Can be replaced by a locvar! */
 	gs_tevents_tab_ptr = &g_tevents_tab[0];
 	/* Forward pointer to entries associated with current route. */
-	while (((unsigned char)gs_tevents_tab_ptr->route_id != route_no) && (gs_tevents_tab_ptr->route_id != -1))
+	while (((unsigned char)gs_tevents_tab_ptr->route_id != route_id) && (gs_tevents_tab_ptr->route_id != -1))
 	{
 		gs_tevents_tab_ptr++;
 	}
@@ -185,7 +185,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	gs_route_dayprogress = 0;
 	/* random section ends */
 
-	while ((gs_tevents_tab_ptr->route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->route_id == route_no))
+	while ((gs_tevents_tab_ptr->route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->route_id == route_id))
 	{
 		tevent_ptr = &gs_route_tevents[gs_route_stepcount];
 		tevent_ptr->place = gs_tevents_tab_ptr->place;
@@ -305,7 +305,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 		if (gs_route_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && g_game_state == GAME_STATE_MAIN)
 		{
-			random_encounter(route_no);
+			random_encounter(route_id);
 			gs_route_encounter_flag = 0;
 
 		} else if (gs_route_fight_flag && gs_route_dayprogress >= gs_route_fight_time && g_game_state == GAME_STATE_MAIN)
@@ -428,7 +428,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			gs_trv_i = 0;
 			gs_route_course_ptr2 = gs_route_course_start;
 
-			if (route_no == 59)
+			if (route_id == 59)
 			{
 				TM_func8(0);
 			}
@@ -442,7 +442,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			call_mouse();
 
-			if (g_request_refresh == 2 && route_no != 59)
+			if (g_request_refresh == 2 && route_id != 59)
 			{
 				/* Return or continue? */
 				if (GUI_radio(get_tx(71), 2, get_tx(72), get_tx(73)) == 2)
@@ -483,7 +483,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 		} while (gs_route_course_ptr[0] != -1);
 
-		if (route_no == 59)
+		if (route_id == 59)
 		{
 			TM_func8(1);
 		}
@@ -496,41 +496,41 @@ void TM_func1(signed short route_no, signed short backwards)
 
 #if defined(__BORLANDC__)
 /* continue travel after arrival while still on map */
-signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_route_no)
+signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_route_id)
 {
-	signed short route_no1;
+	signed short route_id1;
 	signed short route_id;
 	signed short answer;
 	signed short town_i;
-	signed short route_no2;
+	signed short route_id2;
 	signed short town;
-	signed short old_route_id;
+	signed short old_route_id2;
 	char *destinations_tab[7];
 
-	old_route_id = signpost_ptr->end_points[old_route_no] - 1;
+	old_route_id2 = signpost_ptr->end_points[old_route_id] - 1;
 	gs_current_town = town = gs_trv_destination;
 	signpost_ptr = &g_signposts[0];
 
 	do {
 		if ((unsigned char)signpost_ptr->town == town)
 		{
-			route_no1 = 0;
-			while (signpost_ptr->end_points[route_no1] != (signed char)-1)
+			route_id1 = 0;
+			while (signpost_ptr->end_points[route_id1] != (signed char)-1)
 			{
-				if (signpost_ptr->end_points[route_no1] - 1 == old_route_id &&
-					(route_no1 || signpost_ptr->end_points[route_no1 + 1] != (signed char)-1))
+				if (signpost_ptr->end_points[route_id1] - 1 == old_route_id2 &&
+					(route_id1 || signpost_ptr->end_points[route_id1 + 1] != (signed char)-1))
 				{
-					town_i = route_no2 = 0;
+					town_i = route_id2 = 0;
 
-					while ((route_id = signpost_ptr->end_points[route_no2]) != 0xff)
+					while ((route_id = signpost_ptr->end_points[route_id2]) != 0xff)
 					{
-						if (route_no2 != route_no1)
+						if (route_id2 != route_id1)
 						{
 							destinations_tab[town_i++] = get_ttx(235 + (gs_trv_menu_towns[town_i] =
 								((answer = g_land_routes[route_id - 1].town1_id) != gs_current_town ?
 									(signed char)answer : g_land_routes[route_id - 1].town2_id)));
 						}
-						route_no2++;
+						route_id2++;
 					}
 
 					gs_trv_menu_towns[town_i] = (signed char)town;
@@ -555,7 +555,7 @@ signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_r
 					return answer;
 				}
 
-				route_no1++;
+				route_id1++;
 			}
 		}
 
