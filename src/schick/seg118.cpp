@@ -258,7 +258,7 @@ void tevent_078(void)
 			/* try to clean the path */
 
 			/* with SHOVEL/SCHAUFEL 5 Hours, without 8 Hours */
-			if (get_first_hero_with_item(ITEM_SHOVEL) != -1) {
+			if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1) {
 				tmp = 5;
 			} else {
 				tmp = 8;

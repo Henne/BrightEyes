@@ -176,7 +176,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 		dir = hero->viewdir;
 	}
 
-	if ((weapon_type == -1) || ((hero->typus == HERO_TYPE_MAGIER) && (weapon_id == ITEM_MAGIC_WAND))) {
+	if ((weapon_type == -1) || ((hero->typus == HERO_TYPE_MAGIER) && (weapon_id == ITEM_ZAUBERSTAB))) {
 
 		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 :		/* melee attack */
 			(f_action == FIG_ACTION_UNKNOWN3) ? 41 :		/* drink potion */

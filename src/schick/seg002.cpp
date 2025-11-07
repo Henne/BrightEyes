@@ -2995,7 +2995,7 @@ void sub_light_timers(const Bit32s quarter)
 
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-				if (hero_i->inventory[j].item_id == ITEM_TORCH_ON) {
+				if (hero_i->inventory[j].item_id == ITEM_FACKEL__LIT) {
 
 					/* Torch, burning */
 					hero_i->inventory[j].lighting_timer -= tmp;
@@ -3006,13 +3006,13 @@ void sub_light_timers(const Bit32s quarter)
 						hero_i->items_num--;
 
 						/* subtract weight of a torch */
-						hero_i->load -= g_itemsdat[ITEM_TORCH_ON].weight;
+						hero_i->load -= g_itemsdat[ITEM_FACKEL__LIT].weight;
 
 						/* Remove Torch from inventory */
 						memset(&hero_i->inventory[j], 0, sizeof(inventory));
 					}
 
-				} else if (hero_i->inventory[j].item_id == ITEM_LANTERN_ON) {
+				} else if (hero_i->inventory[j].item_id == ITEM_LATERNE__LIT) {
 
 					/* Lantern, burning */
 					hero_i->inventory[j].lighting_timer -= tmp;
@@ -3022,7 +3022,7 @@ void sub_light_timers(const Bit32s quarter)
 						/* Set timer to 0 */
 						hero_i->inventory[j].lighting_timer = 0;
 						/* Set burning lantern to a not burning lantern */
-						hero_i->inventory[j].item_id = ITEM_LANTERN_OFF;
+						hero_i->inventory[j].item_id = ITEM_LATERNE__UNLIT;
 					}
 				}
 			}
@@ -3054,7 +3054,7 @@ static void magical_chainmail_damage(void)
 				/* check if not in jail (the argument might be: heroes are forced to take off armor in jail) */
 				!hero_i->jail &&
 				/* check if cursed chainmail is equipped */
-				(hero_i->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_CHAIN_MAIL_CURSED))
+				(hero_i->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_KETTENHEMD__CURSED))
 			{
 				sub_hero_le(hero_i, 1);
 			}
@@ -3091,17 +3091,17 @@ void herokeeping(void)
 			/* Do the eating */
 
 			/* check for magic bread bag in the group */
-			if (get_first_hero_with_item_in_group(ITEM_MAGIC_BREADBAG, hero->group_id) == -1) {
+			if (get_first_hero_with_item_in_group(ITEM_MAGISCHER_BROTBEUTEL, hero->group_id) == -1) {
 
 				/* if not, check if the hero has the food amulet */
-				if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
+				if (get_item_pos(hero, ITEM_TRAVIA_AMULETT) == -1) {
 					/* if not... */
 
 					/* eat if hunger > 90 % */
 					if (hero->hunger > 90) {
 
 						/* search for Lunchpack */
-						pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
+						pos = get_item_pos(hero, ITEM_PROVIANTPAKET);
 
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
@@ -3114,7 +3114,7 @@ void herokeeping(void)
 
 							/* search for another Lunchpack */
 							/* print last ration message */
-							if (get_item_pos(hero, ITEM_FOOD_PACKAGE) == -1) {
+							if (get_item_pos(hero, ITEM_PROVIANTPAKET) == -1) {
 								gs_food_message[i] = 6;
 							}
 						} else {
@@ -3161,13 +3161,13 @@ void herokeeping(void)
 
 			/* check if someone in the group of the hero has the magic bread bag */
 			/* check for magic waterskin in group */
-			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, hero->group_id) == -1) &&
+			if ((get_first_hero_with_item_in_group(ITEM_MAGISCHER_WASSERSCHLAUCH, hero->group_id) == -1) &&
 				(((hero->group_id == gs_current_group) &&
 					(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
 				((hero->group_id != gs_current_group) && !gs_groups_town[hero->group_id])))
 			{
 					/* check for food amulett */
-					if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
+					if (get_item_pos(hero, ITEM_TRAVIA_AMULETT) == -1) {
 
 						/* hero should drink something */
 						if (hero->thirst > 90) {
@@ -3175,7 +3175,7 @@ void herokeeping(void)
 							g_consume_quiet = 1;
 
 							/* first check for beer :) */
-							pos = get_item_pos(hero, ITEM_BEER);
+							pos = get_item_pos(hero, ITEM_BIER);
 
 							/* and then for water */
 							if (pos == -1) {
@@ -3189,7 +3189,7 @@ void herokeeping(void)
 								D1_INFO("%s trinkt etwas\n", hero->alias);
 #endif
 								/* nothing to drink message */
-								if ((get_item_pos(hero, ITEM_BEER) == -1)
+								if ((get_item_pos(hero, ITEM_BIER) == -1)
 									&& (get_full_waterskin_pos(hero) == -1)) {
 									gs_food_message[i] = 5;
 								}

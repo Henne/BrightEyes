@@ -63,37 +63,37 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 		}
 
 		/* unequip Kraftguertel KK - 5 */
-		if (item_id == ITEM_GIRDLE_MIGHT) {
+		if (item_id == ITEM_KRAFTGUERTEL) {
 
 			hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].current - 5;
 		}
 
 		/* unequip Helm CH + 1 (cursed) */
-		if (item_id == ITEM_HELMET_CURSED) {
+		if (item_id == ITEM_HELM__CURSED) {
 
 			hero->attrib[ATTRIB_CH].current++;
 		}
 
 		/* unequip Silberschmuck TA + 2 */
-		if (item_id == ITEM_SILVER_JEWELRY_MAGIC) {
+		if (item_id == ITEM_SILBERSCHMUCK__MAGIC) {
 
 			hero->attrib[ATTRIB_TA].current = hero->attrib[ATTRIB_TA].current + 2;
 		}
 
 		/* unequip Stirnreif or Ring MR - 2 */
-		if (item_id == ITEM_CORONET_BLUE || item_id == ITEM_RING_RED) {
+		if (item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_RING__RED) {
 
 			hero->mr = hero->mr - 2;
 		}
 
 		/* unequip Totenkopfguertel TA + 4 */
-		if (item_id == ITEM_SKULL_BELT) {
+		if (item_id == ITEM_TOTENKOPFGUERTEL) {
 
 			hero->attrib[ATTRIB_TA].current = hero->attrib[ATTRIB_TA].current + 4;
 		}
 
 		/* unequip Kristallkugel Gefahrensinn - 2 */
-		if (item_id == ITEM_CRYSTAL_BALL) {
+		if (item_id == ITEM_KRISTALLKUGEL) {
 
 			hero->skills[TA_GEFAHRENSINN] = hero->skills[TA_GEFAHRENSINN] - 2;
 		}
@@ -145,31 +145,31 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		}
 
 		/* Girdle of might / Kraftguertel */
-		if (item_id == ITEM_GIRDLE_MIGHT) {
+		if (item_id == ITEM_KRAFTGUERTEL) {
 
 			equipper->attrib[ATTRIB_KK].current = equipper->attrib[ATTRIB_KK].current + 5;
 		}
 
 		/* Helmet / Helm */
-		if (item_id == ITEM_HELMET_CURSED) {
+		if (item_id == ITEM_HELM__CURSED) {
 
 			equipper->attrib[ATTRIB_CH].current--;
 		}
 
 		/* Silver Jewelry / Silberschmuck (magisch) */
-		if (item_id == ITEM_SILVER_JEWELRY_MAGIC) {
+		if (item_id == ITEM_SILBERSCHMUCK__MAGIC) {
 
 			equipper->attrib[ATTRIB_TA].current = equipper->attrib[ATTRIB_TA].current - 2;
 		}
 
 		/* Coronet or Ring / Stirnreif oder Ring */
-		if (item_id == ITEM_CORONET_BLUE || item_id == ITEM_RING_RED) {
+		if (item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_RING__RED) {
 
 			equipper->mr = equipper->mr + 2;
 		}
 
 		/* Skull belt / Totenkopfguertel */
-		if (item_id == ITEM_SKULL_BELT) {
+		if (item_id == ITEM_TOTENKOPFGUERTEL) {
 
 			/* TA - 4 */
 			equipper->attrib[ATTRIB_TA].current = equipper->attrib[ATTRIB_TA].current - 4;
@@ -180,7 +180,7 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		}
 
 		/* Crystal ball / Kristalkugel */
-		if (item_id == ITEM_CRYSTAL_BALL) {
+		if (item_id == ITEM_KRISTALLKUGEL) {
 
 			equipper->skills[TA_GEFAHRENSINN] = equipper->skills[TA_GEFAHRENSINN] + 2;
 		}
@@ -246,7 +246,7 @@ signed int can_item_at_pos(const signed int item_id, const signed int inv_pos)
 	} else {
 
 		/* coronet (Stirnreif) (3 types) can be weared at the head */
-		if ((item_id == ITEM_CORONET_BLUE || item_id == ITEM_CORONET_SILVER || item_id == ITEM_CORONET_GREEN)
+		if ((item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_SILBERNER_STIRNREIF || item_id == ITEM_STIRNREIF__GREEN)
 			&& (inv_pos == HERO_INVENTORY_SLOT_HEAD))
 		{
 			return 1;
@@ -433,11 +433,11 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 								done = 1;
 
 							/* special items */
-							if (item_id == ITEM_SICKLE_MAGIC) {
+							if (item_id == ITEM_SICHEL__MAGIC) {
 								hero->skills[TA_PFLANZENKUNDE] = hero->skills[TA_PFLANZENKUNDE] + 3;
 							}
 
-							if (item_id == ITEM_AMULET_BLUE) {
+							if (item_id == ITEM_AMULETT__BLUE) {
 
 								hero->mr = hero->mr + 5;
 							}
@@ -566,13 +566,13 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 
 					/* check special items */
 					/* item: SICHEL Pflanzenkunde -3 */
-					if (item_id == ITEM_SICKLE_MAGIC) {
+					if (item_id == ITEM_SICHEL__MAGIC) {
 
 						hero->skills[TA_PFLANZENKUNDE] = hero->skills[TA_PFLANZENKUNDE] - 3;
 					}
 
 					/* item:  AMULETT MR -5 */
-					if (item_id == ITEM_AMULET_BLUE) {
+					if (item_id == ITEM_AMULETT__BLUE) {
 
 						hero->mr = hero->mr - 5;
 					}
@@ -585,7 +585,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 		}
 
 		/* check for the pirate cave on Manrek to bring Efferd a gift */
-		if ((item_id == ITEM_TRIDENT || item_id == ITEM_NET) &&
+		if ((item_id == ITEM_DREIZACK || item_id == ITEM_NETZ) &&
 			(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE) && (gs_x_target == 9) && (gs_y_target == 9))
 		{
 			gs_dng11_efferd_sacrifice = 1;
@@ -622,9 +622,9 @@ signed int get_item(signed int item_id, const signed int unused, signed int quan
 	signed int autofight_bak;
 
 	/* Special stacked items */
-	if (item_id == ITEM_200_ARROWS) { item_id = ITEM_ARROWS; quantity = 200;} else
-	if (item_id == ITEM_50_BOLTS) { item_id = ITEM_BOLTS; quantity = 50;} else
-	if (item_id == ITEM_20_CLIMBING_HOOKS) { item_id = ITEM_CLIMBING_HOOKS; quantity = 20;}
+	if (item_id == ITEM_200_PFEILE) { item_id = ITEM_PFEIL; quantity = 200;} else
+	if (item_id == ITEM_50_BOLZEN) { item_id = ITEM_BOLTS; quantity = 50;} else
+	if (item_id == ITEM_20_KLETTERHAKEN) { item_id = ITEM_KLETTERHAKEN; quantity = 20;}
 
 	do {
 		hero_i = get_hero(0);

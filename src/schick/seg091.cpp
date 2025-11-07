@@ -65,7 +65,7 @@ signed short DNG13_handler(void)
 		{
 			gs_dng13_lantern_flag = 1;
 
-			get_item(ITEM_LANTERN_OFF, 1, 1);
+			get_item(ITEM_LATERNE__UNLIT, 1, 1);
 		}
 
 	} else if ((pos == DNG_POS(0,1,12) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,14,13) || pos == DNG_POS(0,3,1)) &&
@@ -191,10 +191,10 @@ void DNG13_unblock_passage(char* text, Bit8u* flag)
 
 			has_items = 0;
 
-			if (get_first_hero_with_item(ITEM_SHOVEL) != -1 &&
-				get_first_hero_with_item(ITEM_PICKAXE) != -1 &&
-				get_first_hero_with_item(ITEM_CROWBAR) != -1 &&
-				get_first_hero_with_item(ITEM_FRANCESCA) != -1)
+			if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1 &&
+				get_first_hero_with_item(ITEM_HACKE) != -1 &&
+				get_first_hero_with_item(ITEM_BRECHEISEN) != -1 &&
+				get_first_hero_with_item(ITEM_WURFBEIL) != -1)
 			{
 				has_items = 1;
 			}
@@ -294,10 +294,10 @@ void DNG13_collapsing_ceiling(void)
 
 		has_items = 0;
 
-		if (get_first_hero_with_item(ITEM_SHOVEL) != -1 &&
-			get_first_hero_with_item(ITEM_PICKAXE) != -1 &&
-			get_first_hero_with_item(ITEM_CROWBAR) != -1 &&
-			get_first_hero_with_item(ITEM_FRANCESCA) != -1)
+		if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1 &&
+			get_first_hero_with_item(ITEM_HACKE) != -1 &&
+			get_first_hero_with_item(ITEM_BRECHEISEN) != -1 &&
+			get_first_hero_with_item(ITEM_WURFBEIL) != -1)
 		{
 			has_items = 1;
 		}
@@ -341,10 +341,10 @@ void DNG13_collapsing_ceiling_easy(void)
 
 		has_items = 0;
 
-		if (get_first_hero_with_item(ITEM_SHOVEL) != -1 &&
-			get_first_hero_with_item(ITEM_PICKAXE) != -1 &&
-			get_first_hero_with_item(ITEM_CROWBAR) != -1 &&
-			get_first_hero_with_item(ITEM_FRANCESCA) != -1)
+		if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1 &&
+			get_first_hero_with_item(ITEM_HACKE) != -1 &&
+			get_first_hero_with_item(ITEM_BRECHEISEN) != -1 &&
+			get_first_hero_with_item(ITEM_WURFBEIL) != -1)
 		{
 			has_items = 1;
 		}

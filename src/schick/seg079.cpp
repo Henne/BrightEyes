@@ -305,7 +305,7 @@ signed short DNG03_handler(void)
 	{
 
 		/* check if a hero in this group has crystals */
-		i = get_first_hero_with_item(ITEM_CRYSTAL) != -1 ? 0 : 1;
+		i = get_first_hero_with_item(ITEM_KRISTALL) != -1 ? 0 : 1;
 
 		do {
 			j = GUI_radio(get_tx(14), 2, get_tx(15), !i ? get_tx(16) : get_tx(29));
@@ -324,14 +324,14 @@ signed short DNG03_handler(void)
 			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,5,13,NORTH);
 
 			/* drop all crystals from the heroes of that group */
-			i = get_first_hero_with_item(ITEM_CRYSTAL);
+			i = get_first_hero_with_item(ITEM_KRISTALL);
 
 			do {
 				hero = get_hero(i);
 
-				drop_item(hero, get_item_pos(hero, ITEM_CRYSTAL), 1);
+				drop_item(hero, get_item_pos(hero, ITEM_KRISTALL), 1);
 
-				i = get_first_hero_with_item(ITEM_CRYSTAL);
+				i = get_first_hero_with_item(ITEM_KRISTALL);
 
 			} while (i != -1);
 
@@ -539,7 +539,7 @@ void DNG03_chest12_loot(struct struct_chest* chest)
 	/* count the crystals in the knapsack of the leader */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++)
 	{
-		if (hero->inventory[i].item_id == ITEM_CRYSTAL)
+		if (hero->inventory[i].item_id == ITEM_KRISTALL)
 		{
 			crystals++;
 		}

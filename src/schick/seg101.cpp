@@ -571,14 +571,14 @@ void spell_brenne(void)
 	g_spell_special_aecost = 0;
 
 	if (g_light_type == LIGHTING_TORCH) {
-		torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
+		torch_pos = get_item_pos(get_spelluser(), ITEM_FACKEL__UNLIT);
 	} else {
 		if (g_light_type == LIGHTING_LANTERN) {
 		} else {
-			torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
+			torch_pos = get_item_pos(get_spelluser(), ITEM_FACKEL__UNLIT);
 		}
 
-		lantern_pos = get_item_pos(get_spelluser(), ITEM_LANTERN_OFF);
+		lantern_pos = get_item_pos(get_spelluser(), ITEM_LATERNE__UNLIT);
 	}
 
 	if (torch_pos != -1) {
@@ -589,8 +589,8 @@ void spell_brenne(void)
 			sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
 
 			answer = GUI_radio(g_dtp2, 2,
-					(char*)GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0),
-					(char*)GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0));
+					(char*)GUI_names_grammar(0x4000, ITEM_FACKEL__UNLIT, 0),
+					(char*)GUI_names_grammar(0x4000, ITEM_LATERNE__UNLIT, 0));
 
 			if (answer == -1) {
 
@@ -611,7 +611,7 @@ void spell_brenne(void)
 	if (torch_pos != -1) {
 
 		/* change torch to burning torch */
-		get_spelluser()->inventory[torch_pos].item_id = ITEM_TORCH_ON;
+		get_spelluser()->inventory[torch_pos].item_id = ITEM_FACKEL__LIT;
 
 		/* set timer to 10 */
 		get_spelluser()->inventory[torch_pos].lighting_timer = 10;
@@ -625,12 +625,12 @@ void spell_brenne(void)
 	} else if (lantern_pos != -1) {
 
 		/* get position of oil */
-		oil_pos = get_item_pos(get_spelluser(), ITEM_OIL);
+		oil_pos = get_item_pos(get_spelluser(), ITEM_OEL);
 
 		if (oil_pos != -1) {
 
 			/* change lantern to burning lantern */
-			get_spelluser()->inventory[lantern_pos].item_id = ITEM_LANTERN_ON;
+			get_spelluser()->inventory[lantern_pos].item_id = ITEM_LATERNE__LIT;
 
 			/* set counter to 100 */
 			get_spelluser()->inventory[lantern_pos].lighting_timer = 100;
@@ -639,7 +639,7 @@ void spell_brenne(void)
 			drop_item(get_spelluser(), oil_pos, 1);
 
 			/* give bronze flask */
-			give_hero_new_item(get_spelluser(), ITEM_FLASK_BRONZE, 0, 1);
+			give_hero_new_item(get_spelluser(), ITEM_BRONZEFLASCHE, 0, 1);
 
 			/* set AP cost */
 			g_spell_special_aecost = random_schick(20);

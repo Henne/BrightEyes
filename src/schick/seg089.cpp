@@ -283,7 +283,7 @@ signed short DNG15_handler(void)
 		{
 			GUI_output(get_tx(51));
 
-			if (get_item(ITEM_PICKAXE, 1, 1) != -1)
+			if (get_item(ITEM_HACKE, 1, 1) != -1)
 			{
 				gs_dng15_took_hoe = 1;
 			}
@@ -607,7 +607,7 @@ void DNG15_cursed_money_chest(struct struct_chest* chest)
 		set_party_money(p_money);
 
 		/* ... 50 GOLD JEWELRY. */
-		get_item(ITEM_GOLD_JEWELRY, 1, 50);
+		get_item(ITEM_GOLDSCHMUCK, 1, 50);
 	}
 	g_textbox_width = tw_bak;
 }
@@ -697,10 +697,10 @@ void DNG15_clear_way(Bit8u* ptr)
 	i = 0;
 
 	/* With all of the following items SHOVEL, HOE, CROWBAR, FRANCESCA ...*/
-	if ((get_first_hero_with_item(ITEM_SHOVEL) != -1) &&
-		(get_first_hero_with_item(ITEM_PICKAXE) != -1) &&
-		(get_first_hero_with_item(ITEM_CROWBAR) != -1) &&
-		(get_first_hero_with_item(ITEM_FRANCESCA) != -1))
+	if ((get_first_hero_with_item(ITEM_SCHAUFEL) != -1) &&
+		(get_first_hero_with_item(ITEM_HACKE) != -1) &&
+		(get_first_hero_with_item(ITEM_BRECHEISEN) != -1) &&
+		(get_first_hero_with_item(ITEM_WURFBEIL) != -1))
 	{
 		i = 1;
 	}

@@ -35,15 +35,15 @@ namespace M302de {
 #endif
 
 struct struct_chest g_dng01_specialchests[9] = {
-	{ DNG_POS(0,12,9), (signed char)ITEM_KEY_GOLDEN_2, use_key_on_chest,		chest_protected_normal, DNG01_chest00_loot, 0, 0, 0 },
-	{ DNG_POS(1,5,8),				2, use_lockpicks_on_chest,	chest_closed,		DNG01_chest01_loot, 0, 0, 0 },
-	{ DNG_POS(1,14,8),    				3, use_lockpicks_on_chest,	chest_protected_heavy,	DNG01_chest02_loot, 0, 0, 0 },
-	{ DNG_POS(3,5,5),    				0, NULL,			NULL,			DNG01_chest03_loot, 0, 0, 0 },
-	{ DNG_POS(3,13,4),    				6, use_lockpicks_on_chest,	chest_cursed, 		NULL,		0, 5000, 0 },
-	{ DNG_POS(3,14,6),    				3, use_lockpicks_on_chest,	chest_fulminictus,	DNG01_chest05_loot,  0, 0, 0 },
-	{ DNG_POS(3,13,11),    				1, DNG01_chest06_open,		DNG01_chest06_trap,	DNG01_chest06_loot, 10, 0, 0 },
-	{ DNG_POS(4,13,6),    				1, DNG01_chest07_open,		NULL,			DNG01_chest07_loot, 0, 0, 0 },
-	{ -1,						0, NULL,			NULL,			NULL,		0, 0, 0 }
+	{ DNG_POS(0,12,9),	(signed char)ITEM_GOLDSCHLUESSEL,	use_key_on_chest,	chest_protected_normal, DNG01_chest00_loot,	 0,    0, 0 },
+	{ DNG_POS(1,5,8),	2,					use_lockpicks_on_chest,	chest_closed,		DNG01_chest01_loot,	 0,    0, 0 },
+	{ DNG_POS(1,14,8),    	3,					use_lockpicks_on_chest,	chest_protected_heavy,	DNG01_chest02_loot,	 0,    0, 0 },
+	{ DNG_POS(3,5,5),    	0,					NULL,			NULL,			DNG01_chest03_loot,	 0,    0, 0 },
+	{ DNG_POS(3,13,4),    	6,					use_lockpicks_on_chest,	chest_cursed, 		NULL,			 0, 5000, 0 },
+	{ DNG_POS(3,14,6),    	3,					use_lockpicks_on_chest,	chest_fulminictus,	DNG01_chest05_loot,	 0,    0, 0 },
+	{ DNG_POS(3,13,11),    	1,					DNG01_chest06_open,	DNG01_chest06_trap,	DNG01_chest06_loot,	10,    0, 0 },
+	{ DNG_POS(4,13,6),    	1,					DNG01_chest07_open,	NULL,			DNG01_chest07_loot,	 0,    0, 0 },
+	{ -1,			0,					NULL,			NULL,			NULL,			 0,    0, 0 }
 }; // ds:0x9314
 const char g_dng01_str_marbo[6] = "MARBO"; // ds:0x93d1
 
@@ -88,19 +88,19 @@ signed short DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(1,13,5)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_sabre_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_SABER, 0), (char*)GUI_2f2(2, ITEM_SABER, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_SAEBEL, 0), (char*)GUI_2f2(2, ITEM_SAEBEL, 0));
 
 		/* ITEM: get a SABRE */
-		if (GUI_bool(g_text_output_buf) && get_item(ITEM_SABER, 1, 1)) {
+		if (GUI_bool(g_text_output_buf) && get_item(ITEM_SAEBEL, 1, 1)) {
 			gs_dng01_sabre_taken = 1;
 		}
 
 	} else if ((target_pos == DNG_POS(3,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_crossbow_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_CROSSBOW, 0), (char*)GUI_2f2(2, ITEM_CROSSBOW, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_ARMBRUST, 0), (char*)GUI_2f2(2, ITEM_ARMBRUST, 0));
 
 		/* ITEM: get a CROSSBOW */
-		if (GUI_bool(g_text_output_buf) && get_item(ITEM_CROSSBOW, 1, 1)) {
+		if (GUI_bool(g_text_output_buf) && get_item(ITEM_ARMBRUST, 1, 1)) {
 
 			gs_dng01_crossbow_taken = 1;
 		}
@@ -108,7 +108,7 @@ signed short DNG01_handler(void)
 	} else if ((target_pos == DNG_POS(4,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_amulet_taken)
 	{
 		/* ITEM: a magic AMULET */
-		if (GUI_bool(get_tx(7)) && get_item(ITEM_AMULET_GREEN, 1, 1))
+		if (GUI_bool(get_tx(7)) && get_item(ITEM_AMULETT__GREEN, 1, 1))
 		{
 			gs_dng01_amulet_taken = 1;
 			gs_gods_estimation[GOD_BORON] -= 100L;
@@ -174,7 +174,7 @@ signed short DNG01_handler(void)
 		{
 			/* check if a ROPE LADDER or a ROPE is available */
 			/* Original-Bug: Why not check for a mage with staffspell level >= 3? */
-			if (get_first_hero_with_item(ITEM_ROPE) != -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
+			if (get_first_hero_with_item(ITEM_SEIL) != -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1)
 			{
 				/* Original-Bug: better get_first_hero_available_in_group() */
 				if (test_skill(get_hero(0), TA_KLETTERN, 0) > 0)
@@ -310,7 +310,7 @@ void DNG01_chest06_loot(struct struct_chest* chest)
 	{
 #endif
 	/* ITEM: the GOLDEN KEY */
-	get_item(ITEM_KEY_GOLDEN_2, 1, 1);
+	get_item(ITEM_GOLDSCHLUESSEL, 1, 1);
 
 	/* Original-Bug: The string 14 from SHIP.DTX needs a pointer to the name of the hero, not an integer.
 	 */

@@ -84,12 +84,12 @@ static signed int g_travel_event_tx2 = -1; // ds:0xb133
  * In certain travel events, an axe is needed as a tool.
  * (These are: bridge building Breida <-> Tjoila, bridge building Auplog <-> Varnheim, path blocked by a tree Skjal <-> Ottarje)
  * The list of accepted axes is a bit arbitrary (The common pattern is that all have "...axt" or "...beil" in their name.
- * Other more or less sensible options would be: ITEM_SKRAJA, ITEM_ORKNASE, ITEM_SCHNEIDZAHN, ITEM_ORKNASE_MAGIC, ITEM_HELLEBARDE. */
-Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_THROWING_AXE, ITEM_FRANCESCA, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+ * Other more or less sensible options would be: ITEM_SKRAJA, ITEM_ORKNASE, ITEM_SCHNEIDZAHN, ITEM_ORKNASE__MAGIC, ITEM_HELLEBARDE. */
+Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_WURFAXT, ITEM_WURFBEIL, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
 #else
-Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE_MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE__MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
 /* rationale:
- * - don't allow throwing axes (ITEM_THROWING_AXE, ITEM_FRANCESCA, ITEM_SCHNEIDZAHN), as they are pretty light and designed for a completely different purpose.
+ * - don't allow throwing axes (ITEM_WURFAXT, ITEM_WURFBEIL, ITEM_SCHNEIDZAHN), as they are pretty light and designed for a completely different purpose.
  * - don't allow ITEM_HELLEBARDE, as it is a polearm with a different purpose. (Note that surprisingliy, it is classified as WEAPON_TYPE_AXT in Schicksalsklinge)
  * - don't allow ITEM_SKRAJA, as it is a small axe with a very short shaft, which won't produce too much momentum.
    (Note that while being an axe, ITEM_SKRAJA is classified as WEAPON_TYPE_HIEBWAFFEN in Schicksalsklinge -- which might be a bug on its own.)
@@ -649,7 +649,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 
 				timewarp(HOURS(1));
 
-				get_item(ITEM_FOOD_PACKAGE, 1, foods1);
+				get_item(ITEM_PROVIANTPAKET, 1, foods1);
 
 				answer = 0;
 			} else {
@@ -669,7 +669,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 		add_hero_ap_all(ap_all2);
 
 		if (foods2 != 0) {
-			get_item(ITEM_FOOD_PACKAGE, 1, foods2);
+			get_item(ITEM_PROVIANTPAKET, 1, foods2);
 		}
 
 	} else if (answer == 1) {
@@ -746,8 +746,8 @@ void TRV_barrier(const signed int text_start)
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
 				{
-					tools_num += hero_count_item(hero, ITEM_ROPE);
-					tools_num += hero_count_item(hero, ITEM_ROPE_LADDER);
+					tools_num += hero_count_item(hero, ITEM_SEIL);
+					tools_num += hero_count_item(hero, ITEM_STRICKLEITER);
 				}
 			}
 
@@ -785,15 +785,15 @@ void TRV_barrier(const signed int text_start)
 
 					add_hero_ap_all(10);
 
-					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
 					if (i == -1) {
-						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
 					}
 					drop_item(hero, i, 1);
 
-					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
+					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
 					if (i == -1) {
-						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
+						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
 					}
 					drop_item(hero, i, 1);
 

@@ -849,7 +849,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 		/* drop the item in the left hand */
 		drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 
-	} else if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_HYLAILIC_FIRE) {
+	} else if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_HYLAILER_FEUER) {
 
 		/* HYLAILIC FIRE */
 

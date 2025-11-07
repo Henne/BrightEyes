@@ -55,7 +55,7 @@ void tevent_110(void)
 			{
 				/* skill test failed */
 
-				if (get_first_hero_with_item(ITEM_ROPE) != -1)
+				if (get_first_hero_with_item(ITEM_SEIL) != -1)
 				{
 					/* one hero in the group has a rope */
 					sprintf(g_dtp2,	get_tx2(85), hero->alias);
@@ -194,7 +194,7 @@ void tevent_111(void)
 
 					timewarp(HOURS(3));
 
-					get_item(ITEM_FOOD_PACKAGE, 1, 200);
+					get_item(ITEM_PROVIANTPAKET, 1, 200);
 
 					gs_tevent111_flag = 2;
 
@@ -234,7 +234,7 @@ void tevent_111(void)
 							}
 						}
 
-						get_item(ITEM_FOOD_PACKAGE, 1, 180);
+						get_item(ITEM_PROVIANTPAKET, 1, 180);
 						gs_tevent111_flag = 2;
 					}
 
@@ -410,10 +410,10 @@ void tevent_114(void)
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(52), get_tx2(26), 0);
 
 				/* get RECIPE FOR POTENT HEALING POTION */
-				get_item(ITEM_RECIPE_STRONG_LE_POTION, 1, 1);
+				get_item(ITEM_REZEPT_FUER_STARKEN_HEILTRANK, 1, 1);
 
 				/* TODO: ORIGINAL-BUG: this item could have been not taken => get_hero(-1) => SEGFAULT */
-				hero = get_hero(get_first_hero_with_item(ITEM_RECIPE_STRONG_LE_POTION));
+				hero = get_hero(get_first_hero_with_item(ITEM_REZEPT_FUER_STARKEN_HEILTRANK));
 
 				sprintf(g_dtp2,	get_tx2(27), hero->alias);
 				GUI_output(g_dtp2);

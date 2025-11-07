@@ -28,21 +28,21 @@ namespace M302de {
 #endif
 
 static signed short g_force_weapons[9] = {
-	ITEM_CLUB,
-	ITEM_MORNING_STAR,
-	ITEM_MACE,
-	ITEM_QUARTERSTAFF,
-	ITEM_WHIP, /* wtf?? */
-	ITEM_WAR_HAMMER,
-	ITEM_WITCHES_BROOM,
-	ITEM_MAGIC_WAND,
+	ITEM_KNUEPPEL,
+	ITEM_MORGENSTERN,
+	ITEM_STREITKOLBEN,
+	ITEM_KAMPFSTAB,
+	ITEM_PEITSCHE, /* wtf?? */
+	ITEM_KRIEGSHAMMER,
+	ITEM_HEXENBESEN,
+	ITEM_ZAUBERSTAB,
 	-1
 }; // ds:0x615c, terminated with -1
  
 static signed short g_knive_weapons[5] = {
-	ITEM_KNIFE,
-	ITEM_DAGGER,
-	ITEM_VOLCANIC_GLASS_DAGGER,
+	ITEM_MESSER,
+	ITEM_DOLCH,
+	ITEM_VULKANGLASDOLCH,
 	ITEM_WOLFSMESSER,
 	-1
 }; // ds:0x616e, terminated with -1
@@ -72,20 +72,20 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 	left_hand = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
 
 	switch (right_hand) {
-		case ITEM_SPEAR:		/* Speer */
-		case ITEM_FRANCESCA:		/* Wurfbeil */
-		case ITEM_THROWING_STAR:	/* Wurfstern */
-		case ITEM_THROWING_AXE:		/* Wurfaxt */
-		case ITEM_THROWING_KNIFE:	/* Wurfmesser */
+		case ITEM_SPEER:		/* Speer */
+		case ITEM_WURFBEIL:		/* Wurfbeil */
+		case ITEM_WURFSTERN:	/* Wurfstern */
+		case ITEM_WURFAXT:		/* Wurfaxt */
+		case ITEM_WURFMESSER:	/* Wurfmesser */
 		case ITEM_SCHNEIDZAHN:		/* Schneidzahn */
-		case ITEM_THROWING_DAGGER_MAGIC:/* Wurfdolch */
-			/* Original-Bug: missing throwing weapon: ITEM_SPEAR_MAGIC */
+		case ITEM_WURFDOLCH__MAGIC:/* Wurfdolch */
+			/* Original-Bug: missing throwing weapon: ITEM_SPEER__MAGIC */
 			{
 				if (!arg) {
 
 					if (g_fig_dropped_counter < 30) {
 						/* potential Original-Bug: Only the item IDs are stored, but not the other item stats. Is this a problem?
-						 * For example, magic_revealed for the ITEM_THROWING_DAGGER_MAGIC might get lost.
+						 * For example, magic_revealed for the ITEM_WURFDOLCH__MAGIC might get lost.
 						 * Moreover, it would be nice to store the owner, to give it back the hero who used the ranged weapon. */
 						g_fig_dropped_weapons[g_fig_dropped_counter] = right_hand;
 						g_fig_dropped_counter++;
@@ -101,10 +101,10 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 				retval = 1;
 				break;
 			}
-		case ITEM_SHORTBOW: 		/* Kurzbogen */
-		case ITEM_LONGBOW:		/* Langbogen */
+		case ITEM_KURZBOGEN: 		/* Kurzbogen */
+		case ITEM_LANGBOGEN:		/* Langbogen */
 			{
-				if (left_hand != ITEM_ARROWS) { /* Pfeil */
+				if (left_hand != ITEM_PFEIL) { /* Pfeil */
 					if (arg != 2) {
 
 						sprintf(g_dtp2, get_tx(8), hero->alias);
@@ -119,7 +119,7 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 				}
 				break;
 			}
-		case ITEM_CROSSBOW:		/* Armbrust */
+		case ITEM_ARMBRUST:		/* Armbrust */
 			{
 				if (left_hand != ITEM_BOLTS) { /* Bolzen */
 					if (arg != 2) {
@@ -135,7 +135,7 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 				}
 				break;
 			}
-		case ITEM_SLING:	/* SCHLEUDER	/ SLING */
+		case ITEM_SCHLEUDER:	/* SCHLEUDER	/ SLING */
 			{
 #ifndef M302de_FEATURE_MOD
 				/* sling does not work in the original game.
@@ -282,13 +282,13 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	}
 
 	/* now depending on the item in the right hand, <weapon_type> is
-	 * -1: not a weapon or broken melee weapon (inluding broken WEAPON_TYPE_WAFFENLOS (i.e. ammunition), broken ITEM_MAGIC_WAND and broken ITEM_QUARTERSTAFF, but no other WEAPON_TYPE_SPEER)
+	 * -1: not a weapon or broken melee weapon (inluding broken WEAPON_TYPE_WAFFENLOS (i.e. ammunition), broken ITEM_ZAUBERSTAB and broken ITEM_KAMPFSTAB, but no other WEAPON_TYPE_SPEER)
 	 *  0: non-broken knive weapon
-	 *  1: non-broken force weapon (including ITEM_MAGIC_WAND and ITEM_QUARTERSTAFF)
+	 *  1: non-broken force weapon (including ITEM_ZAUBERSTAB and ITEM_KAMPFSTAB)
 	 *  2: other non-broken meelee weapon, including WEAPON_TYPE_WAFFENLOS (i.e. ammunition), but not WEAPON_TYPE_SPEER
 	 *  3: any WEAPON_TYPE_SCHUSSWAFFE, broken or not
 	 *  4: any WEAPON_TYPE_WURFWAFFE, broken or not
-	 *  5: any weapon of type WEAPON_TYPE_SPEER with the exception of ITEM_QUARTERSTAFF and ITEM_MAGIC_WAND, broken or not
+	 *  5: any weapon of type WEAPON_TYPE_SPEER with the exception of ITEM_KAMPFSTAB and ITEM_ZAUBERSTAB, broken or not
 	 */
 
 	if (weapon_type != -1) {
@@ -339,7 +339,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 				target_size = ((struct enemy_sheet*)target)->size;
 			}
 
-			/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
+			/* Original-Bug: For ITEM_SPEER and ITEM_SPEER__MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
 			damage_mod = (test_skill(hero,
 						(item_p_rh->subtype == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
@@ -366,12 +366,12 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 		enemy_gfx_id = enemy_p->gfx_id;
 
-		if ((right_hand == ITEM_SABER_MAGIC) && (enemy_gfx_id == 0x1c || enemy_gfx_id == 0x22)) {
+		if ((right_hand == ITEM_SAEBEL__MAGIC) && (enemy_gfx_id == 0x1c || enemy_gfx_id == 0x22)) {
 
 			/* magic SABRE gives Damage + 1 to SKELETONS and ZOMBIES */
 			damage++;
 
-		} else if (right_hand == ITEM_KUKRIS_DAGGER) {
+		} else if (right_hand == ITEM_KUKRISDOLCH) {
 
 			/* KUKRIS DAGGER / KUKRISDOLCH */
 			/* Interesting */
@@ -379,8 +379,8 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 			/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
 			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
-			give_hero_new_item(hero, ITEM_DAGGER, 1, 1); /* TODO: what if no free knapsack slot? */
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DAGGER), hero);
+			give_hero_new_item(hero, ITEM_DOLCH, 1, 1); /* TODO: what if no free knapsack slot? */
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DOLCH), hero);
 
 		} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
 
@@ -393,7 +393,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			give_hero_new_item(hero, ITEM_MENGBILAR, 1, 1); /* TODO: what if no free knapsack slot? */
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), hero);
 
-		} else if ((right_hand == ITEM_SILVER_MACE) && (enemy_gfx_id == 0x1c)) {
+		} else if ((right_hand == ITEM_SILBERSTREITKOLBEN) && (enemy_gfx_id == 0x1c)) {
 
 			/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
 			damage += 4;
@@ -514,14 +514,14 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 		damage -= hero->rs_bonus1;
 
 		/* armor bonus against skeletons and zombies */
-		if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_CHAIN_MAIL_CURSED && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c)))
+		if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_KETTENHEMD__CURSED && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c)))
 		{
 			damage -= 3;
 		}
 
 		/* get position of Totenkopfguertel/Skullbelt */
 
-		if ( ((pos = get_item_pos(hero, ITEM_SKULL_BELT)) != -1) && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c))) {
+		if ( ((pos = get_item_pos(hero, ITEM_TOTENKOPFGUERTEL)) != -1) && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c))) {
 
 			/* no damage for the hero who has it */
 			damage = 0;
@@ -578,9 +578,9 @@ void clear_anisheets(void)
  * \param   hero        pointer to hero
  *
  * \return
- *	-1 = not a weapon or a broken weapon or a ranged weapon (the latter including WEAPON_TYPE_SPEER, but not ITEM_MAGIC_WAND or ITEM_QUARTERSTAFF),
+ *	-1 = not a weapon or a broken weapon or a ranged weapon (the latter including WEAPON_TYPE_SPEER, but not ITEM_ZAUBERSTAB or ITEM_KAMPFSTAB),
  *	0 = non-broken knive weapon,
- *	1 = non-broken force weapon (includes ITEM_MAGIC_WAND and ITEM_QUARTERSTAFF),
+ *	1 = non-broken force weapon (includes ITEM_ZAUBERSTAB and ITEM_KAMPFSTAB),
  *	2 = any other non-broken melee weapon, including WEAPON_TYPE_WAFFENLOS (i.e. ammunition), but no WEAPON_TYPE_SPEER
  */
 signed int weapon_check(struct struct_hero *hero)
@@ -601,7 +601,7 @@ signed int weapon_check(struct struct_hero *hero)
 			(item_p->subtype == WEAPON_TYPE_WURFWAFFE) ||
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline. */
 			(item_p->subtype == WEAPON_TYPE_SPEER &&
-			(item_id != ITEM_MAGIC_WAND) && (item_id != ITEM_QUARTERSTAFF)))))
+			(item_id != ITEM_ZAUBERSTAB) && (item_id != ITEM_KAMPFSTAB)))))
 	{
 		retval = -1;
 	} else {

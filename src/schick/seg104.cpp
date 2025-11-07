@@ -29,82 +29,82 @@ namespace M302de {
 
 static struct struct_recipe g_alchemy_recipes[13] = {
 	{
-		ITEM_RECIPE_LE_POTION,
-		ITEM_FLASK_GLASS, ITEM_EINBEERE, ITEM_EINBEERE, ITEM_TARNELE, ITEM_BRANDY,
+		ITEM_REZEPT_FUER_HEILTRANK,
+		ITEM_GLASFLASCHE, ITEM_EINBEERE, ITEM_EINBEERE, ITEM_TARNELE, ITEM_SCHNAPSFLASCHE,
 		-1, -1, -1, -1, -1,
-		ITEM_LE_POTION,	5, 2, 8
+		ITEM_HEILTRANK,	5, 2, 8
 	},
 	{
-		ITEM_RECIPE_STRONG_LE_POTION,
-		ITEM_FLASK_BRONZE, ITEM_WHIRLWEED, ITEM_WHIRLWEED, ITEM_TARNELE, ITEM_BRANDY,
+		ITEM_REZEPT_FUER_STARKEN_HEILTRANK,
+		ITEM_BRONZEFLASCHE, ITEM_WIRSELKRAUT, ITEM_WIRSELKRAUT, ITEM_TARNELE, ITEM_SCHNAPSFLASCHE,
 		ITEM_ALRAUNE, -1, -1, -1, -1,
-		ITEM_STRONG_LE_POTION, 12, 5, 24
+		ITEM_STARKER_HEILTRANK, 12, 5, 24
 	},
 	{
-		ITEM_RECIPE_WUNDERKUR,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_WHIRLWEED, ITEM_WHIRLWEED, ITEM_DONF_SPRING,
-		ITEM_BELMART, ITEM_ALRAUNE, ITEM_JORUGA_ROOT, -1, -1,
+		ITEM_REZEPT_FUER_WUNDERKUR,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_WIRSELKRAUT, ITEM_WIRSELKRAUT, ITEM_DONFSTENGEL,
+		ITEM_BELMART_BLATT, ITEM_ALRAUNE, ITEM_JORUGAWURZEL, -1, -1,
 		ITEM_WUNDERKUR,	25, 10, 3 * 24
 	},
 	{
-		ITEM_RECIPE_ANTIVENOM,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_MENCHAL, ITEM_MENCHAL, ITEM_ALRAUNE,
-		ITEM_SHURIN, -1, -1, -1, -1,
-		ITEM_ANTIVENOM, 10, 5, 24
+		ITEM_REZEPT_FUER_GEGENGIFT,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_MENCHALKAKTUS, ITEM_MENCHALKAKTUS, ITEM_ALRAUNE,
+		ITEM_SHURINKNOLLE, -1, -1, -1, -1,
+		ITEM_GEGENGIFT, 10, 5, 24
 	},
 	{
-		ITEM_RECIPE_SLEEPING_POTION,
-		ITEM_FLASK_GLASS, ITEM_WINE, ITEM_GULMOND_LEAF, ITEM_TARNELE, -1,
+		ITEM_REZEPT_FUER_SCHLAFTRUNK,
+		ITEM_GLASFLASCHE, ITEM_WEINFLASCHE, ITEM_GULMOND_BLATT, ITEM_TARNELE, -1,
 		-1, -1, -1, -1, -1,
-		ITEM_SLEEPING_POTION, 2, 2, 8
+		ITEM_SCHLAFTRUNK, 2, 2, 8
 	},
 	{
-		ITEM_RECIPE_AE_POTION,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_ALRAUNE, ITEM_ALRAUNE, ITEM_KAIRANHALM,
-		ITEM_KAIRANHALM, ITEM_THONNYS, -1, -1, -1,
-		ITEM_AE_POTION,	7, 8, 2 * 24
+		ITEM_REZEPT_FUER_ZAUBERTRANK,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_ALRAUNE, ITEM_ALRAUNE, ITEM_KAIRANHALM,
+		ITEM_KAIRANHALM, ITEM_THONNYSBLUETE, -1, -1, -1,
+		ITEM_ZAUBERTRANK,	7, 8, 2 * 24
 	},
 	{
-		ITEM_RECIPE_STRONG_AE_POTION,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_ALRAUNE, ITEM_ALRAUNE, ITEM_ALRAUNE,
-		ITEM_KAIRANHALM, ITEM_KAIRANHALM, ITEM_KAIRANHALM, ITEM_THONNYS, -1,
-		ITEM_STRONG_AE_POTION, 15, 12, 5 * 24
+		ITEM_REZEPT_FUER_STARKER_ZAUBERTRANK,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_ALRAUNE, ITEM_ALRAUNE, ITEM_ALRAUNE,
+		ITEM_KAIRANHALM, ITEM_KAIRANHALM, ITEM_KAIRANHALM, ITEM_THONNYSBLUETE, -1,
+		ITEM_ZAUBERTRANK_STARK, 15, 12, 5 * 24
 	},
 	{
-		ITEM_RECIPE_VOMICUM,
-		ITEM_FLASK_BRONZE, ITEM_OIL, ITEM_SHURIN, ITEM_ALRAUNE, -1,
+		ITEM_REZEPT_FUER_VOMICUM,
+		ITEM_BRONZEFLASCHE, ITEM_OEL, ITEM_SHURINKNOLLE, ITEM_ALRAUNE, -1,
 		-1, -1, -1, -1, -1,
 		ITEM_VOMICUM, 0, 5, 8
 	},
 	{
-		ITEM_RECIPE_EXPURGICUM,
-		ITEM_FLASK_BRONZE, ITEM_LICORICE, ITEM_SHURIN, ITEM_SHURIN, ITEM_ALRAUNE,
+		ITEM_REZEPT_FUER_EXPURGICUM,
+		ITEM_BRONZEFLASCHE, ITEM_LAKRITZE, ITEM_SHURINKNOLLE, ITEM_SHURINKNOLLE, ITEM_ALRAUNE,
 		ITEM_ALRAUNE, -1, -1, -1, -1,
 		ITEM_EXPURGICUM, 0, 8, 2 * 24
 	},
 	{
-		ITEM_RECIPE_MIASTHMATICUM,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_KAIRANHALM, ITEM_ILMENBLATT, ITEM_SHURIN,
+		ITEM_REZEPT_FUER_MIASTHMATICUM,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_KAIRANHALM, ITEM_ILMENBLATT, ITEM_SHURINKNOLLE,
 		ITEM_ALRAUNE, -1, -1, -1, -1,
 		ITEM_MIASTHMATICUM, 0, 6, 2 * 24
 	},
 	{
-		ITEM_RECIPE_MU_ELIXIR,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_FINAGE_TREE, ITEM_ALRAUNE, ITEM_DONF_SPRING,
+		ITEM_REZEPT_FUER_MUTELIXIER,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_FINAGEBAEMCHEN, ITEM_ALRAUNE, ITEM_DONFSTENGEL,
 		ITEM_ILMENBLATT, -1, -1, -1, -1,
-		ITEM_MU_ELIXIR, 12, 7, 2 * 24
+		ITEM_MU_ELIXIER, 12, 7, 2 * 24
 	},
 	{
-		ITEM_RECIPE_KK_ELIXIR,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_FINAGE_TREE, ITEM_ALRAUNE, ITEM_GULMOND_LEAF,
-		ITEM_GULMOND_LEAF, -1, -1, -1, -1,
-		ITEM_KK_ELIXIR, 15, 8, 2 * 24
+		ITEM_REZEPT_FUER_KRAFTELIXIER,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_FINAGEBAEMCHEN, ITEM_ALRAUNE, ITEM_GULMOND_BLATT,
+		ITEM_GULMOND_BLATT, -1, -1, -1, -1,
+		ITEM_KK_ELIXIER, 15, 8, 2 * 24
 	},
 	{
-		ITEM_RECIPE_HYLAILIC_FIRE,
-		ITEM_FLASK_GLASS, ITEM_BRANDY, ITEM_BRANDY, ITEM_LICORICE, ITEM_OIL,
-		ITEM_OIL, -1, -1, -1, -1,
-		ITEM_HYLAILIC_FIRE, 0, 5, 8
+		ITEM_REZEPT_FUER_HYLAILER_FEUER,
+		ITEM_GLASFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_SCHNAPSFLASCHE, ITEM_LAKRITZE, ITEM_OEL,
+		ITEM_OEL, -1, -1, -1, -1,
+		ITEM_HYLAILER_FEUER, 0, 5, 8
 	}
 }; // ds:0xacda
 
@@ -168,15 +168,15 @@ void hero_use_ingrendients(struct struct_hero *hero, const signed int recipe_id)
 		drop_item(hero, item_pos, 1);
 
 		/* exchange wine- or brandybottles into glass flask */
-		if ((r_ptr->ingredients[i] == ITEM_WINE) || (r_ptr->ingredients[i] == ITEM_BRANDY))
+		if ((r_ptr->ingredients[i] == ITEM_WEINFLASCHE) || (r_ptr->ingredients[i] == ITEM_SCHNAPSFLASCHE))
 		{
-			give_hero_new_item(hero, ITEM_FLASK_GLASS, 1, 1);
+			give_hero_new_item(hero, ITEM_GLASFLASCHE, 1, 1);
 		}
 
 		/* exchange oil into bronze flask */
-		if (r_ptr->ingredients[i] == ITEM_OIL)
+		if (r_ptr->ingredients[i] == ITEM_OEL)
 		{
-			give_hero_new_item(hero, ITEM_FLASK_BRONZE, 1, 1);
+			give_hero_new_item(hero, ITEM_BRONZEFLASCHE, 1, 1);
 		}
 
 		i++;
@@ -240,7 +240,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 
 	retval = 1;
 	recipes = 0;
-	item_pos = get_item_pos(hero, ITEM_ALCHEMY_KIT);
+	item_pos = get_item_pos(hero, ITEM_ALCHEMIESET);
 
 	if (item_pos == -1) {
 
@@ -418,32 +418,32 @@ signed int has_herb_for_disease(const struct struct_hero *hero, const signed int
 
 		case ILLNESS_TYPE_DUMPFSCHAEDEL:
 			/* any single one of the following herbs is sufficient */
-			if (get_item_pos(hero, ITEM_BELMART)          != -1) retval = ITEM_BELMART;
-			else if (get_item_pos(hero, ITEM_WHIRLWEED)   != -1) retval = ITEM_WHIRLWEED;
+			if (get_item_pos(hero, ITEM_BELMART_BLATT)          != -1) retval = ITEM_BELMART_BLATT;
+			else if (get_item_pos(hero, ITEM_WIRSELKRAUT)   != -1) retval = ITEM_WIRSELKRAUT;
 			else if (get_item_pos(hero, ITEM_EINBEERE)    != -1) retval = ITEM_EINBEERE;
 			else if (get_item_pos(hero, ITEM_TARNELE)     != -1) retval = ITEM_TARNELE;
-			else if (get_item_pos(hero, ITEM_DONF_SPRING) != -1) retval = ITEM_DONF_SPRING;
-			else if (get_item_pos(hero, ITEM_FINAGE_TREE) != -1) retval = ITEM_FINAGE_TREE;
-			else if (get_item_pos(hero, ITEM_MENCHAL)     != -1) retval = ITEM_MENCHAL;
-			else if (get_item_pos(hero, ITEM_OLGIN_ROOT)  != -1) retval = ITEM_OLGIN_ROOT;
-			else if (get_item_pos(hero, ITEM_JORUGA_ROOT) != -1) retval = ITEM_JORUGA_ROOT;
+			else if (get_item_pos(hero, ITEM_DONFSTENGEL) != -1) retval = ITEM_DONFSTENGEL;
+			else if (get_item_pos(hero, ITEM_FINAGEBAEMCHEN) != -1) retval = ITEM_FINAGEBAEMCHEN;
+			else if (get_item_pos(hero, ITEM_MENCHALKAKTUS)     != -1) retval = ITEM_MENCHALKAKTUS;
+			else if (get_item_pos(hero, ITEM_OLGINWURZEL)  != -1) retval = ITEM_OLGINWURZEL;
+			else if (get_item_pos(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
 			break;
 
 		case ILLNESS_TYPE_PARALYSE:
-			if (get_item_pos(hero, ITEM_DONF_SPRING) != -1)
-				retval = ITEM_DONF_SPRING;
+			if (get_item_pos(hero, ITEM_DONFSTENGEL) != -1)
+				retval = ITEM_DONFSTENGEL;
 			break;
 
 		case ILLNESS_TYPE_SCHLACHTENFIEBER:
-			if ( (get_item_pos(hero, ITEM_JORUGA_ROOT) != -1) && (get_item_pos(hero, ITEM_GULMOND_LEAF) != -1)) retval = 999;
+			if ( (get_item_pos(hero, ITEM_JORUGAWURZEL) != -1) && (get_item_pos(hero, ITEM_GULMOND_BLATT) != -1)) retval = 999;
 			break;
 
 		case ILLNESS_TYPE_FROSTSCHAEDEN:
-			if (get_item_pos(hero, ITEM_WHIRLWEED) != -1) retval = ITEM_WHIRLWEED;
+			if (get_item_pos(hero, ITEM_WIRSELKRAUT) != -1) retval = ITEM_WIRSELKRAUT;
 			break;
 
 		case ILLNESS_TYPE_TOLLWUT:
-			if (get_item_pos(hero, ITEM_JORUGA_ROOT) != -1) retval = ITEM_JORUGA_ROOT;
+			if (get_item_pos(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
 			break;
 	}
 
@@ -511,8 +511,8 @@ signed int skill_cure_disease(struct struct_hero *healer, struct struct_hero *pa
 
 					if (herb == 999) {
 						/* drop JORUGA & GULMOND LEAF */
-						drop_item(healer, get_item_pos(healer, ITEM_JORUGA_ROOT), 1);
-						drop_item(healer, get_item_pos(healer, ITEM_GULMOND_LEAF), 1);
+						drop_item(healer, get_item_pos(healer, ITEM_JORUGAWURZEL), 1);
+						drop_item(healer, get_item_pos(healer, ITEM_GULMOND_BLATT), 1);
 					} else {
 						/* drop the herb */
 						drop_item(healer, get_item_pos(healer, herb), 1);

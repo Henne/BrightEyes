@@ -379,7 +379,7 @@ signed short hero_has_lockpicks(const struct struct_hero *hero)
 	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
 		/* ... check for lockpicks ... */
-		if (hero->inventory[i].item_id == ITEM_PICKLOCKS) {
+		if (hero->inventory[i].item_id == ITEM_DIETRICHE) {
 
 			/* ... which are not broken */
 			if (!hero->inventory[i].flags.broken) {
@@ -476,7 +476,7 @@ void loot_special_chest(const signed int check_dir)
 
 		if (chest_ptr->food) {
 			/* There are FOOD PACKAGES in the chest */
-			get_item(ITEM_FOOD_PACKAGE, 1, chest_ptr->food);
+			get_item(ITEM_PROVIANTPAKET, 1, chest_ptr->food);
 		}
 	}
 }
@@ -626,7 +626,7 @@ void loot_multi_chest(Bit8u *content, char *msg)
 
 				if (i != 0) {
 
-					if (content[item_no] == ITEM_DUCATS) {
+					if (content[item_no] == ITEM_DUKATEN) {
 
 						add_party_money(i * 100L);
 
