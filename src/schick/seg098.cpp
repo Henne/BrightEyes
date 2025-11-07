@@ -583,7 +583,7 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 /**
  * \brief   makes a spell test. no AE deduction in this function.
  */
-signed short test_spell(struct struct_hero *hero, signed short spell_no, signed char handicap)
+signed short test_spell(struct struct_hero *hero, signed short spell_id, signed char handicap)
 {
 	signed int retval;
 	struct spell_descr *spell_desc;
@@ -594,14 +594,14 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 	}
 
 	/* check if spell skill >= -5 */
-	if (hero->spells[spell_no] < -5)
+	if (hero->spells[spell_id] < -5)
 		return 0;
 
 	/* check if hero has enough AE */
-	if (get_spell_cost(spell_no, 0) > hero->ae)
+	if (get_spell_cost(spell_id, 0) > hero->ae)
 		return -99;
 
-	spell_desc = &g_spell_descriptions[spell_no];
+	spell_desc = &g_spell_descriptions[spell_id];
 
 	if (spell_desc->fight) {
 
@@ -618,13 +618,13 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 		}
 	}
 
-	if ((spell_no >= 1) && (spell_no <= 85)) {
+	if ((spell_id >= 1) && (spell_id <= 85)) {
 
 #if !defined(__BORLANDC__)
-		D1_INFO("%s Zauberprobe %s %+d (TaW %d)", hero->alias, names_spell[spell_no], handicap, hero->spells[spell_no]);
+		D1_INFO("%s Zauberprobe %s %+d (TaW %d)", hero->alias, names_spell[spell_id], handicap, hero->spells[spell_id]);
 #endif
 
-		handicap -= hero->spells[spell_no];
+		handicap -= hero->spells[spell_id];
 
 		retval = test_attrib3(hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
 
