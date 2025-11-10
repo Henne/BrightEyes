@@ -574,6 +574,77 @@ struct climb_damage_range {
 	unsigned char hi;
 };
 
+struct enemy_flags {
+	/* enemy + 0x31 */
+	unsigned short dead		:1;
+	unsigned short asleep		:1;
+	unsigned short petrified	:1; /* 1: enemy is petrified (from 'Paralue' spell) */
+	unsigned short busy		:1;
+	unsigned short bit4		:1; /* unused? */
+	unsigned short tied		:1; /* 1: enemy is tied (from 'Band und Fessel' spell; all enemies in the final fight except the Orkchampion) */
+	unsigned short mushroom		:1; /* 1: enemy is a mushroom (from 'Salander' spell) */
+	unsigned short illusion		:1;
+	/* enemy + 0x32 */
+	unsigned short tame		:1; /* from 'Bannbaladin', 'Herr der Tiere' or 'Sanftmut' spell */
+	unsigned short renegade		:1; /* from 'Boeser Blick' spell. removed by 'Horriphobus' spell or Angstgift. */
+	unsigned short scared		:1; /* from 'Horriphobus' spell or Angstgift */
+	unsigned short dancing		:1; /* from 'Zwingtanz' spell */
+	unsigned short bit12		:1; /* unused? */
+	unsigned short bit13		:1; /* unused? */
+	unsigned short bit14		:1; /* unused? */
+	unsigned short bit15		:1; /* unused? */
+};
+
+struct enemy_sheet {
+	Bit8s mon_id;
+	Bit8s gfx_id;
+	Bit8s rs;
+	Bit8s attrib[14]; // used in steps of 2 for positive attribs only
+	Bit16s le_orig;
+	Bit16s le;
+	Bit16s ae_orig;
+	Bit16s ae;
+	Bit8s  mr;
+	Bit8s  first_ap;
+	Bit8s  attacks;
+	Bit8s  at;
+	Bit8s  pa;
+	Bit16s dam1;
+	Bit16s dam2;
+	Bit8s  bp_orig;
+	Bit8s  bp;
+	Bit8s  magic;
+	Bit8s  mag_id;
+	Bit8s  fighter_id;
+	Bit8s  viewdir;
+	Bit8s  attacks_left;	 /* number attacks left in the current turn of a battle */
+	Bit8s  level;
+	Bit8s  dummy3;
+	Bit8s  action_id;
+	Bit8s  mspell_id;
+	Bit8s  target_object_id;
+	Bit8s  saftkraft;		/* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
+	Bit8s  blind;			/* blind rounds remaining from 'Blitz' spell */
+	Bit8s  weapon_broken;	/* weapon broken? 0	= no, 1	= yes */
+	struct enemy_flags flags;
+	Bit8s	unused8;
+	Bit8s	size;
+	Bit8s	round_appear;
+	Bit8s	is_animal;		/* is the enemy an animal? */
+	Bit8s	shots;
+	Bit16s	shot_dam;
+	Bit8s	throws;
+	Bit16s	throw_dam;
+	Bit8s 	le_flee;
+};
+
+struct dungeon_door {
+	Bit16s pos;
+	Bit8s smash_handicap;
+	Bit8s lockpick_handicap;
+	Bit8s foramen_handicap;
+};
+
 extern char g_fn_v302de_XXX[], g_fn_v302de_000[], g_fn_v302de_001[], g_fn_v302de_002[];
 extern char g_fn_v302de_003[], g_fn_v302de_004[], g_fn_v302de_005[], g_fn_v302de_006[];
 extern char g_fn_v302de_007[], g_fn_v302de_008[], g_fn_v302de_009[], g_fn_v302de_010[];
