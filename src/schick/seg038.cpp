@@ -106,7 +106,7 @@ static signed char *g_chessboard_cpy; // ds:0xe356
  * \param   mode              mode (see FIG_find_path_to_target)
  * \param   double_size       actor occupies two squares on the map (wolves, dogs, lions)
  */
-void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short target_x, signed short target_y,
+void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed short target_x, signed short target_y,
 			signed short dist, signed char bp_avail,
 			signed short mode, signed short double_size, signed short actor_id)
 {
@@ -133,22 +133,22 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 #else
 	signed short best_dir = 0;
 #endif
-	Bit8s *path_cur;
+	int8_t *path_cur;
 	signed short x_bak;
 	signed short y_bak;
 	signed short target_out_of_reach; /* will be set to 1 if the target is out of reach with avail_bp steps. Redundant, as this could simply be tested by (avail_bp < dist). */
 	struct viewdir_offsets inverse_coordinate_offset = g_viewdir_invoffsets1;
 
-	Bit8s *path_table[4];
+	int8_t *path_table[4];
 
 	target_out_of_reach = 0;
 	lowest_nr_dir_changes = 99;
 
 	memset(g_text_output_buf, 0, 80);
-	path_table[0] = (Bit8s*)g_text_output_buf;
-	path_table[1] = (Bit8s*)g_text_output_buf + 20;
-	path_table[2] = (Bit8s*)g_text_output_buf + 40;
-	path_table[3] = (Bit8s*)g_text_output_buf + 60;
+	path_table[0] = (int8_t*)g_text_output_buf;
+	path_table[1] = (int8_t*)g_text_output_buf + 20;
+	path_table[2] = (int8_t*)g_text_output_buf + 40;
+	path_table[3] = (int8_t*)g_text_output_buf + 60;
 
 	cb_or_dist_entry = get_cb_val(target_x, target_y); /* possibly reads out of the boundary of the chessboard. not critical, as the following condition is always true for coordinates (target_x, target_y) out of the map. */
 
@@ -189,7 +189,7 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 
 				if ((backtrack_y < 24) && (backtrack_y >= 0) && (backtrack_x < 24) && (backtrack_x >= 0))
 				{
-					cb_or_dist_entry = *((Bit8s*)(dist_table_ptr + 25 * backtrack_y + backtrack_x));
+					cb_or_dist_entry = *((int8_t*)(dist_table_ptr + 25 * backtrack_y + backtrack_x));
 
 					if ((cb_or_dist_entry == dist)	&&
 						((!double_size) ||
@@ -321,7 +321,7 @@ signed short FIG_count_direction_changes_of_path(signed char *path_ptr)
   * \param   mode           0: enemy to hero melee / 1: hero to hero melee / 2: enemy to enemy melee / 3: hero to enemy melee / 4: enemy is fleeing / 5: hero is fleeing / 6: enemy to hero ranged /  7: enemy to enemy ranged / 8: hero to hero ranged / 9: hero to enemy ranged / 10: hero movement (target marker 124 on the chess board)
   * \return                 1: reachable target found, path written / -1: no reachable target found.
   */
-signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, signed short x_in, signed short y_in, signed short mode)
+signed short FIG_find_path_to_target(uint8_t *actor_ptr, signed short actor_id, signed short x_in, signed short y_in, signed short mode)
  {
 	signed short nr_targets_reached;
 	signed short i;
@@ -340,12 +340,12 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	signed short best_target;
 	signed char cb_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
 	signed char cb_entry;
-	Bit8u *dist_table_ptr;
+	uint8_t *dist_table_ptr;
 	struct struct_hero *hero_ptr;
 	struct enemy_sheet *enemy_ptr;
 	signed short done;
 	signed short ranged_dist;
-	Bit8u *actor_enemy_ptr; /* not needed, in principal. is only used for tests with NOT_NULL at a few places to determine wether the actor is an enemy. could also be done based on mode. */
+	uint8_t *actor_enemy_ptr; /* not needed, in principal. is only used for tests with NOT_NULL at a few places to determine wether the actor is an enemy. could also be done based on mode. */
 	signed char double_size;
 	signed short target_reached_x[10];
 	signed short target_reached_y[10];
@@ -365,7 +365,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 		}
 	}
 
-	dist_table_ptr = (Bit8u*)g_dtp2;
+	dist_table_ptr = (uint8_t*)g_dtp2;
 	g_chessboard_cpy = (signed char*)(g_dtp2 + 600);
 	new_squares_reached = 1;
 	memset(dist_table_ptr, -1, 600);
@@ -537,7 +537,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 					break;
 				}
 
-				if (*((Bit8s*)(dist_table_ptr + (y * 25) + x)) == (dist - 1)) {
+				if (*((int8_t*)(dist_table_ptr + (y * 25) + x)) == (dist - 1)) {
 
 					for (i = 0; i < 4; i++) {
 
@@ -548,7 +548,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 						if ((new_y < 24) && (new_y >= 0) && (new_x < 24) && (new_x >= 0)) {
 
-							cb_or_dist_entry = *((Bit8s*)(dist_table_ptr + new_y * 25 + new_x));
+							cb_or_dist_entry = *((int8_t*)(dist_table_ptr + new_y * 25 + new_x));
 							cb_entry = *(g_chessboard_cpy + (new_y * 25) + new_x);
 
 							if (cb_or_dist_entry < 0) { /* square has not been reached before */

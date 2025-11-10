@@ -9,7 +9,7 @@ void FANI_prepare_fight_hero_ani(signed short, struct struct_hero*, signed short
 void FANI_prepare_fight_enemy_ani(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);
 
 /* 0x2a */
-void FANI_prepare_spell_hero(Bit16u, struct struct_hero*, Bit16u, Bit16s, Bit16s, Bit16u, Bit16u);
+void FANI_prepare_spell_hero(uint16_t, struct struct_hero*, uint16_t, int16_t, int16_t, uint16_t, uint16_t);
 
 /* 0x2f */
 void FANI_prepare_spell_enemy(signed short, struct enemy_sheet*, signed short, signed short, signed short, signed short);

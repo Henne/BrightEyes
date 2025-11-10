@@ -194,7 +194,7 @@ void tevent_014(void)
 		if (answer == 1)
 		{
 			/* examine the corpse */
-			loot_corpse(&g_tevent014_corpse, get_tx2(46), (Bit8s*)&gs_tevent014_flag);
+			loot_corpse(&g_tevent014_corpse, get_tx2(46), (int8_t*)&gs_tevent014_flag);
 		}
 	}
 }
@@ -696,7 +696,7 @@ void tevent_046(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		TRV_load_textfile(-1);
 
-		hero = (struct struct_hero*)(gs_camp_incident != -1 ? (Bit8u*)get_hero(gs_camp_incident) : (Bit8u*)get_first_hero_available_in_group());
+		hero = (struct struct_hero*)(gs_camp_incident != -1 ? (uint8_t*)get_hero(gs_camp_incident) : (uint8_t*)get_first_hero_available_in_group());
 		gs_camp_incident = -1;
 
 		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)

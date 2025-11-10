@@ -51,9 +51,9 @@ signed short DNG02_handler(void)
 	signed short mod_slot;
 	signed short i;
 	signed short hero_weight;
-	Bit32s weight_sum;
+	int32_t weight_sum;
 	struct struct_hero *hero;
-	Bit8u *amap_ptr;
+	uint8_t *amap_ptr;
 	signed char flag;
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
@@ -202,7 +202,7 @@ signed short DNG02_handler(void)
 					!hero->flags.seen_phantom)
 				{
 					mod_slot = get_free_mod_slot();
-					set_mod_slot(mod_slot, HOURS(5), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -3, (signed char)i);
+					set_mod_slot(mod_slot, HOURS(5), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -3, (signed char)i);
 					{
 						/* mod_slot with different usage */
 						hero->flags.seen_phantom = mod_slot = 1;
@@ -537,7 +537,7 @@ signed short DNG02_handler(void)
 
 void DNG02_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = (gs_dng02_chest00_content);
 
@@ -548,7 +548,7 @@ void DNG02_chest00_loot(struct struct_chest* chest)
 
 void DNG02_chest01_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng02_chest01_content;
 
@@ -559,7 +559,7 @@ void DNG02_chest01_loot(struct struct_chest* chest)
 
 void DNG02_chest02_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng02_chest02_content;
 
@@ -570,7 +570,7 @@ void DNG02_chest02_loot(struct struct_chest* chest)
 
 void DNG02_chest03_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng02_chest03_content;
 
@@ -621,7 +621,7 @@ void DNG02_chest04_loot(struct struct_chest*)
 
 void DNG02_chest05_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng02_chest05_content;
 
@@ -632,12 +632,12 @@ void DNG02_chest05_loot(struct struct_chest* chest)
 
 void DNG02_chest06_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(19), (Bit8s*)&gs_dng02_corpse_flag);
+	loot_corpse(chest, get_tx(19), (int8_t*)&gs_dng02_corpse_flag);
 }
 
 void DNG02_chest06_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng02_chest06_content;
 

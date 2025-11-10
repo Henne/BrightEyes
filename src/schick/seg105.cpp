@@ -749,7 +749,7 @@ void loose_random_item(struct struct_hero *hero, const signed int percent, char 
 			/* drop 1 item */
 			drop_item(hero, pos, 1);
 
-			sprintf(g_text_output_buf, text, hero->alias, (Bit8u*)GUI_names_grammar(0, item_id, 0));
+			sprintf(g_text_output_buf, text, hero->alias, (uint8_t*)GUI_names_grammar(0, item_id, 0));
 			GUI_output(g_text_output_buf);
 
 			return;

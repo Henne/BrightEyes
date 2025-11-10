@@ -95,232 +95,232 @@ struct struct_land_route g_land_routes[59] = {
 
 // ds:0x9fd9, 105 arrays, each terminated by -1
 /* Numbers here are entries in g_land_routes */
-Bit8s g_signposts_linked_lroute_001[] = {15, -1};		//ds:0x9fd9;
-Bit8s g_signposts_linked_lroute_002[] = {4, -1};		//ds:0x9fdb;
-Bit8s g_signposts_linked_lroute_003[] = {1, -1};		//ds:0x9fdd;
-Bit8s g_signposts_linked_lroute_004[] = {4, -1};		//ds:0x9fdf;
-Bit8s g_signposts_linked_lroute_005[] = {5, 7, -1};		//ds:0x9fe1;
-Bit8s g_signposts_linked_lroute_006[] = {10, -1};		//ds:0x9fe4;
-Bit8s g_signposts_linked_lroute_007[] = {7, -1};		//ds:0x9fe6;
-Bit8s g_signposts_linked_lroute_008[] = {9, -1};		//ds:0x9fe8;
-Bit8s g_signposts_linked_lroute_009[] = {11, -1};		//ds:0x9fea;
-Bit8s g_signposts_linked_lroute_010[] = {10, -1};		//ds:0x9fec;
-Bit8s g_signposts_linked_lroute_011[] = {50, -1};		//ds:0x9fee;
-Bit8s g_signposts_linked_lroute_012[] = {12, -1};		//ds:0x9ff0;
-Bit8s g_signposts_linked_lroute_013[] = {11, -1};		//ds:0x9ff2;
-Bit8s g_signposts_linked_lroute_014[] = {12, -1};		//ds:0x9ff4;
-Bit8s g_signposts_linked_lroute_015[] = {13, -1};		//ds:0x9ff6;
-Bit8s g_signposts_linked_lroute_016[] = {13, -1};		//ds:0x9ff8;
-Bit8s g_signposts_linked_lroute_017[] = {14, -1};		//ds:0x9ffa;
-Bit8s g_signposts_linked_lroute_018[] = {14, -1};		//ds:0x9ffc;
-Bit8s g_signposts_linked_lroute_019[] = {49, -1};		//ds:0x9ffe;
-Bit8s g_signposts_linked_lroute_020[] = {50, -1};		//ds:0xa000;
-Bit8s g_signposts_linked_lroute_021[] = {5, -1};		//ds:0xa002;
-Bit8s g_signposts_linked_lroute_022[] = {6, -1};		//ds:0xa004;
-Bit8s g_signposts_linked_lroute_023[] = {6, -1};		//ds:0xa006;
-Bit8s g_signposts_linked_lroute_024[] = {8, -1};		//ds:0xa008;
-Bit8s g_signposts_linked_lroute_025[] = {9, -1};		//ds:0xa00a;
-Bit8s g_signposts_linked_lroute_026[] = {16, -1};		//ds:0xa00c;
-Bit8s g_signposts_linked_lroute_027[] = {17, -1};		//ds:0xa00e;
-Bit8s g_signposts_linked_lroute_028[] = {19, -1};		//ds:0xa010;
-Bit8s g_signposts_linked_lroute_029[] = {18, -1};		//ds:0xa012;
-Bit8s g_signposts_linked_lroute_030[] = {20, -1};		//ds:0xa014;
-Bit8s g_signposts_linked_lroute_031[] = {25, -1};		//ds:0xa016;
-Bit8s g_signposts_linked_lroute_032[] = {21, -1};		//ds:0xa018;
-Bit8s g_signposts_linked_lroute_033[] = {22, -1};		//ds:0xa01a;
-Bit8s g_signposts_linked_lroute_034[] = {20, -1};		//ds:0xa01c;
-Bit8s g_signposts_linked_lroute_035[] = {39, -1};		//ds:0xa01e;
-Bit8s g_signposts_linked_lroute_036[] = {21, -1};		//ds:0xa020;
-Bit8s g_signposts_linked_lroute_037[] = {39, -1};		//ds:0xa022;
-Bit8s g_signposts_linked_lroute_038[] = {40, -1};		//ds:0xa024;
-Bit8s g_signposts_linked_lroute_039[] = {45, -1};		//ds:0xa026;
-Bit8s g_signposts_linked_lroute_040[] = {23, -1};		//ds:0xa028;
-Bit8s g_signposts_linked_lroute_041[] = {49, -1};		//ds:0xa02a;
-Bit8s g_signposts_linked_lroute_042[] = {22, -1};		//ds:0xa02c;
-Bit8s g_signposts_linked_lroute_043[] = {24, -1};		//ds:0xa02e;
-Bit8s g_signposts_linked_lroute_044[] = {23, -1};		//ds:0xa030;
-Bit8s g_signposts_linked_lroute_045[] = {40, -1};		//ds:0xa032;
-Bit8s g_signposts_linked_lroute_046[] = {41, -1};		//ds:0xa034;
-Bit8s g_signposts_linked_lroute_047[] = {46, -1};		//ds:0xa036;
-Bit8s g_signposts_linked_lroute_048[] = {24, 46, 45, 57, 57, -1};	//ds:0xa038;
-Bit8s g_signposts_linked_lroute_049[] = {41, -1};		//ds:0xa03e;
-Bit8s g_signposts_linked_lroute_050[] = {42, -1};		//ds:0xa040;
-Bit8s g_signposts_linked_lroute_051[] = {42, -1};		//ds:0xa042;
-Bit8s g_signposts_linked_lroute_052[] = {35, -1};		//ds:0xa044;
-Bit8s g_signposts_linked_lroute_053[] = {43, -1};		//ds:0xa046;
-Bit8s g_signposts_linked_lroute_054[] = {35, -1};		//ds:0xa048;
-Bit8s g_signposts_linked_lroute_055[] = {37, -1};		//ds:0xa04a;
-Bit8s g_signposts_linked_lroute_056[] = {34, -1};		//ds:0xa04c;
-Bit8s g_signposts_linked_lroute_057[] = {37, -1};		//ds:0xa04e;
-Bit8s g_signposts_linked_lroute_058[] = {36, 38, -1};		//ds:0xa050;
-Bit8s g_signposts_linked_lroute_059[] = {47, -1};		//ds:0xa052;
-Bit8s g_signposts_linked_lroute_060[] = {34, -1};		//ds:0xa054;
-Bit8s g_signposts_linked_lroute_061[] = {33, 38, -1};		//ds:0xa056;
-Bit8s g_signposts_linked_lroute_062[] = {36, 33, -1};		//ds:0xa059;
-Bit8s g_signposts_linked_lroute_063[] = {32, -1};		//ds:0xa05c;
-Bit8s g_signposts_linked_lroute_064[] = {48, 31, -1};		//ds:0xa05e;
-Bit8s g_signposts_linked_lroute_065[] = {32, -1};		//ds:0xa062;
-Bit8s g_signposts_linked_lroute_066[] = {51, -1};		//ds:0xa064;
-Bit8s g_signposts_linked_lroute_067[] = {51, -1};		//ds:0xa066;
-Bit8s g_signposts_linked_lroute_068[] = {30, -1};		//ds:0xa068;
-Bit8s g_signposts_linked_lroute_069[] = {54, -1};		//ds:0xa06a;
-Bit8s g_signposts_linked_lroute_070[] = {58, -1};		//ds:0xa06c;
-Bit8s g_signposts_linked_lroute_071[] = {55, -1};		//ds:0xa06e;
-Bit8s g_signposts_linked_lroute_072[] = {27, -1};		//ds:0xa070;
-Bit8s g_signposts_linked_lroute_073[] = {28, -1};		//ds:0xa072;
-Bit8s g_signposts_linked_lroute_074[] = {31, -1};		//ds:0xa074;
-Bit8s g_signposts_linked_lroute_075[] = {28, -1};		//ds:0xa076;
-Bit8s g_signposts_linked_lroute_076[] = {29, -1};		//ds:0xa078;
-Bit8s g_signposts_linked_lroute_077[] = {48, -1};		//ds:0xa07a;
-Bit8s g_signposts_linked_lroute_078[] = {29, -1};		//ds:0xa07c;
-Bit8s g_signposts_linked_lroute_079[] = {30, -1};		//ds:0xa07e;
-Bit8s g_signposts_linked_lroute_080[] = {27, -1};		//ds:0xa080;
-Bit8s g_signposts_linked_lroute_081[] = {3, -1};		//ds:0xa082;
-Bit8s g_signposts_linked_lroute_082[] = {26, -1};		//ds:0xa084;
-Bit8s g_signposts_linked_lroute_083[] = {47, -1};		//ds:0xa086;
-Bit8s g_signposts_linked_lroute_084[] = {26, -1};		//ds:0xa088;
-Bit8s g_signposts_linked_lroute_085[] = {53, -1};		//ds:0xa08a;
-Bit8s g_signposts_linked_lroute_086[] = {52, -1};		//ds:0xa08c;
-Bit8s g_signposts_linked_lroute_087[] = {52, -1};		//ds:0xa08e;
-Bit8s g_signposts_linked_lroute_088[] = {2, -1};		//ds:0xa090;
-Bit8s g_signposts_linked_lroute_089[] = {25, -1};		//ds:0xa092;
-Bit8s g_signposts_linked_lroute_090[] = {3, -1};		//ds:0xa094;
-Bit8s g_signposts_linked_lroute_091[] = {1, -1};		//ds:0xa096;
-Bit8s g_signposts_linked_lroute_092[] = {2, -1};		//ds:0xa098;
-Bit8s g_signposts_linked_lroute_093[] = {43, -1};		//ds:0xa09a;
-Bit8s g_signposts_linked_lroute_094[] = {44, -1};		//ds:0xa09c;
-Bit8s g_signposts_linked_lroute_095[] = {44, -1};		//ds:0xa09e;
-Bit8s g_signposts_linked_lroute_096[] = {56, -1};		//ds:0xa0a0;
-Bit8s g_signposts_linked_lroute_097[] = {56, -1};		//ds:0xa0a2;
-Bit8s g_signposts_linked_lroute_098[] = {16, -1};		//ds:0xa0a4;
-Bit8s g_signposts_linked_lroute_099[] = {15, -1};		//ds:0xa0a6;
-Bit8s g_signposts_linked_lroute_100[] = {8, -1};		//ds:0xa0a8;
-Bit8s g_signposts_linked_lroute_101[] = {17, -1};		//ds:0xa0aa;
-Bit8s g_signposts_linked_lroute_102[] = {18, -1};		//ds:0xa0ac;
-Bit8s g_signposts_linked_lroute_103[] = {19, -1};		//ds:0xa0ae;
-Bit8s g_signposts_linked_lroute_104[] = {53, -1};		//ds:0xa0b0;
-Bit8s g_signposts_linked_lroute_105[] = {55, -1};		//ds:0xa0b2;
+int8_t g_signposts_linked_lroute_001[] = {15, -1};		//ds:0x9fd9;
+int8_t g_signposts_linked_lroute_002[] = {4, -1};		//ds:0x9fdb;
+int8_t g_signposts_linked_lroute_003[] = {1, -1};		//ds:0x9fdd;
+int8_t g_signposts_linked_lroute_004[] = {4, -1};		//ds:0x9fdf;
+int8_t g_signposts_linked_lroute_005[] = {5, 7, -1};		//ds:0x9fe1;
+int8_t g_signposts_linked_lroute_006[] = {10, -1};		//ds:0x9fe4;
+int8_t g_signposts_linked_lroute_007[] = {7, -1};		//ds:0x9fe6;
+int8_t g_signposts_linked_lroute_008[] = {9, -1};		//ds:0x9fe8;
+int8_t g_signposts_linked_lroute_009[] = {11, -1};		//ds:0x9fea;
+int8_t g_signposts_linked_lroute_010[] = {10, -1};		//ds:0x9fec;
+int8_t g_signposts_linked_lroute_011[] = {50, -1};		//ds:0x9fee;
+int8_t g_signposts_linked_lroute_012[] = {12, -1};		//ds:0x9ff0;
+int8_t g_signposts_linked_lroute_013[] = {11, -1};		//ds:0x9ff2;
+int8_t g_signposts_linked_lroute_014[] = {12, -1};		//ds:0x9ff4;
+int8_t g_signposts_linked_lroute_015[] = {13, -1};		//ds:0x9ff6;
+int8_t g_signposts_linked_lroute_016[] = {13, -1};		//ds:0x9ff8;
+int8_t g_signposts_linked_lroute_017[] = {14, -1};		//ds:0x9ffa;
+int8_t g_signposts_linked_lroute_018[] = {14, -1};		//ds:0x9ffc;
+int8_t g_signposts_linked_lroute_019[] = {49, -1};		//ds:0x9ffe;
+int8_t g_signposts_linked_lroute_020[] = {50, -1};		//ds:0xa000;
+int8_t g_signposts_linked_lroute_021[] = {5, -1};		//ds:0xa002;
+int8_t g_signposts_linked_lroute_022[] = {6, -1};		//ds:0xa004;
+int8_t g_signposts_linked_lroute_023[] = {6, -1};		//ds:0xa006;
+int8_t g_signposts_linked_lroute_024[] = {8, -1};		//ds:0xa008;
+int8_t g_signposts_linked_lroute_025[] = {9, -1};		//ds:0xa00a;
+int8_t g_signposts_linked_lroute_026[] = {16, -1};		//ds:0xa00c;
+int8_t g_signposts_linked_lroute_027[] = {17, -1};		//ds:0xa00e;
+int8_t g_signposts_linked_lroute_028[] = {19, -1};		//ds:0xa010;
+int8_t g_signposts_linked_lroute_029[] = {18, -1};		//ds:0xa012;
+int8_t g_signposts_linked_lroute_030[] = {20, -1};		//ds:0xa014;
+int8_t g_signposts_linked_lroute_031[] = {25, -1};		//ds:0xa016;
+int8_t g_signposts_linked_lroute_032[] = {21, -1};		//ds:0xa018;
+int8_t g_signposts_linked_lroute_033[] = {22, -1};		//ds:0xa01a;
+int8_t g_signposts_linked_lroute_034[] = {20, -1};		//ds:0xa01c;
+int8_t g_signposts_linked_lroute_035[] = {39, -1};		//ds:0xa01e;
+int8_t g_signposts_linked_lroute_036[] = {21, -1};		//ds:0xa020;
+int8_t g_signposts_linked_lroute_037[] = {39, -1};		//ds:0xa022;
+int8_t g_signposts_linked_lroute_038[] = {40, -1};		//ds:0xa024;
+int8_t g_signposts_linked_lroute_039[] = {45, -1};		//ds:0xa026;
+int8_t g_signposts_linked_lroute_040[] = {23, -1};		//ds:0xa028;
+int8_t g_signposts_linked_lroute_041[] = {49, -1};		//ds:0xa02a;
+int8_t g_signposts_linked_lroute_042[] = {22, -1};		//ds:0xa02c;
+int8_t g_signposts_linked_lroute_043[] = {24, -1};		//ds:0xa02e;
+int8_t g_signposts_linked_lroute_044[] = {23, -1};		//ds:0xa030;
+int8_t g_signposts_linked_lroute_045[] = {40, -1};		//ds:0xa032;
+int8_t g_signposts_linked_lroute_046[] = {41, -1};		//ds:0xa034;
+int8_t g_signposts_linked_lroute_047[] = {46, -1};		//ds:0xa036;
+int8_t g_signposts_linked_lroute_048[] = {24, 46, 45, 57, 57, -1};	//ds:0xa038;
+int8_t g_signposts_linked_lroute_049[] = {41, -1};		//ds:0xa03e;
+int8_t g_signposts_linked_lroute_050[] = {42, -1};		//ds:0xa040;
+int8_t g_signposts_linked_lroute_051[] = {42, -1};		//ds:0xa042;
+int8_t g_signposts_linked_lroute_052[] = {35, -1};		//ds:0xa044;
+int8_t g_signposts_linked_lroute_053[] = {43, -1};		//ds:0xa046;
+int8_t g_signposts_linked_lroute_054[] = {35, -1};		//ds:0xa048;
+int8_t g_signposts_linked_lroute_055[] = {37, -1};		//ds:0xa04a;
+int8_t g_signposts_linked_lroute_056[] = {34, -1};		//ds:0xa04c;
+int8_t g_signposts_linked_lroute_057[] = {37, -1};		//ds:0xa04e;
+int8_t g_signposts_linked_lroute_058[] = {36, 38, -1};		//ds:0xa050;
+int8_t g_signposts_linked_lroute_059[] = {47, -1};		//ds:0xa052;
+int8_t g_signposts_linked_lroute_060[] = {34, -1};		//ds:0xa054;
+int8_t g_signposts_linked_lroute_061[] = {33, 38, -1};		//ds:0xa056;
+int8_t g_signposts_linked_lroute_062[] = {36, 33, -1};		//ds:0xa059;
+int8_t g_signposts_linked_lroute_063[] = {32, -1};		//ds:0xa05c;
+int8_t g_signposts_linked_lroute_064[] = {48, 31, -1};		//ds:0xa05e;
+int8_t g_signposts_linked_lroute_065[] = {32, -1};		//ds:0xa062;
+int8_t g_signposts_linked_lroute_066[] = {51, -1};		//ds:0xa064;
+int8_t g_signposts_linked_lroute_067[] = {51, -1};		//ds:0xa066;
+int8_t g_signposts_linked_lroute_068[] = {30, -1};		//ds:0xa068;
+int8_t g_signposts_linked_lroute_069[] = {54, -1};		//ds:0xa06a;
+int8_t g_signposts_linked_lroute_070[] = {58, -1};		//ds:0xa06c;
+int8_t g_signposts_linked_lroute_071[] = {55, -1};		//ds:0xa06e;
+int8_t g_signposts_linked_lroute_072[] = {27, -1};		//ds:0xa070;
+int8_t g_signposts_linked_lroute_073[] = {28, -1};		//ds:0xa072;
+int8_t g_signposts_linked_lroute_074[] = {31, -1};		//ds:0xa074;
+int8_t g_signposts_linked_lroute_075[] = {28, -1};		//ds:0xa076;
+int8_t g_signposts_linked_lroute_076[] = {29, -1};		//ds:0xa078;
+int8_t g_signposts_linked_lroute_077[] = {48, -1};		//ds:0xa07a;
+int8_t g_signposts_linked_lroute_078[] = {29, -1};		//ds:0xa07c;
+int8_t g_signposts_linked_lroute_079[] = {30, -1};		//ds:0xa07e;
+int8_t g_signposts_linked_lroute_080[] = {27, -1};		//ds:0xa080;
+int8_t g_signposts_linked_lroute_081[] = {3, -1};		//ds:0xa082;
+int8_t g_signposts_linked_lroute_082[] = {26, -1};		//ds:0xa084;
+int8_t g_signposts_linked_lroute_083[] = {47, -1};		//ds:0xa086;
+int8_t g_signposts_linked_lroute_084[] = {26, -1};		//ds:0xa088;
+int8_t g_signposts_linked_lroute_085[] = {53, -1};		//ds:0xa08a;
+int8_t g_signposts_linked_lroute_086[] = {52, -1};		//ds:0xa08c;
+int8_t g_signposts_linked_lroute_087[] = {52, -1};		//ds:0xa08e;
+int8_t g_signposts_linked_lroute_088[] = {2, -1};		//ds:0xa090;
+int8_t g_signposts_linked_lroute_089[] = {25, -1};		//ds:0xa092;
+int8_t g_signposts_linked_lroute_090[] = {3, -1};		//ds:0xa094;
+int8_t g_signposts_linked_lroute_091[] = {1, -1};		//ds:0xa096;
+int8_t g_signposts_linked_lroute_092[] = {2, -1};		//ds:0xa098;
+int8_t g_signposts_linked_lroute_093[] = {43, -1};		//ds:0xa09a;
+int8_t g_signposts_linked_lroute_094[] = {44, -1};		//ds:0xa09c;
+int8_t g_signposts_linked_lroute_095[] = {44, -1};		//ds:0xa09e;
+int8_t g_signposts_linked_lroute_096[] = {56, -1};		//ds:0xa0a0;
+int8_t g_signposts_linked_lroute_097[] = {56, -1};		//ds:0xa0a2;
+int8_t g_signposts_linked_lroute_098[] = {16, -1};		//ds:0xa0a4;
+int8_t g_signposts_linked_lroute_099[] = {15, -1};		//ds:0xa0a6;
+int8_t g_signposts_linked_lroute_100[] = {8, -1};		//ds:0xa0a8;
+int8_t g_signposts_linked_lroute_101[] = {17, -1};		//ds:0xa0aa;
+int8_t g_signposts_linked_lroute_102[] = {18, -1};		//ds:0xa0ac;
+int8_t g_signposts_linked_lroute_103[] = {19, -1};		//ds:0xa0ae;
+int8_t g_signposts_linked_lroute_104[] = {53, -1};		//ds:0xa0b0;
+int8_t g_signposts_linked_lroute_105[] = {55, -1};		//ds:0xa0b2;
 
 struct trv_start_point g_signposts[106] = {
-	{ TOWNS_THORWAL            , 1, (Bit8u*)g_signposts_linked_lroute_001 }, //  1
-	{ TOWNS_THORWAL            , 2, (Bit8u*)g_signposts_linked_lroute_002 }, //  2
-	{ TOWNS_THORWAL            , 4, (Bit8u*)g_signposts_linked_lroute_003 }, //  3
-	{ TOWNS_SERSKE             , 1, (Bit8u*)g_signposts_linked_lroute_004 }, //  4
-	{ TOWNS_SERSKE             , 2, (Bit8u*)g_signposts_linked_lroute_005 }, //  5
-	{ TOWNS_BREIDA             , 1, (Bit8u*)g_signposts_linked_lroute_006 }, //  6
-	{ TOWNS_BREIDA             , 2, (Bit8u*)g_signposts_linked_lroute_007 }, //  7
-	{ TOWNS_BREIDA             , 3, (Bit8u*)g_signposts_linked_lroute_008 }, //  8
-	{ TOWNS_PEILINEN           , 1, (Bit8u*)g_signposts_linked_lroute_009 }, //  9
-	{ TOWNS_PEILINEN           , 2, (Bit8u*)g_signposts_linked_lroute_010 }, // 10
-	{ TOWNS_ROVAMUND           , 1, (Bit8u*)g_signposts_linked_lroute_011 }, // 11
-	{ TOWNS_ROVAMUND           , 2, (Bit8u*)g_signposts_linked_lroute_012 }, // 12
-	{ TOWNS_ROVAMUND           , 3, (Bit8u*)g_signposts_linked_lroute_013 }, // 13
-	{ TOWNS_NORDVEST           , 1, (Bit8u*)g_signposts_linked_lroute_014 }, // 14
-	{ TOWNS_NORDVEST           , 2, (Bit8u*)g_signposts_linked_lroute_015 }, // 15
-	{ TOWNS_KRAVIK             , 1, (Bit8u*)g_signposts_linked_lroute_016 }, // 16
-	{ TOWNS_KRAVIK             , 2, (Bit8u*)g_signposts_linked_lroute_017 }, // 17
-	{ TOWNS_SKELELLEN          , 1, (Bit8u*)g_signposts_linked_lroute_018 }, // 18
-	{ TOWNS_SKELELLEN          , 2, (Bit8u*)g_signposts_linked_lroute_019 }, // 19
-	{ TOWNS_MERSKE             , 2, (Bit8u*)g_signposts_linked_lroute_020 }, // 20
-	{ TOWNS_MERSKE             , 3, (Bit8u*)g_signposts_linked_lroute_021 }, // 21
-	{ TOWNS_MERSKE             , 4, (Bit8u*)g_signposts_linked_lroute_022 }, // 22
-	{ TOWNS_EFFERDUN           , 2, (Bit8u*)g_signposts_linked_lroute_023 }, // 23
-	{ TOWNS_TJOILA             , 1, (Bit8u*)g_signposts_linked_lroute_024 }, // 24
-	{ TOWNS_TJOILA             , 2, (Bit8u*)g_signposts_linked_lroute_025 }, // 25
-	{ TOWNS_RUKIAN             , 1, (Bit8u*)g_signposts_linked_lroute_026 }, // 26
-	{ TOWNS_RUKIAN             , 2, (Bit8u*)g_signposts_linked_lroute_027 }, // 27
-	{ TOWNS_ANGBODIRTAL        , 1, (Bit8u*)g_signposts_linked_lroute_028 }, // 28
-	{ TOWNS_AUPLOG             , 1, (Bit8u*)g_signposts_linked_lroute_029 }, // 29
-	{ TOWNS_AUPLOG             , 2, (Bit8u*)g_signposts_linked_lroute_030 }, // 30
-	{ TOWNS_AUPLOG             , 3, (Bit8u*)g_signposts_linked_lroute_031 }, // 31
-	{ TOWNS_VILNHEIM           , 1, (Bit8u*)g_signposts_linked_lroute_032 }, // 32
-	{ TOWNS_VILNHEIM           , 2, (Bit8u*)g_signposts_linked_lroute_033 }, // 33
-	{ TOWNS_VILNHEIM           , 3, (Bit8u*)g_signposts_linked_lroute_034 }, // 34
-	{ TOWNS_VILNHEIM           , 4, (Bit8u*)g_signposts_linked_lroute_035 }, // 35
-	{ TOWNS_BODON              , 1, (Bit8u*)g_signposts_linked_lroute_036 }, // 36
-	{ TOWNS_OBERORKEN          , 1, (Bit8u*)g_signposts_linked_lroute_037 }, // 37
-	{ TOWNS_OBERORKEN          , 2, (Bit8u*)g_signposts_linked_lroute_038 }, // 38
-	{ TOWNS_OBERORKEN          , 3, (Bit8u*)g_signposts_linked_lroute_039 }, // 39
-	{ TOWNS_PHEXCAER           , 1, (Bit8u*)g_signposts_linked_lroute_040 }, // 40
-	{ TOWNS_PHEXCAER           , 2, (Bit8u*)g_signposts_linked_lroute_041 }, // 41
-	{ TOWNS_PHEXCAER           , 3, (Bit8u*)g_signposts_linked_lroute_042 }, // 42
-	{ TOWNS_PHEXCAER           , 4, (Bit8u*)g_signposts_linked_lroute_043 }, // 43
-	{ TOWNS_GROENVELDEN        , 1, (Bit8u*)g_signposts_linked_lroute_044 }, // 44
-	{ TOWNS_FELSTEYN           , 1, (Bit8u*)g_signposts_linked_lroute_045 }, // 45
-	{ TOWNS_FELSTEYN           , 2, (Bit8u*)g_signposts_linked_lroute_046 }, // 46
-	{ TOWNS_FELSTEYN           , 3, (Bit8u*)g_signposts_linked_lroute_047 }, // 47
-	{ TOWNS_EINSIEDLERSEE      , 1, (Bit8u*)g_signposts_linked_lroute_048 }, // 48
-	{ TOWNS_ORKANGER           , 1, (Bit8u*)g_signposts_linked_lroute_049 }, // 49
-	{ TOWNS_ORKANGER           , 2, (Bit8u*)g_signposts_linked_lroute_050 }, // 50
-	{ TOWNS_CLANEGH            , 1, (Bit8u*)g_signposts_linked_lroute_051 }, // 51
-	{ TOWNS_CLANEGH            , 2, (Bit8u*)g_signposts_linked_lroute_052 }, // 52
-	{ TOWNS_CLANEGH            , 3, (Bit8u*)g_signposts_linked_lroute_053 }, // 53
-	{ TOWNS_LISKOR             , 1, (Bit8u*)g_signposts_linked_lroute_054 }, // 54
-	{ TOWNS_LISKOR             , 2, (Bit8u*)g_signposts_linked_lroute_055 }, // 55
-	{ TOWNS_LISKOR             , 3, (Bit8u*)g_signposts_linked_lroute_056 }, // 56
-	{ TOWNS_THOSS              , 1, (Bit8u*)g_signposts_linked_lroute_057 }, // 57
-	{ TOWNS_THOSS              , 2, (Bit8u*)g_signposts_linked_lroute_058 }, // 58
-	{ TOWNS_THOSS              , 3, (Bit8u*)g_signposts_linked_lroute_059 }, // 59
-	{ TOWNS_TJANSET            , 1, (Bit8u*)g_signposts_linked_lroute_060 }, // 60
-	{ TOWNS_TJANSET            , 2, (Bit8u*)g_signposts_linked_lroute_061 }, // 61
-	{ TOWNS_ALA                , 1, (Bit8u*)g_signposts_linked_lroute_062 }, // 62
-	{ TOWNS_ALA                , 2, (Bit8u*)g_signposts_linked_lroute_063 }, // 63
-	{ TOWNS_ORVIL              , 1, (Bit8u*)g_signposts_linked_lroute_064 }, // 64
-	{ TOWNS_ORVIL              , 2, (Bit8u*)g_signposts_linked_lroute_065 }, // 65
-	{ TOWNS_ORVIL              , 3, (Bit8u*)g_signposts_linked_lroute_066 }, // 66
-	{ TOWNS_ROVIK              , 1, (Bit8u*)g_signposts_linked_lroute_067 }, // 67
-	{ TOWNS_KORD               , 1, (Bit8u*)g_signposts_linked_lroute_068 }, // 68
-	{ TOWNS_RUNINSHAVEN        , 1, (Bit8u*)g_signposts_linked_lroute_069 }, // 69
-	{ TOWNS_RUNINSHAVEN        , 2, (Bit8u*)g_signposts_linked_lroute_070 }, // 70
-	{ TOWNS_RUNINSHAVEN        , 4, (Bit8u*)g_signposts_linked_lroute_071 }, // 71
-	{ TOWNS_OTTARJE            , 1, (Bit8u*)g_signposts_linked_lroute_072 }, // 72
-	{ TOWNS_OTTARJE            , 2, (Bit8u*)g_signposts_linked_lroute_073 }, // 73
-	{ TOWNS_OTTARJE            , 3, (Bit8u*)g_signposts_linked_lroute_074 }, // 74
-	{ TOWNS_SKJAL              , 1, (Bit8u*)g_signposts_linked_lroute_075 }, // 75
-	{ TOWNS_SKJAL              , 2, (Bit8u*)g_signposts_linked_lroute_076 }, // 76
-	{ TOWNS_SKJAL              , 3, (Bit8u*)g_signposts_linked_lroute_077 }, // 77
-	{ TOWNS_PREM               , 1, (Bit8u*)g_signposts_linked_lroute_078 }, // 78
-	{ TOWNS_PREM               , 2, (Bit8u*)g_signposts_linked_lroute_079 }, // 79
-	{ TOWNS_DASPOTA            , 1, (Bit8u*)g_signposts_linked_lroute_080 }, // 80
-	{ TOWNS_DASPOTA            , 2, (Bit8u*)g_signposts_linked_lroute_081 }, // 81
-	{ TOWNS_DASPOTA            , 3, (Bit8u*)g_signposts_linked_lroute_082 }, // 82
-	{ TOWNS_RYBON              , 1, (Bit8u*)g_signposts_linked_lroute_083 }, // 83
-	{ TOWNS_RYBON              , 2, (Bit8u*)g_signposts_linked_lroute_084 }, // 84
-	{ TOWNS_LJASDAHL           , 2, (Bit8u*)g_signposts_linked_lroute_085 }, // 85
-	{ TOWNS_LJASDAHL           , 3, (Bit8u*)g_signposts_linked_lroute_086 }, // 86
-	{ TOWNS_LJASDAHL           , 4, (Bit8u*)g_signposts_linked_lroute_087 }, // 87
-	{ TOWNS_VARNHEIM           , 1, (Bit8u*)g_signposts_linked_lroute_088 }, // 88
-	{ TOWNS_VARNHEIM           , 2, (Bit8u*)g_signposts_linked_lroute_089 }, // 89
-	{ TOWNS_VARNHEIM           , 3, (Bit8u*)g_signposts_linked_lroute_090 }, // 90
-	{ TOWNS_VAERMHAG           , 1, (Bit8u*)g_signposts_linked_lroute_091 }, // 91
-	{ TOWNS_VAERMHAG           , 2, (Bit8u*)g_signposts_linked_lroute_092 }, // 92
-	{ TOWNS_TYLDON             , 1, (Bit8u*)g_signposts_linked_lroute_093 }, // 93
-	{ TOWNS_TYLDON             , 2, (Bit8u*)g_signposts_linked_lroute_094 }, // 94
-	{ TOWNS_VIDSAND            , 1, (Bit8u*)g_signposts_linked_lroute_095 }, // 95
-	{ TOWNS_BRENDHIL           , 1, (Bit8u*)g_signposts_linked_lroute_096 }, // 96
-	{ TOWNS_MANRIN             , 1, (Bit8u*)g_signposts_linked_lroute_097 }, // 97
-	{ TOWNS_FAEHRSTATION_TJOILA, 1, (Bit8u*)g_signposts_linked_lroute_098 }, // 98
-	{ TOWNS_FAEHRSTATION_TJOILA, 2, (Bit8u*)g_signposts_linked_lroute_099 }, // 99
-	{ TOWNS_FAEHRSTATION_TJOILA, 3, (Bit8u*)g_signposts_linked_lroute_100 }, // 100
-	{ TOWNS_FAEHRE_ANGBODIRTAL , 1, (Bit8u*)g_signposts_linked_lroute_101 }, // 101
-	{ TOWNS_FAEHRE_ANGBODIRTAL , 2, (Bit8u*)g_signposts_linked_lroute_102 }, // 102
-	{ TOWNS_FAEHRE_ANGBODIRTAL , 3, (Bit8u*)g_signposts_linked_lroute_103 }, // 103
-	{ TOWNS_HJALLANDER_HOF     , 1, (Bit8u*)g_signposts_linked_lroute_104 }, // 104
-	{ TOWNS_LEUCHTTURM_RUNIN   , 2, (Bit8u*)g_signposts_linked_lroute_105 }, // 105
+	{ TOWNS_THORWAL            , 1, (uint8_t*)g_signposts_linked_lroute_001 }, //  1
+	{ TOWNS_THORWAL            , 2, (uint8_t*)g_signposts_linked_lroute_002 }, //  2
+	{ TOWNS_THORWAL            , 4, (uint8_t*)g_signposts_linked_lroute_003 }, //  3
+	{ TOWNS_SERSKE             , 1, (uint8_t*)g_signposts_linked_lroute_004 }, //  4
+	{ TOWNS_SERSKE             , 2, (uint8_t*)g_signposts_linked_lroute_005 }, //  5
+	{ TOWNS_BREIDA             , 1, (uint8_t*)g_signposts_linked_lroute_006 }, //  6
+	{ TOWNS_BREIDA             , 2, (uint8_t*)g_signposts_linked_lroute_007 }, //  7
+	{ TOWNS_BREIDA             , 3, (uint8_t*)g_signposts_linked_lroute_008 }, //  8
+	{ TOWNS_PEILINEN           , 1, (uint8_t*)g_signposts_linked_lroute_009 }, //  9
+	{ TOWNS_PEILINEN           , 2, (uint8_t*)g_signposts_linked_lroute_010 }, // 10
+	{ TOWNS_ROVAMUND           , 1, (uint8_t*)g_signposts_linked_lroute_011 }, // 11
+	{ TOWNS_ROVAMUND           , 2, (uint8_t*)g_signposts_linked_lroute_012 }, // 12
+	{ TOWNS_ROVAMUND           , 3, (uint8_t*)g_signposts_linked_lroute_013 }, // 13
+	{ TOWNS_NORDVEST           , 1, (uint8_t*)g_signposts_linked_lroute_014 }, // 14
+	{ TOWNS_NORDVEST           , 2, (uint8_t*)g_signposts_linked_lroute_015 }, // 15
+	{ TOWNS_KRAVIK             , 1, (uint8_t*)g_signposts_linked_lroute_016 }, // 16
+	{ TOWNS_KRAVIK             , 2, (uint8_t*)g_signposts_linked_lroute_017 }, // 17
+	{ TOWNS_SKELELLEN          , 1, (uint8_t*)g_signposts_linked_lroute_018 }, // 18
+	{ TOWNS_SKELELLEN          , 2, (uint8_t*)g_signposts_linked_lroute_019 }, // 19
+	{ TOWNS_MERSKE             , 2, (uint8_t*)g_signposts_linked_lroute_020 }, // 20
+	{ TOWNS_MERSKE             , 3, (uint8_t*)g_signposts_linked_lroute_021 }, // 21
+	{ TOWNS_MERSKE             , 4, (uint8_t*)g_signposts_linked_lroute_022 }, // 22
+	{ TOWNS_EFFERDUN           , 2, (uint8_t*)g_signposts_linked_lroute_023 }, // 23
+	{ TOWNS_TJOILA             , 1, (uint8_t*)g_signposts_linked_lroute_024 }, // 24
+	{ TOWNS_TJOILA             , 2, (uint8_t*)g_signposts_linked_lroute_025 }, // 25
+	{ TOWNS_RUKIAN             , 1, (uint8_t*)g_signposts_linked_lroute_026 }, // 26
+	{ TOWNS_RUKIAN             , 2, (uint8_t*)g_signposts_linked_lroute_027 }, // 27
+	{ TOWNS_ANGBODIRTAL        , 1, (uint8_t*)g_signposts_linked_lroute_028 }, // 28
+	{ TOWNS_AUPLOG             , 1, (uint8_t*)g_signposts_linked_lroute_029 }, // 29
+	{ TOWNS_AUPLOG             , 2, (uint8_t*)g_signposts_linked_lroute_030 }, // 30
+	{ TOWNS_AUPLOG             , 3, (uint8_t*)g_signposts_linked_lroute_031 }, // 31
+	{ TOWNS_VILNHEIM           , 1, (uint8_t*)g_signposts_linked_lroute_032 }, // 32
+	{ TOWNS_VILNHEIM           , 2, (uint8_t*)g_signposts_linked_lroute_033 }, // 33
+	{ TOWNS_VILNHEIM           , 3, (uint8_t*)g_signposts_linked_lroute_034 }, // 34
+	{ TOWNS_VILNHEIM           , 4, (uint8_t*)g_signposts_linked_lroute_035 }, // 35
+	{ TOWNS_BODON              , 1, (uint8_t*)g_signposts_linked_lroute_036 }, // 36
+	{ TOWNS_OBERORKEN          , 1, (uint8_t*)g_signposts_linked_lroute_037 }, // 37
+	{ TOWNS_OBERORKEN          , 2, (uint8_t*)g_signposts_linked_lroute_038 }, // 38
+	{ TOWNS_OBERORKEN          , 3, (uint8_t*)g_signposts_linked_lroute_039 }, // 39
+	{ TOWNS_PHEXCAER           , 1, (uint8_t*)g_signposts_linked_lroute_040 }, // 40
+	{ TOWNS_PHEXCAER           , 2, (uint8_t*)g_signposts_linked_lroute_041 }, // 41
+	{ TOWNS_PHEXCAER           , 3, (uint8_t*)g_signposts_linked_lroute_042 }, // 42
+	{ TOWNS_PHEXCAER           , 4, (uint8_t*)g_signposts_linked_lroute_043 }, // 43
+	{ TOWNS_GROENVELDEN        , 1, (uint8_t*)g_signposts_linked_lroute_044 }, // 44
+	{ TOWNS_FELSTEYN           , 1, (uint8_t*)g_signposts_linked_lroute_045 }, // 45
+	{ TOWNS_FELSTEYN           , 2, (uint8_t*)g_signposts_linked_lroute_046 }, // 46
+	{ TOWNS_FELSTEYN           , 3, (uint8_t*)g_signposts_linked_lroute_047 }, // 47
+	{ TOWNS_EINSIEDLERSEE      , 1, (uint8_t*)g_signposts_linked_lroute_048 }, // 48
+	{ TOWNS_ORKANGER           , 1, (uint8_t*)g_signposts_linked_lroute_049 }, // 49
+	{ TOWNS_ORKANGER           , 2, (uint8_t*)g_signposts_linked_lroute_050 }, // 50
+	{ TOWNS_CLANEGH            , 1, (uint8_t*)g_signposts_linked_lroute_051 }, // 51
+	{ TOWNS_CLANEGH            , 2, (uint8_t*)g_signposts_linked_lroute_052 }, // 52
+	{ TOWNS_CLANEGH            , 3, (uint8_t*)g_signposts_linked_lroute_053 }, // 53
+	{ TOWNS_LISKOR             , 1, (uint8_t*)g_signposts_linked_lroute_054 }, // 54
+	{ TOWNS_LISKOR             , 2, (uint8_t*)g_signposts_linked_lroute_055 }, // 55
+	{ TOWNS_LISKOR             , 3, (uint8_t*)g_signposts_linked_lroute_056 }, // 56
+	{ TOWNS_THOSS              , 1, (uint8_t*)g_signposts_linked_lroute_057 }, // 57
+	{ TOWNS_THOSS              , 2, (uint8_t*)g_signposts_linked_lroute_058 }, // 58
+	{ TOWNS_THOSS              , 3, (uint8_t*)g_signposts_linked_lroute_059 }, // 59
+	{ TOWNS_TJANSET            , 1, (uint8_t*)g_signposts_linked_lroute_060 }, // 60
+	{ TOWNS_TJANSET            , 2, (uint8_t*)g_signposts_linked_lroute_061 }, // 61
+	{ TOWNS_ALA                , 1, (uint8_t*)g_signposts_linked_lroute_062 }, // 62
+	{ TOWNS_ALA                , 2, (uint8_t*)g_signposts_linked_lroute_063 }, // 63
+	{ TOWNS_ORVIL              , 1, (uint8_t*)g_signposts_linked_lroute_064 }, // 64
+	{ TOWNS_ORVIL              , 2, (uint8_t*)g_signposts_linked_lroute_065 }, // 65
+	{ TOWNS_ORVIL              , 3, (uint8_t*)g_signposts_linked_lroute_066 }, // 66
+	{ TOWNS_ROVIK              , 1, (uint8_t*)g_signposts_linked_lroute_067 }, // 67
+	{ TOWNS_KORD               , 1, (uint8_t*)g_signposts_linked_lroute_068 }, // 68
+	{ TOWNS_RUNINSHAVEN        , 1, (uint8_t*)g_signposts_linked_lroute_069 }, // 69
+	{ TOWNS_RUNINSHAVEN        , 2, (uint8_t*)g_signposts_linked_lroute_070 }, // 70
+	{ TOWNS_RUNINSHAVEN        , 4, (uint8_t*)g_signposts_linked_lroute_071 }, // 71
+	{ TOWNS_OTTARJE            , 1, (uint8_t*)g_signposts_linked_lroute_072 }, // 72
+	{ TOWNS_OTTARJE            , 2, (uint8_t*)g_signposts_linked_lroute_073 }, // 73
+	{ TOWNS_OTTARJE            , 3, (uint8_t*)g_signposts_linked_lroute_074 }, // 74
+	{ TOWNS_SKJAL              , 1, (uint8_t*)g_signposts_linked_lroute_075 }, // 75
+	{ TOWNS_SKJAL              , 2, (uint8_t*)g_signposts_linked_lroute_076 }, // 76
+	{ TOWNS_SKJAL              , 3, (uint8_t*)g_signposts_linked_lroute_077 }, // 77
+	{ TOWNS_PREM               , 1, (uint8_t*)g_signposts_linked_lroute_078 }, // 78
+	{ TOWNS_PREM               , 2, (uint8_t*)g_signposts_linked_lroute_079 }, // 79
+	{ TOWNS_DASPOTA            , 1, (uint8_t*)g_signposts_linked_lroute_080 }, // 80
+	{ TOWNS_DASPOTA            , 2, (uint8_t*)g_signposts_linked_lroute_081 }, // 81
+	{ TOWNS_DASPOTA            , 3, (uint8_t*)g_signposts_linked_lroute_082 }, // 82
+	{ TOWNS_RYBON              , 1, (uint8_t*)g_signposts_linked_lroute_083 }, // 83
+	{ TOWNS_RYBON              , 2, (uint8_t*)g_signposts_linked_lroute_084 }, // 84
+	{ TOWNS_LJASDAHL           , 2, (uint8_t*)g_signposts_linked_lroute_085 }, // 85
+	{ TOWNS_LJASDAHL           , 3, (uint8_t*)g_signposts_linked_lroute_086 }, // 86
+	{ TOWNS_LJASDAHL           , 4, (uint8_t*)g_signposts_linked_lroute_087 }, // 87
+	{ TOWNS_VARNHEIM           , 1, (uint8_t*)g_signposts_linked_lroute_088 }, // 88
+	{ TOWNS_VARNHEIM           , 2, (uint8_t*)g_signposts_linked_lroute_089 }, // 89
+	{ TOWNS_VARNHEIM           , 3, (uint8_t*)g_signposts_linked_lroute_090 }, // 90
+	{ TOWNS_VAERMHAG           , 1, (uint8_t*)g_signposts_linked_lroute_091 }, // 91
+	{ TOWNS_VAERMHAG           , 2, (uint8_t*)g_signposts_linked_lroute_092 }, // 92
+	{ TOWNS_TYLDON             , 1, (uint8_t*)g_signposts_linked_lroute_093 }, // 93
+	{ TOWNS_TYLDON             , 2, (uint8_t*)g_signposts_linked_lroute_094 }, // 94
+	{ TOWNS_VIDSAND            , 1, (uint8_t*)g_signposts_linked_lroute_095 }, // 95
+	{ TOWNS_BRENDHIL           , 1, (uint8_t*)g_signposts_linked_lroute_096 }, // 96
+	{ TOWNS_MANRIN             , 1, (uint8_t*)g_signposts_linked_lroute_097 }, // 97
+	{ TOWNS_FAEHRSTATION_TJOILA, 1, (uint8_t*)g_signposts_linked_lroute_098 }, // 98
+	{ TOWNS_FAEHRSTATION_TJOILA, 2, (uint8_t*)g_signposts_linked_lroute_099 }, // 99
+	{ TOWNS_FAEHRSTATION_TJOILA, 3, (uint8_t*)g_signposts_linked_lroute_100 }, // 100
+	{ TOWNS_FAEHRE_ANGBODIRTAL , 1, (uint8_t*)g_signposts_linked_lroute_101 }, // 101
+	{ TOWNS_FAEHRE_ANGBODIRTAL , 2, (uint8_t*)g_signposts_linked_lroute_102 }, // 102
+	{ TOWNS_FAEHRE_ANGBODIRTAL , 3, (uint8_t*)g_signposts_linked_lroute_103 }, // 103
+	{ TOWNS_HJALLANDER_HOF     , 1, (uint8_t*)g_signposts_linked_lroute_104 }, // 104
+	{ TOWNS_LEUCHTTURM_RUNIN   , 2, (uint8_t*)g_signposts_linked_lroute_105 }, // 105
 	{ -1                    , 0,    NULL }
-}; // ds:0xa0b4; Bit8u*
+}; // ds:0xa0b4; uint8_t*
 
 /* Numbers here are entries in g_sea_route */
-Bit8s g_harbors_linked_sea_routes_01[] = {1, 8, 33, 35, 39, -1};		//ds:0xa330
-Bit8s g_harbors_linked_sea_routes_02[] = {36, 37, -1};				//ds:0xa336
-Bit8s g_harbors_linked_sea_routes_03[] = {33, 34, 36, -1};			//ds:0xa339
-Bit8s g_harbors_linked_sea_routes_04[] = {34, 35, 37, -1};			//ds:0xa33d
-Bit8s g_harbors_linked_sea_routes_05[] = {28, 27, 38, -1};			//ds:0xa341
-Bit8s g_harbors_linked_sea_routes_06[] = {27, 29, 25, -1};			//ds:0xa345
-Bit8s g_harbors_linked_sea_routes_07[] = {24, -1};				//ds:0xa349
-Bit8s g_harbors_linked_sea_routes_08[] = {6, 25, 26, 30, 38, 23, 45, -1};	//ds:0xa34b
-Bit8s g_harbors_linked_sea_routes_09[] = {22, 23, 24, 32, -1};			//ds:0xa353
-Bit8s g_harbors_linked_sea_routes_10[] = {
+int8_t g_harbors_linked_sea_routes_01[] = {1, 8, 33, 35, 39, -1};		//ds:0xa330
+int8_t g_harbors_linked_sea_routes_02[] = {36, 37, -1};				//ds:0xa336
+int8_t g_harbors_linked_sea_routes_03[] = {33, 34, 36, -1};			//ds:0xa339
+int8_t g_harbors_linked_sea_routes_04[] = {34, 35, 37, -1};			//ds:0xa33d
+int8_t g_harbors_linked_sea_routes_05[] = {28, 27, 38, -1};			//ds:0xa341
+int8_t g_harbors_linked_sea_routes_06[] = {27, 29, 25, -1};			//ds:0xa345
+int8_t g_harbors_linked_sea_routes_07[] = {24, -1};				//ds:0xa349
+int8_t g_harbors_linked_sea_routes_08[] = {6, 25, 26, 30, 38, 23, 45, -1};	//ds:0xa34b
+int8_t g_harbors_linked_sea_routes_09[] = {22, 23, 24, 32, -1};			//ds:0xa353
+int8_t g_harbors_linked_sea_routes_10[] = {
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 40: After doing a ship passage from Overthorn to Hjalsingor and leaving the harbor,
 	 * the party is positioned in a wrong square behind the buildings. */
@@ -331,60 +331,60 @@ Bit8s g_harbors_linked_sea_routes_10[] = {
 	2, 5,	/* diff */ 6, 7,	21, 22, -1,
 #endif
 };										//ds:0xa358
-Bit8s g_harbors_linked_sea_routes_11[] = {20, 21, -1};				//ds:0xa35f
-Bit8s g_harbors_linked_sea_routes_12[] = {4, 5, 19, 20, -1};			//ds:0xa362
-Bit8s g_harbors_linked_sea_routes_13[] = {18, 19, 44, -1};			//ds:0xa367
-Bit8s g_harbors_linked_sea_routes_14[] = {15, 17, -1};				//ds:0xa36b
-Bit8s g_harbors_linked_sea_routes_15[] = {16, 17, 18, 41, 42, 43, -1};		//ds:0xa36e
-Bit8s g_harbors_linked_sea_routes_16[] = {13, 12, 11, 40, 41, -1};		//ds:0xa375
-Bit8s g_harbors_linked_sea_routes_17[] = {13, 42, 14, -1};			//ds:0xa37b
-Bit8s g_harbors_linked_sea_routes_18[] = {1, 2, 3, 4, 14, 15, 16, 40, -1};      //ds:0xa37f
-Bit8s g_harbors_linked_sea_routes_19[] = {10, 12, -1};				//ds:0xa388
-Bit8s g_harbors_linked_sea_routes_20[] = {9, 10, 11, 39, -1};			//ds:0xa38b
-Bit8s g_harbors_linked_sea_routes_21[] = {8, 9, -1};				//ds:0xa390
-Bit8s g_harbors_linked_sea_routes_22[] = {26, 28, 29, -1};			//ds:0xa393
-Bit8s g_harbors_linked_sea_routes_23[] = {30, 31, -1};				//ds:0xa397
-Bit8s g_harbors_linked_sea_routes_24[] = {3, 7, 31, 32, 45, -1};		//ds:0xa39a
-Bit8s g_harbors_linked_sea_routes_25[] = {43, 44, -1};					  //ds:0xa3a0
+int8_t g_harbors_linked_sea_routes_11[] = {20, 21, -1};				//ds:0xa35f
+int8_t g_harbors_linked_sea_routes_12[] = {4, 5, 19, 20, -1};			//ds:0xa362
+int8_t g_harbors_linked_sea_routes_13[] = {18, 19, 44, -1};			//ds:0xa367
+int8_t g_harbors_linked_sea_routes_14[] = {15, 17, -1};				//ds:0xa36b
+int8_t g_harbors_linked_sea_routes_15[] = {16, 17, 18, 41, 42, 43, -1};		//ds:0xa36e
+int8_t g_harbors_linked_sea_routes_16[] = {13, 12, 11, 40, 41, -1};		//ds:0xa375
+int8_t g_harbors_linked_sea_routes_17[] = {13, 42, 14, -1};			//ds:0xa37b
+int8_t g_harbors_linked_sea_routes_18[] = {1, 2, 3, 4, 14, 15, 16, 40, -1};      //ds:0xa37f
+int8_t g_harbors_linked_sea_routes_19[] = {10, 12, -1};				//ds:0xa388
+int8_t g_harbors_linked_sea_routes_20[] = {9, 10, 11, 39, -1};			//ds:0xa38b
+int8_t g_harbors_linked_sea_routes_21[] = {8, 9, -1};				//ds:0xa390
+int8_t g_harbors_linked_sea_routes_22[] = {26, 28, 29, -1};			//ds:0xa393
+int8_t g_harbors_linked_sea_routes_23[] = {30, 31, -1};				//ds:0xa397
+int8_t g_harbors_linked_sea_routes_24[] = {3, 7, 31, 32, 45, -1};		//ds:0xa39a
+int8_t g_harbors_linked_sea_routes_25[] = {43, 44, -1};					  //ds:0xa3a0
 
 // for each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes
 
 struct trv_start_point g_harbors[26] = { // a list of the available sea routes for each of the 25 harbors in the game.
-	{ TOWNS_THORWAL         , 3, (Bit8u*)g_harbors_linked_sea_routes_01 }, //  1
-	{ TOWNS_SERSKE          , 3, (Bit8u*)g_harbors_linked_sea_routes_02 }, //  2
-	{ TOWNS_MERSKE          , 1, (Bit8u*)g_harbors_linked_sea_routes_03 }, //  3
-	{ TOWNS_EFFERDUN        , 1, (Bit8u*)g_harbors_linked_sea_routes_04 }, //  4
-	{ TOWNS_LISKOR          , 4, (Bit8u*)g_harbors_linked_sea_routes_05 }, //  5
-	{ TOWNS_TJANSET         , 3, (Bit8u*)g_harbors_linked_sea_routes_06 }, //  6
-	{ TOWNS_ORVIL           , 4, (Bit8u*)g_harbors_linked_sea_routes_07 }, //  7
-	{ TOWNS_OVERTHORN       , 1, (Bit8u*)g_harbors_linked_sea_routes_08 }, //  8
-	{ TOWNS_ROVIK           , 2, (Bit8u*)g_harbors_linked_sea_routes_09 }, //  9
-	{ TOWNS_HJALSINGOR      , 1, (Bit8u*)g_harbors_linked_sea_routes_10 }, // 10
-	{ TOWNS_GUDDASUNDEN     , 1, (Bit8u*)g_harbors_linked_sea_routes_11 }, // 11
-	{ TOWNS_KORD            , 2, (Bit8u*)g_harbors_linked_sea_routes_12 }, // 12
-	{ TOWNS_TREBAN          , 1, (Bit8u*)g_harbors_linked_sea_routes_13 }, // 13
-	{ TOWNS_ARYN            , 1, (Bit8u*)g_harbors_linked_sea_routes_14 }, // 14
-	{ TOWNS_RUNINSHAVEN     , 3, (Bit8u*)g_harbors_linked_sea_routes_15 }, // 15
-	{ TOWNS_OTTARJE         , 4, (Bit8u*)g_harbors_linked_sea_routes_16 }, // 16
-	{ TOWNS_SKJAL           , 4, (Bit8u*)g_harbors_linked_sea_routes_17 }, // 17
-	{ TOWNS_PREM            , 3, (Bit8u*)g_harbors_linked_sea_routes_18 }, // 18
-	{ TOWNS_LJASDAHL        , 1, (Bit8u*)g_harbors_linked_sea_routes_19 }, // 19
-	{ TOWNS_VARNHEIM        , 4, (Bit8u*)g_harbors_linked_sea_routes_20 }, // 20
-	{ TOWNS_VAERMHAG        , 3, (Bit8u*)g_harbors_linked_sea_routes_21 }, // 21
-	{ TOWNS_VIDSAND         , 2, (Bit8u*)g_harbors_linked_sea_routes_22 }, // 22
-	{ TOWNS_BRENDHIL        , 2, (Bit8u*)g_harbors_linked_sea_routes_23 }, // 23
-	{ TOWNS_MANRIN          , 2, (Bit8u*)g_harbors_linked_sea_routes_24 }, // 24
+	{ TOWNS_THORWAL         , 3, (uint8_t*)g_harbors_linked_sea_routes_01 }, //  1
+	{ TOWNS_SERSKE          , 3, (uint8_t*)g_harbors_linked_sea_routes_02 }, //  2
+	{ TOWNS_MERSKE          , 1, (uint8_t*)g_harbors_linked_sea_routes_03 }, //  3
+	{ TOWNS_EFFERDUN        , 1, (uint8_t*)g_harbors_linked_sea_routes_04 }, //  4
+	{ TOWNS_LISKOR          , 4, (uint8_t*)g_harbors_linked_sea_routes_05 }, //  5
+	{ TOWNS_TJANSET         , 3, (uint8_t*)g_harbors_linked_sea_routes_06 }, //  6
+	{ TOWNS_ORVIL           , 4, (uint8_t*)g_harbors_linked_sea_routes_07 }, //  7
+	{ TOWNS_OVERTHORN       , 1, (uint8_t*)g_harbors_linked_sea_routes_08 }, //  8
+	{ TOWNS_ROVIK           , 2, (uint8_t*)g_harbors_linked_sea_routes_09 }, //  9
+	{ TOWNS_HJALSINGOR      , 1, (uint8_t*)g_harbors_linked_sea_routes_10 }, // 10
+	{ TOWNS_GUDDASUNDEN     , 1, (uint8_t*)g_harbors_linked_sea_routes_11 }, // 11
+	{ TOWNS_KORD            , 2, (uint8_t*)g_harbors_linked_sea_routes_12 }, // 12
+	{ TOWNS_TREBAN          , 1, (uint8_t*)g_harbors_linked_sea_routes_13 }, // 13
+	{ TOWNS_ARYN            , 1, (uint8_t*)g_harbors_linked_sea_routes_14 }, // 14
+	{ TOWNS_RUNINSHAVEN     , 3, (uint8_t*)g_harbors_linked_sea_routes_15 }, // 15
+	{ TOWNS_OTTARJE         , 4, (uint8_t*)g_harbors_linked_sea_routes_16 }, // 16
+	{ TOWNS_SKJAL           , 4, (uint8_t*)g_harbors_linked_sea_routes_17 }, // 17
+	{ TOWNS_PREM            , 3, (uint8_t*)g_harbors_linked_sea_routes_18 }, // 18
+	{ TOWNS_LJASDAHL        , 1, (uint8_t*)g_harbors_linked_sea_routes_19 }, // 19
+	{ TOWNS_VARNHEIM        , 4, (uint8_t*)g_harbors_linked_sea_routes_20 }, // 20
+	{ TOWNS_VAERMHAG        , 3, (uint8_t*)g_harbors_linked_sea_routes_21 }, // 21
+	{ TOWNS_VIDSAND         , 2, (uint8_t*)g_harbors_linked_sea_routes_22 }, // 22
+	{ TOWNS_BRENDHIL        , 2, (uint8_t*)g_harbors_linked_sea_routes_23 }, // 23
+	{ TOWNS_MANRIN          , 2, (uint8_t*)g_harbors_linked_sea_routes_24 }, // 24
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 41: After doing a ship passage to Leuchtturm Runin and leaving the harbor,
 	 * the party is positioned in a remote town square. */
 	/* Reason: The following line is incorrect; it is a duplicate of the corresponding entry in g_signposts. */
-//	{ TOWNS_LEUCHTTURM_RUNIN, 2, (Bit8s*)0x14fca0b2 }, // 25 links to land route 105
-	{ TOWNS_LEUCHTTURM_RUNIN, 2, (Bit8s*)g_signposts_linked_lroute_105 }, // 25 links to land route 105
+//	{ TOWNS_LEUCHTTURM_RUNIN, 2, (int8_t*)0x14fca0b2 }, // 25 links to land route 105
+	{ TOWNS_LEUCHTTURM_RUNIN, 2, (int8_t*)g_signposts_linked_lroute_105 }, // 25 links to land route 105
 #else
-	{ TOWNS_LEUCHTTURM_RUNIN, 1, (Bit8u*)g_harbors_linked_sea_routes_25 }, // 25
+	{ TOWNS_LEUCHTTURM_RUNIN, 1, (uint8_t*)g_harbors_linked_sea_routes_25 }, // 25
 #endif
 	{ -1                 , 0, NULL }
-}; // ds:0xa3a3; Bit8u*
+}; // ds:0xa3a3; uint8_t*
 struct struct_point g_town_positions[52] = {
 	{ 0x00bd, 0x0098 },
 	{ 0x00be, 0x00a1 },
@@ -668,7 +668,7 @@ signed short do_travel_mode(void)
 
 	memmove((void*)g_renderbuf_ptr, (void*)gs_travel_map_ptr, 64000);
 
-	map_effect((Bit8u*)g_renderbuf_ptr);
+	map_effect((uint8_t*)g_renderbuf_ptr);
 
 	wait_for_vsync();
 
@@ -874,16 +874,16 @@ signed short do_travel_mode(void)
 
 		for (i = 0; i < 64; i++)
 		{
-			pal_fade((Bit8s*)g_dtp2 + 0xc0, (Bit8s*)g_dtp2);
-			pal_fade((Bit8s*)g_dtp2 + 0x120, (Bit8s*)g_dtp2 + 0x60);
+			pal_fade((int8_t*)g_dtp2 + 0xc0, (int8_t*)g_dtp2);
+			pal_fade((int8_t*)g_dtp2 + 0x120, (int8_t*)g_dtp2 + 0x60);
 			wait_for_vsync();
-			set_palette((Bit8u*)g_dtp2 + 0xc0, 0x00, 0x20);
-			set_palette((Bit8u*)g_dtp2 + 0x120, 0xe0, 0x20);
+			set_palette((uint8_t*)g_dtp2 + 0xc0, 0x00, 0x20);
+			set_palette((uint8_t*)g_dtp2 + 0x120, 0xe0, 0x20);
 		}
 
 		wait_for_vsync();
-		set_palette((Bit8u*)g_dtp2, 0x80, 0x40);
-		set_palette((Bit8u*)g_dtp2, 0x00, 0x20);
+		set_palette((uint8_t*)g_dtp2, 0x80, 0x40);
+		set_palette((uint8_t*)g_dtp2, 0x00, 0x20);
 
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	}

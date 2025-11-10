@@ -285,7 +285,7 @@ void show_treasure_map(void)
 	signed int width;
 	signed int height;
 	signed short pp20_index_bak;
-	Bit32s length;
+	int32_t length;
 	struct nvf_extract_desc nvf;
 
 	/* count the collected treasure map parts */
@@ -307,7 +307,7 @@ void show_treasure_map(void)
 		/* load SKARTE.NVF */
 		l_si = load_archive_file(ARCHIVE_FILE_SKARTE_NVF);
 
-		read_archive_file(l_si, (Bit8u*)g_buffer9_ptr, 30000);
+		read_archive_file(l_si, (uint8_t*)g_buffer9_ptr, 30000);
 
 		length = get_readlength2(l_si);
 
@@ -327,8 +327,8 @@ void show_treasure_map(void)
 			if (gs_treasure_maps[l_si] && (l_si != 9 || (l_si == 9 && !gs_treasure_maps[6])))
 			{
 				/* decompress picture */
-				nvf.dst = (Bit8u*)(((HugePt)g_buffer9_ptr) + 30000L);
-				nvf.src = (Bit8u*)g_buffer9_ptr;
+				nvf.dst = (uint8_t*)(((HugePt)g_buffer9_ptr) + 30000L);
+				nvf.src = (uint8_t*)g_buffer9_ptr;
 				nvf.image_num = l_si;
 				nvf.compression_type = 0;
 				nvf.width = &width;
@@ -349,7 +349,7 @@ void show_treasure_map(void)
 
 		wait_for_vsync();
 
-		set_palette((Bit8u*)((g_buffer9_ptr + length) -0x60L), 0, 0x20);
+		set_palette((uint8_t*)((g_buffer9_ptr + length) -0x60L), 0, 0x20);
 
 		call_mouse();
 
@@ -452,7 +452,7 @@ signed short game_options(void)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
+	g_vga_backbuffer = (uint8_t*)g_buffer9_ptr;
 
 	bak1 = g_textline_maxlen;
 	bak2 = g_textline_posx;
@@ -461,7 +461,7 @@ signed short game_options(void)
 
 	set_textcolor(4, 0);
 
-	memset((Bit8u*)g_buffer9_ptr, 0, 20000);
+	memset((uint8_t*)g_buffer9_ptr, 0, 20000);
 
 	prepare_date_str();
 
@@ -475,7 +475,7 @@ signed short game_options(void)
 	g_pic_copy.dst = g_renderbuf_ptr + 9600;
 	do_pic_copy(2);
 
-	memset((Bit8u*)g_buffer9_ptr, 0, 28000);
+	memset((uint8_t*)g_buffer9_ptr, 0, 28000);
 
 	if (gs_current_town != TOWNS_NONE) {
 
@@ -628,7 +628,7 @@ signed short game_options(void)
 void draw_icon(signed short id, signed short x, signed short y)
 {
 	signed int handle;
-	Bit8u* dst_bak;
+	uint8_t* dst_bak;
 
 	handle = load_archive_file(ARCHIVE_FILE_ICONS);
 
@@ -767,17 +767,17 @@ void leave_location(void)
 void leave_dungeon(void)
 {
 	signed short i;
-	Bit8u *ptr;
+	uint8_t *ptr;
 
 	DNG_lights();
-	ptr = (Bit8u*)g_text_output_buf;
+	ptr = (uint8_t*)g_text_output_buf;
 
 	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
 
-		pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
-		pal_fade((Bit8s*)ptr + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
+		pal_fade((int8_t*)ptr, (int8_t*)g_renderbuf_ptr);
+		pal_fade((int8_t*)ptr + 0x60, (int8_t*)g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(ptr, 0x80, 0x40);
 	}
@@ -840,7 +840,7 @@ void tumult(void)
  */
 void fade_into(void)
 {
-	Bit8u *ptr;
+	uint8_t *ptr;
 	signed int i;
 
 	ptr = g_renderbuf_ptr + 0xfa00;
@@ -853,9 +853,9 @@ void fade_into(void)
 
 	for (i = 0; i < 0x20; i++) {
 
-		pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
+		pal_fade((int8_t*)ptr, (int8_t*)g_renderbuf_ptr);
 
-		pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
+		pal_fade((int8_t*)ptr, (int8_t*)g_renderbuf_ptr);
 
 		wait_for_vsync();
 
@@ -865,7 +865,7 @@ void fade_into(void)
 
 void copy_palette(void)
 {
-	memcpy(g_renderbuf_ptr + 0xfa00, (Bit8u*)g_ani_palette, 0x60);
+	memcpy(g_renderbuf_ptr + 0xfa00, (uint8_t*)g_ani_palette, 0x60);
 	g_fading_state = 2;
 }
 

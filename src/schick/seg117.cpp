@@ -39,7 +39,7 @@ namespace M302de {
 
 /* REMARK: valid values for this array are in {0, ..., 6} */
 static unsigned char g_random_encounter_index[59] = { 1, 1, 1, 1, 1, 1, 3, 0, 2, 3, 3, 4, 4, 4, 1, 1, 1, 3, 0, 3, 0, 5, 5, 5, 4, 4, 1, 1, 1, 3, 7, 4, 4, 1, 1, 4, 3, 4, 4, 4, 6, 4, 3, 1, 5, 5, 6, 7, 7, 7, 1, 1, 1, 1, 1, 7, 5, 7, 7 }; // ds:0xb17e
-static const Bit8u g_random_encounter_descr[14][7] = {
+static const uint8_t g_random_encounter_descr[14][7] = {
 	{  40,  40,  30,  25,  30,  25,  20 },
 	{   0,  45,   0,   0,  40,  30,   0 },
 	{   0,  50,   0,   0,  45,   0,   0 },

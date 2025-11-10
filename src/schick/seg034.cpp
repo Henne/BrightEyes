@@ -478,7 +478,7 @@ void FIG_latecomers(void)
 #if !defined(__BORLANDC__)
 					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, (signed short)g_current_fight->monsters[i].viewdir);
 #else
-					place_obj_on_cb(x, y, i + 10, (_AX = (Bit16s)p_enemy->gfx_id), (_AX = (Bit16s)g_current_fight->monsters[i].viewdir));
+					place_obj_on_cb(x, y, i + 10, (_AX = (int16_t)p_enemy->gfx_id), (_AX = (int16_t)g_current_fight->monsters[i].viewdir));
 #endif
 					FIG_make_visible(p_enemy->fighter_id);
 
@@ -733,7 +733,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 					} else {
 
 						FIG_set_cb_object(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
-						target_reachable = FIG_find_path_to_target((Bit8u*)hero, actor_id, *px, *py, 10);
+						target_reachable = FIG_find_path_to_target((uint8_t*)hero, actor_id, *px, *py, 10);
 						/* target_reachable = 1: there is a path of length < 50 to the target square; target_reachable = -1: there is no such path */
 						bp_cost = FIG_move_pathlen();
 #if !defined(__BORLANDC__)

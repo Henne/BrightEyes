@@ -28,7 +28,7 @@
 namespace M302de {
 #endif
 
-static Bit8u g_tevent067_chest[10] = {
+static uint8_t g_tevent067_chest[10] = {
 	ITEM_BASTARDSCHWERT, 1,
 	ITEM_SCHNAPSFLASCHE, 1,
 	ITEM_REZEPT_FUER_VOMICUM, 1,
@@ -428,7 +428,7 @@ void tevent_074(void)
 {
 	signed int answer;
 	signed int i;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 
 	if (!gs_tevent074_flag) {
@@ -656,7 +656,7 @@ void tevent_077(void)
 {
 	signed int answer;
 	signed int i;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 
 	if (!gs_tevent077_flag) {

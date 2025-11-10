@@ -6,13 +6,13 @@ namespace M302de {
 //0x20
 void unused_store(signed short);
 //0x25
-Bit8u* unused_load(signed short);
+uint8_t* unused_load(signed short);
 #endif
 //0x2a
 void load_area_description(const signed int);
 //0x2f
 #if defined(__BORLANDC__)
-void unused_load_archive_file(const signed int, const unsigned short, const Bit32u);
+void unused_load_archive_file(const signed int, const unsigned short, const uint32_t);
 #endif
 //0x34
 void prepare_dungeon_area(void);
@@ -21,7 +21,7 @@ void load_map(void);
 //0x3e
 void load_dungeon_ddt(void);
 //0x43
-Bit8u* load_city_textures(const signed int, const signed int, const signed int, const signed int);
+uint8_t* load_city_textures(const signed int, const signed int, const signed int, const signed int);
 //0x48
 void prepare_city_area(void);
 //0x4d

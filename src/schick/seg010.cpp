@@ -34,7 +34,7 @@ static unsigned short EMS_installed(void)
 	return 0;
 }
 
-static Bit8u* EMS_get_frame_ptr()
+static uint8_t* EMS_get_frame_ptr()
 {
 #if 0
 	reg_ax = 0x4100;
@@ -104,10 +104,10 @@ unsigned short EMS_map_memory(unsigned short handle, unsigned short lpage, unsig
 #endif
 }
 
-Bit8u* EMS_norm_ptr(Bit8u* p)
+uint8_t* EMS_norm_ptr(uint8_t* p)
 {
 #if 0
-	Bit8u* retval;
+	uint8_t* retval;
 
 	retval = FP_SEG(p) << 4;
 	retval += FP_OFF(p);

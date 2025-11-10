@@ -76,7 +76,7 @@ void PHX_fuhrhaus(void)
 void PHX_stadthaus(void)
 {
 	signed short answer;
-	Bit32s money;
+	int32_t money;
 
 	do {
 		answer = GUI_radio(get_tx2(14), 3, get_tx2(15), get_tx2(16), get_tx2(17));
@@ -138,7 +138,7 @@ void PHX_spielhaus(void)
 	signed short answer;
 	signed short counter;
 	signed short pos;
-	Bit32s money;
+	int32_t money;
 	struct struct_hero *hero;
 
 	do {
@@ -291,7 +291,7 @@ void PHX_apotheke(void)
 {
 	signed short answer;
 	signed short options;
-	Bit32s money;
+	int32_t money;
 
 	load_ani(23);
 
@@ -424,7 +424,7 @@ void PHX_apotheke(void)
 void PHX_healer(void)
 {
 	signed short answer;
-	Bit32s money;
+	int32_t money;
 
 	answer = random_schick(100);
 

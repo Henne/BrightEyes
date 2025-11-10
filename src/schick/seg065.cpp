@@ -31,7 +31,7 @@ namespace M302de {
 #endif
 
 struct struct_ani {
-	Bit8u* ptr;
+	uint8_t* ptr;
 	signed int width;
 	signed int height;
 };
@@ -103,9 +103,9 @@ void final_intro(void)
 	signed int handle;
 	signed int width;
 	signed int height;
-	Bit32u len;
-	Bit8u *ptr1;
-	Bit8u *ptr2;
+	uint32_t len;
+	uint8_t *ptr1;
+	uint8_t *ptr2;
 	struct nvf_extract_desc nvf;
 
 	g_pp20_index = ARCHIVE_FILE_DNGS + 12;
@@ -130,7 +130,7 @@ void final_intro(void)
 	ptr2 = g_buffer9_ptr + 80000L;
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)g_buffer9_ptr;
+	nvf.src = (uint8_t*)g_buffer9_ptr;
 	nvf.image_num = 0;
 	nvf.compression_type = 3;
 	nvf.width = &width;
@@ -140,7 +140,7 @@ void final_intro(void)
 	map_effect(g_renderbuf_ptr);
 
 	nvf.dst = ptr2;
-	nvf.src = (Bit8u*)g_buffer9_ptr;
+	nvf.src = (uint8_t*)g_buffer9_ptr;
 	nvf.image_num = 1;
 	nvf.compression_type = 3;
 	nvf.width = &width;
@@ -168,9 +168,9 @@ void final_intro(void)
 
 	for (i = 0; i < 0x40; i++) {
 
-		pal_fade((Bit8s*)ptr1, (Bit8s*)g_renderbuf_ptr);
-		pal_fade((Bit8s*)ptr1 + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
-		pal_fade((Bit8s*)ptr1 + 0xc0, (Bit8s*)g_renderbuf_ptr + 0xc0);
+		pal_fade((int8_t*)ptr1, (int8_t*)g_renderbuf_ptr);
+		pal_fade((int8_t*)ptr1 + 0x60, (int8_t*)g_renderbuf_ptr + 0x60);
+		pal_fade((int8_t*)ptr1 + 0xc0, (int8_t*)g_renderbuf_ptr + 0xc0);
 
 		wait_for_vsync();
 
@@ -184,7 +184,7 @@ void final_intro(void)
 	call_mouse();
 }
 
-static Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
+static uint8_t* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 {
 	HugePt retval;
 	struct nvf_extract_desc nvf;
@@ -200,7 +200,7 @@ static Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 
 	retval = (HugePt)ani->ptr + ani->width * ani->height;
 
-	return (Bit8u*)retval;
+	return (uint8_t*)retval;
 }
 
 static void hyg_ani_2(struct struct_ani *ani, signed short x, signed short y)
@@ -244,10 +244,10 @@ void show_hyggelik_ani(void)
 {
 	signed int i;
 	signed int handle;
-	Bit32s filelen;
-	Bit8u *src;
-	Bit8u* ptr1;
-	Bit8u* ptr2;
+	int32_t filelen;
+	uint8_t *src;
+	uint8_t* ptr1;
+	uint8_t* ptr2;
 	struct_ani ani[30];
 
 	g_wallclock_update = 0;
@@ -261,7 +261,7 @@ void show_hyggelik_ani(void)
 
 	do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	memcpy((void*)g_dtp2, src, 192);
-	src = (Bit8u*)g_dtp2;
+	src = (uint8_t*)g_dtp2;
 
 	wait_for_vsync();
 	set_palette(src, 0 , 0x40);
@@ -356,8 +356,8 @@ void show_hyggelik_ani(void)
 	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
-		pal_fade((Bit8s*)src, (Bit8s*)g_renderbuf_ptr);
-		pal_fade((Bit8s*)src + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
+		pal_fade((int8_t*)src, (int8_t*)g_renderbuf_ptr);
+		pal_fade((int8_t*)src + 0x60, (int8_t*)g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(src, 0, 0x40);
 	}
@@ -416,7 +416,7 @@ void show_outro(void)
 	signed int width;
 	signed int height;
 	unsigned short len;
-	Bit8u *pal_ptr;
+	uint8_t *pal_ptr;
 	struct struct_hero *hero;
 	signed int i;
 	struct nvf_extract_desc nvf;
@@ -431,7 +431,7 @@ void show_outro(void)
 
 	/* load OUTRO1.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO1_NVF);
-	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
+	len = read_archive_file(handle, (uint8_t*)g_buffer9_ptr, 64000);
 	close(handle);
 
 	pal_ptr = (g_buffer9_ptr + len) - 0xc0L;
@@ -440,7 +440,7 @@ void show_outro(void)
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)g_buffer9_ptr;
+	nvf.src = (uint8_t*)g_buffer9_ptr;
 	nvf.image_num = 0;
 	nvf.compression_type = 0;
 	nvf.width = &width;
@@ -460,7 +460,7 @@ void show_outro(void)
 
 	/* load OUTRO2.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO2_NVF);
-	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
+	len = read_archive_file(handle, (uint8_t*)g_buffer9_ptr, 64000);
 	close(handle);
 
 	pal_ptr = (g_buffer9_ptr + len) - 0xc0L;
@@ -469,7 +469,7 @@ void show_outro(void)
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)g_buffer9_ptr;
+	nvf.src = (uint8_t*)g_buffer9_ptr;
 	nvf.image_num = 0;
 	nvf.compression_type = 0;
 	nvf.width = &width;
@@ -489,7 +489,7 @@ void show_outro(void)
 
 	/* load OUTRO3.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO3_NVF);
-	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
+	len = read_archive_file(handle, (uint8_t*)g_buffer9_ptr, 64000);
 	close(handle);
 
 	pal_ptr = (g_buffer9_ptr + len) - 0xc0L;
@@ -498,7 +498,7 @@ void show_outro(void)
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)g_buffer9_ptr;
+	nvf.src = (uint8_t*)g_buffer9_ptr;
 	nvf.image_num = 0;
 	nvf.compression_type = 0;
 	nvf.width = &width;

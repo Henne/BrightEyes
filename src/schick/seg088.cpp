@@ -83,7 +83,7 @@ void DNG14_fight_intro(signed short fight_id)
 
 void DNG14_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng14_chest_x1;
 
@@ -94,7 +94,7 @@ void DNG14_chest00_loot(struct struct_chest* chest)
 
 void DNG14_chest01_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng14_chest_x2;
 
@@ -110,7 +110,7 @@ void DNG14_chest02_loot(struct struct_chest* chest)
 
 void DNG14_chest03_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng14_chest_x4;
 
@@ -121,7 +121,7 @@ void DNG14_chest03_loot(struct struct_chest* chest)
 
 void DNG14_chest04_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng14_chest_x5;
 
@@ -132,7 +132,7 @@ void DNG14_chest04_loot(struct struct_chest* chest)
 
 void DNG14_chest05_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak;
+	uint8_t* ptr_bak;
 	unsigned char x;
 	unsigned char y;
 
@@ -160,7 +160,7 @@ void DNG14_chest05_loot(struct struct_chest* chest)
 
 void DNG14_chest06_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = (gs_dng14_chest_x7);
 
@@ -171,7 +171,7 @@ void DNG14_chest06_loot(struct struct_chest* chest)
 
 void DNG14_chest07_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = (gs_dng14_chest_x8);
 
@@ -195,7 +195,7 @@ void DNG15_riddle(void)
 	signed short l_di;
 	signed short pos;
 	signed short tw_bak;
-	Bit8u *ptr;
+	uint8_t *ptr;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 8;

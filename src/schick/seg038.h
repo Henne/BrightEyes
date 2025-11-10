@@ -13,12 +13,12 @@ void FIG_unused(const signed short, const signed short, signed short*, signed sh
 #endif
 /* 0x2f */
 /* static */
-void FIG_find_path_to_target_backtrack(Bit8u*, signed short, signed short, signed short, signed char, signed short, signed short, signed short);
+void FIG_find_path_to_target_backtrack(uint8_t*, signed short, signed short, signed short, signed char, signed short, signed short, signed short);
 /* 0x34 */
 /* static */
 signed short FIG_count_direction_changes_of_path(signed char*);
 /* 0x39 */
-signed short FIG_find_path_to_target(Bit8u *, signed short, signed short, signed short, signed short);
+signed short FIG_find_path_to_target(uint8_t *, signed short, signed short, signed short, signed short);
 
 #if !defined(__BORLANDC__)
 }

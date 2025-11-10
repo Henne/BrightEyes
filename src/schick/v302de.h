@@ -23,18 +23,18 @@
 #include <TIME.H>
 #endif
 
-typedef unsigned char Bit8u;
-typedef signed char Bit8s;
-typedef unsigned short Bit16u;
-typedef signed short Bit16s;
+typedef unsigned char uint8_t;
+typedef signed char int8_t;
+typedef unsigned short uint16_t;
+typedef signed short int16_t;
 #if defined(__BORLANDC__)
-typedef unsigned long Bit32u;
-typedef signed long Bit32s;
-typedef Bit8u huge * HugePt;
+typedef unsigned long uint32_t;
+typedef signed long int32_t;
+typedef uint8_t huge * HugePt;
 #else
-typedef unsigned int Bit32u;
-typedef signed int Bit32s;
-typedef Bit8u* HugePt;
+typedef unsigned int uint32_t;
+typedef signed int int32_t;
+typedef uint8_t* HugePt;
 #endif
 
 /**
@@ -48,11 +48,11 @@ typedef Bit8u* HugePt;
 */
 struct nvf_extract_desc {
 #if !defined(__BORLANDC__)
-	Bit8u *dst;
-	Bit8u *src;
+	uint8_t *dst;
+	uint8_t *src;
 #else
-	Bit8u huge *dst;
-	Bit8u huge *src;
+	uint8_t huge *dst;
+	uint8_t huge *src;
 #endif
 	signed int image_num;
 	signed char compression_type;
@@ -187,8 +187,8 @@ static inline char* my_itoa(int value, char *string, int radix)
 	return string;
 }
 
-static inline Bit8u *get_spelltarget_e(void) {
-	return (Bit8u*)M302de::g_spelltarget_e;
+static inline uint8_t *get_spelltarget_e(void) {
+	return (uint8_t*)M302de::g_spelltarget_e;
 }
 
 
@@ -290,7 +290,7 @@ static inline char* get_itemname(unsigned short item_id)
 #define update_informer_cond(informer) (gs_informer_flags[informer] = 1)
 #endif
 
-#define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
+#define get_spelltarget_e()	((uint8_t*)g_spelltarget_e)
 #define get_spelltarget()	((struct struct_hero*)g_spelltarget)
 #define get_spelluser()		((struct struct_hero*)g_spelluser)
 

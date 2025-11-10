@@ -27,7 +27,7 @@ void PHX_drogentempel(void)
 {
 	signed short answer;
 	signed short nr_heroes;
-	Bit32s money;
+	int32_t money;
 
 	load_ani(3);
 
@@ -349,7 +349,7 @@ void PHX_alrik_derondan(void)
 {
 	signed short answer;
 	signed short l_di = 0;
-	Bit32s money;
+	int32_t money;
 
 	load_tx2(ARCHIVE_FILE_PHEX2_LTX);
 

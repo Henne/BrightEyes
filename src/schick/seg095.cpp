@@ -35,28 +35,28 @@ unsigned short npc_meetings(unsigned short type_index)
 
 		/* Nariell */
 		if (gs_current_town == TOWNS_CLANEGH && gs_current_typeindex == 0x30 &&
-			!((Bit8u)gs_npc_timers[NPC_NARIELL])) {
+			!((uint8_t)gs_npc_timers[NPC_NARIELL])) {
 
 			npc_nariell();
 		} else
 
 		/* Harika */
 		if (gs_current_town == TOWNS_PHEXCAER && gs_current_typeindex == 0x28 &&
-			!((Bit8u)gs_npc_timers[NPC_HARIKA])) {
+			!((uint8_t)gs_npc_timers[NPC_HARIKA])) {
 
 			npc_harika();
 		} else
 
 		/* Curian */
 		if (gs_current_town == TOWNS_OVERTHORN && gs_current_typeindex == 0x3c &&
-			!((Bit8u)gs_npc_timers[NPC_CURIAN])) {
+			!((uint8_t)gs_npc_timers[NPC_CURIAN])) {
 
 			npc_curian();
 		} else
 
 		/* Ardora */
 		if (gs_current_town == TOWNS_THORWAL &&	gs_current_typeindex == 0x6 &&
-			!((Bit8u)gs_npc_timers[NPC_ARDORA]) &&
+			!((uint8_t)gs_npc_timers[NPC_ARDORA]) &&
 			gs_dng01_ardora_freed) {
 
 			npc_ardora();
@@ -64,14 +64,14 @@ unsigned short npc_meetings(unsigned short type_index)
 
 		/* Garsvik */
 		if (gs_current_town == TOWNS_PREM && gs_current_typeindex == 0x4a &&
-			!((Bit8u)gs_npc_timers[NPC_GARSVIK])) {
+			!((uint8_t)gs_npc_timers[NPC_GARSVIK])) {
 
 			npc_garsvik();
 		} else
 
 		/* Erwo */
 		if (gs_current_town == TOWNS_MANRIN && gs_current_typeindex == 0x57 &&
-			!((Bit8u)gs_npc_timers[NPC_ERWO])) {
+			!((uint8_t)gs_npc_timers[NPC_ERWO])) {
 
 			npc_erwo();
 		} else {

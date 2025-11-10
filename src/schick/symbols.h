@@ -41,7 +41,7 @@
 //#define WEARABLE_ITEMS_GREEN_ELF        (0x05ce)    /* short[15]; array terminated by -1 */
 //#define WEARABLE_ITEMS_ICE_ELF          (0x05ec)    /* short[19]; array terminated by -1 */
 //#define WEARABLE_ITEMS_SYLVAN_ELF       (0x0612)    /* short[19]; array terminated by -1 */
-//#define WEARABLE_ITEMS_INDEX            (0x0638)    /* Bit8u*[12]; items wearable depending on hero type */
+//#define WEARABLE_ITEMS_INDEX            (0x0638)    /* uint8_t*[12]; items wearable depending on hero type */
 //#define RANGED_WEAPONS_TABLE            (0x0668)    /* struct(8)[9]; struct{char unkn[8];} */
 //#define WEAPONS_TABLE                   (0x06b0)    /* struct(7)[65]; struct{char unkn[7];} */
 //#define ARMORS_TABLE                    (0x0877)    /* struct(2)[25]; struct{char rs, be;} */
@@ -66,7 +66,7 @@
 //#define MAGIC_SCHOOLS_7                 (0x0d6b)    /* short[8]; array terminated by -1 */
 //#define MAGIC_SCHOOLS_8                 (0x0d7b)    /* short[6]; array terminated by -1 */
 //#define MAGIC_SCHOOLS_9                 (0x0d87)    /* short[8]; array terminated by -1 */
-//#define MAGIC_SCHOOLS_INDEX             (0x0d97)    /* Bit8u*[9] */
+//#define MAGIC_SCHOOLS_INDEX             (0x0d97)    /* uint8_t*[9] */
 //#define SPELL_HANDLERS                  (0x0dbb)    /* long[86]; function pointer[86] */
 //#define MON_SPELL_DESCRIPTIONS          (0x0f13)    /* struct(8)[15]; */
 //#define MON_SPELL_REPERTOIRE            (0x0f8b)    /* struct(5)[11]; struct{char spells[5];} */
@@ -108,7 +108,7 @@
 //#define GFX_ANI_DESCRIPTIONS_26         (0x2477)    /* short[37] */
 //#define GFX_ANI_DESCRIPTIONS_27         (0x24c1)    /* short[37] */
 //#define GFX_ANI_DESCRIPTIONS_28         (0x250b)    /* short[37] */
-//#define GFX_ANI_INDEX                   (0x2555)    /* Bit8u*[41] */
+//#define GFX_ANI_INDEX                   (0x2555)    /* uint8_t*[41] */
 //#define TWO_FIELDED_SPRITE_ID           (0x25f9)    /* char[5] */
 //#define WEAPONANI_TABLE                 (0x25fe)    /* unsigned short[72] */
 //#define WEAPONANI_TYPES                 (0x268e)    /* signed char[22]; { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0 } */
@@ -163,8 +163,8 @@
 //#define ALWAYS_ZERO3                    (0x29ba)    /* unsigned short; writeonly (0) */
 // ?16
 //#define ACTION_TABLE_MENU               (0x29cc)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
-//#define ACTION_TABLE_PRIMARY            (0x29e0)    /* Bit8u*; to ACTION_TABLE_MENU */
-//#define ACTION_TABLE_SECONDARY          (0x29e4)    /* Bit8u* */
+//#define ACTION_TABLE_PRIMARY            (0x29e0)    /* uint8_t*; to ACTION_TABLE_MENU */
+//#define ACTION_TABLE_SECONDARY          (0x29e4)    /* uint8_t* */
 //#define ACTION_TABLE_PLAYMASK           (0x29e8)    /* struct(10)[24]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 //#define ACTION_TABLE_STATUS             (0x2ad8)    /* struct(10)[30]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 //#define ACTION_TABLE_MERCHANT           (0x2c04)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
@@ -320,7 +320,7 @@
 //#define ALGRID_TREBORNS_HINT            (0x3467)    /* unsigned char; {0,1} */
 //#define TIOMAR_DRINKMATE                (0x3468)    /* unsigned char; {0-6} */
 //#define TIOMAR_AWAITS_LETTER            (0x3469)    /* unsigned char; {0,1} */
-//#define UNICORN_HERO_PTR                (0x346a)    /* Bit8u* */
+//#define UNICORN_HERO_PTR                (0x346a)    /* uint8_t* */
 //#define NPC_MEET_TAVERN                 (0x346e)    /* signed short */
 //#define NPC_MONTHS                      (0x3470)    /* signed short */
 //#define SMITH_KICKED_FLAGS              (0x3472)    /* signed char[50]; {0,1} */
@@ -546,9 +546,9 @@
 //#define TEVENT114_OLIMONE_FLAG          (0x3e15)    /* unsigned char; {0,1} */
 //#define TEVENT074_FIGHT_FLAG            (0x3e16)    /* unsigned char; {0,1} */
 //#define TEVENT077_FIGHT_FLAG            (0x3e17)    /* unsigned char; {0,1} */
-//#define RANDOM_TLK_HERO                 (0x3e18)    /* Bit8u* */
-//#define RUIN_HERO                       (0x3e1c)    /* Bit8u* */
-//#define MAIN_ACTING_HERO                (0x3e20)    /* Bit8u* */
+//#define RANDOM_TLK_HERO                 (0x3e18)    /* uint8_t* */
+//#define RUIN_HERO                       (0x3e1c)    /* uint8_t* */
+//#define MAIN_ACTING_HERO                (0x3e20)    /* uint8_t* */
 //#define TEVENT073_CORPSE                (0x3e24)    /* unsigned char[3] */
 //#define TEVENT014_CHEST                 (0x3e27)    /* unsigned char[4] */
 //#define TEVENT064_HUT_CONTENT           (0x3e2b)    /* unsigned char[19] */
@@ -750,10 +750,10 @@
 //#define PASSAGE_OCTOPUS_POSITION        (0x4254)    /* unsigned short */
 //#define PASSAGE_PIRATES_FLAG            (0x4256)    /* unsigned short; {0,1} */
 //#define PASSAGE_PIRATES_POSITION        (0x4258)    /* unsigned short */
-//#define ROUTE_COURSE_PTR                (0x425a)    /* Bit8u* */
-//#define ROUTE_COURSE_START              (0x425e)    /* Bit8u* */
-//#define ROUTE_COURSE_PTR2               (0x4262)    /* Bit8u* */
-//#define SEA_TRAVEL_COURSES              (0x4266)    /* Bit8u* */
+//#define ROUTE_COURSE_PTR                (0x425a)    /* uint8_t* */
+//#define ROUTE_COURSE_START              (0x425e)    /* uint8_t* */
+//#define ROUTE_COURSE_PTR2               (0x4262)    /* uint8_t* */
+//#define SEA_TRAVEL_COURSES              (0x4266)    /* uint8_t* */
 //#define TEVENTS_TAB_PTR                 (0x426a)    /* unsigned long */
 //#define TRAVEL_ROUTE_PTR                (0x426e)    /* unsigned long */
 //#define ROUTE_TEVENTS                   (0x4272)    /* struct(4)[15]; struct{short place, event_id;} */
@@ -764,7 +764,7 @@
 //#define HARBOR_OPTIONS                  (0x42b2)    /* struct(12)[10]; buffering passage data for building the menu in a harbor where a sea passage can be selected */
 //#define SEA_TRAVEL_PASSAGE_PRICE        (0x432a)    /* signed short */
 //#define SEA_TRAVEL_PASSAGE_SPEED2       (0x432c)    /* unsigned short; basically, the same purpose as SEA_TRAVEL_PASSAGE_SPEED1. The variables could be merged. */
-//#define TRAVEL_MAP_PTR                  (0x432e)    /* Bit8u* */
+//#define TRAVEL_MAP_PTR                  (0x432e)    /* uint8_t* */
 //#define FORCEDMARCH_TIMER               (0x4332)    /* unsigned char */
 //#define TRAVEL_DETOUR                   (0x4333)    /* unsigned char; indicates a detour from traveling, mostly to a dungeon (if it holds a DUNGEONS_... ID, which is a value in [1..15]). further possible values: 0, 99, and an extra usage of 1 in seg110.cpp */
 //#define CURRENT_SIGNPOST                (0x4334)    /* unsigned short */
@@ -773,7 +773,7 @@
 //#define TRAVEL_DESTINATION_X            (0x433a)    /* unsigned short */
 //#define TRAVEL_DESTINATION_Y            (0x433c)    /* unsigned short */
 //#define TRAVEL_DESTINATION_VIEWDIR      (0x433e)    /* signed short */
-//#define TM_UNUSED1_PTR                  (0x4340)    /* Bit8u* */
+//#define TM_UNUSED1_PTR                  (0x4340)    /* uint8_t* */
 //#define TRV_MENU_TOWNS                  (0x4344)    /* unsigned char[6] */
 //#define TRV_DESTINATION                 (0x434a)    /* unsigned short */
 //#define DNG08_WATERBARREL               (0x434c)    /* signed char; {0,1} */
@@ -800,7 +800,7 @@
 //#define MUSIC_CURRENT_TRACK             (0x447a)    /* signed short */
 //#define SND_VOC_ENABLED                 (0x447c)    /* unsigned short; {0,1} */
 // ?2
-//#define STR_FILE_MISSING_PTR            (0x4480)    /* Bit8u*; to STR_FILE_MISSING */
+//#define STR_FILE_MISSING_PTR            (0x4480)    /* uint8_t*; to STR_FILE_MISSING */
 //#define MOUSE_IRQ_INIT                  (0x4484)    /* unsigned short */
 // ?4
 //#define PAUSE_STRING                    (0x448a)    /* char[10]; "P A U S E" */
@@ -878,7 +878,7 @@
 //#define COLOR_PAL_WHITE                 (0x4b03)    /* char[3]; {0x3f,0x3f,0x3f} */
 //#define PALETTE_ALLBLACK                (0x4b06)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define DELAY_FACTOR                    (0x4b66)    /* short */
-//#define STR_TEMP_XX_PTR                 (0x4b68)    /* Bit8u*; to STR_TEMP_XX */
+//#define STR_TEMP_XX_PTR                 (0x4b68)    /* uint8_t*; to STR_TEMP_XX */
 //#define FIG_STAR_COLORS                 (0x4b6c)    /* signed char[12] */
 //#define FIG_STAR_COUNTER                (0x4b78)    /* signed char */
 //#define FIG_STAR_TIMER                  (0x4b79)    /* signed short */
@@ -890,14 +890,14 @@
 //#define FIGHT_FIGS_INDEX                (0x4b9e)    /* signed short */
 //#define RANDOM_SCHICK_SEED              (0x4ba0)    /* unsigned short */
 //#define EMM_SIG                         (0x4ba2)    /* char[8] */
-//#define EMS_FRAME_PTR                   (0x4baa)    /* Bit8u* */
+//#define EMS_FRAME_PTR                   (0x4baa)    /* uint8_t* */
 //#define ACTION_TABLE_OPTIONS            (0x4bae)    /* struct(10)[10]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 //#define TMAP_X                          (0x4c12)    /* signed short[10] */
 //#define TMAP_Y                          (0x4c26)    /* signed short[10] */
 //#define RENDERBUF_IN_USE_FLAG           (0x4c3a)    /* unsigned char; {0,1} */
-//#define LOCATION_HANDLERS               (0x4c3b)    /* Bit8u*[19]; (void (*)(void))[19] */
+//#define LOCATION_HANDLERS               (0x4c3b)    /* uint8_t*[19]; (void (*)(void))[19] */
 // ?1
-//#define STR_TEMP_XX_PTR2                (0x4c88)    /* Bit8u*; to STR_TEMP_XX2 */
+//#define STR_TEMP_XX_PTR2                (0x4c88)    /* uint8_t*; to STR_TEMP_XX2 */
 //#define FNAMES                          (0x4c8c)    /* long[308] */
 //#define LOADED_HEAD_ID                  (0x515c)    /* unsigned short */
 //#define STR_TEMP_XX2                    (0x515e)    /* char[8]; "TEMP\%s" */
@@ -912,7 +912,7 @@
 //#define SAVEGAME_SUFFIX3                (0x5e59)    /* char[5]; ".gam" */
 //#define ALL_CHR_WILDCARD2               (0x5e5e)    /* char[6]; "*.CHR" */
 //#define ALL_CHR_WILDCARD3               (0x5e64)    /* char[6]; "*.CHR" */
-//#define PP20_BUFFERS                    (0x5e6a)    /* Bit8u*[9] */
+//#define PP20_BUFFERS                    (0x5e6a)    /* uint8_t*[9] */
 //#define PP20_BUFFER_LENGTHS             (0x5e8e)    /* unsigned long[9] */
 //#define CURRENT_FIGHT_ID                (0x5eb2)    /* unsigned short */
 // ?4
@@ -976,13 +976,13 @@
 //#define GFXTAB_SHOTBOLT_HEIGHT          (0x6204)    /* signed short[6]; { 15, 15, 15, 5, 5, 8 } */
 //#define GFXTAB_SHOTBOLT_WIDTH           (0x6210)    /* signed short[6]; { 25, 25, 25, 9, 9, 16 } */
 //#define ANITAB_SHOTBOLT_DATA            (0x621c)    /* char[168]; arrays, each terminated by -1 */
-//#define ANITAB_SHOTBOLT_INDEX2          (0x62c4)    /* Bit8u*[24]; 6 Bit8u* arrays of length 4 (viewdir) */
-//#define ANITAB_SHOTBOLT_INDEX           (0x6324)    /* Bit8u*[6] */
+//#define ANITAB_SHOTBOLT_INDEX2          (0x62c4)    /* uint8_t*[24]; 6 uint8_t* arrays of length 4 (viewdir) */
+//#define ANITAB_SHOTBOLT_INDEX           (0x6324)    /* uint8_t*[6] */
 //#define ANITAB_SPELL_NVFNO              (0x633c)    /* signed char[2]; { 9, 27 } */
 //#define ANITAB_SPELL_OX                 (0x633e)    /* signed short[2]; { 0, 0 } */
 //#define ANITAB_SPELL_OY                 (0x6342)    /* signed short[2]; { 0, 0 } */
 //#define ANITAB_SPELL_DATA               (0x6346)    /* char[32]; 2 arrays, each terminated by -1 */
-//#define ANITAB_SPELL_INDEX              (0x6366)    /* Bit8u*[2] */
+//#define ANITAB_SPELL_INDEX              (0x6366)    /* uint8_t*[2] */
 //#define STATUSPAGE_SELITEM1_NO          (0x636e)    /* unsigned char */
 //#define STATUSPAGE_SELITEM2_NO          (0x636f)    /* unsigned char */
 //#define STATUSPAGE_SELITEM3_NO          (0x6370)    /* unsigned char */
@@ -1008,7 +1008,7 @@
 //#define AUTOINC_SPELLS_WITCH            (0x6544)    /* signed short[3] */
 //#define AUTOINC_SPELLS_DRUID            (0x654a)    /* signed short[4] */
 //#define AUTOINC_SPELLS_MAGE_TABLE       (0x6552)    /* short[108]; 9 arrays, each terminated by -1 */
-//#define AUTOINC_SPELLS_MAGE_INDEX       (0x662a)    /* Bit8u*[9]; by magic school */
+//#define AUTOINC_SPELLS_MAGE_INDEX       (0x662a)    /* uint8_t*[9]; by magic school */
 //#define AUOTINC_SPELLS_GELF             (0x664e)    /* signed short[7] */
 //#define AUTOINC_SPELLS_SELF             (0x665c)    /* signed short[7] */
 //#define AUTOINC_SPELLS_IELF             (0x666a)    /* signed short[12] */
@@ -1060,7 +1060,7 @@
 //#define GOD_TEMPLES_TABLE_12            (0x6e23)    /* char[2]; array terminated by -1 */
 //#define GOD_TEMPLES_TABLE_13            (0x6e25)    /* char[13]; array terminated by -1 */
 //#define GOD_TEMPLES_TABLE_14            (0x6e32)    /* char[4]; array terminated by -1 */
-//#define GOD_TEMPLES_INDEX               (0x6e36)    /* Bit8u*[15] */
+//#define GOD_TEMPLES_INDEX               (0x6e36)    /* uint8_t*[15] */
 //#define STR_TEMP_FILE_WILDCARD          (0x6e72)    /* char[8]; "TEMP\%s" */
 //#define STR_NO_SAVE_IN_TEMPLE           (0x6e7a)    /* char[41]; "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!" */
 // ?1
@@ -1090,7 +1090,7 @@
 //#define HYG_ANI_X7                      (0x71c4)    /* unsigned char[3] */
 //#define HYG_ANI_X9                      (0x71c7)    /* unsigned char[3] */
 //#define TOWNS_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
-//#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* Bit8u*[18] */
+//#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* uint8_t*[18] */
 //#define MAPVAL_TO_LOCTYPE               (0x7246)    /* unsigned char[12]; { 0, 15, 31, 63, 95, 127, 159, 175, 191, 207, 223, 239 } */
 //#define SEG066_0BAD_UNKN0               (0x7252)    /* signed char[29] */
 //#define SEG066_0BAD_UNKN1               (0x726f)    /* signed char[29] */
@@ -1148,7 +1148,7 @@
 //#define DNG_STUB6_STR_COMMA             (0x92cc)    /* char[3]; ", " */
 //#define DNG_STUB6_STR_AND               (0x92cf)    /* char[6]; " UND " */
 // ?1
-//#define DNG_HANDLERS                    (0x92d6)    /* Bit8u*[15] */
+//#define DNG_HANDLERS                    (0x92d6)    /* uint8_t*[15] */
 //#define DNG_LEVEL_CHANGED               (0x9312)    /* unsigned short; {1,0} */
 //#define DNG01_SPECIALCHESTS             (0x9314)    /* struct(21)[9] */
 //#define DNG01_STR_MARBO                 (0x93d1)    /* char[6] */
@@ -1180,13 +1180,13 @@
 // ?1
 //#define DNG13_SPECIALCHESTS             (0x9d48)    /* struct(21)[2] */
 // ?18
-//#define DNG_SPECIALCHEST_INDEX          (0x9d84)    /* Bit8u*[16] */
+//#define DNG_SPECIALCHEST_INDEX          (0x9d84)    /* uint8_t*[16] */
 //#define STR_SINGLE_SPACE                (0x9dc4)    /* char[2]; " " */
 //#define LAND_ROUTES                     (0x9dc6)    /* struct(9)[59]; struct{char from, to, distance, speed_mod, encounters, u1, u2, fights, u3;} */
 //#define SIGNPOSTS_LINKED_LAND_ROUTES    (0x9fd9)    /* char[219]; 105 arrays, each terminated by -1 */
-//#define SIGNPOSTS                       (0xa0b4)    /* struct(6)[106]; struct{char town, typeindex; Bit8u* land_routes;} */
+//#define SIGNPOSTS                       (0xa0b4)    /* struct(6)[106]; struct{char town, typeindex; uint8_t* land_routes;} */
 //#define HARBORS_LINKED_SEA_ROUTES       (0xa330)    /* char[115]; 25 arrays, each terminated by -1 */
-//#define HARBORS                         (0xa3a3)    /* struct(6)[26]; struct{char town, typeindex; Bit8u* sea_routes;} */
+//#define HARBORS                         (0xa3a3)    /* struct(6)[26]; struct{char town, typeindex; uint8_t* sea_routes;} */
 //#define TOWN_POSITIONS                  (0xa43f)    /* struct(4)[52]; struct{signed short x, y;} */
 //#define ACTION_TABLE_TRAVELMAP          (0xa50f)    /* struct(10)[35] */
 //#define TEVENTS_TAB                     (0xa66d)    /* struct(3)[155]; struct{char route_id, place, tevent_id;} */
@@ -1208,12 +1208,12 @@
 //#define GRAMMAR_ARTICLE_EINEM           (0xa90c)    /* char[6]; "EINEM" */
 //#define GRAMMAR_ARTICLE_0               (0xa912)    /* char[1]; "" */
 //#define GRAMMAR_ARTICLE_VON             (0xa913)    /* char[4]; "VON" */
-//#define GRAMMAR_ARTICLES_INDEX          (0xa917)    /* Bit8u*[15] */
+//#define GRAMMAR_ARTICLES_INDEX          (0xa917)    /* uint8_t*[15] */
 //#define GRAMMAR_DEF_TABLE               (0xa953)    /* short[24]; [8], by case, then by gender */
 //#define GRAMMAR_INDEF_TABLE             (0xa983)    /* short[24]; [8], by case, then by gender */
 //#define GRAMMAR_NOARTICLE_TABLE         (0xa9b3)    /* short[24]; [8], by case, then by gender */
-//#define STR_S_S_PTR                     (0xa9e3)    /* Bit8u*; to STR_S_S */
-//#define STR_VON_S_S_PTR                 (0xa9e7)    /* Bit8u*; to STR_VON_S_S */
+//#define STR_S_S_PTR                     (0xa9e3)    /* uint8_t*; to STR_S_S */
+//#define STR_VON_S_S_PTR                 (0xa9e7)    /* uint8_t*; to STR_VON_S_S */
 //#define GRAMMAR_BUF_NO                  (0xa9eb)    /* unsigned short */
 //#define GRAMMAR_GENDER_BITMASKS         (0xa9ed)    /* signed short[3]; {0x1000, 0x2000, 0x3000} */
 //#define GRAMMAR_PRONOUNS_ER             (0xa9f3)    /* char[3]; "ER" */
@@ -1224,7 +1224,7 @@
 //#define GRAMMAR_PRONOUNS_IHN            (0xaa06)    /* char[4]; "IHN" */
 //#define GRAMMAR_PRONOUNS_IHM            (0xaa0a)    /* char[4]; "IHM" */
 //#define GRAMMAR_PRONOUNS_IHNEN          (0xaa0e)    /* char[6]; "IHNEN" */
-//#define GRAMMAR_PRONOUNS_INDEX          (0xaa14)    /* Bit8u*[7] */
+//#define GRAMMAR_PRONOUNS_INDEX          (0xaa14)    /* uint8_t*[7] */
 //#define GRAMMAR_PRONOUNS_TABLE2         (0xaa30)    /* unsigned char[33]; by gender and ?? */
 //#define GUI_CHAR_WIDTH                  (0xaa51)    /* struct(3)[75]; struct{char c, font_id, width;} */
 //#define STR_S_S                         (0xab32)    /* char[6]; "%s %s" */
@@ -1241,7 +1241,7 @@
 //#define SPELL_SELECT_STR_KEYVAL_COLOR   (0xac28)    /* char[8]; "\xf2%s~%d\xf0" */
 //#define SPELL_SELECT_ONES               (0xac30)    /* signed char[12]; { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } */
 //#define ANALUES_ITEMS                   (0xac3c)    /* struct(5)[28]; struct{signed short item_id, barrier; signed char dtp;} */
-//#define HEXENKNOTEN_GFX_BUF             (0xacc8)    /* Bit8u* */
+//#define HEXENKNOTEN_GFX_BUF             (0xacc8)    /* uint8_t* */
 //#define MONSTER_SPELL_AE_COST           (0xaccc)    /* signed short */
 //#define SELECT_SKILL_LVLUP              (0xacce)    /* char[6]; "%s~%d" */
 //#define SELECT_SKILL_DEFAULTS           (0xacd4)    /* signed char[6]; {44, 45, 46, -1, -1, -1} */
@@ -1318,29 +1318,29 @@
 //#define ARCHIVE_FILE_OFFSET             (0xbcdf)    /* unsigned long; start offset in SCHICK.DAT */
 //#define ARCHIVE_FILE_REMAINING          (0xbce3)    /* unsigned long; flen - off */
 //#define ARCHIVE_FILE_LENGTH             (0xbce7)    /* unsigned long */
-//#define AIL_DIGI_DRIVER_BUF2            (0xbceb)    /* Bit8u*; to buffer of size 5016 */
-//#define AIL_VOC_BUFFER                  (0xbcef)    /* Bit8u* */
-//#define AIL_DIGI_DRIVER_BUF             (0xbcf3)    /* Bit8u* */
-//#define AIL_DIGI_DRIVER_DESCR           (0xbcf7)    /* Bit8u* */
+//#define AIL_DIGI_DRIVER_BUF2            (0xbceb)    /* uint8_t*; to buffer of size 5016 */
+//#define AIL_VOC_BUFFER                  (0xbcef)    /* uint8_t* */
+//#define AIL_DIGI_DRIVER_BUF             (0xbcf3)    /* uint8_t* */
+//#define AIL_DIGI_DRIVER_DESCR           (0xbcf7)    /* uint8_t* */
 //#define AIL_DIGI_DRIVER_ID              (0xbcfb)    /* signed short */
 //#define USE_CDAUDIO_FLAG                (0xbcfd)    /* unsigned short; {0,1} */
 //#define LOAD_SOUND_DRIVER               (0xbcff)    /* unsigned short; {0,1} */
 //#define SAMPLE_AD_HANDLE                (0xbd01)    /* signed short */
 //#define AIL_TIMBRE_CACHE_SIZE           (0xbd03)    /* unsigned short */
 //#define AIL_STATE_TABLE_SIZE            (0xbd05)    /* unsigned long */
-//#define AIL_MUSIC_DRIVER_BUF2           (0xbd09)    /* Bit8u* */
-//#define AIL_MIDI_BUFFER                 (0xbd0d)    /* Bit8u* */
-//#define AIL_TIMBRE_CACHE                (0xbd11)    /* Bit8u* */
-//#define AIL_STATE_TABLE                 (0xbd15)    /* Bit8u* */
-//#define AIL_MUSIC_DRIVER_BUF            (0xbd19)    /* Bit8u* */
-//#define AIL_MUSIC_DRIVER_DESCR          (0xbd1d)    /* Bit8u* */
+//#define AIL_MUSIC_DRIVER_BUF2           (0xbd09)    /* uint8_t* */
+//#define AIL_MIDI_BUFFER                 (0xbd0d)    /* uint8_t* */
+//#define AIL_TIMBRE_CACHE                (0xbd11)    /* uint8_t* */
+//#define AIL_STATE_TABLE                 (0xbd15)    /* uint8_t* */
+//#define AIL_MUSIC_DRIVER_BUF            (0xbd19)    /* uint8_t* */
+//#define AIL_MUSIC_DRIVER_DESCR          (0xbd1d)    /* uint8_t* */
 //#define AIL_SEQUENCE                    (0xbd21)    /* signed short */
 //#define AIL_MUSIC_DRIVER_ID             (0xbd23)    /* signed short */
 //#define PREGAME_STATE                   (0xbd25)    /* unsigned short; {0,1} */
 //#define CITYCAMP_CITY                   (0xbd27)    /* unsigned char; { 0 = camp in a dungeon, 1 = camp in a town } */
-//#define CURRENT_FIGHT                   (0xbd28)    /* Bit8u* */
+//#define CURRENT_FIGHT                   (0xbd28)    /* uint8_t* */
 //#define SCENARIO_BUF                    (0xbd2c)    /* long */
-//#define FIGHTOBJ_BUF                    (0xbd30)    /* Bit8u* */
+//#define FIGHTOBJ_BUF                    (0xbd30)    /* uint8_t* */
 //#define HEROES                          (0xbd34)    /* long */
 //#define NEW_MENU_ICONS                  (0xbd38)    /* signed char[9] */
 // ?12
@@ -1351,35 +1351,35 @@
 // ?1
 //#define VISUAL_FIELD_VALS               (0xbd6e)    /* unsigned char[29] */
 // ?1
-//#define EMS_UNUSED_TAB                  (0xbd8c)    /* Bit8u* */
+//#define EMS_UNUSED_TAB                  (0xbd8c)    /* uint8_t* */
 //#define EMS_TRAVEL_MAP                  (0xbd90)    /* unsigned short */
 //#define EMS_UNUSED_HANDLE               (0xbd92)    /* unsigned short */
 //#define DNG_MAP_SIZE                    (0xbd94)    /* unsigned char; {16, 32} */
 //#define DNG_MAP                         (0xbd95)    /* unsigned char[512]; 1 byte for each square of the current dungeon level. higher nybble: ID of the tile on the square. lower nybble: 4 flags */
-//#define RADIO_NAME_LIST                 (0xbf95)    /* Bit8u*[15]; used for items, heroes, spells, skills, recipes */
+//#define RADIO_NAME_LIST                 (0xbf95)    /* uint8_t*[15]; used for items, heroes, spells, skills, recipes */
 // ?40
-//#define GUI_BUFFER_UNKN                 (0xbff9)    /* Bit8u* */
+//#define GUI_BUFFER_UNKN                 (0xbff9)    /* uint8_t* */
 //#define TEXTBOX_WIDTH                   (0xbffd)    /* signed short */
 //#define TEXTBOX_POS_X                   (0xbfff)    /* signed short; coordinate of upper left corner */
 //#define TEXTBOX_POS_Y                   (0xc001)    /* signed short; coordinate of upper left corner */
 //#define GAME_MODE                       (0xc003)    /* signed short; {-1 = unspecified, 1 = beginner, 2 = advanced } */
-//#define SELLITEMS                       (0xc005)    /* Bit8u*; also used for repair items */
-//#define BUYITEMS                        (0xc009)    /* Bit8u*; merchant's assortment */
-//#define PIC_COPY_DST                    (0xc00d)    /* Bit8u* */
+//#define SELLITEMS                       (0xc005)    /* uint8_t*; also used for repair items */
+//#define BUYITEMS                        (0xc009)    /* uint8_t*; merchant's assortment */
+//#define PIC_COPY_DST                    (0xc00d)    /* uint8_t* */
 //#define PIC_COPY_X1                     (0xc011)    /* signed short */
 //#define PIC_COPY_Y1                     (0xc013)    /* signed short */
 //#define PIC_COPY_X2                     (0xc015)    /* signed short */
 //#define PIC_COPY_Y2                     (0xc017)    /* signed short */
-//#define PIC_COPY_SRC                    (0xc019)    /* Bit8u* */
+//#define PIC_COPY_SRC                    (0xc019)    /* uint8_t* */
 //#define PIC_COPY_V1                     (0xc01d)    /* unsigned short */
 //#define PIC_COPY_V2                     (0xc01f)    /* unsigned short */
 //#define PIC_COPY_V3                     (0xc021)    /* unsigned short */
 //#define PIC_COPY_V4                     (0xc023)    /* unsigned short */
 //#define LOCATIONS_LIST                  (0xc025)    /* struct(6)[150]; struct{short pos; char loc, type; short id;} */
-//#define BUFFER8_PTR                     (0xc3a9)    /* Bit8u*; to buffer of size 12008 */
-//#define TX2_INDEX                       (0xc3ad)    /* Bit8u*; to index table of secondary text file */
-//#define TX_INDEX                        (0xc3b1)    /* Bit8u*; to index table of primary text file */
-//#define TEXT_LTX_INDEX                  (0xc3b5)    /* Bit8u*; to index table of TEXT.LTX */
+//#define BUFFER8_PTR                     (0xc3a9)    /* uint8_t*; to buffer of size 12008 */
+//#define TX2_INDEX                       (0xc3ad)    /* uint8_t*; to index table of secondary text file */
+//#define TX_INDEX                        (0xc3b1)    /* uint8_t*; to index table of primary text file */
+//#define TEXT_LTX_INDEX                  (0xc3b5)    /* uint8_t*; to index table of TEXT.LTX */
 // ?6
 //#define RANDOM_SCHICK_SEED2             (0xc3bf)    /* signed short */
 //#define GAME_STATE                      (0xc3c1)    /* signed short; see enum GAME_STATE_* */
@@ -1395,7 +1395,7 @@
 //#define MOUSE1_EVENT2                   (0xc3d5)    /* unsigned short; {0,1}. Indicates a click-and-drag event on mouse button 1 */
 //#define BIOSKEY_EVENT                   (0xc3d7)    /* unsigned short */
 //#define ACTION                          (0xc3d9)    /* unsigned short */
-//#define BUFFER9_PTR                     (0xc3db)    /* Bit8u*; to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF */
+//#define BUFFER9_PTR                     (0xc3db)    /* uint8_t*; to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF */
 // ?8
 //#define ANI_WIDTH                       (0xc3e7)    /* unsigned short */
 //#define ANI_UNKNOWN1                    (0xc3e9)    /* unsigned short */
@@ -1403,39 +1403,39 @@
 //#define ANI_HEIGHT                      (0xc3ed)    /* unsigned char */
 //#define ANI_AREACOUNT                   (0xc3ee)    /* unsigned char */
 //#define ANI_AREA_TABLE                  (0xc3ef)    /* struct(263)[10] */
-//#define ANI_MAIN_PTR                    (0xce35)    /* Bit8u* */
+//#define ANI_MAIN_PTR                    (0xce35)    /* uint8_t* */
 //#define ANI_COMPR_FLAG                  (0xce39)    /* unsigned char; {0,1 = compressed} */
 //#define ANI_PALETTE_SIZE                (0xce3a)    /* unsigned char */
-//#define ANI_PALETTE                     (0xce3b)    /* Bit8u* */
+//#define ANI_PALETTE                     (0xce3b)    /* uint8_t* */
 //#define ANI_POSY                        (0xce3f)    /* signed short */
 //#define ANI_POSX                        (0xce41)    /* signed short */
 //#define ANI_UNKNOWN4                    (0xce43)    /* unsigned long; writeonly (0) */
 // ?64
 //#define GUI_TEXT_BUFFER                 (0xce87)    /* unsigned char[64] */
-//#define LAST_CURSOR                     (0xcec7)    /* Bit8u* */
-//#define CURRENT_CURSOR                  (0xcecb)    /* Bit8u* */
+//#define LAST_CURSOR                     (0xcec7)    /* uint8_t* */
+//#define CURRENT_CURSOR                  (0xcecb)    /* uint8_t* */
 //#define GGST_CURSOR                     (0xcecf)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
 //#define MOUSE_BG_BAK                    (0xcf0f)    /* unsigned char[256] */
 //#define DNG_INIT_FLAG                   (0xd00f)    /* unsigned short; {0,1} */
 //#define DNG_MENU_MODE                   (0xd011)    /* unsigned short; {0 = warehouse (?), 1: 7th symbol is "open door" , 2: 7th symbol is "open chest", 3: 7th symbol is "close door", 4: 7th symbol is "lever", 5: 7th to 9th symbol are the different options to smash/unlock a door } */
 //#define REDRAW_MENUICONS                (0xd013)    /* unsigned short; {0,1} */
-//#define BUFFER9_PTR2                    (0xd015)    /* Bit8u*; unused copy of BUFFER9_PTR */
-//#define BUFFER9_PTR3                    (0xd019)    /* Bit8u*; copy of BUFFER9_PTR */
+//#define BUFFER9_PTR2                    (0xd015)    /* uint8_t*; unused copy of BUFFER9_PTR */
+//#define BUFFER9_PTR3                    (0xd019)    /* uint8_t*; copy of BUFFER9_PTR */
 //#define BUFFER_MONSTER_TAB              (0xd01d)    /* unsigned long[36] */
 //#define BUFFER_WFIGS_TAB                (0xd0ad)    /* unsigned long[43] */
 //#define BUFFER_MFIGS_TAB                (0xd159)    /* unsigned long[43] */
 //#define BUFFER_ANIS_TAB                 (0xd205)    /* unsigned long[37] */
-//#define TRV_TRACK_PIXEL_BAK             (0xd299)    /* Bit8u*; to buffer of size 500 */
-//#define FIG_STAR_GFX                    (0xd29d)    /* Bit8u* */
-//#define MONNAMES_BUFFER                 (0xd2a1)    /* Bit8u* */
-//#define BUFFER5_PTR                     (0xd2a5)    /* Bit8u*; to buffer of size 3880 */
-//#define BUFFER10_PTR                    (0xd2a9)    /* Bit8u*; to buffer of size 16771, used for NVF and text */
-//#define POPUP                           (0xd2ad)    /* Bit8u* */
-//#define BUFFER6_PTR                     (0xd2b1)    /* Bit8u*; to buffer of size 2200, used for NVF */
-//#define BUFFER7_PTR                     (0xd2b5)    /* Bit8u*; to buffer of size 10000, used for NVF and text */
-//#define TEXT_LTX_BUFFER                 (0xd2b9)    /* Bit8u*; to buffer of size 30500 */
-//#define SPLASH_BUFFER                   (0xd2bd)    /* Bit8u*; to buffer of size 1000, used for Splashes */
-//#define BUF_FONT6                       (0xd2c1)    /* Bit8u* */
+//#define TRV_TRACK_PIXEL_BAK             (0xd299)    /* uint8_t*; to buffer of size 500 */
+//#define FIG_STAR_GFX                    (0xd29d)    /* uint8_t* */
+//#define MONNAMES_BUFFER                 (0xd2a1)    /* uint8_t* */
+//#define BUFFER5_PTR                     (0xd2a5)    /* uint8_t*; to buffer of size 3880 */
+//#define BUFFER10_PTR                    (0xd2a9)    /* uint8_t*; to buffer of size 16771, used for NVF and text */
+//#define POPUP                           (0xd2ad)    /* uint8_t* */
+//#define BUFFER6_PTR                     (0xd2b1)    /* uint8_t*; to buffer of size 2200, used for NVF */
+//#define BUFFER7_PTR                     (0xd2b5)    /* uint8_t*; to buffer of size 10000, used for NVF and text */
+//#define TEXT_LTX_BUFFER                 (0xd2b9)    /* uint8_t*; to buffer of size 30500 */
+//#define SPLASH_BUFFER                   (0xd2bd)    /* uint8_t*; to buffer of size 1000, used for Splashes */
+//#define BUF_FONT6                       (0xd2c1)    /* uint8_t* */
 //#define TEXTCOLOR_INDEX                 (0xd2c5)    /* short */
 //#define TEXTCOLOR_BG                    (0xd2c7)    /* short */
 //#define TEXTCOLOR_FG                    (0xd2c9)    /* short */
@@ -1447,17 +1447,17 @@
 //#define TEXTLINE_MAXLEN                 (0xd2d5)    /* unsigned short */
 //#define TEXTLINE_POSY                   (0xd2d7)    /* unsigned short */
 //#define TEXTLINE_POSX                   (0xd2d9)    /* unsigned short */
-//#define FIG_FIGURE2_BUF                 (0xd2db)    /* Bit8u*; to buffer of size 20000 */
-//#define FIG_FIGURE1_BUF                 (0xd2df)    /* Bit8u* */
-//#define OBJECTS_NVF_BUF                 (0xd2e3)    /* Bit8u*; to buffer of size 3400 */
-//#define BUF_ICON                        (0xd2e7)    /* Bit8u* */
-//#define TEXT_OUTPUT_BUF                 (0xd2eb)    /* Bit8u*; to buffer of size 300 */
-//#define TEXT_INPUT_BUF                  (0xd2ef)    /* Bit8u*; to buffer of size 24 */
+//#define FIG_FIGURE2_BUF                 (0xd2db)    /* uint8_t*; to buffer of size 20000 */
+//#define FIG_FIGURE1_BUF                 (0xd2df)    /* uint8_t* */
+//#define OBJECTS_NVF_BUF                 (0xd2e3)    /* uint8_t*; to buffer of size 3400 */
+//#define BUF_ICON                        (0xd2e7)    /* uint8_t* */
+//#define TEXT_OUTPUT_BUF                 (0xd2eb)    /* uint8_t*; to buffer of size 300 */
+//#define TEXT_INPUT_BUF                  (0xd2ef)    /* uint8_t*; to buffer of size 24 */
 //#define DTP2                            (0xd2f3)    /* long */
-//#define ICON                            (0xd2f7)    /* Bit8u* */
-//#define VGA_BACKBUFFER                  (0xd2fb)    /* Bit8u* */
-//#define VGA_MEMSTART                    (0xd2ff)    /* Bit8u* */
-//#define RENDERBUF_PTR                   (0xd303)    /* Bit8u*; to buffer of size 65000 */
+//#define ICON                            (0xd2f7)    /* uint8_t* */
+//#define VGA_BACKBUFFER                  (0xd2fb)    /* uint8_t* */
+//#define VGA_MEMSTART                    (0xd2ff)    /* uint8_t* */
+//#define RENDERBUF_PTR                   (0xd303)    /* uint8_t*; to buffer of size 65000 */
 // ?2
 //#define GAMEINIT_FLAG                   (0xd309)    /* unsigned short; writeonly (1) */
 //#define VIDEO_PAGE_BAK                  (0xd30b)    /* signed short */
@@ -1470,7 +1470,7 @@
 //#define TXT_TABPOS5                     (0xd31b)    /* signed short */
 //#define TXT_TABPOS6                     (0xd31d)    /* signed short */
 //#define TXT_TABPOS7                     (0xd31f)    /* signed short */
-//#define TOWNPAL_BUF                     (0xd321)    /* Bit8u* */
+//#define TOWNPAL_BUF                     (0xd321)    /* uint8_t* */
 //#define FIG_FLEE_POSITION               (0xd325)    /* signed short[4]; the goal square in the dungeon if a hero escapes, depending on the direction the fight board is exited. the direction is stored at HERO_ESCAPE_POSITION */
 //#define WILDCAMP_SLEEP_QUALITY          (0xd32d)    /* signed short */
 //#define GATHER_HERBS_MOD                (0xd32f)    /* signed short */
@@ -1480,20 +1480,20 @@
 //#define FIG_MOVE_PATHDIR                (0xd823)    /* signed char[10] */
 //#define FIG_ACTORS_UNKN                 (0xd82d)    /* signed char[30]; see FIG_ACTION_UNKNOWN2 */
 //#define HERO_IS_TARGET                  (0xd84b)    /* signed char[7] */
-//#define CHESSBOARD                      (0xd852)    /* Bit8u* */
-//#define FIG_SPELLGFX_BUF                (0xd856)    /* Bit8u* */
-//#define FIG_SHOT_BOLT_BUF               (0xd85a)    /* Bit8u* */
-//#define FIG_CB_SELECTOR_BUF             (0xd85e)    /* Bit8u* */
-//#define FIG_CB_MARKER_BUF               (0xd862)    /* Bit8u* */
-//#define SPELLOBJ_NVF_BUF                (0xd866)    /* Bit8u*; to buffer of size 0xf5f */
-//#define WEAPONS_NVF_BUF                 (0xd86a)    /* Bit8u*; to buffer of size 0x1953 */
-//#define FIGHTOBJ_BUF_SEEK_PTR           (0xd86e)    /* Bit8u*; points to end of FIGHTOBJ buffer */
+//#define CHESSBOARD                      (0xd852)    /* uint8_t* */
+//#define FIG_SPELLGFX_BUF                (0xd856)    /* uint8_t* */
+//#define FIG_SHOT_BOLT_BUF               (0xd85a)    /* uint8_t* */
+//#define FIG_CB_SELECTOR_BUF             (0xd85e)    /* uint8_t* */
+//#define FIG_CB_MARKER_BUF               (0xd862)    /* uint8_t* */
+//#define SPELLOBJ_NVF_BUF                (0xd866)    /* uint8_t*; to buffer of size 0xf5f */
+//#define WEAPONS_NVF_BUF                 (0xd86a)    /* uint8_t*; to buffer of size 0x1953 */
+//#define FIGHTOBJ_BUF_SEEK_PTR           (0xd86e)    /* uint8_t*; points to end of FIGHTOBJ buffer */
 //#define NR_OF_ENEMIES                   (0xd872)    /* short; ? */
 //#define FIGHTOBJ_LIST                   (0xd874)    /* unsigned char[90] */
 //#define FIG_ANISHEETS                   (0xd8ce)    /* struct(243)[8] */
 //#define FIG_LIST_ELEM                   (0xe066)    /* struct(35) */
 //#define FIG_LIST_ARRAY                  (0xe089)    /* unsigned char[127]; list of flags (0 or 1) indicating if the corresponding FIGHTER_ID is in use. more precisely: FIG_LIST_ARRAY[i] is 1 (otherwise 0) if the index i is the FIGHTER_ID of a fighter object. */
-//#define FIG_LIST_HEAD                   (0xe108)    /* Bit8u*; to a list */
+//#define FIG_LIST_HEAD                   (0xe108)    /* uint8_t*; to a list */
 //#define LOCATION_MARKET_FLAG            (0xe10c)    /* unsigned char; {0,1} */
 //#define WALLCLOCK_REDRAW                (0xe10d)    /* unsigned short; {0,1} */
 //#define WALLCLOCK_Y                     (0xe10f)    /* short */
@@ -1503,8 +1503,8 @@
 //#define MEM_SLOTS_WFIG                  (0xe119)    /* long */
 //#define MEM_SLOTS_MFIG                  (0xe11d)    /* long */
 //#define MEM_SLOTS_ANIS                  (0xe121)    /* unsigned long; to (struct { unsigned short no, ems_handle; long ani_len; })[36] */
-//#define MONSTER_DAT_BUF                 (0xe125)    /* Bit8u* */
-//#define MONNAMES_INDEX                  (0xe129)    /* Bit8u* */
+//#define MONSTER_DAT_BUF                 (0xe125)    /* uint8_t* */
+//#define MONNAMES_INDEX                  (0xe129)    /* uint8_t* */
 //#define MARKET_ITEMSALDO_TABLE          (0xe12d)    /* signed char[254] */
 //#define ITEMSDAT                        (0xe22b)    /* long */
 //#define ITEMSNAME                       (0xe22f)    /* long */
@@ -1513,8 +1513,8 @@
 //#define ANI_CHANGE_DIR                  (0xe238)    /* signed short[10] */
 //#define ANI_AREA_STATUS                 (0xe24c)    /* signed short[10] */
 //#define ANI_AREA_TIMEOUT                (0xe260)    /* signed short[10] */
-//#define BC_TIMER                        (0xe274)    /* Bit8u* */
-//#define FIG_GFXBUFFERS                  (0xe278)    /* Bit8u*[8]; 0x508 byte segments in FIGHTOBJ_BUF */
+//#define BC_TIMER                        (0xe274)    /* uint8_t* */
+//#define FIG_GFXBUFFERS                  (0xe278)    /* uint8_t*[8]; 0x508 byte segments in FIGHTOBJ_BUF */
 //#define FIG_FIGLIST_READD               (0xe298)    /* signed short[8] */
 //#define FIG_ANI_STATE                   (0xe2a8)    /* unsigned short[8] */
 //#define FIG_ACTOR_GRAMMAR_TYPE          (0xe2b8)    /* unsigned short; 2 = hero, 1 = monster */
@@ -1530,11 +1530,11 @@
 //#define FIGOBJ_UNKN_X2                  (0xe2cc)    /* unsigned short */
 //#define FIGOBJ_UNKN_X2_BAK              (0xe2ce)    /* unsigned short */
 //#define DELAY_TIMER                     (0xe2d0)    /* unsigned short */
-//#define SAVED_FILES_BUF                 (0xe2d2)    /* Bit8u* */
+//#define SAVED_FILES_BUF                 (0xe2d2)    /* uint8_t* */
 //#define LAST_SAVE_TIME                  (0xe2d6)    /* signed long */
 //#define SAVEGAME_NAMES                  (0xe2da)    /* char[45] */
 // ?1
-//#define DIALOG_TITLE                    (0xe308)    /* Bit8u* */
+//#define DIALOG_TITLE                    (0xe308)    /* uint8_t* */
 //#define DIALOG_INFORMER                 (0xe30c)    /* signed short */
 //#define DIALOG_NEXT_STATE               (0xe30e)    /* signed short */
 //#define DIALOG_DONE                     (0xe310)    /* signed short; {0,1} */
@@ -1543,16 +1543,16 @@
 //#define CURRENT_FIGHT_ID                (0xe316)    /* unsigned short */
 //#define AUTOFIGHT                       (0xe318)    /* signed short */
 //#define FIG_DROPPED_WEAPONS             (0xe31a)    /* signed short[30] */
-//#define CHESSBOARD_CPY                  (0xe356)    /* Bit8u* */
+//#define CHESSBOARD_CPY                  (0xe356)    /* uint8_t* */
 //#define FIG_DOUBLE_SIZE_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the double_size enemies */
 //#define FIG_DOUBLE_SIZE_COUNT            (0xe36f)    /* signed char */
 //#define FIGHTOBJ_BUF_FREESPACE          (0xe370)    /* signed long */
-//#define BUFFER_WEAPANIDAT               (0xe374)    /* Bit8u*; pointer to WEAPANI.DAT */
-//#define BUFFER_ANIDAT                   (0xe378)    /* Bit8u*; pointer to ANI.DAT buffer */
-//#define FIG_LIST_BUFFER                 (0xe37c)    /* Bit8u*; to buffer of size 4445, initial value of FIG_LIST_HEAD. A figther entry is of size 35, so the list can store up to 127 entries */
-//#define FIGOBJ_GFXHEIGHT_TABLE          (0xe380)    /* Bit8u*; to signed short[63] */
-//#define FIGOBJ_GFXWIDTH_TABLE           (0xe384)    /* Bit8u*; to signed short[63] */
-//#define FIGOBJ_GFXBUF_TABLE             (0xe388)    /* Bit8u*; to Bit8u*[63] */
+//#define BUFFER_WEAPANIDAT               (0xe374)    /* uint8_t*; pointer to WEAPANI.DAT */
+//#define BUFFER_ANIDAT                   (0xe378)    /* uint8_t*; pointer to ANI.DAT buffer */
+//#define FIG_LIST_BUFFER                 (0xe37c)    /* uint8_t*; to buffer of size 4445, initial value of FIG_LIST_HEAD. A figther entry is of size 35, so the list can store up to 127 entries */
+//#define FIGOBJ_GFXHEIGHT_TABLE          (0xe380)    /* uint8_t*; to signed short[63] */
+//#define FIGOBJ_GFXWIDTH_TABLE           (0xe384)    /* uint8_t*; to signed short[63] */
+//#define FIGOBJ_GFXBUF_TABLE             (0xe388)    /* uint8_t*; to uint8_t*[63] */
 //#define FIG_SPELLGFX_ID                 (0xe38c)    /* unsigned char */
 //#define FIG_SHOT_BOLT_ID                (0xe38d)    /* unsigned char */
 //#define FIG_CB_MARKER_ID                (0xe38e)    /* unsigned char */
@@ -1563,10 +1563,10 @@
 //#define ATTACKER_DEAD                   (0xe3a8)    /* signed short; {0,1} */
 //#define DEFENDER_ATTACKS                (0xe3aa)    /* unsigned short; {0,1} */
 //#define ATTACKER_ATTACKS_AGAIN          (0xe3ac)    /* unsigned short; {0,1} */
-//#define CURRENT_CURSOR_BAK              (0xe3ae)    /* Bit8u* */
-//#define INC_SPELLS_COUNTER              (0xe3b2)    /* Bit8u* */
-//#define INC_SKILLS_COUNTER              (0xe3b6)    /* Bit8u* */
-//#define SKILLS_BUFFER                   (0xe3ba)    /* Bit8u* */
+//#define CURRENT_CURSOR_BAK              (0xe3ae)    /* uint8_t* */
+//#define INC_SPELLS_COUNTER              (0xe3b2)    /* uint8_t* */
+//#define INC_SKILLS_COUNTER              (0xe3b6)    /* uint8_t* */
+//#define SKILLS_BUFFER                   (0xe3ba)    /* uint8_t* */
 //#define WILDCAMP_GUARDS                 (0xe3be)    /* signed char[3] */
 //#define WILDCAMP_HERBSTATUS             (0xe3c1)    /* signed char[7] */
 //#define WILDCAMP_REPLSTATUS             (0xe3c8)    /* signed char[7] */
@@ -1579,40 +1579,40 @@
 // ?1
 //#define BOOKED_INN_DAYS                 (0xe3f0)    /* signed char */
 //#define SLEEP_QUALITY                   (0xe3f1)    /* signed char */
-//#define BUY_SHOPPING_CART               (0xe3f2)    /* Bit8u*; to buffer of size 250, each item has 4 bytes */
+//#define BUY_SHOPPING_CART               (0xe3f2)    /* uint8_t*; to buffer of size 250, each item has 4 bytes */
 //#define PRICE_MODIFICATOR               (0xe3f6)    /* signed short; price modificator for smith and sell */
 //#define TEMPLE_GOD                      (0xe3f8)    /* signed short; id of current temple's god */
 //#define SEA_TRAVEL_SLEEP_QUALITY        (0xe3fa)    /* unsigned char */
 // ?1
-//#define BUFFER9_PTR4                    (0xe3fc)    /* Bit8u*; copy of BUFFER9_PTR */
+//#define BUFFER9_PTR4                    (0xe3fc)    /* uint8_t*; copy of BUFFER9_PTR */
 //#define CITY_HOUSE_COUNT                (0xe400)    /* unsigned char[4]; counts of the four different kinds of houses on the current map */
-//#define BUFFER11_PTR                    (0xe404)    /* Bit8u*; to buffer of size 192, used for palettes */
+//#define BUFFER11_PTR                    (0xe404)    /* uint8_t*; to buffer of size 192, used for palettes */
 //#define CITY_REFRESH_DIRECTION          (0xe408)    /* signed short */
 //#define CITY_REFRESH_Y_TARGET           (0xe40a)    /* signed short */
 //#define CITY_REFRESH_X_TARGET           (0xe40c)    /* signed short */
 //#define ALWAYS_ZERO1                    (0xe40e)    /* unsigned short; writeonly (0) */
 //#define ALWAYS_ZERO2                    (0xe410)    /* unsigned short; writeonly (0) */
 //#define ENTRANCE_ANGLE                  (0xe412)    /* signed short */
-//#define TEX_FLOOR                       (0xe414)    /* Bit8u* */
-//#define TEX_SKY                         (0xe418)    /* Bit8u* */
-//#define TEX_HOUSE1                      (0xe41c)    /* Bit8u* */
-//#define TEX_HOUSE2                      (0xe420)    /* Bit8u* */
-//#define TEX_HOUSE3                      (0xe424)    /* Bit8u* */
-//#define TEX_HOUSE4                      (0xe428)    /* Bit8u* */
+//#define TEX_FLOOR                       (0xe414)    /* uint8_t* */
+//#define TEX_SKY                         (0xe418)    /* uint8_t* */
+//#define TEX_HOUSE1                      (0xe41c)    /* uint8_t* */
+//#define TEX_HOUSE2                      (0xe420)    /* uint8_t* */
+//#define TEX_HOUSE3                      (0xe424)    /* uint8_t* */
+//#define TEX_HOUSE4                      (0xe428)    /* uint8_t* */
 //#define COMBO_MODE                      (0xe42c)    /* signed short; {0,1,2} */
 //#define STR_BEORN_HJALL                 (0xe42e)    /* char[20] */
 //#define AUTOMAP_BUF                     (0xe442)    /* unsigned char[64] */
 //#define DNG_REFRESH_DIRECTION           (0xe482)    /* signed short */
 //#define DNG_REFRESH_Y_TARGET            (0xe484)    /* unsigned short */
 //#define DNG_REFRESH_X_TARGET            (0xe486)    /* unsigned short */
-//#define DNG_MAP_PTR                     (0xe488)    /* Bit8u*; to DNG_MAP */
+//#define DNG_MAP_PTR                     (0xe488)    /* uint8_t*; to DNG_MAP */
 //#define DNG_FLOOR_TEX                   (0xe48c)    /* unsigned char; {0,1}, changing every timestep */
-//#define DNG_GFXTAB                      (0xe48d)    /* Bit8u*; to GFXTAB(_SHIPS|_STONES|_MARBLES) */
+//#define DNG_GFXTAB                      (0xe48d)    /* uint8_t*; to GFXTAB(_SHIPS|_STONES|_MARBLES) */
 // ?1
 //#define LOCKPICK_TRY_COUNTER            (0xe492)    /* signed short; {0..4} */
-//#define DUNGEON_FIGHTS_BUF              (0xe494)    /* Bit8u*; to buffer of size 630 */
-//#define DUNGEON_STAIRS_BUF              (0xe498)    /* Bit8u*; to buffer of size 80 */
-//#define DUNGEON_DOORS_BUF               (0xe49c)    /* Bit8u*; to buffer of size 225 = 45 * 5; each 5-byte entry consists of [pos (2 bytes), smash-handicap, lockpick-handicap, foramen-handicap] */
+//#define DUNGEON_FIGHTS_BUF              (0xe494)    /* uint8_t*; to buffer of size 630 */
+//#define DUNGEON_STAIRS_BUF              (0xe498)    /* uint8_t*; to buffer of size 80 */
+//#define DUNGEON_DOORS_BUF               (0xe49c)    /* uint8_t*; to buffer of size 225 = 45 * 5; each 5-byte entry consists of [pos (2 bytes), smash-handicap, lockpick-handicap, foramen-handicap] */
 //#define GET_EXTRA_LOOT                  (0xe4a0)    /* signed short; {0,1} */
 //#define ROUTE59_FLAG                    (0xe4a2)    /* unsigned char; {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund} */
 //#define TRV_MENU_SELECTION              (0xe4a3)    /* unsigned short */
@@ -1636,15 +1636,15 @@
 //#define MENU_INPUT_BUSY                 (0xe5ae)    /* unsigned short */
 //#define MENU_SELECTED                   (0xe5b0)    /* unsigned short */
 //#define SPELLTEST_RESULT                (0xe5b2)    /* signed short */
-//#define SPELLTARGET_E                   (0xe5b4)    /* Bit8u*; Pointer to enemy */
+//#define SPELLTARGET_E                   (0xe5b4)    /* uint8_t*; Pointer to enemy */
 //#define SPELLTARGET                     (0xe5b8)    /* long */
 //#define SPELLUSER                       (0xe5bc)    /* long */
 //#define SPELLUSER_E                     (0xe5c0)    /* long */
 //#define ALCHEMY_MISSING_ITEM            (0xe5c4)    /* short */
-//#define USED_ITEM_DESC                  (0xe5c6)    /* Bit8u*; pointer to the item description */
+//#define USED_ITEM_DESC                  (0xe5c6)    /* uint8_t*; pointer to the item description */
 //#define USED_ITEM_ID                    (0xe5ca)    /* signed short; used_item ID */
 //#define USED_ITEM_POS                   (0xe5cc)    /* signed short; used_item position */
-//#define ITEMUSER                        (0xe5ce)    /* Bit8u*; pointer to hero */
+//#define ITEMUSER                        (0xe5ce)    /* uint8_t*; pointer to hero */
 //#define EVENT_ANI_BUSY                  (0xe5d2)    /* unsigned char; {0,1} */
 //#define WALLCLOCK_UPDATE_BAK            (0xe5d3)    /* unsigned short; {0,1} */
 //#define TEXTBOX_WIDTH_BAK               (0xe5d5)    /* unsigned short */
@@ -1652,7 +1652,7 @@
 //#define BASEPOS_X_BAK                   (0xe5d9)    /* unsigned short */
 // ?1
 //#define BUFFERSIZE                      (0xe5dc)    /* unsigned long; size of the global buffer */
-//#define GLOBAL_BUFFER_PTR               (0xe5e0)    /* Bit8u*; points to the start of the global buffer */
+//#define GLOBAL_BUFFER_PTR               (0xe5e0)    /* uint8_t*; points to the start of the global buffer */
 //#define LARGE_BUF                       (0xe5e4)    /* signed char; {0,1} */
 /* Unknown Bytes: 831, Undetermined symbols: 0/1479 */
 

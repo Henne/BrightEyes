@@ -52,10 +52,10 @@ static struct viewdir_offsets g_viewdir_offsets4 = { { { 1, 0 }, { 0, -1 }, { -1
  * \param mode	DAT-File to use 3 = WEAPANI.DAT, else ANI.DAT
  * \return   the length of the sequence in bytes.
  */
-static signed int AFIG_copy_ani_sequence(Bit8s *dst, const signed int ani_num, const signed int mode)
+static signed int AFIG_copy_ani_sequence(int8_t *dst, const signed int ani_num, const signed int mode)
 {
-	Bit8u *p_datbuffer;
-	Bit8u *p_datitem;
+	uint8_t *p_datbuffer;
+	uint8_t *p_datitem;
 	signed char len;
 	signed int i;
 	signed int ani_max_num;
@@ -68,7 +68,7 @@ static signed int AFIG_copy_ani_sequence(Bit8s *dst, const signed int ani_num, c
 		p_datbuffer = g_buffer_weapanidat;
 
 	/* read how many ani sequences are in the file */
-	ani_max_num = *(Bit16s*)p_datbuffer;
+	ani_max_num = *(int16_t*)p_datbuffer;
 
 	/* check if the desired ani_no is in the range */
 	if (ani_num < 0)
@@ -108,14 +108,14 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	signed int i;
 	signed char dir1;
 	signed char dir2;
-	Bit8s *sheet_ptr;
+	int8_t *sheet_ptr;
 	signed char dir3;
-	Bit16s *ani_index_ptr;
+	int16_t *ani_index_ptr;
 
 	g_fig_anisheets[0][0] = 0;
 	g_fig_anisheets[0][242] = hero->sprite_id;
 
-	sheet_ptr = (Bit8s*)&g_fig_anisheets[0][1];
+	sheet_ptr = (int8_t*)&g_fig_anisheets[0][1];
 	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
 
 	i = 0;
@@ -269,7 +269,7 @@ signed int AFIG_can_attack_neighbour(const signed int start_x, const signed int 
 		if ( ( (target > 0) && (target < 10) &&	!get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
 			((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
 				//g_enemy_sheets[target - 10].flags.renegade
-				((struct enemy_flags*)(target * sizeof(struct enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
+				((struct enemy_flags*)(target * sizeof(struct enemy_sheet) + (uint8_t*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
 			))
 		{
 			return 1;
@@ -352,7 +352,7 @@ signed int AFIG_search_spell_target(const signed int x, const signed int y, cons
 			if ( ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
 				((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
 				// g_enemy_sheets[target - 10].flags.renegade
-				((struct enemy_flags*)(target * sizeof(struct enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
+				((struct enemy_flags*)(target * sizeof(struct enemy_sheet) + (uint8_t*)g_enemy_sheets - 10 * sizeof(struct enemy_sheet) + 0x31))->renegade
 				))
 				{
 
@@ -463,9 +463,9 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 			if (!hero->flags.tied) {
 
 				if (renegade == 0) {
-					target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
+					target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 9);
 				} else {
-					target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
+					target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 8);
 				}
 
 				if (target_found != -1) {
@@ -631,9 +631,9 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 						} else if (!hero->flags.tied) {
 
 							if (spell_mode == 0) {
-								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
+								target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 3);
 							} else {
-								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
+								target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 1);
 							}
 
 							if (target_found != -1) {
@@ -686,9 +686,9 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 						} else if (!hero->flags.tied) {
 
 							if (spell_mode == 0) {
-								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 9);
+								target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 9);
 							} else {
-								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 8);
+								target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 8);
 							}
 
 							if (target_found != -1) {
@@ -868,7 +868,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 
 			if (!hero->flags.tied) {
 
-				target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5);
+				target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 5);
 
 				if (target_found != -1) {
 
@@ -978,9 +978,9 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 						if (!hero->flags.tied) {
 
 							if (!hero->flags.renegade) {
-								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 3);
+								target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 3);
 							} else {
-								target_found = FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 1);
+								target_found = FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 1);
 							}
 
 							if (target_found != -1) {

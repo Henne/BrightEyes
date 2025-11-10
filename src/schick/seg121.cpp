@@ -25,7 +25,7 @@ void poison_effect(void)
 	signed int i;
 	volatile signed int j;
 	struct struct_hero *hero;
-	Bit8s *poison_ptr;
+	int8_t *poison_ptr;
 
 	g_check_poison = 0;
 
@@ -36,7 +36,7 @@ void poison_effect(void)
 		if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead) {
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_SHURINKNOLLENGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_SHURINKNOLLENGIFT];
 
 			/* SHURINKNOLLENGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
@@ -105,7 +105,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_ARAX];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_ARAX];
 
 			/* ARAXGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
@@ -163,7 +163,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_ANGSTGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_ANGSTGIFT];
 
 			/* ANGSTGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
@@ -223,7 +223,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_SCHLAFGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_SCHLAFGIFT];
 
 			/* SCHLAFGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
@@ -260,7 +260,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_GOLDLEIM];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_GOLDLEIM];
 
 			/* GOLDLEIM: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
@@ -280,7 +280,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_KROETENSCHEMEL];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_KROETENSCHEMEL];
 
 			/* KROETENSCHEMEL: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
@@ -300,7 +300,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_LOTUSGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_LOTUSGIFT];
 
 			/* LOTUSGIFT: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
@@ -318,7 +318,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_KUKRIS];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_KUKRIS];
 
 			/* KUKRIS: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
@@ -336,7 +336,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_BANNSTAUB];
+			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_BANNSTAUB];
 
 			/* BANNSTAUB: hero gets poisoned */
 			if (poison_ptr[0] == -1) {

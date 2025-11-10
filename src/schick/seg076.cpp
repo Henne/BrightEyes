@@ -862,7 +862,7 @@ void DNG_fight(void)
  *
  * \param   unit_ptr    pointer to the number of water units
  */
-void DNG_waterbarrel(Bit8u *unit_ptr)
+void DNG_waterbarrel(uint8_t *unit_ptr)
 {
 	signed short item_pos;
 	signed short l_di;

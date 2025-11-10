@@ -97,8 +97,8 @@ void draw_fight_screen_pal(signed short mode)
 		memset((void*)g_vga_memstart, 0, 320 * 200);
 
 		/* set palettes */
-		set_palette((Bit8u*)g_palette_fight1, 0x00, 0x20);
-		set_palette((Bit8u*)g_palette_fight2, 0x80, 0x14);
+		set_palette((uint8_t*)g_palette_fight1, 0x00, 0x20);
+		set_palette((uint8_t*)g_palette_fight2, 0x80, 0x14);
 		set_palette(g_buffer8_ptr + 0xfa02, 0x60, 0x20);
 
 		g_pp20_index = -1;
@@ -824,7 +824,7 @@ void FIG_load_ship_sprites(void)
 	signed short const2 = 118;
 	signed short l3;	// REMARK: rename to x (screen)
 	signed short l4;	// REMARK: rename to y (screen)
-	Bit8u *ptr;
+	uint8_t *ptr;
 	struct nvf_extract_desc nvf;
 
 	for (i = 0; i < 24; i++) {
@@ -988,7 +988,7 @@ signed short do_fight(signed short fight_id)
 
 	/* open MONSTER.DAT */
 	handle = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);
-	read_archive_file(handle, (Bit8u*)g_monster_dat_buf, 3476);
+	read_archive_file(handle, (uint8_t*)g_monster_dat_buf, 3476);
 	close(handle);
 
 	/* clear all dropped weapons */

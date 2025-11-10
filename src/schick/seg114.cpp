@@ -293,8 +293,8 @@ void tevent_112(void)
 void tevent_113(void)
 {
 	signed int answer;
-	Bit32s est_old;
-	Bit32s est_diff;
+	int32_t est_old;
+	int32_t est_diff;
 
 	do {
 		answer = GUI_radio(get_tx2(14), 2, get_tx2(15), get_tx2(16));

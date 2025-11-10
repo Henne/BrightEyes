@@ -28,7 +28,7 @@
 namespace M302de {
 #endif
 
-static Bit8u *g_pp20_buffers[9] = { 0 };			// ds:0x5e6a; Bit8u*
+static uint8_t *g_pp20_buffers[9] = { 0 };			// ds:0x5e6a; uint8_t*
 static signed long g_pp20_buffer_lengths[9] = {0};		// ds:0x5e8e
 static signed short g_current_fight_id = 0;			// ds:0x5eb2
 static unsigned char g_unkn_038[4] = { 0xb8, 0x14, 0x00, 0x50 }; // ds:0x5eb4
@@ -36,7 +36,7 @@ static unsigned char g_unkn_038[4] = { 0xb8, 0x14, 0x00, 0x50 }; // ds:0x5eb4
 void load_pp20(signed short index)
 {
 	volatile signed int handle;
-	Bit8u* buffer_ptr;
+	uint8_t* buffer_ptr;
 	signed short bi;
 
 	if (index <= 5 || index == ARCHIVE_FILE_PLAYM_US || index == ARCHIVE_FILE_ZUSTA_UK || index == ARCHIVE_FILE_ZUSTA_US)
@@ -120,7 +120,7 @@ void load_pp20(signed short index)
 		/* decompress it */
 		decomp_pp20(g_renderbuf_ptr - 8, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-			(Bit8u*)(g_renderbuf_ptr - 8 + 4),
+			(uint8_t*)(g_renderbuf_ptr - 8 + 4),
 #else
 			FP_OFF(g_renderbuf_ptr - 8) + 4,
 			FP_SEG(g_renderbuf_ptr - 8),
@@ -138,36 +138,36 @@ void load_pp20(signed short index)
  * \return              a pointer to the location where the data is.
  */
 /* Original-Bug: when using EMS for caching something strange happens. */
-Bit8u* load_fight_figs(signed short fig)
+uint8_t* load_fight_figs(signed short fig)
 {
 	signed short i;
 
-	Bit8u* dst;
+	uint8_t* dst;
 	unsigned short ems_handle;
-	Bit32u offset;
-	Bit32u len;
+	uint32_t offset;
+	uint32_t len;
 	signed int handle;
 	signed short max_entries;
 	struct struct_memslot_fig *memslots;
-	Bit32u *p_tab;
+	uint32_t *p_tab;
 	signed short index;
-	Bit8u *src;
+	uint8_t *src;
 
 	/* check if fig is at a known place */
 	if (fig == g_fig_figure1) {
-		return (Bit8u*)g_fig_figure1_buf;
+		return (uint8_t*)g_fig_figure1_buf;
 	} else if (fig == g_fig_figure2) {
-		return (Bit8u*)g_fig_figure2_buf;
+		return (uint8_t*)g_fig_figure2_buf;
 	} else if (g_fig_figure2 != -1) {
 		g_fig_figure1 = g_fig_figure2;
-		memcpy((Bit8u*)g_fig_figure1_buf, (Bit8u*)g_fig_figure2_buf, 20000);
-		src = (Bit8u*)g_fig_figure2_buf;
+		memcpy((uint8_t*)g_fig_figure1_buf, (uint8_t*)g_fig_figure2_buf, 20000);
+		src = (uint8_t*)g_fig_figure2_buf;
 		g_fig_figure2 = fig;
 	} else if (g_fig_figure1 != -1) {
-		src = (Bit8u*)g_fig_figure2_buf;
+		src = (uint8_t*)g_fig_figure2_buf;
 		g_fig_figure2 = fig;
 	} else {
-		src = (Bit8u*)g_fig_figure1_buf;
+		src = (uint8_t*)g_fig_figure1_buf;
 		g_fig_figure1 = fig;
 	}
 
@@ -219,7 +219,7 @@ Bit8u* load_fight_figs(signed short fig)
 #if !defined(__BORLANDC__)
 			D1_LOG("cached from HEAP %d\n", fig);
 #endif
-			memcpy((Bit8u*)src, memslots[i].ptr, memslots[i].length);
+			memcpy((uint8_t*)src, memslots[i].ptr, memslots[i].length);
 		}
 	} else {
 #if !defined(__BORLANDC__)
@@ -234,7 +234,7 @@ Bit8u* load_fight_figs(signed short fig)
 
 		seek_archive_file(handle, offset, 0);
 
-		read_archive_file(handle, (Bit8u*)src, (unsigned short)len);
+		read_archive_file(handle, (uint8_t*)src, (unsigned short)len);
 
 		close(handle);
 
@@ -254,7 +254,7 @@ Bit8u* load_fight_figs(signed short fig)
 			memslots[i].ems_handle = 0;
 			memslots[i].length = len;
 
-			memcpy((Bit8u*)dst, (Bit8u*)src, (unsigned short)len);
+			memcpy((uint8_t*)dst, (uint8_t*)src, (unsigned short)len);
 
 		}
 #if defined(__BORLANDC__)
@@ -299,31 +299,31 @@ void load_ani(const signed short no)
 	struct ani_area_in *p_area;
 	unsigned short ems_handle;
 #if !defined(__BORLANDC__)
-	Bit8u* ani_buffer;
-	Bit8u *unplen_ptr;
+	uint8_t* ani_buffer;
+	uint8_t *unplen_ptr;
 #else
-	Bit8u huge *ani_buffer;
-	Bit8u huge *unplen_ptr;
+	uint8_t huge *ani_buffer;
+	uint8_t huge *unplen_ptr;
 #endif
-	Bit8u *area_changes_ptr;
-	Bit32s area_offset;
-	Bit32s area_data_offset;
+	uint8_t *area_changes_ptr;
+	int32_t area_offset;
+	int32_t area_data_offset;
 	struct ani_area *p_area2;
-	Bit32s ani_off;
-	Bit32s ani_len;
+	int32_t ani_off;
+	int32_t ani_len;
 #if !defined(__BORLANDC__)
-	Bit8u *ani_residue_ptr;
-	Bit8u *ani_end_ptr;
+	uint8_t *ani_residue_ptr;
+	uint8_t *ani_end_ptr;
 #else
-	Bit8u huge *ani_residue_ptr;
-	Bit8u huge *ani_end_ptr;
+	uint8_t huge *ani_residue_ptr;
+	uint8_t huge *ani_end_ptr;
 #endif
-	Bit32s packed_delta;
-	Bit32s unplen;
-	Bit32s plen;
-	Bit32s packed_delta2;
-	Bit32s ani_residue_len;
-	Bit32s area_size;
+	int32_t packed_delta;
+	int32_t unplen;
+	int32_t plen;
+	int32_t packed_delta2;
+	int32_t ani_residue_len;
+	int32_t area_size;
 
 	signed short j;
 
@@ -352,7 +352,7 @@ void load_ani(const signed short no)
 #if defined(__BORLANDC__)
 		/* already buffered in EMS, get from there */
 		ems_handle = g_memslots_anis[i].ems_handle;
-		from_EMS((Bit8u*)g_buffer9_ptr, ems_handle, g_memslots_anis[i].length);
+		from_EMS((uint8_t*)g_buffer9_ptr, ems_handle, g_memslots_anis[i].length);
 #endif
 	} else {
 		/* load it from file */
@@ -364,7 +364,7 @@ void load_ani(const signed short no)
 
 		/* seek to ordered ani */
 		seek_archive_file(handle, ani_off, 0);
-		read_archive_file(handle, (Bit8u*)g_buffer9_ptr, (unsigned short)ani_len);
+		read_archive_file(handle, (uint8_t*)g_buffer9_ptr, (unsigned short)ani_len);
 
 #if defined(__BORLANDC__)
 		/* if EMS is enabled buffer it */
@@ -382,7 +382,7 @@ void load_ani(const signed short no)
 			g_memslots_anis[i].length = ani_len;
 
 			/* copy data to EMS */
-			to_EMS(ems_handle, (Bit8u*)g_buffer9_ptr, ani_len);
+			to_EMS(ems_handle, (uint8_t*)g_buffer9_ptr, ani_len);
 		}
 #endif
 
@@ -392,13 +392,13 @@ void load_ani(const signed short no)
 	ani_buffer = g_buffer9_ptr;
 
 	/* set start of picture data */
-	g_ani_main_ptr = ani_buffer + *(Bit32u*)g_buffer9_ptr;
+	g_ani_main_ptr = ani_buffer + *(uint32_t*)g_buffer9_ptr;
 	/* set start of palette */
-	g_ani_palette = (ani_buffer + *(Bit32u*)(g_buffer9_ptr + 4L)) + 6L;
+	g_ani_palette = (ani_buffer + *(uint32_t*)(g_buffer9_ptr + 4L)) + 6L;
 
 	/* read some bytes between data and palette */
-	g_ani_unknown1 = *(Bit16u*)(g_ani_palette - 6L);
-	g_ani_unknown2 = *(Bit16u*)(g_ani_palette - 4L);
+	g_ani_unknown1 = *(uint16_t*)(g_ani_palette - 6L);
+	g_ani_unknown2 = *(uint16_t*)(g_ani_palette - 4L);
 	/* compression type */
 	g_ani_compr_flag = *(g_ani_palette - 1L);
 	g_ani_palette_size = *(g_ani_palette - 2L);
@@ -406,7 +406,7 @@ void load_ani(const signed short no)
 	ani_end_ptr = g_ani_palette + 3 * g_ani_palette_size;
 
 	/* set picture size */
-	g_ani_width = *(Bit16s*)(g_buffer9_ptr + 8L);
+	g_ani_width = *(int16_t*)(g_buffer9_ptr + 8L);
 	g_ani_height = *(g_buffer9_ptr + 10L);
 	/* set number of areas */
 	g_ani_areacount = *(g_buffer9_ptr + 11L);
@@ -414,30 +414,30 @@ void load_ani(const signed short no)
 	/* Process Main Picture */
 	if (g_ani_compr_flag) {
 
-		plen = *(Bit32u*)g_ani_main_ptr;
+		plen = *(uint32_t*)g_ani_main_ptr;
 		unplen_ptr = g_ani_main_ptr;
 
 		unplen_ptr += (plen - 4);
 
-		unplen = *(Bit32u*)unplen_ptr;
+		unplen = *(uint32_t*)unplen_ptr;
 		unplen = swap_u32(unplen) >> 8;
 
-		decomp_pp20((Bit8u*)g_ani_main_ptr, g_renderbuf_ptr,
+		decomp_pp20((uint8_t*)g_ani_main_ptr, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-			(Bit8u*)(g_ani_main_ptr + 4),
+			(uint8_t*)(g_ani_main_ptr + 4),
 #else
-			FP_OFF((Bit8u*)g_ani_main_ptr) + 4,
-			FP_SEG((Bit8u*)g_ani_main_ptr),
+			FP_OFF((uint8_t*)g_ani_main_ptr) + 4,
+			FP_SEG((uint8_t*)g_ani_main_ptr),
 #endif
 			plen);
 
 		packed_delta = unplen - plen;
-		ani_residue_ptr = (Bit8u*)g_ani_main_ptr;
+		ani_residue_ptr = (uint8_t*)g_ani_main_ptr;
 		ani_residue_ptr += plen;
 		ani_residue_len = ani_end_ptr - ani_residue_ptr;
 		memcpy(ani_end_ptr + packed_delta, ani_residue_ptr, ani_residue_len);
 
-		memcpy((Bit8u*)g_ani_main_ptr, g_renderbuf_ptr, unplen);
+		memcpy((uint8_t*)g_ani_main_ptr, g_renderbuf_ptr, unplen);
 		ani_residue_ptr += packed_delta;
 		memcpy(ani_residue_ptr, ani_end_ptr + packed_delta, ani_residue_len);
 
@@ -449,7 +449,7 @@ void load_ani(const signed short no)
 	for (i_area = 0; g_ani_areacount > i_area; i_area++) {
 
 		p_area2 = &g_ani_area_table[i_area];
-		area_offset = *(Bit32u*)((g_buffer9_ptr + 4 * i_area) + 0xc);
+		area_offset = *(uint32_t*)((g_buffer9_ptr + 4 * i_area) + 0xc);
 		p_area = (struct ani_area_in*)(g_buffer9_ptr + area_offset);
 		strncpy(p_area2->name, (char*)p_area, 4);
 
@@ -462,18 +462,18 @@ void load_ani(const signed short no)
 
 		if (g_ani_compr_flag) {
 
-			area_data_offset = *(Bit32u*)((Bit8u*)p_area + 0xc);
+			area_data_offset = *(uint32_t*)((uint8_t*)p_area + 0xc);
 			area_data_offset += packed_delta;
 			unplen_ptr = g_buffer9_ptr + area_data_offset;
 
-			plen = *(Bit32u*)unplen_ptr;
+			plen = *(uint32_t*)unplen_ptr;
 			unplen_ptr += (plen - 4);
-			area_size = *(Bit32u*)unplen_ptr;
+			area_size = *(uint32_t*)unplen_ptr;
 			area_size = swap_u32(area_size) >> 8;
 
 			decomp_pp20(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-				(Bit8u*)g_buffer9_ptr + area_data_offset + 4,
+				(uint8_t*)g_buffer9_ptr + area_data_offset + 4,
 #else
 				FP_OFF(g_buffer9_ptr + area_data_offset) + 4,
 				FP_SEG(g_buffer9_ptr + area_data_offset),
@@ -483,7 +483,7 @@ void load_ani(const signed short no)
 			packed_delta2 = area_size - plen;
 			packed_delta += packed_delta2;
 
-			ani_residue_ptr = (Bit8u*)g_buffer9_ptr;
+			ani_residue_ptr = (uint8_t*)g_buffer9_ptr;
 			ani_residue_ptr += area_data_offset;
 			ani_residue_ptr += plen;
 			ani_residue_len = ani_end_ptr - ani_residue_ptr;
@@ -499,26 +499,26 @@ void load_ani(const signed short no)
 			area_size = p_area2->height * (signed short)p_area2->width;
 
 			for (j = 0; j < area_pics; j++) {
-				p_area2->pics_tab[j] = (Bit8u*)((g_buffer9_ptr + area_data_offset) + j * area_size);
+				p_area2->pics_tab[j] = (uint8_t*)((g_buffer9_ptr + area_data_offset) + j * area_size);
 			}
 		} else {
 			for (j = 0; j < area_pics; j++) {
-				area_data_offset = *(Bit32u*)((Bit8u*)p_area + j * 4 + 0xc);
+				area_data_offset = *(uint32_t*)((uint8_t*)p_area + j * 4 + 0xc);
 				p_area2->pics_tab[j] = g_buffer9_ptr + area_data_offset;
 			}
 		}
 
-		p_area2->changes = area_changes = *(Bit16u*)((Bit8u*)p_area + area_pics * 4 + 0x0c);
+		p_area2->changes = area_changes = *(uint16_t*)((uint8_t*)p_area + area_pics * 4 + 0x0c);
 
-		area_changes_ptr = (((Bit8u*)p_area) + area_pics * 4 + 0x0e);
+		area_changes_ptr = (((uint8_t*)p_area) + area_pics * 4 + 0x0e);
 
 		for (j = 0; j < area_changes; j++) {
-			p_area2->changes_tb[j].pic = *(Bit16s*)(area_changes_ptr + ((j << 1) << 1));
-			p_area2->changes_tb[j].duration = *(Bit16s*)(area_changes_ptr + ((j << 1) << 1) + 2);
+			p_area2->changes_tb[j].pic = *(int16_t*)(area_changes_ptr + ((j << 1) << 1));
+			p_area2->changes_tb[j].duration = *(int16_t*)(area_changes_ptr + ((j << 1) << 1) + 2);
 		}
 	}
 
-	ani_len = ani_end_ptr - (Bit8u*)g_buffer9_ptr;
+	ani_len = ani_end_ptr - (uint8_t*)g_buffer9_ptr;
 
 	/* this is always true */
 	if (ani_len > g_ani_unknown4) {
@@ -540,7 +540,7 @@ void load_scenario(signed short scenario_id)
 	handle = load_archive_file(ARCHIVE_FILE_SCENARIO_LST);
 
 	/* read the first two bytes == scenario_id of scenarios */
-	read_archive_file(handle, (Bit8u*)&scenario_lst_buf, 2);
+	read_archive_file(handle, (uint8_t*)&scenario_lst_buf, 2);
 
 	/* check if scenario_id is valid */
 	if ((scenario_id > scenario_lst_buf) || (scenario_id < 1))
@@ -550,7 +550,7 @@ void load_scenario(signed short scenario_id)
 	seek_archive_file(handle, 621L * (scenario_id - 1) + 2, 0);
 
 	/* read scenario */
-	read_archive_file(handle, (Bit8u*)g_scenario_buf, 621);
+	read_archive_file(handle, (uint8_t*)g_scenario_buf, 621);
 
 	/* close archive */
 	close(handle);
@@ -587,7 +587,7 @@ signed short count_fight_enemies(signed short fight_id)
 		fight_id = 0;
 
 	/* seek to file position */
-	lseek(handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
+	lseek(handle, (int32_t)sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
 	_read(handle, (void*)fight_lst_buf, sizeof(struct fight));
@@ -633,10 +633,10 @@ void read_fight_lst(signed short fight_id)
 	g_current_fight_id = fight_id;
 
 	/* seek to file position */
-	lseek(handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
+	lseek(handle, (int32_t)sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(handle, (Bit8u*)g_current_fight, sizeof(struct fight));
+	_read(handle, (uint8_t*)g_current_fight, sizeof(struct fight));
 
 	/* close FIGHT.LST */
 	close(handle);
@@ -666,7 +666,7 @@ void write_fight_lst(void)
 	handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* seek to the entry */
-	lseek(handle, (Bit32s)fight_id * sizeof(struct fight) + 2, SEEK_SET);
+	lseek(handle, (int32_t)fight_id * sizeof(struct fight) + 2, SEEK_SET);
 
 	/* write it */
 	write(handle, g_current_fight, sizeof(struct fight));
@@ -699,27 +699,27 @@ void init_common_buffers(void)
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);
-	bytes = read_archive_file(handle, (Bit8u*)g_itemsdat, 255 * sizeof(item_stats));
+	bytes = read_archive_file(handle, (uint8_t*)g_itemsdat, 255 * sizeof(item_stats));
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_ANIS_TAB);
-	read_archive_file(handle, (Bit8u*)&g_buffer_anis_tab, 148);
+	read_archive_file(handle, (uint8_t*)&g_buffer_anis_tab, 148);
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_MFIGS_TAB);
-	read_archive_file(handle, (Bit8u*)&g_buffer_mfigs_tab, 172);
+	read_archive_file(handle, (uint8_t*)&g_buffer_mfigs_tab, 172);
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_WFIGS_TAB);
-	read_archive_file(handle, (Bit8u*)&g_buffer_wfigs_tab, 172);
+	read_archive_file(handle, (uint8_t*)&g_buffer_wfigs_tab, 172);
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONSTER_TAB);
-	read_archive_file(handle, (Bit8u*)&g_buffer_monster_tab, 144);
+	read_archive_file(handle, (uint8_t*)&g_buffer_monster_tab, 144);
 	close(handle);
 
 	handle = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
-	_read(handle, (Bit8u*)&g_savegame_names, 45);
+	_read(handle, (uint8_t*)&g_savegame_names, 45);
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);

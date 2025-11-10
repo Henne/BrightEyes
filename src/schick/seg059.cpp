@@ -37,8 +37,8 @@ void do_tavern(void)
 	signed short done;
 	signed short answer;
 	signed short l3;
-	Bit32s p_money_before;
-	Bit32s p_money_after;
+	int32_t p_money_before;
+	int32_t p_money_after;
 	struct inn_descr *tavern;
 	signed short bonus;
 	time_t timeval;

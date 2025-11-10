@@ -40,7 +40,7 @@ signed short DNG07_handler(void)
 	signed short i;
 	signed short tw_bak;
 	struct struct_hero *hero;
-	Bit8u *amap_ptr;
+	uint8_t *amap_ptr;
 	signed short spell_result;
 	signed short lockpick_pos;
 	signed short skill_result;
@@ -56,9 +56,9 @@ signed short DNG07_handler(void)
 	if (target_pos == DNG_POS(0,13,2) && target_pos != gs_dng_handled_pos)
 	{
 #if !defined(__BORLANDC__)
-		if (div16((Bit16u)amap_ptr[MAP_POS(13,2)]) != DNG_TILE_STAIR_DOWN)
+		if (div16((uint16_t)amap_ptr[MAP_POS(13,2)]) != DNG_TILE_STAIR_DOWN)
 #else
-		/* REMARK: enforce a cast to Bit16u */
+		/* REMARK: enforce a cast to uint16_t */
 		if (div16((_AL = amap_ptr[MAP_POS(13,2)], _AH = 0, _AX)) != DNG_TILE_STAIR_DOWN)
 #endif
 		{
@@ -302,7 +302,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 	signed short i;
 	signed short randval;
 	struct struct_hero *hero;
-	Bit8u *amap_ptr;
+	uint8_t *amap_ptr;
 
 	hero = get_first_hero_available_in_group();
 

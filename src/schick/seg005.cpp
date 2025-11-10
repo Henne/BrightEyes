@@ -38,7 +38,7 @@ namespace M302de {
 
 signed short g_delay_factor = 4; // ds:0x4b66
 extern char g_str_temp_xx[8];
-static char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; Bit8u*
+static char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; uint8_t*
 static signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
 static signed char g_fig_star_counter = 0; // ds:0x4b78
 signed short g_fig_star_timer = 0; // ds:0x4b79
@@ -124,9 +124,9 @@ damn_label:
  * \param   color       1=red/2=green/3=blue/4=yellow/11=darkbrown/12=lightbrown/13=pink
  *
  */
-void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
+void FIG_set_star_color(uint8_t *ptr, unsigned short count, unsigned char color)
 {
-	Bit8u *p;
+	uint8_t *p;
 
 	color += 0x80;
 
@@ -189,12 +189,12 @@ unsigned short fight_printer(void)
 {
 	signed int fg_bak;
 	signed int bg_bak;
-	Bit8u* gfx_pos_bak;
-	Bit16u x;
+	uint8_t* gfx_pos_bak;
+	uint16_t x;
 	char str[6];
-	Bit8u* gfx_dst_bak;
+	uint8_t* gfx_dst_bak;
 
-	Bit16s f_action;
+	int16_t f_action;
 
 	if (!g_fig_msg_data[0].f_action)
 		g_fig_continue_print = 0;
@@ -320,7 +320,7 @@ unsigned short fight_printer(void)
 }
 #undef idx
 
-void draw_fight_screen(Bit16u val)
+void draw_fight_screen(uint16_t val)
 {
 	signed short i;
 	signed int object_id_bak;
@@ -331,8 +331,8 @@ void draw_fight_screen(Bit16u val)
 	signed short obj_x;
 	signed short obj_y;
 
-	Bit8u* p_figure_gfx;
-	Bit8u* p_weapon_gfx;
+	uint8_t* p_figure_gfx;
+	uint8_t* p_weapon_gfx;
 	struct struct_fighter *p_fighter;
 
 	struct struct_rect rect_bak;
@@ -345,8 +345,8 @@ void draw_fight_screen(Bit16u val)
 	signed char double_size_move_tail_first;
 	struct struct_fighter *p_fighter_tmp;
 	signed short viewdir_unconsc;
-	Bit8s *sheet;
-	Bit8s *p_weapon_anisheet;
+	int8_t *sheet;
+	int8_t *p_weapon_anisheet;
 	signed int handle;
 	struct nvf_extract_desc nvf;
 	signed short figlist_remove[8];
@@ -360,7 +360,7 @@ void draw_fight_screen(Bit16u val)
 
 		if (p_fighter->reload == -1) {
 
-			nvf.src = (Bit8u*)load_fight_figs(p_fighter->figure);
+			nvf.src = (uint8_t*)load_fight_figs(p_fighter->figure);
 			nvf.dst = p_fighter->gfxbuf;
 			nvf.image_num = p_fighter->nvf_no;
 			nvf.compression_type = 0;
@@ -406,13 +406,13 @@ void draw_fight_screen(Bit16u val)
 
 			g_fig_ani_state[p_fighter->sheet] = 0;
 
-			memcpy((Bit8u*)g_fig_gfxbuffers[p_fighter->sheet],
+			memcpy((uint8_t*)g_fig_gfxbuffers[p_fighter->sheet],
 				p_fighter->gfxbuf,
 				p_fighter->width * p_fighter->height);
 		}
 
 		if (p_fighter->wsheet != -1) {
-			memset((Bit8u*)g_fig_gfxbuffers[p_fighter->wsheet], 0, 0x508);
+			memset((uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet], 0, 0x508);
 		}
 
 
@@ -483,11 +483,11 @@ void draw_fight_screen(Bit16u val)
 
 			if ((p_fighter->sheet != -1) && (g_fig_ani_state[p_fighter->sheet] != -1)) {
 
-				sheet = (Bit8s*)g_fig_anisheets[p_fighter->sheet];
+				sheet = (int8_t*)g_fig_anisheets[p_fighter->sheet];
 
 				if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -1) {
 
-					p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
+					p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
 					g_fig_ani_state[p_fighter->sheet] = -1;
 					p_fighter->sheet = (p_fighter->wsheet = (-1));
 
@@ -513,7 +513,7 @@ void draw_fight_screen(Bit16u val)
 
 						if (p_fighter->wsheet != -1) {
 
-							p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[p_fighter->wsheet];
+							p_weapon_anisheet = (int8_t*)&g_fig_anisheets[p_fighter->wsheet];
 
 							if (*(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
 							{
@@ -593,7 +593,7 @@ void draw_fight_screen(Bit16u val)
 						obj_y += p_fighter->offsety;
 
 						if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
-							nvf.src = (Bit8u*)load_fight_figs(p_fighter->figure);
+							nvf.src = (uint8_t*)load_fight_figs(p_fighter->figure);
 						} else {
 							nvf.src = g_spellobj_nvf_buf;
 						}
@@ -761,7 +761,7 @@ void draw_fight_screen(Bit16u val)
 										}
 
 										p_fighter->object_id = 0;
-										*((Bit8s*)(sheet + 1 + 3 * (1 + g_fig_ani_state[p_fighter->sheet]))) = -1;
+										*((int8_t*)(sheet + 1 + 3 * (1 + g_fig_ani_state[p_fighter->sheet]))) = -1;
 
 										if (p_fighter->double_size != -1) {
 
@@ -790,7 +790,7 @@ void draw_fight_screen(Bit16u val)
 
 						if (*(sheet + 1 + (g_fig_ani_state[p_fighter->sheet] * 3)) == -1) {
 
-							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
+							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
 							g_fig_ani_state[p_fighter->sheet] = -1;
 							p_fighter->sheet = p_fighter->wsheet = -1;
 
@@ -810,12 +810,12 @@ void draw_fight_screen(Bit16u val)
 							i = g_gfxtab_figures_main[p_fighter->sprite_id][*(sheet)];
 
 							if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
-								nvf.src = (Bit8u*)load_fight_figs(i);
+								nvf.src = (uint8_t*)load_fight_figs(i);
 							} else {
 								nvf.src = g_spellobj_nvf_buf;
 							}
 
-							nvf.dst = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
+							nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
 							nvf.image_num = *(sheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
 							nvf.compression_type = 0;
 							nvf.width = &width;
@@ -825,7 +825,7 @@ void draw_fight_screen(Bit16u val)
 
 							if (p_fighter->wsheet != -1) {
 
-								p_weapon_anisheet = (Bit8s*)&g_fig_anisheets[p_fighter->wsheet];
+								p_weapon_anisheet = (int8_t*)&g_fig_anisheets[p_fighter->wsheet];
 
 								if (*(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3) == -1)
 								{
@@ -834,12 +834,12 @@ void draw_fight_screen(Bit16u val)
 									current_x1 = obj_x;
 									current_y1 = obj_y;
 
-									p_weapon_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->wsheet];
+									p_weapon_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet];
 
 									if (*(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[p_fighter->sheet])) != -5) {
-										nvf.dst = (Bit8u*)g_fig_gfxbuffers[p_fighter->wsheet];
+										nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet];
 										nvf.src = g_weapons_nvf_buf;
-										nvf.image_num = *(Bit8u*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
+										nvf.image_num = *(uint8_t*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
 										nvf.compression_type = 0;
 										nvf.width = &width;
 										nvf.height = &object_id_bak;
@@ -857,7 +857,7 @@ void draw_fight_screen(Bit16u val)
 						}
 
 						if (p_fighter->sheet != -1) {
-							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[p_fighter->sheet];
+							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
 						}
 					}
 				}
@@ -903,7 +903,7 @@ void draw_fight_screen(Bit16u val)
 				}
 
 
-				/* NULL check on Bit8u* */
+				/* NULL check on uint8_t* */
 				if (p_weapon_gfx != 0)  {
 
 					g_pic_copy.x1 = current_x1;

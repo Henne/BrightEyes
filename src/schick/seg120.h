@@ -18,7 +18,7 @@ void init_global_buffer(void);
 /* 0x3e */
 void refresh_colors(void);
 /* 0x43 */
-Bit32s get_diskspace(void);
+int32_t get_diskspace(void);
 /* 0x48 */
 int err_handler(void);
 /* 0x4d */

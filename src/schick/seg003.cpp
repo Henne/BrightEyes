@@ -46,8 +46,8 @@ void move(void)
 	volatile signed short boundary_flag;
 	unsigned char mapval;
 	volatile signed short i;
-	Bit8u *p_map_small;
-	Bit8u *p_map_large;
+	uint8_t *p_map_small;
+	uint8_t *p_map_large;
 	struct point8s *p_vis_field;
 
 	signed short x;
@@ -125,12 +125,12 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	signed int width;
 	signed int height;
 	signed short l1;
-	Bit8u *p1;
-	Bit8u *p2;
+	uint8_t *p1;
+	uint8_t *p2;
 	struct nvf_extract_desc nvf;
 
-	nvf.dst = (Bit8u*)((HugePt)g_buffer9_ptr3 + 0x2e248L);
-	nvf.src = (Bit8u*)g_buffer9_ptr3;
+	nvf.dst = (uint8_t*)((HugePt)g_buffer9_ptr3 + 0x2e248L);
+	nvf.src = (uint8_t*)g_buffer9_ptr3;
 	nvf.image_num = no;
 	nvf.compression_type = 3;
 	nvf.width = &width;
@@ -140,7 +140,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	height -= frame;
 	l1 = width;
 
-	p1 = (Bit8u*)((((HugePt)g_buffer9_ptr3) + frame * width) + 0x2e248L);
+	p1 = (uint8_t*)((((HugePt)g_buffer9_ptr3) + frame * width) + 0x2e248L);
 
 	if ((x < 0) && ((x + width) > 0)) {
 		width += x;
@@ -177,7 +177,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
  * \param   text        output text
  * \param   flag        to mark this chest as done
  */
-void loot_corpse(struct struct_chest* chest_ptr, char *text, Bit8s *flag)
+void loot_corpse(struct struct_chest* chest_ptr, char *text, int8_t *flag)
 {
 	signed short answer;
 

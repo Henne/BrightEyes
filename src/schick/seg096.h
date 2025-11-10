@@ -3,15 +3,15 @@ namespace M302de {
 #endif
 
 //20
-void GUI_write_char_to_screen(Bit8u*, signed short, signed short);
+void GUI_write_char_to_screen(uint8_t*, signed short, signed short);
 //25
-Bit8u* GUI_names_grammar(signed short, signed short, signed short);
+uint8_t* GUI_names_grammar(signed short, signed short, signed short);
 //2a
 char* GUI_name_plural(signed short, char*);
 //2f
 char* GUI_name_singular(char*);
 //34
-Bit8u* GUI_2f2(signed short, signed short, signed short);
+uint8_t* GUI_2f2(signed short, signed short, signed short);
 //39
 char* GUI_get_ptr(const int, const int);
 //3e
@@ -27,13 +27,13 @@ unsigned short GUI_count_lines(char*);
 //57
 signed short GUI_lookup_char_width(signed char, signed short*);
 //5c
-unsigned short GUI_unused(Bit8u*);
+unsigned short GUI_unused(uint8_t*);
 //61
 void GUI_write_fonti_to_screen(unsigned short, unsigned short, unsigned short, unsigned short);
 //66
 void GUI_blank_char(void);
 //6B
-void GUI_font_to_buf(Bit8u*);
+void GUI_font_to_buf(uint8_t*);
 //70
 void GUI_write_char_to_screen_xy(unsigned short, unsigned short, unsigned short, unsigned short);
 //75

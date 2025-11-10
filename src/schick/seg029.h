@@ -23,7 +23,7 @@ void deselect_hero_icon(unsigned short);
 void copy_forename(char*, char*);
 //0x4d
 //static
-void load_icon(Bit16u, Bit16s, Bit16s);
+void load_icon(uint16_t, int16_t, int16_t);
 
 #if !defined(__BORLANDC__)
 }

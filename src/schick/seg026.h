@@ -5,7 +5,7 @@ namespace M302de {
 //0x20
 void init_text(void);
 //0x25
-void split_textbuffer(char **, char*, Bit32u);
+void split_textbuffer(char **, char*, uint32_t);
 //0x2a
 void load_ggsts_nvf(void);
 /* 0x2f */
@@ -17,7 +17,7 @@ signed short read_chr_temp(char*, signed short, signed short);
 //0x3e
 void write_chr_temp(unsigned short);
 /* 0x43 */
-signed short copy_chr_names(Bit8u*, signed short);
+signed short copy_chr_names(uint8_t*, signed short);
 //0x48
 void load_in_head(signed short);
 //0x4d

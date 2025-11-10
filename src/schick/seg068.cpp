@@ -35,7 +35,7 @@ static const char g_str_obviously_closed[28] = "OFFENSICHTLICH GESCHLOSSEN!"; //
 void THO_eisenhof(void)
 {
 	signed short answer;
-	Bit32s money;
+	int32_t money;
 
 	do {
 		answer = GUI_radio(get_tx2(47), 3, get_tx2(48),	get_tx2(49), get_tx2(50));
@@ -123,7 +123,7 @@ void THO_bank(void)
 	signed short answer;
 	signed short done;
 	signed short l3;
-	Bit32s p_money;
+	int32_t p_money;
 
 	done = 0;
 
@@ -261,7 +261,7 @@ void THO_arsenal(void)
 	signed short answer;
 	signed short options;
 	signed short tw_bak;
-	Bit32s p_money;
+	int32_t p_money;
 
 	if (gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) {
 
@@ -532,7 +532,7 @@ void THO_academy(void)
 	signed short item_id;
 	signed short item_pos;
 	signed short cursed_hero_pos;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 
 	/* find the position of the first cursed (=renegade) hero */
@@ -709,7 +709,7 @@ signed short academy_get_equal_item(signed short price)
 	signed short item_pos;
 	signed short retval;
 	signed short i;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 	struct item_stats *p_item;
 

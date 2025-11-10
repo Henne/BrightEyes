@@ -49,7 +49,7 @@ signed short DNG08_handler(void)
 	signed short tmp;
 	signed short tw_bak;
 	struct struct_hero *hero;
-	Bit8u *amap_ptr;
+	uint8_t *amap_ptr;
 
 	amap_ptr = g_dng_map;
 
@@ -179,7 +179,7 @@ signed short DNG08_handler(void)
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), (Bit8u*)&get_hero(i)->attrib[ATTRIB_CH].current, -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (uint8_t*)&get_hero(i)->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}
@@ -202,7 +202,7 @@ signed short DNG08_handler(void)
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), (Bit8u*)&get_hero(i)->attrib[ATTRIB_CH].current, -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (uint8_t*)&get_hero(i)->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}
@@ -412,7 +412,7 @@ void DNG08_search_bed(void)
 
 	slot = get_free_mod_slot();
 
-	set_mod_slot(slot, HOURS(6), (Bit8u*)&hero->attrib[ATTRIB_CH].current, -2, (signed char)get_hero_index(hero));
+	set_mod_slot(slot, HOURS(6), (uint8_t*)&hero->attrib[ATTRIB_CH].current, -2, (signed char)get_hero_index(hero));
 
 	if (random_schick(100) <= 10)
 	{
@@ -490,7 +490,7 @@ void DNG08_chest01_loot(struct struct_chest* chest)
 
 void DNG08_chest02_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng08_chest2_content;
 
@@ -575,7 +575,7 @@ void DNG08_chest05_open(struct struct_chest* chest)
 
 void DNG08_chest04_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng08_chest4_content;
 
@@ -586,7 +586,7 @@ void DNG08_chest04_loot(struct struct_chest* chest)
 
 void DNG08_chest05_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng08_chest5_content;
 

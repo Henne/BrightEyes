@@ -23,7 +23,7 @@ void print_msg_with_first_hero(char*);
 /* 0x4d */
 signed short DNG_step(void);
 /* 0x52 */
-void DNG_waterbarrel(Bit8u*);
+void DNG_waterbarrel(uint8_t*);
 
 #if !defined(__BORLANDC__)
 }

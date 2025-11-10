@@ -677,8 +677,8 @@ void DNG_draw_walls(signed short x, signed short y, signed short a3)
 	signed short width2;
 	signed short height2;
 	signed short flag;
-	Bit8u *dst_ptr;
-	Bit8u *ptr2;
+	uint8_t *dst_ptr;
+	uint8_t *ptr2;
 	struct nvf_extract_desc nvf;
 
 	flag = (a3 & 0x8000) ? 1 : 0;
@@ -693,7 +693,7 @@ void DNG_draw_walls(signed short x, signed short y, signed short a3)
 	}
 
 	nvf.dst = dst_ptr = g_renderbuf_ptr + 0x7530;
-	nvf.src = (Bit8u*)g_buffer9_ptr3;
+	nvf.src = (uint8_t*)g_buffer9_ptr3;
 	nvf.image_num = a3;
 	nvf.width = &nvf_width;
 	nvf.height = &nvf_height;
@@ -892,7 +892,7 @@ void DNG_lights(void)
 		}
 
 		wait_for_vsync();
-		set_palette((Bit8u*)g_text_output_buf, 0x80, 0x40);
+		set_palette((uint8_t*)g_text_output_buf, 0x80, 0x40);
 	}
 }
 
@@ -1010,7 +1010,7 @@ void DNG_open_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove((Bit8u*)g_renderbuf_ptr + 0x7530, g_renderbuf_ptr, 0x6db0);
+	memmove((uint8_t*)g_renderbuf_ptr + 0x7530, g_renderbuf_ptr, 0x6db0);
 
 	if (!gs_dungeon_gfx_style) {
 		x = 45;
@@ -1271,7 +1271,7 @@ void DNG_enter_dungeon(signed short dungeon_id)
 	signed short level;
 	signed short dir;
 	signed short i;
-	Bit8u *ptr;
+	uint8_t *ptr;
 
 	switch (dungeon_id) {
 
@@ -1344,9 +1344,9 @@ mark2:			   goto mark1;
 
 		for (i = 0; i < 0x40; i++) {
 
-			pal_fade((Bit8s*)ptr, (Bit8s*)g_renderbuf_ptr);
-			pal_fade((Bit8s*)ptr + 0x60, (Bit8s*)g_renderbuf_ptr + 0x60);
-			pal_fade((Bit8s*)ptr + 0xc0, (Bit8s*)g_renderbuf_ptr + 0xc0);
+			pal_fade((int8_t*)ptr, (int8_t*)g_renderbuf_ptr);
+			pal_fade((int8_t*)ptr + 0x60, (int8_t*)g_renderbuf_ptr + 0x60);
+			pal_fade((int8_t*)ptr + 0xc0, (int8_t*)g_renderbuf_ptr + 0xc0);
 
 			wait_for_vsync();
 

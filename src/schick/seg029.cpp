@@ -81,9 +81,9 @@ void draw_playmask(void)
 
 	wait_for_vsync();
 
-	set_color((Bit8u*)g_color_black, 0);
+	set_color((uint8_t*)g_color_black, 0);
 
-	set_palette((Bit8u*)g_palette_special, 0xe0, 0x20);
+	set_palette((uint8_t*)g_palette_special, 0xe0, 0x20);
 
 	g_ani_posx = 16;
 	g_ani_posy = 2;
@@ -137,8 +137,8 @@ void draw_status_line(void)
 {
 	signed int fg_bak;
 	signed int bg_bak;
-	Bit8u *src;
-	Bit8u *dst;
+	uint8_t *src;
+	uint8_t *dst;
 	signed int head_bak;
 	signed int i;
 	signed int j;
@@ -193,7 +193,7 @@ void draw_status_line(void)
 				}
 
 				/* set the src pointer of the head */
-				g_pic_copy.src = (get_hero(i)->flags.dead ? (Bit8u*)g_dtp2 : (Bit8u*)get_hero(i)->pic);
+				g_pic_copy.src = (get_hero(i)->flags.dead ? (uint8_t*)g_dtp2 : (uint8_t*)get_hero(i)->pic);
 
 				do_pic_copy(0);
 
@@ -214,7 +214,7 @@ void draw_status_line(void)
 
 				/* set the src pointer of the head */
 				/* TODO: expression to complicated ? */
-				src = (get_hero(i)->flags.dead ? (Bit8u*)g_dtp2 : (Bit8u*)get_hero(i)->pic);
+				src = (get_hero(i)->flags.dead ? (uint8_t*)g_dtp2 : (uint8_t*)get_hero(i)->pic);
 
 				/* Gray out picture */
 				for (j = 0; j < 1024; src++, dst++, j++)
@@ -274,7 +274,7 @@ void clear_hero_icon(unsigned short pos)
  * \param   pos         position of the icon (0-8)
  */
 //static
-void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
+void load_icon(uint16_t fileindex, int16_t icon, int16_t pos)
 {
 	signed int handle;
 

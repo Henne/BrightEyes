@@ -34,8 +34,8 @@ namespace M302de {
 static struct c_str_5 g_sell_screen_str_money_h = { "H %d" }; // ds:0x6bf0
 static struct c_str_5 g_sell_screen_str_money_s = { "S %d" }; // ds:0x6bf5
 static struct c_str_5 g_sell_screen_str_money_d = { "D %d" }; // ds:0x6bfa
-static struct Bit16s_3 g_sell_screen_items_posx = { 30, 95, 160 }; // ds:0x6bff
-static struct Bit16s_5 g_sell_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c05
+static struct int16_t_3 g_sell_screen_items_posx = { 30, 95, 160 }; // ds:0x6bff
+static struct int16_t_5 g_sell_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c05
 
 /**
  * \brief   shows the sell-screen an provides interaction
@@ -65,12 +65,12 @@ void sell_screen(struct shop_descr *shop_descr)
 	struct c_str_5 fmt_h = g_sell_screen_str_money_h;
 	struct c_str_5 fmt_s = g_sell_screen_str_money_s;
 	struct c_str_5 fmt_d = g_sell_screen_str_money_d;
-	struct Bit16s_3 array3 = g_sell_screen_items_posx;
+	struct int16_t_3 array3 = g_sell_screen_items_posx;
 	//struct dummy3 array3 = { { 30, 95, 160 } };
-	struct Bit16s_5 array5 = g_sell_screen_items_posy;
+	struct int16_t_5 array5 = g_sell_screen_items_posy;
 	//struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
-	Bit32s p_money;
-	Bit32s price = 0;
+	int32_t p_money;
+	int32_t price = 0;
 	signed int l12 = 0;
 	struct struct_hero *hero1;
 	struct struct_hero *hero2;
@@ -92,7 +92,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 			disable_ani();
 			g_pp20_index = -1;
-			memset((Bit8u*)g_sellitems, 0, 300 * sizeof(struct shop_item));
+			memset((uint8_t*)g_sellitems, 0, 300 * sizeof(struct shop_item));
 
 			for (items_x = 0; items_x <= 6; items_x++) {
 				for (l_di = 0; l_di < 23; l_di++) {
@@ -347,20 +347,20 @@ void sell_screen(struct shop_descr *shop_descr)
 								nice = hero1->inventory[l15].quantity;
 							}
 
-							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
-									(Bit32s)g_sellitems[item_pos + item].price_unit *
+							price -= ((int32_t)g_sellitems[item_pos + item].shop_price *
+									(int32_t)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
-							price += ((Bit32s)g_sellitems[item_pos + item].shop_price *
-									(Bit32s)g_sellitems[item_pos + item].price_unit *
+							price += ((int32_t)g_sellitems[item_pos + item].shop_price *
+									(int32_t)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 0;
 
-							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
-									(Bit32s)g_sellitems[item_pos + item].price_unit *
+							price -= ((int32_t)g_sellitems[item_pos + item].shop_price *
+									(int32_t)g_sellitems[item_pos + item].price_unit *
 									nice * g_price_modificator) / 4L;
 						}
 					} else {
@@ -378,19 +378,19 @@ void sell_screen(struct shop_descr *shop_descr)
 								nice = hero1->inventory[l15].quantity;
 							}
 
-							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
-									(Bit32s)g_sellitems[item_pos + item].price_unit *
+							price -= ((int32_t)g_sellitems[item_pos + item].shop_price *
+									(int32_t)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
-							price += ((Bit32s)g_sellitems[item_pos + item].shop_price *
-									(Bit32s)g_sellitems[item_pos + item].price_unit *
+							price += ((int32_t)g_sellitems[item_pos + item].shop_price *
+									(int32_t)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 1;
-							price += ((Bit32s)g_sellitems[item_pos + item].shop_price *
-									(Bit32s)g_sellitems[item_pos + item].price_unit *
+							price += ((int32_t)g_sellitems[item_pos + item].shop_price *
+									(int32_t)g_sellitems[item_pos + item].price_unit *
 									nice * g_price_modificator) / 4L;
 						}
 					}

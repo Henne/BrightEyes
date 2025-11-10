@@ -241,7 +241,7 @@ void spell_band(void)
 		/* set 'tied' flag */
 		g_spelltarget_e->flags.tied = 1;
 
-		sprintf(g_dtp2, get_tx(6), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(6), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
 		/* cast hero */
 
@@ -277,7 +277,7 @@ void spell_bannbaladin(void)
 		/* spell does not work on animals */
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(8), (Bit8u*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(8), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
 	} else {
 
 		if (g_spelltarget_e->gfx_id == 0x1c) {
@@ -289,7 +289,7 @@ void spell_bannbaladin(void)
 		/* set 'tame' flag */
 		g_spelltarget_e->flags.tame = 1;
 
-		sprintf(g_dtp2,	get_tx(9), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -356,7 +356,7 @@ void spell_herrdertiere(void)
 
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(11), (Bit8u*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
 	} else {
 
 		g_spell_special_aecost = (g_spelltarget_e->first_ap);
@@ -368,7 +368,7 @@ void spell_herrdertiere(void)
 			/* set 'tame' flag */
 			g_spelltarget_e->flags.tame = 1;
 
-			sprintf(g_dtp2,	get_tx(9), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		}
 	}
 }
@@ -389,7 +389,7 @@ void spell_horriphobus(void)
 		/* unset 'renegade' flag */
 		g_spelltarget_e->flags.renegade = 0;
 
-		sprintf(g_dtp2,	get_tx(12), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -431,7 +431,7 @@ void spell_somnigravis(void)
 		g_spelltarget_e->flags.asleep = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(13), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		return;
 	}
 
@@ -472,7 +472,7 @@ void spell_zwingtanz(void)
 		g_spelltarget_e->flags.dancing = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(14), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -551,14 +551,14 @@ void spell_skelettarius(void)
 	if (!g_spelltarget_e->flags.dead) {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(15), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set ae costs */
 		g_spell_special_aecost = 0;
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(16), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 
@@ -589,7 +589,7 @@ void spell_skelettarius(void)
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5039&pid=148252#pid148252
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=166097#pid166097
 		 * */
-                Bit8u* buf_seek_ptr_bak = g_fightobj_buf_seek_ptr; /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
+                uint8_t* buf_seek_ptr_bak = g_fightobj_buf_seek_ptr; /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
 		g_fightobj_buf_seek_ptr = fighter->gfxbuf;
 #endif
 
@@ -663,18 +663,18 @@ void spell_axxeleratus(void)
 		/* AT + 2 for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(1),
-			(Bit8u*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
+			(uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 			2, (signed char)hero_pos);
 
 		/* PA + 2 for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(1),
-			(Bit8u*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
+			(uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 			2, (signed char)hero_pos);
 
 		/* set Axxeleratus flag (yields +4 BP, second action phase per round of fighting) for 1 minute (= 10 rounds of fighting) */
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(1), (Bit8u*)&get_spelltarget()->axxeleratus, 1, (signed char)hero_pos);
+		set_mod_slot(slot, MINUTES(1), (uint8_t*)&get_spelltarget()->axxeleratus, 1, (signed char)hero_pos);
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(17), get_spelltarget()->alias);
@@ -964,7 +964,7 @@ void spell_adleraug(void)
 	slot = get_free_mod_slot();
 
 	/* Perception / Sinnesschaerfe + 7 */
-	set_mod_slot(slot, MINUTES(6), (Bit8u*)&get_spelluser()->skills[TA_SINNESSCHAERFE], 7, (signed char)hero_pos);
+	set_mod_slot(slot, MINUTES(6), (uint8_t*)&get_spelluser()->skills[TA_SINNESSCHAERFE], 7, (signed char)hero_pos);
 
 	/* prepare message */
 	sprintf(g_dtp2,	get_tx(24), get_spelluser()->alias);

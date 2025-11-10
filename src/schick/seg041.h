@@ -11,7 +11,7 @@ void FIG_clear_msgs();
 //0x2f
 void FIG_add_msg(const signed int, const signed int);
 //0x34
-void FIG_damage_enemy(struct enemy_sheet*, Bit16s, signed short);
+void FIG_damage_enemy(struct enemy_sheet*, int16_t, signed short);
 /* 0x39 */
 signed int FIG_get_hero_weapon_attack_damage(struct struct_hero*, struct struct_hero*, const signed int);
 //0x3e

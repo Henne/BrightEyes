@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void make_valuta_str(char* dst, Bit32s money);
+void make_valuta_str(char* dst, int32_t money);
 /* 0x25 */
 void hero_get_sober(struct struct_hero*);
 /* 0x2a */
@@ -17,7 +17,7 @@ signed short hero_is_diseased(struct struct_hero*);
 /* 0x3e */
 signed short hero_is_poisoned(struct struct_hero*);
 /* 0x43 */
-signed short menu_enter_delete(Bit8u*, signed short, signed short);
+signed short menu_enter_delete(uint8_t*, signed short, signed short);
 /* 0x48 */
 void update_atpa(struct struct_hero*);
 /* 0x4d */

@@ -447,7 +447,7 @@ void tevent_063(void)
 	i = get_free_mod_slot();
 
 	/* MU -2 for 24 hours */
-	set_mod_slot(i, DAYS(1), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)vomiter);
+	set_mod_slot(i, DAYS(1), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)vomiter);
 
 	/* outro message */
 	GUI_output(get_tx2(48));

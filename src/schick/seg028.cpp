@@ -47,8 +47,8 @@ static const unsigned char g_unkn_039[8] = { 0x0b, 0xc0, 0x75, 0x06, 0xb8, 0x01,
 void prepare_dungeon_area(void)
 {
 	signed int dtx_index;
-	Bit32u file_len;
-	Bit32u offset;
+	uint32_t file_len;
+	uint32_t offset;
 	HugePt buf;
 
 	signed int nvf_index;
@@ -87,12 +87,12 @@ void prepare_dungeon_area(void)
 
 		/* clear palette */
 		buf = g_buffer9_ptr3;
-		memset((Bit8u*)buf, 0, 0xc0);
+		memset((uint8_t*)buf, 0, 0xc0);
 		wait_for_vsync();
-		set_palette((Bit8u*)buf, 0x80, 0x40);
+		set_palette((uint8_t*)buf, 0x80, 0x40);
 
 		do {
-			file_len = read_archive_file(handle, (Bit8u*)buf, 65000);
+			file_len = read_archive_file(handle, (uint8_t*)buf, 65000);
 			buf += file_len;
 			offset += file_len;
 
@@ -119,11 +119,11 @@ void load_dungeon_ddt(void)
 
 	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DDT;
 	handle = load_archive_file(index);
-	read_archive_file(handle, (Bit8u*)&low, 2);
-	read_archive_file(handle, (Bit8u*)&high, 2);
+	read_archive_file(handle, (uint8_t*)&low, 2);
+	read_archive_file(handle, (uint8_t*)&high, 2);
 
 	read_archive_file(handle, g_dungeon_fights_buf, low);
-	read_archive_file(handle, (Bit8u*)g_dungeon_doors_buf, high - low);
+	read_archive_file(handle, (uint8_t*)g_dungeon_doors_buf, high - low);
 	read_archive_file(handle, g_dungeon_stairs_buf, 0x7d0);
 
 	close(handle);
@@ -133,7 +133,7 @@ void prepare_city_area(void)
 {
 	signed int i;
 	const signed int ltx_index = gs_current_town + ARCHIVE_FILE_CITY_LTX;
-	Bit8u* arr[4];
+	uint8_t* arr[4];
 
 
 	if (g_city_area_loaded != gs_current_town) {
@@ -205,19 +205,19 @@ void prepare_city_area(void)
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
 
-Bit8u* load_city_textures(const signed int index, const signed int firstcol, const signed int colors, const signed int ref)
+uint8_t* load_city_textures(const signed int index, const signed int firstcol, const signed int colors, const signed int ref)
 {
 	signed int handle;
-	Bit32s file_len;
-	Bit32s offset;
-	Bit8u* ptr = (Bit8u*)g_buffer9_ptr4;
+	int32_t file_len;
+	int32_t offset;
+	uint8_t* ptr = (uint8_t*)g_buffer9_ptr4;
 
 	handle = load_archive_file(index);
 
 	file_len = offset = 0L;
 
 	do {
-		file_len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr4, 65000);
+		file_len = read_archive_file(handle, (uint8_t*)g_buffer9_ptr4, 65000);
 
 		g_buffer9_ptr4 += file_len;
 
@@ -248,7 +248,7 @@ void load_special_textures(const signed int arg)
 
 	handle = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
 
-	read_archive_file(handle, (Bit8u*)g_buffer7_ptr, 64000);
+	read_archive_file(handle, (uint8_t*)g_buffer7_ptr, 64000);
 
 	close(handle);
 }
@@ -375,7 +375,7 @@ void unused_store(signed short no)
 	signed int size;
 
 	nvf.dst = g_renderbuf_ptr + 30000;
-	nvf.src = (Bit8u*)g_buffer9_ptr3;
+	nvf.src = (uint8_t*)g_buffer9_ptr3;
 	nvf.image_num = no;
 	nvf.compression_type = 0;
 	nvf.width = &width;
@@ -388,7 +388,7 @@ void unused_store(signed short no)
 	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
 	size = width * height;
-	memmove((Bit8u*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
+	memmove((uint8_t*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
 
 	ptr = &g_ems_unused_tab[no];
 
@@ -401,7 +401,7 @@ void unused_store(signed short no)
 	g_ems_unused_offset = ((((g_ems_unused_offset + size) & 0x3fff) + 0x100) & 0xff00);
 }
 
-Bit8u* unused_load(signed short no)
+uint8_t* unused_load(signed short no)
 {
 	unsigned short lpage;
 
@@ -440,12 +440,12 @@ void load_map(void)
 	nvf.compression_type = 0;
 	nvf.width = &handle;
 	nvf.height = &handle;
-	nvf.dst = (Bit8u*)(g_buffer9_ptr + 18000L);
+	nvf.dst = (uint8_t*)(g_buffer9_ptr + 18000L);
 	nvf.image_num = 16;
 
 	process_nvf_extraction(&nvf);
 
-	array_add((Bit8u*)(g_buffer9_ptr + 18000L), 3003, 0xe0, 2);
+	array_add((uint8_t*)(g_buffer9_ptr + 18000L), 3003, 0xe0, 2);
 
 	g_pp20_index = ARCHIVE_FILE_KARTE_DAT;
 
@@ -458,7 +458,7 @@ void load_map(void)
 		EMS_map_memory(g_ems_travelmap_handle, 2, 2);
 		EMS_map_memory(g_ems_travelmap_handle, 3, 3);
 		/* set map pointer to EMS */
-		gs_travel_map_ptr = (Bit8u*)g_ems_frame_ptr;
+		gs_travel_map_ptr = (uint8_t*)g_ems_frame_ptr;
 	} else {
 #endif
 		/* or read KARTE.DAT from file */
@@ -574,8 +574,8 @@ void load_informer_tlk(const signed int index)
 	signed int i;
 	signed int handle;
 
-	Bit32s text_len;
-	Bit32s off;
+	int32_t text_len;
+	int32_t off;
 	signed int partners;
 	struct struct_dialog_partner *partner;
 
@@ -584,14 +584,14 @@ void load_informer_tlk(const signed int index)
 	handle = load_archive_file(index);
 
 	/* read the header */
-	read_archive_file(handle, (Bit8u*)&off, 4);
-	read_archive_file(handle, (Bit8u*)&partners, 2);
+	read_archive_file(handle, (uint8_t*)&off, 4);
+	read_archive_file(handle, (uint8_t*)&partners, 2);
 
 	/* read the partner structures */
-	read_archive_file(handle, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (uint8_t*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(handle, (Bit8u*)&gs_dialog_states, (Bit16u)(off - partners * sizeof(struct struct_dialog_partner)));
+	read_archive_file(handle, (uint8_t*)&gs_dialog_states, (uint16_t)(off - partners * sizeof(struct struct_dialog_partner)));
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(handle, g_buffer8_ptr, 10000);
@@ -604,7 +604,7 @@ void load_informer_tlk(const signed int index)
 	/* adjust the pointers to the layouts */
 	/* TODO: Not portable! */
 	for (i = 0; i < partners; i++, partner++) {
-		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + (Bit16u)partner->states_offset);
+		partner->states_offset = (uint32_t)((uint8_t*)&gs_dialog_states + (uint16_t)partner->states_offset);
 	}
 #endif
 }
@@ -613,8 +613,8 @@ void load_tlk(const signed int index)
 {
 	signed int i;
 	signed int handle;
-	Bit32s text_len;
-	Bit32s off;
+	int32_t text_len;
+	int32_t off;
 	signed short partners;
 	struct struct_dialog_partner *partner;
 
@@ -623,17 +623,17 @@ void load_tlk(const signed int index)
 	handle = load_archive_file(index);
 
 	/* read the header */
-	read_archive_file(handle, (Bit8u*)&off, 4);
-	read_archive_file(handle, (Bit8u*)&partners, 2);
+	read_archive_file(handle, (uint8_t*)&off, 4);
+	read_archive_file(handle, (uint8_t*)&partners, 2);
 
 	/* read the partner structures */
-	read_archive_file(handle, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (uint8_t*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(handle, (Bit8u*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (uint8_t*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(handle, (Bit8u*)g_buffer7_ptr, 64000);
+	text_len = (signed short)read_archive_file(handle, (uint8_t*)g_buffer7_ptr, 64000);
 
 	close(handle);
 
@@ -643,17 +643,17 @@ void load_tlk(const signed int index)
 	/* adjust the pointers to the layouts */
 	/* TODO: Not portable! */
 	for (i = 0; i < partners; i++, partner++) {
-		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + partner->states_offset);
+		partner->states_offset = (uint32_t)((uint8_t*)&gs_dialog_states + partner->states_offset);
 	}
 #endif
 }
 
 #if defined(__BORLANDC__)
-void unused_load_archive_file(const signed int index, const unsigned short off, const Bit32u seg)
+void unused_load_archive_file(const signed int index, const unsigned short off, const uint32_t seg)
 {
 	const signed int handle = load_archive_file(index);
 
-	read_archive_file(handle, (Bit8u*)MK_FP(seg, off), 64000);
+	read_archive_file(handle, (uint8_t*)MK_FP(seg, off), 64000);
 
 	close(handle);
 }

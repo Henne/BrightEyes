@@ -307,7 +307,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 	signed int le;
 	struct struct_hero *hero = get_hero(hero_pos);
 	struct struct_hero *patient;
-	Bit32s money;
+	int32_t money;
 	signed int poison_id;
 	signed int tx_file_bak;
 
@@ -686,7 +686,7 @@ signed int GUI_use_skill2(const signed int handicap, char *msg)
  * \return              the result of the throw. A value greater than zero
  *	means success, below or zero means failed.
  */
-signed int bargain(const struct struct_hero *hero, const signed int items, const Bit32s price,
+signed int bargain(const struct struct_hero *hero, const signed int items, const int32_t price,
 	const signed int percent, const signed char mod_init)
 {
 

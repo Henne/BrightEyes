@@ -33,10 +33,10 @@ static struct viewdir_offsets g_viewdir_offsets6 = { { { 1, 0 }, { 0, -1 }, { -1
  * \param[in]   mode    3 for WEAPANI.DAT, anything else is ANI.DAT
  * \return              the number of copied bytes.
  */
-static signed int copy_ani_sequence(Bit8s *dst, const signed int ani_num, const signed int mode)
+static signed int copy_ani_sequence(int8_t *dst, const signed int ani_num, const signed int mode)
 {
-	Bit8u *p_datbuffer;
-	Bit8s *p_datitem;
+	uint8_t *p_datbuffer;
+	int8_t *p_datitem;
 	signed char len;
 	signed int i;
 	signed int ani_max_num;
@@ -48,7 +48,7 @@ static signed int copy_ani_sequence(Bit8s *dst, const signed int ani_num, const 
 	if (mode == 3)
 		p_datbuffer = g_buffer_weapanidat;
 
-	ani_max_num = *(Bit16s*)p_datbuffer;
+	ani_max_num = *(int16_t*)p_datbuffer;
 
 	/* Sanity check of no */
 	if (ani_num < 0)
@@ -58,14 +58,14 @@ static signed int copy_ani_sequence(Bit8s *dst, const signed int ani_num, const 
 		return 0;
 
 	/* set p_datitem to the requested data entry */
-	p_datitem = (Bit8s*)p_datbuffer;
+	p_datitem = (int8_t*)p_datbuffer;
 	p_datitem += ani_max_num + 2;
 
-	len = (Bit8s)p_datbuffer[2];
+	len = (int8_t)p_datbuffer[2];
 
 	for (i = 1; i <= ani_num; i++) {
 		p_datitem += len;
-		len = *(Bit8s*)(p_datbuffer + i + 2);
+		len = *(int8_t*)(p_datbuffer + i + 2);
 	}
 
 	p_datitem++;
@@ -87,16 +87,16 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	signed char dir1;
 	signed char dir2;
 	signed char dir3;
-	Bit8s *sheet_ptr;
+	int8_t *sheet_ptr;
 	struct struct_fighter *fighter;
-	Bit16s *ani_index_ptr;
+	int16_t *ani_index_ptr;
 
 	signed int i;
 
 	g_fig_anisheets[1][0] = 0;
 	g_fig_anisheets[1][242] = enemy->gfx_id;
 
-	sheet_ptr = (Bit8s*)&g_fig_anisheets[1][1];
+	sheet_ptr = (int8_t*)&g_fig_anisheets[1][1];
 	i = 0;
 	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
 
@@ -199,7 +199,7 @@ signed int FIG_enemy_can_attack_neighbour(const signed int x, const signed int y
 			(
 			(target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
 			//g_enemy_sheets[target - 10].flags.renegade
-				((struct enemy_flags*)(target * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
+				((struct enemy_flags*)(target * sizeof(enemy_sheet) + (uint8_t*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
 			))
 		{
 			return 1;
@@ -283,7 +283,7 @@ signed short FIG_search_range_target(const signed int x, const signed int y, con
 				if ( ((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
 					((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead &&
 					// g_enemy_sheets[target - 10].flags.renegade
-					((struct enemy_flags*)(target * sizeof(enemy_sheet) + (Bit8u*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
+					((struct enemy_flags*)(target * sizeof(enemy_sheet) + (uint8_t*)g_enemy_sheets - 10 * sizeof(enemy_sheet) + 0x31))->renegade
 					))
 				{
 					can_attack = 1;
@@ -477,9 +477,9 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 							if (!enemy->flags.tied) {
 
 								if (mode == 1)
-									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 2);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 2);
 								else
-									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 0);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 0);
 
 								if (target_found != -1) {
 									prepare_enemy_ani(enemy, enemy_no);
@@ -524,9 +524,9 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 							if (!enemy->flags.tied) {
 
 								if (mode == 1)
-									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 7);
 								else
-									target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 6);
 
 								if (target_found != -1) {
 									prepare_enemy_ani(enemy, enemy_no);
@@ -603,9 +603,9 @@ signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int en
 					if (!enemy->flags.tied) {
 
 						if (attack_foe == 0)
-							target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
+							target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 6);
 						else
-							target_found = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
+							target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 7);
 
 						if (target_found != -1) {
 							prepare_enemy_ani(enemy, enemy_no);
@@ -796,13 +796,13 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			if (!enemy->flags.tied) {
 
 				if (enemy->flags.scared) {
-					target_reachable = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 4);
+					target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 4);
 					enemy->bp = 0;
 				} else {
 					if (enemy->flags.renegade)
-						target_reachable = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 2);
+						target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 2);
 					else
-						target_reachable = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 0);
+						target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 0);
 				}
 
 				if (target_reachable != -1) {

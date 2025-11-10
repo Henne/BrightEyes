@@ -543,7 +543,7 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 	call_mouse();
 }
 
-signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short options, ...)
+signed short GUI_dialogbox(uint8_t* picture, char *name, char *text, signed short options, ...)
 {
 	va_list arguments;
 	signed short i;

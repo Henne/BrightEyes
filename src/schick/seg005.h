@@ -2,7 +2,7 @@
 namespace M302de {
 #endif
 
-void draw_fight_screen(Bit16u);
+void draw_fight_screen(uint16_t);
 
 #if !defined(__BORLANDC__)
 }

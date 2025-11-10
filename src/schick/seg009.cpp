@@ -37,10 +37,10 @@ static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
 	if (p[0] == 'P' && p[1] == 'P' && p[2] == '2' && p[3] == '0')
 		return val(p+plen-4);
 
-	if (*((Bit32u*)p) == plen)
+	if (*((uint32_t*)p) == plen)
 		return val(p+plen-4);
 
-	if (*((Bit32u*)p) + 8 == plen)
+	if (*((uint32_t*)p) + 8 == plen)
 		return val(p+plen-4);
 
 	return 0; /* not a powerpacker file */
@@ -119,7 +119,7 @@ int ppDecrunch(uint8 *src, uint8 *dest, uint8 *offset_lens,
   /* return (src == buf_src) ? 1 : 0; */
 }
 
-void decomp_pp20(Bit8u *src, Bit8u *dst, Bit8u *p3, Bit32u plen)
+void decomp_pp20(uint8_t *src, uint8_t *dst, uint8_t *p3, uint32_t plen)
 {
 	size_t unplen;
 #if !defined(__BORLANDC__)

@@ -153,17 +153,17 @@ void do_merchant(void)
 	signed short answer;
 	signed short refresh;
 	signed short armor_pos;
-	Bit32s party_money;
+	int32_t party_money;
 	struct shop_descr *shop;
 
 	done = 0;
 
 #if !defined(__BORLANDC__)
 	/* Print merchant values */
-	const Bit8u typi = gs_current_typeindex;
-	const Bit8s price = g_shop_descr_table[typi].price_mod;
-	const Bit8s h_type = g_shop_descr_table[typi].type;
-	const Bit8s sortiment = g_shop_descr_table[typi].sortiment;
+	const uint8_t typi = gs_current_typeindex;
+	const int8_t price = g_shop_descr_table[typi].price_mod;
+	const int8_t h_type = g_shop_descr_table[typi].type;
+	const int8_t sortiment = g_shop_descr_table[typi].sortiment;
 	const char h_type0[] = "UNGUELTIG";
 	const char h_type1[] = "Waffen";
 	const char h_type2[] = "Kraeuter";
@@ -206,7 +206,7 @@ void do_merchant(void)
 	refresh = g_request_refresh = 1;
 
 	g_buyitems = (struct shop_item*)g_fig_figure1_buf;
-	memset((Bit8u*)g_buyitems, 0, 500 * sizeof(struct shop_item));
+	memset((uint8_t*)g_buyitems, 0, 500 * sizeof(struct shop_item));
 
 	g_price_modificator = 4;
 
@@ -261,8 +261,8 @@ void do_merchant(void)
 
 	if (shop->type == 1) {
 
-		qsort((Bit8u*)g_buyitems, item_pos, 7, shop_compar);
-		qsort((Bit8u*)g_buyitems + 7 * 70, armor_pos - 70, 7, shop_compar);
+		qsort((uint8_t*)g_buyitems, item_pos, 7, shop_compar);
+		qsort((uint8_t*)g_buyitems + 7 * 70, armor_pos - 70, 7, shop_compar);
 
 		/* copy the rest */
 		for (l_si = 0; armor_pos - 70 > l_si; l_si++) {
@@ -277,7 +277,7 @@ void do_merchant(void)
 		}
 
 	} else {
-		qsort((Bit8u*)g_buyitems, item_pos, 7, shop_compar);
+		qsort((uint8_t*)g_buyitems, item_pos, 7, shop_compar);
 	}
 
 	while (done == 0 && !gs_merchant_offended_flags[gs_current_typeindex]) {

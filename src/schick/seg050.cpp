@@ -81,7 +81,7 @@ const signed short* g_autoinc_spells_mage_index[9] = {
 	g_autoinc_spells_mage06,
 	g_autoinc_spells_mage07,
 	g_autoinc_spells_mage08
-}; // ds:0x662a, by magic school; Bit8u*
+}; // ds:0x662a, by magic school; uint8_t*
 const signed short g_autoinc_spells_gelf[7] = { SP_FLIM_FLAM_FUNKEL, SP_BLITZ_DICH_FIND, SP_AXXELERATUS_BLITZGESCHWIND, SP_KLARUM_PURUM_KRAEUTERSUD, SP_TIERE_BESPRECHEN, SP_DUNKELHEIT, -1 }; // ds:26190
 const signed short g_autoinc_spells_self[7] = { SP_SILENTIUM_SILENTILLE, SP_ARMATRUTZ, SP_FULMINICTUS_DONNERKEIL, SP_ADLERAUG_UND_LUCHSENOHR, SP_ODEM_ARCANUM, SP_FLIM_FLAM_FUNKEL, -1 }; // ds:26204
 const signed short g_autoinc_spells_ielf[12] = { SP_BALSAM_SALABUNDE, SP_CHAMAELIONI_MIMIKRY, SP_BLITZ_DICH_FIND, SP_ADLERAUG_UND_LUCHSENOHR, SP_FULMINICTUS_DONNERKEIL, SP_ARMATRUTZ, SP_SILENTIUM_SILENTILLE, SP_ODEM_ARCANUM, SP_BAND_UND_FESSEL, SP_AXXELERATUS_BLITZGESCHWIND, SP_EXPOSAMI_CREATUR, -1 }; // ds:26218
@@ -493,7 +493,7 @@ void level_up(signed short hero_pos)
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 
 	g_inc_skills_counter = (struct inc_states*)(g_buffer8_ptr + 4500);
-	g_inc_spells_counter = (struct inc_states*)((Bit8u*)g_inc_skills_counter + 208);
+	g_inc_spells_counter = (struct inc_states*)((uint8_t*)g_inc_skills_counter + 208);
 	g_skills_buffer = (unsigned char*)g_buffer9_ptr;
 
 	l_si = load_archive_file(ARCHIVE_FILE_BSKILLS_DAT);
@@ -744,9 +744,9 @@ void level_up(signed short hero_pos)
 
 		while (hero->saved_skill_increases > 0) {
 
-			l_si = *(Bit16s*)(g_skills_buffer + 100 * hero->typus + 4 * i);
+			l_si = *(int16_t*)(g_skills_buffer + 100 * hero->typus + 4 * i);
 
-			if (hero->skills[l_si] < *(Bit16s*)(g_skills_buffer + 100 * hero->typus + 4 * i + 2))
+			if (hero->skills[l_si] < *(int16_t*)(g_skills_buffer + 100 * hero->typus + 4 * i + 2))
 			{
 				inc_skill_novice(hero, l_si);
 			}

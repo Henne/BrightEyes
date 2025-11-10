@@ -115,8 +115,8 @@ struct sea_route g_sea_routes[46] = {
 	{ (unsigned char)-1             , 0x00                  ,   0,  0, 0, 0, 0, 0 } //TODO: towns should be signed
 }; // ds:0x6f00
 signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
-static struct Bit16s_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
-static struct Bit16s_7 g_sea_travel_sleepbonus_table2 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
+static struct int16_t_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
+static struct int16_t_7 g_sea_travel_sleepbonus_table2 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
 static char g_sea_travel_str_t[2] = "T"; // ds:0x708d
 static char g_sea_travel_str_en[3] = "EN"; // ds:0x708f
 static char g_sea_travel_str_comma[3] = ", "; // ds:0x7092
@@ -168,13 +168,13 @@ void do_harbor(void)
 	signed short done;
 	signed short answer;
 	struct harbor_option_obsolete *psg_ptr;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 	signed char flag;
-	Bit32s money;
+	int32_t money;
 
 	done = 0;
-	struct Bit16s_7 a = g_sea_travel_sleepbonus_table1;
+	struct int16_t_7 a = g_sea_travel_sleepbonus_table1;
 	//struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
 
 	flag = 1;
@@ -396,7 +396,7 @@ void do_harbor(void)
 
 			} else if (gs_sea_travel_psgbooked_timer) {
 
-				/* REMARK: cast is important, since var is Bit8u */
+				/* REMARK: cast is important, since var is uint8_t */
 				GUI_output((signed char)gs_sea_travel_psgbooked_timer == -1 ?
 					get_tx(27) : /* SEA_TRAVEL_PSGBOOKED_TIMER == -1 -> "Zu spaet! Das Schiff, fuer das ihr gebucht wart ist leider ohne euch losgefahren!" */
 					get_tx(20)   /* SEA_TRAVEL_PSGBOOKED_TIMER == +1 -> "Die Matrosen lassen euch das Schiff noch nicht besteigen. Kommt morgen wieder..." */
@@ -514,7 +514,7 @@ void mod_clock_pos(signed short town_id)
 
 	map_x = g_town_positions[town_id - 1].x;
 	//map_y = g_town_positions[town_id - 1].y;
-	map_y = *(signed short*)((Bit8u*)g_town_positions - sizeof(signed short) + 2 * sizeof(signed short) * town_id);
+	map_y = *(signed short*)((uint8_t*)g_town_positions - sizeof(signed short) + 2 * sizeof(signed short) * town_id);
 
 	val = map_x >= 0 && map_x <= 159 ?
 		(map_y >= 0 && map_y <= 99 ? 3 : 1) :
@@ -528,15 +528,15 @@ void sea_travel(signed short passage_id, signed short reverse)
 {
 	signed short i;
 	struct struct_hero *hero;
-	Bit8u *ptr;
-	Bit32s off;
+	uint8_t *ptr;
+	int32_t off;
 
-	struct Bit16s_7 a = g_sea_travel_sleepbonus_table2;
+	struct int16_t_7 a = g_sea_travel_sleepbonus_table2;
 	//struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
 
 	g_traveling = 1;
 
-	gs_sea_travel_courses = (Bit8u*)(passage_id < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
+	gs_sea_travel_courses = (uint8_t*)(passage_id < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
 
 	/* high seas routes have id 0..6, costal routes id 7..44 */
 
@@ -547,8 +547,8 @@ void sea_travel(signed short passage_id, signed short reverse)
 	/* convert costal route ids to range 0..37 */
 	gs_sea_travel_passage_id = passage_id < 7 ? passage_id : passage_id - 7;
 
-	off = ((Bit32s*)gs_sea_travel_courses)[gs_sea_travel_passage_id];
-	gs_route_course_ptr = (Bit16s*)(gs_sea_travel_courses + off + 4 * gs_route_mousehover);
+	off = ((int32_t*)gs_sea_travel_courses)[gs_sea_travel_passage_id];
+	gs_route_course_ptr = (int16_t*)(gs_sea_travel_courses + off + 4 * gs_route_mousehover);
 	ptr = g_vga_memstart;
 
 	gs_route_course_ptr += 2;

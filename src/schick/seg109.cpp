@@ -85,9 +85,9 @@ static signed int g_travel_event_tx2 = -1; // ds:0xb133
  * (These are: bridge building Breida <-> Tjoila, bridge building Auplog <-> Varnheim, path blocked by a tree Skjal <-> Ottarje)
  * The list of accepted axes is a bit arbitrary (The common pattern is that all have "...axt" or "...beil" in their name.
  * Other more or less sensible options would be: ITEM_SKRAJA, ITEM_ORKNASE, ITEM_SCHNEIDZAHN, ITEM_ORKNASE__MAGIC, ITEM_HELLEBARDE. */
-Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_WURFAXT, ITEM_WURFBEIL, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+uint8_t g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_WURFAXT, ITEM_WURFBEIL, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
 #else
-Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE__MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+uint8_t g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE__MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
 /* rationale:
  * - don't allow throwing axes (ITEM_WURFAXT, ITEM_WURFBEIL, ITEM_SCHNEIDZAHN), as they are pretty light and designed for a completely different purpose.
  * - don't allow ITEM_HELLEBARDE, as it is a polearm with a different purpose. (Note that surprisingliy, it is classified as WEAPON_TYPE_AXT in Schicksalsklinge)
@@ -472,7 +472,7 @@ signed int TRV_ferry(char *msg, signed int price)
 	signed int done = 0;
 	signed int answer;
 	const signed int heroes_num = count_heroes_in_group();
-	Bit32u p_money;
+	uint32_t p_money;
 
 	do {
 
@@ -489,7 +489,7 @@ signed int TRV_ferry(char *msg, signed int price)
 			price *= 5 * heroes_num;
 			p_money = get_party_money();
 
-			if ((Bit32u)price > p_money) {
+			if ((uint32_t)price > p_money) {
 				GUI_output(get_ttx(401));
 			} else {
 				done = 1;
@@ -503,7 +503,7 @@ signed int TRV_ferry(char *msg, signed int price)
 			price *= heroes_num;
 			p_money = get_party_money();
 
-			if ((Bit32u)price > p_money) {
+			if ((uint32_t)price > p_money) {
 				GUI_output(get_ttx(401));
 			} else {
 				p_money -= price;

@@ -592,7 +592,7 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
  */
 void INF_treborn_unicorn(signed short informer, signed short state)
 {
-	Bit32s money;
+	int32_t money;
 	signed short enough_money;
 
 	money = get_party_money();
@@ -688,7 +688,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			/* REMARK: what if the NPC is choosen ? */
 			/* REMARK: what if the positions are changed ? */
 			/* REMARK: what if the game is saved and the heroes are at another mem location ? */
-			gs_unicorn_hero_ptr = (Bit8u*)get_hero((gs_unicorn_hero_pos = get_hero_CH_best()));
+			gs_unicorn_hero_ptr = (uint8_t*)get_hero((gs_unicorn_hero_pos = get_hero_CH_best()));
 		} else if (state == 7) {
 			timewarp(HOURS(1));
 		} else if (state == 8) {

@@ -57,7 +57,7 @@ static struct struct_chest *g_dng_specialchest_index[15] = {
 	g_dng13_specialchests,
 	g_dng14_specialchests,
 	g_dng15_specialchests
-}; // ds:0x9d84; Bit8u*
+}; // ds:0x9d84; uint8_t*
 static const char g_str_single_space[2] = " "; // ds:0x9dc4
 
 void chest_protected_normal(void)
@@ -404,7 +404,7 @@ void loot_special_chest(const signed int check_dir)
 	signed int pos;
 	signed int mapflag;
 	struct struct_chest *chest_ptr = g_dng_specialchest_index[gs_dungeon_index - 1];
-	Bit8u *ptr = g_dng_map;
+	uint8_t *ptr = g_dng_map;
 
 	g_get_extra_loot = 0;
 	x = gs_x_target;
@@ -566,10 +566,10 @@ void use_key_on_chest(struct struct_chest* chest)
  *
  * \note: These type of chests have a content of the following format:
  *  ( (item_1, no_1), (item_2, no_2), ... , (item_n, no_n), 0xff).
- *  These informations are stored in an array of type Bit8u[2*n+1]
+ *  These informations are stored in an array of type uint8_t[2*n+1]
  *  and are contained in the game state.
  */
-void loot_multi_chest(Bit8u *content, char *msg)
+void loot_multi_chest(uint8_t *content, char *msg)
 {
 	unsigned int item_cnt;
 	signed int item_id;

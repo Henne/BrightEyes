@@ -57,7 +57,7 @@ signed short DNG11_handler(void)
 	signed short answer;
 	signed short tw_bak;
 	struct struct_hero *hero;
-	Bit8u *amap_ptr;
+	uint8_t *amap_ptr;
 
 	amap_ptr = g_dng_map;
 
@@ -349,7 +349,7 @@ void DNG11_chest01_loot(struct struct_chest*)
 
 void DNG11_chest02_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest3;
 
@@ -360,7 +360,7 @@ void DNG11_chest02_loot(struct struct_chest* chest)
 
 void DNG11_chest03_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest4;
 
@@ -371,7 +371,7 @@ void DNG11_chest03_loot(struct struct_chest* chest)
 
 void DNG11_chest04_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest5;
 
@@ -382,7 +382,7 @@ void DNG11_chest04_loot(struct struct_chest* chest)
 
 void DNG11_chest05_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest6;
 
@@ -393,7 +393,7 @@ void DNG11_chest05_loot(struct struct_chest* chest)
 
 void DNG11_chest06_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = &gs_dng11_chest7;
 
@@ -404,7 +404,7 @@ void DNG11_chest06_loot(struct struct_chest* chest)
 
 void DNG11_chest07_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest8;
 
@@ -415,7 +415,7 @@ void DNG11_chest07_loot(struct struct_chest* chest)
 
 void DNG11_chest08_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest9;
 
@@ -426,7 +426,7 @@ void DNG11_chest08_loot(struct struct_chest* chest)
 
 void DNG11_chest09_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest10;
 
@@ -437,7 +437,7 @@ void DNG11_chest09_loot(struct struct_chest* chest)
 
 void DNG11_chest10_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest11;
 
@@ -448,7 +448,7 @@ void DNG11_chest10_loot(struct struct_chest* chest)
 
 void DNG11_chest11_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest12;
 
@@ -459,7 +459,7 @@ void DNG11_chest11_loot(struct struct_chest* chest)
 
 void DNG11_chest12_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest13;
 
@@ -470,7 +470,7 @@ void DNG11_chest12_loot(struct struct_chest* chest)
 
 void DNG11_chest13_loot(struct struct_chest* chest)
 {
-        Bit8u* ptr_bak = chest->content;
+        uint8_t* ptr_bak = chest->content;
 
         chest->content = gs_dng11_chest14;
 

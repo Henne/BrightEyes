@@ -174,7 +174,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					/* KK+2 for 12h */
 					l_di = get_free_mod_slot();
-					set_mod_slot(l_di, HOURS(12), (Bit8u*)(&consumer->attrib[ATTRIB_KK].current), 2, (signed char)consumer_idx);
+					set_mod_slot(l_di, HOURS(12), (uint8_t*)(&consumer->attrib[ATTRIB_KK].current), 2, (signed char)consumer_idx);
 
 					/* LE + 2 */
 					add_hero_le(consumer, 2);
@@ -211,7 +211,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					/* TODO: unknown for 24h */
 					l_di = get_free_mod_slot();
-					set_mod_slot(l_di, DAYS(1), (Bit8u*)(&consumer->herbs), 1, (signed char)consumer_idx);
+					set_mod_slot(l_di, DAYS(1), (uint8_t*)(&consumer->herbs), 1, (signed char)consumer_idx);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(503), consumer->alias);
@@ -228,7 +228,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					l_di = get_free_mod_slot();
-					set_mod_slot(l_di, DAYS(1), (Bit8u*)(&consumer->herbs), 2, (signed char)consumer_idx);
+					set_mod_slot(l_di, DAYS(1), (uint8_t*)(&consumer->herbs), 2, (signed char)consumer_idx);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(503), consumer->alias);
@@ -239,7 +239,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					for (l_si = 9; l_si < 19; l_si++) {
 						/* All body skills + 2 for 5h */
 						l_di = get_free_mod_slot();
-						set_mod_slot(l_di, HOURS(5), (Bit8u*)(&consumer->skills[l_si]), 2, (signed char)consumer_idx);
+						set_mod_slot(l_di, HOURS(5), (uint8_t*)(&consumer->skills[l_si]), 2, (signed char)consumer_idx);
 					}
 
 					/* prepare output */
@@ -286,7 +286,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 				/* Attribute +5 for 1h */
 				l_di = get_free_mod_slot();
-				set_mod_slot(l_di, HOURS(1), (Bit8u*)(&consumer->attrib[l_si - 1].current), 5, (signed char)consumer_idx);
+				set_mod_slot(l_di, HOURS(1), (uint8_t*)(&consumer->attrib[l_si - 1].current), 5, (signed char)consumer_idx);
 
 				/* prepare output */
 				sprintf(g_dtp2, get_ttx(509), consumer->alias, get_ttx(411 + l_si), 5);
@@ -305,7 +305,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 				/* Attribute -7 for 1h */
 				l_di = get_free_mod_slot();
-				set_mod_slot(l_di, HOURS(1), (Bit8u*)(&consumer->attrib[id_bad_elex - 1].current), -7, (signed char)consumer_idx);
+				set_mod_slot(l_di, HOURS(1), (uint8_t*)(&consumer->attrib[id_bad_elex - 1].current), -7, (signed char)consumer_idx);
 
 				/* prepare output */
 				sprintf(g_dtp2, get_ttx(656), consumer->alias, get_ttx(411 + id_bad_elex), 7);

@@ -47,11 +47,11 @@ signed short DNG06_handler(void)
 	signed short l3;
 	signed short l4;
 	signed short tw_bak;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 	struct struct_hero *hero_first;
 	struct struct_hero *hero_second;
-	Bit8u *amap_ptr;
+	uint8_t *amap_ptr;
 
 	amap_ptr = g_dng_map;
 
@@ -227,7 +227,7 @@ signed short DNG06_handler(void)
 			div16(amap_ptr[MAP_POS(2,6)]) != DNG_TILE_CLOSED_DOOR ||
 			div16(amap_ptr[MAP_POS(11,4)]) != DNG_TILE_CLOSED_DOOR)
 #else
-		/* REMARK: enforce cast to Bit16u */
+		/* REMARK: enforce cast to uint16_t */
 		if (div16((_AL = amap_ptr[MAP_POS(11,1)], _AH = 0, _AX)) != DNG_TILE_CLOSED_DOOR ||
 			div16((_AL = amap_ptr[MAP_POS(2,6)], _AH = 0, _AX)) != DNG_TILE_CLOSED_DOOR ||
 			div16((_AL = amap_ptr[MAP_POS(11,4)], _AH = 0, _AX)) != DNG_TILE_CLOSED_DOOR)
@@ -472,7 +472,7 @@ void DNG06_fight_intro(signed short fight_id)
 
 void DNG06_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng06_chest1_content;
 

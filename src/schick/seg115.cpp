@@ -697,7 +697,7 @@ void tevent_100(void)
 
 					answer = get_free_mod_slot();
 
-					set_mod_slot(answer, DAYS(1), (Bit8u*)&hero->attrib[ATTRIB_GE].current, -2, 0);
+					set_mod_slot(answer, DAYS(1), (uint8_t*)&hero->attrib[ATTRIB_GE].current, -2, 0);
 
 					timewarp(MINUTES(15));
 

@@ -50,7 +50,7 @@ void spell_arcano(void)
 	slot = get_free_mod_slot();
 
 	/* MR + 2 for 1 h */
-	set_mod_slot(slot, HOURS(1), (Bit8u*)&get_spelltarget()->mr, 2, (signed char)target);
+	set_mod_slot(slot, HOURS(1), (uint8_t*)&get_spelltarget()->mr, 2, (signed char)target);
 
 	/* "Die Magieresistenz von %s steigt um 2 Punkte." */
 	sprintf(g_dtp2, get_tx(98), get_spelltarget()->alias);
@@ -95,7 +95,7 @@ void spell_armatrutz(void)
 		pos = get_hero_index(get_spelluser());
 		g_spell_special_aecost = (bonus * bonus);
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(5), (Bit8u*)&get_spelluser()->rs_bonus, (signed char)bonus, (signed char)pos);
+		set_mod_slot(slot, MINUTES(5), (uint8_t*)&get_spelluser()->rs_bonus, (signed char)bonus, (signed char)pos);
 
 		/* prepare output message */
 		sprintf(g_dtp2,	get_tx(100), get_spelluser()->alias, bonus);
@@ -140,7 +140,7 @@ void spell_inc_ch(void)
 		slot = get_free_mod_slot();
 
 		/* CH + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_CH].current, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (uint8_t*)&get_spelltarget()->attrib[ATTRIB_CH].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2, get_tx(101), get_spelltarget()->alias, get_ttx(414));
@@ -160,7 +160,7 @@ void spell_feuerbann(void)
 		slot = get_free_mod_slot();
 
 		/* Duration = Level * 12 min */
-		set_mod_slot(slot, get_spelluser()->level * MINUTES(5), (Bit8u*)&get_spelluser()->fireban, 1, (signed char)target);
+		set_mod_slot(slot, get_spelluser()->level * MINUTES(5), (uint8_t*)&get_spelluser()->fireban, 1, (signed char)target);
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(102), get_spelluser()->alias);
@@ -202,7 +202,7 @@ void spell_inc_ff(void)
 		slot = get_free_mod_slot();
 
 		/* FF + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_FF].current, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (uint8_t*)&get_spelltarget()->attrib[ATTRIB_FF].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(415));
@@ -240,7 +240,7 @@ void spell_inc_ge(void)
 		slot = get_free_mod_slot();
 
 		/* GE + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_GE].current, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (uint8_t*)&get_spelltarget()->attrib[ATTRIB_GE].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(416));
@@ -278,7 +278,7 @@ void spell_inc_in(void)
 		slot = get_free_mod_slot();
 
 		/* IN + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_IN].current, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (uint8_t*)&get_spelltarget()->attrib[ATTRIB_IN].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(417));
@@ -316,7 +316,7 @@ void spell_inc_kk(void)
 		slot = get_free_mod_slot();
 
 		/* IN + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_KK].current, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (uint8_t*)&get_spelltarget()->attrib[ATTRIB_KK].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,	get_tx(101), get_spelltarget()->alias, get_ttx(418));
@@ -354,7 +354,7 @@ void spell_inc_kl(void)
 		slot = get_free_mod_slot();
 
 		/* KL + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_KL].current, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (uint8_t*)&get_spelltarget()->attrib[ATTRIB_KL].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2, get_tx(101), get_spelltarget()->alias, get_ttx(413));
@@ -392,7 +392,7 @@ void spell_inc_mu(void)
 		slot = get_free_mod_slot();
 
 		/* MU + 2 for 2 hours */
-		set_mod_slot(slot, HOURS(2), (Bit8u*)&get_spelltarget()->attrib[ATTRIB_MU].current, 2, (signed char)target);
+		set_mod_slot(slot, HOURS(2), (uint8_t*)&get_spelltarget()->attrib[ATTRIB_MU].current, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2, get_tx(101), get_spelltarget()->alias, get_ttx(412));
@@ -525,7 +525,7 @@ void spell_visibili(void)
 		g_spell_special_aecost = rounds * 5;
 		pos = get_hero_index(get_spelluser());
 		slot = get_free_mod_slot();
-		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), (Bit8u*)&get_spelluser()->invisible, 1, (signed char)pos);
+		set_mod_slot(slot, (int32_t)rounds * MINUTES(5), (uint8_t*)&get_spelluser()->invisible, 1, (signed char)pos);
 
 		sprintf(g_dtp2,	get_tx(106), get_spelluser()->alias, GUI_get_ptr(get_spelluser()->sex, 0));
 	} else {
@@ -668,7 +668,7 @@ void spell_claudibus(void)
 void spell_dunkelheit(void)
 {
 	/* set dunkelheit duration (level + 3) * hours */
-	gs_ingame_timers[INGAME_TIMER_DARKNESS] = (Bit32s)(get_spelluser()->level + 3) * HOURS(1);
+	gs_ingame_timers[INGAME_TIMER_DARKNESS] = (int32_t)(get_spelluser()->level + 3) * HOURS(1);
 
 	/* copy message text */
 	strcpy(g_dtp2, get_tx(109));
@@ -684,7 +684,7 @@ void spell_erstarre(void)
 void spell_flimflam(void)
 {
 	/* set flim flam duration (level + 3) hours */
-	gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] = (Bit32s)(get_spelluser()->level + 3) * HOURS(1);
+	gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] = (int32_t)(get_spelluser()->level + 3) * HOURS(1);
 
 	/* copy message text */
 	strcpy(g_dtp2, get_tx(110));
@@ -711,7 +711,7 @@ void spell_silentium(void)
 			slot = get_free_mod_slot();
 
 			/* skill stealth + 10 for 5 minutes */
-			set_mod_slot(slot, MINUTES(5), (Bit8u*)&hero->skills[TA_SCHLEICHEN], 10, (signed char)i);
+			set_mod_slot(slot, MINUTES(5), (uint8_t*)&hero->skills[TA_SCHLEICHEN], 10, (signed char)i);
 		}
 	}
 

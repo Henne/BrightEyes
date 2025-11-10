@@ -590,7 +590,7 @@ void DNG15_figures_chest(struct struct_chest* chest)
 
 void DNG15_cursed_money_chest(struct struct_chest* chest)
 {
-	Bit32s p_money;
+	int32_t p_money;
 	signed short tw_bak;
 
 	tw_bak = g_textbox_width;
@@ -612,7 +612,7 @@ void DNG15_cursed_money_chest(struct struct_chest* chest)
 	g_textbox_width = tw_bak;
 }
 
-void DNG15_collapsing_ceiling(Bit8u* ptr)
+void DNG15_collapsing_ceiling(uint8_t* ptr)
 {
 	signed short i;
 	signed short cnt;
@@ -690,7 +690,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 	}
 }
 
-void DNG15_clear_way(Bit8u* ptr)
+void DNG15_clear_way(uint8_t* ptr)
 {
 	signed short i;
 	struct struct_hero *hero = get_hero(0);
@@ -733,9 +733,9 @@ void DNG15_clear_way(Bit8u* ptr)
 	}
 }
 
-void DNG15_cursed_money(Bit8u* ptr)
+void DNG15_cursed_money(uint8_t* ptr)
 {
-	Bit32s p_money;
+	int32_t p_money;
 
 	if (GUI_bool(get_tx(53)))
 	{

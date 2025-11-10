@@ -37,9 +37,9 @@ signed short DNG14_handler(void)
 	signed short l_di;
 	signed short hero_pos;
 	signed short tw_bak;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
-	Bit8u *amap_ptr;
+	uint8_t *amap_ptr;
 
 	amap_ptr = g_dng_map;
 
@@ -447,7 +447,7 @@ signed short DNG14_handler(void)
 			{
 				l_di = get_free_mod_slot();
 
-				set_mod_slot(l_di, HOURS(6), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)hero_pos);
+				set_mod_slot(l_di, HOURS(6), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)hero_pos);
 			}
 		}
 

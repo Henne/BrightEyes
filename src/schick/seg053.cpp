@@ -108,9 +108,9 @@ void do_healer(void)
 	leave_healer = 0;
 
 #if !defined(__BORLANDC__)
-	const Bit8u typi = gs_current_typeindex;
-	const Bit8s h_price = g_healer_descr_table[typi].price_mod;
-	const Bit8u h_qual = g_healer_descr_table[typi].quality;
+	const uint8_t typi = gs_current_typeindex;
+	const int8_t h_price = g_healer_descr_table[typi].price_mod;
+	const uint8_t h_qual = g_healer_descr_table[typi].quality;
 
 	D1_INFO("Heiler: %2d\n", typi);
 	D1_INFO("\tPreis: %d%% [50,150]\n", h_price + 100);

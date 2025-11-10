@@ -25,11 +25,11 @@
 namespace M302de {
 #endif
 
-Bit8s g_statuspage_sel_inv_slot_1 = 1; // ds:0x636e
-Bit8s g_statuspage_sel_inv_slot_2 = 1; // ds:0x636f
-Bit8s g_statuspage_sel_inv_slot_3 = 7; // ds:0x6370
-Bit8s g_statuspage_sel_inv_slot_4 = -1; // ds:0x6371
-Bit8u g_statuspage_palette[32][3] = {
+int8_t g_statuspage_sel_inv_slot_1 = 1; // ds:0x636e
+int8_t g_statuspage_sel_inv_slot_2 = 1; // ds:0x636f
+int8_t g_statuspage_sel_inv_slot_3 = 7; // ds:0x6370
+int8_t g_statuspage_sel_inv_slot_4 = -1; // ds:0x6371
+uint8_t g_statuspage_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x06, 0x06, 0x06 },
 	{ 0x3f, 0x26, 0x10 },
@@ -259,14 +259,14 @@ static void reset_status_string(char *fmt)
  *
  * \param   index       index of the hero
  */
-void status_show(Bit16u index)
+void status_show(uint16_t index)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	char le_fix[10];
 #endif
 	struct struct_hero *hero;
-	Bit16s txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
-	Bit8s val;
+	int16_t txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
+	int8_t val;
 	signed int width;
 	signed int height;
 	signed short at;
@@ -311,7 +311,7 @@ void status_show(Bit16u index)
 	g_pic_copy.x2 = 47;
 	g_pic_copy.y2 = 40;
 	g_pic_copy.dst = g_renderbuf_ptr;
-	/* the source must be passed here as Bit8u* */
+	/* the source must be passed here as uint8_t* */
 	g_pic_copy.src = hero->pic;
 	do_pic_copy(0);
 

@@ -152,7 +152,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 						hero->inventory[pos1].quantity += hero->inventory[pos2].quantity;
 
 						/* delete item at pos2 */
-						memset((Bit8u*)&hero->inventory[pos2], 0, sizeof(inventory));
+						memset((uint8_t*)&hero->inventory[pos2], 0, sizeof(inventory));
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Decrement the item counter */
 						hero->num_inv_slots_used--;
@@ -243,11 +243,11 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 
 			/* more than one item or special */
 			sprintf(g_dtp2, get_tx2(72), get_ttx(305),
-				(Bit8u*)GUI_names_grammar(0x4004, inventory_p->item_id, 0));
+				(uint8_t*)GUI_names_grammar(0x4004, inventory_p->item_id, 0));
 		} else {
 			/* one item */
 			sprintf(g_dtp2, get_tx2(11), get_ttx(304),
-				(Bit8u*)GUI_names_grammar(0, inventory_p->item_id, 0));
+				(uint8_t*)GUI_names_grammar(0, inventory_p->item_id, 0));
 		}
 	} else {
 		/* no item */
@@ -757,22 +757,22 @@ void equip_belt_ani(void)
 
 	signed int width;
 	signed int height;
-	Bit32s nvf_length;
-	Bit8u *p_pal;
+	int32_t nvf_length;
+	uint8_t *p_pal;
 	struct nvf_extract_desc nvf;
 
 	/* open GUERTEL.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_GUERTEL_NVF);
 
 	/* read NVF part 1 */
-	nvf_length = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
+	nvf_length = read_archive_file(handle, (uint8_t*)g_buffer9_ptr, 64000);
 	/* read NVF part 2 */
-	nvf_length += read_archive_file(handle, (Bit8u*)(g_buffer9_ptr + 64000L), 64000);
+	nvf_length += read_archive_file(handle, (uint8_t*)(g_buffer9_ptr + 64000L), 64000);
 
 	close(handle);
 
 	/* calculate palette pointer */
-	p_pal = (Bit8u*)((g_buffer9_ptr + nvf_length) -0x60L);
+	p_pal = (uint8_t*)((g_buffer9_ptr + nvf_length) -0x60L);
 
 	wait_for_vsync();
 
@@ -817,7 +817,7 @@ void equip_belt_ani(void)
 	for (i = 0; i < 12; i++) {
 
 		nvf.dst = g_renderbuf_ptr;
-		nvf.src = (Bit8u*)g_buffer9_ptr;
+		nvf.src = (uint8_t*)g_buffer9_ptr;
 		nvf.image_num = i;
 		nvf.compression_type = 3;
 		nvf.width = &width;

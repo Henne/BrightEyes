@@ -94,7 +94,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			hero->flags.tied = 0; /* unset 'tied' flag (why??) */
 			hero->flags.petrified = 0; /* unset 'petrified' flag (why???) */
 
-			if (FIG_find_path_to_target((Bit8u*)hero, actor_id, x, y, 5) != -1) {
+			if (FIG_find_path_to_target((uint8_t*)hero, actor_id, x, y, 5) != -1) {
 				FIG_prepare_hero_ani(hero, actor_id); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
@@ -183,7 +183,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 						/* Failure */
 						/* MU - 2 for 7 hours */
 						slot_no = get_free_mod_slot();
-						set_mod_slot(slot_no, HOURS(7), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)actor_id);
+						set_mod_slot(slot_no, HOURS(7), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)actor_id);
 					}
 				}
 

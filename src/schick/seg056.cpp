@@ -34,8 +34,8 @@ namespace M302de {
 static struct c_str_5 g_buy_screen_str_money_h = { "H %d" }; // ds:0x6bc8
 static struct c_str_5 g_buy_screen_str_money_s = { "S %d" }; // ds:0x6bcd
 static struct c_str_5 g_buy_screen_str_money_d = { "D %d" }; // ds:0x6bd2
-static struct Bit16s_3 g_buy_screen_items_posx = { 30, 95, 160 }; // ds:0x6bd7
-static struct Bit16s_5 g_buy_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6bdd
+static struct int16_t_3 g_buy_screen_items_posx = { 30, 95, 160 }; // ds:0x6bd7
+static struct int16_t_5 g_buy_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6bdd
 static struct c_str_6 g_buy_screen_str_d_s = { "%d %s" }; // ds:0x6be7
 static char g_buy_screen_str_comma_space[3] = ", "; // ds:0x6bed
 
@@ -50,8 +50,8 @@ static struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer
  */
 int shop_compar(const void *p1_in, const void *p2_in)
 {
-	Bit32s v1;
-	Bit32s v2;
+	int32_t v1;
+	int32_t v2;
 	const struct shop_item *p1 = (const struct shop_item*)p1_in;
 	const struct shop_item *p2 = (const struct shop_item*)p2_in;
 
@@ -84,14 +84,14 @@ void buy_screen(void)
 	struct c_str_5 fmt_h = g_buy_screen_str_money_h;
 	struct c_str_5 fmt_s = g_buy_screen_str_money_s;
 	struct c_str_5 fmt_d = g_buy_screen_str_money_d;
-	struct Bit16s_3 array3 = g_buy_screen_items_posx;
+	struct int16_t_3 array3 = g_buy_screen_items_posx;
 	//signed short array3[3] = { { 30, 95, 160 } };
-	struct Bit16s_5 array5 = g_buy_screen_items_posy;
+	struct int16_t_5 array5 = g_buy_screen_items_posy;
 	//signed short array5[5] = { { 35, 55, 75, 95, 115 } };
 	//
-	Bit32s price = 0;
-	Bit32s l9;
-	Bit32s p_money;
+	int32_t price = 0;
+	int32_t l9;
+	int32_t p_money;
 	signed short nice = 0;
 	signed short free_slots = 0;
 	signed short offended = 0;
@@ -112,7 +112,7 @@ void buy_screen(void)
 
 	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
 	g_buy_shopping_cart = (struct struct_shopping_cart*)g_fig_figure1_buf + 2800 / 4;
-	memset((Bit8u*)g_buy_shopping_cart, 0, 250);
+	memset((uint8_t*)g_buy_shopping_cart, 0, 250);
 
 	g_request_refresh = 1;
 
@@ -374,7 +374,7 @@ void buy_screen(void)
 						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
-					l9 = (Bit32s)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
+					l9 = (int32_t)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
 
 					if (l3 == 1 && price + l9 > p_money) {
 
@@ -425,7 +425,7 @@ void buy_screen(void)
 
 					if (l4 > 0) {
 
-						l9 = (Bit32s)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
+						l9 = (int32_t)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
 
 						if (price + l9 > p_money) {
 

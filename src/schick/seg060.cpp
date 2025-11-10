@@ -138,8 +138,8 @@ void talk_tavern(void)
 	char *answer3_buffer;
 	char *format;
 	struct struct_hero *hero;
-	Bit8u *gossip_ptr1;
-	Bit8u *gossip_ptr2;
+	uint8_t *gossip_ptr1;
+	uint8_t *gossip_ptr2;
 
 	answer = 0;
 
@@ -200,10 +200,10 @@ void talk_tavern(void)
 
 			} else if (txt_id == 40 || txt_id == 46) {
 
-				gossip_ptr1 = (Bit8u*)load_current_town_gossip();
+				gossip_ptr1 = (uint8_t*)load_current_town_gossip();
 
 				do {
-					gossip_ptr2 = (Bit8u*)load_current_town_gossip();
+					gossip_ptr2 = (uint8_t*)load_current_town_gossip();
 
 				} while (gossip_ptr1 == gossip_ptr2);
 
@@ -241,7 +241,7 @@ void talk_tavern(void)
 
 			} else if (txt_id == 119) {
 
-				sprintf(text_buffer, format, (Bit8u*)get_random_tavern_message());
+				sprintf(text_buffer, format, (uint8_t*)get_random_tavern_message());
 
 			} else if (txt_id == 122 || txt_id == 126 || txt_id == 127 || txt_id == 132) {
 
@@ -258,7 +258,7 @@ void talk_tavern(void)
 				sprintf(text_buffer, format,
 					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
 					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
-					(Bit8u*)load_current_town_gossip());
+					(uint8_t*)load_current_town_gossip());
 
 			} else {
 
@@ -345,7 +345,7 @@ void TLK_tavern(signed short answer)
 {
 	signed short old_state;
 	signed short tmp;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 	signed short hero_pos;
 

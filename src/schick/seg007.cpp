@@ -21,7 +21,7 @@ unsigned short g_random_schick_seed = 0x327b; // ds:0x4ba0
 
 /* REMARK: belong to seg010.cpp */
 char g_emm_sig[8] = { 'E', 'M', 'M', 'X', 'X', 'X', 'X', '0'}; // ds:0x4ba2
-Bit8u *g_ems_frame_ptr = NULL; // ds:0x4baa; Bit8u*
+uint8_t *g_ems_frame_ptr = NULL; // ds:0x4baa; uint8_t*
 
 #if !defined(__BORLANDC__)
 static inline
@@ -112,7 +112,7 @@ int is_in_word_array(const int val, signed short *p)
 /**
  * \brief   checks if val is in a byte array
  */
-int is_in_byte_array(const signed char val, Bit8s *p)
+int is_in_byte_array(const signed char val, int8_t *p)
 {
 	int i;
 

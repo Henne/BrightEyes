@@ -76,7 +76,7 @@ static signed char *g_anitab_shotbolt_index2[6][4] = {
 	{g_anitab_shotbolt_data[12], g_anitab_shotbolt_data[13], g_anitab_shotbolt_data[14], g_anitab_shotbolt_data[15]},
 	{g_anitab_shotbolt_data[16], g_anitab_shotbolt_data[17], g_anitab_shotbolt_data[18], g_anitab_shotbolt_data[19]},
 	{g_anitab_shotbolt_data[20], g_anitab_shotbolt_data[21], g_anitab_shotbolt_data[22], g_anitab_shotbolt_data[23]}
-}; // ds:0x62c4, 6 long arrays of length 4 (viewdir); Bit8u*
+}; // ds:0x62c4, 6 long arrays of length 4 (viewdir); uint8_t*
 static signed char **g_anitab_shotbolt_index[6] = {
 	g_anitab_shotbolt_index2[0],
 	g_anitab_shotbolt_index2[1],
@@ -84,7 +84,7 @@ static signed char **g_anitab_shotbolt_index[6] = {
 	g_anitab_shotbolt_index2[3],
 	g_anitab_shotbolt_index2[4],
 	g_anitab_shotbolt_index2[5]
-}; // ds:0x6324; Bit8u*
+}; // ds:0x6324; uint8_t*
 
 static signed char g_anitab_spell_nvfno[2] = { 0x09, 0x1b }; // ds:0x633c
 static signed short g_anitab_spell_ox[2] = { 0, 0 }; // ds:0x633e
@@ -104,7 +104,7 @@ static const signed char g_anitab_spell_data[2][16] = {
 static signed char* g_anitab_spell_index[2] = {
 	(signed char*)&g_anitab_spell_data[0],
 	(signed char*)&g_anitab_spell_data[1],
-}; // ds:0x6366; Bit8u*
+}; // ds:0x6366; uint8_t*
 
 
 /**
@@ -179,7 +179,7 @@ void FANI_remove_shotbolt(void)
  * \param   src         pointer to sources
  * \param   term        termination sign
  */
-signed short FANI_copy_sequence(Bit8s *dst, Bit8s *src, const signed char term)
+signed short FANI_copy_sequence(int8_t *dst, int8_t *src, const signed char term)
 {
 	signed short i;
 
@@ -204,7 +204,7 @@ signed short FANI_copy_sequence(Bit8s *dst, Bit8s *src, const signed char term)
 signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int type, const signed int fighter_id, const signed int target_object_id, const signed int dir)
 {
 	signed int i;
-	Bit8s *sheet_ptr;
+	int8_t *sheet_ptr;
 	signed int fighter_x;
 	signed int fighter_y;
 	signed int target_x;
@@ -296,7 +296,7 @@ void FANI_remove_spell(void)
 
 void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_hero *hero, const signed int spell_ani_id)
 {
-	Bit8s *sheet_ptr;
+	int8_t *sheet_ptr;
 	signed int x;
 	signed int y;
 
@@ -317,7 +317,7 @@ void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_
 
 void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_sheet *enemy, const signed int spell_ani_id)
 {
-	Bit8s *sheet_ptr;
+	int8_t *sheet_ptr;
 	signed int x;
 	signed int y;
 

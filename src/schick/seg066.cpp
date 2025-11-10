@@ -78,19 +78,19 @@ struct market g_market_descr_table[34] = {
 	{  4,  30,  4, 0 },
 	{ -1,   0,  0, 0 }
 }; // ds:0x70a8
-const Bit8u g_hyg_ani_x0[5] = { 0x52, 0x58, 0x59, 0x5a, 0x5a }; // ds:0x71b8
-const Bit8u g_hyg_ani_x1 = 0x5a; // ds:0x71bd
-const Bit8u g_hyg_ani_x2 = 0x5a; // ds:0x71be
-const Bit8u g_hyg_ani_x3[3] = { 0x5a, 0x5a, 0x5a }; // ds:0x71bf
-const Bit8u g_hyg_ani_x5 = 0xba; // ds:0x71c2
-const Bit8u g_hyg_ani_x6 = 0xba; // ds:0x71c3
-const Bit8u g_hyg_ani_x7[3] = { 0xb1, 0xa8, 0xa4 }; // ds:0x71c4
-const Bit8u g_hyg_ani_x9[3] = { 0x30, 0x26, 0x26 }; // ds:0x71c7
+const uint8_t g_hyg_ani_x0[5] = { 0x52, 0x58, 0x59, 0x5a, 0x5a }; // ds:0x71b8
+const uint8_t g_hyg_ani_x1 = 0x5a; // ds:0x71bd
+const uint8_t g_hyg_ani_x2 = 0x5a; // ds:0x71be
+const uint8_t g_hyg_ani_x3[3] = { 0x5a, 0x5a, 0x5a }; // ds:0x71bf
+const uint8_t g_hyg_ani_x5 = 0xba; // ds:0x71c2
+const uint8_t g_hyg_ani_x6 = 0xba; // ds:0x71c3
+const uint8_t g_hyg_ani_x7[3] = { 0xb1, 0xa8, 0xa4 }; // ds:0x71c4
+const uint8_t g_hyg_ani_x9[3] = { 0x30, 0x26, 0x26 }; // ds:0x71c7
 
 
-static const Bit8u  g_towns_cityindex_table[52] = { 0x36, 0x04, 0x08, 0x07, 0x0a, 0x04, 0x02, 0x04, 0x04, 0x0c, 0x03, 0x04, 0x06, 0x03, 0x0c, 0x02, 0x12, 0x18, 0x03, 0x06, 0x01, 0x07, 0x0a, 0x07, 0x06, 0x08, 0x03, 0x0b, 0x0a, 0x03, 0x08, 0x04, 0x0c, 0x03, 0x05, 0x04, 0x08, 0x09, 0x16, 0x13, 0x03, 0x0a, 0x0a, 0x07, 0x06, 0x0a, 0x03, 0x0c, 0x02, 0x01, 0x01, 0x03 }; // ds:0x71ca
+static const uint8_t  g_towns_cityindex_table[52] = { 0x36, 0x04, 0x08, 0x07, 0x0a, 0x04, 0x02, 0x04, 0x04, 0x0c, 0x03, 0x04, 0x06, 0x03, 0x0c, 0x02, 0x12, 0x18, 0x03, 0x06, 0x01, 0x07, 0x0a, 0x07, 0x06, 0x08, 0x03, 0x0b, 0x0a, 0x03, 0x08, 0x04, 0x0c, 0x03, 0x05, 0x04, 0x08, 0x09, 0x16, 0x13, 0x03, 0x0a, 0x0a, 0x07, 0x06, 0x0a, 0x03, 0x0c, 0x02, 0x01, 0x01, 0x03 }; // ds:0x71ca
 
-static Bit8u* g_daspota_locloot_index[18] = {
+static uint8_t* g_daspota_locloot_index[18] = {
 	gs_daspota_location01_loot,
 	gs_daspota_location02_loot,
 	gs_daspota_location03_loot,
@@ -109,7 +109,7 @@ static Bit8u* g_daspota_locloot_index[18] = {
 	gs_daspota_location16_loot,
 	NULL,
 	gs_daspota_location18_loot
-}; // ds:0x71fe; Bit8u*
+}; // ds:0x71fe; uint8_t*
 
 static const unsigned char g_mapval_to_loctype[12] = { 0x00, 0x0f, 0x1f, 0x3f, 0x5f, 0x7f, 0x9f, 0xaf, 0xbf, 0xcf, 0xdf, 0xef }; // ds:0x7246
 static const signed char g_seg066_0bad_unkn0[29] = { 0x01, -0x01, 0x02, -0x01, 0x03, 0x04, 0x05, -0x01, 0x06, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0a, -0x01, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, -0x01, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 }; // ds:0x7252
@@ -677,7 +677,7 @@ static void refresh_floor_and_sky(void)
 
 	process_nvf_extraction(&nvf);
 
-	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 208 * height;
+	nvf.dst = ((uint8_t*)g_renderbuf_ptr) + 208 * height;
 	nvf.src = g_tex_floor[0];
 	nvf.image_num = 0;
 	nvf.compression_type = 3;
@@ -937,7 +937,7 @@ void city_water_and_grass(void)
 	signed char c1;
 	signed char bi;
 	unsigned char c2;
-	Bit16s *ptr;
+	int16_t *ptr;
 
 	for (i = 0; i < 29; i++) {
 
@@ -951,7 +951,7 @@ void city_water_and_grass(void)
 			if (bi == 6 || bi == 7) {
 
 				/* water or grass */
-				ptr = (Bit16s*)&g_visual_field_offsets_grass[c1];
+				ptr = (int16_t*)&g_visual_field_offsets_grass[c1];
 
 				x = ptr[0];
 				y = ptr[1];
@@ -960,7 +960,7 @@ void city_water_and_grass(void)
 
 				if (c1 != -1) {
 
-					ptr = (Bit16s*)&g_tex_descr_table[c1 - 1][0];
+					ptr = (int16_t*)&g_tex_descr_table[c1 - 1][0];
 
 					if ((nvf_no = ptr[2]) != -1) {
 
@@ -989,7 +989,7 @@ void city_building_textures(void)
 	signed char c1;
 	signed char bi;
 	unsigned char c2;
-	Bit16s *ptr;
+	int16_t *ptr;
 
 	for (i = 0; i < 29; i++) {
 
@@ -1003,14 +1003,14 @@ void city_building_textures(void)
 			if (bi != 7 && bi != 6) {
 			    /* if not grass or water */
 
-				ptr = (Bit16s*)&g_visual_field_offsets_std[c1];
+				ptr = (int16_t*)&g_visual_field_offsets_std[c1];
 
 				if (bi == 8) {
 					/* direction sign */
-					ptr = (Bit16s*)&g_visual_field_offsets_sign[c1];
+					ptr = (int16_t*)&g_visual_field_offsets_sign[c1];
 				} else if (bi == 9 || bi == 10) {
 					/* tavern/inn or shop */
-					ptr = (Bit16s*)&g_visual_field_offsets_inn[c1];
+					ptr = (int16_t*)&g_visual_field_offsets_inn[c1];
 				}
 
 				x = ptr[0];
@@ -1020,7 +1020,7 @@ void city_building_textures(void)
 
 				if (c1 != -1) {
 
-					ptr = (Bit16s*)&g_tex_descr_table[c1 - 1][0];
+					ptr = (int16_t*)&g_tex_descr_table[c1 - 1][0];
 
 					l4 =	bi == 2 ? 186 : (
 						bi == 3 ? 187 : (
@@ -1088,8 +1088,8 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 	signed short copy_width;
 	signed short copy_height;
 	signed short direction;
-	Bit8u *src;
-	Bit8u *dst;
+	uint8_t *src;
+	uint8_t *dst;
 	struct nvf_extract_desc nvf;
 
 	direction = (nvf_no & 0x8000 ? 1: 0);
@@ -1106,7 +1106,7 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 	nvf.src = g_tex_floor[v4];
 
 	if (v4 == 48 || v4 == 49) {
-		nvf.src = (Bit8u*)g_buffer7_ptr;
+		nvf.src = (uint8_t*)g_buffer7_ptr;
 	}
 
 	nvf.image_num = nvf_no;
@@ -1144,7 +1144,7 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 			copy_height = 135 - y;
 		}
 
-		dst = ((Bit8u*)g_renderbuf_ptr) + y * 208 + x;
+		dst = ((uint8_t*)g_renderbuf_ptr) + y * 208 + x;
 
 		copy_solid(dst, src, copy_width, copy_height, 208, width, v4 == 0 ? 0 : 128);
 	}
@@ -1406,8 +1406,8 @@ void city_do_step(const signed int forward)
 void city_fade_and_colors(void)
 {
 	signed int i;
-	Bit8u *dst;
-	Bit8u *pal_ptr;
+	uint8_t *dst;
+	uint8_t *pal_ptr;
 
 	if (g_fading_state == 2) {
 
@@ -1444,7 +1444,7 @@ void city_fade_and_colors(void)
 
 	if (g_fading_state != 0) {
 
-		dst = ((Bit8u*)g_renderbuf_ptr) + 500;
+		dst = ((uint8_t*)g_renderbuf_ptr) + 500;
 		pal_ptr = g_renderbuf_ptr;
 
 		memset(g_renderbuf_ptr, 0, 0x120);
@@ -1452,8 +1452,8 @@ void city_fade_and_colors(void)
 
 		for (i = 0; i < 64; i += 2) {
 
-			pal_fade_in((Bit8s*)pal_ptr, (Bit8s*)dst, i, 0x60);
-			pal_fade_in((Bit8s*)pal_ptr, (Bit8s*)dst, i + 1, 0x60);
+			pal_fade_in((int8_t*)pal_ptr, (int8_t*)dst, i, 0x60);
+			pal_fade_in((int8_t*)pal_ptr, (int8_t*)dst, i + 1, 0x60);
 
 			wait_for_vsync();
 
@@ -1476,7 +1476,7 @@ void city_update_house_count(void)
 {
 	signed int l_si;
 	signed int i;
-	Bit8u *map_ptr = g_dng_map;
+	uint8_t *map_ptr = g_dng_map;
 
 	g_city_house_count[0] = g_city_house_count[1]
 				= g_city_house_count[2] = g_city_house_count[3] = 0;

@@ -33,26 +33,26 @@ void set_video_page(signed short page)
 {
 }
 
-void save_display_stat(Bit8u* p)
+void save_display_stat(uint8_t* p)
 {
 }
 
-void set_color(Bit8u *ptr, unsigned char color)
+void set_color(uint8_t *ptr, unsigned char color)
 {
 }
 
-void set_palette(Bit8u *ptr, unsigned short first_color, unsigned short colors)
+void set_palette(uint8_t *ptr, unsigned short first_color, unsigned short colors)
 {
 }
 
-void draw_h_line(Bit8u *ptr, unsigned short count, signed short color) {
+void draw_h_line(uint8_t *ptr, unsigned short count, signed short color) {
 	unsigned short i;
 
 	for (i = 0; i < count; i++)
 		*(ptr + i) = color;
 }
 
-void draw_h_spaced_dots(Bit8u *ptr, signed short count, signed short color, signed short space)
+void draw_h_spaced_dots(uint8_t *ptr, signed short count, signed short color, signed short space)
 {
 	unsigned short i;
 
@@ -62,11 +62,11 @@ void draw_h_spaced_dots(Bit8u *ptr, signed short count, signed short color, sign
 	}
 }
 
-void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
+void pic_copy(uint8_t *dst, short x1, short y1, short x2, short y2,
 	unsigned short val1, unsigned short val2,
 	unsigned short val3, unsigned short val4,
 	unsigned short src_width, unsigned short src_height,
-	Bit8u *src, unsigned short mode) {
+	uint8_t *src, unsigned short mode) {
 
 	signed int r_y2, r_y1, r_x1, r_x2;
 	signed int cur_height;
@@ -207,9 +207,9 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 }
 
 #if defined(__BORLANDC__)
-void save_rect(Bit16u seg, Bit16u off, Bit8u *dst, unsigned short width, unsigned short height)
+void save_rect(uint16_t seg, uint16_t off, uint8_t *dst, unsigned short width, unsigned short height)
 #else
-void save_rect(Bit8u* src, Bit8u *dst, unsigned short width, unsigned short height)
+void save_rect(uint8_t* src, uint8_t *dst, unsigned short width, unsigned short height)
 #endif
 {
 	for (; height; height--) {
@@ -228,9 +228,9 @@ void save_rect(Bit8u* src, Bit8u *dst, unsigned short width, unsigned short heig
 }
 
 #if defined(__BORLANDC__)
-void fill_rect(Bit16u seg, Bit16u off, signed short color, signed short width, signed short height)
+void fill_rect(uint16_t seg, uint16_t off, signed short color, signed short width, signed short height)
 #else
-void fill_rect(Bit8u *dst, signed short color, signed short width, signed short height)
+void fill_rect(uint8_t *dst, signed short color, signed short width, signed short height)
 #endif
 {
 	unsigned short x;
@@ -252,11 +252,11 @@ void fill_rect(Bit8u *dst, signed short color, signed short width, signed short 
 	}
 }
 
-void copy_solid_permuted(Bit8u *dst, Bit8u *src, unsigned short width_to_copy,
+void copy_solid_permuted(uint8_t *dst, uint8_t *src, unsigned short width_to_copy,
 	unsigned short height, unsigned short dst_width,
 	unsigned short src_width, unsigned short solid) {
 
-	Bit8u *s, *d;
+	uint8_t *s, *d;
 	unsigned short y,x;
 
 	s = src;
@@ -270,11 +270,11 @@ void copy_solid_permuted(Bit8u *dst, Bit8u *src, unsigned short width_to_copy,
 		}
 }
 
-void copy_solid(Bit8u *dst, Bit8u *src, unsigned short width_to_copy,
+void copy_solid(uint8_t *dst, uint8_t *src, unsigned short width_to_copy,
 	unsigned short height, unsigned short dst_width,
 	unsigned short src_width, unsigned short solid) {
 
-	Bit8u *s, *d;
+	uint8_t *s, *d;
 	unsigned short y,x;
 
 	s = src;
@@ -288,10 +288,10 @@ void copy_solid(Bit8u *dst, Bit8u *src, unsigned short width_to_copy,
 		}
 }
 
-void decomp_rle(unsigned short width, unsigned short height, Bit8u *dst,
-	Bit8u *src, Bit8u *tmp_buffer, unsigned short mode) {
+void decomp_rle(unsigned short width, unsigned short height, uint8_t *dst,
+	uint8_t *src, uint8_t *tmp_buffer, unsigned short mode) {
 
-	Bit8u *my_dst;
+	uint8_t *my_dst;
 	unsigned short i,x;
 	unsigned char tmp;
 	unsigned char cnt;

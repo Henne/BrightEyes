@@ -165,7 +165,7 @@ void city_event_2(void)
 void city_event_3(void)
 {
 	signed short answer;
-	Bit32s money;
+	int32_t money;
 
 	load_in_head(43);
 
@@ -191,7 +191,7 @@ void city_event_3(void)
 void city_event_4(void)
 {
 	signed short answer;
-	Bit32s money;
+	int32_t money;
 
 	load_in_head(43);
 

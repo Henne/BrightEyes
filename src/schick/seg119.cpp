@@ -44,7 +44,7 @@ void disease_effect(void)
 	signed int j;
 	struct struct_hero *hero;
 	struct struct_hero *hero2;
-	Bit8s *disease_ptr;
+	int8_t *disease_ptr;
 
 	g_check_disease = 0;
 
@@ -54,7 +54,7 @@ void disease_effect(void)
 
 			hero = get_hero(i);
 
-			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_WUNDFIEBER];
+			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_WUNDFIEBER];
 
 			/* TETANUS / WUNDFIEBER: get worse */
 			if (disease_ptr[0] == -1) {
@@ -101,7 +101,7 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_DUMPFSCHAEDEL];
+			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_DUMPFSCHAEDEL];
 
 			/* NUMBSKULL / DUMPFSCHAEDEL: get worse */
 			if (disease_ptr[0] == -1) {
@@ -193,7 +193,7 @@ void disease_effect(void)
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_BLAUE_KEUCHE];
+			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_BLAUE_KEUCHE];
 
 			/* BLUE COUGH / BLAUE KEUCHE: get worse */
 			if (disease_ptr[0] == -1) {
@@ -269,7 +269,7 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_PARALYSE];
+			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_PARALYSE];
 
 			/* PARALYSIS / PARALYSE: get worse */
 			if (disease_ptr[0] == -1) {
@@ -322,7 +322,7 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_SCHLACHTENFIEBER];
+			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_SCHLACHTENFIEBER];
 
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get worse */
 			if (disease_ptr[0] == -1) {
@@ -386,7 +386,7 @@ void disease_effect(void)
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_FROSTSCHAEDEN];
+			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_FROSTSCHAEDEN];
 
 			/* FROSTBITE / FROSTSCHAEDEN: get worse */
 			if (disease_ptr[0] == -1) {
@@ -452,7 +452,7 @@ void disease_effect(void)
 				}
 			}
 
-			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_TOLLWUT];
+			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_TOLLWUT];
 
 			/* RABIES / TOLLWUT: get worse */
 			if (disease_ptr[0] == -1) {

@@ -55,7 +55,7 @@ static const int g_cd_audio_tracklist[15] = {
 	ARCHIVE_FILE_COMBAT_XMI,
 	ARCHIVE_FILE_DUNGEON_XMI
 };
-Bit32u g_cd_skipmagic = 0L;
+uint32_t g_cd_skipmagic = 0L;
 
 static unsigned short g_cd_check_err_countdown = 5;
 static const char g_str_insert_cd[142] = "BITTE LEGEN SIE DIE \xf2SCHICKSALSKLINGE-CD\xf0 IN LAUFWERK %c: EIN. DIESE WIRD BEN\x99TIGT, DA DATEN W\x8eHREND DES SPIELS VON CD GELADEN WERDEN M\x9aSSEN.";
@@ -173,7 +173,7 @@ static void CD_unused1(void)
  * \todo    produces a compiler warning and is a bit hacky
  */
 /* Borlandified and identical */
-static Bit32s CD_get_tod(void)
+static int32_t CD_get_tod(void)
 {
 	asm {
 		mov ah, 0x0
@@ -188,8 +188,8 @@ leave_tod:
 /* Borlandified and nearly identical */
 static void CD_audio_track_start(signed short track_num)
 {
-	Bit32s track_start;
-	Bit32s track_end;
+	int32_t track_start;
+	int32_t track_end;
 
 	if (g_cd_init_successful) {
 
@@ -224,7 +224,7 @@ static void CD_audio_track_start(signed short track_num)
 
 		CD_driver_request(&req[5]);
 
-		g_cd_audio_pos = (((Bit32u)track_start - 150) * 0x1234e) / 0x4b000;
+		g_cd_audio_pos = (((uint32_t)track_start - 150) * 0x1234e) / 0x4b000;
 		g_cd_audio_tod = CD_get_tod();
 	}
 }
@@ -236,7 +236,7 @@ void CD_enable_repeat(void)
 #if defined(__BORLANDC__)
 	if (!g_cd_init_successful) return;
 
-	if (CD_get_tod() - (Bit32s)g_cd_audio_tod < (Bit32s)g_cd_audio_pos)
+	if (CD_get_tod() - (int32_t)g_cd_audio_tod < (int32_t)g_cd_audio_pos)
 		return;
 
 	if (g_cd_audio_repeat == 1)

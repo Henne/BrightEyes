@@ -15,7 +15,7 @@ void miracle_heal_hero(signed short, char*);
 /* 0x39 */
 void miracle_resurrect(char*);
 /* 0x3e */
-void miracle_modify(unsigned short, Bit32s, signed short);
+void miracle_modify(unsigned short, int32_t, signed short);
 /* 0x43 */
 void miracle_weapon(char*, signed short);
 

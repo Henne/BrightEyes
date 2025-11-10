@@ -71,7 +71,7 @@ void FIG_draw_figures(void)
 	signed short l1, l2;
 	struct struct_fighter *list_i;
 	struct struct_rect rect_bak;
-	Bit8u* gfx_dst_bak;
+	uint8_t* gfx_dst_bak;
 	signed short l_si, l_di;
 
 	l1 = 10;
@@ -130,7 +130,7 @@ void FIG_draw_figures(void)
 void FIG_set_gfx(void)
 {
 	/* TODO: potential bug: Just backup pointer dst or the whole struct_pic_copy ? */
-	Bit8u* dst_bak = g_pic_copy.dst;
+	uint8_t* dst_bak = g_pic_copy.dst;
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
@@ -504,7 +504,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	struct enemy_sheet *p_enemy;
 	signed int fg_bak;
 	signed int bg_bak;
-	Bit8u* p1;
+	uint8_t* p1;
 	struct nvf_extract_desc nvf;
 
 	p1 = ((HugePt)g_buffer8_ptr) - 1288L;
@@ -513,7 +513,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 	if (g_gfxtab_figures_main[p_enemy->gfx_id][0] != g_fight_figs_index) {
 
-		nvf.src = (Bit8u*)load_fight_figs(g_gfxtab_figures_main[p_enemy->gfx_id][0]);
+		nvf.src = (uint8_t*)load_fight_figs(g_gfxtab_figures_main[p_enemy->gfx_id][0]);
 		nvf.dst = p1;
 		nvf.image_num = 1;
 		nvf.compression_type = 0;

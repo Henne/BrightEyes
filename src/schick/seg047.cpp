@@ -22,9 +22,9 @@ namespace M302de {
 #endif
 
 signed char g_hero_sel_exclude = -1; // ds:0x64a2
-static struct Bit16s_7 g_seg047_init1 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64a3, filled with zeroes
-static struct Bit16s_7 g_seg047_init2 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64b1, filled with zeroes
-static struct Bit16s_7 g_seg047_init3 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64bf, filled with zeroes
+static struct int16_t_7 g_seg047_init1 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64a3, filled with zeroes
+static struct int16_t_7 g_seg047_init2 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64b1, filled with zeroes
+static struct int16_t_7 g_seg047_init3 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64bf, filled with zeroes
 
 /**
  * \brief   get index of the first hero with the highest CH value
@@ -252,7 +252,7 @@ signed short check_heroes_KK(const signed short val)
  *
  *	This funcion is buggy.
  */
-void make_valuta_str(char *dst, Bit32s money) {
+void make_valuta_str(char *dst, int32_t money) {
 	/* Orig-BUG: d can overflow  on D > 65536*/
 	unsigned short d = 0;
 	unsigned short s = 0;
@@ -333,7 +333,7 @@ void update_atpa(struct struct_hero *hero)
  * \return              the number of the selected hero.
  * Used only in temples.
  */
-signed short menu_enter_delete(Bit8u* ptr, signed short entries, signed short mode)
+signed short menu_enter_delete(uint8_t* ptr, signed short entries, signed short mode)
 {
 	signed short i;
 	signed short answer;
@@ -395,7 +395,7 @@ signed short select_hero_from_group(char *title)
 {
 	signed short i;
 	signed short answer;
-	struct Bit16s_7 dst = g_seg047_init1;
+	struct int16_t_7 dst = g_seg047_init1;
 	/* Hack for
 	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
@@ -466,7 +466,7 @@ signed short select_hero_ok(char *title)
 {
 	signed short i;
 	signed short answer;
-	struct Bit16s_7 dst = g_seg047_init2;
+	struct int16_t_7 dst = g_seg047_init2;
 	/* Hack for
 	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
@@ -535,7 +535,7 @@ signed short select_hero_ok_forced(char *title)
 {
 	signed short i;
 	signed short answer;
-	struct Bit16s_7 dst = g_seg047_init3;
+	struct int16_t_7 dst = g_seg047_init3;
 	/* Hack for
 	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/

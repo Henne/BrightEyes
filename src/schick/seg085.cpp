@@ -51,8 +51,8 @@ signed short DNG10_handler(void)
 	signed short result;
 	signed short tw_bak;
 	struct struct_hero *hero;
-	Bit8u *amap_ptr;
-	Bit32s p_money;
+	uint8_t *amap_ptr;
+	int32_t p_money;
 
 	amap_ptr = g_dng_map;
 	tw_bak = g_textbox_width;
@@ -428,12 +428,12 @@ signed short DNG10_handler(void)
 
 void DNG10_chest00_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(3), (Bit8s*)&gs_dng10_corpse_flag);
+	loot_corpse(chest, get_tx(3), (int8_t*)&gs_dng10_corpse_flag);
 }
 
 void DNG10_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng10_chest0_content;
 
@@ -444,7 +444,7 @@ void DNG10_chest00_loot(struct struct_chest* chest)
 
 void DNG10_chest01_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng10_chest1_content;
 
@@ -455,7 +455,7 @@ void DNG10_chest01_loot(struct struct_chest* chest)
 
 void DNG10_chest02_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng10_chest2_content;
 
@@ -466,7 +466,7 @@ void DNG10_chest02_loot(struct struct_chest* chest)
 
 void DNG10_chest03_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng10_chest3_content;
 
@@ -477,7 +477,7 @@ void DNG10_chest03_loot(struct struct_chest* chest)
 
 void DNG10_chest04_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng10_chest4_content;
 

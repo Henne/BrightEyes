@@ -45,11 +45,11 @@
 namespace M302de {
 #endif
 
-static Bit8u g_color_white[3] = { 0x3f, 0x3f, 0x3f }; // ds:0xb22a
+static uint8_t g_color_white[3] = { 0x3f, 0x3f, 0x3f }; // ds:0xb22a
 
-Bit8u g_color_black[3] = { 0, 0, 0 }; // ds:0xb22d
+uint8_t g_color_black[3] = { 0, 0, 0 }; // ds:0xb22d
 
-static Bit8u g_palette_unknown2[8][3] = {
+static uint8_t g_palette_unknown2[8][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x38, 0x30, 0x28 },
 	{ 0x38, 0x30, 0x10 },
@@ -60,13 +60,13 @@ static Bit8u g_palette_unknown2[8][3] = {
 	{ 0x0b, 0x19, 0x0c }
 }; // ds:0xb230
 
-static Bit8u g_palette_unknown3[3][3] = {
+static uint8_t g_palette_unknown3[3][3] = {
 	{ 0x30, 0x00, 0x00 },
 	{ 0x30, 0x30, 0x00 },
 	{ 0x00, 0x00, 0x30 }
 }; // ds:0xb248
 
-static Bit8u g_palette_unknown4[32][3] = {
+static uint8_t g_palette_unknown4[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x38, 0x30, 0x28 },
 	{ 0x30, 0x24, 0x1c },
@@ -101,7 +101,7 @@ static Bit8u g_palette_unknown4[32][3] = {
 	{ 0x3c, 0x3c, 0x3c }
 }; // ds:0xb251
 
-static Bit8u g_palette_general[32][3] = {
+static uint8_t g_palette_general[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x3f },
 	{ 0x00, 0x00, 0x24 },
@@ -152,7 +152,7 @@ static const char g_str_gen_1[2] = "1"; // ds:0xb4d3
 static const char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 
 
-static Bit32u g_buffersize;		// ds:0xe5dc, size of the global buffer
+static uint32_t g_buffersize;		// ds:0xe5dc, size of the global buffer
 static HugePt g_global_buffer_ptr;	// ds:0xe5e0, points to the start of the global buffer
 signed char g_large_buf; 		// ds:0xe5e4
 
@@ -367,7 +367,7 @@ void init_global_buffer(void)
 signed int init_memory(void)
 {
 	signed int error = 0;
-	Bit32u freemem;
+	uint32_t freemem;
 
 	/* disable EMS memory */
 	g_ems_enabled = 0;
@@ -463,26 +463,26 @@ signed int init_memory(void)
 /* Borlandified and identical */
 void refresh_colors(void)
 {
-	set_color((Bit8u*)g_color_black, 0);
-	set_color((Bit8u*)g_color_white, 0xff);
-	set_palette((Bit8u*)g_palette_unknown2, 0xd8, 8);
-	set_palette((Bit8u*)g_palette_unknown3, 0xc8, 3);
-	set_palette((Bit8u*)g_palette_unknown4, 0x40, 0x20);
-	set_palette((Bit8u*)g_palette_general, 0x20, 0x20);
-	set_palette((Bit8u*)g_palette_unknown1, 0x60, 0x20);
+	set_color((uint8_t*)g_color_black, 0);
+	set_color((uint8_t*)g_color_white, 0xff);
+	set_palette((uint8_t*)g_palette_unknown2, 0xd8, 8);
+	set_palette((uint8_t*)g_palette_unknown3, 0xc8, 3);
+	set_palette((uint8_t*)g_palette_unknown4, 0x40, 0x20);
+	set_palette((uint8_t*)g_palette_general, 0x20, 0x20);
+	set_palette((uint8_t*)g_palette_unknown1, 0x60, 0x20);
 }
 
 
 /* Borlandified and identical */
-Bit32s get_diskspace(void)
+int32_t get_diskspace(void)
 {
 #if defined(__BORLANDC__)
 	struct dfree df;
-	Bit32s space;
+	int32_t space;
 
 	getdfree(getdisk() + 1, &df);
 
-	space = (Bit32s)df.df_avail * (Bit32s)df.df_bsec * df.df_sclus;
+	space = (int32_t)df.df_avail * (int32_t)df.df_bsec * df.df_sclus;
 
 	return space - 204800;
 #else
@@ -793,7 +793,7 @@ void game_over_screen(void)
 
 	memcpy((void*)g_vga_memstart, (void*)g_renderbuf_ptr, 320 * 200);
 
-	set_palette((Bit8u*)g_renderbuf_ptr + 64002L, 0x00, 0x40);
+	set_palette((uint8_t*)g_renderbuf_ptr + 64002L, 0x00, 0x40);
 
 	wait_for_keypress();
 
@@ -813,7 +813,7 @@ void game_over_screen(void)
 /* Borlandified and identical */
 void call_gen(void)
 {
-	Bit32u freemem;
+	uint32_t freemem;
 	signed int retval;
 
 	call_mouse_bg();

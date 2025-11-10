@@ -36,7 +36,7 @@ void use_lockpicks_on_chest(struct struct_chest*);
 void use_key_on_chest(struct struct_chest*);
 
 /* 0x57 */
-void loot_multi_chest(Bit8u*, char*);
+void loot_multi_chest(uint8_t*, char*);
 
 /* 0x5c */
 void chest_poisoned1(void);

@@ -89,7 +89,7 @@ void set_textbox_positions(signed short town_id)
 
 
 	x = g_current_town_anix = g_town_positions[town_id - 1].x;
-	y = g_current_town_aniy = *(signed short*)((Bit8u*)g_town_positions + 4 * (town_id - 1) + 2);
+	y = g_current_town_aniy = *(signed short*)((uint8_t*)g_town_positions + 4 * (town_id - 1) + 2);
 
 	r_dx = (x >= 0 && x <= 159) ? (y >= 0 && y <= 99 ? 3 : 1) : (y >= 0 && y <= 99 ? 2 : 0);
 
@@ -105,7 +105,7 @@ void set_textbox_positions(signed short town_id)
  */
 void TM_func1(signed short route_id, signed short backwards)
 {
-	Bit8u* fb_start;
+	uint8_t* fb_start;
 	struct struct_hero *hero;
 	struct struct_route_tevent *tevent_ptr;
 	signed short bak1;
@@ -116,7 +116,7 @@ void TM_func1(signed short route_id, signed short backwards)
 	g_traveling = 1;
 
 	last_tevent_no = -1;
-	gs_route_course_ptr = (Bit16s*)((g_buffer9_ptr + *(Bit16s*)((Bit8u*)g_buffer9_ptr + 4 * (route_id - 1))) + 0xecL);
+	gs_route_course_ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (route_id - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
 	gs_route_course_ptr += 2;
 
@@ -669,10 +669,10 @@ void TM_draw_track(signed short route_id, signed short length, signed short dire
 {
 	signed short i;
 	signed short *ptr;
-	Bit8u* fb_start;
+	uint8_t* fb_start;
 
 	fb_start = g_vga_memstart;
-	ptr = (Bit16s*)((g_buffer9_ptr + *(Bit16s*)((Bit8u*)g_buffer9_ptr + 4 * (route_id - 1))) + 0xecL);
+	ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (route_id - 1))) + 0xecL);
 	ptr += 2;
 
 	if (direction)

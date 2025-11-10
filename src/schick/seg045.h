@@ -9,7 +9,7 @@ void FANI_add_shotbolt(const signed int, const signed int, const signed int);
 void FANI_remove_shotbolt(void);
 /* should be static */
 /* 0x2a */
-signed int FANI_copy_sequence(Bit8s*, Bit8s*, const signed char);
+signed int FANI_copy_sequence(int8_t*, int8_t*, const signed char);
 /* 0x2f */
 signed int FANI_prepare_shotbolt_ani(const signed int, const signed int, const signed int, const signed int, const signed int);
 

@@ -23,7 +23,7 @@
 namespace M302de {
 #endif
 
-Bit8u g_palette_fight2[20][3] = {
+uint8_t g_palette_fight2[20][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x3f, 0x00, 0x00 },
 	{ 0x00, 0x3f, 0x00 },
@@ -108,7 +108,7 @@ void show_automap(void)
 				render_automap(l_si);
 				clear_ani_pal();
 				draw_automap_to_screen();
-				set_ani_pal((Bit8u*)g_palette_fight2);
+				set_ani_pal((uint8_t*)g_palette_fight2);
 				g_request_refresh = 0;
 			}
 
@@ -183,7 +183,7 @@ unsigned short is_discovered(signed short x, signed short y)
  */
 unsigned short get_mapval_small(signed short x, signed short y)
 {
-	Bit8u *map = g_dng_map;
+	uint8_t *map = g_dng_map;
 
 	return *(map + 16 * y + x);
 }
@@ -197,7 +197,7 @@ unsigned short get_mapval_small(signed short x, signed short y)
  */
 unsigned short get_mapval_large(signed short x, signed short y)
 {
-	Bit8u *map = g_dng_map;
+	uint8_t *map = g_dng_map;
 
 	return *(map + 32 * y + x);
 }
@@ -359,14 +359,14 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 {
 	signed short i;
 	unsigned short offset_y;
-	Bit8u* p_img_tile;
+	uint8_t* p_img_tile;
 	signed char tile[50];
 
 	offset_y = y;
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = (Bit8u*)g_renderbuf_ptr + offset_y + 8 * x + 0xca8;
+	p_img_tile = (uint8_t*)g_renderbuf_ptr + offset_y + 8 * x + 0xca8;
 
 	for (i = 0; i < 49; i++) {
 		tile[i] = (signed char)color;
@@ -414,7 +414,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	}
 
 	g_pic_copy.dst = p_img_tile;
-	g_pic_copy.src = (Bit8u*)tile;
+	g_pic_copy.src = (uint8_t*)tile;
 
 	do_pic_copy(0);
 }
@@ -431,12 +431,12 @@ void draw_automap_entrance(signed short x, signed short y, signed short dir)
 	unsigned short offset_y = y;
 	signed short d = dir;
 	signed short skipsize;
-	Bit8u *p_img_tile;
+	uint8_t *p_img_tile;
 
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = ((Bit8u*)g_renderbuf_ptr) + offset_y + 8 * x + 0xca8;
+	p_img_tile = ((uint8_t*)g_renderbuf_ptr) + offset_y + 8 * x + 0xca8;
 
 	if (!d) {
 		p_img_tile += 2;
@@ -533,7 +533,7 @@ signed short select_teleport_dest(void)
 
 	draw_automap_to_screen();
 
-	set_ani_pal((Bit8u*)g_palette_fight2);
+	set_ani_pal((uint8_t*)g_palette_fight2);
 
 	if (g_dng_map_size == 16) {
 		draw_loc_icons(1, MENU_ICON_MAGIC);
@@ -645,7 +645,7 @@ signed short select_teleport_dest(void)
 		if ((gs_dungeon_index && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
 #else
 		/* REMARK: enforce the use of register DI */
-		if ((gs_dungeon_index && (_DI == 15)) || ((gs_current_town != TOWNS_NONE) && ((((Bit16s)_DI >= 2) && ((Bit16s)_DI <= 5)) || (_DI == 6))))
+		if ((gs_dungeon_index && (_DI == 15)) || ((gs_current_town != TOWNS_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
 #endif
 	{
 		strcpy(g_dtp2, get_ttx(611));

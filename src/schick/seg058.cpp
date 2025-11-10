@@ -84,8 +84,8 @@ static struct smith_descr g_smith_descr_table[42] = { /* 'quality' is apparently
 static struct c_str_5 g_smith_str_money_h = { "H %d" }; // ds:0x6c64
 static struct c_str_5 g_smith_str_money_s = { "S %d" }; // ds:0x6c69
 static struct c_str_5 g_smith_str_money_d = { "D %d" }; // ds:0x6c6e
-static struct Bit16s_3 g_smith_items_posx = { 30, 95, 160 }; // ds:0x6c73
-static struct Bit16s_5 g_smith_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c79
+static struct int16_t_3 g_smith_items_posx = { 30, 95, 160 }; // ds:0x6c73
+static struct int16_t_5 g_smith_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c79
 
 signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
 
@@ -179,13 +179,13 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 	struct c_str_5 fmt_h = g_smith_str_money_h;
 	struct c_str_5 fmt_s = g_smith_str_money_s;
 	struct c_str_5 fmt_d = g_smith_str_money_d;
-	struct Bit16s_3 array3 = g_smith_items_posx;
+	struct int16_t_3 array3 = g_smith_items_posx;
 	//signed int array3[3] = { { 30, 95, 160 } };
-	struct Bit16s_5 array5 = g_smith_items_posy;
+	struct int16_t_5 array5 = g_smith_items_posy;
 	//signed int array5[5] = { { 35, 55, 75, 95, 115 } };
 
-	Bit32s price;
-	Bit32s p_money;
+	int32_t price;
+	int32_t p_money;
 	signed int l12 = 0;
 	struct struct_hero *hero2;
 	struct struct_hero *hero_bargain;
@@ -232,7 +232,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 		do_pic_copy(0);
 
 		g_sellitems = (struct shop_item*)g_fig_figure1_buf;
-		memset((Bit8u*)g_sellitems, 0, 50 * sizeof(struct shop_item));
+		memset((uint8_t*)g_sellitems, 0, 50 * sizeof(struct shop_item));
 
 		get_textcolor(&fg_bak, &bg_bak);
 		set_textcolor(255, 0);

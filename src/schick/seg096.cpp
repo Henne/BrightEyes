@@ -54,7 +54,7 @@ static char* g_grammar_articles_index[15] = {
 	g_grammar_article_einem,
 	g_grammar_article_0,
 	g_grammar_article_von
-}; // ds:0xa917; Bit8u*
+}; // ds:0xa917; uint8_t*
 static signed short g_grammar_def_table[24] = {
 	0, 1, 2, 3, 0, 3,
 	4, 1, 2, 5, 0, 5,
@@ -77,10 +77,10 @@ static signed short g_grammar_noarticle_table[24] = {
 extern char g_str_s_s[6];
 extern char g_str_von_s_s[9];
 
-static char *g_str_s_s_ptr = (char*)&g_str_s_s; // ds:0xa9e3, to STR_S_S; Bit8u*
-static char *g_str_von_s_s_ptr = (char*)&g_str_von_s_s; // ds:0xa9e7, to STR_VON_S_S; Bit8u*
+static char *g_str_s_s_ptr = (char*)&g_str_s_s; // ds:0xa9e3, to STR_S_S; uint8_t*
+static char *g_str_von_s_s_ptr = (char*)&g_str_von_s_s; // ds:0xa9e7, to STR_VON_S_S; uint8_t*
 static signed short g_grammar_buf_no = 0; // ds:0xa9eb
-static struct Bit16s_3 g_grammar_gender_bitmasks = { 0x1000, 0x2000, 0x3000 }; // ds:0xa9ed, {0x1000, 0x2000, 0x3000}
+static struct int16_t_3 g_grammar_gender_bitmasks = { 0x1000, 0x2000, 0x3000 }; // ds:0xa9ed, {0x1000, 0x2000, 0x3000}
 static char g_grammar_pronouns_er[3] = "ER"; // ds:0xa9f3
 static char g_grammar_pronouns_sie[4] = "SIE"; // ds:0xa9f6
 static char g_grammar_pronouns_es[3] = "ES"; // ds:0xa9fa
@@ -97,7 +97,7 @@ static char *g_grammar_pronouns_index[7] = {
 	g_grammar_pronouns_ihr,
 	g_grammar_pronouns_ihn,
 	g_grammar_pronouns_ihm
-}; // ds:0xaa14; Bit8u*
+}; // ds:0xaa14; uint8_t*
 static const signed char g_grammar_pronouns_table2[33] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x05, 0x01, 0x02, 0x06, 0x04, 0x06, 0x01, 0x01, 0x01, 0x04, 0x04, 0x04, 0x01, 0x01, 0x01, 0x07, 0x07, 0x07, 0x00, -128, -64, -32, -16, -8, -4, -2, -1 }; // ds:0xaa30, by gender and ??
 static struct struct_char_width g_gui_char_width[75] = {
 	{ 0x20, 0x00, 0x06 },
@@ -195,13 +195,13 @@ static char g_grammar_bufs[5][40];	// ds:0xe4e3
  * \param   index	index of the word of which a worgroup should be made
  * \param   type	if index is true the index is an enemy, if not it is an item
  */
-Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short type)
+uint8_t* GUI_names_grammar(signed short flag, signed short index, signed short type)
 {
 	signed short *lp1;
 	signed short l2 = 0;
 	char *p_name;
 	signed short l4;
-	struct Bit16s_3 lp5 = g_grammar_gender_bitmasks;
+	struct int16_t_3 lp5 = g_grammar_gender_bitmasks;
 	//signed short lp5[3] = { {0x1000, 0x2000, 0x3000} };
 
 	if (type == 0) {
@@ -248,7 +248,7 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 	if (++g_grammar_buf_no == 4)
 		g_grammar_buf_no = 0;
 
-	return (Bit8u*)g_grammar_bufs[1 + l4];
+	return (uint8_t*)g_grammar_bufs[1 + l4];
 }
 
 //1a7
@@ -304,13 +304,13 @@ char* GUI_name_singular(char *s)
 /**
  * \brief   return a pointer to the pronoun
  */
-Bit8u* GUI_2f2(signed short v1, signed short word_id, signed short type)
+uint8_t* GUI_2f2(signed short v1, signed short word_id, signed short type)
 {
 	signed short genus;
 
 	genus = (type == 0) ? g_items_genders[word_id] : g_monname_genders[word_id];
 
-	return (Bit8u*)g_grammar_pronouns_index[g_grammar_pronouns_table2[v1 * 3 + genus]];
+	return (uint8_t*)g_grammar_pronouns_index[g_grammar_pronouns_table2[v1 * 3 + genus]];
 }
 
 //330
@@ -350,9 +350,9 @@ char* GUI_get_ptr2(signed short genus, signed short causus)
 }
 
 //3f8
-void GUI_write_char_to_screen(Bit8u *dst, signed short char_width, signed short char_height)
+void GUI_write_char_to_screen(uint8_t *dst, signed short char_width, signed short char_height)
 {
-	Bit8u *ptr;
+	uint8_t *ptr;
 	signed short y;
 	signed short x;
 
@@ -628,7 +628,7 @@ void GUI_write_fonti_to_screen(unsigned short font_index, unsigned short char_wi
  */
 void GUI_blank_char(void)
 {
-	Bit8u *ptr = &g_gui_text_buffer[0];
+	uint8_t *ptr = &g_gui_text_buffer[0];
 	signed short i;
 	signed short j;
 
@@ -639,9 +639,9 @@ void GUI_blank_char(void)
 }
 
 //8f8
-void GUI_font_to_buf(Bit8u *fc)
+void GUI_font_to_buf(uint8_t *fc)
 {
-	Bit8u *p;
+	uint8_t *p;
 	char c;
 	short i;
 	short j;
@@ -667,7 +667,7 @@ void GUI_font_to_buf(Bit8u *fc)
 void GUI_write_char_to_screen_xy(unsigned short x, unsigned short y, unsigned short char_height, unsigned short char_width)
 {
 	/* screen_start */
-	Bit8u* dst = g_vga_backbuffer + y * 320 + x;
+	uint8_t* dst = g_vga_backbuffer + y * 320 + x;
 
 	GUI_write_char_to_screen(dst, char_height, char_width);
 }
@@ -696,7 +696,7 @@ void get_textcolor(signed int *fg, signed int *bg)
 	*bg = g_textcolor_bg;
 }
 
-unsigned short GUI_unused(Bit8u *str)
+unsigned short GUI_unused(uint8_t *str)
 {
 	unsigned short lines = 0;
 

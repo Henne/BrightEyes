@@ -6,7 +6,7 @@ namespace M302de {
 signed int test_skill(const struct struct_hero*, const signed int, signed char);
 
 /* 0x25 */
-signed int bargain(const struct struct_hero*, const signed int, const Bit32s, const signed int, const signed char);
+signed int bargain(const struct struct_hero*, const signed int, const int32_t, const signed int, const signed char);
 
 /* 0x2a */
 signed int GUI_use_skill(const signed int, const signed char);

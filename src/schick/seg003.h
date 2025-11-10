@@ -8,7 +8,7 @@ void move(void);
 
 void door_frame(signed short, signed short, signed short, signed short);
 
-void loot_corpse(struct struct_chest*, char*, Bit8s*);
+void loot_corpse(struct struct_chest*, char*, int8_t*);
 
 void no_way(void);
 

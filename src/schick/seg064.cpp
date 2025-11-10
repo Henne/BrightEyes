@@ -167,7 +167,7 @@ char* print_passage_price(signed short price, struct sea_route *route)
  */
 unsigned short get_passage_travel_hours(signed short distance, signed short base_speed)
 {
-	Bit32s tmp;
+	int32_t tmp;
 
 	/* convert base_speed to unit [100m per hour] */
 	base_speed = ROUNDED_DIVISION(base_speed * 10, 24);

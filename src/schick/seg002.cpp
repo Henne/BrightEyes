@@ -80,7 +80,7 @@ unsigned char g_playmask_us;			// ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
 unsigned char g_gfxbuf_wait_keypress[100];	// ds:0xbc63
 unsigned char *g_splash_ae;			// ds:0xbcc7
 unsigned char *g_splash_le;			// ds:0xbccb
-Bit8u g_hero_splash_timer[7];			// ds:0xbccf
+uint8_t g_hero_splash_timer[7];			// ds:0xbccf
 signed short g_spinlock_flag;			// ds:0xbcd6
 signed short g_map_townmark_state;		// ds:0xbcd8
 signed char g_freeze_timers;			// ds:0xbcda
@@ -89,15 +89,15 @@ signed char g_freeze_timers;			// ds:0xbcda
 void interrupt far (*g_mouse_handler_bak)(...); // ds:0xbcdb; seg002
 #endif
 
-static Bit32s g_archive_file_offset;	// ds:0xbcdf, start offset in SCHICK.DAT
-static Bit32s g_archive_file_remaining; // ds:0xbce3, flen - off
-static Bit32s g_archive_file_length;	// ds:0xbce7
+static int32_t g_archive_file_offset;	// ds:0xbcdf, start offset in SCHICK.DAT
+static int32_t g_archive_file_remaining; // ds:0xbce3, flen - off
+static int32_t g_archive_file_length;	// ds:0xbce7
 
 #if defined(__BORLANDC__)
-static Bit8u *g_ail_digi_driver_buf2;		// ds:0xbceb, to buffer of size 5016
-static Bit8u *g_ail_voc_buffer;		// ds:0xbcef
-static Bit8u *g_ail_digi_driver_buf;		// ds:0xbcf3
-static Bit16s *g_ail_digi_driver_descr;		// ds:0xbcf7
+static uint8_t *g_ail_digi_driver_buf2;		// ds:0xbceb, to buffer of size 5016
+static uint8_t *g_ail_voc_buffer;		// ds:0xbcef
+static uint8_t *g_ail_digi_driver_buf;		// ds:0xbcf3
+static int16_t *g_ail_digi_driver_descr;		// ds:0xbcf7
 static signed short g_ail_digi_driver_id;	// ds:0xbcfb
 #endif
 
@@ -108,12 +108,12 @@ static signed short g_load_sound_driver;	// ds:0xbcff
 static signed short g_sample_ad_handle;	// ds:0xbd01
 static unsigned short g_ail_timbre_cache_size; // ds:0xbd03
 static signed long g_ail_state_table_size;	// ds:0xbd05
-static Bit8u *g_ail_music_driver_buf2;		// ds:0xbd09
-static Bit8u *g_ail_midi_buffer;		// ds:0xbd0d
-static Bit8u *g_ail_timbre_cache;		// ds:0xbd11
-static Bit8u *g_ail_state_table;		// ds:0xbd15
-static Bit8u *g_ail_music_driver_buf;		// ds:0xbd19
-static Bit16s *g_ail_music_driver_descr;	// ds:0xbd1d
+static uint8_t *g_ail_music_driver_buf2;		// ds:0xbd09
+static uint8_t *g_ail_midi_buffer;		// ds:0xbd0d
+static uint8_t *g_ail_timbre_cache;		// ds:0xbd11
+static uint8_t *g_ail_state_table;		// ds:0xbd15
+static uint8_t *g_ail_music_driver_buf;		// ds:0xbd19
+static int16_t *g_ail_music_driver_descr;	// ds:0xbd1d
 static signed short g_ail_sequence;		// ds:0xbd21
 static signed short g_ail_music_driver_id;	// ds:0xbd23
 #endif
@@ -186,7 +186,7 @@ unsigned char g_ani_palette_size; // ds:0xce3a
 HugePt g_ani_palette; // ds:0xce3b
 signed int g_ani_posy; // ds:0xce3f
 signed int g_ani_posx; // ds:0xce41
-Bit32s g_ani_unknown4; // ds:0xce43, writeonly (0)
+int32_t g_ani_unknown4; // ds:0xce43, writeonly (0)
 unsigned char g_unkn_081[64]; // ds:0xce47
 unsigned char g_gui_text_buffer[64]; // ds:0xce87
 static struct mouse_cursor *g_last_cursor; // ds:0xcec7
@@ -199,10 +199,10 @@ signed short g_dng_extra_action;	// ds:0xd011, {0 = warehouse,1 = open door,2 = 
 signed short g_redraw_menuicons;	// ds:0xd013
 unsigned char *g_buffer9_ptr2;		// ds:0xd015, copy of BUFFER9_PTR
 HugePt g_buffer9_ptr3;			// ds:0xd019, copy of BUFFER9_PTR
-Bit32u g_buffer_monster_tab[36];	// ds:0xd01d
-Bit32u g_buffer_wfigs_tab[43];		// ds:0xd0ad
-Bit32u g_buffer_mfigs_tab[43];		// ds:0xd159
-Bit32s g_buffer_anis_tab[37];		// ds:0xd205
+uint32_t g_buffer_monster_tab[36];	// ds:0xd01d
+uint32_t g_buffer_wfigs_tab[43];		// ds:0xd0ad
+uint32_t g_buffer_mfigs_tab[43];		// ds:0xd159
+int32_t g_buffer_anis_tab[37];		// ds:0xd205
 
 unsigned char *g_trv_track_pixel_bak; // ds:0xd299, to buffer of size 500
 unsigned char *g_fig_star_gfx; // ds:0xd29d
@@ -256,16 +256,16 @@ signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short *
 signed char g_fig_actors_unkn[30]; // ds:0xd82d, see FIG_ACTION_UNKNOWN2
 signed char g_hero_is_target[7]; // ds:0xd84b
 signed char *g_chessboard;// ds:0xd852
-Bit8u *g_fig_spellgfx_buf; // ds:0xd856
-Bit8u *g_fig_shot_bolt_buf; // ds:0xd85a
-Bit8u *g_fig_cb_selector_buf; // ds:0xd85e
-Bit8u *g_fig_cb_marker_buf; // ds:0xd862
-Bit8u *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f
-Bit8u *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
+uint8_t *g_fig_spellgfx_buf; // ds:0xd856
+uint8_t *g_fig_shot_bolt_buf; // ds:0xd85a
+uint8_t *g_fig_cb_selector_buf; // ds:0xd85e
+uint8_t *g_fig_cb_marker_buf; // ds:0xd862
+uint8_t *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f
+uint8_t *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
 unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer
 signed int g_nr_of_enemies; // ds:0xd872, ?
 signed char g_fightobj_list[90]; // ds:0xd874
-Bit8s g_fig_anisheets[8][243]; // ds:0xd8ce
+int8_t g_fig_anisheets[8][243]; // ds:0xd8ce
 
 struct struct_fighter g_fig_list_elem; // ds:0xe066
 signed char g_fig_list_array[127]; // ds:0xe089
@@ -287,26 +287,26 @@ char **g_itemsname; // ds:0xe22f
 
 
 #if !defined(__BORLANDC__)
-static inline Bit8u readb(Bit8u *p)
+static inline uint8_t readb(uint8_t *p)
 {
-	return ((Bit8u)*p);
+	return ((uint8_t)*p);
 }
 
-static inline Bit16s readws(Bit8u *p)
+static inline int16_t readws(uint8_t *p)
 {
-	return ((Bit16s)(readb(p + 1) << 8) | (readb(p)));
+	return ((int16_t)(readb(p + 1) << 8) | (readb(p)));
 }
 
-static inline Bit32s readds(Bit8u *p)
+static inline int32_t readds(uint8_t *p)
 {
-	return ((Bit32s)(readws(p + 2) << 16) | readws(p));
+	return ((int32_t)(readws(p + 2) << 16) | readws(p));
 }
 
 #else
 
-#define readb(p) (*(Bit8u*)(p))
-#define readws(p) (*(Bit16u*)(p))
-#define readds(p) (*(Bit32u*)(p))
+#define readb(p) (*(uint8_t*)(p))
+#define readws(p) (*(uint16_t*)(p))
+#define readds(p) (*(uint32_t*)(p))
 
 #endif
 
@@ -334,7 +334,7 @@ void play_music_file(signed short index)
 #endif
 }
 
-void set_audio_track(Bit16u index)
+void set_audio_track(uint16_t index)
 {
 #if defined(__BORLANDC__)
 	CD_check();
@@ -417,15 +417,15 @@ void read_sound_cfg(void)
 	/* try to open SOUND.CFG */
 	if ( (handle = open(g_fname_sound_cfg, O_BINARY | O_RDONLY)) != -1) {
 
-		_read(handle, (Bit8u*)&midi_port, 2);
-		_read(handle, (Bit8u*)&dummy, 2);
-		_read(handle, (Bit8u*)&digi_port, 2);
-		_read(handle, (Bit8u*)&digi_irq, 2);
+		_read(handle, (uint8_t*)&midi_port, 2);
+		_read(handle, (uint8_t*)&dummy, 2);
+		_read(handle, (uint8_t*)&digi_port, 2);
+		_read(handle, (uint8_t*)&digi_irq, 2);
 		_close(handle);
 
 #if !defined(__BORLANDC__)
 		/* menu to select the music source */
-		const Bit16s tw_bak = g_textbox_width;
+		const int16_t tw_bak = g_textbox_width;
 		char question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
 		char opt1[] = "AUDIO-CD";
 		char opt2[] = "MIDI";
@@ -494,10 +494,10 @@ void read_sound_cfg(void)
 #endif
 }
 
-void init_AIL(Bit32u size)
+void init_AIL(uint32_t size)
 {
 #if defined(__BORLANDC__)
-	if ((g_ail_midi_buffer = (Bit8u*)schick_alloc(size))) {
+	if ((g_ail_midi_buffer = (uint8_t*)schick_alloc(size))) {
 		AIL_startup();
 		g_load_sound_driver = 1;
 	}
@@ -507,7 +507,7 @@ void init_AIL(Bit32u size)
 void exit_AIL(void)
 {
 #if defined(__BORLANDC__)
-	AIL_shutdown((Bit8u*)NULL);
+	AIL_shutdown((uint8_t*)NULL);
 
 	if (g_ail_timbre_cache) {
 		free((void*)g_ail_timbre_cache);
@@ -534,12 +534,12 @@ void exit_AIL(void)
 #endif
 }
 
-Bit8u* read_music_driver(Bit8u* fname)
+uint8_t* read_music_driver(uint8_t* fname)
 {
 #if defined(__BORLANDC__)
-	Bit32u len;
-	Bit8u* buf;
-	Bit32u ptr;
+	uint32_t len;
+	uint8_t* buf;
+	uint32_t ptr;
 
 	signed int handle;
 
@@ -547,12 +547,12 @@ Bit8u* read_music_driver(Bit8u* fname)
 
 		len = 16500L;
 
-		g_ail_music_driver_buf2 = (Bit8u*)schick_alloc(len + 16L);
+		g_ail_music_driver_buf2 = (uint8_t*)schick_alloc(len + 16L);
 		/* insane pointer casting */
-		ptr = (Bit32u)g_ail_music_driver_buf2 + 15L;
+		ptr = (uint32_t)g_ail_music_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((Bit8u*)ptr);
-		_read(handle, (Bit8u*)buf, (unsigned short)len);
+		buf = EMS_norm_ptr((uint8_t*)ptr);
+		_read(handle, (uint8_t*)buf, (unsigned short)len);
 		_close(handle);
 		return buf;
 	}
@@ -567,7 +567,7 @@ signed short prepare_midi_playback(signed short sequence)
 	unsigned short l_si;
 	signed short l_di;
 	signed short patch;
-	Bit8u* ptr;
+	uint8_t* ptr;
 
 	if ((g_sample_ad_handle = load_archive_file(ARCHIVE_FILE_SAMPLE_AD)) != -1) {
 
@@ -608,7 +608,7 @@ signed short start_midi_playback(signed short seq)
 
 
 /* static */
-Bit8u* prepare_timbre(signed short a1, signed short patch)
+uint8_t* prepare_timbre(signed short a1, signed short patch)
 {
 #if defined(__BORLANDC__)
 	char *buf;
@@ -616,7 +616,7 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 	seek_archive_file(g_sample_ad_handle, 0, 0);
 
 	do {
-		read_archive_file(g_sample_ad_handle, (Bit8u*)&g_sample_ad_idx_entry, 6);
+		read_archive_file(g_sample_ad_handle, (uint8_t*)&g_sample_ad_idx_entry, 6);
 
 		if (g_sample_ad_idx_entry.bank == -1) {
 			return NULL;
@@ -626,7 +626,7 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 
 	seek_archive_file(g_sample_ad_handle, g_sample_ad_idx_entry.offset, 0);
 
-	read_archive_file(g_sample_ad_handle, (Bit8u*)&g_sample_ad_length, 2);
+	read_archive_file(g_sample_ad_handle, (uint8_t*)&g_sample_ad_length, 2);
 
 	buf = schick_alloc(g_sample_ad_length);
 
@@ -662,13 +662,13 @@ signed short do_load_midi_file(signed short index)
 }
 
 /* static */
-signed short load_music_driver(Bit8u* fname, signed short type, signed short port)
+signed short load_music_driver(uint8_t* fname, signed short type, signed short port)
 {
 #if defined(__BORLANDC__)
-	if (port && (g_ail_music_driver_buf = (Bit8u*)read_music_driver(fname)) &&
+	if (port && (g_ail_music_driver_buf = (uint8_t*)read_music_driver(fname)) &&
 		((g_ail_music_driver_id = AIL_register_driver(g_ail_music_driver_buf)) != -1))
 	{
-		g_ail_music_driver_descr = (Bit16s*)AIL_describe_driver(g_ail_music_driver_id);
+		g_ail_music_driver_descr = (int16_t*)AIL_describe_driver(g_ail_music_driver_id);
 
 		if (g_ail_music_driver_descr[1] == type)
 		{
@@ -688,12 +688,12 @@ signed short load_music_driver(Bit8u* fname, signed short type, signed short por
 
 				if (type == 3) {
 					g_ail_state_table_size = AIL_state_table_size(g_ail_music_driver_id);
-					g_ail_state_table = (Bit8u*)schick_alloc(g_ail_state_table_size);
+					g_ail_state_table = (uint8_t*)schick_alloc(g_ail_state_table_size);
 					g_ail_timbre_cache_size = AIL_default_timbre_cache_size(g_ail_music_driver_id);
 
 					if (g_ail_timbre_cache_size) {
 
-						g_ail_timbre_cache = (Bit8u*)schick_alloc(g_ail_timbre_cache_size);
+						g_ail_timbre_cache = (uint8_t*)schick_alloc(g_ail_timbre_cache_size);
 
 						AIL_define_timbre_cache(g_ail_music_driver_id, g_ail_timbre_cache, g_ail_timbre_cache_size);
 					}
@@ -782,7 +782,7 @@ void cruft_2(signed short volume)
 signed short have_mem_for_sound(void)
 {
 #if defined(__BORLANDC__)
-	Bit32s size;
+	int32_t size;
 	signed short retval;
 	struct ffblk blk;
 
@@ -792,10 +792,10 @@ signed short have_mem_for_sound(void)
 		size = blk.ff_fsize;
 		size += 4000L;
 
-		if ((Bit32u)size < farcoreleft()) {
+		if ((uint32_t)size < farcoreleft()) {
 			retval = 1;
 
-			if ((Bit32u)(size + 25000L) < farcoreleft()) {
+			if ((uint32_t)(size + 25000L) < farcoreleft()) {
 
 				g_snd_voc_enabled = 1;
 			}
@@ -841,11 +841,11 @@ void play_voc_delay(signed short index)
 #endif
 }
 
-void alloc_voc_buffer(Bit32u size)
+void alloc_voc_buffer(uint32_t size)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
-		if ((g_ail_voc_buffer = (Bit8u*)schick_alloc(size))) ;
+		if ((g_ail_voc_buffer = (uint8_t*)schick_alloc(size))) ;
 	}
 #endif
 }
@@ -937,14 +937,14 @@ void SND_set_volume(unsigned short volume)
 }
 
 /* static */
-signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, signed short irq)
+signed short load_digi_driver(uint8_t* fname, signed short type, signed short io, signed short irq)
 {
 #if defined(__BORLANDC__)
-	if (io && (g_ail_digi_driver_buf = (Bit8u*)read_digi_driver(fname)) &&
+	if (io && (g_ail_digi_driver_buf = (uint8_t*)read_digi_driver(fname)) &&
 		((g_ail_digi_driver_id = AIL_register_driver(g_ail_digi_driver_buf)) != -1))
 	{
 
-		g_ail_digi_driver_descr = (Bit16s*)AIL_describe_driver(g_ail_digi_driver_id);
+		g_ail_digi_driver_descr = (int16_t*)AIL_describe_driver(g_ail_digi_driver_id);
 
 		if (g_ail_digi_driver_descr[1] == type) {
 
@@ -977,9 +977,9 @@ signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, 
 unsigned char* read_digi_driver(char *fname)
 {
 #if defined(__BORLANDC__)
-	Bit32u len;
-	Bit8u *buf;
-	Bit32u ptr;
+	uint32_t len;
+	uint8_t *buf;
+	uint32_t ptr;
 
 	signed int handle;
 
@@ -987,11 +987,11 @@ unsigned char* read_digi_driver(char *fname)
 
 		len = 5000L;
 
-		g_ail_digi_driver_buf2 = (Bit8u*)schick_alloc(len + 16L);
-		ptr = (Bit32u)g_ail_digi_driver_buf2 + 15L;
+		g_ail_digi_driver_buf2 = (uint8_t*)schick_alloc(len + 16L);
+		ptr = (uint32_t)g_ail_digi_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((Bit8u*)ptr);
-		_read(handle, (Bit8u*)buf, (unsigned short)len);
+		buf = EMS_norm_ptr((uint8_t*)ptr);
+		_read(handle, (uint8_t*)buf, (unsigned short)len);
 		_close(handle);
 		return buf;
 	}
@@ -1008,8 +1008,8 @@ unsigned char* read_digi_driver(char *fname)
 /* static */
 signed short open_and_seek_dat(unsigned short fileindex)
 {
-	Bit32u start;
-	Bit32u end;
+	uint32_t start;
+	uint32_t end;
 	signed int handle;
 
 	/* open SCHICK.DAT */
@@ -1023,10 +1023,10 @@ signed short open_and_seek_dat(unsigned short fileindex)
 		lseek(handle, fileindex * 4, SEEK_SET);
 
 		/* read the start offset of the desired file */
-		_read(handle, (Bit8u*)&start, 4);
+		_read(handle, (uint8_t*)&start, 4);
 
 		/* read the start offset of the next file */
-		_read(handle, (Bit8u*)&end, 4);
+		_read(handle, (uint8_t*)&end, 4);
 
 		/* seek to the desired file */
 		lseek(handle, start, SEEK_SET);
@@ -1041,7 +1041,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 	return handle;
 }
 
-Bit32u get_readlength2(signed short index)
+uint32_t get_readlength2(signed short index)
 {
 	return index != -1 ? g_archive_file_length : 0;
 }
@@ -1054,7 +1054,7 @@ Bit32u get_readlength2(signed short index)
  * \param   len         number of bytes to read
  * \return              number of bytes read
  */
-unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
+unsigned short read_archive_file(uint16_t handle, uint8_t *buffer, uint16_t len)
 {
 
 	/* no need to read */
@@ -1062,7 +1062,7 @@ unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
 
 		/* adjust number of bytes to read */
 		if (len > g_archive_file_remaining)
-			len = (Bit16u)g_archive_file_remaining;
+			len = (uint16_t)g_archive_file_remaining;
 
 		g_archive_file_remaining -= len;
 
@@ -1078,10 +1078,10 @@ unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
  * \param   handle      handle returned by load_archive_file
  * \param   off         position to seek for
  */
-void seek_archive_file(Bit16u handle, Bit32s off, ...)
+void seek_archive_file(uint16_t handle, int32_t off, ...)
 {
 
-	Bit32u file_off;
+	uint32_t file_off;
 
 	g_archive_file_remaining = g_archive_file_length - off;
 
@@ -1092,7 +1092,7 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 	return;
 }
 
-signed short load_regular_file(Bit16u index)
+signed short load_regular_file(uint16_t index)
 {
 	signed int handle;
 
@@ -1118,7 +1118,7 @@ signed short load_regular_file(Bit16u index)
  * \param   index       index of the file in SCHICK.DAT or in temp (bitwise or 0x8000)
  * \return              a file handle that can be used with read_archive_file etc.
  */
-signed short load_archive_file(Bit16u index)
+signed short load_archive_file(uint16_t index)
 {
 #if defined(__BORLANDC__)
 	flushall();
@@ -1203,25 +1203,25 @@ void copy_file_to_temp(char* src_file, char* fname)
 	}
 }
 
-Bit32s process_nvf_extraction(struct nvf_extract_desc *nvf)
+int32_t process_nvf_extraction(struct nvf_extract_desc *nvf)
 {
 	signed short i;
-	Bit32u offs;
+	uint32_t offs;
 	signed short pics;
 	signed short width;
 	signed short height;
 	signed short va;
-	Bit32u p_size;
-	Bit32u retval;
+	uint32_t p_size;
+	uint32_t retval;
 	signed char nvf_type;
 #if !defined(__BORLANDC__)
-	Bit8u *nvf_no;
-	Bit8u *src;
+	uint8_t *nvf_no;
+	uint8_t *src;
 #else
-	Bit8u huge *nvf_no;
-	Bit8u huge *src;
+	uint8_t huge *nvf_no;
+	uint8_t huge *src;
 #endif
-	Bit8u *dst;
+	uint8_t *dst;
 
 	nvf_type = *(signed char*)(nvf->src);
 	va = nvf_type & 0x80;
@@ -1312,7 +1312,7 @@ Bit32s process_nvf_extraction(struct nvf_extract_desc *nvf)
 		dst = nvf->dst;
 
 		/* RLE decompression */
-		decomp_rle(width, height, dst, src, (Bit8u*)g_text_output_buf, nvf->compression_type);
+		decomp_rle(width, height, dst, src, (uint8_t*)g_text_output_buf, nvf->compression_type);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* retval was originally neither set nor used here.
 			VC++2008 complains about an uninitialized variable
@@ -1635,7 +1635,7 @@ void mouse_setCRTpage(const unsigned int page)
  *
  * \param icon	pointer to the icon of the item 16x16
  */
-void make_ggst_cursor(Bit8u *icon)
+void make_ggst_cursor(uint8_t *icon)
 {
 	signed int y;
 	signed int x;
@@ -2198,7 +2198,7 @@ static void set_market_size(void)
 	}
 }
 
-void pal_fade(Bit8s *dst, Bit8s *p2)
+void pal_fade(int8_t *dst, int8_t *p2)
 {
 	signed int i;
 
@@ -2241,7 +2241,7 @@ void pal_fade(Bit8s *dst, Bit8s *p2)
 	}
 }
 
-void pal_fade_in(Bit8s *dst, Bit8s *p2, const signed int v3, const signed int colors)
+void pal_fade_in(int8_t *dst, int8_t *p2, const signed int v3, const signed int colors)
 {
 	signed int i;
 	signed int si;
@@ -2276,13 +2276,13 @@ static void dawning(void)
 	if ((gs_day_timer >= HOURS(6)) && (gs_day_timer <= HOURS(7)) && !((gs_day_timer - HOURS(6)) % SECONDS(56)))
 	{
 		/* floor */
-		pal_fade((Bit8s*)gs_palette_floor, (Bit8s*)g_townpal_buf);
+		pal_fade((int8_t*)gs_palette_floor, (int8_t*)g_townpal_buf);
 
 		/* buildings */
-		pal_fade((Bit8s*)gs_palette_buildings, (Bit8s*)g_townpal_buf + 0x60);
+		pal_fade((int8_t*)gs_palette_buildings, (int8_t*)g_townpal_buf + 0x60);
 
 		/* sky */
-		pal_fade((Bit8s*)gs_palette_sky, (Bit8s*)g_townpal_buf + 0xc0);
+		pal_fade((int8_t*)gs_palette_sky, (int8_t*)g_townpal_buf + 0xc0);
 
 		/* in a town */
 		if (gs_current_town && !gs_dungeon_index && !gs_current_loctype && !gs_show_travel_map &&
@@ -2305,13 +2305,13 @@ static void nightfall(void)
 	if ((gs_day_timer >= HOURS(20)) && (gs_day_timer <= HOURS(21)) && !((gs_day_timer - HOURS(20)) % SECONDS(56)))
 	{
 		/* floor */
-		pal_fade((Bit8s*)gs_palette_floor, (Bit8s*)&g_floor_fade_palette[0][0]);
+		pal_fade((int8_t*)gs_palette_floor, (int8_t*)&g_floor_fade_palette[0][0]);
 
 		/* buildings */
-		pal_fade((Bit8s*)gs_palette_buildings, (Bit8s*)&g_building_fade_palette[0][0]);
+		pal_fade((int8_t*)gs_palette_buildings, (int8_t*)&g_building_fade_palette[0][0]);
 
 		/* sky */
-		pal_fade((Bit8s*)gs_palette_sky, (Bit8s*)&g_sky_fade_palette[0][0]);
+		pal_fade((int8_t*)gs_palette_sky, (int8_t*)&g_sky_fade_palette[0][0]);
 
 		/* in a town */
 		if (gs_current_town && !gs_dungeon_index && !gs_current_loctype && !gs_show_travel_map &&
@@ -2353,7 +2353,7 @@ signed int get_current_season(void)
 static void do_census(void)
 {
 	signed int sign = 0;	/* {-1, 0, 1} */
-	Bit32s val;
+	int32_t val;
 
 	if (gs_bank_deposit > 0) {
 		sign = 1;
@@ -2682,7 +2682,7 @@ void do_timers(void)
  * \param   val         vaule to subtract from the ingame timers
  * \note improvable
  */
-void sub_ingame_timers(const Bit32s val)
+void sub_ingame_timers(const int32_t val)
 {
 	signed int i = 0;
 
@@ -2709,7 +2709,7 @@ void sub_ingame_timers(const Bit32s val)
  *
  * \param   val         vaule to subtract from the modification timers
  */
-void sub_mod_timers(const Bit32s val)
+void sub_mod_timers(const int32_t val)
 {
 	signed int i;
 	signed int j;
@@ -2763,9 +2763,9 @@ void sub_mod_timers(const Bit32s val)
 				if (h_index != -1) {
 					/* if a hero/npc is determined */
 
-					mp = (Bit8u*)get_hero(h_index);
+					mp = (uint8_t*)get_hero(h_index);
 					/* make a pointer to the hero's attribute mod */
-					mp += (Bit32u)sp->offset;
+					mp += (uint32_t)sp->offset;
 					/* subtract the mod */
 					*mp -= sp->modifier;
 
@@ -2804,7 +2804,7 @@ void sub_mod_timers(const Bit32s val)
 
 			} else {
 				/* target affects the savegame */
-				mp = (Bit8u*)&gs_datseg_status_start;
+				mp = (uint8_t*)&gs_datseg_status_start;
 				mp += sp->offset;
 				*mp -= sp->modifier;
 			}
@@ -2847,14 +2847,14 @@ signed int get_free_mod_slot(void)
 	return i;
 }
 
-void set_mod_slot(const signed int slot_no, const Bit32s timer_value, const Bit8u *ptr, const signed char mod, const signed char who)
+void set_mod_slot(const signed int slot_no, const int32_t timer_value, const uint8_t *ptr, const signed char mod, const signed char who)
 {
 	signed int j;
 
 #if !defined (__BORLANDC__)
-	Bit8u *mod_ptr;
+	uint8_t *mod_ptr;
 #else
-	Bit8u huge *mod_ptr;
+	uint8_t huge *mod_ptr;
 #endif
 	signed char target;
 	signed int i;
@@ -2863,10 +2863,10 @@ void set_mod_slot(const signed int slot_no, const Bit32s timer_value, const Bit8
 
 	if (who == -1) {
 		/* mod slot is on savegame */
-		mod_ptr = (Bit8u*)&gs_datseg_status_start;
+		mod_ptr = (uint8_t*)&gs_datseg_status_start;
 	} else {
 		/* mod slot is on a hero/npc */
-		mod_ptr = (Bit8u*)get_hero(who);
+		mod_ptr = (uint8_t*)get_hero(who);
 
 		if (get_hero(who)->timer_id != 0) {
 			/* hero/npc has a target number */
@@ -2899,7 +2899,7 @@ void set_mod_slot(const signed int slot_no, const Bit32s timer_value, const Bit8
 	gs_modification_timers[slot_no].modifier = mod;
 	gs_modification_timers[slot_no].offset = (HugePt)ptr - mod_ptr;
 	gs_modification_timers[slot_no].time_left = timer_value;
-	*((Bit8s*)ptr) += mod;
+	*((int8_t*)ptr) += mod;
 }
 
 /**
@@ -2908,7 +2908,7 @@ void set_mod_slot(const signed int slot_no, const Bit32s timer_value, const Bit8
  *	This function decrements the timers for the healing and staffspell timeouts.
  *	Furthermore, the g_check_poison flag is set.
  */
-void sub_heal_staffspell_timers(const Bit32s fmin)
+void sub_heal_staffspell_timers(const int32_t fmin)
 {
 	signed int i;
 	struct struct_hero *hero_i;
@@ -2971,7 +2971,7 @@ void sub_heal_staffspell_timers(const Bit32s fmin)
  *	If the time of the lightsource is up the torch is removed from the
  *	inventory and the lantern is turned off.
  */
-void sub_light_timers(const Bit32s quarter)
+void sub_light_timers(const int32_t quarter)
 {
 	signed int j;
 	signed int i;
@@ -3325,9 +3325,9 @@ static void check_level_up(void)
 void update_travelmap(void)
 {
 	signed int l_si = 0;
-	Bit8u* p1;
-	Bit8u* p2;
-	Bit8u* p3;
+	uint8_t* p1;
+	uint8_t* p2;
+	uint8_t* p3;
 	struct struct_pic_copy pic_copy_bak = g_pic_copy; /* struct copy */
 
 	p1 = g_buffer6_ptr + 2000;
@@ -3574,14 +3574,14 @@ static void passages_reset(void)
  *
  * \param   time        ticks to forward
  */
-void timewarp(const Bit32s time)
+void timewarp(const int32_t time)
 {
 	signed short hour_old;
 	signed short hour_new;
-	Bit32s i;
+	int32_t i;
 	signed short td_bak;
 	signed short hour_diff;
-	Bit32s timer_bak;
+	int32_t timer_bak;
 
 	timer_bak = gs_day_timer;
 	td_bak = g_timers_disabled;
@@ -3691,7 +3691,7 @@ void timewarp(const Bit32s time)
  *
  * \param   time        ticks to forward to, e.g to 6 AM. If the passed time agrees with the current time of the day, 24 hours will be forwarded.
  */
-void timewarp_until_time_of_day(const Bit32s time)
+void timewarp_until_time_of_day(const int32_t time)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* The code of the function replicates the one of timewarp(..)
@@ -3705,11 +3705,11 @@ void timewarp_until_time_of_day(const Bit32s time)
 #else
 	signed short hour_old;
 	signed short hour_new;
-	Bit32s i;
+	int32_t i;
 	signed short td_bak;
 	signed short j;
 	signed short hour_diff;
-	Bit32s timer_bak;
+	int32_t timer_bak;
 
 	i = 0;
 	timer_bak = gs_day_timer;
@@ -3791,7 +3791,7 @@ static void draw_splash(const signed int hero_pos, const signed int type)
 {
 	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
-		Bit8u *splash = (type == 0 ? g_splash_le : g_splash_ae);
+		uint8_t *splash = (type == 0 ? g_splash_le : g_splash_ae);
 
 		restore_rect_rle(g_vga_memstart, splash, g_hero_pic_posx[hero_pos], 157, 32, 32, 2);
 
@@ -3808,7 +3808,7 @@ void timewarp_until_midnight(void)
 	/* only called at a single place, at the Swafnild encounter in seg072.cpp */
 {
 	/* TODO: This doesn't look all correct to me... Have all timers been considered? Why not call timewarp_until_time_of_day(..)? */
-	Bit32s ticks_left;
+	int32_t ticks_left;
 	signed short td_bak;
 
 	/* save the timers status */
@@ -3996,35 +3996,35 @@ void unused_spinlock(void)
  * \param   v           32bit BE value
  * \return              32bit LE value
  */
-Bit32s swap_u32(Bit32u v)
+int32_t swap_u32(uint32_t v)
 {
 	register signed short tmp;
 	signed short a[2];
-	Bit32s *ptr = (Bit32s*)(&a[0]);
+	int32_t *ptr = (int32_t*)(&a[0]);
 
-	*ptr = readds((Bit8u*)&v);
+	*ptr = readds((uint8_t*)&v);
 
 	tmp = a[0];
 	a[0] = swap_u16(a[1]);
 	a[1] = swap_u16(tmp);
 
-	return readds((Bit8u*)ptr);
+	return readds((uint8_t*)ptr);
 }
 
 #if defined(__BORLANDC__)
 /* unused */
-Bit32u swap_u32_unused(Bit32u v)
+uint32_t swap_u32_unused(uint32_t v)
 {
 	signed short a[2];
 	signed short tmp;
-	Bit32s *ptr = (Bit32s*)(&a[0]);
+	int32_t *ptr = (int32_t*)(&a[0]);
 
-	tmp = (signed short)(*ptr = readds((Bit8u*)&v));
+	tmp = (signed short)(*ptr = readds((uint8_t*)&v));
 
 	a[0] = a[1];
 	a[1] = tmp;
 
-	return readds((Bit8u*)ptr);
+	return readds((uint8_t*)ptr);
 }
 #endif
 
@@ -4035,7 +4035,7 @@ Bit32u swap_u32_unused(Bit32u v)
  * \param   bytes       bytes to allocate
  * \return              an EMS handle, to access the memory.
  */
-signed int alloc_EMS(const Bit32s bytes)
+signed int alloc_EMS(const int32_t bytes)
 {
 	signed int handle;
 
@@ -4054,20 +4054,20 @@ signed int alloc_EMS(const Bit32s bytes)
 	return 0;
 }
 
-void from_EMS(const Bit8u* dst, const signed int handle, Bit32s bytes)
+void from_EMS(const uint8_t* dst, const signed int handle, int32_t bytes)
 {
 	signed int pages_copied;
 	signed int pages_left;
 	signed int pages_copied2;
 	signed int len;
-	Bit8u* ptr;
+	uint8_t* ptr;
 
 	pages_left = bytes / 0x4000 + 1;
 	pages_copied2 = pages_copied = 0;
 
 	do {
 		EMS_map_memory(handle, pages_copied2++, 0);
-		ptr = (Bit8u*)((HugePt)dst + (((Bit32s)pages_copied) << 0x0e));
+		ptr = (uint8_t*)((HugePt)dst + (((int32_t)pages_copied) << 0x0e));
 		pages_copied++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : bytes;
@@ -4079,20 +4079,20 @@ void from_EMS(const Bit8u* dst, const signed int handle, Bit32s bytes)
 	} while (--pages_left != 0);
 }
 
-void to_EMS(const signed int handle, const Bit8u* src, Bit32s bytes)
+void to_EMS(const signed int handle, const uint8_t* src, int32_t bytes)
 {
 	signed int pages_copied;
 	signed int pages_left;
 	signed int pages_copied2;
 	signed int len;
-	Bit8u* ptr;
+	uint8_t* ptr;
 
 	pages_left = bytes / 0x4000 + 1;
 	pages_copied2 = pages_copied = 0;
 
 	do {
 		EMS_map_memory(handle, pages_copied2++, 0);
-		ptr = (Bit8u*)((HugePt)src + (((Bit32s)pages_copied) << 0x0e));
+		ptr = (uint8_t*)((HugePt)src + (((int32_t)pages_copied) << 0x0e));
 		pages_copied++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : bytes;
@@ -5096,10 +5096,10 @@ signed int get_random_hero(void)
  *
  * \return              the sum of the money of all heroes in the current group
  */
-Bit32s get_party_money(void)
+int32_t get_party_money(void)
 {
 	signed int i;
-	Bit32s sum = 0;
+	int32_t sum = 0;
 	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i < 6; i++, hero++) {
@@ -5121,11 +5121,11 @@ Bit32s get_party_money(void)
  *	If only a NPC is in that party, he gets all the money.
  *	If a hero is dead and in the current party, his money is set to 0.
  */
-void set_party_money(Bit32s money)
+void set_party_money(int32_t money)
 {
 	signed short heroes = 0;
 	signed short i;
-	Bit32s hero_money;
+	int32_t hero_money;
 	struct struct_hero *hero;
 
 	if (money < 0)
@@ -5174,7 +5174,7 @@ void set_party_money(Bit32s money)
  *
  * \param   money       money to add
  */
-void add_party_money(const Bit32s money)
+void add_party_money(const int32_t money)
 {
 	set_party_money(get_party_money() + money);
 }
@@ -5185,7 +5185,7 @@ void add_party_money(const Bit32s money)
  * \param   hero        pointer to the hero
  * \param   ap          AP the hero should get
  */
-void add_hero_ap(struct struct_hero *hero, const Bit32s ap)
+void add_hero_ap(struct struct_hero *hero, const int32_t ap)
 {
 	hero->ap += ap;
 }
@@ -5195,7 +5195,7 @@ void add_hero_ap(struct struct_hero *hero, const Bit32s ap)
  *
  * \param   ap          AP to share
  */
-void add_group_ap(Bit32s ap)
+void add_group_ap(int32_t ap)
 {
 	signed int i;
 	struct struct_hero *hero;
@@ -5262,11 +5262,11 @@ void sub_hero_ap_all(const signed int ap)
 
 		if (hero->typus && (hero->group_id == gs_current_group) && !hero->flags.dead)
 		{
-			if ((Bit32u)ap <= hero->ap) {
+			if ((uint32_t)ap <= hero->ap) {
 #if !defined(__BORLANDC__)
 				D1_INFO("%s erhaelt %+d AP\n", hero->alias, -ap);
 #endif
-				add_hero_ap(hero, -((Bit32s)ap));
+				add_hero_ap(hero, -((int32_t)ap));
 			} else {
 #if !defined(__BORLANDC__)
 				D1_INFO("%s wird auf 0 AP gesetzt\n", hero->alias);
@@ -5565,7 +5565,7 @@ int main(int argc, char** argv)
 {
 	signed short l_si;
 	signed short l_di;
-	Bit32s l3;
+	int32_t l3;
 	signed short savegame;
 	signed short len;
 
@@ -5578,7 +5578,7 @@ int main(int argc, char** argv)
 #if defined(__BORLANDC__)
 	randomize();
 
-	save_display_stat((Bit8u*)&g_video_page_bak);
+	save_display_stat((uint8_t*)&g_video_page_bak);
 #endif
 
 	if (!init_memory()) {
@@ -5716,12 +5716,12 @@ int main(int argc, char** argv)
 #endif
 }
 
-Bit8u* schick_alloc(Bit32u size)
+uint8_t* schick_alloc(uint32_t size)
 {
 #if defined(__BORLANDC__)
-	return (Bit8u*)farcalloc(size, 1);
+	return (uint8_t*)farcalloc(size, 1);
 #else
-	return (Bit8u*)calloc(size, 1);
+	return (uint8_t*)calloc(size, 1);
 #endif
 }
 

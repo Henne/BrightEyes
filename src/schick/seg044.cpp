@@ -30,23 +30,23 @@ namespace M302de {
  * \return              the number of copied bytes
  */
 /* Borlandified and identical */
-static signed int copy_ani_seq(Bit8s *dst, const signed int ani_num, const signed int type)
+static signed int copy_ani_seq(int8_t *dst, const signed int ani_num, const signed int type)
 {
-	Bit8s *p_datbuffer;
-	Bit8s *p_datitem;
+	int8_t *p_datbuffer;
+	int8_t *p_datitem;
 	signed int ani_max_num;
 	signed int i;
 	signed char len;
 
 	/* get pointer from ANI.DAT */
-	p_datbuffer = (Bit8s*)g_buffer_anidat;
+	p_datbuffer = (int8_t*)g_buffer_anidat;
 
 	/* check if we must use WEAPANI.DAT */
 	if (type == 3)
-		p_datbuffer = (Bit8s*)g_buffer_weapanidat;
+		p_datbuffer = (int8_t*)g_buffer_weapanidat;
 
 	/* get number of animation sequences */
-	ani_max_num = *(Bit16s*)p_datbuffer;
+	ani_max_num = *(int16_t*)p_datbuffer;
 
 	/* sanity check */
 	if (ani_num < 0)
@@ -90,17 +90,17 @@ static signed int copy_ani_seq(Bit8s *dst, const signed int ani_num, const signe
 /* Borlandified and identical */
 static signed char get_seq_header(const signed int ani_num)
 {
-	Bit8s *p_datbuffer;
-	Bit8s *p_datitem;
-	Bit8s length;
+	int8_t *p_datbuffer;
+	int8_t *p_datitem;
+	int8_t length;
 	signed int ani_max_num;
 	signed int i;
 
 	/* get pointer from ANI.DAT */
-	p_datbuffer = (Bit8s*)g_buffer_anidat;
+	p_datbuffer = (int8_t*)g_buffer_anidat;
 
 	/* get number of ani seqences in ANI.DAT */
-	ani_max_num = *(Bit16s*)p_datbuffer;
+	ani_max_num = *(int16_t*)p_datbuffer;
 
 	if (ani_num < 0) {
 		return 0;
@@ -146,10 +146,10 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 	signed short l8;
 	signed short l9;
 	signed short i;
-	Bit8s *sheet_ptr1;
-	Bit8s *sheet_ptr2;
+	int8_t *sheet_ptr1;
+	int8_t *sheet_ptr2;
 	signed int weapon_id;
-	Bit16s *ani_index_ptr;
+	int16_t *ani_index_ptr;
 
 	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
 	weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
@@ -194,8 +194,8 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 	}
 
 	l1 += dir;
-	sheet_ptr1 = (Bit8s*)&g_fig_anisheets[sheet_id][1];
-	sheet_ptr2 = (Bit8s*)&g_fig_anisheets[sheet_id + 4][1];
+	sheet_ptr1 = (int8_t*)&g_fig_anisheets[sheet_id][1];
+	sheet_ptr2 = (int8_t*)&g_fig_anisheets[sheet_id + 4][1];
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
 	g_fig_anisheets[sheet_id][242] = hero->sprite_id;
@@ -274,7 +274,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 			}
 
 			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-				*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_id] * 48 + weapon_type * 16) +
+				*(int16_t*)((uint8_t*)g_weaponani_table + (g_weaponani_types[hero->sprite_id] * 48 + weapon_type * 16) +
 				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 		}
 	}
@@ -286,7 +286,7 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
 			if ((weapon_type != -1) && (weapon_type < 3) &&	(hero->typus != HERO_TYPE_MAGIER) && (hero->typus != HERO_TYPE_DRUIDE))
 			{
 				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-					*(Bit16s*)((Bit8u*)g_weaponani_table + (g_weaponani_types[hero->sprite_id] * 48 + weapon_type * 16) +
+					*(int16_t*)((uint8_t*)g_weaponani_table + (g_weaponani_types[hero->sprite_id] * 48 + weapon_type * 16) +
 					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 			}
 	}
@@ -334,10 +334,10 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
 	signed short l8;
 	signed short l9;
 	signed short i;
-	Bit8s *sheet_ptr1;
-	Bit8s *sheet_ptr2;
+	int8_t *sheet_ptr1;
+	int8_t *sheet_ptr2;
 	struct struct_fighter *fighter;			/* only user for two sprited figures */
-	Bit16s *ani_index_ptr;			/* read only */
+	int16_t *ani_index_ptr;			/* read only */
 	signed short weapon_type;
 
 	/* initialize with bare hands */
@@ -393,8 +393,8 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
 
 	l1 += dir;
 
-	sheet_ptr1 = (Bit8s*)&g_fig_anisheets[sheet_id][1];
-	sheet_ptr2 = (Bit8s*)&g_fig_anisheets[sheet_id + 4][1];
+	sheet_ptr1 = (int8_t*)&g_fig_anisheets[sheet_id][1];
+	sheet_ptr2 = (int8_t*)&g_fig_anisheets[sheet_id + 4][1];
 
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
@@ -483,7 +483,7 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
 
 			/* copy the weapon ani */
 			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-				*(Bit16s*)((Bit8u*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
+				*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 		}
 	}
 
@@ -496,7 +496,7 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
 
 				/* copy the weapon ani */
 				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-					*(Bit16s*)((Bit8u*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
+					*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 			}
 	}
 
@@ -551,7 +551,7 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
  */
 
 /* Borlandified and identical */
-void FANI_prepare_spell_hero(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit16s obj1, Bit16s obj2, Bit16u v5, Bit16u v6)
+void FANI_prepare_spell_hero(uint16_t v1, struct struct_hero *hero, uint16_t v2, int16_t obj1, int16_t obj2, uint16_t v5, uint16_t v6)
 {
 	signed int x_obj1;
 	signed int y_obj1;
@@ -560,8 +560,8 @@ void FANI_prepare_spell_hero(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit
 	signed short dir;
 	signed short l2;
 	signed short l3;
-	Bit8s *sheet_ptr;
-	Bit16s *ani_index_ptr;
+	int8_t *sheet_ptr;
+	int16_t *ani_index_ptr;
 
 	signed short l_di;
 	signed short l_si;
@@ -592,7 +592,7 @@ void FANI_prepare_spell_hero(Bit16u v1, struct struct_hero *hero, Bit16u v2, Bit
 
 	l_di += (v2 == 4) ? dir : hero->viewdir;
 
-	sheet_ptr = (Bit8s*)&g_fig_anisheets[v1][1];
+	sheet_ptr = (int8_t*)&g_fig_anisheets[v1][1];
 
 	g_fig_anisheets[v1][0] = get_seq_header(ani_index_ptr[l_di]);
 
@@ -688,8 +688,8 @@ void FANI_prepare_spell_enemy(signed short v1, struct enemy_sheet *enemy, signed
 	signed int dir;
 	signed int l2;
 	signed int l3;		/* indicees to ani_index_ptr */
-	Bit8s *sheet_ptr;	/* mostly written */
-	Bit16s *ani_index_ptr;	/* read only */
+	int8_t *sheet_ptr;	/* mostly written */
+	int16_t *ani_index_ptr;	/* read only */
 
 	signed int dir2;
 
@@ -718,7 +718,7 @@ void FANI_prepare_spell_enemy(signed short v1, struct enemy_sheet *enemy, signed
 	/* this is true if a monster attacks a hero */
 	l1 = (v2 == 4) ? 29 : 16;
 
-	sheet_ptr = (Bit8s*)&g_fig_anisheets[v1][1];
+	sheet_ptr = (int8_t*)&g_fig_anisheets[v1][1];
 
 	/* this is true if a monster attacks a hero */
 	l1 += (v2 == 4) ? dir : enemy->viewdir;

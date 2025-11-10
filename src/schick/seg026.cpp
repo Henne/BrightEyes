@@ -443,13 +443,13 @@ char g_all_chr_wildcard3[6] = "*.CHR"; // ds:0x5e64
 
 
 
-static Bit32u *g_saved_files_buf;		// ds:0xe2d2
+static uint32_t *g_saved_files_buf;		// ds:0xe2d2
 time_t g_last_save_time;			// ds:0xe2d6
 char g_savegame_names[5][9];			// ds:0xe2da
 
 void init_text(void)
 {
-	Bit32s len;
+	int32_t len;
 	signed int handle;
 
 	handle = load_archive_file(ARCHIVE_FILE_FONT6);
@@ -457,19 +457,19 @@ void init_text(void)
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TEXT_LTX);
-	len = (signed short)read_archive_file(handle, (Bit8u*)g_text_ltx_buffer, 64000);
+	len = (signed short)read_archive_file(handle, (uint8_t*)g_text_ltx_buffer, 64000);
 	close(handle);
 
 	split_textbuffer((char**)g_text_ltx_index, g_text_ltx_buffer, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
-	len = (signed short)read_archive_file(handle, (Bit8u*)g_buffer5_ptr, 5000);
+	len = (signed short)read_archive_file(handle, (uint8_t*)g_buffer5_ptr, 5000);
 	close(handle);
 
 	split_textbuffer((char**)g_itemsname, g_buffer5_ptr, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
-	len = (signed short)read_archive_file(handle, (Bit8u*)g_monnames_buffer, 5000);
+	len = (signed short)read_archive_file(handle, (uint8_t*)g_monnames_buffer, 5000);
 	close(handle);
 
 	split_textbuffer((char**)g_monnames_index, g_monnames_buffer, len);
@@ -477,7 +477,7 @@ void init_text(void)
 
 void load_tx(signed short index)
 {
-	Bit32s archive_file_len;
+	int32_t archive_file_len;
 	signed short archive_file_handle;
 
 	if (index == -1)
@@ -485,7 +485,7 @@ void load_tx(signed short index)
 
 	archive_file_handle = load_archive_file(index);
 
-	archive_file_len = (signed short)read_archive_file(archive_file_handle, (Bit8u*)g_buffer7_ptr, 64000);
+	archive_file_len = (signed short)read_archive_file(archive_file_handle, (uint8_t*)g_buffer7_ptr, 64000);
 
 	close(archive_file_handle);
 
@@ -496,7 +496,7 @@ void load_tx(signed short index)
 
 void load_tx2(signed short index)
 {
-	Bit32s len;
+	int32_t len;
 	register signed int handle;
 
 	if (index == -1)
@@ -514,23 +514,23 @@ void load_tx2(signed short index)
  * WAFFINFO.LTX seems to have 19 + 40 + 67 = 126 strings, which will lead to problems */
 void load_ltx(unsigned short index)
 {
-	Bit32s len;
+	int32_t len;
 	signed int handle;
 
 	handle = load_archive_file(index);
 
 	g_area_prepared = -1;
 
-	len = (signed short)read_archive_file(handle, ((Bit8u*)g_buffer9_ptr3) + 1000, 64000);
+	len = (signed short)read_archive_file(handle, ((uint8_t*)g_buffer9_ptr3) + 1000, 64000);
 
 	close(handle);
 
 	split_textbuffer((char**)g_buffer9_ptr3, (char*)(g_buffer9_ptr3 + 1000L), len);
 }
 
-void split_textbuffer(char **dst, char *src, Bit32u len)
+void split_textbuffer(char **dst, char *src, uint32_t len)
 {
-	Bit32u i = 0;
+	uint32_t i = 0;
 
 	*dst = src;
 	dst++;
@@ -686,15 +686,15 @@ signed short load_game_state(void)
 #endif
 
 		/* init */
-		g_saved_files_buf = (Bit32u*)g_dtp2;
-		memset(g_saved_files_buf, 0, 286 * sizeof(Bit32u));
+		g_saved_files_buf = (uint32_t*)g_dtp2;
+		memset(g_saved_files_buf, 0, 286 * sizeof(uint32_t));
 
 		/* read version info */
-		_read(handle_sg, (Bit8u*)g_text_output_buf, 12);
-		_read(handle_sg, (Bit8u*)&version[3], 1);
-		_read(handle_sg, (Bit8u*)&version[2], 1);
-		_read(handle_sg, (Bit8u*)&version[0], 1);
-		_read(handle_sg, (Bit8u*)&version[1], 1);
+		_read(handle_sg, (uint8_t*)g_text_output_buf, 12);
+		_read(handle_sg, (uint8_t*)&version[3], 1);
+		_read(handle_sg, (uint8_t*)&version[2], 1);
+		_read(handle_sg, (uint8_t*)&version[0], 1);
+		_read(handle_sg, (uint8_t*)&version[1], 1);
 
 		_read(handle_sg, &gs_datseg_status_start, 4);
 
@@ -709,7 +709,7 @@ signed short load_game_state(void)
 		g_special_screen = 1;
 
 		/* read file table */
-		_read(handle_sg, g_saved_files_buf, 286 * sizeof(Bit32u));
+		_read(handle_sg, g_saved_files_buf, 286 * sizeof(uint32_t));
 
 		/* create for each saved file in gam a file in TEMP */
 		for (i = 0; i < 286; i++) {
@@ -737,7 +737,7 @@ signed short load_game_state(void)
 		hero_i = (struct struct_hero*)g_renderbuf_ptr;
 
 		do {
-			l3 = _read(handle_sg, (Bit8u*)hero_i, sizeof(struct struct_hero));
+			l3 = _read(handle_sg, (uint8_t*)hero_i, sizeof(struct struct_hero));
 
 			if (l3 != 0) {
 
@@ -749,7 +749,7 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
 
-				write(handle, (Bit8u*)hero_i, sizeof(struct struct_hero));
+				write(handle, (uint8_t*)hero_i, sizeof(struct struct_hero));
 				close(handle);
 
 				if (hero_i->slot_pos != 0) {
@@ -842,10 +842,10 @@ signed short save_game_state(void)
 	signed short tw_bak;
 	signed short l1;
 	signed short slot;
-	Bit32u filepos;
-	Bit32u filepos2;
+	uint32_t filepos;
+	uint32_t filepos2;
 	signed short flag;
-	Bit32u len;
+	uint32_t len;
 	struct ffblk blk;
 
 	tw_bak = g_textbox_width;
@@ -893,8 +893,8 @@ signed short save_game_state(void)
 
 	g_textbox_width = tw_bak;
 
-	g_saved_files_buf = (Bit32u*)g_dtp2;
-	memset(g_saved_files_buf, 0, 286 * sizeof(Bit32u));
+	g_saved_files_buf = (uint32_t*)g_dtp2;
+	memset(g_saved_files_buf, 0, 286 * sizeof(uint32_t));
 
 	if (slot != -2 && slot != 5) {
 
@@ -1002,7 +1002,7 @@ signed short save_game_state(void)
 		}
 
 		filepos2 = filepos;
-		len = (Bit16u)write(handle_sg, g_saved_files_buf, 286 * sizeof(Bit32u));
+		len = (uint16_t)write(handle_sg, g_saved_files_buf, 286 * sizeof(uint32_t));
 		filepos += len;
 
 		if (len != 4 * 286) {
@@ -1027,10 +1027,10 @@ signed short save_game_state(void)
 				_read(handle, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
 				close(handle);
 
-				len = (Bit16u)write(handle_sg, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
+				len = (uint16_t)write(handle_sg, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
 				filepos += len;
 
-				if ((Bit16u)g_saved_files_buf[tw_bak] != len) {
+				if ((uint16_t)g_saved_files_buf[tw_bak] != len) {
 					GUI_output(get_ttx(348));
 					close(handle_sg);
 					return 0;
@@ -1044,7 +1044,7 @@ signed short save_game_state(void)
 
 		/* write the file table */
 		lseek(handle_sg, filepos2, 0);
-		write(handle_sg, g_saved_files_buf, 286 * sizeof(Bit32u));
+		write(handle_sg, g_saved_files_buf, 286 * sizeof(uint32_t));
 
 		/* append all CHR files */
 		lseek(handle_sg, filepos, 0);
@@ -1183,7 +1183,7 @@ void write_chr_temp(unsigned short hero_pos)
  * \param   temple_id   > 0 the id of the temple, -1 on delete mode
  * \return              # of CHR-files in TEMP-dir
  */
-signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
+signed short copy_chr_names(uint8_t *ptr, signed short temple_id)
 {
 #if defined(__BORLANDC__)
 	signed short count = 0;

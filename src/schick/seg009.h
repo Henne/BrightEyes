@@ -1,14 +1,14 @@
 #if !defined(__BORLANDC__)
 namespace M302de {
 
-void decomp_pp20(Bit8u *dst, Bit8u *src_data, Bit8u *src, Bit32u len);
+void decomp_pp20(uint8_t *dst, uint8_t *src_data, uint8_t *src, uint32_t len);
 
 }
 
 #else
 extern "C" {
 
-void decomp_pp20(Bit8u *dst, Bit8u *src_data, Bit16u off, Bit16u seg, Bit32u len);
+void decomp_pp20(uint8_t *dst, uint8_t *src_data, uint16_t off, uint16_t seg, uint32_t len);
 
 }
 #endif

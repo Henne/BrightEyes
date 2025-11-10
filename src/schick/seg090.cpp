@@ -42,9 +42,9 @@ signed short DNG12_handler(void)
 	signed short target_pos;
 	signed short i;
 	signed short tw_bak;
-	Bit32s money;
+	int32_t money;
 	struct struct_hero *hero;
-	Bit8u *ptr;
+	uint8_t *ptr;
 
 	ptr = g_dng_map;
 	tw_bak = g_textbox_width;
@@ -268,9 +268,9 @@ signed short DNG12_handler(void)
 #endif
 
 #if !defined(__BORLANDC__)
-		if (div16((Bit16u)ptr[MAP_POS(3,11)]) == DNG_TILE_OPEN_DOOR)
+		if (div16((uint16_t)ptr[MAP_POS(3,11)]) == DNG_TILE_OPEN_DOOR)
 #else
-		/* REMARK: enforce cast to Bit16u */
+		/* REMARK: enforce cast to uint16_t */
 		if (div16((_AL = ptr[MAP_POS(3,11)], _AH = 0, _AX)) == DNG_TILE_OPEN_DOOR)
 #endif
 		{
@@ -284,9 +284,9 @@ signed short DNG12_handler(void)
 #endif
 
 #if !defined(__BORLANDC__)
-		if (div16((Bit16u)ptr[MAP_POS(3,6)]) == 2)
+		if (div16((uint16_t)ptr[MAP_POS(3,6)]) == 2)
 #else
-		/* REMARK: enforce cast to Bit16u */
+		/* REMARK: enforce cast to uint16_t */
 		if (div16((_AL = ptr[MAP_POS(3,6)], _AH = 0, _AX)) == 2)
 #endif
 		{
@@ -515,7 +515,7 @@ signed short DNG12_handler(void)
 	return 0;
 }
 
-void DNG_clear_corridor(Bit8s *flag)
+void DNG_clear_corridor(int8_t *flag)
 {
 	/* ask if the corridor should be cleared */
 	if (GUI_bool(get_tx(1))) {
@@ -534,7 +534,7 @@ void DNG_clear_corridor(Bit8s *flag)
 
 void DNG12_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* ptr_bak = chest->content;
+	uint8_t* ptr_bak = chest->content;
 
 	chest->content = gs_dng12_chest1_content;
 

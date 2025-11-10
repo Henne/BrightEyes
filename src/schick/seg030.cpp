@@ -159,7 +159,7 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 	signed int answer;
 	signed int optioncount;
 	struct struct_dialog_state *state_ptr;
-	Bit8u *states_tab;
+	uint8_t *states_tab;
 	struct struct_dialog_partner *partners_tab;
 	char *dst;
 	char *fmt;
@@ -183,7 +183,7 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 	g_dialog_state = g_dialog_done = 0;
 
 	partners_tab = &gs_dialog_partners[0];
-	states_tab = (Bit8u*)partners_tab[tlk_informer].states_offset;
+	states_tab = (uint8_t*)partners_tab[tlk_informer].states_offset;
 	txt_offset = partners_tab[tlk_informer].txt_offset;
 	g_dialog_title = (char*)partners_tab[tlk_informer].title;
 

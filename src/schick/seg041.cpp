@@ -202,7 +202,7 @@ void FIG_add_msg(const signed int f_action, const signed int damage)
  * \param   damage      the damage
  * \param   flag        impact on 'renegade' flag. 0: not affected. 1: reset 'renegade' to 0 (monster will be hostile again)
  */
-void FIG_damage_enemy(struct enemy_sheet *enemy, Bit16s damage, signed short preserve_renegade)
+void FIG_damage_enemy(struct enemy_sheet *enemy, int16_t damage, signed short preserve_renegade)
 {
 	signed short i;
 

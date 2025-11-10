@@ -5,7 +5,7 @@ namespace M302de {
 extern struct struct_chest g_dng12_specialchests[3];
 
 /* 0x20 */
-void DNG_clear_corridor(Bit8s*);
+void DNG_clear_corridor(int8_t*);
 /* 0x25 */
 void DNG12_chest00_loot(struct struct_chest*);
 /* 0x2a */

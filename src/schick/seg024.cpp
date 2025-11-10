@@ -64,7 +64,7 @@ void diary_show(void)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
+	g_vga_backbuffer = (uint8_t*)g_buffer9_ptr;
 	bak1 = g_textline_maxlen;
 	bak2 = g_textline_posx;
 	txt_tabpos1_bak = g_txt_tabpos[0];
@@ -149,7 +149,7 @@ void diary_new_entry(void)
  *
  * \param   line        the line to start the entry
  */
-Bit16u diary_print_entry(Bit16u line)
+uint16_t diary_print_entry(uint16_t line)
 {
 	signed short day;
 	signed short month;
@@ -158,7 +158,7 @@ Bit16u diary_print_entry(Bit16u line)
 	char *town_name;
 	signed short di = 0;
 
-	memset((Bit8u*)g_buffer9_ptr, 0, 64000);
+	memset((uint8_t*)g_buffer9_ptr, 0, 64000);
 
 	entry = &gs_diary_entries[line];
 
@@ -211,7 +211,7 @@ Bit16u diary_print_entry(Bit16u line)
 	g_pic_copy.y1 = 0;
 	g_pic_copy.x2 = 319;
 	g_pic_copy.y2 = line * 7;
-	g_pic_copy.src = (Bit8u*)g_buffer9_ptr;
+	g_pic_copy.src = (uint8_t*)g_buffer9_ptr;
 	g_pic_copy.dst = &g_renderbuf_ptr[(startline * 2240) + 9600];
 	do_pic_copy(2);
 

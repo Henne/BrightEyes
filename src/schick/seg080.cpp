@@ -37,7 +37,7 @@ struct struct_chest g_dng04_specialchests[4] = {
 	{ DNG_POS(0,6,1),	1, DNG04_chest02_open, NULL, DNG04_chest02_loot, 0, 0, 0 },
 	{     -1,		0, NULL, 	       NULL, NULL,		0, 0, 0 }
 }; // ds:0x95ba
-Bit16s g_dng05_trash_flag = 0; // ds:0x960e
+int16_t g_dng05_trash_flag = 0; // ds:0x960e
 
 /**
  * \brief   dungeon handler of the wolfcave
@@ -141,7 +141,7 @@ signed short DNG04_handler(void)
 
 			/* Original-BUG: assumption the leader is at pos 0 */
 			/* CH-5 for 1 day */
-			set_mod_slot(i, DAYS(1), (Bit8u*)&get_hero(0)->attrib[ATTRIB_CH].current, -5, 0);
+			set_mod_slot(i, DAYS(1), (uint8_t*)&get_hero(0)->attrib[ATTRIB_CH].current, -5, 0);
 		}
 
 	} else if (pos == DNG_POS(0,14,14) && pos != gs_dng_handled_pos)
@@ -287,22 +287,22 @@ signed short DNG04_handler(void)
 
 void DNG04_chest00_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(1), (Bit8s*)&gs_dng04_corpse0_flag);
+	loot_corpse(chest, get_tx(1), (int8_t*)&gs_dng04_corpse0_flag);
 }
 
 void DNG04_chest01_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(8), (Bit8s*)&gs_dng04_corpse1_flag);
+	loot_corpse(chest, get_tx(8), (int8_t*)&gs_dng04_corpse1_flag);
 }
 
 void DNG04_chest02_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(20), (Bit8s*)&gs_dng04_corpse2_flag);
+	loot_corpse(chest, get_tx(20), (int8_t*)&gs_dng04_corpse2_flag);
 }
 
 void DNG04_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* bak = chest->content;
+	uint8_t* bak = chest->content;
 
 	chest->content = gs_dng04_chest_corpse0;
 
@@ -313,7 +313,7 @@ void DNG04_chest00_loot(struct struct_chest* chest)
 
 void DNG04_chest01_loot(struct struct_chest* chest)
 {
-	Bit8u* bak = chest->content;
+	uint8_t* bak = chest->content;
 
 	chest->content = gs_dng04_chest_corpse1;
 
@@ -324,7 +324,7 @@ void DNG04_chest01_loot(struct struct_chest* chest)
 
 void DNG04_chest02_loot(struct struct_chest* chest)
 {
-	Bit8u* bak = chest->content;
+	uint8_t* bak = chest->content;
 
 	chest->content = gs_dng04_chest_corpse2;
 
@@ -359,7 +359,7 @@ signed short DNG05_handler(void)
 			GUI_output(get_tx(16));
 
 			tmp = get_free_mod_slot();
-			set_mod_slot(tmp, DAYS(1), (Bit8u*)&hero->attrib[ATTRIB_CH].current, -5, 0);
+			set_mod_slot(tmp, DAYS(1), (uint8_t*)&hero->attrib[ATTRIB_CH].current, -5, 0);
 
 			add_party_money(20L);
 		}

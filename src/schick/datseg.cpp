@@ -428,7 +428,7 @@ const signed short g_magic_schools_6[8] = { 0x0026, 0x0027, 0x0029, 0x0028, 0x00
 const signed short g_magic_schools_7[8] = { 0x0031, 0x0033, 0x0034, 0x0035, 0x0036, 0x0039, 0x003e, -1 }; // ds:0x0d6b, array terminated by -1
 const signed short g_magic_schools_8[6] = { 0x003c, 0x003e, 0x0048, 0x0049, 0x004b, -1 }; // ds:0x0d7b, array terminated by -1
 const signed short g_magic_schools_9[8] = { 0x004c, 0x004e, 0x004f, 0x0050, 0x0052, 0x0053, 0x0054, -1 }; // ds:0x0d87, array terminated by -1
-//long g_magic_schools_index[9] = { 0x14fc0d1b, 0x14fc0d29, 0x14fc0d35, 0x14fc0d43, 0x14fc0d4f, 0x14fc0d5b, 0x14fc0d6b, 0x14fc0d7b, 0x14fc0d87 }; // ds:0x0d97; Bit8u*
+//long g_magic_schools_index[9] = { 0x14fc0d1b, 0x14fc0d29, 0x14fc0d35, 0x14fc0d43, 0x14fc0d4f, 0x14fc0d5b, 0x14fc0d6b, 0x14fc0d7b, 0x14fc0d87 }; // ds:0x0d97; uint8_t*
 const signed short* g_magic_schools_index[9] = {
 	g_magic_schools_1,
 	g_magic_schools_2,
@@ -561,7 +561,7 @@ struct mon_spell_description g_mon_spell_descriptions[15] = {
 	{ 13, 3, 0, 5, 2, 6, 1, 0 }	/* Paralue */
 }; // ds:0x0f13
 
-Bit8s g_mon_spell_repertoire[11][5] = {
+int8_t g_mon_spell_repertoire[11][5] = {
 	{ 1,  7,  8, -1, -1 },
 	{ 1,  7,  3,  4, -1 },
 	{ 1,  7,  4,  2,  9 },
@@ -706,7 +706,7 @@ const struct point8s g_gfxtab_offsets_unconscious[22][4] = {
 	{ {  1, 6 }, { -1, 6 }, {  1, 5 }, {  0, 4 } },
 	{ {  1, 8 }, {  0, 7 }, {  1, 5 }, {  0, 4 } }
 }; // ds:0x1210, ; by viewdir
-const Bit8s g_gfxtab_figures_main[125][5] = {
+const int8_t g_gfxtab_figures_main[125][5] = {
 	{ -0x01, -0x01, -0x01, -0x01, -1 },
 	{ 0x01, 0x02, 0x03, 0x04, -1 },
 	{ 0x05, 0x06, 0x07, 0x08, -1 },
@@ -990,7 +990,7 @@ short g_gfx_ani_descriptions_25[37] = { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 
 short g_gfx_ani_descriptions_26[37] = { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x000a, 0x000b, 0x0018, 0x0019, 0x001a, 0x001b, 0x01d1, 0x01d2, 0x01d3, 0x01d4, 0x01e7, 0x016e, 0x016f, 0x0170, 0x0171, 0x01aa, 0x01ab, 0x01ac, 0x01ad, -0x0001, -0x0001, -0x0001, -0x0001, 0x01ee, 0x01ef, 0x01f0, 0x01f1 }; // ds:0x2477
 short g_gfx_ani_descriptions_27[37] = { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0014, 0x0015, 0x0016, 0x0017, 0x0024, 0x0025, 0x0026, 0x0027, 0x01d5, 0x01d6, 0x01d7, 0x01d8, 0x01e8, 0x0172, 0x0173, 0x0174, 0x0175, 0x01ae, 0x01af, 0x01b0, 0x01b1, 0x01f2, 0x01f3, 0x01f4, 0x01f5, -0x0001, -0x0001, -0x0001, -1 }; // ds:0x24c1
 short g_gfx_ani_descriptions_28[37] = { 0x00fe, 0x00ff, 0x0100, 0x0101, 0x0102, 0x0103, 0x0104, 0x0105, 0x0122, 0x0123, 0x0124, 0x0125, 0x0142, 0x0143, 0x0144, 0x0145, 0x01d9, 0x01da, 0x01db, 0x01dc, 0x01e9, 0x0176, 0x0177, 0x0178, 0x0179, 0x01b2, 0x01b3, 0x01b4, 0x01b5, -0x0001, -0x0001, -0x0001, -0x0001, -0x0001, -0x0001, -0x0001, -1 }; // ds:0x250b
-Bit16s *g_gfx_ani_index[41] = {
+int16_t *g_gfx_ani_index[41] = {
 	NULL,
 	g_gfx_ani_descriptions_01,
 	g_gfx_ani_descriptions_02,
@@ -1032,7 +1032,7 @@ Bit16s *g_gfx_ani_index[41] = {
 	g_gfx_ani_descriptions_28,
 	g_gfx_ani_descriptions_17,
 	g_gfx_ani_descriptions_28,
-}; // ds:0x2555; Bit8u*
+}; // ds:0x2555; uint8_t*
 signed char g_double_size_gfx_id_table[5] = { 0x1b, 0x26, 0x28, 0x27, -1 }; // ds:0x25f9
 signed short g_weaponani_table[72] = {
 	0x0000, 0x0003, 0x0006, 0x0009, 0x000c, 0x000f, 0x0012, 0x0015,
@@ -1062,9 +1062,9 @@ signed short g_check_poison = 0; // ds:0x26bb
 signed short g_text_file_index = -1; // ds:0x26bd
 signed short g_tx_file_index = -1; // ds:0x26bf, index of file stored with load_tx
 signed short g_fig_discard = 0; // ds:0x26c1, whether to discard the fight data after the fight
-Bit8u g_palette_allblack2[3 * 32] = {0}; // ds:0x26c3
+uint8_t g_palette_allblack2[3 * 32] = {0}; // ds:0x26c3
 
-Bit8u g_palette_unknown1[32][3] = {
+uint8_t g_palette_unknown1[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x29 },
 	{ 0x00, 0x00, 0x0e },
@@ -1098,7 +1098,7 @@ Bit8u g_palette_unknown1[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x26, 0x26, 0x26 }
 }; // ds:0x2723
-Bit8u g_palette_fight1[32][3] = {
+uint8_t g_palette_fight1[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x3c, 0x2c, 0x24 },
 	{ 0x3c, 0x28, 0x1c },
@@ -1133,7 +1133,7 @@ Bit8u g_palette_fight1[32][3] = {
 	{ 0x3c, 0x3c, 0x3c }
 }; // ds:0x2783
 //struct{unsigned char r,g,b;} g_palette_special[32] = {
-Bit8u g_palette_special[32][3] = {
+uint8_t g_palette_special[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x38, 0x38, 0x38 },
 	{ 0x34, 0x34, 0x34 },
@@ -1253,8 +1253,8 @@ struct mouse_action g_action_table_menu[2] = {
 	{ 0x0000, 0x0000, 0x013f, 0x00c7, 0x001c },
 	{ -0x0001, -0x0001, -0x0001, -0x0001, 0xffff }
 }; // ds:0x29cc
-struct mouse_action *g_action_table_primary = &g_action_table_menu[0]; // ds:0x29e0, to ACTION_TABLE_MENU; Bit8u*
-struct mouse_action *g_action_table_secondary = 0; // ds:0x29e4; Bit8u*
+struct mouse_action *g_action_table_primary = &g_action_table_menu[0]; // ds:0x29e0, to ACTION_TABLE_MENU; uint8_t*
+struct mouse_action *g_action_table_secondary = 0; // ds:0x29e4; uint8_t*
 struct mouse_action g_action_table_playmask[24] = {
 	{ 0x00f0, 0x0000, 0x0140, 0x0014, 0x00fd },
 	{ 0x00f0, 0x0015, 0x0140, 0x0038, 0x00fc },
@@ -1317,7 +1317,7 @@ struct mouse_action g_action_table_merchant[2] = {
 	{ 0x0010, 0x0004, 0x00df, 0x008a, 0x0090 },
 	{ -0x0001, -0x0001, -0x0001, -0x0001, 0xffff }
 }; // ds:0x2c04
-Bit16s g_char_status_bars[7][4] = {
+int16_t g_char_status_bars[7][4] = {
 	{ 0x0000, 0x0000, 0x0000, 0x0000 },
 	{ 0x0000, 0x0000, 0x0000, 0x0000 },
 	{ 0x0000, 0x0000, 0x0000, 0x0000 },
@@ -1372,384 +1372,384 @@ signed char g_levelup_spta_conv[6] = { 5, 5, 5, 0, 0, 0 }; // ds:0x2d21
 signed char g_mr_modificators[13] = { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }; // ds:0x2d27
 
 
-Bit8s gs_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the datseg that is stored one to one in savegame files
-Bit8s  gs_current_group = 0; // ds:0x2d35
-Bit8s  gs_group_member_counts[6] = {0}; // ds:0x2d36, members per group
-Bit8s  gs_total_hero_counter = 0; // ds:0x2d3c
-Bit8s  gs_direction = 0; // ds:0x2d3d
-Bit8s  gs_groups_direction[6] = {0}; // ds:0x2d3e
-Bit16s gs_x_target = 0; // ds:0x2d44
-Bit16s gs_y_target = 0; // ds:0x2d46
-Bit16s gs_groups_x_target[6] = {0}; // ds:0x2d48
-Bit16s gs_groups_y_target[6] = {0}; // ds:0x2d54
-Bit8s  gs_current_loctype = 0; // ds:0x2d60
-Bit8s  gs_groups_current_loctype[6] = {0}; // ds:0x2d61
-Bit8s  gs_current_town = 0; // ds:0x2d67
-Bit8s  gs_groups_town[6] = {0}; // ds:0x2d68
-Bit8s  gs_dungeon_index = 0; // ds:0x2d6e
-Bit8s  gs_groups_dng_index[6] = {0}; // ds:0x2d6f
-Bit8s  gs_dungeon_level = 0; // ds:0x2d75
-Bit8s  gs_groups_dng_level[6] = {0}; // ds:0x2d76
-Bit8s  gs_direction_bak = 0;	// ds:0x2d7c
-Bit8s  gs_groups_direction_bak[6] = {0}; // ds:0x2d7d
-Bit16s gs_x_target_bak = 0; // ds:0x2d83
-Bit16s gs_y_target_bak = 0; // ds:0x2d85
-Bit16s gs_groups_x_target_bak[6] = {0}; // ds:0x2d87
-Bit16s gs_groups_y_target_bak[6] = {0}; // ds:0x2d93
-Bit8s  gs_current_loctype_bak = 0; // ds:0x2d9f
-Bit8s  gs_groups_current_loctype_bak[6] = {0}; // ds:0x2da0
-Bit8s  gs_current_town_bak = 0; // ds:0x2da6
-Bit8s  gs_groups_town_bak[6] = {0}; // ds:0x2da7
-Bit8s  gs_dungeon_index_bak = 0; // ds:0x2dad
-Bit8s  gs_groups_dng_index_bak[6] = {0}; // ds:0x2dae
-Bit8s  gs_dungeon_level_bak = 0; // ds:0x2db4
-Bit8s  gs_groups_dng_level_bak[6] = {0}; // ds:0x2db5
-Bit32s gs_day_timer = 0; // ds:0x2dbb
-Bit8s  gs_day_of_week = 0; // ds:0x2dbf
-Bit8s  gs_day_of_month = 0; // ds:0x2dc0
-Bit8s  gs_month = 0; // ds:0x2dc1
-Bit8s  gs_year = 0; // ds:0x2dc2
-Bit8s  gs_special_day = 0; // ds:0x2dc3
-Bit32s gs_ingame_timers[26] = {0}; // ds:0x2dc4
+int8_t gs_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the datseg that is stored one to one in savegame files
+int8_t  gs_current_group = 0; // ds:0x2d35
+int8_t  gs_group_member_counts[6] = {0}; // ds:0x2d36, members per group
+int8_t  gs_total_hero_counter = 0; // ds:0x2d3c
+int8_t  gs_direction = 0; // ds:0x2d3d
+int8_t  gs_groups_direction[6] = {0}; // ds:0x2d3e
+int16_t gs_x_target = 0; // ds:0x2d44
+int16_t gs_y_target = 0; // ds:0x2d46
+int16_t gs_groups_x_target[6] = {0}; // ds:0x2d48
+int16_t gs_groups_y_target[6] = {0}; // ds:0x2d54
+int8_t  gs_current_loctype = 0; // ds:0x2d60
+int8_t  gs_groups_current_loctype[6] = {0}; // ds:0x2d61
+int8_t  gs_current_town = 0; // ds:0x2d67
+int8_t  gs_groups_town[6] = {0}; // ds:0x2d68
+int8_t  gs_dungeon_index = 0; // ds:0x2d6e
+int8_t  gs_groups_dng_index[6] = {0}; // ds:0x2d6f
+int8_t  gs_dungeon_level = 0; // ds:0x2d75
+int8_t  gs_groups_dng_level[6] = {0}; // ds:0x2d76
+int8_t  gs_direction_bak = 0;	// ds:0x2d7c
+int8_t  gs_groups_direction_bak[6] = {0}; // ds:0x2d7d
+int16_t gs_x_target_bak = 0; // ds:0x2d83
+int16_t gs_y_target_bak = 0; // ds:0x2d85
+int16_t gs_groups_x_target_bak[6] = {0}; // ds:0x2d87
+int16_t gs_groups_y_target_bak[6] = {0}; // ds:0x2d93
+int8_t  gs_current_loctype_bak = 0; // ds:0x2d9f
+int8_t  gs_groups_current_loctype_bak[6] = {0}; // ds:0x2da0
+int8_t  gs_current_town_bak = 0; // ds:0x2da6
+int8_t  gs_groups_town_bak[6] = {0}; // ds:0x2da7
+int8_t  gs_dungeon_index_bak = 0; // ds:0x2dad
+int8_t  gs_groups_dng_index_bak[6] = {0}; // ds:0x2dae
+int8_t  gs_dungeon_level_bak = 0; // ds:0x2db4
+int8_t  gs_groups_dng_level_bak[6] = {0}; // ds:0x2db5
+int32_t gs_day_timer = 0; // ds:0x2dbb
+int8_t  gs_day_of_week = 0; // ds:0x2dbf
+int8_t  gs_day_of_month = 0; // ds:0x2dc0
+int8_t  gs_month = 0; // ds:0x2dc1
+int8_t  gs_year = 0; // ds:0x2dc2
+int8_t  gs_special_day = 0; // ds:0x2dc3
+int32_t gs_ingame_timers[26] = {0}; // ds:0x2dc4
 struct struct_modification_timer gs_modification_timers[100] = { {0} }; // ds:0x2e2c
 unsigned char g_unkn_012[2] = { 0, 0 }; // ds:0x314c
-Bit32s gs_gods_estimation[15] = {0};	// ds:0x314e
-Bit8s  gs_tav_cheated_flags[88] = {0};	// ds:0x318a
+int32_t gs_gods_estimation[15] = {0};	// ds:0x314e
+int8_t  gs_tav_cheated_flags[88] = {0};	// ds:0x318a
 struct struct_smith_repairitems gs_smith_repairitems[50] = {0}; // ds:0x31e2
-Bit16s gs_dng_handled_pos = 0; // ds:0x330e
-Bit16s gs_deathtrap_steps = 0; // ds:0x3310 // for activated deathtrap: number of remaining steps in dungeon
-Bit16s gs_deathtrap = 0; // ds:0x3312 // 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated
-Bit8s  gs_dng01_amulet_taken = 0; // ds:0x3314
-Bit8s  gs_dng01_sabre_taken = 0; // ds:0x3315
-Bit8s  gs_dng01_crossbow_taken = 0; // ds:0x3316
-Bit8s  gs_dng01_ardora_freed = 0; // ds:0x3317
+int16_t gs_dng_handled_pos = 0; // ds:0x330e
+int16_t gs_deathtrap_steps = 0; // ds:0x3310 // for activated deathtrap: number of remaining steps in dungeon
+int16_t gs_deathtrap = 0; // ds:0x3312 // 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated
+int8_t  gs_dng01_amulet_taken = 0; // ds:0x3314
+int8_t  gs_dng01_sabre_taken = 0; // ds:0x3315
+int8_t  gs_dng01_crossbow_taken = 0; // ds:0x3316
+int8_t  gs_dng01_ardora_freed = 0; // ds:0x3317
 unsigned char g_unkn_013[1] = { 0x00 }; // ds:0x3318
-Bit8s  gs_dng01_key_taken = 0; // ds:0x3319
-Bit8s  gs_dng01_corpse_looted = 0; // ds:0x331a
-Bit16u gs_weather1 = 0; // ds:0x331b, random(6)
-Bit16u gs_weather2 = 0; // ds:0x331d, random(7)
-Bit8u  gs_daspota_fightflags[19] = {0}; // ds:0x331f
-Bit8s  gs_treasure_maps[10] = {0}; // ds:0x3332 /* flags for the received parts of Hyggelik's map */
-Bit8s  gs_debtbook_read_flag = 1; // ds:0x333c
-Bit8s  gs_orcdocument_read_flag = 0; // ds:0x333d
-Bit16s gs_gardanium_used_ae = 0; // ds:0x333e	WRITEONLY
-Bit16s gs_min_map_parts = 0;	// ds:0x3340
-Bit16s gs_subvention = 0;	// ds:0x3342, {0-4}
-Bit16s gs_otta_windriders = 0;	// ds:0x3344
-Bit16s gs_otta_stormchildren = 0; // ds:0x3346
-Bit16s gs_otta_garaldsson = 0;	// ds:0x3348
-Bit16s gs_heard_announce = 0;	// ds:0x334a, {0 = not heard, 1 = heard, 3 = spoke with hetman}
-Bit16s gs_got_main_quest = 0;	// ds:0x334c
-Bit16s gs_quested_months = 0;	// ds:0x334e
-Bit16s gs_monthly_credit = 0;	// ds:0x3350
-Bit16s gs_got_letter_jad = 0;	// ds:0x3352
-Bit16s gs_visited_miller = 0;	// ds:0x3354
-Bit16s gs_quest_ugdalf = 0;	// ds:0x3356
-Bit16s gs_academy_daily_curse = 0; // ds:0x3358
-Bit16s gs_academy_daily_ident = 0; // ds:0x335a
-Bit16s gs_bank_deposit = 0;	 // ds:0x335c
-Bit16s gs_days_to_cens = 0;	 // ds:0x335e
-Bit16s gs_debt_days = 0;	 // ds:0x3360
-Bit16s gs_in_academy = 0;	 // ds:0x3362
-Bit8u  gs_informer_flags[16] = {0}; // ds:0x3364
-Bit8u  gs_tav_kicked_flags[88] = {0}; // ds:0x3374
-Bit8u  gs_town_outlawed_flags[52] = {0}; // ds:0x33cc WRITEONLY
-Bit8u  gs_herberg_kicked_flags[74] = {0}; // ds:0x3400
-Bit8u  gs_got_letter_het = 0; // ds:0x344a
+int8_t  gs_dng01_key_taken = 0; // ds:0x3319
+int8_t  gs_dng01_corpse_looted = 0; // ds:0x331a
+uint16_t gs_weather1 = 0; // ds:0x331b, random(6)
+uint16_t gs_weather2 = 0; // ds:0x331d, random(7)
+uint8_t  gs_daspota_fightflags[19] = {0}; // ds:0x331f
+int8_t  gs_treasure_maps[10] = {0}; // ds:0x3332 /* flags for the received parts of Hyggelik's map */
+int8_t  gs_debtbook_read_flag = 1; // ds:0x333c
+int8_t  gs_orcdocument_read_flag = 0; // ds:0x333d
+int16_t gs_gardanium_used_ae = 0; // ds:0x333e	WRITEONLY
+int16_t gs_min_map_parts = 0;	// ds:0x3340
+int16_t gs_subvention = 0;	// ds:0x3342, {0-4}
+int16_t gs_otta_windriders = 0;	// ds:0x3344
+int16_t gs_otta_stormchildren = 0; // ds:0x3346
+int16_t gs_otta_garaldsson = 0;	// ds:0x3348
+int16_t gs_heard_announce = 0;	// ds:0x334a, {0 = not heard, 1 = heard, 3 = spoke with hetman}
+int16_t gs_got_main_quest = 0;	// ds:0x334c
+int16_t gs_quested_months = 0;	// ds:0x334e
+int16_t gs_monthly_credit = 0;	// ds:0x3350
+int16_t gs_got_letter_jad = 0;	// ds:0x3352
+int16_t gs_visited_miller = 0;	// ds:0x3354
+int16_t gs_quest_ugdalf = 0;	// ds:0x3356
+int16_t gs_academy_daily_curse = 0; // ds:0x3358
+int16_t gs_academy_daily_ident = 0; // ds:0x335a
+int16_t gs_bank_deposit = 0;	 // ds:0x335c
+int16_t gs_days_to_cens = 0;	 // ds:0x335e
+int16_t gs_debt_days = 0;	 // ds:0x3360
+int16_t gs_in_academy = 0;	 // ds:0x3362
+uint8_t  gs_informer_flags[16] = {0}; // ds:0x3364
+uint8_t  gs_tav_kicked_flags[88] = {0}; // ds:0x3374
+uint8_t  gs_town_outlawed_flags[52] = {0}; // ds:0x33cc WRITEONLY
+uint8_t  gs_herberg_kicked_flags[74] = {0}; // ds:0x3400
+uint8_t  gs_got_letter_het = 0; // ds:0x344a
 unsigned char g_unkn_015[1] = { 0x00 }; // ds:0x344b
-Bit8u  gs_jurge_awaits_letter = 0; // ds:0x344c
-Bit8u  gs_umbrik_quest_gorah = 0; // ds:0x344d
+uint8_t  gs_jurge_awaits_letter = 0; // ds:0x344c
+uint8_t  gs_umbrik_quest_gorah = 0; // ds:0x344d
 unsigned char g_unkn_016[1] = { 0x00 }; // ds:0x344e
-Bit8u  gs_isleif_jandas_regards = 0; // ds:0x344f
-Bit8u  gs_isleif_map_given = 0; // ds:0x3450
-Bit8u  gs_ragna_asked_map = 0; // ds:0x3451
-Bit8u  gs_beorn_litt_bold = 0; // ds:0x3452
-Bit8u  gs_beorn_medi_bold = 0; // ds:0x3453
-Bit8u  gs_beorn_very_bold = 0; // ds:0x3454
-Bit8u  gs_eliane_quest_nameless = 0; // ds:0x3455
-Bit8u  gs_olvir_start_hetmann = 0; // ds:0x3456
-Bit8u  gs_olvir_start_hyggelik = 0; // ds:0x3457
-Bit8u  gs_olvir_start_hasgar = 0; // ds:0x3458
-Bit8u  gs_olvir_interrupted = 0; // ds:0x3459
-Bit8u  gs_olvir_singing_hetmann = 0; // ds:0x345a
-Bit8u  gs_olvir_singing_hyggelik = 0; // ds:0x345b
-Bit8u  gs_olvir_singing_hasgar = 0; // ds:0x345c
-Bit8u  gs_swafnild_tp1 = 0; // ds:0x345d
-Bit8u  gs_swafnild_tp2 = 0; // ds:0x345e
-Bit8u  gs_swafnild_tp3 = 0; // ds:0x345f
-Bit8u  gs_swafnild_tp4 = 0; // ds:0x3460
-Bit8u  gs_swafnild_destination = 0; // ds:0x3461
-Bit8u  gs_swafnild_nomap = 0; // ds:0x3462
-Bit8u  gs_treborn_date = 0; // ds:0x3463
-Bit8u  gs_unicorn_hero_pos = 0; // ds:0x3464, {0-6}
-Bit8u  gs_unicorn_get_map = 0; // ds:0x3465
-Bit8u  gs_unicorn_timer = 0; // ds:0x3466
-Bit8u  gs_algrid_treborns_hint = 0; // ds:0x3467
-Bit8u  gs_tiomar_drinkmate = 0; // ds:0x3468, {0-6}
-Bit8u  gs_tiomar_awaits_letter = 0; // ds:0x3469
+uint8_t  gs_isleif_jandas_regards = 0; // ds:0x344f
+uint8_t  gs_isleif_map_given = 0; // ds:0x3450
+uint8_t  gs_ragna_asked_map = 0; // ds:0x3451
+uint8_t  gs_beorn_litt_bold = 0; // ds:0x3452
+uint8_t  gs_beorn_medi_bold = 0; // ds:0x3453
+uint8_t  gs_beorn_very_bold = 0; // ds:0x3454
+uint8_t  gs_eliane_quest_nameless = 0; // ds:0x3455
+uint8_t  gs_olvir_start_hetmann = 0; // ds:0x3456
+uint8_t  gs_olvir_start_hyggelik = 0; // ds:0x3457
+uint8_t  gs_olvir_start_hasgar = 0; // ds:0x3458
+uint8_t  gs_olvir_interrupted = 0; // ds:0x3459
+uint8_t  gs_olvir_singing_hetmann = 0; // ds:0x345a
+uint8_t  gs_olvir_singing_hyggelik = 0; // ds:0x345b
+uint8_t  gs_olvir_singing_hasgar = 0; // ds:0x345c
+uint8_t  gs_swafnild_tp1 = 0; // ds:0x345d
+uint8_t  gs_swafnild_tp2 = 0; // ds:0x345e
+uint8_t  gs_swafnild_tp3 = 0; // ds:0x345f
+uint8_t  gs_swafnild_tp4 = 0; // ds:0x3460
+uint8_t  gs_swafnild_destination = 0; // ds:0x3461
+uint8_t  gs_swafnild_nomap = 0; // ds:0x3462
+uint8_t  gs_treborn_date = 0; // ds:0x3463
+uint8_t  gs_unicorn_hero_pos = 0; // ds:0x3464, {0-6}
+uint8_t  gs_unicorn_get_map = 0; // ds:0x3465
+uint8_t  gs_unicorn_timer = 0; // ds:0x3466
+uint8_t  gs_algrid_treborns_hint = 0; // ds:0x3467
+uint8_t  gs_tiomar_drinkmate = 0; // ds:0x3468, {0-6}
+uint8_t  gs_tiomar_awaits_letter = 0; // ds:0x3469
 /* REMARK: pointer in gamestate are no good */
-Bit8u *gs_unicorn_hero_ptr = NULL; // ds:0x346a; Bit8u*
-Bit16s gs_npc_meet_tavern = 0;	// ds:0x346e
-Bit16s gs_npc_months = 0;	// ds:0x3470
-Bit8u  gs_smith_kicked_flags[50] = {0};		// ds:0x3472
-Bit8u  gs_smith_flogged_flags[50] = {0};	// ds:0x34a4
-Bit8u  gs_merchant_kicked_flags[94] = {0};	// ds:0x34d6
-Bit8u  gs_merchant_kicked2_flags[94] = {0};	// ds:0x3534
-Bit8u  gs_merchant_offended_flags[94] = {0};	// ds:0x3592
-Bit8u  gs_quest_deadship = 0; // ds:0x35f0
+uint8_t *gs_unicorn_hero_ptr = NULL; // ds:0x346a; uint8_t*
+int16_t gs_npc_meet_tavern = 0;	// ds:0x346e
+int16_t gs_npc_months = 0;	// ds:0x3470
+uint8_t  gs_smith_kicked_flags[50] = {0};		// ds:0x3472
+uint8_t  gs_smith_flogged_flags[50] = {0};	// ds:0x34a4
+uint8_t  gs_merchant_kicked_flags[94] = {0};	// ds:0x34d6
+uint8_t  gs_merchant_kicked2_flags[94] = {0};	// ds:0x3534
+uint8_t  gs_merchant_offended_flags[94] = {0};	// ds:0x3592
+uint8_t  gs_quest_deadship = 0; // ds:0x35f0
 unsigned char g_unkn_017[1] = { 0x00 }; // ds:0x35f1
-Bit8u  gs_quest_deadship_done = 0; // ds:0x35f2
-Bit8s  gs_always_one2 = 0; // ds:0x35f3, writeonly (1)
-Bit8u  gs_dng03_spidereggs_burned = 0; // ds:0x35f4
+uint8_t  gs_quest_deadship_done = 0; // ds:0x35f2
+int8_t  gs_always_one2 = 0; // ds:0x35f3, writeonly (1)
+uint8_t  gs_dng03_spidereggs_burned = 0; // ds:0x35f4
 unsigned char g_unkn_018[2] = { 0, 0 }; // ds:0x35f5
-Bit8u  gs_dng06_dasptreas_found = 0; // ds:0x35f7
+uint8_t  gs_dng06_dasptreas_found = 0; // ds:0x35f7
 unsigned char g_unkn_019[2] = { 0, 0 }; // ds:0x35f8
-Bit8u  gs_quest_nameless_done = 0; // ds:0x35fa
+uint8_t  gs_quest_nameless_done = 0; // ds:0x35fa
 unsigned char g_unkn_020[4] = { 0x00, 0x00, 0x00, 0x00 }; // ds:0x35fb
-Bit8u  gs_dng14_ugdalf_done = 0; // ds:0x35ff
-Bit8u  gs_got_grimring = 0; // ds:0x3600
-Bit8s  gs_npc_timers[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x3601
-Bit8u  gs_tlk_tav_firstinfo = 0; // ds:0x3608
-Bit8u  gs_tlk_tav_infopromise = 0; // ds:0x3609
-Bit8u  gs_tlk_tav_round = 0; // ds:0x360a
-Bit8u  gs_tlk_tav_freebeer = 0; // ds:0x360b
-Bit8u  gs_tlk_tav_drinkcount = 0; // ds:0x360c
-Bit8u  gs_tlk_tav_informersex = 0; // ds:0x360d, {1 = male,2 = female}
+uint8_t  gs_dng14_ugdalf_done = 0; // ds:0x35ff
+uint8_t  gs_got_grimring = 0; // ds:0x3600
+int8_t  gs_npc_timers[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x3601
+uint8_t  gs_tlk_tav_firstinfo = 0; // ds:0x3608
+uint8_t  gs_tlk_tav_infopromise = 0; // ds:0x3609
+uint8_t  gs_tlk_tav_round = 0; // ds:0x360a
+uint8_t  gs_tlk_tav_freebeer = 0; // ds:0x360b
+uint8_t  gs_tlk_tav_drinkcount = 0; // ds:0x360c
+uint8_t  gs_tlk_tav_informersex = 0; // ds:0x360d, {1 = male,2 = female}
 unsigned char g_unkn_021[1] = { 0x00 }; // ds:0x360e
-Bit8u  gs_tlk_tav_followinformer = 0; // ds:0x360f
-Bit8u  gs_tlk_tav_fullness = 0; // ds:0x3610
-Bit8u  gs_tlk_tav_testdrunk = 0; // ds:0x3611
-Bit8u  gs_current_informer = 0; // ds:0x3612
-Bit8u  gs_dungeon_light = 0; // ds:0x3613, 0 = light is on, 1, 2 = light is off
-Bit8u  gs_show_travel_map = 0; // ds:0x3614
-Bit8u  gs_hermit_visited = 0; // ds:0x3615
-Bit8u  gs_dungeon_gfx_style = 0; // ds:0x3616, { 0 = SHIPS, 1 = MARBLES, 2 = STONES }
-Bit8u  gs_estorik_known = 0; // ds:0x3617
+uint8_t  gs_tlk_tav_followinformer = 0; // ds:0x360f
+uint8_t  gs_tlk_tav_fullness = 0; // ds:0x3610
+uint8_t  gs_tlk_tav_testdrunk = 0; // ds:0x3611
+uint8_t  gs_current_informer = 0; // ds:0x3612
+uint8_t  gs_dungeon_light = 0; // ds:0x3613, 0 = light is on, 1, 2 = light is off
+uint8_t  gs_show_travel_map = 0; // ds:0x3614
+uint8_t  gs_hermit_visited = 0; // ds:0x3615
+uint8_t  gs_dungeon_gfx_style = 0; // ds:0x3616, { 0 = SHIPS, 1 = MARBLES, 2 = STONES }
+uint8_t  gs_estorik_known = 0; // ds:0x3617
 struct struct_dialog_partner gs_dialog_partners[10] = { {0} }; // ds:0x3618
 struct struct_dialog_state gs_dialog_states[160] = { {0} }; // ds:0x3794
-Bit8u  gs_dng02_sphere_known = 0; // ds:0x3c94
-Bit8u  gs_dng02_corpse_flag = 0; // ds:0x3c95
-Bit8u  gs_dng02_apparature_destroyed = 0; // ds:0x3c96
-Bit8u  gs_dng02_sphere_timer = 0; // ds:0x3c97, {0,...,7}
-Bit8u  gs_dng02_sphere_active = 0; // ds:0x3c98
-Bit8u  gs_dng02_raven_destroyed = 0; // ds:0x3c99
-Bit8u  gs_dng02_secret_door1 = 0; // ds:0x3c9a
-Bit8u  gs_dng02_secret_door2 = 0; // ds:0x3c9b
-Bit8u  gs_dng02_secret_door3 = 0; // ds:0x3c9c
-Bit8u  gs_dng03_lever_trap = 1; // ds:0x3c9d
-Bit8u  gs_dng03_lever_chest11 = 1; // ds:0x3c9e
-Bit8u  gs_dng03_sanctum_smashed = 0; // ds:0x3c9f
-Bit8u  gs_dng04_corpse0_flag = 0; // ds:0x3ca0
-Bit8u  gs_dng04_corpse1_flag = 0; // ds:0x3ca1
-Bit8u  gs_dng04_corpse2_flag = 0; // ds:0x3ca2
-Bit8u  gs_dng04_gap_flag = 0; // ds:0x3ca3
-Bit8u  gs_dng04_helmet_flag = 0; // ds:0x3ca4
-Bit8u  gs_dng04_lantern_flag = 0; // ds:0x3ca5
-Bit8u  gs_dng04_deepgap_flag = 0; // ds:0x3ca6
-Bit8u  gs_dng06_pitdoor_flag = 0; // ds:0x3ca7
-Bit8u  gs_dng06_proviant_flag = 0; // ds:0x3ca8
-Bit8u  gs_dng06_money_flag = 0; // ds:0x3ca9
-Bit8u  gs_dng06_goldkey_flag = 0; // ds:0x3caa
-Bit8s  gs_dng06_countdown_timer = 5; // ds:0x3cab
-Bit8u  gs_dng06_lever_flag = 0; // ds:0x3cac
-Bit8u  gs_dng06_book_flag = 0; // ds:0x3cad
-Bit8u  gs_dng06_fight19_flag = 0; // ds:0x3cae
-Bit8u  gs_dng05_proviant_flag = 0; // ds:0x3caf
-Bit8u  gs_dng05_bats_flag = 0; // ds:0x3cb0
-Bit8u  gs_dng05_god_flag = 0; // ds:0x3cb1
-Bit8u  gs_dng07_muelixier_flag = 0; // ds:0x3cb2
-Bit8u  gs_dng07_antimuelixier_flag = 0; // ds:0x3cb3
-Bit8u  gs_dng07_flicker_flag = 0; // ds:0x3cb4
-Bit8u  gs_dng07_poison_flag = 0; // ds:0x3cb5
-Bit32s gs_dng07_poison_timer = 0; // ds:0x3cb6
-Bit8u  gs_dng08_bed_00 = 0; // ds:0x3cba
-Bit8u  gs_dng08_bed_01 = 0; // ds:0x3cbb
-Bit8u  gs_dng08_bed_02 = 0; // ds:0x3cbc
-Bit8u  gs_dng08_bed_03 = 0; // ds:0x3cbd
-Bit8u  gs_dng08_bed_04 = 0; // ds:0x3cbe
-Bit8u  gs_dng08_bed_05 = 0; // ds:0x3cbf
-Bit8u  gs_dng08_bed_06 = 0; // ds:0x3cc0
-Bit8u  gs_dng08_bed_07 = 0; // ds:0x3cc1
-Bit8u  gs_dng08_bed_08 = 0; // ds:0x3cc2
-Bit8u  gs_dng08_bed_09 = 0; // ds:0x3cc3
-Bit8u  gs_dng08_bed_10 = 0; // ds:0x3cc4
-Bit8u  gs_dng08_bed_11 = 0; // ds:0x3cc5
-Bit8u  gs_dng08_timer1 = 0; // ds:0x3cc6, {0, 1, ..., 24}
-Bit8u  gs_dng08_timer2 = 0; // ds:0x3cc7, {0, 1, ..., 24}
-Bit8u  gs_dng08_bundles_done = 0; // ds:0x3cc8
-Bit8u  gs_dng08_ballista_done = 0; // ds:0x3cc9
-Bit8u  gs_dng08_chest2_looted = 0; // ds:0x3cca
-Bit8u  gs_dng08_secret_door = 0; // ds:0x3ccb, {0,1 = found,2 = opened}
-Bit8u  gs_dng08_chest0_looted = 0; // ds:0x3ccc
-Bit8u  gs_dng08_chest35_looted = 0; // ds:0x3ccd
-Bit8u  gs_daspota_location01_loot[29] = { 0x36, 0x01, 0x0c, 0x01, 0x0d, 0x1e, 0x9e, 0x01, 0x9f, 0x01, 0x5c, 0x0a, 0x17, 0x32, 0x5b, 0x14, 0x4a, 0x01, 0x4a, 0x01, 0x22, 0x01, 0x92, 0x01, 0x8e, 0x01, 0xfa, 0xff, 0xff }; // ds:0x3cce
-Bit8u  gs_daspota_location02_loot[15] = { 0x0c, 0x01, 0x0c, 0x01, 0x0d, 0x1e, 0x07, 0x01, 0x07, 0x01, 0x19, 0x01, 0x29, 0x01, 0xff }; // ds:0x3ceb
-Bit8u  gs_daspota_location03_loot[15] = { 0x0c, 0x01, 0x0c, 0x01, 0x0d, 0x1e, 0x07, 0x01, 0x07, 0x01, 0x19, 0x01, 0x29, 0x01, 0xff }; // ds:0x3cfa
-Bit8u  gs_daspota_location04_loot[9] = { 0x08, 0x01, 0x17, 0x0a, 0x56, 0x01, 0x4d, 0x01, 0xff }; // ds:0x3d09
-Bit8u  gs_daspota_location05_loot[31] = { 0xa0, 0x01, 0xa1, 0x01, 0x15, 0x01, 0x6d, 0x01, 0x5b, 0x14, 0x4c, 0x02, 0x24, 0x01, 0x1d, 0x01, 0x22, 0x01, 0x2a, 0x01, 0x26, 0x01, 0x23, 0x01, 0x39, 0x01, 0x3b, 0x01, 0x8f, 0x01, 0xff }; // ds:0x3d12
-Bit8u  gs_daspota_location06_loot[25] = { 0x03, 0x03, 0x01, 0x03, 0x07, 0x03, 0x08, 0x03, 0x10, 0x03, 0x13, 0x03, 0x36, 0x03, 0x4e, 0x03, 0x54, 0x03, 0x75, 0x03, 0x52, 0x03, 0x51, 0x03, 0xff }; // ds:0x3d31
-Bit8u  gs_daspota_location07_loot[7] = { 0x17, 0x14, 0x5b, 0x14, 0x5c, 0x0a, 0xff }; // ds:0x3d4a
-Bit8u  gs_daspota_location08_loot[15] = { 0x4c, 0x05, 0x4a, 0x05, 0x22, 0x01, 0x22, 0x01, 0x1f, 0x01, 0x2e, 0x01, 0x22, 0x01, 0xff }; // ds:0x3d51
-Bit8u  gs_daspota_location10_loot[7] = { 0x17, 0x32, 0x5b, 0x14, 0x5c, 0x0a, 0xff }; // ds:0x3d60
-Bit8u  gs_daspota_location12_loot[21] = { 0x1a, 0x03, 0x20, 0x03, 0x28, 0x03, 0x2e, 0x03, 0x48, 0x03, 0x55, 0x03, 0x5f, 0x03, 0x41, 0x03, 0x79, 0x03, 0x1f, 0x03, 0xff }; // ds:0x3d67
-Bit8u  gs_daspota_location13_loot[9] = { 0x08, 0x03, 0x79, 0x03, 0x1b, 0x03, 0x10, 0x02, 0xff }; // ds:0x3d7c
-Bit8u  gs_daspota_location14_loot[5] = { 0x17, 0x50, 0x5c, 0x0a, 0xff }; // ds:0x3d85
-Bit8u  gs_daspota_location16_loot[5] = { 0x17, 0x32, 0x2d, 0x0a, 0xff }; // ds:0x3d8a
-Bit8u  gs_daspota_location18_loot[19] = { 0x5c, 0x0a, 0x17, 0x28, 0x4c, 0x05, 0x4a, 0x05, 0x1f, 0x02, 0x5f, 0x01, 0x7e, 0x01, 0x3a, 0x01, 0x80, 0x01, 0xff }; // ds:0x3d8f
-Bit8u  gs_tevent004_flag = 0; // ds:0x3da2
-Bit8u  gs_tevent005_flag = 0; // ds:0x3da3
-Bit8u  gs_tevent008_flag = 0; // ds:0x3da4
-Bit8u  gs_tevent009_flag = 0; // ds:0x3da5
-Bit8u  gs_tevent011_flag = 0; // ds:0x3da6
-Bit8u  gs_tevent013_flag = 0; // ds:0x3da7
-Bit8u  gs_tevent014_flag = 0; // ds:0x3da8
-Bit8u  gs_tevent016_flag = 0; // ds:0x3da9
-Bit8u  gs_tevent017_flag = 0; // ds:0x3daa
-Bit8u  gs_tevent020_flag = 0; // ds:0x3dab
-Bit8u  gs_tevent021_flag = 0; // ds:0x3dac
-Bit8u  gs_tevent022_flag = 0; // ds:0x3dad
-Bit8u  gs_tevent022_track_flag = 0; // ds:0x3dae
-Bit8u  gs_tevent024_flag = 0; // ds:0x3daf
-Bit8u  gs_tevent025_flag = 0; // ds:0x3db0
-Bit8u  gs_tevent028_flag = 0; // ds:0x3db1
-Bit8u  gs_tevent030_flag = 0; // ds:0x3db2
-Bit8u  gs_tevent031_flag = 0; // ds:0x3db3
-Bit8u  gs_tevent032_flag = 0; // ds:0x3db4
-Bit8u  gs_tevent032_herb_flag = 0; // ds:0x3db5
-Bit8u  gs_tevent034_flag = 0; // ds:0x3db6
-Bit8u  gs_tevent035_flag = 0; // ds:0x3db7
-Bit8u  gs_tevent036_flag = 0; // ds:0x3db8
-Bit8u  gs_tevent036_herb_flag = 0; // ds:0x3db9
-Bit8u  gs_tevent037_flag = 0; // ds:0x3dba
-Bit8u  gs_tevent039_flag = 0; // ds:0x3dbb
-Bit8u  gs_tevent040_flag = 0; // ds:0x3dbc
-Bit8u  gs_tevent041_flag = 0; // ds:0x3dbd
-Bit8u  gs_tevent042_flag = 0; // ds:0x3dbe
-Bit8u  gs_tevent043_flag = 0; // ds:0x3dbf
-Bit8u  gs_tevent048_flag = 0; // ds:0x3dc0
-Bit8u  gs_tevent048_track_flag = 0; // ds:0x3dc1
-Bit8u  gs_tevent049_flag = 0; // ds:0x3dc2
-Bit8u  gs_tevent050_flag = 0; // ds:0x3dc3
-Bit8u  gs_tevent050_herb_flag = 0; // ds:0x3dc4
-Bit8u  gs_tevent051_flag = 0; // ds:0x3dc5
-Bit8u  gs_tevent053_flag = 0; // ds:0x3dc6
-Bit8u  gs_tevent058_flag = 0; // ds:0x3dc7
-Bit8u  gs_tevent061_flag = 0; // ds:0x3dc8
-Bit8u  gs_tevent064_flag = 0; // ds:0x3dc9
-Bit8u  gs_tevent066_flag = 0; // ds:0x3dca
-Bit8u  gs_tevent066_track_flag = 0; // ds:0x3dcb
-Bit8u  gs_tevent067_flag = 0; // ds:0x3dcc
-Bit8u  gs_tevent069_flag = 0; // ds:0x3dcd
-Bit8u  gs_tevent070_flag = 0; // ds:0x3dce
-Bit8u  gs_tevent070_herb_flag = 0; // ds:0x3dcf
-Bit8u  gs_tevent070_trail_flag = 0; // ds:0x3dd0
-Bit8u  gs_tevent071_flag = 0; // ds:0x3dd1
-Bit8u  gs_teventu01_flag = 0; // ds:0x3dd2
-Bit8u  gs_tevent064_silent_flag = 0; // ds:0x3dd3
+uint8_t  gs_dng02_sphere_known = 0; // ds:0x3c94
+uint8_t  gs_dng02_corpse_flag = 0; // ds:0x3c95
+uint8_t  gs_dng02_apparature_destroyed = 0; // ds:0x3c96
+uint8_t  gs_dng02_sphere_timer = 0; // ds:0x3c97, {0,...,7}
+uint8_t  gs_dng02_sphere_active = 0; // ds:0x3c98
+uint8_t  gs_dng02_raven_destroyed = 0; // ds:0x3c99
+uint8_t  gs_dng02_secret_door1 = 0; // ds:0x3c9a
+uint8_t  gs_dng02_secret_door2 = 0; // ds:0x3c9b
+uint8_t  gs_dng02_secret_door3 = 0; // ds:0x3c9c
+uint8_t  gs_dng03_lever_trap = 1; // ds:0x3c9d
+uint8_t  gs_dng03_lever_chest11 = 1; // ds:0x3c9e
+uint8_t  gs_dng03_sanctum_smashed = 0; // ds:0x3c9f
+uint8_t  gs_dng04_corpse0_flag = 0; // ds:0x3ca0
+uint8_t  gs_dng04_corpse1_flag = 0; // ds:0x3ca1
+uint8_t  gs_dng04_corpse2_flag = 0; // ds:0x3ca2
+uint8_t  gs_dng04_gap_flag = 0; // ds:0x3ca3
+uint8_t  gs_dng04_helmet_flag = 0; // ds:0x3ca4
+uint8_t  gs_dng04_lantern_flag = 0; // ds:0x3ca5
+uint8_t  gs_dng04_deepgap_flag = 0; // ds:0x3ca6
+uint8_t  gs_dng06_pitdoor_flag = 0; // ds:0x3ca7
+uint8_t  gs_dng06_proviant_flag = 0; // ds:0x3ca8
+uint8_t  gs_dng06_money_flag = 0; // ds:0x3ca9
+uint8_t  gs_dng06_goldkey_flag = 0; // ds:0x3caa
+int8_t  gs_dng06_countdown_timer = 5; // ds:0x3cab
+uint8_t  gs_dng06_lever_flag = 0; // ds:0x3cac
+uint8_t  gs_dng06_book_flag = 0; // ds:0x3cad
+uint8_t  gs_dng06_fight19_flag = 0; // ds:0x3cae
+uint8_t  gs_dng05_proviant_flag = 0; // ds:0x3caf
+uint8_t  gs_dng05_bats_flag = 0; // ds:0x3cb0
+uint8_t  gs_dng05_god_flag = 0; // ds:0x3cb1
+uint8_t  gs_dng07_muelixier_flag = 0; // ds:0x3cb2
+uint8_t  gs_dng07_antimuelixier_flag = 0; // ds:0x3cb3
+uint8_t  gs_dng07_flicker_flag = 0; // ds:0x3cb4
+uint8_t  gs_dng07_poison_flag = 0; // ds:0x3cb5
+int32_t gs_dng07_poison_timer = 0; // ds:0x3cb6
+uint8_t  gs_dng08_bed_00 = 0; // ds:0x3cba
+uint8_t  gs_dng08_bed_01 = 0; // ds:0x3cbb
+uint8_t  gs_dng08_bed_02 = 0; // ds:0x3cbc
+uint8_t  gs_dng08_bed_03 = 0; // ds:0x3cbd
+uint8_t  gs_dng08_bed_04 = 0; // ds:0x3cbe
+uint8_t  gs_dng08_bed_05 = 0; // ds:0x3cbf
+uint8_t  gs_dng08_bed_06 = 0; // ds:0x3cc0
+uint8_t  gs_dng08_bed_07 = 0; // ds:0x3cc1
+uint8_t  gs_dng08_bed_08 = 0; // ds:0x3cc2
+uint8_t  gs_dng08_bed_09 = 0; // ds:0x3cc3
+uint8_t  gs_dng08_bed_10 = 0; // ds:0x3cc4
+uint8_t  gs_dng08_bed_11 = 0; // ds:0x3cc5
+uint8_t  gs_dng08_timer1 = 0; // ds:0x3cc6, {0, 1, ..., 24}
+uint8_t  gs_dng08_timer2 = 0; // ds:0x3cc7, {0, 1, ..., 24}
+uint8_t  gs_dng08_bundles_done = 0; // ds:0x3cc8
+uint8_t  gs_dng08_ballista_done = 0; // ds:0x3cc9
+uint8_t  gs_dng08_chest2_looted = 0; // ds:0x3cca
+uint8_t  gs_dng08_secret_door = 0; // ds:0x3ccb, {0,1 = found,2 = opened}
+uint8_t  gs_dng08_chest0_looted = 0; // ds:0x3ccc
+uint8_t  gs_dng08_chest35_looted = 0; // ds:0x3ccd
+uint8_t  gs_daspota_location01_loot[29] = { 0x36, 0x01, 0x0c, 0x01, 0x0d, 0x1e, 0x9e, 0x01, 0x9f, 0x01, 0x5c, 0x0a, 0x17, 0x32, 0x5b, 0x14, 0x4a, 0x01, 0x4a, 0x01, 0x22, 0x01, 0x92, 0x01, 0x8e, 0x01, 0xfa, 0xff, 0xff }; // ds:0x3cce
+uint8_t  gs_daspota_location02_loot[15] = { 0x0c, 0x01, 0x0c, 0x01, 0x0d, 0x1e, 0x07, 0x01, 0x07, 0x01, 0x19, 0x01, 0x29, 0x01, 0xff }; // ds:0x3ceb
+uint8_t  gs_daspota_location03_loot[15] = { 0x0c, 0x01, 0x0c, 0x01, 0x0d, 0x1e, 0x07, 0x01, 0x07, 0x01, 0x19, 0x01, 0x29, 0x01, 0xff }; // ds:0x3cfa
+uint8_t  gs_daspota_location04_loot[9] = { 0x08, 0x01, 0x17, 0x0a, 0x56, 0x01, 0x4d, 0x01, 0xff }; // ds:0x3d09
+uint8_t  gs_daspota_location05_loot[31] = { 0xa0, 0x01, 0xa1, 0x01, 0x15, 0x01, 0x6d, 0x01, 0x5b, 0x14, 0x4c, 0x02, 0x24, 0x01, 0x1d, 0x01, 0x22, 0x01, 0x2a, 0x01, 0x26, 0x01, 0x23, 0x01, 0x39, 0x01, 0x3b, 0x01, 0x8f, 0x01, 0xff }; // ds:0x3d12
+uint8_t  gs_daspota_location06_loot[25] = { 0x03, 0x03, 0x01, 0x03, 0x07, 0x03, 0x08, 0x03, 0x10, 0x03, 0x13, 0x03, 0x36, 0x03, 0x4e, 0x03, 0x54, 0x03, 0x75, 0x03, 0x52, 0x03, 0x51, 0x03, 0xff }; // ds:0x3d31
+uint8_t  gs_daspota_location07_loot[7] = { 0x17, 0x14, 0x5b, 0x14, 0x5c, 0x0a, 0xff }; // ds:0x3d4a
+uint8_t  gs_daspota_location08_loot[15] = { 0x4c, 0x05, 0x4a, 0x05, 0x22, 0x01, 0x22, 0x01, 0x1f, 0x01, 0x2e, 0x01, 0x22, 0x01, 0xff }; // ds:0x3d51
+uint8_t  gs_daspota_location10_loot[7] = { 0x17, 0x32, 0x5b, 0x14, 0x5c, 0x0a, 0xff }; // ds:0x3d60
+uint8_t  gs_daspota_location12_loot[21] = { 0x1a, 0x03, 0x20, 0x03, 0x28, 0x03, 0x2e, 0x03, 0x48, 0x03, 0x55, 0x03, 0x5f, 0x03, 0x41, 0x03, 0x79, 0x03, 0x1f, 0x03, 0xff }; // ds:0x3d67
+uint8_t  gs_daspota_location13_loot[9] = { 0x08, 0x03, 0x79, 0x03, 0x1b, 0x03, 0x10, 0x02, 0xff }; // ds:0x3d7c
+uint8_t  gs_daspota_location14_loot[5] = { 0x17, 0x50, 0x5c, 0x0a, 0xff }; // ds:0x3d85
+uint8_t  gs_daspota_location16_loot[5] = { 0x17, 0x32, 0x2d, 0x0a, 0xff }; // ds:0x3d8a
+uint8_t  gs_daspota_location18_loot[19] = { 0x5c, 0x0a, 0x17, 0x28, 0x4c, 0x05, 0x4a, 0x05, 0x1f, 0x02, 0x5f, 0x01, 0x7e, 0x01, 0x3a, 0x01, 0x80, 0x01, 0xff }; // ds:0x3d8f
+uint8_t  gs_tevent004_flag = 0; // ds:0x3da2
+uint8_t  gs_tevent005_flag = 0; // ds:0x3da3
+uint8_t  gs_tevent008_flag = 0; // ds:0x3da4
+uint8_t  gs_tevent009_flag = 0; // ds:0x3da5
+uint8_t  gs_tevent011_flag = 0; // ds:0x3da6
+uint8_t  gs_tevent013_flag = 0; // ds:0x3da7
+uint8_t  gs_tevent014_flag = 0; // ds:0x3da8
+uint8_t  gs_tevent016_flag = 0; // ds:0x3da9
+uint8_t  gs_tevent017_flag = 0; // ds:0x3daa
+uint8_t  gs_tevent020_flag = 0; // ds:0x3dab
+uint8_t  gs_tevent021_flag = 0; // ds:0x3dac
+uint8_t  gs_tevent022_flag = 0; // ds:0x3dad
+uint8_t  gs_tevent022_track_flag = 0; // ds:0x3dae
+uint8_t  gs_tevent024_flag = 0; // ds:0x3daf
+uint8_t  gs_tevent025_flag = 0; // ds:0x3db0
+uint8_t  gs_tevent028_flag = 0; // ds:0x3db1
+uint8_t  gs_tevent030_flag = 0; // ds:0x3db2
+uint8_t  gs_tevent031_flag = 0; // ds:0x3db3
+uint8_t  gs_tevent032_flag = 0; // ds:0x3db4
+uint8_t  gs_tevent032_herb_flag = 0; // ds:0x3db5
+uint8_t  gs_tevent034_flag = 0; // ds:0x3db6
+uint8_t  gs_tevent035_flag = 0; // ds:0x3db7
+uint8_t  gs_tevent036_flag = 0; // ds:0x3db8
+uint8_t  gs_tevent036_herb_flag = 0; // ds:0x3db9
+uint8_t  gs_tevent037_flag = 0; // ds:0x3dba
+uint8_t  gs_tevent039_flag = 0; // ds:0x3dbb
+uint8_t  gs_tevent040_flag = 0; // ds:0x3dbc
+uint8_t  gs_tevent041_flag = 0; // ds:0x3dbd
+uint8_t  gs_tevent042_flag = 0; // ds:0x3dbe
+uint8_t  gs_tevent043_flag = 0; // ds:0x3dbf
+uint8_t  gs_tevent048_flag = 0; // ds:0x3dc0
+uint8_t  gs_tevent048_track_flag = 0; // ds:0x3dc1
+uint8_t  gs_tevent049_flag = 0; // ds:0x3dc2
+uint8_t  gs_tevent050_flag = 0; // ds:0x3dc3
+uint8_t  gs_tevent050_herb_flag = 0; // ds:0x3dc4
+uint8_t  gs_tevent051_flag = 0; // ds:0x3dc5
+uint8_t  gs_tevent053_flag = 0; // ds:0x3dc6
+uint8_t  gs_tevent058_flag = 0; // ds:0x3dc7
+uint8_t  gs_tevent061_flag = 0; // ds:0x3dc8
+uint8_t  gs_tevent064_flag = 0; // ds:0x3dc9
+uint8_t  gs_tevent066_flag = 0; // ds:0x3dca
+uint8_t  gs_tevent066_track_flag = 0; // ds:0x3dcb
+uint8_t  gs_tevent067_flag = 0; // ds:0x3dcc
+uint8_t  gs_tevent069_flag = 0; // ds:0x3dcd
+uint8_t  gs_tevent070_flag = 0; // ds:0x3dce
+uint8_t  gs_tevent070_herb_flag = 0; // ds:0x3dcf
+uint8_t  gs_tevent070_trail_flag = 0; // ds:0x3dd0
+uint8_t  gs_tevent071_flag = 0; // ds:0x3dd1
+uint8_t  gs_teventu01_flag = 0; // ds:0x3dd2
+uint8_t  gs_tevent064_silent_flag = 0; // ds:0x3dd3
 unsigned char g_unkn_022[1] = { 0x00 }; // ds:0x3dd4
-Bit8u  gs_teventu02_flag = 0; // ds:0x3dd5
-Bit8u  gs_teventu03_flag = 0; // ds:0x3dd6
-Bit8u  gs_teventu04_flag = 0; // ds:0x3dd7
-Bit8u  gs_teventu05_flag = 0; // ds:0x3dd8
-Bit8u  gs_teventu06_flag = 0; // ds:0x3dd9
-Bit8u  gs_tevent071_orcstatue = 0; // ds:0x3dda
-Bit8u  gs_met_unicorn_flag = 0; // ds:0x3ddb	1st (tevent087, tevent038), 2nd tevent136
-Bit8u  gs_find_hyggelik = 0; // ds:0x3ddc, {0,1 = you are able to find Hyggelik} tevent031, tevent115
-Bit8u  gs_tevent072_flag = 0; // ds:0x3ddd
-Bit8u  gs_tevent073_flag = 0; // ds:0x3dde
-Bit8u  gs_tevent074_flag = 0; // ds:0x3ddf
-Bit8u  gs_tevent075_flag = 0; // ds:0x3de0
-Bit8u  gs_tevent076_flag = 0; // ds:0x3de1
-Bit8u  gs_tevent077_flag = 0; // ds:0x3de2
-Bit8u  gs_tevent079_flag = 0; // ds:0x3de3
-Bit8u  gs_tevent080_flag = 0; // ds:0x3de4
-Bit8u  gs_tevent080_tatzelwurm = 0; // ds:0x3de5
-Bit8u  gs_tevent081_flag = 0; // ds:0x3de6
-Bit8u  gs_tevent083_flag = 0; // ds:0x3de7
-Bit8u  gs_tevent084_flag = 0; // ds:0x3de8
-Bit8u  gs_tevent085_flag = 0; // ds:0x3de9
-Bit8u  gs_tevent085_herb_flag = 0; // ds:0x3dea
-Bit8u  gs_tevent086_flag = 0; // ds:0x3deb
-Bit8u  gs_tevent088_flag = 0; // ds:0x3dec
-Bit8u  gs_tevent091_flag = 0; // ds:0x3ded
-Bit8u  gs_tevent093_flag = 0; // ds:0x3dee
-Bit8u  gs_tevent094_flag = 0; // ds:0x3def
-Bit8u  gs_teventu07_flag = 0; // ds:0x3df0
-Bit8u  gs_teventu08_flag = 0; // ds:0x3df1
-Bit8u  gs_tevent099_flag = 0; // ds:0x3df2
-Bit8u  gs_tevent100_flag = 0; // ds:0x3df3
-Bit8u  gs_tevent101_flag = 0; // ds:0x3df4
-Bit8u  gs_tevent106_flag = 0; // ds:0x3df5
-Bit8u  gs_tevent108_flag = 0; // ds:0x3df6
-Bit8u  gs_tevent109_flag = 0; // ds:0x3df7
-Bit8u  gs_tevent111_flag = 0; // ds:0x3df8
-Bit8u  gs_tevent112_flag = 0; // ds:0x3df9
-Bit8u  gs_tevent112_herb_flag = 0; // ds:0x3dfa
-Bit8u  gs_tevent115_flag = 0; // ds:0x3dfb
-Bit8u  gs_tevent116_flag = 0; // ds:0x3dfc
-Bit8u  gs_tevent118_flag = 0; // ds:0x3dfd
-Bit8u  gs_tevent119_flag = 0; // ds:0x3dfe
-Bit8u  gs_tevent120_flag = 0; // ds:0x3dff
-Bit8u  gs_tevent122_flag = 0; // ds:0x3e00
+uint8_t  gs_teventu02_flag = 0; // ds:0x3dd5
+uint8_t  gs_teventu03_flag = 0; // ds:0x3dd6
+uint8_t  gs_teventu04_flag = 0; // ds:0x3dd7
+uint8_t  gs_teventu05_flag = 0; // ds:0x3dd8
+uint8_t  gs_teventu06_flag = 0; // ds:0x3dd9
+uint8_t  gs_tevent071_orcstatue = 0; // ds:0x3dda
+uint8_t  gs_met_unicorn_flag = 0; // ds:0x3ddb	1st (tevent087, tevent038), 2nd tevent136
+uint8_t  gs_find_hyggelik = 0; // ds:0x3ddc, {0,1 = you are able to find Hyggelik} tevent031, tevent115
+uint8_t  gs_tevent072_flag = 0; // ds:0x3ddd
+uint8_t  gs_tevent073_flag = 0; // ds:0x3dde
+uint8_t  gs_tevent074_flag = 0; // ds:0x3ddf
+uint8_t  gs_tevent075_flag = 0; // ds:0x3de0
+uint8_t  gs_tevent076_flag = 0; // ds:0x3de1
+uint8_t  gs_tevent077_flag = 0; // ds:0x3de2
+uint8_t  gs_tevent079_flag = 0; // ds:0x3de3
+uint8_t  gs_tevent080_flag = 0; // ds:0x3de4
+uint8_t  gs_tevent080_tatzelwurm = 0; // ds:0x3de5
+uint8_t  gs_tevent081_flag = 0; // ds:0x3de6
+uint8_t  gs_tevent083_flag = 0; // ds:0x3de7
+uint8_t  gs_tevent084_flag = 0; // ds:0x3de8
+uint8_t  gs_tevent085_flag = 0; // ds:0x3de9
+uint8_t  gs_tevent085_herb_flag = 0; // ds:0x3dea
+uint8_t  gs_tevent086_flag = 0; // ds:0x3deb
+uint8_t  gs_tevent088_flag = 0; // ds:0x3dec
+uint8_t  gs_tevent091_flag = 0; // ds:0x3ded
+uint8_t  gs_tevent093_flag = 0; // ds:0x3dee
+uint8_t  gs_tevent094_flag = 0; // ds:0x3def
+uint8_t  gs_teventu07_flag = 0; // ds:0x3df0
+uint8_t  gs_teventu08_flag = 0; // ds:0x3df1
+uint8_t  gs_tevent099_flag = 0; // ds:0x3df2
+uint8_t  gs_tevent100_flag = 0; // ds:0x3df3
+uint8_t  gs_tevent101_flag = 0; // ds:0x3df4
+uint8_t  gs_tevent106_flag = 0; // ds:0x3df5
+uint8_t  gs_tevent108_flag = 0; // ds:0x3df6
+uint8_t  gs_tevent109_flag = 0; // ds:0x3df7
+uint8_t  gs_tevent111_flag = 0; // ds:0x3df8
+uint8_t  gs_tevent112_flag = 0; // ds:0x3df9
+uint8_t  gs_tevent112_herb_flag = 0; // ds:0x3dfa
+uint8_t  gs_tevent115_flag = 0; // ds:0x3dfb
+uint8_t  gs_tevent116_flag = 0; // ds:0x3dfc
+uint8_t  gs_tevent118_flag = 0; // ds:0x3dfd
+uint8_t  gs_tevent119_flag = 0; // ds:0x3dfe
+uint8_t  gs_tevent120_flag = 0; // ds:0x3dff
+uint8_t  gs_tevent122_flag = 0; // ds:0x3e00
 unsigned char g_unkn_023[1] = { 0x00 }; // ds:0x3e01
-Bit8u  gs_tevent128_flag = 0; // ds:0x3e02
-Bit8u  gs_tevent128_replen_flag = 0; // ds:0x3e03
-Bit8u  gs_tevent129_flag = 0; // ds:0x3e04
-Bit8u  gs_tevent131_flag = 0; // ds:0x3e05
-Bit8u  gs_tevent132_flag = 0; // ds:0x3e06
-Bit8u  gs_tevent132_herb_flag = 0; // ds:0x3e07
-Bit8u  gs_tevent134_flag = 0; // ds:0x3e08
-Bit8u  gs_tevent137_flag = 0; // ds:0x3e09
-Bit8u  gs_tevent138_flag = 0; // ds:0x3e0a
-Bit8u  gs_teventu09_flag = 0; // ds:0x3e0b
-Bit8u  gs_tevent140_flag = 0; // ds:0x3e0c
-Bit8u  gs_tevent140_herb_flag = 0; // ds:0x3e0d
-Bit8u  gs_tevent141_flag = 0; // ds:0x3e0e
-Bit8u  gs_tevent142_flag = 0; // ds:0x3e0f
+uint8_t  gs_tevent128_flag = 0; // ds:0x3e02
+uint8_t  gs_tevent128_replen_flag = 0; // ds:0x3e03
+uint8_t  gs_tevent129_flag = 0; // ds:0x3e04
+uint8_t  gs_tevent131_flag = 0; // ds:0x3e05
+uint8_t  gs_tevent132_flag = 0; // ds:0x3e06
+uint8_t  gs_tevent132_herb_flag = 0; // ds:0x3e07
+uint8_t  gs_tevent134_flag = 0; // ds:0x3e08
+uint8_t  gs_tevent137_flag = 0; // ds:0x3e09
+uint8_t  gs_tevent138_flag = 0; // ds:0x3e0a
+uint8_t  gs_teventu09_flag = 0; // ds:0x3e0b
+uint8_t  gs_tevent140_flag = 0; // ds:0x3e0c
+uint8_t  gs_tevent140_herb_flag = 0; // ds:0x3e0d
+uint8_t  gs_tevent141_flag = 0; // ds:0x3e0e
+uint8_t  gs_tevent142_flag = 0; // ds:0x3e0f
 unsigned char g_unkn_024[1] = { 0x00 }; // ds:0x3e10
-Bit8u  gs_teventu10_flag = 0; // ds:0x3e11
-Bit8u  gs_teventu11_flag = 0; // ds:0x3e12
-Bit8u  gs_teventu12_flag = 0; // ds:0x3e13
-Bit8u  gs_teventu13_flag = 0; // ds:0x3e14
-Bit8u  gs_tevent114_olimone_flag = 0; // ds:0x3e15
-Bit8u  gs_tevent074_fight_flag = 0xff; // ds:0x3e16
-Bit8u  gs_tevent077_fight_flag = 0xff; // ds:0x3e17
+uint8_t  gs_teventu10_flag = 0; // ds:0x3e11
+uint8_t  gs_teventu11_flag = 0; // ds:0x3e12
+uint8_t  gs_teventu12_flag = 0; // ds:0x3e13
+uint8_t  gs_teventu13_flag = 0; // ds:0x3e14
+uint8_t  gs_tevent114_olimone_flag = 0; // ds:0x3e15
+uint8_t  gs_tevent074_fight_flag = 0xff; // ds:0x3e16
+uint8_t  gs_tevent077_fight_flag = 0xff; // ds:0x3e17
 
 #if defined(__BORLANDC__)
 struct struct_hero *gs_random_tlk_hero = NULL;	// ds:0x3e18;
 struct struct_hero *gs_ruin_hero = NULL;		// ds:0x3e1c;
 struct struct_hero *gs_main_acting_hero = NULL;	// ds:0x3e20;
 #else
-Bit32u gs_random_tlk_hero_obsolete = 0; // ds:0x3e18; This is a dummy now!
-Bit32u gs_ruin_hero_obsolete = 0;	// ds:0x3e1c; This is a dummy now!
-Bit32u gs_main_acting_hero_obsolete = 0;// ds:0x3e20; This is a dummy now!
+uint32_t gs_random_tlk_hero_obsolete = 0; // ds:0x3e18; This is a dummy now!
+uint32_t gs_ruin_hero_obsolete = 0;	// ds:0x3e1c; This is a dummy now!
+uint32_t gs_main_acting_hero_obsolete = 0;// ds:0x3e20; This is a dummy now!
 #endif
 
-Bit8u gs_tevent073_corpse[3] = { 0xaa, 0x01, 0xff }; // ds:0x3e24
-Bit8u gs_tevent014_chest[4] = { 0x01, 0x6e, 0xa2, 0xff }; // ds:0x3e27
-Bit8u gs_tevent064_hut_content[19] = { 0x4b, 0x01, 0x5c, 0x01, 0x5b, 0x01, 0x7e, 0x01, 0x78, 0x01, 0x80, 0x01, 0x1d, 0x01, 0x46, 0x01, 0x92, 0x01, 0xff }; // ds:0x3e2b
-Bit8u gs_tevent064_chest[21] = { 0xa4, 0x01, 0xa5, 0x01, 0x92, 0x01, 0xb4, 0x02, 0xa6, 0x01, 0xa7, 0x01, 0x7e, 0x02, 0x82, 0x01, 0x9d, 0x01, 0x83, 0x01, 0xff }; // ds:0x3e3e
+uint8_t gs_tevent073_corpse[3] = { 0xaa, 0x01, 0xff }; // ds:0x3e24
+uint8_t gs_tevent014_chest[4] = { 0x01, 0x6e, 0xa2, 0xff }; // ds:0x3e27
+uint8_t gs_tevent064_hut_content[19] = { 0x4b, 0x01, 0x5c, 0x01, 0x5b, 0x01, 0x7e, 0x01, 0x78, 0x01, 0x80, 0x01, 0x1d, 0x01, 0x46, 0x01, 0x92, 0x01, 0xff }; // ds:0x3e2b
+uint8_t gs_tevent064_chest[21] = { 0xa4, 0x01, 0xa5, 0x01, 0x92, 0x01, 0xb4, 0x02, 0xa6, 0x01, 0xa7, 0x01, 0x7e, 0x02, 0x82, 0x01, 0x9d, 0x01, 0x83, 0x01, 0xff }; // ds:0x3e3e
 
-Bit8u  gs_palette_floor[3 * 32] = { 0 };	// ds:0x3e53
-Bit8u  gs_palette_buildings[3 * 32] = { 0 };	// ds:0x3eb3
-Bit8u  gs_palette_sky[3 * 32] = { 0 };		// ds:0x3f13
-Bit8u  gs_need_letter = 0;	// ds:0x3f73
-Bit8u  gs_gremob_invited = 0;	// ds:0x3f74
-Bit8u  gs_harlot_date = 0;	// ds:0x3f75
-Bit8u  gs_drug_timer = 0;	// ds:0x3f76, {0, 1, ..., 10}
-Bit8u  gs_ptemple_closed = 0;	// ds:0x3f77
-Bit8u  gs_alrik_derondan = 0;	// ds:0x3f78
-Bit8u  gs_alrik_derondan_insulted = 0; // ds:0x3f79
-Bit8u  gs_dng13_lantern_flag = 0; // ds:0x3f7a
-Bit8s  gs_dng13_corpse0_flag = 0; // ds:0x3f7b
-Bit8s  gs_dng13_corpse1_flag = 0; // ds:0x3f7c
-Bit8u  gs_dng13_passage1_flag = 0; // ds:0x3f7d
-Bit8u  gs_dng13_passage2_flag = 0; // ds:0x3f7e
-Bit8u  gs_dng13_passage3_flag = 0; // ds:0x3f7f
-Bit8u  gs_dng13_passage4_flag = 0; // ds:0x3f80
-Bit8u  gs_dng13_passage5_flag = 0; // ds:0x3f81
-Bit8u  gs_dng13_money_flag = 0; // ds:0x3f82
-Bit8u  gs_dng13_chest_equips[13] = {
+uint8_t  gs_palette_floor[3 * 32] = { 0 };	// ds:0x3e53
+uint8_t  gs_palette_buildings[3 * 32] = { 0 };	// ds:0x3eb3
+uint8_t  gs_palette_sky[3 * 32] = { 0 };		// ds:0x3f13
+uint8_t  gs_need_letter = 0;	// ds:0x3f73
+uint8_t  gs_gremob_invited = 0;	// ds:0x3f74
+uint8_t  gs_harlot_date = 0;	// ds:0x3f75
+uint8_t  gs_drug_timer = 0;	// ds:0x3f76, {0, 1, ..., 10}
+uint8_t  gs_ptemple_closed = 0;	// ds:0x3f77
+uint8_t  gs_alrik_derondan = 0;	// ds:0x3f78
+uint8_t  gs_alrik_derondan_insulted = 0; // ds:0x3f79
+uint8_t  gs_dng13_lantern_flag = 0; // ds:0x3f7a
+int8_t  gs_dng13_corpse0_flag = 0; // ds:0x3f7b
+int8_t  gs_dng13_corpse1_flag = 0; // ds:0x3f7c
+uint8_t  gs_dng13_passage1_flag = 0; // ds:0x3f7d
+uint8_t  gs_dng13_passage2_flag = 0; // ds:0x3f7e
+uint8_t  gs_dng13_passage3_flag = 0; // ds:0x3f7f
+uint8_t  gs_dng13_passage4_flag = 0; // ds:0x3f80
+uint8_t  gs_dng13_passage5_flag = 0; // ds:0x3f81
+uint8_t  gs_dng13_money_flag = 0; // ds:0x3f82
+uint8_t  gs_dng13_chest_equips[13] = {
 	ITEM_HACKE,		 3,
 	ITEM_SCHAUFEL,	 	 1,
 	ITEM_SEIL,		 3,
@@ -1758,23 +1758,23 @@ Bit8u  gs_dng13_chest_equips[13] = {
 	ITEM_TOPFHELM,	 	 1,
 	0xff
 }; // ds:0x3f83
-Bit8u  gs_dng13_chest0_content[6] = {
+uint8_t  gs_dng13_chest0_content[6] = {
 	ITEM_DOLCH, ITEM_ZUNDERKAESTCHEN, ITEM_FACKEL__UNLIT, ITEM_FACKEL__UNLIT, ITEM_SEIL, 0xff }; // ds:0x3f90
-Bit8u  gs_dng13_chest1_content[5] = {
+uint8_t  gs_dng13_chest1_content[5] = {
 	ITEM_DOLCH, ITEM_SCHWERT, ITEM_FACKEL__UNLIT, ITEM_ZUNDERKAESTCHEN, 0xff }; // ds:0x3f96
-Bit8s  gs_dng12_tunnel1 = 45; // ds:0x3f9b
-Bit8s  gs_dng12_tunnel2 = 40; // ds:0x3f9c
-Bit8s  gs_dng12_tunnel3 = 35; // ds:0x3f9d
-Bit8s  gs_dng12_tunnel4 = 30; // ds:0x3f9e
-Bit8u  gs_dng12_ingerimm_sacrifice = 0; // ds:0x3f9f
-Bit8u  gs_dng12_ingerimm_hint = 0; // ds:0x3fa0
-Bit8s  gs_dng12_watertrap_water_runs = 0; // ds:0x3fa1
-Bit32s gs_dng12_watertrap_timer = MINUTES(50); // ds:0x3fa2
-Bit8u  gs_dng12_watertrap_active = 1; // ds:0x3fa6
-Bit8s  gs_dng12_obstacle_hp = 40; // ds:0x3fa7, {-25,...,40}
-Bit8u  gs_dng12_obstacle_active = 1; // ds:0x3fa8
-Bit8u  gs_dng12_speartrap_active = 1; // ds:0x3fa9
-Bit8u  gs_dng12_chest1_content[12] = {
+int8_t  gs_dng12_tunnel1 = 45; // ds:0x3f9b
+int8_t  gs_dng12_tunnel2 = 40; // ds:0x3f9c
+int8_t  gs_dng12_tunnel3 = 35; // ds:0x3f9d
+int8_t  gs_dng12_tunnel4 = 30; // ds:0x3f9e
+uint8_t  gs_dng12_ingerimm_sacrifice = 0; // ds:0x3f9f
+uint8_t  gs_dng12_ingerimm_hint = 0; // ds:0x3fa0
+int8_t  gs_dng12_watertrap_water_runs = 0; // ds:0x3fa1
+int32_t gs_dng12_watertrap_timer = MINUTES(50); // ds:0x3fa2
+uint8_t  gs_dng12_watertrap_active = 1; // ds:0x3fa6
+int8_t  gs_dng12_obstacle_hp = 40; // ds:0x3fa7, {-25,...,40}
+uint8_t  gs_dng12_obstacle_active = 1; // ds:0x3fa8
+uint8_t  gs_dng12_speartrap_active = 1; // ds:0x3fa9
+uint8_t  gs_dng12_chest1_content[12] = {
 	ITEM_KETTENHEMD,
 	ITEM_KETTENHEMD,
 	ITEM_KRIEGSBEIL,
@@ -1787,31 +1787,31 @@ Bit8u  gs_dng12_chest1_content[12] = {
 	ITEM_HEILTRANK,
 	ITEM_ZAUBERTRANK,
 	0xff }; // ds:0x3faa
-Bit8u  gs_dng14_money_flag = 0; // ds:0x3fb6
-Bit8u  gs_dng14_alarm_flag = 0; // ds:0x3fb7
-Bit8u  gs_dng14_secretdoor1 = 0; // ds:0x3fb8, {0, 1 = found, 2 = unlocked}
-Bit8u  gs_dng14_secretdoor2 = 0; // ds:0x3fb9, {0, 1 = found, 2 = unlocked}
-Bit8u  gs_dng14_secretdoor3 = 0; // ds:0x3fba, {0, 1 = found, 2 = unlocked}
-Bit8u  gs_dng14_secretdoor4 = 0; // ds:0x3fbb, {0, 1 = found, 2 = unlocked}
-Bit8u  gs_dng14_secretdoor5 = 0; // ds:0x3fbc, {0, 1 = found, 2 = unlocked}
-Bit8u  gs_dng14_poisontrap = 0; // ds:0x3fbd
-Bit8u  gs_dng14_lvl2_fight = 0; // ds:0x3fbe
-Bit8u  gs_dng14_booty_flag = 0; // ds:0x3fbf
-Bit8u  gs_dng14_torches_flag = 0; // ds:0x3fc0
-Bit8u  gs_dng14_spear_flag = 0; // ds:0x3fc1
-Bit8u  gs_dng14_hatchet_flag = 0; // ds:0x3fc2
-Bit8u  gs_dng14_ring_flag = 0; // ds:0x3fc3
-Bit8u  gs_dng14_orknase_flag = 0; // ds:0x3fc4
-Bit8u  gs_dng14_spooky_flag = 0; // ds:0x3fc5
-Bit8u  gs_dng14_cellarexit_flag = 0; // ds:0x3fc6
-Bit8u  gs_dng14_chest_pantry[9] = {
+uint8_t  gs_dng14_money_flag = 0; // ds:0x3fb6
+uint8_t  gs_dng14_alarm_flag = 0; // ds:0x3fb7
+uint8_t  gs_dng14_secretdoor1 = 0; // ds:0x3fb8, {0, 1 = found, 2 = unlocked}
+uint8_t  gs_dng14_secretdoor2 = 0; // ds:0x3fb9, {0, 1 = found, 2 = unlocked}
+uint8_t  gs_dng14_secretdoor3 = 0; // ds:0x3fba, {0, 1 = found, 2 = unlocked}
+uint8_t  gs_dng14_secretdoor4 = 0; // ds:0x3fbb, {0, 1 = found, 2 = unlocked}
+uint8_t  gs_dng14_secretdoor5 = 0; // ds:0x3fbc, {0, 1 = found, 2 = unlocked}
+uint8_t  gs_dng14_poisontrap = 0; // ds:0x3fbd
+uint8_t  gs_dng14_lvl2_fight = 0; // ds:0x3fbe
+uint8_t  gs_dng14_booty_flag = 0; // ds:0x3fbf
+uint8_t  gs_dng14_torches_flag = 0; // ds:0x3fc0
+uint8_t  gs_dng14_spear_flag = 0; // ds:0x3fc1
+uint8_t  gs_dng14_hatchet_flag = 0; // ds:0x3fc2
+uint8_t  gs_dng14_ring_flag = 0; // ds:0x3fc3
+uint8_t  gs_dng14_orknase_flag = 0; // ds:0x3fc4
+uint8_t  gs_dng14_spooky_flag = 0; // ds:0x3fc5
+uint8_t  gs_dng14_cellarexit_flag = 0; // ds:0x3fc6
+uint8_t  gs_dng14_chest_pantry[9] = {
 	ITEM_PROVIANTPAKET, 50,
 	ITEM_BIER, 20,
 	ITEM_WEINFLASCHE, 20,
 	ITEM_SCHNAPSFLASCHE, 5,
 	0xff
 }; // ds:0x3fc7
-Bit8u  gs_dng14_chest_gear[13] = {
+uint8_t  gs_dng14_chest_gear[13] = {
 	ITEM_HACKE, 3,
 	ITEM_SCHAUFEL, 2,
 	ITEM_SEIL, 3,
@@ -1820,15 +1820,15 @@ Bit8u  gs_dng14_chest_gear[13] = {
 	ITEM_BRECHEISEN, 3,
 	0xff
 }; // ds:0x3fd0
-Bit8u  gs_dng14_chest_barrel[7] = {
+uint8_t  gs_dng14_chest_barrel[7] = {
 	ITEM_SPEER, 3,
 	ITEM_HELLEBARDE, 3,
 	ITEM_ZWEILILIEN, 1,
 	0xff
 }; // ds:0x3fdd
-Bit8u gs_dng14_chest_x1[7] = { 0x5c, 0x9a, 0x9a, 0x0e, 0x9b, 0x9b, 0xff }; // ds:0x3fe4
-Bit8u gs_dng14_chest_x2[16] = { 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x9a, 0x9a, 0x9a, 0x9b, 0x9b, 0x9b, 0xff }; // ds:0x3feb
-Bit8u gs_dng14_chest_x3[11] = {
+uint8_t gs_dng14_chest_x1[7] = { 0x5c, 0x9a, 0x9a, 0x0e, 0x9b, 0x9b, 0xff }; // ds:0x3fe4
+uint8_t gs_dng14_chest_x2[16] = { 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x9a, 0x9a, 0x9a, 0x9b, 0x9b, 0x9b, 0xff }; // ds:0x3feb
+uint8_t gs_dng14_chest_x3[11] = {
 	ITEM_KURZBOGEN, 3,
 	ITEM_ARMBRUST, 1,
 	ITEM_WURFMESSER, 4,
@@ -1836,37 +1836,37 @@ Bit8u gs_dng14_chest_x3[11] = {
 	ITEM_PFEIL, 50,
 	0xff
 }; // ds:0x3ffb
-Bit8u gs_dng14_chest_x4[14] = { 0x03, 0x03, 0x03, 0x03, 0x01, 0x01, 0x0e, 0x0e, 0x0e, 0x0e, 0x87, 0x87, 0x92, 0xff }; // ds:0x4006
-Bit8u gs_dng14_chest_x5[10] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5c, 0x5c, 0x91, 0x91, 0xff }; // ds:0x4014
-Bit8u gs_dng14_chest_x6[8] = { 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x22, 0x4c, 0xff }; // ds:0x401e
-Bit8u gs_dng14_chest_x7[7] = { 0xef, 0xef, 0xef, 0xef, 0xef, 0xef, 0xff }; // ds:0x4026
-Bit8u gs_dng14_chest_x8[13] = { 0x88, 0x88, 0x88, 0x86, 0x86, 0x86, 0x05, 0x05, 0x05, 0x07, 0x07, 0x07, 0xff }; // ds:0x402d
-Bit8u  gs_dng14_fullmap_flag = 1; // ds:0x403a
+uint8_t gs_dng14_chest_x4[14] = { 0x03, 0x03, 0x03, 0x03, 0x01, 0x01, 0x0e, 0x0e, 0x0e, 0x0e, 0x87, 0x87, 0x92, 0xff }; // ds:0x4006
+uint8_t gs_dng14_chest_x5[10] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5c, 0x5c, 0x91, 0x91, 0xff }; // ds:0x4014
+uint8_t gs_dng14_chest_x6[8] = { 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x22, 0x4c, 0xff }; // ds:0x401e
+uint8_t gs_dng14_chest_x7[7] = { 0xef, 0xef, 0xef, 0xef, 0xef, 0xef, 0xff }; // ds:0x4026
+uint8_t gs_dng14_chest_x8[13] = { 0x88, 0x88, 0x88, 0x86, 0x86, 0x86, 0x05, 0x05, 0x05, 0x07, 0x07, 0x07, 0xff }; // ds:0x402d
+uint8_t  gs_dng14_fullmap_flag = 1; // ds:0x403a
 
-Bit8u  gs_dng02_chest00_content[2] = { 0x86, 0xff }; // ds:0x403b
-Bit8u  gs_dng02_chest01_content[4] = { 0x03, 0x62, 0x04, 0xff }; // ds:0x403d
-Bit8u  gs_dng02_chest06_content[4] = { 0x48, 0x1e, 0x0e, 0xff }; // ds:0x4041
-Bit8u  gs_dng02_chest02_content[8] = { 0x2f, 0x99, 0x91, 0x91, 0x94, 0xa7, 0xcb, 0xff }; // ds:0x4045
-Bit8u  gs_dng02_chest03_content[8] = { 0x2f, 0x95, 0xec, 0xb4, 0xa9, 0xcc, 0xf3, 0xff }; // ds:0x404d
-Bit8u  gs_dng02_chest05_content[8] = { 0x2f, 0x95, 0xec, 0xb4, 0xa9, 0xcc, 0xf3, 0xff }; // ds:0x4055
+uint8_t  gs_dng02_chest00_content[2] = { 0x86, 0xff }; // ds:0x403b
+uint8_t  gs_dng02_chest01_content[4] = { 0x03, 0x62, 0x04, 0xff }; // ds:0x403d
+uint8_t  gs_dng02_chest06_content[4] = { 0x48, 0x1e, 0x0e, 0xff }; // ds:0x4041
+uint8_t  gs_dng02_chest02_content[8] = { 0x2f, 0x99, 0x91, 0x91, 0x94, 0xa7, 0xcb, 0xff }; // ds:0x4045
+uint8_t  gs_dng02_chest03_content[8] = { 0x2f, 0x95, 0xec, 0xb4, 0xa9, 0xcc, 0xf3, 0xff }; // ds:0x404d
+uint8_t  gs_dng02_chest05_content[8] = { 0x2f, 0x95, 0xec, 0xb4, 0xa9, 0xcc, 0xf3, 0xff }; // ds:0x4055
 
-Bit8u  gs_dng03_chest00_content[7] = { 0x4b, 0x4b, 0x4b, 0x4b, 0x4b, 0x4b, 0xff }; // ds:0x405d
-Bit8u  gs_dng03_chest01_content[8] = { 0x79, 0x79, 0x1b, 0x49, 0x1a, 0x28, 0x91, 0xff }; // ds:0x4064
-Bit8u  gs_dng03_chest02_content[13] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0xff }; // ds:0x406c
-Bit8u  gs_dng03_chest03_content[3] = { 0xd8, 0x9a, 0xff }; // ds:0x4079
-Bit8u  gs_dng03_chest04_content[9] = { 0x4c, 0x4c, 0x4c, 0x5b, 0x5b, 0x5b, 0x5e, 0xff, 0xff }; // ds:0x407c
-Bit8u  gs_dng03_chest06_content[8] = { 0x4c, 0x4c, 0x4c, 0x5b, 0x5b, 0x5b, 0x5e, 0xff }; // ds:0x4085
-Bit8u  gs_dng03_chest07_content[2] = { 0xe1, 0xff }; // ds:0x408d
-Bit8u  gs_dng03_chest08_content[4] = { 0x9a, 0x9a, 0x9a, 0xff }; // ds:0x408f
-Bit8u  gs_dng03_chest09_content[11] = { 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0xff }; // ds:0x4093
-Bit8u  gs_dng03_chest12_content[7] = { 0xf5, 0xf5, 0xf6, 0x27, 0x27, 0xd3, 0xff }; // ds:0x409e
+uint8_t  gs_dng03_chest00_content[7] = { 0x4b, 0x4b, 0x4b, 0x4b, 0x4b, 0x4b, 0xff }; // ds:0x405d
+uint8_t  gs_dng03_chest01_content[8] = { 0x79, 0x79, 0x1b, 0x49, 0x1a, 0x28, 0x91, 0xff }; // ds:0x4064
+uint8_t  gs_dng03_chest02_content[13] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0xff }; // ds:0x406c
+uint8_t  gs_dng03_chest03_content[3] = { 0xd8, 0x9a, 0xff }; // ds:0x4079
+uint8_t  gs_dng03_chest04_content[9] = { 0x4c, 0x4c, 0x4c, 0x5b, 0x5b, 0x5b, 0x5e, 0xff, 0xff }; // ds:0x407c
+uint8_t  gs_dng03_chest06_content[8] = { 0x4c, 0x4c, 0x4c, 0x5b, 0x5b, 0x5b, 0x5e, 0xff }; // ds:0x4085
+uint8_t  gs_dng03_chest07_content[2] = { 0xe1, 0xff }; // ds:0x408d
+uint8_t  gs_dng03_chest08_content[4] = { 0x9a, 0x9a, 0x9a, 0xff }; // ds:0x408f
+uint8_t  gs_dng03_chest09_content[11] = { 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0xff }; // ds:0x4093
+uint8_t  gs_dng03_chest12_content[7] = { 0xf5, 0xf5, 0xf6, 0x27, 0x27, 0xd3, 0xff }; // ds:0x409e
 
-Bit8u  gs_dng04_chest_corpse0[4] = { 0x03, 0x0e, 0x5c, 0xff }; // ds:0x40a5
-Bit8u  gs_dng04_chest_corpse1[12] = { 0x01, 0x01, 0x88, 0x0e, 0x0e, 0x6e, 0x50, 0x79, 0x49, 0x19, 0xb0, 0xff }; // ds:0x40a9
-Bit8u  gs_dng04_chest_corpse2[10] = { 0x0e, 0x13, 0x54, 0x79, 0x48, 0x1e, 0x55, 0x2e, 0x92, 0xff }; // ds:0x40b5
+uint8_t  gs_dng04_chest_corpse0[4] = { 0x03, 0x0e, 0x5c, 0xff }; // ds:0x40a5
+uint8_t  gs_dng04_chest_corpse1[12] = { 0x01, 0x01, 0x88, 0x0e, 0x0e, 0x6e, 0x50, 0x79, 0x49, 0x19, 0xb0, 0xff }; // ds:0x40a9
+uint8_t  gs_dng04_chest_corpse2[10] = { 0x0e, 0x13, 0x54, 0x79, 0x48, 0x1e, 0x55, 0x2e, 0x92, 0xff }; // ds:0x40b5
 
-Bit8u  gs_dng06_chest1_content[16] = { 0x70, 0x70, 0x01, 0x01, 0x35, 0x35, 0x4e, 0x4e, 0x07, 0x07, 0x0e, 0x0e, 0x0c, 0x0c, 0x50, 0xff }; // ds:0x40bf
-Bit8u  gs_dng06_chest_dasptreas[17] = {
+uint8_t  gs_dng06_chest1_content[16] = { 0x70, 0x70, 0x01, 0x01, 0x35, 0x35, 0x4e, 0x4e, 0x07, 0x07, 0x0e, 0x0e, 0x0c, 0x0c, 0x50, 0xff }; // ds:0x40bf
+uint8_t  gs_dng06_chest_dasptreas[17] = {
 	ITEM_KETTENHEMD__MAGIC, 1,
 	ITEM_GOLDSCHMUCK, 1,
 	ITEM_GOLDSCHMUCK, 1,
@@ -1878,7 +1878,7 @@ Bit8u  gs_dng06_chest_dasptreas[17] = {
 	0xff
 }; // ds:0x40cf
    //
-Bit8u  gs_dng08_chest1_content[11] = {
+uint8_t  gs_dng08_chest1_content[11] = {
 	ITEM_SAEBEL, 8,
 	ITEM_SPEER, 3,
 	ITEM_STREITKOLBEN, 2,
@@ -1886,133 +1886,133 @@ Bit8u  gs_dng08_chest1_content[11] = {
 	ITEM_PFEIL, 40,
 	0xff
 }; // ds:0x40e0
-Bit8u  gs_dng08_chest2_content[2] = { 0xb1, 0xff }; // ds:0x40eb
-Bit8u  gs_dng08_chest4_content[2] = { 0xb2, 0xff }; // ds:0x40ed
-Bit8u  gs_dng08_chest5_content[6] = { 0x27, 0x27, 0x4a, 0x93, 0xb3, 0xff }; // ds:0x40ef
+uint8_t  gs_dng08_chest2_content[2] = { 0xb1, 0xff }; // ds:0x40eb
+uint8_t  gs_dng08_chest4_content[2] = { 0xb2, 0xff }; // ds:0x40ed
+uint8_t  gs_dng08_chest5_content[6] = { 0x27, 0x27, 0x4a, 0x93, 0xb3, 0xff }; // ds:0x40ef
 
-Bit8u  gs_dng09_lever1_flag = 0; // ds:0x40f5
-Bit8u  gs_dng09_bolttrap1_flag = 3; // ds:0x40f6
-Bit8u  gs_dng09_bolttrap2_flag = 3; // ds:0x40f7
-Bit8u  gs_dng09_bolttrap3_flag = 1; // ds:0x40f8
-Bit8u  gs_dng09_cultist_flag = 1; // ds:0x40f9
-Bit8u  gs_dng09_lever2_flag = 0; // ds:0x40fa
-Bit8u  gs_dng09_bolttrap4_flag = 10; // ds:0x40fb
-Bit8u  gs_dng09_crystal_flag = 0; // ds:0x40fc
-Bit8u  gs_dng09_pit_flag = 0; // ds:0x40fd, number of heroes in pit
+uint8_t  gs_dng09_lever1_flag = 0; // ds:0x40f5
+uint8_t  gs_dng09_bolttrap1_flag = 3; // ds:0x40f6
+uint8_t  gs_dng09_bolttrap2_flag = 3; // ds:0x40f7
+uint8_t  gs_dng09_bolttrap3_flag = 1; // ds:0x40f8
+uint8_t  gs_dng09_cultist_flag = 1; // ds:0x40f9
+uint8_t  gs_dng09_lever2_flag = 0; // ds:0x40fa
+uint8_t  gs_dng09_bolttrap4_flag = 10; // ds:0x40fb
+uint8_t  gs_dng09_crystal_flag = 0; // ds:0x40fc
+uint8_t  gs_dng09_pit_flag = 0; // ds:0x40fd, number of heroes in pit
 unsigned char g_unkn_025[1] = { 0x00 }; // ds:0x40fe
-Bit8u  gs_dng09_altar_flag = 0; // ds:0x40ff
-Bit8u  gs_dng09_secretdoor1 = 0; // ds:0x4100, {0, 1 = found, 2 = unlocked}
-Bit8u  gs_dng09_secretdoor2 = 0; // ds:0x4101, {0, 1 = found, 2 = unlocked}
-Bit8u  gs_dng09_chest0[12] = { 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x5b, 0x5b, 0x5c, 0xff }; // ds:0x4102
-Bit8u  gs_dng09_chest1[10] = { 0x4c, 0x4c, 0x4c, 0x19, 0x19, 0x19, 0x29, 0x29, 0x29, 0xff }; // ds:0x410e
-Bit8u  gs_dng09_chest2[8] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xea, 0x9a, 0xff }; // ds:0x4118
-Bit8u  gs_dng09_chest3[21] = { 0x4b, 0x4b, 0x4b, 0x30, 0x30, 0x30, 0x31, 0x31, 0x31, 0x0e, 0x0e, 0x0e, 0x01, 0x5b, 0x17, 0xff, 0x01, 0x0e, 0x4a, 0x23, 0xff }; // ds:0x4120
-Bit8u  gs_dng09_chest5[4] = { 0xbd, 0xbe, 0x4c, 0xff }; // ds:0x4135
-Bit8u  gs_dng09_chest6[7] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xd9, 0xff }; // ds:0x4139
-Bit8u  gs_dng10_corpse_flag = 0; // ds:0x4140
-Bit8u  gs_dng10_lever_found = 0; // ds:0x4141
-Bit8u  gs_dng10_hole_state = 0; // ds:0x4142
-Bit8u  gs_dng10_lever_state = 0; // ds:0x4143
-Bit8u  gs_dng10_hole_damage = 0; // ds:0x4144, {0, 1, ..., 255} ; default = 0
-Bit8u  gs_dng10_floorplate_found = 0; // ds:0x4145
-Bit8u  gs_dng10_floorplate_loads = 3; // ds:0x4146
-Bit8u  gs_dng10_mummy_lever = 0; // ds:0x4147
-Bit8u  gs_dng10_heshtot = 0; // ds:0x4148
-Bit8u  gs_dng10_dragon_quest = 0; // ds:0x4149
-Bit8u  gs_dng10_hoard_plundered = 0; // ds:0x414a
-Bit8u  gs_dng10_chest0_content[5] = { 0x50, 0x1b, 0x91, 0xb7, 0xff}; // ds:0x414b
-Bit8u  gs_dng10_chest1_content[4] = { 0x91, 0x92, 0x91, 0xff}; // ds:0x4150
-Bit8u  gs_dng10_chest2_content[4] = { 0x9a, 0x9b, 0x9a, 0xff}; // ds:0x4154
-Bit8u  gs_dng10_chest3_content[3] = { 0xc7, 0xc5, 0xff}; // ds:0x4158
-Bit8u  gs_dng10_chest4_content[2] = { 0xdf, 0xff}; // ds:0x415b
+uint8_t  gs_dng09_altar_flag = 0; // ds:0x40ff
+uint8_t  gs_dng09_secretdoor1 = 0; // ds:0x4100, {0, 1 = found, 2 = unlocked}
+uint8_t  gs_dng09_secretdoor2 = 0; // ds:0x4101, {0, 1 = found, 2 = unlocked}
+uint8_t  gs_dng09_chest0[12] = { 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x5b, 0x5b, 0x5c, 0xff }; // ds:0x4102
+uint8_t  gs_dng09_chest1[10] = { 0x4c, 0x4c, 0x4c, 0x19, 0x19, 0x19, 0x29, 0x29, 0x29, 0xff }; // ds:0x410e
+uint8_t  gs_dng09_chest2[8] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xea, 0x9a, 0xff }; // ds:0x4118
+uint8_t  gs_dng09_chest3[21] = { 0x4b, 0x4b, 0x4b, 0x30, 0x30, 0x30, 0x31, 0x31, 0x31, 0x0e, 0x0e, 0x0e, 0x01, 0x5b, 0x17, 0xff, 0x01, 0x0e, 0x4a, 0x23, 0xff }; // ds:0x4120
+uint8_t  gs_dng09_chest5[4] = { 0xbd, 0xbe, 0x4c, 0xff }; // ds:0x4135
+uint8_t  gs_dng09_chest6[7] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xd9, 0xff }; // ds:0x4139
+uint8_t  gs_dng10_corpse_flag = 0; // ds:0x4140
+uint8_t  gs_dng10_lever_found = 0; // ds:0x4141
+uint8_t  gs_dng10_hole_state = 0; // ds:0x4142
+uint8_t  gs_dng10_lever_state = 0; // ds:0x4143
+uint8_t  gs_dng10_hole_damage = 0; // ds:0x4144, {0, 1, ..., 255} ; default = 0
+uint8_t  gs_dng10_floorplate_found = 0; // ds:0x4145
+uint8_t  gs_dng10_floorplate_loads = 3; // ds:0x4146
+uint8_t  gs_dng10_mummy_lever = 0; // ds:0x4147
+uint8_t  gs_dng10_heshtot = 0; // ds:0x4148
+uint8_t  gs_dng10_dragon_quest = 0; // ds:0x4149
+uint8_t  gs_dng10_hoard_plundered = 0; // ds:0x414a
+uint8_t  gs_dng10_chest0_content[5] = { 0x50, 0x1b, 0x91, 0xb7, 0xff}; // ds:0x414b
+uint8_t  gs_dng10_chest1_content[4] = { 0x91, 0x92, 0x91, 0xff}; // ds:0x4150
+uint8_t  gs_dng10_chest2_content[4] = { 0x9a, 0x9b, 0x9a, 0xff}; // ds:0x4154
+uint8_t  gs_dng10_chest3_content[3] = { 0xc7, 0xc5, 0xff}; // ds:0x4158
+uint8_t  gs_dng10_chest4_content[2] = { 0xdf, 0xff}; // ds:0x415b
 
-Bit8u  gs_dng11_waterbarrel1 = 80; // ds:0x415d
-Bit8u  gs_dng11_waterbarrel2 = 20; // ds:0x415e
-Bit8u  gs_dng11_efferd_sacrifice = 0; // ds:0x415f
-Bit8u  gs_dng11_efferd_hint = 0; // ds:0x4160
-Bit8u  gs_dng11_unknown1_flag = 0; // ds:0x4161
-Bit8u  gs_dng11_firetrap1_flag = 2; // ds:0x4162
-Bit8u  gs_dng11_unknown2_flag = 1; // ds:0x4163
-Bit8u  gs_dng11_firetrap2_flag = 3; // ds:0x4164
-Bit8u  gs_dng11_secretdoor1_flag = 0; // ds:0x4165
-Bit8u  gs_dng11_secretdoor2_flag = 0; // ds:0x4166
-Bit8u  gs_dng11_secretdoor3_flag = 0; // ds:0x4167
-Bit8u  gs_dng11_lever_flag = 2; // ds:0x4168, {0-5}
-Bit8u  gs_dng11_proviant1_flag = 0; // ds:0x4169
-Bit8u  gs_dng11_proviant2_flag = 0; // ds:0x416a
-Bit8u  gs_dng11_chest3[15] = { 0x03, 0x03, 0x03, 0x03, 0x03, 0x70, 0x70, 0x70, 0x70, 0x70, 0x01, 0x86, 0x86, 0x88, 0xff }; // ds:0x416b
-Bit8u  gs_dng11_chest4[11] = { 0x09, 0x09, 0x05, 0x05, 0x05, 0x05, 0x05, 0x0c, 0xfb, 0xfc, 0xff }; // ds:0x417a
-Bit8u  gs_dng11_chest5[5] = { 0x0e, 0x5c, 0x27, 0x30, 0xff }; // ds:0x4185
-Bit8u  gs_dng11_chest6[7] = { 0x86, 0x27, 0x5b, 0x60, 0x31, 0x91, 0xff }; // ds:0x418a
-Bit8u  gs_dng11_chest7 = 0xff; // ds:0x4191
-Bit8u  gs_dng11_chest8[6] = { 0x5c, 0x5c, 0x5c, 0x0e, 0x91, 0xff }; // ds:0x4192
-Bit8u  gs_dng11_chest9[6] = { 0x1a, 0x5d, 0x49, 0x87, 0x87, 0xff }; // ds:0x4198
-Bit8u  gs_dng11_chest10[11] = { 0x79, 0x79, 0x79, 0x79, 0x1b, 0x1b, 0x1b, 0x1b, 0xfd, 0x87, 0xff }; // ds:0x419e
-Bit8u  gs_dng11_chest11[4] = { 0x5b, 0xc0, 0x0e, 0xff }; // ds:0x41a9
-Bit8u  gs_dng11_chest12[13] = { 0x4a, 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x27, 0x27, 0x27, 0x27, 0x4c, 0x4c, 0xff }; // ds:0x41ad
-Bit8u  gs_dng11_chest13[6] = { 0x91, 0x94, 0x2f, 0xcb, 0x01, 0xff }; // ds:0x41ba
-Bit8u  gs_dng11_chest14[6] = { 0x24, 0x1d, 0x5b, 0x9a, 0xbd, 0xff }; // ds:0x41c0
-Bit8u  gs_dng15_took_cursed_money = 0; // ds:0x41c6
-Bit8u  gs_dng15_unknown_flag = 1; // ds:0x41c7
-Bit8u  gs_dng15_reached_hands = 0; // ds:0x41c8
-Bit8u  gs_dng15_lever_south = 0; // ds:0x41c9
-Bit8u  gs_dng15_lever_north = 0; // ds:0x41ca
-Bit8u  gs_dng15_took_hoe = 0; // ds:0x41cb
-Bit8u  gs_dng15_ceilings[18] = { 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 2, 3, 1, 1 }; // ds:0x41cc
-Bit8u  gs_dng15_cursed_money[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x41de
-Bit8u  gs_dng15_undead_fight = 0; // ds:0x41e4
-Bit8u  gs_dng15_chest_equips[7] = { 0x5d, 0x02, 0x1b, 0x03, 0x65, 0x01, 0xff }; // ds:0x41e5
-Bit8u  gs_dng01_chest1_content[8] = { 0x70, 0x79, 0x79, 0x79, 0x1b, 0x08, 0x18, 0xff }; // ds:0x41ec
-Bit8u  gs_dng01_chest2_content[10] = { 0x03, 0x6d, 0x5c, 0x19, 0x29, 0x24, 0x1d, 0x27, 0x91, 0xff }; // ds:0x41f4
-Bit8u  gs_dng01_chest3_content[2] = { ITEM_DOLCH, 0xff }; // ds:0x41fe
-Bit8u  gs_dng01_chest5_content[13] = { 0x6e, 0x6e, 0x03, 0x03, 0x70, 0x70, 0x43, 0x62, 0x62, 0x62, 0x10, 0x66, 0xff }; // ds:0x4200
-Bit8u  gs_dng01_chest7_content[5] = { ITEM_SCHWERT, ITEM_DOLCH, ITEM_GOLDSCHMUCK, ITEM_DIETRICHE, 0xff }; // ds:0x420d
-Bit8s  gs_unconscious_message[7] = {0}; // ds:0x4212
-Bit8s  gs_food_message[7] = {0};	// ds:0x4219
+uint8_t  gs_dng11_waterbarrel1 = 80; // ds:0x415d
+uint8_t  gs_dng11_waterbarrel2 = 20; // ds:0x415e
+uint8_t  gs_dng11_efferd_sacrifice = 0; // ds:0x415f
+uint8_t  gs_dng11_efferd_hint = 0; // ds:0x4160
+uint8_t  gs_dng11_unknown1_flag = 0; // ds:0x4161
+uint8_t  gs_dng11_firetrap1_flag = 2; // ds:0x4162
+uint8_t  gs_dng11_unknown2_flag = 1; // ds:0x4163
+uint8_t  gs_dng11_firetrap2_flag = 3; // ds:0x4164
+uint8_t  gs_dng11_secretdoor1_flag = 0; // ds:0x4165
+uint8_t  gs_dng11_secretdoor2_flag = 0; // ds:0x4166
+uint8_t  gs_dng11_secretdoor3_flag = 0; // ds:0x4167
+uint8_t  gs_dng11_lever_flag = 2; // ds:0x4168, {0-5}
+uint8_t  gs_dng11_proviant1_flag = 0; // ds:0x4169
+uint8_t  gs_dng11_proviant2_flag = 0; // ds:0x416a
+uint8_t  gs_dng11_chest3[15] = { 0x03, 0x03, 0x03, 0x03, 0x03, 0x70, 0x70, 0x70, 0x70, 0x70, 0x01, 0x86, 0x86, 0x88, 0xff }; // ds:0x416b
+uint8_t  gs_dng11_chest4[11] = { 0x09, 0x09, 0x05, 0x05, 0x05, 0x05, 0x05, 0x0c, 0xfb, 0xfc, 0xff }; // ds:0x417a
+uint8_t  gs_dng11_chest5[5] = { 0x0e, 0x5c, 0x27, 0x30, 0xff }; // ds:0x4185
+uint8_t  gs_dng11_chest6[7] = { 0x86, 0x27, 0x5b, 0x60, 0x31, 0x91, 0xff }; // ds:0x418a
+uint8_t  gs_dng11_chest7 = 0xff; // ds:0x4191
+uint8_t  gs_dng11_chest8[6] = { 0x5c, 0x5c, 0x5c, 0x0e, 0x91, 0xff }; // ds:0x4192
+uint8_t  gs_dng11_chest9[6] = { 0x1a, 0x5d, 0x49, 0x87, 0x87, 0xff }; // ds:0x4198
+uint8_t  gs_dng11_chest10[11] = { 0x79, 0x79, 0x79, 0x79, 0x1b, 0x1b, 0x1b, 0x1b, 0xfd, 0x87, 0xff }; // ds:0x419e
+uint8_t  gs_dng11_chest11[4] = { 0x5b, 0xc0, 0x0e, 0xff }; // ds:0x41a9
+uint8_t  gs_dng11_chest12[13] = { 0x4a, 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x27, 0x27, 0x27, 0x27, 0x4c, 0x4c, 0xff }; // ds:0x41ad
+uint8_t  gs_dng11_chest13[6] = { 0x91, 0x94, 0x2f, 0xcb, 0x01, 0xff }; // ds:0x41ba
+uint8_t  gs_dng11_chest14[6] = { 0x24, 0x1d, 0x5b, 0x9a, 0xbd, 0xff }; // ds:0x41c0
+uint8_t  gs_dng15_took_cursed_money = 0; // ds:0x41c6
+uint8_t  gs_dng15_unknown_flag = 1; // ds:0x41c7
+uint8_t  gs_dng15_reached_hands = 0; // ds:0x41c8
+uint8_t  gs_dng15_lever_south = 0; // ds:0x41c9
+uint8_t  gs_dng15_lever_north = 0; // ds:0x41ca
+uint8_t  gs_dng15_took_hoe = 0; // ds:0x41cb
+uint8_t  gs_dng15_ceilings[18] = { 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 2, 3, 1, 1 }; // ds:0x41cc
+uint8_t  gs_dng15_cursed_money[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x41de
+uint8_t  gs_dng15_undead_fight = 0; // ds:0x41e4
+uint8_t  gs_dng15_chest_equips[7] = { 0x5d, 0x02, 0x1b, 0x03, 0x65, 0x01, 0xff }; // ds:0x41e5
+uint8_t  gs_dng01_chest1_content[8] = { 0x70, 0x79, 0x79, 0x79, 0x1b, 0x08, 0x18, 0xff }; // ds:0x41ec
+uint8_t  gs_dng01_chest2_content[10] = { 0x03, 0x6d, 0x5c, 0x19, 0x29, 0x24, 0x1d, 0x27, 0x91, 0xff }; // ds:0x41f4
+uint8_t  gs_dng01_chest3_content[2] = { ITEM_DOLCH, 0xff }; // ds:0x41fe
+uint8_t  gs_dng01_chest5_content[13] = { 0x6e, 0x6e, 0x03, 0x03, 0x70, 0x70, 0x43, 0x62, 0x62, 0x62, 0x10, 0x66, 0xff }; // ds:0x4200
+uint8_t  gs_dng01_chest7_content[5] = { ITEM_SCHWERT, ITEM_DOLCH, ITEM_GOLDSCHMUCK, ITEM_DIETRICHE, 0xff }; // ds:0x420d
+int8_t  gs_unconscious_message[7] = {0}; // ds:0x4212
+int8_t  gs_food_message[7] = {0};	// ds:0x4219
 unsigned char g_unkn_026[2] = { 0, 0 }; // ds:0x4220
-Bit16s gs_current_locdata = 0; // ds:0x4222
-Bit16s gs_current_typeindex = 0; // ds:0x4224
-Bit8u  gs_dng03_highpriest_killed = 0; // ds:0x4226, {0, 14 = in fight 224, 16 = in fight 222}
-Bit8s  gs_dng03_chest12_loads = 6; // ds:0x4227, {0,1,...,6}
-Bit16s gs_trv_i = 0; // ds:0x4228
-Bit16s gs_route_stepcount = 0; // ds:0x422a
-Bit16s gs_forcedmarch_le_cost = 0; // ds:0x422c
-Bit16s gs_route_total_steps = 0; // ds:0x422e
-Bit16s gs_route_length = 0; // ds:0x4230
-Bit16s gs_route_duration = 0; // ds:0x4232
-Bit16s gs_route_timedelta = 0; // ds:0x4234
-Bit16s gs_route_mousehover = 0; // ds:0x4236
-Bit16s gs_route_progress = 0; // ds:0x4238
-Bit16s gs_route_stepsize = 0; // ds:0x423a
-Bit16s gs_route_dayprogress = 0; // ds:0x423c
-Bit16s gs_sea_travel_passage_id = 0; // ds:0x423e
-Bit16s gs_route_encounter_flag = 0; // ds:0x4240
-Bit16s gs_route_encounter_time = 0; // ds:0x4242
-Bit16s gs_route_informer_flag = 0; // ds:0x4244
-Bit16s gs_route_informer_time = 0; // ds:0x4246
-Bit16s gs_route_fight_flag = 0; // ds:0x4248
-Bit16s gs_route_fight_time = 0; // ds:0x424a
-Bit16s gs_travel_speed = 0; // ds:0x424c
-Bit16s gs_passage_deadship_flag = 0; // ds:0x424e
-Bit16s gs_passage_deadship_position = 0; // ds:0x4250
-Bit16s gs_passage_octopus_flag = 0; // ds:0x4252
-Bit16s gs_passage_octopus_position = 0; // ds:0x4254
-Bit16s gs_passage_pirates_flag = 0; // ds:0x4256
-Bit16s gs_passage_pirates_position = 0; // ds:0x4258
+int16_t gs_current_locdata = 0; // ds:0x4222
+int16_t gs_current_typeindex = 0; // ds:0x4224
+uint8_t  gs_dng03_highpriest_killed = 0; // ds:0x4226, {0, 14 = in fight 224, 16 = in fight 222}
+int8_t  gs_dng03_chest12_loads = 6; // ds:0x4227, {0,1,...,6}
+int16_t gs_trv_i = 0; // ds:0x4228
+int16_t gs_route_stepcount = 0; // ds:0x422a
+int16_t gs_forcedmarch_le_cost = 0; // ds:0x422c
+int16_t gs_route_total_steps = 0; // ds:0x422e
+int16_t gs_route_length = 0; // ds:0x4230
+int16_t gs_route_duration = 0; // ds:0x4232
+int16_t gs_route_timedelta = 0; // ds:0x4234
+int16_t gs_route_mousehover = 0; // ds:0x4236
+int16_t gs_route_progress = 0; // ds:0x4238
+int16_t gs_route_stepsize = 0; // ds:0x423a
+int16_t gs_route_dayprogress = 0; // ds:0x423c
+int16_t gs_sea_travel_passage_id = 0; // ds:0x423e
+int16_t gs_route_encounter_flag = 0; // ds:0x4240
+int16_t gs_route_encounter_time = 0; // ds:0x4242
+int16_t gs_route_informer_flag = 0; // ds:0x4244
+int16_t gs_route_informer_time = 0; // ds:0x4246
+int16_t gs_route_fight_flag = 0; // ds:0x4248
+int16_t gs_route_fight_time = 0; // ds:0x424a
+int16_t gs_travel_speed = 0; // ds:0x424c
+int16_t gs_passage_deadship_flag = 0; // ds:0x424e
+int16_t gs_passage_deadship_position = 0; // ds:0x4250
+int16_t gs_passage_octopus_flag = 0; // ds:0x4252
+int16_t gs_passage_octopus_position = 0; // ds:0x4254
+int16_t gs_passage_pirates_flag = 0; // ds:0x4256
+int16_t gs_passage_pirates_position = 0; // ds:0x4258
 #if defined (__BORLANDC__)
-Bit16s *gs_route_course_ptr = NULL;			// ds:0x425a;
-Bit16s *gs_route_course_start = NULL;			// ds:0x425e;
-Bit16s *gs_route_course_ptr2 = NULL;			// ds:0x4262;
-Bit8u  *gs_sea_travel_courses = NULL;			// ds:0x4266
+int16_t *gs_route_course_ptr = NULL;			// ds:0x425a;
+int16_t *gs_route_course_start = NULL;			// ds:0x425e;
+int16_t *gs_route_course_ptr2 = NULL;			// ds:0x4262;
+uint8_t  *gs_sea_travel_courses = NULL;			// ds:0x4266
 struct struct_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr = NULL;	// ds:0x426e
 #else
-Bit32u gs_route_course_ptr_obsolete = 0;	// ds:0x425a; This is a dummy now!
-Bit32u gs_route_course_start_obsolete = 0;	// ds:0x425e; This is a dummy now!
-Bit32u gs_route_course_ptr2_obsolete = 0;	// ds:0x4262; This is a dummy now!
-Bit32u gs_sea_travel_courses_obsolete = 0;	// ds:0x4266; This is a dummy now!
-Bit32u gs_tevents_tab_ptr_obsolete = 0;		// ds:0x426a; This is a dummy now!
-Bit32u gs_travel_route_ptr_obsolete = 0;	// ds:0x426e; This is a dummy now!
+uint32_t gs_route_course_ptr_obsolete = 0;	// ds:0x425a; This is a dummy now!
+uint32_t gs_route_course_start_obsolete = 0;	// ds:0x425e; This is a dummy now!
+uint32_t gs_route_course_ptr2_obsolete = 0;	// ds:0x4262; This is a dummy now!
+uint32_t gs_sea_travel_courses_obsolete = 0;	// ds:0x4266; This is a dummy now!
+uint32_t gs_tevents_tab_ptr_obsolete = 0;		// ds:0x426a; This is a dummy now!
+uint32_t gs_travel_route_ptr_obsolete = 0;	// ds:0x426e; This is a dummy now!
 #endif
 struct struct_route_tevent gs_route_tevents[15] = {
 	{ 0x0000, 0x0000 },
@@ -2031,58 +2031,58 @@ struct struct_route_tevent gs_route_tevents[15] = {
 	{ 0x0000, 0x0000 },
 	{ 0x0000, 0x0000 }
 }; // ds:0x4272
-Bit8u  gs_sea_travel_psgbooked_flag = 0; // ds:0x42ae
-Bit8u  gs_sea_travel_psgbooked_timer = 0; // ds:0x42af SHOULD BE SIGNED
-Bit8s  gs_sea_travel_passage_speed1 = 0; // ds:0x42b0
-Bit8u  gs_current_sea_route_id = 0; // ds:0x42b1
+uint8_t  gs_sea_travel_psgbooked_flag = 0; // ds:0x42ae
+uint8_t  gs_sea_travel_psgbooked_timer = 0; // ds:0x42af SHOULD BE SIGNED
+int8_t  gs_sea_travel_passage_speed1 = 0; // ds:0x42b0
+uint8_t  gs_current_sea_route_id = 0; // ds:0x42b1
 
 /* REMARK: uses 120 byte in the game state */
 struct harbor_option_obsolete gs_harbor_options[10] = { { 0 } }; // ds:0x42b2
 
-Bit16s gs_sea_travel_passage_price = 0; // ds:0x432a
-Bit16s gs_sea_travel_passage_speed2 = 0; // ds:0x432c // shouldn't this be _unsigned_ ?
+int16_t gs_sea_travel_passage_price = 0; // ds:0x432a
+int16_t gs_sea_travel_passage_speed2 = 0; // ds:0x432c // shouldn't this be _unsigned_ ?
 
 #if defined(__BORLANDC__)
-Bit8u  *gs_travel_map_ptr = 0; 		// ds:0x432e; Bit8u*
+uint8_t  *gs_travel_map_ptr = 0; 		// ds:0x432e; uint8_t*
 #else
-Bit32u gs_travel_map_ptr_obsolete = 0;	// ds:0x432e; This is a dummy now!
+uint32_t gs_travel_map_ptr_obsolete = 0;	// ds:0x432e; This is a dummy now!
 #endif
 
-Bit8u  gs_forcedmarch_timer = 0; // ds:0x4332
-Bit8u  gs_travel_detour = 0; // ds:0x4333
-Bit16s gs_current_signpost = 0; // ds:0x4334
-Bit16s gs_trv_return = 0; // ds:0x4336, {-1, 0, 1, 2} + ?
-Bit16s gs_travel_destination_town_id = 0; // ds:0x4338
-Bit16s gs_travel_destination_x = 0; // ds:0x433a
-Bit16s gs_travel_destination_y = 0; // ds:0x433c
-Bit16s gs_travel_destination_viewdir = 0; // ds:0x433e
+uint8_t  gs_forcedmarch_timer = 0; // ds:0x4332
+uint8_t  gs_travel_detour = 0; // ds:0x4333
+int16_t gs_current_signpost = 0; // ds:0x4334
+int16_t gs_trv_return = 0; // ds:0x4336, {-1, 0, 1, 2} + ?
+int16_t gs_travel_destination_town_id = 0; // ds:0x4338
+int16_t gs_travel_destination_x = 0; // ds:0x433a
+int16_t gs_travel_destination_y = 0; // ds:0x433c
+int16_t gs_travel_destination_viewdir = 0; // ds:0x433e
 
 #if defined(__BORLANDC__)
 struct trv_start_point *gs_tm_unused1_ptr = NULL;	// ds:0x4340;
 #else
-Bit32u gs_tm_unused1_ptr_obsolete = 0;			// ds:0x4340;
+uint32_t gs_tm_unused1_ptr_obsolete = 0;			// ds:0x4340;
 #endif
 
-Bit8s  gs_trv_menu_towns[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
-Bit16s gs_trv_destination = 0; // ds:0x434a
-Bit8u  gs_dng08_waterbarrel = 0; // ds:0x434c
-Bit8u  gs_dng13_collapsecount = 0; // ds:0x434d
-Bit8u  gs_dng13_herocount = 0; // ds:0x434e
-Bit16s gs_camp_incident = -1; // ds:0x434f, -1 = not determined or will not happen, 0,1,2 = guard that will be affected
-Bit8s  gs_known_monsters[78] = { 0 }; // ds:0x4351
-Bit8u  gs_nameless_destroyed = 0; // ds:0x439f
-Bit8u  gs_deadship_final = 0; // ds:0x43a0
-Bit8u  gs_dng09_lever_fast = 0; // ds:0x43a1
-Bit8u  gs_dng11_soup_supply = 10; // ds:0x43a2
-Bit16s gs_arsenal_money = -1; // ds:0x43a3, {-1, 0 - 60 }
-Bit8s  gs_announce_day = 0; // ds:0x43a5
+int8_t  gs_trv_menu_towns[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
+int16_t gs_trv_destination = 0; // ds:0x434a
+uint8_t  gs_dng08_waterbarrel = 0; // ds:0x434c
+uint8_t  gs_dng13_collapsecount = 0; // ds:0x434d
+uint8_t  gs_dng13_herocount = 0; // ds:0x434e
+int16_t gs_camp_incident = -1; // ds:0x434f, -1 = not determined or will not happen, 0,1,2 = guard that will be affected
+int8_t  gs_known_monsters[78] = { 0 }; // ds:0x4351
+uint8_t  gs_nameless_destroyed = 0; // ds:0x439f
+uint8_t  gs_deadship_final = 0; // ds:0x43a0
+uint8_t  gs_dng09_lever_fast = 0; // ds:0x43a1
+uint8_t  gs_dng11_soup_supply = 10; // ds:0x43a2
+int16_t gs_arsenal_money = -1; // ds:0x43a3, {-1, 0 - 60 }
+int8_t  gs_announce_day = 0; // ds:0x43a5
 
 /* REMARK: Maybe from this point Game State infomation is V3.XX only */
-Bit8s  gs_known_persons[20] = {0}; // ds:0x43a6
-Bit16s gs_diary_entry_counter = 0; // ds:0x43ba
+int8_t  gs_known_persons[20] = {0}; // ds:0x43a6
+int16_t gs_diary_entry_counter = 0; // ds:0x43ba
 struct struct_diary_entry gs_diary_entries[23] = { {0} }; // ds:0x43bc
 
-Bit8u gs_datseg_status_end = 0; // ds:0x4474
+uint8_t gs_datseg_status_end = 0; // ds:0x4474
 
 unsigned char g_fading_state = 0; // ds:0x4475
 unsigned char g_music_enabled = 1; // ds:0x4476
@@ -2096,7 +2096,7 @@ extern unsigned _stklen = 0x2000; // ds:0x447e
 #endif
 
 extern char g_str_file_missing[20];	//forward declaration
-char *g_str_file_missing_ptr = (char*)&g_str_file_missing; // ds:0x4480, to STR_FILE_MISSING; Bit8u*
+char *g_str_file_missing_ptr = (char*)&g_str_file_missing; // ds:0x4480, to STR_FILE_MISSING; uint8_t*
 unsigned short g_mouse_irq_init = 0; // ds:0x4484
 unsigned char g_unkn_030[4] = { 0xff, 0xff, 0x00, 0x00 }; // ds:0x4486
 char g_pause_string[10] = "P A U S E"; // ds:0x448a
@@ -2104,7 +2104,7 @@ signed char g_npc_last_farewellcheck = 0; // ds:0x4494
 signed char g_check_party = 0; // ds:0x4495
 signed char g_food_mod = 0; // ds:0x4496
 signed char g_travel_herokeeping = 0; // ds:0x4497
-Bit8u g_floor_fade_palette[32][3] = {
+uint8_t g_floor_fade_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x28, 0x00, 0x28 },
 	{ 0x16, 0x0c, 0x08 },
@@ -2138,7 +2138,7 @@ Bit8u g_floor_fade_palette[32][3] = {
 	{ 0x00, 0x00, 0x0d },
 	{ 0x00, 0x00, 0x0b }
 }; // ds:0x4498
-Bit8u g_building_fade_palette[32][3] = {
+uint8_t g_building_fade_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x22, 0x22, 0x26 },
 	{ 0x1b, 0x1b, 0x1f },
@@ -2172,7 +2172,7 @@ Bit8u g_building_fade_palette[32][3] = {
 	{ 0x00, 0x03, 0x0f },
 	{ 0x00, 0x08, 0x16 }
 }; // ds:0x44f8
-Bit8u g_sky_fade_palette[32][3] = {
+uint8_t g_sky_fade_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x11 },
 	{ 0x00, 0x00, 0x1b },
@@ -2461,13 +2461,13 @@ char g_noway_string[40] = "IN DIESE RICHTUNG GEHT ES NICHT WEITER."; // ds:0x4a6
 #if !defined(__BORLANDC__)
 struct struct_hero *gs_ruin_hero;			// ds:0x3e1c;
 struct struct_hero *gs_main_acting_hero;		// ds:0x3e20;
-Bit16s  *gs_route_course_ptr;				// ds:0x425a;
-Bit16s  *gs_route_course_start;				// ds:0x425e;
-Bit16s *gs_route_course_ptr2;				// ds:0x4262;
-Bit8u *gs_sea_travel_courses;				// ds:0x4266
+int16_t  *gs_route_course_ptr;				// ds:0x425a;
+int16_t  *gs_route_course_start;				// ds:0x425e;
+int16_t *gs_route_course_ptr2;				// ds:0x4262;
+uint8_t *gs_sea_travel_courses;				// ds:0x4266
 struct struct_tevent *gs_tevents_tab_ptr;		// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e
-Bit8u  *gs_travel_map_ptr; 				// ds:0x432e; Bit8u*
+uint8_t  *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
 #endif
 
 

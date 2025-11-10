@@ -26,23 +26,23 @@
 namespace M302de {
 #endif
 
-static Bit16s g_ani_busy = 0; // ds:0x4a90
-Bit16s g_pic_copy_flag = 0; // ds:0x4a92
-static Bit16u  g_status_bar_colors[2] = { 0xf0, 0xf9 }; // ds:0x4a94, {le_color, 0, ae_color, 0}
+static int16_t g_ani_busy = 0; // ds:0x4a90
+int16_t g_pic_copy_flag = 0; // ds:0x4a92
+static uint16_t  g_status_bar_colors[2] = { 0xf0, 0xf9 }; // ds:0x4a94, {le_color, 0, ae_color, 0}
 static unsigned char g_unkn_035[2] = { 0, 0 }; // ds:0x4a98
-static Bit8s  g_status_page_hunger_max_counter = 0; // ds:0x4a9a
-static Bit8s  g_status_page_hunger_max_color = 0; // ds:0x4a9b
-static Bit8s  g_status_page_thirst_max_counter = 0; // ds:0x4a9c
-static Bit8s  g_status_page_thirst_max_color = 0; // ds:0x4a9d
+static int8_t  g_status_page_hunger_max_counter = 0; // ds:0x4a9a
+static int8_t  g_status_page_hunger_max_color = 0; // ds:0x4a9b
+static int8_t  g_status_page_thirst_max_counter = 0; // ds:0x4a9c
+static int8_t  g_status_page_thirst_max_color = 0; // ds:0x4a9d
 static signed short g_wallclock_pos = 0; // ds:0x4a9e, position of sun/moon
-static Bit8s g_wallclock_pos_y[81] = { 0x14, 0x12, 0x11, 0x10, 0x0f, 0x0e, 0x0d, 0x0c, 0x0b, 0x0b, 0x0a, 0x09, 0x09, 0x08, 0x07, 0x07, 0x06, 0x06, 0x05, 0x05, 0x05, 0x04, 0x04, 0x03, 0x03, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x14 }; // ds:0x4aa0
-static Bit8u g_wallclock_palette_day[3][3] = { { 0x10, 0x14, 0x3c }, { 0x00, 0x08, 0x38 }, { 0x00, 0x08, 0x34 } }; // ds:0x4af1
-static Bit8u g_wallclock_palette_night[3][3] = { { 0x00, 0x00, 0x1a }, { 0x00, 0x00, 0x18 }, { 0x00, 0x00, 0x1c } }; // ds:0x4afa
-static struct Bit8u_3 g_color_pal_white = { 0x3f, 0x3f, 0x3f }; // ds:0x4b03, {0x3f,0x3f,0x3f}
-static struct Bit8u_32_3 g_palette_allblack = { { 0 } }; // ds:0x4b06
+static int8_t g_wallclock_pos_y[81] = { 0x14, 0x12, 0x11, 0x10, 0x0f, 0x0e, 0x0d, 0x0c, 0x0b, 0x0b, 0x0a, 0x09, 0x09, 0x08, 0x07, 0x07, 0x06, 0x06, 0x05, 0x05, 0x05, 0x04, 0x04, 0x03, 0x03, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x14 }; // ds:0x4aa0
+static uint8_t g_wallclock_palette_day[3][3] = { { 0x10, 0x14, 0x3c }, { 0x00, 0x08, 0x38 }, { 0x00, 0x08, 0x34 } }; // ds:0x4af1
+static uint8_t g_wallclock_palette_night[3][3] = { { 0x00, 0x00, 0x1a }, { 0x00, 0x00, 0x18 }, { 0x00, 0x00, 0x1c } }; // ds:0x4afa
+static struct uint8_t_3 g_color_pal_white = { 0x3f, 0x3f, 0x3f }; // ds:0x4b03, {0x3f,0x3f,0x3f}
+static struct uint8_t_32_3 g_palette_allblack = { { 0 } }; // ds:0x4b06
 
 
-static Bit32s g_gfx_spinlock;			// ds:0xe234
+static int32_t g_gfx_spinlock;			// ds:0xe234
 static signed short g_ani_change_dir[10];	// ds:0xe238
 static signed short g_ani_area_status[10];	// ds:0xe24c
 static signed short g_ani_area_timeout[10]; 	// ds:0xe260
@@ -79,7 +79,7 @@ void reset_timer(void)
 #endif
 }
 
-void init_ani(Bit16u v1)
+void init_ani(uint16_t v1)
 {
 	signed short i;
 
@@ -119,7 +119,7 @@ void init_ani(Bit16u v1)
 		/* copy the main ani picture */
 		do_pic_copy(1);
 
-		set_ani_pal((Bit8u*)g_ani_palette);
+		set_ani_pal((uint8_t*)g_ani_palette);
 
 		/* reset flag for pic_copy() */
 		g_pic_copy_flag = 0;
@@ -331,7 +331,7 @@ void interrupt timer_isr(void)
 
 static void unused_gfx_spinlock(void)
 {
-	Bit32s v = g_gfx_spinlock;
+	int32_t v = g_gfx_spinlock;
 
 	while (v == g_gfx_spinlock) { ; }
 }
@@ -502,7 +502,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	signed short y_min;
 	signed short x;
 	signed short lost;
-	Bit8u* dst;
+	uint8_t* dst;
 
 	if (mode == 0)
 		call_mouse_bg();
@@ -514,7 +514,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	} else {
 		x = type * 4 + 36;
 		y_min = 42;
-		dst = (Bit8u*)g_renderbuf_ptr;
+		dst = (uint8_t*)g_renderbuf_ptr;
 	}
 
 	if (pts_cur == 0) {
@@ -554,12 +554,12 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	}
 }
 
-void restore_rect(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, signed char n, signed char m)
+void restore_rect(uint8_t *dst, uint8_t *src, unsigned short x, unsigned short y, signed char n, signed char m)
 {
 	signed short i;
 	signed short j;
 	signed char c;
-	Bit8u* p;
+	uint8_t* p;
 
 	call_mouse_bg();
 
@@ -577,7 +577,7 @@ void restore_rect(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, si
 	call_mouse();
 }
 
-void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, signed char width, signed char height, unsigned short v1)
+void restore_rect_rle(uint8_t *dst, uint8_t *src, unsigned short x, unsigned short y, signed char width, signed char height, unsigned short v1)
 {
 	signed short si;
 	signed short di;
@@ -585,7 +585,7 @@ void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y
 	signed char c;
 	unsigned char cnt;
 	signed char tmp;
-	Bit8u *p = dst;
+	uint8_t *p = dst;
 
 	p += y * 320 + x;
 	call_mouse_bg();
@@ -618,7 +618,7 @@ void mouse_cursor_draw(void)
 	signed short x;
 	signed char i;
 	signed char j;
-	Bit8u *dst;
+	uint8_t *dst;
 	unsigned short *mouse_cursor;
 	signed short y;
 	signed short width;
@@ -652,7 +652,7 @@ void mouse_cursor_draw(void)
 
 void mouse_save_bg(void)
 {
-	Bit8u *src;
+	uint8_t *src;
 	signed short realpos_x;
 	signed short realpos_y;
 	signed short realwidth;
@@ -690,7 +690,7 @@ void restore_mouse_bg(void)
 	signed short realpos_x;
 	signed short delta_x;
 
-	Bit8u *dst;
+	uint8_t *dst;
 	signed short realpos_y;
 	signed short realwidth;
 	signed short realheight;
@@ -756,7 +756,7 @@ void load_wallclock_nvf(void)
 void update_wallclock(void)
 {
 	signed short night;
-	Bit32s d;
+	int32_t d;
 
 	if ((g_wallclock_update) && ((g_pp20_index == ARCHIVE_FILE_PLAYM_UK) || (g_pp20_index == ARCHIVE_FILE_KARTE_DAT)) && !g_dialogbox_lock) {
 
@@ -821,9 +821,9 @@ void draw_wallclock(signed short pos, signed short night)
 
 	/* set palette (night/day) */
 #if !defined(__BORLANDC__)
-	set_palette((Bit8u*)(!night ? &g_wallclock_palette_day : &g_wallclock_palette_night), 0xfa, 3);
+	set_palette((uint8_t*)(!night ? &g_wallclock_palette_day : &g_wallclock_palette_night), 0xfa, 3);
 #else
-	set_palette((Bit8u*)MK_FP(_DS, (!night ? FP_OFF(g_wallclock_palette_day) : FP_OFF(g_wallclock_palette_night))), 0xfa, 3);
+	set_palette((uint8_t*)MK_FP(_DS, (!night ? FP_OFF(g_wallclock_palette_day) : FP_OFF(g_wallclock_palette_night))), 0xfa, 3);
 #endif
 
 	/* check if mouse is in that window */
@@ -900,7 +900,7 @@ void draw_wallclock(signed short pos, signed short night)
  * \param   op          operator
  * \param   flag        if 2, op will not be added if array element is 0
  */
-void array_add(Bit8u *dst, signed short len, signed short op, signed short flag)
+void array_add(uint8_t *dst, signed short len, signed short op, signed short flag)
 {
 	signed int i;
 
@@ -918,10 +918,10 @@ void array_add(Bit8u *dst, signed short len, signed short op, signed short flag)
 
 void schick_set_video(void)
 {
-	struct Bit8u_3 pal_white = g_color_pal_white;;
+	struct uint8_t_3 pal_white = g_color_pal_white;;
 
 	set_video_mode(0x13);
-	set_color((Bit8u*)&pal_white, 0xff);
+	set_color((uint8_t*)&pal_white, 0xff);
 }
 
 void schick_reset_video(void)
@@ -934,15 +934,15 @@ void schick_reset_video(void)
 
 void clear_ani_pal(void)
 {
-	struct Bit8u_32_3 pal = g_palette_allblack;
+	struct uint8_t_32_3 pal = g_palette_allblack;
 
 	wait_for_vsync();
 
 	/* REMARK: memset would be better */
-	set_palette((Bit8u*)&pal, 0, 0x20);
+	set_palette((uint8_t*)&pal, 0, 0x20);
 }
 
-void set_ani_pal(Bit8u *pal)
+void set_ani_pal(uint8_t *pal)
 {
 	wait_for_vsync();
 	set_palette(pal, 0, 0x20);
@@ -989,11 +989,11 @@ void unused_ega6(unsigned char a)
 
 #endif
 
-void do_h_line(Bit8u* ptr, signed short x1, signed short x2, signed short y, signed char color)
+void do_h_line(uint8_t* ptr, signed short x1, signed short x2, signed short y, signed char color)
 {
 	signed short tmp;
 	signed short count;
-	Bit8u* dst;
+	uint8_t* dst;
 
 	if (x1 == x2)
 		return;
@@ -1010,11 +1010,11 @@ void do_h_line(Bit8u* ptr, signed short x1, signed short x2, signed short y, sig
 	draw_h_line(dst, count, color);
 }
 
-void do_v_line(Bit8u* ptr, signed short y, signed short x1, signed short x2, signed char color)
+void do_v_line(uint8_t* ptr, signed short y, signed short x1, signed short x2, signed char color)
 {
 	signed short tmp;
 	signed short count;
-	Bit8u* dst;
+	uint8_t* dst;
 
 	if (x1 == x2)
 		return;
@@ -1031,7 +1031,7 @@ void do_v_line(Bit8u* ptr, signed short y, signed short x1, signed short x2, sig
 	draw_h_spaced_dots(dst, count, color, 320);
 }
 
-void do_border(Bit8u* dst, signed short x1, signed short y1, signed short x2, signed short y2, signed char color)
+void do_border(uint8_t* dst, signed short x1, signed short y1, signed short x2, signed short y2, signed char color)
 {
 	call_mouse_bg();
 	do_h_line(dst, x1, x2, y1, color);
@@ -1047,8 +1047,8 @@ void do_pic_copy(unsigned short mode)
 	short x2, y2;
 	short v1, v2, v3, v4;
 	short width, height;
-	Bit8u *src;
-	Bit8u* dst;
+	uint8_t *src;
+	uint8_t* dst;
 
 	x1 = g_pic_copy.x1;
 	y1 = g_pic_copy.y1;
@@ -1074,8 +1074,8 @@ void do_save_rect(void)
 	signed short x1,y1;
 	signed short width,height;
 	signed short x2,y2;
-	Bit8u* src;
-	Bit8u* dst;
+	uint8_t* src;
+	uint8_t* dst;
 
 	x1 = g_pic_copy.x1;
 	y1 = g_pic_copy.y1;
@@ -1097,7 +1097,7 @@ void do_save_rect(void)
 #endif
 }
 
-void do_fill_rect(Bit8u* dst, signed short x, signed short y, signed short w, signed short h, signed short color)
+void do_fill_rect(uint8_t* dst, signed short x, signed short y, signed short w, signed short h, signed short color)
 {
 	signed short width, height;
 
@@ -1147,7 +1147,7 @@ void wait_for_vsync(void)
  *
  * \param   src         pointer to a picture
  */
-void map_effect(Bit8u *src)
+void map_effect(uint8_t *src)
 {
 	unsigned short si;
 	unsigned short i;

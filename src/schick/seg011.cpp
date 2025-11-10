@@ -14,101 +14,101 @@ void AIL_startup(void)
 {
 }
 
-void AIL_shutdown(Bit8u* signoff_msg)
+void AIL_shutdown(uint8_t* signoff_msg)
 {
 }
 
-Bit16s AIL_register_driver(Bit8u* driver)
+int16_t AIL_register_driver(uint8_t* driver)
 {
 	return 0;
 }
 
-Bit8u* AIL_describe_driver(Bit16u driver)
+uint8_t* AIL_describe_driver(uint16_t driver)
 {
 	return NULL;
 }
 
-Bit16u AIL_detect_device(Bit16u driver, Bit16u IO_addr, Bit16u IRQ, Bit16u DMA, Bit16u DRQ)
+uint16_t AIL_detect_device(uint16_t driver, uint16_t IO_addr, uint16_t IRQ, uint16_t DMA, uint16_t DRQ)
 {
 	return 0;
 }
 
-void AIL_init_driver(Bit16u driver, Bit16u IO_addr, Bit16u IRQ, Bit16u DMA, Bit16u DRQ)
+void AIL_init_driver(uint16_t driver, uint16_t IO_addr, uint16_t IRQ, uint16_t DMA, uint16_t DRQ)
 {
 }
 
-void AIL_play_VOC_file(Bit16u driver, Bit8u* VOC_file, Bit16s block_marker)
+void AIL_play_VOC_file(uint16_t driver, uint8_t* VOC_file, int16_t block_marker)
 {
 }
 
-Bit16u AIL_format_VOC_file(Bit16u driver, Bit8u* VOC_file, Bit16s block_marker)
-{
-	return 0;
-}
-
-Bit16u AIL_VOC_playback_status(Bit16u driver)
+uint16_t AIL_format_VOC_file(uint16_t driver, uint8_t* VOC_file, int16_t block_marker)
 {
 	return 0;
 }
 
-void AIL_start_digital_playback(Bit16u driver)
-{
-}
-
-void AIL_stop_digital_playback(Bit16u driver)
-{
-}
-
-void AIL_set_digital_playback_volume(Bit16u driver, Bit16u percent)
-{
-}
-
-Bit16u AIL_state_table_size(Bit16u driver)
+uint16_t AIL_VOC_playback_status(uint16_t driver)
 {
 	return 0;
 }
 
-Bit16u AIL_register_sequence(Bit16u driver, Bit8u* FORM_XMID, Bit16u sequence_num, Bit8u* state_table, Bit8u* controller_table)
+void AIL_start_digital_playback(uint16_t driver)
+{
+}
+
+void AIL_stop_digital_playback(uint16_t driver)
+{
+}
+
+void AIL_set_digital_playback_volume(uint16_t driver, uint16_t percent)
+{
+}
+
+uint16_t AIL_state_table_size(uint16_t driver)
 {
 	return 0;
 }
 
-void AIL_release_sequence_handle(Bit16s driver, Bit16s sequence)
-{
-}
-
-Bit16u AIL_default_timbre_cache_size(Bit16u driver)
+uint16_t AIL_register_sequence(uint16_t driver, uint8_t* FORM_XMID, uint16_t sequence_num, uint8_t* state_table, uint8_t* controller_table)
 {
 	return 0;
 }
 
-void AIL_define_timbre_cache(Bit16u driver, Bit8u* cache_addr, Bit16u cache_size)
+void AIL_release_sequence_handle(int16_t driver, int16_t sequence)
 {
 }
 
-Bit16u AIL_timbre_request(Bit16u driver, Bit16u sequence)
-{
-	return 0;
-}
-
-void AIL_install_timbre(Bit16u driver, Bit16u bank, Bit16u patch, Bit8u* src_addr)
-{
-}
-
-void AIL_start_sequence(Bit16s driver, Bit16s sequence)
-{
-}
-
-void AIL_stop_sequence(Bit16s driver, Bit16s sequence)
-{
-}
-
-Bit16u AIL_sequence_status(Bit16u driver, Bit16u sequence)
+uint16_t AIL_default_timbre_cache_size(uint16_t driver)
 {
 	return 0;
 }
 
-void AIL_set_relative_volume(Bit16u driver, Bit16u sequence, Bit16u percent, Bit16u ms)
+void AIL_define_timbre_cache(uint16_t driver, uint8_t* cache_addr, uint16_t cache_size)
+{
+}
+
+uint16_t AIL_timbre_request(uint16_t driver, uint16_t sequence)
+{
+	return 0;
+}
+
+void AIL_install_timbre(uint16_t driver, uint16_t bank, uint16_t patch, uint8_t* src_addr)
+{
+}
+
+void AIL_start_sequence(int16_t driver, int16_t sequence)
+{
+}
+
+void AIL_stop_sequence(int16_t driver, int16_t sequence)
+{
+}
+
+uint16_t AIL_sequence_status(uint16_t driver, uint16_t sequence)
+{
+	return 0;
+}
+
+void AIL_set_relative_volume(uint16_t driver, uint16_t sequence, uint16_t percent, uint16_t ms)
 {
 }
 

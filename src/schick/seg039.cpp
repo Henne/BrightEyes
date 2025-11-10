@@ -328,7 +328,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 
 	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
 
-		nvf.src = (Bit8u*)load_fight_figs(g_fig_list_elem.figure);
+		nvf.src = (uint8_t*)load_fight_figs(g_fig_list_elem.figure);
 		nvf.dst = g_fig_list_elem.gfxbuf;
 		nvf.image_num = g_fig_list_elem.nvf_no;
 		nvf.compression_type = 0;

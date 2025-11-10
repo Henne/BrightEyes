@@ -37,7 +37,7 @@ signed short DNG13_handler(void)
 {
 	signed short pos;
 	signed short tw_bak;
-	Bit32s p_money;
+	int32_t p_money;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -175,7 +175,7 @@ signed short DNG13_handler(void)
  * \param   text        text for the output
  * \param   flag        pointer to the flag (0 = blocked / 1 = free)
  */
-void DNG13_unblock_passage(char* text, Bit8u* flag)
+void DNG13_unblock_passage(char* text, uint8_t* flag)
 {
 	signed short has_items;
 
@@ -222,7 +222,7 @@ void DNG13_chest00_open(struct struct_chest* chest)
 
 void DNG13_chest00_loot(struct struct_chest* chest)
 {
-	Bit8u* bak = chest->content;
+	uint8_t* bak = chest->content;
 
 	chest->content = gs_dng13_chest0_content;
 
@@ -238,7 +238,7 @@ void DNG13_chest01_open(struct struct_chest* chest)
 
 void DNG13_chest01_loot(struct struct_chest* chest)
 {
-	Bit8u* bak = chest->content;
+	uint8_t* bak = chest->content;
 
 	chest->content = gs_dng13_chest1_content;
 
