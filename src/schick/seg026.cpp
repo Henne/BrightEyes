@@ -1093,10 +1093,10 @@ signed short save_game_state(void)
  *
  * \param   fname       filename
  * \param   hero_pos    position of the hero
- * \param   a2          ???
+ * \param   group_id    id of the group
  * \return              1 = OK, 0 = Error
  */
-signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
+signed short read_chr_temp(char *fname, signed short hero_pos, signed short group_id)
 {
 #if defined(__BORLANDC__)
 	signed int handle;
@@ -1116,7 +1116,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 		_read(handle, hero, hero_size);
 		close(handle);
 
-		hero->group_id = (signed char)a2;
+		hero->group_id = group_id;
 
 		if (hero->sex == 1) {
 
