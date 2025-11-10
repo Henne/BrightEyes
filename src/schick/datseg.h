@@ -44,10 +44,10 @@ struct struct_modification_timer {
 };
 
 struct mouse_action {
-	int x1;
-	int y1;
-	int x2;
-	int y2;
+	int x1; // upper left corner
+	int y1; // upper left corner
+	int x2; // lower right corner
+	int y2; // lower right corner
 	int action;
 };
 
