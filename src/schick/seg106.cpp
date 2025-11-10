@@ -58,30 +58,30 @@ static const signed int g_hero_startup_items_all[4] = {
  *
  * \param   hero        the hero
  * \param   item_id     the item which should be equipped
- * \param   pos         the position the item should be placed
+ * \param   inv_slot    the inventary slot where the item should be placed
  */
 /* Borlandified and identical */
-signed int two_hand_collision(struct struct_hero* hero, const signed int item_id, const signed int pos)
+signed int two_hand_collision(struct struct_hero* hero, const signed int item_id, const signed int inv_slot)
 {
 	signed int retval = 0;
-	signed int other_pos;
-	signed int in_hand;
+	signed int other_inv_slot;
+	signed int other_item_id;
 
-	if (pos == 3 || pos == 4) {
+	if (inv_slot == HERO_INVENTORY_SLOT_RIGHT_HAND || inv_slot == HERO_INVENTORY_SLOT_LEFT_HAND) {
 
-		other_pos = 3;
+		other_inv_slot = HERO_INVENTORY_SLOT_RIGHT_HAND;
 
-		if (pos == 3) {
-			other_pos = 4;
+		if (inv_slot == HERO_INVENTORY_SLOT_RIGHT_HAND) {
+			other_inv_slot = HERO_INVENTORY_SLOT_LEFT_HAND;
 		}
 
 		/* get the item in the other hand */
-		in_hand = hero->inventory[other_pos].item_id;
-		if (in_hand) {
+		other_item_id = hero->inventory[other_inv_slot].item_id;
+		if (other_item_id) {
 
 			/* check if one hand has a two-handed weapon */
 			if ((g_itemsdat[item_id].flags.weapon && (g_itemsdat[item_id].subtype == WEAPON_TYPE_ZWEIHAENDER)) ||
-			(g_itemsdat[in_hand].flags.weapon && (g_itemsdat[in_hand].subtype == WEAPON_TYPE_ZWEIHAENDER))) {
+			(g_itemsdat[other_item_id].flags.weapon && (g_itemsdat[other_item_id].subtype == WEAPON_TYPE_ZWEIHAENDER))) {
 				retval = 1;
 			}
 		}
