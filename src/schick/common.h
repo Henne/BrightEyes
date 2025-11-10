@@ -387,48 +387,6 @@ enum {
 /* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
 
 enum {
-	/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#R%C3%BCstungstabelle */
-	/* structure of the entries of ARMORS_TABLE */
-	ARMOR_STATS_RS = 0, /* Rüstungsschutz */
-	ARMOR_STATS_BE = 1, /* Behinderung */
-	SIZEOF_ARMOR_STATS = 2
-};
-
-enum {
-	/* structure of the entries of RANGED_WEAPON_TABLE */
-	RANGED_WEAPON_STATS_DAMAGE_MODIFIER = 0, /* char[7] table with damage modifiers depending on the distance */
-	RANGED_WEAPON_STATS_BASE_HANDICAP = 7,
-	SIZEOF_RANGED_WEAPON_STATS = 8
-	/* According to DSA3 rules (MSZ), there are the following distance types.
-	 *
-	 * name         distance          encoding in Schicksalsklinge
-	 * extrem nah	1-5 Schritt       0
-	 * sehr nah     5-10 Schritt	  1
-	 * nah          10-15 Schritt     2
-	 * mittel       15-25 Schritt     3
-	 * weit         25-40 Schritt     4
-	 * sehr weit    40-60 Schritt     5
-	 * extrem weit  61-100 Schritt    6
-	 *
-	 * Moreover, there are the following types of sizes of the target
-	 *
-	 * name         examples                                         encoding in Schicksalsklinge
-	 * winzig       Silbertaler, Drachenauge, Maus, Ratte, Kroete    0
-	 * sehr klein   Schlange, Fasan, Katze, Rabe                     1
-	 * klein        Wolf, Reh, Kobold, Zwerg                         2
-	 * mittel       Goblin, Elf, Mensch, Ork                         3
-	 * gross        Pferd, Elch, Oger, Troll                         4
-	 * sehr gross   Scheunentor, Drache, Elefant, Riese              5
-	 *
-	 * The skill test handicap for the ranged attack depends on the distance and the size of the target.
-	 * In Schicksalsklinge, RANGED_WEAPON_STATS_BASE_HANDICAP is the skill test handicap vs. a target which is extrem nah and winzig (0,0).
-	 * The general formula for the handicap is base_handicap + 2 * distance - 2 * target_size.
-	 *
-	 * The damage is calculated as the base damage of the weapon (like D6 + 3 for the shortbow) + a distance modifier.
-	 * The modifier is given in the RANGED_WEAPON_STATS_DAMAGE_MODIFIER array. */
-};
-
-enum {
 	NUTRITION_TYPE_DRINK	= 0,
 	NUTRITION_TYPE_FOOD	= 1
 };
