@@ -191,8 +191,36 @@ struct fight_msg {
 
 /* seg041 */
 struct ranged_weapon_descr {
-	signed char damage_modifier[7];
+	/* structure of the entries of RANGED_WEAPON_TABLE */
+	signed char damage_modifier[7]; /* table with damage modifiers depending on the distance */
 	signed char base_handicap;
+	/* According to DSA3 rules (MSZ), there are the following distance types.
+	 *
+	 * name         distance          encoding in Schicksalsklinge
+	 * extrem nah	1-5 Schritt       0
+	 * sehr nah     5-10 Schritt	  1
+	 * nah          10-15 Schritt     2
+	 * mittel       15-25 Schritt     3
+	 * weit         25-40 Schritt     4
+	 * sehr weit    40-60 Schritt     5
+	 * extrem weit  61-100 Schritt    6
+	 *
+	 * Moreover, there are the following types of sizes of the target
+	 *
+	 * name         examples                                         encoding in Schicksalsklinge
+	 * winzig       Silbertaler, Drachenauge, Maus, Ratte, Kroete    0
+	 * sehr klein   Schlange, Fasan, Katze, Rabe                     1
+	 * klein        Wolf, Reh, Kobold, Zwerg                         2
+	 * mittel       Goblin, Elf, Mensch, Ork                         3
+	 * gross        Pferd, Elch, Oger, Troll                         4
+	 * sehr gross   Scheunentor, Drache, Elefant, Riese              5
+	 *
+	 * The skill test handicap for the ranged attack depends on the distance and the size of the target.
+	 * In Schicksalsklinge, RANGED_WEAPON_STATS_BASE_HANDICAP is the skill test handicap vs. a target which is extrem nah and winzig (0,0).
+	 * The general formula for the handicap is base_handicap + 2 * distance - 2 * target_size.
+	 *
+	 * The damage is calculated as the base damage of the weapon (like D6 + 3 for the shortbow) + a distance modifier.
+	 * The modifier is given in the RANGED_WEAPON_STATS_DAMAGE_MODIFIER array. */
 };
 
 struct weapon_descr {
@@ -205,9 +233,11 @@ struct weapon_descr {
 	Bit8s pa_mod;
 };
 
-struct armors_descr {
-	Bit8s rs;
-	Bit8s be;
+struct armor_descr {
+	/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#R%C3%BCstungstabelle */
+	/* structure of the entries of ARMORS_TABLE */
+	Bit8s rs; /* Rüstungsschutz */
+	Bit8s be; /* Behinderung */
 };
 
 struct specialitem_descr {
@@ -736,7 +766,7 @@ extern signed char g_items_genders[254];				// ds:0x02ac; seg096
 extern signed short* g_wearable_items_index[12];			// ds:0x0638; seg048, seg056, seg105
 extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
 extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
-extern struct armors_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
+extern struct armor_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
 extern const struct specialitem_descr g_specialitems_table[14];		// ds:0x08a9; seg105, seg107
 extern signed short g_poison_potions[10];				// ds:0x08d3; seg107, seg108
 extern signed short g_herbs_toxic[5];					// ds:0x08e7; seg108
