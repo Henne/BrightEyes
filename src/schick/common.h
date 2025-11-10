@@ -360,36 +360,6 @@ enum {
 #define NR_HERO_INVENTORY_SLOTS (23)
 
 enum {
-	/* describes an item in a single inventory slot of a hero */
-	/* https://github.com/shihan42/BrightEyesWiki/wiki/CHR-NPC#inventarslots */
-	INVENTORY_ITEM_ID		= 0,	/* 2 bytes */
-	INVENTORY_QUANTITY		= 2,	/* 2 bytes */ /* for stackable items: nr of items in stack; for items with magic charges: nr of charges left */
-	INVENTORY_FLAGS			= 4, 	/* 2 bytes */ /* bitfield, see inventory_flags */
-	INVENTORY_BF 			= 6,	/* 1 byte */ /* Bruchfaktor. -99 means unbreakable */
-	INVENTORY_RS_LOST		= 7, 	/* 1 byte */ /* so far only seen for body armour. (from 'Ignifaxius' spell or from traps in DNG03 (Spinnenhoehle)) */
-	INVENTORY_LIGHTING_TIMER	= 8,	/* 1 byte */ /* for burning torch: number of remaining time, unit: 15 minutes */
-	INVENTORY_POISON_TYPE		= 9,	/* 1 byte */ /* for poisoned weapon: poison type according to enum POISON_TYPE (0-kein Gift, 1-Schurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemelgift, 7-Lotosgift, 8-Kukris, 9-Bannstaub, 10-Expurgicum, 11-Vomicum). */
-	INVENTORY_NR_POISON_CHARGES	= 10,	/* 1 byte */ /* for poisoned weapon: number of remaining poison charges (= successful attacs). */
-	/* remaining part: apparently unused */
-};
-#define SIZEOF_INVENTORY (14)
-
-enum {
-	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
-	/* structure of the entries of ITEMS.DAT */
-	ITEM_STATS_GFX		= 0,
-	ITEM_STATS_FLAGS	= 2, /* bitfield. bit 0: armor / bit 1: weapon / bit 2: useable / bit 3: nutrition / bit 4: stackable / bit 5: poison/herb/potion / bit 6: personal item (undropable) / bit 7: not usable by "use object"?? */
-	ITEM_STATS_SUBTYPE	= 3, /* meaning depends on item type set in ITEM_STATS_FLAGS. weapon -> WEAPON_TYPE_..., armor -> ARMOR_TYPE_..., nutrition -> NUTRITION_TYPE... */
-	ITEM_STATS_TABLE_INDEX	= 4,
-	ITEM_STATS_WEIGHT	= 5, /* weight in ounces */
-	ITEM_STATS_PRICE_UNIT	= 7, /* 1: Heller / 10: Silberstücke / 100: Dukaten */
-	ITEM_STATS_PRICE	= 8, /* unit is ITEM_STATS_PRICE_UNIT. So the price in Heller is ITEM_STATS_PRICE_UNIT * ITEM_STATS_PRICE */
-	ITEM_STATS_COMMONNESS	= 10,
-	ITEM_STATS_MAGIC	= 11, /* 0: not magic / 1: magic */
-	SIZEOF_ITEM_STATS	= 12
-};
-
-enum {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
 	/* except the last entry ITEM_SUBTYPE_ARMOR_LEFT_HAND (shields), all values agree with HERO_INVENTORY_SLOT_... */
 	ARMOR_TYPE_HEAD 	= 0,

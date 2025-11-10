@@ -499,8 +499,10 @@ struct item_flags {
 };
 
 struct item_stats {
+	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
+	/* structure of the entries of ITEMS.DAT */
 	Bit16s gfx;
-	struct item_flags flags;		/* bitfield */
+	struct item_flags flags;/* bitfield */
 	Bit8s subtype;		/* meaning depends on item type set in ITEM_STATS_FLAGS. weapon -> WEAPON_TYPE_..., armor -> ARMOR_TYPE_..., nutrition -> NUTRITION_TYPE... */
 	Bit8s table_index;
 	Bit16s weight;		/* weight in ounces */
