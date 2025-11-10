@@ -60,7 +60,7 @@ signed int g_fig_dropped_weapons[30];	// ds:0xe31a
  *
  * \param   y           the Y-Coordinate on the chessboard
  * \param   x           the X-Coordinate on the chessboard
- * \param   object      number of the object
+ * \param   object_id   id of the object
  *			0=free, 1-7=heroes, 10-29=enemies,
  *			30-49=tails of double-size enemies,
  *			>50walls, trees, etc
