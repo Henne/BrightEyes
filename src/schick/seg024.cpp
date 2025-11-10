@@ -125,7 +125,7 @@ void diary_new_entry(void)
 	entry = &gs_diary_entries[gs_diary_entry_counter - 1];
 
 	/* avoid double entries for the same town */
-	if (gs_current_town != entry->town) {
+	if (gs_current_town != entry->town_id) {
 
 		/* make a pointer to the current entry */
 		entry = &gs_diary_entries[gs_diary_entry_counter];
@@ -140,7 +140,7 @@ void diary_new_entry(void)
 		/* Write year */
 		entry->year = gs_year;
 		/* Write city */
-		entry->town = gs_current_town;
+		entry->town_id = gs_current_town;
 	}
 }
 
@@ -167,7 +167,7 @@ Bit16u diary_print_entry(Bit16u line)
 	do {
 		day = entry->day;
 		month = entry->month;
-		town_name = get_ttx(entry->town + 0xeb);
+		town_name = get_ttx(entry->town_id + 0xeb);
 
 		if (di == 0) {
 			if ((signed short)strlen(town_name) > 24) {

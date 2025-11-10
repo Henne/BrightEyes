@@ -706,7 +706,7 @@ signed short do_travel_mode(void)
 			g_request_refresh = 0;
 		}
 
-		if ((signpost_ptr->town == gs_current_town) && (signpost_ptr->typeindex == gs_current_signpost))
+		if ((signpost_ptr->town_id == gs_current_town) && (signpost_ptr->typeindex == gs_current_signpost))
 		{
 			while (1) {
 				handle_input();
@@ -714,7 +714,7 @@ signed short do_travel_mode(void)
 				if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP)
 				{
 					i = 0;
-					while ((l_di = signpost_ptr->end_points[i]) != 0xff)
+					while ((l_di = signpost_ptr->linked_travel_routes[i]) != 0xff)
 					{
 						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
 							(answer = g_land_routes[l_di - 1].town1_id) != gs_current_town ?
@@ -749,7 +749,7 @@ signed short do_travel_mode(void)
 						break;
 					}
 
-					route_id = signpost_ptr->end_points[answer];
+					route_id = signpost_ptr->linked_travel_routes[answer];
 					gs_trv_destination = gs_trv_menu_towns[answer];
 
 					if (!get_current_season() &&
@@ -765,8 +765,8 @@ signed short do_travel_mode(void)
 
 					g_wallclock_update = 1;
 
-					TM_func1(signpost_ptr->end_points[answer],
-						(g_land_routes[signpost_ptr->end_points[answer] - 1].town1_id == gs_current_town ? 0 : 1));
+					TM_func1(signpost_ptr->linked_travel_routes[answer],
+						(g_land_routes[signpost_ptr->linked_travel_routes[answer] - 1].town1_id == gs_current_town ? 0 : 1));
 					g_wallclock_update = 0;
 
 					if (g_route59_flag)
@@ -844,7 +844,7 @@ signed short do_travel_mode(void)
 
 		signpost_ptr++;
 
-	} while (signpost_ptr->town != -1);
+	} while (signpost_ptr->town_id != -1);
 
 	g_current_town_anix = g_current_town_aniy = g_selected_town_anix = g_selected_town_aniy = 0;
 
