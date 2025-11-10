@@ -1448,20 +1448,6 @@ enum {
 	*/
 };
 
-enum { // struct signpost
-	SIGNPOST_TOWN = 0, /* one byte */ /* ID of the town where the harbor is located */
-	SIGNPOST_TYPEINDEX = 1, /* one byte */ /* TYPEINDEX of the signpost within its town */
-	SIGNPOST_LAND_ROUTES = 2, /* four byte, Bit8u* to the route. Points to the first associated entry in SIGNPOSTS_LINKED_LAND_ROUTES */
-	SIZEOF_SIGNPOST = 6
-};
-
-enum { // struct harbor
-	HARBOR_TOWN = 0, /* one byte */ /* ID of the town where the harbor is located */
-	HARBOR_TYPEINDEX = 1, /* one byte */ /* TYPEINDEX of the harbor within its town */
-	HARBOR_SEA_ROUTES = 2, /* four byte, Bit8u* to the route. Points to the first associated entry in HARBORS_LINKED_SEA_ROUTES */
-	SIZEOF_HARBOR = 6
-};
-
 enum {
 	GAME_MODE_UNSPECIFIED	= -1,
 	GAME_MODE_BEGINNER	= 1,

@@ -503,26 +503,26 @@ signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_r
 	signed short answer;
 	signed short town_i;
 	signed short route_id2;
-	signed short town;
+	signed short town_id;
 	signed short old_route_id2;
 	char *destinations_tab[7];
 
-	old_route_id2 = signpost_ptr->end_points[old_route_id] - 1;
-	gs_current_town = town = gs_trv_destination;
+	old_route_id2 = signpost_ptr->linked_travel_routes[old_route_id] - 1;
+	gs_current_town = town_id = gs_trv_destination;
 	signpost_ptr = &g_signposts[0];
 
 	do {
-		if ((unsigned char)signpost_ptr->town == town)
+		if ((unsigned char)signpost_ptr->town_id == town_id)
 		{
 			route_id1 = 0;
-			while (signpost_ptr->end_points[route_id1] != (signed char)-1)
+			while (signpost_ptr->linked_travel_routes[route_id1] != (signed char)-1)
 			{
-				if (signpost_ptr->end_points[route_id1] - 1 == old_route_id2 &&
-					(route_id1 || signpost_ptr->end_points[route_id1 + 1] != (signed char)-1))
+				if (signpost_ptr->linked_travel_routes[route_id1] - 1 == old_route_id2 &&
+					(route_id1 || signpost_ptr->linked_travel_routes[route_id1 + 1] != (signed char)-1))
 				{
 					town_i = route_id2 = 0;
 
-					while ((route_id = signpost_ptr->end_points[route_id2]) != 0xff)
+					while ((route_id = signpost_ptr->linked_travel_routes[route_id2]) != 0xff)
 					{
 						if (route_id2 != route_id1)
 						{
@@ -533,13 +533,13 @@ signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_r
 						route_id2++;
 					}
 
-					gs_trv_menu_towns[town_i] = (signed char)town;
+					gs_trv_menu_towns[town_i] = town_id;
 					destinations_tab[town_i] = get_ttx(547);
 					town_i++;
 
 					gs_tm_unused1_ptr = signpost_ptr;
 
-					set_textbox_positions(town);
+					set_textbox_positions(town_id);
 
 					answer = GUI_radio(get_ttx(546), (signed char)town_i,
 								destinations_tab[0], destinations_tab[1],
@@ -561,7 +561,7 @@ signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_r
 
 		signpost_ptr++;
 
-	} while (signpost_ptr->town != -1);
+	} while (signpost_ptr->town_id != -1);
 
 	return -1;
 }
@@ -597,12 +597,12 @@ signed short TM_enter_target_town(void)
 		signpost_ptr = &g_signposts[0];
 		signpost_id = 0;
 		do {
-			if ((unsigned char)signpost_ptr->town == gs_travel_destination_town_id)
+			if ((unsigned char)signpost_ptr->town_id == gs_travel_destination_town_id)
 			{
 				tmp = 0;
 
 				do {
-					tmp2 = signpost_ptr->end_points[tmp] - 1;
+					tmp2 = signpost_ptr->linked_travel_routes[tmp] - 1;
 
 					if ((g_land_routes[tmp2].town1_id == gs_current_town) || (g_land_routes[tmp2].town2_id == gs_current_town))
 					{
@@ -612,12 +612,12 @@ signed short TM_enter_target_town(void)
 
 					tmp++;
 
-				} while (signpost_ptr->end_points[tmp] != 0xff);
+				} while (signpost_ptr->linked_travel_routes[tmp] != 0xff);
 			}
 
 			signpost_ptr++;
 
-		} while (!signpost_id && signpost_ptr->town != -1);
+		} while (!signpost_id && signpost_ptr->town_id != -1);
 
 		if (signpost_id)
 		{

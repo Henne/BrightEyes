@@ -175,7 +175,7 @@ struct struct_diary_entry {
 	Bit16s day;
 	Bit16s month;
 	Bit16s year;
-	Bit16s town;
+	Bit16s town_id;
 };
 
 struct special_day {
@@ -245,10 +245,10 @@ struct skill_descr {
 	Bit8s max_incs;
 };
 
-struct trv_start_point {
-	Bit8s town;
-	Bit8u typeindex;
-	Bit8u *end_points;
+struct trv_start_point { /* a start_point is either a signpost or a harbor */
+	Bit8s town_id; /* ID of the town where the harbor/signpost is located */
+	Bit8u typeindex; /* TYPEINDEX of the harbor/signpost within its town */
+	Bit8u *linked_travel_routes; /* Points to the first associated entry in g_sea_routes or g_land_routes */
 };
 
 // A location is a point of interest in a town or a travel event. //

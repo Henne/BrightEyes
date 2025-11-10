@@ -289,11 +289,11 @@ unsigned short passage_arrival(void)
 	/* find the harbor of the destination town. */
 
 	do {
-		if ((unsigned char)harbor_ptr->town == gs_travel_destination_town_id) {
+		if ((unsigned char)harbor_ptr->town_id == gs_travel_destination_town_id) {
 			si = 0;
 			do {
 				/* tmp ranges over the IDs of the linked sea routes, diminished by 1. */
-				tmp = harbor_ptr->end_points[si] - 1;
+				tmp = harbor_ptr->linked_travel_routes[si] - 1;
 				if (g_sea_routes[tmp].town1 == gs_current_town || g_sea_routes[tmp].town2 == gs_current_town) {
 					harbor_typeindex = (unsigned char)harbor_ptr->typeindex;
 					break;
@@ -301,12 +301,12 @@ unsigned short passage_arrival(void)
 
 				si++;
 
-			} while (harbor_ptr->end_points[si] != 0xff);
+			} while (harbor_ptr->linked_travel_routes[si] != 0xff);
 		}
 
 		harbor_ptr++;
 
-	} while ((harbor_typeindex == 0) && (harbor_ptr->town != -1));
+	} while ((harbor_typeindex == 0) && (harbor_ptr->town_id != -1));
 
 	if (harbor_typeindex) {
 
