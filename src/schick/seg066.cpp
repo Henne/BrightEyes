@@ -644,7 +644,7 @@ void TLK_eremit(const signed int state)
 
 void do_town(void)
 {
-	if ((g_city_area_loaded != gs_current_town) || (g_area_prepared != AREA_TYPE_TOWN))
+	if ((g_town_loaded_town_id != gs_current_town) || (g_area_prepared != AREA_TYPE_TOWN))
 	{
 		prepare_area(1);
 
@@ -1302,7 +1302,7 @@ signed int city_step(void)
 		}
 	}
 
-	if ((gs_current_town != TOWNS_NONE) && (g_city_area_loaded != -1)) {
+	if ((gs_current_town != TOWNS_NONE) && (g_town_loaded_town_id != -1)) {
 
 		if (!i) {
 			options = enter_location(gs_current_town);

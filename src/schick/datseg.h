@@ -864,8 +864,8 @@ extern signed char  g_status_page_thirst;		//ds:0x2ca0; seg004, seg048, seg050
 extern signed char  g_missing_file_guilock;		//ds:0x2ca1; seg002
 extern signed short g_basepos_x;			//ds:0x2ca2; seg025-seg117
 extern signed short g_basepos_y;			//ds:0x2ca4; seg025-seg117
-extern signed char g_dng_area_loaded;			//ds:0x2ca6; seg028-seg106
-extern signed char g_city_area_loaded;			//ds:0x2ca7; seg025-seg106
+extern signed char g_dng_loaded_dng_index;			//ds:0x2ca6; seg028-seg106
+extern signed char g_town_loaded_town_id;			//ds:0x2ca7; seg025-seg106
 extern signed char g_travel_map_loaded;			//ds:0x2ca8; seg025, seg093
 extern signed char g_ani_unknown_flag;			//ds:0x2cca; seg004 WRITEONLY
 extern signed short g_area_prepared;			//ds:0x2ccb; seg024-seg089
