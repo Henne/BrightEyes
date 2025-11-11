@@ -136,17 +136,17 @@ void DNG_door(signed short action)
 				if (g_dng_extra_action != DNG_MENU_MODE_UNLOCK_DOOR) {
 					/* either 'open door' or 'close door' */
 
-					if (gs_dungeon_id == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,9,3) && gs_dng15_unknown_flag)
+					if (gs_dungeon_id == DUNGEON_ID_HYGGELIKS_RUINE && pos == DNG_POS(1,9,3) && gs_dng15_unknown_flag)
 					{
 						GUI_output(get_tx(18));
 
-					} else if (!(gs_dungeon_id == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && gs_dng11_lever_flag != 4) &&
-							!(gs_dungeon_id == DUNGEONS_DASPOTASCHATZ && pos == DNG_POS(0,11,1) && gs_dng06_pitdoor_flag) &&
-							!(gs_dungeon_id == DUNGEONS_ZWERGENFESTE && gs_dng12_watertrap_water_runs))
+					} else if (!(gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && gs_dng11_lever_flag != 4) &&
+							!(gs_dungeon_id == DUNGEON_ID_DASPOTASCHATZ && pos == DNG_POS(0,11,1) && gs_dng06_pitdoor_flag) &&
+							!(gs_dungeon_id == DUNGEON_ID_ZWERGENFESTE && gs_dng12_watertrap_water_runs))
 					{
 						/* for this door works an IRON KEY [first type] */
 						/* BEWARE: there are two types of IRON KEYs in the game */
-						if (gs_dungeon_id == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && get_first_hero_with_item(ITEM_EISENSCHLUESSEL__1) != -1)
+						if (gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && get_first_hero_with_item(ITEM_EISENSCHLUESSEL__1) != -1)
 						{
 							*(g_dng_map_ptr + MAP_POS(x, y)) |= 0x02;
 							/* effect: ......1. i.e. door is unlocked */
@@ -531,7 +531,7 @@ signed short DNG_step(void)
 		/* merge groups or reach hands through the mirror */
 		pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-		if ((gs_dungeon_id == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,8,1)) || pos == DNG_POS(1,8,5))
+		if ((gs_dungeon_id == DUNGEON_ID_HYGGELIKS_RUINE && pos == DNG_POS(1,8,1)) || pos == DNG_POS(1,8,5))
 		{
 			GUI_output(get_tx(33));
 
@@ -650,7 +650,7 @@ signed short DNG_step(void)
 		}
 	}
 
-	if ((gs_dungeon_id != DUNGEONS_NONE) && (g_dng_loaded_dungeon_id != -1) && !l_di)
+	if ((gs_dungeon_id != DUNGEON_ID_NONE) && (g_dng_loaded_dungeon_id != -1) && !l_di)
 	{
 		DNG_see_stairs();
 		DNG_see_door();
@@ -991,7 +991,7 @@ void DNG_see_lever(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	if (gs_dungeon_id == DUNGEONS_HYGGELIKS_RUINE &&
+	if (gs_dungeon_id == DUNGEON_ID_HYGGELIKS_RUINE &&
 		(target_pos == DNG_POS(1,8,1) || target_pos == DNG_POS(1,8,5)) &&
 		(!gs_dng15_lever_south || !gs_dng15_lever_north))
 	{

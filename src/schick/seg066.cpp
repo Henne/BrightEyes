@@ -371,7 +371,7 @@ signed int enter_location(const signed int town_id)
 	signed int b_index;
 	struct location *locations_tab_ptr;
 
-	if (town_id == TOWNS_DASPOTA) {
+	if (town_id == TOWN_ID_DASPOTA) {
 		return enter_location_daspota();
 	}
 
@@ -519,7 +519,7 @@ void do_special_buildings(void)
 
 	type = gs_current_typeindex;
 
-	if (gs_current_town == TOWNS_THORWAL) {
+	if (gs_current_town == TOWN_ID_THORWAL) {
 
 		load_tx2(type < 41 ? ARCHIVE_FILE_THORWAL1_LTX : ARCHIVE_FILE_THORWAL2_LTX);
 		g_textbox_width = 9;
@@ -566,7 +566,7 @@ void do_special_buildings(void)
 			THO_tav_inn_combi();
 		}
 
-	} else if (gs_current_town == TOWNS_PHEXCAER) {
+	} else if (gs_current_town == TOWN_ID_PHEXCAER) {
 
 		load_tx2(type <= 3 ? ARCHIVE_FILE_PHEX2_LTX : ARCHIVE_FILE_PHEX1_LTX);
 		g_textbox_width = 9;
@@ -592,7 +592,7 @@ void do_special_buildings(void)
 		}
 
 
-	} else if (gs_current_town == TOWNS_EINSIEDLERSEE) {
+	} else if (gs_current_town == TOWN_ID_EINSIEDLERSEE) {
 		/*  HERMITS LAKE / EINSIEDLERSEE */
 
 		if (type == 1) {
@@ -1302,7 +1302,7 @@ signed int city_step(void)
 		}
 	}
 
-	if ((gs_current_town != TOWNS_NONE) && (g_town_loaded_town_id != -1)) {
+	if ((gs_current_town != TOWN_ID_NONE) && (g_town_loaded_town_id != -1)) {
 
 		if (!i) {
 			options = enter_location(gs_current_town);
@@ -1313,8 +1313,8 @@ signed int city_step(void)
 		if (((gs_y_target != gs_y_target_bak) || (gs_x_target != gs_x_target_bak)) &&
 
 			/* only in big town */
-			(gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM ||
-			gs_current_town == TOWNS_PHEXCAER || gs_current_town == TOWNS_OBERORKEN))
+			(gs_current_town == TOWN_ID_THORWAL || gs_current_town == TOWN_ID_PREM ||
+			gs_current_town == TOWN_ID_PHEXCAER || gs_current_town == TOWN_ID_OBERORKEN))
 		{
 
 		       	/* 1% chance only between 8:00 and 20:00 o'clock */

@@ -135,7 +135,7 @@ void TRV_a_path(void)
 	if (answer == 1)
 	{
 		/* follow the path */
-		g_route59_flag = (gs_current_town == TOWNS_PEILINEN ? 2 : 4);
+		g_route59_flag = (gs_current_town == TOWN_ID_PEILINEN ? 2 : 4);
 
 		/* Original-Glitch:
 		 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
@@ -208,7 +208,7 @@ void tevent_014_chest(struct struct_chest* chest)
 
 void tevent_015(void)
 {
-	TRV_found_inn(TOWNS_VAERMHAG, 67);
+	TRV_found_inn(TOWN_ID_VAERMHAG, 67);
 }
 
 void tevent_017(void)
@@ -249,7 +249,7 @@ void tevent_020(void)
 			if (answer == 1)
 			{
 			    /* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen. */
-				g_route59_flag = (gs_current_town == TOWNS_PEILINEN ? 1 : 3);
+				g_route59_flag = (gs_current_town == TOWN_ID_PEILINEN ? 1 : 3);
 
 				/* Original-Glitch:
 				 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).
@@ -647,7 +647,7 @@ void tevent_045(void)
 {
 	signed int answer;
 
-	if (gs_trv_destination == TOWNS_DASPOTA)
+	if (gs_trv_destination == TOWN_ID_DASPOTA)
 	{
 		load_in_head(11);
 
@@ -710,7 +710,7 @@ void tevent_046(void)
 
 			if (answer == 1)
 			{
-				gs_travel_detour = DUNGEONS_VERFALLENE_HERBERGE;
+				gs_travel_detour = DUNGEON_ID_VERFALLENE_HERBERGE;
 				enter_inn = 1;
 			}
 		}
@@ -731,7 +731,7 @@ void tevent_046(void)
 
 			if (answer == 1)
 			{
-				gs_travel_detour = DUNGEONS_VERFALLENE_HERBERGE;
+				gs_travel_detour = DUNGEON_ID_VERFALLENE_HERBERGE;
 			}
 		}
 	}

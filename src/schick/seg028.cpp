@@ -70,15 +70,15 @@ void prepare_dungeon_area(void)
 		disable_ani();
 		g_current_ani = -1;
 
-		nvf_index = (gs_dungeon_id == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
-			(((gs_dungeon_id == DUNGEONS_VERFALLENE_HERBERGE) ||
-				(gs_dungeon_id == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) ||
-				(gs_dungeon_id == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) ||
-				(gs_dungeon_id == DUNGEONS_PIRATENHOEHLE) ||
-				(gs_dungeon_id == DUNGEONS_ZWERGENFESTE) ||
-				(gs_dungeon_id == DUNGEONS_VERLASSENE_MINE) ||
-				(gs_dungeon_id == DUNGEONS_ZWINGFESTE) ||
-				(gs_dungeon_id == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
+		nvf_index = (gs_dungeon_id == DUNGEON_ID_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
+			(((gs_dungeon_id == DUNGEON_ID_VERFALLENE_HERBERGE) ||
+				(gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) ||
+				(gs_dungeon_id == DUNGEON_ID_KULTSTAETTE_DES_NAMENLOSEN) ||
+				(gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE) ||
+				(gs_dungeon_id == DUNGEON_ID_ZWERGENFESTE) ||
+				(gs_dungeon_id == DUNGEON_ID_VERLASSENE_MINE) ||
+				(gs_dungeon_id == DUNGEON_ID_ZWINGFESTE) ||
+				(gs_dungeon_id == DUNGEON_ID_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
 
 		gs_dungeon_gfx_style = (nvf_index == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((nvf_index == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2);
 
@@ -326,7 +326,7 @@ void load_area_description(const signed int type)
 		/* load DAT or DNG file */
 		handle = load_archive_file(f_index + 0x8000);
 
-		if (!gs_dungeon_id && (gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER))
+		if (!gs_dungeon_id && (gs_current_town == TOWN_ID_THORWAL || gs_current_town == TOWN_ID_PREM || gs_current_town == TOWN_ID_PHEXCAER))
 		{
 			/* path taken in THORWAL PREM and PHEXCAER */
 			_read(handle, g_dng_map, 512);

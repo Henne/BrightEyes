@@ -847,7 +847,7 @@ void TLK_way_to_ruin(const signed int state)
 	} else if (state == 42 || state == 60) {
 		timewarp(MINUTES(150));
 	} else if (state == 67 || state == 44) {
-		gs_travel_detour = DUNGEONS_HYGGELIKS_RUINE;
+		gs_travel_detour = DUNGEON_ID_HYGGELIKS_RUINE;
 
 	} else if (state == 48) {
 

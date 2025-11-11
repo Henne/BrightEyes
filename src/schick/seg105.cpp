@@ -586,14 +586,14 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 
 		/* check for the pirate cave on Manrek to bring Efferd a gift */
 		if ((item_id == ITEM_DREIZACK || item_id == ITEM_NETZ) &&
-			(gs_dungeon_id == DUNGEONS_PIRATENHOEHLE) && (gs_x_target == 9) && (gs_y_target == 9))
+			(gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE) && (gs_x_target == 9) && (gs_y_target == 9))
 		{
 			gs_dng11_efferd_sacrifice = 1;
 		}
 
 		/* check for the mine in Oberorken to bring Ingerimm a gift */
 		if (item_pleasing_ingerimm(item_id) &&
-			(gs_dungeon_id == DUNGEONS_ZWERGENFESTE) && (gs_x_target == 2) && (gs_y_target == 14) && (gs_dungeon_level == 1))
+			(gs_dungeon_id == DUNGEON_ID_ZWERGENFESTE) && (gs_x_target == 2) && (gs_y_target == 14) && (gs_dungeon_level == 1))
 		{
 			gs_dng12_ingerimm_sacrifice = 1;
 		}

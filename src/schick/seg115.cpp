@@ -212,7 +212,7 @@ void tevent_094(void)
 
 		if (answer == 1) {
 			/* enter Daspota dungeon */
-			gs_travel_detour = DUNGEONS_DASPOTASCHATZ;
+			gs_travel_detour = DUNGEON_ID_DASPOTASCHATZ;
 		}
 	}
 }
@@ -448,7 +448,7 @@ void tevent_126(void)
 
 		if (answer == 1)
 		{
-			gs_travel_detour = DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN;
+			gs_travel_detour = DUNGEON_ID_KULTSTAETTE_DES_NAMENLOSEN;
 		}
 	}
 }
@@ -509,7 +509,7 @@ void tevent_129(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = DUNGEONS_DRACHENHORT;
+			gs_travel_detour = DUNGEON_ID_DRACHENHORT;
 		}
 
 	} else if (gs_tevent129_flag) {
@@ -523,7 +523,7 @@ void tevent_129(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = DUNGEONS_DRACHENHORT;
+			gs_travel_detour = DUNGEON_ID_DRACHENHORT;
 		}
 	}
 }
@@ -611,11 +611,11 @@ void tevent_047(void)
 
 						if (answer == 1)
 						{
-							gs_current_town = TOWNS_LJASDAHL;
+							gs_current_town = TOWN_ID_LJASDAHL;
 							gs_x_target = 7;
 							gs_y_target = 3;
 						} else {
-							gs_current_town = TOWNS_OTTARJE;
+							gs_current_town = TOWN_ID_OTTARJE;
 							gs_x_target = 9;
 							gs_y_target = 10;
 						}
@@ -637,7 +637,7 @@ void tevent_047(void)
 						GUI_dialog_na(0, get_tx2(23));
 						GUI_dialog_na(0, get_tx2(25));
 
-						gs_current_town = TOWNS_VARNHEIM;
+						gs_current_town = TOWN_ID_VARNHEIM;
 						gs_x_target = 4;
 						gs_y_target = 10;
 						gs_travel_detour = 99;
@@ -679,7 +679,7 @@ void tevent_100(void)
 
 			if (answer == 1) {
 
-				gs_travel_detour = DUNGEONS_RUINE_DES_SCHWARZMAGIERS;
+				gs_travel_detour = DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS;
 
 			} else {
 

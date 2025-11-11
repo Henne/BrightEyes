@@ -829,7 +829,7 @@ void tevent_108(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = DUNGEONS_ORKBEHAUSUNG;
+			gs_travel_detour = DUNGEON_ID_ORKBEHAUSUNG;
 		}
 
 	} else if (gs_tevent108_flag) {
@@ -842,7 +842,7 @@ void tevent_108(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = DUNGEONS_ORKBEHAUSUNG;
+			gs_travel_detour = DUNGEON_ID_ORKBEHAUSUNG;
 		}
 	}
 }

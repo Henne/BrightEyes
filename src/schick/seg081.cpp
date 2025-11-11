@@ -616,7 +616,7 @@ void DNG09_pitfall(void)
 
 				for (i = 0; i < 6; i++)	{
 
-					if ((gs_groups_dungeon_id[i] == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) && (gs_groups_dng_level[i] == 2)) {
+					if ((gs_groups_dungeon_id[i] == DUNGEON_ID_KULTSTAETTE_DES_NAMENLOSEN) && (gs_groups_dng_level[i] == 2)) {
 						gs_groups_dng_level[i] = 1;
 					}
 				}

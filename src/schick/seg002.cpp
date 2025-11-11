@@ -1416,7 +1416,7 @@ void interrupt mouse_isr(void)
 			g_mouse_rightclick_event = 1;
 		}
 
-		if (((gs_dungeon_id != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
+		if (((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_current_town != TOWN_ID_NONE)) &&
 				!gs_current_loctype && !g_dialogbox_lock && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			g_current_cursor =	(is_mouse_in_rect( 68,  4, 171,  51) ?	&g_cursor_arrow_up :
@@ -2023,9 +2023,9 @@ static void game_loop(void)
 
 		if (gs_current_loctype != LOCTYPE_NONE) {
 			do_location();
-		} else if (gs_current_town != TOWNS_NONE) {
+		} else if (gs_current_town != TOWN_ID_NONE) {
 			do_town();
-		} else if (gs_dungeon_id != DUNGEONS_NONE) {
+		} else if (gs_dungeon_id != DUNGEON_ID_NONE) {
 			do_dungeon();
 		} else if (gs_show_travel_map != 0) {
 			do_travel_mode();
@@ -2063,7 +2063,7 @@ static void game_loop(void)
 		}
 
 		if ((get_hero(6)->typus != HERO_TYPE_NONE) &&
-			((gs_current_town != TOWNS_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
+			((gs_current_town != TOWN_ID_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
 			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
 			npc_farewell();
@@ -2536,7 +2536,7 @@ void do_timers(void)
 					group_id = ptr->group_id;
 
 					/* hero is in group and in mage dungeon */
-					if ((gs_current_group == group_id) && (gs_dungeon_id == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
+					if ((gs_current_group == group_id) && (gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS))
 					{
 
 						if (gs_dungeon_level == 1) {
@@ -2550,7 +2550,7 @@ void do_timers(void)
 						}
 
 					} else {
-						if (gs_groups_dungeon_id[group_id] == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) {
+						if (gs_groups_dungeon_id[group_id] == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) {
 
 							if (gs_groups_dng_level[group_id] == 1) {
 								/* 1W6-1 */
@@ -3163,7 +3163,7 @@ void herokeeping(void)
 			/* check for magic waterskin in group */
 			if ((get_first_hero_with_item_in_group(ITEM_MAGISCHER_WASSERSCHLAUCH, hero->group_id) == -1) &&
 				(((hero->group_id == gs_current_group) &&
-					(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
+					(!gs_current_town || (gs_current_town != TOWN_ID_NONE && gs_show_travel_map != 0))) ||
 				((hero->group_id != gs_current_group) && !gs_groups_town[hero->group_id])))
 			{
 					/* check for food amulett */
@@ -4169,7 +4169,7 @@ void draw_compass(void)
 		/* Has something to do with traveling */
 		!g_travel_event_active &&
 		/* Not in town or dungeon */
-		((gs_dungeon_id != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
+		((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_current_town != TOWN_ID_NONE)) &&
 		/* I have no clue */
 		(g_fading_state != 2))
 	{

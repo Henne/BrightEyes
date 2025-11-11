@@ -309,10 +309,10 @@ void do_merchant(void)
 
 		handle_gui_input();
 
-		if (gs_current_town == TOWNS_THORWAL ||
-			gs_current_town == TOWNS_PREM ||
-			gs_current_town == TOWNS_PHEXCAER ||
-			gs_current_town == TOWNS_OBERORKEN)
+		if (gs_current_town == TOWN_ID_THORWAL ||
+			gs_current_town == TOWN_ID_PREM ||
+			gs_current_town == TOWN_ID_PHEXCAER ||
+			gs_current_town == TOWN_ID_OBERORKEN)
 		{
 
 			/* debt logic in shops */

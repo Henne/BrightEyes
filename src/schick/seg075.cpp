@@ -919,7 +919,7 @@ void DNG_timestep(signed short forward)
 			GUI_output(get_tx(23));
 		}
 
-		gs_dungeon_id = DUNGEONS_NONE;
+		gs_dungeon_id = DUNGEON_ID_NONE;
 
 		/* exit game */
 		g_game_state = GAME_STATE_DEAD;
@@ -1275,38 +1275,38 @@ void DNG_enter_dungeon(signed short dungeon_id)
 
 	switch (dungeon_id) {
 
-		case DUNGEONS_TOTENSCHIFF:  x_pos = 9;  y_pos = 11;  dir = NORTH;  level = 2;  break;
-		case DUNGEONS_VERFALLENE_HERBERGE:  x_pos = 1;  y_pos = 1;   dir = SOUTH;  level = 0;  break;
-		case DUNGEONS_SPINNENHOEHLE:  x_pos = 1;  y_pos = 8;   dir = EAST;  level = 0;  break;
+		case DUNGEON_ID_TOTENSCHIFF:  x_pos = 9;  y_pos = 11;  dir = NORTH;  level = 2;  break;
+		case DUNGEON_ID_VERFALLENE_HERBERGE:  x_pos = 1;  y_pos = 1;   dir = SOUTH;  level = 0;  break;
+		case DUNGEON_ID_SPINNENHOEHLE:  x_pos = 1;  y_pos = 8;   dir = EAST;  level = 0;  break;
 
 #if !defined(__BORLANDC__)
-		case DUNGEONS_WOLFSHOEHLE:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
+		case DUNGEON_ID_WOLFSHOEHLE:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
 #else
-mark1:		case DUNGEONS_WOLFSHOEHLE:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
+mark1:		case DUNGEON_ID_WOLFSHOEHLE:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
 #endif
 
-		case DUNGEONS_GOBLINHOEHLE:  x_pos = 6;  y_pos = 14;  dir = NORTH;  level = 0;  break;
-		case DUNGEONS_DASPOTASCHATZ:  x_pos = 13; y_pos = 14;  dir = NORTH;  level = 0;  break;
-		case DUNGEONS_RUINE_DES_SCHWARZMAGIERS:  x_pos = 1;  y_pos = 13;  dir = NORTH;  level = 0;  break;
-		case DUNGEONS_ORKBEHAUSUNG:  x_pos = 1;  y_pos = 14;  dir = EAST;  level = 0;  break;
+		case DUNGEON_ID_GOBLINHOEHLE:  x_pos = 6;  y_pos = 14;  dir = NORTH;  level = 0;  break;
+		case DUNGEON_ID_DASPOTASCHATZ:  x_pos = 13; y_pos = 14;  dir = NORTH;  level = 0;  break;
+		case DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS:  x_pos = 1;  y_pos = 13;  dir = NORTH;  level = 0;  break;
+		case DUNGEON_ID_ORKBEHAUSUNG:  x_pos = 1;  y_pos = 14;  dir = EAST;  level = 0;  break;
 
 #if !defined(__BORLANDC__)
-		case DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
+		case DUNGEON_ID_KULTSTAETTE_DES_NAMENLOSEN:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
 #else
-		case DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN:  goto mark1;
+		case DUNGEON_ID_KULTSTAETTE_DES_NAMENLOSEN:  goto mark1;
 mark2:			   goto mark1;
 #endif
 
-		case DUNGEONS_DRACHENHORT:  x_pos = 1;  y_pos = 3;   dir = EAST;  level = 0;  break;
+		case DUNGEON_ID_DRACHENHORT:  x_pos = 1;  y_pos = 3;   dir = EAST;  level = 0;  break;
 
 #if !defined(__BORLANDC__)
-		case DUNGEONS_PIRATENHOEHLE:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
+		case DUNGEON_ID_PIRATENHOEHLE:  x_pos = 7;  y_pos = 14;  dir = NORTH;  level = 0;  break;
 #else
-		case DUNGEONS_PIRATENHOEHLE:  goto mark2;
+		case DUNGEON_ID_PIRATENHOEHLE:  goto mark2;
 #endif
 
-		case DUNGEONS_ZWERGENFESTE:  x_pos = 13; y_pos = 14;  dir = NORTH;  level = 0;  break;
-		case DUNGEONS_VERLASSENE_MINE: {
+		case DUNGEON_ID_ZWERGENFESTE:  x_pos = 13; y_pos = 14;  dir = NORTH;  level = 0;  break;
+		case DUNGEON_ID_VERLASSENE_MINE: {
 			x_pos = 7;
 			y_pos = 14;
 			dir = NORTH;
@@ -1316,14 +1316,14 @@ mark2:			   goto mark1;
 			gs_dng13_herocount = count_heroes_in_group();
 			break;
 		}
-		case DUNGEONS_ZWINGFESTE: {
+		case DUNGEON_ID_ZWINGFESTE: {
 			x_pos = 1;
 			y_pos = 14;
 			dir = WEST;
 			level = gs_current_loctype = LOCTYPE_NONE; /* == 0 */
 			break;
 		}
-		case DUNGEONS_HYGGELIKS_RUINE:  x_pos = 1;  y_pos = 11;   dir = EAST;  level = 0;  break;
+		case DUNGEON_ID_HYGGELIKS_RUINE:  x_pos = 1;  y_pos = 11;   dir = EAST;  level = 0;  break;
 	}
 
 	gs_x_target = x_pos;
@@ -1333,10 +1333,10 @@ mark2:			   goto mark1;
 	gs_dungeon_id = dungeon_id;
 	gs_current_loctype_bak = gs_current_loctype;
 	gs_current_town_bak = gs_current_town;
-	gs_current_loctype = gs_current_town = TOWNS_NONE;
+	gs_current_loctype = gs_current_town = TOWN_ID_NONE;
 	g_dng_loaded_dungeon_id = g_town_loaded_town_id = -1;
 
-	if (dungeon_id == DUNGEONS_ZWINGFESTE) {
+	if (dungeon_id == DUNGEON_ID_ZWINGFESTE) {
 
 		ptr = g_renderbuf_ptr + 0x1f4;
 		memset(g_renderbuf_ptr, 0, 0x120);
