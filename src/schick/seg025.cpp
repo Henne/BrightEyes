@@ -268,7 +268,7 @@ void do_informer(void)
 
 void enter_map(void)
 {
-	gs_current_signpost = gs_current_typeindex;
+	gs_current_signpost_typeindex = gs_current_typeindex;
 
 	gs_current_typeindex = gs_town_id;
 

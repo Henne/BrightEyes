@@ -1443,7 +1443,7 @@ extern int16_t gs_sea_travel_passage_speed2;	//ds:0x432c; seg063, seg064
 extern uint8_t *gs_travel_map_ptr;		//ds:0x432e; seg028, seg063, seg093, seg094
 extern uint8_t  gs_forcedmarch_timer;		//ds:0x4332; seg002, seg094
 extern uint8_t  gs_travel_detour;			//ds:0x4333; seg002-seg118
-extern int16_t gs_current_signpost;		//ds:0x4334; seg025, seg063, seg093
+extern int16_t gs_current_signpost_typeindex;		//ds:0x4334; seg025, seg063, seg093
 extern int16_t gs_trv_return;			//ds:0x4336; seg093-seg116
 extern int16_t gs_travel_destination_town_id;	//ds:0x4338; seg063-seg094
 extern int16_t gs_travel_destination_x;		//ds:0x433a; seg063-seg094
