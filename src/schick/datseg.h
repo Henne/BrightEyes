@@ -763,7 +763,7 @@ extern uint32_t g_cd_skipmagic;
 extern signed short g_items_noplural[23];				// ds:0x0270; seg096
 extern signed short g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_items_genders[254];				// ds:0x02ac; seg096
-extern signed short* g_wearable_items_index[12];			// ds:0x0638; seg048, seg056, seg105
+extern signed short* g_forbidden_item_ids_table[12];			// ds:0x0638; seg048, seg056, seg105
 extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
 extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
 extern struct armor_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105

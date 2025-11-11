@@ -205,7 +205,7 @@ signed int can_hero_use_item(const struct struct_hero *hero, const signed int it
 #endif
 
 	/* calculate the address of the class forbidden items array */
-	if (is_in_word_array(item_id, g_wearable_items_index[hero->typus - 1])) {
+	if (is_in_word_array(item_id, g_forbidden_item_ids_table[hero->typus - 1])) {
 
 		return 0;
 	} else {
