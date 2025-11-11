@@ -706,7 +706,7 @@ signed short do_travel_mode(void)
 			g_request_refresh = 0;
 		}
 
-		if ((signpost_ptr->town_id == gs_town_id) && (signpost_ptr->typeindex == gs_current_signpost))
+		if ((signpost_ptr->town_id == gs_town_id) && (signpost_ptr->typeindex == gs_current_signpost_typeindex))
 		{
 			while (1) {
 				handle_input();

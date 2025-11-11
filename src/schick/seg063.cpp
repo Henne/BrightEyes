@@ -179,7 +179,7 @@ void do_harbor(void)
 
 	flag = 1;
 
-	gs_current_signpost = gs_current_typeindex;
+	gs_current_signpost_typeindex = gs_current_typeindex;
 
 	draw_loc_icons(4, MENU_ICON_BOOK_SHIP_PASSAGE, MENU_ICON_HARBOR_MASTER, MENU_ICON_BOARD_SHIP, MENU_ICON_LEAVE);
 	g_request_refresh = 1;
