@@ -1351,6 +1351,12 @@ enum {
 	LIGHTING_LANTERN	= 2
 };
 
+enum {
+	GENDER_MASCULINE	= 0,
+	GENDER_FEMININE		= 1,
+	GENDER_NEUTER		= 2
+};
+
 #define NR_SEA_ROUTES (45)
 
 enum {
