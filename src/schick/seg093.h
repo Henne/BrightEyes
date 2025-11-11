@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short do_travel_mode(void);
+signed int do_travel_mode(void);
 
 #if !defined(__BORLANDC__)
 }

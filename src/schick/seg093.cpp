@@ -636,18 +636,18 @@ struct struct_tevent g_tevents_tab[156] = {
 	{ -1,  0,   0 },
 }; // ds:0xa66d
 
-signed short do_travel_mode(void)
+signed int do_travel_mode(void)
 {
-	signed short l_di;
-	signed short i;
-	signed short answer;
-	signed short l4;
-	signed short route_id;
+	signed int l_di;
+	signed int i;
+	signed int answer;
+	signed int l4;
+	signed int route_id;
 	struct trv_start_point *signpost_ptr;
-	signed short l6;
-	signed short l7;
-	signed short bak1;
-	signed short tw_bak;
+	signed int l6;
+	signed int l7;
+	signed int bak1;
+	signed int tw_bak;
 	char *destinations_tab[6];
 
 	bak1 = g_wallclock_update;

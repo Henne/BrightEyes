@@ -5,7 +5,7 @@ namespace M302de {
 /* 0x20 */
 signed int use_magic(struct struct_hero*);
 /* 0x25 */
-signed short test_spell(struct struct_hero*, signed short, signed char);
+signed int test_spell(struct struct_hero*, const signed int, signed char);
 /* 0x2a */
 signed int use_spell(struct struct_hero*, const signed int, signed char);
 /* 0x2f */
@@ -14,20 +14,20 @@ signed int select_spell(struct struct_hero*, signed int);
 /* static */
 void magic_heal_ani(const struct struct_hero*);
 /* 0x39 */
-void FIG_do_spell_damage(signed short);
+void FIG_do_spell_damage(const signed int);
 /* 0x3e */
-signed short get_attackee_parade(void);
+signed int get_attackee_parade(void);
 /* 0x43 */
-signed short get_attackee_rs(void);
+signed int get_attackee_rs(void);
 /* 0x48 */
-signed short get_spell_cost(signed short, signed short);
+signed int get_spell_cost(const signed int, const signed int);
 /* 0x4d */
 /* can be static */
 signed int can_use_spellclass(const struct struct_hero*, const signed int);
 /* 0x52 */
-signed short test_spell_group(signed short, signed char);
+signed int test_spell_group(const signed int, const signed char);
 /* 0x57 */
-signed short select_magic_user(void);
+signed int select_magic_user(void);
 
 #if !defined(__BORLANDC__)
 }

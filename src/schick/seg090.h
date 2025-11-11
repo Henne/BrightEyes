@@ -11,7 +11,7 @@ void DNG12_chest00_loot(struct struct_chest*);
 /* 0x2a */
 signed short DNG12_handler(void);
 /* 0x2f */
-void DNG12_fight_intro(signed short);
+void DNG12_fight_intro(const signed int);
 
 #if !defined(__BORLANDC__)
 }

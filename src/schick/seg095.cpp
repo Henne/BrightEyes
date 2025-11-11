@@ -25,7 +25,7 @@
 namespace M302de {
 #endif
 
-unsigned short npc_meetings(unsigned short type_index)
+signed int npc_meetings(const signed int type_index)
 {
 	/* check if an NPC is in the party and if we
 		already had an NPC conversation here */
@@ -87,8 +87,8 @@ unsigned short npc_meetings(unsigned short type_index)
 void npc_farewell(void)
 {
 	struct struct_hero *hero_i;
-	signed short i;
-	signed short tmp;
+	signed int i;
+	signed int tmp;
 
 	/* no NPC there */
 	if (get_hero(6)->typus == HERO_TYPE_NONE)
@@ -177,7 +177,7 @@ void npc_farewell(void)
 //static
 void npc_nariell(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* load NSC.LTX */
 	load_tx(ARCHIVE_FILE_NSC_LTX);
@@ -218,8 +218,8 @@ void npc_nariell(void)
 //static
 void npc_harika(void)
 {
-	long money;
-	signed short answer;
+	signed long money;
+	signed int answer;
 
 	/* load NSC.LTX */
 	load_tx(ARCHIVE_FILE_NSC_LTX);
@@ -288,7 +288,7 @@ void npc_harika(void)
 
 void npc_curian(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* load NSC.LTX */
 	load_tx(ARCHIVE_FILE_NSC_LTX);
@@ -326,7 +326,7 @@ void npc_curian(void)
 //static
 void npc_ardora(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* load NSC.LTX */
 	load_tx(ARCHIVE_FILE_NSC_LTX);
@@ -393,7 +393,7 @@ void npc_ardora(void)
 //static
 void npc_garsvik(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* load NSC.LTX */
 	load_tx(ARCHIVE_FILE_NSC_LTX);
@@ -431,7 +431,7 @@ void npc_garsvik(void)
 //static
 void npc_erwo(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* load NSC.LTX */
 	load_tx(ARCHIVE_FILE_NSC_LTX);
@@ -467,8 +467,8 @@ void npc_erwo(void)
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
 }
 
-void remove_npc(signed short head_index, signed char days,
-		signed short index, char *name, char *text)
+void remove_npc(const signed int head_index, const signed char days,
+		const signed int index, char *name, char *text)
 {
 
 	if (g_fading_state != 0)
@@ -508,7 +508,7 @@ void remove_npc(signed short head_index, signed char days,
 
 }
 
-void add_npc(signed short index)
+void add_npc(const signed int index)
 {
 	load_npc(index);
 
