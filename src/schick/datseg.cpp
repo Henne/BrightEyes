@@ -2534,10 +2534,40 @@ uint32_t gs_ruin_hero_obsolete = 0;	// ds:0x3e1c; This is a dummy now!
 uint32_t gs_main_acting_hero_obsolete = 0;// ds:0x3e20; This is a dummy now!
 #endif
 
-uint8_t gs_tevent073_corpse[3] = { 0xaa, 0x01, 0xff }; // ds:0x3e24
-uint8_t gs_tevent014_chest[4] = { 0x01, 0x6e, 0xa2, 0xff }; // ds:0x3e27
-uint8_t gs_tevent064_hut_content[19] = { 0x4b, 0x01, 0x5c, 0x01, 0x5b, 0x01, 0x7e, 0x01, 0x78, 0x01, 0x80, 0x01, 0x1d, 0x01, 0x46, 0x01, 0x92, 0x01, 0xff }; // ds:0x3e2b
-uint8_t gs_tevent064_chest[21] = { 0xa4, 0x01, 0xa5, 0x01, 0x92, 0x01, 0xb4, 0x02, 0xa6, 0x01, 0xa7, 0x01, 0x7e, 0x02, 0x82, 0x01, 0x9d, 0x01, 0x83, 0x01, 0xff }; // ds:0x3e3e
+uint8_t gs_tevent073_corpse[3] = {
+	ITEM_DOKUMENT__1, 1,
+	0xff
+}; // ds:0x3e24
+uint8_t gs_tevent014_chest[4] = {
+	ITEM_SCHWERT,
+	ITEM_SCHWERER_DOLCH,
+	ITEM_AMULETT__UNKNOWN_1,
+	0xff
+}; // ds:0x3e27
+uint8_t gs_tevent064_hut_content[19] = {
+	ITEM_ROBE__GREEN_1, 1,
+	ITEM_SCHNAPSFLASCHE, 1,
+	ITEM_WEINFLASCHE, 1,
+	ITEM_ALRAUNE, 1,
+	ITEM_SCHLEUDER, 1,
+	ITEM_ILMENBLATT, 1,
+	ITEM_SCHRIFTROLLE, 1,
+	ITEM_KRISTALLKUGEL, 1,
+	ITEM_STARKER_HEILTRANK, 1,
+	0xff
+}; // ds:0x3e2b
+uint8_t gs_tevent064_chest[21] = {
+	ITEM_KNOCHEN_MIT_RUNE, 1,
+	ITEM_RING__RED, 1,
+	ITEM_STARKER_HEILTRANK, 1,
+	ITEM_GEGENGIFT, 2,
+	ITEM_EXPURGICUM, 1,
+	ITEM_REZEPT_FUER_EXPURGICUM, 1,
+	ITEM_ALRAUNE, 2,
+	ITEM_JORUGAWURZEL, 1,
+	ITEM_KAIRANHALM, 1,
+	ITEM_THONNYSBLUETE, 1,
+0xff }; // ds:0x3e3e
 
 uint8_t  gs_palette_floor[3 * 32] = { 0 };	// ds:0x3e53
 uint8_t  gs_palette_buildings[3 * 32] = { 0 };	// ds:0x3eb3
@@ -2568,9 +2598,20 @@ uint8_t  gs_dng13_chest_equips[13] = {
 	0xff
 }; // ds:0x3f83
 uint8_t  gs_dng13_chest0_content[6] = {
-	ITEM_DOLCH, ITEM_ZUNDERKAESTCHEN, ITEM_FACKEL__UNLIT, ITEM_FACKEL__UNLIT, ITEM_SEIL, 0xff }; // ds:0x3f90
+	ITEM_DOLCH,
+	ITEM_ZUNDERKAESTCHEN,
+	ITEM_FACKEL__UNLIT,
+	ITEM_FACKEL__UNLIT,
+	ITEM_SEIL,
+	0xff
+}; // ds:0x3f90
 uint8_t  gs_dng13_chest1_content[5] = {
-	ITEM_DOLCH, ITEM_SCHWERT, ITEM_FACKEL__UNLIT, ITEM_ZUNDERKAESTCHEN, 0xff }; // ds:0x3f96
+	ITEM_DOLCH,
+	ITEM_SCHWERT,
+	ITEM_FACKEL__UNLIT,
+	ITEM_ZUNDERKAESTCHEN,
+	0xff
+}; // ds:0x3f96
 int8_t  gs_dng12_tunnel1 = 45; // ds:0x3f9b
 int8_t  gs_dng12_tunnel2 = 40; // ds:0x3f9c
 int8_t  gs_dng12_tunnel3 = 35; // ds:0x3f9d
@@ -2595,7 +2636,8 @@ uint8_t  gs_dng12_chest1_content[12] = {
 	ITEM_LEDERHELM,
 	ITEM_HEILTRANK,
 	ITEM_ZAUBERTRANK,
-	0xff }; // ds:0x3faa
+	0xff
+}; // ds:0x3faa
 uint8_t  gs_dng14_money_flag = 0; // ds:0x3fb6
 uint8_t  gs_dng14_alarm_flag = 0; // ds:0x3fb7
 uint8_t  gs_dng14_secretdoor1 = 0; // ds:0x3fb8, {0, 1 = found, 2 = unlocked}
@@ -2645,36 +2687,245 @@ uint8_t gs_dng14_chest_x3[11] = {
 	ITEM_PFEIL, 50,
 	0xff
 }; // ds:0x3ffb
-uint8_t gs_dng14_chest_x4[14] = { 0x03, 0x03, 0x03, 0x03, 0x01, 0x01, 0x0e, 0x0e, 0x0e, 0x0e, 0x87, 0x87, 0x92, 0xff }; // ds:0x4006
-uint8_t gs_dng14_chest_x5[10] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5c, 0x5c, 0x91, 0x91, 0xff }; // ds:0x4014
-uint8_t gs_dng14_chest_x6[8] = { 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x22, 0x4c, 0xff }; // ds:0x401e
-uint8_t gs_dng14_chest_x7[7] = { 0xef, 0xef, 0xef, 0xef, 0xef, 0xef, 0xff }; // ds:0x4026
-uint8_t gs_dng14_chest_x8[13] = { 0x88, 0x88, 0x88, 0x86, 0x86, 0x86, 0x05, 0x05, 0x05, 0x07, 0x07, 0x07, 0xff }; // ds:0x402d
+uint8_t gs_dng14_chest_x4[14] = {
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_SCHWERT,
+	ITEM_SCHWERT,
+	ITEM_DOLCH,
+	ITEM_DOLCH,
+	ITEM_DOLCH,
+	ITEM_DOLCH,
+	ITEM_KRIEGSBEIL,
+	ITEM_KRIEGSBEIL,
+	ITEM_STARKER_HEILTRANK,
+	0xff
+}; // ds:0x4006
+uint8_t gs_dng14_chest_x5[10] = {
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_SCHNAPSFLASCHE,
+	ITEM_SCHNAPSFLASCHE,
+	ITEM_HEILTRANK,
+	ITEM_HEILTRANK,
+	0xff
+}; // ds:0x4014
+uint8_t gs_dng14_chest_x6[8] = {
+	ITEM_GOLDSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_MESSINGSPIEGEL,
+	ITEM_ROBE__RED,
+	0xff
+}; // ds:0x401e
+uint8_t gs_dng14_chest_x7[7] = {
+	ITEM_HYLAILER_FEUER,
+	ITEM_HYLAILER_FEUER,
+	ITEM_HYLAILER_FEUER,
+	ITEM_HYLAILER_FEUER,
+	ITEM_HYLAILER_FEUER,
+	ITEM_HYLAILER_FEUER,
+	0xff
+}; // ds:0x4026
+uint8_t gs_dng14_chest_x8[13] = {
+	ITEM_ORKNASE,
+	ITEM_ORKNASE,
+	ITEM_ORKNASE,
+	ITEM_SKRAJA,
+	ITEM_SKRAJA,
+	ITEM_SKRAJA,
+	ITEM_SPEER,
+	ITEM_SPEER,
+	ITEM_SPEER,
+	ITEM_SCHILD,
+	ITEM_SCHILD,
+	ITEM_SCHILD,
+	0xff
+}; // ds:0x402d
 uint8_t  gs_dng14_fullmap_flag = 1; // ds:0x403a
 
-uint8_t  gs_dng02_chest00_content[2] = { 0x86, 0xff }; // ds:0x403b
-uint8_t  gs_dng02_chest01_content[4] = { 0x03, 0x62, 0x04, 0xff }; // ds:0x403d
-uint8_t  gs_dng02_chest06_content[4] = { 0x48, 0x1e, 0x0e, 0xff }; // ds:0x4041
-uint8_t  gs_dng02_chest02_content[8] = { 0x2f, 0x99, 0x91, 0x91, 0x94, 0xa7, 0xcb, 0xff }; // ds:0x4045
-uint8_t  gs_dng02_chest03_content[8] = { 0x2f, 0x95, 0xec, 0xb4, 0xa9, 0xcc, 0xf3, 0xff }; // ds:0x404d
-uint8_t  gs_dng02_chest05_content[8] = { 0x2f, 0x95, 0xec, 0xb4, 0xa9, 0xcc, 0xf3, 0xff }; // ds:0x4055
+uint8_t  gs_dng02_chest00_content[2] = {
+	ITEM_SKRAJA,
+	0xff
+}; // ds:0x403b
+uint8_t  gs_dng02_chest01_content[4] = {
+	ITEM_SAEBEL,
+	ITEM_WURFMESSER,
+	ITEM_MESSER,
+	0xff
+}; // ds:0x403d
+uint8_t  gs_dng02_chest06_content[4] = {
+	ITEM_DECKE,
+	ITEM_WASSERSCHLAUCH,
+	ITEM_DOLCH,
+	0xff
+}; // ds:0x4041
+uint8_t  gs_dng02_chest02_content[8] = {
+	ITEM_ALCHEMIESET,
+	ITEM_KK_ELIXIER,
+	ITEM_HEILTRANK,
+	ITEM_HEILTRANK,
+	ITEM_KL_ELIXIER,
+	ITEM_REZEPT_FUER_EXPURGICUM,
+	ITEM_REZEPT_FUER_HYLAILER_FEUER,
+	0xff
+}; // ds:0x4045
+uint8_t  gs_dng02_chest03_content[8] = {
+	ITEM_ALCHEMIESET,
+	ITEM_CH_ELIXIER,
+	ITEM_WUNDERKUR,
+	ITEM_GEGENGIFT,
+	ITEM_REZEPT_FUER_VOMICUM,
+	ITEM_REZEPT_FUER_KRAFTELIXIER,
+	ITEM_REZEPT_FUER_STARKER_ZAUBERTRANK,
+	0xff
+}; // ds:0x404d
+uint8_t  gs_dng02_chest05_content[8] = {
+	ITEM_ALCHEMIESET,
+	ITEM_CH_ELIXIER,
+	ITEM_WUNDERKUR,
+	ITEM_GEGENGIFT,
+	ITEM_REZEPT_FUER_VOMICUM,
+	ITEM_REZEPT_FUER_KRAFTELIXIER,
+	ITEM_REZEPT_FUER_STARKER_ZAUBERTRANK,
+	0xff
+}; // ds:0x4055
 
-uint8_t  gs_dng03_chest00_content[7] = { 0x4b, 0x4b, 0x4b, 0x4b, 0x4b, 0x4b, 0xff }; // ds:0x405d
-uint8_t  gs_dng03_chest01_content[8] = { 0x79, 0x79, 0x1b, 0x49, 0x1a, 0x28, 0x91, 0xff }; // ds:0x4064
-uint8_t  gs_dng03_chest02_content[13] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0xff }; // ds:0x406c
-uint8_t  gs_dng03_chest03_content[3] = { 0xd8, 0x9a, 0xff }; // ds:0x4079
-uint8_t  gs_dng03_chest04_content[9] = { 0x4c, 0x4c, 0x4c, 0x5b, 0x5b, 0x5b, 0x5e, 0xff, 0xff }; // ds:0x407c
-uint8_t  gs_dng03_chest06_content[8] = { 0x4c, 0x4c, 0x4c, 0x5b, 0x5b, 0x5b, 0x5e, 0xff }; // ds:0x4085
-uint8_t  gs_dng03_chest07_content[2] = { 0xe1, 0xff }; // ds:0x408d
-uint8_t  gs_dng03_chest08_content[4] = { 0x9a, 0x9a, 0x9a, 0xff }; // ds:0x408f
-uint8_t  gs_dng03_chest09_content[11] = { 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0xff }; // ds:0x4093
-uint8_t  gs_dng03_chest12_content[7] = { 0xf5, 0xf5, 0xf6, 0x27, 0x27, 0xd3, 0xff }; // ds:0x409e
+uint8_t  gs_dng03_chest00_content[7] = {
+	ITEM_ROBE__GREEN_1,
+	ITEM_ROBE__GREEN_1,
+	ITEM_ROBE__GREEN_1,
+	ITEM_ROBE__GREEN_1,
+	ITEM_ROBE__GREEN_1,
+	ITEM_ROBE__GREEN_1,
+	0xff
+}; // ds:0x405d
+uint8_t  gs_dng03_chest01_content[8] = {
+	ITEM_SEIL,
+	ITEM_SEIL,
+	ITEM_HAMMER,
+	ITEM_SCHAUFEL,
+	ITEM_BRECHEISEN,
+	ITEM_KLETTERHAKEN,
+	ITEM_HEILTRANK,
+	0xff
+}; // ds:0x4064
+uint8_t  gs_dng03_chest02_content[13] = {
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	0xff
+}; // ds:0x406c
+uint8_t  gs_dng03_chest03_content[3] = {
+	ITEM_SPEER__MAGIC,
+	ITEM_ZAUBERTRANK,
+	0xff
+}; // ds:0x4079
+uint8_t  gs_dng03_chest04_content[9] = {
+	ITEM_ROBE__RED,
+	ITEM_ROBE__RED,
+	ITEM_ROBE__RED,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_PRAIOS_AMULETT,
+	0xff,
+	0xff
+}; // ds:0x407c
+uint8_t  gs_dng03_chest06_content[8] = {
+	ITEM_ROBE__RED,
+	ITEM_ROBE__RED,
+	ITEM_ROBE__RED,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_PRAIOS_AMULETT,
+	0xff
+}; // ds:0x4085
+uint8_t  gs_dng03_chest07_content[2] = {
+	ITEM_KRISTALL,
+	0xff
+}; // ds:0x408d
+uint8_t  gs_dng03_chest08_content[4] = {
+	ITEM_ZAUBERTRANK,
+	ITEM_ZAUBERTRANK,
+	ITEM_ZAUBERTRANK,
+	0xff
+}; // ds:0x408f
+uint8_t  gs_dng03_chest09_content[11] = {
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	ITEM_ARAXGIFT,
+	0xff
+}; // ds:0x4093
+uint8_t  gs_dng03_chest12_content[7] = {
+	ITEM_STIRNREIF__GREEN,
+	ITEM_STIRNREIF__GREEN,
+	ITEM_BUCH__HEPTAGON,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_ROTER_SCHLUESSEL,
+	0xff
+}; // ds:0x409e
 
-uint8_t  gs_dng04_chest_corpse0[4] = { 0x03, 0x0e, 0x5c, 0xff }; // ds:0x40a5
-uint8_t  gs_dng04_chest_corpse1[12] = { 0x01, 0x01, 0x88, 0x0e, 0x0e, 0x6e, 0x50, 0x79, 0x49, 0x19, 0xb0, 0xff }; // ds:0x40a9
-uint8_t  gs_dng04_chest_corpse2[10] = { 0x0e, 0x13, 0x54, 0x79, 0x48, 0x1e, 0x55, 0x2e, 0x92, 0xff }; // ds:0x40b5
+uint8_t  gs_dng04_chest_corpse0[4] = {
+	ITEM_SAEBEL,
+	ITEM_DOLCH,
+	ITEM_SCHNAPSFLASCHE,
+	0xff
+}; // ds:0x40a5
+uint8_t  gs_dng04_chest_corpse1[12] = {
+	ITEM_SCHWERT,
+	ITEM_SCHWERT,
+	ITEM_ORKNASE,
+	ITEM_DOLCH,
+	ITEM_DOLCH,
+	ITEM_SCHWERER_DOLCH,
+	ITEM_KETTENHEMD,
+	ITEM_SEIL,
+	ITEM_SCHAUFEL,
+	ITEM_LATERNE__UNLIT,
+	ITEM_SCHULDBUCH,
+	0xff
+}; // ds:0x40a9
+uint8_t  gs_dng04_chest_corpse2[10] = {
+	ITEM_DOLCH,
+	ITEM_LANGBOGEN,
+	ITEM_LEDERZEUG,
+	ITEM_SEIL,
+	ITEM_DECKE,
+	ITEM_WASSERSCHLAUCH,
+	ITEM_ZUNDERKAESTCHEN,
+	ITEM_FLOETE,
+	ITEM_STARKER_HEILTRANK,
+	0xff
+}; // ds:0x40b5
 
-uint8_t  gs_dng06_chest1_content[16] = { 0x70, 0x70, 0x01, 0x01, 0x35, 0x35, 0x4e, 0x4e, 0x07, 0x07, 0x0e, 0x0e, 0x0c, 0x0c, 0x50, 0xff }; // ds:0x40bf
+uint8_t  gs_dng06_chest1_content[16] = {
+ITEM_ENTERMESSER, ITEM_ENTERMESSER, ITEM_SCHWERT, ITEM_SCHWERT, ITEM_LEDERHARNISCH, ITEM_LEDERHARNISCH, ITEM_LEDERHELM, ITEM_LEDERHELM, ITEM_SCHILD, ITEM_SCHILD, ITEM_DOLCH, ITEM_DOLCH, ITEM_ARMBRUST, ITEM_ARMBRUST, ITEM_KETTENHEMD, 0xff }; // ds:0x40bf
 uint8_t  gs_dng06_chest_dasptreas[17] = {
 	ITEM_KETTENHEMD__MAGIC, 1,
 	ITEM_GOLDSCHMUCK, 1,
@@ -2695,9 +2946,22 @@ uint8_t  gs_dng08_chest1_content[11] = {
 	ITEM_PFEIL, 40,
 	0xff
 }; // ds:0x40e0
-uint8_t  gs_dng08_chest2_content[2] = { 0xb1, 0xff }; // ds:0x40eb
-uint8_t  gs_dng08_chest4_content[2] = { 0xb2, 0xff }; // ds:0x40ed
-uint8_t  gs_dng08_chest5_content[6] = { 0x27, 0x27, 0x4a, 0x93, 0xb3, 0xff }; // ds:0x40ef
+uint8_t  gs_dng08_chest2_content[2] = {
+	ITEM_ROTE_MONDSCHEIBE,
+	0xff
+}; // ds:0x40eb
+uint8_t  gs_dng08_chest4_content[2] = {
+	ITEM_ZWEIHAENDER__MAGIC,
+	0xff
+}; // ds:0x40ed
+uint8_t  gs_dng08_chest5_content[6] = {
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_MU_ELIXIER,
+	ITEM_ORKDOKUMENT,
+	0xff
+}; // ds:0x40ef
 
 uint8_t  gs_dng09_lever1_flag = 0; // ds:0x40f5
 uint8_t  gs_dng09_bolttrap1_flag = 3; // ds:0x40f6
@@ -2712,12 +2976,81 @@ unsigned char g_unkn_025[1] = { 0x00 }; // ds:0x40fe
 uint8_t  gs_dng09_altar_flag = 0; // ds:0x40ff
 uint8_t  gs_dng09_secretdoor1 = 0; // ds:0x4100, {0, 1 = found, 2 = unlocked}
 uint8_t  gs_dng09_secretdoor2 = 0; // ds:0x4101, {0, 1 = found, 2 = unlocked}
-uint8_t  gs_dng09_chest0[12] = { 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x5b, 0x5b, 0x5c, 0xff }; // ds:0x4102
-uint8_t  gs_dng09_chest1[10] = { 0x4c, 0x4c, 0x4c, 0x19, 0x19, 0x19, 0x29, 0x29, 0x29, 0xff }; // ds:0x410e
-uint8_t  gs_dng09_chest2[8] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xea, 0x9a, 0xff }; // ds:0x4118
-uint8_t  gs_dng09_chest3[21] = { 0x4b, 0x4b, 0x4b, 0x30, 0x30, 0x30, 0x31, 0x31, 0x31, 0x0e, 0x0e, 0x0e, 0x01, 0x5b, 0x17, 0xff, 0x01, 0x0e, 0x4a, 0x23, 0xff }; // ds:0x4120
-uint8_t  gs_dng09_chest5[4] = { 0xbd, 0xbe, 0x4c, 0xff }; // ds:0x4135
-uint8_t  gs_dng09_chest6[7] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xd9, 0xff }; // ds:0x4139
+uint8_t  gs_dng09_chest0[12] = {
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_PROVIANTPAKET,
+	ITEM_WEINFLASCHE,
+	ITEM_WEINFLASCHE,
+	ITEM_SCHNAPSFLASCHE,
+	0xff
+}; // ds:0x4102
+uint8_t  gs_dng09_chest1[10] = {
+	ITEM_ROBE__RED,
+	ITEM_ROBE__RED,
+	ITEM_ROBE__RED,
+	ITEM_LATERNE__UNLIT,
+	ITEM_LATERNE__UNLIT,
+	ITEM_LATERNE__UNLIT,
+	ITEM_OEL,
+	ITEM_OEL,
+	ITEM_OEL,
+	0xff
+}; // ds:0x410e
+uint8_t  gs_dng09_chest2[8] = {
+	ITEM_GOLDSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_GOLDENER_SCHILD,
+	ITEM_ZAUBERTRANK,
+	0xff
+}; // ds:0x4118
+uint8_t  gs_dng09_chest3[21] = {
+	ITEM_ROBE__GREEN_1,
+	ITEM_ROBE__GREEN_1,
+	ITEM_ROBE__GREEN_1,
+	ITEM_HEMD,
+	ITEM_HEMD,
+	ITEM_HEMD,
+	ITEM_HOSE,
+	ITEM_HOSE,
+	ITEM_HOSE,
+	ITEM_DOLCH,
+	ITEM_DOLCH,
+	ITEM_DOLCH,
+	ITEM_SCHWERT,
+	ITEM_WEINFLASCHE,
+	ITEM_BIER,
+	0xff,
+	ITEM_SCHWERT,
+	ITEM_DOLCH,
+	ITEM_GOLDSCHMUCK,
+	ITEM_DIETRICHE,
+	0xff
+}; // ds:0x4120
+uint8_t  gs_dng09_chest5[4] = {
+	ITEM_LOBPREISUNGEN,
+	ITEM_MITGLIEDERLISTE,
+	ITEM_ROBE__RED,
+	0xff
+}; // ds:0x4135
+uint8_t  gs_dng09_chest6[7] = {
+	ITEM_GOLDSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_STIRNREIF__BLUE,
+	0xff
+}; // ds:0x4139
+   //
 uint8_t  gs_dng10_corpse_flag = 0; // ds:0x4140
 uint8_t  gs_dng10_lever_found = 0; // ds:0x4141
 uint8_t  gs_dng10_hole_state = 0; // ds:0x4142
@@ -2729,11 +3062,34 @@ uint8_t  gs_dng10_mummy_lever = 0; // ds:0x4147
 uint8_t  gs_dng10_heshtot = 0; // ds:0x4148
 uint8_t  gs_dng10_dragon_quest = 0; // ds:0x4149
 uint8_t  gs_dng10_hoard_plundered = 0; // ds:0x414a
-uint8_t  gs_dng10_chest0_content[5] = { 0x50, 0x1b, 0x91, 0xb7, 0xff}; // ds:0x414b
-uint8_t  gs_dng10_chest1_content[4] = { 0x91, 0x92, 0x91, 0xff}; // ds:0x4150
-uint8_t  gs_dng10_chest2_content[4] = { 0x9a, 0x9b, 0x9a, 0xff}; // ds:0x4154
-uint8_t  gs_dng10_chest3_content[3] = { 0xc7, 0xc5, 0xff}; // ds:0x4158
-uint8_t  gs_dng10_chest4_content[2] = { 0xdf, 0xff}; // ds:0x415b
+uint8_t  gs_dng10_chest0_content[5] = {
+	ITEM_KETTENHEMD,
+	ITEM_HAMMER,
+	ITEM_HEILTRANK,
+	ITEM_KRAFTGUERTEL,
+	0xff
+}; // ds:0x414b
+uint8_t  gs_dng10_chest1_content[4] = {
+	ITEM_HEILTRANK,
+	ITEM_STARKER_HEILTRANK,
+	ITEM_HEILTRANK,
+	0xff
+}; // ds:0x4150
+uint8_t  gs_dng10_chest2_content[4] = {
+	ITEM_ZAUBERTRANK,
+	ITEM_ZAUBERTRANK_STARK,
+	ITEM_ZAUBERTRANK,
+	0xff
+}; // ds:0x4154
+uint8_t  gs_dng10_chest3_content[3] = {
+	ITEM_SCHWERT__MAGIC,
+	ITEM_KETTENHEMD__CURSED,
+	0xff
+}; // ds:0x4158
+uint8_t  gs_dng10_chest4_content[2] = {
+	ITEM_ANTIKRANKHEITSELIXIER,
+	0xff
+}; // ds:0x415b
 
 uint8_t  gs_dng11_waterbarrel1 = 80; // ds:0x415d
 uint8_t  gs_dng11_waterbarrel2 = 20; // ds:0x415e
@@ -2749,18 +3105,119 @@ uint8_t  gs_dng11_secretdoor3_flag = 0; // ds:0x4167
 uint8_t  gs_dng11_lever_flag = 2; // ds:0x4168, {0-5}
 uint8_t  gs_dng11_proviant1_flag = 0; // ds:0x4169
 uint8_t  gs_dng11_proviant2_flag = 0; // ds:0x416a
-uint8_t  gs_dng11_chest3[15] = { 0x03, 0x03, 0x03, 0x03, 0x03, 0x70, 0x70, 0x70, 0x70, 0x70, 0x01, 0x86, 0x86, 0x88, 0xff }; // ds:0x416b
-uint8_t  gs_dng11_chest4[11] = { 0x09, 0x09, 0x05, 0x05, 0x05, 0x05, 0x05, 0x0c, 0xfb, 0xfc, 0xff }; // ds:0x417a
-uint8_t  gs_dng11_chest5[5] = { 0x0e, 0x5c, 0x27, 0x30, 0xff }; // ds:0x4185
-uint8_t  gs_dng11_chest6[7] = { 0x86, 0x27, 0x5b, 0x60, 0x31, 0x91, 0xff }; // ds:0x418a
+uint8_t  gs_dng11_chest3[15] = {
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_ENTERMESSER,
+	ITEM_ENTERMESSER,
+	ITEM_ENTERMESSER,
+	ITEM_ENTERMESSER,
+	ITEM_ENTERMESSER,
+	ITEM_SCHWERT,
+	ITEM_SKRAJA,
+	ITEM_SKRAJA,
+	ITEM_ORKNASE,
+	0xff
+}; // ds:0x416b
+uint8_t  gs_dng11_chest4[11] = {
+	ITEM_KURZBOGEN,
+	ITEM_KURZBOGEN,
+	ITEM_SPEER,
+	ITEM_SPEER,
+	ITEM_SPEER,
+	ITEM_SPEER,
+	ITEM_SPEER,
+	ITEM_ARMBRUST,
+	ITEM_200_PFEILE,
+	ITEM_50_BOLZEN,
+	0xff
+}; // ds:0x417a
+uint8_t  gs_dng11_chest5[5] = {
+	ITEM_DOLCH,
+	ITEM_SCHNAPSFLASCHE,
+	ITEM_SILBERSCHMUCK,
+	ITEM_HEMD,
+	0xff
+}; // ds:0x4185
+uint8_t  gs_dng11_chest6[7] = {
+	ITEM_SKRAJA,
+	ITEM_SILBERSCHMUCK,
+	ITEM_WEINFLASCHE,
+	ITEM_WINTERMANTEL,
+	ITEM_HOSE,
+	ITEM_HEILTRANK,
+	0xff
+}; // ds:0x418a
 uint8_t  gs_dng11_chest7 = 0xff; // ds:0x4191
-uint8_t  gs_dng11_chest8[6] = { 0x5c, 0x5c, 0x5c, 0x0e, 0x91, 0xff }; // ds:0x4192
-uint8_t  gs_dng11_chest9[6] = { 0x1a, 0x5d, 0x49, 0x87, 0x87, 0xff }; // ds:0x4198
-uint8_t  gs_dng11_chest10[11] = { 0x79, 0x79, 0x79, 0x79, 0x1b, 0x1b, 0x1b, 0x1b, 0xfd, 0x87, 0xff }; // ds:0x419e
-uint8_t  gs_dng11_chest11[4] = { 0x5b, 0xc0, 0x0e, 0xff }; // ds:0x41a9
-uint8_t  gs_dng11_chest12[13] = { 0x4a, 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x27, 0x27, 0x27, 0x27, 0x4c, 0x4c, 0xff }; // ds:0x41ad
-uint8_t  gs_dng11_chest13[6] = { 0x91, 0x94, 0x2f, 0xcb, 0x01, 0xff }; // ds:0x41ba
-uint8_t  gs_dng11_chest14[6] = { 0x24, 0x1d, 0x5b, 0x9a, 0xbd, 0xff }; // ds:0x41c0
+uint8_t  gs_dng11_chest8[6] = {
+	ITEM_SCHNAPSFLASCHE,
+	ITEM_SCHNAPSFLASCHE,
+	ITEM_SCHNAPSFLASCHE,
+	ITEM_DOLCH,
+	ITEM_HEILTRANK,
+	0xff
+}; // ds:0x4192
+uint8_t  gs_dng11_chest9[6] = {
+	ITEM_BRECHEISEN,
+	ITEM_HACKE,
+	ITEM_SCHAUFEL,
+	ITEM_KRIEGSBEIL,
+	ITEM_KRIEGSBEIL,
+	0xff
+}; // ds:0x4198
+uint8_t  gs_dng11_chest10[11] = {
+	ITEM_SEIL,
+	ITEM_SEIL,
+	ITEM_SEIL,
+	ITEM_SEIL,
+	ITEM_HAMMER,
+	ITEM_HAMMER,
+	ITEM_HAMMER,
+	ITEM_HAMMER,
+	ITEM_20_KLETTERHAKEN,
+	ITEM_KRIEGSBEIL,
+	0xff
+}; // ds:0x419e
+uint8_t  gs_dng11_chest11[4] = {
+	ITEM_WEINFLASCHE,
+	ITEM_SEEKARTE,
+	ITEM_DOLCH,
+	0xff
+}; // ds:0x41a9
+uint8_t  gs_dng11_chest12[13] = {
+	ITEM_GOLDSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_GOLDSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_SILBERSCHMUCK,
+	ITEM_ROBE__RED,
+	ITEM_ROBE__RED,
+	0xff
+}; // ds:0x41ad
+uint8_t  gs_dng11_chest13[6] = {
+	ITEM_HEILTRANK,
+	ITEM_KL_ELIXIER,
+	ITEM_ALCHEMIESET,
+	ITEM_REZEPT_FUER_HYLAILER_FEUER,
+	ITEM_SCHWERT,
+	0xff
+}; // ds:0x41ba
+uint8_t  gs_dng11_chest14[6] = {
+	ITEM_SCHREIBZEUG,
+	ITEM_SCHRIFTROLLE,
+	ITEM_WEINFLASCHE,
+	ITEM_ZAUBERTRANK,
+	ITEM_LOBPREISUNGEN,
+	0xff
+}; // ds:0x41c0
 uint8_t  gs_dng15_took_cursed_money = 0; // ds:0x41c6
 uint8_t  gs_dng15_unknown_flag = 1; // ds:0x41c7
 uint8_t  gs_dng15_reached_hands = 0; // ds:0x41c8
@@ -2770,12 +3227,63 @@ uint8_t  gs_dng15_took_hoe = 0; // ds:0x41cb
 uint8_t  gs_dng15_ceilings[18] = { 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 2, 3, 1, 1 }; // ds:0x41cc
 uint8_t  gs_dng15_cursed_money[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x41de
 uint8_t  gs_dng15_undead_fight = 0; // ds:0x41e4
-uint8_t  gs_dng15_chest_equips[7] = { 0x5d, 0x02, 0x1b, 0x03, 0x65, 0x01, 0xff }; // ds:0x41e5
-uint8_t  gs_dng01_chest1_content[8] = { 0x70, 0x79, 0x79, 0x79, 0x1b, 0x08, 0x18, 0xff }; // ds:0x41ec
-uint8_t  gs_dng01_chest2_content[10] = { 0x03, 0x6d, 0x5c, 0x19, 0x29, 0x24, 0x1d, 0x27, 0x91, 0xff }; // ds:0x41f4
-uint8_t  gs_dng01_chest3_content[2] = { ITEM_DOLCH, 0xff }; // ds:0x41fe
-uint8_t  gs_dng01_chest5_content[13] = { 0x6e, 0x6e, 0x03, 0x03, 0x70, 0x70, 0x43, 0x62, 0x62, 0x62, 0x10, 0x66, 0xff }; // ds:0x4200
-uint8_t  gs_dng01_chest7_content[5] = { ITEM_SCHWERT, ITEM_DOLCH, ITEM_GOLDSCHMUCK, ITEM_DIETRICHE, 0xff }; // ds:0x420d
+uint8_t  gs_dng15_chest_equips[7] = {
+	ITEM_HACKE,
+	ITEM_KNUEPPEL,
+	ITEM_HAMMER,
+	ITEM_SAEBEL,
+	ITEM_KRIEGSHAMMER,
+	ITEM_SCHWERT,
+	0xff
+}; // ds:0x41e5
+uint8_t  gs_dng01_chest1_content[8] = {
+	ITEM_ENTERMESSER,
+	ITEM_SEIL,
+	ITEM_SEIL,
+	ITEM_SEIL,
+	ITEM_HAMMER,
+	ITEM_KRIEGSBEIL__SPECIAL,
+	ITEM_WURFHAKEN,
+	0xff
+}; // ds:0x41ec
+uint8_t  gs_dng01_chest2_content[10] = {
+	ITEM_SAEBEL,
+	ITEM_MENGBILAR,
+	ITEM_SCHNAPSFLASCHE,
+	ITEM_LATERNE__UNLIT,
+	ITEM_OEL,
+	ITEM_SCHREIBZEUG,
+	ITEM_SCHRIFTROLLE,
+	ITEM_SILBERSCHMUCK,
+	ITEM_HEILTRANK,
+	0xff
+}; // ds:0x41f4
+uint8_t  gs_dng01_chest3_content[2] = {
+	ITEM_DOLCH,
+	0xff
+}; // ds:0x41fe
+uint8_t  gs_dng01_chest5_content[13] = {
+	ITEM_SCHWERER_DOLCH,
+	ITEM_SCHWERER_DOLCH,
+	ITEM_SAEBEL,
+	ITEM_SAEBEL,
+	ITEM_ENTERMESSER,
+	ITEM_ENTERMESSER,
+	ITEM_DEGEN,
+	ITEM_WURFMESSER,
+	ITEM_WURFMESSER,
+	ITEM_WURFMESSER,
+	ITEM_WURFBEIL,
+	ITEM_DREIZACK,
+	0xff
+}; // ds:0x4200
+uint8_t  gs_dng01_chest7_content[5] = {
+	ITEM_SCHWERT,
+	ITEM_DOLCH,
+	ITEM_GOLDSCHMUCK,
+	ITEM_DIETRICHE,
+	0xff
+}; // ds:0x420d
 int8_t  gs_unconscious_message[7] = {0}; // ds:0x4212
 int8_t  gs_food_message[7] = {0};	// ds:0x4219
 unsigned char g_unkn_026[2] = { 0, 0 }; // ds:0x4220
@@ -3270,13 +3778,13 @@ char g_noway_string[40] = "IN DIESE RICHTUNG GEHT ES NICHT WEITER."; // ds:0x4a6
 #if !defined(__BORLANDC__)
 struct struct_hero *gs_ruin_hero;			// ds:0x3e1c;
 struct struct_hero *gs_main_acting_hero;		// ds:0x3e20;
-int16_t  *gs_route_course_ptr;				// ds:0x425a;
-int16_t  *gs_route_course_start;				// ds:0x425e;
+int16_t *gs_route_course_ptr;				// ds:0x425a;
+int16_t *gs_route_course_start;				// ds:0x425e;
 int16_t *gs_route_course_ptr2;				// ds:0x4262;
 uint8_t *gs_sea_travel_courses;				// ds:0x4266
 struct struct_tevent *gs_tevents_tab_ptr;		// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e
-uint8_t  *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
+uint8_t *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
 #endif
 
 
