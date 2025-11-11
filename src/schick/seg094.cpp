@@ -75,7 +75,7 @@ void prepare_map_marker(void)
 		process_nvf_extraction(&nvf);
 	}
 
-	set_textbox_positions(gs_current_town);
+	set_textbox_positions(gs_town_id);
 }
 
 void set_textbox_positions(signed short town_id)
@@ -508,7 +508,7 @@ signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_r
 	char *destinations_tab[7];
 
 	old_route_id2 = signpost_ptr->linked_travel_routes[old_route_id] - 1;
-	gs_current_town = town_id = gs_trv_destination;
+	gs_town_id = town_id = gs_trv_destination;
 	signpost_ptr = &g_signposts[0];
 
 	do {
@@ -527,8 +527,8 @@ signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_r
 						if (route_id2 != route_id1)
 						{
 							destinations_tab[town_i++] = get_ttx(235 + (gs_trv_menu_towns[town_i] =
-								((answer = g_land_routes[route_id - 1].town1_id) != gs_current_town ?
-									(signed char)answer : g_land_routes[route_id - 1].town2_id)));
+								((answer = g_land_routes[route_id - 1].town_id_1) != gs_town_id ?
+									(signed char)answer : g_land_routes[route_id - 1].town_id_2)));
 						}
 						route_id2++;
 					}
@@ -604,7 +604,7 @@ signed short TM_enter_target_town(void)
 				do {
 					tmp2 = signpost_ptr->linked_travel_routes[tmp] - 1;
 
-					if ((g_land_routes[tmp2].town1_id == gs_current_town) || (g_land_routes[tmp2].town2_id == gs_current_town))
+					if ((g_land_routes[tmp2].town_id_1 == gs_town_id) || (g_land_routes[tmp2].town_id_2 == gs_town_id))
 					{
 						signpost_id = signpost_ptr->typeindex;
 						break;
@@ -622,8 +622,8 @@ signed short TM_enter_target_town(void)
 		if (signpost_id)
 		{
 			/* set the target town as current town */
-			tmp2 = gs_current_town;
-			gs_current_town = (signed char)gs_travel_destination_town_id;
+			tmp2 = gs_town_id;
+			gs_town_id = (signed char)gs_travel_destination_town_id;
 
 			/* load the map */
 			call_load_area(1);
@@ -639,7 +639,7 @@ signed short TM_enter_target_town(void)
 			gs_travel_destination_y = tmp & 0x0f;
 			gs_travel_destination_viewdir = TM_enter_target_town_viewdir(locations_tab_ptr->pos);
 
-			gs_current_town = (signed char)tmp2;
+			gs_town_id = (signed char)tmp2;
 
 			/* load the map */
 			call_load_area(1);
@@ -719,14 +719,14 @@ void TM_func8(signed short a1)
 {
 	if (!(g_route59_flag & 1))
 	{
-		if (gs_current_town == TOWN_ID_PEILINEN)
+		if (gs_town_id == TOWN_ID_PEILINEN)
 		{
 			TM_draw_track(11, 9, 0, a1);
 		} else {
 			TM_draw_track(11, 17, 1, a1);
 		}
 	} else {
-		if (gs_current_town == TOWN_ID_KRAVIK)
+		if (gs_town_id == TOWN_ID_KRAVIK)
 		{
 			TM_draw_track(14, 8, 0, a1);
 		} else {

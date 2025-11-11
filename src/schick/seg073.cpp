@@ -40,11 +40,11 @@ unsigned short get_tavern_gossip(void)
 	unsigned short r_si;
 	unsigned short r_di;
 
-	r_di = g_towns_gossip_max[gs_current_town - 1];
+	r_di = g_towns_gossip_max[gs_town_id - 1];
 
 	r_si = r_di = random_schick(r_di) - 1;
 
-	switch (gs_current_town - 1) {
+	switch (gs_town_id - 1) {
 	/* Thorwal */
 	case (TOWN_ID_THORWAL - 1): {
 		if (r_si == 6)
@@ -444,7 +444,7 @@ unsigned short get_tavern_gossip(void)
 	}
 	}
 
-	return r_di + g_towns_gossip_off[gs_current_town - 1];
+	return r_di + g_towns_gossip_off[gs_town_id - 1];
 
 }
 
@@ -499,7 +499,7 @@ signed short tavern_quest_infos(void)
 
 		/* Original-Bug: which return value here? */
 
-	} else if ((gs_current_town == TOWN_ID_THORWAL) && !gs_quest_deadship && (gs_current_typeindex == 6))
+	} else if ((gs_town_id == TOWN_ID_THORWAL) && !gs_quest_deadship && (gs_current_typeindex == 6))
 	{
 		/* print the message about a ghost ship */
 		GUI_output(get_tx(209));
@@ -507,7 +507,7 @@ signed short tavern_quest_infos(void)
 		/* remember that */
 		gs_quest_deadship = l_si = 1;
 
-	} else if ((gs_current_town == TOWN_ID_SKJAL) &&	(gs_current_typeindex == 69) &&
+	} else if ((gs_town_id == TOWN_ID_SKJAL) &&	(gs_current_typeindex == 69) &&
 			(gs_informer_flags[INFORMER_JURGE] != 2) && (gs_informer_flags[INFORMER_JURGE] != 0) &&
 			!gs_jurge_awaits_letter)
 	{
@@ -517,7 +517,7 @@ signed short tavern_quest_infos(void)
 			gs_current_informer = l_si = 1;
 		}
 
-	} else if ((gs_current_town == TOWN_ID_VIDSAND) && (gs_current_typeindex == 84) &&
+	} else if ((gs_town_id == TOWN_ID_VIDSAND) && (gs_current_typeindex == 84) &&
 			(gs_informer_flags[INFORMER_RAGNA] != 2) && (gs_informer_flags[INFORMER_RAGNA] != 0))
 	{
 		/* meet Informer Ragna */
@@ -526,7 +526,7 @@ signed short tavern_quest_infos(void)
 			gs_current_informer = l_si = 6;
 		}
 
-	} else if ((gs_current_town == TOWN_ID_ANGBODIRTAL) && ((gs_current_typeindex == 27) || (gs_current_typeindex == 28)) &&
+	} else if ((gs_town_id == TOWN_ID_ANGBODIRTAL) && ((gs_current_typeindex == 27) || (gs_current_typeindex == 28)) &&
 			(gs_informer_flags[INFORMER_BEORN] != 2) && (gs_informer_flags[INFORMER_BEORN] != 0))
 	{
 		/* meet Informer Beorn */
@@ -538,7 +538,7 @@ signed short tavern_quest_infos(void)
 		}
 
 
-	} else if ((gs_current_town == TOWN_ID_BREIDA) && ((gs_current_typeindex == 14) || (gs_current_typeindex == 15)) &&
+	} else if ((gs_town_id == TOWN_ID_BREIDA) && ((gs_current_typeindex == 14) || (gs_current_typeindex == 15)) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 2) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 0) &&
 			(gs_got_main_quest != 0))
@@ -549,7 +549,7 @@ signed short tavern_quest_infos(void)
 			gs_current_informer = l_si = 8;
 		}
 
-	} else if ((gs_current_town == TOWN_ID_HJALSINGOR) &&
+	} else if ((gs_town_id == TOWN_ID_HJALSINGOR) &&
 			((gs_current_typeindex == 61) || (gs_current_typeindex == 62)) &&
 			(gs_informer_flags[INFORMER_ALGRID] != 2) &&
 			(gs_informer_flags[INFORMER_ALGRID] != 0))
@@ -562,7 +562,7 @@ signed short tavern_quest_infos(void)
 			gs_current_informer = l_si = 14;
 		}
 
-	} else if ((gs_current_town == TOWN_ID_PHEXCAER) && gs_alrik_derondan) {
+	} else if ((gs_town_id == TOWN_ID_PHEXCAER) && gs_alrik_derondan) {
 
 		/* meet Alrik Derondan */
 		PHX_alrik_derondan();

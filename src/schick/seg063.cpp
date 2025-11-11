@@ -150,8 +150,8 @@ void passages_init(void)
 
 #if !defined(__BORLANDC__)
 	D1_LOG("%16s - %16s: %d %d %d %d %d %d\n",
-		get_ttx(route->town1 + 0xeb),
-		get_ttx(route->town2 + 0xeb),
+		get_ttx(route->town_id_1 + 0xeb),
+		get_ttx(route->town_id_2 + 0xeb),
 		route->distance,
 		route->frequency,
 		route->passage_timer,
@@ -451,7 +451,7 @@ void do_harbor(void)
 
 				set_palette(gs_travel_map_ptr + 64002, 0, 0x20);
 
-				mod_clock_pos(gs_current_town);
+				mod_clock_pos(gs_town_id);
 
 				set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
@@ -459,7 +459,7 @@ void do_harbor(void)
 				g_wallclock_y = g_basepos_y + 87;
 				g_wallclock_update = 1;
 
-				sea_travel(gs_current_sea_route_id, (g_sea_routes[gs_current_sea_route_id].town1 == gs_current_town ? 0 : 1));
+				sea_travel(gs_current_sea_route_id, (g_sea_routes[gs_current_sea_route_id].town_id_1 == gs_town_id ? 0 : 1));
 				passage_arrival();
 
 				g_wallclock_update = g_basepos_x = g_basepos_y = gs_sea_travel_psgbooked_flag = 0;
@@ -469,7 +469,7 @@ void do_harbor(void)
 
 				if (!gs_travel_detour) {
 
-					gs_current_town = (signed char)gs_travel_destination_town_id;
+					gs_town_id = (signed char)gs_travel_destination_town_id;
 					gs_x_target_bak = gs_travel_destination_x;
 					gs_y_target_bak = gs_travel_destination_y;
 					gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
@@ -499,7 +499,7 @@ void do_harbor(void)
 
 	} else {
 
-		gs_current_town = TOWN_ID_NONE;
+		gs_town_id = TOWN_ID_NONE;
 	}
 }
 

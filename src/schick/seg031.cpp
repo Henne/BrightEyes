@@ -238,7 +238,7 @@ char* get_informer_forename(void)
 
 	for (i = 0; i < 15; i++, p_info += 1) {
 
-		if (p_info->town_id == gs_current_town) {
+		if (p_info->town_id == gs_town_id) {
 
 			i = 0;
 			informer_name = get_ttx(p_info->name_id);
@@ -272,7 +272,7 @@ signed int get_town_lookup_entry(void)
 
 	for (i = 0; i < 15; i++, p_info++) {
 
-		if (p_info->town_id == gs_current_town) {
+		if (p_info->town_id == gs_town_id) {
 			return i;
 		}
 	}
@@ -295,7 +295,7 @@ char* get_informer_hint(void)
 
 	for (i = 0; i < 15; i++, p_info++) {
 
-		if (p_info->town_id == gs_current_town) {
+		if (p_info->town_id == gs_town_id) {
 			return get_ttx(i + 715);
 		}
 	}
@@ -334,7 +334,7 @@ char* load_current_town_gossip(void)
 	char **ptr;
 
 	/* load TOWN.LTX */
-	load_ltx(gs_current_town + ARCHIVE_FILE_CITY_LTX);
+	load_ltx(gs_town_id + ARCHIVE_FILE_CITY_LTX);
 
 	/* mark some buffers invalid */
 	g_area_prepared = g_current_ani = -1;
@@ -362,7 +362,7 @@ char* get_random_tavern_message(void)
 
 	} else if (randval == 3) {
 
-		sprintf(g_text_output_buf, ptr, get_ttx(gs_current_town + 235));
+		sprintf(g_text_output_buf, ptr, get_ttx(gs_town_id + 235));
 
 		return g_text_output_buf;
 

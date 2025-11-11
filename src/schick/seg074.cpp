@@ -62,7 +62,7 @@ void show_automap(void)
 	signed short loc_bak;
 	signed short done;
 	signed short dungeon;
-	signed short town;
+	signed short town_id;
 	signed short tw_bak;
 
 	if (!gs_dungeon_light ||
@@ -72,9 +72,9 @@ void show_automap(void)
 		g_special_screen = 1;
 
 		dungeon = gs_dungeon_id;
-		town = gs_current_town;
+		town_id = gs_town_id;
 
-		gs_current_town = (gs_dungeon_id = 0);
+		gs_town_id = (gs_dungeon_id = 0);
 
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
@@ -83,7 +83,7 @@ void show_automap(void)
 				((gs_x_target - 8 < 0) ? 0 :
 				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
-		gs_current_town = (signed char)town;
+		gs_town_id = (signed char)town_id;
 		gs_dungeon_id = dungeon;
 
 		g_request_refresh = 1;
@@ -315,7 +315,7 @@ void render_automap(signed short x_off)
 		if ((gs_current_group != group_i) &&
 			(gs_group_member_counts[group_i] > 0) &&
 			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
-			(gs_groups_town[group_i] == gs_current_town) &&
+			(gs_groups_town_id[group_i] == gs_town_id) &&
 			(gs_groups_dungeon_id[group_i] == gs_dungeon_id) &&
 			!is_group_in_prison(group_i) &&
 			(gs_groups_x_target[group_i] - x_off >= 0) &&
@@ -513,8 +513,8 @@ signed short select_teleport_dest(void)
 	draw_main_screen();
 
 	dungeon = gs_dungeon_id;
-	town = gs_current_town;
-	gs_current_town = gs_dungeon_id = 0;
+	town = gs_town_id;
+	gs_town_id = gs_dungeon_id = 0;
 
 	l_si = ((g_dng_map_size == 16) ? 0 :
 			((gs_x_target - 8 < 0) ? 0 :
@@ -523,7 +523,7 @@ signed short select_teleport_dest(void)
 	g_automap_selx = gs_x_target;
 	g_automap_sely = gs_y_target;
 	gs_dungeon_id = dungeon;
-	gs_current_town = (signed char)town;
+	gs_town_id = (signed char)town;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 
@@ -617,7 +617,7 @@ signed short select_teleport_dest(void)
 #if !defined(__BORLANDC__)
 	l_di = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
-	if (gs_current_town != TOWN_ID_NONE) {
+	if (gs_town_id != TOWN_ID_NONE) {
 		l_di = get_border_index(l_di);
 	} else {
 		l_di = div16(l_di);
@@ -626,7 +626,7 @@ signed short select_teleport_dest(void)
 	/* REMARK: enforce the use of register DI */
 	_DI = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
-	if (gs_current_town != TOWN_ID_NONE) {
+	if (gs_town_id != TOWN_ID_NONE) {
 		_DI = get_border_index(_DI);
 	} else {
 		_DI = div16(_DI);
@@ -642,10 +642,10 @@ signed short select_teleport_dest(void)
 
 	} else
 #if !defined(__BORLANDC__)
-		if ((gs_dungeon_id && (l_di == 15)) || ((gs_current_town != TOWN_ID_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
+		if ((gs_dungeon_id && (l_di == 15)) || ((gs_town_id != TOWN_ID_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
 #else
 		/* REMARK: enforce the use of register DI */
-		if ((gs_dungeon_id && (_DI == 15)) || ((gs_current_town != TOWN_ID_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
+		if ((gs_dungeon_id && (_DI == 15)) || ((gs_town_id != TOWN_ID_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
 #endif
 	{
 		strcpy(g_dtp2, get_ttx(611));
@@ -674,7 +674,7 @@ signed short get_maploc(signed short x, signed short y)
 	signed short pos_xy = TOWN_POS(x,y);
 
 	// Wow. Original game has these hard-coded manipulation of the data.
-	if (gs_current_town == TOWN_ID_THORWAL) {
+	if (gs_town_id == TOWN_ID_THORWAL) {
 
 		if (pos_xy == TOWN_POS(4,13)) {
 			// schwarzer Finger
@@ -689,12 +689,12 @@ signed short get_maploc(signed short x, signed short y)
 		{
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (gs_current_town == TOWN_ID_PREM) {
+	} else if (gs_town_id == TOWN_ID_PREM) {
 		if (pos_xy == TOWN_POS(28,9)) {
 			// Inn "Zur Trutz". Why is this a special case here?
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (gs_current_town == TOWN_ID_GUDDASUNDEN) {
+	} else if (gs_town_id == TOWN_ID_GUDDASUNDEN) {
 		if (pos_xy == TOWN_POS(1,14)) {
 			// Harbor, which is located in a building (not a signpost).
 			return TOWN_TILE_SIGNPOST;

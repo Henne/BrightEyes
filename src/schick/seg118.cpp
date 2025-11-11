@@ -579,11 +579,11 @@ void tevent_145(void)
 		if (answer == 1)
 		{
 			gs_trv_destination = TOWN_ID_KRAVIK;
-			gs_current_town = TOWN_ID_SKELELLEN;
+			gs_town_id = TOWN_ID_SKELELLEN;
 
 		} else {
 			gs_trv_destination = TOWN_ID_SKELELLEN;
-			gs_current_town = TOWN_ID_KRAVIK;
+			gs_town_id = TOWN_ID_KRAVIK;
 		}
 
 	} else {
@@ -596,11 +596,11 @@ void tevent_145(void)
 		if (answer == 1) {
 
 			gs_trv_destination = TOWN_ID_PEILINEN;
-			gs_current_town = TOWN_ID_ROVAMUND;
+			gs_town_id = TOWN_ID_ROVAMUND;
 
 		} else {
 			gs_trv_destination = TOWN_ID_ROVAMUND;
-			gs_current_town = TOWN_ID_PEILINEN;
+			gs_town_id = TOWN_ID_PEILINEN;
 		}
 	}
 

@@ -132,11 +132,11 @@ void load_dungeon_ddt(void)
 void prepare_city_area(void)
 {
 	signed int i;
-	const signed int ltx_index = gs_current_town + ARCHIVE_FILE_CITY_LTX;
+	const signed int ltx_index = gs_town_id + ARCHIVE_FILE_CITY_LTX;
 	uint8_t* arr[4];
 
 
-	if (g_town_loaded_town_id != gs_current_town) {
+	if (g_town_loaded_town_id != gs_town_id) {
 		load_area_description(1);
 		g_dng_loaded_dungeon_id = -1;
 	}
@@ -199,7 +199,7 @@ void prepare_city_area(void)
 		g_area_prepared = AREA_TYPE_TOWN;
 	}
 
-	g_town_loaded_town_id = gs_current_town;
+	g_town_loaded_town_id = gs_town_id;
 	g_dng_loaded_dungeon_id = -1;
 
 	set_automap_tiles(gs_x_target, gs_y_target);
@@ -314,7 +314,7 @@ void load_area_description(const signed int type)
 			g_areadescr_fileid = f_index = gs_dungeon_id + (ARCHIVE_FILE_DNGS-1);
 		} else {
 			/* city */
-			g_areadescr_fileid = f_index = gs_current_town + (ARCHIVE_FILE_CITY_DAT-1);
+			g_areadescr_fileid = f_index = gs_town_id + (ARCHIVE_FILE_CITY_DAT-1);
 		}
 
 		/* save dungeon level */
@@ -326,7 +326,7 @@ void load_area_description(const signed int type)
 		/* load DAT or DNG file */
 		handle = load_archive_file(f_index + 0x8000);
 
-		if (!gs_dungeon_id && (gs_current_town == TOWN_ID_THORWAL || gs_current_town == TOWN_ID_PREM || gs_current_town == TOWN_ID_PHEXCAER))
+		if (!gs_dungeon_id && (gs_town_id == TOWN_ID_THORWAL || gs_town_id == TOWN_ID_PREM || gs_town_id == TOWN_ID_PHEXCAER))
 		{
 			/* path taken in THORWAL PREM and PHEXCAER */
 			_read(handle, g_dng_map, 512);

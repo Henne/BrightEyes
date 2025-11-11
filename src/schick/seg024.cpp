@@ -125,7 +125,7 @@ void diary_new_entry(void)
 	entry = &gs_diary_entries[gs_diary_entry_counter - 1];
 
 	/* avoid double entries for the same town */
-	if (gs_current_town != entry->town_id) {
+	if (gs_town_id != entry->town_id) {
 
 		/* make a pointer to the current entry */
 		entry = &gs_diary_entries[gs_diary_entry_counter];
@@ -140,7 +140,7 @@ void diary_new_entry(void)
 		/* Write year */
 		entry->year = gs_year;
 		/* Write city */
-		entry->town_id = gs_current_town;
+		entry->town_id = gs_town_id;
 	}
 }
 

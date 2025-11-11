@@ -515,7 +515,7 @@ signed short DNG02_handler(void)
 	} else if (target_pos == DNG_POS(0,1,0) && target_pos != gs_dng_handled_pos)
 	{
 		leave_dungeon();
-		gs_current_town = (signed char)gs_travel_destination_town_id;
+		gs_town_id = (signed char)gs_travel_destination_town_id;
 		gs_x_target = gs_travel_destination_x;
 		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;

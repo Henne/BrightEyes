@@ -152,7 +152,7 @@ void show_citizen(void)
  */
 void do_house(void)
 {
-	signed short i;
+	signed short i; /* dual use as a town_id and a hero_pos */
 	signed short l_di;
 	struct struct_hero *hero;
 
@@ -184,7 +184,7 @@ void do_house(void)
 			{
 				/* every hero must pass a sneak -2 test */
 
-				i = gs_current_town;
+				i = gs_town_id;
 
 				if ((i == TOWN_ID_THORWAL) || (i == TOWN_ID_PREM) || (i == TOWN_ID_PHEXCAER) || (i == TOWN_ID_OBERORKEN)) {
 
@@ -270,9 +270,9 @@ void enter_map(void)
 {
 	gs_current_signpost = gs_current_typeindex;
 
-	gs_current_typeindex = gs_current_town;
+	gs_current_typeindex = gs_town_id;
 
-	gs_current_loctype = gs_current_town = TOWN_ID_NONE;
+	gs_current_loctype = gs_town_id = TOWN_ID_NONE;
 
 	gs_show_travel_map = 1;
 }
@@ -477,14 +477,14 @@ signed short game_options(void)
 
 	memset((uint8_t*)g_buffer9_ptr, 0, 28000);
 
-	if (gs_current_town != TOWN_ID_NONE) {
+	if (gs_town_id != TOWN_ID_NONE) {
 
 		/* if the party is in a town */
 		load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
-		GUI_print_header(get_tx(gs_current_town - 1));
+		GUI_print_header(get_tx(gs_town_id - 1));
 
-		load_tx(gs_current_town + (ARCHIVE_FILE_CITY_DAT-1));
+		load_tx(gs_town_id + (ARCHIVE_FILE_CITY_DAT-1));
 
 		g_pic_copy.x1 = 0;
 		g_pic_copy.y1 = 0;
@@ -616,7 +616,7 @@ signed short game_options(void)
 	g_request_refresh = 1;
 	g_special_screen = 0;
 
-	if (gs_current_town != TOWN_ID_NONE) {
+	if (gs_town_id != TOWN_ID_NONE) {
 		g_fading_state = 3;
 	}
 
@@ -783,7 +783,7 @@ void leave_dungeon(void)
 	}
 
 	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
-	gs_current_town = gs_current_town_bak;
+	gs_town_id = gs_town_id_bak;
 	gs_dungeon_id_bak = gs_dungeon_id;
 	gs_dungeon_id = gs_dungeon_level = gs_dungeon_light = 0;
 	g_town_loaded_town_id = -1;
@@ -826,8 +826,8 @@ void tumult(void)
 
 	/* the guards or a mob */
 	sprintf(g_dtp2, get_ttx(765),
-		((gs_current_town == TOWN_ID_PREM || gs_current_town == TOWN_ID_PHEXCAER ||
-	  		gs_current_town == TOWN_ID_THORWAL || gs_current_town == TOWN_ID_OBERORKEN)
+		((gs_town_id == TOWN_ID_PREM || gs_town_id == TOWN_ID_PHEXCAER ||
+	  		gs_town_id == TOWN_ID_THORWAL || gs_town_id == TOWN_ID_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
 	GUI_output(g_dtp2);

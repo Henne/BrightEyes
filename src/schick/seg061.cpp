@@ -127,7 +127,7 @@ void do_temple(void)
 			/* location string */
 			sprintf(g_dtp2, get_ttx(235),
 				get_ttx(g_temple_god + 21),	/* name of the god */
-				(char*)(gs_current_typeindex != 58 ? get_ttx(gs_current_town + 235): get_ttx(622)));
+				(char*)(gs_current_typeindex != 58 ? get_ttx(gs_town_id + 235): get_ttx(622)));
 
 			GUI_print_loc_line(g_dtp2);
 
@@ -176,7 +176,7 @@ void do_temple(void)
 				} while (game_state == -1);
 
 				/* location string */
-				sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_current_town + 235));
+				sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_town_id + 235));
 				GUI_print_loc_line(g_dtp2);
 
 				draw_status_line();
@@ -318,7 +318,7 @@ void char_add(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf(g_dtp2, get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_current_town + 235));
+					sprintf(g_dtp2, get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_town_id + 235));
 
 					GUI_print_loc_line(g_dtp2);
 				}
@@ -370,7 +370,7 @@ void char_letgo(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_current_town + 235));
+					sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_town_id + 235));
 					GUI_print_loc_line(g_dtp2);
 				}
 			}

@@ -295,7 +295,7 @@ signed short DNG11_handler(void)
 	{
 		leave_dungeon();
 
-		gs_current_town = gs_travel_destination_town_id;
+		gs_town_id = gs_travel_destination_town_id;
 		gs_x_target = gs_travel_destination_x;
 		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;

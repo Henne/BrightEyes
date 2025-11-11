@@ -364,14 +364,14 @@ void do_inn(void)
 					gs_groups_x_target[group_nr] = 0;
 					gs_groups_y_target[group_nr] = 0; /* TODO: remove one of them */
 					gs_groups_y_target[group_nr] = 0;
-					gs_groups_town[group_nr] = 0;
+					gs_groups_town_id[group_nr] = 0;
 					gs_groups_dungeon_id[group_nr] = 0;
 					gs_groups_dng_level[group_nr] = 0;
 					gs_groups_direction_bak[group_nr] = 0;
 					gs_groups_x_target_bak[group_nr] = 0;
 					gs_groups_y_target_bak[group_nr] = 0;
 					gs_groups_current_loctype_bak[group_nr] = LOCTYPE_NONE;
-					gs_groups_town_bak[group_nr] = 0;
+					gs_groups_town_id_bak[group_nr] = 0;
 					gs_groups_dungeon_id_bak[group_nr] = 0;
 					gs_groups_dng_level_bak[group_nr] = 0;
 					gs_group_member_counts[group_nr] = 0;
@@ -709,7 +709,7 @@ void TLK_herberg(signed short state)
 		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 11) {
 		tumult();
-		gs_town_outlawed_flags[gs_current_town] = 1;
+		gs_town_outlawed_flags[gs_town_id] = 1;
 		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
