@@ -270,9 +270,9 @@ void tevent_135(void)
 
 								GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
-								if (!(hero->start_gear & 0x2)) {
+								if (!(hero->start_gear__monolith_reward & 0x2)) {
 
-									hero->start_gear |= 0x02;
+									hero->start_gear__monolith_reward |= 0x02;
 									hero->attrib[ATTRIB_IN].normal++;
 									hero->attrib[ATTRIB_IN].current++;
 								}
