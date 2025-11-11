@@ -262,7 +262,7 @@ struct spell_descr {
 	int8_t attrib3;
 	int8_t ae_cost;
 	int8_t where_to_use;	/* -1: not in fight; 0: normal and fight; 1: only in fight */
-	int8_t unkn6;
+	int8_t ani;
 	int8_t target_type;
 	int8_t range;
 	int8_t fight;

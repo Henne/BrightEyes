@@ -684,7 +684,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					g_attacker_dead = 1;
 				}
 
-				l6 = g_spell_descriptions[hero->spell_id].unkn6;
+				l6 = g_spell_descriptions[hero->spell_id].ani;
 
 				*g_dtp2 = '\0';
 
