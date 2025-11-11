@@ -183,7 +183,7 @@ signed short DNG07_handler(void)
 			/* ORIGINAL-BUG: forgot to set hero */
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 				{
 					hero->attrib[ATTRIB_MU].current += 3;
 
@@ -358,7 +358,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 				{
 					/* the twelve will grant miracles again */
 					hero->flags.gods_pissed = 0;

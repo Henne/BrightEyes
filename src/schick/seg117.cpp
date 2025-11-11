@@ -134,7 +134,7 @@ void hunt_karen(void)
 			for (i = passed = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) &&
-					(hero->group_id == gs_current_group) &&
+					(hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead &&
 					(test_skill(hero, TA_SCHLEICHEN, 2) > 0))
 				{
@@ -151,7 +151,7 @@ void hunt_karen(void)
 				hero = get_hero(0);
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
@@ -214,7 +214,7 @@ void hunt_wildboar(void)
 			/* make a STEALTH+0 test and count the heroes who passed it */
 			for (i = passed = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead && (test_skill(hero, TA_SCHLEICHEN, 0) > 0))
 				{
 					passed++;
@@ -230,7 +230,7 @@ void hunt_wildboar(void)
 				hero = get_hero(0);
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
-					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
@@ -288,7 +288,7 @@ void hunt_cavebear(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 
 				/* AT of the current weapon - (RS-BE / 2) <= 1W20 */
@@ -341,7 +341,7 @@ void hunt_viper(void)
 		/* hero is not dead */
 		/* check GE+0 */
 		/* Original-Bug: something was forgotten */
-		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_current_group) &&
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_active_group_id) &&
 			(!hero_i->flags.dead) && (test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
 		{
 			/* remember the hero */
@@ -404,7 +404,7 @@ void octopus_attack(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && !overboard[i])
 			{
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -475,7 +475,7 @@ void octopus_attack(void)
 		/* octopus has won. all heroes disappear in the open sea. */
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group)) {
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id)) {
 				hero_disappear(hero, i, -2);
 			}
 		}
@@ -771,7 +771,7 @@ void TLK_way_to_ruin(const signed int state)
 			hero = get_hero(g_tlk_ruin_hero_counter);
 			g_tlk_ruin_hero_counter++;
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead) {
 
 				gs_ruin_hero = hero;
@@ -828,7 +828,7 @@ void TLK_way_to_ruin(const signed int state)
 
 		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
 		       	{
 				g_tlk_ruin_hero_counter++;
@@ -855,7 +855,7 @@ void TLK_way_to_ruin(const signed int state)
 
 		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
 			{
 				g_tlk_ruin_hero_counter++;

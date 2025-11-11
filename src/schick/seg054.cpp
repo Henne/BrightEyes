@@ -137,7 +137,7 @@ struct struct_hero* get_first_brewing_hero(void)
 	for (i = 0; i < 7; i++, hero++)
 # endif
 	{
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_active_group_id) &&
 			hero->flags.brewing && (hero->alchemy_inn_id == gs_current_typeindex))
 		{
 			return hero;
@@ -189,7 +189,7 @@ void do_inn(void)
 	 * a textbox is shown with the possibility to interrupt the brewing process.
 	 * However, this textbox is not shown if a single hero enters the inn. */
 
-	if (gs_group_member_counts[gs_current_group] == 1) {
+	if (gs_group_member_counts[gs_active_group_id] == 1) {
 		/* current group consists only of a single hero */
 
 		hero = get_first_hero_available_in_group();
@@ -285,7 +285,7 @@ void do_inn(void)
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
 		/*
-		if (gs_group_member_counts[gs_current_group] != 1) {
+		if (gs_group_member_counts[gs_active_group_id] != 1) {
 			D1_INFO("FEHLER: Gruppengroesse eines brauenden Helden ist nicht 1.");
 		}
 		*/
@@ -316,7 +316,7 @@ void do_inn(void)
 	} else {
 		hero = get_hero(0);
 		for (i = 0; i < 7; i++, hero++) {
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_active_group_id) &&
 				hero->flags.brewing && (hero->alchemy_inn_id == gs_current_typeindex))
 			{
 				draw_status_line();
@@ -376,8 +376,8 @@ void do_inn(void)
 					gs_groups_dng_level_bak[group_nr] = 0;
 					gs_group_member_counts[group_nr] = 0;
 
-					gs_group_member_counts[gs_current_group]++;
-					hero->group_id = gs_current_group;
+					gs_group_member_counts[gs_active_group_id]++;
+					hero->group_id = gs_active_group_id;
 
 					GRP_sort_heroes();
 				}
@@ -475,7 +475,7 @@ void do_inn(void)
 
 					for (i = 0, hero2 = get_hero(0); i <= 6; i++, hero2++) {
 
-						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_id == gs_current_group) && !hero2->flags.dead)
+						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_id == gs_active_group_id) && !hero2->flags.dead)
 						{
 							portion_size = (21 - inn->quality) * 20;
 							if (portion_size > 100) {
@@ -630,7 +630,7 @@ void do_inn(void)
 					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero++) {
 
-						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 						{
 							if (booked_days > 1) {
 								/* Original-Bug 7:

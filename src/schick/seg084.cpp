@@ -105,7 +105,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -136,7 +136,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -156,7 +156,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -180,7 +180,7 @@ signed short DNG09_handler(void)
 	{
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_skill(hero, TA_GEFAHRENSINN, 2) > 0)
 			{
 				l3 = 1;
@@ -205,7 +205,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -233,7 +233,7 @@ signed short DNG09_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
@@ -287,7 +287,7 @@ signed short DNG09_handler(void)
 				*(amap_ptr + MAP_POS(4,5)) &= (DNG_TILE_CORRIDOR << 4) + MAP_POS(15,0);
 				*(amap_ptr + MAP_POS(3,5)) |= 0xf0; /* clear flags */
 
-				if (gs_group_member_counts[gs_current_group] > 1)
+				if (gs_group_member_counts[gs_active_group_id] > 1)
 				{
 					gs_direction_bak = (gs_direction);
 					l3 = 0;
@@ -298,7 +298,7 @@ signed short DNG09_handler(void)
 
 					hero->group_id = (signed char)l3;
 					gs_group_member_counts[l3]++;
-					gs_group_member_counts[gs_current_group]--;
+					gs_group_member_counts[gs_active_group_id]--;
 					GRP_save_pos(l3);
 					gs_dng09_lever_fast = 1;
 				}
@@ -319,7 +319,7 @@ signed short DNG09_handler(void)
 		for (i = l3 = 0; i < 6; i++)
 		{
 			if (gs_groups_x_target[i] == 7 && gs_groups_y_target[i] == 13 &&
-				gs_groups_dng_level[i] == 1 && gs_current_group != i)
+				gs_groups_dng_level[i] == 1 && gs_active_group_id != i)
 			{
 				l3 = 1;
 			}

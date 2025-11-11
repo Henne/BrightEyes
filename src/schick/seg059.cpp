@@ -151,7 +151,7 @@ void do_tavern(void)
 
 					gs_food_message[i] = g_food_message_shown[i] = 0;
 
-					if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_id == gs_current_group))
+					if ((get_hero(i)->typus != HERO_TYPE_NONE) && (get_hero(i)->group_id == gs_active_group_id))
 					{
 
 						l3 = (21 - tavern->quality) * 20;

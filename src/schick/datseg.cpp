@@ -1373,7 +1373,7 @@ signed char g_mr_modificators[13] = { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }; 
 
 
 int8_t gs_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the datseg that is stored one to one in savegame files
-int8_t  gs_current_group = 0; // ds:0x2d35
+int8_t  gs_active_group_id = 0; // ds:0x2d35
 int8_t  gs_group_member_counts[6] = {0}; // ds:0x2d36, members per group
 int8_t  gs_total_hero_counter = 0; // ds:0x2d3c
 int8_t  gs_direction = 0; // ds:0x2d3d

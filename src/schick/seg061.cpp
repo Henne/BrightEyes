@@ -151,7 +151,7 @@ void do_temple(void)
 
 		if (g_action == ACTION_ID_ICON_9) {
 			/* leave temple */
-			if (!gs_group_member_counts[gs_current_group]) {
+			if (!gs_group_member_counts[gs_active_group_id]) {
 				GUI_output(get_ttx(232));
 			} else {
 				done = 1;
@@ -192,7 +192,7 @@ void do_temple(void)
 			/* save game */
 			if (gs_current_typeindex != 58) {
 
-				if (!gs_group_member_counts[gs_current_group]) {
+				if (!gs_group_member_counts[gs_active_group_id]) {
 					GUI_output(get_ttx(232));
 				} else {
 					save_game_state();
@@ -215,7 +215,7 @@ void do_temple(void)
 		if (g_action == ACTION_ID_ICON_7) {
 
 			/* ask for a miracle */
-			if (!gs_group_member_counts[gs_current_group]) {
+			if (!gs_group_member_counts[gs_active_group_id]) {
 				GUI_output(get_ttx(232));
 			} else {
 				ask_miracle();
@@ -225,7 +225,7 @@ void do_temple(void)
 		if (g_action == ACTION_ID_ICON_8) {
 
 			/* make a donation */
-			if (!gs_group_member_counts[gs_current_group]) {
+			if (!gs_group_member_counts[gs_active_group_id]) {
 				GUI_output(get_ttx(232));
 			} else {
 
@@ -304,9 +304,9 @@ void char_add(signed short temple_id)
 
 							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * l_si));
 
-							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
+							if (read_chr_temp(g_dtp2, i, gs_active_group_id)) {
 								gs_total_hero_counter++;
-								gs_group_member_counts[gs_current_group]++;
+								gs_group_member_counts[gs_active_group_id]++;
 								hero->slot_pos = i + 1;
 								write_chr_temp(i);
 							}
@@ -335,7 +335,7 @@ void char_letgo(signed short temple_id)
 	signed short hero_pos;
 	struct struct_hero *hero;
 
-	if (!gs_total_hero_counter || !gs_group_member_counts[gs_current_group]) {
+	if (!gs_total_hero_counter || !gs_group_member_counts[gs_active_group_id]) {
 
 		GUI_output(get_ttx(232));
 
@@ -357,7 +357,7 @@ void char_letgo(signed short temple_id)
 					/* let go a hero */
 					hero = get_hero(hero_pos);
 					gs_total_hero_counter--;
-					gs_group_member_counts[gs_current_group]--;
+					gs_group_member_counts[gs_active_group_id]--;
 
 					hero->temple_id = (signed char)temple_id;
 					hero->slot_pos = 0;
@@ -375,7 +375,7 @@ void char_letgo(signed short temple_id)
 				}
 			}
 
-		} while ((hero_pos != -1) && (gs_group_member_counts[gs_current_group] > (get_hero(6)->typus ? 1 : 0)));
+		} while ((hero_pos != -1) && (gs_group_member_counts[gs_active_group_id] > (get_hero(6)->typus ? 1 : 0)));
 	}
 }
 
@@ -457,7 +457,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 
 		hero = get_hero(i);
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead && !hero->flags.gods_pissed && !hero->flags.dead &&
 			((le_diff = hero->le_max - hero->le) > le))
 		{
@@ -494,7 +494,7 @@ void miracle_resurrect(char *str)
 
 		struct struct_hero *hero = get_hero(i);
 
-		if (hero->flags.dead && (hero->group_id == gs_current_group) && !hero->flags.gods_pissed)
+		if (hero->flags.dead && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 		{
 			/* resurrect from the dead */
 			hero->flags.dead = 0;
@@ -529,7 +529,7 @@ void miracle_modify(unsigned short offset, int32_t timer_value, signed short mod
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead && !hero->flags.gods_pissed)
 		{
 			slot = get_free_mod_slot();
@@ -558,7 +558,7 @@ void miracle_weapon(char *str, signed short mode)
 
 		struct struct_hero *hero = get_hero(j);
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead && !hero->flags.gods_pissed)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead && !hero->flags.gods_pissed)
 		{
 			for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++)
 			{

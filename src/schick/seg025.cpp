@@ -178,7 +178,7 @@ void do_house(void)
 
 		for (i = 0; i < 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && /* Original-Bug: What if petrified, sleeping etc. */
 				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
 			{
@@ -203,11 +203,11 @@ void do_house(void)
 						}
 					}
 
-					if ((gs_group_member_counts[gs_current_group] < gs_total_hero_counter) && l_di)
+					if ((gs_group_member_counts[gs_active_group_id] < gs_total_hero_counter) && l_di)
 					{
 						i = 0;
 
-						while (get_hero(i)->group_id == gs_current_group)
+						while (get_hero(i)->group_id == gs_active_group_id)
 						{
 							/* imprison hero */
 							get_hero(i)->jail = 1;

@@ -168,7 +168,7 @@ signed short DNG08_handler(void)
 
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead)
 				{
 					gs_dng08_timer1 = 24;
@@ -192,7 +192,7 @@ signed short DNG08_handler(void)
 
 			for (i = 0; i <= 6; i++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 				{
 					gs_dng08_timer2 = 24;
 
@@ -271,7 +271,7 @@ signed short DNG08_handler(void)
 			*(amap_ptr + MAP_POS(8,13)) &= 0x0f;
 			*(amap_ptr + MAP_POS(8,13)) |= DNG_TILE_OPEN_DOOR << 4;
 
-			if (gs_group_member_counts[gs_current_group] > 1) {
+			if (gs_group_member_counts[gs_active_group_id] > 1) {
 
 				gs_direction_bak = gs_direction;
 
@@ -279,7 +279,7 @@ signed short DNG08_handler(void)
 
 				hero->group_id = (signed char)tmp;
 				gs_group_member_counts[tmp]++;
-				gs_group_member_counts[gs_current_group]--;
+				gs_group_member_counts[gs_active_group_id]--;
 
 				GRP_save_pos(tmp);
 			}
@@ -297,7 +297,7 @@ signed short DNG08_handler(void)
 		for (i = tmp = 0; i < 6; i++)
 		{
 			if (gs_groups_x_target[i] == 11 && gs_groups_y_target[i] == 11 &&
-				gs_current_group != i)
+				gs_active_group_id != i)
 			{
 				tmp = 1;
 			}
@@ -316,7 +316,7 @@ signed short DNG08_handler(void)
 
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
 				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_ptr(hero->sex, 0));

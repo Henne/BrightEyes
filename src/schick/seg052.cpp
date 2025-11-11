@@ -279,7 +279,7 @@ void do_area_camp(void)
 						for (l_si = 0; l_si <= 6; l_si++, hero++) {
 
 							if ((hero->typus != HERO_TYPE_NONE) &&
-								(hero->group_id == gs_current_group) &&
+								(hero->group_id == gs_active_group_id) &&
 								(g_area_camp_guardstatus[l_si] < 2) &&
 								(g_area_camp_magicstatus[l_si] != 1))
 							{

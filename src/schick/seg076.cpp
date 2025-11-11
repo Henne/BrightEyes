@@ -384,7 +384,7 @@ void DNG_fallpit_test(signed short max_damage)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			/* TODO: need to check if the hero is dead ? */
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 			{
 				sub_hero_le(hero, random_schick(max_damage));
 			}
@@ -888,7 +888,7 @@ void DNG_waterbarrel(uint8_t *unit_ptr)
 			hero = get_hero(0);
 			for (l_di = 0; l_di <= 6; l_di++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead)
 				{
 					/* 1 unit of water <=> 10 Points of thirst */
@@ -925,7 +925,7 @@ void DNG_waterbarrel(uint8_t *unit_ptr)
 			hero = get_hero(0);
 			for (hero_refilled_counter = l_di = 0; l_di <= 6; l_di++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead)
 				{
 					for (item_pos = hero_refilled = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++)

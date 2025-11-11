@@ -95,7 +95,7 @@ void TRV_swim2(const signed int mod, const signed int percent)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 			/* a swim test */
 			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
@@ -374,7 +374,7 @@ void tevent_029(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 				sub_hero_le(hero, 2);
 

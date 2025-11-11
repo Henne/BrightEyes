@@ -124,7 +124,7 @@ void buy_screen(void)
 			hero2 = get_hero(0);
 			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
-				if ((hero2->typus) && (hero2->group_id == gs_current_group))
+				if ((hero2->typus) && (hero2->group_id == gs_active_group_id))
 				{
 					for (j = HERO_INVENTORY_SLOT_KNAPSACK_1; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
@@ -280,7 +280,7 @@ void buy_screen(void)
 					copy_forename(g_dtp2, hero1->alias);
 					set_textcolor(255, 0);
 
-					if (hero1->group_id != gs_current_group) {
+					if (hero1->group_id != gs_active_group_id) {
 
 						set_textcolor(111, 0);
 

@@ -74,7 +74,7 @@ void ask_miracle(void)
 				case GOD_PRAIOS: {
 					no_spellcaster_in_group = 1;
 
-					for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
+					for (i = 0; gs_group_member_counts[gs_active_group_id] > i; i++) {
 						if ((get_hero(i))->typus >= HERO_TYPE_HEXE) {
 #ifndef M302de_ORIGINAL_BUGFIX
 							/* Original-Bug 43:
@@ -140,7 +140,7 @@ void ask_miracle(void)
 									break;
 
 								} else {
-									if (hero->flags.renegade && (hero->group_id == gs_current_group) && !hero->flags.gods_pissed)
+									if (hero->flags.renegade && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 									{
 										hero->flags.renegade = 0;
 
@@ -210,7 +210,7 @@ void ask_miracle(void)
 
 							hero = get_hero(i);
 
-							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.gods_pissed)
+							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 							{
 								hero->hunger = hero->thirst = 0;
 							}
@@ -269,7 +269,7 @@ void ask_miracle(void)
 
 								sprintf(g_dtp2,	get_ttx(565), hero->alias);
 								break;
-							} else if (hero->flags.renegade && (hero->group_id == gs_current_group) && !hero->flags.gods_pissed)
+							} else if (hero->flags.renegade && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 							{
 								hero->flags.renegade = 0;
 
@@ -327,7 +327,7 @@ void ask_miracle(void)
 						hero = get_hero(0);
 						for (i = 0; i <= 6; i++, hero++) {
 
-							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 								!hero->flags.dead && !hero->flags.gods_pissed)
 							{
 								/* heal hero completely */
@@ -385,7 +385,7 @@ void ask_miracle(void)
 							hero = get_hero(i);
 							disease = hero_is_diseased(hero);
 
-							if (disease != 0 && (hero->group_id == gs_current_group) && !hero->flags.gods_pissed)
+							if (disease != 0 && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 							{
 								hero->sick[disease][0] = 1;
 								hero->sick[disease][1] = 0;
@@ -405,7 +405,7 @@ void ask_miracle(void)
 						for (i = 0; i <= 6; i++) {
 							hero = get_hero(i);
 
-							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 								!hero->flags.dead && !hero->flags.gods_pissed)
 							{
 
@@ -461,7 +461,7 @@ void ask_miracle(void)
 							hero = get_hero(0);
 							for (i = 0; i <= 6; i++, hero++) {
 
-								if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+								if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 									!hero->flags.dead && !hero->flags.gods_pissed)
 								{
 									/* permanent Betören +1 */

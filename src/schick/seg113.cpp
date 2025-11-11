@@ -195,7 +195,7 @@ void tevent_086(void)
 
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 			{
 				sub_hero_le(hero, 2);
 			}
@@ -274,7 +274,7 @@ void tevent_098(void)
 
 			for (i = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead)
 				{
 
@@ -324,7 +324,7 @@ void tevent_098(void)
 				for (i = 0; i <= 6; i++, hero++) {
 
 					if ((i != hero_pos) && (hero->typus != HERO_TYPE_NONE) &&
-						(hero->group_id == gs_current_group) &&	!hero->flags.dead)
+						(hero->group_id == gs_active_group_id) &&	!hero->flags.dead)
 					{
 						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
 
@@ -378,7 +378,7 @@ void hero_disappear(struct struct_hero *hero, const signed int pos, const signed
 	}
 
 	/* decrement group counter */
-	gs_group_member_counts[gs_current_group]--;
+	gs_group_member_counts[gs_active_group_id]--;
 
 	/* write temple_id to character sheet */
 	hero->temple_id = temple_id;
@@ -600,7 +600,7 @@ void tevent_104(void)
 
 		for (i = l_si = nr_heroes = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 				nr_heroes++;
 
@@ -767,7 +767,7 @@ void tevent_107(void)
 
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 1) <= 0)
 			{
 

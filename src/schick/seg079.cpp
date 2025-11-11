@@ -143,7 +143,7 @@ signed short DNG03_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
-				(hero->group_id == gs_current_group) &&
+				(hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead &&
 				(test_skill(hero, TA_KLETTERN, 2) <= 0))
 			{
@@ -216,7 +216,7 @@ signed short DNG03_handler(void)
 
 		if ((hero = get_second_hero_available_in_group()) &&
 			(hero->typus != HERO_TYPE_NONE) &&
-			(hero->group_id == gs_current_group) &&
+			(hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead &&
 			(test_skill(hero, TA_GEFAHRENSINN, 4) <= 0))
 		{
@@ -250,7 +250,7 @@ signed short DNG03_handler(void)
 		if ((hero = get_second_hero_available_in_group()) &&
 			(j == 2 ||
 			(hero->typus != HERO_TYPE_NONE) &&
-			(hero->group_id == gs_current_group) &&
+			(hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead &&
 			(test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
@@ -583,7 +583,7 @@ void DNG03_chest11_loot(struct struct_chest*)
 		for (l_di = counter = l_si = 0; l_di <= 6; l_di++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) &&
-				(hero->group_id == gs_current_group) &&
+				(hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead)
 			{
 				l_si++;
