@@ -1091,26 +1091,97 @@ const struct spells_index g_spells_index2[4] = {
 	{ 0x4c, 0x0a }
 }; // ds:0x0d13
 
-const signed short g_magic_schools_1[7] = { 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x002a, -1 }; // ds:0x0d1b, array terminated by -1
-const signed short g_magic_schools_2[6] = { 0x0007, 0x000c, 0x000e, 0x0010, 0x002c, -1 }; // ds:0x0d29, array terminated by -1
-const signed short g_magic_schools_3[7] = { 0x0012, 0x0013, 0x0015, 0x0017, 0x0018, 0x003b, -1 }; // ds:0x0d35, array terminated by -1
-const signed short g_magic_schools_4[6] = { 0x001b, 0x001c, 0x001d, 0x001e, 0x001f, -1 }; // ds:0x0d43, array terminated by -1
-const signed short g_magic_schools_5[6] = { 0x0021, 0x0023, 0x0024, 0x003d, 0x0046, -1 }; // ds:0x0d4f, array terminated by -1
-const signed short g_magic_schools_6[8] = { 0x0026, 0x0027, 0x0029, 0x0028, 0x002a, 0x002b, 0x002c, -1 }; // ds:0x0d5b, array terminated by -1
-const signed short g_magic_schools_7[8] = { 0x0031, 0x0033, 0x0034, 0x0035, 0x0036, 0x0039, 0x003e, -1 }; // ds:0x0d6b, array terminated by -1
-const signed short g_magic_schools_8[6] = { 0x003c, 0x003e, 0x0048, 0x0049, 0x004b, -1 }; // ds:0x0d7b, array terminated by -1
-const signed short g_magic_schools_9[8] = { 0x004c, 0x004e, 0x004f, 0x0050, 0x0052, 0x0053, 0x0054, -1 }; // ds:0x0d87, array terminated by -1
-//long g_magic_schools_index[9] = { 0x14fc0d1b, 0x14fc0d29, 0x14fc0d35, 0x14fc0d43, 0x14fc0d4f, 0x14fc0d5b, 0x14fc0d6b, 0x14fc0d7b, 0x14fc0d87 }; // ds:0x0d97; uint8_t*
-const signed short* g_magic_schools_index[9] = {
-	g_magic_schools_1,
-	g_magic_schools_2,
-	g_magic_schools_3,
-	g_magic_schools_4,
-	g_magic_schools_5,
-	g_magic_schools_6,
-	g_magic_schools_7,
-	g_magic_schools_8,
-	g_magic_schools_9
+const signed short g_magic_school_antimagie_spell_ids[7] = {
+	SP_BEHERRSCHUNG_BRECHEN,
+	SP_DESTRUCTIBO_ARCANITAS,
+	SP_GARDIANUM_PARADEI,
+	SP_ILLUSIONEN_ZERSTOEREN,
+	SP_VERWANDLUNG_BEENDEN,
+	SP_ODEM_ARCANUM,
+	-1
+}; // ds:0x0d1b, array terminated by -1
+const signed short g_magic_school_beherrschung_spell_ids[6] = {
+	SP_BANNBALADIN,
+	SP_HORRIPHOBUS,
+	SP_RESPONDAMI_VERITAR,
+	SP_SOMNIGRAVIS_TAUSENDSCHLAF,
+	SP_SENSIBAR_WAHR_UND_KLAR,
+	-1
+}; // ds:0x0d29, array terminated by -1
+const signed short g_magic_school_beschwoerung_spell_ids[7] = {
+	SP_FUROR_BLUT_UND_SULPHURDAMPF,
+	SP_GEISTER_AUSTREIBEN,
+	SP_HEPTAGON_UND_KROETENEI,
+	SP_SKELETTARIUS_KRYPTADUFT,
+	SP_ELEMENTARE_BESCHWOEREN,
+	SP_NEKROPATHIA_MODERND_LEICH,
+	-1
+}; // ds:0x0d35, array terminated by -1
+const signed short g_magic_school_bewegung_spell_ids[6] = {
+	SP_AXXELERATUS_BLITZGESCHWIND,
+	SP_FORAMEN_FORAMINOR,
+	SP_MOTORICUS_MOTILITICH,
+	SP_SPURLOS_TRITTLOS_FAEHRTENLOS,
+	SP_TRANSVERSALIS_TELEPORT,
+	-1
+}; // ds:0x0d43, array terminated by -1
+const signed short g_magic_school_heilung_spell_ids[6] = {
+	SP_BALSAM_SALABUNDE,
+	SP_KLARUM_PURUM_KRAEUTERSUD,
+	SP_RUHE_KOERPER_RUHE_GEIST,
+	SP_ARCANO_PSYCHOSTABILIS,
+	SP_MU_STEIGERN,
+	-1
+}; // ds:0x0d4f, array terminated by -1
+const signed short g_magic_school_hellsicht_spell_ids[8] = {
+	SP_ADLERAUG_UND_LUCHSENOHR,
+	SP_ANALUES_ARCANSTRUKTUR,
+	SP_EXPOSAMI_CREATUR,
+	SP_EIGENSCHAFTEN_SEID_GELESEN,
+	SP_ODEM_ARCANUM,
+	SP_PENETRIZZEL_HOLZ_UND_STEIN,
+	SP_SENSIBAR_WAHR_UND_KLAR,
+	-1
+}; // ds:0x0d5b, array terminated by -1
+const signed short g_magic_school_kampf_spell_ids[8] = {
+	SP_BLITZ_DICH_FIND,
+	SP_EISENROST_UND_GRUENER_SPAN,
+	SP_FULMINICTUS_DONNERKEIL,
+	SP_IGNIFAXIUS_FLAMMENSTRAHL,
+	SP_PLUMBUMBARUM_UND_NARRETEI,
+	SP_SCHARFES_AUGE_UND_SICHRE_HAND,
+	SP_ARMATRUTZ,
+	-1
+}; // ds:0x0d6b, array terminated by -1
+const signed short g_magic_school_verwandlung_spell_ids[6] = {
+	SP_ADLER_WOLF_UND_HAMMERHAI,
+	SP_ARMATRUTZ,
+	SP_PARALUE_PARALEIN,
+	SP_SALANDER_MUTANDERER,
+	SP_VISIBILI_VANITAR,
+	-1
+}; // ds:0x0d7b, array terminated by -1
+const signed short g_magic_school_veraenderung_spell_ids[8] = {
+	SP_ABVENENUM_PEST_UND_GALLE,
+	SP_BRENNE_TOTER_STOFF,
+	SP_CLAUDIBUS_CLAVISTIBOR,
+	SP_DUNKELHEIT,
+	SP_FLIM_FLAM_FUNKEL,
+	SP_HARTES_SCHMELZE,
+	SP_SILENTIUM_SILENTILLE,
+	-1
+}; // ds:0x0d87, array terminated by -1
+//long g_magic_schools_table[9] = { 0x14fc0d1b, 0x14fc0d29, 0x14fc0d35, 0x14fc0d43, 0x14fc0d4f, 0x14fc0d5b, 0x14fc0d6b, 0x14fc0d7b, 0x14fc0d87 }; // ds:0x0d97; uint8_t*
+const signed short* g_magic_schools_table[9] = {
+	g_magic_school_antimagie_spell_ids,
+	g_magic_school_beherrschung_spell_ids,
+	g_magic_school_beschwoerung_spell_ids,
+	g_magic_school_bewegung_spell_ids,
+	g_magic_school_heilung_spell_ids,
+	g_magic_school_hellsicht_spell_ids,
+	g_magic_school_kampf_spell_ids,
+	g_magic_school_verwandlung_spell_ids,
+	g_magic_school_veraenderung_spell_ids
 };
 
 void (*g_spell_handlers[86])(void) = {

@@ -159,7 +159,7 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 		}
 
 		/* depending on the HERO_MAGIC_SCHOOL, the mage will get 3 possible increases on certain spells */
-		if (is_in_word_array(spell_id, (signed short*)g_magic_schools_index[hero->spell_school]))
+		if (is_in_word_array(spell_id, (signed short*)g_magic_schools_table[hero->spell_school]))
 		{
 			max_incs = 3;
 		}
@@ -824,11 +824,11 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (hero->saved_spell_increases != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_magic_schools_table[hero->spell_school][i] != -1)) {
 
-							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
+							if (hero->spells[g_magic_schools_table[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[hero->spell_school][i]);
+								inc_spell_novice(hero, g_magic_schools_table[hero->spell_school][i]);
 							}
 							i++;
 						}
@@ -844,11 +844,11 @@ void level_up(signed short hero_pos)
 						}
 
 						i = 0;
-						while ((hero->saved_spell_increases) != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
+						while ((hero->saved_spell_increases) != 0 && (g_magic_schools_table[hero->spell_school][i] != -1)) {
 
-							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
+							if (hero->spells[g_magic_schools_table[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[hero->spell_school][i]);
+								inc_spell_novice(hero, g_magic_schools_table[hero->spell_school][i]);
 							}
 							i++;
 						}
