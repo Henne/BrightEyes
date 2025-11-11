@@ -76,11 +76,11 @@ struct struct_chest g_dng15_specialchests[33] = {
 
 signed short DNG15_handler(void)
 {
-	signed short target_pos;
-	signed short i;
-	signed short dir;
-	signed short tmp;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int i;
+	signed int dir;
+	signed int tmp;
+	signed int tw_bak;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -507,8 +507,8 @@ signed short DNG15_handler(void)
  */
 void DNG15_small_wounds(void)
 {
-	signed short i;
-	signed short randval;
+	signed int i;
+	signed int randval;
 	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++)
@@ -533,7 +533,7 @@ void DNG15_small_wounds(void)
  *
  * \param   ladder      (0 = no ladder, 1 = ladder)
  */
-void DNG15_debris(signed short ladder)
+void DNG15_debris(const signed int ladder)
 {
 	if (GUI_bool(get_tx(10)))
 	{
@@ -580,7 +580,7 @@ void DNG15_smelling_chest(struct struct_chest* chest)
 
 void DNG15_figures_chest(struct struct_chest* chest)
 {
-	signed short tw_bak;
+	signed int tw_bak;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -591,7 +591,7 @@ void DNG15_figures_chest(struct struct_chest* chest)
 void DNG15_cursed_money_chest(struct struct_chest* chest)
 {
 	int32_t p_money;
-	signed short tw_bak;
+	signed int tw_bak;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -614,8 +614,8 @@ void DNG15_cursed_money_chest(struct struct_chest* chest)
 
 void DNG15_collapsing_ceiling(uint8_t* ptr)
 {
-	signed short i;
-	signed short cnt;
+	signed int i;
+	signed int cnt;
 	struct struct_hero *hero;
 
 	hero = get_hero(0);
@@ -692,7 +692,7 @@ void DNG15_collapsing_ceiling(uint8_t* ptr)
 
 void DNG15_clear_way(uint8_t* ptr)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero = get_hero(0);
 	i = 0;
 
@@ -753,7 +753,7 @@ void DNG15_cursed_money(uint8_t* ptr)
  * \param wounds      group may get wounds (0/1)
  * \param ladder      here is a ladder to the next level
  */
-void DNG15_wounds_and_ladders(char* text, signed short wounds, signed short ladder)
+void DNG15_wounds_and_ladders(char* text, const signed int wounds, const signed int ladder)
 {
 	GUI_output(text);
 

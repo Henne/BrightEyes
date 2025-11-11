@@ -51,13 +51,13 @@ const char g_dng03_str_mactans[8] = "MACTANS"; // ds:0x95b2
 
 signed short DNG03_handler(void)
 {
-	signed short target_pos;
-	signed short i;
-	signed short j;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int i;
+	signed int j;
+	signed int tw_bak;
 	struct struct_hero *hero;
-	signed short l3;
-	signed short l4;
+	signed int l3;
+	signed int l4;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -466,7 +466,7 @@ void DNG03_chest04_loot(struct struct_chest* chest)
 
 void DNG03_chest05_loot(struct struct_chest*)
 {
-	signed short answer;
+	signed int answer;
 
 	do {
 		answer = GUI_radio(get_tx(10), 2, get_tx(11), get_tx(12));
@@ -568,10 +568,10 @@ void DNG03_chest10_loot(struct struct_chest*)
 
 void DNG03_chest11_loot(struct struct_chest*)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short counter;
-	signed short mod;
+	signed int l_si;
+	signed int l_di;
+	signed int counter;
+	signed int mod;
 	struct struct_hero *hero;
 
 	if (!gs_dng03_lever_chest11)

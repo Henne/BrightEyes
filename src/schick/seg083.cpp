@@ -44,10 +44,10 @@ static const char g_dng08_str_tairach[8] = "TAIRACH"; // ds:0x9725
 
 signed short DNG08_handler(void)
 {
-	signed short target_pos;
-	signed short i;
-	signed short tmp;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int i;
+	signed int tmp;
+	signed int tw_bak;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
 
@@ -401,9 +401,9 @@ signed short DNG08_handler(void)
 /* static */
 void DNG08_search_bed(void)
 {
-	signed short counter;
-	signed short money;
-	signed short slot;
+	signed int counter;
+	signed int money;
+	signed int slot;
 	struct struct_hero *hero;
 
 	money = counter = 0;

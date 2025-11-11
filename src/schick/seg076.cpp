@@ -70,16 +70,16 @@ static signed short (*g_dng_handlers[15])(void) = {
 	DNG14_handler,
 	DNG15_handler
 }; // ds:0x92d6
-signed short g_dng_level_changed = 0; // ds:0x9312
+signed int g_dng_level_changed = 0; // ds:0x9312
 
-signed short g_dng_refresh_direction;	// ds:0xe482
-signed short g_dng_refresh_y_target;	// ds:0xe484
-signed short g_dng_refresh_x_target;	// ds:0xe486
+signed int g_dng_refresh_direction;	// ds:0xe482
+signed int g_dng_refresh_y_target;	// ds:0xe484
+signed int g_dng_refresh_x_target;	// ds:0xe486
 unsigned char *g_dng_map_ptr;		// ds:0xe488, to DNG_MAP
 signed char g_dng_floor_tex;		// ds:0xe48c, changing every timestep
 struct dng_gfxtab *g_dng_gfxtab;		// ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)
 unsigned char g_unkn_090[1];		// ds:0xe491
-static signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
+static signed int g_lockpick_try_counter; // ds:0xe492, {0..4}
 unsigned char *g_dungeon_fights_buf;	// ds:0xe494, to buffer of size 630
 unsigned char *g_dungeon_stairs_buf;	// ds:0xe498, to buffer of size 80
 struct dungeon_door *g_dungeon_doors_buf;	// ds:0xe49c, to buffer of size 225
@@ -93,19 +93,19 @@ signed int g_get_extra_loot;		// ds:0xe4a0
  * ACTION_ID_ICON_8 = 136: 'lockpicks'
  * ACTION_ID_ICON_9 = 137: 'foramen spell'
  */
-void DNG_door(signed short action)
+void DNG_door(const signed int action)
 	/* is called from a single code position. DNG_MENU_MODE is one of 1 = DNG_MENU_MODE_OPEN_DOOR, 3 = DNG_MENU_MODE_CLOSE_DOOR, 5 = DNG_MENU_MODE_UNLOCK_DOOR */
 {
-	signed short x;
-	signed short y;
-	signed short pos;
-	signed short l4;
-	signed short spell_result;
+	signed int x;
+	signed int y;
+	signed int pos;
+	signed int l4;
+	signed int spell_result;
 	struct dungeon_door *ptr_doors;
 	struct struct_hero *hero;
-	signed short hero_pos;
-	signed short lockpick_pos;
-	signed short lockpick_result;
+	signed int hero_pos;
+	signed int lockpick_pos;
+	signed int lockpick_result;
 
 	ptr_doors = g_dungeon_doors_buf;
 	x = gs_x_target;
@@ -357,9 +357,9 @@ void print_msg_with_first_hero(char *msg)
  *
  * \param   max_damage  maximum damage if a hero drops in the fallpit
  */
-void DNG_fallpit_test(signed short max_damage)
+void DNG_fallpit_test(const signed int max_damage)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
@@ -417,17 +417,17 @@ void DNG_fallpit_test(signed short max_damage)
 	}
 }
 
-signed short DNG_step(void)
+signed int DNG_step(void)
 {
-	signed short l_si;
-	signed short l_di;
+	signed int l_si;
+	signed int l_di;
 	signed short (*dungeon_handler)(void);
-	signed short retval;
-	signed short tw_bak;
-	signed short old_value;
-	signed short x;
-	signed short y;
-	signed short pos;
+	signed int retval;
+	signed int tw_bak;
+	signed int old_value;
+	signed int x;
+	signed int y;
+	signed int pos;
 
 	g_new_menu_icons[0] = MENU_ICON_SPLIT_GROUP;
 	old_value = g_new_menu_icons[1];
@@ -666,14 +666,14 @@ signed short DNG_step(void)
 }
 
 struct stair_struct {
-	signed short pos;
+	signed int pos;
 	signed char target_x;
 	signed char target_y;
 };
 
 void DNG_see_stairs(void)
 {
-	signed short target_pos;
+	signed int target_pos;
 	stair_struct *stair_ptr;
 	stair_ptr = (stair_struct*)g_dungeon_stairs_buf;
 
@@ -725,7 +725,7 @@ void DNG_see_stairs(void)
 
 void DNG_see_door(void)
 {
-	signed short l_si;
+	signed int l_si;
 
 	if ((l_si = div16(g_steptarget_front)) == 1 || l_si == 2)
 	{
@@ -778,7 +778,7 @@ void DNG_see_chest(void)
 
 void do_dungeon(void)
 {
-	signed short tw_bak;
+	signed int tw_bak;
 
 	if ((g_dng_loaded_dungeon_id != gs_dungeon_id) || g_area_prepared || g_dng_init_flag)
 	{
@@ -810,18 +810,18 @@ void do_dungeon(void)
 }
 
 struct fight_struct {
-	signed short pos;
-	signed short fight_id;
-	signed short flee_north;
-	signed short flee_east;
-	signed short flee_south;
-	signed short flee_west;
-	signed short ap;
+	signed int pos;
+	signed int fight_id;
+	signed int flee_north;
+	signed int flee_east;
+	signed int flee_south;
+	signed int flee_west;
+	signed int ap;
 };
 
 void DNG_fight(void)
 {
-	signed short target_pos;
+	signed int target_pos;
 	struct fight_struct *fight_ptr;
 
 	fight_ptr = (struct fight_struct*)g_dungeon_fights_buf;
@@ -864,13 +864,13 @@ void DNG_fight(void)
  */
 void DNG_waterbarrel(uint8_t *unit_ptr)
 {
-	signed short item_pos;
-	signed short l_di;
-	signed short answer;
-	signed short units_needed;
-	signed short hero_refilled;
-	signed short hero_refilled_counter;
-	signed short done;
+	signed int item_pos;
+	signed int l_di;
+	signed int answer;
+	signed int units_needed;
+	signed int hero_refilled;
+	signed int hero_refilled_counter;
+	signed int done;
 	struct struct_hero *hero;
 
 	done = 0;
@@ -987,7 +987,7 @@ void DNG_waterbarrel(uint8_t *unit_ptr)
 
 void DNG_see_lever(void)
 {
-	signed short target_pos;
+	signed int target_pos;
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 

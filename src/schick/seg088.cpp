@@ -37,9 +37,9 @@ struct struct_chest g_dng14_specialchests[9] = {
 }; // ds:0x9990
 
 
-void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
+void DNG14_dive(const signed int diver_pos, const signed char mod, const signed int dest_x)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	hero = get_hero(0);
@@ -74,7 +74,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG14_fight_intro(signed short fight_id)
+void DNG14_fight_intro(const signed int fight_id)
 {
 	if ((fight_id == 172) || (fight_id == 174)) {
 		GUI_output(get_tx(56));
@@ -191,10 +191,10 @@ void DNG14_chest07_trap(void)
 
 void DNG15_riddle(void)
 {
-	signed short i;
-	signed short l_di;
-	signed short pos;
-	signed short tw_bak;
+	signed int i;
+	signed int l_di;
+	signed int pos;
+	signed int tw_bak;
 	uint8_t *ptr;
 
 	tw_bak = g_textbox_width;

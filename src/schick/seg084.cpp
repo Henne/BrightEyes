@@ -48,10 +48,10 @@ struct struct_chest g_dng09_specialchests[8] = {
 
 signed short DNG09_handler(void)
 {
-	signed short target_pos;
-	signed short i;
-	signed short l3;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int i;
+	signed int l3;
+	signed int tw_bak;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
 
@@ -459,9 +459,9 @@ signed short DNG09_handler(void)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG09_fight_intro(signed short fight_id)
+void DNG09_fight_intro(const signed int fight_id)
 {
-	if (fight_id == 94)
+	if (fight_id == FIGHTS_F126_08)
 	{
 		GUI_output(get_tx(13));
 	}
@@ -513,7 +513,7 @@ void DNG09_chest03_loot(struct struct_chest* chest)
 
 void DNG09_chest04_loot(struct struct_chest* chest)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	if (!gs_dng09_crystal_flag)

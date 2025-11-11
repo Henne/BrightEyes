@@ -1613,7 +1613,7 @@ extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
 extern struct dng_gfxtab g_dng_gfxtab_wood[88];			//ds:0x7dea; seg067
 extern struct dng_gfxtab g_dng_gfxtab_stone[88];			//ds:0x841a; seg067
 extern struct dng_gfxtab g_dng_gfxtab_marble[88];			//ds:0x8a4a; seg067
-extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
+extern signed int g_dng_level_changed;			//ds:0x9312; seg075, seg076
 
 extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 extern struct trv_start_point g_signposts[106];			//ds:0xa0b4; seg093, seg094
@@ -1667,9 +1667,9 @@ extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,
 extern struct dng_gfxtab *g_dng_gfxtab;		// ds:0xe48d; seg075, seg076
 extern signed char g_dng_floor_tex;		// ds:0xe48c; seg075
 extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
-extern signed short g_dng_refresh_x_target;	// ds:0xe486; seg075, seg076
-extern signed short g_dng_refresh_y_target;	// ds:0xe484; seg075, seg076
-extern signed short g_dng_refresh_direction;	// ds:0xe482; seg075, seg076, seg082, seg088
+extern signed int g_dng_refresh_x_target;	// ds:0xe486; seg075, seg076
+extern signed int g_dng_refresh_y_target;	// ds:0xe484; seg075, seg076
+extern signed int g_dng_refresh_direction;	// ds:0xe482; seg075, seg076, seg082, seg088
 extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
 extern signed short g_combo_mode;		// ds:0xe42c; seg054, seg059, seg069
 extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066

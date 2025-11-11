@@ -33,10 +33,10 @@ namespace M302de {
 
 signed short DNG14_handler(void)
 {
-	signed short pos;
-	signed short l_di;
-	signed short hero_pos;
-	signed short tw_bak;
+	signed int pos;
+	signed int l_di;
+	signed int hero_pos;
+	signed int tw_bak;
 	int32_t p_money;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;

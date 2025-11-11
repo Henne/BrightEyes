@@ -65,8 +65,8 @@ void city_event_switch(void)
  */
 void city_event_1(void)
 {
-	signed short randval;
-	signed short answer;
+	signed int randval;
+	signed int answer;
 	struct struct_hero *hero;
 
 	hero = get_hero(get_random_hero());
@@ -124,7 +124,7 @@ void city_event_1(void)
  */
 void city_event_2(void)
 {
-	signed short answer;
+	signed int answer;
 	struct struct_hero *hero;
 
 	hero = get_hero(get_random_hero());
@@ -164,7 +164,7 @@ void city_event_2(void)
  */
 void city_event_3(void)
 {
-	signed short answer;
+	signed int answer;
 	int32_t money;
 
 	load_in_head(43);
@@ -190,7 +190,7 @@ void city_event_3(void)
  */
 void city_event_4(void)
 {
-	signed short answer;
+	signed int answer;
 	int32_t money;
 
 	load_in_head(43);
@@ -223,8 +223,8 @@ void city_event_4(void)
  */
 void city_event_5(void)
 {
-	signed short randval;
-	signed short tw_bak;
+	signed int randval;
+	signed int tw_bak;
 	struct struct_hero* hero;
 
 	load_in_head(48);
@@ -253,11 +253,11 @@ void city_event_5(void)
  */
 void city_event_6(void)
 {
-	signed short answer;
-	signed short loc_bak;
+	signed int answer;
+	signed int loc_bak;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 24 */
-	signed short type_bak;
+	signed int type_bak;
 #endif
 
 	if (gs_day_timer >= HOURS(8) && gs_day_timer <= HOURS(20)) {
@@ -305,7 +305,7 @@ void city_event_6(void)
  */
 void city_event_7(void)
 {
-	signed short randval;
+	signed int randval;
 	struct struct_hero *hero;
 
 	randval = random_schick(4) - 1;
@@ -352,7 +352,7 @@ void city_event_7(void)
  */
 void city_event_8(void)
 {
-	signed short randval;
+	signed int randval;
 	struct struct_hero *hero;
 
 	randval = random_schick(4) - 1;
@@ -386,7 +386,7 @@ void city_event_8(void)
  */
 void city_event_9(void)
 {
-	signed short randval = random_schick(4) - 1;
+	signed int randval = random_schick(4) - 1;
 
 	if (!randval) {
 

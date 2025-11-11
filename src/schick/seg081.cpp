@@ -42,11 +42,11 @@ static const char g_str_s_und_s_waren[17] = "%s UND %s WAREN "; // ds:0x9657
 
 signed short DNG06_handler(void)
 {
-	signed short i;
-	signed short target_pos;
-	signed short l3;
-	signed short l4;
-	signed short tw_bak;
+	signed int i;
+	signed int target_pos;
+	signed int l3;
+	signed int l4;
+	signed int tw_bak;
 	int32_t p_money;
 	struct struct_hero *hero;
 	struct struct_hero *hero_first;
@@ -459,7 +459,7 @@ signed short DNG06_handler(void)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG06_fight_intro(signed short fight_id)
+void DNG06_fight_intro(const signed int fight_id)
 {
 	if (fight_id == FIGHTS_F094_22)
 	{
@@ -484,7 +484,7 @@ void DNG06_chest00_loot(struct struct_chest* chest)
 
 void DNG06_chest01_loot(struct struct_chest* chest)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	sprintf(g_dtp2, get_tx(33));
@@ -513,8 +513,8 @@ void DNG06_chest01_loot(struct struct_chest* chest)
 
 void DNG09_pitfall(void)
 {
-	signed short i;
-	signed short l3;
+	signed int i;
+	signed int l3;
 	struct struct_hero *hero;
 	struct struct_hero *hero_first;
 	struct struct_hero *hero_second;

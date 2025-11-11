@@ -46,10 +46,10 @@ struct struct_chest g_dng10_specialchests[6] = {
 
 signed short DNG10_handler(void)
 {
-	signed short target_pos;
-	signed short answer;
-	signed short result;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int answer;
+	signed int result;
+	signed int tw_bak;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
 	int32_t p_money;

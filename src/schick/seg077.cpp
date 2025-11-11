@@ -52,8 +52,8 @@ const char g_dng01_str_marbo[6] = "MARBO"; // ds:0x93d1
  */
 signed short DNG01_handler(void)
 {
-	signed short target_pos;
-	signed short i;
+	signed int target_pos;
+	signed int i;
 	struct struct_hero *hero;
 
 

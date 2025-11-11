@@ -44,9 +44,9 @@ int16_t g_dng05_trash_flag = 0; // ds:0x960e
  */
 signed short DNG04_handler(void)
 {
-	signed short pos;
-	signed short i;
-	signed short tw_bak;
+	signed int pos;
+	signed int i;
+	signed int tw_bak;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -338,9 +338,9 @@ void DNG04_chest02_loot(struct struct_chest* chest)
  */
 signed short DNG05_handler(void)
 {
-	signed short pos;
-	signed short tmp;
-	signed short tw_bak;
+	signed int pos;
+	signed int tmp;
+	signed int tw_bak;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -467,7 +467,7 @@ signed short DNG05_handler(void)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG5_fight_intro(signed short fight_id)
+void DNG05_fight_intro(const signed int fight_id)
 {
 	if (fight_id == 76) {
 		GUI_output(get_tx(10));

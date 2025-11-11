@@ -52,10 +52,10 @@ struct struct_chest g_dng11_specialchests[15] = {
 
 signed short DNG11_handler(void)
 {
-	signed short target_pos;
-	signed short test_result;
-	signed short answer;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int test_result;
+	signed int answer;
+	signed int tw_bak;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
 
@@ -484,9 +484,9 @@ void DNG11_chest13_loot(struct struct_chest* chest)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG11_fight_intro(signed short fight_id)
+void DNG11_fight_intro(const signed int fight_id)
 {
-	if (fight_id == 127) {
+	if (fight_id == FIGHTS_F131_11_1) {
 		GUI_output(get_tx(14));
 	}
 }

@@ -875,7 +875,7 @@ void GUI_print_fight_intro_msg(const signed int fight_id)
 		DNG02_fight_intro(fight_id);
 	}
 	if (gs_dungeon_id == DUNGEON_ID_GOBLINHOEHLE) {
-		DNG5_fight_intro(fight_id);
+		DNG05_fight_intro(fight_id);
 	}
 	if (gs_dungeon_id == DUNGEON_ID_DASPOTASCHATZ) {
 		DNG06_fight_intro(fight_id);

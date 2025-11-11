@@ -424,12 +424,9 @@ void DNG_floor_ceil(void)
 
 }
 
-#if defined(__BORLANDC__)
-static
-#endif
-void DNG_turn(void)
+static void DNG_turn(void)
 {
-	signed short tmp;
+	signed int tmp;
 
 	if ( ((tmp = div16(g_visual_field_vals[3])) == 15) || (tmp == 1)) {
 		g_visual_field_vals[3] = 0;
@@ -633,7 +630,7 @@ void DNG_stub1(void)
 
 void DNG_stub2(void)
 {
-	signed short tmp;
+	signed int tmp;
 
 	tmp = div16(g_visual_field_vals[1]);
 
@@ -647,8 +644,8 @@ void DNG_stub2(void)
 
 void DNG_stub3(void)
 {
-	signed short i;
-	signed short tmp;
+	signed int i;
+	signed int tmp;
 
 	for (i = 21; i >= 0; i--) {
 
@@ -670,13 +667,13 @@ void DNG_stub3(void)
 	}
 }
 
-void DNG_draw_walls(signed short x, signed short y, signed short a3)
+void DNG_draw_walls(signed int x, signed int y, signed int a3)
 {
 	signed int nvf_width;
 	signed int nvf_height;
-	signed short width2;
-	signed short height2;
-	signed short flag;
+	signed int width2;
+	signed int height2;
+	signed int flag;
 	uint8_t *dst_ptr;
 	uint8_t *ptr2;
 	struct nvf_extract_desc nvf;
@@ -737,16 +734,16 @@ void DNG_draw_walls(signed short x, signed short y, signed short a3)
 
 void DNG_stub4(void)
 {
-	signed short l1;
-	signed short l2;
+	signed int l1;
+	signed int l2;
 	signed char l3;
 	unsigned char l4;
 	unsigned char l5;
 	/* REMARK: not sure if (x.y) is the correct terminology here */
 	struct struct_point *ptr;
 
-	signed short i;
-	signed short j;
+	signed int i;
+	signed int j;
 
 	for (i = 0; i < 22; i++) {
 
@@ -826,10 +823,10 @@ void DNG_stub5(void)
  *
  * \return              0 = false, 1 = true
  */
-signed short is_staff_lvl2_in_group(void)
+signed int is_staff_lvl2_in_group(void)
 {
 	struct struct_hero *hero_i;
-	signed short i;
+	signed int i;
 
 	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
@@ -846,10 +843,10 @@ signed short is_staff_lvl2_in_group(void)
 
 void DNG_lights(void)
 {
-	signed short l1;
+	signed int l1;
 	signed char l2;
 
-	signed short i;
+	signed int i;
 
 	if (div16(g_visual_field_vals[1]) != 11) {
 
@@ -901,9 +898,9 @@ void DNG_lights(void)
  *
  * \param 	foward	1: forward step; -1: backward step
  */
-void DNG_timestep(signed short forward)
+void DNG_timestep(const signed int forward)
 {
-	signed short dir;
+	signed int dir;
 
 	timewarp(MINUTES(1));
 
@@ -998,10 +995,10 @@ void DNG_dec_level(void)
 
 void DNG_open_door(void)
 {
-	signed short x;
-	signed short y;
-	signed short iters;
-	signed short i;
+	signed int x;
+	signed int y;
+	signed int iters;
+	signed int i;
 
 	DNG_floor_ceil();
 	move();
@@ -1044,10 +1041,10 @@ void DNG_open_door(void)
 
 void DNG_close_door(void)
 {
-	signed short x;
-	signed short y;
-	signed short iters;
-	signed short i;
+	signed int x;
+	signed int y;
+	signed int iters;
+	signed int i;
 
 	DNG_floor_ceil();
 	move();
@@ -1089,9 +1086,9 @@ void DNG_close_door(void)
 
 void DNG_stub6(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short l1;
+	signed int l_si;
+	signed int l_di;
+	signed int l1;
 	struct struct_hero *hero_auto;
 	struct struct_hero *hero1;
 	struct struct_hero *hero2;
@@ -1176,9 +1173,9 @@ void DNG_stub6(void)
 }
 
 
-signed short DNG_check_climb_tools(void)
+signed int DNG_check_climb_tools(void)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero = get_hero(0);
 
 	/* check for a mage with staffspell > 2 */
@@ -1264,13 +1261,13 @@ signed int DNG_fallpit(const signed int max_damage)
 	return retval;
 }
 
-void DNG_enter_dungeon(signed short dungeon_id)
+void DNG_enter_dungeon(const signed int dungeon_id)
 {
-	signed short x_pos;
-	signed short y_pos;
-	signed short level;
-	signed short dir;
-	signed short i;
+	signed int x_pos;
+	signed int y_pos;
+	signed int level;
+	signed int dir;
+	signed int i;
 	uint8_t *ptr;
 
 	switch (dungeon_id) {

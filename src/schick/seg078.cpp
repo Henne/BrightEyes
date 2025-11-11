@@ -47,10 +47,10 @@ struct struct_chest g_dng02_specialchests[8] = {
 
 signed short DNG02_handler(void)
 {
-	signed short target_pos;
-	signed short mod_slot;
-	signed short i;
-	signed short hero_weight;
+	signed int target_pos;
+	signed int mod_slot;
+	signed int i;
+	signed int hero_weight;
 	int32_t weight_sum;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
@@ -144,7 +144,7 @@ signed short DNG02_handler(void)
 	} else if ((target_pos == DNG_POS(0,10,12) || target_pos == DNG_POS(0,10,10)) && target_pos != gs_dng_handled_pos)
 	{
 		hero = get_hero(0);
-		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero++)
+		for (i = (signed int)(weight_sum = 0); i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 			{
@@ -233,7 +233,7 @@ signed short DNG02_handler(void)
 	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos)
 	{
 		hero = get_hero(0);
-		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero++)
+		for (i = (signed int)(weight_sum = 0); i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 			{
@@ -581,9 +581,9 @@ void DNG02_chest03_loot(struct struct_chest* chest)
 
 void DNG02_chest04_loot(struct struct_chest*)
 {
-	signed short i;
-	signed short answer;
-	signed short tw_bak;
+	signed int i;
+	signed int answer;
+	signed int tw_bak;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -651,15 +651,15 @@ void DNG02_chest06_loot(struct struct_chest* chest)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG02_fight_intro(signed short fight_id)
+void DNG02_fight_intro(const signed int fight_id)
 {
-	if (fight_id == 62) {
+	if (fight_id == FIGHTS_F046_13) {
 		GUI_output(get_tx(32));
-	} else if (fight_id == 66) {
+	} else if (fight_id == FIGHTS_F046_22) {
 		GUI_output(get_tx(33));
-	} else if (fight_id == 68) {
+	} else if (fight_id == FIGHTS_F046_25) {
 		GUI_output(get_tx(34));
-	} else if (fight_id == 72) {
+	} else if (fight_id == FIGHTS_F046_28) {
 		GUI_output(get_tx(36));
 	}
 }

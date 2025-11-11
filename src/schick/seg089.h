@@ -5,7 +5,7 @@ namespace M302de {
 extern struct struct_chest g_dng15_specialchests[33];
 
 /* 0x20 */
-void DNG15_debris(signed short);
+void DNG15_debris(const signed int);
 /* 0x25 */
 void DNG15_small_wounds(void);
 /* 0x2a */
@@ -15,7 +15,7 @@ void DNG15_clear_way(uint8_t*);
 /* 0x34 */
 void DNG15_cursed_money(uint8_t*);
 /* 0x39 */
-void DNG15_wounds_and_ladders(char*, signed short, signed short);
+void DNG15_wounds_and_ladders(char*, const signed int, const signed int);
 /* 0x3e */
 signed short DNG15_handler(void);
 /* 0x43 */

@@ -23,7 +23,7 @@ void DNG09_chest04_trap(void);
 /* 0x48 */
 signed short DNG09_handler(void);
 /* 0x4d */
-void DNG09_fight_intro(signed short);
+void DNG09_fight_intro(const signed int);
 
 #if !defined(__BORLANDC__)
 }

@@ -36,14 +36,14 @@ struct struct_chest g_dng07_specialchests[2] = {
 
 signed short DNG07_handler(void)
 {
-	signed short target_pos;
-	signed short i;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int i;
+	signed int tw_bak;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
-	signed short spell_result;
-	signed short lockpick_pos;
-	signed short skill_result;
+	signed int spell_result;
+	signed int lockpick_pos;
+	signed int skill_result;
 
 	amap_ptr = g_dng_map;
 	tw_bak = g_textbox_width;
@@ -297,10 +297,10 @@ signed short DNG07_handler(void)
 	return 0;
 }
 
-void DNG09_statues(signed short prob, signed short bonus)
+void DNG09_statues(const signed int prob, const signed int bonus)
 {
-	signed short i;
-	signed short randval;
+	signed int i;
+	signed int randval;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
 

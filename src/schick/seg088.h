@@ -5,9 +5,9 @@ namespace M302de {
 extern struct struct_chest g_dng14_specialchests[9];
 
 /* 0x20 */
-void DNG14_dive(signed short, signed char, signed short);
+void DNG14_dive(const signed int, const signed char, const signed int);
 /* 0x25 */
-void DNG14_fight_intro(signed short);
+void DNG14_fight_intro(const signed int);
 /* 0x2a */
 void DNG14_chest00_loot(struct struct_chest*);
 /* 0x2f */

@@ -21,7 +21,7 @@ signed short DNG04_handler(void);
 /* 0x43 */
 signed short DNG05_handler(void);
 /* 0x48 */
-void DNG5_fight_intro(signed short);
+void DNG05_fight_intro(const signed int);
 
 #if !defined(__BORLANDC__)
 }
