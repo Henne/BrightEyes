@@ -652,7 +652,7 @@ signed short do_travel_mode(void)
 
 	bak1 = g_wallclock_update;
 	g_route59_flag = g_wallclock_update = gs_travel_detour = 0;
-	gs_current_town = gs_current_typeindex;
+	gs_town_id = gs_current_typeindex;
 
 	call_mouse_bg();
 
@@ -706,7 +706,7 @@ signed short do_travel_mode(void)
 			g_request_refresh = 0;
 		}
 
-		if ((signpost_ptr->town_id == gs_current_town) && (signpost_ptr->typeindex == gs_current_signpost))
+		if ((signpost_ptr->town_id == gs_town_id) && (signpost_ptr->typeindex == gs_current_signpost))
 		{
 			while (1) {
 				handle_input();
@@ -717,17 +717,17 @@ signed short do_travel_mode(void)
 					while ((l_di = signpost_ptr->linked_travel_routes[i]) != 0xff)
 					{
 						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
-							(answer = g_land_routes[l_di - 1].town1_id) != gs_current_town ?
-							(signed char) answer : g_land_routes[l_di - 1].town2_id)));
+							(answer = g_land_routes[l_di - 1].town_id_1) != gs_town_id ?
+							(signed char) answer : g_land_routes[l_di - 1].town_id_2)));
 
 						i++;
 					}
 
-					gs_trv_menu_towns[i] = gs_current_town;
+					gs_trv_menu_towns[i] = gs_town_id;
 					destinations_tab[i] = get_ttx(613);
 					i++;
 
-					sprintf(g_text_output_buf, get_ttx(545), get_ttx(235 + gs_current_town));
+					sprintf(g_text_output_buf, get_ttx(545), get_ttx(235 + gs_town_id));
 
 					tw_bak = g_textbox_width;
 					g_textbox_width = 4;
@@ -766,7 +766,7 @@ signed short do_travel_mode(void)
 					g_wallclock_update = 1;
 
 					TM_func1(signpost_ptr->linked_travel_routes[answer],
-						(g_land_routes[signpost_ptr->linked_travel_routes[answer] - 1].town1_id == gs_current_town ? 0 : 1));
+						(g_land_routes[signpost_ptr->linked_travel_routes[answer] - 1].town_id_1 == gs_town_id ? 0 : 1));
 					g_wallclock_update = 0;
 
 					if (g_route59_flag)
@@ -787,7 +787,7 @@ signed short do_travel_mode(void)
 
 					if (!gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 					{
-						gs_current_town = gs_travel_destination_town_id;
+						gs_town_id = gs_travel_destination_town_id;
 						gs_x_target_bak = gs_travel_destination_x;
 						gs_y_target_bak = gs_travel_destination_y;
 						gs_direction = (gs_travel_destination_viewdir + 2) & 3;
@@ -861,7 +861,7 @@ signed short do_travel_mode(void)
 
 	} else if (gs_travel_detour != 99)
 	{
-		gs_current_town = TOWN_ID_NONE;
+		gs_town_id = TOWN_ID_NONE;
 	}
 
 	if (g_pp20_index == 5)

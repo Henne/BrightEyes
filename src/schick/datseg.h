@@ -503,9 +503,9 @@ struct ship {
  * the other values are constants. */
 struct sea_route {
 
-	unsigned char town1;	/* one byte readonly */
+	unsigned char town_id_1;	/* one byte readonly */
 				/* ID of the first town of the connection. Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
-	unsigned char town2;	/* one byte readonly */ /* ID of the second town of the connection */
+	unsigned char town_id_2;	/* one byte readonly */ /* ID of the second town of the connection */
 	unsigned char distance; /* one byte readonly */ /* TODO: But should be 2 Byte for Prem <-> Manrin to avoid an integer overflow */
 	signed char frequency;/* one byte readonly */ /* the higher this value, the rarer a passage on the route is offered */
 	signed char passage_timer;	/* one byte rw */ /* after how many days will a ship do a passage on this route? */
@@ -559,8 +559,8 @@ struct struct_route_tevent {
 
 struct struct_land_route {
 	/* Note: routes are undirected */
-	uint8_t town1_id;
-	uint8_t town2_id;
+	uint8_t town_id_1;
+	uint8_t town_id_2;
 	uint8_t distance;
 	int8_t speed_mod;		/* {-4, ..., 7} */
 	uint8_t encounters;
@@ -896,8 +896,8 @@ extern int16_t gs_groups_x_target[6];		//ds:0x2d48; seg002-seg089
 extern int16_t gs_groups_y_target[6];		//ds:0x2d54; seg002-seg089
 extern int8_t  gs_current_loctype;		//ds:0x2d60; seg002-seg120
 extern int8_t  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
-extern int8_t  gs_current_town;			//ds:0x2d67; seg002-seg120
-extern int8_t  gs_groups_town[6];		//ds:0x2d68; seg002-seg074
+extern int8_t  gs_town_id;			//ds:0x2d67; seg002-seg120
+extern int8_t  gs_groups_town_id[6];		//ds:0x2d68; seg002-seg074
 extern int8_t  gs_dungeon_id;			//ds:0x2d6e; seg002-seg120
 extern int8_t  gs_groups_dungeon_id[6];		//ds:0x2d6f; seg002, seg049
 extern int8_t  gs_dungeon_level;			//ds:0x2d75; seg002-seg107
@@ -910,8 +910,8 @@ extern int16_t gs_groups_x_target_bak[6];	//ds:0x2d87; seg002, seg049, seg054
 extern int16_t gs_groups_y_target_bak[6];	//ds:0x2d93; seg002, seg049, seg054
 extern int8_t  gs_current_loctype_bak;		//ds:0x2d9f; seg002-seg120
 extern int8_t  gs_groups_current_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
-extern int8_t  gs_current_town_bak;		//ds:0x2da6; seg025, seg049, seg066, seg075, seg120
-extern int8_t  gs_groups_town_bak[6];		//ds:0x2da7; seg049, seg054
+extern int8_t  gs_town_id_bak;		//ds:0x2da6; seg025, seg049, seg066, seg075, seg120
+extern int8_t  gs_groups_town_id_bak[6];		//ds:0x2da7; seg049, seg054
 extern int8_t  gs_dungeon_id_bak;		//ds:0x2dad; seg025, seg049, seg076
 extern int8_t  gs_groups_dungeon_id_bak[6];	//ds:0x2dae; seg049, seg054
 extern int8_t  gs_dungeon_level_bak;		//ds:0x2db4; seg032, seg049

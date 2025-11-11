@@ -687,7 +687,7 @@ void TLK_old_woman(const signed int state)
 		} while (1);
 
 	} else if (state == 34) {
-		g_dialog_next_state = (gs_current_town == TOWN_ID_FELSTEYN ? 35 : 39);
+		g_dialog_next_state = (gs_town_id == TOWN_ID_FELSTEYN ? 35 : 39);
 	} else if (state == 37) {
 		gs_tevent093_flag = gs_tevent088_flag = 1;
 	} else if (state == 38) {

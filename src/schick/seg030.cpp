@@ -349,7 +349,7 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 
 							sprintf(dst, fmt, get_ttx(235 + gs_swafnild_tp4));
 
-							gs_current_town = gs_swafnild_tp4;
+							gs_town_id = gs_swafnild_tp4;
 
 							gs_x_target_bak = (gs_swafnild_tp4 == 35 ? 10 : (gs_swafnild_tp4 == 32 ? 2 : 7));
 							gs_y_target_bak = (gs_swafnild_tp4 == 35 ? 2 : (gs_swafnild_tp4 == 32 ? 14 : 3));

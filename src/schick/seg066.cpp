@@ -519,7 +519,7 @@ void do_special_buildings(void)
 
 	type = gs_current_typeindex;
 
-	if (gs_current_town == TOWN_ID_THORWAL) {
+	if (gs_town_id == TOWN_ID_THORWAL) {
 
 		load_tx2(type < 41 ? ARCHIVE_FILE_THORWAL1_LTX : ARCHIVE_FILE_THORWAL2_LTX);
 		g_textbox_width = 9;
@@ -566,7 +566,7 @@ void do_special_buildings(void)
 			THO_tav_inn_combi();
 		}
 
-	} else if (gs_current_town == TOWN_ID_PHEXCAER) {
+	} else if (gs_town_id == TOWN_ID_PHEXCAER) {
 
 		load_tx2(type <= 3 ? ARCHIVE_FILE_PHEX2_LTX : ARCHIVE_FILE_PHEX1_LTX);
 		g_textbox_width = 9;
@@ -592,7 +592,7 @@ void do_special_buildings(void)
 		}
 
 
-	} else if (gs_current_town == TOWN_ID_EINSIEDLERSEE) {
+	} else if (gs_town_id == TOWN_ID_EINSIEDLERSEE) {
 		/*  HERMITS LAKE / EINSIEDLERSEE */
 
 		if (type == 1) {
@@ -644,7 +644,7 @@ void TLK_eremit(const signed int state)
 
 void do_town(void)
 {
-	if ((g_town_loaded_town_id != gs_current_town) || (g_area_prepared != AREA_TYPE_TOWN))
+	if ((g_town_loaded_town_id != gs_town_id) || (g_area_prepared != AREA_TYPE_TOWN))
 	{
 		prepare_area(1);
 
@@ -657,7 +657,7 @@ void do_town(void)
 
 	g_current_ani = -1;
 
-	gs_current_town_bak = gs_current_town;
+	gs_town_id_bak = gs_town_id;
 
 	city_step();
 }
@@ -1302,10 +1302,10 @@ signed int city_step(void)
 		}
 	}
 
-	if ((gs_current_town != TOWN_ID_NONE) && (g_town_loaded_town_id != -1)) {
+	if ((gs_town_id != TOWN_ID_NONE) && (g_town_loaded_town_id != -1)) {
 
 		if (!i) {
-			options = enter_location(gs_current_town);
+			options = enter_location(gs_town_id);
 		}
 
 		/* random city event? */
@@ -1313,8 +1313,8 @@ signed int city_step(void)
 		if (((gs_y_target != gs_y_target_bak) || (gs_x_target != gs_x_target_bak)) &&
 
 			/* only in big town */
-			(gs_current_town == TOWN_ID_THORWAL || gs_current_town == TOWN_ID_PREM ||
-			gs_current_town == TOWN_ID_PHEXCAER || gs_current_town == TOWN_ID_OBERORKEN))
+			(gs_town_id == TOWN_ID_THORWAL || gs_town_id == TOWN_ID_PREM ||
+			gs_town_id == TOWN_ID_PHEXCAER || gs_town_id == TOWN_ID_OBERORKEN))
 		{
 
 		       	/* 1% chance only between 8:00 and 20:00 o'clock */

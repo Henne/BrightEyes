@@ -519,7 +519,7 @@ void init_game_state(void)
 	gs_direction = 0;
 	gs_dungeon_id = DUNGEON_ID_NONE;
 
-	gs_current_town_bak = gs_current_town = TOWN_ID_THORWAL;
+	gs_town_id_bak = gs_town_id = TOWN_ID_THORWAL;
 
 	g_textbox_width = 3;
 

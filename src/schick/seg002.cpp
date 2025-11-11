@@ -1416,7 +1416,7 @@ void interrupt mouse_isr(void)
 			g_mouse_rightclick_event = 1;
 		}
 
-		if (((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_current_town != TOWN_ID_NONE)) &&
+		if (((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_town_id != TOWN_ID_NONE)) &&
 				!gs_current_loctype && !g_dialogbox_lock && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			g_current_cursor =	(is_mouse_in_rect( 68,  4, 171,  51) ?	&g_cursor_arrow_up :
@@ -2023,7 +2023,7 @@ static void game_loop(void)
 
 		if (gs_current_loctype != LOCTYPE_NONE) {
 			do_location();
-		} else if (gs_current_town != TOWN_ID_NONE) {
+		} else if (gs_town_id != TOWN_ID_NONE) {
 			do_town();
 		} else if (gs_dungeon_id != DUNGEON_ID_NONE) {
 			do_dungeon();
@@ -2063,7 +2063,7 @@ static void game_loop(void)
 		}
 
 		if ((get_hero(6)->typus != HERO_TYPE_NONE) &&
-			((gs_current_town != TOWN_ID_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
+			((gs_town_id != TOWN_ID_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
 			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
 			npc_farewell();
@@ -2285,7 +2285,7 @@ static void dawning(void)
 		pal_fade((int8_t*)gs_palette_sky, (int8_t*)g_townpal_buf + 0xc0);
 
 		/* in a town */
-		if (gs_current_town && !gs_dungeon_id && !gs_current_loctype && !gs_show_travel_map &&
+		if (gs_town_id && !gs_dungeon_id && !gs_current_loctype && !gs_show_travel_map &&
 			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
@@ -2314,7 +2314,7 @@ static void nightfall(void)
 		pal_fade((int8_t*)gs_palette_sky, (int8_t*)&g_sky_fade_palette[0][0]);
 
 		/* in a town */
-		if (gs_current_town && !gs_dungeon_id && !gs_current_loctype && !gs_show_travel_map &&
+		if (gs_town_id && !gs_dungeon_id && !gs_current_loctype && !gs_show_travel_map &&
 			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
@@ -3163,8 +3163,8 @@ void herokeeping(void)
 			/* check for magic waterskin in group */
 			if ((get_first_hero_with_item_in_group(ITEM_MAGISCHER_WASSERSCHLAUCH, hero->group_id) == -1) &&
 				(((hero->group_id == gs_current_group) &&
-					(!gs_current_town || (gs_current_town != TOWN_ID_NONE && gs_show_travel_map != 0))) ||
-				((hero->group_id != gs_current_group) && !gs_groups_town[hero->group_id])))
+					(!gs_town_id || (gs_town_id != TOWN_ID_NONE && gs_show_travel_map != 0))) ||
+				((hero->group_id != gs_current_group) && !gs_groups_town_id[hero->group_id])))
 			{
 					/* check for food amulett */
 					if (get_item_pos(hero, ITEM_TRAVIA_AMULETT) == -1) {
@@ -3530,7 +3530,7 @@ static void passages_recalc(void)
 #if !defined(__BORLANDC__)
 			// TODO: Ausgabe fuer Schiffstyp verbessern (momentan nur Zahl)
 			D1_INFO_VERBOSE("Neue Passage auf Seeroute ID %d (%s -- %s): Abfahrt in %d Tagen, Schiffstyp: %d, Preisanpassung: %d%%.\n",
-					i, get_ttx(route->town1 + 235), get_ttx(route->town2 + 235),
+					i, get_ttx(route->town_id_1 + 235), get_ttx(route->town_id_2 + 235),
 					route->passage_timer, route->ship_type,	route->price_mod);
 #endif
 		}
@@ -4169,7 +4169,7 @@ void draw_compass(void)
 		/* Has something to do with traveling */
 		!g_travel_event_active &&
 		/* Not in town or dungeon */
-		((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_current_town != TOWN_ID_NONE)) &&
+		((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_town_id != TOWN_ID_NONE)) &&
 		/* I have no clue */
 		(g_fading_state != 2))
 	{
@@ -4222,7 +4222,7 @@ signed int can_merge_group(void)
 				(gs_groups_x_target[i] == gs_x_target) &&
 				(gs_groups_y_target[i] == gs_y_target) &&
 				(gs_groups_current_loctype[i] == gs_current_loctype) &&
-				(gs_groups_town[i] == gs_current_town) &&
+				(gs_groups_town_id[i] == gs_town_id) &&
 				(gs_groups_dungeon_id[i] == gs_dungeon_id) &&
 				(gs_groups_dng_level[i] == gs_dungeon_level))
 			{

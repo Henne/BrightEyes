@@ -747,15 +747,15 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			g_dialog_next_state = (gs_swafnild_nomap ? 38 : 39);
 		} else if (state == 7) {
 
-			if ((gs_current_town >= TOWN_ID_THORWAL && gs_current_town <= TOWN_ID_EFFERDUN) ||
-				(gs_current_town >= TOWN_ID_DASPOTA && gs_current_town <= TOWN_ID_VAERMHAG))
+			if ((gs_town_id >= TOWN_ID_THORWAL && gs_town_id <= TOWN_ID_EFFERDUN) ||
+				(gs_town_id >= TOWN_ID_DASPOTA && gs_town_id <= TOWN_ID_VAERMHAG))
 			{
 				gs_swafnild_tp1 = (TOWN_ID_PREM);
 				gs_swafnild_tp2 = (TOWN_ID_SKJAL);
 				gs_swafnild_tp3 = (TOWN_ID_OTTARJE);
 				gs_swafnild_tp4 = (TOWN_ID_ARYN);
 
-			} else if (gs_current_town >= TOWN_ID_ROVIK && gs_current_town <= TOWN_ID_TREBAN) {
+			} else if (gs_town_id >= TOWN_ID_ROVIK && gs_town_id <= TOWN_ID_TREBAN) {
 				gs_swafnild_tp1 = (TOWN_ID_OTTARJE);
 				gs_swafnild_tp2 = (TOWN_ID_SKJAL);
 				gs_swafnild_tp3 = (TOWN_ID_PREM);
@@ -798,10 +798,10 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 
 		} else if (state == 37) {
 
-			gs_current_town = (gs_swafnild_destination == 1 ? gs_swafnild_tp1 :
+			gs_town_id = (gs_swafnild_destination == 1 ? gs_swafnild_tp1 :
 						(gs_swafnild_destination == 2 ? gs_swafnild_tp2 : gs_swafnild_tp3));
 
-			switch (gs_current_town) {
+			switch (gs_town_id) {
 				case TOWN_ID_PREM: gs_x_target_bak        = 22; gs_y_target_bak =  8; break;
 				case TOWN_ID_KORD: gs_x_target_bak        =  4; gs_y_target_bak =  3; break;
 				case TOWN_ID_OTTARJE: gs_x_target_bak     =  9; gs_y_target_bak = 10; break;

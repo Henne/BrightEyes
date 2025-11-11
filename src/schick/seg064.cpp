@@ -70,7 +70,7 @@ unsigned short prepare_passages(void)
 
 	for (i = prepared = 0; i < NR_SEA_ROUTES; ent++, i++) {
 
-		if (!ent->passage_timer && (ent->town1 == gs_current_town || ent->town2 == gs_current_town)) {
+		if (!ent->passage_timer && (ent->town_id_1 == gs_town_id || ent->town_id_2 == gs_town_id)) {
 
 			/* ship is leaving today */
 
@@ -95,13 +95,13 @@ unsigned short prepare_passages(void)
 			gs_harbor_options[prepared].ship_name_ptr = get_tx(ent->ship_type * 10 + ent->price_mod % 10 + 0x2a);
 #endif
 
-			gs_harbor_options[prepared].destination = ent->town1 == gs_current_town ? ent->town2 : ent->town1;
+			gs_harbor_options[prepared].destination = ent->town_id_1 == gs_town_id ? ent->town_id_2 : ent->town_id_1;
 
 				/* store the other town of the connection */
 			prepared++;
 		} else {
 			if (((signed long)gs_day_timer > HOURS(14)) && (ent->passage_timer == 1)
-				&& ((ent->town1 == gs_current_town) || (ent->town2 == gs_current_town)))
+				&& ((ent->town_id_1 == gs_town_id) || (ent->town_id_2 == gs_town_id)))
 		        {
 				/* ship is leaving tomorrow and it is later than 14:00 */
 
@@ -119,7 +119,7 @@ unsigned short prepare_passages(void)
 				gs_harbor_options[prepared].ship_name_ptr = get_tx(ent->ship_type * 10 + ent->price_mod % 10 + 0x2a);
 #endif
 
-				gs_harbor_options[prepared].destination = ent->town1 == gs_current_town ? ent->town2 : ent->town1;
+				gs_harbor_options[prepared].destination = ent->town_id_1 == gs_town_id ? ent->town_id_2 : ent->town_id_1;
 
 				prepared++;
 			}
@@ -243,8 +243,8 @@ unsigned short get_next_passages(unsigned short type)
 			if (entry->passage_timer == 1 || entry->passage_timer == 2) {
 
 				/* compare town */
-				if (entry->town1 == gs_current_town || entry->town2 == gs_current_town) {
-					gs_harbor_options[option].destination = entry->town1 == gs_current_town ? entry->town2 : entry->town1;
+				if (entry->town_id_1 == gs_town_id || entry->town_id_2 == gs_town_id) {
+					gs_harbor_options[option].destination = entry->town_id_1 == gs_town_id ? entry->town_id_2 : entry->town_id_1;
 
 					option++;
 				}
@@ -252,9 +252,9 @@ unsigned short get_next_passages(unsigned short type)
 		} else {
 
 			/* compare town */
-			if (entry->town1 == gs_current_town || entry->town2 == gs_current_town) {
+			if (entry->town_id_1 == gs_town_id || entry->town_id_2 == gs_town_id) {
 
-				gs_harbor_options[option].destination = entry->town1 == gs_current_town ? entry->town2: entry->town1;
+				gs_harbor_options[option].destination = entry->town_id_1 == gs_town_id ? entry->town_id_2: entry->town_id_1;
 
 				option++;
 			}
@@ -282,8 +282,8 @@ unsigned short passage_arrival(void)
 	   Code is a bit unorthodox: Within the if-condition, the id of TOWN_1 is written to gs_travel_destination_town_id
 	   Then the condition is evaluated: If this is the initial town, then gs_travel_destination_town_id is overwritten by the id of TOWN_2,
 	   which in this case must be the destination town. */
-	if ((gs_travel_destination_town_id = p_sea_route->town1) == gs_current_town) {
-		gs_travel_destination_town_id = p_sea_route->town2;
+	if ((gs_travel_destination_town_id = p_sea_route->town_id_1) == gs_town_id) {
+		gs_travel_destination_town_id = p_sea_route->town_id_2;
 	}
 
 	/* find the harbor of the destination town. */
@@ -294,7 +294,7 @@ unsigned short passage_arrival(void)
 			do {
 				/* tmp ranges over the IDs of the linked sea routes, diminished by 1. */
 				tmp = harbor_ptr->linked_travel_routes[si] - 1;
-				if (g_sea_routes[tmp].town1 == gs_current_town || g_sea_routes[tmp].town2 == gs_current_town) {
+				if (g_sea_routes[tmp].town_id_1 == gs_town_id || g_sea_routes[tmp].town_id_2 == gs_town_id) {
 					harbor_typeindex = (unsigned char)harbor_ptr->typeindex;
 					break;
 				}
@@ -311,9 +311,9 @@ unsigned short passage_arrival(void)
 	if (harbor_typeindex) {
 
 		/* save the old town in tmp */
-		tmp = (signed char)gs_current_town;
+		tmp = (signed char)gs_town_id;
 		/* set the new town in current_town */
-		gs_current_town = gs_travel_destination_town_id;
+		gs_town_id = gs_travel_destination_town_id;
 
 		/* load the area of the new town */
 		call_load_area(1);
@@ -332,7 +332,7 @@ unsigned short passage_arrival(void)
 		gs_travel_destination_viewdir = (si >> 4) & 0x0f;	/* = (si / 16) % 15 */
 
 		/* restore the old town area / TODO: a bit bogus */
-		gs_current_town = (unsigned char)tmp;
+		gs_town_id = (unsigned char)tmp;
 		call_load_area(1);
 	}
 

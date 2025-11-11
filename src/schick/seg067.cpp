@@ -53,7 +53,7 @@ void city_event_switch(void)
 	g_c_event_active = 0;
 
 	/* load the LTX-file of the current town */
-	load_tx(gs_current_town + 77);
+	load_tx(gs_town_id + 77);
 
 	/* update the current position / make the step */
 	gs_x_target = gs_x_target_bak;

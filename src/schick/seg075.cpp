@@ -1332,8 +1332,8 @@ mark2:			   goto mark1;
 	gs_dungeon_level = level;
 	gs_dungeon_id = dungeon_id;
 	gs_current_loctype_bak = gs_current_loctype;
-	gs_current_town_bak = gs_current_town;
-	gs_current_loctype = gs_current_town = TOWN_ID_NONE;
+	gs_town_id_bak = gs_town_id;
+	gs_current_loctype = gs_town_id = TOWN_ID_NONE;
 	g_dng_loaded_dungeon_id = g_town_loaded_town_id = -1;
 
 	if (dungeon_id == DUNGEON_ID_ZWINGFESTE) {

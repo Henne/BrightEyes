@@ -1133,7 +1133,7 @@ signed short do_fight(signed short fight_id)
 
 				GRP_switch_to_next(2);
 
-				if (gs_current_town != TOWN_ID_NONE) {
+				if (gs_town_id != TOWN_ID_NONE) {
 					g_fading_state = 3;
 				}
 			}
@@ -1296,7 +1296,7 @@ signed short do_fight(signed short fight_id)
 	load_wallclock_nvf();
 	call_mouse();
 
-	if ((gs_current_town != TOWN_ID_NONE) && !gs_show_travel_map) {
+	if ((gs_town_id != TOWN_ID_NONE) && !gs_show_travel_map) {
 		g_fading_state = 3;
 	}
 

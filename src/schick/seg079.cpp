@@ -388,7 +388,7 @@ signed short DNG03_handler(void)
 			target_pos == DNG_POS(0,0,8))
 	{
 		leave_dungeon();
-		gs_current_town = ((signed char)gs_travel_destination_town_id);
+		gs_town_id = ((signed char)gs_travel_destination_town_id);
 		gs_x_target = gs_travel_destination_x;
 		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
