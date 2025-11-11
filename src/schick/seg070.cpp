@@ -32,7 +32,7 @@ namespace M302de {
  */
 void PHX_fuhrhaus(void)
 {
-	signed short answer;
+	signed int answer;
 
 	load_in_head(42);
 
@@ -75,7 +75,7 @@ void PHX_fuhrhaus(void)
  */
 void PHX_stadthaus(void)
 {
-	signed short answer;
+	signed int answer;
 	int32_t money;
 
 	do {
@@ -90,7 +90,7 @@ void PHX_stadthaus(void)
 	} else {
 
 #ifdef M302de_ORIGINAL_BUGFIX
-		signed short answer2;
+		signed int answer2;
 #endif
 		money = get_party_money();
 
@@ -135,9 +135,9 @@ void PHX_stadthaus(void)
  */
 void PHX_spielhaus(void)
 {
-	signed short answer;
-	signed short counter;
-	signed short pos;
+	signed int answer;
+	signed int counter;
+	signed int pos;
 	int32_t money;
 	struct struct_hero *hero;
 
@@ -243,7 +243,7 @@ void PHX_villa_gremob(void)
  */
 void PHX_bordell(void)
 {
-	signed short answer;
+	signed int answer;
 
 	load_ani(24);
 
@@ -289,8 +289,8 @@ void PHX_bordell(void)
  */
 void PHX_apotheke(void)
 {
-	signed short answer;
-	signed short options;
+	signed int answer;
+	signed int options;
 	int32_t money;
 
 	load_ani(23);
@@ -423,7 +423,7 @@ void PHX_apotheke(void)
  */
 void PHX_healer(void)
 {
-	signed short answer;
+	signed int answer;
 	int32_t money;
 
 	answer = random_schick(100);

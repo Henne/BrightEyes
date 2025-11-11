@@ -25,8 +25,8 @@ namespace M302de {
 
 void PHX_drogentempel(void)
 {
-	signed short answer;
-	signed short nr_heroes;
+	signed int answer;
+	signed int nr_heroes;
 	int32_t money;
 
 	load_ani(3);
@@ -185,9 +185,9 @@ void PHX_drogentempel(void)
  */
 void PHX_phextempel(void)
 {
-	signed short answer;		/* the selected answer from the dialogs */
-	signed short tw_bak;		/* saving the width of the textboxes */
-	signed short loc_bak;		/* saving the no of the old location */
+	signed int answer;		/* the selected answer from the dialogs */
+	signed int tw_bak;		/* saving the width of the textboxes */
+	signed int loc_bak;		/* saving the no of the old location */
 
 	tw_bak = g_textbox_width;
 
@@ -347,8 +347,8 @@ void PHX_phextempel(void)
  */
 void PHX_alrik_derondan(void)
 {
-	signed short answer;
-	signed short l_di = 0;
+	signed int answer;
+	signed int l_di = 0;
 	int32_t money;
 
 	load_tx2(ARCHIVE_FILE_PHEX2_LTX);

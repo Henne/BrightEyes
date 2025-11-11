@@ -39,7 +39,7 @@ static char g_str_beorn_hjall[20]; // ds:0xe42e
  * \param   informer    0 = jurge, 1 = hjore
  * \param   state       state of the dialog
  */
-void INF_jurge_hjore(signed short informer, signed short state)
+void INF_jurge_hjore(const signed int informer, const signed int state)
 {
 
 	if (!informer) {
@@ -124,7 +124,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
  * \param   informer    0 = yasma, 1 = umbrik, 2 = isleif
  * \param   state       state of the dialog
  */
-void INF_yasma_umbrik_isleif(signed short informer, signed short state)
+void INF_yasma_umbrik_isleif(const signed int informer, const signed int state)
 {
 	struct struct_hero *hero;
 
@@ -224,10 +224,10 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
  * \param   informer    0 = ragna, 1 = beorn, 2 = algrid
  * \param   state       state of the dialog
  */
-void INF_ragna_beorn_algrid(signed short informer, signed short state)
+void INF_ragna_beorn_algrid(const signed int informer, const signed int state)
 {
 	unsigned char tmp;
-	signed short beorn_ch_malus;
+	signed int beorn_ch_malus;
 
 	if (informer == 0) {
 		/* RAGNA FIRUNJASDOTTER */
@@ -405,7 +405,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
  * \param   informer    0 = eliane, 1 = tiomar
  * \param   state       state of the dialog
  */
-void INF_eliane_tiomar(signed short informer, signed short state)
+void INF_eliane_tiomar(const signed int informer, const signed int state)
 {
 	if (!informer) {
 		/* ELIANE WINDENBECK */
@@ -498,7 +498,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
  * \param   informer    0 = olvir, 1 = asgrimm
  * \param   state       state of the dialog
  */
-void INF_olvir_asgrimm(signed short informer, signed short state)
+void INF_olvir_asgrimm(const signed int informer, const signed int state)
 {
 	struct struct_hero *hero;
 
@@ -564,7 +564,7 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 			/* mark ASGRIMM THURBOLDSSON as done */
 			gs_informer_flags[INFORMER_ASGRIMM] = 2;
 		} else if (state == 7) {
-			signed short i;
+			signed int i;
 			/* ASGRIMM takes a meal with the heroes */
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++) {
@@ -590,10 +590,10 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
  * \param   informer    0 = treborn, 1 = treborn, 2 = unicorn
  * \param   state       state of the dialog
  */
-void INF_treborn_unicorn(signed short informer, signed short state)
+void INF_treborn_unicorn(const signed int informer, const signed int state)
 {
 	int32_t money;
-	signed short enough_money;
+	signed int enough_money;
 
 	money = get_party_money();
 
@@ -736,7 +736,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
  * \param   informer    0 = Swafnild, 1 = unicorn
  * \param   state       state of the dialog
  */
-void INF_swafnild_unicorn(signed short informer, signed short state)
+void INF_swafnild_unicorn(const signed int informer, const signed int state)
 {
 	if (!informer) {
 		/* SWAFNILD EGILSDOTTER */
@@ -750,21 +750,21 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			if ((gs_town_id >= TOWN_ID_THORWAL && gs_town_id <= TOWN_ID_EFFERDUN) ||
 				(gs_town_id >= TOWN_ID_DASPOTA && gs_town_id <= TOWN_ID_VAERMHAG))
 			{
-				gs_swafnild_tp1 = (TOWN_ID_PREM);
-				gs_swafnild_tp2 = (TOWN_ID_SKJAL);
-				gs_swafnild_tp3 = (TOWN_ID_OTTARJE);
-				gs_swafnild_tp4 = (TOWN_ID_ARYN);
+				gs_swafnild_tp1 = TOWN_ID_PREM;
+				gs_swafnild_tp2 = TOWN_ID_SKJAL;
+				gs_swafnild_tp3 = TOWN_ID_OTTARJE;
+				gs_swafnild_tp4 = TOWN_ID_ARYN;
 
 			} else if (gs_town_id >= TOWN_ID_ROVIK && gs_town_id <= TOWN_ID_TREBAN) {
-				gs_swafnild_tp1 = (TOWN_ID_OTTARJE);
-				gs_swafnild_tp2 = (TOWN_ID_SKJAL);
-				gs_swafnild_tp3 = (TOWN_ID_PREM);
-				gs_swafnild_tp4 = (TOWN_ID_LJASDAHL);
+				gs_swafnild_tp1 = TOWN_ID_OTTARJE;
+				gs_swafnild_tp2 = TOWN_ID_SKJAL;
+				gs_swafnild_tp3 = TOWN_ID_PREM;
+				gs_swafnild_tp4 = TOWN_ID_LJASDAHL;
 			} else {
-				gs_swafnild_tp1 = (TOWN_ID_KORD);
-				gs_swafnild_tp2 = (TOWN_ID_TREBAN);
-				gs_swafnild_tp3 = (TOWN_ID_RUNINSHAVEN);
-				gs_swafnild_tp4 = (TOWN_ID_GUDDASUNDEN);
+				gs_swafnild_tp1 = TOWN_ID_KORD;
+				gs_swafnild_tp2 = TOWN_ID_TREBAN;
+				gs_swafnild_tp3 = TOWN_ID_RUNINSHAVEN;
+				gs_swafnild_tp4 = TOWN_ID_GUDDASUNDEN;
 			}
 		} else if (state == 17) {
 			/* mark RAGNA FIRUNJASDOTTER as known */
@@ -826,7 +826,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 		/* EINHORN / UNICORN (second meeting) */
 
 		if (state == 3) {
-			signed short i;
+			signed int i;
 
 			/* search a map part the party does not have */
 			for (i = 0; i < 9; i++) {
@@ -852,7 +852,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
  *
  * \return              the number of map parts
  */
-signed short count_map_parts(void)
+signed int count_map_parts(void)
 {
 	int i;
 	int parts;
@@ -870,10 +870,10 @@ signed short count_map_parts(void)
  *
  * \return              0 = no letter, 1 = have the letter
  */
-signed short has_intro_letter(void)
+signed int has_intro_letter(void)
 {
 	/* check for the introduction letter / Empfehlungsschreiben */
-	return (get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN) != -1) ? 1 : 0;
+	return (get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN) != -1 ? 1 : 0);
 }
 
 #if !defined(__BORLANDC__)

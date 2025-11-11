@@ -57,13 +57,13 @@ unsigned char g_automap_buf[64]; // ds:0xe442
 
 void show_automap(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short loc_bak;
-	signed short done;
-	signed short dungeon;
-	signed short town_id;
-	signed short tw_bak;
+	signed int l_si;
+	signed int l_di;
+	signed int loc_bak;
+	signed int done;
+	signed int dungeon;
+	signed int town_id;
+	signed int tw_bak;
 
 	if (!gs_dungeon_light ||
 		((gs_dungeon_light == 1) && (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
@@ -211,7 +211,7 @@ unsigned short get_mapval_large(signed short x, signed short y)
 signed short is_group_in_prison(signed short group_id)
 {
 	struct struct_hero *hero = get_hero(0);
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 6; i++, hero++) {
 
@@ -231,11 +231,11 @@ signed short is_group_in_prison(signed short group_id)
  */
 void render_automap(signed short x_off)
 {
-	signed short tile_type;
-	signed short group_i;
-	signed short x;
-	signed short y;
-	signed short entrance_dir;
+	signed int tile_type;
+	signed int group_i;
+	signed int x;
+	signed int y;
+	signed int entrance_dir;
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
@@ -357,7 +357,7 @@ void render_automap(signed short x_off)
  */
 void draw_automap_square(signed short x, signed short y, signed short color, signed short dir)
 {
-	signed short i;
+	signed int i;
 	unsigned short offset_y;
 	uint8_t* p_img_tile;
 	signed char tile[50];
@@ -369,7 +369,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	p_img_tile = (uint8_t*)g_renderbuf_ptr + offset_y + 8 * x + 0xca8;
 
 	for (i = 0; i < 49; i++) {
-		tile[i] = (signed char)color;
+		tile[i] = color;
 	}
 
 	if ((color == 4) || (color == 16)) {
@@ -408,7 +408,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 			if (!g_automap_tile_cross[i]) {
 				tile[i] = 0;
 			} else {
-				tile[i] = (signed char)color;
+				tile[i] = color;
 			}
 		}
 	}
@@ -429,8 +429,8 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 void draw_automap_entrance(signed short x, signed short y, signed short dir)
 {
 	unsigned short offset_y = y;
-	signed short d = dir;
-	signed short skipsize;
+	signed int d = dir;
+	signed int skipsize;
 	uint8_t *p_img_tile;
 
 	offset_y <<= 3;
@@ -498,17 +498,17 @@ void draw_automap_to_screen(void)
  */
 signed short select_teleport_dest(void)
 {
-	signed short l_si;
+	signed int l_si;
 #if !defined(__BORLANDC__)
-	signed short l_di;
+	signed int l_di;
 #endif
 
-	signed short answer;
-	signed short done;
-	signed short dungeon;
-	signed short town;
-	signed short ae_costs;
-	signed short tw_bak;
+	signed int answer;
+	signed int done;
+	signed int dungeon;
+	signed int town;
+	signed int ae_costs;
+	signed int tw_bak;
 
 	draw_main_screen();
 
@@ -671,7 +671,7 @@ signed short select_teleport_dest(void)
 signed short get_maploc(signed short x, signed short y)
 {
 	struct location *locations_tab_ptr;
-	signed short pos_xy = TOWN_POS(x,y);
+	signed int pos_xy = TOWN_POS(x,y);
 
 	// Wow. Original game has these hard-coded manipulation of the data.
 	if (gs_town_id == TOWN_ID_THORWAL) {
