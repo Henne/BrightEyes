@@ -256,7 +256,7 @@ struct staffspell_descr {
 };
 
 struct spell_descr {
-	int8_t herotype;	/* 0: druid spell; 1: mage spell; 2: witch spell; 3: green elf spell; 4: ice elf spell; 5: sylvan elf spell */
+	int8_t origin;	/* 0: druid spell; 1: mage spell; 2: witch spell; 3: green elf spell; 4: ice elf spell; 5: sylvan elf spell */
 	int8_t attrib1;
 	int8_t attrib2;
 	int8_t attrib3;
