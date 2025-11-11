@@ -567,8 +567,8 @@ signed short DNG_step(void)
 
 	} else if (g_action == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_PLAIN)
 	{
-		gs_current_loctype = LOCTYPE_CITYCAMP;
-		g_citycamp_city = 0; /* CITYCAMP takes place in dungeon */
+		gs_current_loctype = LOCTYPE_AREA_CAMP;
+		g_area_camp_area_type = AREA_TYPE_DUNGEON; /* AREA_CAMP takes place in dungeon */
 		l_di = 1;
 
 	} else if (g_action == ACTION_ID_LEFT)

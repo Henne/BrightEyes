@@ -1272,7 +1272,7 @@ signed short do_fight(signed short fight_id)
 	g_in_fight = 0;
 	g_request_refresh = 1;
 	g_current_ani = -1;
-	g_area_prepared = -1;
+	g_area_prepared = AREA_TYPE_NONE;
 	g_timers_disabled = 0;
 	g_autofight = 0;
 	g_check_party = 1;

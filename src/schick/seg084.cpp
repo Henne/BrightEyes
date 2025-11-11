@@ -368,7 +368,7 @@ signed short DNG09_handler(void)
 		}
 
 		disable_ani();
-		g_area_prepared = -1;
+		g_area_prepared = AREA_TYPE_NONE;
 
 	} else if (target_pos == DNG_POS(1,4,2) && (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == WEST && gs_dng09_secretdoor1 != 2)

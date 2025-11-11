@@ -435,7 +435,7 @@ signed short DNG05_handler(void)
 		disable_ani();
 
 		gs_x_target = 5;
-		g_area_prepared = -1;
+		g_area_prepared = AREA_TYPE_NONE;
 
 	} else if (pos == DNG_POS(0,6,15) && pos != gs_dng_handled_pos)
 	{
