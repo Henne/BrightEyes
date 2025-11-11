@@ -56,7 +56,7 @@ void ask_miracle(void)
 
 		bonus = (signed short)((god_bonus.a[g_temple_god] * (gs_gods_estimation[g_temple_god] / 100) / 10) - const_zero);
 
-		if (gs_current_town == TOWNS_CLANEGH) {
+		if (gs_current_town == TOWN_ID_CLANEGH) {
 			bonus += 2;
 		}
 

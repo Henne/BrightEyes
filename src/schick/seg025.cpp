@@ -186,7 +186,7 @@ void do_house(void)
 
 				i = gs_current_town;
 
-				if ((i == TOWNS_THORWAL) || (i == TOWNS_PREM) || (i == TOWNS_PHEXCAER) || (i == TOWNS_OBERORKEN)) {
+				if ((i == TOWN_ID_THORWAL) || (i == TOWN_ID_PREM) || (i == TOWN_ID_PHEXCAER) || (i == TOWN_ID_OBERORKEN)) {
 
 					/* sneak test failed in a town with guards */
 
@@ -272,7 +272,7 @@ void enter_map(void)
 
 	gs_current_typeindex = gs_current_town;
 
-	gs_current_loctype = gs_current_town = TOWNS_NONE;
+	gs_current_loctype = gs_current_town = TOWN_ID_NONE;
 
 	gs_show_travel_map = 1;
 }
@@ -477,7 +477,7 @@ signed short game_options(void)
 
 	memset((uint8_t*)g_buffer9_ptr, 0, 28000);
 
-	if (gs_current_town != TOWNS_NONE) {
+	if (gs_current_town != TOWN_ID_NONE) {
 
 		/* if the party is in a town */
 		load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
@@ -616,7 +616,7 @@ signed short game_options(void)
 	g_request_refresh = 1;
 	g_special_screen = 0;
 
-	if (gs_current_town != TOWNS_NONE) {
+	if (gs_current_town != TOWN_ID_NONE) {
 		g_fading_state = 3;
 	}
 
@@ -826,8 +826,8 @@ void tumult(void)
 
 	/* the guards or a mob */
 	sprintf(g_dtp2, get_ttx(765),
-		((gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER ||
-	  		gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_OBERORKEN)
+		((gs_current_town == TOWN_ID_PREM || gs_current_town == TOWN_ID_PHEXCAER ||
+	  		gs_current_town == TOWN_ID_THORWAL || gs_current_town == TOWN_ID_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
 	GUI_output(g_dtp2);

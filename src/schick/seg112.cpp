@@ -631,7 +631,7 @@ void tevent_076(void)
 			} while (answer == -1);
 
 			if (answer == 1) {
-				gs_travel_detour = DUNGEONS_GOBLINHOEHLE;
+				gs_travel_detour = DUNGEON_ID_GOBLINHOEHLE;
 			}
 		}
 
@@ -646,7 +646,7 @@ void tevent_076(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = DUNGEONS_GOBLINHOEHLE;
+			gs_travel_detour = DUNGEON_ID_GOBLINHOEHLE;
 		}
 	}
 }

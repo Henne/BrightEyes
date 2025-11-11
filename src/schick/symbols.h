@@ -766,7 +766,7 @@
 //#define SEA_TRAVEL_PASSAGE_SPEED2       (0x432c)    /* unsigned short; basically, the same purpose as SEA_TRAVEL_PASSAGE_SPEED1. The variables could be merged. */
 //#define TRAVEL_MAP_PTR                  (0x432e)    /* uint8_t* */
 //#define FORCEDMARCH_TIMER               (0x4332)    /* unsigned char */
-//#define TRAVEL_DETOUR                   (0x4333)    /* unsigned char; indicates a detour from traveling, mostly to a dungeon (if it holds a DUNGEONS_... ID, which is a value in [1..15]). further possible values: 0, 99, and an extra usage of 1 in seg110.cpp */
+//#define TRAVEL_DETOUR                   (0x4333)    /* unsigned char; indicates a detour from traveling, mostly to a dungeon (if it holds a DUNGEON_ID_... ID, which is a value in [1..15]). further possible values: 0, 99, and an extra usage of 1 in seg110.cpp */
 //#define CURRENT_SIGNPOST                (0x4334)    /* unsigned short */
 //#define TRV_RETURN                      (0x4336)    /* signed short; {-1, 0, 1, 2} + ? */
 //#define TRAVEL_DESTINATION_TOWN_ID      (0x4338)    /* unsigned short */
@@ -1089,7 +1089,7 @@
 //#define HYG_ANI_X6                      (0x71c3)    /* unsigned char */
 //#define HYG_ANI_X7                      (0x71c4)    /* unsigned char[3] */
 //#define HYG_ANI_X9                      (0x71c7)    /* unsigned char[3] */
-//#define TOWNS_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
+//#define TOWN_ID_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
 //#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* uint8_t*[18] */
 //#define MAPVAL_TO_LOCTYPE               (0x7246)    /* unsigned char[12]; { 0, 15, 31, 63, 95, 127, 159, 175, 191, 207, 223, 239 } */
 //#define SEG066_0BAD_UNKN0               (0x7252)    /* signed char[29] */
@@ -1115,8 +1115,8 @@
 //#define TMAP_DOUBLE1                    (0x7c9a)    /* unsigned char; 1 = unicorn brought a piece you already have */
 //#define TMAP_DOUBLE2                    (0x7c9b)    /* unsigned char; 1 = you got a piece you already have from the unicorn */
 //#define SWAFNILD_TRAVELED               (0x7c9c)    /* unsigned char; {0,1} */
-//#define TOWNS_GOSSIP_MAX                (0x7c9d)    /* unsigned char[52] */
-//#define TOWNS_GOSSIP_OFF                (0x7cd1)    /* unsigned char[52] */
+//#define TOWN_ID_GOSSIP_MAX                (0x7c9d)    /* unsigned char[52] */
+//#define TOWN_ID_GOSSIP_OFF                (0x7cd1)    /* unsigned char[52] */
 // ?1
 //#define GOSSIP_STR_TRIPLE_WILDCARD      (0x7d06)    /* char[8]; "%s %s%s" */
 //#define PALETTE_FIGHT2                  (0x7d0e)    /* struct(3)[20]; struct{unsigned char r,g,b;} */

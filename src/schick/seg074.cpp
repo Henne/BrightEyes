@@ -249,7 +249,7 @@ void render_automap(signed short x_off)
 		for (x = 0; x < 16; x++) {
 			if (is_discovered(x + x_off, y)) {
 
-				if (gs_dungeon_id != DUNGEONS_NONE) {
+				if (gs_dungeon_id != DUNGEON_ID_NONE) {
 					/* in dungeon */
 
 					tile_type = div16(get_mapval_small(x, y));
@@ -617,7 +617,7 @@ signed short select_teleport_dest(void)
 #if !defined(__BORLANDC__)
 	l_di = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
-	if (gs_current_town != TOWNS_NONE) {
+	if (gs_current_town != TOWN_ID_NONE) {
 		l_di = get_border_index(l_di);
 	} else {
 		l_di = div16(l_di);
@@ -626,7 +626,7 @@ signed short select_teleport_dest(void)
 	/* REMARK: enforce the use of register DI */
 	_DI = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
-	if (gs_current_town != TOWNS_NONE) {
+	if (gs_current_town != TOWN_ID_NONE) {
 		_DI = get_border_index(_DI);
 	} else {
 		_DI = div16(_DI);
@@ -642,10 +642,10 @@ signed short select_teleport_dest(void)
 
 	} else
 #if !defined(__BORLANDC__)
-		if ((gs_dungeon_id && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
+		if ((gs_dungeon_id && (l_di == 15)) || ((gs_current_town != TOWN_ID_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
 #else
 		/* REMARK: enforce the use of register DI */
-		if ((gs_dungeon_id && (_DI == 15)) || ((gs_current_town != TOWNS_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
+		if ((gs_dungeon_id && (_DI == 15)) || ((gs_current_town != TOWN_ID_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
 #endif
 	{
 		strcpy(g_dtp2, get_ttx(611));
@@ -674,7 +674,7 @@ signed short get_maploc(signed short x, signed short y)
 	signed short pos_xy = TOWN_POS(x,y);
 
 	// Wow. Original game has these hard-coded manipulation of the data.
-	if (gs_current_town == TOWNS_THORWAL) {
+	if (gs_current_town == TOWN_ID_THORWAL) {
 
 		if (pos_xy == TOWN_POS(4,13)) {
 			// schwarzer Finger
@@ -689,12 +689,12 @@ signed short get_maploc(signed short x, signed short y)
 		{
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (gs_current_town == TOWNS_PREM) {
+	} else if (gs_current_town == TOWN_ID_PREM) {
 		if (pos_xy == TOWN_POS(28,9)) {
 			// Inn "Zur Trutz". Why is this a special case here?
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (gs_current_town == TOWNS_GUDDASUNDEN) {
+	} else if (gs_current_town == TOWN_ID_GUDDASUNDEN) {
 		if (pos_xy == TOWN_POS(1,14)) {
 			// Harbor, which is located in a building (not a signpost).
 			return TOWN_TILE_SIGNPOST;

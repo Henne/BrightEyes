@@ -31,67 +31,67 @@ namespace M302de {
 #endif
 
 struct struct_land_route g_land_routes[59] = {
-	{ TOWNS_THORWAL            , TOWNS_VAERMHAG           ,  34,  1, 10,  25,  0, 10, 100 }, //  1
-	{ TOWNS_VAERMHAG           , TOWNS_VARNHEIM           ,  40,  1, 10,  20,  0, 10, 100 }, //  2
-	{ TOWNS_VARNHEIM           , TOWNS_DASPOTA            ,  21,  1, 10,   5,  0, 10, 100 }, //  3
-	{ TOWNS_THORWAL            , TOWNS_SERSKE             ,   9,  2,  5, 100,  0,  5, 100 }, //  4
-	{ TOWNS_SERSKE             , TOWNS_MERSKE             ,  27,  2,  5, 100,  0,  5, 100 }, //  5
-	{ TOWNS_MERSKE             , TOWNS_EFFERDUN           ,  15,  2,  5, 100,  0,  5, 100 }, //  6
-	{ TOWNS_SERSKE             , TOWNS_BREIDA             ,  36, -1, 25,  10,  0, 10,  90 }, //  7
-	{ TOWNS_FAEHRSTATION_TJOILA, TOWNS_TJOILA             ,   0,  7,  0,   0,  0,  0,   0 }, //  8
-	{ TOWNS_TJOILA             , TOWNS_BREIDA             ,  28,  0, 20,  15,  5, 20,  75 }, //  9
-	{ TOWNS_BREIDA             , TOWNS_PEILINEN           ,  33,  0, 25,  15,  5, 20,  75 }, // 10
-	{ TOWNS_PEILINEN           , TOWNS_ROVAMUND           ,  30,  0, 30,  15,  5, 20,  75 }, // 11
-	{ TOWNS_ROVAMUND           , TOWNS_NORDVEST           ,  38,  0, 30,  15,  5, 20,  75 }, // 12
-	{ TOWNS_NORDVEST           , TOWNS_KRAVIK             ,  24,  0, 35,  15,  5, 20,  75 }, // 13
-	{ TOWNS_KRAVIK             , TOWNS_SKELELLEN          ,  27, -1, 40,   5,  5, 30,  50 }, // 14
-	{ TOWNS_THORWAL            , TOWNS_FAEHRSTATION_TJOILA,  21,  1, 15,  65,  0, 20, 100 }, // 15
-	{ TOWNS_FAEHRSTATION_TJOILA, TOWNS_RUKIAN             ,  11,  1, 15,  55,  0, 20, 100 }, // 16
-	{ TOWNS_RUKIAN             , TOWNS_FAEHRE_ANGBODIRTAL ,  22,  1, 15,  55,  0, 25, 100 }, // 17
-	{ TOWNS_FAEHRE_ANGBODIRTAL , TOWNS_AUPLOG             ,  12,  1, 20,  55,  0, 25, 100 }, // 18
-	{ TOWNS_FAEHRE_ANGBODIRTAL , TOWNS_ANGBODIRTAL        ,   0,  7,  0,   0,  0,  0,   0 }, // 19
-	{ TOWNS_AUPLOG             , TOWNS_VILNHEIM           ,  24,  1, 15,  60,  0, 30, 100 }, // 20
-	{ TOWNS_VILNHEIM           , TOWNS_BODON              ,   0,  8,  0,   0,  0,  0,   0 }, // 21
-	{ TOWNS_VILNHEIM           , TOWNS_PHEXCAER           , 105, -1, 35,  10,  5, 45, 100 }, // 22
-	{ TOWNS_PHEXCAER           , TOWNS_GROENVELDEN        ,  17, -1, 35,  25,  5, 60, 100 }, // 23
-	{ TOWNS_PHEXCAER           , TOWNS_EINSIEDLERSEE      ,  57, -2, 25,   0,  0, 50, 100 }, // 24
-	{ TOWNS_VARNHEIM           , TOWNS_AUPLOG             ,  52, -1, 15,  25,  5, 15,  75 }, // 25
-	{ TOWNS_DASPOTA            , TOWNS_RYBON              ,  19, -2, 15,   5,  5,  5,  40 }, // 26
-	{ TOWNS_DASPOTA            , TOWNS_OTTARJE            ,  36, -1, 20,   5, 30,  0,  20 }, // 27
-	{ TOWNS_OTTARJE            , TOWNS_SKJAL              ,  48, -1, 15,  10, 30,  0,  10 }, // 28
-	{ TOWNS_SKJAL              , TOWNS_PREM               ,  27,  0, 15,  25, 35,  0,   5 }, // 29
-	{ TOWNS_PREM               , TOWNS_KORD               ,  34,  0, 10,  25, 30,  0,   0 }, // 30
-	{ TOWNS_OTTARJE            , TOWNS_ORVIL              ,  65, -2, 30,   5, 10,  5,   5 }, // 31
-	{ TOWNS_ORVIL              , TOWNS_ALA                ,  29,  0, 15,  30, 25, 10,  20 }, // 32
-	{ TOWNS_ALA                , TOWNS_TJANSET            ,  25,  0, 20,  30, 25, 10,  15 }, // 33
-	{ TOWNS_TJANSET            , TOWNS_LISKOR             ,  24,  0,  5,  25, 20, 10,  10 }, // 34
-	{ TOWNS_LISKOR             , TOWNS_CLANEGH            ,  21,  0, 10,  30, 25, 10,  20 }, // 35
-	{ TOWNS_ALA                , TOWNS_THOSS              ,  42, -2, 25,  20, 15,  5,  15 }, // 36
-	{ TOWNS_THOSS              , TOWNS_LISKOR             ,  19,  0, 20,  30, 25,  5,  20 }, // 37
-	{ TOWNS_TJANSET            , TOWNS_THOSS              ,  47,  0, 20,  25, 20,  5,  15 }, // 38
-	{ TOWNS_VILNHEIM           , TOWNS_OBERORKEN          ,  12,  1, 15,  60,  0, 25, 100 }, // 39
-	{ TOWNS_OBERORKEN          , TOWNS_FELSTEYN           ,  20, -2, 50,   5, 10, 30,  75 }, // 40
-	{ TOWNS_FELSTEYN           , TOWNS_ORKANGER           ,  50, -2, 50,   5, 10, 30,  75 }, // 41
-	{ TOWNS_ORKANGER           , TOWNS_CLANEGH            ,  30, -2, 50,   5, 10, 30,  75 }, // 42
-	{ TOWNS_CLANEGH            , TOWNS_TYLDON             ,  28,  1, 20,  40, 50,  5,  15 }, // 43
-	{ TOWNS_TYLDON             , TOWNS_VIDSAND            ,  29,  1, 20,  30, 50,  5,  10 }, // 44
-	{ TOWNS_OBERORKEN          , TOWNS_EINSIEDLERSEE      ,  81, -3, 50,   0,  0, 50, 100 }, // 45
-	{ TOWNS_FELSTEYN           , TOWNS_EINSIEDLERSEE      ,  67, -3, 50,   0,  0, 50, 100 }, // 46
-	{ TOWNS_RYBON              , TOWNS_THOSS              ,  60, -4, 40,   0, 10,  5,  10 }, // 47
-	{ TOWNS_SKJAL              , TOWNS_ORVIL              ,  68, -4, 40,   0,  5,  5,   5 }, // 48
-	{ TOWNS_SKELELLEN          , TOWNS_PHEXCAER           , 140, -4, 50,   0,  0, 10,  30 }, // 49
-	{ TOWNS_MERSKE             , TOWNS_ROVAMUND           ,  71, -2, 25,   5,  5, 10,  50 }, // 50
-	{ TOWNS_ORVIL              , TOWNS_ROVIK              ,  23, -2, 25,   5,  5,  0,  20 }, // 51
-	{ TOWNS_LJASDAHL           , TOWNS_LJASDAHL           ,  70, -3, 35,   0,  0,  0,   0 }, // 52 // circular route
-	{ TOWNS_LJASDAHL           , TOWNS_HJALLANDER_HOF     ,   9, -2, 40,   5,  5,  0,   0 }, // 53
-	{ TOWNS_RUNINSHAVEN        , TOWNS_LEUCHTTURM_RUNIN   ,  24, -3, 30,   0,  0,  0,   0 }, // 54 // not linked at LEUCHTTURM_RUNIN
-	{ TOWNS_RUNINSHAVEN        , TOWNS_LEUCHTTURM_RUNIN   ,  17, -2, 35,   5,  5,  0,   0 }, // 55 // middle route; only route linked at LEUCHTTURM_RUNIN
-	{ TOWNS_BRENDHIL           , TOWNS_MANRIN             ,  30, -3, 35,   0,  0,  0,   0 }, // 56
-	{ TOWNS_EINSIEDLERSEE      , TOWNS_EINSIEDLERSEE      ,  47, -3, 35,   0,  0, 50, 100 }, // 57 // circular route
-	{ TOWNS_LEUCHTTURM_RUNIN   , TOWNS_RUNINSHAVEN        ,  27, -3, 25,   0,  0,  0,   0 }, // 58 // not linked at LEUCHTTURM_RUNIN
+	{ TOWN_ID_THORWAL            , TOWN_ID_VAERMHAG           ,  34,  1, 10,  25,  0, 10, 100 }, //  1
+	{ TOWN_ID_VAERMHAG           , TOWN_ID_VARNHEIM           ,  40,  1, 10,  20,  0, 10, 100 }, //  2
+	{ TOWN_ID_VARNHEIM           , TOWN_ID_DASPOTA            ,  21,  1, 10,   5,  0, 10, 100 }, //  3
+	{ TOWN_ID_THORWAL            , TOWN_ID_SERSKE             ,   9,  2,  5, 100,  0,  5, 100 }, //  4
+	{ TOWN_ID_SERSKE             , TOWN_ID_MERSKE             ,  27,  2,  5, 100,  0,  5, 100 }, //  5
+	{ TOWN_ID_MERSKE             , TOWN_ID_EFFERDUN           ,  15,  2,  5, 100,  0,  5, 100 }, //  6
+	{ TOWN_ID_SERSKE             , TOWN_ID_BREIDA             ,  36, -1, 25,  10,  0, 10,  90 }, //  7
+	{ TOWN_ID_FAEHRSTATION_TJOILA, TOWN_ID_TJOILA             ,   0,  7,  0,   0,  0,  0,   0 }, //  8
+	{ TOWN_ID_TJOILA             , TOWN_ID_BREIDA             ,  28,  0, 20,  15,  5, 20,  75 }, //  9
+	{ TOWN_ID_BREIDA             , TOWN_ID_PEILINEN           ,  33,  0, 25,  15,  5, 20,  75 }, // 10
+	{ TOWN_ID_PEILINEN           , TOWN_ID_ROVAMUND           ,  30,  0, 30,  15,  5, 20,  75 }, // 11
+	{ TOWN_ID_ROVAMUND           , TOWN_ID_NORDVEST           ,  38,  0, 30,  15,  5, 20,  75 }, // 12
+	{ TOWN_ID_NORDVEST           , TOWN_ID_KRAVIK             ,  24,  0, 35,  15,  5, 20,  75 }, // 13
+	{ TOWN_ID_KRAVIK             , TOWN_ID_SKELELLEN          ,  27, -1, 40,   5,  5, 30,  50 }, // 14
+	{ TOWN_ID_THORWAL            , TOWN_ID_FAEHRSTATION_TJOILA,  21,  1, 15,  65,  0, 20, 100 }, // 15
+	{ TOWN_ID_FAEHRSTATION_TJOILA, TOWN_ID_RUKIAN             ,  11,  1, 15,  55,  0, 20, 100 }, // 16
+	{ TOWN_ID_RUKIAN             , TOWN_ID_FAEHRE_ANGBODIRTAL ,  22,  1, 15,  55,  0, 25, 100 }, // 17
+	{ TOWN_ID_FAEHRE_ANGBODIRTAL , TOWN_ID_AUPLOG             ,  12,  1, 20,  55,  0, 25, 100 }, // 18
+	{ TOWN_ID_FAEHRE_ANGBODIRTAL , TOWN_ID_ANGBODIRTAL        ,   0,  7,  0,   0,  0,  0,   0 }, // 19
+	{ TOWN_ID_AUPLOG             , TOWN_ID_VILNHEIM           ,  24,  1, 15,  60,  0, 30, 100 }, // 20
+	{ TOWN_ID_VILNHEIM           , TOWN_ID_BODON              ,   0,  8,  0,   0,  0,  0,   0 }, // 21
+	{ TOWN_ID_VILNHEIM           , TOWN_ID_PHEXCAER           , 105, -1, 35,  10,  5, 45, 100 }, // 22
+	{ TOWN_ID_PHEXCAER           , TOWN_ID_GROENVELDEN        ,  17, -1, 35,  25,  5, 60, 100 }, // 23
+	{ TOWN_ID_PHEXCAER           , TOWN_ID_EINSIEDLERSEE      ,  57, -2, 25,   0,  0, 50, 100 }, // 24
+	{ TOWN_ID_VARNHEIM           , TOWN_ID_AUPLOG             ,  52, -1, 15,  25,  5, 15,  75 }, // 25
+	{ TOWN_ID_DASPOTA            , TOWN_ID_RYBON              ,  19, -2, 15,   5,  5,  5,  40 }, // 26
+	{ TOWN_ID_DASPOTA            , TOWN_ID_OTTARJE            ,  36, -1, 20,   5, 30,  0,  20 }, // 27
+	{ TOWN_ID_OTTARJE            , TOWN_ID_SKJAL              ,  48, -1, 15,  10, 30,  0,  10 }, // 28
+	{ TOWN_ID_SKJAL              , TOWN_ID_PREM               ,  27,  0, 15,  25, 35,  0,   5 }, // 29
+	{ TOWN_ID_PREM               , TOWN_ID_KORD               ,  34,  0, 10,  25, 30,  0,   0 }, // 30
+	{ TOWN_ID_OTTARJE            , TOWN_ID_ORVIL              ,  65, -2, 30,   5, 10,  5,   5 }, // 31
+	{ TOWN_ID_ORVIL              , TOWN_ID_ALA                ,  29,  0, 15,  30, 25, 10,  20 }, // 32
+	{ TOWN_ID_ALA                , TOWN_ID_TJANSET            ,  25,  0, 20,  30, 25, 10,  15 }, // 33
+	{ TOWN_ID_TJANSET            , TOWN_ID_LISKOR             ,  24,  0,  5,  25, 20, 10,  10 }, // 34
+	{ TOWN_ID_LISKOR             , TOWN_ID_CLANEGH            ,  21,  0, 10,  30, 25, 10,  20 }, // 35
+	{ TOWN_ID_ALA                , TOWN_ID_THOSS              ,  42, -2, 25,  20, 15,  5,  15 }, // 36
+	{ TOWN_ID_THOSS              , TOWN_ID_LISKOR             ,  19,  0, 20,  30, 25,  5,  20 }, // 37
+	{ TOWN_ID_TJANSET            , TOWN_ID_THOSS              ,  47,  0, 20,  25, 20,  5,  15 }, // 38
+	{ TOWN_ID_VILNHEIM           , TOWN_ID_OBERORKEN          ,  12,  1, 15,  60,  0, 25, 100 }, // 39
+	{ TOWN_ID_OBERORKEN          , TOWN_ID_FELSTEYN           ,  20, -2, 50,   5, 10, 30,  75 }, // 40
+	{ TOWN_ID_FELSTEYN           , TOWN_ID_ORKANGER           ,  50, -2, 50,   5, 10, 30,  75 }, // 41
+	{ TOWN_ID_ORKANGER           , TOWN_ID_CLANEGH            ,  30, -2, 50,   5, 10, 30,  75 }, // 42
+	{ TOWN_ID_CLANEGH            , TOWN_ID_TYLDON             ,  28,  1, 20,  40, 50,  5,  15 }, // 43
+	{ TOWN_ID_TYLDON             , TOWN_ID_VIDSAND            ,  29,  1, 20,  30, 50,  5,  10 }, // 44
+	{ TOWN_ID_OBERORKEN          , TOWN_ID_EINSIEDLERSEE      ,  81, -3, 50,   0,  0, 50, 100 }, // 45
+	{ TOWN_ID_FELSTEYN           , TOWN_ID_EINSIEDLERSEE      ,  67, -3, 50,   0,  0, 50, 100 }, // 46
+	{ TOWN_ID_RYBON              , TOWN_ID_THOSS              ,  60, -4, 40,   0, 10,  5,  10 }, // 47
+	{ TOWN_ID_SKJAL              , TOWN_ID_ORVIL              ,  68, -4, 40,   0,  5,  5,   5 }, // 48
+	{ TOWN_ID_SKELELLEN          , TOWN_ID_PHEXCAER           , 140, -4, 50,   0,  0, 10,  30 }, // 49
+	{ TOWN_ID_MERSKE             , TOWN_ID_ROVAMUND           ,  71, -2, 25,   5,  5, 10,  50 }, // 50
+	{ TOWN_ID_ORVIL              , TOWN_ID_ROVIK              ,  23, -2, 25,   5,  5,  0,  20 }, // 51
+	{ TOWN_ID_LJASDAHL           , TOWN_ID_LJASDAHL           ,  70, -3, 35,   0,  0,  0,   0 }, // 52 // circular route
+	{ TOWN_ID_LJASDAHL           , TOWN_ID_HJALLANDER_HOF     ,   9, -2, 40,   5,  5,  0,   0 }, // 53
+	{ TOWN_ID_RUNINSHAVEN        , TOWN_ID_LEUCHTTURM_RUNIN   ,  24, -3, 30,   0,  0,  0,   0 }, // 54 // not linked at LEUCHTTURM_RUNIN
+	{ TOWN_ID_RUNINSHAVEN        , TOWN_ID_LEUCHTTURM_RUNIN   ,  17, -2, 35,   5,  5,  0,   0 }, // 55 // middle route; only route linked at LEUCHTTURM_RUNIN
+	{ TOWN_ID_BRENDHIL           , TOWN_ID_MANRIN             ,  30, -3, 35,   0,  0,  0,   0 }, // 56
+	{ TOWN_ID_EINSIEDLERSEE      , TOWN_ID_EINSIEDLERSEE      ,  47, -3, 35,   0,  0, 50, 100 }, // 57 // circular route
+	{ TOWN_ID_LEUCHTTURM_RUNIN   , TOWN_ID_RUNINSHAVEN        ,  27, -3, 25,   0,  0,  0,   0 }, // 58 // not linked at LEUCHTTURM_RUNIN
 	{ 0                        , 0                        ,  50, -4, 50,   0,  0,  5,   9 }
 }; // ds:0x9dc6
-// towns not connected to any land route: TOWNS_OVERTHORN, TOWNS_HJALSINGOR, TOWNS_GUDDASUNDEN, TOWNS_TREBAN, TOWNS_ARYN
+// towns not connected to any land route: TOWN_ID_OVERTHORN, TOWN_ID_HJALSINGOR, TOWN_ID_GUDDASUNDEN, TOWN_ID_TREBAN, TOWN_ID_ARYN
 
 // ds:0x9fd9, 105 arrays, each terminated by -1
 /* Numbers here are entries in g_land_routes */
@@ -202,111 +202,111 @@ int8_t g_signposts_linked_lroute_104[] = {53, -1};		//ds:0xa0b0;
 int8_t g_signposts_linked_lroute_105[] = {55, -1};		//ds:0xa0b2;
 
 struct trv_start_point g_signposts[106] = {
-	{ TOWNS_THORWAL            , 1, (uint8_t*)g_signposts_linked_lroute_001 }, //  1
-	{ TOWNS_THORWAL            , 2, (uint8_t*)g_signposts_linked_lroute_002 }, //  2
-	{ TOWNS_THORWAL            , 4, (uint8_t*)g_signposts_linked_lroute_003 }, //  3
-	{ TOWNS_SERSKE             , 1, (uint8_t*)g_signposts_linked_lroute_004 }, //  4
-	{ TOWNS_SERSKE             , 2, (uint8_t*)g_signposts_linked_lroute_005 }, //  5
-	{ TOWNS_BREIDA             , 1, (uint8_t*)g_signposts_linked_lroute_006 }, //  6
-	{ TOWNS_BREIDA             , 2, (uint8_t*)g_signposts_linked_lroute_007 }, //  7
-	{ TOWNS_BREIDA             , 3, (uint8_t*)g_signposts_linked_lroute_008 }, //  8
-	{ TOWNS_PEILINEN           , 1, (uint8_t*)g_signposts_linked_lroute_009 }, //  9
-	{ TOWNS_PEILINEN           , 2, (uint8_t*)g_signposts_linked_lroute_010 }, // 10
-	{ TOWNS_ROVAMUND           , 1, (uint8_t*)g_signposts_linked_lroute_011 }, // 11
-	{ TOWNS_ROVAMUND           , 2, (uint8_t*)g_signposts_linked_lroute_012 }, // 12
-	{ TOWNS_ROVAMUND           , 3, (uint8_t*)g_signposts_linked_lroute_013 }, // 13
-	{ TOWNS_NORDVEST           , 1, (uint8_t*)g_signposts_linked_lroute_014 }, // 14
-	{ TOWNS_NORDVEST           , 2, (uint8_t*)g_signposts_linked_lroute_015 }, // 15
-	{ TOWNS_KRAVIK             , 1, (uint8_t*)g_signposts_linked_lroute_016 }, // 16
-	{ TOWNS_KRAVIK             , 2, (uint8_t*)g_signposts_linked_lroute_017 }, // 17
-	{ TOWNS_SKELELLEN          , 1, (uint8_t*)g_signposts_linked_lroute_018 }, // 18
-	{ TOWNS_SKELELLEN          , 2, (uint8_t*)g_signposts_linked_lroute_019 }, // 19
-	{ TOWNS_MERSKE             , 2, (uint8_t*)g_signposts_linked_lroute_020 }, // 20
-	{ TOWNS_MERSKE             , 3, (uint8_t*)g_signposts_linked_lroute_021 }, // 21
-	{ TOWNS_MERSKE             , 4, (uint8_t*)g_signposts_linked_lroute_022 }, // 22
-	{ TOWNS_EFFERDUN           , 2, (uint8_t*)g_signposts_linked_lroute_023 }, // 23
-	{ TOWNS_TJOILA             , 1, (uint8_t*)g_signposts_linked_lroute_024 }, // 24
-	{ TOWNS_TJOILA             , 2, (uint8_t*)g_signposts_linked_lroute_025 }, // 25
-	{ TOWNS_RUKIAN             , 1, (uint8_t*)g_signposts_linked_lroute_026 }, // 26
-	{ TOWNS_RUKIAN             , 2, (uint8_t*)g_signposts_linked_lroute_027 }, // 27
-	{ TOWNS_ANGBODIRTAL        , 1, (uint8_t*)g_signposts_linked_lroute_028 }, // 28
-	{ TOWNS_AUPLOG             , 1, (uint8_t*)g_signposts_linked_lroute_029 }, // 29
-	{ TOWNS_AUPLOG             , 2, (uint8_t*)g_signposts_linked_lroute_030 }, // 30
-	{ TOWNS_AUPLOG             , 3, (uint8_t*)g_signposts_linked_lroute_031 }, // 31
-	{ TOWNS_VILNHEIM           , 1, (uint8_t*)g_signposts_linked_lroute_032 }, // 32
-	{ TOWNS_VILNHEIM           , 2, (uint8_t*)g_signposts_linked_lroute_033 }, // 33
-	{ TOWNS_VILNHEIM           , 3, (uint8_t*)g_signposts_linked_lroute_034 }, // 34
-	{ TOWNS_VILNHEIM           , 4, (uint8_t*)g_signposts_linked_lroute_035 }, // 35
-	{ TOWNS_BODON              , 1, (uint8_t*)g_signposts_linked_lroute_036 }, // 36
-	{ TOWNS_OBERORKEN          , 1, (uint8_t*)g_signposts_linked_lroute_037 }, // 37
-	{ TOWNS_OBERORKEN          , 2, (uint8_t*)g_signposts_linked_lroute_038 }, // 38
-	{ TOWNS_OBERORKEN          , 3, (uint8_t*)g_signposts_linked_lroute_039 }, // 39
-	{ TOWNS_PHEXCAER           , 1, (uint8_t*)g_signposts_linked_lroute_040 }, // 40
-	{ TOWNS_PHEXCAER           , 2, (uint8_t*)g_signposts_linked_lroute_041 }, // 41
-	{ TOWNS_PHEXCAER           , 3, (uint8_t*)g_signposts_linked_lroute_042 }, // 42
-	{ TOWNS_PHEXCAER           , 4, (uint8_t*)g_signposts_linked_lroute_043 }, // 43
-	{ TOWNS_GROENVELDEN        , 1, (uint8_t*)g_signposts_linked_lroute_044 }, // 44
-	{ TOWNS_FELSTEYN           , 1, (uint8_t*)g_signposts_linked_lroute_045 }, // 45
-	{ TOWNS_FELSTEYN           , 2, (uint8_t*)g_signposts_linked_lroute_046 }, // 46
-	{ TOWNS_FELSTEYN           , 3, (uint8_t*)g_signposts_linked_lroute_047 }, // 47
-	{ TOWNS_EINSIEDLERSEE      , 1, (uint8_t*)g_signposts_linked_lroute_048 }, // 48
-	{ TOWNS_ORKANGER           , 1, (uint8_t*)g_signposts_linked_lroute_049 }, // 49
-	{ TOWNS_ORKANGER           , 2, (uint8_t*)g_signposts_linked_lroute_050 }, // 50
-	{ TOWNS_CLANEGH            , 1, (uint8_t*)g_signposts_linked_lroute_051 }, // 51
-	{ TOWNS_CLANEGH            , 2, (uint8_t*)g_signposts_linked_lroute_052 }, // 52
-	{ TOWNS_CLANEGH            , 3, (uint8_t*)g_signposts_linked_lroute_053 }, // 53
-	{ TOWNS_LISKOR             , 1, (uint8_t*)g_signposts_linked_lroute_054 }, // 54
-	{ TOWNS_LISKOR             , 2, (uint8_t*)g_signposts_linked_lroute_055 }, // 55
-	{ TOWNS_LISKOR             , 3, (uint8_t*)g_signposts_linked_lroute_056 }, // 56
-	{ TOWNS_THOSS              , 1, (uint8_t*)g_signposts_linked_lroute_057 }, // 57
-	{ TOWNS_THOSS              , 2, (uint8_t*)g_signposts_linked_lroute_058 }, // 58
-	{ TOWNS_THOSS              , 3, (uint8_t*)g_signposts_linked_lroute_059 }, // 59
-	{ TOWNS_TJANSET            , 1, (uint8_t*)g_signposts_linked_lroute_060 }, // 60
-	{ TOWNS_TJANSET            , 2, (uint8_t*)g_signposts_linked_lroute_061 }, // 61
-	{ TOWNS_ALA                , 1, (uint8_t*)g_signposts_linked_lroute_062 }, // 62
-	{ TOWNS_ALA                , 2, (uint8_t*)g_signposts_linked_lroute_063 }, // 63
-	{ TOWNS_ORVIL              , 1, (uint8_t*)g_signposts_linked_lroute_064 }, // 64
-	{ TOWNS_ORVIL              , 2, (uint8_t*)g_signposts_linked_lroute_065 }, // 65
-	{ TOWNS_ORVIL              , 3, (uint8_t*)g_signposts_linked_lroute_066 }, // 66
-	{ TOWNS_ROVIK              , 1, (uint8_t*)g_signposts_linked_lroute_067 }, // 67
-	{ TOWNS_KORD               , 1, (uint8_t*)g_signposts_linked_lroute_068 }, // 68
-	{ TOWNS_RUNINSHAVEN        , 1, (uint8_t*)g_signposts_linked_lroute_069 }, // 69
-	{ TOWNS_RUNINSHAVEN        , 2, (uint8_t*)g_signposts_linked_lroute_070 }, // 70
-	{ TOWNS_RUNINSHAVEN        , 4, (uint8_t*)g_signposts_linked_lroute_071 }, // 71
-	{ TOWNS_OTTARJE            , 1, (uint8_t*)g_signposts_linked_lroute_072 }, // 72
-	{ TOWNS_OTTARJE            , 2, (uint8_t*)g_signposts_linked_lroute_073 }, // 73
-	{ TOWNS_OTTARJE            , 3, (uint8_t*)g_signposts_linked_lroute_074 }, // 74
-	{ TOWNS_SKJAL              , 1, (uint8_t*)g_signposts_linked_lroute_075 }, // 75
-	{ TOWNS_SKJAL              , 2, (uint8_t*)g_signposts_linked_lroute_076 }, // 76
-	{ TOWNS_SKJAL              , 3, (uint8_t*)g_signposts_linked_lroute_077 }, // 77
-	{ TOWNS_PREM               , 1, (uint8_t*)g_signposts_linked_lroute_078 }, // 78
-	{ TOWNS_PREM               , 2, (uint8_t*)g_signposts_linked_lroute_079 }, // 79
-	{ TOWNS_DASPOTA            , 1, (uint8_t*)g_signposts_linked_lroute_080 }, // 80
-	{ TOWNS_DASPOTA            , 2, (uint8_t*)g_signposts_linked_lroute_081 }, // 81
-	{ TOWNS_DASPOTA            , 3, (uint8_t*)g_signposts_linked_lroute_082 }, // 82
-	{ TOWNS_RYBON              , 1, (uint8_t*)g_signposts_linked_lroute_083 }, // 83
-	{ TOWNS_RYBON              , 2, (uint8_t*)g_signposts_linked_lroute_084 }, // 84
-	{ TOWNS_LJASDAHL           , 2, (uint8_t*)g_signposts_linked_lroute_085 }, // 85
-	{ TOWNS_LJASDAHL           , 3, (uint8_t*)g_signposts_linked_lroute_086 }, // 86
-	{ TOWNS_LJASDAHL           , 4, (uint8_t*)g_signposts_linked_lroute_087 }, // 87
-	{ TOWNS_VARNHEIM           , 1, (uint8_t*)g_signposts_linked_lroute_088 }, // 88
-	{ TOWNS_VARNHEIM           , 2, (uint8_t*)g_signposts_linked_lroute_089 }, // 89
-	{ TOWNS_VARNHEIM           , 3, (uint8_t*)g_signposts_linked_lroute_090 }, // 90
-	{ TOWNS_VAERMHAG           , 1, (uint8_t*)g_signposts_linked_lroute_091 }, // 91
-	{ TOWNS_VAERMHAG           , 2, (uint8_t*)g_signposts_linked_lroute_092 }, // 92
-	{ TOWNS_TYLDON             , 1, (uint8_t*)g_signposts_linked_lroute_093 }, // 93
-	{ TOWNS_TYLDON             , 2, (uint8_t*)g_signposts_linked_lroute_094 }, // 94
-	{ TOWNS_VIDSAND            , 1, (uint8_t*)g_signposts_linked_lroute_095 }, // 95
-	{ TOWNS_BRENDHIL           , 1, (uint8_t*)g_signposts_linked_lroute_096 }, // 96
-	{ TOWNS_MANRIN             , 1, (uint8_t*)g_signposts_linked_lroute_097 }, // 97
-	{ TOWNS_FAEHRSTATION_TJOILA, 1, (uint8_t*)g_signposts_linked_lroute_098 }, // 98
-	{ TOWNS_FAEHRSTATION_TJOILA, 2, (uint8_t*)g_signposts_linked_lroute_099 }, // 99
-	{ TOWNS_FAEHRSTATION_TJOILA, 3, (uint8_t*)g_signposts_linked_lroute_100 }, // 100
-	{ TOWNS_FAEHRE_ANGBODIRTAL , 1, (uint8_t*)g_signposts_linked_lroute_101 }, // 101
-	{ TOWNS_FAEHRE_ANGBODIRTAL , 2, (uint8_t*)g_signposts_linked_lroute_102 }, // 102
-	{ TOWNS_FAEHRE_ANGBODIRTAL , 3, (uint8_t*)g_signposts_linked_lroute_103 }, // 103
-	{ TOWNS_HJALLANDER_HOF     , 1, (uint8_t*)g_signposts_linked_lroute_104 }, // 104
-	{ TOWNS_LEUCHTTURM_RUNIN   , 2, (uint8_t*)g_signposts_linked_lroute_105 }, // 105
+	{ TOWN_ID_THORWAL            , 1, (uint8_t*)g_signposts_linked_lroute_001 }, //  1
+	{ TOWN_ID_THORWAL            , 2, (uint8_t*)g_signposts_linked_lroute_002 }, //  2
+	{ TOWN_ID_THORWAL            , 4, (uint8_t*)g_signposts_linked_lroute_003 }, //  3
+	{ TOWN_ID_SERSKE             , 1, (uint8_t*)g_signposts_linked_lroute_004 }, //  4
+	{ TOWN_ID_SERSKE             , 2, (uint8_t*)g_signposts_linked_lroute_005 }, //  5
+	{ TOWN_ID_BREIDA             , 1, (uint8_t*)g_signposts_linked_lroute_006 }, //  6
+	{ TOWN_ID_BREIDA             , 2, (uint8_t*)g_signposts_linked_lroute_007 }, //  7
+	{ TOWN_ID_BREIDA             , 3, (uint8_t*)g_signposts_linked_lroute_008 }, //  8
+	{ TOWN_ID_PEILINEN           , 1, (uint8_t*)g_signposts_linked_lroute_009 }, //  9
+	{ TOWN_ID_PEILINEN           , 2, (uint8_t*)g_signposts_linked_lroute_010 }, // 10
+	{ TOWN_ID_ROVAMUND           , 1, (uint8_t*)g_signposts_linked_lroute_011 }, // 11
+	{ TOWN_ID_ROVAMUND           , 2, (uint8_t*)g_signposts_linked_lroute_012 }, // 12
+	{ TOWN_ID_ROVAMUND           , 3, (uint8_t*)g_signposts_linked_lroute_013 }, // 13
+	{ TOWN_ID_NORDVEST           , 1, (uint8_t*)g_signposts_linked_lroute_014 }, // 14
+	{ TOWN_ID_NORDVEST           , 2, (uint8_t*)g_signposts_linked_lroute_015 }, // 15
+	{ TOWN_ID_KRAVIK             , 1, (uint8_t*)g_signposts_linked_lroute_016 }, // 16
+	{ TOWN_ID_KRAVIK             , 2, (uint8_t*)g_signposts_linked_lroute_017 }, // 17
+	{ TOWN_ID_SKELELLEN          , 1, (uint8_t*)g_signposts_linked_lroute_018 }, // 18
+	{ TOWN_ID_SKELELLEN          , 2, (uint8_t*)g_signposts_linked_lroute_019 }, // 19
+	{ TOWN_ID_MERSKE             , 2, (uint8_t*)g_signposts_linked_lroute_020 }, // 20
+	{ TOWN_ID_MERSKE             , 3, (uint8_t*)g_signposts_linked_lroute_021 }, // 21
+	{ TOWN_ID_MERSKE             , 4, (uint8_t*)g_signposts_linked_lroute_022 }, // 22
+	{ TOWN_ID_EFFERDUN           , 2, (uint8_t*)g_signposts_linked_lroute_023 }, // 23
+	{ TOWN_ID_TJOILA             , 1, (uint8_t*)g_signposts_linked_lroute_024 }, // 24
+	{ TOWN_ID_TJOILA             , 2, (uint8_t*)g_signposts_linked_lroute_025 }, // 25
+	{ TOWN_ID_RUKIAN             , 1, (uint8_t*)g_signposts_linked_lroute_026 }, // 26
+	{ TOWN_ID_RUKIAN             , 2, (uint8_t*)g_signposts_linked_lroute_027 }, // 27
+	{ TOWN_ID_ANGBODIRTAL        , 1, (uint8_t*)g_signposts_linked_lroute_028 }, // 28
+	{ TOWN_ID_AUPLOG             , 1, (uint8_t*)g_signposts_linked_lroute_029 }, // 29
+	{ TOWN_ID_AUPLOG             , 2, (uint8_t*)g_signposts_linked_lroute_030 }, // 30
+	{ TOWN_ID_AUPLOG             , 3, (uint8_t*)g_signposts_linked_lroute_031 }, // 31
+	{ TOWN_ID_VILNHEIM           , 1, (uint8_t*)g_signposts_linked_lroute_032 }, // 32
+	{ TOWN_ID_VILNHEIM           , 2, (uint8_t*)g_signposts_linked_lroute_033 }, // 33
+	{ TOWN_ID_VILNHEIM           , 3, (uint8_t*)g_signposts_linked_lroute_034 }, // 34
+	{ TOWN_ID_VILNHEIM           , 4, (uint8_t*)g_signposts_linked_lroute_035 }, // 35
+	{ TOWN_ID_BODON              , 1, (uint8_t*)g_signposts_linked_lroute_036 }, // 36
+	{ TOWN_ID_OBERORKEN          , 1, (uint8_t*)g_signposts_linked_lroute_037 }, // 37
+	{ TOWN_ID_OBERORKEN          , 2, (uint8_t*)g_signposts_linked_lroute_038 }, // 38
+	{ TOWN_ID_OBERORKEN          , 3, (uint8_t*)g_signposts_linked_lroute_039 }, // 39
+	{ TOWN_ID_PHEXCAER           , 1, (uint8_t*)g_signposts_linked_lroute_040 }, // 40
+	{ TOWN_ID_PHEXCAER           , 2, (uint8_t*)g_signposts_linked_lroute_041 }, // 41
+	{ TOWN_ID_PHEXCAER           , 3, (uint8_t*)g_signposts_linked_lroute_042 }, // 42
+	{ TOWN_ID_PHEXCAER           , 4, (uint8_t*)g_signposts_linked_lroute_043 }, // 43
+	{ TOWN_ID_GROENVELDEN        , 1, (uint8_t*)g_signposts_linked_lroute_044 }, // 44
+	{ TOWN_ID_FELSTEYN           , 1, (uint8_t*)g_signposts_linked_lroute_045 }, // 45
+	{ TOWN_ID_FELSTEYN           , 2, (uint8_t*)g_signposts_linked_lroute_046 }, // 46
+	{ TOWN_ID_FELSTEYN           , 3, (uint8_t*)g_signposts_linked_lroute_047 }, // 47
+	{ TOWN_ID_EINSIEDLERSEE      , 1, (uint8_t*)g_signposts_linked_lroute_048 }, // 48
+	{ TOWN_ID_ORKANGER           , 1, (uint8_t*)g_signposts_linked_lroute_049 }, // 49
+	{ TOWN_ID_ORKANGER           , 2, (uint8_t*)g_signposts_linked_lroute_050 }, // 50
+	{ TOWN_ID_CLANEGH            , 1, (uint8_t*)g_signposts_linked_lroute_051 }, // 51
+	{ TOWN_ID_CLANEGH            , 2, (uint8_t*)g_signposts_linked_lroute_052 }, // 52
+	{ TOWN_ID_CLANEGH            , 3, (uint8_t*)g_signposts_linked_lroute_053 }, // 53
+	{ TOWN_ID_LISKOR             , 1, (uint8_t*)g_signposts_linked_lroute_054 }, // 54
+	{ TOWN_ID_LISKOR             , 2, (uint8_t*)g_signposts_linked_lroute_055 }, // 55
+	{ TOWN_ID_LISKOR             , 3, (uint8_t*)g_signposts_linked_lroute_056 }, // 56
+	{ TOWN_ID_THOSS              , 1, (uint8_t*)g_signposts_linked_lroute_057 }, // 57
+	{ TOWN_ID_THOSS              , 2, (uint8_t*)g_signposts_linked_lroute_058 }, // 58
+	{ TOWN_ID_THOSS              , 3, (uint8_t*)g_signposts_linked_lroute_059 }, // 59
+	{ TOWN_ID_TJANSET            , 1, (uint8_t*)g_signposts_linked_lroute_060 }, // 60
+	{ TOWN_ID_TJANSET            , 2, (uint8_t*)g_signposts_linked_lroute_061 }, // 61
+	{ TOWN_ID_ALA                , 1, (uint8_t*)g_signposts_linked_lroute_062 }, // 62
+	{ TOWN_ID_ALA                , 2, (uint8_t*)g_signposts_linked_lroute_063 }, // 63
+	{ TOWN_ID_ORVIL              , 1, (uint8_t*)g_signposts_linked_lroute_064 }, // 64
+	{ TOWN_ID_ORVIL              , 2, (uint8_t*)g_signposts_linked_lroute_065 }, // 65
+	{ TOWN_ID_ORVIL              , 3, (uint8_t*)g_signposts_linked_lroute_066 }, // 66
+	{ TOWN_ID_ROVIK              , 1, (uint8_t*)g_signposts_linked_lroute_067 }, // 67
+	{ TOWN_ID_KORD               , 1, (uint8_t*)g_signposts_linked_lroute_068 }, // 68
+	{ TOWN_ID_RUNINSHAVEN        , 1, (uint8_t*)g_signposts_linked_lroute_069 }, // 69
+	{ TOWN_ID_RUNINSHAVEN        , 2, (uint8_t*)g_signposts_linked_lroute_070 }, // 70
+	{ TOWN_ID_RUNINSHAVEN        , 4, (uint8_t*)g_signposts_linked_lroute_071 }, // 71
+	{ TOWN_ID_OTTARJE            , 1, (uint8_t*)g_signposts_linked_lroute_072 }, // 72
+	{ TOWN_ID_OTTARJE            , 2, (uint8_t*)g_signposts_linked_lroute_073 }, // 73
+	{ TOWN_ID_OTTARJE            , 3, (uint8_t*)g_signposts_linked_lroute_074 }, // 74
+	{ TOWN_ID_SKJAL              , 1, (uint8_t*)g_signposts_linked_lroute_075 }, // 75
+	{ TOWN_ID_SKJAL              , 2, (uint8_t*)g_signposts_linked_lroute_076 }, // 76
+	{ TOWN_ID_SKJAL              , 3, (uint8_t*)g_signposts_linked_lroute_077 }, // 77
+	{ TOWN_ID_PREM               , 1, (uint8_t*)g_signposts_linked_lroute_078 }, // 78
+	{ TOWN_ID_PREM               , 2, (uint8_t*)g_signposts_linked_lroute_079 }, // 79
+	{ TOWN_ID_DASPOTA            , 1, (uint8_t*)g_signposts_linked_lroute_080 }, // 80
+	{ TOWN_ID_DASPOTA            , 2, (uint8_t*)g_signposts_linked_lroute_081 }, // 81
+	{ TOWN_ID_DASPOTA            , 3, (uint8_t*)g_signposts_linked_lroute_082 }, // 82
+	{ TOWN_ID_RYBON              , 1, (uint8_t*)g_signposts_linked_lroute_083 }, // 83
+	{ TOWN_ID_RYBON              , 2, (uint8_t*)g_signposts_linked_lroute_084 }, // 84
+	{ TOWN_ID_LJASDAHL           , 2, (uint8_t*)g_signposts_linked_lroute_085 }, // 85
+	{ TOWN_ID_LJASDAHL           , 3, (uint8_t*)g_signposts_linked_lroute_086 }, // 86
+	{ TOWN_ID_LJASDAHL           , 4, (uint8_t*)g_signposts_linked_lroute_087 }, // 87
+	{ TOWN_ID_VARNHEIM           , 1, (uint8_t*)g_signposts_linked_lroute_088 }, // 88
+	{ TOWN_ID_VARNHEIM           , 2, (uint8_t*)g_signposts_linked_lroute_089 }, // 89
+	{ TOWN_ID_VARNHEIM           , 3, (uint8_t*)g_signposts_linked_lroute_090 }, // 90
+	{ TOWN_ID_VAERMHAG           , 1, (uint8_t*)g_signposts_linked_lroute_091 }, // 91
+	{ TOWN_ID_VAERMHAG           , 2, (uint8_t*)g_signposts_linked_lroute_092 }, // 92
+	{ TOWN_ID_TYLDON             , 1, (uint8_t*)g_signposts_linked_lroute_093 }, // 93
+	{ TOWN_ID_TYLDON             , 2, (uint8_t*)g_signposts_linked_lroute_094 }, // 94
+	{ TOWN_ID_VIDSAND            , 1, (uint8_t*)g_signposts_linked_lroute_095 }, // 95
+	{ TOWN_ID_BRENDHIL           , 1, (uint8_t*)g_signposts_linked_lroute_096 }, // 96
+	{ TOWN_ID_MANRIN             , 1, (uint8_t*)g_signposts_linked_lroute_097 }, // 97
+	{ TOWN_ID_FAEHRSTATION_TJOILA, 1, (uint8_t*)g_signposts_linked_lroute_098 }, // 98
+	{ TOWN_ID_FAEHRSTATION_TJOILA, 2, (uint8_t*)g_signposts_linked_lroute_099 }, // 99
+	{ TOWN_ID_FAEHRSTATION_TJOILA, 3, (uint8_t*)g_signposts_linked_lroute_100 }, // 100
+	{ TOWN_ID_FAEHRE_ANGBODIRTAL , 1, (uint8_t*)g_signposts_linked_lroute_101 }, // 101
+	{ TOWN_ID_FAEHRE_ANGBODIRTAL , 2, (uint8_t*)g_signposts_linked_lroute_102 }, // 102
+	{ TOWN_ID_FAEHRE_ANGBODIRTAL , 3, (uint8_t*)g_signposts_linked_lroute_103 }, // 103
+	{ TOWN_ID_HJALLANDER_HOF     , 1, (uint8_t*)g_signposts_linked_lroute_104 }, // 104
+	{ TOWN_ID_LEUCHTTURM_RUNIN   , 2, (uint8_t*)g_signposts_linked_lroute_105 }, // 105
 	{ -1                    , 0,    NULL }
 }; // ds:0xa0b4; uint8_t*
 
@@ -350,38 +350,38 @@ int8_t g_harbors_linked_sea_routes_25[] = {43, 44, -1};					  //ds:0xa3a0
 // for each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes
 
 struct trv_start_point g_harbors[26] = { // a list of the available sea routes for each of the 25 harbors in the game.
-	{ TOWNS_THORWAL         , 3, (uint8_t*)g_harbors_linked_sea_routes_01 }, //  1
-	{ TOWNS_SERSKE          , 3, (uint8_t*)g_harbors_linked_sea_routes_02 }, //  2
-	{ TOWNS_MERSKE          , 1, (uint8_t*)g_harbors_linked_sea_routes_03 }, //  3
-	{ TOWNS_EFFERDUN        , 1, (uint8_t*)g_harbors_linked_sea_routes_04 }, //  4
-	{ TOWNS_LISKOR          , 4, (uint8_t*)g_harbors_linked_sea_routes_05 }, //  5
-	{ TOWNS_TJANSET         , 3, (uint8_t*)g_harbors_linked_sea_routes_06 }, //  6
-	{ TOWNS_ORVIL           , 4, (uint8_t*)g_harbors_linked_sea_routes_07 }, //  7
-	{ TOWNS_OVERTHORN       , 1, (uint8_t*)g_harbors_linked_sea_routes_08 }, //  8
-	{ TOWNS_ROVIK           , 2, (uint8_t*)g_harbors_linked_sea_routes_09 }, //  9
-	{ TOWNS_HJALSINGOR      , 1, (uint8_t*)g_harbors_linked_sea_routes_10 }, // 10
-	{ TOWNS_GUDDASUNDEN     , 1, (uint8_t*)g_harbors_linked_sea_routes_11 }, // 11
-	{ TOWNS_KORD            , 2, (uint8_t*)g_harbors_linked_sea_routes_12 }, // 12
-	{ TOWNS_TREBAN          , 1, (uint8_t*)g_harbors_linked_sea_routes_13 }, // 13
-	{ TOWNS_ARYN            , 1, (uint8_t*)g_harbors_linked_sea_routes_14 }, // 14
-	{ TOWNS_RUNINSHAVEN     , 3, (uint8_t*)g_harbors_linked_sea_routes_15 }, // 15
-	{ TOWNS_OTTARJE         , 4, (uint8_t*)g_harbors_linked_sea_routes_16 }, // 16
-	{ TOWNS_SKJAL           , 4, (uint8_t*)g_harbors_linked_sea_routes_17 }, // 17
-	{ TOWNS_PREM            , 3, (uint8_t*)g_harbors_linked_sea_routes_18 }, // 18
-	{ TOWNS_LJASDAHL        , 1, (uint8_t*)g_harbors_linked_sea_routes_19 }, // 19
-	{ TOWNS_VARNHEIM        , 4, (uint8_t*)g_harbors_linked_sea_routes_20 }, // 20
-	{ TOWNS_VAERMHAG        , 3, (uint8_t*)g_harbors_linked_sea_routes_21 }, // 21
-	{ TOWNS_VIDSAND         , 2, (uint8_t*)g_harbors_linked_sea_routes_22 }, // 22
-	{ TOWNS_BRENDHIL        , 2, (uint8_t*)g_harbors_linked_sea_routes_23 }, // 23
-	{ TOWNS_MANRIN          , 2, (uint8_t*)g_harbors_linked_sea_routes_24 }, // 24
+	{ TOWN_ID_THORWAL         , 3, (uint8_t*)g_harbors_linked_sea_routes_01 }, //  1
+	{ TOWN_ID_SERSKE          , 3, (uint8_t*)g_harbors_linked_sea_routes_02 }, //  2
+	{ TOWN_ID_MERSKE          , 1, (uint8_t*)g_harbors_linked_sea_routes_03 }, //  3
+	{ TOWN_ID_EFFERDUN        , 1, (uint8_t*)g_harbors_linked_sea_routes_04 }, //  4
+	{ TOWN_ID_LISKOR          , 4, (uint8_t*)g_harbors_linked_sea_routes_05 }, //  5
+	{ TOWN_ID_TJANSET         , 3, (uint8_t*)g_harbors_linked_sea_routes_06 }, //  6
+	{ TOWN_ID_ORVIL           , 4, (uint8_t*)g_harbors_linked_sea_routes_07 }, //  7
+	{ TOWN_ID_OVERTHORN       , 1, (uint8_t*)g_harbors_linked_sea_routes_08 }, //  8
+	{ TOWN_ID_ROVIK           , 2, (uint8_t*)g_harbors_linked_sea_routes_09 }, //  9
+	{ TOWN_ID_HJALSINGOR      , 1, (uint8_t*)g_harbors_linked_sea_routes_10 }, // 10
+	{ TOWN_ID_GUDDASUNDEN     , 1, (uint8_t*)g_harbors_linked_sea_routes_11 }, // 11
+	{ TOWN_ID_KORD            , 2, (uint8_t*)g_harbors_linked_sea_routes_12 }, // 12
+	{ TOWN_ID_TREBAN          , 1, (uint8_t*)g_harbors_linked_sea_routes_13 }, // 13
+	{ TOWN_ID_ARYN            , 1, (uint8_t*)g_harbors_linked_sea_routes_14 }, // 14
+	{ TOWN_ID_RUNINSHAVEN     , 3, (uint8_t*)g_harbors_linked_sea_routes_15 }, // 15
+	{ TOWN_ID_OTTARJE         , 4, (uint8_t*)g_harbors_linked_sea_routes_16 }, // 16
+	{ TOWN_ID_SKJAL           , 4, (uint8_t*)g_harbors_linked_sea_routes_17 }, // 17
+	{ TOWN_ID_PREM            , 3, (uint8_t*)g_harbors_linked_sea_routes_18 }, // 18
+	{ TOWN_ID_LJASDAHL        , 1, (uint8_t*)g_harbors_linked_sea_routes_19 }, // 19
+	{ TOWN_ID_VARNHEIM        , 4, (uint8_t*)g_harbors_linked_sea_routes_20 }, // 20
+	{ TOWN_ID_VAERMHAG        , 3, (uint8_t*)g_harbors_linked_sea_routes_21 }, // 21
+	{ TOWN_ID_VIDSAND         , 2, (uint8_t*)g_harbors_linked_sea_routes_22 }, // 22
+	{ TOWN_ID_BRENDHIL        , 2, (uint8_t*)g_harbors_linked_sea_routes_23 }, // 23
+	{ TOWN_ID_MANRIN          , 2, (uint8_t*)g_harbors_linked_sea_routes_24 }, // 24
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 41: After doing a ship passage to Leuchtturm Runin and leaving the harbor,
 	 * the party is positioned in a remote town square. */
 	/* Reason: The following line is incorrect; it is a duplicate of the corresponding entry in g_signposts. */
-//	{ TOWNS_LEUCHTTURM_RUNIN, 2, (int8_t*)0x14fca0b2 }, // 25 links to land route 105
-	{ TOWNS_LEUCHTTURM_RUNIN, 2, (int8_t*)g_signposts_linked_lroute_105 }, // 25 links to land route 105
+//	{ TOWN_ID_LEUCHTTURM_RUNIN, 2, (int8_t*)0x14fca0b2 }, // 25 links to land route 105
+	{ TOWN_ID_LEUCHTTURM_RUNIN, 2, (int8_t*)g_signposts_linked_lroute_105 }, // 25 links to land route 105
 #else
-	{ TOWNS_LEUCHTTURM_RUNIN, 1, (uint8_t*)g_harbors_linked_sea_routes_25 }, // 25
+	{ TOWN_ID_LEUCHTTURM_RUNIN, 1, (uint8_t*)g_harbors_linked_sea_routes_25 }, // 25
 #endif
 	{ -1                 , 0, NULL }
 }; // ds:0xa3a3; uint8_t*
@@ -861,7 +861,7 @@ signed short do_travel_mode(void)
 
 	} else if (gs_travel_detour != 99)
 	{
-		gs_current_town = TOWNS_NONE;
+		gs_current_town = TOWN_ID_NONE;
 	}
 
 	if (g_pp20_index == 5)

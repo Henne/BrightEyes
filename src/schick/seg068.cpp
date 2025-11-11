@@ -443,7 +443,7 @@ void THO_ugdalf(void)
 		dramosch_says(get_tx2(35));
 
 		/* enter the dungeon */
-		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
+		DNG_enter_dungeon(DUNGEON_ID_ZWINGFESTE);
 
 		gs_x_target_bak = gs_x_target;
 		gs_y_target_bak = gs_y_target;
@@ -481,7 +481,7 @@ void THO_ugdalf(void)
 		dramosch_says((char*)(g_dtp2 + 0x400));
 
 		/* enter the dungeon */
-		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
+		DNG_enter_dungeon(DUNGEON_ID_ZWINGFESTE);
 
 		gs_x_target_bak = (gs_x_target);
 		gs_y_target_bak = (gs_y_target);

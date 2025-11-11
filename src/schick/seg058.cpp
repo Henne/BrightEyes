@@ -596,7 +596,7 @@ void do_smith(void)
 
 			if (gs_smith_kicked_flags[gs_current_typeindex] ||
 				gs_smith_flogged_flags[gs_current_typeindex] ||
-				gs_dungeon_id != DUNGEONS_NONE)
+				gs_dungeon_id != DUNGEON_ID_NONE)
 			{
 				done = 1;
 			}
@@ -633,7 +633,7 @@ void TLK_schmied(const signed int state)
 		g_price_modificator = 3;
 	} else if (state == 30) {
 
-		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
+		DNG_enter_dungeon(DUNGEON_ID_ZWINGFESTE);
 
 		gs_dungeon_level = 3;
 		gs_x_target_bak = gs_x_target = 11;

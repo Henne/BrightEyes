@@ -47,7 +47,7 @@ void tevent_053(void)
 /* Prem <-> Skjal: inn "Langschiff" */
 void tevent_054(void)
 {
-	TRV_found_inn(TOWNS_BRENDHIL, 68);
+	TRV_found_inn(TOWN_ID_BRENDHIL, 68);
 }
 
 /* Path ??? */
@@ -69,7 +69,7 @@ void tevent_055(void)
 
 void tevent_056(void)
 {
-	TRV_found_inn(TOWNS_MANRIN, 69);
+	TRV_found_inn(TOWN_ID_MANRIN, 69);
 }
 
 void tevent_057(void)
@@ -378,7 +378,7 @@ void tevent_061(void)
 			} while (answer == -1);
 
 			if (answer == 1) {
-				gs_travel_detour = DUNGEONS_WOLFSHOEHLE;
+				gs_travel_detour = DUNGEON_ID_WOLFSHOEHLE;
 			}
 		}
 
@@ -393,7 +393,7 @@ void tevent_061(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = DUNGEONS_WOLFSHOEHLE;
+			gs_travel_detour = DUNGEON_ID_WOLFSHOEHLE;
 		}
 	}
 }

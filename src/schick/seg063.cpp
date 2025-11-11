@@ -61,57 +61,57 @@ static const struct ship g_ship_table[8] = {
 }; // ds:0x6ed0
 static signed short g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
 struct sea_route g_sea_routes[46] = {
-	{ TOWNS_THORWAL    , TOWNS_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
-	{ TOWNS_PREM       , TOWNS_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
+	{ TOWN_ID_THORWAL    , TOWN_ID_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
+	{ TOWN_ID_PREM       , TOWN_ID_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
 #ifndef M302de_ORIGINAL_BUGFIX
 	 /* Original-Bug 25: According to the map, the route Prem <-> Manrin should be the longest ship route by far. Distance 54 is way too short. Maybe the original intention was a value of 310, which after a byte overflow results in 54. */
-	{ TOWNS_PREM       , TOWNS_MANRIN          ,  54,  7, 0, 0, 0, 0 }, //  3
+	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          ,  54,  7, 0, 0, 0, 0 }, //  3
 #else
-	{ TOWNS_PREM       , TOWNS_MANRIN          , 255,  7, 0, 0, 0, 0 }, //  3
+	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          , 255,  7, 0, 0, 0, 0 }, //  3
 	/* set the distance to maximum possible value 255. Still too short, but much better than 54 */
 #endif
-	{ TOWNS_PREM       , TOWNS_KORD            , 135,  7, 0, 0, 0, 0 }, //  4
-	{ TOWNS_KORD       , TOWNS_HJALSINGOR      ,  80,  6, 0, 0, 0, 0 }, //  5
-	{ TOWNS_HJALSINGOR , TOWNS_OVERTHORN       , 115,  4, 0, 0, 0, 0 }, //  6
-	{ TOWNS_HJALSINGOR , TOWNS_MANRIN          , 110,  5, 0, 0, 0, 0 }, //  7
-	{ TOWNS_THORWAL    , TOWNS_VAERMHAG        ,  30,  7, 0, 1, 0, 0 }, //  8
-	{ TOWNS_VAERMHAG   , TOWNS_VARNHEIM        ,  37,  5, 0, 1, 0, 0 }, //  9
-	{ TOWNS_VARNHEIM   , TOWNS_LJASDAHL        ,  25,  3, 0, 1, 0, 0 }, // 10
-	{ TOWNS_VARNHEIM   , TOWNS_OTTARJE         ,  25,  8, 0, 1, 0, 0 }, // 11
-	{ TOWNS_LJASDAHL   , TOWNS_OTTARJE         ,  10,  1, 0, 1, 0, 0 }, // 12
-	{ TOWNS_SKJAL      , TOWNS_OTTARJE         ,  52,  3, 0, 1, 0, 0 }, // 13
-	{ TOWNS_SKJAL      , TOWNS_PREM            ,  28,  4, 0, 1, 0, 0 }, // 14
-	{ TOWNS_PREM       , TOWNS_ARYN            ,  28,  6, 0, 1, 0, 0 }, // 15
-	{ TOWNS_PREM       , TOWNS_RUNINSHAVEN     ,  35,  7, 0, 1, 0, 0 }, // 16
-	{ TOWNS_ARYN       , TOWNS_RUNINSHAVEN     ,  25,  4, 0, 1, 0, 0 }, // 17
-	{ TOWNS_RUNINSHAVEN, TOWNS_TREBAN          ,  50,  7, 0, 1, 0, 0 }, // 18
-	{ TOWNS_TREBAN     , TOWNS_KORD            ,  40,  2, 0, 1, 0, 0 }, // 19
-	{ TOWNS_KORD       , TOWNS_GUDDASUNDEN     ,  65,  2, 0, 1, 0, 0 }, // 20
-	{ TOWNS_GUDDASUNDEN, TOWNS_HJALSINGOR      ,  20,  1, 0, 1, 0, 0 }, // 21
-	{ TOWNS_HJALSINGOR , TOWNS_ROVIK           ,  46,  2, 0, 1, 0, 0 }, // 22
-	{ TOWNS_ROVIK      , TOWNS_OVERTHORN       ,  67,  2, 0, 1, 0, 0 }, // 23
-	{ TOWNS_ROVIK      , TOWNS_ORVIL           ,  18,  1, 0, 1, 0, 0 }, // 24
-	{ TOWNS_OVERTHORN  , TOWNS_TJANSET         ,  40,  3, 0, 1, 0, 0 }, // 25
-	{ TOWNS_OVERTHORN  , TOWNS_VIDSAND         ,  48,  1, 0, 1, 0, 0 }, // 26
-	{ TOWNS_TJANSET    , TOWNS_LISKOR          ,  22,  6, 0, 1, 0, 0 }, // 27
-	{ TOWNS_LISKOR     , TOWNS_VIDSAND         ,  22,  1, 0, 1, 0, 0 }, // 28
-	{ TOWNS_TJANSET    , TOWNS_VIDSAND         ,  36,  2, 0, 1, 0, 0 }, // 29
-	{ TOWNS_OVERTHORN  , TOWNS_BRENDHIL        ,  32,  3, 0, 1, 0, 0 }, // 30
-	{ TOWNS_BRENDHIL   , TOWNS_MANRIN          ,  57,  5, 0, 1, 0, 0 }, // 31
-	{ TOWNS_ROVIK      , TOWNS_MANRIN          ,  83,  7, 0, 1, 0, 0 }, // 32
-	{ TOWNS_THORWAL    , TOWNS_MERSKE          ,  30,  7, 0, 1, 0, 0 }, // 33
-	{ TOWNS_MERSKE     , TOWNS_EFFERDUN        ,  18,  8, 0, 1, 0, 0 }, // 34
-	{ TOWNS_THORWAL    , TOWNS_EFFERDUN        ,  47,  3, 0, 1, 0, 0 }, // 35
-	{ TOWNS_SERSKE     , TOWNS_MERSKE          ,  24,  7, 0, 1, 0, 0 }, // 36
-	{ TOWNS_SERSKE     , TOWNS_EFFERDUN        ,  41,  5, 0, 1, 0, 0 }, // 37
-	{ TOWNS_OVERTHORN  , TOWNS_LISKOR          ,  51,  3, 0, 1, 0, 0 }, // 38
-	{ TOWNS_THORWAL    , TOWNS_VARNHEIM        ,  67,  4, 0, 1, 0, 0 }, // 39
-	{ TOWNS_OTTARJE    , TOWNS_PREM            ,  62,  4, 0, 1, 0, 0 }, // 40
-	{ TOWNS_OTTARJE    , TOWNS_RUNINSHAVEN     ,  73,  7, 0, 1, 0, 0 }, // 41
-	{ TOWNS_SKJAL      , TOWNS_RUNINSHAVEN     ,  55,  6, 0, 1, 0, 0 }, // 42
-	{ TOWNS_RUNINSHAVEN, TOWNS_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
-	{ TOWNS_TREBAN     , TOWNS_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
-	{ TOWNS_MANRIN     , TOWNS_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
+	{ TOWN_ID_PREM       , TOWN_ID_KORD            , 135,  7, 0, 0, 0, 0 }, //  4
+	{ TOWN_ID_KORD       , TOWN_ID_HJALSINGOR      ,  80,  6, 0, 0, 0, 0 }, //  5
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_OVERTHORN       , 115,  4, 0, 0, 0, 0 }, //  6
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_MANRIN          , 110,  5, 0, 0, 0, 0 }, //  7
+	{ TOWN_ID_THORWAL    , TOWN_ID_VAERMHAG        ,  30,  7, 0, 1, 0, 0 }, //  8
+	{ TOWN_ID_VAERMHAG   , TOWN_ID_VARNHEIM        ,  37,  5, 0, 1, 0, 0 }, //  9
+	{ TOWN_ID_VARNHEIM   , TOWN_ID_LJASDAHL        ,  25,  3, 0, 1, 0, 0 }, // 10
+	{ TOWN_ID_VARNHEIM   , TOWN_ID_OTTARJE         ,  25,  8, 0, 1, 0, 0 }, // 11
+	{ TOWN_ID_LJASDAHL   , TOWN_ID_OTTARJE         ,  10,  1, 0, 1, 0, 0 }, // 12
+	{ TOWN_ID_SKJAL      , TOWN_ID_OTTARJE         ,  52,  3, 0, 1, 0, 0 }, // 13
+	{ TOWN_ID_SKJAL      , TOWN_ID_PREM            ,  28,  4, 0, 1, 0, 0 }, // 14
+	{ TOWN_ID_PREM       , TOWN_ID_ARYN            ,  28,  6, 0, 1, 0, 0 }, // 15
+	{ TOWN_ID_PREM       , TOWN_ID_RUNINSHAVEN     ,  35,  7, 0, 1, 0, 0 }, // 16
+	{ TOWN_ID_ARYN       , TOWN_ID_RUNINSHAVEN     ,  25,  4, 0, 1, 0, 0 }, // 17
+	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_TREBAN          ,  50,  7, 0, 1, 0, 0 }, // 18
+	{ TOWN_ID_TREBAN     , TOWN_ID_KORD            ,  40,  2, 0, 1, 0, 0 }, // 19
+	{ TOWN_ID_KORD       , TOWN_ID_GUDDASUNDEN     ,  65,  2, 0, 1, 0, 0 }, // 20
+	{ TOWN_ID_GUDDASUNDEN, TOWN_ID_HJALSINGOR      ,  20,  1, 0, 1, 0, 0 }, // 21
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_ROVIK           ,  46,  2, 0, 1, 0, 0 }, // 22
+	{ TOWN_ID_ROVIK      , TOWN_ID_OVERTHORN       ,  67,  2, 0, 1, 0, 0 }, // 23
+	{ TOWN_ID_ROVIK      , TOWN_ID_ORVIL           ,  18,  1, 0, 1, 0, 0 }, // 24
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_TJANSET         ,  40,  3, 0, 1, 0, 0 }, // 25
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_VIDSAND         ,  48,  1, 0, 1, 0, 0 }, // 26
+	{ TOWN_ID_TJANSET    , TOWN_ID_LISKOR          ,  22,  6, 0, 1, 0, 0 }, // 27
+	{ TOWN_ID_LISKOR     , TOWN_ID_VIDSAND         ,  22,  1, 0, 1, 0, 0 }, // 28
+	{ TOWN_ID_TJANSET    , TOWN_ID_VIDSAND         ,  36,  2, 0, 1, 0, 0 }, // 29
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_BRENDHIL        ,  32,  3, 0, 1, 0, 0 }, // 30
+	{ TOWN_ID_BRENDHIL   , TOWN_ID_MANRIN          ,  57,  5, 0, 1, 0, 0 }, // 31
+	{ TOWN_ID_ROVIK      , TOWN_ID_MANRIN          ,  83,  7, 0, 1, 0, 0 }, // 32
+	{ TOWN_ID_THORWAL    , TOWN_ID_MERSKE          ,  30,  7, 0, 1, 0, 0 }, // 33
+	{ TOWN_ID_MERSKE     , TOWN_ID_EFFERDUN        ,  18,  8, 0, 1, 0, 0 }, // 34
+	{ TOWN_ID_THORWAL    , TOWN_ID_EFFERDUN        ,  47,  3, 0, 1, 0, 0 }, // 35
+	{ TOWN_ID_SERSKE     , TOWN_ID_MERSKE          ,  24,  7, 0, 1, 0, 0 }, // 36
+	{ TOWN_ID_SERSKE     , TOWN_ID_EFFERDUN        ,  41,  5, 0, 1, 0, 0 }, // 37
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_LISKOR          ,  51,  3, 0, 1, 0, 0 }, // 38
+	{ TOWN_ID_THORWAL    , TOWN_ID_VARNHEIM        ,  67,  4, 0, 1, 0, 0 }, // 39
+	{ TOWN_ID_OTTARJE    , TOWN_ID_PREM            ,  62,  4, 0, 1, 0, 0 }, // 40
+	{ TOWN_ID_OTTARJE    , TOWN_ID_RUNINSHAVEN     ,  73,  7, 0, 1, 0, 0 }, // 41
+	{ TOWN_ID_SKJAL      , TOWN_ID_RUNINSHAVEN     ,  55,  6, 0, 1, 0, 0 }, // 42
+	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
+	{ TOWN_ID_TREBAN     , TOWN_ID_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
+	{ TOWN_ID_MANRIN     , TOWN_ID_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
 	{ (unsigned char)-1             , 0x00                  ,   0,  0, 0, 0, 0, 0 } //TODO: towns should be signed
 }; // ds:0x6f00
 signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
@@ -476,7 +476,7 @@ void do_harbor(void)
 
 				} else {
 					done = 1;
-					DNG_enter_dungeon(DUNGEONS_TOTENSCHIFF);
+					DNG_enter_dungeon(DUNGEON_ID_TOTENSCHIFF);
 				}
 			}
 
@@ -499,7 +499,7 @@ void do_harbor(void)
 
 	} else {
 
-		gs_current_town = TOWNS_NONE;
+		gs_current_town = TOWN_ID_NONE;
 	}
 }
 
@@ -659,7 +659,7 @@ void sea_travel(signed short passage_id, signed short reverse)
 		if (gs_passage_deadship_flag != 0 && gs_route_dayprogress >= gs_passage_deadship_position && !gs_quest_deadship_done) {
 
 			/* within the call prolog_ghostship(), the party can decide if they enter the Totenschiff.
-			 * In that case, gs_travel_detour is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
+			 * In that case, gs_travel_detour is set to DUNGEON_ID_TOTENSCHIFF (instead of 0) */
 			prolog_ghostship();
 			gs_passage_deadship_flag = 0;
 

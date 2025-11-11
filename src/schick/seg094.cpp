@@ -719,14 +719,14 @@ void TM_func8(signed short a1)
 {
 	if (!(g_route59_flag & 1))
 	{
-		if (gs_current_town == TOWNS_PEILINEN)
+		if (gs_current_town == TOWN_ID_PEILINEN)
 		{
 			TM_draw_track(11, 9, 0, a1);
 		} else {
 			TM_draw_track(11, 17, 1, a1);
 		}
 	} else {
-		if (gs_current_town == TOWNS_KRAVIK)
+		if (gs_current_town == TOWN_ID_KRAVIK)
 		{
 			TM_draw_track(14, 8, 0, a1);
 		} else {

@@ -388,7 +388,7 @@ void tevent_051(void)
 
 			if (answer == 1)
 			{
-				gs_travel_detour = DUNGEONS_SPINNENHOEHLE;
+				gs_travel_detour = DUNGEON_ID_SPINNENHOEHLE;
 			}
 		}
 
@@ -403,7 +403,7 @@ void tevent_051(void)
 
 		if (answer == 1)
 		{
-			gs_travel_detour = DUNGEONS_SPINNENHOEHLE;
+			gs_travel_detour = DUNGEON_ID_SPINNENHOEHLE;
 		}
 	}
 }
@@ -578,12 +578,12 @@ void tevent_145(void)
 
 		if (answer == 1)
 		{
-			gs_trv_destination = TOWNS_KRAVIK;
-			gs_current_town = TOWNS_SKELELLEN;
+			gs_trv_destination = TOWN_ID_KRAVIK;
+			gs_current_town = TOWN_ID_SKELELLEN;
 
 		} else {
-			gs_trv_destination = TOWNS_SKELELLEN;
-			gs_current_town = TOWNS_KRAVIK;
+			gs_trv_destination = TOWN_ID_SKELELLEN;
+			gs_current_town = TOWN_ID_KRAVIK;
 		}
 
 	} else {
@@ -595,12 +595,12 @@ void tevent_145(void)
 
 		if (answer == 1) {
 
-			gs_trv_destination = TOWNS_PEILINEN;
-			gs_current_town = TOWNS_ROVAMUND;
+			gs_trv_destination = TOWN_ID_PEILINEN;
+			gs_current_town = TOWN_ID_ROVAMUND;
 
 		} else {
-			gs_trv_destination = TOWNS_ROVAMUND;
-			gs_current_town = TOWNS_PEILINEN;
+			gs_trv_destination = TOWN_ID_ROVAMUND;
+			gs_current_town = TOWN_ID_PEILINEN;
 		}
 	}
 

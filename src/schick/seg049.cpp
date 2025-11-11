@@ -319,8 +319,8 @@ void GRP_switch_to_next(signed short mode)
 
 	if (gs_current_group != group) {
 
-		if ( ((gs_current_town != TOWNS_NONE) && !gs_groups_town[group]) ||
-			(!gs_current_town && (gs_groups_town[group] != TOWNS_NONE)))
+		if ( ((gs_current_town != TOWN_ID_NONE) && !gs_groups_town[group]) ||
+			(!gs_current_town && (gs_groups_town[group] != TOWN_ID_NONE)))
 		{
 			set_palette(g_palette_allblack2, 0x00, 0x20);
 			set_palette(g_palette_allblack2, 0x80, 0x20);

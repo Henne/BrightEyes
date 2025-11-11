@@ -273,7 +273,7 @@ void prolog_ghostship(void)
 
 	if (answer == 1) {
 		g_request_refresh = 0;
-		gs_travel_detour = (DUNGEONS_TOTENSCHIFF);
+		gs_travel_detour = (DUNGEON_ID_TOTENSCHIFF);
 	} else {
 		g_request_refresh = 1;
 	}

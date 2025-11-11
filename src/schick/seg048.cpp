@@ -920,7 +920,7 @@ lab3:
 	g_textbox_width = tw_bak;
 	g_timers_disabled--;
 
-	if (gs_current_town != TOWNS_NONE) {
+	if (gs_current_town != TOWN_ID_NONE) {
 		g_fading_state = 3;
 	}
 }

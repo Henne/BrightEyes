@@ -532,7 +532,7 @@ signed int TRV_ferry(char *msg, signed int price)
 /* Vaermhag <-> Varnheim: inn "Golfblick" */
 void tevent_001(void)
 {
-	TRV_found_inn(TOWNS_DASPOTA, 65);
+	TRV_found_inn(TOWN_ID_DASPOTA, 65);
 }
 
 /* Varnheim <-> Daspota: hunter */
@@ -850,7 +850,7 @@ void tevent_009(void)
 
 void tevent_010(void)
 {
-	TRV_found_inn(TOWNS_VARNHEIM, 66);
+	TRV_found_inn(TOWN_ID_VARNHEIM, 66);
 }
 
 void tevent_012(void)
