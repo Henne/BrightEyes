@@ -541,7 +541,7 @@ void item_bag(void)
 {
 	/* MAGIC BREADBAG, BAG: ID 184, 221 */
 
-	if ((gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
+	if ((gs_dungeon_id == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
 
 		/* set ptr to the map */
 		uint8_t *ptr = g_dng_map;

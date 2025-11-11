@@ -919,7 +919,7 @@ void DNG_timestep(signed short forward)
 			GUI_output(get_tx(23));
 		}
 
-		gs_dungeon_index = DUNGEONS_NONE;
+		gs_dungeon_id = DUNGEONS_NONE;
 
 		/* exit game */
 		g_game_state = GAME_STATE_DEAD;
@@ -1330,11 +1330,11 @@ mark2:			   goto mark1;
 	gs_y_target = y_pos;
 	gs_direction = dir;
 	gs_dungeon_level = level;
-	gs_dungeon_index = dungeon_id;
+	gs_dungeon_id = dungeon_id;
 	gs_current_loctype_bak = gs_current_loctype;
 	gs_current_town_bak = gs_current_town;
 	gs_current_loctype = gs_current_town = TOWNS_NONE;
-	g_dng_loaded_dng_index = g_town_loaded_town_id = -1;
+	g_dng_loaded_dungeon_id = g_town_loaded_town_id = -1;
 
 	if (dungeon_id == DUNGEONS_ZWINGFESTE) {
 

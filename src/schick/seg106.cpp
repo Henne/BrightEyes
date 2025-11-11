@@ -842,7 +842,7 @@ void equip_belt_ani(void)
 		call_mouse();
 	}
 
-	g_current_ani = g_dng_loaded_dng_index = g_town_loaded_town_id = -1;
+	g_current_ani = g_dng_loaded_dungeon_id = g_town_loaded_town_id = -1;
 }
 
 /**
