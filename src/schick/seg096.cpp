@@ -223,7 +223,7 @@ uint8_t* GUI_names_grammar(signed short flag, signed short index, signed short t
 		}
 	} else {
 		p_name = get_monname(index);
-		flag += lp5.a[g_monname_genders[index]];
+		flag += lp5.a[g_monster_name_genders[index]];
 	}
 
 	lp1 = (flag & 0x8000) ? &g_grammar_def_table[(flag & 0xf) * 3] :
@@ -308,7 +308,7 @@ uint8_t* GUI_2f2(signed short v1, signed short word_id, signed short type)
 {
 	signed short genus;
 
-	genus = (type == 0) ? g_items_genders[word_id] : g_monname_genders[word_id];
+	genus = (type == 0) ? g_items_genders[word_id] : g_monster_name_genders[word_id];
 
 	return (uint8_t*)g_grammar_pronouns_index[g_grammar_pronouns_table2[v1 * 3 + genus]];
 }

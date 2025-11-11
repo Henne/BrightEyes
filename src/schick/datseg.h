@@ -774,7 +774,7 @@ extern signed short g_herbs_uneatable[7];				// ds:0x08f1; seg108
 extern signed short g_elixir_potions[8];				// ds:0x08ff; seg108
 extern signed short g_bad_elixirs[8];					// ds:0x090f; seg108
 extern signed short g_attack_items[3];					// ds:0x091f; seg033
-extern signed char g_monname_genders[78];				// ds:0x0925; seg096
+extern signed char g_monster_name_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
 extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
 extern const struct spells_index g_spells_index[8];			// ds:0x0d03; seg046, seg098
