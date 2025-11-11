@@ -94,7 +94,7 @@ signed short g_items_pluralwords[7] = {
 	ITEM_LOBPREISUNGEN,
 	-1
 }; // ds:0x029e
-signed char g_items_genders[254] = {
+signed char g_item_name_genders[254] = {
 	GENDER_FEMININE,
 	GENDER_NEUTER,
 	GENDER_MASCULINE,

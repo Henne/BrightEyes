@@ -208,7 +208,7 @@ uint8_t* GUI_names_grammar(signed short flag, signed short index, signed short t
 		/* string_array_itemnames */
 		p_name = get_itemname(index);
 
-		flag += lp5.a[g_items_genders[index]];
+		flag += lp5.a[g_item_name_genders[index]];
 
 		lp1 = &g_items_noplural[0];
 
@@ -308,7 +308,7 @@ uint8_t* GUI_2f2(signed short v1, signed short word_id, signed short type)
 {
 	signed short genus;
 
-	genus = (type == 0) ? g_items_genders[word_id] : g_monster_name_genders[word_id];
+	genus = (type == 0) ? g_item_name_genders[word_id] : g_monster_name_genders[word_id];
 
 	return (uint8_t*)g_grammar_pronouns_index[g_grammar_pronouns_table2[v1 * 3 + genus]];
 }
