@@ -166,7 +166,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char target_object_id, signe
 		sheet->bp_orig = 10;
 
 	sheet->magic = monster->magic;
-	sheet->mag_id = monster->mag_id;
+	sheet->spell_repertoire_id = monster->spell_repertoire_id;
 
 	/* unset 'dead' flag */
 	/* bogus this value is 0x00 or 0x20 */

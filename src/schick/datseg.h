@@ -343,7 +343,7 @@ struct struct_monster {
 	int16_t dam2;
 	int8_t bp;
 	int8_t magic;
-	int8_t mag_id;
+	int8_t spell_repertoire_id;
 	int8_t level;
 	int8_t size;
 	int8_t is_animal;
@@ -646,7 +646,7 @@ struct enemy_sheet {
 	int8_t  bp_orig;
 	int8_t  bp;
 	int8_t  magic;
-	int8_t  mag_id;
+	int8_t  spell_repertoire_id;
 	int8_t  fighter_id;
 	int8_t  viewdir;
 	int8_t  attacks_left;	 /* number attacks left in the current turn of a battle */
