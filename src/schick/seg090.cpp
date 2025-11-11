@@ -39,9 +39,9 @@ signed int g_dng12_watertrap_bak = 0;  // ds:0x9d45 SHOULD BE IN GAME STATE
 
 signed short DNG12_handler(void)
 {
-	signed short target_pos;
-	signed short i;
-	signed short tw_bak;
+	signed int target_pos;
+	signed int i;
+	signed int tw_bak;
 	int32_t money;
 	struct struct_hero *hero;
 	uint8_t *ptr;
@@ -548,7 +548,7 @@ void DNG12_chest00_loot(struct struct_chest* chest)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG12_fight_intro(signed short fight_id)
+void DNG12_fight_intro(const signed int fight_id)
 {
 	if (fight_id == 141) {
 		GUI_output(get_tx(12));

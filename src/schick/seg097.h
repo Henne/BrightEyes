@@ -4,44 +4,44 @@ namespace M302de {
 
 //20
 #if defined(__BORLANDC__)
-void GUI_unused1(char*, signed short, signed short);
+void GUI_unused1(char*, signed int, signed int);
 #endif
 
 //25
-signed short GUI_lookup_char_height(signed char c, signed short *p);
+signed int GUI_lookup_char_height(signed char c, signed int *p);
 //2a
 #if defined(__BORLANDC__)
 void GUI_1c2(const int, const int, const int, const int);
 #endif
 //2f
-signed short GUI_enter_text(char*, signed short, signed short, signed short, signed short);
+signed int GUI_enter_text(char*, signed int, signed int, signed int, signed int);
 //0x34
-signed short GUI_input(char*, unsigned short);
+signed int GUI_input(char*, signed int);
 //0x39
 void GUI_output(char*);
 //0x3e
-signed short GUI_bool(char*);
+signed int GUI_bool(char*);
 //0x43
-signed short GUI_radio(char*, signed char, ...);
+signed int GUI_radio(char*, signed char, ...);
 //0x48
 #if defined(__BORLANDC__)
-signed short GUI_unused2(const int, const int, const int);
+signed int GUI_unused2(const int, const int, const int);
 #endif
 //4d
-void GUI_draw_radio_bg(signed short,signed short, signed short, signed short);
+void GUI_draw_radio_bg(signed int,signed int, signed int, signed int);
 // 52
 //static
-void GUI_copy_smth(unsigned short width, unsigned short height);
+void GUI_copy_smth(signed int width, signed int height);
 //0x57
-void GUI_fill_radio_button(signed short, unsigned short, unsigned short);
+void GUI_fill_radio_button(signed int, signed int, signed int);
 //0x5c
-signed short GUI_dialogbox(unsigned char*, char*, char*, signed short, ...);
+signed int GUI_dialogbox(unsigned char*, char*, char*, signed int, ...);
 //0x61
-signed short GUI_menu_input(signed short, signed short, signed short);
+signed int GUI_menu_input(signed int, signed int, signed int);
 //0x66
-void GUI_print_fight_intro_msg(signed short);
+void GUI_print_fight_intro_msg(const signed int);
 //0x6b
-void GUI_dialog_na(unsigned short, char*);
+void GUI_dialog_na(const signed int, char*);
 
 #if !defined(__BORLANDC__)
 }

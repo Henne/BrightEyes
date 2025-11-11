@@ -102,7 +102,7 @@ void spell_destructibo(void)
 
 void spell_gardanium(void)
 {
-	signed short answer;
+	signed int answer;
 
 	/* prepare a question */
 	sprintf(g_dtp2, get_tx(2), get_spelluser()->alias);
@@ -163,7 +163,7 @@ void spell_illusionen(void)
 		}
 	} else {
 		/* print a failure message */
-		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* costs 2 AE */
 		g_spell_special_aecost = 2;
@@ -172,7 +172,7 @@ void spell_illusionen(void)
 
 void spell_verwandlung(void)
 {
-	signed short i;
+	signed int i;
 
 	/* set spelltarget */
 	g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
@@ -241,7 +241,7 @@ void spell_band(void)
 		/* set 'tied' flag */
 		g_spelltarget_e->flags.tied = 1;
 
-		sprintf(g_dtp2, get_tx(6), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(6), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
 		/* cast hero */
 
@@ -289,7 +289,7 @@ void spell_bannbaladin(void)
 		/* set 'tame' flag */
 		g_spelltarget_e->flags.tame = 1;
 
-		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -312,7 +312,7 @@ void spell_boeser_blick(void)
 		g_spelltarget_e->attacks = 2;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(10), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(10), (char*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -368,7 +368,7 @@ void spell_herrdertiere(void)
 			/* set 'tame' flag */
 			g_spelltarget_e->flags.tame = 1;
 
-			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 		}
 	}
 }
@@ -389,7 +389,7 @@ void spell_horriphobus(void)
 		/* unset 'renegade' flag */
 		g_spelltarget_e->flags.renegade = 0;
 
-		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -431,7 +431,7 @@ void spell_somnigravis(void)
 		g_spelltarget_e->flags.asleep = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 		return;
 	}
 
@@ -472,7 +472,7 @@ void spell_zwingtanz(void)
 		g_spelltarget_e->flags.dancing = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -511,10 +511,10 @@ void spell_heptagon(void)
 
 void spell_kraehenruf(void)
 {
-	signed short caster_level;
-	signed short pa_value;
-	signed short i;
-	signed short damage;
+	signed int caster_level;
+	signed int pa_value;
+	signed int i;
+	signed int damage;
 
 
 	caster_level = get_spelluser()->level + 2;
@@ -540,8 +540,8 @@ void spell_kraehenruf(void)
 void spell_skelettarius(void)
 {
 	struct struct_fighter *fighter;
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 	signed char unk;
 
 	/* Set pointer to enemy target */
@@ -551,14 +551,14 @@ void spell_skelettarius(void)
 	if (!g_spelltarget_e->flags.dead) {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set ae costs */
 		g_spell_special_aecost = 0;
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
 
 		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 
@@ -650,8 +650,8 @@ void spell_solidirid(void)
 
 void spell_axxeleratus(void)
 {
-	signed short hero_pos;
-	signed short slot;
+	signed int hero_pos;
+	signed int slot;
 
 	hero_pos = get_spelluser()->target_object_id - 1;
 
@@ -687,8 +687,8 @@ void spell_axxeleratus(void)
 
 void spell_foramen(void)
 {
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 
 	if
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -784,7 +784,7 @@ void spell_ueber_eis(void)
 void spell_balsam(void)
 {
 
-	signed short le_to_heal;
+	signed int le_to_heal;
 
 	/* Set pointer to hero target */
 	g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
@@ -838,7 +838,7 @@ void spell_balsam(void)
 
 void spell_hexenspeichel(void)
 {
-	signed short le;
+	signed int le;
 
 	/* Set pointer to hero target */
 	g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
@@ -881,7 +881,7 @@ void spell_hexenspeichel(void)
 
 void spell_klarum_purum(void)
 {
-	signed short poison_id;
+	signed int poison_id;
 
 	/* Set pointer to hero target */
 	g_spelltarget = get_hero(get_spelluser()->target_object_id - 1);
@@ -930,7 +930,7 @@ void spell_tiere_heilen(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Tiere heilen\" ist nicht implementiert und dient nur zum AE ausgeben.\n");
 #endif
-	signed short ae;
+	signed int ae;
 
 	/* set AE costs to 0 */
 	g_spell_special_aecost = 0;
@@ -956,8 +956,8 @@ void spell_tiere_heilen(void)
 
 void spell_adleraug(void)
 {
-	signed short slot;
-	signed short hero_pos;
+	signed int slot;
+	signed int hero_pos;
 
 	hero_pos = get_hero_index(get_spelluser());
 
@@ -972,9 +972,9 @@ void spell_adleraug(void)
 
 char* spell_analues(void)
 {
-	signed short item_id;
-	signed short i;
-	signed short item_pos;
+	signed int item_id;
+	signed int i;
+	signed int item_pos;
 
 	/* set analisation capabilities */
 	if (gs_in_academy == 99) {

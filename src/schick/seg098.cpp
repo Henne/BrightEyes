@@ -36,7 +36,7 @@
 namespace M302de {
 #endif
 
-signed short g_spell_special_aecost = -1; // ds:0xac0e
+signed int g_spell_special_aecost = -1; // ds:0xac0e
 static struct int16_t_5 g_ani_heal_picstars = { 0, 1, 2, 1, 0 };	// ds:0xac10
 static struct c_str_6 g_spell_select_str_keyval = { "%s~%d" };		// ds:0xac1a
 static struct c_str_5 g_spell_select_str_key = { "\xf2%s\xf0"};	// ds:0xac20
@@ -53,7 +53,7 @@ void magic_heal_ani(const struct struct_hero *hero)
 {
 	signed int target_object_id;
 	struct int16_t_5 a = g_ani_heal_picstars;
-	//signed short a[5] = { 0, 1, 2, 1, 0 };
+	//signed int a[5] = { 0, 1, 2, 1, 0 };
 
 	struct struct_hero *target;
 	signed int handle;
@@ -109,7 +109,7 @@ void magic_heal_ani(const struct struct_hero *hero)
  *
  * \param   le          LE someone looses
  */
-void FIG_do_spell_damage(signed short le)
+void FIG_do_spell_damage(const signed int le)
 {
 
 	if (le <= 0)
@@ -160,7 +160,7 @@ void FIG_do_spell_damage(signed short le)
  *
  *          This function is only used by the spell Kraehenruf.
  */
-signed short get_attackee_parade(void)
+signed int get_attackee_parade(void)
 {
 	/* check if enemy or hero is attacked */
 	if (get_spelluser()->target_object_id < 10) {
@@ -191,7 +191,7 @@ signed short get_attackee_parade(void)
  *
  *          This function is unused.
  */
-signed short get_attackee_rs(void)
+signed int get_attackee_rs(void)
 {
 	/* check if enemy or hero is attacked */
 	if (get_spelluser()->target_object_id < 10) {
@@ -219,14 +219,14 @@ signed short get_attackee_rs(void)
  * \param   spell_id	the spell ID
  * \param   half_cost	spellcaster needs only half AE
  */
-signed short get_spell_cost(signed short spell_id, signed short half_cost)
+signed int get_spell_cost(const signed int spell_id, const signed int half_cost)
 {
 	signed char ret = g_spell_descriptions[spell_id].ae_cost;
 
 	if (half_cost != 0) {
 
 		if (ret == -1) {
-			ret = (signed char)random_interval(5, 10);
+			ret = random_interval(5, 10);
 		} else {
 			ret /= 2;
 		}
@@ -583,7 +583,7 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 /**
  * \brief   makes a spell test. no AE deduction in this function.
  */
-signed short test_spell(struct struct_hero *hero, signed short spell_id, signed char handicap)
+signed int test_spell(struct struct_hero *hero, const signed int spell_id, signed char handicap)
 {
 	signed int retval;
 	struct spell_descr *spell_desc;
@@ -641,9 +641,8 @@ signed short test_spell(struct struct_hero *hero, signed short spell_id, signed 
 /**
  * \brief   makes a spell test for all magic users in the current group
  */
-signed short test_spell_group(signed short spell, signed char handicap)
+signed int test_spell_group(const signed int spell_id, const signed char handicap)
 {
-
 	struct struct_hero *hero_i = get_hero(0);
 	signed int i;
 
@@ -660,7 +659,7 @@ signed short test_spell_group(signed short spell, signed char handicap)
 			/* Original-Bug: what if petrified, sleeping, unconcious etc. */
 		{
 
-			if (test_spell(hero_i, spell, handicap) > 0) {
+			if (test_spell(hero_i, spell_id, handicap) > 0) {
 				return 1;
 			}
 		}
@@ -669,12 +668,10 @@ signed short test_spell_group(signed short spell, signed char handicap)
 	return 0;
 }
 
-signed short select_magic_user(void)
+signed int select_magic_user(void)
 {
-	signed int answer;
-
-	/* select the hero who shoulds cast a spell */
-	answer = select_hero_ok(get_ttx(317));
+	/* select the hero who should cast a spell */
+	const signed int answer = select_hero_ok(get_ttx(317));
 
 	if (answer != -1) {
 		/* valid answer => cast spell */
@@ -703,8 +700,8 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 	signed int l4;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 29: see below */
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 	signed int pos;
 	struct dungeon_door *ptr_doors;
 #endif

@@ -35,8 +35,8 @@ struct struct_chest g_dng13_specialchests[3] = {
 
 signed short DNG13_handler(void)
 {
-	signed short pos;
-	signed short tw_bak;
+	signed int pos;
+	signed int tw_bak;
 	int32_t p_money;
 	struct struct_hero *hero;
 
@@ -177,7 +177,7 @@ signed short DNG13_handler(void)
  */
 void DNG13_unblock_passage(char* text, uint8_t* flag)
 {
-	signed short has_items;
+	signed int has_items;
 
 	/* check if passage is blocked */
 	if (!(*flag))
@@ -252,7 +252,7 @@ void DNG13_chest01_loot(struct struct_chest* chest)
  *
  * \param   fight_id    ID of the fight
  */
-void DNG13_fight_intro(signed short fight_id)
+void DNG13_fight_intro(const signed int fight_id)
 {
 	if (fight_id == FIGHTS_DPRE10_1)
 	{
@@ -262,9 +262,9 @@ void DNG13_fight_intro(signed short fight_id)
 
 void DNG13_collapsing_ceiling(void)
 {
-	signed short i;
-	signed short fails;
-	signed short has_items;
+	signed int i;
+	signed int fails;
+	signed int has_items;
 	struct struct_hero *hero;
 
 	gs_dng13_collapsecount++;
@@ -309,9 +309,9 @@ void DNG13_collapsing_ceiling(void)
 
 void DNG13_collapsing_ceiling_easy(void)
 {
-	signed short i;
-	signed short fails;
-	signed short has_items;
+	signed int i;
+	signed int fails;
+	signed int has_items;
 	struct struct_hero *hero;
 
 	gs_dng13_collapsecount++;

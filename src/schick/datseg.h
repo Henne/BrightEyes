@@ -762,6 +762,7 @@ extern uint32_t g_cd_skipmagic;
 
 extern signed short g_items_noplural[23];				// ds:0x0270; seg096
 extern signed short g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
+
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
 extern signed short* g_forbidden_item_ids_table[12];			// ds:0x0638; seg048, seg056, seg105
 extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
@@ -1622,7 +1623,7 @@ extern struct struct_point g_town_positions[52];		//ds:0xa43f; seg002, seg063, s
 extern struct struct_tevent g_tevents_tab[156];		//ds:0xa66d; seg094
 extern signed char g_traveling;				//ds:0xa842; seg002, seg032, seg063, seg094
 
-extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
+extern signed int g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
 
 extern int g_light_type;			// ds:0xaee8; seg101, seg107
 

@@ -79,7 +79,7 @@ extern char g_str_von_s_s[9];
 
 static char *g_str_s_s_ptr = (char*)&g_str_s_s; // ds:0xa9e3, to STR_S_S; uint8_t*
 static char *g_str_von_s_s_ptr = (char*)&g_str_von_s_s; // ds:0xa9e7, to STR_VON_S_S; uint8_t*
-static signed short g_grammar_buf_no = 0; // ds:0xa9eb
+static signed int g_grammar_buf_no = 0; // ds:0xa9eb
 static struct int16_t_3 g_grammar_gender_bitmasks = { 0x1000, 0x2000, 0x3000 }; // ds:0xa9ed, {0x1000, 0x2000, 0x3000}
 static char g_grammar_pronouns_er[3] = "ER"; // ds:0xa9f3
 static char g_grammar_pronouns_sie[4] = "SIE"; // ds:0xa9f6
@@ -99,7 +99,7 @@ static char *g_grammar_pronouns_index[7] = {
 	g_grammar_pronouns_ihm
 }; // ds:0xaa14; uint8_t*
 static const signed char g_grammar_pronouns_table2[33] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x05, 0x01, 0x02, 0x06, 0x04, 0x06, 0x01, 0x01, 0x01, 0x04, 0x04, 0x04, 0x01, 0x01, 0x01, 0x07, 0x07, 0x07, 0x00, -128, -64, -32, -16, -8, -4, -2, -1 }; // ds:0xaa30, by gender and ??
-static struct struct_char_width g_gui_char_width[75] = {
+static const struct struct_char_width g_gui_char_width[75] = {
 	{ 0x20, 0x00, 0x06 },
 	{ 0x41, 0x01, 0x06 },
 	{ 0x42, 0x02, 0x06 },
@@ -195,12 +195,12 @@ static char g_grammar_bufs[5][40];	// ds:0xe4e3
  * \param   index	index of the word of which a worgroup should be made
  * \param   type	if index is true the index is an enemy, if not it is an item
  */
-uint8_t* GUI_names_grammar(signed short flag, signed short index, signed short type)
+uint8_t* GUI_names_grammar(signed short flag, const signed int index, const signed int type)
 {
 	signed short *lp1;
-	signed short l2 = 0;
+	signed int l2 = 0;
 	char *p_name;
-	signed short l4;
+	signed int l4;
 	struct int16_t_3 lp5 = g_grammar_gender_bitmasks;
 	//signed short lp5[3] = { {0x1000, 0x2000, 0x3000} };
 
@@ -252,7 +252,7 @@ uint8_t* GUI_names_grammar(signed short flag, signed short index, signed short t
 }
 
 //1a7
-char* GUI_name_plural(signed short v1, char *s)
+char* GUI_name_plural(const signed int v1, char *s)
 {
 	char *p = g_grammar_bufs[0];
 	char tmp;
@@ -304,11 +304,9 @@ char* GUI_name_singular(char *s)
 /**
  * \brief   return a pointer to the pronoun
  */
-uint8_t* GUI_2f2(signed short v1, signed short word_id, signed short type)
+uint8_t* GUI_2f2(const signed int v1, const signed int word_id, const signed int type)
 {
-	signed short genus;
-
-	genus = (type == 0) ? g_item_name_genders[word_id] : g_monster_name_genders[word_id];
+	signed int genus = (type == 0 ? g_item_name_genders[word_id] : g_monster_name_genders[word_id]);
 
 	return (uint8_t*)g_grammar_pronouns_index[g_grammar_pronouns_table2[v1 * 3 + genus]];
 }
@@ -320,7 +318,7 @@ uint8_t* GUI_2f2(signed short v1, signed short word_id, signed short type)
  * \param   genus       gender of the hero
  * \param   causus      the grammatical causus
  */
-char* GUI_get_ptr(const int genus, const int causus)
+char* GUI_get_ptr(const signed int genus, const signed int causus)
 {
 	if (genus == 0) {
 		return (causus == 0) ? g_grammar_pronouns_er :
@@ -336,25 +334,25 @@ char* GUI_get_ptr(const int genus, const int causus)
 //394
 /**
  */
-char* GUI_get_ptr2(signed short genus, signed short causus)
+char* GUI_get_article(const signed int genus, const signed int causus)
 {
 	if (genus == 0) {
-		return (causus == 0) ? (g_grammar_article_der) :
-			((causus == 1) ? (g_grammar_article_des) :
-			((causus == 3) ? (g_grammar_article_dem) : (g_grammar_article_den)));
+		return (causus == 0) ? g_grammar_article_der :
+			((causus == 1) ? g_grammar_article_des :
+			((causus == 3) ? g_grammar_article_dem : g_grammar_article_den));
 	} else {
-		return (causus == 0) ? (g_grammar_article_die) :
-			((causus == 1) ? (g_grammar_article_der) :
-			((causus == 3) ? (g_grammar_article_der) : (g_grammar_article_die)));
+		return (causus == 0) ? g_grammar_article_die :
+			((causus == 1) ? g_grammar_article_der :
+			((causus == 3) ? g_grammar_article_der : g_grammar_article_die));
 	}
 }
 
 //3f8
-void GUI_write_char_to_screen(uint8_t *dst, signed short char_width, signed short char_height)
+void GUI_write_char_to_screen(uint8_t *dst, const signed int char_width, const signed int char_height)
 {
 	uint8_t *ptr;
-	signed short y;
-	signed short x;
+	signed int y;
+	signed int x;
 
 	ptr = &g_gui_text_buffer[0];
 
@@ -375,17 +373,16 @@ void GUI_write_char_to_screen(uint8_t *dst, signed short char_width, signed shor
  *	    which should be printed on screen must not be constant.
  *	    Otherwise this application may crash.
  */
-unsigned short GUI_count_lines(char *str)
+signed int GUI_count_lines(char *str)
 {
-	signed short current_pos;
-	signed short last_ws;
-
+	signed int current_pos;
+	signed int last_ws;
 	char *str_loc;
-	signed short always_zero;
-	signed short lines;
-	signed short max_line_width;
-	signed short width_char;
-	signed short width_line;
+	signed int always_zero;
+	signed int lines;
+	signed int max_line_width;
+	signed int width_char;
+	signed int width_line;
 
 	lines = 0;
 
@@ -462,9 +459,9 @@ unsigned short GUI_count_lines(char *str)
 }
 
 //5d7
-signed short GUI_print_header(char *str)
+signed int GUI_print_header(char *str)
 {
-	signed short retval = 1;
+	signed int retval = 1;
 
 	call_mouse_bg();
 	retval = GUI_count_lines(str);
@@ -505,11 +502,11 @@ void GUI_print_loc_line(char *str)
 }
 
 //691
-void GUI_print_string(char *str, signed short x, signed short y)
+void GUI_print_string(char *str, signed int x, signed int y)
 {
-	signed short l1;
-	signed short l2;
-	signed short l3;
+	signed int l1;
+	signed int l2;
+	signed int l3;
 	unsigned char l4;
 
 	l1 = 0;
@@ -576,10 +573,10 @@ void GUI_print_string(char *str, signed short x, signed short y)
 }
 
 //7f0
-signed short GUI_print_char(unsigned char c, unsigned short x, unsigned short y)
+signed int GUI_print_char(const char c, const signed int x, const signed int y)
 {
-	signed short char_width;
-	signed short font_index;
+	signed int char_width;
+	signed int font_index;
 
 	g_gui_print_char = c;
 
@@ -591,9 +588,9 @@ signed short GUI_print_char(unsigned char c, unsigned short x, unsigned short y)
 }
 
 //82b
-signed short GUI_lookup_char_width(signed char c, signed short *p)
+signed int GUI_lookup_char_width(const signed char c, signed int *p)
 {
-	signed short i;
+	signed int i;
 
 	/* REMARK: This array of struct should be seen as signed char[75*3] */
 	for (i = 0; i != 75 * 3; i += 3) {
@@ -616,7 +613,7 @@ signed short GUI_lookup_char_width(signed char c, signed short *p)
 }
 
 //88f
-void GUI_write_fonti_to_screen(unsigned short font_index, unsigned short char_width, unsigned short x, unsigned short y)
+void GUI_write_fonti_to_screen(const signed int font_index, const signed int char_width, const signed int x, const signed int y)
 {
 	GUI_blank_char();
 	GUI_font_to_buf(g_buf_font6 + font_index * 8);
@@ -629,8 +626,8 @@ void GUI_write_fonti_to_screen(unsigned short font_index, unsigned short char_wi
 void GUI_blank_char(void)
 {
 	uint8_t *ptr = &g_gui_text_buffer[0];
-	signed short i;
-	signed short j;
+	signed int i;
+	signed int j;
 
 	for (i = 0; i < 8; ptr += 8, i++) {
 		for (j = 0; j < 8; j++)
@@ -643,8 +640,8 @@ void GUI_font_to_buf(uint8_t *fc)
 {
 	uint8_t *p;
 	char c;
-	short i;
-	short j;
+	signed int i;
+	signed int j;
 
 	/* current text position */
 	p = &g_gui_text_buffer[0];
@@ -664,7 +661,7 @@ void GUI_font_to_buf(uint8_t *fc)
 }
 
 //956
-void GUI_write_char_to_screen_xy(unsigned short x, unsigned short y, unsigned short char_height, unsigned short char_width)
+void GUI_write_char_to_screen_xy(const signed int x, const signed int y, const signed int char_height, const signed int char_width)
 {
 	/* screen_start */
 	uint8_t* dst = g_vga_backbuffer + y * 320 + x;
@@ -696,9 +693,9 @@ void get_textcolor(signed int *fg, signed int *bg)
 	*bg = g_textcolor_bg;
 }
 
-unsigned short GUI_unused(uint8_t *str)
+signed int GUI_unused(char *str)
 {
-	unsigned short lines = 0;
+	signed int lines = 0;
 
 	while (*str) {
 
@@ -711,10 +708,10 @@ unsigned short GUI_unused(uint8_t *str)
 }
 
 //9D6
-signed short GUI_get_space_for_string(char *p, signed short dir)
+signed int GUI_get_space_for_string(char *p, const signed int dir)
 {
-	signed short sum;
-	signed short tmp;
+	signed int sum;
+	signed int tmp;
 
 	for (sum = 0; *p; sum += tmp) {
 		if (dir) {
@@ -728,13 +725,13 @@ signed short GUI_get_space_for_string(char *p, signed short dir)
 }
 
 //A26
-signed short GUI_get_first_pos_centered(char *p, signed short x, signed short v2, unsigned short dir)
+signed int GUI_get_first_pos_centered(char *p, const signed int x, signed int v2, const signed int dir)
 {
-	register signed short i;
-	register signed short c;
-	signed short tmp;
+	register signed int i;
+	register signed int c;
+	signed int tmp;
 
-	for (i = 0;  (c = *p) && (c != 0x40) && (c != 0x0d); i += tmp) {
+	for (i = 0; (c = *p) && (c != 0x40) && (c != 0x0d); i += tmp) {
 		if (dir)
 			GUI_lookup_char_height(*p++, &tmp);
 		else
@@ -756,14 +753,14 @@ signed short GUI_get_first_pos_centered(char *p, signed short x, signed short v2
  * \param   line        number of the current line
  * \param   type        type of line 0 = top / 1 = middle normal / 2 = middle radio / 3 =bottom
  */
-void GUI_draw_popup_line(signed short line, signed short type)
+void GUI_draw_popup_line(const signed int line, const signed int type)
 {
-	short popup_left;
-	short i;
-	short popup_middle;
-	short popup_right;
-	short y;
-	short x;
+	signed int popup_left;
+	signed int i;
+	signed int popup_middle;
+	signed int popup_right;
+	signed int y;
+	signed int x;
 
 	/* set the offsets in the popup.dat buffer */
 	switch (type) {

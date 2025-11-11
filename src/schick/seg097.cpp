@@ -108,7 +108,7 @@ static struct struct_char_height g_gui_char_height[67] = {
 	{ -0x28, 0x41, 0x08 },
 	{ -0x27, 0x42, 0x06 }
 }; // ds:0xab42
-static signed short g_gui_bool_flag = 0; // ds:0xac0b
+static signed int g_gui_bool_flag = 0; // ds:0xac0b
 
 
 signed int g_menu_default_select;	// ds:0xe5ac
@@ -116,10 +116,10 @@ signed int g_menu_input_busy;		// ds:0xe5ae
 signed int g_menu_selected;		// ds:0xe5b0
 
 #if defined(__BORLANDC__)
-void GUI_unused1(char *a1, signed short a2, signed short a3)
+void GUI_unused1(char *a1, signed int a2, signed int a3)
 {
-	signed short l1;
-	signed short l2;
+	signed int l1;
+	signed int l2;
 	signed char c;
 
 	l1 = 0;
@@ -166,10 +166,10 @@ void GUI_unused1(char *a1, signed short a2, signed short a3)
 	call_mouse();
 }
 
-signed short GUI_unused2(const int c, const int x, const int y)
+signed int GUI_unused2(const int c, const int x, const int y)
 {
-	signed short v1;
-	signed short v2;
+	signed int v1;
+	signed int v2;
 
 	v2 = GUI_lookup_char_height((signed char)c, &v1);
 
@@ -179,9 +179,9 @@ signed short GUI_unused2(const int c, const int x, const int y)
 }
 #endif
 
-signed short GUI_lookup_char_height(signed char c, signed short *p)
+signed int GUI_lookup_char_height(signed char c, signed int *p)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i != 201; i += 3) {
 		if (c == ((signed char*)g_gui_char_height)[i]) {
@@ -212,14 +212,14 @@ void GUI_1c2(const int index, const int v2, const int x, const int y)
 #endif
 
 //static
-signed short GUI_enter_text(char* dst, signed short x, signed short y, signed short num, signed short zero)
+signed int GUI_enter_text(char* dst, signed int x, signed int y, signed int num, signed int zero)
 {
-	signed short di;
-	register signed short si;
-	signed short pos;
-	signed short c;
+	signed int di;
+	register signed int si;
+	signed int pos;
+	signed int c;
 	char *dst_start;
-	signed short length;
+	signed int length;
 
 	dst_start = dst;
 	call_mouse_bg();
@@ -345,9 +345,9 @@ dummy:
 }
 
 //static
-void GUI_draw_radio_bg(signed short header, signed short options, signed short width, signed short height)
+void GUI_draw_radio_bg(signed int header, signed int options, signed int width, signed int height)
 {
-	signed short i;
+	signed int i;
 
 	/* set upper left coordinates */
 	g_pic_copy.x1 = g_textbox_pos_x;
@@ -378,7 +378,7 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 	flush_keyboard_queue_alt();
 }
 
-void GUI_copy_smth(unsigned short width, unsigned short height)
+void GUI_copy_smth(signed int width, signed int height)
 {
 	g_pic_copy.x1 = g_textbox_pos_x;
 	g_pic_copy.y1 = g_textbox_pos_y;
@@ -393,19 +393,19 @@ void GUI_output(char *str)
 	GUI_input(str, 0);
 }
 
-signed short GUI_input(char *str, unsigned short num)
+signed int GUI_input(char *str, signed int num)
 {
-	signed short retval;
-	signed short l2;
+	signed int retval;
+	signed int l2;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed short l3;
-	signed short l4;
-	signed short l5;
-	signed short l6;
-	signed short l7;
-	signed short l_si;
-	signed short l_di;
+	signed int l3;
+	signed int l4;
+	signed int l5;
+	signed int l6;
+	signed int l7;
+	signed int l_si;
+	signed int l_di;
 
 	retval = 0;
 
@@ -425,7 +425,7 @@ signed short GUI_input(char *str, unsigned short num)
 	l5 = g_textline_maxlen;
 
 	l_di = (g_textbox_width * 32) + 32;
-	g_textbox_pos_x = ((signed short)(320u - l_di) >> 1) + g_basepos_x;
+	g_textbox_pos_x = ((signed int)(320u - l_di) >> 1) + g_basepos_x;
 
 	g_textline_posx = (g_textbox_pos_x + 5);
 	g_textline_maxlen = (l_di - 8);
@@ -437,7 +437,7 @@ signed short GUI_input(char *str, unsigned short num)
 
 	l2 = (l_si + 2) * 8;
 
-	g_textbox_pos_y = ((signed short)(200u - l2) >> 1) + g_basepos_y;
+	g_textbox_pos_y = ((signed int)(200u - l2) >> 1) + g_basepos_y;
 	g_textline_posy = (g_textbox_pos_y + 7);
 
 	get_textcolor(&fg_bak, &bg_bak);
@@ -453,8 +453,8 @@ signed short GUI_input(char *str, unsigned short num)
 	call_mouse();
 
 	if (num != 0) {
-		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed short)(l_di - num * 6) >> 1), g_textbox_pos_y + l_si * 8 -2, num, 0) != -1) {
-			retval = (signed short)atol(g_text_input_buf);
+		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed int)(l_di - num * 6) >> 1), g_textbox_pos_y + l_si * 8 -2, num, 0) != -1) {
+			retval = (signed int)atol(g_text_input_buf);
 		} else {
 			retval = -1;
 		}
@@ -499,9 +499,9 @@ signed short GUI_input(char *str, unsigned short num)
  *
  * \param   text	the displayed text
  */
-signed short GUI_bool(char *text)
+signed int GUI_bool(char *text)
 {
-	signed short ret_radio;
+	signed int ret_radio;
 
 	g_gui_bool_flag = 1;
 
@@ -514,12 +514,11 @@ signed short GUI_bool(char *text)
 
 
 //static
-void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
-	unsigned short offset)
+void GUI_fill_radio_button(signed int old_pos, signed int new_pos, signed int offset)
 {
-	signed short i;
-	signed short x;
-	signed short y;
+	signed int i;
+	signed int x;
+	signed int y;
 
 	call_mouse_bg();
 
@@ -543,18 +542,18 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 	call_mouse();
 }
 
-signed short GUI_dialogbox(uint8_t* picture, char *name, char *text, signed short options, ...)
+signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int options, ...)
 {
 	va_list arguments;
-	signed short i;
-	signed short l2, l3, l4, l5;
-	signed short tw_bak;
+	signed int i;
+	signed int l2, l3, l4, l5;
+	signed int tw_bak;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed short l7, l8, l9, l10;
-	signed short retval;
-	signed short l11, l12, l13;
-	signed short l_si, l_di;
+	signed int l7, l8, l9, l10;
+	signed int retval;
+	signed int l11, l12, l13;
+	signed int l_si, l_di;
 
 	l13 = g_ani_enabled;
 	l12 = g_update_statusline;
@@ -572,7 +571,7 @@ signed short GUI_dialogbox(uint8_t* picture, char *name, char *text, signed shor
 	g_textbox_width = 9;
 
 	l_di = g_textbox_width * 32 + 32;
-	g_textbox_pos_x = ((signed short)(320 - l_di) >> 1) + g_basepos_x;
+	g_textbox_pos_x = ((signed int)(320 - l_di) >> 1) + g_basepos_x;
 	g_textline_posx = (g_textbox_pos_x + 5);
 	g_textline_maxlen = (l_di - 8);
 	l10 = g_txt_tabpos[0];
@@ -662,7 +661,7 @@ signed short GUI_dialogbox(uint8_t* picture, char *name, char *text, signed shor
 
 	g_wallclock_update = l11;
 
-	g_action = (g_dialogbox_lock = 0);
+	g_action = g_dialogbox_lock = 0;
 
 	g_update_statusline = l12;
 
@@ -673,11 +672,11 @@ signed short GUI_dialogbox(uint8_t* picture, char *name, char *text, signed shor
 }
 
 //static
-signed short GUI_menu_input(signed short positions, signed short h_lines, signed short width)
+signed int GUI_menu_input(signed int positions, signed int h_lines, signed int width)
 {
-	volatile signed short l1, l2, l3, l4, l5, l6;
-	signed short done;
-	signed short retval;
+	volatile signed int l1, l2, l3, l4, l5, l6;
+	signed int done;
+	signed int retval;
 
 	l5 = -1;
 	done = 0;
@@ -781,18 +780,18 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 	return retval;
 }
 
-signed short GUI_radio(char *text, signed char options, ...)
+signed int GUI_radio(char *text, signed char options, ...)
 {
 	signed int i;
-	signed short l_di;
+	signed int l_di;
 
 	va_list arguments;
-	signed short l3, l4, l5, l6;
+	signed int l3, l4, l5, l6;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed short l7, l8, l9, l10, l11;
-	signed short retval;
-	signed short l12;
+	signed int l7, l8, l9, l10, l11;
+	signed int retval;
+	signed int l12;
 
 	l12 = g_update_statusline;
 	g_update_statusline = 0;
@@ -867,9 +866,9 @@ signed short GUI_radio(char *text, signed char options, ...)
  *
  * \param   fight_id    ID of the fight
  */
-void GUI_print_fight_intro_msg(signed short fight_id)
+void GUI_print_fight_intro_msg(const signed int fight_id)
 {
-	signed short tw_bak = g_textbox_width;
+	const signed int tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
 	if (gs_dungeon_id == DUNGEON_ID_VERFALLENE_HERBERGE) {
@@ -906,7 +905,7 @@ void GUI_print_fight_intro_msg(signed short fight_id)
  * \param   head_index  the number of a head, if another should be loaded
  * \param   text        the text
  */
-void GUI_dialog_na(unsigned short head_index, char *text)
+void GUI_dialog_na(const signed int head_index, char *text)
 {
 
 	if (head_index != 0)

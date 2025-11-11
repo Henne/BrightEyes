@@ -78,18 +78,18 @@ void prepare_map_marker(void)
 	set_textbox_positions(gs_town_id);
 }
 
-void set_textbox_positions(signed short town_id)
+void set_textbox_positions(const signed int town_id)
 {
-	signed short x;
-	signed short r_dx;
-	signed short y;
+	signed int x;
+	signed int r_dx;
+	signed int y;
 
 	/* zero some global variables */
 	g_current_town_over = g_trv_menu_selection = g_selected_town_anix = g_selected_town_aniy = 0;
 
 
 	x = g_current_town_anix = g_town_positions[town_id - 1].x;
-	y = g_current_town_aniy = *(signed short*)((uint8_t*)g_town_positions + 4 * (town_id - 1) + 2);
+	y = g_current_town_aniy = *(signed int*)((uint8_t*)g_town_positions + 4 * (town_id - 1) + 2);
 
 	r_dx = (x >= 0 && x <= 159) ? (y >= 0 && y <= 99 ? 3 : 1) : (y >= 0 && y <= 99 ? 2 : 0);
 
@@ -103,15 +103,15 @@ void set_textbox_positions(signed short town_id)
  * \param   route_id    number of the route
  * \param   backwards   0 = travel the route forwards, 1 = travel backwards
  */
-void TM_func1(signed short route_id, signed short backwards)
+void TM_func1(const signed int route_id, const signed int backwards)
 {
 	uint8_t* fb_start;
 	struct struct_hero *hero;
 	struct struct_route_tevent *tevent_ptr;
-	signed short bak1;
-	signed short bak2;
-	signed short last_tevent_no;
-	signed short answer;
+	signed int bak1;
+	signed int bak2;
+	signed int last_tevent_no;
+	signed int answer;
 
 	g_traveling = 1;
 
@@ -496,15 +496,15 @@ void TM_func1(signed short route_id, signed short backwards)
 
 #if defined(__BORLANDC__)
 /* continue travel after arrival while still on map */
-signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_route_id)
+signed int TM_unused1(struct trv_start_point *signpost_ptr, const signed int old_route_id)
 {
-	signed short route_id1;
-	signed short route_id;
-	signed short answer;
-	signed short town_i;
-	signed short route_id2;
-	signed short town_id;
-	signed short old_route_id2;
+	signed int route_id1;
+	signed int route_id;
+	signed int answer;
+	signed int town_i;
+	signed int route_id2;
+	signed int town_id;
+	signed int old_route_id2;
 	char *destinations_tab[7];
 
 	old_route_id2 = signpost_ptr->linked_travel_routes[old_route_id] - 1;
@@ -580,11 +580,11 @@ signed int TM_get_track_length(struct struct_point *track)
 	return length;
 }
 
-signed short TM_enter_target_town(void)
+signed int TM_enter_target_town(void)
 {
-	signed short tmp;
-	signed short signpost_id;
-	signed short tmp2;
+	signed int tmp;
+	signed int signpost_id;
+	signed int tmp2;
 	struct trv_start_point *signpost_ptr;
 	struct location *locations_tab_ptr;
 
@@ -623,7 +623,7 @@ signed short TM_enter_target_town(void)
 		{
 			/* set the target town as current town */
 			tmp2 = gs_town_id;
-			gs_town_id = (signed char)gs_travel_destination_town_id;
+			gs_town_id = gs_travel_destination_town_id;
 
 			/* load the map */
 			call_load_area(1);
@@ -639,7 +639,7 @@ signed short TM_enter_target_town(void)
 			gs_travel_destination_y = tmp & 0x0f;
 			gs_travel_destination_viewdir = TM_enter_target_town_viewdir(locations_tab_ptr->pos);
 
-			gs_town_id = (signed char)tmp2;
+			gs_town_id = tmp2;
 
 			/* load the map */
 			call_load_area(1);
@@ -649,26 +649,21 @@ signed short TM_enter_target_town(void)
 	return 0;
 }
 
-signed short TM_enter_target_town_viewdir(signed short coordinates)
+signed int TM_enter_target_town_viewdir(const signed int coordinates)
 {
-	signed short x;
-	signed short y;
-	signed short retval;
-
-	x = (coordinates >> 8) & 0xff;
-	y = coordinates & 0xf;
-
-	retval = (gs_travel_destination_x < x ? EAST :
-			(gs_travel_destination_x > x ? WEST :
-			(gs_travel_destination_y < y ? SOUTH : NORTH)));
+	const signed int x = (coordinates >> 8) & 0xff;
+	const signed int y = coordinates & 0xf;
+	const signed int retval = (gs_travel_destination_x < x ? EAST :
+				(gs_travel_destination_x > x ? WEST :
+				(gs_travel_destination_y < y ? SOUTH : NORTH)));
 
 	return retval;
 }
 
-void TM_draw_track(signed short route_id, signed short length, signed short direction, signed short restore)
+void TM_draw_track(const signed int route_id, const signed int length, const signed int direction, const signed int restore)
 {
-	signed short i;
-	signed short *ptr;
+	signed int i;
+	int16_t *ptr;
 	uint8_t* fb_start;
 
 	fb_start = g_vga_memstart;
@@ -715,22 +710,22 @@ void TM_unused2(void)
 }
 #endif
 
-void TM_func8(signed short a1)
+void TM_func8(const signed int restore)
 {
 	if (!(g_route59_flag & 1))
 	{
 		if (gs_town_id == TOWN_ID_PEILINEN)
 		{
-			TM_draw_track(11, 9, 0, a1);
+			TM_draw_track(11, 9, 0, restore);
 		} else {
-			TM_draw_track(11, 17, 1, a1);
+			TM_draw_track(11, 17, 1, restore);
 		}
 	} else {
 		if (gs_town_id == TOWN_ID_KRAVIK)
 		{
-			TM_draw_track(14, 8, 0, a1);
+			TM_draw_track(14, 8, 0, restore);
 		} else {
-			TM_draw_track(14, 17, 1, a1);
+			TM_draw_track(14, 17, 1, restore);
 		}
 	}
 }

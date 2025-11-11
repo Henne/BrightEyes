@@ -95,7 +95,7 @@ signed short g_items_pluralwords[7] = {
 	-1
 }; // ds:0x029e
 signed char g_item_name_genders[254] = {
-	GENDER_FEMININE,
+  GENDER_FEMININE,
 	GENDER_NEUTER,
 	GENDER_MASCULINE,
 	GENDER_MASCULINE,
