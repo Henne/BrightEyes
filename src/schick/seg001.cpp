@@ -35,11 +35,11 @@
 #endif
 
 char cd_dummy0 = 2;
-unsigned short g_cd_init_successful = 0;
+unsigned short g_cd_init_successful = 0; /* {0,1} */
 static unsigned char cd_dummy1[4] = {0};
-static unsigned short g_cd_audio_repeat = 0;
+static unsigned short g_cd_audio_repeat = 0; /* {0,1} */
 static unsigned char cd_dummy2[4] = {0};
-static unsigned short g_cd_audio_paused = 0;
+static unsigned short g_cd_audio_paused = 0; /* {0,1} */
 static unsigned short g_cd_audio_track_bak = 0x7fff;
 static const int g_cd_audio_tracklist[15] = {
 	0x7fff,	0x7fff,	0x7fff, 0x7fff,
