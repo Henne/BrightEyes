@@ -644,7 +644,7 @@ void TLK_eremit(const signed int state)
 
 void do_town(void)
 {
-	if ((g_city_area_loaded != gs_current_town) || (g_area_prepared != 1))
+	if ((g_city_area_loaded != gs_current_town) || (g_area_prepared != AREA_TYPE_TOWN))
 	{
 		prepare_area(1);
 
@@ -1262,8 +1262,8 @@ signed int city_step(void)
 
 	} else if (g_action == ACTION_ID_ICON_7) {
 
-		gs_current_loctype = LOCTYPE_CITYCAMP;
-		g_citycamp_city = 1; /* CITYCAMP takes place in a town */
+		gs_current_loctype = LOCTYPE_AREA_CAMP;
+		g_area_camp_area_type = AREA_TYPE_TOWN; /* AREA_CAMP takes place in a town */
 		i = 1;
 
 	} else if (g_action == ACTION_ID_ICON_8 && g_new_menu_icons[7] != MENU_ICON_NONE) {

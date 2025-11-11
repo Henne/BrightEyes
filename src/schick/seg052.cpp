@@ -1,5 +1,5 @@
 /**
- *	Rewrite of DSA1 v3.02_de functions of seg052 (citycamp)
+ *	Rewrite of DSA1 v3.02_de functions of seg052 (area_camp)
  *	Functions rewritten: 1/1 (complete)
  *
  *	Borlandified and identical
@@ -32,14 +32,14 @@ namespace M302de {
 
 static const signed short g_dcampfights[4] = { 254, 255, 256, 257 }; // ds:0x66e2
 
-static signed char g_citycamp_guards[3];	// ds:0xe3de
-static signed char g_citycamp_magicstatus[7];	// ds:0xe3e1
-static signed char g_citycamp_guardstatus[8];	// ds:0xe3e8
+static signed char g_area_camp_guards[3];	// ds:0xe3de
+static signed char g_area_camp_magicstatus[7];	// ds:0xe3e1
+static signed char g_area_camp_guardstatus[8];	// ds:0xe3e8
 
 /**
  * \brief   camp in a city or a dungeon
  */
-void do_citycamp(void)
+void do_area_camp(void)
 {
 	signed short l_si;
 	signed short l_di;
@@ -58,11 +58,11 @@ void do_citycamp(void)
 	l3 = g_request_refresh = 1;
 
 	for (l_si = 0; l_si <= 6; l_si++) {
-		g_citycamp_magicstatus[l_si] = g_citycamp_guardstatus[l_si] = 0;
+		g_area_camp_magicstatus[l_si] = g_area_camp_guardstatus[l_si] = 0;
 	}
 
 	for (l_si = 0; l_si < 3; l_si++) {
-		g_citycamp_guards[l_si] = -1;
+		g_area_camp_guards[l_si] = -1;
 	}
 
 	draw_loc_icons(5, MENU_ICON_GUARDS, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE);
@@ -88,7 +88,7 @@ void do_citycamp(void)
 
 		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
-			/* open citycamp radio menu */
+			/* open area_camp radio menu */
 			answer = GUI_radio(get_ttx(307), 5,
 						get_ttx(308), get_ttx(212),
 						get_ttx(310), get_ttx(316),
@@ -106,8 +106,8 @@ void do_citycamp(void)
 
 			for (l_si = 0; l_si <= 6; l_si++) {
 
-				if (!g_citycamp_magicstatus[l_si] && check_hero(get_hero(l_si))) {
-					g_citycamp_guardstatus[l_si] = 0;
+				if (!g_area_camp_magicstatus[l_si] && check_hero(get_hero(l_si))) {
+					g_area_camp_guardstatus[l_si] = 0;
 					answer = 0;
 				}
 			}
@@ -124,7 +124,7 @@ void do_citycamp(void)
 
 						answer = select_hero_ok(g_dtp2);
 
-						if (answer != -1 && g_citycamp_magicstatus[answer] != 0) {
+						if (answer != -1 && g_area_camp_magicstatus[answer] != 0) {
 							GUI_output(get_ttx(331));
 							answer = -1;
 						}
@@ -136,8 +136,8 @@ void do_citycamp(void)
 
 					} while (answer == -1);
 
-					g_citycamp_guardstatus[answer]++;
-					g_citycamp_guards[l_si] = answer;
+					g_area_camp_guardstatus[answer]++;
+					g_area_camp_guards[l_si] = answer;
 				}
 			}
 
@@ -161,17 +161,17 @@ void do_citycamp(void)
 
 				if (hero->typus >= HERO_TYPE_HEXE) {
 
-					if (g_citycamp_guardstatus[answer]) {
+					if (g_area_camp_guardstatus[answer]) {
 
 						GUI_output(get_ttx(331));
 
 					} else {
-						if (g_citycamp_magicstatus[answer]) {
+						if (g_area_camp_magicstatus[answer]) {
 
 							GUI_output(get_ttx(334));
 
 						} else {
-							g_citycamp_magicstatus[answer] = use_magic(hero);
+							g_area_camp_magicstatus[answer] = use_magic(hero);
 						}
 					}
 				} else {
@@ -195,7 +195,7 @@ void do_citycamp(void)
 						/* without guards: (4*hours - 1) % chance for an incident */
 						/* For a 1 hour rest with guards this will be 0% chance! */
 						/* TODO: maybe change it to random_schick(100) - 1 to fix that */
-						if ((g_citycamp_guards[0] == -1 ? 4 * hours : hours) > random_schick(100)) {
+						if ((g_area_camp_guards[0] == -1 ? 4 * hours : hours) > random_schick(100)) {
 							gs_camp_incident = random_schick(3) - 1;
 						}
 					}
@@ -203,9 +203,9 @@ void do_citycamp(void)
 					l8 = 0;
 					l7 = hours;
 
-					if (g_citycamp_guards[l_di] != -1) {
+					if (g_area_camp_guards[l_di] != -1) {
 
-						sprintf(g_dtp2,	get_ttx(774), get_hero(g_citycamp_guards[l_di])->alias);
+						sprintf(g_dtp2,	get_ttx(774), get_hero(g_area_camp_guards[l_di])->alias);
 
 						GUI_print_loc_line(g_dtp2);
 					}
@@ -228,9 +228,9 @@ void do_citycamp(void)
 							l6 = l5;
 							l_di++;
 
-							if (g_citycamp_guards[l_di] != -1) {
+							if (g_area_camp_guards[l_di] != -1) {
 
-								sprintf(g_dtp2,	get_ttx(774), get_hero(g_citycamp_guards[l_di])->alias);
+								sprintf(g_dtp2,	get_ttx(774), get_hero(g_area_camp_guards[l_di])->alias);
 
 								GUI_print_loc_line(g_dtp2);
 							}
@@ -242,7 +242,7 @@ void do_citycamp(void)
 
 						gs_camp_incident = -1;
 
-						if (g_citycamp_city == 0) {
+						if (g_area_camp_area_type == AREA_TYPE_DUNGEON) {
 							/* in a dungeon */
 
 							g_fig_initiative = 1;
@@ -280,8 +280,8 @@ void do_citycamp(void)
 
 							if ((hero->typus != HERO_TYPE_NONE) &&
 								(hero->group_id == gs_current_group) &&
-								(g_citycamp_guardstatus[l_si] < 2) &&
-								(g_citycamp_magicstatus[l_si] != 1))
+								(g_area_camp_guardstatus[l_si] < 2) &&
+								(g_area_camp_magicstatus[l_si] != 1))
 							{
 								GRP_hero_sleep(hero, hours - 10);
 							}

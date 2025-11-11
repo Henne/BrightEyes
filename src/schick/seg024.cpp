@@ -55,7 +55,7 @@ void diary_show(void)
 
 	g_special_screen = 1;
 	g_wallclock_update = 0;
-	g_area_prepared = -1;
+	g_area_prepared = AREA_TYPE_NONE;
 
 	g_current_cursor = &g_default_mouse_cursor;
 

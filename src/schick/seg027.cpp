@@ -522,7 +522,7 @@ void load_ani(const signed short no)
 
 	/* this is always true */
 	if (ani_len > g_ani_unknown4) {
-		g_area_prepared = -1;
+		g_area_prepared = AREA_TYPE_NONE;
 	}
 }
 

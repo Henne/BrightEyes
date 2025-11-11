@@ -330,13 +330,13 @@ void GRP_switch_to_next(signed short mode)
 		if (gs_groups_dng_index[group] && (gs_groups_dng_index[group] != gs_dungeon_index))
 		{
 			g_dng_area_loaded = -1;
-			g_area_prepared = -1;
+			g_area_prepared = AREA_TYPE_NONE;
 		}
 
 		if (gs_groups_town[group] && (gs_groups_town[group] != gs_current_town))
 		{
 			g_city_area_loaded = -1;
-			g_area_prepared = -1;
+			g_area_prepared = AREA_TYPE_NONE;
 		}
 
 		/* save positions from the old group */

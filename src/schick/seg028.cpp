@@ -65,7 +65,7 @@ void prepare_dungeon_area(void)
 
 	load_tx(dtx_index);
 
-	if ((g_area_prepared == -1) || (g_area_prepared == 1)) {
+	if ((g_area_prepared == AREA_TYPE_NONE) || (g_area_prepared == AREA_TYPE_TOWN)) { // idea: g_area_prepared != AREA_TYPE_DUNGEON
 
 		disable_ani();
 		g_current_ani = -1;
@@ -143,7 +143,7 @@ void prepare_city_area(void)
 
 	load_tx(ltx_index);
 
-	if ((g_area_prepared == -1) || (g_area_prepared == 0)) {
+	if ((g_area_prepared == AREA_TYPE_NONE) || (g_area_prepared == AREA_TYPE_DUNGEON)) { // idea: g_area_prepared != AREA_TYPE_TOWN
 
 		disable_ani();
 
@@ -196,7 +196,7 @@ void prepare_city_area(void)
 			memcpy(gs_palette_floor, g_buffer11_ptr, 0x60);
 		}
 
-		g_area_prepared = 1;
+		g_area_prepared = AREA_TYPE_TOWN;
 	}
 
 	g_city_area_loaded = gs_current_town;
@@ -426,7 +426,7 @@ void load_map(void)
 	wallclock_update_bak = g_wallclock_update;
 	g_wallclock_update = 0;
 
-	g_area_prepared = -1;
+	g_area_prepared = AREA_TYPE_NONE;
 	/* set current_ani to -1 */
 	g_current_ani = -1;
 

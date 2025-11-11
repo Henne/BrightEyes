@@ -119,7 +119,7 @@ static signed short g_ail_music_driver_id;	// ds:0xbd23
 #endif
 
 signed short g_pregame_state;		// ds:0xbd25
-signed char g_citycamp_city;		// ds:0xbd27, {0 = camp in dungeon, 1}
+signed char g_area_camp_area_type;		// ds:0xbd27, {0 = camp takes place in a dungeon, 1 = camp takes place in a town}
 struct fight *g_current_fight;		// ds:0xbd28
 signed char *g_scenario_buf;		// ds:0xbd2c
 unsigned char *g_fightobj_buf;		// ds:0xbd30

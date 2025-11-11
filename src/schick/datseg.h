@@ -1863,7 +1863,7 @@ extern struct struct_hero *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
 extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
 extern struct fight *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
-extern signed char g_citycamp_city;	// ds:0xbd27; seg052, seg066, seg076
+extern signed char g_area_camp_area_type;	// ds:0xbd27; seg052, seg066, seg076
 extern signed short g_pregame_state;	// ds:0xbd25; seg002, seg097
 extern signed short g_use_cdaudio_flag;		// ds:0xbcfd; seg002
 #if defined(__BORLANDC__)

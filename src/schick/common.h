@@ -441,7 +441,7 @@ enum {
 	LOCTYPE_UNKN2		= 15,
 	LOCTYPE_HOUSE		= 16,
 	LOCTYPE_SPECIAL		= 17, // used in Thorwal, Phexcaer, Einsiedlersee
-	LOCTYPE_CITYCAMP	= 18
+	LOCTYPE_AREA_CAMP	= 18
 };
 
 enum {
@@ -749,6 +749,12 @@ enum {
 	FIGHTS_DCAMPFIGHT2	= 255,
 	FIGHTS_DCAMPFIGHT3	= 256,
 	FIGHTS_DCAMPFIGHT4	= 257
+};
+
+enum {
+	AREA_TYPE_DUNGEON = 0,
+	AREA_TYPE_TOWN = 1,
+	AREA_TYPE_NONE = -1
 };
 
 enum {

@@ -1337,7 +1337,7 @@
 //#define AIL_SEQUENCE                    (0xbd21)    /* signed short */
 //#define AIL_MUSIC_DRIVER_ID             (0xbd23)    /* signed short */
 //#define PREGAME_STATE                   (0xbd25)    /* unsigned short; {0,1} */
-//#define CITYCAMP_CITY                   (0xbd27)    /* unsigned char; { 0 = camp in a dungeon, 1 = camp in a town } */
+//#define AREA_CAMP_CITY                   (0xbd27)    /* unsigned char; { 0 = camp in a dungeon, 1 = camp in a town } */
 //#define CURRENT_FIGHT                   (0xbd28)    /* uint8_t* */
 //#define SCENARIO_BUF                    (0xbd2c)    /* long */
 //#define FIGHTOBJ_BUF                    (0xbd30)    /* uint8_t* */
@@ -1573,9 +1573,9 @@
 //#define WILDCAMP_MAGICSTATUS            (0xe3cf)    /* signed char[7] */
 //#define WILDCAMP_GUARDSTATUS            (0xe3d6)    /* signed char[7] */
 // ?1
-//#define CITYCAMP_GUARDS                 (0xe3de)    /* signed char[3] */
-//#define CITYCAMP_MAGICSTATUS            (0xe3e1)    /* signed char[7] */
-//#define CITYCAMP_GUARDSTATUS            (0xe3e8)    /* signed char[7] */
+//#define AREA_CAMP_GUARDS                 (0xe3de)    /* signed char[3] */
+//#define AREA_CAMP_MAGICSTATUS            (0xe3e1)    /* signed char[7] */
+//#define AREA_CAMP_GUARDSTATUS            (0xe3e8)    /* signed char[7] */
 // ?1
 //#define BOOKED_INN_DAYS                 (0xe3f0)    /* signed char */
 //#define SLEEP_QUALITY                   (0xe3f1)    /* signed char */

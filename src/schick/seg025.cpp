@@ -85,7 +85,7 @@ static void (*g_location_handlers[19])(void) = {
 	NULL,
 	do_house,
 	do_special_buildings,
-	do_citycamp,
+	do_area_camp,
 };  // ds:0x4c3b, (void (*)(void))[19];
 
 void show_entrance(void)
@@ -419,7 +419,7 @@ void show_treasure_map(void)
 		} else {
 			g_current_ani = -1;
 			g_request_refresh = 1;
-			g_area_prepared = -1;
+			g_area_prepared = AREA_TYPE_NONE;
 			g_special_screen = 0;
 			draw_main_screen();
 		}
@@ -444,7 +444,7 @@ signed short game_options(void)
 	g_textbox_width = 3;
 	g_special_screen = 1;
 	g_wallclock_update = 0;
-	g_area_prepared = -1;
+	g_area_prepared = AREA_TYPE_NONE;
 	g_current_cursor = &g_default_mouse_cursor;
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
