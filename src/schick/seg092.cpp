@@ -560,19 +560,19 @@ void use_key_on_chest(struct struct_chest* chest)
 }
 
 /**
- * \brief loot a chest with stacked items (item_id, no of items)
- * \param chest pointer to the chest
+ * \brief loot a chest with stacked items (item_id, quantity)
+ * \param content pointer to content, format: see below.
  * \param msg header of the radio box
  *
  * \note: These type of chests have a content of the following format:
- *  ( (item_1, no_1), (item_2, no_2), ... , (item_n, no_n), 0xff).
+ *  ( (item_id_1, quantity_1), (item_id_2, quantity_2), ... , (item_id_n, quantity_n), 0xff).
  *  These informations are stored in an array of type uint8_t[2*n+1]
  *  and are contained in the game state.
  */
 void loot_multi_chest(uint8_t *content, char *msg)
 {
-	unsigned int item_cnt;
-	signed int item_id;
+	unsigned int quantity;
+	signed int pos;
 	signed int i;
 	signed int tw_bak;
 	char temp_str[10];
@@ -583,80 +583,82 @@ void loot_multi_chest(uint8_t *content, char *msg)
 	g_textbox_width = 7;
 
 	do {
-		item_id = 0;
-		while ((i = content[(item_id + item_id)]) != 0xff) {
+		pos = 0;
+		while ((i = content[pos + pos]) != 0xff) {
 
-			names[item_id][0] = '\0';
+			names[pos][0] = '\0';
 
-			if ((item_cnt = content[item_id + item_id + 1]) > 1)
+			if ((quantity = content[pos + pos + 1]) > 1)
 			{
-				my_itoa(item_cnt, names[item_id], 10);
+				my_itoa(quantity, names[pos], 10);
 
-				strcat(names[item_id], g_str_single_space);
+				strcat(names[pos], g_str_single_space);
 			}
 
-			strcat(names[item_id++], GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
+			strcat(names[pos++], GUI_name_plural( ((signed short)(quantity > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
 		}
 
-		if (item_id != 0) {
+		if (pos != 0) {
 
-			item_id = GUI_radio(msg, (signed char)item_id,
+			pos = GUI_radio(msg, (signed char)pos,
 				names[0], names[1], names[2], names[3],
 				names[4], names[5], names[6], names[7],
 				names[8], names[9], names[10], names[11],
 				names[12], names[13], names[14], names[15],
 				names[16], names[17], names[18], names[19]) - 1;
 
-			if (item_id != -2) {
+			if (pos != -2) {
 
-				item_id += item_id;
+				pos += pos;
 
-				my_itoa(content[item_id + 1], temp_str, 10);
+				my_itoa(content[pos + 1], temp_str, 10);
 
 				len = strlen(temp_str);
 
 				do {
-					i = (item_cnt = content[item_id + 1]) > 1 ? GUI_input(get_ttx(593), len) : item_cnt;
+					i = (quantity = content[pos + 1]) > 1 ? GUI_input(get_ttx(593), len) : quantity;
 
 				} while (i < 0);
 
-				if (i > item_cnt) {
-					i = item_cnt;
+				if (i > quantity) {
+					i = quantity;
 				}
 
 				if (i != 0) {
 
-					if (content[item_id] == ITEM_DUKATEN) {
+					if (content[pos] == ITEM_DUKATEN) {
 
 						add_party_money(i * 100L);
 
 					} else {
-						i = get_item(content[item_id], 1, i);
+						i = get_item(content[pos], 1, i);
 					}
 
-					if (i == item_cnt) {
+					if (i == quantity) {
+						// full quantity of item taken away.
+						// To fill the gap, move all subseqent list entries up by one position.
 
 						do {
-							content[item_id] = (unsigned char)(i = content[item_id + 2]);
-							content[item_id + 1] = content[item_id + 3];
-							item_id += 2;
+							content[pos] = (unsigned char)(i = content[pos + 2]);
+							content[pos + 1] = content[pos + 3];
+							pos += 2;
 
-						} while (i != 255);
+						} while (i != 0xff);
 
 					} else if (i != 0) {
-						content[item_id + 1] -= i;
+						content[pos + 1] -= i;
 					} else {
-						item_id = -2;
+						pos = -2;
 					}
 				}
 			}
 
 
 		} else {
-			item_id = -2;
+			pos = -2;
 		}
 
-	} while (item_id != -2);
+	} while (pos != -2);
 
 	g_textbox_width = tw_bak;
 }
