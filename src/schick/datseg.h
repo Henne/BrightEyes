@@ -864,7 +864,7 @@ extern signed char  g_status_page_thirst;		//ds:0x2ca0; seg004, seg048, seg050
 extern signed char  g_missing_file_guilock;		//ds:0x2ca1; seg002
 extern signed short g_basepos_x;			//ds:0x2ca2; seg025-seg117
 extern signed short g_basepos_y;			//ds:0x2ca4; seg025-seg117
-extern signed char g_dng_loaded_dng_index;			//ds:0x2ca6; seg028-seg106
+extern signed char g_dng_loaded_dungeon_id;			//ds:0x2ca6; seg028-seg106
 extern signed char g_town_loaded_town_id;			//ds:0x2ca7; seg025-seg106
 extern signed char g_travel_map_loaded;			//ds:0x2ca8; seg025, seg093
 extern signed char g_ani_unknown_flag;			//ds:0x2cca; seg004 WRITEONLY
@@ -898,8 +898,8 @@ extern int8_t  gs_current_loctype;		//ds:0x2d60; seg002-seg120
 extern int8_t  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
 extern int8_t  gs_current_town;			//ds:0x2d67; seg002-seg120
 extern int8_t  gs_groups_town[6];		//ds:0x2d68; seg002-seg074
-extern int8_t  gs_dungeon_index;			//ds:0x2d6e; seg002-seg120
-extern int8_t  gs_groups_dng_index[6];		//ds:0x2d6f; seg002, seg049
+extern int8_t  gs_dungeon_id;			//ds:0x2d6e; seg002-seg120
+extern int8_t  gs_groups_dungeon_id[6];		//ds:0x2d6f; seg002, seg049
 extern int8_t  gs_dungeon_level;			//ds:0x2d75; seg002-seg107
 extern int8_t  gs_groups_dng_level[6];		//ds:0x2d76; seg002-seg084
 extern int8_t  gs_direction_bak;			//ds:0x2d7c; seg03-seg120
@@ -912,8 +912,8 @@ extern int8_t  gs_current_loctype_bak;		//ds:0x2d9f; seg002-seg120
 extern int8_t  gs_groups_current_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
 extern int8_t  gs_current_town_bak;		//ds:0x2da6; seg025, seg049, seg066, seg075, seg120
 extern int8_t  gs_groups_town_bak[6];		//ds:0x2da7; seg049, seg054
-extern int8_t  gs_dungeon_index_bak;		//ds:0x2dad; seg025, seg049, seg076
-extern int8_t  gs_groups_dng_index_bak[6];	//ds:0x2dae; seg049, seg054
+extern int8_t  gs_dungeon_id_bak;		//ds:0x2dad; seg025, seg049, seg076
+extern int8_t  gs_groups_dungeon_id_bak[6];	//ds:0x2dae; seg049, seg054
 extern int8_t  gs_dungeon_level_bak;		//ds:0x2db4; seg032, seg049
 extern int8_t  gs_groups_dng_level_bak[6];	//ds:0x2db5; seg049, seg054
 extern int32_t gs_day_timer;			//ds:0x2dbb; seg002-seg120

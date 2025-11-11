@@ -54,9 +54,9 @@ void prepare_dungeon_area(void)
 	signed int nvf_index;
 	signed int handle;
 
-	dtx_index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DTX;
+	dtx_index = gs_dungeon_id + ARCHIVE_FILE_DNGS_DTX;
 
-	if (g_dng_loaded_dng_index != gs_dungeon_index) {
+	if (g_dng_loaded_dungeon_id != gs_dungeon_id) {
 
 		load_area_description(1);
 		g_town_loaded_town_id = -1;
@@ -70,15 +70,15 @@ void prepare_dungeon_area(void)
 		disable_ani();
 		g_current_ani = -1;
 
-		nvf_index = (gs_dungeon_index == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
-			(((gs_dungeon_index == DUNGEONS_VERFALLENE_HERBERGE) ||
-				(gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) ||
-				(gs_dungeon_index == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) ||
-				(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE) ||
-				(gs_dungeon_index == DUNGEONS_ZWERGENFESTE) ||
-				(gs_dungeon_index == DUNGEONS_VERLASSENE_MINE) ||
-				(gs_dungeon_index == DUNGEONS_ZWINGFESTE) ||
-				(gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
+		nvf_index = (gs_dungeon_id == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
+			(((gs_dungeon_id == DUNGEONS_VERFALLENE_HERBERGE) ||
+				(gs_dungeon_id == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) ||
+				(gs_dungeon_id == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) ||
+				(gs_dungeon_id == DUNGEONS_PIRATENHOEHLE) ||
+				(gs_dungeon_id == DUNGEONS_ZWERGENFESTE) ||
+				(gs_dungeon_id == DUNGEONS_VERLASSENE_MINE) ||
+				(gs_dungeon_id == DUNGEONS_ZWINGFESTE) ||
+				(gs_dungeon_id == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
 
 		gs_dungeon_gfx_style = (nvf_index == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((nvf_index == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2);
 
@@ -102,10 +102,10 @@ void prepare_dungeon_area(void)
 
 		g_buffer11_ptr = (g_buffer9_ptr3 + offset) - 0xc0L;
 
-		g_area_prepared = !gs_dungeon_index;
+		g_area_prepared = !gs_dungeon_id;
 	}
 
-	g_dng_loaded_dng_index = gs_dungeon_index;
+	g_dng_loaded_dungeon_id = gs_dungeon_id;
 	g_town_loaded_town_id = -1;
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
@@ -117,7 +117,7 @@ void load_dungeon_ddt(void)
 	signed short high;
 	signed int handle;
 
-	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DDT;
+	index = gs_dungeon_id + ARCHIVE_FILE_DNGS_DDT;
 	handle = load_archive_file(index);
 	read_archive_file(handle, (uint8_t*)&low, 2);
 	read_archive_file(handle, (uint8_t*)&high, 2);
@@ -138,7 +138,7 @@ void prepare_city_area(void)
 
 	if (g_town_loaded_town_id != gs_current_town) {
 		load_area_description(1);
-		g_dng_loaded_dng_index = -1;
+		g_dng_loaded_dungeon_id = -1;
 	}
 
 	load_tx(ltx_index);
@@ -200,7 +200,7 @@ void prepare_city_area(void)
 	}
 
 	g_town_loaded_town_id = gs_current_town;
-	g_dng_loaded_dng_index = -1;
+	g_dng_loaded_dungeon_id = -1;
 
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
@@ -309,9 +309,9 @@ void load_area_description(const signed int type)
 	if (type != 0) {
 
 		/* calc archive file index */
-		if (gs_dungeon_index != 0) {
+		if (gs_dungeon_id != 0) {
 			/* dungeon */
-			g_areadescr_fileid = f_index = gs_dungeon_index + (ARCHIVE_FILE_DNGS-1);
+			g_areadescr_fileid = f_index = gs_dungeon_id + (ARCHIVE_FILE_DNGS-1);
 		} else {
 			/* city */
 			g_areadescr_fileid = f_index = gs_current_town + (ARCHIVE_FILE_CITY_DAT-1);
@@ -321,12 +321,12 @@ void load_area_description(const signed int type)
 		g_areadescr_dng_level = gs_dungeon_level;
 
 		/* save if we are in a dungeon */
-		g_areadescr_dng_flag = (gs_dungeon_index != 0 ? 1 : 0);
+		g_areadescr_dng_flag = (gs_dungeon_id != 0 ? 1 : 0);
 
 		/* load DAT or DNG file */
 		handle = load_archive_file(f_index + 0x8000);
 
-		if (!gs_dungeon_index && (gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER))
+		if (!gs_dungeon_id && (gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER))
 		{
 			/* path taken in THORWAL PREM and PHEXCAER */
 			_read(handle, g_dng_map, 512);
@@ -348,7 +348,7 @@ void load_area_description(const signed int type)
 			_read(handle, g_automap_buf, 64);
 			g_locations_tab_size = 0;
 
-			if (!gs_dungeon_index) {
+			if (!gs_dungeon_id) {
 				/* TODO: is that neccessary ? */
 				memset(g_locations_tab, -1, 900);
 				g_locations_tab_size = _read(handle, g_locations_tab, 1000);

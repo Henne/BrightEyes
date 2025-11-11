@@ -156,7 +156,7 @@ signed short DNG02_handler(void)
 
 			if ((gs_groups_x_target[i] == 10 && gs_groups_y_target[i] == 11) &&
 				(gs_groups_dng_level[i] == gs_dungeon_level) &&
-				(gs_groups_dng_index[i] == gs_dungeon_index))
+				(gs_groups_dungeon_id[i] == gs_dungeon_id))
 			{
 				weight_sum = 0L;
 			}
@@ -256,7 +256,7 @@ signed short DNG02_handler(void)
 
 			if (gs_groups_x_target[i] == 11 && gs_groups_y_target[i] == 6 &&
 				gs_groups_dng_level[i] == gs_dungeon_level &&
-				gs_groups_dng_index[i] == gs_dungeon_index)
+				gs_groups_dungeon_id[i] == gs_dungeon_id)
 			{
 				hero = get_hero(0);
 				for (mod_slot = 0; mod_slot <= 6; mod_slot++, hero++)
@@ -272,7 +272,7 @@ signed short DNG02_handler(void)
 			} else if (gs_groups_x_target[i] == 11 &&
 					gs_groups_y_target[i] == 8 &&
 					gs_groups_dng_level[i] == gs_dungeon_level &&
-					gs_groups_dng_index[i] == gs_dungeon_index)
+					gs_groups_dungeon_id[i] == gs_dungeon_id)
 			{
 				weight_sum = 5000L;
 			}

@@ -696,7 +696,7 @@ void spell_foramen(void)
 	 * Free Foramen spell (from the spellcast menu) can open closed dors only if the 'open door' submenu has been activated before (showing the three symbols smash, pick and spell). */
 	(g_dng_extra_action != DNG_MENU_MODE_UNLOCK_DOOR)
 #else
-	(gs_dungeon_index == DUNGEONS_NONE || (g_dng_extra_action != DNG_MENU_MODE_UNLOCK_DOOR && g_dng_extra_action != DNG_MENU_MODE_OPEN_DOOR))
+	(gs_dungeon_id == DUNGEONS_NONE || (g_dng_extra_action != DNG_MENU_MODE_UNLOCK_DOOR && g_dng_extra_action != DNG_MENU_MODE_OPEN_DOOR))
 #endif
 	{
 		/* check if the party is in front of a closed door in a dungeon */
@@ -741,7 +741,7 @@ void spell_spurlos(void)
 
 void spell_transversalis(void)
 {
-	if (!gs_dungeon_index && !gs_current_town) {
+	if (!gs_dungeon_id && !gs_current_town) {
 		/* cannot be used outside of a dungeon or a town */
 
 		/* prepare message */

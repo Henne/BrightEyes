@@ -71,10 +71,10 @@ void show_automap(void)
 
 		g_special_screen = 1;
 
-		dungeon = gs_dungeon_index;
+		dungeon = gs_dungeon_id;
 		town = gs_current_town;
 
-		gs_current_town = (gs_dungeon_index = 0);
+		gs_current_town = (gs_dungeon_id = 0);
 
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
@@ -84,7 +84,7 @@ void show_automap(void)
 				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
 		gs_current_town = (signed char)town;
-		gs_dungeon_index = dungeon;
+		gs_dungeon_id = dungeon;
 
 		g_request_refresh = 1;
 
@@ -249,7 +249,7 @@ void render_automap(signed short x_off)
 		for (x = 0; x < 16; x++) {
 			if (is_discovered(x + x_off, y)) {
 
-				if (gs_dungeon_index != DUNGEONS_NONE) {
+				if (gs_dungeon_id != DUNGEONS_NONE) {
 					/* in dungeon */
 
 					tile_type = div16(get_mapval_small(x, y));
@@ -316,7 +316,7 @@ void render_automap(signed short x_off)
 			(gs_group_member_counts[group_i] > 0) &&
 			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
 			(gs_groups_town[group_i] == gs_current_town) &&
-			(gs_groups_dng_index[group_i] == gs_dungeon_index) &&
+			(gs_groups_dungeon_id[group_i] == gs_dungeon_id) &&
 			!is_group_in_prison(group_i) &&
 			(gs_groups_x_target[group_i] - x_off >= 0) &&
 			(gs_groups_x_target[group_i] - x_off <= 16))
@@ -512,9 +512,9 @@ signed short select_teleport_dest(void)
 
 	draw_main_screen();
 
-	dungeon = gs_dungeon_index;
+	dungeon = gs_dungeon_id;
 	town = gs_current_town;
-	gs_current_town = gs_dungeon_index = 0;
+	gs_current_town = gs_dungeon_id = 0;
 
 	l_si = ((g_dng_map_size == 16) ? 0 :
 			((gs_x_target - 8 < 0) ? 0 :
@@ -522,7 +522,7 @@ signed short select_teleport_dest(void)
 
 	g_automap_selx = gs_x_target;
 	g_automap_sely = gs_y_target;
-	gs_dungeon_index = dungeon;
+	gs_dungeon_id = dungeon;
 	gs_current_town = (signed char)town;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
@@ -642,10 +642,10 @@ signed short select_teleport_dest(void)
 
 	} else
 #if !defined(__BORLANDC__)
-		if ((gs_dungeon_index && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
+		if ((gs_dungeon_id && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
 #else
 		/* REMARK: enforce the use of register DI */
-		if ((gs_dungeon_index && (_DI == 15)) || ((gs_current_town != TOWNS_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
+		if ((gs_dungeon_id && (_DI == 15)) || ((gs_current_town != TOWNS_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
 #endif
 	{
 		strcpy(g_dtp2, get_ttx(611));

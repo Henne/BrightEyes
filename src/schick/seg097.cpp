@@ -872,28 +872,28 @@ void GUI_print_fight_intro_msg(signed short fight_id)
 	signed short tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	if (gs_dungeon_index == DUNGEONS_VERFALLENE_HERBERGE) {
+	if (gs_dungeon_id == DUNGEONS_VERFALLENE_HERBERGE) {
 		DNG02_fight_intro(fight_id);
 	}
-	if (gs_dungeon_index == DUNGEONS_GOBLINHOEHLE) {
+	if (gs_dungeon_id == DUNGEONS_GOBLINHOEHLE) {
 		DNG5_fight_intro(fight_id);
 	}
-	if (gs_dungeon_index == DUNGEONS_DASPOTASCHATZ) {
+	if (gs_dungeon_id == DUNGEONS_DASPOTASCHATZ) {
 		DNG06_fight_intro(fight_id);
 	}
-	if (gs_dungeon_index == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) {
+	if (gs_dungeon_id == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) {
 		DNG09_fight_intro(fight_id);
 	}
-	if (gs_dungeon_index == DUNGEONS_PIRATENHOEHLE) {
+	if (gs_dungeon_id == DUNGEONS_PIRATENHOEHLE) {
 		DNG11_fight_intro(fight_id);
 	}
-	if (gs_dungeon_index == DUNGEONS_ZWERGENFESTE) {
+	if (gs_dungeon_id == DUNGEONS_ZWERGENFESTE) {
 		DNG12_fight_intro(fight_id);
 	}
-	if (gs_dungeon_index == DUNGEONS_VERLASSENE_MINE) {
+	if (gs_dungeon_id == DUNGEONS_VERLASSENE_MINE) {
 		DNG13_fight_intro(fight_id);
 	}
-	if (gs_dungeon_index == DUNGEONS_ZWINGFESTE) {
+	if (gs_dungeon_id == DUNGEONS_ZWINGFESTE) {
 		DNG14_fight_intro(fight_id);
 	}
 

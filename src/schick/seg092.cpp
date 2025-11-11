@@ -403,7 +403,7 @@ void loot_special_chest(const signed int check_dir)
 	signed int y;
 	signed int pos;
 	signed int mapflag;
-	struct struct_chest *chest_ptr = g_dng_specialchest_index[gs_dungeon_index - 1];
+	struct struct_chest *chest_ptr = g_dng_specialchest_index[gs_dungeon_id - 1];
 	uint8_t *ptr = g_dng_map;
 
 	g_get_extra_loot = 0;

@@ -784,8 +784,8 @@ void leave_dungeon(void)
 
 	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
 	gs_current_town = gs_current_town_bak;
-	gs_dungeon_index_bak = gs_dungeon_index;
-	gs_dungeon_index = gs_dungeon_level = gs_dungeon_light = 0;
+	gs_dungeon_id_bak = gs_dungeon_id;
+	gs_dungeon_id = gs_dungeon_level = gs_dungeon_light = 0;
 	g_town_loaded_town_id = -1;
 	g_fading_state = g_request_refresh = 1;
 

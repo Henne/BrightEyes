@@ -142,7 +142,7 @@ void GRP_save_pos(signed short group)
 
 	gs_groups_current_loctype[group] = gs_current_loctype;
 	gs_groups_town[group] = gs_current_town;
-	gs_groups_dng_index[group] = gs_dungeon_index;
+	gs_groups_dungeon_id[group] = gs_dungeon_id;
 	gs_groups_dng_level[group] = gs_dungeon_level;
 	gs_groups_direction_bak[group] = gs_direction_bak;
 
@@ -151,7 +151,7 @@ void GRP_save_pos(signed short group)
 
 	gs_groups_current_loctype_bak[group] = gs_current_loctype_bak;
 	gs_groups_town_bak[group] = gs_current_town_bak;
-	gs_groups_dng_index_bak[group] = gs_dungeon_index_bak;
+	gs_groups_dungeon_id_bak[group] = gs_dungeon_id_bak;
 	gs_groups_dng_level_bak[group] = gs_dungeon_level_bak;
 
 	if (!refresh) {
@@ -230,10 +230,10 @@ void GRP_merge(void)
 
 			gs_groups_direction[answer] = gs_groups_x_target[answer]
 				= gs_groups_y_target[answer] = gs_groups_town[answer]
-				= gs_groups_dng_index[answer] = gs_groups_dng_level[answer]
+				= gs_groups_dungeon_id[answer] = gs_groups_dng_level[answer]
 				= gs_groups_direction_bak[answer] = gs_groups_x_target_bak[answer]
 				= gs_groups_y_target_bak[answer] = gs_groups_current_loctype_bak[answer]
-				= gs_groups_town_bak[answer] = gs_groups_dng_index_bak[answer]
+				= gs_groups_town_bak[answer] = gs_groups_dungeon_id_bak[answer]
 				= gs_groups_dng_level_bak[answer] = 0;
 
 			gs_group_member_counts[answer] = 0;
@@ -327,9 +327,9 @@ void GRP_switch_to_next(signed short mode)
 			set_palette(g_palette_allblack2, 0xa0, 0x20);
 		}
 
-		if (gs_groups_dng_index[group] && (gs_groups_dng_index[group] != gs_dungeon_index))
+		if (gs_groups_dungeon_id[group] && (gs_groups_dungeon_id[group] != gs_dungeon_id))
 		{
-			g_dng_loaded_dng_index = -1;
+			g_dng_loaded_dungeon_id = -1;
 			g_area_prepared = AREA_TYPE_NONE;
 		}
 
@@ -345,14 +345,14 @@ void GRP_switch_to_next(signed short mode)
 		gs_groups_y_target[gs_current_group] = gs_y_target;
 		gs_groups_current_loctype[gs_current_group] = gs_current_loctype;
 		gs_groups_town[gs_current_group] = gs_current_town;
-		gs_groups_dng_index[gs_current_group] = gs_dungeon_index;
+		gs_groups_dungeon_id[gs_current_group] = gs_dungeon_id;
 		gs_groups_dng_level[gs_current_group] = gs_dungeon_level;
 		gs_groups_direction_bak[gs_current_group] = gs_direction_bak;
 		gs_groups_x_target_bak[gs_current_group] = gs_x_target_bak;
 		gs_groups_y_target_bak[gs_current_group] = gs_y_target_bak;
 		gs_groups_current_loctype_bak[gs_current_group] = gs_current_loctype_bak;
 		gs_groups_town_bak[gs_current_group] = gs_current_town_bak;
-		gs_groups_dng_index_bak[gs_current_group] = gs_dungeon_index_bak;
+		gs_groups_dungeon_id_bak[gs_current_group] = gs_dungeon_id_bak;
 		gs_groups_dng_level_bak[gs_current_group] = gs_dungeon_level_bak;
 
 		/* set positions for the new group */
@@ -362,7 +362,7 @@ void GRP_switch_to_next(signed short mode)
 		gs_y_target = gs_groups_y_target[group];
 		gs_current_loctype = gs_groups_current_loctype[group];
 		gs_current_town = gs_groups_town[group];
-		gs_dungeon_index = gs_groups_dng_index[group];
+		gs_dungeon_id = gs_groups_dungeon_id[group];
 		dng_level = gs_dungeon_level;
 		gs_dungeon_level = gs_groups_dng_level[group];
 
@@ -375,7 +375,7 @@ void GRP_switch_to_next(signed short mode)
 		gs_y_target_bak = gs_groups_y_target_bak[group];
 		gs_current_loctype_bak = gs_groups_current_loctype_bak[group];
 		gs_current_town_bak = gs_groups_town_bak[group];
-		gs_dungeon_index_bak = gs_groups_dng_index_bak[group];
+		gs_dungeon_id_bak = gs_groups_dungeon_id_bak[group];
 		gs_dungeon_level_bak = gs_groups_dng_level_bak[group];
 
 		GRP_sort_heroes();
