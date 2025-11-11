@@ -89,7 +89,7 @@ signed short g_items_pluralwords[7] = {
 	ITEM_DIETRICHE,
 	ITEM_SCHUHE,
 	ITEM_STIEFEL,
-	ITEM_SCHNEESCHUH,
+	ITEM_SCHNEESCHUHE,
 	ITEM_BONBONS,
 	ITEM_LOBPREISUNGEN,
 	-1
@@ -212,7 +212,7 @@ struct armor_descr g_armors_table[25] = {
 	{ 0, 0 }, /*  4 <- ITEM_TROWSERS */
 	{ 0, 0 }, /*  5 <- ITEM_SCHUHE */
 	{ 0, 0 }, /*  6 <- ITEM_STIEFEL */
-	{ 0, 0 }, /*  7 <- ITEM_SCHNEESCHUH */
+	{ 0, 0 }, /*  7 <- ITEM_SCHNEESCHUHE */
 	{ 3, 3 }, /*  8 <- ITEM_LEDERHARNISCH */
 	{ 5, 4 }, /*  9 <- ITEM_SCHUPPENRUESTUNG */
 	{ 0, 0 }, /* 10 <- ITEM_ROBE__GREEN_1, ITEM_ROBE__GREEN_1_2 */
