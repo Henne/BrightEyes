@@ -1137,11 +1137,11 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short grou
 		 * bit 1 is a flag which is set if the hero got the IN attribute bonus at the black eye at the Monolith (Einsiedlersee <-> Einsiedlersee, tevent135).
 		 * However, this should still be ok, as it should never happen that bit 0 is unset and bit 1 is set. */
 
-		if (!hero->start_gear) {
+		if (!hero->start_gear__monolith_reward) {
 
 			startup_equipment(hero);
 
-			get_hero(hero_pos)->start_gear = 1; /* it would be more consistent to set only bit 0 and leave the others untouched, see above. */
+			get_hero(hero_pos)->start_gear__monolith_reward = 1; /* it would be more consistent to set only bit 0 and leave the others untouched, see above. */
 
 			write_chr_temp(hero_pos);
 		}

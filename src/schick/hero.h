@@ -151,11 +151,13 @@ struct struct_hero {
 	signed char fight_atpa_mod; /* last used attack mode in fight. +2: aggressive (AT+2, PA-2); 0: normal (AT+0, PA+0); -2: cautious (AT-2, PA+2) */
 	signed char le_max_malus; /* le_max lost from starvation */
 	signed char timer_id;
-	signed char start_gear;
+	signed char start_gear__monolith_reward;
 	  /* has been picked up at a temple and therefore got the initial gear set: 1 = true, 0 = false. 
-	   * Bit1 is used as a flag if the hero got the IN attribute bonus at the black eye at the Monolith (Einsiedlersee <-> Einsiedlersee, tevent135).
-	   * Bits2--7 appear to be unused.
-	   * TODO: Better name? */
+	   * Bit 1 is used as a flag if the hero got the IN attribute bonus at the black eye at the Monolith (Einsiedlersee <-> Einsiedlersee, tevent135).
+	   * Bits 2--7 appear to be unused.
+	   * This is strange as the 'start gear' functionality is done on byte level (affecting all bits together).
+	   * Note that this is not a bug because it it should never happen in the game that bit 0 is unset and bit 1 is set.
+	   * Maybe the bit 1 functionality was actually meant to be applied to the second byte of hero_flags, whose bit 1 is unused. Who knows. */
 	signed char herbs; /* none = 0, Belmart = 1, Menchalkaktus = 2 */
 	signed char hunger_timer; /* timer for no-hunger-miracle */
 	signed char hunger; /* percentage */
