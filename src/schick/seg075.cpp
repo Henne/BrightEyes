@@ -834,7 +834,7 @@ signed short is_staff_lvl2_in_group(void)
 	hero_i = get_hero(0);
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus) && (hero_i->group_id == gs_current_group) &&
+		if ((hero_i->typus) && (hero_i->group_id == gs_active_group_id) &&
 			check_hero(hero_i) && (hero_i->staff_level >= 2))
 		{
 			return 1;
@@ -1185,7 +1185,7 @@ signed short DNG_check_climb_tools(void)
 	for (i = 0; i <= 6; i++, hero++) {
 
 		/* TODO: potential Original-Bug: What if petrified / unconscious etc.? Compare to is_staff_lvl2_in_group where check_hero is called */
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead && (hero->typus == HERO_TYPE_MAGIER) && (hero->staff_level > 2))
 		{
 			return i + 1;
@@ -1208,16 +1208,16 @@ signed int DNG_fallpit(const signed int max_damage)
 	retval = 0;
 
 	g_dng_level_changed = 1;
-	nr_fallen_heroes = random_schick(gs_group_member_counts[gs_current_group]);
+	nr_fallen_heroes = random_schick(gs_group_member_counts[gs_active_group_id]);
 
 	/* If the result was rolled that all but one hero of the active group should fall down, all heroes will fall down.
 	 * Reason probably: Avoid that the NPC gets separated into a single group (as he might be the single hero not falling down) */
 
-	if (gs_group_member_counts[gs_current_group] - 1 == nr_fallen_heroes) {
-		nr_fallen_heroes = gs_group_member_counts[gs_current_group];
+	if (gs_group_member_counts[gs_active_group_id] - 1 == nr_fallen_heroes) {
+		nr_fallen_heroes = gs_group_member_counts[gs_active_group_id];
 	}
 
-	if (gs_group_member_counts[gs_current_group] != nr_fallen_heroes) {
+	if (gs_group_member_counts[gs_active_group_id] != nr_fallen_heroes) {
 		/* only a part of the heroes of the active group falls down */
 
 		/* find empty group */
@@ -1230,12 +1230,12 @@ signed int DNG_fallpit(const signed int max_damage)
 			do {
 				hero_pos = random_schick(7) - 1;
 
-			} while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_current_group) ||
+			} while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_active_group_id) ||
 					((nr_fallen_heroes == 1) && (hero_pos == 6))); /* avoid that the NPC gets separated into a single group */
 
 			get_hero(hero_pos)->group_id = (unsigned char)new_group;
 			gs_group_member_counts[new_group]++;
-			gs_group_member_counts[gs_current_group]--;
+			gs_group_member_counts[gs_active_group_id]--;
 			sub_hero_le(get_hero(hero_pos), random_schick(max_damage));
 		}
 
@@ -1250,7 +1250,7 @@ signed int DNG_fallpit(const signed int max_damage)
 
 		for (i = 0; i < nr_fallen_heroes; i++) {
 
-			while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_current_group))
+			while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_active_group_id))
 			{
 				hero_pos++;
 			}

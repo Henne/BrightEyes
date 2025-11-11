@@ -389,7 +389,7 @@ void drink_while_drinking(const signed int amount)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead) {
 
 			/* sub fluid amount */
 			hero->thirst = hero->thirst - amount;
@@ -419,7 +419,7 @@ void eat_while_drinking(const signed int amount)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead) {
 
 			/* sub food amount */
 			hero->hunger = hero->hunger - amount;

@@ -131,7 +131,7 @@ signed short DNG11_handler(void)
 			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead)
 				{
 					sub_hero_le(hero, test_attrib(hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
@@ -150,7 +150,7 @@ signed short DNG11_handler(void)
 			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 				{
 					sub_hero_le(hero, test_attrib(hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
 				}
@@ -184,7 +184,7 @@ signed short DNG11_handler(void)
 			hero = get_hero(0);
 			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 				{
 					hero_disappear(hero, answer, -1);
 				}

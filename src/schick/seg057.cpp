@@ -507,7 +507,7 @@ void sell_screen(struct shop_descr *shop_descr)
 			hero_pos = g_action - 241;
 			hero3 = get_hero(hero_pos);
 
-			if ((hero3->typus != HERO_TYPE_NONE) && (hero3->group_id == gs_current_group))
+			if ((hero3->typus != HERO_TYPE_NONE) && (hero3->group_id == gs_active_group_id))
 			{
 				hero1 = get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);

@@ -423,7 +423,7 @@ void do_harbor(void)
 					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero++) {
 
-						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 						{
 							GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
 
@@ -696,7 +696,7 @@ void sea_travel(signed short passage_id, signed short reverse)
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 				{
 					GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
 					hero->hunger = hero->thirst = 0;

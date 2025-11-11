@@ -159,7 +159,7 @@ void draw_status_line(void)
 			set_textcolor(0xff, 0);
 
 			/* Gray the names of heroes in another group */
-			if (get_hero(i)->group_id != gs_current_group) {
+			if (get_hero(i)->group_id != gs_active_group_id) {
 
 				set_textcolor(0x6f, 0);
 			}
@@ -177,7 +177,7 @@ void draw_status_line(void)
 			clear_hero_icon(i);
 
 		} else {
-			if (get_hero(i)->group_id == gs_current_group) {
+			if (get_hero(i)->group_id == gs_active_group_id) {
 
 				g_pic_copy.x1 = g_hero_pic_posx[i];
 				g_pic_copy.y1 = 157;

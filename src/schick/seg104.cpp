@@ -350,7 +350,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 
 									hero_p = get_hero(0);
 									for (i = 0; i <= 6; i++, hero_p++) {
-										if ((hero_p->typus != HERO_TYPE_NONE) && (hero_p->group_id == gs_current_group))
+										if ((hero_p->typus != HERO_TYPE_NONE) && (hero_p->group_id == gs_active_group_id))
 										{
 											GRP_hero_sleep(hero_p, g_sleep_quality);
 										}
@@ -372,7 +372,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 
 								hero->group_id = (signed char)l5;
 								gs_group_member_counts[l5]++;
-								gs_group_member_counts[gs_current_group]--;
+								gs_group_member_counts[gs_active_group_id]--;
 
 								/* time in days, rounded down */
 								hero->recipe_timer = g_alchemy_recipes[recipe_index].duration / 24;
@@ -563,7 +563,7 @@ struct struct_hero* get_heaviest_hero(void)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 		{
 			weight = hero->weight + hero->load;
 
@@ -597,7 +597,7 @@ signed int get_skilled_hero_pos(const signed int skill_id)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 		{
 
 			cur =	hero->attrib[g_skill_descriptions[skill_id].attrib1].current +

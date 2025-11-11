@@ -312,7 +312,7 @@ void render_automap(signed short x_off)
 	/* draw purple arrows at the positions of other groups */
 	for (group_i = 0; group_i < 6; group_i++) {
 
-		if ((gs_current_group != group_i) &&
+		if ((gs_active_group_id != group_i) &&
 			(gs_group_member_counts[group_i] > 0) &&
 			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
 			(gs_groups_town_id[group_i] == gs_town_id) &&

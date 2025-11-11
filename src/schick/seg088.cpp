@@ -45,7 +45,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
-		if ((i != diver_pos) && (hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+		if ((i != diver_pos) && (hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 
 			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
@@ -208,13 +208,13 @@ void DNG15_riddle(void)
 	for (i = l_di = 0; i < 6; i++) {
 
 		if (pos == DNG_POS(1,8,1) && gs_groups_x_target[i] == 8 &&
-			gs_groups_y_target[i] == 5 && gs_current_group != i)
+			gs_groups_y_target[i] == 5 && gs_active_group_id != i)
 		{
 			l_di = 1;
 		}
 
 		if (pos == DNG_POS(1,8,5) && gs_groups_x_target[i] == 8 &&
-			gs_groups_y_target[i] == 1 && gs_current_group != i)
+			gs_groups_y_target[i] == 1 && gs_active_group_id != i)
 		{
 			l_di = 1;
 		}

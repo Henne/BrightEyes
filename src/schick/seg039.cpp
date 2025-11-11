@@ -438,7 +438,7 @@ void FIG_init_heroes(void)
 			continue;
 
 		/* check group */
-		if (hero->group_id != gs_current_group)
+		if (hero->group_id != gs_active_group_id)
 			continue;
 
 		hero->action_id = FIG_ACTION_WAIT;

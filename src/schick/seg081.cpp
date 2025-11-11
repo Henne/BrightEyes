@@ -110,7 +110,7 @@ signed short DNG06_handler(void)
 		hero = get_hero(0);
 		for (i = l3 = 0; i < 2; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 				l3++;
 			}
@@ -140,7 +140,7 @@ signed short DNG06_handler(void)
 		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && (test_skill(hero, TA_GEFAHRENSINN, 5) > 0))
 			{
 				l3 = 1;
@@ -158,7 +158,7 @@ signed short DNG06_handler(void)
 				for (i = l3 = 0; i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) &&
-						(hero->group_id == gs_current_group) &&
+						(hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead &&
 						(test_skill(hero, TA_GEFAHRENSINN, 5) > 0))
 					{
@@ -196,7 +196,7 @@ signed short DNG06_handler(void)
 		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && (test_skill(hero, TA_SINNESSCHAERFE, 10) > 0))
 			{
 				l3++;
@@ -271,7 +271,7 @@ signed short DNG06_handler(void)
 			for (i = 0; i <= 6; i++, hero++)
 			{
 				if ((hero->typus != HERO_TYPE_NONE) &&
-					(hero->group_id == gs_current_group) &&
+					(hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead &&
 					(test_skill(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus) <= 0))
 				{
@@ -294,7 +294,7 @@ signed short DNG06_handler(void)
 			for (i = l3 = 0; i < 6; i++)
 			{
 				if (gs_groups_x_target[i] == 3 && gs_groups_y_target[i] == 6 &&
-					gs_current_group != i)
+					gs_active_group_id != i)
 				{
 					hero = get_hero(0);
 					for (l4 = 0; l4 <= 6; l4++, hero++)
@@ -334,7 +334,7 @@ signed short DNG06_handler(void)
 			for (i = l3 = 0; i < 6; i++)
 			{
 				if (gs_groups_x_target[i] == 1 && gs_groups_y_target[i] == 2 &&
-					gs_current_group != i)
+					gs_active_group_id != i)
 				{
 					hero = get_hero(0);
 					for (l4 = 0; l4 <= 6; l4++, hero++)
@@ -492,7 +492,7 @@ void DNG06_chest01_loot(struct struct_chest* chest)
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
 	{
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead && (test_skill(hero, TA_LESEN, 0) > 0))
 		{
 			strcat(g_dtp2, get_tx(34));
@@ -525,7 +525,7 @@ void DNG09_pitfall(void)
 	{
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_skill(hero, TA_GEFAHRENSINN, 4) > 0)
 				/* TODO: potential Original-Bug: Why should 'petrified' or 'uncouscious' (or maybe other properties ) be o.k. here?? */
 			{
@@ -541,7 +541,7 @@ void DNG09_pitfall(void)
 			hero_first = get_first_hero_available_in_group();
 			hero_second = get_second_hero_available_in_group();
 
-			if (gs_group_member_counts[gs_current_group] >= 2)
+			if (gs_group_member_counts[gs_active_group_id] >= 2)
 			{
 				/* the current group has at least two heroes */
 
@@ -561,7 +561,7 @@ void DNG09_pitfall(void)
 				hero_first->group_id = l3;
 				hero_second->group_id = l3;
 				gs_group_member_counts[l3] += 2;
-				gs_group_member_counts[gs_current_group] -= 2;
+				gs_group_member_counts[gs_active_group_id] -= 2;
 
 				GRP_save_pos(l3);
 
@@ -585,7 +585,7 @@ void DNG09_pitfall(void)
 				/* put this hero in an empty group */
 				hero_first->group_id = l3;
 				gs_group_member_counts[l3]++;
-				gs_group_member_counts[gs_current_group]--;
+				gs_group_member_counts[gs_active_group_id]--;
 
 				GRP_save_pos(l3);
 

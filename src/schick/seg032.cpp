@@ -149,9 +149,9 @@ signed short FIG_choose_next_hero(void)
 			for (int i = 0; i < 7; i++, hero++) {
 
 				D1_ERR("Hero %d typus = %x group=%x current_group=%x actions=%x\n",
-					i, hero->typus,	hero->group_id, gs_current_group, hero->actions);
+					i, hero->typus,	hero->group_id, gs_active_group_id, hero->actions);
 
-				if (hero->typus && (hero->group_id == gs_current_group) && hero->actions) {
+				if (hero->typus && (hero->group_id == gs_active_group_id) && hero->actions) {
 
 					retval = i;
 				}
@@ -172,7 +172,7 @@ signed short FIG_choose_next_hero(void)
 	/* search for a hero who has a class, is in the current group and
 		something still unknown */
 	} while ((get_hero(retval)->typus == HERO_TYPE_NONE) ||
-			(get_hero(retval)->group_id != gs_current_group) ||
+			(get_hero(retval)->group_id != gs_active_group_id) ||
 			(get_hero(retval)->actions == 0));
 
 	return retval;
@@ -300,7 +300,7 @@ signed short FIG_get_first_active_hero(void)
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_current_group) &&
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_active_group_id) &&
 			!hero_i->flags.dead && !hero_i->flags.petrified && !hero_i->flags.renegade &&
 			!hero_i->flags.scared && !hero_i->flags.unconscious)
 		{
@@ -330,7 +330,7 @@ unsigned short FIG_all_heroes_escaped(void)
 
 		for (i = 0; i <= 6; i++, hero_i++) {
 
-			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_current_group) &&
+			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_active_group_id) &&
 				!hero_i->flags.dead && (hero_i->action_id == FIG_ACTION_FLEE))
 			{
 				return 1;
@@ -412,7 +412,7 @@ void FIG_do_round(void)
 
 		hero = get_hero(i);
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && (hero->action_id != FIG_ACTION_FLEE))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && (hero->action_id != FIG_ACTION_FLEE))
 		{
 			/* set #action phases to 1 */
 			hero->actions = 1;
@@ -925,7 +925,7 @@ signed short do_fight(signed short fight_id)
 	signed short tw_bak;
 	signed short escape_positions[6];
 
-	if ((gs_group_member_counts[gs_current_group] == 1) && (get_hero(0)->invisible != 0))
+	if ((gs_group_member_counts[gs_active_group_id] == 1) && (get_hero(0)->invisible != 0))
 	{
 		/* group consists of a single hero with an active Visibili spell */
 		/* TODO: potential Original-Bug: what about groups with >= 2 heroes where all have an active Visibili? */
@@ -1095,7 +1095,7 @@ signed short do_fight(signed short fight_id)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 			{
 				hero->flags.tied = 0;
 				hero->flags.asleep = 0;
@@ -1124,7 +1124,7 @@ signed short do_fight(signed short fight_id)
 					ptr = get_hero(0);
 					for (j = 0; j <= 6; j++, ptr++) {
 
-						if ((ptr->typus != HERO_TYPE_NONE) && (ptr->group_id == gs_current_group))
+						if ((ptr->typus != HERO_TYPE_NONE) && (ptr->group_id == gs_active_group_id))
 						{
 							hero_disappear(ptr, j, -2);
 						}
@@ -1180,7 +1180,7 @@ signed short do_fight(signed short fight_id)
 
 			nr_escape_positions = 0;
 
-			for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
+			for (i = 0; gs_group_member_counts[gs_active_group_id] > i; i++) {
 
 				hero = get_hero(i);
 
@@ -1210,7 +1210,7 @@ signed short do_fight(signed short fight_id)
 						group_nr++;
 					}
 
-					group_size = gs_group_member_counts[gs_current_group];
+					group_size = gs_group_member_counts[gs_active_group_id];
 					x_target_bak = gs_x_target;
 					y_target_bak = gs_y_target;
 					direction_bak = gs_direction;
@@ -1230,7 +1230,7 @@ signed short do_fight(signed short fight_id)
 							hero->group_id = (signed char)group_nr;
 							hero->escape_position = 0;
 							gs_group_member_counts[group_nr]++;
-							gs_group_member_counts[gs_current_group]--;
+							gs_group_member_counts[gs_active_group_id]--;
 						}
 					}
 
@@ -1241,7 +1241,7 @@ signed short do_fight(signed short fight_id)
 					gs_dungeon_level = dungeon_level_bak;
 				}
 
-				group_size = gs_group_member_counts[gs_current_group];
+				group_size = gs_group_member_counts[gs_active_group_id];
 
 				for (j = 0; j < group_size; j++) {
 					get_hero(j)->escape_position = 0;

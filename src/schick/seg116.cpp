@@ -157,7 +157,7 @@ void tevent_133(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 				timewarp(HOURS(1));
 
@@ -346,7 +346,7 @@ void tevent_137(void)
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 				{
 					/* each hero gets five FOODPACKAGES */
 					give_hero_new_item(hero, ITEM_PROVIANTPAKET, 1, 5);
@@ -394,7 +394,7 @@ void tevent_139(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 				sub_hero_le(hero, random_schick(2));
 			}
@@ -488,7 +488,7 @@ void tevent_143(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 			{
 				sub_hero_le(hero, random_schick(2) + 1);
 			}

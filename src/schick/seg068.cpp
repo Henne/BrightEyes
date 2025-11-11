@@ -539,7 +539,7 @@ void THO_academy(void)
 	hero = get_hero(0);
 	for (item_pos = cursed_hero_pos = 0; item_pos <= 6; item_pos++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && hero->flags.renegade)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && hero->flags.renegade)
 		{
 			cursed_hero_pos = item_pos;
 			break;
@@ -722,7 +722,7 @@ signed short academy_get_equal_item(signed short price)
 		hero = get_hero(0);
 		for (i = 0; i < 6; i++, hero++) {
 
-			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 				for (item_pos = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++) {
 

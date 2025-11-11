@@ -726,7 +726,7 @@ signed int AFIG_count_heroes(const signed int hero_pos)
 	signed int i;
 
 	/* for each hero in this group */
-	for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
+	for (i = 0; gs_group_member_counts[gs_active_group_id] > i; i++) {
 
 		if ((i != hero_pos) && check_hero(get_hero(i))) {
 			cnt++;

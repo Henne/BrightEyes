@@ -351,7 +351,7 @@ void do_wildcamp(void)
 
 					for (i = 0; i <= 6; i++, hero++) {
 
-						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 							g_wildcamp_guardstatus[i] < 2 && g_wildcamp_magicstatus[i] != 1)
 						{
 							GRP_hero_sleep(hero, g_wildcamp_sleep_quality);
@@ -548,7 +548,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
-							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_id == gs_current_group) &&
+							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_id == gs_active_group_id) &&
 								!hero2->flags.dead)
 							{
 								hero2->thirst = 0;
@@ -578,7 +578,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						hero2 = get_hero(0);
 						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
-							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_id == gs_current_group) &&
+							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_id == gs_active_group_id) &&
 								!hero2->flags.dead)
 							{
 								hero2->hunger = 0;

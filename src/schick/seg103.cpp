@@ -126,7 +126,7 @@ struct struct_hero* get_proper_hero(const signed int skill_id)
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if ((hero_i->typus != HERO_TYPE_NONE) &&
-			(hero_i->group_id == gs_current_group) &&
+			(hero_i->group_id == gs_active_group_id) &&
 			/* TODO: potential Original-Bug: What if petrified / unconscious etc.? */
 			!hero_i->flags.dead) {
 

@@ -203,7 +203,7 @@ void status_menu(signed short hero_pos)
 		handle_input();
 
 		/* RIGHT_KEY */
-		if ((g_action == ACTION_ID_RIGHT) && (gs_group_member_counts[gs_current_group] > 1)) {
+		if ((g_action == ACTION_ID_RIGHT) && (gs_group_member_counts[gs_active_group_id] > 1)) {
 
 			/* set hero_pos to the next possible hero */
 			do {
@@ -212,7 +212,7 @@ void status_menu(signed short hero_pos)
 				if (hero_pos > 6) hero_pos = 0;
 
 			} while (!(get_hero(hero_pos)->typus) ||
-					(get_hero(hero_pos)->group_id != gs_current_group) ||
+					(get_hero(hero_pos)->group_id != gs_active_group_id) ||
 					((get_hero(hero_pos)->typus < HERO_TYPE_HEXE) && (g_status_page_mode > 3)));
 
 
@@ -236,7 +236,7 @@ void status_menu(signed short hero_pos)
 		}
 
 		/* LEFT_KEY */
-		if ((g_action == ACTION_ID_LEFT) && (gs_group_member_counts[gs_current_group] > 1)) {
+		if ((g_action == ACTION_ID_LEFT) && (gs_group_member_counts[gs_active_group_id] > 1)) {
 
 			/* set hero_pos to the next possible hero */
 			do {
@@ -245,7 +245,7 @@ void status_menu(signed short hero_pos)
 				if (hero_pos < 0) hero_pos = 6;
 
 			} while (!(get_hero(hero_pos)->typus) ||
-					(get_hero(hero_pos)->group_id != gs_current_group) ||
+					(get_hero(hero_pos)->group_id != gs_active_group_id) ||
 					((get_hero(hero_pos)->typus < HERO_TYPE_HEXE) && (g_status_page_mode > 3)));
 
 
@@ -929,7 +929,7 @@ lab3:
 void status_select_hero(void)
 {
 
-	if (!g_statusmenu_allowed || !gs_group_member_counts[gs_current_group]) {
+	if (!g_statusmenu_allowed || !gs_group_member_counts[gs_active_group_id]) {
 		/* Yes, it was written that way! */
 	} else {
 		signed short hero_pos = select_hero_from_group(get_ttx(301));

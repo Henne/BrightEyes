@@ -438,7 +438,7 @@ void TRV_ford_test(const signed int mod, const signed int time)
 
 	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) && !hero->flags.dead)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 			/* Original-Bugfix: tests fail if their result is lower or equal than zero */
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -599,7 +599,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 	hero = get_hero(0);
 	for (i = failed_sneaks_num = 0; i <= 6; i++, hero++) {
 
-		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group) &&
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead && (test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
 		{
 			failed_sneaks_num++;
@@ -744,7 +744,7 @@ void TRV_barrier(const signed int text_start)
 			hero = get_hero(0);
 			for (i = tools_num = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_current_group))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 				{
 					tools_num += hero_count_item(hero, ITEM_SEIL);
 					tools_num += hero_count_item(hero, ITEM_STRICKLEITER);
