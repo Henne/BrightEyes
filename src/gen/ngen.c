@@ -30,6 +30,7 @@
 #include "AIL.H"
 #else
 #include <SDL.h>
+#include <SDL_main.h>
 #include <SDL_mixer.h>
 // lseek(), close(), read(), write()
 #if defined(_MSC_VER)
