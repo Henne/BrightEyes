@@ -122,23 +122,23 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 	signed short randval;
 	struct mssr a = g_magic_school_spellranges;
 
-	if ((hero->typus == HERO_TYPE_HEXE) && (g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_WITCH))
+	if ((hero->typus == HERO_TYPE_HEXE) && (g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_HEXE))
 	{
 		/* witch spell */
 		max_incs = 2;
 	}
 
 	if ((hero->typus >= HERO_TYPE_AUELF) && /* hero is one of the three elven types */
-		((g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_GELF) ||
-			(g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_SELF) ||
-			(g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_IELF)))
+		((g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_AUELF) ||
+			(g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_WALDELF) ||
+			(g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_FIRNELF)))
 	{
 		/* elven spell */
 		max_incs = 2;
 	}
 
 	if ((hero->typus == HERO_TYPE_DRUIDE) &&
-		(g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_DRUID))
+		(g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_DRUIDE))
 	{
 		/* druid spell */
 		max_incs = 2;
@@ -147,7 +147,7 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 	if (hero->typus == HERO_TYPE_MAGIER) {
 
 		/* mages */
-		if (g_spell_descriptions[spell_id].herotype == SPELL_DESC_HEROTYPE_MAGE) {
+		if (g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_MAGIER) {
 			/* spell is a mage spell */
 			max_incs = 2;
 		}
@@ -159,7 +159,7 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 		}
 
 		/* depending on the HERO_MAGIC_SCHOOL, the mage will get 3 possible increases on certain spells */
-		if (is_in_word_array(spell_id, (signed short*)g_magic_schools_index[hero->spell_school]))
+		if (is_in_word_array(spell_id, (signed short*)g_magic_schools_table[hero->spell_school]))
 		{
 			max_incs = 3;
 		}
@@ -784,7 +784,7 @@ void level_up(signed short hero_pos)
 						 * up to skill value at most 11. */
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_WITCH && hero->spells[i] < 11) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_HEXE && hero->spells[i] < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -805,7 +805,7 @@ void level_up(signed short hero_pos)
 
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_DRUID && (hero->spells[i] < 11)) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_DRUIDE && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -824,11 +824,11 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (hero->saved_spell_increases != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_magic_schools_table[hero->spell_school][i] != -1)) {
 
-							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
+							if (hero->spells[g_magic_schools_table[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[hero->spell_school][i]);
+								inc_spell_novice(hero, g_magic_schools_table[hero->spell_school][i]);
 							}
 							i++;
 						}
@@ -844,11 +844,11 @@ void level_up(signed short hero_pos)
 						}
 
 						i = 0;
-						while ((hero->saved_spell_increases) != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
+						while ((hero->saved_spell_increases) != 0 && (g_magic_schools_table[hero->spell_school][i] != -1)) {
 
-							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
+							if (hero->spells[g_magic_schools_table[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[hero->spell_school][i]);
+								inc_spell_novice(hero, g_magic_schools_table[hero->spell_school][i]);
 							}
 							i++;
 						}
@@ -859,7 +859,7 @@ void level_up(signed short hero_pos)
 
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF) && (hero->spells[i] < 11)) {
+							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_AUELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -875,7 +875,7 @@ void level_up(signed short hero_pos)
 						i = 1;
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF && (hero->spells[i] < 11)) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_AUELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -887,7 +887,7 @@ void level_up(signed short hero_pos)
 
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && (hero->spells[i] < 11)) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_FIRNELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -903,7 +903,7 @@ void level_up(signed short hero_pos)
 						i = 1;
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && (hero->spells[i] < 11)) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_FIRNELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -914,7 +914,7 @@ void level_up(signed short hero_pos)
 
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF) && (hero->spells[i] < 11)) {
+							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_WALDELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -930,7 +930,7 @@ void level_up(signed short hero_pos)
 						i = 1;
 						while ((hero->saved_spell_increases != 0) && (i < 86)) {
 
-							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF) && (hero->spells[i] < 11)) {
+							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_WALDELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
