@@ -1141,7 +1141,7 @@ enum {
 	ITEM_HOSE				= 0x31, /* trousers */
 	ITEM_SCHUHE				= 0x32, /* shoes */
 	ITEM_STIEFEL				= 0x33, /* boots */
-	ITEM_SCHNEESCHUH			= 0x34, /* laceup shoe */
+	ITEM_SCHNEESCHUHE			= 0x34, /* laceup shoe */
 	ITEM_LEDERHARNISCH			= 0x35, /* leather armor */
 	ITEM_SCHUPPENRUESTUNG			= 0x36, /* scale armor */
 	ITEM_SHURINKNOLLEKNOLLENGIFT		= 0x37, /* Shurin poison */
