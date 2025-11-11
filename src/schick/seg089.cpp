@@ -458,7 +458,7 @@ signed short DNG15_handler(void)
 
 				add_hero_ap_all(50);
 
-				g_dng_area_loaded = g_area_prepared = -1;
+				g_dng_loaded_dng_index = g_area_prepared = -1;
 				g_pp20_index = -2;
 
 				draw_main_screen();

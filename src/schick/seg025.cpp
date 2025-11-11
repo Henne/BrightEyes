@@ -786,7 +786,7 @@ void leave_dungeon(void)
 	gs_current_town = gs_current_town_bak;
 	gs_dungeon_index_bak = gs_dungeon_index;
 	gs_dungeon_index = gs_dungeon_level = gs_dungeon_light = 0;
-	g_city_area_loaded = -1;
+	g_town_loaded_town_id = -1;
 	g_fading_state = g_request_refresh = 1;
 
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);

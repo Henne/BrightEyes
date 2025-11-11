@@ -463,7 +463,7 @@ void do_harbor(void)
 				passage_arrival();
 
 				g_wallclock_update = g_basepos_x = g_basepos_y = gs_sea_travel_psgbooked_flag = 0;
-				g_current_ani = g_city_area_loaded = g_pp20_index = -1;
+				g_current_ani = g_town_loaded_town_id = g_pp20_index = -1;
 				g_request_refresh = 1;
 				gs_show_travel_map = 0;
 

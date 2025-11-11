@@ -888,7 +888,7 @@ signed short do_travel_mode(void)
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	}
 
-	g_current_ani = g_city_area_loaded = g_pp20_index = -1;
+	g_current_ani = g_town_loaded_town_id = g_pp20_index = -1;
 	g_request_refresh = g_fading_state = 1;
 	g_wallclock_update = bak1;
 
