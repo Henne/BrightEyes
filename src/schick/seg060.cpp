@@ -31,7 +31,7 @@
 namespace M302de {
 #endif
 
-struct inn_descr g_tavern_descr_table[89] = {
+const struct inn_descr g_tavern_descr_table[89] = {
 	{ 0x000c, -0x000a },
 	{ 0x000b, 0x0000 },
 	{ 0x0009, 0x0000 },
@@ -126,10 +126,10 @@ struct inn_descr g_tavern_descr_table[89] = {
 
 void talk_tavern(void)
 {
-	signed short txt_id;
-	signed short food_quality;
-	signed short answer;
-	signed short options;
+	signed int txt_id;
+	signed int food_quality;
+	signed int answer;
+	signed int options;
 	struct struct_dialog_state *state_ptr;
 	struct struct_dialog_state *states_tab;
 	char *text_buffer;
@@ -341,13 +341,13 @@ void talk_tavern(void)
 	disable_ani();
 }
 
-void TLK_tavern(signed short answer)
+void TLK_tavern(const signed int answer)
 {
-	signed short old_state;
-	signed short tmp;
+	signed int old_state;
+	signed int tmp;
 	int32_t p_money;
 	struct struct_hero *hero;
-	signed short hero_pos;
+	signed int hero_pos;
 
 	old_state = g_dialog_state;
 	hero = get_first_hero_available_in_group();

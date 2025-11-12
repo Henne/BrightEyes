@@ -33,18 +33,16 @@ namespace M302de {
 
 void do_tavern(void)
 {
-	signed short i;
-	signed short done;
-	signed short answer;
-	signed short l3;
+	signed int i;
+	signed int done = 0;
+	signed int answer;
+	signed int l3;
 	int32_t p_money_before;
 	int32_t p_money_after;
-	struct inn_descr *tavern;
-	signed short bonus;
+	const struct inn_descr *tavern = &g_tavern_descr_table[gs_current_typeindex];
+	signed int bonus;
 	time_t timeval;
 
-	done = 0;
-	tavern = &g_tavern_descr_table[gs_current_typeindex];
 
 	GUI_print_loc_line(get_tx(gs_current_locdata));
 
@@ -107,7 +105,7 @@ void do_tavern(void)
 						get_ttx(824)) - 1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -139,7 +137,7 @@ void do_tavern(void)
 			p_money_after = count_heroes_in_group() * (6 - tavern->quality / 4);
 
 			p_money_after += tavern->price_mod * p_money_after / 100;
-			sprintf(g_dtp2, get_ttx(473), (signed short)p_money_after);
+			sprintf(g_dtp2, get_ttx(473), (signed int)p_money_after);
 
 			if (GUI_bool(g_dtp2)) {
 
@@ -246,10 +244,10 @@ void pirates_attack_wrapper(void)
 
 void prolog_ghostship(void)
 {
-	signed short answer;
-	signed short tw_bak;
-	signed short bak1;
-	signed short bak2;
+	signed int answer;
+	signed int tw_bak;
+	signed int bak1;
+	signed int bak2;
 
 	tw_bak = g_textbox_width;
 	bak1 = g_basepos_x;

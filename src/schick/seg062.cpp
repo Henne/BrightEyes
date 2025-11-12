@@ -28,17 +28,17 @@ static struct int8_t_15 g_temple_miracle_dice = { 0, 9, 9, 10, 17, 6, 10, 10, 18
 
 void ask_miracle(void)
 {
-	signed short miracle_dice_roll;
-	signed short j;
+	signed int miracle_dice_roll;
+	signed int j;
 	struct struct_hero *hero;
-	signed short disease;
-	signed short fi_bak;
-	signed short const_zero; // always zero
-	signed short bonus;
-	signed short no_spellcaster_in_group;
-	signed short i;
-	signed short mod_slot;
-	signed short item_id;
+	signed int disease;
+	signed int fi_bak;
+	signed int const_zero; // always zero
+	signed int bonus;
+	signed int no_spellcaster_in_group;
+	signed int i;
+	signed int mod_slot;
+	signed int item_id;
 	struct int8_t_15 god_bonus = g_temple_miracle_bonus;
 	//struct dummy15 god_bonus = {{0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0, 1}};
 	struct int8_t_15 god_dice = g_temple_miracle_dice;
@@ -54,7 +54,7 @@ void ask_miracle(void)
 	/* check gods estimation */
 	if (gs_gods_estimation[g_temple_god] >= 100) {
 
-		bonus = (signed short)((god_bonus.a[g_temple_god] * (gs_gods_estimation[g_temple_god] / 100) / 10) - const_zero);
+		bonus = (god_bonus.a[g_temple_god] * (gs_gods_estimation[g_temple_god] / 100) / 10) - const_zero;
 
 		if (gs_town_id == TOWN_ID_CLANEGH) {
 			bonus += 2;
@@ -488,8 +488,8 @@ void ask_miracle(void)
 	GUI_output(g_dtp2);
 
 	/* restore text file except for WONDER.LTX, TAVERN.TLK and except for dialogs */
-	if (fi_bak != -1 && fi_bak != ARCHIVE_FILE_WONDER_LTX
-		&& fi_bak != ARCHIVE_FILE_TAVERN_TLK
+	if ((fi_bak != -1) && (fi_bak != ARCHIVE_FILE_WONDER_LTX)
+		&& (fi_bak != ARCHIVE_FILE_TAVERN_TLK)
 		&& (fi_bak < 156 || fi_bak > 176)) {
 		load_tx2(fi_bak);
 	}

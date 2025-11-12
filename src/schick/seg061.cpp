@@ -75,17 +75,17 @@ static char g_str_no_save_in_temple[41] = "IN DIESEM TEMPEL KEIN SPEICHERN M\x99
 
 
 /* REMARK: should be passed as a parameter to asm_miracles() */
-signed short g_temple_god; // ds:0xe3f8, id of current temple's god
+signed int g_temple_god; // ds:0xe3f8, id of current temple's god
 
 void do_temple(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short input;
+	signed int l_si;
+	signed int l_di;
+	signed int input;
 	signed char done = 0;
 	int32_t money;
 	int32_t donation;
-	signed short game_state;
+	signed int game_state;
 
 	g_intemple = g_intemple2 = 0;
 	g_request_refresh = 1;
@@ -268,13 +268,12 @@ void do_temple(void)
 	g_intemple = g_intemple2 = 1;
 }
 
-void char_add(signed short temple_id)
+void char_add(const signed int temple_id)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short i;
+	signed int l_si;
+	signed int l_di;
+	signed int i;
 	uint8_t *ptr;
-	struct struct_hero *hero;
 
 	ptr = g_renderbuf_ptr + 50000;
 	l_di = copy_chr_names(ptr, temple_id);
@@ -296,7 +295,7 @@ void char_add(signed short temple_id)
 
 				if (l_si != -1) {
 
-					hero = get_hero(0);
+					struct struct_hero *hero = get_hero(0);
 
 					for (i = 0; i < 6; i++, hero++) {
 
@@ -330,16 +329,15 @@ void char_add(signed short temple_id)
 	}
 }
 
-void char_letgo(signed short temple_id)
+void char_letgo(const signed int temple_id)
 {
-	signed short hero_pos;
-	struct struct_hero *hero;
-
 	if (!gs_total_hero_counter || !gs_group_member_counts[gs_active_group_id]) {
 
 		GUI_output(get_ttx(232));
 
 	} else {
+
+		signed int hero_pos;
 
 		do {
 			hero_pos = select_hero_from_group(get_ttx(618));
@@ -355,11 +353,11 @@ void char_letgo(signed short temple_id)
 				} else {
 
 					/* let go a hero */
-					hero = get_hero(hero_pos);
+					struct struct_hero *hero = get_hero(hero_pos);
 					gs_total_hero_counter--;
 					gs_group_member_counts[gs_active_group_id]--;
 
-					hero->temple_id = (signed char)temple_id;
+					hero->temple_id = temple_id;
 					hero->slot_pos = 0;
 
 					write_chr_temp(hero_pos);
@@ -379,11 +377,11 @@ void char_letgo(signed short temple_id)
 	}
 }
 
-signed short char_erase(void)
+signed int char_erase(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short unlink_ret;
+	signed int l_si;
+	signed int l_di;
+	signed int unlink_ret;
 	uint8_t *ptr;
 
 	if (g_renderbuf_in_use_flag) {
@@ -441,22 +439,19 @@ signed short char_erase(void)
  * \param   le_in       healable LE maximum
  * \param   str         a format-string for the output
  */
-void miracle_heal_hero(signed short le_in, char *str)
+void miracle_heal_hero(signed int le_in, const char *str)
 {
-	signed short i;
-	signed short le;
-	signed short hero_pos;
-	signed short le_diff;
-	struct struct_hero *hero;
-
-	le = 0;
-	hero_pos = -1;
+	signed int i;
+	signed int le = 0;
+	signed int hero_pos = -1;
 
 	/* search for the hero with the largest LE-difference */
 	for (i = 0; i <= 6; i++) {
 
-		hero = get_hero(i);
+		signed int le_diff;
+		const struct struct_hero *hero = get_hero(i);
 
+		/* REMARK: remove one check for dead, do difference calculation before the if */
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead && !hero->flags.gods_pissed && !hero->flags.dead &&
 			((le_diff = hero->le_max - hero->le) > le))
@@ -482,13 +477,13 @@ void miracle_heal_hero(signed short le_in, char *str)
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
-		sprintf(g_dtp2, (char*)str, get_hero(hero_pos)->alias, le_in, g_text_output_buf);
+		sprintf(g_dtp2, str, get_hero(hero_pos)->alias, le_in, g_text_output_buf);
 	}
 }
 
-void miracle_resurrect(char *str)
+void miracle_resurrect(const char *str)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++) {
 
@@ -506,7 +501,7 @@ void miracle_resurrect(char *str)
 			draw_status_line();
 
 			/* prepare a message */
-			sprintf(g_dtp2, (char*)str, hero->alias);
+			sprintf(g_dtp2, str, hero->alias);
 
 			break;
 		}
@@ -520,10 +515,10 @@ void miracle_resurrect(char *str)
  * \param   timer_value how long should the modification last
  * \param   mod         modification value
  */
-void miracle_modify(unsigned short offset, int32_t timer_value, signed short mod)
+void miracle_modify(const unsigned int offset, const int32_t timer_value, const signed int mod)
 {
-	int i;
-	int slot;
+	signed int i;
+	signed int slot;
 	HugePt ptr;
 	struct struct_hero *hero = get_hero(0);
 
@@ -547,12 +542,12 @@ void miracle_modify(unsigned short offset, int32_t timer_value, signed short mod
  * \param   str         format string for output
  * \param   mode        0 = magic, != 0 repair
  */
-void miracle_weapon(char *str, signed short mode)
+void miracle_weapon(const char *str, const signed int mode)
 {
-	int i;
-	int j;
-	int done;
-	int item_id;
+	signed int i;
+	signed int j;
+	signed int done;
+	signed int item_id;
 
 	for (j = done = 0; (j <= 6) && (!done); j++) {
 
@@ -575,7 +570,7 @@ void miracle_weapon(char *str, signed short mode)
 							hero->inventory[i].flags.magic = 1;
 							hero->inventory[i].flags.magic_revealed = 1;
 
-							sprintf(g_dtp2, (char*)str, GUI_names_grammar((signed short)0x8000, item_id, 0), hero->alias);
+							sprintf(g_dtp2, str, GUI_names_grammar((signed int)0x8000, item_id, 0), hero->alias);
 
 							done = 1;
 							break;
@@ -587,7 +582,7 @@ void miracle_weapon(char *str, signed short mode)
 						{
 							hero->inventory[i].flags.broken = 0;
 
-							sprintf(g_dtp2, (char*)str, GUI_names_grammar((signed short)0x8000, item_id, 0), hero->alias);
+							sprintf(g_dtp2, str, GUI_names_grammar((signed int)0x8000, item_id, 0), hero->alias);
 
 							done = 1;
 							break;

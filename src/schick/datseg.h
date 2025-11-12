@@ -1587,7 +1587,7 @@ extern int8_t g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg1
 
 extern struct shop_descr g_shop_descr_table[95];	//ds:0x6870; seg055, seg065
 
-extern struct inn_descr g_tavern_descr_table[89];	//ds:0x6c84; seg054, seg059, seg060
+extern const struct inn_descr g_tavern_descr_table[89];	//ds:0x6c84; seg054, seg059, seg060
 
 extern struct sea_route g_sea_routes[46];	//ds:0x6f00; seg002, seg063, seg064 SHOULD BE IN GAME STATE
 extern signed char g_travel_by_ship;		//ds:0x7070; seg049, seg063
@@ -1675,7 +1675,7 @@ extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066
 extern HugePt g_buffer9_ptr4;			// ds:0xe3fc; seg028
-extern signed short g_temple_god;		// ds:0xe3f8; seg061, seg062
+extern signed int g_temple_god;			// ds:0xe3f8; seg061, seg062
 extern signed short g_price_modificator;	// ds:0xe3f6; seg055, seg057, seg058
 extern signed char g_sleep_quality;		// ds:0xe3f1; seg054, seg104
 extern signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6; seg049, seg051, seg109

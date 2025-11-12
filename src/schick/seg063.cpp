@@ -39,7 +39,7 @@
 namespace M302de {
 #endif
 
-static signed short g_passage_type_to_name[7] = {
+static const signed int g_passage_type_to_name[7] = {
 	/* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
 	0x001d, /* HEUER */
 	0x001e, /* BEGLEITSCHUTZFAHRT */
@@ -59,7 +59,7 @@ static const struct ship g_ship_table[8] = {
 	{ 5, 0, 10,  60 },
 	{ 6, 0,  0,  40 }
 }; // ds:0x6ed0
-static signed short g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
+static const signed int g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
 struct sea_route g_sea_routes[46] = {
 	{ TOWN_ID_THORWAL    , TOWN_ID_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
 	{ TOWN_ID_PREM       , TOWN_ID_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
@@ -126,8 +126,8 @@ static signed char g_sea_travel_sleep_quality; // ds:0xe3fa
 
 void passages_init(void)
 {
-	signed short si;
-	signed short i;
+	signed int si;
+	signed int i;
 	struct sea_route *route = &g_sea_routes[0];
 
 
@@ -164,9 +164,9 @@ void passages_init(void)
 
 void do_harbor(void)
 {
-	signed short i; /* diverse usage */
-	signed short done;
-	signed short answer;
+	signed int i; /* diverse usage */
+	signed int done;
+	signed int answer;
 	struct harbor_option_obsolete *psg_ptr;
 	int32_t p_money;
 	struct struct_hero *hero;
@@ -504,17 +504,18 @@ void do_harbor(void)
 }
 
 /**
- * \brief   * \param town_id	ID of the town
+ * \brief
+ * \param town_id	ID of the town
  */
-void mod_clock_pos(signed short town_id)
+void mod_clock_pos(const signed int town_id)
 {
-	signed short val;
-	signed short map_x;
-	signed short map_y;
+	signed int val;
+	signed int map_x;
+	signed int map_y;
 
 	map_x = g_town_positions[town_id - 1].x;
 	//map_y = g_town_positions[town_id - 1].y;
-	map_y = *(signed short*)((uint8_t*)g_town_positions - sizeof(signed short) + 2 * sizeof(signed short) * town_id);
+	map_y = *(int16_t*)((uint8_t*)g_town_positions - sizeof(int16_t) + 2 * sizeof(int16_t) * town_id);
 
 	val = map_x >= 0 && map_x <= 159 ?
 		(map_y >= 0 && map_y <= 99 ? 3 : 1) :
@@ -524,9 +525,9 @@ void mod_clock_pos(signed short town_id)
 	g_basepos_y = ((!val || val == 1) ? -40 : 40);
 }
 
-void sea_travel(signed short passage_id, signed short reverse)
+void sea_travel(const signed int passage_id, const signed int reverse)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 	uint8_t *ptr;
 	int32_t off;

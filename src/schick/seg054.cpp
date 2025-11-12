@@ -177,7 +177,6 @@ void do_inn(void)
 	int32_t price_suite;
 	signed short booked_days;
 	signed short rested_days;
-	struct inn_descr *tavern;
 
 	done = 0;
 	stay = 0;
@@ -667,7 +666,7 @@ void do_inn(void)
 
 		} else if (g_action == ACTION_ID_ICON_8 && g_combo_mode != 0) {
 
-			tavern = &g_tavern_descr_table[gs_current_typeindex];
+			const struct inn_descr *tavern = &g_tavern_descr_table[gs_current_typeindex];
 
 			if (tavern->quality >= 6 && tavern->quality <= 13 && gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
