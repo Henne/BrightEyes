@@ -50,7 +50,7 @@ const char g_dng01_str_marbo[6] = "MARBO"; // ds:0x93d1
 /**
  * \brief   dungeon handler of the death ship
  */
-signed short DNG01_handler(void)
+signed int DNG01_handler(void)
 {
 	signed int target_pos;
 	signed int i;

@@ -27,7 +27,7 @@ void DNG08_chest04_open(struct struct_chest*);
 /* 0x52 */
 void DNG08_chest05_open(struct struct_chest*);
 /* 0x57 */
-signed short DNG08_handler(void);
+signed int DNG08_handler(void);
 
 #if !defined(__BORLANDC__)
 }

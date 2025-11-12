@@ -34,7 +34,7 @@ struct struct_chest g_dng07_specialchests[2] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9668
 
-signed short DNG07_handler(void)
+signed int DNG07_handler(void)
 {
 	signed int target_pos;
 	signed int i;

@@ -42,7 +42,7 @@ struct struct_chest g_dng08_specialchests[7] = {
 }; // ds:0x9692
 static const char g_dng08_str_tairach[8] = "TAIRACH"; // ds:0x9725
 
-signed short DNG08_handler(void)
+signed int DNG08_handler(void)
 {
 	signed int target_pos;
 	signed int i;

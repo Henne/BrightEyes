@@ -46,7 +46,7 @@ struct struct_chest g_dng09_specialchests[8] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x972e
 
-signed short DNG09_handler(void)
+signed int DNG09_handler(void)
 {
 	signed int target_pos;
 	signed int i;

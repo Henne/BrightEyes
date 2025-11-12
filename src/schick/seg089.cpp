@@ -74,7 +74,7 @@ struct struct_chest g_dng15_specialchests[33] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9a4e
 
-signed short DNG15_handler(void)
+signed int DNG15_handler(void)
 {
 	signed int target_pos;
 	signed int i;

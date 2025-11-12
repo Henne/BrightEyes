@@ -40,7 +40,7 @@ static const char g_str_s_war[8] = "%s WAR "; // ds:0x964f
 static const char g_str_s_und_s_waren[17] = "%s UND %s WAREN "; // ds:0x9657
 
 
-signed short DNG06_handler(void)
+signed int DNG06_handler(void)
 {
 	signed int i;
 	signed int target_pos;

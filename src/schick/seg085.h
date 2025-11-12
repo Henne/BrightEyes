@@ -17,7 +17,7 @@ void DNG10_chest03_loot(struct struct_chest*);
 /* 0x39 */
 void DNG10_chest04_loot(struct struct_chest*);
 /* 0x3e */
-signed short DNG10_handler(void);
+signed int DNG10_handler(void);
 
 #if !defined(__BORLANDC__)
 }

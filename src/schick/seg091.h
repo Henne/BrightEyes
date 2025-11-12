@@ -19,7 +19,7 @@ void DNG13_chest01_loot(struct struct_chest*);
 /* 0x3e */
 void DNG13_chest00_loot(struct struct_chest*);
 /* 0x43 */
-signed short DNG13_handler(void);
+signed int DNG13_handler(void);
 /* 0x48 */
 void DNG13_fight_intro(const signed int);
 

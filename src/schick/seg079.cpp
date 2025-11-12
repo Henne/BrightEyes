@@ -49,7 +49,7 @@ const char g_dng03_str_spinnennetz[12] = "SPINNENNETZ"; // ds:0x95a6
 const char g_dng03_str_mactans[8] = "MACTANS"; // ds:0x95b2
 
 
-signed short DNG03_handler(void)
+signed int DNG03_handler(void)
 {
 	signed int target_pos;
 	signed int i;

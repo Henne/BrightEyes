@@ -50,7 +50,7 @@ struct struct_chest g_dng11_specialchests[15] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9854
 
-signed short DNG11_handler(void)
+signed int DNG11_handler(void)
 {
 	signed int target_pos;
 	signed int test_result;

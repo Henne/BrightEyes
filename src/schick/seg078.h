@@ -21,7 +21,7 @@ void DNG02_chest06_open(struct struct_chest*);
 /* 0x43 */
 void DNG02_chest06_loot(struct struct_chest*);
 /* 0x48 */
-signed short DNG02_handler(void);
+signed int DNG02_handler(void);
 /* 0x4d */
 void DNG02_fight_intro(const signed int);
 

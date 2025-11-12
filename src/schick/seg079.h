@@ -33,7 +33,7 @@ void DNG03_chest12_loot(struct struct_chest*);
 /* 0x61 */
 void DNG03_chest12_trap(void);
 /* 0x66 */
-signed short DNG03_handler(void);
+signed int DNG03_handler(void);
 
 #if !defined(__BORLANDC__)
 }

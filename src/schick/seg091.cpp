@@ -33,7 +33,7 @@ struct struct_chest g_dng13_specialchests[3] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0}
 }; // ds:0x9d48
 
-signed short DNG13_handler(void)
+signed int DNG13_handler(void)
 {
 	signed int pos;
 	signed int tw_bak;

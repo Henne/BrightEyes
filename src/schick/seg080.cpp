@@ -42,7 +42,7 @@ int16_t g_dng05_trash_flag = 0; // ds:0x960e
 /**
  * \brief   dungeon handler of the wolfcave
  */
-signed short DNG04_handler(void)
+signed int DNG04_handler(void)
 {
 	signed int pos;
 	signed int i;
@@ -336,7 +336,7 @@ void DNG04_chest02_loot(struct struct_chest* chest)
 /**
  * \brief   dungeon handler of a cave
  */
-signed short DNG05_handler(void)
+signed int DNG05_handler(void)
 {
 	signed int pos;
 	signed int tmp;

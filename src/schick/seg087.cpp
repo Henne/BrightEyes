@@ -31,7 +31,7 @@
 namespace M302de {
 #endif
 
-signed short DNG14_handler(void)
+signed int DNG14_handler(void)
 {
 	signed int pos;
 	signed int l_di;

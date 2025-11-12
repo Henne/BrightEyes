@@ -21,7 +21,7 @@ void DNG09_chest06_loot(struct struct_chest*);
 /* 0x43 */
 void DNG09_chest04_trap(void);
 /* 0x48 */
-signed short DNG09_handler(void);
+signed int DNG09_handler(void);
 /* 0x4d */
 void DNG09_fight_intro(const signed int);
 

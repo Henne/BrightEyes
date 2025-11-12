@@ -17,7 +17,7 @@ void DNG15_cursed_money(uint8_t*);
 /* 0x39 */
 void DNG15_wounds_and_ladders(char*, const signed int, const signed int);
 /* 0x3e */
-signed short DNG15_handler(void);
+signed int DNG15_handler(void);
 /* 0x43 */
 void DNG15_empty_chest(struct struct_chest*);
 /* 0x48 */

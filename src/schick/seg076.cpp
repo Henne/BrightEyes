@@ -53,7 +53,7 @@
 namespace M302de {
 #endif
 
-static signed short (*g_dng_handlers[15])(void) = {
+static signed int (*g_dng_handlers[15])(void) = {
 	DNG01_handler,
 	DNG02_handler,
 	DNG03_handler,
@@ -421,7 +421,7 @@ signed int DNG_step(void)
 {
 	signed int l_si;
 	signed int l_di;
-	signed short (*dungeon_handler)(void);
+	signed int (*dungeon_handler)(void);
 	signed int retval;
 	signed int tw_bak;
 	signed int old_value;

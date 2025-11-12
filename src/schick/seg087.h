@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short DNG14_handler(void);
+signed int DNG14_handler(void);
 
 #if !defined(__BORLANDC__)
 }
