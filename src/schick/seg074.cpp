@@ -49,8 +49,8 @@ const unsigned char g_automap_bitmask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04,
 static const unsigned char g_automap_tile_arrowup[49] = { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 }; // ds:0x7d52
 static const unsigned char g_automap_tile_arrowright[49] = { 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }; // ds:0x7d83
 static const unsigned char g_automap_tile_cross[49] = { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }; // ds:0x7db4
-signed short g_automap_selx = -1; // ds:0x7de5
-signed short g_automap_sely = -1; // ds:0x7de7
+signed int g_automap_selx = -1; // ds:0x7de5
+signed int g_automap_sely = -1; // ds:0x7de7
 unsigned char g_unkn_055[1] = { 0x00 }; // ds:0x7de9
 
 unsigned char g_automap_buf[64]; // ds:0xe442
@@ -74,7 +74,7 @@ void show_automap(void)
 		dungeon = gs_dungeon_id;
 		town_id = gs_town_id;
 
-		gs_town_id = (gs_dungeon_id = 0);
+		gs_town_id = gs_dungeon_id = 0;
 
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
@@ -83,7 +83,7 @@ void show_automap(void)
 				((gs_x_target - 8 < 0) ? 0 :
 				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
-		gs_town_id = (signed char)town_id;
+		gs_town_id = town_id;
 		gs_dungeon_id = dungeon;
 
 		g_request_refresh = 1;
@@ -169,7 +169,7 @@ void show_automap(void)
 	}
 }
 
-unsigned short is_discovered(signed short x, signed short y)
+signed int is_discovered(const signed int x, const signed int y)
 {
 	return g_automap_buf[(4 * y) + (x >> 3)] & g_automap_bitmask[(x & 7)];
 }
@@ -181,7 +181,7 @@ unsigned short is_discovered(signed short x, signed short y)
  * \param   y           y-coordinate
  * \return              value of the field at (x,y)
  */
-unsigned short get_mapval_small(signed short x, signed short y)
+unsigned short get_mapval_small(const signed int x, const signed int y)
 {
 	uint8_t *map = g_dng_map;
 
@@ -195,7 +195,7 @@ unsigned short get_mapval_small(signed short x, signed short y)
  * \param   y           y-coordinate
  * \return              value of the field at (x,y)
  */
-unsigned short get_mapval_large(signed short x, signed short y)
+unsigned short get_mapval_large(const signed int x, const signed int y)
 {
 	uint8_t *map = g_dng_map;
 
@@ -208,7 +208,7 @@ unsigned short get_mapval_large(signed short x, signed short y)
  * \param   group_id    number of the group
  * \return              the value of the "in_prison" flag
  */
-signed short is_group_in_prison(signed short group_id)
+signed int is_group_in_prison(const signed int group_id)
 {
 	struct struct_hero *hero = get_hero(0);
 	signed int i;
@@ -229,7 +229,7 @@ signed short is_group_in_prison(signed short group_id)
  *
  * \param   x_off           x offset for vertical scroll
  */
-void render_automap(signed short x_off)
+void render_automap(const signed int x_off)
 {
 	signed int tile_type;
 	signed int group_i;
@@ -304,8 +304,7 @@ void render_automap(signed short x_off)
 	 * The reason is that the yellow arrow will be overdrawn by the purple ones, which are drawn later. */
 	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
-		draw_automap_square(gs_x_target - x_off, gs_y_target,
-					MAP_TILE_YELLOW_ARROW, gs_direction);
+		draw_automap_square(gs_x_target - x_off, gs_y_target, MAP_TILE_YELLOW_ARROW, gs_direction);
 	}
 #endif
 
@@ -335,15 +334,14 @@ void render_automap(signed short x_off)
 	 * Fix: Move the code block drawing the yellow arrow after the one drawing the purple arrows. */
 	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
-		draw_automap_square(gs_x_target - x_off, gs_y_target,
-					MAP_TILE_YELLOW_ARROW, gs_direction);
+		draw_automap_square(gs_x_target - x_off, gs_y_target, MAP_TILE_YELLOW_ARROW, gs_direction);
 	}
 #endif
 
 	/* In the target selector screen of the Transversalis spell, mark the target with a cross */
 	if (((g_automap_selx - x_off) >= 0) && ((g_automap_selx - x_off) <= 16)) {
 
-		draw_automap_square(g_automap_selx - x_off,	g_automap_sely, MAP_TILE_CROSS, -1);
+		draw_automap_square(g_automap_selx - x_off, g_automap_sely, MAP_TILE_CROSS, -1);
 	}
 }
 
@@ -355,10 +353,10 @@ void render_automap(signed short x_off)
  * \param   color       the color
  * \param   dir         direction of the entrance, -1 for none
  */
-void draw_automap_square(signed short x, signed short y, signed short color, signed short dir)
+void draw_automap_square(const signed int x, const signed int y, const signed int color, const signed int dir)
 {
 	signed int i;
-	unsigned short offset_y;
+	signed int offset_y;
 	uint8_t* p_img_tile;
 	signed char tile[50];
 
@@ -426,9 +424,9 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
  * \param   y           y-coordinate of the building
  * \param   dir         direction of the entrance, 0 = NORTH, 1 = EAST,...
  */
-void draw_automap_entrance(signed short x, signed short y, signed short dir)
+void draw_automap_entrance(const signed int x, const signed int y, const signed int dir)
 {
-	unsigned short offset_y = y;
+	signed int offset_y = y;
 	signed int d = dir;
 	signed int skipsize;
 	uint8_t *p_img_tile;
@@ -496,7 +494,7 @@ void draw_automap_to_screen(void)
  *
  * \return              costs for teleport in AE
  */
-signed short select_teleport_dest(void)
+signed int select_teleport_dest(void)
 {
 	signed int l_si;
 #if !defined(__BORLANDC__)
@@ -523,7 +521,7 @@ signed short select_teleport_dest(void)
 	g_automap_selx = gs_x_target;
 	g_automap_sely = gs_y_target;
 	gs_dungeon_id = dungeon;
-	gs_town_id = (signed char)town;
+	gs_town_id = town;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 
@@ -668,7 +666,7 @@ signed short select_teleport_dest(void)
  * \param   y           y-coordinate of the building
  * \return              type of location
  */
-signed short get_maploc(signed short x, signed short y)
+signed int get_maploc(const signed int x, const signed int y)
 {
 	struct location *locations_tab_ptr;
 	signed int pos_xy = TOWN_POS(x,y);

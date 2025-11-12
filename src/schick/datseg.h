@@ -1607,8 +1607,8 @@ extern signed char g_tmap_double2;				//ds:0x7c9b; seg025, seg072, seg082
 extern signed char g_swafnild_traveled;				//ds:0x7c9c; seg063, seg072
 extern uint8_t g_palette_fight2[20][3];				//ds:0x7d0e; seg032, seg074
 extern const unsigned char g_automap_bitmask[8];		//ds:0x7d4a; seg002, seg074
-extern signed short g_automap_selx;				//ds:0x7de5; seg074, seg099
-extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
+extern signed int g_automap_selx;				//ds:0x7de5; seg074, seg099
+extern signed int g_automap_sely;				//ds:0x7de7; seg074, seg099
 extern struct dng_gfxtab g_dng_gfxtab_wood[88];			//ds:0x7dea; seg067
 extern struct dng_gfxtab g_dng_gfxtab_stone[88];			//ds:0x841a; seg067
 extern struct dng_gfxtab g_dng_gfxtab_marble[88];			//ds:0x8a4a; seg067
