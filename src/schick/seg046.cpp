@@ -128,13 +128,12 @@ static char g_empty_string7[1] = ""; // ds:0x64a1
  * \param   gy          the upper y coordinate of this spellgroup
  */
 /* Borlandified and identical */
-void status_show_spell(struct struct_hero *hero, signed short spell_id, unsigned short fsig,
-			unsigned short x1, unsigned short x2, unsigned short gy)
+void status_show_spell(const struct struct_hero *hero, const signed int spell_id, const signed int fsig,
+			const signed int x1, const signed int x2, const signed int gy)
 {
-	unsigned short group;
+	const signed int group = spell_id - fsig;
 	char str[10];
 
-	group = spell_id - fsig;
 
 	/* print spellname */
 	GUI_print_string(get_ttx(spell_id + 0x6a), x1, gy + group * 7);
@@ -157,13 +156,11 @@ void status_show_spell(struct struct_hero *hero, signed short spell_id, unsigned
  * \param   gy          the upper y coordinate of this skillgroup
  */
 /* Borlandified and identical */
-void status_show_skill(struct struct_hero *hero, signed short skill_id, unsigned short ftig,
-			unsigned short x1, unsigned short x2, unsigned short gy)
+void status_show_skill(const struct struct_hero *hero, const signed int skill_id, const signed int ftig,
+			const signed int x1, const signed int x2, const signed int gy)
 {
-	unsigned short group;
+	const signed int group = skill_id - ftig;
 	char str[10];
-
-	group = skill_id - ftig;
 
 	/* print skillname */
 	GUI_print_string(get_ttx(skill_id + 0x30), x1, gy + group * 7);
@@ -181,9 +178,10 @@ void status_show_skill(struct struct_hero *hero, signed short skill_id, unsigned
  * \param   hero        the hero whose skills should be shown
  */
 /* Borlandified and identical */
-void status_show_skills(struct struct_hero *hero) {
-
-	signed short skill_category, skill_no;
+void status_show_skills(const struct struct_hero *hero)
+{
+	signed int skill_category;
+	signed int skill_id;
 
 	set_textcolor(0xff, 2);
 
@@ -206,16 +204,16 @@ void status_show_skills(struct struct_hero *hero) {
 
 	for (skill_category = 0; skill_category < 7; skill_category++) {
 
-		skill_no = g_skills_index[skill_category].first;
+		skill_id = g_skills_index[skill_category].first;
 
-		while (g_skills_index[skill_category].first + g_skills_index[skill_category].length > skill_no) {
+		while (g_skills_index[skill_category].first + g_skills_index[skill_category].length > skill_id) {
 
-			status_show_skill(hero, skill_no, g_skills_index[skill_category].first,
+			status_show_skill(hero, skill_id, g_skills_index[skill_category].first,
 					g_statuspage_skills_xy[skill_category].x_name,
 					g_statuspage_skills_xy[skill_category].x_val,
 					g_statuspage_skills_xy[skill_category].y);
 
-			skill_no++;
+			skill_id++;
 		}
 	}
 }
@@ -230,9 +228,7 @@ void status_show_skills(struct struct_hero *hero) {
  */
 static void set_status_string(char *fmt)
 {
-	char *fp;
-
-	fp = strstr(fmt, "%d");
+	char *fp = strstr(fmt, "%d");
 
 	fp[1] = 's';
 }
@@ -246,9 +242,7 @@ static void set_status_string(char *fmt)
  */
 static void reset_status_string(char *fmt)
 {
-	char *fp;
-
-	fp = strstr(fmt, "%s");
+	char *fp = strstr(fmt, "%s");
 
 	fp[1] = 'd';
 }
@@ -259,7 +253,7 @@ static void reset_status_string(char *fmt)
  *
  * \param   index       index of the hero
  */
-void status_show(uint16_t index)
+void status_show(const signed int index)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	char le_fix[10];
@@ -269,12 +263,12 @@ void status_show(uint16_t index)
 	int8_t val;
 	signed int width;
 	signed int height;
-	signed short at;
-	signed short pa;
-	signed short l1;
-	signed short bp;
-	signed short i;
-	signed short j;
+	signed int at;
+	signed int pa;
+	signed int l1;
+	signed int bp;
+	signed int i;
+	signed int j;
 
 	struct nvf_extract_desc nvf;
 

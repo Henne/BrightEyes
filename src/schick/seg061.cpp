@@ -79,8 +79,8 @@ signed int g_temple_god; // ds:0xe3f8, id of current temple's god
 
 void do_temple(void)
 {
-	signed int l_si;
-	signed int l_di;
+	signed int i;
+	signed int answer;
 	signed int input;
 	signed char done = 0;
 	int32_t money;
@@ -98,10 +98,10 @@ void do_temple(void)
 
 			/* search which god owns this temple */
 			g_temple_god = 1;
-			for (l_si = 1; l_si < 15; l_si++) {
-				if (is_in_byte_array(gs_current_typeindex, g_god_temples_index[l_si]))
+			for (i = 1; i < 15; i++) {
+				if (is_in_byte_array(gs_current_typeindex, g_god_temples_index[i]))
 				{
-					g_temple_god = l_si;
+					g_temple_god = i;
 					break;
 				}
 			}
@@ -139,13 +139,13 @@ void do_temple(void)
 		/* input window */
 		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
-			l_di = GUI_radio(get_ttx(225), 9,
+			answer = GUI_radio(get_ttx(225), 9,
 						get_ttx(226), get_ttx(227), get_ttx(293),
 						get_ttx(228), get_ttx(229), get_ttx(230),
 						get_ttx(620), get_ttx(296), get_ttx(231)) - 1;
 
-			if (l_di != -2) {
-				g_action = (l_di + ACTION_ID_ICON_1);
+			if (answer != -2) {
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -208,7 +208,7 @@ void do_temple(void)
 			if (GUI_bool(get_ttx(299))) {
 
 				done = 1;
-				g_game_state = (GAME_STATE_QUIT);
+				g_game_state = GAME_STATE_QUIT;
 			}
 		}
 
@@ -270,13 +270,13 @@ void do_temple(void)
 
 void char_add(const signed int temple_id)
 {
-	signed int l_si;
-	signed int l_di;
+	signed int position;
+	signed int entries;
 	signed int i;
 	uint8_t *ptr;
 
 	ptr = g_renderbuf_ptr + 50000;
-	l_di = copy_chr_names(ptr, temple_id);
+	entries = copy_chr_names(ptr, temple_id);
 
 	if (gs_total_hero_counter == 7 || (gs_total_hero_counter == 6 && !get_hero(6)->typus))
 	{
@@ -286,14 +286,14 @@ void char_add(const signed int temple_id)
 
 		do {
 
-			if (!l_di) {
+			if (!entries) {
 				GUI_output(get_ttx(290));
-				l_si = -1;
+				position = -1;
 			} else {
 
-				l_si = menu_enter_delete(ptr, l_di, 1);
+				position = menu_enter_delete(ptr, entries, 1);
 
-				if (l_si != -1) {
+				if (position != -1) {
 
 					struct struct_hero *hero = get_hero(0);
 
@@ -301,7 +301,7 @@ void char_add(const signed int temple_id)
 
 						if (!hero->typus) {
 
-							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * l_si));
+							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * position));
 
 							if (read_chr_temp(g_dtp2, i, gs_active_group_id)) {
 								gs_total_hero_counter++;
@@ -322,10 +322,10 @@ void char_add(const signed int temple_id)
 					GUI_print_loc_line(g_dtp2);
 				}
 
-				l_di = copy_chr_names(ptr, temple_id);
+				entries = copy_chr_names(ptr, temple_id);
 			}
 
-		} while ((l_si != -1) && (gs_total_hero_counter < (get_hero(6)->typus ? 7 : 6)));
+		} while ((position != -1) && (gs_total_hero_counter < (get_hero(6)->typus ? 7 : 6)));
 	}
 }
 
@@ -379,8 +379,8 @@ void char_letgo(const signed int temple_id)
 
 signed int char_erase(void)
 {
-	signed int l_si;
-	signed int l_di;
+	signed int position;
+	signed int entries;
 	signed int unlink_ret;
 	uint8_t *ptr;
 
@@ -390,17 +390,17 @@ signed int char_erase(void)
 		ptr = g_renderbuf_ptr + 50000;
 	}
 
-	l_di = copy_chr_names(ptr, -1);
+	entries = copy_chr_names(ptr, -1);
 
 	do {
-		if (!l_di) {
-			l_si = -1;
+		if (!entries) {
+			position = -1;
 		} else {
-			l_si = menu_enter_delete(ptr, l_di, -1);
+			position = menu_enter_delete(ptr, entries, -1);
 
-			if (l_si != -1) {
+			if (position != -1) {
 
-				strcpy(g_dtp2, (char*)ptr + 32 * l_si);
+				strcpy(g_dtp2, (char*)ptr + 32 * position);
 
 				sprintf(g_text_output_buf, get_ttx(295), g_dtp2);
 
@@ -421,14 +421,14 @@ signed int char_erase(void)
 					unlink(g_dtp2);
 				}
 
-				l_di = copy_chr_names(ptr, -1);
+				entries = copy_chr_names(ptr, -1);
 
 			} else {
 				return 0;
 			}
 		}
 
-	} while (l_si != -1);
+	} while (position != -1);
 
 	return 1;
 }

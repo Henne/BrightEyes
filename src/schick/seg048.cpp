@@ -56,7 +56,7 @@ static const struct struct_point g_invslot_borderxy_table[25] = {
 	{ 0x0080, 0x0037 },
 	{ 0x0091, 0x0037 }
 }; // ds:0x64ce
-signed short g_cheatskill_usable = 0; // ds:0x6532
+signed int g_cheatskill_usable = 0; // ds:0x6532
 static char g_extraspace_separated_strings[7] = "%s %s "; // ds:0x6534
 static char g_empty_string8[1] = ""; // ds:0x653b
 static char g_extraspace_separated_strings2[7] = "%s %s "; // ds:0x653c
@@ -97,20 +97,20 @@ void reset_item_selector(void)
 }
 
 /* Borlandified and identical */
-void status_menu(signed short hero_pos)
+void status_menu(signed int hero_pos)
 {
-	signed short l_di;
-	signed short flag1;
-	signed short flag2;
+	signed int l_di;
+	signed int flag1;
+	signed int flag2;
 	signed int width;
 	signed int height;
-	signed short file_bak;
+	signed int file_bak;
 	struct struct_hero *hero2;
 	struct struct_hero *hero1;
-	signed short flag3;
-	signed short l1;
-	signed short tw_bak;
-	signed short flag4;
+	signed int flag3;
+	signed int l1;
+	signed int tw_bak;
+	signed int flag4;
 	struct nvf_extract_desc nvf;
 
 	flag1 = 0;
@@ -317,7 +317,7 @@ void status_menu(signed short hero_pos)
 				}
 			}
 
-			if (g_action >= 128 && g_action <= 152)
+			if ((g_action >= 128) && (g_action <= 152))
 			{
 				if (g_statuspage_sel_inv_slot_4 != -1) {
 					g_statuspage_sel_inv_slot_4 = g_action - 128;
@@ -643,14 +643,8 @@ void status_menu(signed short hero_pos)
 				/* from ATPA-page */
 
 				l_di = GUI_radio((char*)NULL, 8,
-						get_tx2(16),
-						get_tx2(17),
-						get_ttx(212),
-						get_ttx(213),
-						get_tx2(24),
-						get_tx2(20),
-						get_tx2(21),
-						get_tx2(15));
+						get_tx2(16), get_tx2(17), get_ttx(212),	get_ttx(213),
+						get_tx2(24), get_tx2(20), get_tx2(21), get_tx2(15));
 
 				if (l_di != -1) {
 					switch (l_di) {
@@ -932,7 +926,7 @@ void status_select_hero(void)
 	if (!g_statusmenu_allowed || !gs_group_member_counts[gs_active_group_id]) {
 		/* Yes, it was written that way! */
 	} else {
-		signed short hero_pos = select_hero_from_group(get_ttx(301));
+		const signed int hero_pos = select_hero_from_group(get_ttx(301));
 
 		if (hero_pos != -1) {
 			status_menu(hero_pos);

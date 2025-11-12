@@ -87,7 +87,7 @@ static struct c_str_5 g_smith_str_money_d = { "D %d" }; // ds:0x6c6e
 static struct int16_t_3 g_smith_items_posx = { 30, 95, 160 }; // ds:0x6c73
 static struct int16_t_5 g_smith_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c79
 
-signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
+signed int g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
 
 /**
  * \brief   add all items of a hero to the repair list

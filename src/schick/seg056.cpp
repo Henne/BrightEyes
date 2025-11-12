@@ -48,7 +48,7 @@ static struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer
  * \param   p2_in       second pointer
  * \return              -1 -> p1 < p2; 0 -> p1 == p2; 1 -> p1 > p1
  */
-int shop_compar(const void *p1_in, const void *p2_in)
+signed int shop_compar(const void *p1_in, const void *p2_in)
 {
 	int32_t v1;
 	int32_t v2;
@@ -66,48 +66,48 @@ int shop_compar(const void *p1_in, const void *p2_in)
  */
 void buy_screen(void)
 {
-	signed short l_di;
-	signed short j;
-	signed short items_x;
+	signed int l_di;
+	signed int j;
+	signed int items_x;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed short l3;
-	signed short l4;
-	signed short percent;
-	signed short percent_old = 100;
-	signed short l6 = 1;
+	signed int l3;
+	signed int l4;
+	signed int percent;
+	signed int percent_old = 100;
+	signed int l6 = 1;
 	signed int item_pos = 0;
-	signed short done = 0;
-	signed short item = 0;
-	signed short l8;
-	signed short item_id;
+	signed int done = 0;
+	signed int item = 0;
+	signed int l8;
+	signed int item_id;
 	struct c_str_5 fmt_h = g_buy_screen_str_money_h;
 	struct c_str_5 fmt_s = g_buy_screen_str_money_s;
 	struct c_str_5 fmt_d = g_buy_screen_str_money_d;
 	struct int16_t_3 array3 = g_buy_screen_items_posx;
-	//signed short array3[3] = { { 30, 95, 160 } };
+	//signed int array3[3] = { { 30, 95, 160 } };
 	struct int16_t_5 array5 = g_buy_screen_items_posy;
-	//signed short array5[5] = { { 35, 55, 75, 95, 115 } };
+	//signed int array5[5] = { { 35, 55, 75, 95, 115 } };
 	//
 	int32_t price = 0;
 	int32_t l9;
 	int32_t p_money;
-	signed short nice = 0;
-	signed short free_slots = 0;
-	signed short offended = 0;
+	signed int nice = 0;
+	signed int free_slots = 0;
+	signed int offended = 0;
 	struct struct_hero *hero1;
 	struct struct_hero *hero2;
 	signed int width;
 	signed int height;
-	signed short given_items;
-	signed short l12;
-	signed short l13;
+	signed int given_items;
+	signed int l12;
+	signed int l13;
 	struct c_str_6 fmt_d_s = g_buy_screen_str_d_s;
 	//char fmt_d_s[6] = { "%d %s" };
 	//
-	signed short l15 = 0;
-	signed short l16;
-	signed short l17;
+	signed int l15 = 0;
+	signed int l16;
+	signed int l17;
 	struct nvf_extract_desc nvf;
 
 	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
@@ -596,10 +596,10 @@ void buy_screen(void)
  * \param   item_pos    position of the item in the heroes inventory
  * \param   shop_pos    position if the item in the sales array
  */
-void insert_sell_items(struct shop_descr *shop_descr, struct struct_hero *hero, signed short item_pos, signed short shop_pos)
+void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_hero *hero, const signed int item_pos, const signed int shop_pos)
 {
-	signed short item_id;
-	signed short sellable = 0;
+	signed int item_id;
+	signed int sellable = 0;
 
 	item_id = hero->inventory[item_pos].item_id;
 

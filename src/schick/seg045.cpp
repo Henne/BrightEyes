@@ -18,26 +18,26 @@
 namespace M302de {
 #endif
 
-static const signed short g_gfxtab_shotbolt_ox[6][4] = {
-	-17, -3, -3, 3,
-	-17, -3, -3, 3,
-	-17, -3, -3, 3,
-	-17, -3, -3, 3,
-	-17, -3, -3, 3,
-	-17, -3, -3, 3
+static const signed int g_gfxtab_shotbolt_ox[6][4] = {
+	{ -17, -3, -3, 3 },
+	{ -17, -3, -3, 3 },
+	{ -17, -3, -3, 3 },
+	{ -17, -3, -3, 3 },
+	{ -17, -3, -3, 3 },
+	{ -17, -3, -3, 3 }
 }; // ds:0x6198
-static const signed short g_gfxtab_shotbolt_oy[6][4] = {
-	-30, -20, -20, -20,
-	-30, -20, -20, -20,
-	-30, -20, -20, -20,
-	-30, -20, -20, -20,
-	-30, -20, -20, -20,
-	-30, -20, -20, -20
+static const signed int g_gfxtab_shotbolt_oy[6][4] = {
+	{ -30, -20, -20, -20 },
+	{ -30, -20, -20, -20 },
+	{ -30, -20, -20, -20 },
+	{ -30, -20, -20, -20 },
+	{ -30, -20, -20, -20 },
+	{ -30, -20, -20, -20 }
 }; // ds:0x61c8
-static signed short g_gfxtab_shotbolt_nvfno[6] = { 0, 4, 8, 12, 16, 20 }; // ds:0x61f8
-static signed short g_gfxtab_shotbolt_height[6] = { 15, 15, 15, 5, 5, 8 }; // ds:0x6204
-static signed short g_gfxtab_shotbolt_width[6] = { 25, 25, 25, 9, 9, 16 }; // ds:0x6210
-static signed char g_anitab_shotbolt_data[24][7] = {
+static const signed int g_gfxtab_shotbolt_nvfno[6] = { 0, 4, 8, 12, 16, 20 }; // ds:0x61f8
+static const signed int g_gfxtab_shotbolt_height[6] = { 15, 15, 15, 5, 5, 8 }; // ds:0x6204
+static const signed int g_gfxtab_shotbolt_width[6] = { 25, 25, 25, 9, 9, 16 }; // ds:0x6210
+static const int8_t g_anitab_shotbolt_data[24][7] = {
 
 	{-2,  1,  0,  0, 0, 0, -1},
 	{-2,  0, -1,  1, 0, 0, -1},
@@ -69,7 +69,7 @@ static signed char g_anitab_shotbolt_data[24][7] = {
 	{-2, -1,  0, 22, 0, 0, -1},
 	{-2,  0,  1, 23, 0, 0, -1}
 }; // ds:0x621c, arrays, each terminated by -1
-static signed char *g_anitab_shotbolt_index2[6][4] = {
+static const int8_t *g_anitab_shotbolt_index2[6][4] = {
 	{g_anitab_shotbolt_data[0],  g_anitab_shotbolt_data[1],  g_anitab_shotbolt_data[2],  g_anitab_shotbolt_data[3]},
 	{g_anitab_shotbolt_data[4],  g_anitab_shotbolt_data[5],  g_anitab_shotbolt_data[6],  g_anitab_shotbolt_data[7]},
 	{g_anitab_shotbolt_data[8],  g_anitab_shotbolt_data[9],  g_anitab_shotbolt_data[10], g_anitab_shotbolt_data[11]},
@@ -77,7 +77,7 @@ static signed char *g_anitab_shotbolt_index2[6][4] = {
 	{g_anitab_shotbolt_data[16], g_anitab_shotbolt_data[17], g_anitab_shotbolt_data[18], g_anitab_shotbolt_data[19]},
 	{g_anitab_shotbolt_data[20], g_anitab_shotbolt_data[21], g_anitab_shotbolt_data[22], g_anitab_shotbolt_data[23]}
 }; // ds:0x62c4, 6 long arrays of length 4 (viewdir); uint8_t*
-static signed char **g_anitab_shotbolt_index[6] = {
+static const int8_t **g_anitab_shotbolt_index[6] = {
 	g_anitab_shotbolt_index2[0],
 	g_anitab_shotbolt_index2[1],
 	g_anitab_shotbolt_index2[2],
@@ -86,10 +86,10 @@ static signed char **g_anitab_shotbolt_index[6] = {
 	g_anitab_shotbolt_index2[5]
 }; // ds:0x6324; uint8_t*
 
-static signed char g_anitab_spell_nvfno[2] = { 0x09, 0x1b }; // ds:0x633c
-static signed short g_anitab_spell_ox[2] = { 0, 0 }; // ds:0x633e
-static signed short g_anitab_spell_oy[2] = { 0, 0 }; // ds:0x6342
-static const signed char g_anitab_spell_data[2][16] = {
+static const int8_t g_anitab_spell_nvfno[2] = { 9, 27 }; // ds:0x633c
+static const signed int g_anitab_spell_ox[2] = { 0, 0 }; // ds:0x633e
+static const signed int g_anitab_spell_oy[2] = { 0, 0 }; // ds:0x6342
+static const int8_t g_anitab_spell_data[2][16] = {
 	{	 9, 0, 0,
 		10, 0, 0,
 		11, 0, 0,
@@ -101,9 +101,9 @@ static const signed char g_anitab_spell_data[2][16] = {
 		28, 0, 0,
 		27, 0, 0, -1},
 }; // ds:0x6346, 2 arrays, each terminated by -1
-static signed char* g_anitab_spell_index[2] = {
-	(signed char*)&g_anitab_spell_data[0],
-	(signed char*)&g_anitab_spell_data[1],
+static const int8_t* g_anitab_spell_index[2] = {
+	(const int8_t*)&g_anitab_spell_data[0],
+	(const int8_t*)&g_anitab_spell_data[1],
 }; // ds:0x6366; uint8_t*
 
 
@@ -179,9 +179,9 @@ void FANI_remove_shotbolt(void)
  * \param   src         pointer to sources
  * \param   term        termination sign
  */
-signed short FANI_copy_sequence(int8_t *dst, int8_t *src, const signed char term)
+signed int FANI_copy_sequence(int8_t *dst, const int8_t *src, const signed char term)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; *src != term; i += 3) {
 
@@ -239,7 +239,7 @@ struct dummy2 {
 };
 
 struct dummy4 {
-	signed short a[2];
+	signed int a[2];
 };
 
 void FANI_add_spell(const signed int x, const signed int y, const signed int spell_ani_id)
@@ -248,9 +248,9 @@ void FANI_add_spell(const signed int x, const signed int y, const signed int spe
 	signed int width;
 
 	/* TODO: some kind of initialized structure */
-	struct dummy2 a = *(struct dummy2*)&g_anitab_spell_nvfno;
-	struct dummy4 b = *(struct dummy4*)&g_anitab_spell_ox;
-	struct dummy4 c = *(struct dummy4*)&g_anitab_spell_oy;
+	struct dummy2 a = *(struct dummy2*)&g_anitab_spell_nvfno;	/* struct copy */
+	struct dummy4 b = *(struct dummy4*)&g_anitab_spell_ox;		/* struct copy */
+	struct dummy4 c = *(struct dummy4*)&g_anitab_spell_oy;		/* struct copy */
 
 	struct nvf_extract_desc nvf;
 
@@ -275,8 +275,8 @@ void FANI_add_spell(const signed int x, const signed int y, const signed int spe
 	g_fig_list_elem.width = width;
 	g_fig_list_elem.x1 = 0;
 	g_fig_list_elem.y1 = 0;
-	g_fig_list_elem.x2 = (signed char)width - 1;
-	g_fig_list_elem.y2 = (signed char)height - 1;
+	g_fig_list_elem.x2 = width - 1;
+	g_fig_list_elem.y2 = height - 1;
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
 	g_fig_list_elem.wsheet = -1;

@@ -76,9 +76,8 @@ static const struct healer_descr g_healer_descr_table[41] = {
  * \param   hero        pointer to hero
  * \return              1 if hero can be healed, else 0.
  */
-signed short is_hero_healable(const struct struct_hero *hero)
+signed int is_hero_healable(const struct struct_hero *hero)
 {
-
 	if (hero->flags.dead || hero->flags.petrified) {
 
 		/* this hero can not be helped */
@@ -92,20 +91,16 @@ signed short is_hero_healable(const struct struct_hero *hero)
 
 void do_healer(void)
 {
-	signed char motivation;
-	signed short leave_healer;
-	signed short request_refresh;
+	signed char motivation = 0;
+	signed int leave_healer = 0;
+	signed int request_refresh;
 	struct struct_hero *hero;
 	signed long money;
 	signed long price;
 	const struct healer_descr *healer;
-	signed short poison;
-
-	signed short answer;
-	signed short disease;
-
-	motivation = 0;
-	leave_healer = 0;
+	signed int poison;
+	signed int answer;
+	signed int disease;
 
 #if !defined(__BORLANDC__)
 	const uint8_t typi = gs_current_typeindex;

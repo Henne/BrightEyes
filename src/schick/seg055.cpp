@@ -135,28 +135,25 @@ struct shop_descr g_shop_descr_table[95] = {
  * \param   item_id     item_id
  * \param   pos         position in the shop
  */
-void add_item_to_shop(struct shop_descr *shop, signed short item_id, signed short pos)
+void add_item_to_shop(const struct shop_descr *shop, const signed int item_id, const signed int pos)
 {
 	g_buyitems[pos].item_id = item_id;
 
-	g_buyitems[pos].shop_price =
-		g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop->price_mod / 100;
+	g_buyitems[pos].shop_price = g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop->price_mod / 100;
 
 	g_buyitems[pos].price_unit = g_itemsdat[item_id].price_unit;
 }
 
 void do_merchant(void)
 {
-	signed short l_si;
-	signed short item_pos;
-	signed short done;
-	signed short answer;
-	signed short refresh;
-	signed short armor_pos;
+	signed int l_si;
+	signed int item_pos;
+	signed int done = 0;
+	signed int answer;
+	signed int refresh;
+	signed int armor_pos;
 	int32_t party_money;
 	struct shop_descr *shop;
-
-	done = 0;
 
 #if !defined(__BORLANDC__)
 	/* Print merchant values */
@@ -392,7 +389,7 @@ void do_merchant(void)
 
 void talk_merchant(void)
 {
-	signed short tlk_id;
+	signed int tlk_id;
 
 	switch (g_shop_descr_table[gs_current_typeindex].type) {
 		case 1: tlk_id = 16; break;
@@ -403,7 +400,7 @@ void talk_merchant(void)
 	do_random_talk(tlk_id, 0);
 }
 
-void TLK_ghandel(signed short state)
+void TLK_ghandel(const signed int state)
 {
 	if (!state) {
 		g_dialog_next_state = (gs_merchant_kicked_flags[gs_current_typeindex] ? 1 : 4);
@@ -418,7 +415,7 @@ void TLK_ghandel(signed short state)
 	}
 }
 
-void TLK_khandel(signed short state)
+void TLK_khandel(const signed int state)
 {
 	if (!state) {
 		g_dialog_next_state = (gs_merchant_kicked_flags[gs_current_typeindex] ? 1 : 2);
@@ -440,7 +437,7 @@ void TLK_khandel(signed short state)
 	}
 }
 
-void TLK_whandel(signed short state)
+void TLK_whandel(const signed int state)
 {
 	if (!state) {
 

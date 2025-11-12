@@ -114,7 +114,7 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 
 void GRP_sort_heroes(void)
 {
-	signed short i;
+	signed int i;
 
 	qsort((void*)get_hero(0), 6, sizeof(struct struct_hero), GRP_compare_heroes);
 
@@ -123,9 +123,9 @@ void GRP_sort_heroes(void)
 	}
 }
 
-void GRP_save_pos(signed short group)
+void GRP_save_pos(signed int group)
 {
-	signed short refresh = 0;
+	signed int refresh = 0;
 
 	if (group & 0x8000) {
 		refresh = 1;
@@ -161,9 +161,9 @@ void GRP_save_pos(signed short group)
 
 void GRP_split(void)
 {
-	signed short new_group_id;
-	signed short not_empty;
-	signed short answer;
+	signed int new_group_id;
+	signed int not_empty;
+	signed int answer;
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 13:
@@ -194,7 +194,7 @@ void GRP_split(void)
 			} else {
 
 				not_empty = 1;
-				get_hero(answer)->group_id = (signed char)new_group_id;
+				get_hero(answer)->group_id = new_group_id;
 				gs_group_member_counts[new_group_id]++;
 				gs_group_member_counts[gs_active_group_id]--;
 			}
@@ -216,8 +216,8 @@ void GRP_split(void)
 
 void GRP_merge(void)
 {
-	signed short answer;
-	signed short i;
+	signed int answer;
+	signed int i;
 
 	answer = can_merge_group();
 
@@ -256,14 +256,14 @@ void GRP_merge(void)
 	}
 }
 
-void GRP_switch_to_next(signed short mode)
+void GRP_switch_to_next(const signed int mode)
 {
-	signed short i;
-	signed short state;
+	signed int i;
+	signed int state;
 
-	signed short group;
-	signed short done = 0;
-	signed short dng_level;
+	signed int group;
+	signed int done = 0;
+	signed int dng_level;
 
 	group = gs_active_group_id;
 
@@ -390,8 +390,8 @@ void GRP_switch_to_next(signed short mode)
 
 void GRP_swap_heroes(void)
 {
-	signed short hero1_no;
-	signed short hero2_no;
+	signed int hero1_no;
+	signed int hero2_no;
 	signed char l2;
 	signed char l3;
 	signed char l4;
@@ -414,7 +414,7 @@ void GRP_swap_heroes(void)
 			for (i = 0; i < 3; i++) {
 
 				if (g_wildcamp_guards[i] == hero1_no) {
-					g_wildcamp_guards[i] = (signed char)hero2_no;
+					g_wildcamp_guards[i] = hero2_no;
 				}
 			}
 
@@ -456,10 +456,9 @@ void GRP_swap_heroes(void)
 	draw_status_line();
 }
 
-void GRP_move_hero(signed short src_pos)
+void GRP_move_hero(const signed int src_pos)
 {
-
-	signed short dst_pos;
+	signed int dst_pos;
 	struct struct_hero *src;
 	struct struct_hero *dst;
 	signed char src_guardstatus;
@@ -621,10 +620,10 @@ void GRP_move_hero(signed short src_pos)
 
 void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 {
-	signed short le_regen;
-	signed short ae_regen;
-	signed short diff;
-	signed short tmp;
+	signed int le_regen;
+	signed int ae_regen;
+	signed int diff;
+	signed int tmp;
 
 	if (!hero->flags.dead && (hero->staffspell_timer == 0) && (hero->recipe_timer == 0))
 	{

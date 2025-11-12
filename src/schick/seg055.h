@@ -7,13 +7,13 @@ void do_merchant(void);
 /* 0x25 */
 void talk_merchant(void);
 /* 0x2a */
-void add_item_to_shop(struct shop_descr*, signed short, signed short);
+void add_item_to_shop(const struct shop_descr*, const signed int, const signed int);
 /* 0x2f */
-void TLK_ghandel(signed short);
+void TLK_ghandel(const signed int);
 /* 0x34 */
-void TLK_khandel(signed short);
+void TLK_khandel(const signed int);
 /* 0x39 */
-void TLK_whandel(signed short);
+void TLK_whandel(const signed int);
 
 #if !defined(__BORLANDC__)
 }

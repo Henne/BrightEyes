@@ -32,19 +32,19 @@ static struct int16_t_7 g_seg047_init3 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64bf, 
  * \return index of the first hero with the highest current CH value.
  * The hero must be alive and in the current group.
  */
-signed short get_hero_CH_best(void)
+signed int get_hero_CH_best(void)
 {
-	signed short retval;
+	signed int retval;
 	struct struct_hero *hero_i;
-	signed short i;
-	signed short ch_val = -1;
+	signed int i;
+	signed int ch_val = -1;
 
 	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_active_group_id) &&
-			(!hero_i->flags.dead) &&	(hero_i->attrib[ATTRIB_CH].current > ch_val))
+			!hero_i->flags.dead && (hero_i->attrib[ATTRIB_CH].current > ch_val))
 		{
 			/* check if CH value is higher */
 
@@ -62,19 +62,19 @@ signed short get_hero_CH_best(void)
  * \return index of the hero first hero with the highest current KK value.
  * The hero must be alive and in the current group.
  */
-signed short get_hero_KK_best(void)
+signed int get_hero_KK_best(void)
 {
-	signed short retval;
+	signed int retval;
 	struct struct_hero *hero_i;
-	signed short i;
-	signed short kk_val = -1;
+	signed int i;
+	signed int kk_val = -1;
 
 	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
 		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_active_group_id) &&
-			(!hero_i->flags.dead) &&	(hero_i->attrib[ATTRIB_KK].current > kk_val))
+			!hero_i->flags.dead && (hero_i->attrib[ATTRIB_KK].current > kk_val))
 		{
 			/* check if KK is higher */
 
@@ -92,9 +92,9 @@ signed short get_hero_KK_best(void)
  *          Only the first disease is returned here.
  *
  * \param   hero        the hero which should be checked
- * \return              number of the first disease the hero has
+ * \return  number of the first disease the hero has
  */
-signed short hero_is_diseased(struct struct_hero *hero)
+signed int hero_is_diseased(const struct struct_hero *hero)
 {
 	signed int i;
 
@@ -117,7 +117,7 @@ signed short hero_is_diseased(struct struct_hero *hero)
  * \param   hero        the hero which should be checked
  * \return              number of the first poisoning the hero has
  */
-signed short hero_is_poisoned(struct struct_hero *hero)
+signed int hero_is_poisoned(const struct struct_hero *hero)
 {
 	signed int i;
 
@@ -138,15 +138,15 @@ signed short hero_is_poisoned(struct struct_hero *hero)
  * \param   hero        the hero which gets poisoned
  * \param   poison      the kind of poison
  */
-void hero_gets_poisoned(struct struct_hero *hero, const signed short poison)
+void hero_gets_poisoned(struct struct_hero *hero, const signed int poison_id)
 {
 	if (!hero->flags.dead) {
 
-		hero->poison[poison][0] = -1;
-		hero->poison[poison][1] = 0;
-		hero->poison[poison][2] = 0;
-		hero->poison[poison][3] = 0;
-		hero->poison[poison][4] = 0;
+		hero->poison[poison_id][0] = -1;
+		hero->poison[poison_id][1] = 0;
+		hero->poison[poison_id][2] = 0;
+		hero->poison[poison_id][3] = 0;
+		hero->poison[poison_id][4] = 0;
 	}
 }
 
@@ -156,7 +156,7 @@ void hero_gets_poisoned(struct struct_hero *hero, const signed short poison)
  * \param   hero        the hero which gets diseased
  * \param   disease     the kind of disease
  */
-void hero_gets_diseased(struct struct_hero *hero, const signed short disease)
+void hero_gets_diseased(struct struct_hero *hero, const signed int disease)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* not a real BUG, but very useless */
@@ -185,8 +185,8 @@ void hero_gets_diseased(struct struct_hero *hero, const signed short disease)
  * \param   disease     the kind of disease
  * \param   probability the probability to get diseased in percent
  */
-void hero_disease_test(struct struct_hero *hero, const signed short disease, const signed short probability) {
-
+void hero_disease_test(struct struct_hero *hero, const signed int disease, const signed int probability)
+{
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* not a real BUG, but very useless */
 	if (hero->typus == HERO_TYPE_NONE) {
@@ -207,22 +207,22 @@ void hero_disease_test(struct struct_hero *hero, const signed short disease, con
  *
  *	This function is not used in the game!
  */
-signed short check_hero_KK_unused(const signed short val)
+signed int check_hero_KK_unused(const signed int val)
 {
 	return get_hero(0)->attrib[ATTRIB_KK].current + get_hero(0)->attrib[ATTRIB_KK].mod >= val ? 1 : 0;
 }
 
 /**
- *	check_heroes_KK
+ * \brief check_heroes_KK
  * \param   val         value to compare KK with
  *
  *	This function, like hero_check_KK_unused, is buggy!
  *	It does not check if the first slot is a valid hero.
  */
-signed short check_heroes_KK(const signed short val)
+signed int check_heroes_KK(const signed int val)
 {
 	struct struct_hero *hero;
-	signed short sum;
+	signed int sum;
 
 	hero = get_hero(0);
 
@@ -253,9 +253,10 @@ signed short check_heroes_KK(const signed short val)
  *	This funcion is buggy.
  */
 void make_valuta_str(char *dst, int32_t money) {
+
 	/* Orig-BUG: d can overflow  on D > 65536*/
-	unsigned short d = 0;
-	unsigned short s = 0;
+	signed int d = 0;
+	signed int s = 0;
 
 	/*	These loops are not very performant.
 		They take longer the more money you have.
@@ -279,7 +280,7 @@ void make_valuta_str(char *dst, int32_t money) {
 		money -= 10;
 	}
 
-	sprintf(dst, get_ttx(748), d, s, (short)money);
+	sprintf(dst, get_ttx(748), d, s, (signed int)money);
 }
 
 /**
@@ -288,18 +289,19 @@ void make_valuta_str(char *dst, int32_t money) {
 void update_atpa(struct struct_hero *hero)
 {
 	div_t erg;
-	signed short diff;
-	signed short i;
+	signed int diff;
+	signed int i;
 
 	/* ATPA base = (IN + KK + GE) / 5 rounded */
 	erg = div(hero->attrib[ATTRIB_IN].normal + hero->attrib[ATTRIB_KK].normal + hero->attrib[ATTRIB_GE].normal, 5);
 	/* Original-Bug:
 	 * According to DSA 3 rules, AT basis value is (MU + KK + GE) / 5
-	 * (PA basis (IN + KK + GE)/5 is correct */
+	 * (PA basis (IN + KK + GE) / 5 is correct */
 
 	/* round up */
-	if (erg.rem >= 3)
+	if (erg.rem >= 3) {
 		erg.quot++;
+	}
 
 	/* calculate difference */
 	diff = erg.quot - hero->atpa_base;
@@ -333,15 +335,12 @@ void update_atpa(struct struct_hero *hero)
  * \return              the number of the selected hero.
  * Used only in temples.
  */
-signed short menu_enter_delete(uint8_t* ptr, signed short entries, signed short mode)
+signed int menu_enter_delete(uint8_t* ptr, const signed int entries, const signed int mode)
 {
-	signed short i;
-	signed short answer;
-	signed short i_max;
-	signed short i_min;
-
-	answer = 0;
-	i_min = 0;
+	signed int i;
+	signed int answer = 0;
+	signed int i_max;
+	signed int i_min = 0;
 
 	while (answer != -1) {
 
@@ -391,19 +390,19 @@ signed short menu_enter_delete(uint8_t* ptr, signed short entries, signed short 
  * \return              index of the hero or -1 (ESC).
  * Remark: The available heroes must be in the group only.
  */
-signed short select_hero_from_group(char *title)
+signed int select_hero_from_group(char *title)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct int16_t_7 dst = g_seg047_init1;
 	/* Hack for
-	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
+	signed int dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
 
-	signed short cnt;
-	signed short tw_bak;
-	signed short bak_2;
-	signed short bak_3;
+	signed int cnt;
+	signed int tw_bak;
+	signed int bak_2;
+	signed int bak_3;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -462,19 +461,19 @@ signed short select_hero_from_group(char *title)
  * \return              index of the hero or -1 (ESC).
  * Remark: The available heroes must be in the group and pass check_hero().
  */
-signed short select_hero_ok(char *title)
+signed int select_hero_ok(char *title)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct int16_t_7 dst = g_seg047_init2;
 	/* Hack for
-	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
+	signed int dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
 
-	signed short cnt;
-	signed short tw_bak;
-	signed short bak_2;
-	signed short bak_3;
+	signed int cnt;
+	signed int tw_bak;
+	signed int bak_2;
+	signed int bak_3;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -531,19 +530,19 @@ signed short select_hero_ok(char *title)
  * Remark: The available heroes must be in the group, pass check_hero() and
  *		you are forced to select a hero.
  */
-signed short select_hero_ok_forced(char *title)
+signed int select_hero_ok_forced(char *title)
 {
-	signed short i;
-	signed short answer;
+	signed int i;
+	signed int answer;
 	struct int16_t_7 dst = g_seg047_init3;
 	/* Hack for
-	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
+	signed int dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
 
-	signed short cnt;
-	signed short tw_bak;
-	signed short bak_2;
-	signed short bak_3;
+	signed int cnt;
+	signed int tw_bak;
+	signed int bak_2;
+	signed int bak_3;
 	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
@@ -597,13 +596,11 @@ signed short select_hero_ok_forced(char *title)
  *
  * \return  number of living heroes in the current group
  */
-signed short count_heroes_in_group(void)
+signed int count_heroes_in_group(void)
 {
 	struct struct_hero *hero_i;
-	signed short i;
-	signed short retval;
-
-	retval = 0;
+	signed int i;
+	signed int retval = 0;
 
 	for (hero_i = get_hero(0), i = 0; i <= 6; i++, hero_i++) {
 

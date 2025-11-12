@@ -30,48 +30,48 @@
 namespace M302de {
 #endif
 
-const signed short g_autoinc_spells_witch[3] = { SP_ODEM_ARCANUM, SP_BLITZ_DICH_FIND, -1 }; // ds:25924
-const signed short g_autoinc_spells_druid[4] = { SP_ODEM_ARCANUM, SP_VERWANDLUNG_BEENDEN, SP_EXPOSAMI_CREATUR, -1 }; // ds:25930
+const signed int g_autoinc_spells_witch[3] = { SP_ODEM_ARCANUM, SP_BLITZ_DICH_FIND, -1 }; // ds:25924
+const signed int g_autoinc_spells_druid[4] = { SP_ODEM_ARCANUM, SP_VERWANDLUNG_BEENDEN, SP_EXPOSAMI_CREATUR, -1 }; // ds:25930
 
-static const signed short g_autoinc_spells_mage00[] = {
+static const signed int g_autoinc_spells_mage00[] = {
 	SP_GEISTER_AUSTREIBEN, SP_BALSAM_SALABUNDE, SP_ARCANO_PSYCHOSTABILIS,
 	SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_KLARUM_PURUM_KRAEUTERSUD, SP_ANALUES_ARCANSTRUKTUR,
 	SP_FLIM_FLAM_FUNKEL, SP_ARMATRUTZ, SP_HEPTAGON_UND_KROETENEI, SP_ABVENENUM_PEST_UND_GALLE, -1};
-static const signed short g_autoinc_spells_mage01[] = {
+static const signed int g_autoinc_spells_mage01[] = {
 	SP_ODEM_ARCANUM, SP_SENSIBAR_WAHR_UND_KLAR, SP_IGNIFAXIUS_FLAMMENSTRAHL,
 	SP_BAND_UND_FESSEL, SP_DUPLICATUS_DOPPELPEIN, SP_GROSSE_VERWIRRUNG, SP_BALSAM_SALABUNDE,
 	SP_HARMLOSE_GESTALT, SP_FLIM_FLAM_FUNKEL, SP_HERR_UEBER_DAS_TIERREICH, SP_EIGENSCHAFTEN_SEID_GELESEN, -1};
-static const signed short g_autoinc_spells_mage02[] = {
+static const signed int g_autoinc_spells_mage02[] = {
 	SP_NIHILATIO_GRAVITAS, SP_ODEM_ARCANUM, SP_SOLIDIRID_FARBENSPIEL,
 	SP_FLIM_FLAM_FUNKEL, SP_BALSAM_SALABUNDE, SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_DUNKELHEIT,
 	SP_GARDIANUM_PARADEI, SP_ECLIPTIFACTUS, SP_GEISTER_BESCHWOEREN, SP_ANALUES_ARCANSTRUKTUR, -1};
-static const signed short g_autoinc_spells_mage03[] = {
+static const signed int g_autoinc_spells_mage03[] = {
 	SP_BALSAM_SALABUNDE, SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_FLIM_FLAM_FUNKEL, SP_PENETRIZZEL_HOLZ_UND_STEIN,
 	SP_CLAUDIBUS_CLAVISTIBOR, SP_SOLIDIRID_FARBENSPIEL, SP_ODEM_ARCANUM, SP_PLUMBUMBARUM_UND_NARRETEI,
 	SP_IN_SEE_UND_FLUSS, SP_VISIBILI_VANITAR, SP_UEBER_EIS_UND_UEBER_SCHNEE, -1};
-static const signed short g_autoinc_spells_mage04[] = {
+static const signed int g_autoinc_spells_mage04[] = {
 	SP_ABVENENUM_PEST_UND_GALLE, SP_ODEM_ARCANUM, SP_EIGENSCHAFTEN_SEID_GELESEN, SP_ARMATRUTZ,
 	SP_GARDIANUM_PARADEI, SP_BLITZ_DICH_FIND, SP_TIERE_BESPRECHEN, SP_KK_STEIGERN, SP_FLIM_FLAM_FUNKEL, SP_EISENROST_UND_GRUENER_SPAN, -1};
-static const signed short g_autoinc_spells_mage05[] = {
+static const signed int g_autoinc_spells_mage05[] = {
 	SP_BALSAM_SALABUNDE, SP_FLIM_FLAM_FUNKEL, SP_RESPONDAMI_VERITAR,
 	SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_BANNBALADIN, SP_ARMATRUTZ,
 	SP_ARCANO_PSYCHOSTABILIS, SP_GARDIANUM_PARADEI, SP_HORRIPHOBUS, -1};
-static const signed short g_autoinc_spells_mage06[] = {
+static const signed int g_autoinc_spells_mage06[] = {
 	SP_GARDIANUM_PARADEI, SP_BALSAM_SALABUNDE, SP_PARALUE_PARALEIN,
 	SP_FLIM_FLAM_FUNKEL, SP_ECLIPTIFACTUS, SP_HORRIPHOBUS, SP_DUNKELHEIT,
 	SP_SAFT_KRAFT_MONSTERMACHT, SP_ODEM_ARCANUM, SP_FUROR_BLUT_UND_SULPHURDAMPF,
 	SP_ARCANO_PSYCHOSTABILIS, SP_KK_STEIGERN, SP_GE_STEIGERN, SP_MU_STEIGERN, -1};
-static const signed short g_autoinc_spells_mage07[] = {
+static const signed int g_autoinc_spells_mage07[] = {
 	SP_BALSAM_SALABUNDE, SP_KLARUM_PURUM_KRAEUTERSUD, SP_IGNIFAXIUS_FLAMMENSTRAHL,
 	SP_FLIM_FLAM_FUNKEL, SP_KK_STEIGERN, SP_ARCANO_PSYCHOSTABILIS, SP_GE_STEIGERN,
 	SP_ECLIPTIFACTUS, SP_IN_SEE_UND_FLUSS, SP_ODEM_ARCANUM, SP_EIGENSCHAFTEN_SEID_GELESEN, -1};
-static const signed short g_autoinc_spells_mage08[] = {
+static const signed int g_autoinc_spells_mage08[] = {
 	SP_PARALUE_PARALEIN, SP_ARMATRUTZ, SP_GARDIANUM_PARADEI,
 	SP_BALSAM_SALABUNDE, SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_PENETRIZZEL_HOLZ_UND_STEIN,
 	SP_FORAMEN_FORAMINOR, SP_WEICHES_ERSTARRE, SP_AEOLITUS_WINDGEBRAUS,
 	SP_STURMGEBRUELL_BESAENFTGE_DICH, SP_PLUMBUMBARUM_UND_NARRETEI, SP_DESTRUCTIBO_ARCANITAS, -1};
 
-const signed short* g_autoinc_spells_mage_index[9] = {
+const signed int* g_autoinc_spells_mage_index[9] = {
 	g_autoinc_spells_mage00,
 	g_autoinc_spells_mage01,
 	g_autoinc_spells_mage02,
@@ -82,9 +82,9 @@ const signed short* g_autoinc_spells_mage_index[9] = {
 	g_autoinc_spells_mage07,
 	g_autoinc_spells_mage08
 }; // ds:0x662a, by magic school; uint8_t*
-const signed short g_autoinc_spells_gelf[7] = { SP_FLIM_FLAM_FUNKEL, SP_BLITZ_DICH_FIND, SP_AXXELERATUS_BLITZGESCHWIND, SP_KLARUM_PURUM_KRAEUTERSUD, SP_TIERE_BESPRECHEN, SP_DUNKELHEIT, -1 }; // ds:26190
-const signed short g_autoinc_spells_self[7] = { SP_SILENTIUM_SILENTILLE, SP_ARMATRUTZ, SP_FULMINICTUS_DONNERKEIL, SP_ADLERAUG_UND_LUCHSENOHR, SP_ODEM_ARCANUM, SP_FLIM_FLAM_FUNKEL, -1 }; // ds:26204
-const signed short g_autoinc_spells_ielf[12] = { SP_BALSAM_SALABUNDE, SP_CHAMAELIONI_MIMIKRY, SP_BLITZ_DICH_FIND, SP_ADLERAUG_UND_LUCHSENOHR, SP_FULMINICTUS_DONNERKEIL, SP_ARMATRUTZ, SP_SILENTIUM_SILENTILLE, SP_ODEM_ARCANUM, SP_BAND_UND_FESSEL, SP_AXXELERATUS_BLITZGESCHWIND, SP_EXPOSAMI_CREATUR, -1 }; // ds:26218
+const signed int g_autoinc_spells_gelf[7] = { SP_FLIM_FLAM_FUNKEL, SP_BLITZ_DICH_FIND, SP_AXXELERATUS_BLITZGESCHWIND, SP_KLARUM_PURUM_KRAEUTERSUD, SP_TIERE_BESPRECHEN, SP_DUNKELHEIT, -1 }; // ds:26190
+const signed int g_autoinc_spells_self[7] = { SP_SILENTIUM_SILENTILLE, SP_ARMATRUTZ, SP_FULMINICTUS_DONNERKEIL, SP_ADLERAUG_UND_LUCHSENOHR, SP_ODEM_ARCANUM, SP_FLIM_FLAM_FUNKEL, -1 }; // ds:26204
+const signed int g_autoinc_spells_ielf[12] = { SP_BALSAM_SALABUNDE, SP_CHAMAELIONI_MIMIKRY, SP_BLITZ_DICH_FIND, SP_ADLERAUG_UND_LUCHSENOHR, SP_FULMINICTUS_DONNERKEIL, SP_ARMATRUTZ, SP_SILENTIUM_SILENTILLE, SP_ODEM_ARCANUM, SP_BAND_UND_FESSEL, SP_AXXELERATUS_BLITZGESCHWIND, SP_EXPOSAMI_CREATUR, -1 }; // ds:26218
 const struct mssr g_magic_school_spellranges = { {
 	{ SP_BEHERRSCHUNG_BRECHEN, SP_VERWANDLUNG_BEENDEN },			/* Antimagie */
 	{ SP_BAND_UND_FESSEL, SP_ZWINGTANZ },					/* Beherrschung */
@@ -118,8 +118,8 @@ static unsigned char *g_skills_buffer;		// ds:0xe3ba
  */
 void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 {
-	signed short max_incs = 1;
-	signed short randval;
+	signed int max_incs = 1;
+	signed int randval;
 	struct mssr a = g_magic_school_spellranges;
 
 	if ((hero->typus == HERO_TYPE_HEXE) && (g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_HEXE))
@@ -228,8 +228,8 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
  */
 void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 {
-	signed short randval;
-	signed short max_incs;
+	signed int randval;
+	signed int max_incs;
 
 	max_incs = g_skill_descriptions[skill_id].max_incs;
 
@@ -324,16 +324,14 @@ void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
  */
 void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
 {
-	signed short done;
-	signed short randval;
-
-	done = 0;
+	signed int done = 0;
+	signed int randval;
 
 	while (!done) {
 
 		/* leave the loop if 3 incs failes or the skill value is 18 */
-		if ((g_inc_skills_counter[skill_id].tries == 3) ||
-			(hero->skills[skill_id] == 18)) {
+		if ((g_inc_skills_counter[skill_id].tries == 3) || (hero->skills[skill_id] == 18)) {
+
 			done = 1;
 #if !defined(__BORLANDC__)
 			D1_INFO("%s kann Talent nicht weiter steigern (3 Fehlversuche oder Talentwert 18)\n", hero->alias);
@@ -405,8 +403,8 @@ void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
  */
 void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
 {
-	signed short done;
-	signed short randval;
+	signed int done;
+	signed int randval;
 
 	done = 0;
 
@@ -469,16 +467,16 @@ void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
  *
  * \param   hero_pos    the position of the hero
  */
-void level_up(signed short hero_pos)
+void level_up(const signed int hero_pos)
 {
-	signed short l_si;
-	signed short l_di;
+	signed int l_si;
+	signed int l_di;
 	signed char mr;
 	signed char v2;
 	signed char v3;
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
-	signed short city_bak;
+	signed int city_bak;
 
 	hero = get_hero(hero_pos);
 

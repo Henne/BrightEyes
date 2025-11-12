@@ -2,12 +2,12 @@
 namespace M302de {
 #endif
 
-void status_show(uint16_t);
-void status_show_spell(struct struct_hero*, signed short, unsigned short, unsigned short,
-				unsigned short, unsigned short);
-void status_show_skill(struct struct_hero*, signed short, unsigned short, unsigned short,
-				unsigned short, unsigned short);
-void status_show_skills(struct struct_hero*);
+void status_show(const signed int);
+void status_show_spell(const struct struct_hero*, const signed int, const signed int, const signed int,
+			const signed int, const signed int);
+void status_show_skill(const struct struct_hero*, const signed int, const signed int, const signed int,
+			const signed int, const signed int);
+void status_show_skills(const struct struct_hero*);
 
 #if !defined(__BORLANDC__)
 }

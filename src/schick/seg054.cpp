@@ -124,7 +124,7 @@ void talk_inn(void)
 struct struct_hero* get_first_brewing_hero(void)
 {
 	struct struct_hero *hero;
-	signed short i;
+	signed int i;
 
 	hero = get_hero(0);
 # ifndef M302de_ORIGINAL_BUGFIX
@@ -152,11 +152,11 @@ struct struct_hero* get_first_brewing_hero(void)
  */
 void do_inn(void)
 {
-	signed short i;
-	signed short answer;
-	signed short done;
-	signed short refresh;
-	signed short portion_size;
+	signed int i;
+	signed int answer;
+	signed int done;
+	signed int refresh;
+	signed int portion_size;
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 7: NPC Curian cannot do magic actions in an inn.
 	 * Problem: no space allocated for the NPC (= seventh hero). */
@@ -170,13 +170,13 @@ void do_inn(void)
 	int32_t party_money;
 	int32_t price;
 	signed char stay;
-	signed short tw_bak;
-	signed short nr_heroes;
+	signed int tw_bak;
+	signed int nr_heroes;
 	int32_t price_schlafsaal;
 	int32_t price_einzelzimmer;
 	int32_t price_suite;
-	signed short booked_days;
-	signed short rested_days;
+	signed int booked_days;
+	signed int rested_days;
 
 	done = 0;
 	stay = 0;
@@ -455,7 +455,7 @@ void do_inn(void)
 			/* higher food quality -> higher price */
 			price += (price * inn->price_mod) / 100L;
 
-			sprintf(g_dtp2,	get_ttx(473), (signed short)price);
+			sprintf(g_dtp2,	get_ttx(473), (signed int)price);
 
 			if (GUI_bool(g_dtp2)) {
 
@@ -517,11 +517,11 @@ void do_inn(void)
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
 
-			sprintf(g_dtp2,	get_ttx(397), (signed short)price_schlafsaal);
+			sprintf(g_dtp2,	get_ttx(397), (signed int)price_schlafsaal);
 
-			sprintf(g_dtp2 + 50, get_ttx(398), (signed short)price_einzelzimmer);
+			sprintf(g_dtp2 + 50, get_ttx(398), (signed int)price_einzelzimmer);
 
-			sprintf(g_dtp2 + 100, get_ttx(399), (signed short)price_suite);
+			sprintf(g_dtp2 + 100, get_ttx(399), (signed int)price_suite);
 
 			g_sleep_quality = GUI_radio(get_ttx(396), 3, g_dtp2, g_dtp2 + 50, g_dtp2 + 100);
 
@@ -698,7 +698,7 @@ void do_inn(void)
 	}
 }
 
-void TLK_herberg(signed short state)
+void TLK_herberg(const signed int state)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 

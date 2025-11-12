@@ -33,7 +33,13 @@
 namespace M302de {
 #endif
 
-static const signed short g_campfights[4] = { 0x00d9, 0x00da, 0x00db, 0x00e8 }; // ds:0x6694
+static const signed int g_campfights[4] = {
+	FIGHTS_CAMPFIGHT1,
+	FIGHTS_CAMPFIGHT2,
+	FIGHTS_CAMPFIGHT3,
+	FIGHTS_CAMPFIGHT4
+}; // ds:0x6694
+
 struct gather_herbs g_gather_herbs_table[13] = {
 	{ ITEM_ALRAUNE,			 5, 1, 15 },
 	{ ITEM_BELMART_BLATT,		12, 3,  8 },
@@ -64,25 +70,22 @@ signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6
 
 void do_wildcamp(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short i;
-	signed short done;
-	signed short answer;
-	signed char stock_tries;
-	signed char herb_tries;
+	signed int l_si;
+	signed int l_di;
+	signed int i;
+	signed int done = 0;
+	signed int answer;
+	signed char stock_tries = 0;
+	signed char herb_tries = 0;
 	signed char herb_hours;
 	struct struct_hero* hero;
 	signed char l3;
-	signed short l4;
-	signed short l5;
-	signed short l6;
+	signed int l4;
+	signed int l5;
+	signed int l6;
 	signed char have_guards;
 	signed char l8;
 
-	done = 0;
-	stock_tries = 0;
-	herb_tries = 0;
 	l_di = g_request_refresh = 1;
 
 	for (i = 0; i <= 6; i++) {
@@ -267,7 +270,7 @@ void do_wildcamp(void)
 					{
 						hero = get_hero(answer);
 
-						herb_hours = (signed char)GUI_input(get_ttx(327), 1);
+						herb_hours = GUI_input(get_ttx(327), 1);
 
 						if (herb_hours > 0)
 						{
@@ -289,7 +292,7 @@ void do_wildcamp(void)
 
 			if (GUI_bool(get_ttx(318))) {
 
-				l3 = (signed char)(gs_day_timer / HOURS(1));
+				l3 = gs_day_timer / HOURS(1);
 
 				l3 = gs_day_timer < HOURS(8) ? 8 - l3 : 24 - l3 + 8;
 
@@ -402,10 +405,10 @@ void do_wildcamp(void)
 	leave_location();
 }
 
-signed short gather_herbs(struct struct_hero *hero, signed short hours, signed short handicap)
+signed int gather_herbs(struct struct_hero *hero, const signed int hours, const signed int handicap)
 {
-	signed short herb_index;
-	signed short unique_herbs_count;
+	signed int herb_index;
+	signed int unique_herbs_count;
 	struct gather_herbs *ptr;
 	signed char herb_count[12];
 
@@ -428,7 +431,7 @@ signed short gather_herbs(struct struct_hero *hero, signed short hours, signed s
 		if ((random_schick(100) <= ptr->chance_max) &&
 			test_skill(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
 
-			herb_count[herb_index] = (signed char)give_hero_new_item(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
+			herb_count[herb_index] = give_hero_new_item(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
 
 			if (herb_count[herb_index]) {
 				unique_herbs_count++;
@@ -492,16 +495,15 @@ signed short gather_herbs(struct struct_hero *hero, signed short hours, signed s
  * \param   tries       how often was tried to replenish stocks
  * \return              0 if replenish was not possible or 1 if replenish was possible
  */
-signed short replenish_stocks(signed short mod, signed short tries)
+signed int replenish_stocks(signed int mod, const signed int tries)
 {
-	signed short hero_pos;
-	signed short l_di;
-	signed short retval;
-	signed short j;
+	signed int hero_pos;
+	signed int l_di;
+	signed int retval = 0;
+	signed int j;
 	struct struct_hero* hero;
 	struct struct_hero* hero2;
 
-	retval = 0;
 	mod += 5;
 
 	g_skilled_hero_pos = get_skilled_hero_pos(TA_WILDNISLEBEN);
@@ -538,7 +540,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					retval = 1;
 
 					/* search for water */
-					if ((test_skill(hero, TA_WILDNISLEBEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
+					if ((test_skill(hero, TA_WILDNISLEBEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
 
 						/* found water */
 						sprintf(g_dtp2, get_ttx(324), hero->alias);
@@ -572,7 +574,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					vsync_or_key(200);
 
 					/* search for food */
-					if ((test_skill(hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
+					if ((test_skill(hero, TA_FAEHRTENSUCHEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
 
 						/* remove hunger of all living heroes in the current group */
 						hero2 = get_hero(0);

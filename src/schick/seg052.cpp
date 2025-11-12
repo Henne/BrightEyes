@@ -30,7 +30,12 @@
 namespace M302de {
 #endif
 
-static const signed short g_dcampfights[4] = { 254, 255, 256, 257 }; // ds:0x66e2
+static const signed int g_dcampfights[4] = {
+	FIGHTS_DCAMPFIGHT1,
+	FIGHTS_DCAMPFIGHT2,
+	FIGHTS_DCAMPFIGHT3,
+	FIGHTS_DCAMPFIGHT4
+}; // ds:0x66e2
 
 static signed char g_area_camp_guards[3];	// ds:0xe3de
 static signed char g_area_camp_magicstatus[7];	// ds:0xe3e1
@@ -41,16 +46,16 @@ static signed char g_area_camp_guardstatus[8];	// ds:0xe3e8
  */
 void do_area_camp(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short done;
-	signed short answer;
-	signed short l3;
+	signed int l_si;
+	signed int l_di;
+	signed int done;
+	signed int answer;
+	signed int l3;
 	struct struct_hero* hero;
 	signed char hours;
-	signed short l5;
-	signed short l6;
-	signed short l7;
+	signed int l5;
+	signed int l6;
+	signed int l7;
 	signed char l8;
 
 	done = 0;
@@ -182,7 +187,7 @@ void do_area_camp(void)
 
 			if (GUI_bool(get_ttx(318))) {
 
-				hours = (signed char)GUI_input(get_ttx(833), 1);
+				hours = GUI_input(get_ttx(833), 1);
 
 				if (hours > 0) {
 

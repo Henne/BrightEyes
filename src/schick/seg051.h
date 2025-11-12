@@ -5,9 +5,9 @@ namespace M302de {
 /* 0x20 */
 void do_wildcamp(void);
 /* 0x25 */
-signed short replenish_stocks(signed short, signed short);
+signed int replenish_stocks(signed int, const signed int);
 /* 0x2a */
-signed short gather_herbs(struct struct_hero*, signed short, signed short);
+signed int gather_herbs(struct struct_hero*, const signed int, const signed int);
 
 #if !defined(__BORLANDC__)
 }

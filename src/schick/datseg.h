@@ -1411,7 +1411,7 @@ extern int16_t gs_route_mousehover;			//ds:0x4236; seg063, seg094
 extern int16_t gs_route_progress;			//ds:0x4238; seg063, seg094
 extern int16_t gs_route_stepsize;			//ds:0x423a; seg063, seg094
 extern int16_t gs_route_dayprogress;			//ds:0x423c; seg094
-extern int16_t gs_sea_travel_passage_id;			//ds:0x423e; seg063
+extern int16_t gs_sea_travel_passage_id;		//ds:0x423e; seg063
 extern int16_t gs_route_encounter_flag;			//ds:0x4240; seg094
 extern int16_t gs_route_encounter_time;			//ds:0x4242; seg094
 extern int16_t gs_route_informer_flag;			//ds:0x4244; seg094
@@ -1419,7 +1419,7 @@ extern int16_t gs_route_informer_time;			//ds:0x4246; seg094
 extern int16_t gs_route_fight_flag;			//ds:0x4248; seg094, seg117
 extern int16_t gs_route_fight_time;			//ds:0x424a; seg094
 extern int16_t gs_travel_speed;				//ds:0x424c; seg063, seg094
-extern int16_t gs_passage_deadship_flag;			//ds:0x424e; seg063
+extern int16_t gs_passage_deadship_flag;		//ds:0x424e; seg063
 extern int16_t gs_passage_deadship_position;		//ds:0x4250; seg063
 extern int16_t gs_passage_octopus_flag;			//ds:0x4252; seg063
 extern int16_t gs_passage_octopus_position;		//ds:0x4254; seg063
@@ -1436,14 +1436,14 @@ extern uint8_t  gs_sea_travel_psgbooked_flag;	//ds:0x42ae; seg002, seg063
 extern uint8_t  gs_sea_travel_psgbooked_timer;	//ds:0x42af; seg002, seg063
 extern int8_t  gs_sea_travel_passage_speed1;	//ds:0x42b0; seg063
 extern uint8_t  gs_current_sea_route_id;		//ds:0x42b1; seg063, seg064
-// TODO: HORBOUR OPTIONS: contains pointers
+// TODO: HARBOR OPTIONS: contains pointers
 extern struct harbor_option_obsolete gs_harbor_options[10];	//ds:0x42b2; seg063, seg064
 extern int16_t gs_sea_travel_passage_price;	//ds:0x432a; seg063, seg064
 extern int16_t gs_sea_travel_passage_speed2;	//ds:0x432c; seg063, seg064
 extern uint8_t *gs_travel_map_ptr;		//ds:0x432e; seg028, seg063, seg093, seg094
 extern uint8_t  gs_forcedmarch_timer;		//ds:0x4332; seg002, seg094
-extern uint8_t  gs_travel_detour;			//ds:0x4333; seg002-seg118
-extern int16_t gs_current_signpost_typeindex;		//ds:0x4334; seg025, seg063, seg093
+extern uint8_t  gs_travel_detour;		//ds:0x4333; seg002-seg118
+extern int16_t gs_current_signpost_typeindex;	//ds:0x4334; seg025, seg063, seg093
 extern int16_t gs_trv_return;			//ds:0x4336; seg093-seg116
 extern int16_t gs_travel_destination_town_id;	//ds:0x4338; seg063-seg094
 extern int16_t gs_travel_destination_x;		//ds:0x433a; seg063-seg094
@@ -1581,7 +1581,7 @@ extern int8_t g_statuspage_sel_inv_slot_4;		//ds:0x6371; seg048
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
-extern signed short g_cheatskill_usable;	//ds:0x6532; seg048, seg103
+extern signed int g_cheatskill_usable;		//ds:0x6532; seg048, seg103
 
 extern int8_t g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg112, seg113, seg114, seg115, seg116
 
@@ -1676,7 +1676,7 @@ extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066
 extern HugePt g_buffer9_ptr4;			// ds:0xe3fc; seg028
 extern signed int g_temple_god;			// ds:0xe3f8; seg061, seg062
-extern signed short g_price_modificator;	// ds:0xe3f6; seg055, seg057, seg058
+extern signed int g_price_modificator;		// ds:0xe3f6; seg055, seg057, seg058
 extern signed char g_sleep_quality;		// ds:0xe3f1; seg054, seg104
 extern signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6; seg049, seg051, seg109
 extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg109

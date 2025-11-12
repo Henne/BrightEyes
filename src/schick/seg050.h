@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void level_up(signed short);
+void level_up(const signed int);
 /* 0x25 */
 void inc_spell_advanced(struct struct_hero*, const signed int);
 /* 0x2a */

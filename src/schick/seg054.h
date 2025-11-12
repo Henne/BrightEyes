@@ -9,7 +9,7 @@ void talk_inn(void);
 /* 0x2a */
 struct struct_hero* get_first_brewing_hero(void);
 /* 0x2f */
-void TLK_herberg(signed short);
+void TLK_herberg(const signed int);
 
 #if !defined(__BORLANDC__)
 }
