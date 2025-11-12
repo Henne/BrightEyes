@@ -359,7 +359,7 @@ void spell_herrdertiere(void)
 		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
 	} else {
 
-		g_spell_special_aecost = (g_spelltarget_e->first_ap);
+		g_spell_special_aecost = g_spelltarget_e->first_ap;
 
 		if (get_spelluser()->ae < g_spell_special_aecost) {
 			g_spell_special_aecost = -2;
@@ -506,7 +506,7 @@ void spell_heptagon(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Heptagon\" ist nicht implementiert\n");
 #endif
-	g_spell_special_aecost = (-2);
+	g_spell_special_aecost = -2;
 }
 
 void spell_kraehenruf(void)
@@ -628,7 +628,7 @@ void spell_elementare(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Elementare\" ist nicht implementiert\n");
 #endif
-	g_spell_special_aecost = (-2);
+	g_spell_special_aecost = -2;
 }
 
 void spell_nihilatio(void)
@@ -749,13 +749,13 @@ void spell_transversalis(void)
 
 	} else {
 		/* set spell costs */
-		g_spell_special_aecost = (select_teleport_dest());
+		g_spell_special_aecost = select_teleport_dest();
 
 		if (g_spell_special_aecost > 0) {
 			/* check AE */
 			if (get_spelluser()->ae < g_spell_special_aecost) {
 				/* abort */
-				g_spell_special_aecost = (-2);
+				g_spell_special_aecost = -2;
 			} else {
 				/* play sound */
 				play_voc(ARCHIVE_FILE_FX16_VOC);
@@ -775,7 +775,7 @@ void spell_ueber_eis(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Ueber Eis\" ist nicht implementiert\n");
 #endif
-	g_spell_special_aecost = (-2);
+	g_spell_special_aecost = -2;
 }
 
 
@@ -827,7 +827,7 @@ void spell_balsam(void)
 
 		if (get_spelluser()->ae < g_spell_special_aecost) {
 			/* not enough AE */
-			g_spell_special_aecost = (get_spelluser()->ae);
+			g_spell_special_aecost = get_spelluser()->ae;
 			le_to_heal = g_spell_special_aecost;
 			/* reduce AE-costs and 'le_to_heal' to the available AE */
 		}

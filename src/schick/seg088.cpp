@@ -162,7 +162,7 @@ void DNG14_chest06_loot(struct struct_chest* chest)
 {
 	uint8_t* ptr_bak = chest->content;
 
-	chest->content = (gs_dng14_chest_x7);
+	chest->content = gs_dng14_chest_x7;
 
 	loot_simple_chest(chest);
 
@@ -173,7 +173,7 @@ void DNG14_chest07_loot(struct struct_chest* chest)
 {
 	uint8_t* ptr_bak = chest->content;
 
-	chest->content = (gs_dng14_chest_x8);
+	chest->content = gs_dng14_chest_x8;
 
 	loot_simple_chest(chest);
 

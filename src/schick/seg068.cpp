@@ -483,8 +483,8 @@ void THO_ugdalf(void)
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEON_ID_ZWINGFESTE);
 
-		gs_x_target_bak = (gs_x_target);
-		gs_y_target_bak = (gs_y_target);
+		gs_x_target_bak = gs_x_target;
+		gs_y_target_bak = gs_y_target;
 	}
 }
 

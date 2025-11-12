@@ -251,7 +251,7 @@ void spell_hexenknoten(void)
 	}
 
 	if (get_cb_val(x, y) != 0) {
-		g_spell_special_aecost = (-2);
+		g_spell_special_aecost = -2;
 		return;
 	}
 
@@ -354,9 +354,9 @@ void spell_ecliptifactus(void)
 
 		if (get_spelluser()->ae >= ae) {
 			/* set AP costs */
-			g_spell_special_aecost = (ae);
+			g_spell_special_aecost = ae;
 			/* enable the spell */
-			get_spelluser()->ecliptifactus_timer = (signed char)rounds + 1;
+			get_spelluser()->ecliptifactus_timer = rounds + 1;
 			/* prepare the message */
 			sprintf(g_dtp2, get_tx(88), get_spelluser()->alias,
 				GUI_get_ptr(get_spelluser()->sex, 3), rounds);
@@ -392,7 +392,7 @@ void spell_eisenrost(void)
 
 			if (!id) {
 				/* no weapon in hand */
-				g_spell_special_aecost = (-2);
+				g_spell_special_aecost = -2;
 			} else {
 				/* check if weapon is already broken */
 				if (get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
@@ -468,7 +468,7 @@ void spell_fulminictus(void)
 		FIG_do_spell_damage(damage);
 
 		/* set costs to damage AE */
-		g_spell_special_aecost = (damage);
+		g_spell_special_aecost = damage;
 	}
 }
 

@@ -489,7 +489,7 @@ void draw_fight_screen(uint16_t val)
 
 					p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
 					g_fig_ani_state[p_fighter->sheet] = -1;
-					p_fighter->sheet = (p_fighter->wsheet = (-1));
+					p_fighter->sheet = p_fighter->wsheet = -1;
 
 				} else {
 

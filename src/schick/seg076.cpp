@@ -477,9 +477,9 @@ signed int DNG_step(void)
 		g_lockpick_try_counter = 0;
 	}
 
-	gs_x_target_bak = (gs_x_target);
-	gs_y_target_bak = (gs_y_target);
-	gs_direction_bak = (gs_direction);
+	gs_x_target_bak = gs_x_target;
+	gs_y_target_bak = gs_y_target;
+	gs_direction_bak = gs_direction;
 
 	handle_gui_input();
 
