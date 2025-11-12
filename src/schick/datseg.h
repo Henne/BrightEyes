@@ -1670,7 +1670,7 @@ extern signed int g_dng_refresh_x_target;	// ds:0xe486; seg075, seg076
 extern signed int g_dng_refresh_y_target;	// ds:0xe484; seg075, seg076
 extern signed int g_dng_refresh_direction;	// ds:0xe482; seg075, seg076, seg082, seg088
 extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
-extern signed short g_combo_mode;		// ds:0xe42c; seg054, seg059, seg069
+extern signed int g_combo_mode;			// ds:0xe42c; seg054, seg059, seg069
 extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066

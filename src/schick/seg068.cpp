@@ -34,7 +34,7 @@ static const char g_str_obviously_closed[28] = "OFFENSICHTLICH GESCHLOSSEN!"; //
 
 void THO_eisenhof(void)
 {
-	signed short answer;
+	signed int answer;
 	int32_t money;
 
 	do {
@@ -70,27 +70,20 @@ void THO_eisenhof(void)
 
 void THO_imman(void)
 {
+	signed int tmp = get_current_season();
 
-	unsigned short tmp;
+	if ((tmp == SEASON_SPRING || tmp == SEASON_AUTUMN) && (gs_day_of_week == 5)) {
 
-	tmp = get_current_season();
-
-	if ((tmp == 1 || tmp == 3) && (gs_day_of_week == 5)) {
 		/* ask to visit the game */
 		if (GUI_bool(get_tx2(55)) != 0) {
 
 			tmp = random_schick(4) + 0x38;
+
 			sprintf(g_dtp2, get_tx2(56),
-				/* winner */
-				get_tx2(tmp),
-				/* looser */
-				get_tx2(random_schick(7) + 0x3c),
-				/* winner */
-				get_tx2(tmp),
-				/* winners points */
-				random_interval(15, 30),
-				/* loosers points */
-				random_schick(14));
+				/* winning team, loosing team, winning team */
+				get_tx2(tmp), get_tx2(random_schick(7) + 0x3c),	get_tx2(tmp),
+				/* winning team score, loosing team score */
+				random_interval(15, 30), random_schick(14));
 
 			GUI_input(g_dtp2, 0);
 		}
@@ -120,9 +113,9 @@ void THO_botschaft(void)
 
 void THO_bank(void)
 {
-	signed short answer;
-	signed short done;
-	signed short l3;
+	signed int answer;
+	signed int done;
+	signed int l3;
 	int32_t p_money;
 
 	done = 0;
@@ -258,9 +251,9 @@ void THO_bank(void)
 void THO_arsenal(void)
 {
 	/* ARSENAL / ZEUGHAUS */
-	signed short answer;
-	signed short options;
-	signed short tw_bak;
+	signed int answer;
+	signed int options;
+	signed int tw_bak;
 	int32_t p_money;
 
 	if (gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) {
@@ -269,7 +262,7 @@ void THO_arsenal(void)
 
 	} else if (gs_merchant_kicked_flags[gs_current_typeindex]) {
 
-			talk_merchant();
+		talk_merchant();
 
 	} else if (gs_arsenal_money) {
 
@@ -307,7 +300,7 @@ void THO_arsenal(void)
 
 			do_merchant();
 
-			gs_arsenal_money = (signed short)get_party_money();
+			gs_arsenal_money = (signed int)get_party_money();
 			gs_arsenal_money /= 100;
 			g_textbox_width = tw_bak;
 			set_party_money(p_money);
@@ -326,7 +319,7 @@ void THO_arsenal(void)
 
 void THO_magistracy(void)
 {
-	signed short answer;
+	signed int answer;
 
 	if (!gs_got_main_quest) {
 
@@ -394,8 +387,8 @@ void dramosch_says(char *msg)
 
 void THO_ugdalf(void)
 {
-	signed short answer;
-	signed short randval;
+	signed int answer;
+	signed int randval;
 
 	load_in_head(gs_quest_ugdalf == 0 ? 0 : 14);
 
@@ -491,8 +484,8 @@ void THO_ugdalf(void)
 /* should be static */
 void academy_analues(void)
 {
-	signed short buffer1_bak;
-	signed short hero_pos;
+	signed int buffer1_bak;
+	signed int hero_pos;
 
 	GUI_input(get_tx2(62), 0);
 
@@ -528,10 +521,10 @@ void academy_analues(void)
 
 void THO_academy(void)
 {
-	signed short answer;
-	signed short item_id;
-	signed short item_pos;
-	signed short cursed_hero_pos;
+	signed int answer;
+	signed int item_id;
+	signed int item_pos;
+	signed int cursed_hero_pos;
 	int32_t p_money;
 	struct struct_hero *hero;
 
@@ -578,7 +571,7 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed short)0x8002, item_id, 0));
+					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed int)0x8002, item_id, 0));
 
 					do {
 						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
@@ -649,7 +642,7 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed short)0x8002, item_id, 0));
+					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed int)0x8002, item_id, 0));
 
 					do {
 						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
@@ -704,11 +697,11 @@ void THO_academy(void)
  * \return              -2 = enough money, -1 no item found or the item_id
  */
 /* should be static */
-signed short academy_get_equal_item(signed short price)
+signed int academy_get_equal_item(const signed int price)
 {
-	signed short item_pos;
-	signed short retval;
-	signed short i;
+	signed int item_pos;
+	signed int retval;
+	signed int i;
 	int32_t p_money;
 	struct struct_hero *hero;
 	struct item_stats *p_item;

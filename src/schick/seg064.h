@@ -3,17 +3,17 @@ namespace M302de {
 #endif
 
 /*0x20*/
-char* print_passage_price(signed short, struct sea_route*);
+char* print_passage_price(signed int, const struct sea_route*);
 /*0x25*/
-char* get_ship_name(signed char, signed short);
+char* get_ship_name(const signed char, const signed int);
 /*0x2a*/
-unsigned short prepare_passages(void);
+signed int prepare_passages(void);
 /*0x2f*/
-unsigned short get_passage_travel_hours(signed short, signed short);
+signed int get_passage_travel_hours(const signed int, signed int);
 /*0x34*/
-unsigned short get_next_passages(unsigned short);
+signed int get_next_passages(const signed int);
 /*0x39*/
-unsigned short passage_arrival(void);
+signed int passage_arrival(void);
 
 #if !defined(__BORLANDC__)
 }

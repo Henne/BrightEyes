@@ -23,13 +23,13 @@
 namespace M302de {
 #endif
 
-signed short g_combo_mode; // ds:0xe42c
+signed int g_combo_mode; // ds:0xe42c
 
 void THO_hetmann(void)
 {
-	signed short answer;
-	signed short i;
-	signed short map_parts;
+	signed int answer;
+	signed int i;
+	signed int map_parts;
 
 	load_in_head(66);
 
@@ -152,12 +152,8 @@ void THO_hetmann(void)
 
 void THO_windriders(void)
 {
-	signed short answer;
+	const signed int answer = GUI_radio(get_tx2(20), 3, get_tx2(21), get_tx2(22), get_tx2(23));
 
-	answer = GUI_radio(get_tx2(20), 3,
-				get_tx2(21),
-				get_tx2(22),
-				get_tx2(23));
 	if (answer != -1) {
 
 		if (answer == 1) {
@@ -189,8 +185,8 @@ void THO_windriders(void)
 
 void THO_tav_inn_combi(void)
 {
-	signed short answer;
-	signed short type_bak;
+	signed int answer;
+	signed int type_bak;
 
 	disable_ani();
 	load_ani(4);
@@ -264,12 +260,8 @@ void THO_tav_inn_combi(void)
 
 void THO_stormchildren(void)
 {
-	signed short answer;
+	const signed int answer = GUI_radio(get_tx2(29), 3, get_tx2(30), get_tx2(31), get_tx2(32));
 
-	answer = GUI_radio(get_tx2(29), 3,
-				get_tx2(30),
-				get_tx2(31),
-				get_tx2(32));
 	if (answer != -1) {
 
 		if (answer == 1) {
@@ -301,9 +293,8 @@ void THO_stormchildren(void)
 
 void THO_garaldsson(void)
 {
-	signed short answer;
+	const signed int answer = GUI_radio(get_tx2(38), 3, get_tx2(39), get_tx2(40), get_tx2(41));
 
-	answer = GUI_radio(get_tx2(38), 3, get_tx2(39), get_tx2(40), get_tx2(41));
 	if (answer != -1) {
 
 		if (answer == 1) {

@@ -42,11 +42,11 @@ void do_market(void)
 	signed int answer;
 	signed int type_bak;
 	signed int dir_bak;
-	signed int bak1;
+	signed int dir_bak_bak;
 
 	done = 0;
 	g_request_refresh = 1;
-	bak1 = gs_direction_bak;
+	dir_bak_bak = gs_direction_bak;
 	dir_bak = gs_direction;
 
 	do {
@@ -71,7 +71,7 @@ void do_market(void)
 			/* set up parameters for this merchant */
 			g_shop_descr_table[90].price_mod = g_market_descr_table[gs_current_typeindex].price_mod;
 			g_shop_descr_table[90].sortiment = g_market_descr_table[gs_current_typeindex].size;
-			g_shop_descr_table[90].type = (signed char)answer;
+			g_shop_descr_table[90].type = answer;
 			type_bak = gs_current_typeindex;
 			gs_current_typeindex = 90;
 
@@ -83,8 +83,8 @@ void do_market(void)
 
 			/* clean up */
 			gs_current_typeindex = type_bak;
-			gs_direction_bak = (signed char)bak1;
-			gs_direction = (signed char)dir_bak; /* by this line, the party will *not* be rotated after leaving the market */
+			gs_direction_bak = dir_bak_bak;
+			gs_direction = dir_bak; /* by this line, the party will *not* be rotated after leaving the market */
 
 			g_shop_descr_table[90].price_mod = 0;
 			g_shop_descr_table[90].sortiment = 0;
@@ -184,7 +184,7 @@ void final_intro(void)
 	call_mouse();
 }
 
-static uint8_t* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
+static uint8_t* hyg_ani_1(const signed int nvf_no, struct struct_ani *ani)
 {
 	HugePt retval;
 	struct nvf_extract_desc nvf;
@@ -203,7 +203,7 @@ static uint8_t* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 	return (uint8_t*)retval;
 }
 
-static void hyg_ani_2(struct struct_ani *ani, signed short x, signed short y)
+static void hyg_ani_2(struct struct_ani *ani, const signed int x, const signed int y)
 {
 	g_pic_copy.x1 = x;
 	g_pic_copy.y1 = y;

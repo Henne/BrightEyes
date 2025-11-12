@@ -20,8 +20,8 @@
 namespace M302de {
 #endif
 
-static char g_sea_travel_str_heller[10] = "%d^HELLER"; // ds:0x7096
-static char g_sea_travel_str_nothing[7] = "NICHTS"; // ds:0x70a0
+static const char g_sea_travel_str_heller[10] = "%d^HELLER"; // ds:0x7096
+static const char g_sea_travel_str_nothing[7] = "NICHTS"; // ds:0x70a0
 
 /**
  * \brief   returns a pointer to the name of a ship
@@ -30,13 +30,13 @@ static char g_sea_travel_str_nothing[7] = "NICHTS"; // ds:0x70a0
  * \param   nr_ships_created	number of ships which have already been created before (for avoiding duplicate ship names)
  */
 
-char* get_ship_name(signed char passage_type, signed short nr_ships_created)
+char* get_ship_name(const signed char passage_type, const signed int nr_ships_created)
 	/* Function is called in a single place only, which is contained in the code of Original-Bug 23 (see below).
 	 * Therefore, the function could be removed if M302de_ORIGINAL_BUGFIX is activated.
 	 */
 {
 	signed char done, i;
-	signed short name_id;
+	signed int name_id;
 
 	done = 0;
 
@@ -62,10 +62,10 @@ char* get_ship_name(signed char passage_type, signed short nr_ships_created)
  *
  * \return	number of prepared passages */
 
-unsigned short prepare_passages(void)
+signed int prepare_passages(void)
 {
-	signed short prepared;
-	signed short i;
+	signed int prepared;
+	signed int i;
 	struct sea_route *ent = &g_sea_routes[0];
 
 	for (i = prepared = 0; i < NR_SEA_ROUTES; ent++, i++) {
@@ -135,9 +135,9 @@ unsigned short prepare_passages(void)
  * \param   route_pointer     pointer to the sea route
  * \return                    a pointer to the text buffer.
  */
-char* print_passage_price(signed short price, struct sea_route *route)
+char* print_passage_price(signed int price, const struct sea_route *route)
 {
-	unsigned short di;
+	unsigned int di;
 
 	if (price != 0) {
 		/* calc price per distance */
@@ -165,7 +165,7 @@ char* print_passage_price(signed short price, struct sea_route *route)
  * \param   base_speed   base speed of the ship [unit: km per day]
  * \return               the traveling time in hours
  */
-unsigned short get_passage_travel_hours(signed short distance, signed short base_speed)
+signed int get_passage_travel_hours(const signed int distance, signed int base_speed)
 {
 	int32_t tmp;
 
@@ -218,7 +218,7 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
 	tmp = ROUNDED_DIVISION(10 * distance, gs_sea_travel_passage_speed2);
 #endif
 
-	return (unsigned short)tmp;
+	return tmp;
 }
 
 /**
@@ -227,11 +227,11 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
  * \param   type        1 = passages next days "Ankommende Routen erfragen" / 2 = all passages
  * \return  number of prepared passages.
  */
-unsigned short get_next_passages(unsigned short type)
+signed int get_next_passages(const signed int type)
 {
 	sea_route *entry;
-	signed short option;
-	signed short i;
+	signed int option;
+	signed int i;
 
 	entry = &g_sea_routes[0];
 
@@ -264,14 +264,14 @@ unsigned short get_next_passages(unsigned short type)
 	return option;
 }
 
-unsigned short passage_arrival(void)
+signed int passage_arrival(void)
 {
-	signed short tmp;
+	signed int tmp;
 	struct trv_start_point *harbor_ptr;
 	struct location *locations_tab_ptr;
 	sea_route *p_sea_route;
-	signed short si;
-	signed short harbor_typeindex;
+	signed int si;
+	signed int harbor_typeindex;
 
 	harbor_typeindex = 0;
 	harbor_ptr = &g_harbors[0];

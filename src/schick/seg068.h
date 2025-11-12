@@ -30,7 +30,7 @@ void academy_analues(void);
 void THO_academy(void);
 /* 0x5c */
 /* should be static */
-signed short academy_get_equal_item(signed short);
+signed int academy_get_equal_item(const signed int);
 
 #if !defined(__BORLANDC__)
 }
