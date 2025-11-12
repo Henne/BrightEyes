@@ -783,7 +783,7 @@ struct weapon_descr g_weapons_table[65] = {
 	{ 1, 4, 99,  0, -1,  0,  0 }, /* 50 <- ITEM_SCHNEIDZAHN */ /* Original-Bug: entry -1 for ranged_index is not o.k. for a throwing weapon */
 	{ 1, 3, 15,  2, -1,  0,  0 }, /* 51 <- ITEM_ROBBENTOETER */
 	{ 1, 3, 15,  2, -1,  0, -1 }, /* 52 <- ITEM_WOLFSMESSER */
-	{ 0, 0, 99,  0, -1,  0,  0 }, /* 53 <- ITEM_PFEIL, ITEM_BOLTS */
+	{ 0, 0, 99,  0, -1,  0,  0 }, /* 53 <- ITEM_PFEIL, ITEM_BOLZEN */
 	{ 1, 5, 14, -5, -1, -2, -3 }, /* 54 <- ITEM_BASTARDSCHWERT__MAGIC */
 	{ 1,10, 14,-99, -1, -2, -8 }, /* 55 <- ITEM_ORKNASE__MAGIC */
 	{ 1, 2, 15,-99, -1,  2, -1 }, /* 56 <- ITEM_KURZSCHWERT__MAGIC */
@@ -2683,7 +2683,7 @@ uint8_t gs_dng14_chest_x3[11] = {
 	ITEM_KURZBOGEN, 3,
 	ITEM_ARMBRUST, 1,
 	ITEM_WURFMESSER, 4,
-	ITEM_BOLTS, 20,
+	ITEM_BOLZEN, 20,
 	ITEM_PFEIL, 50,
 	0xff
 }; // ds:0x3ffb

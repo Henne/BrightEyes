@@ -622,8 +622,8 @@ signed int get_item(signed int item_id, const signed int unused, signed int quan
 	signed int autofight_bak;
 
 	/* Special stacked items */
-	if (item_id == ITEM_200_PFEILE) { item_id = ITEM_PFEIL; quantity = 200;} else
-	if (item_id == ITEM_50_BOLZEN) { item_id = ITEM_BOLTS; quantity = 50;} else
+	if (item_id == ITEM_200_PFEILE) { item_id = ITEM_PFEIL; quantity = 200; } else
+	if (item_id == ITEM_50_BOLZEN) { item_id = ITEM_BOLZEN; quantity = 50; } else
 	if (item_id == ITEM_20_KLETTERHAKEN) { item_id = ITEM_KLETTERHAKEN; quantity = 20;}
 
 	do {

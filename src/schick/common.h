@@ -1120,7 +1120,7 @@ enum {
 	ITEM_PFEIL				= 0x0a, /* arrow */
 	ITEM_STREITAXT				= 0x0b, /* battleaxe */
 	ITEM_ARMBRUST				= 0x0c, /* crossbow */
-	ITEM_BOLTS				= 0x0d, /* bolt */
+	ITEM_BOLZEN				= 0x0d, /* bolt */
 	ITEM_DOLCH				= 0x0e, /* dagger */
 	ITEM_IRON_SHIELD			= 0x0f, /* iron shield */
 	ITEM_WURFBEIL				= 0x10, /* francesca */

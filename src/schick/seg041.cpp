@@ -121,7 +121,7 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 			}
 		case ITEM_ARMBRUST:		/* Armbrust */
 			{
-				if (left_hand != ITEM_BOLTS) { /* Bolzen */
+				if (left_hand != ITEM_BOLZEN) { /* Bolzen */
 					if (arg != 2) {
 
 						sprintf(g_dtp2, get_tx(9), hero->alias);

@@ -32,7 +32,7 @@ static uint8_t g_tevent067_chest[10] = {
 	ITEM_BASTARDSCHWERT, 1,
 	ITEM_SCHNAPSFLASCHE, 1,
 	ITEM_REZEPT_FUER_VOMICUM, 1,
-	ITEM_BOLTS, 2,
+	ITEM_BOLZEN, 2,
 	0xff, 0
 }; // ds:0xb16a
 
