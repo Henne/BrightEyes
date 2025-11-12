@@ -1304,7 +1304,7 @@ struct mon_spell_description g_mon_spell_descriptions[15] = {
 	{ 13, 3, 0, 5, 2, 6, 1, 0 }	/* Paralue */
 }; // ds:0x0f13
 
-int8_t g_mon_spell_repertoire[11][5] = {
+int8_t g_mon_spellbooks[11][5] = {
 	{
 		MONSTER_SPELL_VERWANDLUNG_BEENDEN,
 		MONSTER_SPELL_BLITZ,

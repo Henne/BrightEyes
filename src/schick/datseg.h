@@ -343,7 +343,7 @@ struct struct_monster {
 	int16_t dam2;
 	int8_t bp;
 	int8_t magic;
-	int8_t spell_repertoire_id;
+	int8_t spellbook_id;
 	int8_t level;
 	int8_t size;
 	int8_t is_animal;
@@ -646,7 +646,7 @@ struct enemy_sheet {
 	int8_t  bp_orig;
 	int8_t  bp;
 	int8_t  magic;
-	int8_t  spell_repertoire_id;
+	int8_t  spellbook_id;
 	int8_t  fighter_id;
 	int8_t  viewdir;
 	int8_t  attacks_left;	 /* number attacks left in the current turn of a battle */
@@ -782,7 +782,7 @@ extern const struct spells_index g_spells_index2[4];			// ds:0x0d13; seg046
 extern const signed short* g_magic_schools_table[9];
 extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
 extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
-extern int8_t g_mon_spell_repertoire[11][5];				// ds:0x0f8b; seg037
+extern int8_t g_mon_spellbooks[11][5];				// ds:0x0f8b; seg037
 extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
 extern const struct skill_descr g_skill_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
 extern const struct skills_index g_skills_index[7];			//ds:0x10ce; seg046, seg103

@@ -409,7 +409,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 	retval = 0;
 
 	available_spells = i = 0;
-	while ((i < 5) && (g_mon_spell_repertoire[enemy->spell_repertoire_id][i++] != -1))
+	while ((i < 5) && (g_mon_spellbooks[enemy->spellbook_id][i++] != -1))
 	{
 		available_spells++;
 	}
@@ -421,7 +421,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 
 		for (i = 0; i < available_spells; i++) {
 
-			mspell_id = g_mon_spell_repertoire[enemy->spell_repertoire_id][i];
+			mspell_id = g_mon_spellbooks[enemy->spellbook_id][i];
 
 			if (g_mon_spell_descriptions[mspell_id].unkn1 == 1) {
 
@@ -433,7 +433,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 		}
 
 		if (decided == 0) {
-			mspell_id = g_mon_spell_repertoire[enemy->spell_repertoire_id][random_interval(0, available_spells - 1)];
+			mspell_id = g_mon_spellbooks[enemy->spellbook_id][random_interval(0, available_spells - 1)];
 		}
 
 		enemy->target_object_id = 0;
@@ -719,7 +719,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			}
 
 			/* enemy can cast spells and has AE >= 5 left */
-			if ((enemy->spell_repertoire_id != -1) && (enemy->ae >= 5) && FIG_select_mspell(enemy, enemy_no, attack_foe, x, y))
+			if ((enemy->spellbook_id != -1) && (enemy->ae >= 5) && FIG_select_mspell(enemy, enemy_no, attack_foe, x, y))
 			{
 				/* REMARK: enemy can still cast a spell with less than 5 BP. */
 				enemy->action_id = FIG_ACTION_SPELL;
