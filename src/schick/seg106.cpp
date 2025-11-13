@@ -167,7 +167,7 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 							GUI_output(g_dtp2);
 
 						} else {
-							if (!can_item_at_pos(item_id2, pos1)) {
+							if (!can_hero_equip_item_at_slot(item_id2, pos1)) {
 
 								if (is_in_word_array(item_id2, g_items_pluralwords))
 
@@ -347,7 +347,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 			}
 #endif
 
-		} else if (!can_item_at_pos(item_id1, pos2)) {
+		} else if (!can_hero_equip_item_at_slot(item_id1, pos2)) {
 
 			if (is_in_word_array(item_id1, g_items_pluralwords)) {
 
@@ -448,7 +448,7 @@ lab02:
 
 #endif
 
-		} else if (!can_item_at_pos(item_id2, pos1)) {
+		} else if (!can_hero_equip_item_at_slot(item_id2, pos1)) {
 
 			if (is_in_word_array(item_id2, g_items_pluralwords)) {
 
