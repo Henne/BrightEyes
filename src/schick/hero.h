@@ -119,7 +119,7 @@ struct struct_hero {
 	/* Offset 0x10 */
 	char alias[16];
 	/* Offset 0x20 */
-	signed char num_inv_slots_used; /* number of occupied item slots in the inventory. (equipped items are not included (really??)) */
+	signed char num_inv_slots_used; /* number of occupied item slots in the inventory. (only knapsack, equipped items are not included (really??)) */
 	signed char typus; /* see enum HERO_TYPE_* */
 	signed char sex;
 	unsigned char height; /* unit: cm */
