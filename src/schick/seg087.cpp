@@ -431,7 +431,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_torches_flag = 1;
 
-			get_item(ITEM_FACKEL__UNLIT, 1, 4);
+			give_new_item_to_group(ITEM_FACKEL__UNLIT, 1, 4);
 		}
 
 	} else if (pos == DNG_POS(2,3,1) && pos != gs_dng_handled_pos && !gs_dng14_spooky_flag) {
@@ -457,7 +457,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_spear_flag = 1;
 
-			get_item(ITEM_SPEER, 1, 1);
+			give_new_item_to_group(ITEM_SPEER, 1, 1);
 		}
 
 
@@ -586,7 +586,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_hatchet_flag = 1;
 
-			get_item(ITEM_HACKE, 1, 1);
+			give_new_item_to_group(ITEM_HACKE, 1, 1);
 		}
 
 	} else if (pos == DNG_POS(3,11,13) && pos != gs_dng_handled_pos && gs_direction == EAST) {
@@ -607,7 +607,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_ring_flag = 1;
 
-			get_item(ITEM_RING__BLUE, 1, 1);
+			give_new_item_to_group(ITEM_RING__BLUE, 1, 1);
 		}
 
 	} else if (pos == DNG_POS(3,11,1) && pos != gs_dng_handled_pos) {
@@ -640,7 +640,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_orknase_flag = 1;
 
-			get_item(ITEM_ORKNASE, 1, 1);
+			give_new_item_to_group(ITEM_ORKNASE, 1, 1);
 		}
 
 	} else if (pos == DNG_POS(4,12,9) && pos != gs_dng_handled_pos && gs_direction == SOUTH) {

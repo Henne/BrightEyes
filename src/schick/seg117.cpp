@@ -163,14 +163,14 @@ void hunt_karen(void)
 
 					GUI_output(get_tx2(8));
 					/* get 80 FOOD PACKAGES */
-					get_item(ITEM_PROVIANTPAKET, 1, 80);
+					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 80);
 
 				} else if (passed) {
 					/* at least one of the group passed MISSLE WEAPON+0 */
 
 					GUI_output(get_tx2(7));
 					/* get 40 FOOD PACKAGES */
-					get_item(ITEM_PROVIANTPAKET, 1, 40);
+					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 40);
 				} else {
 					/* everybody failed MISSLE WEAPON+0 */
 					GUI_output(get_tx2(6));
@@ -242,7 +242,7 @@ void hunt_wildboar(void)
 
 					GUI_output(get_tx2(17));
 					/* get 30 FOOD PACKAGES */
-					get_item(ITEM_PROVIANTPAKET, 1, 30);
+					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 30);
 
 				} else {
 					/* everybody failed MISSLE WEAPON+0 */

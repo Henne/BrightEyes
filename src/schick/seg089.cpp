@@ -283,7 +283,7 @@ signed int DNG15_handler(void)
 		{
 			GUI_output(get_tx(51));
 
-			if (get_item(ITEM_HACKE, 1, 1) != -1)
+			if (give_new_item_to_group(ITEM_HACKE, 1, 1) != -1)
 			{
 				gs_dng15_took_hoe = 1;
 			}
@@ -452,7 +452,7 @@ signed int DNG15_handler(void)
 				if (1) { } else { }
 
 				/* group gets GRIMRING */
-				do { ; } while (!get_item(ITEM_GRIMRING, 1, 1));
+				do { ; } while (!give_new_item_to_group(ITEM_GRIMRING, 1, 1));
 
 				gs_got_grimring = 1;
 
@@ -607,7 +607,7 @@ void DNG15_cursed_money_chest(struct struct_chest* chest)
 		set_party_money(p_money);
 
 		/* ... 50 GOLD JEWELRY. */
-		get_item(ITEM_GOLDSCHMUCK, 1, 50);
+		give_new_item_to_group(ITEM_GOLDSCHMUCK, 1, 50);
 	}
 	g_textbox_width = tw_bak;
 }

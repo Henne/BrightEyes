@@ -404,7 +404,7 @@ void item_apply_weapon_poison(void)
 		}
 		}
 
-		give_hero_new_item(g_itemuser, bottle_id, 1, 1);
+		give_new_item_to_hero(g_itemuser, bottle_id, 1, 1);
 
 		sprintf(g_dtp2, get_ttx(739),
 			(char*)GUI_names_grammar((signed int)0x8000, g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
@@ -486,7 +486,7 @@ void item_ignite(void)
 			drop_item(g_itemuser, pos, 1);
 
 			/* give a bronze flask */
-			give_hero_new_item(g_itemuser, ITEM_BRONZEFLASCHE, 0, 1);
+			give_new_item_to_hero(g_itemuser, ITEM_BRONZEFLASCHE, 0, 1);
 
 			/* prepare message */
 			sprintf(g_dtp2, get_tx(119), g_itemuser->alias);

@@ -521,7 +521,7 @@ void buy_screen(void)
 					for (l_di = 0; l_di < nice; l_di++) {
 
 						item_id = g_buy_shopping_cart[l_di].item_id;
-						given_items = get_item(item_id, 1, g_buy_shopping_cart[l_di].quantity);
+						given_items = give_new_item_to_group(item_id, 1, g_buy_shopping_cart[l_di].quantity);
 
 						g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] + given_items;
 

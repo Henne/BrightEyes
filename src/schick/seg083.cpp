@@ -419,7 +419,7 @@ void DNG08_search_bed(void)
 		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 92, 0));
 
 		/* a BRANDY BOTTLE */
-		get_item(ITEM_SCHNAPSFLASCHE, 1, 1);
+		give_new_item_to_group(ITEM_SCHNAPSFLASCHE, 1, 1);
 
 		GUI_output(g_dtp2);
 
@@ -431,7 +431,7 @@ void DNG08_search_bed(void)
 		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 14, 0));
 
 		/* a DAGGER */
-		get_item(ITEM_DOLCH, 1, 1);
+		give_new_item_to_group(ITEM_DOLCH, 1, 1);
 
 		GUI_output(g_dtp2);
 
@@ -479,7 +479,7 @@ void DNG08_chest00_loot(struct struct_chest* chest)
 		GUI_output(get_tx(32));
 
 		/* get 40 FOOD PACKAGES */
-		get_item(ITEM_PROVIANTPAKET, 1, 40);
+		give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 40);
 	}
 }
 

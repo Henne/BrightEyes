@@ -1150,7 +1150,7 @@ signed int do_fight(const signed int fight_id)
 			/* give automatically dropped items to the heroes */
 			i = 0;
 			while (g_fig_dropped_weapons[i]) {
-				get_item(g_fig_dropped_weapons[i++], 0, 1);
+				give_new_item_to_group(g_fig_dropped_weapons[i++], 0, 1);
 			}
 
 			FIG_loot_monsters();

@@ -343,7 +343,7 @@ void THO_magistracy(void)
 				GUI_output(get_tx2(14));
 
 				/* get "LETTER FROM JADRA" */
-				get_item(ITEM_SCHREIBEN_VON_JADRA, 1, 1);
+				give_new_item_to_group(ITEM_SCHREIBEN_VON_JADRA, 1, 1);
 
 			} else {
 				GUI_output(get_tx2(15));

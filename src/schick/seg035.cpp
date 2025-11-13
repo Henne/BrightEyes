@@ -147,7 +147,7 @@ void FIG_loot_monsters(void)
 
 			if ((l4 != -2) && ((l5 == 0) || ((l5 != 0) && (l6 - 1 != l4)))) {
 
-				if (!get_item(g_current_fight->loot[l4 + l_si], 1, 1))
+				if (!give_new_item_to_group(g_current_fight->loot[l4 + l_si], 1, 1))
 				{
 					l4 = -2;
 

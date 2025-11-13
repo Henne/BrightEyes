@@ -269,7 +269,7 @@ void loot_simple_chest(struct struct_chest *chest)
 			if (item_num != -2) {
 
 				/* if not pressed ESC */
-				if (get_item(chest->content[item_num], 1, 1)) {
+				if (give_new_item_to_group(chest->content[item_num], 1, 1)) {
 
 					/* got the item in inventory => remove from chest */
 					delete_chest_item(chest, item_num);
@@ -348,7 +348,7 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
 			if (pos != -2) {
 
 				/* if not pressed ESC */
-				if (get_item(chest->content[pos], 1, 1)) {
+				if (give_new_item_to_group(chest->content[pos], 1, 1)) {
 
 					/* got the item in inventory => remove from chest */
 					delete_chest_item(chest, pos);
@@ -476,7 +476,7 @@ void loot_special_chest(const signed int check_dir)
 
 		if (chest_ptr->food) {
 			/* There are FOOD PACKAGES in the chest */
-			get_item(ITEM_PROVIANTPAKET, 1, chest_ptr->food);
+			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, chest_ptr->food);
 		}
 	}
 }
@@ -631,7 +631,7 @@ void loot_multi_chest(uint8_t *content, char *msg)
 						add_party_money(i * 100L);
 
 					} else {
-						i = get_item(content[pos], 1, i);
+						i = give_new_item_to_group(content[pos], 1, i);
 					}
 
 					if (i == quantity) {

@@ -146,7 +146,7 @@ signed int hero_has_ingrendients(struct struct_hero *hero, const signed int reci
 
 	while (i >= 0) {
 		/* give all needed items back */
-		give_hero_new_item(hero, r_ptr->ingredients[i], 1, 1);
+		give_new_item_to_hero(hero, r_ptr->ingredients[i], 1, 1);
 		i--;
 	}
 
@@ -170,13 +170,13 @@ void hero_use_ingrendients(struct struct_hero *hero, const signed int recipe_id)
 		/* exchange wine- or brandybottles into glass flask */
 		if ((r_ptr->ingredients[i] == ITEM_WEINFLASCHE) || (r_ptr->ingredients[i] == ITEM_SCHNAPSFLASCHE))
 		{
-			give_hero_new_item(hero, ITEM_GLASFLASCHE, 1, 1);
+			give_new_item_to_hero(hero, ITEM_GLASFLASCHE, 1, 1);
 		}
 
 		/* exchange oil into bronze flask */
 		if (r_ptr->ingredients[i] == ITEM_OEL)
 		{
-			give_hero_new_item(hero, ITEM_BRONZEFLASCHE, 1, 1);
+			give_new_item_to_hero(hero, ITEM_BRONZEFLASCHE, 1, 1);
 		}
 
 		i++;
@@ -204,7 +204,7 @@ signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, cons
 	{
 		/* success */
 
-		give_hero_new_item(hero, r_ptr->outcome, 1, 1);
+		give_new_item_to_hero(hero, r_ptr->outcome, 1, 1);
 
 		sprintf(g_dtp2, get_ttx(731), hero->alias, (char*)GUI_names_grammar(1, r_ptr->outcome, 0));
 		GUI_output(g_dtp2);
@@ -213,7 +213,7 @@ signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, cons
 	} else {
 		/* failure */
 		/* give first ingredient back, which is always the bottle (glass or bronze). */
-		give_hero_new_item(hero, r_ptr->ingredients[0], 1, 1);
+		give_new_item_to_hero(hero, r_ptr->ingredients[0], 1, 1);
 
 		sprintf(g_dtp2,	get_ttx(732), hero->alias, (char*)GUI_names_grammar(2, r_ptr->outcome, 0));
 		GUI_output(g_dtp2);

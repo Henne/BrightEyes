@@ -332,7 +332,7 @@ signed int where_has_hero_incomplete_stack_of_item(struct struct_hero *hero, con
  *
  * \return	quantity of items the hero has taken
  */
-signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id, const signed int mode, const signed int quantity)
+signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item_id, const signed int mode, const signed int quantity)
 {
 	signed int inv_slot;
 	signed int retval;
@@ -621,7 +621,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
  * \param   quantity	number of items
  * \return  the number of given items
  */
-signed int get_item(signed int item_id, const signed int dummy, signed int quantity)
+signed int give_new_item_to_group(signed int item_id, const signed int dummy, signed int quantity)
 {
 	signed int i;
 	signed int retval = 0;
@@ -643,7 +643,7 @@ signed int get_item(signed int item_id, const signed int dummy, signed int quant
 
 			if ((hero_i->typus) && (hero_i->group_id == gs_active_group_id))
 			{
-				while ((quantity > 0) && (quant_hero = give_hero_new_item(hero_i, item_id, 0, quantity)) > 0) {
+				while ((quantity > 0) && (quant_hero = give_new_item_to_hero(hero_i, item_id, 0, quantity)) > 0) {
 					quantity -= quant_hero;
 					retval += quant_hero;
 				}
