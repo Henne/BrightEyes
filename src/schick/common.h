@@ -409,6 +409,11 @@ enum {
 	NUTRITION_TYPE_FOOD	= 1
 };
 
+enum {
+	HERB_POTION_TYPE_HERB_AND_POISON = 0,
+	HERB_POTION_TYPE_POTION = 1
+};
+
 // A location is a point of interest in a town or a travel event. //
 enum {
 	// https://github.com/shihan42/BrightEyesWiki/wiki/DAT-(Stadt)#feldinhaltliste
@@ -1154,7 +1159,7 @@ enum {
 	ITEM_PIKE				= 0x2c, /* pike */
 	ITEM_PROVIANTPAKET			= 0x2d, /* food package */
 	ITEM_FLOETE				= 0x2e, /* flute */
-	ITEM_ALCHEMIESET			= 0x2f, /* alchemy kit */
+	ITEM_ALCHIMIESET			= 0x2f, /* alchemy kit */
 	ITEM_HEMD				= 0x30, /* shirt */
 	ITEM_HOSE				= 0x31, /* trousers */
 	ITEM_SCHUHE				= 0x32, /* shoes */
@@ -1294,7 +1299,7 @@ enum {
 	ITEM_MAGISCHER_BROTBEUTEL		= 0xb8, /* magic breadbag */
 	ITEM_MAGISCHER_WASSERSCHLAUCH		= 0xb9, /* magic waterskin */
 	ITEM_REZEPT_FUER_HEILTRANK		= 0xba, /* recipe for heal potion */
-	ITEM_SCHREIBEN_VON_JARDA		= 0xbb, /* writing of Jarda */
+	ITEM_SCHREIBEN_VON_JADRA		= 0xbb, /* writing of Jarda */
 	ITEM_AMULETT__UNKNOWN_2			= 0xbc, /* amulet [TODO: which one?? it might be yellow, magic: protects from fire; found at Totenschiff] */
 	ITEM_LOBPREISUNGEN			= 0xbd, /* praises [found in Tempel des Namenlosen and in Piratenhoehle] */
 	ITEM_MITGLIEDERLISTE			= 0xbe, /* member list [found in Tempel des Namenlosen] */
@@ -1311,8 +1316,8 @@ enum {
 	ITEM_PLATINSCHLUESSEL			= 0xc9, /* platin key */
 	ITEM_REZEPT_FUER_GEGENGIFT		= 0xca, /* recipe for antivenom */
 	ITEM_REZEPT_FUER_HYLAILER_FEUER		= 0xcb, /* recipe for Hylailer Feuer */
-	ITEM_REZEPT_FUER_KRAFTELIXIER		= 0xcc, /* recipe for KK elixier */
-	ITEM_REZEPT_FUER_MUTELIXIER		= 0xcd, /* recipe for MU elixier */
+	ITEM_REZEPT_FUER_KRAFTELIXIER		= 0xcc, /* recipe for KK elixir */
+	ITEM_REZEPT_FUER_MUTELIXIER		= 0xcd, /* recipe for MU elixir */
 	ITEM_REZEPT_FUER_ZAUBERTRANK		= 0xce, /* recipe for AE potion */
 	ITEM_RING__BLUE				= 0xcf, /* ring [blue, not magic, found in Zwingfeste] */
 	ITEM_SCHLUESSEL__2			= 0xd0, /* key [2] */ /* TODO: Farbe? */

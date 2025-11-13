@@ -53,7 +53,7 @@ struct inventory {
 	/* describes an item in a single inventory slot of a hero */
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/CHR-NPC#inventarslots */
 	signed short item_id; /* +0 */
-	signed short quantity; /* +2 */ /* for stackable items: nr of items in stack; for items with magic charges: nr of charges left */
+	signed short quantity; /* +2 */ /* for stackable items: number of items in the stack; for items with magic charges: number of charges left */
 
 	struct inventory_flags flags; /* +4 */
 	signed char bf; /* +6 */ /* Bruchfaktor. -99 means unbreakable */
@@ -61,7 +61,7 @@ struct inventory {
 
 	signed char lighting_timer; /* +8 */ /* for burning torch/lantern: number of remaining time, unit: 15 minutes */
 	signed char poison_type; /* +9 */ /* for poisoned weapon: poison type according to enum POISON_TYPE (0-kein Gift, 1-Schurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemelgift, 7-Lotosgift, 8-Kukris, 9-Bannstaub, 10-Expurgicum, 11-Vomicum). */
-	signed char nr_poison_charges; /* +10 */ /* for poisoned weapon: number of remaining poison charges (= successful attacs). */
+	signed char num_poison_charges; /* +10 */ /* for poisoned weapon: number of remaining poison charges (= successful attacks). */
 	signed char unused1; /* +11 */
 
 	signed char unused2; /* +12 */

@@ -49,7 +49,7 @@ void spell_dunkelheit(void);
 /* 0x89 */
 void spell_erstarre(void);
 /* 0x8e */
-void spell_flimflam(void);
+void spell_flim_flam(void);
 /* 0x93 */
 void spell_schmelze(void);
 /* 0x98 */

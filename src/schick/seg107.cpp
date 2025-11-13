@@ -28,28 +28,28 @@
 namespace M302de {
 #endif
 
-static void (*g_use_special_item_handlers[14])(void) = {
+static void (*g_use_item_handlers[14])(void) = {
 	NULL,
-	item_arcano,
+	item_invoke_arcano_psychostabilils,
 	item_read_recipe,
 	item_read_document,
-	item_armatrutz,
-	item_flimflam,
-	item_debtbook,
-	item_orcdocument,
-	item_weapon_poison,
-	item_myastmatic,
-	item_hylailic,
-	item_magic_book,
-	item_brenne,
-	item_bag
+	item_invoke_armatrutz,
+	item_invoke_flim_flam,
+	item_read_schuldbuch,
+	item_read_orkdokument,
+	item_apply_weapon_poison,
+	item_use_miasthmaticum,
+	item_use_hylailer_feuer,
+	item_read_spellbook_heptagon,
+	item_ignite,
+	item_use_beutel
 }; // ds:0xaeb0
 
 int g_light_type = 0; // ds:0xaee8, 0 = none, 1 = torch, 2 = lantern
 
 static struct item_stats *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
 static signed int g_used_item_id;	// ds:0xe5ca, used_item ID
-static signed int g_used_item_pos;	// ds:0xe5cc, used_item position
+static signed int g_used_item_inv_slot;	// ds:0xe5cc, used_item position
 
 static struct struct_hero *g_itemuser;	// ds:0xe5ce, pointer to hero
 
@@ -60,22 +60,22 @@ static inline struct struct_hero* get_itemuser() { return g_itemuser; }
 #endif
 
 /* Borlandified and identical */
-void use_item(const signed int item_pos, const signed int hero_pos)
+void use_item(const signed int inv_slot, const signed int hero_pos)
 {
 	void (*func)(void);
 
 	/* set global variables for item usage */
-	g_used_item_pos = item_pos;
+	g_used_item_inv_slot = inv_slot;
 
 	g_itemuser = get_hero(hero_pos);
 
-	g_used_item_id = get_itemuser()->inventory[g_used_item_pos].item_id;
+	g_used_item_id = get_itemuser()->inventory[g_used_item_inv_slot].item_id;
 
 	g_used_item_desc = &g_itemsdat[g_used_item_id];
 
 	if (check_hero(get_itemuser())) {
 
-			if (!g_used_item_desc->flags.useable) {
+			if (!g_used_item_desc->flags.usable) {
 
 				/* item is not usable */
 
@@ -89,25 +89,25 @@ void use_item(const signed int item_pos, const signed int hero_pos)
 
 				GUI_output(g_dtp2);
 
-			} else if (g_used_item_desc->flags.herb_potion && !is_in_word_array(g_used_item_id, g_poison_potions)) {
+			} else if (g_used_item_desc->flags.herb_potion && !is_in_word_array(g_used_item_id, g_weapon_poisons)) {
 
 				/* don't consume poison */
-				consume(get_itemuser(), get_itemuser(), item_pos);
+				consume(get_itemuser(), get_itemuser(), inv_slot);
 
-			} else if (get_itemuser()->inventory[g_used_item_pos].quantity <= 0) {
+			} else if (get_itemuser()->inventory[g_used_item_inv_slot].quantity <= 0) {
 
 				/* magic item is used up */
 				GUI_output(get_ttx(638));
 			} else {
-				/* special item */
-				func = g_use_special_item_handlers[g_specialitems_table[g_used_item_desc->table_index].handler_id];
+				/* usable item, but not poison, herb, or potion */
+				func = g_use_item_handlers[g_usable_items_table[g_used_item_desc->table_index].handler_id];
 				func();
 			}
 	}
 }
 
 /* Borlandified and identical */
-void item_arcano(void)
+void item_invoke_arcano_psychostabilils(void)
 {
 	/* RING ID 165 */
 
@@ -128,7 +128,7 @@ void item_arcano(void)
 		spell_arcano();
 
 		/* decrement usage counter */
-		get_itemuser()->inventory[g_used_item_pos].quantity--;
+		get_itemuser()->inventory[g_used_item_inv_slot].quantity--;
 	}
 
 	if ((tx_index_bak != -1) && (tx_index_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
@@ -143,21 +143,20 @@ void item_read_recipe(void)
 {
 	char *str;
 
-	/* TODO: replace magic numbers */
 	switch (g_used_item_id) {
-		case 0xa7: str = get_ttx(639); break;
-		case 0xa9: str = get_ttx(640); break;
-		case 0xca: str = get_ttx(649); break;
-		case 0xcb: str = get_ttx(650); break;
-		case 0xcc: str = get_ttx(651); break;
-		case 0xcd: str = get_ttx(652); break;
-		case 0xce: str = get_ttx(653); break;
-		case 0xba: str = get_ttx(681); break;
-		case 0xf0: str = get_ttx(682); break;
-		case 0xf2: str = get_ttx(684); break;
-		case 0xf3: str = get_ttx(685); break;
-		case 0xf4: str = get_ttx(686); break;
-		case 0xf1: str = get_ttx(683); break;
+		case ITEM_REZEPT_FUER_EXPURGICUM: str = get_ttx(639); break;
+		case ITEM_REZEPT_FUER_VOMICUM: str = get_ttx(640); break;
+		case ITEM_REZEPT_FUER_GEGENGIFT: str = get_ttx(649); break;
+		case ITEM_REZEPT_FUER_HYLAILER_FEUER: str = get_ttx(650); break;
+		case ITEM_REZEPT_FUER_KRAFTELIXIER: str = get_ttx(651); break;
+		case ITEM_REZEPT_FUER_MUTELIXIER: str = get_ttx(652); break;
+		case ITEM_REZEPT_FUER_ZAUBERTRANK: str = get_ttx(653); break;
+		case ITEM_REZEPT_FUER_HEILTRANK: str = get_ttx(681); break;
+		case ITEM_REZEPT_FUER_STARKEN_HEILTRANK: str = get_ttx(682); break;
+		case ITEM_REZEPT_FUER_SCHLAFTRUNK: str = get_ttx(684); break;
+		case ITEM_REZEPT_FUER_STARKER_ZAUBERTRANK: str = get_ttx(685); break;
+		case ITEM_REZEPT_FUER_MIASTHMATICUM: str = get_ttx(686); break;
+		case ITEM_REZEPT_FUER_WUNDERKUR: str = get_ttx(683); break;
 	}
 
 	/* prepare message */
@@ -172,18 +171,17 @@ void item_read_document(void)
 	char *str;
 	signed int tw_bak;
 
-	/* TODO: replace magic numbers */
 	switch (g_used_item_id) {
 
-		case 0xaa: str = get_ttx(641); break;
-		case 0xbb: str = get_ttx(645); break;
-		case 0xbd: str = get_ttx(646); break;
-		case 0xbe: str = get_ttx(647); break;
-		case 0xc0: str = get_ttx(648); break;
-		case 0xde: str = get_ttx(654); break;
-		case 0xe0: str = get_ttx(655); break;
-		case 0xeb: str = get_ttx(657); break;
-		case 0xf7: str = get_ttx(759); break;
+		case ITEM_DOKUMENT__1: str = get_ttx(641); break;
+		case ITEM_SCHREIBEN_VON_JADRA: str = get_ttx(645); break;
+		case ITEM_LOBPREISUNGEN: str = get_ttx(646); break;
+		case ITEM_MITGLIEDERLISTE: str = get_ttx(647); break;
+		case ITEM_SEEKARTE: str = get_ttx(648); break;
+		case ITEM_BUCH__1: str = get_ttx(654); break;
+		case ITEM_BUCH__2: str = get_ttx(655); break;
+		case ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN: str = get_ttx(657); break;
+		case ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN: str = get_ttx(759); break;
 	}
 
 	tw_bak = g_textbox_width;
@@ -193,7 +191,7 @@ void item_read_document(void)
 }
 
 /* Borlandified and identical */
-void item_armatrutz(void)
+void item_invoke_armatrutz(void)
 {
 	/* ID 171 = ITEM_SILBERNER_STIRNREIF, 245 = ITEM_STIRNREIF__GREEN */
 
@@ -211,7 +209,7 @@ void item_armatrutz(void)
 		/* use it */
 		spell_armatrutz();
 		/* decrement usage counter */
-		get_itemuser()->inventory[g_used_item_pos].quantity--;
+		get_itemuser()->inventory[g_used_item_inv_slot].quantity--;
 
 		GUI_output(g_dtp2);
 	}
@@ -223,7 +221,7 @@ void item_armatrutz(void)
 }
 
 /* Borlandified and identical */
-void item_flimflam(void)
+void item_invoke_flim_flam(void)
 {
 	/* ID 174 = ITEM_AMULETT__GREEN */
 	const signed int tx_index_bak = g_tx_file_index;
@@ -233,10 +231,10 @@ void item_flimflam(void)
 
 	g_spelluser = get_itemuser();
 
-	spell_flimflam();
+	spell_flim_flam();
 
 	/* decrement usage counter */
-	get_itemuser()->inventory[g_used_item_pos].quantity--;
+	get_itemuser()->inventory[g_used_item_inv_slot].quantity--;
 
 	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
 
@@ -248,7 +246,7 @@ void item_flimflam(void)
 }
 
 /* Borlandified and identical */
-void item_debtbook(void)
+void item_read_schuldbuch(void)
 {
 	/* DEBTBOOK, ID 176 */
 
@@ -268,7 +266,7 @@ void item_debtbook(void)
 }
 
 /* Borlandified and identical */
-void item_orcdocument(void)
+void item_read_orkdokument(void)
 {
 	/* ORCDOCUMENT, ID 179 */
 
@@ -288,7 +286,7 @@ void item_orcdocument(void)
 }
 
 /* Borlandified and identical */
-void item_weapon_poison(void)
+void item_apply_weapon_poison(void)
 {
 	/*	WEAPON POISON, EXPURGICUM, VOMICUM
 		ID 55-59, 141-144, 166, 168 */
@@ -324,7 +322,7 @@ void item_weapon_poison(void)
 		case ITEM_SHURINKNOLLEKNOLLENGIFT: {
 			/* SHURIN-BULB POISON / SHURINKNOLLENGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SHURINKNOLLENGIFT;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SHURINKNOLLEKNOLLENGIFT), 1);
 
@@ -334,7 +332,7 @@ void item_weapon_poison(void)
 		case ITEM_ARAXGIFT: {
 			/* ARAX POISON / ARAXGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ARAX;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ARAXGIFT), 1);
 
@@ -344,7 +342,7 @@ void item_weapon_poison(void)
 		case ITEM_ANGSTGIFT: {
 			/* FEAR POISON / ANGSTGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ANGSTGIFT;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ANGSTGIFT), 1);
 
@@ -354,7 +352,7 @@ void item_weapon_poison(void)
 		case ITEM_SCHLAFGIFT: {
 			/* SLEPPING POISON / SCHALFGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SCHLAFGIFT;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SCHLAFGIFT), 1);
 
@@ -364,7 +362,7 @@ void item_weapon_poison(void)
 		case ITEM_GOLDLEIM: {
 			/* GOLDEN GLUE / GOLDLEIM */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_GOLDLEIM;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_GOLDLEIM), 1);
 
@@ -374,7 +372,7 @@ void item_weapon_poison(void)
 		case ITEM_LOTUSGIFT: {
 			/* LOTUS POISON / LOTUSGIFT */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_LOTUSGIFT;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_LOTUSGIFT), 1);
 
@@ -384,7 +382,7 @@ void item_weapon_poison(void)
 		case ITEM_KUKRIS: {
 			/* KUKRIS */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_KUKRIS;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KUKRIS), 1);
 
@@ -394,7 +392,7 @@ void item_weapon_poison(void)
 		case ITEM_BANNSTAUB: {
 			/* BANE DUST / BANNSTAUB */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_BANNSTAUB;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BANNSTAUB), 1);
 
@@ -403,7 +401,7 @@ void item_weapon_poison(void)
 		}
 		case ITEM_KROETENSCHEMELGIFT: {
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_KROETENSCHEMEL;
-			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges = 5;
+			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KROETENSCHEMELGIFT), 1);
 
@@ -424,7 +422,7 @@ void item_weapon_poison(void)
 	GUI_output(g_dtp2);
 }
 
-void item_myastmatic(void)
+void item_use_miasthmaticum(void)
 {
 	/* MYASTMATIC, ID 238 */
 
@@ -434,7 +432,7 @@ void item_myastmatic(void)
 	}
 }
 
-void item_hylailic(void)
+void item_use_hylailer_feuer(void)
 {
 	/* HYLAILIC FIRE, ID 239 */
 
@@ -444,7 +442,7 @@ void item_hylailic(void)
 	}
 }
 
-void item_magic_book(void)
+void item_read_spellbook_heptagon(void)
 {
 	/* BOOK, ID 246 */
 
@@ -459,7 +457,7 @@ void item_magic_book(void)
 }
 
 /* Borlandified and identical */
-void item_brenne(void)
+void item_ignite(void)
 {
 	/*	LANTERN, TORCH, TINDERBOX, LANTERN
 		ID 25, 65, 85, 249 */
@@ -528,7 +526,7 @@ void item_brenne(void)
 		}
 	}
 
-	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
+	if ((tx_index_bak != -1) && (tx_index_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
 		/* need to reload buffer1 */
 		load_tx(tx_index_bak);
 	}
@@ -537,7 +535,7 @@ void item_brenne(void)
 }
 
 /* Borlandified and identical */
-void item_bag(void)
+void item_use_beutel(void)
 {
 	/* MAGIC BREADBAG, BAG: ID 184, 221 */
 
