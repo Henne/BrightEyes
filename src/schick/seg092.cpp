@@ -544,7 +544,7 @@ void use_key_on_chest(struct struct_chest* chest)
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
-	if ((key_pos = get_item_pos(hero, chest->key)) != -1) {
+	if ((key_pos = inv_slot_of_item(hero, chest->key)) != -1) {
 
 		if (!hero->inventory[key_pos].flags.broken) {
 

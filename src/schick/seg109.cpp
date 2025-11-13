@@ -785,15 +785,15 @@ void TRV_barrier(const signed int text_start)
 
 					add_hero_ap_all(10);
 
-					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
+					i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
 					if (i == -1) {
-						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
+						i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
 					}
 					drop_item(hero, i, 1);
 
-					i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
+					i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
 					if (i == -1) {
-						i = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
+						i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
 					}
 					drop_item(hero, i, 1);
 

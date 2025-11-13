@@ -354,7 +354,7 @@ void tevent_137(void)
 					/* each hero gets his first WATERSKIN filled */
 					/* potential Original-Bug: Does it make sense that the further WATERSKINs are not filled? */
 
-					if ((item_pos = get_item_pos(hero, ITEM_WASSERSCHLAUCH)) != -1)
+					if ((item_pos = inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH)) != -1)
 					{
 						/* fill waterskin */
 						hero->inventory[item_pos].flags.half_empty = hero->inventory[item_pos].flags.empty = 0;

@@ -380,7 +380,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
 			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
 			give_hero_new_item(hero, ITEM_DOLCH, 1, 1); /* TODO: what if no free knapsack slot? */
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DOLCH), hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_DOLCH), hero);
 
 		} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
 
@@ -391,7 +391,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			/* drop the KUKRISMENGBILAR and equip a normal MENGBILAR  */
 			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
 			give_hero_new_item(hero, ITEM_MENGBILAR, 1, 1); /* TODO: what if no free knapsack slot? */
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_MENGBILAR), hero);
 
 		} else if ((right_hand == ITEM_SILBERSTREITKOLBEN) && (enemy_gfx_id == 0x1c)) {
 
@@ -521,7 +521,7 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 
 		/* get position of Totenkopfguertel/Skullbelt */
 
-		if ( ((pos = get_item_pos(hero, ITEM_TOTENKOPFGUERTEL)) != -1) && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c))) {
+		if ( ((pos = inv_slot_of_item(hero, ITEM_TOTENKOPFGUERTEL)) != -1) && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c))) {
 
 			/* no damage for the hero who has it */
 			damage = 0;

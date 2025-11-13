@@ -585,7 +585,7 @@ void THO_academy(void)
 					} else {
 
 						hero = get_hero(get_first_hero_with_item(item_id));
-						item_pos = get_item_pos(hero, item_id);
+						item_pos = inv_slot_of_item(hero, item_id);
 
 						if (drop_item(hero, item_pos, 1)) {
 
@@ -656,7 +656,7 @@ void THO_academy(void)
 					} else {
 
 						hero = get_hero(get_first_hero_with_item(item_id));
-						item_pos = get_item_pos(hero, item_id);
+						item_pos = inv_slot_of_item(hero, item_id);
 
 						if (drop_item(hero, item_pos, 1)) {
 

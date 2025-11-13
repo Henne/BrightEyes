@@ -571,14 +571,14 @@ void spell_brenne(void)
 	g_spell_special_aecost = 0;
 
 	if (g_light_type == LIGHTING_TORCH) {
-		torch_pos = get_item_pos(get_spelluser(), ITEM_FACKEL__UNLIT);
+		torch_pos = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
 	} else {
 		if (g_light_type == LIGHTING_LANTERN) {
 		} else {
-			torch_pos = get_item_pos(get_spelluser(), ITEM_FACKEL__UNLIT);
+			torch_pos = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
 		}
 
-		lantern_pos = get_item_pos(get_spelluser(), ITEM_LATERNE__UNLIT);
+		lantern_pos = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
 	}
 
 	if (torch_pos != -1) {
@@ -625,7 +625,7 @@ void spell_brenne(void)
 	} else if (lantern_pos != -1) {
 
 		/* get position of oil */
-		oil_pos = get_item_pos(get_spelluser(), ITEM_OEL);
+		oil_pos = inv_slot_of_item(get_spelluser(), ITEM_OEL);
 
 		if (oil_pos != -1) {
 

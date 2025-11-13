@@ -305,7 +305,7 @@ void item_apply_weapon_poison(void)
 			/* VOMICUM */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.poison_vomicum = 1;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_VOMICUM), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_VOMICUM), 1);
 
 			bottle_id = ITEM_BRONZEFLASCHE;
 			break;
@@ -314,7 +314,7 @@ void item_apply_weapon_poison(void)
 			/* EXPURGICUM */
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.poison_expurgicum = 1;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_EXPURGICUM), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_EXPURGICUM), 1);
 
 			bottle_id = ITEM_BRONZEFLASCHE;
 			break;
@@ -324,7 +324,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SHURINKNOLLENGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SHURINKNOLLEKNOLLENGIFT), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_SHURINKNOLLEKNOLLENGIFT), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -334,7 +334,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ARAX;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ARAXGIFT), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_ARAXGIFT), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -344,7 +344,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ANGSTGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_ANGSTGIFT), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_ANGSTGIFT), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -354,7 +354,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SCHLAFGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_SCHLAFGIFT), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_SCHLAFGIFT), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -364,7 +364,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_GOLDLEIM;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_GOLDLEIM), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_GOLDLEIM), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -374,7 +374,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_LOTUSGIFT;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_LOTUSGIFT), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_LOTUSGIFT), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -384,7 +384,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_KUKRIS;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KUKRIS), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_KUKRIS), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -394,7 +394,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_BANNSTAUB;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BANNSTAUB), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_BANNSTAUB), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -403,7 +403,7 @@ void item_apply_weapon_poison(void)
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_KROETENSCHEMEL;
 			get_itemuser()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
-			drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_KROETENSCHEMELGIFT), 1);
+			drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_KROETENSCHEMELGIFT), 1);
 
 			bottle_id = ITEM_GLASFLASCHE;
 			break;
@@ -453,7 +453,7 @@ void item_read_spellbook_heptagon(void)
 	get_itemuser()->spells[SP_HEPTAGON_UND_KROETENEI] += 2;
 
 	/* drop the book */
-	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BUCH__HEPTAGON), 1);
+	drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_BUCH__HEPTAGON), 1);
 }
 
 /* Borlandified and identical */
@@ -479,11 +479,11 @@ void item_ignite(void)
 #endif
 
 		/* look for oil at the spelluser() */
-		pos = get_item_pos(get_spelluser(), ITEM_OEL);
+		pos = inv_slot_of_item(get_spelluser(), ITEM_OEL);
 
 		if (pos != -1) {
 			/* look for the burning lantern at the spelluser() ??? */
-			refill_pos = get_item_pos(get_spelluser(), ITEM_LATERNE__LIT);
+			refill_pos = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__LIT);
 
 			/* reset the burning time of the lantern */
 			get_itemuser()->inventory[refill_pos].lighting_timer = 100;
@@ -502,7 +502,7 @@ void item_ignite(void)
 		}
 	} else {
 
-		if (get_item_pos(get_itemuser(), ITEM_ZUNDERKAESTCHEN) == -1) {
+		if (inv_slot_of_item(get_itemuser(), ITEM_ZUNDERKAESTCHEN) == -1) {
 			/* No tinderbox */
 			sprintf(g_dtp2, get_tx(122), get_itemuser()->alias);
 		} else {
@@ -559,7 +559,7 @@ void item_use_beutel(void)
 	GUI_output(get_ttx(775));
 
 	/* drop the BAG */
-	drop_item(get_itemuser(), get_item_pos(get_itemuser(), ITEM_BEUTEL), 1);
+	drop_item(get_itemuser(), inv_slot_of_item(get_itemuser(), ITEM_BEUTEL), 1);
 }
 
 #if !defined(__BORLANDC__)

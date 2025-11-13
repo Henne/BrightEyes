@@ -370,7 +370,7 @@ signed int DNG10_handler(void)
 			if ((answer = get_first_hero_with_item(ITEM_PLATINSCHLUESSEL)) != -1)
 			{
 				hero = get_hero(answer);
-				result = get_item_pos(hero, ITEM_PLATINSCHLUESSEL);
+				result = inv_slot_of_item(hero, ITEM_PLATINSCHLUESSEL);
 				drop_item(hero, result, 1);
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(36), 0);
