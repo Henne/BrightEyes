@@ -291,22 +291,22 @@ signed int has_hero_equipped(struct struct_hero *hero, const signed int item_id)
  *
  * \param   hero        the hero
  * \param   item        the item
- * \return              the postition of a non-full (<99) item stack or -1 if
+ * \return              the inventory slot of a non-full (<99) item stack or -1 if
  * the hero doesn't own this item or has only full stacks of them.
  */
 //static
 signed int has_hero_stacked(struct struct_hero *hero, const signed int item_id)
 {
-	signed int i;
+	signed int inv_slot;
 
-	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
+	for (inv_slot = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++) {
 
 		/* has the hero the item */
 		/* is the number of items < 99 */
 		/* REMARK: should check if item is stackable */
-		if ((hero->inventory[i].item_id == item_id) && (hero->inventory[i].quantity < 99)) {
+		if ((hero->inventory[inv_slot].item_id == item_id) && (hero->inventory[inv_slot].quantity < 99)) {
 
-			return i;
+			return inv_slot;
 		}
 	}
 
@@ -328,17 +328,20 @@ signed int has_hero_stacked(struct struct_hero *hero, const signed int item_id)
  */
 signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id, const signed int mode, const signed int quantity)
 {
-	signed int l1;
+	signed int inv_slot;
 	signed int retval;
 	signed int done;
 	struct item_stats *item_p;
-	signed int si, di;
+	signed int quantity_taken, inv_slot_2;
 
-	si = quantity;
+	quantity_taken = quantity;
 
 	retval = 0;
 
-	/* check if hero can carry that item */
+	/* check if hero can carry that item.
+	 *
+	 * The following check doesn't take into account the weight of the new item, which is a bit inconsistent.
+	 * Might be a future FEATURE_MOD to fix this. Then, one has to consider also taking a partial stack, if the full stack is too heavy. */
 	if ((mode != 2) && (hero->attrib[ATTRIB_KK].current * 100 <= hero->load)) {
 
 		if (mode != 0) {
@@ -351,22 +354,23 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 		item_p = &g_itemsdat[item_id];
 
 		/* hero has a non-full stack of this item */
-		if (item_p->flags.stackable && ((l1 = has_hero_stacked(hero, item_id)) != -1)) {
+		if (item_p->flags.stackable && ((inv_slot = has_hero_stacked(hero, item_id)) != -1)) {
 
 
 			/* check for space on existing stack */
-			if (hero->inventory[l1].quantity + si > 99) {
+			if (hero->inventory[inv_slot].quantity + quantity_taken > 99) {
 
-				si = 99 - hero->inventory[l1].quantity;
+				quantity_taken = 99 - hero->inventory[inv_slot].quantity;
 			}
 
 			/* add items to stack */
-			hero->inventory[l1].quantity += si;
+			hero->inventory[inv_slot].quantity += quantity_taken;
 
 			/* add weight */
-			hero->load += item_p->weight * si;
+			hero->load += item_p->weight * quantity_taken;
 
-			retval = si;
+			retval = quantity_taken;
+			/* Potential FEATURE_MOD: Consider opening a new stack if there are items left. */
 		} else {
 
 			/* Original-Bug: may lead to problems when the item counter is broken */
@@ -379,29 +383,29 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 					if (hero->num_inv_slots_used < NR_HERO_INVENTORY_SLOTS) {
 
 						/* look for a free place : tricky */
-						di = HERO_INVENTORY_SLOT_KNAPSACK_1 - 1;
-						while ((hero->inventory[++di].item_id != ITEM_NONE) && (di < NR_HERO_INVENTORY_SLOTS));
+						inv_slot_2 = HERO_INVENTORY_SLOT_KNAPSACK_1 - 1;
+						while ((hero->inventory[++inv_slot_2].item_id != ITEM_NONE) && (inv_slot_2 < NR_HERO_INVENTORY_SLOTS));
 
-						if (di < NR_HERO_INVENTORY_SLOTS) {
+						if (inv_slot_2 < NR_HERO_INVENTORY_SLOTS) {
 
-							if (si > 99) {
-								si = 99;
+							if (quantity_taken > 99) {
+								quantity_taken = 99;
 							}
 
 							/* increment item counter */
 							hero->num_inv_slots_used++;
 
 							/* write item id */
-							hero->inventory[di].item_id = item_id;
+							hero->inventory[inv_slot_2].item_id = item_id;
 
-							hero->inventory[di].quantity =
-								(item_p->flags.stackable ? si : (item_p->flags.useable ?
-								g_specialitems_table[item_p->table_index].quantity : 0));
+							hero->inventory[inv_slot_2].quantity =
+								(item_p->flags.stackable ? quantity_taken : (item_p->flags.usable ?
+								g_usable_items_table[item_p->table_index].quantity : 0));
 
 							/* set magical flag */
 							if (item_p->magic) {
 
-								hero->inventory[di].flags.magic = 1;
+								hero->inventory[inv_slot_2].flags.magic = 1;
 
 #if !defined(__BORLANDC__)
 								D1_INFO("%s hat soeben einen magischen Gegenstand erhalten: %s\n",
@@ -411,25 +415,25 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 
 							/* set breakfactor */
 							if (item_p->flags.weapon) {
-								hero->inventory[di].bf = g_weapons_table[item_p->table_index].bf;
+								hero->inventory[inv_slot_2].bf = g_weapons_table[item_p->table_index].bf;
 							}
 
 							/* adjust weight */
 							if (item_p->flags.stackable) {
 
 								/* add stackable items weight */
-								hero->load += item_p->weight * si;
-								retval = si;
-								si = 0;
+								hero->load += item_p->weight * quantity_taken;
+								retval = quantity_taken;
+								quantity_taken = 0;
 							} else {
-								/* add single item weight */
+								/* add quantity_takenngle item weight */
 								hero->load += item_p->weight;
-								si--;
+								quantity_taken--;
 								retval++;
 							}
 
 							/* all items are distributed */
-							if (si == 0)
+							if (quantity_taken == 0)
 								done = 1;
 
 							/* special items */

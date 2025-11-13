@@ -433,9 +433,9 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 				damage += 10 * g_poison_prices[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type];
 			}
 
-			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges--;
+			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges--;
 
-			if (!hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].nr_poison_charges) {
+			if (!hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges) {
 				hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_NONE;
 			}
 		}

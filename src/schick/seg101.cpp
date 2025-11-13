@@ -681,7 +681,7 @@ void spell_erstarre(void)
 #endif
 }
 
-void spell_flimflam(void)
+void spell_flim_flam(void)
 {
 	/* set flim flam duration (level + 3) hours */
 	gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] = (int32_t)(get_spelluser()->level + 3) * HOURS(1);

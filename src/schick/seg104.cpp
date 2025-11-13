@@ -240,7 +240,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 
 	retval = 1;
 	recipes = 0;
-	item_pos = get_item_pos(hero, ITEM_ALCHEMIESET);
+	item_pos = get_item_pos(hero, ITEM_ALCHIMIESET);
 
 	if (item_pos == -1) {
 

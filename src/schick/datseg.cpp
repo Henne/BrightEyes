@@ -825,24 +825,25 @@ struct armor_descr g_armors_table[25] = {
 	{-1, 0 }
 }; // ds:0x0877
 
-const struct specialitem_descr g_specialitems_table[14] = {
+const struct usable_item_descr g_usable_items_table[14] = {
 	{ 0, 0,  0 }, /*  0 <- DUMMY */
-	{ 2, 5,  1 }, /*  1 <- arcano */
-	{ 0, 1,  2 }, /*  2 <- read_recipe */
-	{ 0, 1,  3 }, /*  3 <- read_document */
-	{ 2, 3,  4 }, /*  4 <- armatrutz */
-	{ 0, 6,  5 }, /*  5 <- flim_flam */
-	{ 0, 1,  6 }, /*  6 <- debtbook */
-	{ 0, 1,  7 }, /*  7 <- orcdocument */
-	{ 0, 1,  8 }, /*  8 <- weapon_poison */
-	{ 0, 1,  9 }, /*  9 <- myastmatic */
-	{ 0, 1, 10 }, /* 10 <- hylailic */
-	{ 0, 1, 11 }, /* 11 <- magic_book */
-	{ 0, 1, 12 }, /* 12 <- brenne */
-	{ 0, 1, 13 }  /* 13 <- bag */
+	{ 2, 5,  1 }, /*  1 <- item_invoke_arcano_psychostabilils */
+	{ 0, 1,  2 }, /*  2 <- item_read_recipe */
+	{ 0, 1,  3 }, /*  3 <- item_read_document */
+	{ 2, 3,  4 }, /*  4 <- item_invoke_armatrutz */
+	{ 0, 6,  5 }, /*  5 <- item_invoke_flim_flam */
+	{ 0, 1,  6 }, /*  6 <- item_read_schuldbuch */
+	{ 0, 1,  7 }, /*  7 <- item_read_orkdokument */
+	{ 0, 1,  8 }, /*  8 <- item_apply_weapon_poison */
+	{ 0, 1,  9 }, /*  9 <- item_use_miasthmaticum */
+	{ 0, 1, 10 }, /* 10 <- item_use_hylailer_feuer */
+	{ 0, 1, 11 }, /* 11 <- item_use_spellbook_heptagon */
+	{ 0, 1, 12 }, /* 12 <- item_ignite */
+	{ 0, 1, 13 }  /* 13 <- item_use_beutel */
 }; // ds:0x08a9
 
-signed short g_poison_potions[10] = {
+signed short g_weapon_poisons[10] = {
+	/* poisons, can be applied to a weapon */
 	ITEM_SHURINKNOLLEKNOLLENGIFT,
 	ITEM_ARAXGIFT,
 	ITEM_ANGSTGIFT,
@@ -1279,7 +1280,7 @@ void (*g_spell_handlers[86])(void) = {
 	spell_claudibus,
 	spell_dunkelheit,
 	spell_erstarre,
-	spell_flimflam,
+	spell_flim_flam,
 	spell_schmelze,
 	spell_silentium,
 	spell_sturmgebr
@@ -2366,8 +2367,8 @@ uint8_t  gs_dng06_fight19_flag = 0; // ds:0x3cae
 uint8_t  gs_dng05_proviant_flag = 0; // ds:0x3caf
 uint8_t  gs_dng05_bats_flag = 0; // ds:0x3cb0
 uint8_t  gs_dng05_god_flag = 0; // ds:0x3cb1
-uint8_t  gs_dng07_muelixier_flag = 0; // ds:0x3cb2
-uint8_t  gs_dng07_antimuelixier_flag = 0; // ds:0x3cb3
+uint8_t  gs_dng07_mu_elixir_flag = 0; // ds:0x3cb2
+uint8_t  gs_dng07_anti_mu_elixir_flag = 0; // ds:0x3cb3
 uint8_t  gs_dng07_flicker_flag = 0; // ds:0x3cb4
 uint8_t  gs_dng07_poison_flag = 0; // ds:0x3cb5
 int32_t gs_dng07_poison_timer = 0; // ds:0x3cb6
@@ -2768,7 +2769,7 @@ uint8_t  gs_dng02_chest06_content[4] = {
 	0xff
 }; // ds:0x4041
 uint8_t  gs_dng02_chest02_content[8] = {
-	ITEM_ALCHEMIESET,
+	ITEM_ALCHIMIESET,
 	ITEM_KK_ELIXIER,
 	ITEM_HEILTRANK,
 	ITEM_HEILTRANK,
@@ -2778,7 +2779,7 @@ uint8_t  gs_dng02_chest02_content[8] = {
 	0xff
 }; // ds:0x4045
 uint8_t  gs_dng02_chest03_content[8] = {
-	ITEM_ALCHEMIESET,
+	ITEM_ALCHIMIESET,
 	ITEM_CH_ELIXIER,
 	ITEM_WUNDERKUR,
 	ITEM_GEGENGIFT,
@@ -2788,7 +2789,7 @@ uint8_t  gs_dng02_chest03_content[8] = {
 	0xff
 }; // ds:0x404d
 uint8_t  gs_dng02_chest05_content[8] = {
-	ITEM_ALCHEMIESET,
+	ITEM_ALCHIMIESET,
 	ITEM_CH_ELIXIER,
 	ITEM_WUNDERKUR,
 	ITEM_GEGENGIFT,
@@ -3221,7 +3222,7 @@ uint8_t  gs_dng11_chest12[13] = {
 uint8_t  gs_dng11_chest13[6] = {
 	ITEM_HEILTRANK,
 	ITEM_KL_ELIXIER,
-	ITEM_ALCHEMIESET,
+	ITEM_ALCHIMIESET,
 	ITEM_REZEPT_FUER_HYLAILER_FEUER,
 	ITEM_SCHWERT,
 	0xff

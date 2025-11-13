@@ -240,7 +240,7 @@ struct armor_descr {
 	int8_t be; /* Behinderung */
 };
 
-struct specialitem_descr {
+struct usable_item_descr {
 	int8_t unkn1;
 	int8_t quantity;
 	int8_t handler_id;
@@ -519,13 +519,15 @@ struct item_flags {
 	/* item + 0x02 */
 	unsigned short armor		:1;	/* bit 0: armor */
 	unsigned short weapon		:1;	/* bit 1: weapon */
-	unsigned short useable	 	:1;	/* bit 2: useable */
-	unsigned short food		:1;	/* bit 3: nutrition */
+	unsigned short usable	 	:1;	/* bit 2: usable item */
+	unsigned short nutrition	:1;	/* bit 3: nutrition */
 
 	unsigned short stackable	:1;	/* bit 4: stackable */
-	unsigned short herb_potion	:1;	/* bit 5: poison/herb/potion */
-	unsigned short undropable	:1;	/* bit 6: personal item (undropable) */
-	unsigned short bit7		:1;	/* bit 7: not usable by "use object"?? */
+	unsigned short herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
+	unsigned short undropable	:1;	/* bit 6: personal item (cannot be dropped) */
+	unsigned short dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
+						 * But in is set for various items in ITEMS.DAT:
+						 * It seems that bit 7 is set for an item if and only if no other bit is set. */
 };
 
 struct item_stats {
@@ -533,12 +535,24 @@ struct item_stats {
 	/* structure of the entries of ITEMS.DAT */
 	int16_t gfx;
 	struct item_flags flags;/* bitfield */
-	int8_t subtype;		/* meaning depends on item type set in ITEM_STATS_FLAGS. weapon -> WEAPON_TYPE_..., armor -> ARMOR_TYPE_..., nutrition -> NUTRITION_TYPE... */
+	int8_t subtype;
+		/* meaning depends on item type set in flags.
+		 * flags.weapon -> WEAPON_TYPE_...,
+		 * flags.armor -> ARMOR_TYPE_...,
+		 * flags.nutrition -> NUTRITION_TYPE...
+		 * flags.herb_potion -> HERB_POTION_TYPE...
+		 */
 	int8_t table_index;
+		/* meaning depends on item type set in flags.
+		 * flags.armor -> index in g_armors_table
+		 * flags.weapon -> index in g_weapons_table
+		 * flags.nutrition -> number of nutrition units (percentage value)
+		 * flags.usable -> index in g_usable_items_table
+		 */
 	int16_t weight;		/* weight in ounces */
 	int8_t price_unit;	/* 1: Heller / 10: Silberstücke / 100: Dukaten */
-	int16_t price;		/* unit is ITEM_STATS_PRICE_UNIT. So the price in Heller is ITEM_STATS_PRICE_UNIT * ITEM_STATS_PRICE */
-	int8_t commonness;
+	int16_t price;		/* base unit is price_unit. So the price in Heller is price_unit * price */
+	int8_t commonness;	/* which shops do offer this item? */
 	int8_t magic;		/* 0: not magic / 1: magic */
 };
 
@@ -767,8 +781,8 @@ extern signed short* g_forbidden_item_ids_table[12];			// ds:0x0638; seg048, seg
 extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
 extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
 extern struct armor_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
-extern const struct specialitem_descr g_specialitems_table[14];		// ds:0x08a9; seg105, seg107
-extern signed short g_poison_potions[10];				// ds:0x08d3; seg107, seg108
+extern const struct usable_item_descr g_usable_items_table[14];		// ds:0x08a9; seg105, seg107
+extern signed short g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
 extern signed short g_herbs_toxic[5];					// ds:0x08e7; seg108
 extern signed short g_herbs_uneatable[7];				// ds:0x08f1; seg108
 extern signed short g_elixir_potions[8];				// ds:0x08ff; seg108
@@ -1061,8 +1075,8 @@ extern uint8_t  gs_dng06_fight19_flag;		//ds:0x3cae; seg081
 extern uint8_t  gs_dng05_proviant_flag;		//ds:0x3caf; seg080
 extern uint8_t  gs_dng05_bats_flag;		//ds:0x3cb0; seg080
 extern uint8_t  gs_dng05_god_flag;		//ds:0x3cb1; seg080
-extern uint8_t  gs_dng07_muelixier_flag;		//ds:0x3cb2; seg082
-extern uint8_t  gs_dng07_antimuelixier_flag;	//ds:0x3cb3; seg082
+extern uint8_t  gs_dng07_mu_elixir_flag;		//ds:0x3cb2; seg082
+extern uint8_t  gs_dng07_anti_mu_elixir_flag;	//ds:0x3cb3; seg082
 extern uint8_t  gs_dng07_flicker_flag;		//ds:0x3cb4; seg082
 extern uint8_t  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern int32_t gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082

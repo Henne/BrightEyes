@@ -805,7 +805,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 
 	if (p_item->flags.herb_potion) {
 		usecase = 1;
-	} else if (!p_item->flags.useable || (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].quantity == 0)) {
+	} else if (!p_item->flags.usable || (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].quantity == 0)) {
 		usecase = 0;
 	} else {
 		usecase = 2;

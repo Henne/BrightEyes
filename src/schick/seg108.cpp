@@ -29,14 +29,14 @@ namespace M302de {
  *
  * \param   owner       the owner
  * \param   consumer    the consumer
- * \param   pos         the position in the inventory of the owner
+ * \param   inv_slot    the inventory slot of the owner
  */
-void consume(struct struct_hero *owner, struct struct_hero *consumer, const signed int pos)
+void consume(struct struct_hero *owner, struct struct_hero *consumer, const signed int inv_slot)
 {
-	struct item_stats *item_p;
+	struct item_stats *item_desc;
 	signed int item_id;
 
-	signed int id_bad_elex;
+	signed int bad_elixir_item_id;
 	signed int le_diff;
 
 	signed int disease;
@@ -54,28 +54,29 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	consumer_idx = get_hero_index(consumer);
 
 	/* get item id */
-	item_id = owner->inventory[pos].item_id;
+	item_id = owner->inventory[inv_slot].item_id;
 
 	/* get pointer to ITEMS.DAT */
-	item_p = &g_itemsdat[item_id];
+	item_desc = &g_itemsdat[item_id];
 
-	/* is food */
-	if (item_p->flags.food) {
+	/* is nutrition */
+	if (item_desc->flags.nutrition) {
 
-		if (item_p->subtype == 1) {
+		if (item_desc->subtype == NUTRITION_TYPE_FOOD) {
 			/* eating */
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->hunger - item_p->table_index;
+				int diff = consumer->hunger - item_desc->table_index;
+				/* note that, for nutrition, table_index contains the nutrition value */
 
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
 					consumer->alias, GUI_name_singular(get_itemname(item_id)),
-					item_p->table_index,
+					item_desc->table_index,
 					consumer->hunger, (diff >= 0) ? diff : 0);
 #endif
 
 			/* subtract from hunger value */
-			consumer->hunger -= item_p->table_index;
+			consumer->hunger -= item_desc->table_index;
 
 			/* adjust hunger value */
 			if (consumer->hunger < 0) {
@@ -88,22 +89,22 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 			}
 
 			/* drop one unit of that item */
-			drop_item(owner, pos, 1);
+			drop_item(owner, inv_slot, 1);
 		} else {
 			/* drinking */
 
 			/* check if item is not empty */
-			if (!owner->inventory[pos].flags.empty) {
+			if (!owner->inventory[inv_slot].flags.empty) {
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->thirst - item_p->table_index;
+				int diff = consumer->thirst - item_desc->table_index;
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item_id)), item_p->table_index,
+					consumer->alias, GUI_name_singular(get_itemname(item_id)), item_desc->table_index,
 					consumer->thirst, (diff >= 0) ? diff : 0);
 #endif
 
 				/* subtract from thirst value */
-				consumer->thirst -= item_p->table_index;
+				consumer->thirst -= item_desc->table_index;
 
 				/* adjust thirst value */
 				if (consumer->thirst < 0) {
@@ -119,19 +120,19 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				if (item_id == ITEM_WASSERSCHLAUCH) {
 					/* water */
 
-					if (owner->inventory[pos].flags.half_empty) {
-						owner->inventory[pos].flags.empty = 1;
+					if (owner->inventory[inv_slot].flags.half_empty) {
+						owner->inventory[inv_slot].flags.empty = 1;
 					} else {
-						owner->inventory[pos].flags.half_empty = 1;
+						owner->inventory[inv_slot].flags.half_empty = 1;
 					}
 
 				} else if (item_id == ITEM_SCHNAPSFLASCHE || item_id == ITEM_WEINFLASCHE) {
 					/* wine or snaps */
 					hero_get_drunken(consumer);
-					drop_item(owner, pos, 1);
+					drop_item(owner, inv_slot, 1);
 				} else {
 					/* everything else: Beer */
-					drop_item(owner, pos, 1);
+					drop_item(owner, inv_slot, 1);
 
 					/* That does not happen */
 					if (item_id != ITEM_BIER) {
@@ -147,15 +148,15 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 		g_request_refresh = 1;
 
-	} else if (item_p->flags.herb_potion) {
+	} else if (item_desc->flags.herb_potion) {
 
-		if (item_p->subtype == 0) {
+		if (item_desc->subtype == HERB_POTION_TYPE_HERB_AND_POISON) {
 
 			if (is_in_word_array(item_id, g_herbs_uneatable)) {
 
 				GUI_output(get_ttx(499));
 
-			} else if (is_in_word_array(item_id, g_herbs_toxic) || is_in_word_array(item_id, g_poison_potions)) {
+			} else if (is_in_word_array(item_id, g_herbs_toxic) || is_in_word_array(item_id, g_weapon_poisons)) {
 				/* herbs and poisons */
 				GUI_output(get_ttx(500));
 
@@ -163,7 +164,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* consume with effects */
 
 				/* drop one entity */
-				drop_item(owner, pos, 1);
+				drop_item(owner, inv_slot, 1);
 
 				/* terminate output string */
 				*g_dtp2 = '\0';
@@ -271,15 +272,15 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 			}
 		} else {
 
-			/* check if item is an elexire */
+			/* check if item is an elixir */
 			l_si = is_in_word_array(item_id, g_elixir_potions);
-			id_bad_elex = is_in_word_array(item_id, g_bad_elixirs);
+			bad_elixir_item_id = is_in_word_array(item_id, g_bad_elixirs);
 
 			if (l_si != 0) {
-				/* handle good elexires */
+				/* handle good elixirs */
 
-				/* drop elexire */
-				drop_item(owner, pos, 1);
+				/* drop elixir */
+				drop_item(owner, inv_slot, 1);
 
 				/* get glassbottle */
 				give_hero_new_item(owner, ITEM_GLASFLASCHE, 2, 1);
@@ -294,21 +295,21 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* print output */
 				GUI_output(g_dtp2);
 
-			} else if (id_bad_elex != 0) {
-				/* handle bad elexires */
+			} else if (bad_elixir_item_id != 0) {
+				/* handle bad elixires */
 
-				/* drop elexire */
-				drop_item(owner, pos, 1);
+				/* drop elixir */
+				drop_item(owner, inv_slot, 1);
 
 				/* get glassbottle */
 				give_hero_new_item(owner, ITEM_GLASFLASCHE, 2, 1);
 
 				/* Attribute -7 for 1h */
 				l_di = get_free_mod_slot();
-				set_mod_slot(l_di, HOURS(1), (uint8_t*)(&consumer->attrib[id_bad_elex - 1].current), -7, (signed char)consumer_idx);
+				set_mod_slot(l_di, HOURS(1), (uint8_t*)(&consumer->attrib[bad_elixir_item_id - 1].current), -7, (signed char)consumer_idx);
 
 				/* prepare output */
-				sprintf(g_dtp2, get_ttx(656), consumer->alias, get_ttx(411 + id_bad_elex), 7);
+				sprintf(g_dtp2, get_ttx(656), consumer->alias, get_ttx(411 + bad_elixir_item_id), 7);
 
 				/* print output */
 				GUI_output(g_dtp2);
@@ -317,10 +318,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* everything else */
 
 				/* drop the item */
-				drop_item(owner, pos, 1);
+				drop_item(owner, inv_slot, 1);
 
 				switch (item_id) {
-				case 0x91 : {
+				case ITEM_HEILTRANK : {
 					/* Heiltrank */
 
 					l_si = consumer->le_max - consumer->le;
@@ -345,7 +346,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					sprintf(g_dtp2, get_ttx(510), consumer->alias, l_si, g_text_output_buf);
 					break;
 				}
-				case 0x92 : {
+				case  ITEM_STARKER_HEILTRANK : {
 					/* Starker Heiltrank */
 
 					/* 1W20+10 */
@@ -371,7 +372,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					sprintf(g_dtp2, get_ttx(510), consumer->alias, l_si, g_text_output_buf);
 					break;
 				}
-				case 0xec: {
+				case ITEM_WUNDERKUR: {
 					/* Wunderkur */
 
 					/* undo starvation damage */
@@ -407,7 +408,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					break;
 				}
-				case 0xed: {
+				case ITEM_SCHLAFTRUNK: {
 					/* Schlaftrunk */
 
 					/* 3 Rounds of sleep */
@@ -420,7 +421,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					sprintf(g_dtp2, get_ttx(738), consumer->alias);
 					break;
 				}
-				case 0x9a: {
+				case ITEM_ZAUBERTRANK: {
 					/* Zaubertrank */
 
 					if (consumer->typus >= HERO_TYPE_HEXE) {
@@ -456,7 +457,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					break;
 				}
-				case 0x9b: {
+				case ITEM_ZAUBERTRANK_STARK: {
 					/* Zaubertrank (stark) */
 
 					if (consumer->typus >= HERO_TYPE_HEXE) {
@@ -494,7 +495,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 					break;
 				}
-				case 0xb4: {
+				case ITEM_GEGENGIFT: {
 					/* Gegengift */
 
 					poison = hero_is_poisoned(consumer);
@@ -510,7 +511,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					sprintf(g_dtp2, get_ttx(467), consumer->alias);
 					break;
 				}
-				case 0xdf: {
+				case ITEM_ANTIKRANKHEITSELIXIER: {
 					/* Antikrankheitselexier */
 
 					disease = hero_is_diseased(consumer);
