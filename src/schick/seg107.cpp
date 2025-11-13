@@ -76,7 +76,7 @@ void use_item(const signed int inv_slot, const signed int hero_pos)
 				if (is_in_word_array(g_used_item_id, g_items_pluralwords))
 				{
 					/* german grammar, singular and plural are the same */
-					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(get_itemname(g_used_item_id)));
+					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(g_itemsname[g_used_item_id]));
 				} else {
 					sprintf(g_dtp2, get_ttx(571), GUI_names_grammar(0, g_used_item_id, 0));
 				}

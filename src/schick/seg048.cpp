@@ -173,7 +173,7 @@ void status_menu(signed int hero_pos)
 				if (hero1->inventory[g_statuspage_sel_inv_slot_3].item_id != ITEM_NONE) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings,
-						(char*)GUI_name_singular(get_itemname(hero1->inventory[g_statuspage_sel_inv_slot_3].item_id)),
+						(char*)GUI_name_singular(g_itemsname[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id]),
 						!is_in_word_array(hero1->inventory[g_statuspage_sel_inv_slot_3].item_id,
 							g_forbidden_item_ids_table[hero2->typus - 1]) ? g_empty_string8 : get_tx2(66));
 
@@ -354,7 +354,7 @@ void status_menu(signed int hero_pos)
 				if (hero2->inventory[g_statuspage_sel_inv_slot_3].item_id) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings2,
-						(char*)GUI_name_singular(get_itemname(hero2->inventory[g_statuspage_sel_inv_slot_3].item_id)),
+						(char*)GUI_name_singular(g_itemsname[hero2->inventory[g_statuspage_sel_inv_slot_3].item_id]),
 						!is_in_word_array(
 						    hero2->inventory[g_statuspage_sel_inv_slot_3].item_id,
 						    g_forbidden_item_ids_table[hero2->typus - 1]) ? g_empty_string9 : get_tx2(66));

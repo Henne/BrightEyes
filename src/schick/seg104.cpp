@@ -253,7 +253,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 		for (i = 0; i <= 12; i++) {
 			if (inv_slot_of_item(hero, g_alchemy_recipes[i].item_id) != -1) {
 
-				strcpy(g_dtp2 + recipes * 50, GUI_name_singular(get_itemname(g_alchemy_recipes[i].outcome)));
+				strcpy(g_dtp2 + recipes * 50, GUI_name_singular(g_itemsname[g_alchemy_recipes[i].outcome]));
 
 				g_radio_name_list[recipes] = g_dtp2 + recipes * 50;
 				array[recipes] = (signed char)i;
@@ -391,7 +391,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 					}
 				} else {
 					/* not all ingrendients */
-					sprintf(g_dtp2, get_tx(49), GUI_name_singular(get_itemname(g_alchemy_missing_item)));
+					sprintf(g_dtp2, get_tx(49), GUI_name_singular(g_itemsname[g_alchemy_missing_item]));
 					GUI_output(g_dtp2);
 				}
 			}

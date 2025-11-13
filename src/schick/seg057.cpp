@@ -288,7 +288,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 			clear_loc_line();
 
-			GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[item_pos + item].item_id)));
+			GUI_print_loc_line(GUI_name_singular(g_itemsname[g_sellitems[item_pos + item].item_id]));
 		}
 
 		if (g_mouse_rightclick_event  || g_action == ACTION_ID_PAGE_UP) {

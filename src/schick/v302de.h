@@ -264,11 +264,6 @@ static inline void dump_cb(void)
 	fclose(fd);
 }
 
-static inline char* get_itemname(unsigned short item_id)
-{
-	return (char*)M302de::g_itemsname[item_id];
-}
-
 #define DUMMY_WARNING() D1_ERR("Error: %s is not implemented\n", __func__)
 
 // end #if !defined(__BORLANDC__)

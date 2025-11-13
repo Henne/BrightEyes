@@ -98,7 +98,7 @@ void FIG_loot_monsters(void)
 			/* Apparently a quick "fix" for an unwanted bone with runes in fight THOR8,
 			 * see https://www.crystals-dsa-foren.de/showthread.php?tid=453&pid=172221#pid172221 */
 		{
-			strcpy(loot_names[loot_num++], GUI_name_plural(0, get_itemname(item_id)));
+			strcpy(loot_names[loot_num++], GUI_name_plural(0, g_itemsname[item_id]));
 			item_cnt++;
 		}
 
