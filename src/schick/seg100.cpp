@@ -476,7 +476,7 @@ void spell_ignifaxius(void)
 {
 	signed int rs_malus;
 	signed int hero_pos;
-	signed int slot;
+	signed int mod_slot;
 	signed int mummy = 0;
 	struct inventory *p_armor;
 	signed int damage;
@@ -569,13 +569,13 @@ void spell_ignifaxius(void)
 		}
 
 		/* get an AT/PA-Malus of -level / 2 for the current weapon and one hour */
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1),
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, HOURS(1),
 			(uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 			-level / 2, (signed char)hero_pos);
 
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1),
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, HOURS(1),
 			(uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 			-level / 2, (signed char)hero_pos);
 
@@ -605,7 +605,7 @@ void spell_ignifaxius(void)
 
 void spell_plumbumbarum(void)
 {
-	signed int slot;
+	signed int mod_slot;
 	signed int hero_pos;
 
 	if (get_spelluser()->target_object_id < 10) {
@@ -628,8 +628,8 @@ void spell_plumbumbarum(void)
 		} else {
 
 			/* give a short AT-malus of -3 to the current weapon of the target */
-			slot = get_free_mod_slot();
-			set_mod_slot(slot, 0x2d,
+			mod_slot = get_free_mod_slot();
+			set_mod_slot(mod_slot, 0x2d,
 				(uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 				-3, (signed char)hero_pos);
 
@@ -661,7 +661,7 @@ void spell_radau(void)
 void spell_saft_kraft(void)
 {
 	signed int target;
-	signed int slot;
+	signed int mod_slot;
 	signed int rounds;
 
 	rounds = random_schick(20);
@@ -673,23 +673,23 @@ void spell_saft_kraft(void)
 	g_spelltarget = get_hero(target);
 
 	/* +5 on AT of the current weapon */
-	slot = get_free_mod_slot();
+	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(slot, rounds * 9L,
+	set_mod_slot(mod_slot, rounds * 9L,
 		(uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 		5, (signed char)target);
 
 	/* -5 on PA of the current weapon */
-	slot = get_free_mod_slot();
+	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(slot, rounds * 9L,
+	set_mod_slot(mod_slot, rounds * 9L,
 		(uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 		-5, (signed char)target);
 
 	/* +5 extra damage */
-	slot = get_free_mod_slot();
+	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(slot, rounds * 9L, (uint8_t*)&get_spelltarget()->saftkraft, 5, (signed char)target);
+	set_mod_slot(mod_slot, rounds * 9L, (uint8_t*)&get_spelltarget()->saftkraft, 5, (signed char)target);
 
 	/* set ae costs */
 	g_spell_special_aecost = rounds;
@@ -712,7 +712,7 @@ void spell_saft_kraft(void)
 void spell_scharfes_auge(void)
 {
 	signed int target;
-	signed int slot;
+	signed int mod_slot;
 
 	/* get the index of the hero on whom the spell is cast */
 	target = get_spelluser()->target_object_id - 1;
@@ -722,13 +722,13 @@ void spell_scharfes_auge(void)
 
 	/* all range skills are boosted + 3 */
 
-	slot = get_free_mod_slot();
+	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(slot, 3 * 9L, (uint8_t*)&get_spelltarget()->skills[TA_WURFWAFFEN], 3, (signed char)target); /* TA_WURFWAFFEN */
+	set_mod_slot(mod_slot, 3 * 9L, (uint8_t*)&get_spelltarget()->skills[TA_WURFWAFFEN], 3, (signed char)target); /* TA_WURFWAFFEN */
 
-	slot = get_free_mod_slot();
+	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(slot, 3 * 9L, (uint8_t*)&get_spelltarget()->skills[TA_SCHUSSWAFFEN], 3, (signed char)target); /* TA_SCHUSSWAFFEN */
+	set_mod_slot(mod_slot, 3 * 9L, (uint8_t*)&get_spelltarget()->skills[TA_SCHUSSWAFFEN], 3, (signed char)target); /* TA_SCHUSSWAFFEN */
 
 	sprintf(g_dtp2, get_tx(97), get_spelltarget()->alias);
 }

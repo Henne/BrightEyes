@@ -494,7 +494,8 @@ signed int is_item_pleasing_ingerimm(const signed int item_id)
  *
  * \param   hero        pointer to the hero
  * \param   inv_slot    position of the item to be dropped
- * \param   quantity    number of stacked items to be dropped / -1 to ask
+ * \param   quantity    if item is stackable: number of stacked items to be dropped / -1 to ask
+ * 			if item is not stackable: -1: don't drop anything / otherwise (including quantity==0): drop a single item
  * \return              true if the item has been dropped or false if not
  *
  *	TODO: This function can be tuned a bit
@@ -560,6 +561,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 
 				retval = 1;
 			} else {
+				/* item is not stackable */
 				if (!(quantity != -1 || GUI_bool(get_ttx(220)))) {
 				} else {
 
@@ -686,19 +688,19 @@ signed int give_new_item_to_group(signed int item_id, const signed int dummy, si
 }
 
 /**
- * \brief   returns how many items of one type the hero has
+ * \brief   returns how many items of one type the hero has, ignoring stack sizes.
  *
  * \param   hero        the hero
  * \param   item[in]	the item ID
  */
 signed int hero_count_item(struct struct_hero *hero, const signed int item_id)
 {
-	signed int i;
+	signed int inv_slot;
 	signed int ret = 0;
 
-	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
+	for (inv_slot = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++) {
 
-		if (hero->inventory[i].item_id == item_id) {
+		if (hero->inventory[inv_slot].item_id == item_id) {
 			ret++;
 		}
 	}
@@ -707,7 +709,7 @@ signed int hero_count_item(struct struct_hero *hero, const signed int item_id)
 }
 
 /**
- * \brief   count the number of items of one type the current group has
+ * \brief   count the number of items of one type the current group has, ignoring stack sizes.
  *
  * \param   item_id[in]	the item-ID
  * \return  the number of items
@@ -715,11 +717,11 @@ signed int hero_count_item(struct struct_hero *hero, const signed int item_id)
 signed int group_count_item(const signed int item_id)
 {
 	struct struct_hero *hero_i;
-	signed int i;
+	signed int hero_pos;
 	signed int ret = 0;
 
 	hero_i = get_hero(0);
-	for (i = 0; i <= 6; i++, hero_i++) {
+	for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero_i++) {
 
 		if (hero_i->typus && (hero_i->group_id == gs_active_group_id)) {
 

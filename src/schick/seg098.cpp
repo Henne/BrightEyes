@@ -251,7 +251,7 @@ signed int use_magic(struct struct_hero *hero)
 	signed int ae;
 	signed int retval;
 	signed int answer;
-	signed int thonny_pos;
+	signed int thonnys_inv_slot;
 
 	retval = 0;
 
@@ -268,13 +268,13 @@ signed int use_magic(struct struct_hero *hero)
 				/* not a mage, need thonnys */
 
 
-				if ((thonny_pos = inv_slot_of_item(hero, ITEM_THONNYSBLUETE)) == -1) {
+				if ((thonnys_inv_slot = inv_slot_of_item(hero, ITEM_THONNYSBLUETE)) == -1) {
 					GUI_output(get_ttx(790));
 					return 0;
 				}
 			} else {
 				/* a mage */
-				thonny_pos = -1;
+				thonnys_inv_slot = -1;
 			}
 
 			/* Asks how many AE should be generated */
@@ -283,9 +283,9 @@ signed int use_magic(struct struct_hero *hero)
 			if (ae != -1) {
 				retval = 2;
 
-				if (thonny_pos != -1) {
+				if (thonnys_inv_slot != -1) {
 					/* drop a thonny */
-					drop_item(hero, thonny_pos, 1);
+					drop_item(hero, thonnys_inv_slot, 1);
 				}
 
 				/* cap the converted AE such that the hero has at most HERO_AE_ORIG in the end. */

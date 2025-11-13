@@ -523,18 +523,18 @@ void THO_academy(void)
 {
 	signed int answer;
 	signed int item_id;
-	signed int item_pos;
+	signed int i; /* dual use as inv_slot and hero_pos */
 	signed int cursed_hero_pos;
 	int32_t p_money;
 	struct struct_hero *hero;
 
 	/* find the position of the first cursed (=renegade) hero */
 	hero = get_hero(0);
-	for (item_pos = cursed_hero_pos = 0; item_pos <= 6; item_pos++, hero++) {
+	for (i = cursed_hero_pos = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && hero->flags.renegade)
 		{
-			cursed_hero_pos = item_pos;
+			cursed_hero_pos = i;
 			break;
 		}
 	}
@@ -585,9 +585,9 @@ void THO_academy(void)
 					} else {
 
 						hero = get_hero(get_first_hero_with_item(item_id));
-						item_pos = inv_slot_of_item(hero, item_id);
+						i = inv_slot_of_item(hero, item_id);
 
-						if (drop_item(hero, item_pos, 1)) {
+						if (drop_item(hero, i, 1)) {
 
 							GUI_input(get_tx2(62), 0);
 							GUI_input(get_tx2(63), 0);
@@ -656,9 +656,9 @@ void THO_academy(void)
 					} else {
 
 						hero = get_hero(get_first_hero_with_item(item_id));
-						item_pos = inv_slot_of_item(hero, item_id);
+						i = inv_slot_of_item(hero, item_id);
 
-						if (drop_item(hero, item_pos, 1)) {
+						if (drop_item(hero, i, 1)) {
 
 							academy_analues();
 

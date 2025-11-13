@@ -348,8 +348,8 @@ void tevent_028(void)
 
 void tevent_029(void)
 {
-	signed int i;
-	signed int item_pos;
+	signed int hero_pos;
+	signed int i; /* dual use: inv_slot and item_count */
 	struct struct_hero *hero;
 
 	load_in_head(51);
@@ -358,7 +358,7 @@ void tevent_029(void)
 	GUI_dialog_na(0, get_tx2(75));
 
 	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero++)
+	for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++)
 	{
 		hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 	}
@@ -372,24 +372,28 @@ void tevent_029(void)
 	} else {
 		/* skill test failed */
 		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero++)
+		for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
 				sub_hero_le(hero, 2);
 
-				item_pos = inv_slot_of_item(hero, ITEM_PROVIANTPAKET);
+				i = inv_slot_of_item(hero, ITEM_PROVIANTPAKET);
 
-				if (item_pos != -1) {
+				if (i != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
-					drop_item(hero, item_pos, hero->inventory[item_pos].quantity);
+					drop_item(hero, i, hero->inventory[i].quantity);
 				}
 
-				item_pos = hero_count_item(hero, ITEM_WASSERSCHLAUCH);
+				i = hero_count_item(hero, ITEM_WASSERSCHLAUCH);
 
-				if (item_pos) {
+				if (i) {
 					/* hero looses the first WATERSKIN */
-					drop_item(hero, inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH), item_pos - 1);
+					drop_item(hero, inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH), i - 1);
+					/* effect of i - 1:
+					 * if i==0 (hero doesn't have a waterskin), don't drop anything.
+					 * otherwise (hero has one ore more waterskins), drop a single one.
+					 */
 				}
 			}
 		}

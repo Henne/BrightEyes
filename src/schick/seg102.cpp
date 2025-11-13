@@ -622,7 +622,7 @@ void mspell_ignifaxius(void)
 	signed int level;
 	signed int rs_malus;
 	signed int hero_pos;
-	signed int slot;
+	signed int mod_slot;
 	struct inventory *p_armor;
 
 	/* get the level of the spelluser */
@@ -668,12 +668,12 @@ void mspell_ignifaxius(void)
 		}
 
 		/* AT - level / 2 */
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), (uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type], -level / 2, (signed char)hero_pos);
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, HOURS(1), (uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type], -level / 2, (signed char)hero_pos);
 
 		/* PA - level / 2 */
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), (uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type], -level / 2, (signed char)hero_pos);
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, HOURS(1), (uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type], -level / 2, (signed char)hero_pos);
 
 	} else {
 		/* target is a monster */
@@ -698,7 +698,7 @@ void mspell_ignifaxius(void)
 
 void mspell_plumbumbarum(void)
 {
-	signed int slot;
+	signed int mod_slot;
 	signed int hero_pos;
 
 	if (g_spelluser_e->target_object_id < 10) {
@@ -711,8 +711,8 @@ void mspell_plumbumbarum(void)
 		g_spelltarget = get_hero(hero_pos);
 
 		/* AT - 3 */
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, HOURS(1), (uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type], -3, (signed char)hero_pos);
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, HOURS(1), (uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type], -3, (signed char)hero_pos);
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(94), get_spelltarget()->alias);

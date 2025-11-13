@@ -373,17 +373,17 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
 signed short hero_has_lockpicks(const struct struct_hero *hero)
 {
 	signed int retval = -1;
-	signed int i;
+	signed int inv_slot;
 
 	/* in each inventory slot... */
-	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
+	for (inv_slot = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++) {
 
 		/* ... check for lockpicks ... */
-		if (hero->inventory[i].item_id == ITEM_DIETRICHE) {
+		if (hero->inventory[inv_slot].item_id == ITEM_DIETRICHE) {
 
 			/* ... which are not broken */
-			if (!hero->inventory[i].flags.broken) {
-				return i;
+			if (!hero->inventory[inv_slot].flags.broken) {
+				return inv_slot;
 			} else {
 				retval = -2;
 			}
@@ -483,13 +483,13 @@ void loot_special_chest(const signed int check_dir)
 
 void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 {
-	signed int item_pos;
+	signed int inv_slot;
 	signed int test_val;
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if ((item_pos = hero_has_lockpicks(hero)) != -1) {
+	if ((inv_slot = hero_has_lockpicks(hero)) != -1) {
 
-		if (item_pos != -2) {
+		if (inv_slot != -2) {
 
 			test_val = test_skill(hero, TA_SCHLOESSER, (chest_ptr)->mod);
 
@@ -498,7 +498,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 				/* unlucky, your lockpicks break... */
 
 				print_msg_with_first_hero(get_ttx(533));
-				hero->inventory[item_pos].flags.broken = 1;
+				hero->inventory[inv_slot].flags.broken = 1;
 
 				/* ... and you trigger the trap */
 				if ((chest_ptr)->trap) {
