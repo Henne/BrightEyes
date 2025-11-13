@@ -329,7 +329,7 @@ signed int DNG03_handler(void)
 			do {
 				hero = get_hero(i);
 
-				drop_item(hero, get_item_pos(hero, ITEM_KRISTALL), 1);
+				drop_item(hero, inv_slot_of_item(hero, ITEM_KRISTALL), 1);
 
 				i = get_first_hero_with_item(ITEM_KRISTALL);
 

@@ -772,13 +772,13 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 			 * if the hero has them in the inventory */
 			if ((g_fight_round == 0) &&
 				(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LANGBOGEN) &&
-				(get_item_pos(hero, ITEM_PFEIL) != -1) &&
-				(get_item_pos(hero, ITEM_LANGBOGEN) != -1))
+				(inv_slot_of_item(hero, ITEM_PFEIL) != -1) &&
+				(inv_slot_of_item(hero, ITEM_LANGBOGEN) != -1))
 			{
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LANGBOGEN), hero);
+				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_LANGBOGEN), hero);
 
 				if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_PFEIL) {
-					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_PFEIL), hero);
+					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
 				}
 			}
 
@@ -790,13 +790,13 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 				 * if the hero has them in the inventory */
 				if ((g_fight_round == 0) &&
 					(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LANGBOGEN) &&
-					(get_item_pos(hero, ITEM_PFEIL) != -1) &&
-					(get_item_pos(hero, ITEM_LANGBOGEN) != -1))
+					(inv_slot_of_item(hero, ITEM_PFEIL) != -1) &&
+					(inv_slot_of_item(hero, ITEM_LANGBOGEN) != -1))
 				{
-					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_LANGBOGEN), hero);
+					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_LANGBOGEN), hero);
 
 					if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_PFEIL) {
-						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_PFEIL), hero);
+						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
 					}
 
 				} else if (FIG_get_range_weapon_type(hero) == -1) {

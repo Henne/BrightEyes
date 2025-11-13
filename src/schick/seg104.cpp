@@ -121,7 +121,7 @@ signed int hero_has_ingrendients(struct struct_hero *hero, const signed int reci
 	/* loop over ingrendients */
 	while ((r_ptr->ingredients[i] != -1) && retval) {
 
-		item_pos = get_item_pos(hero, r_ptr->ingredients[i]);
+		item_pos = inv_slot_of_item(hero, r_ptr->ingredients[i]);
 
 		if (item_pos == -1) {
 
@@ -162,7 +162,7 @@ void hero_use_ingrendients(struct struct_hero *hero, const signed int recipe_id)
 	/* loop over ingredients */
 	while (r_ptr->ingredients[i] != -1) {
 
-		item_pos = get_item_pos(hero, r_ptr->ingredients[i]);
+		item_pos = inv_slot_of_item(hero, r_ptr->ingredients[i]);
 
 		/* drop the needed item */
 		drop_item(hero, item_pos, 1);
@@ -240,7 +240,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 
 	retval = 1;
 	recipes = 0;
-	item_pos = get_item_pos(hero, ITEM_ALCHIMIESET);
+	item_pos = inv_slot_of_item(hero, ITEM_ALCHIMIESET);
 
 	if (item_pos == -1) {
 
@@ -251,7 +251,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 
 		/* count all recipes and prepare the menu */
 		for (i = 0; i <= 12; i++) {
-			if (get_item_pos(hero, g_alchemy_recipes[i].item_id) != -1) {
+			if (inv_slot_of_item(hero, g_alchemy_recipes[i].item_id) != -1) {
 
 				strcpy(g_dtp2 + recipes * 50, GUI_name_singular(get_itemname(g_alchemy_recipes[i].outcome)));
 
@@ -418,32 +418,32 @@ signed int has_herb_for_disease(const struct struct_hero *hero, const signed int
 
 		case ILLNESS_TYPE_DUMPFSCHAEDEL:
 			/* any single one of the following herbs is sufficient */
-			if (get_item_pos(hero, ITEM_BELMART_BLATT)          != -1) retval = ITEM_BELMART_BLATT;
-			else if (get_item_pos(hero, ITEM_WIRSELKRAUT)   != -1) retval = ITEM_WIRSELKRAUT;
-			else if (get_item_pos(hero, ITEM_EINBEERE)    != -1) retval = ITEM_EINBEERE;
-			else if (get_item_pos(hero, ITEM_TARNELE)     != -1) retval = ITEM_TARNELE;
-			else if (get_item_pos(hero, ITEM_DONFSTENGEL) != -1) retval = ITEM_DONFSTENGEL;
-			else if (get_item_pos(hero, ITEM_FINAGEBAEMCHEN) != -1) retval = ITEM_FINAGEBAEMCHEN;
-			else if (get_item_pos(hero, ITEM_MENCHALKAKTUS)     != -1) retval = ITEM_MENCHALKAKTUS;
-			else if (get_item_pos(hero, ITEM_OLGINWURZEL)  != -1) retval = ITEM_OLGINWURZEL;
-			else if (get_item_pos(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
+			if (inv_slot_of_item(hero, ITEM_BELMART_BLATT)          != -1) retval = ITEM_BELMART_BLATT;
+			else if (inv_slot_of_item(hero, ITEM_WIRSELKRAUT)   != -1) retval = ITEM_WIRSELKRAUT;
+			else if (inv_slot_of_item(hero, ITEM_EINBEERE)    != -1) retval = ITEM_EINBEERE;
+			else if (inv_slot_of_item(hero, ITEM_TARNELE)     != -1) retval = ITEM_TARNELE;
+			else if (inv_slot_of_item(hero, ITEM_DONFSTENGEL) != -1) retval = ITEM_DONFSTENGEL;
+			else if (inv_slot_of_item(hero, ITEM_FINAGEBAEMCHEN) != -1) retval = ITEM_FINAGEBAEMCHEN;
+			else if (inv_slot_of_item(hero, ITEM_MENCHALKAKTUS)     != -1) retval = ITEM_MENCHALKAKTUS;
+			else if (inv_slot_of_item(hero, ITEM_OLGINWURZEL)  != -1) retval = ITEM_OLGINWURZEL;
+			else if (inv_slot_of_item(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
 			break;
 
 		case ILLNESS_TYPE_PARALYSE:
-			if (get_item_pos(hero, ITEM_DONFSTENGEL) != -1)
+			if (inv_slot_of_item(hero, ITEM_DONFSTENGEL) != -1)
 				retval = ITEM_DONFSTENGEL;
 			break;
 
 		case ILLNESS_TYPE_SCHLACHTENFIEBER:
-			if ( (get_item_pos(hero, ITEM_JORUGAWURZEL) != -1) && (get_item_pos(hero, ITEM_GULMOND_BLATT) != -1)) retval = 999;
+			if ( (inv_slot_of_item(hero, ITEM_JORUGAWURZEL) != -1) && (inv_slot_of_item(hero, ITEM_GULMOND_BLATT) != -1)) retval = 999;
 			break;
 
 		case ILLNESS_TYPE_FROSTSCHAEDEN:
-			if (get_item_pos(hero, ITEM_WIRSELKRAUT) != -1) retval = ITEM_WIRSELKRAUT;
+			if (inv_slot_of_item(hero, ITEM_WIRSELKRAUT) != -1) retval = ITEM_WIRSELKRAUT;
 			break;
 
 		case ILLNESS_TYPE_TOLLWUT:
-			if (get_item_pos(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
+			if (inv_slot_of_item(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
 			break;
 	}
 
@@ -511,11 +511,11 @@ signed int skill_cure_disease(struct struct_hero *healer, struct struct_hero *pa
 
 					if (herb == 999) {
 						/* drop JORUGA & GULMOND LEAF */
-						drop_item(healer, get_item_pos(healer, ITEM_JORUGAWURZEL), 1);
-						drop_item(healer, get_item_pos(healer, ITEM_GULMOND_BLATT), 1);
+						drop_item(healer, inv_slot_of_item(healer, ITEM_JORUGAWURZEL), 1);
+						drop_item(healer, inv_slot_of_item(healer, ITEM_GULMOND_BLATT), 1);
 					} else {
 						/* drop the herb */
-						drop_item(healer, get_item_pos(healer, herb), 1);
+						drop_item(healer, inv_slot_of_item(healer, herb), 1);
 					}
 
 					retval = 1;

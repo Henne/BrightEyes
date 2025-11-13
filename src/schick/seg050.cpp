@@ -651,7 +651,7 @@ void level_up(const signed int hero_pos)
 			hero->mr += 2;
 		}
 		/* check for AMULETT / in inventory => MR + 5 */
-		if (get_item_pos(hero, ITEM_AMULETT__BLUE) != -1) {
+		if (inv_slot_of_item(hero, ITEM_AMULETT__BLUE) != -1) {
 			hero->mr += 5;
 		}
 

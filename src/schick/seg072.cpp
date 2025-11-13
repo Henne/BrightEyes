@@ -164,7 +164,7 @@ void INF_yasma_umbrik_isleif(const signed int informer, const signed int state)
 		} else if (state == 19) {
 			/* give the RUNENKNOCHEN / BONE WITH RUNE to UMBRIK */
 			hero = get_hero(get_first_hero_with_item(ITEM_KNOCHEN_MIT_RUNE));
-			drop_item(hero, get_item_pos(hero, ITEM_KNOCHEN_MIT_RUNE), 1);
+			drop_item(hero, inv_slot_of_item(hero, ITEM_KNOCHEN_MIT_RUNE), 1);
 		} else if (state == 23) {
 			/* mark UMBRIK SIEBENSTEIN as done */
 			gs_informer_flags[INFORMER_UMBRIK] = 2;

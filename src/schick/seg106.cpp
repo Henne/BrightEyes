@@ -686,11 +686,11 @@ void startup_equipment(struct struct_hero *hero)
 	}
 
 	if (hero->typus == HERO_TYPE_KRIEGER) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_LEDERHARNISCH), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, inv_slot_of_item(hero, ITEM_LEDERHARNISCH), hero);
 	}
 
 	if (hero->typus == HERO_TYPE_MAGIER) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_ROBE__GREEN_1), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, inv_slot_of_item(hero, ITEM_ROBE__GREEN_1), hero);
 	}
 
 	if ((hero->typus == HERO_TYPE_JAEGER) ||
@@ -698,7 +698,7 @@ void startup_equipment(struct struct_hero *hero)
 		(hero->typus == HERO_TYPE_WALDELF))
 	{
 		give_hero_new_item(hero, ITEM_PFEIL, 1, 20);
-		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_PFEIL), hero);
+		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
 	}
 }
 

@@ -268,7 +268,7 @@ signed int use_magic(struct struct_hero *hero)
 				/* not a mage, need thonnys */
 
 
-				if ((thonny_pos = get_item_pos(hero, ITEM_THONNYSBLUETE)) == -1) {
+				if ((thonny_pos = inv_slot_of_item(hero, ITEM_THONNYSBLUETE)) == -1) {
 					GUI_output(get_ttx(790));
 					return 0;
 				}

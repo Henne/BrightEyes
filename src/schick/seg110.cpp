@@ -378,7 +378,7 @@ void tevent_029(void)
 			{
 				sub_hero_le(hero, 2);
 
-				item_pos = get_item_pos(hero, ITEM_PROVIANTPAKET);
+				item_pos = inv_slot_of_item(hero, ITEM_PROVIANTPAKET);
 
 				if (item_pos != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
@@ -389,7 +389,7 @@ void tevent_029(void)
 
 				if (item_pos) {
 					/* hero looses the first WATERSKIN */
-					drop_item(hero, get_item_pos(hero, ITEM_WASSERSCHLAUCH), item_pos - 1);
+					drop_item(hero, inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH), item_pos - 1);
 				}
 			}
 		}

@@ -3094,14 +3094,14 @@ void herokeeping(void)
 			if (get_first_hero_with_item_in_group(ITEM_MAGISCHER_BROTBEUTEL, hero->group_id) == -1) {
 
 				/* if not, check if the hero has the food amulet */
-				if (get_item_pos(hero, ITEM_TRAVIA_AMULETT) == -1) {
+				if (inv_slot_of_item(hero, ITEM_TRAVIA_AMULETT) == -1) {
 					/* if not... */
 
 					/* eat if hunger > 90 % */
 					if (hero->hunger > 90) {
 
 						/* search for Lunchpack */
-						pos = get_item_pos(hero, ITEM_PROVIANTPAKET);
+						pos = inv_slot_of_item(hero, ITEM_PROVIANTPAKET);
 
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
@@ -3114,7 +3114,7 @@ void herokeeping(void)
 
 							/* search for another Lunchpack */
 							/* print last ration message */
-							if (get_item_pos(hero, ITEM_PROVIANTPAKET) == -1) {
+							if (inv_slot_of_item(hero, ITEM_PROVIANTPAKET) == -1) {
 								gs_food_message[i] = 6;
 							}
 						} else {
@@ -3167,7 +3167,7 @@ void herokeeping(void)
 				((hero->group_id != gs_active_group_id) && !gs_groups_town_id[hero->group_id])))
 			{
 					/* check for food amulett */
-					if (get_item_pos(hero, ITEM_TRAVIA_AMULETT) == -1) {
+					if (inv_slot_of_item(hero, ITEM_TRAVIA_AMULETT) == -1) {
 
 						/* hero should drink something */
 						if (hero->thirst > 90) {
@@ -3175,7 +3175,7 @@ void herokeeping(void)
 							g_consume_quiet = 1;
 
 							/* first check for beer :) */
-							pos = get_item_pos(hero, ITEM_BIER);
+							pos = inv_slot_of_item(hero, ITEM_BIER);
 
 							/* and then for water */
 							if (pos == -1) {
@@ -3189,7 +3189,7 @@ void herokeeping(void)
 								D1_INFO("%s trinkt etwas\n", hero->alias);
 #endif
 								/* nothing to drink message */
-								if ((get_item_pos(hero, ITEM_BIER) == -1)
+								if ((inv_slot_of_item(hero, ITEM_BIER) == -1)
 									&& (get_full_waterskin_pos(hero) == -1)) {
 									gs_food_message[i] = 5;
 								}
@@ -5298,13 +5298,14 @@ signed int get_hero_index(const struct struct_hero *hero)
 }
 
 /**
- * \brief   gets item position
+ * \brief   checks if hero has the item and returns its inventory slot
  *
  * \param   hero        pointer to the hero
  * \param   item        item ID to look for
- * \return              position of the item or -1 if the item is not in the inventory.
+ * \return              -1 if the item is not in the inventory
+ *			otherwise: first inventory slot holding item
  */
-signed int get_item_pos(const struct struct_hero *hero, const signed int item_id)
+signed int inv_slot_of_item(const struct struct_hero *hero, const signed int item_id)
 {
 	signed int i;
 

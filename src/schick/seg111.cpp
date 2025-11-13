@@ -309,9 +309,9 @@ void tevent_060(void)
 
 						for (i = 0; i < 3; i++) {
 
-							answer = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
+							answer = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
 							if (answer == -1) {
-								answer = get_item_pos((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
+								answer = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
 							}
 
 							drop_item(hero, answer, 1);
