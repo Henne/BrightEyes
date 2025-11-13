@@ -33,11 +33,11 @@ unsigned char g_unkn_067[1] = { 0x00 }; // ds:0xae47
 /**
  * \brief   TODO
  *
- * \param   hero	the hero
- * \param   item_id[in]	the item which gets unequipped
- * \param   inv_pos[in]	the position of the item
+ * \param   hero		the hero
+ * \param   item_id[in]		the item which gets unequipped
+ * \param   inv_slot[in]	the inventory slot of the item
  */
-void unequip(struct struct_hero *hero, const signed int item_id, const signed int inv_pos)
+void unequip(struct struct_hero *hero, const signed int item_id, const signed int inv_slot)
 {
 	/* unequip of item 0 is not allowed */
 	if (item_id != ITEM_NONE) {
@@ -49,15 +49,15 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 
 			hero->rs_bonus -= g_armors_table[item_p->table_index].rs;
 
-			hero->rs_bonus += hero->inventory[inv_pos].rs_lost;
+			hero->rs_bonus += hero->inventory[inv_slot].rs_lost;
 
 			hero->rs_be -= g_armors_table[item_p->table_index].be;
 		}
 
 		/* if item is a weapon and in the right hand ? */
-		if (item_p->flags.weapon && (inv_pos == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
+		if (item_p->flags.weapon && (inv_slot == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
-			hero->weapon_type = 0;
+			hero->weapon_type = WEAPON_TYPE_WAFFENLOS;
 
 			hero->weapon_at_mod = hero->weapon_pa_mod = 0;
 		}
@@ -66,6 +66,7 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 		if (item_id == ITEM_KRAFTGUERTEL) {
 
 			hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].current - 5;
+			/* TODO: Original-Bug: update dependent values like atpa_base */
 		}
 
 		/* unequip Helm CH + 1 (cursed) */
@@ -107,10 +108,10 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
  * \param   owner			the owner of the item
  * \param   equipper			the one who equips the item
  * \param   item_id[in]			the item ID
- * \param   inv_pos_owner[in]		the position in the inventory of the owner
- * \param   inv_pos_equipper[in]	the position in the inventory of the equipper
+ * \param   inv_slot_owner[in]		owner holds item in this inventory slot
+ * \param   inv_slot_equipper[in]	equipper equips item in this inventory slot
  */
-void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, const signed int item_id, const signed int inv_pos_owner, const signed int inv_pos_equipper)
+void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, const signed int item_id, const signed int inv_slot_owner, const signed int inv_slot_equipper)
 {
 	if (item_id != ITEM_NONE) {
 
@@ -124,7 +125,7 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 			equipper->rs_bonus += g_armors_table[item_p->table_index].rs;
 
 			/* subtract degraded RS */
-			equipper->rs_bonus -= owner->inventory[inv_pos_owner].rs_lost;
+			equipper->rs_bonus -= owner->inventory[inv_slot_owner].rs_lost;
 
 			/* add RS-BE */
 			equipper->rs_be += g_armors_table[item_p->table_index].be;
@@ -132,7 +133,7 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		}
 
 		/* weapon right hand */
-		if (item_p->flags.weapon && (inv_pos_equipper == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
+		if (item_p->flags.weapon && (inv_slot_equipper == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
 			/* set weapon type */
 			equipper->weapon_type = item_p->subtype;
@@ -148,6 +149,7 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		if (item_id == ITEM_KRAFTGUERTEL) {
 
 			equipper->attrib[ATTRIB_KK].current = equipper->attrib[ATTRIB_KK].current + 5;
+			/* TODO: Original-Bug: update dependent values like atpa_base */
 		}
 
 		/* Helmet / Helm */
@@ -214,31 +216,32 @@ signed int can_hero_use_item(const struct struct_hero *hero, const signed int it
 }
 
 /**
- * \brief   checks if an item is equipable at a body position
+ * \brief   checks if an item is equipable at a body slot
  *
  * \param   item_id[in]	the item ID
- * \param   inv_pos[in] the position at the body
- * \return  1 if equipping is possible or 0 if not.
+ * \param   inv_slot[in] inventory slot to check for equippability
+ * \return  0: not possible / 1: possible
  */
-signed int can_item_at_pos(const signed int item_id, const signed int inv_pos)
+signed int can_hero_equip_item_at_slot(const signed int item_id, const signed int inv_slot)
 {
+	// assert(inv_slot) < HERO_INVENTORY_SLOT_KNAPSACK_1 // only for inv_slot at the body
 	struct item_stats *item_p = &g_itemsdat[item_id];
 
 	/* if item is an armor ? */
 	if (item_p->flags.armor) {
 
 		/* can be weared on the head */
-		if ((inv_pos == HERO_INVENTORY_SLOT_HEAD && item_p->subtype == ARMOR_TYPE_HEAD) ||
+		if ((inv_slot == HERO_INVENTORY_SLOT_HEAD && item_p->subtype == ARMOR_TYPE_HEAD) ||
 			/* can be weared on the torso */
-			(inv_pos == HERO_INVENTORY_SLOT_BODY && item_p->subtype == ARMOR_TYPE_BODY) ||
+			(inv_slot == HERO_INVENTORY_SLOT_BODY && item_p->subtype == ARMOR_TYPE_BODY) ||
 			/* can be weared at the feet */
-			(inv_pos == HERO_INVENTORY_SLOT_FEET && item_p->subtype == ARMOR_TYPE_FEET) ||
+			(inv_slot == HERO_INVENTORY_SLOT_FEET && item_p->subtype == ARMOR_TYPE_FEET) ||
 			/* can be weared at the arms */
-			(inv_pos == HERO_INVENTORY_SLOT_ARMS && item_p->subtype == ARMOR_TYPE_ARMS) ||
+			(inv_slot == HERO_INVENTORY_SLOT_ARMS && item_p->subtype == ARMOR_TYPE_ARMS) ||
 			/* can be weared at the legs */
-			(inv_pos == HERO_INVENTORY_SLOT_LEGS && item_p->subtype == ARMOR_TYPE_LEGS) ||
+			(inv_slot == HERO_INVENTORY_SLOT_LEGS && item_p->subtype == ARMOR_TYPE_LEGS) ||
 			/* can be weared at the left hand */
-			(inv_pos == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->subtype == ARMOR_TYPE_LEFT_HAND)) {
+			(inv_slot == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->subtype == ARMOR_TYPE_LEFT_HAND)) {
 			return 1;
 		} else {
 			return 0;
@@ -247,14 +250,14 @@ signed int can_item_at_pos(const signed int item_id, const signed int inv_pos)
 
 		/* coronet (Stirnreif) (3 types) can be weared at the head */
 		if ((item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_SILBERNER_STIRNREIF || item_id == ITEM_STIRNREIF__GREEN)
-			&& (inv_pos == HERO_INVENTORY_SLOT_HEAD))
+			&& (inv_slot == HERO_INVENTORY_SLOT_HEAD))
 		{
 			return 1;
 		}
 
 		/* you can take everything else in the hands, but nowhere else */
 
-		if ((inv_pos != HERO_INVENTORY_SLOT_RIGHT_HAND) && (inv_pos != HERO_INVENTORY_SLOT_LEFT_HAND)) {
+		if ((inv_slot != HERO_INVENTORY_SLOT_RIGHT_HAND) && (inv_slot != HERO_INVENTORY_SLOT_LEFT_HAND)) {
 			return 0;
 		}
 
@@ -271,7 +274,7 @@ signed int can_item_at_pos(const signed int item_id, const signed int inv_pos)
  * \return  the position of item, if equipped, otherwise -1.
  * Is not used in the game.
  */
-signed int has_hero_equipped(struct struct_hero *hero, const signed int item_id)
+signed int where_has_hero_equipped_item(struct struct_hero *hero, const signed int item_id)
 {
 	signed int i;
 
@@ -287,16 +290,17 @@ signed int has_hero_equipped(struct struct_hero *hero, const signed int item_id)
 }
 
 /**
- * \brief   returns the position of a non-full item stack
+ * \brief   returns the inventory slot holding non-full stack of a given item
  *
  * \param   hero        the hero
  * \param   item        the item
- * \return              the inventory slot of a non-full (<99) item stack or -1 if
- * the hero doesn't own this item or has only full stacks of them.
+ * \return              -1 if hero doesn't own this item or has only full stacks of it
+ * 			otherwise: inventory slot holding the first incomplete stack of this item
  */
 //static
-signed int has_hero_stacked(struct struct_hero *hero, const signed int item_id)
+signed int where_has_hero_incomplete_stack_of_item(struct struct_hero *hero, const signed int item_id)
 {
+	// assert(g_itemsdat[item_id]->flags.stackable)
 	signed int inv_slot;
 
 	for (inv_slot = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++) {
@@ -325,6 +329,8 @@ signed int has_hero_stacked(struct struct_hero *hero, const signed int item_id)
  * \param   item_id[in]		the item ID
  * \param   mode[in]		0 = quiet / 1 = warn / 2 = ignore
  * \param   quantity[in]	amount of items the hero should get
+ *
+ * \return	quantity of items the hero has taken
  */
 signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id, const signed int mode, const signed int quantity)
 {
@@ -354,7 +360,7 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 		item_p = &g_itemsdat[item_id];
 
 		/* hero has a non-full stack of this item */
-		if (item_p->flags.stackable && ((inv_slot = has_hero_stacked(hero, item_id)) != -1)) {
+		if (item_p->flags.stackable && ((inv_slot = where_has_hero_incomplete_stack_of_item(hero, item_id)) != -1)) {
 
 
 			/* check for space on existing stack */
@@ -426,7 +432,7 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 								retval = quantity_taken;
 								quantity_taken = 0;
 							} else {
-								/* add quantity_takenngle item weight */
+								/* add single item weight */
 								hero->load += item_p->weight;
 								quantity_taken--;
 								retval++;
@@ -467,7 +473,7 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
  * \param   item_id[in]	the item ID
  */
 //static
-signed int item_pleasing_ingerimm(const signed int item_id)
+signed int is_item_pleasing_ingerimm(const signed int item_id)
 {
 
 	struct item_stats *item_p = &g_itemsdat[item_id];
@@ -487,13 +493,13 @@ signed int item_pleasing_ingerimm(const signed int item_id)
  * \brief   tries to drop an item
  *
  * \param   hero        pointer to the hero
- * \param   pos         position of the item to be dropped
- * \param   no          number of stacked items to be dropped / -1 to ask
+ * \param   inv_slot    position of the item to be dropped
+ * \param   quantity    number of stacked items to be dropped / -1 to ask
  * \return              true if the item has been dropped or false if not
  *
  *	TODO: This function can be tuned a bit
  */
-signed int drop_item(struct struct_hero *hero, const signed int pos, signed int no)
+signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed int quantity)
 {
 
 	struct item_stats *p_item;
@@ -501,9 +507,9 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 	signed int retval = 0;
 	signed int item_id;
 
-	item_id = hero->inventory[pos].item_id;
+	item_id = hero->inventory[inv_slot].item_id;
 
-	/* check if that item is valid */
+	/* check if that item_id is valid */
 	if (item_id != ITEM_NONE) {
 
 		p_item = &g_itemsdat[item_id];
@@ -519,7 +525,7 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 			/* this item is droppable */
 			if (p_item->flags.stackable) {
 
-				if (no == -1) {
+				if (quantity == -1) {
 					sprintf(g_dtp2,	get_ttx(219), (char*)GUI_names_grammar(6, item_id, 0));
 
 					do {
@@ -527,39 +533,39 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 
 					} while (answer < 0);
 
-					no = answer;
+					quantity = answer;
 				}
 
-				if (hero->inventory[pos].quantity > no) {
+				if (hero->inventory[inv_slot].quantity > quantity) {
 
-					/* remove some stacked items */
+					/* remove part of the stack */
 
 					/* adjust stack counter */
-					hero->inventory[pos].quantity -= no;
+					hero->inventory[inv_slot].quantity -= quantity;
 
 					/* adjust weight */
-					hero->load -= p_item->weight * no;
+					hero->load -= p_item->weight * quantity;
 				} else {
-					/* remove all stacked items */
+					/* remove full stack */
 
 					/* adjust weight */
-					hero->load -= p_item->weight * hero->inventory[pos].quantity;
+					hero->load -= p_item->weight * hero->inventory[inv_slot].quantity;
 
 					/* decrement item counter */
 					hero->num_inv_slots_used--;
 
-					/* clear the inventory pos */
-					memset(&hero->inventory[pos], 0, sizeof(inventory));
+					/* clear the inv_slot */
+					memset(&hero->inventory[inv_slot], 0, sizeof(inventory));
 				}
 
 				retval = 1;
 			} else {
-				if (!(no != -1 || GUI_bool(get_ttx(220)))) {
+				if (!(quantity != -1 || GUI_bool(get_ttx(220)))) {
 				} else {
 
 					/* check if item is equipped */
-					if (pos < 7) {
-						unequip(hero, item_id, pos);
+					if (inv_slot < HERO_INVENTORY_SLOT_KNAPSACK_1) {
+						unequip(hero, item_id, inv_slot);
 					}
 
 					/* decrement item counter */
@@ -581,8 +587,8 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 						hero->mr = hero->mr - 5;
 					}
 
-					/* clear the inventory pos */
-					memset(&hero->inventory[pos], 0, sizeof(inventory));
+					/* clear the inventory slot */
+					memset(&hero->inventory[inv_slot], 0, sizeof(inventory));
 					retval = 1;
 				}
 			}
@@ -591,12 +597,13 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 		/* check for the pirate cave on Manrek to bring Efferd a gift */
 		if ((item_id == ITEM_DREIZACK || item_id == ITEM_NETZ) &&
 			(gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE) && (gs_x_target == 9) && (gs_y_target == 9))
+			/* no check of dungeon level needed: pirate cafe has only a single level */
 		{
 			gs_dng11_efferd_sacrifice = 1;
 		}
 
 		/* check for the mine in Oberorken to bring Ingerimm a gift */
-		if (item_pleasing_ingerimm(item_id) &&
+		if (is_item_pleasing_ingerimm(item_id) &&
 			(gs_dungeon_id == DUNGEON_ID_ZWERGENFESTE) && (gs_x_target == 2) && (gs_y_target == 14) && (gs_dungeon_level == 1))
 		{
 			gs_dng12_ingerimm_sacrifice = 1;
@@ -607,14 +614,14 @@ signed int drop_item(struct struct_hero *hero, const signed int pos, signed int 
 }
 
 /**
- * \brief   gives one item to the party
+ * \brief   gives one item to the active group
  *
  * \param   item_id	the item ID
- * \param   unused	unused parameter
+ * \param   dummy	unused parameter
  * \param   quantity	number of items
- * \return  the number of given items.
+ * \return  the number of given items
  */
-signed int get_item(signed int item_id, const signed int unused, signed int quantity)
+signed int get_item(signed int item_id, const signed int dummy, signed int quantity)
 {
 	signed int i;
 	signed int retval = 0;
@@ -727,23 +734,26 @@ signed int group_count_item(const signed int item_id)
  * \brief   a hero will loose an item
  *
  * \param   hero        the hero
- * \param   percent     probability to loose
+ * \param   chance      probability to loose as a percentage value
  * \param   text        the displayed text
  */
-void loose_random_item(struct struct_hero *hero, const signed int percent, char *text)
+void loose_random_item(struct struct_hero *hero, const signed int chance, char *text)
+	/* TODO / FEATURE_MOD: rethink plausibility.
+	 * For example, in many situations, suddenly loosing your equipped body armor does not make any sense.
+	 */
 {
 	struct item_stats *p_item;
 	signed int item_id;
-	signed int pos;
+	signed int inv_slot;
 
-	if (random_schick(100) > percent)
+	if (random_schick(100) > chance)
 		return;
 
 	/* Original-Bug: infinite loop if the hero has no item */
 	do {
-		pos = random_schick(NR_HERO_INVENTORY_SLOTS) - 1;
+		inv_slot = random_schick(NR_HERO_INVENTORY_SLOTS) - 1;
 
-		item_id = hero->inventory[pos].item_id;
+		item_id = hero->inventory[inv_slot].item_id;
 
 		p_item = &g_itemsdat[item_id];
 
@@ -751,7 +761,7 @@ void loose_random_item(struct struct_hero *hero, const signed int percent, char 
 		if (item_id != 0 && !p_item->flags.undropable) {
 
 			/* drop 1 item */
-			drop_item(hero, pos, 1);
+			drop_item(hero, inv_slot, 1);
 
 			sprintf(g_text_output_buf, text, hero->alias, (uint8_t*)GUI_names_grammar(0, item_id, 0));
 			GUI_output(g_text_output_buf);
