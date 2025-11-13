@@ -518,7 +518,7 @@ void miracle_resurrect(const char *str)
 void miracle_modify(const unsigned int offset, const int32_t timer_value, const signed int mod)
 {
 	signed int i;
-	signed int slot;
+	signed int mod_slot;
 	HugePt ptr;
 	struct struct_hero *hero = get_hero(0);
 
@@ -527,11 +527,11 @@ void miracle_modify(const unsigned int offset, const int32_t timer_value, const 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead && !hero->flags.gods_pissed)
 		{
-			slot = get_free_mod_slot();
+			mod_slot = get_free_mod_slot();
 			ptr = (uint8_t*)hero;
 			ptr += offset;
 
-			set_mod_slot(slot, timer_value, (uint8_t*)ptr, (signed char)mod, (signed char)i);
+			set_mod_slot(mod_slot, timer_value, (uint8_t*)ptr, (signed char)mod, (signed char)i);
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace M302de {
 signed int DNG14_handler(void)
 {
 	signed int pos;
-	signed int l_di;
+	signed int tmp; /* multiple use: mod_slot, item_count, result of skill test */
 	signed int hero_pos;
 	signed int tw_bak;
 	int32_t p_money;
@@ -156,14 +156,14 @@ signed int DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
+				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
-			if (l_di > 0) {
+			if (tmp > 0) {
 				amap_ptr[MAP_POS(5,11)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor1 = 2;
 				DNG_update_pos();
@@ -183,14 +183,14 @@ signed int DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
+				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
-			if (l_di > 0) {
+			if (tmp > 0) {
 				amap_ptr[MAP_POS(12,7)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor2 = 2;
 				DNG_update_pos();
@@ -304,14 +304,14 @@ signed int DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
-			if (l_di > 0) {
+			if (tmp > 0) {
 				/* test was sucessful => disable trap */
 				amap_ptr[MAP_POS(1,10)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor3 = 2;
@@ -334,14 +334,14 @@ signed int DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
-			if (l_di > 0) {
+			if (tmp > 0) {
 				/* test was sucessful => disable trap */
 				amap_ptr[MAP_POS(6,10)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor4 = 2;
@@ -361,8 +361,8 @@ signed int DNG14_handler(void)
 
 		if (GUI_bool(get_tx(21))) {
 
-			l_di = group_count_item(ITEM_SEIL);
-			l_di += group_count_item(ITEM_STRICKLEITER);
+			tmp = group_count_item(ITEM_SEIL);
+			tmp += group_count_item(ITEM_STRICKLEITER);
 
 			hero = get_hero(0);
 			for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
@@ -374,12 +374,12 @@ signed int DNG14_handler(void)
 					(hero->staff_level > 2))
 				{
 					/* mage with staffspell-level > 2 => can transform staff to rope */
-					l_di++;
+					tmp++;
 				}
 			}
 
 			do {
-				hero_pos = GUI_radio(get_tx(22), (l_di >= 5 ? 3 : 2), get_tx(23), get_tx(24), get_tx(25));
+				hero_pos = GUI_radio(get_tx(22), (tmp >= 5 ? 3 : 2), get_tx(23), get_tx(24), get_tx(25));
 
 			} while (hero_pos == -1);
 
@@ -445,9 +445,9 @@ signed int DNG14_handler(void)
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_TA, 0) <= 0)
 			{
-				l_di = get_free_mod_slot();
+				tmp = get_free_mod_slot();
 
-				set_mod_slot(l_di, HOURS(6), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)hero_pos);
+				set_mod_slot(tmp, HOURS(6), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)hero_pos);
 			}
 		}
 
@@ -503,14 +503,14 @@ signed int DNG14_handler(void)
 			sprintf(g_dtp2,	get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
-			if (l_di > 0) {
+			if (tmp > 0) {
 				/* disable trap */
 				amap_ptr[MAP_POS(14,4)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 

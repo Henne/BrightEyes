@@ -46,7 +46,7 @@ signed int DNG08_handler(void)
 {
 	signed int target_pos;
 	signed int i;
-	signed int tmp;
+	signed int tmp; /* multiple use: mod_slot, group_id */
 	signed int tw_bak;
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
@@ -403,16 +403,16 @@ void DNG08_search_bed(void)
 {
 	signed int counter;
 	signed int money;
-	signed int slot;
+	signed int mod_slot;
 	struct struct_hero *hero;
 
 	money = counter = 0;
 
 	hero = get_first_hero_available_in_group();
 
-	slot = get_free_mod_slot();
+	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(slot, HOURS(6), (uint8_t*)&hero->attrib[ATTRIB_CH].current, -2, (signed char)get_hero_index(hero));
+	set_mod_slot(mod_slot, HOURS(6), (uint8_t*)&hero->attrib[ATTRIB_CH].current, -2, (signed char)get_hero_index(hero));
 
 	if (random_schick(100) <= 10)
 	{

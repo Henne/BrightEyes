@@ -651,16 +651,16 @@ void tevent_047(void)
 /* Rybon <-> Thoss: entrance to the dungeon "ruin of the black wizard" */
 void tevent_100(void)
 {
-	signed int answer;
+	signed int tmp; /* multiple use: answer, mod_slot */
 
 	if (gs_tevent100_flag) {
 
 		do {
-			answer = GUI_radio(get_tx2(52), 3, get_tx2(53), get_tx2(54), get_tx2(55));
+			tmp = GUI_radio(get_tx2(52), 3, get_tx2(53), get_tx2(54), get_tx2(55));
 
-		} while (answer == -1);
+		} while (tmp == -1);
 
-		if (answer == 1) {
+		if (tmp == 1) {
 
 			GUI_output(get_tx2(56));
 
@@ -673,11 +673,11 @@ void tevent_100(void)
 			GUI_output(get_tx2(57));
 
 			do {
-				answer = GUI_radio(get_tx2(58), 2, get_tx2(59), get_tx2(60));
+				tmp = GUI_radio(get_tx2(58), 2, get_tx2(59), get_tx2(60));
 
-			} while (answer == -1);
+			} while (tmp == -1);
 
-			if (answer == 1) {
+			if (tmp == 1) {
 
 				gs_travel_detour = DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS;
 
@@ -695,9 +695,9 @@ void tevent_100(void)
 					/* fail */
 					struct struct_hero *hero = get_first_hero_available_in_group();
 
-					answer = get_free_mod_slot();
+					tmp = get_free_mod_slot();
 
-					set_mod_slot(answer, DAYS(1), (uint8_t*)&hero->attrib[ATTRIB_GE].current, -2, 0);
+					set_mod_slot(tmp, DAYS(1), (uint8_t*)&hero->attrib[ATTRIB_GE].current, -2, 0);
 
 					timewarp(MINUTES(15));
 
@@ -711,7 +711,7 @@ void tevent_100(void)
 
 			g_request_refresh = 1;
 
-		} else if (answer == 3) {
+		} else if (tmp == 3) {
 
 			gs_trv_return = 1;
 		}

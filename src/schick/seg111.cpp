@@ -409,7 +409,7 @@ void tevent_062(void)
 /* Orvil <-> Skjal: dead animal */
 void tevent_063(void)
 {
-	signed int i;
+	signed int i; /* multiple use: hero_pos, mod_slot */
 	signed int max;
 	signed int proof;
 	signed int vomiter;

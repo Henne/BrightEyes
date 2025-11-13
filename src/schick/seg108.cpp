@@ -44,7 +44,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	signed int tw_bak;
 	signed int consumer_idx;
 
-	signed int l_di, l_si;
+	signed int tmp; /* multiple use: mod_slot, random_le_gain */
+	signed int tmp2; /* multiple use: talent_id, flag, attrib_id, etc. */
 
 	/* this hero cannot consume */
 	if (check_hero(consumer) == 0) {
@@ -174,8 +175,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					/* Gulmond Blatt */
 
 					/* KK+2 for 12h */
-					l_di = get_free_mod_slot();
-					set_mod_slot(l_di, HOURS(12), (uint8_t*)(&consumer->attrib[ATTRIB_KK].current), 2, (signed char)consumer_idx);
+					tmp = get_free_mod_slot();
+					set_mod_slot(tmp, HOURS(12), (uint8_t*)(&consumer->attrib[ATTRIB_KK].current), 2, (signed char)consumer_idx);
 
 					/* LE + 2 */
 					add_hero_le(consumer, 2);
@@ -187,15 +188,15 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case ITEM_EINBEERE: {
 					/* Vierblaettrige Einbeere */
 
-					l_di = random_schick(6);
+					tmp = random_schick(6);
 					le_diff = consumer->le_max - consumer->le;
-					if (l_di > le_diff)
-						l_di = le_diff;
+					if (tmp > le_diff)
+						tmp = le_diff;
 
-					add_hero_le(consumer, l_di);
+					add_hero_le(consumer, tmp);
 
 					/* prepare output */
-					sprintf(g_dtp2, get_ttx(502), l_di);
+					sprintf(g_dtp2, get_ttx(502), tmp);
 
 					break;
 				}
@@ -211,8 +212,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* TODO: unknown for 24h */
-					l_di = get_free_mod_slot();
-					set_mod_slot(l_di, DAYS(1), (uint8_t*)(&consumer->herbs), 1, (signed char)consumer_idx);
+					tmp = get_free_mod_slot();
+					set_mod_slot(tmp, DAYS(1), (uint8_t*)(&consumer->herbs), 1, (signed char)consumer_idx);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(503), consumer->alias);
@@ -228,8 +229,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						consumer->poison[poison][0] = 1;
 					}
 
-					l_di = get_free_mod_slot();
-					set_mod_slot(l_di, DAYS(1), (uint8_t*)(&consumer->herbs), 2, (signed char)consumer_idx);
+					tmp = get_free_mod_slot();
+					set_mod_slot(tmp, DAYS(1), (uint8_t*)(&consumer->herbs), 2, (signed char)consumer_idx);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(503), consumer->alias);
@@ -237,10 +238,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 				case ITEM_ATMONBLUETE: {
 					/* Atmon */
-					for (l_si = 9; l_si < 19; l_si++) {
+					for (tmp2 = 9; tmp2 < 19; tmp2++) {
 						/* All body skills + 2 for 5h */
-						l_di = get_free_mod_slot();
-						set_mod_slot(l_di, HOURS(5), (uint8_t*)(&consumer->skills[l_si]), 2, (signed char)consumer_idx);
+						tmp = get_free_mod_slot();
+						set_mod_slot(tmp, HOURS(5), (uint8_t*)(&consumer->skills[tmp2]), 2, (signed char)consumer_idx);
 					}
 
 					/* prepare output */
@@ -249,15 +250,15 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 				case ITEM_WIRSELKRAUT: {
 					/* Wirselkraut */
-					l_di = 10;
+					tmp = 10;
 					le_diff = consumer->le_max - consumer->le;
-					if (le_diff < l_di)
-						l_di = le_diff;
+					if (le_diff < tmp)
+						tmp = le_diff;
 
-					add_hero_le(consumer, l_di);
+					add_hero_le(consumer, tmp);
 					/* prepare output */
 
-					sprintf(g_dtp2, get_ttx(505), l_di);
+					sprintf(g_dtp2, get_ttx(505), tmp);
 					break;
 				}
 				case ITEM_TARNELE: {
@@ -273,10 +274,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 		} else {
 
 			/* check if item is an elixir */
-			l_si = is_in_word_array(item_id, g_elixir_potions);
+			tmp2 = is_in_word_array(item_id, g_elixir_potions);
 			bad_elixir_item_id = is_in_word_array(item_id, g_bad_elixirs);
 
-			if (l_si != 0) {
+			if (tmp2 != 0) {
 				/* handle good elixirs */
 
 				/* drop elixir */
@@ -286,11 +287,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
 
 				/* Attribute +5 for 1h */
-				l_di = get_free_mod_slot();
-				set_mod_slot(l_di, HOURS(1), (uint8_t*)(&consumer->attrib[l_si - 1].current), 5, (signed char)consumer_idx);
+				tmp = get_free_mod_slot();
+				set_mod_slot(tmp, HOURS(1), (uint8_t*)(&consumer->attrib[tmp2 - 1].current), 5, (signed char)consumer_idx);
 
 				/* prepare output */
-				sprintf(g_dtp2, get_ttx(509), consumer->alias, get_ttx(411 + l_si), 5);
+				sprintf(g_dtp2, get_ttx(509), consumer->alias, get_ttx(411 + tmp2), 5);
 
 				/* print output */
 				GUI_output(g_dtp2);
@@ -305,8 +306,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
 
 				/* Attribute -7 for 1h */
-				l_di = get_free_mod_slot();
-				set_mod_slot(l_di, HOURS(1), (uint8_t*)(&consumer->attrib[bad_elixir_item_id - 1].current), -7, (signed char)consumer_idx);
+				tmp = get_free_mod_slot();
+				set_mod_slot(tmp, HOURS(1), (uint8_t*)(&consumer->attrib[bad_elixir_item_id - 1].current), -7, (signed char)consumer_idx);
 
 				/* prepare output */
 				sprintf(g_dtp2, get_ttx(656), consumer->alias, get_ttx(411 + bad_elixir_item_id), 7);
@@ -324,38 +325,38 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case ITEM_HEILTRANK : {
 					/* Heiltrank */
 
-					l_si = consumer->le_max - consumer->le;
-					if (l_si > 10)
-						l_si = 10;
+					tmp2 = consumer->le_max - consumer->le;
+					if (tmp2 > 10)
+						tmp2 = 10;
 
 					/* singular POINT/ PUNKT */
 					strcpy(g_text_output_buf, get_ttx(392));
 
-					if (l_si > 1) {
+					if (tmp2 > 1) {
 						/* make plural POINTS/PUNKTE */
 						strcat(g_text_output_buf, get_ttx(393));
 					}
 
 					/* add LE */
-					add_hero_le(consumer, l_si);
+					add_hero_le(consumer, tmp2);
 
 					/* give owner a glassbottle */
 					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
 
 					/* prepare output */
-					sprintf(g_dtp2, get_ttx(510), consumer->alias, l_si, g_text_output_buf);
+					sprintf(g_dtp2, get_ttx(510), consumer->alias, tmp2, g_text_output_buf);
 					break;
 				}
 				case  ITEM_STARKER_HEILTRANK : {
 					/* Starker Heiltrank */
 
 					/* 1W20+10 */
-					l_si = dice_roll(1, 20, 10);
-					if (consumer->le_max - consumer->le < l_si)
-						l_si = consumer->le_max - consumer->le;
+					tmp2 = dice_roll(1, 20, 10);
+					if (consumer->le_max - consumer->le < tmp2)
+						tmp2 = consumer->le_max - consumer->le;
 
 					/* add LE */
-					add_hero_le(consumer, l_si);
+					add_hero_le(consumer, tmp2);
 
 					/* give owner a copperbottle */
 					give_new_item_to_hero(owner, ITEM_BRONZEFLASCHE, 2, 1);
@@ -363,13 +364,13 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					/* singular POINT/ PUNKT */
 					strcpy(g_text_output_buf, get_ttx(392));
 
-					if (l_si > 1) {
+					if (tmp2 > 1) {
 						/* make plural POINTS/PUNKTE */
 						strcat(g_text_output_buf, get_ttx(393));
 					}
 
 					/* prepare output */
-					sprintf(g_dtp2, get_ttx(510), consumer->alias, l_si, g_text_output_buf);
+					sprintf(g_dtp2, get_ttx(510), consumer->alias, tmp2, g_text_output_buf);
 					break;
 				}
 				case ITEM_WUNDERKUR: {
@@ -427,13 +428,13 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					if (consumer->typus >= HERO_TYPE_HEXE) {
 						/* Magicuser */
 
-						l_si = consumer->ae_max - consumer->ae;
+						tmp2 = consumer->ae_max - consumer->ae;
 
-						if (l_si > 10)
-							l_si = 10;
+						if (tmp2 > 10)
+							tmp2 = 10;
 
 						/* add AE */
-						add_hero_ae(consumer, l_si);
+						add_hero_ae(consumer, tmp2);
 
 						/* give hero a glassbottle */
 						give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
@@ -441,11 +442,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						/* prepare output */
 						strcpy(g_text_output_buf, get_ttx(392));
 
-						if (l_si > 1) {
+						if (tmp2 > 1) {
 							strcat(g_text_output_buf, get_ttx(393));
 						}
 
-						sprintf(g_dtp2, get_ttx(512), l_si, g_text_output_buf, consumer->alias);
+						sprintf(g_dtp2, get_ttx(512), tmp2, g_text_output_buf, consumer->alias);
 					} else {
 						/* Not a magicuser */
 
@@ -463,13 +464,13 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					if (consumer->typus >= HERO_TYPE_HEXE) {
 						/* Magicuser */
 
-						l_si = consumer->ae_max - consumer->ae;
+						tmp2 = consumer->ae_max - consumer->ae;
 
-						if (l_si > 30)
-							l_si = 30;
+						if (tmp2 > 30)
+							tmp2 = 30;
 
 						/* add AE */
-						add_hero_ae(consumer, l_si);
+						add_hero_ae(consumer, tmp2);
 
 						/* give owner a glassbottle */
 						give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
@@ -480,11 +481,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						} else {
 							strcpy(g_text_output_buf, get_ttx(392));
 
-							if (l_si > 1) {
+							if (tmp2 > 1) {
 								strcat(g_text_output_buf, get_ttx(393));
 							}
 
-							sprintf(g_dtp2, get_ttx(512), l_si, g_text_output_buf, consumer->alias);
+							sprintf(g_dtp2, get_ttx(512), tmp2, g_text_output_buf, consumer->alias);
 						}
 					} else {
 						/* Not a magicuser */

@@ -45,7 +45,7 @@ int16_t g_dng05_trash_flag = 0; // ds:0x960e
 signed int DNG04_handler(void)
 {
 	signed int pos;
-	signed int i;
+	signed int i; /* dual use: mod_slot, hero_pos */
 	signed int tw_bak;
 	struct struct_hero *hero;
 
@@ -339,7 +339,7 @@ void DNG04_chest02_loot(struct struct_chest* chest)
 signed int DNG05_handler(void)
 {
 	signed int pos;
-	signed int tmp;
+	signed int tmp; /* multiple use: mod_slot, answer */
 	signed int tw_bak;
 	struct struct_hero *hero;
 
