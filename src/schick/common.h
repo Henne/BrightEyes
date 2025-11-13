@@ -1485,4 +1485,8 @@ enum {
 	MENU_ICON_CAMP			= 54
 };
 
+enum{
+	STACK_SIZE_MAX = 99
+};
+
 #endif

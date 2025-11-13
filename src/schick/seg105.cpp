@@ -308,7 +308,7 @@ signed int where_has_hero_incomplete_stack_of_item(struct struct_hero *hero, con
 		/* has the hero the item */
 		/* is the number of items < 99 */
 		/* REMARK: should check if item is stackable */
-		if ((hero->inventory[inv_slot].item_id == item_id) && (hero->inventory[inv_slot].quantity < 99)) {
+		if ((hero->inventory[inv_slot].item_id == item_id) && (hero->inventory[inv_slot].quantity < STACK_SIZE_MAX)) {
 
 			return inv_slot;
 		}
@@ -364,9 +364,9 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 
 			/* check for space on existing stack */
-			if (hero->inventory[inv_slot].quantity + quantity_taken > 99) {
+			if (hero->inventory[inv_slot].quantity + quantity_taken > STACK_SIZE_MAX) {
 
-				quantity_taken = 99 - hero->inventory[inv_slot].quantity;
+				quantity_taken = STACK_SIZE_MAX - hero->inventory[inv_slot].quantity;
 			}
 
 			/* add items to stack */
@@ -394,8 +394,8 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 						if (inv_slot_2 < NR_HERO_INVENTORY_SLOTS) {
 
-							if (quantity_taken > 99) {
-								quantity_taken = 99;
+							if (quantity_taken > STACK_SIZE_MAX) {
+								quantity_taken = STACK_SIZE_MAX;
 							}
 
 							/* increment item counter */

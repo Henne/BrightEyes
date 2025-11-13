@@ -489,10 +489,10 @@ lab04:
 				stackable_quant = hero1->inventory[pos1].quantity;
 			}
 
-			if ((stackable_quant > 0) && (hero2->inventory[pos2].quantity < 99)) {
+			if ((stackable_quant > 0) && (hero2->inventory[pos2].quantity < STACK_SIZE_MAX)) {
 
-				if (hero2->inventory[pos2].quantity + stackable_quant > 99) {
-					stackable_quant = 99 - hero2->inventory[pos2].quantity;
+				if (hero2->inventory[pos2].quantity + stackable_quant > STACK_SIZE_MAX) {
+					stackable_quant = STACK_SIZE_MAX - hero2->inventory[pos2].quantity;
 				}
 
 				while ((hero2->attrib[ATTRIB_KK].current * 100 <= hero2->load + item1_desc->weight * stackable_quant) && (stackable_quant > 0)) {
