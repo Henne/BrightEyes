@@ -1062,7 +1062,7 @@ signed int do_fight(const signed int fight_id)
 			/* increment round counter */
 			g_fight_round++;
 
-			timewarp(SECONDS(6));
+			timewarp(FIGHT_ROUNDS(1)); /* 1 fight round == 6 seconds == 9 ticks */
 
 			if (g_in_fight) {
 				FIG_latecomers();

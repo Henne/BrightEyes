@@ -629,7 +629,7 @@ void spell_plumbumbarum(void)
 
 			/* give a short AT-malus of -3 to the current weapon of the target */
 			mod_slot = get_free_mod_slot();
-			set_mod_slot(mod_slot, 0x2d,
+			set_mod_slot(mod_slot, FIGHT_ROUNDS(5),
 				(uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 				-3, (signed char)hero_pos);
 
@@ -675,21 +675,21 @@ void spell_saft_kraft(void)
 	/* +5 on AT of the current weapon */
 	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(mod_slot, rounds * 9L,
+	set_mod_slot(mod_slot, FIGHT_ROUNDS(rounds),
 		(uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 		5, (signed char)target);
 
 	/* -5 on PA of the current weapon */
 	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(mod_slot, rounds * 9L,
+	set_mod_slot(mod_slot, FIGHT_ROUNDS(rounds),
 		(uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 		-5, (signed char)target);
 
 	/* +5 extra damage */
 	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(mod_slot, rounds * 9L, (uint8_t*)&get_spelltarget()->saftkraft, 5, (signed char)target);
+	set_mod_slot(mod_slot, FIGHT_ROUNDS(rounds), (uint8_t*)&get_spelltarget()->saftkraft, 5, (signed char)target);
 
 	/* set ae costs */
 	g_spell_special_aecost = rounds;
@@ -724,11 +724,11 @@ void spell_scharfes_auge(void)
 
 	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(mod_slot, 3 * 9L, (uint8_t*)&get_spelltarget()->skills[TA_WURFWAFFEN], 3, (signed char)target); /* TA_WURFWAFFEN */
+	set_mod_slot(mod_slot, FIGHT_ROUNDS(3), (uint8_t*)&get_spelltarget()->skills[TA_WURFWAFFEN], 3, (signed char)target); /* TA_WURFWAFFEN */
 
 	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(mod_slot, 3 * 9L, (uint8_t*)&get_spelltarget()->skills[TA_SCHUSSWAFFEN], 3, (signed char)target); /* TA_SCHUSSWAFFEN */
+	set_mod_slot(mod_slot, FIGHT_ROUNDS(3), (uint8_t*)&get_spelltarget()->skills[TA_SCHUSSWAFFEN], 3, (signed char)target); /* TA_SCHUSSWAFFEN */
 
 	sprintf(g_dtp2, get_tx(97), get_spelltarget()->alias);
 }
