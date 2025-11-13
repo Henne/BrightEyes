@@ -191,8 +191,6 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 		if (hero->action_id == FIG_ACTION_MELEE_ATTACK) {
 
-			/* attack a hero */
-
 			p_weapon = &hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
 			weapon_type = weapon_check(hero);
@@ -215,7 +213,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				atpa--;
 			}
 
-			/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a PA-bonus against orcs */
+			/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get an AT-bonus against orcs */
 			if (gs_tevent071_orcstatue &&
 				(hero->typus == HERO_TYPE_ZWERG) &&
 				!target_is_hero &&

@@ -530,13 +530,17 @@ struct item_flags {
 	unsigned short armor		:1;	/* bit 0: armor */
 	unsigned short weapon		:1;	/* bit 1: weapon */
 	unsigned short usable	 	:1;	/* bit 2: usable item */
+						/* strange: ITEM_BASTARDSCHWERT__MAGIC is marked as usable. Original-Bug? */
+
 	unsigned short nutrition	:1;	/* bit 3: nutrition */
 
 	unsigned short stackable	:1;	/* bit 4: stackable */
 	unsigned short herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
 	unsigned short undropable	:1;	/* bit 6: personal item (cannot be dropped) */
 	unsigned short dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
-						 * In ITEMS.DAT, it seems that bit 7 is set for an item if and only if no other bit is set. */
+						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
+						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
+						 * which are special anyway, don't have any flag set. */
 };
 
 struct item_stats {

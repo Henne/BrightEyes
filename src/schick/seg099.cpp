@@ -37,33 +37,94 @@ namespace M302de {
 #endif
 
 static const struct analues_item g_analues_items[28] = {
+	/* messages from SPELLTXT.LTX */
+
 	{ ITEM_AMULETT__UNKNOWN_1   ,  2, 0x36 },
+	/* DIENT DER ABWEHR VON IGNIFAXIUS, MÖCHT ICH MEINEN.@DA BIN ICH MIR SOGAR ZIEMLICH SICHER. */
+
 	{ ITEM_RING__RED            ,  3, 0x38 },
+	/* HOCHINTERESSANT...EIN SCHUTZRING...ERHÖHT DIE MAGISCHEN ABWEHRKRÄFTE... SEHR BELIEBT BEI THORWALERN.*/
+
 	{ ITEM_SILBERNER_STIRNREIF  ,  4, 0x39 },
+	/* <DIESER STIRNREIF IST EINDEUTIG ELFISCHER MACHART.@ACH JA, UND EIN ARMATRUTZ IST ENTHALTEN. */
+
 	{ ITEM_STIRNREIF__GREEN     ,  4, 0x39 },
+	/* <DIESER STIRNREIF IST EINDEUTIG ELFISCHER MACHART.@ACH JA, UND EIN ARMATRUTZ IST ENTHALTEN. */
+
 	{ ITEM_SAEBEL__MAGIC        ,  3, 0x3a },
+	/* DIESER SÄBEL IST BESONDERS WIRKUNGSVOLL GEGEN ZOMBIES, SKELETTE UND MUMIEN. */
+
 	{ ITEM_AMULETT__RED         ,  6, 0x3b },
+	/* AUF DIESEM AMULETT LIEGT DER HEXENZAUBER FEUERBANN.@JEDESMAL, WENN MAN DURCH FEUER SCHADEN ERLEIDEN WÜRDE, FÄNGT DIESES AMULETT EINEN GROSSTEIL DER WIRKUNG AUF. */
+	/* Original-Bug? effect seems not to be implemented. */
+
 	{ ITEM_AMULETT__GREEN       ,  0, 0x3c },
+	/* AUF DIESEM AMULETT LIEGT DER ZAUBER FLIM FLAM FUNKEL.@DER BESITZER BRAUCHT SICH DIE NÄCHSTE ZEIT KEINE UNNÖTIGEN SORGEN UM FACKELN ODER ÖLLAMPEN ZU MACHEN. */
+
 	{ ITEM_TRAVIA_AMULETT       ,  6, 0x3d },
+	/* AUF DIESEM AMULETT LIEGT EIN ZAUBER, DER DEN TRÄGER UNEMPFINDLICH GEGEN HUNGER UND DURST MACHT. WELCHE ART ZAUBER DIES IST, KANN ICH JEDOCH NICHT BESTIMMEN. */
+
 	{ ITEM_ZWEIHAENDER__MAGIC   ,  0, 0x3e },
+	/* DIESE WAFFE SCHEINT MIR UNZERBRECHLICH ZU SEIN. */
+
 	{ ITEM_SILBERSCHMUCK__MAGIC ,  3, 0x3f },
+	/* SCHEINT MIR EIN GUTER SCHUTZ GEGEN UNTOTE ZU SEIN. */
+
 	{ ITEM_SPEER__MAGIC         ,  3, 0x40 },
+	/* MIR SCHEINT, ALS HÄTTE DIESER SPEER MACHT ÜBER SPINNENTIERE. */
+	/* Original-Bug? effect seems not to be implemented. */
+
 	{ ITEM_STIRNREIF__BLUE      ,  4, 0x41 },
+	/* OHA! AUF DIESEM STIRNREIF LIEGT EIN PERMANENTER ARCANO PSYCHOSTABILIS! */
+
 	{ ITEM_BASTARDSCHWERT__MAGIC,  4, 0x42 },
+	/* EINE HERVORRAGENDE WAFFE! */
+
 	{ ITEM_ORKNASE__MAGIC       ,  4, 0x43 },
+	/* AHA. DA HAT DER SCHMIED DIE WUCHT DER WAFFE AUF KOSTEN DER HANDHABUNG VERBESSTER.@NUR ETWAS FÜR ECHTE KÖNNER. */
+
 	{ ITEM_KURZSCHWERT__MAGIC   ,  4, 0x44 },
+	/* DIESES KURZSCHWERT SCHEINT DIE ATTACKE DES TRÄGERS ENTSCHEIDEND ZU VERBESSERN. */
+
 	{ ITEM_SICHEL__MAGIC        ,  6, 0x45 },
+	/* HM. SCHEINT MIR EIN DRUIDISCHES ARTEFAKT ZU SEIN, DAS EINEM DEN WEG ZU BESTIMMTEN KRÄUTERN WEIST. ABER ICH BIN MIR NICHT SICHER. */
+
 	{ ITEM_AMULETT__BLUE        ,  2, 0x46 },
+	/* OFFENSICHTLICH EIN SCHUZTAMULETT, GANZ BESONDERS GEGEN VERWANDLUNGEN UND KAMPFZAUBER GEEIGNET. */
+
 	{ ITEM_AMULETT__UNKNOWN_2   ,  0, 0x47 },
+	/* ICH KANN KEINERLEI ZAUBER FESTSTELLEN. */
+
 	{ ITEM_KETTENHEMD__MAGIC    , 15, 0x48 },
+	/* ICH KANN DEN GENAUEN ZAUBER NICHT ERKENNEN, ABER ES SCHEINT ETWAS MIT DEM WESEN DER SCHWERE ZU TUN ZU HABEN.@DIESES KETTENHEMD WIRKT AUCH ZIEMLICH LEICHT FÜR SEINE STABILE MACHART. */
+
 	{ ITEM_KRAFTGUERTEL         ,  7, 0x49 },
+	/* DIESER GÜRTEL VERLEIHT DEM TRÄGER EINMALIG EINE IMMENSE KÖRPERKRAFT. */
+
 	{ ITEM_SCHWERT__MAGIC       ,  5, 0x4a },
+	/* DIESES SCHWERT SOLLTE BESONDERS GEGEN UNTOTE WIRKSAM SEIN. */
+	/* Original-Bug? effect seems not to be implemented. */
+
 	{ ITEM_KETTENHEMD__CURSED   ,  5, 0x4b },
+	/* DIESES RÜSTSTÜCK SCHEINT ZU MERKEN, OB UNTOTE DIE WAFFEN FÜHREN. ABER WAS GENAU DANN PASSIERT, WEISS ICH NICHT. */
+
 	{ ITEM_ANTIKRANKHEITSELIXIER, 15, 0x4c },
+	/* DIESES MITTEL SCHEINT GEGEN KRANKHEITEN ZU WIRKEN. */
+
 	{ ITEM_RING__GREEN          ,  5, 0x4d },
+	/* DIESER SCHMUCK SCHÜTZT DEN TRÄGER VOR MAGISCHEM FEUER, JEDENFALLS EINE GEWISSE ZEIT LANG. */
+	/* Original-Bug? effect seems not to be implemented. */
+
 	{ ITEM_WURFDOLCH__MAGIC     ,  6, 0x4e },
+	/* DIESER WURFDOLCH SCHEINT EINEM DAS ZIELEN SEHR ZU ERLEICHTERN. */
+	/* Indeed, accuracy is improved a bit (but not too much), but the main treat is the damage formula 1D6 + 9, see https://crystals-dsa-foren.de/showthread.php?pid=170046 */
+
 	{ ITEM_KRISTALLKUGEL        ,  2, 0x4f },
+	/* DIESE KUGEL HILFT EINEM, DROHENDE GEFAHREN RECHTZEITIG ZU BEMERKEN. */
+
 	{ ITEM_BEUTEL               ,  0, 0x50 },
+	/* DIESEN ZAUBER VERSTEHE ICH NICHT! */
+
 	{ -0x0001                   ,  0, 0x00 }
 }; // ds:0xac3c
 
@@ -974,22 +1035,22 @@ char* spell_analues(void)
 {
 	signed int item_id;
 	signed int i;
-	signed int item_pos;
+	signed int inv_slot;
 
 	/* set analisation capabilities */
 	if (gs_in_academy == 99) {
 		g_spelltest_result = 99;
 	}
 
-	item_pos = select_item_to_drop(get_spelluser());
+	inv_slot = select_item_to_drop(get_spelluser());
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* If the player cancels item selection or has no items select_item_to_drop() returns -1.
 	The original uses the return value to calculate an index, whithout checking for this. */
-	if (item_pos == -1) item_id = 0;
-	else item_id = get_spelluser()->inventory[item_pos].item_id;
+	if (inv_slot == -1) item_id = 0;
+	else item_id = get_spelluser()->inventory[inv_slot].item_id;
 #else
-	item_id = get_spelluser()->inventory[item_pos].item_id;
+	item_id = get_spelluser()->inventory[inv_slot].item_id;
 #endif
 
 	strcpy(g_text_output_buf, get_tx(52));
@@ -1014,7 +1075,7 @@ char* spell_analues(void)
 					/* copy the matching result string */
 					strcpy(g_text_output_buf, get_tx(g_analues_items[i].text_id));
 
-					get_spelluser()->inventory[item_pos].flags.magic_revealed = 1;
+					get_spelluser()->inventory[inv_slot].flags.magic_revealed = 1;
 					break;
 				} else {
 					/* nothing found string */
