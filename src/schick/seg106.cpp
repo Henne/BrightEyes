@@ -91,32 +91,33 @@ signed int two_hand_collision(struct struct_hero* hero, const signed int item_id
 }
 
 /* Borlandified and identical */
-/* is it pos2 -> pos1 or pos1 -> pos2 ? */
-void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
+/* is it inv_slot_2 -> inv_slot_1 or inv_slot_1 -> inv_slot_2 ? */
+/* probably slot_2 -> slot_1 ... */
+void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero *hero)
 {
-	signed int item_id1;
-	signed int item_id2;
+	signed int item_id_1;
+	signed int item_id_2;
 	signed int v3 = 0;
 	signed int temp;
 	struct inventory tmp;
 
-	if (!check_hero(hero) || (pos1 == pos2)) {
+	if (!check_hero(hero) || (inv_slot_1 == inv_slot_2)) {
 
 	} else {
 
-		if ((pos2 > HERO_INVENTORY_SLOT_KNAPSACK_1 - 1) && (pos1 > HERO_INVENTORY_SLOT_KNAPSACK_1 - 1)) {
+		if ((inv_slot_2 > HERO_INVENTORY_SLOT_KNAPSACK_1 - 1) && (inv_slot_1 > HERO_INVENTORY_SLOT_KNAPSACK_1 - 1)) {
 			/* Both items are in knapsacks */
 			v3 = 1;
-			item_id1 = hero->inventory[pos1].item_id;
-			item_id2 = hero->inventory[pos2].item_id;
+			item_id_1 = hero->inventory[inv_slot_1].item_id;
+			item_id_2 = hero->inventory[inv_slot_2].item_id;
 		} else {
-			item_id1 = hero->inventory[pos1].item_id;
-			item_id2 = hero->inventory[pos2].item_id;
+			item_id_1 = hero->inventory[inv_slot_1].item_id;
+			item_id_2 = hero->inventory[inv_slot_2].item_id;
 
-			if ((pos2 < pos1) || ((pos1 < HERO_INVENTORY_SLOT_KNAPSACK_1) && (pos2 < HERO_INVENTORY_SLOT_KNAPSACK_1))) {
+			if ((inv_slot_2 < inv_slot_1) || ((inv_slot_1 < HERO_INVENTORY_SLOT_KNAPSACK_1) && (inv_slot_2 < HERO_INVENTORY_SLOT_KNAPSACK_1))) {
 
-				if (pos1 < HERO_INVENTORY_SLOT_KNAPSACK_1) {
-					if (item_id1 != ITEM_NONE)
+				if (inv_slot_1 < HERO_INVENTORY_SLOT_KNAPSACK_1) {
+					if (item_id_1 != ITEM_NONE)
 						v3 = 1;
 				} else {
 					v3 = 1;
@@ -124,79 +125,80 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 
 				if (v3 != 0) {
 					/* exchange positions */
-					temp = pos1;
-					pos1 = pos2;
-					pos2 = temp;
+					temp = inv_slot_1;
+					inv_slot_1 = inv_slot_2;
+					inv_slot_2 = temp;
 
 					/* exchange ids */
-					temp = item_id1;
-					item_id1 = item_id2;
-					item_id2 = temp;
+					temp = item_id_1;
+					item_id_1 = item_id_2;
+					item_id_2 = temp;
 				}
 			}
 
 			v3 = 0;
 
-			if ((item_id1 == 0) && (item_id2 == 0)) {
+			if ((item_id_1 == 0) && (item_id_2 == 0)) {
 
 				GUI_output(get_ttx(209));
 
 			} else {
-				if (item_id2 != ITEM_NONE) {
+				if (item_id_2 != ITEM_NONE) {
 
 					/* item have the same ids and are stackable */
-					if ((item_id2 == item_id1) && g_itemsdat[item_id1].flags.stackable) {
+					if ((item_id_2 == item_id_1) && g_itemsdat[item_id_1].flags.stackable) {
 						/* merge them */
 
-						/* add quantity of item at pos2 to item at pos1 */
-						hero->inventory[pos1].quantity += hero->inventory[pos2].quantity;
+						/* add quantity of item at inv_slot_2 to item at inv_slot_1 */
+						hero->inventory[inv_slot_1].quantity += hero->inventory[inv_slot_2].quantity;
+						/* Original-Bug: Might result in a stack size bigger than STACK_SIZE_MAX */
 
-						/* delete item at pos2 */
-						memset((uint8_t*)&hero->inventory[pos2], 0, sizeof(inventory));
+						/* delete item at inv_slot_2 */
+						memset((uint8_t*)&hero->inventory[inv_slot_2], 0, sizeof(inventory));
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Decrement the item counter */
 						hero->num_inv_slots_used--;
 #endif
 					} else {
-						if (!can_hero_use_item(hero, item_id2)) {
+						if (!can_hero_use_item(hero, item_id_2)) {
 
 							sprintf(g_dtp2, get_ttx(221), hero->alias,
 								get_ttx((hero->sex != 0 ? 593 : 9) + hero->typus),
-								GUI_names_grammar(2, item_id2, 0));
+								GUI_names_grammar(2, item_id_2, 0));
 
 							GUI_output(g_dtp2);
 
 						} else {
-							if (!can_hero_equip_item_at_slot(item_id2, pos1)) {
+							if (!can_hero_equip_item_at_slot(item_id_2, inv_slot_1)) {
 
-								if (is_in_word_array(item_id2, g_items_pluralwords))
+								if (is_in_word_array(item_id_2, g_items_pluralwords))
 
 									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0x4000, item_id2, 0), get_ttx(557));
+										GUI_names_grammar(0x4000, item_id_2, 0), get_ttx(557));
 								else
 									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0, item_id2, 0), get_ttx(556));
+										GUI_names_grammar(0, item_id_2, 0), get_ttx(556));
 
 								GUI_output(g_dtp2);
 							} else {
-								if (two_hand_collision(hero, item_id2, pos1)) {
+								if (two_hand_collision(hero, item_id_2, inv_slot_1)) {
 
 									sprintf(g_dtp2, get_ttx(829), hero->alias);
 									GUI_output(g_dtp2);
 
 								} else {
-									if (item_id1 != 0) {
-										unequip(hero, item_id1, pos1);
+									if (item_id_1 != 0) {
+										unequip(hero, item_id_1, inv_slot_1);
 									}
 
-									add_equip_boni(hero, hero, item_id2, pos2, pos1);
+									add_equip_boni(hero, hero, item_id_2, inv_slot_2, inv_slot_1);
 									v3 = 1;
 								}
 							}
 						}
 					}
 				} else {
-					unequip(hero, item_id1, pos1);
+					unequip(hero, item_id_1, inv_slot_1);
 					v3 = 1;
 				}
 			}
@@ -205,14 +207,14 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 		if (v3 != 0) {
 
 			/* item have the same ids and are stackable */
-			if ((item_id2 == item_id1) && g_itemsdat[item_id1].flags.stackable) {
+			if ((item_id_2 == item_id_1) && g_itemsdat[item_id_1].flags.stackable) {
 				/* merge them */
 
-				/* add quantity of item at pos2 to item at pos1 */
-				hero->inventory[pos1].quantity += hero->inventory[pos2].quantity;
+				/* add quantity of item at inv_slot_2 to item at inv_slot_1 */
+				hero->inventory[inv_slot_1].quantity += hero->inventory[inv_slot_2].quantity;
 
-				/* delete item at pos2 */
-				memset(&hero->inventory[pos2], 0, sizeof(inventory));
+				/* delete item at inv_slot_2 */
+				memset(&hero->inventory[inv_slot_2], 0, sizeof(inventory));
 #ifdef M302de_ORIGINAL_BUGFIX
 				/* Decrement the item counter */
 				hero->num_inv_slots_used--;
@@ -220,9 +222,9 @@ void move_item(signed int pos1, signed int pos2, struct struct_hero *hero)
 			} else {
 
 				/* exchange the items */
-				tmp = hero->inventory[pos1];
-				hero->inventory[pos1] = hero->inventory[pos2];
-				hero->inventory[pos2] = tmp;
+				tmp = hero->inventory[inv_slot_1];
+				hero->inventory[inv_slot_1] = hero->inventory[inv_slot_2];
+				hero->inventory[inv_slot_2] = tmp;
 			}
 		}
 	}
