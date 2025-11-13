@@ -28,7 +28,7 @@ static const char no_way_msg[][41] = {
 };
 #endif
 
-signed short update_direction(unsigned char mod)
+signed int update_direction(const unsigned char mod)
 {
 	/* save old direction */
 	gs_direction_bak = gs_direction;
@@ -43,15 +43,15 @@ signed short update_direction(unsigned char mod)
 
 void move(void)
 {
-	volatile signed short boundary_flag;
+	volatile signed int boundary_flag;
 	unsigned char mapval;
-	volatile signed short i;
+	volatile signed int i;
 	uint8_t *p_map_small;
 	uint8_t *p_map_large;
 	struct point8s *p_vis_field;
 
-	signed short x;
-	signed short y;
+	signed int x;
+	signed int y;
 
 	p_map_small = p_map_large = g_dng_map;
 
@@ -120,11 +120,11 @@ void move(void)
 	}
 }
 
-void door_frame(signed short no, signed short x, signed short y, signed short frame)
+void door_frame(const signed int no, signed int x, signed int y, const signed int frame)
 {
 	signed int width;
 	signed int height;
-	signed short l1;
+	signed int l1;
 	uint8_t *p1;
 	uint8_t *p2;
 	struct nvf_extract_desc nvf;
@@ -177,9 +177,9 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
  * \param   text        output text
  * \param   flag        to mark this chest as done
  */
-void loot_corpse(struct struct_chest* chest_ptr, char *text, int8_t *flag)
+void loot_corpse(struct struct_chest* chest_ptr, const char *text, int8_t *flag)
 {
-	signed short answer;
+	signed int answer;
 
 	sprintf(g_text_output_buf, (char*)(!(*flag) ? get_ttx(523) : get_ttx(527)), text);
 

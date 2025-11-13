@@ -51,16 +51,18 @@ void SND_set_volume(unsigned short);
 signed short load_digi_driver(uint8_t*, signed short, signed short, signed short);
 /* static */
 unsigned char* read_digi_driver(char*);
+
 //static
 signed short open_and_seek_dat(unsigned short);
 uint32_t get_readlength2(signed short);
-unsigned short read_archive_file(uint16_t, uint8_t *, uint16_t);
-void seek_archive_file(uint16_t, int32_t, ...);
-signed short load_regular_file(uint16_t);
-signed short load_archive_file(uint16_t);
-signed short open_temp_file(unsigned short);
-void copy_from_archive_to_temp(unsigned short, char*);
-void copy_file_to_temp(char*, char*);
+unsigned short read_archive_file(const signed int, uint8_t *, uint16_t);
+void seek_archive_file(const signed int, int32_t, ...);
+signed int load_regular_file(const signed int);
+signed int load_archive_file(const signed int);
+signed int open_temp_file(const signed int);
+void copy_from_archive_to_temp(const signed int, const char*);
+void copy_file_to_temp(const char*, const char*);
+
 int32_t process_nvf_extraction(struct nvf_extract_desc *);
 #if defined(__BORLANDC__)
 void interrupt mouse_isr(void);
@@ -125,7 +127,7 @@ void draw_loc_icons(const signed int, ...);
 signed int mod_day_timer(const signed int);
 void draw_compass(void);
 signed int can_merge_group(void);
-unsigned short div16(unsigned char);
+unsigned short div16(const unsigned char);
 
 void select_with_mouse(signed int*, const struct shop_item*);
 void select_with_keyboard(signed int*, const struct shop_item*);

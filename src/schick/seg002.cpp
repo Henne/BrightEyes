@@ -1054,9 +1054,8 @@ uint32_t get_readlength2(signed short index)
  * \param   len         number of bytes to read
  * \return              number of bytes read
  */
-unsigned short read_archive_file(uint16_t handle, uint8_t *buffer, uint16_t len)
+unsigned short read_archive_file(const signed int handle, uint8_t *buffer, uint16_t len)
 {
-
 	/* no need to read */
 	if (g_archive_file_remaining != 0) {
 
@@ -1078,9 +1077,8 @@ unsigned short read_archive_file(uint16_t handle, uint8_t *buffer, uint16_t len)
  * \param   handle      handle returned by load_archive_file
  * \param   off         position to seek for
  */
-void seek_archive_file(uint16_t handle, int32_t off, ...)
+void seek_archive_file(const signed int handle, int32_t off, ...)
 {
-
 	uint32_t file_off;
 
 	g_archive_file_remaining = g_archive_file_length - off;
@@ -1092,7 +1090,7 @@ void seek_archive_file(uint16_t handle, int32_t off, ...)
 	return;
 }
 
-signed short load_regular_file(uint16_t index)
+signed int load_regular_file(const signed int index)
 {
 	signed int handle;
 
@@ -1118,7 +1116,7 @@ signed short load_regular_file(uint16_t index)
  * \param   index       index of the file in SCHICK.DAT or in temp (bitwise or 0x8000)
  * \return              a file handle that can be used with read_archive_file etc.
  */
-signed short load_archive_file(uint16_t index)
+signed int load_archive_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	flushall();
@@ -1127,7 +1125,7 @@ signed short load_archive_file(uint16_t index)
 	return (index & 0x8000) ? open_temp_file(index & 0x7fff) : open_and_seek_dat(index);
 }
 
-signed short open_temp_file(unsigned short index)
+signed int open_temp_file(const signed int index)
 {
 	char tmppath[40];
 	signed int handle;
@@ -1153,11 +1151,11 @@ signed short open_temp_file(unsigned short index)
 	return handle;
 }
 
-void copy_from_archive_to_temp(unsigned short index, char* fname)
+void copy_from_archive_to_temp(const signed int index, const char* fname)
 {
 	signed int handle1;
 	signed int handle2;
-	signed short len;
+	signed int len;
 
 	if ( (handle1 = load_archive_file(index)) != -1) {
 
@@ -1176,11 +1174,11 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 	}
 }
 
-void copy_file_to_temp(char* src_file, char* fname)
+void copy_file_to_temp(const char* src_file, const char* fname)
 {
 	signed int handle1;
 	signed int handle2;
-	signed short len;
+	signed int len;
 
 #if defined(__BORLANDC__) || defined(_WIN32)
 	if ( (handle1 = open(src_file, O_BINARY | O_RDONLY)) != -1) {
@@ -3547,7 +3545,7 @@ static void passages_recalc(void)
  */
 static void passages_reset(void)
 {
-	signed short i;
+	signed int i;
 	struct sea_route *route = &g_sea_routes[0];
 
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -3576,11 +3574,11 @@ static void passages_reset(void)
  */
 void timewarp(const int32_t time)
 {
-	signed short hour_old;
-	signed short hour_new;
+	signed int hour_old;
+	signed int hour_new;
 	int32_t i;
-	signed short td_bak;
-	signed short hour_diff;
+	signed int td_bak;
+	signed int hour_diff;
 	int32_t timer_bak;
 
 	timer_bak = gs_day_timer;
@@ -3703,12 +3701,12 @@ void timewarp_until_time_of_day(const int32_t time)
 		timewarp(DAYS(1) + time - gs_day_timer);
 	}
 #else
-	signed short hour_old;
-	signed short hour_new;
+	signed int hour_old;
+	signed int hour_new;
 	int32_t i;
-	signed short td_bak;
-	signed short j;
-	signed short hour_diff;
+	signed int td_bak;
+	signed int j;
+	signed int hour_diff;
 	int32_t timer_bak;
 
 	i = 0;
@@ -3809,7 +3807,7 @@ void timewarp_until_midnight(void)
 {
 	/* TODO: This doesn't look all correct to me... Have all timers been considered? Why not call timewarp_until_time_of_day(..)? */
 	int32_t ticks_left;
-	signed short td_bak;
+	signed int td_bak;
 
 	/* save the timers status */
 	td_bak = g_timers_disabled;
@@ -3970,9 +3968,9 @@ void vsync_or_key(const signed int duration)
 
 #if defined(__BORLANDC__)
 /* unused */
-void unused_delay(signed short no)
+void unused_delay(const signed int no)
 {
-	signed short i = 0;
+	signed int i = 0;
 
 	while (i < no) {
 		wait_for_vsync();
@@ -3998,8 +3996,8 @@ void unused_spinlock(void)
  */
 int32_t swap_u32(uint32_t v)
 {
-	register signed short tmp;
-	signed short a[2];
+	register signed int tmp;
+	int16_t a[2];
 	int32_t *ptr = (int32_t*)(&a[0]);
 
 	*ptr = readds((uint8_t*)&v);
@@ -4015,11 +4013,11 @@ int32_t swap_u32(uint32_t v)
 /* unused */
 uint32_t swap_u32_unused(uint32_t v)
 {
-	signed short a[2];
-	signed short tmp;
+	int16_t a[2];
+	signed int tmp;
 	int32_t *ptr = (int32_t*)(&a[0]);
 
-	tmp = (signed short)(*ptr = readds((uint8_t*)&v));
+	tmp = (int16_t)(*ptr = readds((uint8_t*)&v));
 
 	a[0] = a[1];
 	a[1] = tmp;
@@ -4122,7 +4120,7 @@ void clear_menu_icons(void)
  */
 void draw_loc_icons(const signed int icons, ...)
 {
-	signed short icons_bak[9];
+	signed int icons_bak[9];
 	va_list arguments;
 	signed int i;
 	signed int changed = 0;
@@ -4234,7 +4232,7 @@ signed int can_merge_group(void)
 	return retval;
 }
 
-unsigned short div16(unsigned char val)
+unsigned short div16(const unsigned char val)
 {
 	return val >> 4;
 }
@@ -4491,7 +4489,7 @@ void sub_ae_splash(struct struct_hero *hero, signed int ae_cost)
 {
 	if (!hero->flags.dead && (ae_cost > 0)) {
 
-		signed short tmp = g_update_statusline;
+		signed int tmp = g_update_statusline;
 		g_update_statusline = 0;
 
 		if ((hero->typus == HERO_TYPE_MAGIER) && (hero->staff_level >= 4)) {
@@ -4532,7 +4530,7 @@ void add_hero_ae(struct struct_hero* hero, const signed int ae)
 	/* dont add AE if hero is dead or ae = 0 */
 	if (!hero->flags.dead && (ae > 0)) {
 
-		signed short tmp = g_update_statusline;
+		signed int tmp = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* add AE to hero's current AE */
@@ -4556,9 +4554,9 @@ void add_hero_ae(struct struct_hero* hero, const signed int ae)
  */
 void sub_hero_le(struct struct_hero *hero, const signed int le)
 {
-	signed short i;
-	signed short bak;
-	signed short old_le;
+	signed int i;
+	signed int bak;
+	signed int old_le;
 	struct struct_fighter *fighter;
 	struct struct_hero *hero_i;
 
@@ -4895,12 +4893,11 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 	 * Ordinary success leads to return value 1, or, in the case of a negative handicap (in other words, a positive bonus),
 	 * the number of remaining bonus points, increased by 1.  */
 
-	signed short i;
-	signed short rolls_sum;
-	signed short tmp;
-	signed short nr_rolls_20;
+	signed int i;
+	signed int rolls_sum;
+	signed int tmp;
+	signed int nr_rolls_20 = 0;
 
-	nr_rolls_20 = 0;
 	rolls_sum = 0;
 
 #if !defined(__BORLANDC__)
@@ -4942,11 +4939,11 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 	/* Here, the original DSA2/3 skill test logic is implemented.
 	 * WARNING: This makes skill tests, and thus the game, significantly harder!
 	 * Note that we are not implementing the DSA4 rules, where tests with a positive handicap are yet harder. */
-	signed short i;
-	signed short tmp;
-	signed short nr_rolls_1 = 0;
-	signed short nr_rolls_20 = 0;
-	signed short fail = 0;
+	signed int i;
+	signed int tmp;
+	signed int nr_rolls_1 = 0;
+	signed int nr_rolls_20 = 0;
+	signed int fail = 0;
 	signed char attrib [3];
 
 	attrib[0] = hero->attrib[attrib1].current + hero->attrib[attrib1].mod;
@@ -5031,10 +5028,9 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 }
 
 #if defined(__BORLANDC__)
-signed short unused_cruft(void)
+signed int unused_cruft(void)
 {
-
-	signed short l_si;
+	signed int l_si;
 
 	if (!gs_total_hero_counter) {
 		return -1;
@@ -5065,7 +5061,7 @@ signed int get_random_hero(void)
 		cur_hero = random_schick(gs_group_member_counts[gs_active_group_id]) - 1;
 
 #ifdef M302de_ORIGINAL_BUGFIX
-		signed short pos = 0;
+		signed int pos = 0;
 
 		struct struct_hero *hero = get_hero(0);
 		for (int i = 0; i <= 6; i++, hero++) {
@@ -5123,8 +5119,8 @@ int32_t get_party_money(void)
  */
 void set_party_money(int32_t money)
 {
-	signed short heroes = 0;
-	signed short i;
+	signed int heroes = 0;
+	signed int i;
 	int32_t hero_money;
 	struct struct_hero *hero;
 
@@ -5285,7 +5281,7 @@ void sub_hero_ap_all(const signed int ap)
  */
 signed int get_hero_index(const struct struct_hero *hero)
 {
-	signed short i = 0;
+	signed int i = 0;
 	struct struct_hero *p;
 
 	p = get_hero(i);
@@ -5353,7 +5349,7 @@ signed int get_first_hero_with_item(const signed int item_id)
  * \param   group       group number
  * \return              position of the hero or -1 if nobody in the specified group has this item
  */
-signed int get_first_hero_with_item_in_group(const signed int item_id, const signed int group)
+signed int get_first_hero_with_item_in_group(const signed int item_id, const signed int group_id)
 {
 	signed int j;
 	signed int i;
@@ -5361,7 +5357,7 @@ signed int get_first_hero_with_item_in_group(const signed int item_id, const sig
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((hero_i->typus) && (hero_i->group_id == (signed char)group))
+		if (hero_i->typus && (hero_i->group_id == (signed char)group_id))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
@@ -5496,8 +5492,8 @@ signed int count_heroes_available_ignore_npc(void)
  */
 signed int count_heroes_available_in_group(void)
 {
-	signed short heroes = 0;
-	signed short i;
+	signed int heroes = 0;
+	signed int i;
 	struct struct_hero *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
@@ -5564,11 +5560,11 @@ void check_group(void)
 
 int main(int argc, char** argv)
 {
-	signed short l_si;
-	signed short l_di;
+	signed int l_si;
+	signed int l_di;
 	int32_t l3;
-	signed short savegame;
-	signed short len;
+	signed int savegame;
+	signed int len;
 
 	g_pregame_state = 1;
 
