@@ -182,7 +182,7 @@ struct struct_hero {
 	signed char blind_timer; /* remaining fight rounds the hero is blinded from 'Blitz' spell */
 	signed char ecliptifactus_timer; /* remaining fight rounds the hero is shadowed from 'Ecliptifactus' spell */
 	signed char saftkraft; /* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
-	signed char fireban; /* 1 = 'Feuerbann' spell is active, 0 = inactive */
+	signed char fireban; /* 1 = 'Feuerbann' spell is active, 0 = inactive */ /* Original-Bug? Effect seems not to be implemented. */
 	signed char invisible; /* 1 = 'Visibili' spell is active, 0 = inactive */
 	signed char sprite_id; /* fight gfx of hero, depending on typus and sex.
                                 * 1: Gaukler, male. 2: Jaeger, male, ..., 10: any Elf, male,

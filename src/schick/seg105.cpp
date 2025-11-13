@@ -230,17 +230,17 @@ signed int can_hero_equip_item_at_slot(const signed int item_id, const signed in
 	/* if item is an armor ? */
 	if (item_p->flags.armor) {
 
-		/* can be weared on the head */
+		/* can be worn on the head */
 		if ((inv_slot == HERO_INVENTORY_SLOT_HEAD && item_p->subtype == ARMOR_TYPE_HEAD) ||
-			/* can be weared on the torso */
+			/* can be worn on the torso */
 			(inv_slot == HERO_INVENTORY_SLOT_BODY && item_p->subtype == ARMOR_TYPE_BODY) ||
-			/* can be weared at the feet */
+			/* can be worn at the feet */
 			(inv_slot == HERO_INVENTORY_SLOT_FEET && item_p->subtype == ARMOR_TYPE_FEET) ||
-			/* can be weared at the arms */
+			/* can be worn at the arms */
 			(inv_slot == HERO_INVENTORY_SLOT_ARMS && item_p->subtype == ARMOR_TYPE_ARMS) ||
-			/* can be weared at the legs */
+			/* can be worn at the legs */
 			(inv_slot == HERO_INVENTORY_SLOT_LEGS && item_p->subtype == ARMOR_TYPE_LEGS) ||
-			/* can be weared at the left hand */
+			/* can be worn at the left hand */
 			(inv_slot == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->subtype == ARMOR_TYPE_LEFT_HAND)) {
 			return 1;
 		} else {
@@ -248,7 +248,7 @@ signed int can_hero_equip_item_at_slot(const signed int item_id, const signed in
 		}
 	} else {
 
-		/* coronet (Stirnreif) (3 types) can be weared at the head */
+		/* coronet (Stirnreif) (3 types) can be worn at the head */
 		if ((item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_SILBERNER_STIRNREIF || item_id == ITEM_STIRNREIF__GREEN)
 			&& (inv_slot == HERO_INVENTORY_SLOT_HEAD))
 		{

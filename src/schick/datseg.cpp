@@ -828,18 +828,81 @@ struct armor_descr g_armors_table[25] = {
 const struct usable_item_descr g_usable_items_table[14] = {
 	{ 0, 0,  0 }, /*  0 <- DUMMY */
 	{ 2, 5,  1 }, /*  1 <- item_invoke_arcano_psychostabilils */
+	/* ITEM_RING__RED */
+
 	{ 0, 1,  2 }, /*  2 <- item_read_recipe */
+	/* ITEM_REZEPT_FUER_EXPURGICUM,
+	 * ITEM_REZEPT_FUER_VOMICUM,
+	 * ITEM_REZEPT_FUER_HEILTRANK,
+	 * ITEM_REZEPT_FUER_GEGENGIFT,
+	 * ITEM_REZEPT_FUER_HYLAILER_FEUER,
+	 * ITEM_REZEPT_FUER_KRAFTELIXIER,
+	 * ITEM_REZEPT_FUER_MUTELIXIER,
+	 * ITEM_REZEPT_FUER_ZAUBERTRANK,
+	 * ITEM_REZEPT_FUER_STARKEN_HEILTRANK,
+	 * ITEM_REZEPT_FUER_WUNDERKUR,
+	 * ITEM_REZEPT_FUER_SCHLAFTRUNK,
+	 * ITEM_REZEPT_FUER_STARKER_ZAUBERTRANK,
+	 * ITEM_REZEPT_FUER_MIASTHMATICUM
+	 */
+
 	{ 0, 1,  3 }, /*  3 <- item_read_document */
+	/* ITEM_DOKUMENT__1,
+	 * ITEM_SCHREIBEN_VON_JADRA,
+	 * ITEM_LOBPREISUNGEN,
+	 * ITEM_MITGLIEDERLISTE,
+	 * ITEM_SEEKARTE,
+	 * ITEM_BUCH__1,
+	 * ITEM_BUCH__2,
+	 * ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN,
+	 * ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN
+	 */
+
 	{ 2, 3,  4 }, /*  4 <- item_invoke_armatrutz */
+	/* ITEM_SILBERNER_STIRNREIF,
+	 * ITEM_STIRNREIF__GREEN
+	 */
+
 	{ 0, 6,  5 }, /*  5 <- item_invoke_flim_flam */
+	/* ITEM_AMULETT__GREEN */
+
 	{ 0, 1,  6 }, /*  6 <- item_read_schuldbuch */
+	/* ITEM_SCHULDBUCH */
+
 	{ 0, 1,  7 }, /*  7 <- item_read_orkdokument */
+	/* ITEM_ORKDOKUMENT */
+
 	{ 0, 1,  8 }, /*  8 <- item_apply_weapon_poison */
+	/* ITEM_SHURINKNOLLEKNOLLENGIFT,
+	 * ITEM_ARAXGIFT,
+	 * ITEM_ANGSTGIFT,
+	 * ITEM_SCHLAFGIFT,
+	 * ITEM_GOLDLEIM,
+	 * ITEM_EXPURGICUM,
+	 * ITEM_VOMICUM
+	 */
+
 	{ 0, 1,  9 }, /*  9 <- item_use_miasthmaticum */
+	/* ITEM_MIASTHMATICUM */
+
 	{ 0, 1, 10 }, /* 10 <- item_use_hylailer_feuer */
+	/* ITEM_HYLAILER_FEUER */
+
 	{ 0, 1, 11 }, /* 11 <- item_use_spellbook_heptagon */
+	/* ITEM_BUCH__HEPTAGON */
+
 	{ 0, 1, 12 }, /* 12 <- item_ignite */
+	/* ITEM_LATERNE__UNLIT,
+	 * ITEM_FACKEL__UNLIT,
+	 * ITEM_ZUNDERKAESTCHEN, Why?
+	 * ITEM_LATERNE__LIT  Why?? Original-Bug? (note that ITEM_FACKEL__LIT is not in this list)
+	 */
+
 	{ 0, 1, 13 }  /* 13 <- item_use_beutel */
+	/* ITEM_MAGISCHER_BROTBEUTEL, Original-Bug? Why??
+	 * ITEM_BEUTEL
+	 */
+
 }; // ds:0x08a9
 
 signed short g_weapon_poisons[10] = {

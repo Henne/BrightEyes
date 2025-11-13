@@ -1247,7 +1247,7 @@ enum {
 	ITEM_LOTUSBLUETE			= 0x84, /* Lotus bloom */
 	ITEM_ZAUBERSTAB				= 0x85, /* magic wand */
 	ITEM_SKRAJA				= 0x86, /* Skraja */
-	ITEM_KRIEGSBEIL				= 0x87, /* hatchet[the common one, 1D6 + 4, KK+13, BF 2, AT-2, PA-4] */
+	ITEM_KRIEGSBEIL				= 0x87, /* hatchet [the common one, 1D6 + 4, KK+13, BF 2, AT-2, PA-4] */
 	ITEM_ORKNASE				= 0x88, /* orc nose */
 	ITEM_SCHNEIDZAHN			= 0x89, /* cutting tooth */
 	ITEM_ROBBENTOETER			= 0x8a, /* seal killer */
@@ -1273,20 +1273,20 @@ enum {
 	ITEM_BASTARDSCHWERT__MAGIC		= 0x9e, /* bastard sword [magic: lower BF; found in Daspota] */
 	ITEM_ORKNASE__MAGIC			= 0x9f, /* orc nose [magic: damage +5, AT-1, PA-5; found in Daspota] */
 	ITEM_KURZSCHWERT__MAGIC			= 0xa0, /* short sword [magic: AT + 2, unbreakable; found in Daspota ] */
-	ITEM_SICHEL__MAGIC			= 0xa1, /* sickle [magic, in inventory: Pflanzenkunde + 3; found in Daspota] */
-	ITEM_AMULETT__UNKNOWN_1			= 0xa2, /* amulet [found at a corpse in tevent014] */
-	ITEM_AMULETT__BLUE			= 0xa3, /* amulet [blue, magic: MR + 5; found in ruin of the black wizard and at a fight vs. orcs at the track Phexcaer <-> Einsiedlersee] */
-	ITEM_KNOCHEN_MIT_RUNE			= 0xa4, /* bone with rune */
-	ITEM_RING__RED				= 0xa5, /* ring [red, magic, MR + 2, additionally 5 charges of Arcano Psychostabilis (additionally MR + 2) when used; found in Gorah's chest ] */
+	ITEM_SICHEL__MAGIC			= 0xa1, /* sickle [magic, while in inventory: Pflanzenkunde + 3; found in Daspota] */
+	ITEM_AMULETT__UNKNOWN_1			= 0xa2, /* amulet [found at a corpse in tevent014. Analues: "Dient der Abwehr von Ignifaxius"]. */ /* Called "Feuerbannamulett" in https://www.crystals-dsa-foren.de/showthread.php?tid=653&pid=16411 But apparently, no effect is implemented. */
+	ITEM_AMULETT__BLUE			= 0xa3, /* amulet [blue, magic: while in inventory MR + 5; found in ruin of the black wizard and at a fight vs. orcs at the track Phexcaer <-> Einsiedlersee] */
+	ITEM_KNOCHEN_MIT_RUNE			= 0xa4, /* bone with rune [found in Gorah's chest] */
+	ITEM_RING__RED				= 0xa5, /* ring [red, magic, MR + 2. additionally 5 charges of Arcano Psychostabilis (additionally MR + 2) when used; found in Gorah's chest ] */
 	ITEM_EXPURGICUM				= 0xa6, /* Expurgicum */
 	ITEM_REZEPT_FUER_EXPURGICUM		= 0xa7, /* recipe for Expurgicum */
 	ITEM_VOMICUM				= 0xa8, /* Vomicum */
 	ITEM_REZEPT_FUER_VOMICUM		= 0xa9, /* recipe for Vomicum */
-	ITEM_DOKUMENT__1			= 0xaa, /* unicorn letter, found in tevent073 */
-	ITEM_SILBERNER_STIRNREIF		= 0xab, /* coronet silver Silberner Stirnreif [magic, use -> Armatrutz +5, i.e. RS + 5] */
+	ITEM_DOKUMENT__1			= 0xaa, /* unicorn letter [found in tevent073] */
+	ITEM_SILBERNER_STIRNREIF		= 0xab, /* silver coronet [magic, 3 charges, use -> Armatrutz +5, i.e. RS + 5] */
 	ITEM_SAEBEL__MAGIC			= 0xac, /* sabre [magic, damage+1 to skeletons and zombies] */
 	ITEM_AMULETT__RED			= 0xad, /* amulet [red, magic, protection from fire; found at corpse between Rovamund and Nordvest ] */
-	ITEM_AMULETT__GREEN			= 0xae, /* amulet [green, magic: use -> Flim Flam; found in Totenschiff] */
+	ITEM_AMULETT__GREEN			= 0xae, /* amulet [green, magic, 6 charges: use -> Flim Flam; found in Totenschiff] */
 	ITEM_TRAVIA_AMULETT			= 0xaf, /* amulet [golden cross, magic: no hunger or thirst; found in Wolfshoehle ] */
 	ITEM_SCHULDBUCH				= 0xb0, /* debt register [found in Wolfshoehle] */
 	ITEM_ROTE_MONDSCHEIBE			= 0xb1, /* red moon disk [found in Orkhoehle; red herring] */
@@ -1300,16 +1300,16 @@ enum {
 	ITEM_MAGISCHER_WASSERSCHLAUCH		= 0xb9, /* magic waterskin */
 	ITEM_REZEPT_FUER_HEILTRANK		= 0xba, /* recipe for heal potion */
 	ITEM_SCHREIBEN_VON_JADRA		= 0xbb, /* writing of Jarda */
-	ITEM_AMULETT__UNKNOWN_2			= 0xbc, /* amulet [TODO: which one?? it might be yellow, magic: protects from fire; found at Totenschiff] */
+	ITEM_AMULETT__UNKNOWN_2			= 0xbc, /* amulet [TODO: which one?? has the shape of a golden cross. it might be yellow, magic: protects from fire; found at Totenschiff] */
 	ITEM_LOBPREISUNGEN			= 0xbd, /* praises [found in Tempel des Namenlosen and in Piratenhoehle] */
 	ITEM_MITGLIEDERLISTE			= 0xbe, /* member list [found in Tempel des Namenlosen] */
-	ITEM_DOKUMENT__2			= 0xbf, /* document [2, Depotschein?] */
+	ITEM_DOKUMENT__2			= 0xbf, /* document [2, not readable. Depotschein?] */
 	ITEM_SEEKARTE				= 0xc0, /* sea chart [found in Piratenhoehle] */
 	ITEM_KUKRISDOLCH			= 0xc1, /* Kukris dagger */
 	ITEM_SCHLUESSEL__1			= 0xc2, /* key [1] */ /* TODO: Farbe? umbenennen! */
 	ITEM_GOLDENER_SCHLUESSEL		= 0xc3, /* golden key [found in the dungeon of the Daspota treasure] / note that there is also ITEM_GOLDSCHLUESSEL */
 	ITEM_HELM__CURSED			= 0xc4, /* helmet [cursed: CH - 1; found in goblin cave and at NPC Ardora von Greifenfurt ] */
-	ITEM_KETTENHEMD__CURSED			= 0xc5, /* chain mail [magic, cursed, protection +1 vs. skeletons and zombies, but protection -2 vs. everything else, additionally drains LE; found in Drachenhoehle] */
+	ITEM_KETTENHEMD__CURSED			= 0xc5, /* chain mail [magic, cursed, protection +1 vs. skeletons and zombies (arising as damage-3, but protection-2), but protection -2 vs. everything else, additionally drains LE; found in Drachenhoehle] */
 	ITEM_KETTENHEMD__MAGIC			= 0xc6, /* chain mail [magic, AT+1, BE-1, RS+1; found in the dungeon of the Daspota treasure (Rybon-Thoss)] */
 	ITEM_SCHWERT__MAGIC			= 0xc7, /* sword [magic: AT + 2; found in Drachenhoehle] */
 	ITEM_KUKRIS_MENGBILAR			= 0xc8, /* Kukris mengbilar */
@@ -1330,7 +1330,7 @@ enum {
 	ITEM_SILBERSCHMUCK__MAGIC		= 0xd7, /* silver jewelry [magic: TA - 2; found in Verfallene Herberge] */
 	ITEM_SPEER__MAGIC			= 0xd8, /* spear [magic; found in Spinnenhoehle] */
 	ITEM_STIRNREIF__BLUE			= 0xd9, /* coronet [blau, magic: MR + 2; found in Tempel des Namenlosen] */
-	ITEM_WURFDOLCH__MAGIC			= 0xda, /* throwing dagger [magic; found in Drachenhoehle]. note that there is no 'ordinary' throwing dagger in the game */
+	ITEM_WURFDOLCH__MAGIC			= 0xda, /* throwing dagger [magic, improved accuracy, damage 1D6 + 9; found in Drachenhoehle]. Note that there is no 'ordinary' throwing dagger in the game. See the discussion at https://crystals-dsa-foren.de/showthread.php?pid=170046 */
 	ITEM_GOLDSCHLUESSEL			= 0xdb, /* gold key. note that there is also ITEM_GOLDENER_SCHLUESSEL (golden key) */
 	ITEM_RING__GREEN			= 0xdc, /* ring [green, magic: protection from magic fire; found in Drachenhoehle] */
 	ITEM_BEUTEL				= 0xdd, /* bag [found and used in the first level of the ruin of the black wizard to open a passage] */
@@ -1357,7 +1357,7 @@ enum {
 	ITEM_REZEPT_FUER_SCHLAFTRUNK		= 0xf2, /* recipe for sleeping potion */
 	ITEM_REZEPT_FUER_STARKER_ZAUBERTRANK	= 0xf3, /* recipe for strong AE potion */
 	ITEM_REZEPT_FUER_MIASTHMATICUM		= 0xf4, /* recipe for Miasthmaticum */
-	ITEM_STIRNREIF__GREEN			= 0xf5, /* coronet [green, magic: use -> Armatrutz +5, i.e. RS + 5; found 2x in Spinnenhoehle] */
+	ITEM_STIRNREIF__GREEN			= 0xf5, /* coronet [green, magic, 3 charges: use -> Armatrutz +5, i.e. RS + 5; found 2x in Spinnenhoehle] */ /* TODO: Is this in fact another SILBERNER_STIRNREIF? */
 	ITEM_BUCH__HEPTAGON			= 0xf6, /* book [read -> 'Heptagon' spell +3; found in Spinnenhoehle] */
 	ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN	= 0xf7, /* commendation letter [Umbrik Siebenstein] */
 	ITEM_SCHWARZE_STATUETTE			= 0xf8, /* black figurine, found in Tempel des Namenlosen and used as evidence to Eliane Windenbeck */
