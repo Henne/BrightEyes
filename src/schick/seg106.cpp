@@ -662,7 +662,7 @@ void startup_equipment(struct struct_hero *hero)
 	signed int i;
 	struct items_all all;
 
-	*(struct items_all*)&all = *(struct items_all*)g_hero_startup_items_all;
+	*(struct items_all*)&all = *(struct items_all*)g_hero_startup_items_all; /* struct copy */
 
 	for (i = 0; i < 4; i++) {
 		give_new_item_to_hero(hero, all.a[i], 1, 1);

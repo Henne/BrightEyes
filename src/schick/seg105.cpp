@@ -260,7 +260,6 @@ signed int can_hero_equip_item_at_slot(const signed int item_id, const signed in
 		if ((inv_slot != HERO_INVENTORY_SLOT_RIGHT_HAND) && (inv_slot != HERO_INVENTORY_SLOT_LEFT_HAND)) {
 			return 0;
 		}
-
 	}
 
 	return 1;
@@ -485,7 +484,6 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 //static
 signed int is_item_pleasing_ingerimm(const signed int item_id)
 {
-
 	struct item_stats *item_p = &g_itemsdat[item_id];
 
 	if (item_p->flags.weapon && (item_p->subtype == WEAPON_TYPE_AXT))
@@ -512,13 +510,10 @@ signed int is_item_pleasing_ingerimm(const signed int item_id)
  */
 signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed int quantity)
 {
-
 	struct item_stats *p_item;
 	signed int answer;
 	signed int retval = 0;
-	signed int item_id;
-
-	item_id = hero->inventory[inv_slot].item_id;
+	const signed int item_id = hero->inventory[inv_slot].item_id;
 
 	/* check if that item_id is valid */
 	if (item_id != ITEM_NONE) {
