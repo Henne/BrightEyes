@@ -17,15 +17,15 @@
 namespace M302de {
 #endif
 
-unsigned short g_random_schick_seed = 0x327b; // ds:0x4ba0
+uint16_t g_random_schick_seed = 0x327b; // ds:0x4ba0
 
 /* REMARK: belong to seg010.cpp */
 char g_emm_sig[8] = { 'E', 'M', 'M', 'X', 'X', 'X', 'X', '0'}; // ds:0x4ba2
 uint8_t *g_ems_frame_ptr = NULL; // ds:0x4baa; uint8_t*
 
 #if !defined(__BORLANDC__)
-static inline
-unsigned short _rotl(unsigned short op, unsigned char count) {
+static inline uint16_t _rotl(const uint16_t op, const uint8_t count)
+{
 	return (op << count) | (op >> (16 - count));
 }
 #endif
@@ -33,7 +33,7 @@ unsigned short _rotl(unsigned short op, unsigned char count) {
 /**
  * \brief   generates a random number in the range [lo .. hi]
  */
-int random_interval(const int lo, const int hi)
+int random_interval(const signed int lo, const signed int hi)
 {
 
 	return lo + random_schick(hi - lo + 1) - 1;
@@ -42,9 +42,9 @@ int random_interval(const int lo, const int hi)
 /**
  * \brief   generates a u16 random number in the range [1 .. val]
  */
-int random_schick(const int val)
+int random_schick(const signed int val)
 {
-	signed short retval;
+	signed int retval;
 
 	if (val == 0) {
 		return 0;
@@ -67,10 +67,10 @@ int random_schick(const int val)
 /**
  * \brief   rolls a dice: n*Wm+x
  */
-int dice_roll(const int n, const int m, const int x)
+int dice_roll(const signed int n, const signed int m, const signed int x)
 {
-	int sum = 0;
-	int i;
+	signed int sum = 0;
+	signed int i;
 
 	for (i = 0; i < n; i++) {
 		sum += random_schick(m);
@@ -88,7 +88,7 @@ int dice_roll(const int n, const int m, const int x)
  * \param m	number of sides of the dice (outcome of a single dice roll is [1..m])
  * \param x	constant summand in the damage formula
  */
-void calc_damage_range(const int n, const int m, const int x, signed int *min, signed int *max)
+void calc_damage_range(const signed int n, const signed int m, const signed int x, signed int *min, signed int *max)
 {
 	*min = n + x;
 	*max = n * m + x;
@@ -97,7 +97,7 @@ void calc_damage_range(const int n, const int m, const int x, signed int *min, s
 /**
  * \brief   checks if val is in a word array
  */
-int is_in_word_array(const int val, signed short *p)
+int is_in_word_array(const signed int val, signed short *p)
 {
 	int i;
 
@@ -112,7 +112,7 @@ int is_in_word_array(const int val, signed short *p)
 /**
  * \brief   checks if val is in a byte array
  */
-int is_in_byte_array(const signed char val, int8_t *p)
+int is_in_byte_array(const int8_t val, int8_t *p)
 {
 	int i;
 
@@ -127,12 +127,13 @@ int is_in_byte_array(const signed char val, int8_t *p)
 /**
  * \brief   rolls a dice from enemy templates
  */
-int dice_template(const unsigned short val)
+int dice_template(const uint16_t val)
 {
-	signed short n;
-	signed short m;
+	signed int n;
+	signed int m;
 	signed char x;
-	signed short i, sum = 0;
+	signed int i;
+	signed int sum = 0;
 
 	/* get dice formula n*Wm+x */
 	n = _rotl(val & 0xf000, 4);
@@ -141,7 +142,7 @@ int dice_template(const unsigned short val)
 
 	m = (i == 1) ? 6 : ((i == 2) ? 20 : ((i == 3) ? 3 : 4));
 
-	x = (signed char)val;
+	x = val;
 
 	/* roll the dices */
 	for (i = 0; i < n; i++)
@@ -155,12 +156,13 @@ int dice_template(const unsigned short val)
 /**
  * \brief   writes damage range from enemy templates to mem
  */
-void damage_range_template(const unsigned short val, signed int *min, signed int *max)
+void damage_range_template(const uint16_t val, signed int *min, signed int *max)
 {
-	signed short n, m;
+	signed int n;
+	signed int m;
 	signed char x;
-	signed short i;
-	signed short tmp = val;
+	signed int i;
+	const uint16_t tmp = val;
 
 	/* get dice formula n*Wm+x */
 	n = _rotl(tmp & 0xf000, 4);
@@ -169,7 +171,7 @@ void damage_range_template(const unsigned short val, signed int *min, signed int
 
 	m = (i == 1) ? 6 : ((i == 2) ? 20 : ((i == 3) ? 3 : 4));
 
-	x = (signed char)tmp;
+	x = tmp;
 
 	/* set vars to 0 */
 

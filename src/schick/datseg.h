@@ -1572,9 +1572,9 @@ extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
 
 extern signed short g_fight_figs_index;		//ds:0x4b9e; seg006, seg032
 
-extern unsigned short g_random_schick_seed;	//ds:0x4ba0; seg007
+extern uint16_t g_random_schick_seed;		//ds:0x4ba0; seg007
 
-extern uint8_t* g_ems_frame_ptr;			//ds:0x4baa; seg002, seg010, seg028
+extern uint8_t* g_ems_frame_ptr;		//ds:0x4baa; seg002, seg010, seg028
 
 extern unsigned char g_renderbuf_in_use_flag;	//ds:0x4c3a; seg025, seg061
 
