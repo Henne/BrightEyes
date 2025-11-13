@@ -34,7 +34,7 @@ static int8_t  g_status_page_hunger_max_counter = 0; // ds:0x4a9a
 static int8_t  g_status_page_hunger_max_color = 0; // ds:0x4a9b
 static int8_t  g_status_page_thirst_max_counter = 0; // ds:0x4a9c
 static int8_t  g_status_page_thirst_max_color = 0; // ds:0x4a9d
-static signed short g_wallclock_pos = 0; // ds:0x4a9e, position of sun/moon
+static signed int g_wallclock_pos = 0; // ds:0x4a9e, position of sun/moon
 static int8_t g_wallclock_pos_y[81] = { 0x14, 0x12, 0x11, 0x10, 0x0f, 0x0e, 0x0d, 0x0c, 0x0b, 0x0b, 0x0a, 0x09, 0x09, 0x08, 0x07, 0x07, 0x06, 0x06, 0x05, 0x05, 0x05, 0x04, 0x04, 0x03, 0x03, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x14 }; // ds:0x4aa0
 static uint8_t g_wallclock_palette_day[3][3] = { { 0x10, 0x14, 0x3c }, { 0x00, 0x08, 0x38 }, { 0x00, 0x08, 0x34 } }; // ds:0x4af1
 static uint8_t g_wallclock_palette_night[3][3] = { { 0x00, 0x00, 0x1a }, { 0x00, 0x00, 0x18 }, { 0x00, 0x00, 0x1c } }; // ds:0x4afa
@@ -43,9 +43,9 @@ static struct uint8_t_32_3 g_palette_allblack = { { 0 } }; // ds:0x4b06
 
 
 static int32_t g_gfx_spinlock;			// ds:0xe234
-static signed short g_ani_change_dir[10];	// ds:0xe238
-static signed short g_ani_area_status[10];	// ds:0xe24c
-static signed short g_ani_area_timeout[10]; 	// ds:0xe260
+static signed int g_ani_change_dir[10];	// ds:0xe238
+static signed int g_ani_area_status[10];	// ds:0xe24c
+static signed int g_ani_area_timeout[10]; 	// ds:0xe260
 #if defined(__BORLANDC__)
 static void interrupt far (*g_bc_timer)(...);	// ds:0xe274
 #endif
@@ -81,7 +81,7 @@ void reset_timer(void)
 
 void init_ani(uint16_t v1)
 {
-	signed short i;
+	signed int i;
 
 	if (g_current_ani == -1)
 		return;
@@ -140,7 +140,7 @@ void disable_ani(void)
 	g_ani_enabled = 0;
 }
 
-void init_ani_busy_loop(unsigned short v1)
+void init_ani_busy_loop(const signed int v1)
 {
 	/* set lock */
 	g_ani_busy = 1;
@@ -158,7 +158,8 @@ void init_ani_busy_loop(unsigned short v1)
 
 void clear_ani(void)
 {
-	signed short i, j;
+	signed int i;
+	signed int j;
 
 	g_ani_width = 0;
 	g_ani_height = 0;
@@ -191,8 +192,8 @@ void clear_ani(void)
 #if defined(__BORLANDC__)
 void interrupt timer_isr(void)
 {
-	signed short i;
-	signed short l_di;
+	signed int i;
+	signed int l_di;
 	signed char flag;
 	struct ani_area *ptr;
 	struct struct_pic_copy pic_copy_bak;
@@ -339,7 +340,7 @@ static void unused_gfx_spinlock(void)
 
 void update_status_bars(void)
 {
-	signed short i;
+	signed int i;
 	struct struct_hero *hero;
 
 	g_unused_spinlock_flag = 0;
@@ -496,12 +497,12 @@ void update_status_bars(void)
 	It should be used, either hero or mode is zero,
 	since in fight mode only the active hero is shown.
  */
-void draw_bar(unsigned short type, signed short hero, signed short pts_cur, signed short pts_max, signed short mode)
+void draw_bar(const signed int type, const signed int hero, const signed int pts_cur, const signed int pts_max, const signed int mode)
 {
-	signed short i;
-	signed short y_min;
-	signed short x;
-	signed short lost;
+	signed int i;
+	signed int y_min;
+	signed int x;
+	signed int lost;
 	uint8_t* dst;
 
 	if (mode == 0)
@@ -554,10 +555,10 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	}
 }
 
-void restore_rect(uint8_t *dst, uint8_t *src, unsigned short x, unsigned short y, signed char n, signed char m)
+void restore_rect(uint8_t *dst, uint8_t *src, const signed int x, const signed int y, const signed char n, const signed char m)
 {
-	signed short i;
-	signed short j;
+	signed int i;
+	signed int j;
 	signed char c;
 	uint8_t* p;
 
@@ -577,11 +578,11 @@ void restore_rect(uint8_t *dst, uint8_t *src, unsigned short x, unsigned short y
 	call_mouse();
 }
 
-void restore_rect_rle(uint8_t *dst, uint8_t *src, unsigned short x, unsigned short y, signed char width, signed char height, unsigned short v1)
+void restore_rect_rle(uint8_t *dst, uint8_t *src, const signed int x, const signed int y, const signed char width, const signed char height, const signed int v1)
 {
-	signed short si;
-	signed short di;
-	signed short i;
+	signed int si;
+	signed int di;
+	signed int i;
 	signed char c;
 	unsigned char cnt;
 	signed char tmp;
@@ -614,15 +615,15 @@ void restore_rect_rle(uint8_t *dst, uint8_t *src, unsigned short x, unsigned sho
 
 void mouse_cursor_draw(void)
 {
-	register signed short mask;
-	signed short x;
+	register signed int mask;
+	signed int x;
 	signed char i;
 	signed char j;
 	uint8_t *dst;
 	unsigned short *mouse_cursor;
-	signed short y;
-	signed short width;
-	signed short height;
+	signed int y;
+	signed int width;
+	signed int height;
 
 	dst = g_vga_memstart;
 	mouse_cursor = &g_current_cursor->mask[0];
@@ -653,12 +654,12 @@ void mouse_cursor_draw(void)
 void mouse_save_bg(void)
 {
 	uint8_t *src;
-	signed short realpos_x;
-	signed short realpos_y;
-	signed short realwidth;
-	signed short realheight;
-	signed short delta_y;
-	signed short delta_x;
+	signed int realpos_x;
+	signed int realpos_y;
+	signed int realwidth;
+	signed int realheight;
+	signed int delta_y;
+	signed int delta_x;
 
 	src = g_vga_memstart;
 
@@ -686,14 +687,14 @@ void mouse_save_bg(void)
 
 void restore_mouse_bg(void)
 {
-	signed short delta_y;
-	signed short realpos_x;
-	signed short delta_x;
+	signed int delta_y;
+	signed int realpos_x;
+	signed int delta_x;
 
 	uint8_t *dst;
-	signed short realpos_y;
-	signed short realwidth;
-	signed short realheight;
+	signed int realpos_y;
+	signed int realwidth;
+	signed int realheight;
 
 
 	/* gfx memory */
@@ -755,7 +756,7 @@ void load_wallclock_nvf(void)
 
 void update_wallclock(void)
 {
-	signed short night;
+	signed int night;
 	int32_t d;
 
 	if ((g_wallclock_update) && ((g_pp20_index == ARCHIVE_FILE_PLAYM_UK) || (g_pp20_index == ARCHIVE_FILE_KARTE_DAT)) && !g_dialogbox_lock) {
@@ -777,7 +778,7 @@ void update_wallclock(void)
 
 			g_wallclock_redraw = 0;
 			night = ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) ? 0 : 1;
-			draw_wallclock((signed short)(d / 771), night);
+			draw_wallclock((signed int)(d / 771), night);
 			g_wallclock_pos = d / 771;
 		}
 	}
@@ -790,10 +791,10 @@ void update_wallclock(void)
  * \param   night       0 = day / 1 = night
  *
  */
-void draw_wallclock(signed short pos, signed short night)
+void draw_wallclock(signed int pos, const signed int night)
 {
-	signed short y;
-	signed short mouse_updated;
+	signed int y;
+	signed int mouse_updated;
 	struct struct_rect rect_bak;
 	struct struct_pic_copy pic_copy_bak;
 
@@ -827,11 +828,8 @@ void draw_wallclock(signed short pos, signed short night)
 #endif
 
 	/* check if mouse is in that window */
-	if (is_mouse_in_rect(g_wallclock_x - 6,
-				g_wallclock_y - 6,
-				g_wallclock_x + 85,
-				g_wallclock_y + 28)) {
-
+	if (is_mouse_in_rect(g_wallclock_x - 6,	g_wallclock_y - 6, g_wallclock_x + 85, g_wallclock_y + 28))
+	{
 			call_mouse_bg();
 			mouse_updated = 1;
 	}
@@ -900,7 +898,7 @@ void draw_wallclock(signed short pos, signed short night)
  * \param   op          operator
  * \param   flag        if 2, op will not be added if array element is 0
  */
-void array_add(uint8_t *dst, signed short len, signed short op, signed short flag)
+void array_add(uint8_t *dst, const signed int len, const signed int op, const signed int flag)
 {
 	signed int i;
 
@@ -989,10 +987,10 @@ void unused_ega6(unsigned char a)
 
 #endif
 
-void do_h_line(uint8_t* ptr, signed short x1, signed short x2, signed short y, signed char color)
+void do_h_line(uint8_t* ptr, signed int x1, signed int x2, const signed int y, const signed char color)
 {
-	signed short tmp;
-	signed short count;
+	signed int tmp;
+	signed int count;
 	uint8_t* dst;
 
 	if (x1 == x2)
@@ -1010,10 +1008,10 @@ void do_h_line(uint8_t* ptr, signed short x1, signed short x2, signed short y, s
 	draw_h_line(dst, count, color);
 }
 
-void do_v_line(uint8_t* ptr, signed short y, signed short x1, signed short x2, signed char color)
+void do_v_line(uint8_t* ptr, const signed int y, signed int x1, signed int x2, const signed char color)
 {
-	signed short tmp;
-	signed short count;
+	signed int tmp;
+	signed int count;
 	uint8_t* dst;
 
 	if (x1 == x2)
@@ -1031,7 +1029,7 @@ void do_v_line(uint8_t* ptr, signed short y, signed short x1, signed short x2, s
 	draw_h_spaced_dots(dst, count, color, 320);
 }
 
-void do_border(uint8_t* dst, signed short x1, signed short y1, signed short x2, signed short y2, signed char color)
+void do_border(uint8_t* dst, const signed int x1, const signed int y1, const signed int x2, const signed int y2, const signed char color)
 {
 	call_mouse_bg();
 	do_h_line(dst, x1, x2, y1, color);
@@ -1041,12 +1039,18 @@ void do_border(uint8_t* dst, signed short x1, signed short y1, signed short x2, 
 	call_mouse();
 }
 
-void do_pic_copy(unsigned short mode)
+void do_pic_copy(const signed int mode)
 {
-	short x1, y1;
-	short x2, y2;
-	short v1, v2, v3, v4;
-	short width, height;
+	signed int x1;
+	signed int y1;
+	signed int x2;
+	signed int y2;
+	signed int v1;
+	signed int v2;
+	signed int v3;
+	signed int v4;
+	signed int width;
+	signed int height;
 	uint8_t *src;
 	uint8_t* dst;
 
@@ -1071,9 +1075,9 @@ void do_pic_copy(unsigned short mode)
 
 void do_save_rect(void)
 {
-	signed short x1,y1;
-	signed short width,height;
-	signed short x2,y2;
+	signed int x1,y1;
+	signed int width,height;
+	signed int x2,y2;
 	uint8_t* src;
 	uint8_t* dst;
 
@@ -1097,12 +1101,10 @@ void do_save_rect(void)
 #endif
 }
 
-void do_fill_rect(uint8_t* dst, signed short x, signed short y, signed short w, signed short h, signed short color)
+void do_fill_rect(uint8_t* dst, const signed int x, const signed int y, const signed int w, const signed int h, const signed int color)
 {
-	signed short width, height;
-
-	width = w - x + 1;
-	height = h - y + 1;
+	signed int width = w - x + 1;
+	signed int height = h - y + 1;
 
 	dst += y * 320 + x;
 
@@ -1118,7 +1120,7 @@ void do_fill_rect(uint8_t* dst, signed short x, signed short y, signed short w, 
 void wait_for_vsync(void)
 {
 #if defined(__BORLANDC__)
-	signed short tmp;
+	signed int tmp;
 
 	outportb(0x3d4, 0x11);
 
@@ -1149,10 +1151,10 @@ void wait_for_vsync(void)
  */
 void map_effect(uint8_t *src)
 {
-	unsigned short si;
-	unsigned short i;
-	signed short seed;
-	signed short wallclock_update_bak;
+	unsigned int si;
+	unsigned int i;
+	signed int seed;
+	signed int wallclock_update_bak;
 
 	seed = 0;
 
