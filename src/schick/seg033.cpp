@@ -71,7 +71,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 	signed int damage_hi;
 	signed int weapon_id;
 	signed int radio_i;
-	signed int slot_no;
+	signed int i; /* dual use: mod_slot, enemy_id */
 	struct struct_fighter *ptr;
 	signed int tw_bak;
 	signed int slots[16];
@@ -182,8 +182,8 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 					} else if (hero->attrib[ATTRIB_MU].current > 4) {
 						/* Failure */
 						/* MU - 2 for 7 hours */
-						slot_no = get_free_mod_slot();
-						set_mod_slot(slot_no, HOURS(7), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)actor_id);
+						i = get_free_mod_slot();
+						set_mod_slot(i, HOURS(7), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)actor_id);
 					}
 				}
 
@@ -452,13 +452,13 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 						radio_i = 0;
 
-						for (slot_no = HERO_INVENTORY_SLOT_KNAPSACK_1; slot_no < NR_HERO_INVENTORY_SLOTS; slot_no++) {
+						for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
-							weapon_id = hero->inventory[slot_no].item_id;
+							weapon_id = hero->inventory[i].item_id;
 
 							if (weapon_id != 0) {
 
-								slots[radio_i] = slot_no;
+								slots[radio_i] = i;
 
 								g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
@@ -516,20 +516,20 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 						radio_i = 0;
 
-						for (slot_no = HERO_INVENTORY_SLOT_KNAPSACK_1; slot_no < NR_HERO_INVENTORY_SLOTS; slot_no++) {
+						for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
-							weapon_id = hero->inventory[slot_no].item_id;
+							weapon_id = hero->inventory[i].item_id;
 
 							if (g_itemsdat[weapon_id].flags.weapon) {
 
-								slots[radio_i] = slot_no;
+								slots[radio_i] = i;
 
 								g_radio_name_list[radio_i] = (g_dtp2 + 40 * radio_i);
 
 								sprintf(g_radio_name_list[radio_i],
 									g_space_separated_strings, /* "%s %s" */
 									GUI_name_singular(g_itemsname[weapon_id]),
-									hero->inventory[slot_no].flags.broken ? get_ttx(478) : g_empty_string3);
+									hero->inventory[i].flags.broken ? get_ttx(478) : g_empty_string3);
 
 								radio_i++;
 							}
@@ -725,13 +725,13 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 					radio_i = 0;
 
-					for (slot_no = HERO_INVENTORY_SLOT_KNAPSACK_1; slot_no < NR_HERO_INVENTORY_SLOTS; slot_no++) {
+					for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
-						weapon_id = hero->inventory[slot_no].item_id;
+						weapon_id = hero->inventory[i].item_id;
 
 						if (weapon_id != 0) {
 
-							slots[radio_i] = slot_no;
+							slots[radio_i] = i;
 
 							g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
@@ -844,8 +844,8 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			(hero->action_id == FIG_ACTION_USE_ITEM)))
 	{
 
-		for (slot_no = 0; slot_no < 20; slot_no++) {
-			g_enemy_sheets[slot_no].flags.tied = 0;
+		for (i = 0; i < 20; i++) {
+			g_enemy_sheets[i].flags.tied = 0;
 		}
 
 		g_finalfight_tumult = 1;
