@@ -448,10 +448,10 @@ signed int DNG12_handler(void)
 					*/
 
 					sprintf(g_dtp2,
-						"ALS %s MIT DER BARRIERE KOLLIDIERT, BRICHT SIE IN ST\x9aCKE.\x40"
+						"ALS %s MIT DER BARRIERE KOLLIDIERT, BRICHT SIE IN ST""\x9a""CKE.\x40"
 						"DAS GANZE WAR NUR EIN BILD!\x40"
-						"SCHADE DASS IHR DAS NICHT FR\x9aHER BEMERKT HABT.\0",
-						hero->alias);
+						"SCHADE DASS IHR DAS NICHT FR""\x9a""HER BEMERKT HABT.\0",
+					hero->alias);
 #endif
 				}
 
