@@ -23,7 +23,7 @@
 namespace M302de {
 #endif
 
-signed short g_fight_figs_index = -1; // ds:0x4b9e
+signed int g_fight_figs_index = -1; // ds:0x4b9e
 
 /**
  * \brief   get the pointer to the fighter with id fighter_id
@@ -32,7 +32,7 @@ signed short g_fight_figs_index = -1; // ds:0x4b9e
  * \return              a pointer to the fighter with id fighter_id
  */
 
-struct struct_fighter* FIG_get_fighter(signed char fighter_id)
+struct struct_fighter* FIG_get_fighter(const signed char fighter_id)
 {
 	struct struct_fighter *list_i = g_fig_list_head;
 
@@ -68,14 +68,13 @@ static signed char FIG_set_array(void)
 
 void FIG_draw_figures(void)
 {
-	signed short l1, l2;
+	signed int l1 = 10;
+	signed int l2 = 118;
 	struct struct_fighter *list_i;
 	struct struct_rect rect_bak;
 	uint8_t* gfx_dst_bak;
-	signed short l_si, l_di;
-
-	l1 = 10;
-	l2 = 118;
+	signed int l_si;
+	signed int l_di;
 
 	/* TODO: potential bug: Just backup the pointer dst or the whole structure struct_pic_copy ? */
 	gfx_dst_bak = g_pic_copy.dst;
@@ -165,7 +164,7 @@ void FIG_draw_pic(void)
 	}
 }
 
-struct struct_hero* FIG_get_hero_ptr(const signed short fighter_id)
+struct struct_hero* FIG_get_hero_ptr(const signed int fighter_id)
 {
 	signed int i;
 
@@ -177,9 +176,9 @@ struct struct_hero* FIG_get_hero_ptr(const signed short fighter_id)
 	return get_hero(0);
 }
 
-struct enemy_sheet* FIG_get_enemy_sheet(const signed short fighter_id)
+struct enemy_sheet* FIG_get_enemy_sheet(const signed int fighter_id)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 20; i++) {
 		if (fighter_id == g_enemy_sheets[i].fighter_id)
@@ -189,7 +188,7 @@ struct enemy_sheet* FIG_get_enemy_sheet(const signed short fighter_id)
 	return NULL;
 }
 
-void FIG_set_sheet(signed char fighter_id, signed char val)
+void FIG_set_sheet(const signed char fighter_id, const signed char sheet)
 {
 	struct struct_fighter *list_i = g_fig_list_head;
 
@@ -204,7 +203,7 @@ void FIG_set_sheet(signed char fighter_id, signed char val)
 		list_i = list_i->next;
 	}
 
-	list_i->sheet = val;
+	list_i->sheet = sheet;
 
 	/* set presence flag */
 	list_i->visible = 1;
@@ -214,7 +213,7 @@ void FIG_set_sheet(signed char fighter_id, signed char val)
  * \brief   hides an element from the chessboard without removing it
  * \param   fighter_id  identificates the element to hide
  */
-void FIG_make_invisible(signed char fighter_id)
+void FIG_make_invisible(const signed char fighter_id)
 {
 	struct struct_fighter *list_i;
 	struct struct_fighter *ptr2;
@@ -248,7 +247,7 @@ void FIG_make_invisible(signed char fighter_id)
  *
  * \param   fighter_id  identificates the element to unhide
  */
-void FIG_make_visible(signed short fighter_id)
+void FIG_make_visible(const signed int fighter_id)
 {
 	struct struct_fighter *list_i;
 	struct struct_fighter *ptr2;
@@ -257,7 +256,7 @@ void FIG_make_visible(signed short fighter_id)
 
 	while (list_i->id != (signed char)fighter_id) {
 
-		if (list_i->next == NULL){
+		if (list_i->next == NULL) {
 			return;
 		}
 
@@ -279,7 +278,7 @@ void FIG_make_visible(signed short fighter_id)
 	}
 }
 
-void FIG_set_weapon_sheet(signed char fighter_id, signed char val)
+void FIG_set_weapon_sheet(const signed char fighter_id, const signed char wsheet)
 {
 	struct struct_fighter *list_i = g_fig_list_head;
 
@@ -292,7 +291,7 @@ void FIG_set_weapon_sheet(signed char fighter_id, signed char val)
 		list_i = list_i->next;
 	}
 
-	list_i->wsheet = val;
+	list_i->wsheet = wsheet;
 }
 
 /**
@@ -301,7 +300,7 @@ void FIG_set_weapon_sheet(signed char fighter_id, signed char val)
  * \param   fighter_id  the element to remove
  * \param   keep_in_memory whether to save the removed element in g_fig_list_elem, useful for moving element to end of list
  */
-void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
+void FIG_remove_from_list(const signed char fighter_id, const signed char keep_in_memory)
 {
 	struct struct_fighter *list_i = g_fig_list_head;
 
@@ -354,15 +353,12 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
  * \param   fighter_id  id to assign to the new element (-1 = assign a new id)
  * \return  the new element's fighter_id (position in g_fig_list_array)
  */
-signed char FIG_add_to_list(signed char fighter_id)
+signed char FIG_add_to_list(const signed char fighter_id)
 {
-	struct struct_fighter* p1;
+	struct struct_fighter* p1 = g_fig_list_buffer;
 	struct struct_fighter* p2;
-	signed short x, y;
-
-	p1 = g_fig_list_buffer;
-	x = g_fig_list_elem.cbx;
-	y = g_fig_list_elem.cby;
+	signed int x = g_fig_list_elem.cbx;
+	signed int y = g_fig_list_elem.cby;
 
 	if (g_fig_list_head == NULL) {
 
@@ -448,7 +444,7 @@ signed char FIG_add_to_list(signed char fighter_id)
  * \param   loc         0 = upper left, 1 = lower left
  * \param   hero_pos    position of the hero
  */
-void FIG_draw_char_pic(signed short loc, signed short hero_pos)
+void FIG_draw_char_pic(const signed int loc, const signed int hero_pos)
 {
 	struct struct_hero *hero;
 	signed int fg_bak;
@@ -498,7 +494,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
  * \param   loc         0 = left side, 1 = right side
  * \param   id          ID of the enemy
  */
-void FIG_draw_enemy_pic(signed short loc, signed short id)
+void FIG_draw_enemy_pic(const signed int loc, const signed int id)
 {
 	signed int height_width;
 	struct enemy_sheet *p_enemy;

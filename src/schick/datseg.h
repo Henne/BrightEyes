@@ -1570,7 +1570,7 @@ extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 extern signed short g_fig_star_timer;		//ds:0x4b79; seg004, seg005
 extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
 
-extern signed short g_fight_figs_index;		//ds:0x4b9e; seg006, seg032
+extern signed int g_fight_figs_index;		//ds:0x4b9e; seg006, seg032
 
 extern uint16_t g_random_schick_seed;		//ds:0x4ba0; seg007
 
