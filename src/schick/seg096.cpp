@@ -206,7 +206,7 @@ uint8_t* GUI_names_grammar(signed short flag, const signed int index, const sign
 
 	if (type == 0) {
 		/* string_array_itemnames */
-		p_name = get_itemname(index);
+		p_name = g_itemsname[index];
 
 		flag += lp5.a[g_item_name_genders[index]];
 

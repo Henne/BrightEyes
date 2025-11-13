@@ -70,7 +70,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* note that, for nutrition, table_index contains the nutrition value */
 
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item_id)),
+					consumer->alias, GUI_name_singular(g_itemsname[item_id]),
 					item_desc->table_index,
 					consumer->hunger, (diff >= 0) ? diff : 0);
 #endif
@@ -99,7 +99,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 #if !defined(__BORLANDC__)
 				int diff = consumer->thirst - item_desc->table_index;
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(get_itemname(item_id)), item_desc->table_index,
+					consumer->alias, GUI_name_singular(g_itemsname[item_id]), item_desc->table_index,
 					consumer->thirst, (diff >= 0) ? diff : 0);
 #endif
 

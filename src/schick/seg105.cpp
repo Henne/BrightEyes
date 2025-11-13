@@ -415,7 +415,7 @@ signed int give_hero_new_item(struct struct_hero *hero, const signed int item_id
 
 #if !defined(__BORLANDC__)
 								D1_INFO("%s hat soeben einen magischen Gegenstand erhalten: %s\n",
-									hero->alias, get_itemname(item_id));
+									hero->alias, g_itemsname[item_id]);
 #endif
 							}
 
@@ -791,7 +791,7 @@ signed int select_item_to_drop(struct struct_hero *hero)
 		if ((item_id = hero->inventory[i].item_id)) {
 			str[item_cnt] = i;
 			g_radio_name_list[item_cnt] = (g_dtp2 + item_cnt * 30);
-			strcpy(g_radio_name_list[item_cnt], GUI_name_singular(get_itemname(item_id)));
+			strcpy(g_radio_name_list[item_cnt], GUI_name_singular(g_itemsname[item_id]));
 			item_cnt++;
 		}
 	}
