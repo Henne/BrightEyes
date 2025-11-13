@@ -36,31 +36,31 @@
 namespace M302de {
 #endif
 
-signed short g_delay_factor = 4; // ds:0x4b66
+signed int g_delay_factor = 4; // ds:0x4b66
 extern char g_str_temp_xx[8];
 static char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; uint8_t*
 static signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
 static signed char g_fig_star_counter = 0; // ds:0x4b78
-signed short g_fig_star_timer = 0; // ds:0x4b79
+signed int g_fig_star_timer = 0; // ds:0x4b79
 static signed char g_fig_star_last_count = -1; // ds:0x4b7b
-static signed short g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
+static signed int g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
 signed char g_fig_star_printed = 0; // ds:0x4b94
 char g_str_temp_xx[8] = "TEMP\\XX"; // ds:0x4b95
 
 static unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
-static signed short g_fig_figlist_readd[8];	// ds:0xe298
-static signed short g_fig_ani_state[8];		// ds:0xe2a8
+static signed int g_fig_figlist_readd[8];	// ds:0xe298
+static signed int g_fig_ani_state[8];		// ds:0xe2a8
 struct_msg g_fig_actor_grammar;			// ds:0xe2ba
 struct_msg g_fig_target_grammar;		// ds:0xe2be
-static signed short g_figobj_unkn_y1;		// ds:0xe2c0
-static signed short g_figobj_unkn_y1_bak;	// ds:0xe2c2
-static signed short g_figobj_unkn_x1;		// ds:0xe2c4
-static signed short g_figobj_unkn_x1_bak;	// ds:0xe2c6
-static signed short g_figobj_unkn_y2;		// ds:0xe2c8
-static signed short g_figobj_unkn_y2_bak;	// ds:0xe2ca
-static signed short g_figobj_unkn_x2;		// ds:0xe2cc
-static signed short g_figobj_unkn_x2_bak;	// ds:0xe2ce
-signed short g_delay_timer;			// ds:0xe2d0
+static signed int g_figobj_unkn_y1;		// ds:0xe2c0
+static signed int g_figobj_unkn_y1_bak;		// ds:0xe2c2
+static signed int g_figobj_unkn_x1;		// ds:0xe2c4
+static signed int g_figobj_unkn_x1_bak;		// ds:0xe2c6
+static signed int g_figobj_unkn_y2;		// ds:0xe2c8
+static signed int g_figobj_unkn_y2_bak;		// ds:0xe2ca
+static signed int g_figobj_unkn_x2;		// ds:0xe2cc
+static signed int g_figobj_unkn_x2_bak;		// ds:0xe2ce
+signed int g_delay_timer;			// ds:0xe2d0
 
 /* static prototypes */
 static void set_delay_timer(void);
@@ -72,13 +72,13 @@ static void fight_delay(void);
  * \param[in] x       x coordinate on the screen
  * \param[in] y       y coordinate on the screen
  */
-static signed short FIG_obj_needs_refresh(struct struct_fighter *fighter, const signed short x, const signed short y)
+static signed int FIG_obj_needs_refresh(struct struct_fighter *fighter, const signed int x, const signed int y)
 {
-	struct struct_fighter *list_i;
-	signed short ox;
-	signed short oy;
-
 	if (fighter->visible) {
+
+		struct struct_fighter *list_i;
+		signed int ox;
+		signed int oy;
 
 		/* animated objects always need a refresh */
 		if ((fighter->sheet != -1) || (fighter->visible == 3))
@@ -124,7 +124,7 @@ damn_label:
  * \param   color       1=red/2=green/3=blue/4=yellow/11=darkbrown/12=lightbrown/13=pink
  *
  */
-void FIG_set_star_color(uint8_t *ptr, unsigned short count, unsigned char color)
+static void FIG_set_star_color(uint8_t *ptr, signed int count, signed char color)
 {
 	uint8_t *p;
 
@@ -142,7 +142,7 @@ void FIG_set_star_color(uint8_t *ptr, unsigned short count, unsigned char color)
  * \param   pos         position
  * \return              "einem Magier" if the enemy is a "Magier".
  */
-static char* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
+static char* FIG_name_3rd_case(const signed int type, volatile const signed int pos)
 {
 	if (type == 2) {
 		return get_hero(pos)->alias;
@@ -158,13 +158,13 @@ static char* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
  * \param   pos         position
  * \return              "einen Magier" if the enemy is a "Magier".
  */
-static char* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
+static char* FIG_name_4th_case(const signed int type, volatile const signed int pos)
 {
-
-	if (type == 2)
+	if (type == 2) {
 		return get_hero(pos)->alias;
-	else
+	} else {
 		return (char*)GUI_names_grammar(2, pos, 1);
+	}
 }
 
 /**
@@ -174,18 +174,18 @@ static char* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
  * \param   pos         position
  * \return              "ein Magier" if the enemy is a "Magier".
  */
-static char *FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
+static char *FIG_name_1st_case(const signed int type, volatile const signed int pos)
 {
-
-	if (type == 2)
+	if (type == 2) {
 		return get_hero(pos)->alias;
-	else
+	} else {
 		return (char*)GUI_names_grammar(0, pos, 1);
+	}
 }
 
 #define idx (g_fig_msg_dtps[g_fig_msg_data[g_fig_star_counter].f_action - 1])
 
-unsigned short fight_printer(void)
+static signed int fight_printer(void)
 {
 	signed int fg_bak;
 	signed int bg_bak;
@@ -196,8 +196,9 @@ unsigned short fight_printer(void)
 
 	int16_t f_action;
 
-	if (!g_fig_msg_data[0].f_action)
+	if (!g_fig_msg_data[0].f_action) {
 		g_fig_continue_print = 0;
+	}
 
 	if (!g_fig_star_timer && g_fig_star_printed) {
 
@@ -219,87 +220,86 @@ unsigned short fight_printer(void)
 
 			f_action = g_fig_msg_data[g_fig_star_counter].f_action;
 
-		if (f_action) {
+			if (f_action) {
 
-			gfx_pos_bak = g_vga_backbuffer;
+				gfx_pos_bak = g_vga_backbuffer;
 
-			g_vga_backbuffer = g_renderbuf_ptr;
+				g_vga_backbuffer = g_renderbuf_ptr;
 
-			get_textcolor(&fg_bak, &bg_bak);
+				get_textcolor(&fg_bak, &bg_bak);
 
-			FIG_set_star_color(g_fig_star_gfx, 3724, g_fig_star_colors[f_action - 1]);
+				FIG_set_star_color(g_fig_star_gfx, 3724, g_fig_star_colors[f_action - 1]);
 
-			g_pic_copy.x1 = 0;
-			g_pic_copy.y1 = 150;
-			g_pic_copy.x2 = 75;
-			g_pic_copy.y2 = 198;
-			g_pic_copy.src = g_fig_star_gfx;
-			g_pic_copy.dst = g_renderbuf_ptr;
-			gfx_dst_bak = g_pic_copy.dst;
-			do_pic_copy(2);
+				g_pic_copy.x1 = 0;
+				g_pic_copy.y1 = 150;
+				g_pic_copy.x2 = 75;
+				g_pic_copy.y2 = 198;
+				g_pic_copy.src = g_fig_star_gfx;
+				g_pic_copy.dst = g_renderbuf_ptr;
+				gfx_dst_bak = g_pic_copy.dst;
+				do_pic_copy(2);
 
-			g_pic_copy.dst = gfx_dst_bak;
+				g_pic_copy.dst = gfx_dst_bak;
 
-			/* print number into the star */
-			if (g_fig_msg_data[g_fig_star_counter].damage) {
+				/* print number into the star */
+				if (g_fig_msg_data[g_fig_star_counter].damage) {
 
-				set_textcolor(0xff, g_fig_star_colors[f_action - 1] + 0x80);
+					set_textcolor(0xff, g_fig_star_colors[f_action - 1] + 0x80);
 
-				my_itoa(g_fig_msg_data[g_fig_star_counter].damage, str, 10);
+					my_itoa(g_fig_msg_data[g_fig_star_counter].damage, str, 10);
 
-				x = GUI_get_first_pos_centered(str, 30, 20, 0);
-				GUI_print_string(str, x, 170);
-			}
-
-			/* Generate textmessage */
-			if (g_fig_msg_dtps[f_action - 1]) {
-
-				g_pic_copy.x1 = g_pic_copy.v1 = 0;
-				g_pic_copy.y1 = g_pic_copy.v2 = 194;
-				g_pic_copy.x2 = 318;
-				g_pic_copy.y2 = 199;
-				g_pic_copy.src = g_buffer8_ptr;
-				do_pic_copy(3);
-
-				set_textcolor(0xff, 0);
-
-				if (f_action == 1 || f_action == 3) {
-//					case 1:	/* heroes attack fails */
-//					case 3: /* enemy attack fails */
-
-					sprintf(g_text_output_buf, get_tx(idx),
-						FIG_name_3rd_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id));
-
-				} else if (f_action == 2 || f_action == 4 || f_action == 7) {
-//					case 2: /* hero parade fails */
-//					case 4: /* enemy parade fails */
-//					case 7:	/* hero get unconscious */
-
-					sprintf(g_text_output_buf, get_tx(idx),
-						FIG_name_3rd_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
-
-
-
-				} else if (f_action == 8 || f_action == 11) {
-//					case 8:		/* enemy hits hero */
-//					case 11:	/* hero hits enemy */
-
-					sprintf(g_text_output_buf, get_tx(idx),
-						FIG_name_1st_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id),
-						FIG_name_4th_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
-				} else {
-					/* case 5: hero successful parade */
-					/* case 6: weapon broke */
-					strcpy(g_text_output_buf, get_tx(idx));
+					x = GUI_get_first_pos_centered(str, 30, 20, 0);
+					GUI_print_string(str, x, 170);
 				}
 
-				GUI_print_string(g_text_output_buf, 1, 194);
+				/* Generate textmessage */
+				if (g_fig_msg_dtps[f_action - 1]) {
+
+					g_pic_copy.x1 = g_pic_copy.v1 = 0;
+					g_pic_copy.y1 = g_pic_copy.v2 = 194;
+					g_pic_copy.x2 = 318;
+					g_pic_copy.y2 = 199;
+					g_pic_copy.src = g_buffer8_ptr;
+					do_pic_copy(3);
+
+					set_textcolor(0xff, 0);
+
+					if (f_action == 1 || f_action == 3) {
+//						case 1:	/* heroes attack fails */
+//						case 3: /* enemy attack fails */
+
+						sprintf(g_text_output_buf, get_tx(idx),
+							FIG_name_3rd_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id));
+
+					} else if (f_action == 2 || f_action == 4 || f_action == 7) {
+//						case 2: /* hero parade fails */
+//						case 4: /* enemy parade fails */
+//						case 7:	/* hero get unconscious */
+
+						sprintf(g_text_output_buf, get_tx(idx),
+							FIG_name_3rd_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
+
+
+
+					} else if (f_action == 8 || f_action == 11) {
+//						case 8:		/* enemy hits hero */
+//						case 11:	/* hero hits enemy */
+
+						sprintf(g_text_output_buf, get_tx(idx),
+							FIG_name_1st_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id),
+							FIG_name_4th_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
+					} else {
+						/* case 5: hero successful parade */
+						/* case 6: weapon broke */
+						strcpy(g_text_output_buf, get_tx(idx));
+					}
+
+					GUI_print_string(g_text_output_buf, 1, 194);
+				}
+
+				g_vga_backbuffer = gfx_pos_bak;
+				set_textcolor(fg_bak, bg_bak);
 			}
-
-			g_vga_backbuffer = gfx_pos_bak;
-			set_textcolor(fg_bak, bg_bak);
-		}
-
 
 			g_fig_star_last_count = g_fig_star_counter;
 
@@ -320,16 +320,16 @@ unsigned short fight_printer(void)
 }
 #undef idx
 
-void draw_fight_screen(uint16_t val)
+void draw_fight_screen(const signed int val)
 {
-	signed short i;
+	signed int i;
 	signed int object_id_bak;
 	signed int width;
-	signed short flag;
-	signed short current_x1;
-	signed short current_y1;
-	signed short obj_x;
-	signed short obj_y;
+	signed int flag;
+	signed int current_x1;
+	signed int current_y1;
+	signed int obj_x;
+	signed int obj_y;
 
 	uint8_t* p_figure_gfx;
 	uint8_t* p_weapon_gfx;
@@ -339,17 +339,17 @@ void draw_fight_screen(uint16_t val)
 	struct struct_hero *hero;
 	struct enemy_sheet *p_enemy_sheet;
 
-	signed short viewdir_before;
-	signed short viewdir_after;
-	signed short object_id;
+	signed int viewdir_before;
+	signed int viewdir_after;
+	signed int object_id;
 	signed char double_size_move_tail_first;
 	struct struct_fighter *p_fighter_tmp;
-	signed short viewdir_unconsc;
+	signed int viewdir_unconsc;
 	int8_t *sheet;
 	int8_t *p_weapon_anisheet;
 	signed int handle;
 	struct nvf_extract_desc nvf;
-	signed short figlist_remove[8];
+	signed int figlist_remove[8];
 
 	call_mouse_bg();
 
@@ -653,7 +653,7 @@ void draw_fight_screen(uint16_t val)
 							}
 
 							object_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* object id of the square the tail moves to */
-							p_fighter->object_id = (signed char)object_id; /* move it to FIGHTER_OBJ_ID */
+							p_fighter->object_id = object_id; /* move it to FIGHTER_OBJ_ID */
 							FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, object_id_bak); /* set object id of the target square to enemy_id + 30 */
 
 							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
@@ -705,14 +705,14 @@ void draw_fight_screen(uint16_t val)
 									/* The FIGHTER_OBJ_ID entry of the head part will be overwritten by the next line in the original code.
 									 * In this way, sometimes dead bodies are lost from the chessboard after a double-size enemy walks over it.
 									 * The right thing is to copy it to the FIGHTER_OBJ_ID of tail part. */
-									p_fighter->object_id = ((signed char)(p_fighter_tmp->object_id));
+									p_fighter->object_id = p_fighter_tmp->object_id;
 #endif
-									p_fighter_tmp->object_id = (signed char)object_id_bak;
+									p_fighter_tmp->object_id = object_id_bak;
 									/* write cb_id of the tail part at FIGHTER_OBJ_ID of the head part.
 									 * when the head part moves lated, it will be written to the cb.
 									 * possible bug: the overwritten FIGHTER_OBJ_ID is lost! */
 								} else {
-									p_fighter->object_id = ((signed char)object_id);
+									p_fighter->object_id = object_id;
 								}
 
 								/* check chessboard bounds */
@@ -1040,7 +1040,6 @@ static void fight_delay(void)
 		g_delay_timer--;
 		wait_for_vsync();
 	}
-
 }
 
 #if !defined(__BORLANDC__)

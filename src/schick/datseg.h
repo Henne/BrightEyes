@@ -1566,8 +1566,8 @@ extern char   g_noway_string[40];		//ds:0x4a68; seg003
 
 extern int16_t g_pic_copy_flag;			//ds:0x4a92; seg004, seg008, seg074
 
-extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
-extern signed short g_fig_star_timer;		//ds:0x4b79; seg004, seg005
+extern signed int g_delay_factor;		//ds:0x4b66; seg005, seg025
+extern signed int g_fig_star_timer;		//ds:0x4b79; seg004, seg005
 extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
 
 extern signed int g_fight_figs_index;		//ds:0x4b9e; seg006, seg032
@@ -1741,7 +1741,7 @@ extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 
 extern char g_savegame_names[5][9];	// ds:0xe2da; seg026, seg027
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
-extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
+extern signed int g_delay_timer;	// ds:0xe2d0; seg004, seg005
 extern struct struct_msg g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
 extern struct struct_msg g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
