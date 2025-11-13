@@ -6,17 +6,17 @@ void do_location(void);
 /* 0x25 */
 void leave_location(void);
 /* 0x2a */
-signed short game_options(void);
+signed int game_options(void);
 /* 0x2f */
 void copy_palette(void);
 /* 0x34 */
-void draw_icon(signed short, signed short, signed short);
+void draw_icon(const signed int, const signed int, const signed int);
 /* 0x39 */
 void show_entrance(void);
 /* 0x3e */
 void show_citizen(void);
 /* 0x43 */
-signed short show_storytext(void);
+signed int show_storytext(void);
 /* 0x48 */
 void do_house(void);
 /* 0x4d */

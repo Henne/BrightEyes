@@ -26,7 +26,7 @@ namespace M302de {
 #endif
 
 struct tlk_option {
-	signed short txt, goto_state;
+	signed int txt, goto_state;
 };
 
 static const struct struct_informer_tab g_informer_tab[15] = {
@@ -50,30 +50,30 @@ static const struct struct_informer_tab g_informer_tab[15] = {
 
 void do_random_talk(const signed int talk_id, const signed int informer_id)
 {
-	signed short optioncount;
-	signed short answer = 0;
-	signed short txt_id;
-	signed short txt_offset;
-	signed short opt0_txt;
-	signed short opt1_txt;
-	signed short opt2_txt;
-	signed short txt_id_raw;
-	signed short txt_id_rand;
-	signed short opt0_rand;
-	signed short opt1_rand;
-	signed short opt2_rand;
+	signed int optioncount;
+	signed int answer = 0;
+	signed int txt_id;
+	signed int txt_offset;
+	signed int opt0_txt;
+	signed int opt1_txt;
+	signed int opt2_txt;
+	signed int txt_id_raw;
+	signed int txt_id_rand;
+	signed int opt0_rand;
+	signed int opt1_rand;
+	signed int opt2_rand;
 	struct struct_dialog_state *state_ptr;
 	struct struct_dialog_state *states_tab;
 	struct struct_dialog_partner *partners_tab;
 	char *dialog_title;
 	char *dst;
 	char *fmt;
-	signed short shufflepair_1;
-	signed short shufflepair_2;
-	signed short shufflecount;
-	signed short i;
-	signed short tmp1;
-	signed short tmp2;
+	signed int shufflepair_1;
+	signed int shufflepair_2;
+	signed int shufflecount;
+	signed int i;
+	signed int tmp1;
+	signed int tmp2;
 	struct tlk_option options[3];
 
 	g_dialog_informer = informer_id;

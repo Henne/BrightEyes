@@ -30,14 +30,14 @@ namespace M302de {
 
 static uint8_t *g_pp20_buffers[9] = { 0 };			// ds:0x5e6a; uint8_t*
 static signed long g_pp20_buffer_lengths[9] = {0};		// ds:0x5e8e
-static signed short g_current_fight_id = 0;			// ds:0x5eb2
+static signed int g_current_fight_id = 0;			// ds:0x5eb2
 static unsigned char g_unkn_038[4] = { 0xb8, 0x14, 0x00, 0x50 }; // ds:0x5eb4
 
-void load_pp20(signed short index)
+void load_pp20(const signed int index)
 {
 	volatile signed int handle;
 	uint8_t* buffer_ptr;
-	signed short bi;
+	signed int bi;
 
 	if (index <= 5 || index == ARCHIVE_FILE_PLAYM_US || index == ARCHIVE_FILE_ZUSTA_UK || index == ARCHIVE_FILE_ZUSTA_US)
 	{
@@ -138,19 +138,19 @@ void load_pp20(signed short index)
  * \return              a pointer to the location where the data is.
  */
 /* Original-Bug: when using EMS for caching something strange happens. */
-uint8_t* load_fight_figs(signed short fig)
+uint8_t* load_fight_figs(signed int fig)
 {
-	signed short i;
+	signed int i;
 
 	uint8_t* dst;
 	unsigned short ems_handle;
 	uint32_t offset;
 	uint32_t len;
 	signed int handle;
-	signed short max_entries;
+	signed int max_entries;
 	struct struct_memslot_fig *memslots;
 	uint32_t *p_tab;
-	signed short index;
+	signed int index;
 	uint8_t *src;
 
 	/* check if fig is at a known place */
@@ -289,13 +289,13 @@ uint8_t* load_fight_figs(signed short fig)
  *
  * \param   no          number of the animation
  */
-void load_ani(const signed short no)
+void load_ani(const signed int no)
 {
-	signed short i_area;
-	signed short area_pics;
-	signed short area_changes;
+	signed int i_area;
+	signed int area_pics;
+	signed int area_changes;
 	signed int handle;
-	signed short i;
+	signed int i;
 	struct ani_area_in *p_area;
 	unsigned short ems_handle;
 #if !defined(__BORLANDC__)
@@ -325,7 +325,7 @@ void load_ani(const signed short no)
 	int32_t ani_residue_len;
 	int32_t area_size;
 
-	signed short j;
+	signed int j;
 
 
 	/* sanity check */
@@ -364,7 +364,7 @@ void load_ani(const signed short no)
 
 		/* seek to ordered ani */
 		seek_archive_file(handle, ani_off, 0);
-		read_archive_file(handle, (uint8_t*)g_buffer9_ptr, (unsigned short)ani_len);
+		read_archive_file(handle, (uint8_t*)g_buffer9_ptr, (unsigned int)ani_len);
 
 #if defined(__BORLANDC__)
 		/* if EMS is enabled buffer it */
@@ -487,16 +487,16 @@ void load_ani(const signed short no)
 			ani_residue_ptr += area_data_offset;
 			ani_residue_ptr += plen;
 			ani_residue_len = ani_end_ptr - ani_residue_ptr;
-			memcpy(ani_end_ptr + packed_delta2, ani_residue_ptr, (unsigned short)ani_residue_len);
+			memcpy(ani_end_ptr + packed_delta2, ani_residue_ptr, (unsigned int)ani_residue_len);
 
-			memcpy(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr, (unsigned short)area_size);
+			memcpy(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr, (unsigned int)area_size);
 			ani_residue_ptr += packed_delta2;
-			memcpy(ani_residue_ptr, ani_end_ptr + packed_delta2, (unsigned short)ani_residue_len);
+			memcpy(ani_residue_ptr, ani_end_ptr + packed_delta2, (unsigned int)ani_residue_len);
 
 			g_ani_palette += packed_delta2;
 			ani_end_ptr += packed_delta2;
 
-			area_size = p_area2->height * (signed short)p_area2->width;
+			area_size = p_area2->height * (signed int)p_area2->width;
 
 			for (j = 0; j < area_pics; j++) {
 				p_area2->pics_tab[j] = (uint8_t*)((g_buffer9_ptr + area_data_offset) + j * area_size);
@@ -531,10 +531,10 @@ void load_ani(const signed short no)
  *
  * \param   scenario_id number of the scenario in SCENARIO.LST
  */
-void load_scenario(signed short scenario_id)
+void load_scenario(signed int scenario_id)
 {
 	signed int handle;
-	signed short scenario_lst_buf;
+	signed int scenario_lst_buf;
 
 	/* load SCENARIO.LST */
 	handle = load_archive_file(ARCHIVE_FILE_SCENARIO_LST);
@@ -564,13 +564,13 @@ void load_scenario(signed short scenario_id)
  * \param   fight_id    number of the fight in FIGHT.LST
  * \return              number of enemies present in first round
  */
-signed short count_fight_enemies(signed short fight_id)
+signed int count_fight_enemies(signed int fight_id)
 {
-	signed short enemy_i;
-	signed short enemy_count;
+	signed int enemy_i;
+	signed int enemy_count;
 	struct fight *fight_lst_buf;
 	signed int handle;
-	signed short fight_count;
+	signed int fight_count;
 
 	enemy_count = 0;
 
@@ -614,10 +614,10 @@ signed short count_fight_enemies(signed short fight_id)
  *
  * \param   fight_id    number of the fight in FIGHT.LST
  */
-void read_fight_lst(signed short fight_id)
+void read_fight_lst(signed int fight_id)
 {
 	signed int handle;
-	signed short fight_count;
+	signed int fight_count;
 
 	/* load FIGHT.LST from TEMP dir */
 	handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
@@ -657,13 +657,10 @@ void read_fight_lst(signed short fight_id)
  */
 void write_fight_lst(void)
 {
-	signed short fight_id;
-	signed int handle;
-
-	fight_id = g_current_fight_id;
+	const signed int fight_id = g_current_fight_id;
 
 	/* load FIGHT.LST from TEMP dir */
-	handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
+	signed int handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* seek to the entry */
 	lseek(handle, (int32_t)fight_id * sizeof(struct fight) + 2, SEEK_SET);
@@ -678,7 +675,7 @@ void write_fight_lst(void)
 void init_common_buffers(void)
 {
 	signed int handle;
-	signed short bytes;
+	signed int bytes;
 
 	handle = load_archive_file(ARCHIVE_FILE_POPUP_DAT);
 	bytes = read_archive_file(handle, g_popup - 8, 500);

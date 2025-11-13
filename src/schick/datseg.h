@@ -1576,7 +1576,7 @@ extern unsigned char g_renderbuf_in_use_flag;	//ds:0x4c3a; seg025, seg061
 
 extern char *g_str_temp_xx_ptr2;		//ds:0x4c88; seg002, seg026, seg120
 
-extern signed short g_loaded_head_id;		//ds:0x515c; seg026, seg029
+extern signed int g_loaded_head_id;		//ds:0x515c; seg026, seg029
 
 extern const char* g_fnames_v302de[];		//ds:0x4c8c; seg002, seg026
 

@@ -62,8 +62,8 @@ static struct mouse_action g_action_table_options[10] = {
 	{ 0x00, 0x00, 0x013f, 0xc7, 0x89 },
 	{ -0x0001, -0x0001, -0x0001, -0x0001, 0xffff }
 }; // ds:0x4bae
-static signed short g_tmap_x[10] = { 0x02, 0x76, 0xc1, 0x03, 0x76, 0xc1, 0x00, 0x76, 0xc1, 0x00 }; // ds:0x4c12
-static signed short g_tmap_y[10] = { 0x04, 0x04, 0x04, 0x46, 0x46, 0x46, 0x88, 0x88, 0x88, 0x88 }; // ds:0x4c26
+static signed int g_tmap_x[10] = { 0x02, 0x76, 0xc1, 0x03, 0x76, 0xc1, 0x00, 0x76, 0xc1, 0x00 }; // ds:0x4c12
+static signed int g_tmap_y[10] = { 0x04, 0x04, 0x04, 0x46, 0x46, 0x46, 0x88, 0x88, 0x88, 0x88 }; // ds:0x4c26
 unsigned char g_renderbuf_in_use_flag = 0; // ds:0x4c3a
 
 static void (*g_location_handlers[19])(void) = {
@@ -152,8 +152,8 @@ void show_citizen(void)
  */
 void do_house(void)
 {
-	signed short i; /* dual use as a town_id and a hero_pos */
-	signed short l_di;
+	signed int i; /* dual use as a town_id and a hero_pos */
+	signed int l_di;
 	struct struct_hero *hero;
 
 	/* prepare the question */
@@ -245,7 +245,7 @@ void do_house(void)
 
 void do_informer(void)
 {
-	signed short no = gs_current_typeindex - 1;
+	signed int no = gs_current_typeindex - 1;
 
 	if (no == INFORMER_JURGE)	do_talk(6, 0); else
 	if (no == INFORMER_HJORE)	do_talk(6, 1); else
@@ -279,12 +279,12 @@ void enter_map(void)
 
 void show_treasure_map(void)
 {
-	signed short l_si;
-	signed short tw_bak;
-	signed short count;	/* #collected treasure map parts */
+	signed int l_si;
+	signed int tw_bak;
+	signed int count;	/* #collected treasure map parts */
 	signed int width;
 	signed int height;
-	signed short pp20_index_bak;
+	signed int pp20_index_bak;
 	int32_t length;
 	struct nvf_extract_desc nvf;
 
@@ -426,7 +426,7 @@ void show_treasure_map(void)
 	}
 }
 
-signed short game_options(void)
+signed int game_options(void)
 {
 	signed int done;
 	signed int answer;
@@ -625,14 +625,14 @@ signed short game_options(void)
 	return done == -1 ? 1 : 0;
 }
 
-void draw_icon(signed short id, signed short x, signed short y)
+void draw_icon(const signed int icon_id, const signed int x, const signed int y)
 {
 	signed int handle;
 	uint8_t* dst_bak;
 
 	handle = load_archive_file(ARCHIVE_FILE_ICONS);
 
-	seek_archive_file(handle, id * 576L, 0);
+	seek_archive_file(handle, icon_id * 576L, 0);
 
 	read_archive_file(handle, g_icon, 576);
 
@@ -659,11 +659,11 @@ void draw_icon(signed short id, signed short x, signed short y)
  * These were introduced in V3.00 (de and en) to find a better way into the story.
  */
 /* static */
-signed short show_storytext(void)
+signed int show_storytext(void)
 {
 	char *ptr;
-	signed short person;
-	signed short icon;
+	signed int person;
+	signed int icon;
 
 	load_tx(ARCHIVE_FILE_STORY_LTX);
 
@@ -707,10 +707,10 @@ signed short show_storytext(void)
 
 void do_location(void)
 {
-	signed short bak1;
-	signed short bak2;
-	signed short tw_bak;
-	signed short tm_bak;
+	signed int bak1;
+	signed int bak2;
+	signed int tw_bak;
+	signed int tm_bak;
 	void (*func)(void);
 
 	tm_bak = gs_show_travel_map;
@@ -766,7 +766,7 @@ void leave_location(void)
 
 void leave_dungeon(void)
 {
-	signed short i;
+	signed int i;
 	uint8_t *ptr;
 
 	DNG_lights();
@@ -813,7 +813,7 @@ void leave_dungeon(void)
  */
 void tumult(void)
 {
-	signed short tw_bak;
+	signed int tw_bak;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;

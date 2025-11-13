@@ -30,7 +30,8 @@ static signed char g_loaded_menu_icons[9] = { -2, -2, -2, -2, -2, -2, -2, -2, -2
 
 #if 0
 struct coord {
-	unsigned short x,y;
+	unsigned short x;
+	unsigned short y;
 };
 
 /* GUI_BUTTONS_POS */
@@ -295,7 +296,7 @@ void load_icon(uint16_t fileindex, int16_t icon, int16_t pos)
  */
 void draw_icons(void)
 {
-	signed short i;
+	signed int i;
 
 	if (g_pp20_index != ARCHIVE_FILE_PLAYM_UK)
 		return;

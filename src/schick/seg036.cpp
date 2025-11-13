@@ -504,7 +504,7 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 signed int AFIG_get_spell(const signed int spell_id, const signed int renegade)
 {
 	struct spell_descr *spell_description;
-	signed short retval = -1;
+	signed int retval = -1;
 
 	/* make a pointer to the spell description */
 	spell_description = &g_spell_descriptions[spell_id];

@@ -9,29 +9,29 @@ void split_textbuffer(char **, char*, uint32_t);
 //0x2a
 void load_ggsts_nvf(void);
 /* 0x2f */
-signed short load_game_state(void);
+signed int load_game_state(void);
 /* 0x34 */
-signed short save_game_state(void);
+signed int save_game_state(void);
 /* 0x39 */
-signed short read_chr_temp(char*, signed short, signed short);
+signed int read_chr_temp(char*, const signed int, const signed int);
 //0x3e
-void write_chr_temp(unsigned short);
+void write_chr_temp(const signed int);
 /* 0x43 */
-signed short copy_chr_names(uint8_t*, signed short);
+signed int copy_chr_names(uint8_t*, const signed int);
 //0x48
-void load_in_head(signed short);
+void load_in_head(const signed int);
 //0x4d
-void load_tx2(signed short);
+void load_tx2(const signed int);
 //0x57
-void load_tx(signed short);
+void load_tx(const signed int);
 //0x57
-void load_ltx(unsigned short);
+void load_ltx(const signed int);
 //0x61
 void prepare_chr_name(char*, char*);
 //0x61
 void prepare_sg_name(char*, char*);
 //0x66
-void load_tempicon(signed short);
+void load_tempicon(signed int);
 
 #if !defined(__BORLANDC__)
 }

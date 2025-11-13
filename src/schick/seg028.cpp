@@ -34,13 +34,13 @@
 namespace M302de {
 #endif
 
-static signed short g_locations_tab_size = 0;	// ds:0x5eb8
-static signed short g_areadescr_dng_level = 0;	// ds:0x5eba
-static signed short g_areadescr_fileid = 0;	// ds:0x5ebc
-static signed short g_areadescr_dng_flag = 0;	// ds:0x5ebe
+static signed int g_locations_tab_size = 0;	// ds:0x5eb8
+static signed int g_areadescr_dng_level = 0;	// ds:0x5eba
+static signed int g_areadescr_fileid = 0;	// ds:0x5ebc
+static signed int g_areadescr_dng_flag = 0;	// ds:0x5ebe
 #if defined(__BORLANDC__)
-static unsigned short g_ems_unused_lpage = 0;	// ds:0x5ec0
-static signed short g_ems_unused_offset = 0x0300; // ds:0x5ec2
+static unsigned int g_ems_unused_lpage = 0;	// ds:0x5ec0
+static signed int g_ems_unused_offset = 0x0300; // ds:0x5ec2
 #endif
 static const unsigned char g_unkn_039[8] = { 0x0b, 0xc0, 0x75, 0x06, 0xb8, 0x01, 0x00, 0x00 }; // ds:0x5ec4
 
@@ -113,8 +113,8 @@ void prepare_dungeon_area(void)
 void load_dungeon_ddt(void)
 {
 	signed int index;
-	signed short low;
-	signed short high;
+	signed int low;
+	signed int high;
 	signed int handle;
 
 	index = gs_dungeon_id + ARCHIVE_FILE_DNGS_DDT;
@@ -282,7 +282,7 @@ void prepare_area(const signed int town)
  */
 void load_area_description(const signed int type)
 {
-	signed short f_index;
+	signed int f_index;
 	signed int handle;
 
 	if (g_areadescr_fileid) {
@@ -403,7 +403,7 @@ void unused_store(signed short no)
 
 uint8_t* unused_load(signed short no)
 {
-	unsigned short lpage;
+	unsigned int lpage;
 
 	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
@@ -558,7 +558,7 @@ void load_splashes(void)
 	nvf.width = &width;
 	nvf.height = &height;
 	/* REMARK: use another variable instead of handle */
-	handle = (signed short)process_nvf_extraction(&nvf);
+	handle = (signed int)process_nvf_extraction(&nvf);
 
 	nvf.dst = g_splash_ae = g_splash_buffer + handle;
 	nvf.src = g_renderbuf_ptr;
@@ -594,7 +594,7 @@ void load_informer_tlk(const signed int index)
 	read_archive_file(handle, (uint8_t*)&gs_dialog_states, (uint16_t)(off - partners * sizeof(struct struct_dialog_partner)));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(handle, g_buffer8_ptr, 10000);
+	text_len = (signed int)read_archive_file(handle, g_buffer8_ptr, 10000);
 
 	close(handle);
 
@@ -615,7 +615,7 @@ void load_tlk(const signed int index)
 	signed int handle;
 	int32_t text_len;
 	int32_t off;
-	signed short partners;
+	signed int partners;
 	struct struct_dialog_partner *partner;
 
 	g_text_file_index = index;
@@ -633,7 +633,7 @@ void load_tlk(const signed int index)
 	read_archive_file(handle, (uint8_t*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(handle, (uint8_t*)g_buffer7_ptr, 64000);
+	text_len = (signed int)read_archive_file(handle, (uint8_t*)g_buffer7_ptr, 64000);
 
 	close(handle);
 

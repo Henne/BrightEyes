@@ -151,12 +151,12 @@ void diary_new_entry(void)
  */
 uint16_t diary_print_entry(uint16_t line)
 {
-	signed short day;
-	signed short month;
-	signed short startline;
+	signed int day;
+	signed int month;
+	signed int startline;
 	struct struct_diary_entry *entry;
 	char *town_name;
-	signed short di = 0;
+	signed int di = 0;
 
 	memset((uint8_t*)g_buffer9_ptr, 0, 64000);
 

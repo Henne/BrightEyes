@@ -116,7 +116,7 @@ const char* g_fnames_v302de[] = {
 	g_fn_v302de_304, g_fn_v302de_305, g_fn_v302de_306, g_fn_v302de_307,
 }; // ds:0x4c8c
 
-signed short g_loaded_head_id = -1; // ds:0x515c
+signed int g_loaded_head_id = -1; // ds:0x515c
 char g_str_temp_xx2[8] = "TEMP\\%s"; // ds:0x515e
 
 // ds:0x5166, names of files in SCHICK.DAT
@@ -475,10 +475,10 @@ void init_text(void)
 	split_textbuffer((char**)g_monnames_index, g_monnames_buffer, len);
 }
 
-void load_tx(signed short index)
+void load_tx(const signed int index)
 {
 	int32_t archive_file_len;
-	signed short archive_file_handle;
+	signed int archive_file_handle;
 
 	if (index == -1)
 		return;
@@ -494,7 +494,7 @@ void load_tx(signed short index)
 	g_tx_file_index = index;
 }
 
-void load_tx2(signed short index)
+void load_tx2(const signed int index)
 {
 	int32_t len;
 	register signed int handle;
@@ -512,7 +512,7 @@ void load_tx2(signed short index)
 
 /* REMARK: 1000 byte for pointer, means 250 strings on 16/32-bit machines and 125 strings on 64-bit machines.
  * WAFFINFO.LTX seems to have 19 + 40 + 67 = 126 strings, which will lead to problems */
-void load_ltx(unsigned short index)
+void load_ltx(const signed int index)
 {
 	int32_t len;
 	signed int handle;
@@ -566,7 +566,7 @@ void load_ggsts_nvf(void)
 void prepare_chr_name(char *dst, char *src)
 {
 	char tmp_str[40];
-	signed short i;
+	signed int i;
 
 	strcpy(tmp_str, src);
 
@@ -588,7 +588,7 @@ void prepare_chr_name(char *dst, char *src)
 void prepare_sg_name(char *dst, char *src)
 {
 	char tmp_str[40];
-	signed short i;
+	signed int i;
 
 	strcpy(tmp_str, src);
 
@@ -615,21 +615,21 @@ void prepare_sg_name(char *dst, char *src)
 	dst[8] = '\0';
 }
 
-signed short load_game_state(void)
+signed int load_game_state(void)
 {
 #if defined(__BORLANDC__)
 	register signed int handle_sg;
-	signed short i;
+	signed int i;
 	signed int handle;
-	signed short answer;
-	signed short l1;
+	signed int answer;
+	signed int l1;
 	HugePt p_status_start;
 	HugePt p_status_end;
-	signed short status_length;
-	signed short l2;
-	signed short l3;
-	signed short retval;
-	signed short l4;
+	signed int status_length;
+	signed int l2;
+	signed int l3;
+	signed int retval;
+	signed int l4;
 	struct struct_hero* hero_i;
 	signed char version[4];
 	struct ffblk blk;
@@ -831,20 +831,20 @@ signed short load_game_state(void)
  *
  * \return              1 = OK, 0 = error
  */
-signed short save_game_state(void)
+signed int save_game_state(void)
 {
 #if defined(__BORLANDC__)
-	signed short handle_sg;
+	signed int handle_sg;
 	HugePt p_status_start;
 	HugePt p_status_end;
 	unsigned short status_len;
 	signed int handle;
-	signed short tw_bak;
-	signed short l1;
-	signed short slot;
+	signed int tw_bak;
+	signed int l1;
+	signed int slot;
 	uint32_t filepos;
 	uint32_t filepos2;
-	signed short flag;
+	signed int flag;
 	uint32_t len;
 	struct ffblk blk;
 
@@ -1096,11 +1096,11 @@ signed short save_game_state(void)
  * \param   group_id    id of the group
  * \return              1 = OK, 0 = Error
  */
-signed short read_chr_temp(char *fname, signed short hero_pos, signed short group_id)
+signed int read_chr_temp(char *fname, const signed int hero_pos, const signed int group_id)
 {
 #if defined(__BORLANDC__)
 	signed int handle;
-	signed short hero_size = sizeof(struct struct_hero);
+	signed int hero_size = sizeof(struct struct_hero);
 	struct struct_hero *hero;
 
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, (char*)fname);
@@ -1159,7 +1159,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short grou
  *
  * \param   hero_pos    position of the hero
  */
-void write_chr_temp(unsigned short hero_pos)
+void write_chr_temp(const signed int hero_pos)
 {
 	char fname[20];
 	signed int handle;
@@ -1183,11 +1183,11 @@ void write_chr_temp(unsigned short hero_pos)
  * \param   temple_id   > 0 the id of the temple, -1 on delete mode
  * \return              # of CHR-files in TEMP-dir
  */
-signed short copy_chr_names(uint8_t *ptr, signed short temple_id)
+signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
 {
 #if defined(__BORLANDC__)
-	signed short count = 0;
-	signed short l_di;
+	signed int count = 0;
+	signed int l_di;
 	signed int handle;
 	struct struct_hero *hero;
 	struct ffblk blk;
@@ -1235,7 +1235,7 @@ signed short copy_chr_names(uint8_t *ptr, signed short temple_id)
  *
  * \param   head        index of the desired head
  */
-void load_in_head(signed short head)
+void load_in_head(const signed int head)
 {
 	signed int handle;
 
@@ -1256,15 +1256,15 @@ void load_in_head(signed short head)
 /**
  * \brief   load a temple icon
  *
- * \param   no          the number of the icon
+ * \param   icon_id          the number of the icon
  */
-void load_tempicon(signed short no)
+void load_tempicon(signed int icon_id)
 {
 	struct nvf_extract_desc nvf;
 	signed int handle; /* REMARK: reused differently */
 
-	if (no == 14) {
-		no = 7;
+	if (icon_id == 14) {
+		icon_id = 7;
 	}
 
 	/* load TEMPICON */
@@ -1274,7 +1274,7 @@ void load_tempicon(signed short no)
 
 	nvf.dst = g_buffer8_ptr + 7000;
 	nvf.src = g_buffer8_ptr;
-	nvf.image_num = no;
+	nvf.image_num = icon_id;
 	nvf.compression_type = 0;
 	nvf.width = &handle;
 	nvf.height = &handle;

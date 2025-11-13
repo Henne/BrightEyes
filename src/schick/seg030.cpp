@@ -128,8 +128,8 @@ void print_date(void)
 
 void prepare_date_str(void)
 {
-	unsigned short unused = 0;
-	signed short hour = gs_day_timer / HOURS(1);
+	signed int unused = 0;
+	signed int hour = gs_day_timer / HOURS(1);
 
 	if (gs_day_of_month < 0) {
 
@@ -149,7 +149,7 @@ void prepare_date_str(void)
 }
 
 struct tlk_option {
-	signed short txt, goto_state;
+	signed int txt, goto_state;
 };
 
 void do_talk(const signed int talk_id, const signed int tlk_informer)

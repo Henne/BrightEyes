@@ -75,9 +75,9 @@ void FIG_loot_monsters(void)
 	signed int loot_num;
 	signed int item_id;
 	signed int item_cnt;
-	signed short l4;
-	signed short l5;
-	signed short l6;
+	signed int l4;
+	signed int l5;
+	signed int l6;
 	int32_t money;
 	const signed int autofight_bak = g_autofight;
 	signed int tw_bak;
