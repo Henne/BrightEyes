@@ -88,7 +88,7 @@ int dice_roll(const int n, const int m, const int x)
  * \param m	number of sides of the dice (outcome of a single dice roll is [1..m])
  * \param x	constant summand in the damage formula
  */
-void calc_damage_range(const int n, const int m, const int x, signed short *min, signed short *max)
+void calc_damage_range(const int n, const int m, const int x, signed int *min, signed int *max)
 {
 	*min = n + x;
 	*max = n * m + x;

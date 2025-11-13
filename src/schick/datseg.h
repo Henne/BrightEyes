@@ -822,7 +822,7 @@ extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093
 extern unsigned char g_ems_enabled;			//ds:0x26ab; seg027-seg028, seg120
 extern signed char g_fig_initiative;			//ds:0x26ac; seg032,seg051,seg052,seg110-seg113
-extern signed short g_fig_msg_counter;			//ds:0x26ad; seg041
+extern signed int g_fig_msg_counter;			//ds:0x26ad; seg041
 extern unsigned short g_always_one;			//ds:0x26af; seg006
 extern signed short g_fig_continue_print;		//ds:0x26b1; seg004,seg005,seg042,seg043
 extern signed short g_fig_char_pic;			//ds:0x26b3; seg006,seg032
@@ -1592,10 +1592,10 @@ extern signed char g_gfxtab_double_size_x1[4];			//ds:0x6030; seg005, seg039, se
 extern signed char g_gfxtab_double_size_x2[4];			//ds:0x6034; seg005, seg039, seg043
 extern signed char g_gfxtab_double_size_extra_x1[4];		//ds:0x6038; seg005, seg039
 extern signed char g_gfxtab_double_size_extra_x2[4];		//ds:0x603c; seg005, seg039
-extern const signed short g_gfxtab_obj_offset_x[63];	//ds:0x6060; seg032, seg040
-extern const signed short g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
+extern const signed int g_gfxtab_obj_offset_x[63];	//ds:0x6060; seg032, seg040
+extern const signed int g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
 
-extern signed short g_mspell_awake_flag;		//ds:0x618e; seg043, seg102
+extern signed int g_mspell_awake_flag;			//ds:0x618e; seg043, seg102
 
 extern int8_t g_statuspage_sel_inv_slot_1;		//ds:0x636e; seg048
 extern int8_t g_statuspage_sel_inv_slot_2;		//ds:0x636f; seg048
@@ -1706,11 +1706,11 @@ extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg1
 extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg049, seg052
 extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg049, seg052
 extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg049, seg052
-extern signed short g_attacker_attacks_again;	// ds:0xe3ac; seg042, seg043, seg044
-extern signed short g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044
-extern signed short g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
-extern signed short g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg098, seg102
-extern signed short g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099
+extern signed int  g_attacker_attacks_again;	// ds:0xe3ac; seg042, seg043, seg044
+extern signed int  g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044
+extern signed int  g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
+extern signed int  g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg098, seg102
+extern signed int  g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099
 extern signed char g_fig_cb_selector_id[21];	// ds:0xe38f; seg032, seg034, seg040
 extern signed char g_fig_cb_marker_id;		// ds:0xe38e; seg032, seg033, seg036, seg037, seg038, seg040
 extern signed char g_fig_shot_bolt_id;		// ds:0xe38d; seg040, seg042, seg043, seg045

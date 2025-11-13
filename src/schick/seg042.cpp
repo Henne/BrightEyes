@@ -31,13 +31,13 @@ namespace M302de {
 #endif
 
 static struct viewdir_offsets8s g_viewdir_invoffsets2 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6178
-static char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
+static const char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
 
-signed short g_spell_illusionen;	// ds:0xe3a4, 1 = spell has effect
-signed short g_defender_dead;		// ds:0xe3a6
-signed short g_attacker_dead;		// ds:0xe3a8
-signed short g_defender_attacks;	// ds:0xe3aa
-signed short g_attacker_attacks_again;	// ds:0xe3ac
+signed int g_spell_illusionen;		// ds:0xe3a4, 1 = spell has effect
+signed int g_defender_dead;		// ds:0xe3a6
+signed int g_attacker_dead;		// ds:0xe3a8
+signed int g_defender_attacks;		// ds:0xe3aa
+signed int g_attacker_attacks_again;	// ds:0xe3ac
 
 /**
  * \brief   executes the fight action of hero
@@ -47,37 +47,37 @@ signed short g_attacker_attacks_again;	// ds:0xe3ac
  */
 void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 {
-	signed short damage;
+	signed int damage;
 	struct enemy_sheet *target_monster;
 	struct struct_hero *target_hero;
 	struct inventory *p_weapon;
 	struct inventory *p_weapon_target;
-	signed short weapon_type;
-	signed short weapon_type_target;
-	signed short two_w_6;
-	signed short l5;
-	signed short l6;
-	signed short randval1;
-	signed short randval2;
-	signed short atpa;
-	signed short l10;
-	signed short l11;
-	signed short l12;
-	signed short l13;
-	signed short target_is_hero = 0;
-	signed short l15;
+	signed int weapon_type;
+	signed int weapon_type_target;
+	signed int two_w_6;
+	signed int l5;
+	signed int l6;
+	signed int randval1;
+	signed int randval2;
+	signed int atpa;
+	signed int l10;
+	signed int l11;
+	signed int l12;
+	signed int l13;
+	signed int target_is_hero = 0;
+	signed int l15;
 	struct struct_fighter *fighter_add;
 	signed int width;
 	signed int height;
-	signed short l16 = 0;
-	signed short l17 = 0;
-	signed short fighter_id;
+	signed int l16 = 0;
+	signed int l17 = 0;
+	signed int fighter_id;
 	struct viewdir_offsets8s dst = g_viewdir_invoffsets2;
 	signed int hero_x;
 	signed int hero_y;
 	signed int target_x;
 	signed int target_y;
-	signed short dir;
+	signed int dir;
 	struct struct_fighter *fighter;
 	struct struct_msg tmp;
 	signed int fg_bak;

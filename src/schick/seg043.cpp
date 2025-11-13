@@ -29,7 +29,7 @@
 namespace M302de {
 #endif
 
-signed short g_mspell_awake_flag = 0; // ds:0x618e
+signed int g_mspell_awake_flag = 0; // ds:0x618e
 static struct viewdir_offsets8s g_viewdir_invoffsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
 
 /**
@@ -38,35 +38,34 @@ static struct viewdir_offsets8s g_viewdir_invoffsets3 = { { { -1, 0 }, { 0, 1 },
  * \param   monster     pointer to a monster datasheet
  * \param   monster_pos position of the monster (fighter_id = monster_pos + 10)
  */
-void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
+void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_pos)
 {
-	signed short damage;
-
+	signed int damage;
 	struct struct_hero *hero;
 	struct enemy_sheet *target_enemy;
 	struct inventory *p_weapon;
-	signed short two_w_6;
-	signed short weapon_type;
-	signed short defender_gets_hit;
-	signed short randval;
-	signed short randval2;
-	signed short attacker_at;
-	signed short defender_at;
-	signed short defender_pa;
+	signed int two_w_6;
+	signed int weapon_type;
+	signed int defender_gets_hit;
+	signed int randval;
+	signed int randval2;
+	signed int attacker_at;
+	signed int defender_at;
+	signed int defender_pa;
 	signed char target_is_hero;
-	signed short l11;
-	signed short l12;
-	signed short l13;
-	signed short l14;
-	signed short l15;
+	signed int l11;
+	signed int l12;
+	signed int l13;
+	signed int l14;
+	signed int l15;
 	struct struct_fighter *fighter;
-	signed short l17 = 0;
-	signed short fighter_id;
+	signed int l17 = 0;
+	signed int fighter_id;
 	signed int hero_x;
 	signed int hero_y;
 	signed int target_x;
 	signed int target_y;
-	signed short dir;
+	signed int dir;
 	struct viewdir_offsets8s dst = g_viewdir_invoffsets3;
 	struct struct_msg tmp;
 
@@ -793,14 +792,14 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
  * \param   flag        bool value, used when a hero attacks a hero
  * \param   hero_pos    position of the hero
  */
-void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, struct struct_hero *target_hero, signed short flag, signed short hero_pos)
+void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, struct struct_hero *target_hero, const signed int flag, const signed int hero_pos)
 {
-	signed short damage;
+	signed int damage;
 
-	signed short l3;
-	signed short hylailic = 0;
-	signed short usecase;
-	signed short item_id = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
+	signed int l3;
+	signed int hylailic = 0;
+	signed int usecase;
+	signed int item_id = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
 	struct item_stats *p_item = &g_itemsdat[item_id];
 
 	if (p_item->flags.herb_potion) {
@@ -885,7 +884,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 	} else {
 		/* use item in the regular way */
 
-		use_item(4, hero_pos);
+		use_item(HERO_INVENTORY_SLOT_LEFT_HAND, hero_pos);
 
 		*g_dtp2 = '\0';
 	}

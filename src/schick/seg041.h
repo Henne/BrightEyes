@@ -7,19 +7,19 @@ signed int range_attack_check_ammo(struct struct_hero*, const signed int);
 //0x25
 void FIG_output(char*);
 //0x2a
-void FIG_clear_msgs();
+void FIG_clear_msgs(void);
 //0x2f
 void FIG_add_msg(const signed int, const signed int);
 //0x34
-void FIG_damage_enemy(struct enemy_sheet*, int16_t, signed short);
+void FIG_damage_enemy(struct enemy_sheet*, const signed int, const signed int);
 /* 0x39 */
 signed int FIG_get_hero_weapon_attack_damage(struct struct_hero*, struct struct_hero*, const signed int);
 //0x3e
-signed int weapon_check(struct struct_hero*);
+signed int weapon_check(const struct struct_hero*);
 //0x43
-signed short FIG_get_enemy_attack_damage(struct enemy_sheet*, struct enemy_sheet*, signed short);
+signed int FIG_get_enemy_attack_damage(const struct enemy_sheet*, struct enemy_sheet*, const signed int);
 //0x48
-void clear_anisheets();
+void clear_anisheets(void);
 
 #if !defined(__BORLANDC__)
 }

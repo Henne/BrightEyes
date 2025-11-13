@@ -1861,7 +1861,7 @@ signed char g_weaponani_types[22] = { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 
 signed char g_food_message_shown[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x26a4
 unsigned char g_ems_enabled = 0; // ds:0x26ab
 signed char g_fig_initiative = 0; // ds:0x26ac, 0 = random, 1 = enemies, 2 = heroes (attack first)
-signed short g_fig_msg_counter = 0; // ds:0x26ad
+signed int g_fig_msg_counter = 0; // ds:0x26ad
 unsigned short g_always_one = 0; // ds:0x26af, writeonly (1)
 signed short g_fig_continue_print = 0; // ds:0x26b1
 signed short g_fig_char_pic = 0; // ds:0x26b3

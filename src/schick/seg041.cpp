@@ -48,10 +48,6 @@ static signed short g_knive_weapons[5] = {
 }; // ds:0x616e, terminated with -1
 
 
-#if 0
-static signed short msg_counter;
-#endif
-
 /**
  * \brief   check if a range attack can be done
  *
@@ -61,11 +57,9 @@ static signed short msg_counter;
  */
 signed int range_attack_check_ammo(struct struct_hero *hero, const signed int arg)
 {
-	signed short right_hand;
-	signed short left_hand;
-	signed short retval;
-
-	retval = 0;
+	signed int right_hand;
+	signed int left_hand;
+	signed int retval = 0;
 
 	/* read the item ids from the hands */
 	right_hand = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
@@ -202,9 +196,9 @@ void FIG_add_msg(const signed int f_action, const signed int damage)
  * \param   damage      the damage
  * \param   flag        impact on 'renegade' flag. 0: not affected. 1: reset 'renegade' to 0 (monster will be hostile again)
  */
-void FIG_damage_enemy(struct enemy_sheet *enemy, int16_t damage, signed short preserve_renegade)
+void FIG_damage_enemy(struct enemy_sheet *enemy, const signed int damage, const signed int preserve_renegade)
 {
-	signed short i;
+	signed int i;
 
 	/* subtract the damage from the enemies LE */
 	enemy->le -= damage;
@@ -246,25 +240,23 @@ void FIG_damage_enemy(struct enemy_sheet *enemy, int16_t damage, signed short pr
  */
 signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct struct_hero* target, const signed int attack_hero)
 {
-	signed short damage;
-	signed short damage_mod;
+	signed int damage;
+	signed int damage_mod = 0;
 	struct item_stats *item_p_rh;
 	struct weapon_descr *weapon;
 	const struct ranged_weapon_descr *p_rangedtab;
-	signed short target_size;
-	signed short right_hand;
-	signed short beeline;
-	signed short distance;
+	signed int target_size;
+	signed int right_hand;
+	signed int beeline;
+	signed int distance;
 	signed int x_hero;
 	signed int y_hero;
 	signed int x_target;
 	signed int y_target;
-	signed short hero_idx;
+	signed int hero_idx;
 	signed char enemy_gfx_id;
 	struct enemy_sheet* enemy_p;
-	signed short weapon_type;
-
-	damage_mod = 0;
+	signed int weapon_type;
 
 	if (attack_hero == 0) {
 		enemy_p = (struct enemy_sheet*)target; /* TODO: to attack an enemy enemy_p should be used instead of target */
@@ -489,13 +481,13 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
  *
  */
 
-signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct enemy_sheet *target, signed short is_enemy)
+signed int FIG_get_enemy_attack_damage(const struct enemy_sheet *attacker, struct enemy_sheet *target, const signed int is_enemy)
 {
-	signed short pos;
+	signed int pos;
 	struct struct_hero *hero;
 
-	signed short damage;
-	signed short dice;
+	signed int damage;
+	signed int dice;
 
 	dice = attacker->dam1;
 
@@ -563,7 +555,7 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 
 void clear_anisheets(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 8; i++)
 		memset(&g_fig_anisheets[i], -1, 0xf3);
@@ -583,7 +575,7 @@ void clear_anisheets(void)
  *	1 = non-broken force weapon (includes ITEM_ZAUBERSTAB and ITEM_KAMPFSTAB),
  *	2 = any other non-broken melee weapon, including WEAPON_TYPE_WAFFENLOS (i.e. ammunition), but no WEAPON_TYPE_SPEER
  */
-signed int weapon_check(struct struct_hero *hero)
+signed int weapon_check(const struct struct_hero *hero)
 {
 	struct item_stats *item_p;
 

@@ -134,18 +134,18 @@ static signed char get_seq_header(const signed int ani_num)
  * \param   action_type {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_UNKNOWN2 = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
  */
 /* Borlandified and identical */
-void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero, signed short weapon_type, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
+void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *hero, const signed int weapon_type, const signed int f_action, const signed int fid_attacker, const signed int fid_target, const signed int a7)
 {
-	signed short l1;
+	signed int l1;
 	signed int attacker_x;
 	signed int attacker_y;
 	signed int target_x;
 	signed int target_y;
-	signed short dir;
-	signed short l7;
-	signed short l8;
-	signed short l9;
-	signed short i;
+	signed int dir;
+	signed int l7;
+	signed int l8;
+	signed int l9;
+	signed int i;
 	int8_t *sheet_ptr1;
 	int8_t *sheet_ptr2;
 	signed int weapon_id;
@@ -322,23 +322,23 @@ void FANI_prepare_fight_hero_ani(signed short sheet_id, struct struct_hero *hero
  * \brief   prepares the animation sequence of a hero in fights
  */
 /* Borlandified and identical */
-void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *enemy, signed short f_action, signed short fid_attacker, signed short fid_target, signed short a7)
+void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet *enemy, const signed int f_action, const signed int fid_attacker, const signed int fid_target, const signed int a7)
 {
-	signed short l1;
+	signed int l1;
 	signed int attacker_x;
 	signed int attacker_y;
 	signed int target_x;
 	signed int target_y;
-	signed short dir;
-	signed short l7;
-	signed short l8;
-	signed short l9;
-	signed short i;
+	signed int dir;
+	signed int l7;
+	signed int l8;
+	signed int l9;
+	signed int i;
 	int8_t *sheet_ptr1;
 	int8_t *sheet_ptr2;
 	struct struct_fighter *fighter;			/* only user for two sprited figures */
 	int16_t *ani_index_ptr;			/* read only */
-	signed short weapon_type;
+	signed int weapon_type;
 
 	/* initialize with bare hands */
 	weapon_type = -1;
@@ -437,7 +437,7 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
 
 
 		/* set the new direction in enemy sheet */
-		enemy->viewdir = (signed char)dir;
+		enemy->viewdir = dir;
 
 		/* only if the turn is 90 degree */
 		if (l7 == -1) {
@@ -551,20 +551,20 @@ void FANI_prepare_fight_enemy_ani(signed short sheet_id, struct enemy_sheet *ene
  */
 
 /* Borlandified and identical */
-void FANI_prepare_spell_hero(uint16_t v1, struct struct_hero *hero, uint16_t v2, int16_t obj1, int16_t obj2, uint16_t v5, uint16_t v6)
+void FANI_prepare_spell_hero(const signed int v1, struct struct_hero *hero, const signed int v2, const signed int obj1, const signed int obj2, const signed int v5, const signed int v6)
 {
 	signed int x_obj1;
 	signed int y_obj1;
 	signed int x_obj2;
 	signed int y_obj2;
-	signed short dir;
-	signed short l2;
-	signed short l3;
+	signed int dir;
+	signed int l2;
+	signed int l3;
 	int8_t *sheet_ptr;
 	int16_t *ani_index_ptr;
 
-	signed short l_di;
-	signed short l_si;
+	signed int l_di;
+	signed int l_si;
 
 	/* get a pointer from an array where the Monster-ID serves as index */
 	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
@@ -677,8 +677,7 @@ void FANI_prepare_spell_hero(uint16_t v1, struct struct_hero *hero, uint16_t v2,
  * \param   v5          0 or 1
  */
 /* Borlandified and identical */
-void FANI_prepare_spell_enemy(signed short v1, struct enemy_sheet *enemy, signed short v2, signed short target, signed short caster,
-								signed short v5)
+void FANI_prepare_spell_enemy(const signed int v1, struct enemy_sheet *enemy, const signed int v2, const signed int target, const signed int caster, const signed int v5)
 {
 	signed int l1;
 	signed int x_target;

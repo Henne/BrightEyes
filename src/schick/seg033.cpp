@@ -52,29 +52,29 @@ static const char g_empty_string5[1] = ""; // ds:0x5f44
  */
 void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x, signed int y)
 {
-	signed short selected;
-	signed short l1;
-	signed short txt_tabpos_bak;
-	signed short done;
+	signed int selected;
+	signed int l1;
+	signed int txt_tabpos_bak;
+	signed int done;
 	signed int target_x;
 	signed int target_y;
-	signed short range_weapon;
+	signed int range_weapon;
 	signed char target_object_id;
-	signed short rwt1;
-	signed short rwt2;
+	signed int rwt1;
+	signed int rwt2;
 	signed char at;
 	signed char pa;
 	struct item_stats *p_itemsdat;
 	struct weapon_descr *weapon;
 	struct spell_descr *spell_description;
-	signed short damage_lo;
-	signed short damage_hi;
-	signed short weapon_id;
-	signed short radio_i;
-	signed short slot_no;
+	signed int damage_lo;
+	signed int damage_hi;
+	signed int weapon_id;
+	signed int radio_i;
+	signed int slot_no;
 	struct struct_fighter *ptr;
-	signed short tw_bak;
-	signed short slots[16];
+	signed int tw_bak;
+	signed int slots[16];
 
 	l1 = 1;
 	done = 0;
@@ -476,7 +476,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 								sprintf(g_text_output_buf, get_tx(60), hero->alias);
 							} else {
 								sprintf(g_text_output_buf, get_tx(31), hero->alias,
-									GUI_names_grammar((signed short)0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
+									GUI_names_grammar((signed int)0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
 							}
 
 							call_mouse();
@@ -540,7 +540,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							GUI_output(g_dtp2);
 						} else {
 							sprintf(g_text_output_buf, get_tx(2), hero->alias,
-								GUI_names_grammar((signed short)0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
+								GUI_names_grammar((signed int)0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
 
 							call_mouse();
 							tw_bak = g_textbox_width;

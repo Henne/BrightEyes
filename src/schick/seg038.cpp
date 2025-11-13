@@ -85,8 +85,8 @@ void FIG_init_list_elem(signed short obj)
 #if defined(__BORLANDC__)
 void FIG_unused(const signed short a1, const signed short a2, signed short *p1, signed short *p2)
 {
-	signed short loc1 = 10;
-	signed short loc2 = 118;
+	signed int loc1 = 10;
+	signed int loc2 = 118;
 
 	*p2 = ((loc2 - a2) + ((a1 - loc1) / 2)) / 10;
 	*p1 = (a1 - loc1) / 10 - *p2;
@@ -110,33 +110,33 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed short tar
 			signed short dist, signed char bp_avail,
 			signed short mode, signed short double_size, signed short actor_id)
 {
-	signed short i;
-	signed short dist_duplicate; /* duplicates the dist variable. apparently redundant */
-	signed short backtrack_x;
-	signed short backtrack_y;
-	signed short cb_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
-	signed short dist_bak;
-	signed short target_is_escape_square = 0;
-	signed short tail_x;
-	signed short tail_y;
-	signed short dir;
-	signed short success;
-	signed short lowest_nr_dir_changes;
-	signed short nr_dir_changes;
+	signed int i;
+	signed int dist_duplicate; /* duplicates the dist variable. apparently redundant */
+	signed int backtrack_x;
+	signed int backtrack_y;
+	signed int cb_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
+	signed int dist_bak;
+	signed int target_is_escape_square = 0;
+	signed int tail_x;
+	signed int tail_y;
+	signed int dir;
+	signed int success;
+	signed int lowest_nr_dir_changes;
+	signed int nr_dir_changes;
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* potential Original-Bug:
 	 * best_dir is not initialized and may stay so in case that FIG_find_path_to_target_backtrack is called with equal target and hero/enemy position.
 	 * It's not clear however if this does indeed happen.
 	 * See https://www.crystals-dsa-foren.de/showthread.php?tid=5383&pid=155007#pid155007
 	 */
-	signed short best_dir;
+	signed int best_dir;
 #else
-	signed short best_dir = 0;
+	signed int best_dir = 0;
 #endif
 	int8_t *path_cur;
-	signed short x_bak;
-	signed short y_bak;
-	signed short target_out_of_reach; /* will be set to 1 if the target is out of reach with avail_bp steps. Redundant, as this could simply be tested by (avail_bp < dist). */
+	signed int x_bak;
+	signed int y_bak;
+	signed int target_out_of_reach; /* will be set to 1 if the target is out of reach with avail_bp steps. Redundant, as this could simply be tested by (avail_bp < dist). */
 	struct viewdir_offsets inverse_coordinate_offset = g_viewdir_invoffsets1;
 
 	int8_t *path_table[4];
@@ -284,8 +284,8 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed short tar
 signed short FIG_count_direction_changes_of_path(signed char *path_ptr)
 {
 
-	signed short i = 0;
-	signed short count = 0;
+	signed int i = 0;
+	signed int count = 0;
 
 	if (path_ptr[0] == -1) {
 		return 99;
@@ -323,33 +323,33 @@ signed short FIG_count_direction_changes_of_path(signed char *path_ptr)
   */
 signed short FIG_find_path_to_target(uint8_t *actor_ptr, signed short actor_id, signed short x_in, signed short y_in, signed short mode)
  {
-	signed short nr_targets_reached;
-	signed short i;
-	signed short target_reached = 0;
-	signed short dist = 0;
-	signed short new_squares_reached;
-	signed short new_x;
-	signed short new_y;
+	signed int nr_targets_reached;
+	signed int i;
+	signed int target_reached = 0;
+	signed int dist = 0;
+	signed int new_squares_reached;
+	signed int new_x;
+	signed int new_y;
 	signed int x;
 	signed int y;
-	signed short tail_x;
-	signed short tail_y;
-	signed short dir;
-	signed short nr_dir_changes;
-	signed short lowest_nr_dir_changes;
-	signed short best_target;
+	signed int tail_x;
+	signed int tail_y;
+	signed int dir;
+	signed int nr_dir_changes;
+	signed int lowest_nr_dir_changes;
+	signed int best_target;
 	signed char cb_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
 	signed char cb_entry;
 	uint8_t *dist_table_ptr;
 	struct struct_hero *hero_ptr;
 	struct enemy_sheet *enemy_ptr;
-	signed short done;
-	signed short ranged_dist;
+	signed int done;
+	signed int ranged_dist;
 	uint8_t *actor_enemy_ptr; /* not needed, in principal. is only used for tests with NOT_NULL at a few places to determine wether the actor is an enemy. could also be done based on mode. */
 	signed char double_size;
-	signed short target_reached_x[10];
-	signed short target_reached_y[10];
-	signed short unused[10]; /* array gets only written, but never read */
+	signed int target_reached_x[10];
+	signed int target_reached_y[10];
+	signed int unused[10]; /* array gets only written, but never read */
 
 	struct viewdir_offsets coordinate_offset = g_viewdir_offsets7;
 

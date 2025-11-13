@@ -73,7 +73,7 @@ signed int g_fig_dropped_weapons[30];	// ds:0xe31a
 /* The functions in this file need object to be signed short.
  * All other callers use signed short from the header.
  */
-void FIG_set_cb_object(signed short y, signed short x, signed short object_id)
+void FIG_set_cb_object(const signed int y, const signed int x, const signed int object_id)
 {
 	/* check that the object is in the borders */
 	if (!((y >= 0) && (y <= 24) && (x >= 0) && (x <= 24)))
@@ -83,7 +83,7 @@ void FIG_set_cb_object(signed short y, signed short x, signed short object_id)
 	}
 }
 
-void draw_fight_screen_pal(signed short mode)
+void draw_fight_screen_pal(const signed int mode)
 {
 	FIG_draw_pic();
 
@@ -114,14 +114,14 @@ void draw_fight_screen_pal(signed short mode)
  *
  *          This is simply done randomly.
  */
-signed short FIG_choose_next_hero(void)
+signed int FIG_choose_next_hero(void)
 {
 #if !defined(__BORLANDC__)
-	signed short loop_cnt = 0;
+	signed int loop_cnt = 0;
 	long tries[7] = {0, 0, 0, 0, 0, 0, 0};
 #endif
 
-	signed short retval;
+	signed int retval;
 
 	do {
 		retval = random_schick(7) - 1;
@@ -185,15 +185,15 @@ signed short FIG_choose_next_hero(void)
  *
  *	Orig_BUG: I had this loop running infinitely.
  */
-signed short FIG_choose_next_enemy(void)
+signed int FIG_choose_next_enemy(void)
 {
-	signed short retval;
+	signed int retval;
 
 #if !defined(__BORLANDC__)
 	struct enemy_sheet *enemy;
-	unsigned short i;
-	unsigned short loop_cnt = 0;
-	long tries[20] = {	0, 0, 0, 0, 0,
+	int32_t i;
+	int32_t loop_cnt = 0;
+	int32_t tries[20] = {	0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0};
@@ -248,11 +248,11 @@ signed short FIG_choose_next_enemy(void)
 /**
  * \brief   return the number of active enemies
  */
-signed short FIG_count_active_enemies(void)
+signed int FIG_count_active_enemies(void)
 {
 	struct enemy_sheet *enemy;
-	signed short i;
-	signed short retval = 0;
+	signed int i;
+	signed int retval = 0;
 
 	for (i = 0; i < 20; i++) {
 
@@ -275,7 +275,7 @@ signed short FIG_count_active_enemies(void)
  * \return              1 if enemy can act or 0 if not.
  */
 //static
-signed short FIG_is_enemy_active(struct enemy_sheet *enemy)
+signed int FIG_is_enemy_active(const struct enemy_sheet *enemy)
 {
 	if (enemy->flags.asleep || enemy->flags.dead || enemy->flags.petrified || enemy->flags.dancing ||
 		enemy->flags.mushroom ||enemy->flags.busy || enemy->flags.tame || (enemy->round_appear > 0))
@@ -291,12 +291,10 @@ signed short FIG_is_enemy_active(struct enemy_sheet *enemy)
  *
  * \return the index of the first active hero.
  */
-signed short FIG_get_first_active_hero(void)
+signed int FIG_get_first_active_hero(void)
 {
-	struct struct_hero *hero_i;
-	signed short i;
-
-	hero_i = get_hero(0);
+	struct struct_hero *hero_i = get_hero(0);
+	signed int i;
 
 	for (i = 0; i <= 6; i++, hero_i++) {
 
@@ -319,10 +317,10 @@ signed short FIG_get_first_active_hero(void)
  *                      something at offset HERO_ACTION_ID set (maybe sleeping).
  */
 //static
-unsigned short FIG_all_heroes_escaped(void)
+signed int FIG_all_heroes_escaped(void)
 {
 	struct struct_hero *hero_i;
-	signed short i;
+	signed int i;
 
 	if (FIG_get_first_active_hero() == -1) {
 
@@ -345,7 +343,7 @@ unsigned short FIG_all_heroes_escaped(void)
 }
 
 //static
-unsigned short FIG_fight_continues(void)
+signed int FIG_fight_continues(void)
 {
 	if (FIG_all_heroes_escaped()) {
 
@@ -815,15 +813,15 @@ void FIG_do_round(void)
  */
 void FIG_load_ship_sprites(void)
 {
-	signed short l_si;
-	signed short l_di;	// REMARK: rename to x (chessboard)
-	signed short i;		// REMARK: rename to y (chessboard)
+	signed int object_id;
+	signed int l_di;	// REMARK: rename to x (chessboard)
+	signed int i;		// REMARK: rename to y (chessboard)
 	signed int width;
 	signed int height;
-	signed short const1 = 10;
-	signed short const2 = 118;
-	signed short l3;	// REMARK: rename to x (screen)
-	signed short l4;	// REMARK: rename to y (screen)
+	signed int const1 = 10;
+	signed int const2 = 118;
+	signed int l3;	// REMARK: rename to x (screen)
+	signed int l4;	// REMARK: rename to y (screen)
 	uint8_t *ptr;
 	struct nvf_extract_desc nvf;
 
@@ -831,17 +829,17 @@ void FIG_load_ship_sprites(void)
 
 		for (l_di = 0; l_di < 24; l_di++) {
 
-			l_si =*(g_scenario_buf + 0x15 + 25 * i + l_di);
+			object_id =*(g_scenario_buf + 0x15 + 25 * i + l_di);
 
-			if ((l_si >= 108) && (l_si <= 111)) {
+			if ((object_id >= 108) && (object_id <= 111)) {
 
-				l_si -= 50;
+				object_id -= 50;
 
-				if (g_figobj_gfxbuf_table[l_si]) {
+				if (g_figobj_gfxbuf_table[object_id]) {
 
 					/* this sprite has already been buffered */
 
-					ptr = g_figobj_gfxbuf_table[l_si];
+					ptr = g_figobj_gfxbuf_table[object_id];
 
 				} else {
 					/* this sprite has not been used yet */
@@ -850,7 +848,7 @@ void FIG_load_ship_sprites(void)
 
 					nvf.dst = ptr;
 					nvf.src = g_fightobj_buf;
-					nvf.image_num = l_si;
+					nvf.image_num = object_id;
 					nvf.compression_type = 0;
 					nvf.width = &width;
 					nvf.height = &height;
@@ -858,9 +856,9 @@ void FIG_load_ship_sprites(void)
 					process_nvf_extraction(&nvf);
 
 					/* buffer this picture */
-					g_figobj_gfxbuf_table[l_si] = g_fightobj_buf_seek_ptr;
-					g_figobj_gfxwidth_table[l_si] = width;
-					g_figobj_gfxheight_table[l_si] = height;
+					g_figobj_gfxbuf_table[object_id] = g_fightobj_buf_seek_ptr;
+					g_figobj_gfxwidth_table[object_id] = width;
+					g_figobj_gfxheight_table[object_id] = height;
 
 					/* adjust the pointer */
 					g_fightobj_buf_seek_ptr +=  width * height + 8;
@@ -877,18 +875,18 @@ void FIG_load_ship_sprites(void)
 
 
 				/* calculate screen coordinates */
-				l3 = const1 - g_figobj_gfxwidth_table[l_si] / 2 + 10 * (l_di + i);
-				l4 = const2 - g_figobj_gfxheight_table[l_si] + 5 * (l_di - i);
+				l3 = const1 - g_figobj_gfxwidth_table[object_id] / 2 + 10 * (l_di + i);
+				l4 = const2 - g_figobj_gfxheight_table[object_id] + 5 * (l_di - i);
 
-				l3 += g_gfxtab_obj_offset_x[l_si];
-				l4 += g_gfxtab_obj_offset_y[l_si];
+				l3 += g_gfxtab_obj_offset_x[object_id];
+				l4 += g_gfxtab_obj_offset_y[object_id];
 
 				/* set screen coordinates */
 				g_pic_copy.x1 = l3;
 				g_pic_copy.y1 = l4;
-				g_pic_copy.x2 = l3 + g_figobj_gfxwidth_table[l_si] - 1;
-				g_pic_copy.y2 = l4 + g_figobj_gfxheight_table[l_si] - 1;
-				g_pic_copy.src = g_figobj_gfxbuf_table[l_si];
+				g_pic_copy.x2 = l3 + g_figobj_gfxwidth_table[object_id] - 1;
+				g_pic_copy.y2 = l4 + g_figobj_gfxheight_table[object_id] - 1;
+				g_pic_copy.src = g_figobj_gfxbuf_table[object_id];
 				g_pic_copy.dst = g_buffer8_ptr;
 
 				do_pic_copy(2);
@@ -905,25 +903,25 @@ void FIG_load_ship_sprites(void)
  * \param   fight_id    id of the fight
  * \return              0 = heroes are in Hygellik's ruin and cursed -> no fight (?); 1 = no enemies -> no fight; 2 = ?; 3 = sneaked around -> no fight;
  */
-signed short do_fight(signed short fight_id)
+signed int do_fight(const signed int fight_id)
 {
-	signed short i;
+	signed int i;
 
 	signed int handle;
-	signed short j;
-	signed short new_escape_position_found;
-	signed short group_nr;
-	signed short group_size;
-	signed short retval = 0;
+	signed int j;
+	signed int new_escape_position_found;
+	signed int group_nr;
+	signed int group_size;
+	signed int retval = 0;
 	struct struct_hero *hero;
 	struct struct_hero *ptr;
-	signed short nr_escape_positions;
-	signed short x_target_bak;
-	signed short y_target_bak;
-	signed short dungeon_level_bak;
-	signed short direction_bak;
-	signed short tw_bak;
-	signed short escape_positions[6];
+	signed int nr_escape_positions;
+	signed int x_target_bak;
+	signed int y_target_bak;
+	signed int dungeon_level_bak;
+	signed int direction_bak;
+	signed int tw_bak;
+	signed int escape_positions[6];
 
 	if ((gs_group_member_counts[gs_active_group_id] == 1) && (get_hero(0)->invisible != 0))
 	{

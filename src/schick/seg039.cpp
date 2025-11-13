@@ -22,7 +22,6 @@
 namespace M302de {
 #endif
 
-
 static struct struct_point g_gfxtab_double_size_extra_cb[4] = {
 	{ -1,  0 }, {  0,  1 }, {  1,  0 }, {  0, -1 } }; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
 signed char g_gfxtab_double_size_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
@@ -45,7 +44,7 @@ signed char g_gfxtab_double_size_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0x603c
  * \param   y2          y-coordinate of the seconn point
  * \return              beeline between the two points
  */
-signed short calc_beeline(signed short x1, signed short y1, signed short x2, signed short y2)
+signed int calc_beeline(const signed int x1, const signed int y1, const signed int x2, const signed int y2)
 {
 	return __abs__(x1 - x2) + __abs__(y1 - y2);
 }
@@ -57,7 +56,7 @@ signed short calc_beeline(signed short x1, signed short y1, signed short x2, sig
  * \param   hero        pointer to hero
  * \return              range weapon type {-1, 3, 4, 5}: -1 = none, 3 = shooting, 4 = throwing, 5 = weapon of type spear, but not magic wand or quarterstaff
  */
-signed int FIG_get_range_weapon_type(struct struct_hero *hero)
+signed int FIG_get_range_weapon_type(const struct struct_hero *hero)
 {
 	struct item_stats *item_p;
 	signed int retval = -1;
@@ -97,11 +96,11 @@ signed int FIG_get_range_weapon_type(struct struct_hero *hero)
  *
  * \remark: special fight situations should be handled elsewhere
  */
-void fill_enemy_sheet(signed short sheet_no, signed char target_object_id, signed char round)
+void fill_enemy_sheet(const signed int sheet_no, const signed char target_object_id, const signed char round)
 {
 	struct struct_monster *monster;
 	struct enemy_sheet *sheet;
-	signed short i;
+	signed int i;
 
 	/* calculate the pointers */
 	monster = &g_monster_dat_buf[target_object_id];
@@ -138,7 +137,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char target_object_id, signe
 	sheet->ae_orig = sheet->ae = dice_template(monster->ae);
 
 	/* roll out MR  and save it */
-	sheet->mr = (signed char)dice_template(monster->mr);
+	sheet->mr = dice_template(monster->mr);
 
 	/* Terrible hack:
 		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
@@ -278,15 +277,15 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
  * \param   x           x-coordinate on the chessboard
  * \param   y           y-coordinate on the chessboard
  */
-void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed short y)
+void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const signed int y)
 {
 	struct nvf_extract_desc nvf;
-	signed int l1;
+	signed int width_height;
 
 	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->gfx_id][0];
 	g_fig_list_elem.nvf_no = enemy->viewdir;
-	g_fig_list_elem.cbx = (signed char)x;
-	g_fig_list_elem.cby = (signed char)y;
+	g_fig_list_elem.cbx = x;
+	g_fig_list_elem.cby = y;
 
 	g_fig_list_elem.offsetx = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].x;
 	g_fig_list_elem.offsety = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].y;
@@ -332,8 +331,8 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 		nvf.dst = g_fig_list_elem.gfxbuf;
 		nvf.image_num = g_fig_list_elem.nvf_no;
 		nvf.compression_type = 0;
-		nvf.width = &l1;
-		nvf.height = &l1;
+		nvf.width = &width_height;
+		nvf.height = &width_height;
 		process_nvf_extraction(&nvf);
 		g_fig_list_elem.reload = 0;
 	}
@@ -362,9 +361,9 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 
 void FIG_init_enemies(void)
 {
-	signed short i;
-	signed short x;
-	signed short y;
+	signed int i;
+	signed int x;
+	signed int y;
 
 	/* Cleanup the old enemy tables */
 	for (i = 0; i < 20; i++) {
@@ -415,10 +414,10 @@ void FIG_init_enemies(void)
 void FIG_init_heroes(void)
 {
 	struct struct_hero *hero;
-	signed short cb_x;
-	signed short cb_y;
-	signed short l_si;
-	signed short l_di; /* player char no */
+	signed int cb_x;
+	signed int cb_y;
+	signed int l_si;
+	signed int l_di; /* player char no */
 
 	for (l_si = 0; l_si <= 6; l_si++) {
 
@@ -494,8 +493,8 @@ void FIG_init_heroes(void)
 		}
 
 		g_fig_list_elem.figure = g_gfxtab_figures_main[hero->sprite_id][0];
-		g_fig_list_elem.cbx = (signed char)cb_x;
-		g_fig_list_elem.cby = (signed char)cb_y;
+		g_fig_list_elem.cbx = cb_x;
+		g_fig_list_elem.cby = cb_y;
 		g_fig_list_elem.offsetx = 0;
 		g_fig_list_elem.offsety = 0;
 
