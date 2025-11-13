@@ -4,15 +4,15 @@ namespace M302de {
 
 #if defined(__BORLANDC__)
 //0x20
-void unused_store(signed short);
+void unused_store(const signed int);
 //0x25
-uint8_t* unused_load(signed short);
+uint8_t* unused_load(const signed int);
 #endif
 //0x2a
 void load_area_description(const signed int);
 //0x2f
 #if defined(__BORLANDC__)
-void unused_load_archive_file(const signed int, const unsigned short, const uint32_t);
+void unused_load_archive_file(const signed int, const uint16_t, const uint32_t);
 #endif
 //0x34
 void prepare_dungeon_area(void);

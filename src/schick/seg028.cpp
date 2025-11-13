@@ -366,7 +366,7 @@ void call_load_area(const signed int type)
 }
 
 #if defined(__BORLANDC__)
-void unused_store(signed short no)
+void unused_store(const signed int image_num)
 {
 	signed int width;
 	signed int height;
@@ -376,7 +376,7 @@ void unused_store(signed short no)
 
 	nvf.dst = g_renderbuf_ptr + 30000;
 	nvf.src = (uint8_t*)g_buffer9_ptr3;
-	nvf.image_num = no;
+	nvf.image_num = image_num;
 	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
@@ -390,7 +390,7 @@ void unused_store(signed short no)
 	size = width * height;
 	memmove((uint8_t*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
 
-	ptr = &g_ems_unused_tab[no];
+	ptr = &g_ems_unused_tab[image_num];
 
 	ptr->lpage = g_ems_unused_lpage;
 	ptr->offset = g_ems_unused_offset >> 8;
@@ -401,19 +401,19 @@ void unused_store(signed short no)
 	g_ems_unused_offset = ((((g_ems_unused_offset + size) & 0x3fff) + 0x100) & 0xff00);
 }
 
-uint8_t* unused_load(signed short no)
+uint8_t* unused_load(const signed int image_num)
 {
 	unsigned int lpage;
 
 	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
-	lpage = g_ems_unused_tab[no].lpage;
+	lpage = g_ems_unused_tab[image_num].lpage;
 
 	EMS_map_memory(g_ems_unused_handle, lpage, 0);
 	EMS_map_memory(g_ems_unused_handle, lpage + 1, 1);
 	EMS_map_memory(g_ems_unused_handle, lpage + 2, 2);
 
-	return g_ems_frame_ptr + 256 * g_ems_unused_tab[no].offset;
+	return g_ems_frame_ptr + 256 * g_ems_unused_tab[image_num].offset;
 }
 #endif
 
@@ -649,7 +649,7 @@ void load_tlk(const signed int index)
 }
 
 #if defined(__BORLANDC__)
-void unused_load_archive_file(const signed int index, const unsigned short off, const uint32_t seg)
+void unused_load_archive_file(const signed int index, const uint16_t off, const uint32_t seg)
 {
 	const signed int handle = load_archive_file(index);
 

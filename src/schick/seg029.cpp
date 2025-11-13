@@ -30,8 +30,8 @@ static signed char g_loaded_menu_icons[9] = { -2, -2, -2, -2, -2, -2, -2, -2, -2
 
 #if 0
 struct coord {
-	unsigned short x;
-	unsigned short y;
+	signed int x;
+	signed int y;
 };
 
 /* GUI_BUTTONS_POS */
@@ -254,16 +254,16 @@ void draw_status_line(void)
  *
  * \param   pos         position of the hero
  */
-void clear_hero_icon(unsigned short pos)
+void clear_hero_icon(const signed int hero_pos)
 {
 
 	/* fill icon area black */
-	do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos], 157, g_hero_pic_posx[pos] + 31, 188, 0);
+	do_fill_rect(g_vga_memstart, g_hero_pic_posx[hero_pos], 157, g_hero_pic_posx[hero_pos] + 31, 188, 0);
 
-	if (!get_hero(pos)->typus) {
+	if (!get_hero(hero_pos)->typus) {
 
 		/* fill bars area black */
-		do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos] + 33, 157, g_hero_pic_posx[pos] + 39, 188, 0);
+		do_fill_rect(g_vga_memstart, g_hero_pic_posx[hero_pos] + 33, 157, g_hero_pic_posx[hero_pos] + 39, 188, 0);
 	}
 }
 
@@ -275,20 +275,18 @@ void clear_hero_icon(unsigned short pos)
  * \param   pos         position of the icon (0-8)
  */
 //static
-void load_icon(uint16_t fileindex, int16_t icon, int16_t pos)
+void load_icon(const signed int fileindex, const signed int icon_id, const signed int pos)
 {
-	signed int handle;
+	signed int handle = load_archive_file(fileindex);
 
-	handle = load_archive_file(fileindex);
-
-	seek_archive_file(handle, icon * 576L, 0);
+	seek_archive_file(handle, icon_id * 576L, 0);
 
 	read_archive_file(handle, g_buf_icon + pos * 576, 576);
 
 	close(handle);
 
 	/* set a real or blank icon */
-	g_loaded_menu_icons[pos] = (fileindex == ARCHIVE_FILE_ICONS ? icon : -1);
+	g_loaded_menu_icons[pos] = (fileindex == ARCHIVE_FILE_ICONS ? icon_id : -1);
 }
 
 /**
@@ -368,7 +366,7 @@ void clear_loc_line(void)
  *
  * \param   pos         position of the hero
  */
-void select_hero_icon(unsigned short pos)
+void select_hero_icon(const signed int pos)
 {
 	signed int fg_bak;
 	signed int bg_bak;
@@ -403,8 +401,8 @@ void select_hero_icon(unsigned short pos)
  * \param   pos         position of the hero
  */
 /* TODO: this function an select_hero_icon() can be merged into one. */
-void deselect_hero_icon(unsigned short pos) {
-
+void deselect_hero_icon(const signed int pos)
+{
 	signed int fg_bak;
 	signed int bg_bak;
 
