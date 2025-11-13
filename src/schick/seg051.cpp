@@ -431,7 +431,7 @@ signed int gather_herbs(struct struct_hero *hero, const signed int hours, const 
 		if ((random_schick(100) <= ptr->chance_max) &&
 			test_skill(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
 
-			herb_count[herb_index] = give_hero_new_item(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
+			herb_count[herb_index] = give_new_item_to_hero(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
 
 			if (herb_count[herb_index]) {
 				unique_herbs_count++;
@@ -588,7 +588,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 						}
 
 						/* the group may get three food packages */
-						if (!get_item(ITEM_PROVIANTPAKET, 1, 3)) {
+						if (!give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 3)) {
 							strcpy(g_dtp2, get_ttx(306));
 							g_request_refresh = 1;
 						} else {

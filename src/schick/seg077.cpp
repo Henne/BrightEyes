@@ -91,7 +91,7 @@ signed int DNG01_handler(void)
 		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_SAEBEL, 0), (char*)GUI_2f2(2, ITEM_SAEBEL, 0));
 
 		/* ITEM: get a SABRE */
-		if (GUI_bool(g_text_output_buf) && get_item(ITEM_SAEBEL, 1, 1)) {
+		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_SAEBEL, 1, 1)) {
 			gs_dng01_sabre_taken = 1;
 		}
 
@@ -100,7 +100,7 @@ signed int DNG01_handler(void)
 		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_ARMBRUST, 0), (char*)GUI_2f2(2, ITEM_ARMBRUST, 0));
 
 		/* ITEM: get a CROSSBOW */
-		if (GUI_bool(g_text_output_buf) && get_item(ITEM_ARMBRUST, 1, 1)) {
+		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_ARMBRUST, 1, 1)) {
 
 			gs_dng01_crossbow_taken = 1;
 		}
@@ -108,7 +108,7 @@ signed int DNG01_handler(void)
 	} else if ((target_pos == DNG_POS(4,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_amulet_taken)
 	{
 		/* ITEM: a magic AMULET */
-		if (GUI_bool(get_tx(7)) && get_item(ITEM_AMULETT__GREEN, 1, 1))
+		if (GUI_bool(get_tx(7)) && give_new_item_to_group(ITEM_AMULETT__GREEN, 1, 1))
 		{
 			gs_dng01_amulet_taken = 1;
 			gs_gods_estimation[GOD_BORON] -= 100L;
@@ -310,7 +310,7 @@ void DNG01_chest06_loot(struct struct_chest* chest)
 	{
 #endif
 	/* ITEM: the GOLDEN KEY */
-	get_item(ITEM_GOLDSCHLUESSEL, 1, 1);
+	give_new_item_to_group(ITEM_GOLDSCHLUESSEL, 1, 1);
 
 	/* Original-Bug: The string 14 from SHIP.DTX needs a pointer to the name of the hero, not an integer.
 	 */

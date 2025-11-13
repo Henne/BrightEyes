@@ -201,7 +201,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 			/* not ready yet */
 			GUI_output(get_ttx(485));
 
-		} else if (get_item(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
+		} else if (give_new_item_to_group(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
 			sprintf(g_dtp2, get_ttx(486), GUI_names_grammar((signed int)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
 

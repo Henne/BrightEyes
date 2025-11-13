@@ -65,7 +65,7 @@ signed int DNG13_handler(void)
 		{
 			gs_dng13_lantern_flag = 1;
 
-			get_item(ITEM_LATERNE__UNLIT, 1, 1);
+			give_new_item_to_group(ITEM_LATERNE__UNLIT, 1, 1);
 		}
 
 	} else if ((pos == DNG_POS(0,1,12) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,14,13) || pos == DNG_POS(0,3,1)) &&

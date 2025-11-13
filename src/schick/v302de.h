@@ -293,7 +293,7 @@ static inline void dump_cb(void)
 #define get_tx(no) ((char*)(g_tx_index[(no)]))
 #define get_tx2(no) ((char*)(g_tx2_index[(no)]))
 #define get_monname(no) ((char*)g_monnames_index[no])
-#define get_itemname(item_id) ((char*)g_itemsname[(item_id)])
+#define give_new_item_to_groupname(item_id) ((char*)g_itemsname[(item_id)])
 
 #define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))
 

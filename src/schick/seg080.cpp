@@ -77,7 +77,7 @@ signed int DNG04_handler(void)
 			sub_hero_le(hero, 2);
 
 			/* get a magic AMULET */
-			get_item(ITEM_TRAVIA_AMULETT, 1, 1);
+			give_new_item_to_group(ITEM_TRAVIA_AMULETT, 1, 1);
 
 			gs_dng04_gap_flag = 1;
 		}
@@ -88,7 +88,7 @@ signed int DNG04_handler(void)
 		if (GUI_bool(get_tx(7)))
 		{
 			/* get a SILVER HELMET */
-			if (get_item(ITEM_SILBERHELM, 1, 1))
+			if (give_new_item_to_group(ITEM_SILBERHELM, 1, 1))
 			{
 				/* mark SILVER HELMET as taken */
 				gs_dng04_helmet_flag = 1;
@@ -172,7 +172,7 @@ signed int DNG04_handler(void)
 		if (GUI_bool(get_tx(16)))
 		{
 			/* get a LANTERN */
-			if (get_item(ITEM_LATERNE__UNLIT, 1, 1))
+			if (give_new_item_to_group(ITEM_LATERNE__UNLIT, 1, 1))
 			{
 				/* mark LANTERN as taken */
 				gs_dng04_lantern_flag = 1;
@@ -370,7 +370,7 @@ signed int DNG05_handler(void)
 		{
 			GUI_output(get_tx(3));
 
-			get_item(ITEM_PROVIANTPAKET, 1, 10);
+			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 10);
 
 			gs_dng05_proviant_flag = 1;
 		}

@@ -359,7 +359,7 @@ signed int DNG09_handler(void)
 
 			if (i == 1) {
 
-				get_item(ITEM_SCHWARZE_STATUETTE, 1, 1);
+				give_new_item_to_group(ITEM_SCHWARZE_STATUETTE, 1, 1);
 
 			} else {
 

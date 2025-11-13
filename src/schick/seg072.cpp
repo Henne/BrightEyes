@@ -170,7 +170,7 @@ void INF_yasma_umbrik_isleif(const signed int informer, const signed int state)
 			gs_informer_flags[INFORMER_UMBRIK] = 2;
 
 			/* get EMPFEHLUNGSSCHREIBEN / LETTER OF INTRODUCTION */
-			get_item(ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN, 1, 1);
+			give_new_item_to_group(ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN, 1, 1);
 
 			/* make BEORN HJALLASSON known */
 			if (!gs_informer_flags[INFORMER_BEORN]) gs_informer_flags[INFORMER_BEORN] = 1;

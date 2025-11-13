@@ -9,11 +9,11 @@ void add_equip_boni(struct struct_hero*, struct struct_hero*, const signed int, 
 /* 0x2a */
 signed int where_has_hero_equipped_item(struct struct_hero*, const signed int);
 /* 0x2f */
-signed int give_hero_new_item(struct struct_hero*, const signed int, const signed int, const signed int);
+signed int give_new_item_to_hero(struct struct_hero*, const signed int, const signed int, const signed int);
 /* 0x34 */
 signed int drop_item(struct struct_hero*, const signed int, signed int);
 /* 0x39 */
-signed int get_item(signed int, const signed int, signed int);
+signed int give_new_item_to_group(signed int, const signed int, signed int);
 /* 0x3e */
 signed int can_hero_use_item(const struct struct_hero*, const signed int);
 /* 0x43 */

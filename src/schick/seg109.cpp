@@ -649,7 +649,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 
 				timewarp(HOURS(1));
 
-				get_item(ITEM_PROVIANTPAKET, 1, foods1);
+				give_new_item_to_group(ITEM_PROVIANTPAKET, 1, foods1);
 
 				answer = 0;
 			} else {
@@ -669,7 +669,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 		add_hero_ap_all(ap_all2);
 
 		if (foods2 != 0) {
-			get_item(ITEM_PROVIANTPAKET, 1, foods2);
+			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, foods2);
 		}
 
 	} else if (answer == 1) {

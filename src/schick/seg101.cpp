@@ -639,7 +639,7 @@ void spell_brenne(void)
 			drop_item(get_spelluser(), oil_pos, 1);
 
 			/* give bronze flask */
-			give_hero_new_item(get_spelluser(), ITEM_BRONZEFLASCHE, 0, 1);
+			give_new_item_to_hero(get_spelluser(), ITEM_BRONZEFLASCHE, 0, 1);
 
 			/* set AP cost */
 			g_spell_special_aecost = random_schick(20);

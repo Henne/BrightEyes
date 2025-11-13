@@ -194,7 +194,7 @@ void tevent_111(void)
 
 					timewarp(HOURS(3));
 
-					get_item(ITEM_PROVIANTPAKET, 1, 200);
+					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 200);
 
 					gs_tevent111_flag = 2;
 
@@ -234,7 +234,7 @@ void tevent_111(void)
 							}
 						}
 
-						get_item(ITEM_PROVIANTPAKET, 1, 180);
+						give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 180);
 						gs_tevent111_flag = 2;
 					}
 
@@ -410,7 +410,7 @@ void tevent_114(void)
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(52), get_tx2(26), 0);
 
 				/* get RECIPE FOR POTENT HEALING POTION */
-				get_item(ITEM_REZEPT_FUER_STARKEN_HEILTRANK, 1, 1);
+				give_new_item_to_group(ITEM_REZEPT_FUER_STARKEN_HEILTRANK, 1, 1);
 
 				/* TODO: ORIGINAL-BUG: this item could have been not taken => get_hero(-1) => SEGFAULT */
 				hero = get_hero(get_first_hero_with_item(ITEM_REZEPT_FUER_STARKEN_HEILTRANK));
