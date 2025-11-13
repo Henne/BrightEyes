@@ -712,7 +712,7 @@ void spell_solidirid(void)
 void spell_axxeleratus(void)
 {
 	signed int hero_pos;
-	signed int slot;
+	signed int mod_slot;
 
 	hero_pos = get_spelluser()->target_object_id - 1;
 
@@ -722,20 +722,20 @@ void spell_axxeleratus(void)
 	if (!get_spelltarget()->axxeleratus) {
 
 		/* AT + 2 for 1 minute (= 10 rounds of fighting) */
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(1),
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, MINUTES(1),
 			(uint8_t*)&get_spelltarget()->at_talent_bonus[get_spelltarget()->weapon_type],
 			2, (signed char)hero_pos);
 
 		/* PA + 2 for 1 minute (= 10 rounds of fighting) */
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(1),
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, MINUTES(1),
 			(uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type],
 			2, (signed char)hero_pos);
 
 		/* set Axxeleratus flag (yields +4 BP, second action phase per round of fighting) for 1 minute (= 10 rounds of fighting) */
-		slot = get_free_mod_slot();
-		set_mod_slot(slot, MINUTES(1), (uint8_t*)&get_spelltarget()->axxeleratus, 1, (signed char)hero_pos);
+		mod_slot = get_free_mod_slot();
+		set_mod_slot(mod_slot, MINUTES(1), (uint8_t*)&get_spelltarget()->axxeleratus, 1, (signed char)hero_pos);
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(17), get_spelltarget()->alias);
@@ -1017,15 +1017,15 @@ void spell_tiere_heilen(void)
 
 void spell_adleraug(void)
 {
-	signed int slot;
+	signed int mod_slot;
 	signed int hero_pos;
 
 	hero_pos = get_hero_index(get_spelluser());
 
-	slot = get_free_mod_slot();
+	mod_slot = get_free_mod_slot();
 
 	/* Perception / Sinnesschaerfe + 7 */
-	set_mod_slot(slot, MINUTES(6), (uint8_t*)&get_spelluser()->skills[TA_SINNESSCHAERFE], 7, (signed char)hero_pos);
+	set_mod_slot(mod_slot, MINUTES(6), (uint8_t*)&get_spelluser()->skills[TA_SINNESSCHAERFE], 7, (signed char)hero_pos);
 
 	/* prepare message */
 	sprintf(g_dtp2,	get_tx(24), get_spelluser()->alias);

@@ -326,9 +326,9 @@ void tevent_135(void)
 
 void tevent_137(void)
 {
-	signed int i;
+	signed int hero_pos;
 	signed int answer;
-	signed int item_pos;
+	signed int inv_slot;
 	struct struct_hero *hero;
 
 	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !gs_tevent137_flag) ||
@@ -344,7 +344,7 @@ void tevent_137(void)
 		if (answer == 1) {
 
 			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero++) {
+			for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 				{
@@ -354,10 +354,10 @@ void tevent_137(void)
 					/* each hero gets his first WATERSKIN filled */
 					/* potential Original-Bug: Does it make sense that the further WATERSKINs are not filled? */
 
-					if ((item_pos = inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH)) != -1)
+					if ((inv_slot = inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH)) != -1)
 					{
 						/* fill waterskin */
-						hero->inventory[item_pos].flags.half_empty = hero->inventory[item_pos].flags.empty = 0;
+						hero->inventory[inv_slot].flags.half_empty = hero->inventory[inv_slot].flags.empty = 0;
 					}
 
 					hero->hunger = hero->thirst = 0;

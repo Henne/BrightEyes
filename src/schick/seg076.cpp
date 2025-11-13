@@ -104,7 +104,7 @@ void DNG_door(const signed int action)
 	struct dungeon_door *ptr_doors;
 	struct struct_hero *hero;
 	signed int hero_pos;
-	signed int lockpick_pos;
+	signed int lockpick_inv_slot;
 	signed int lockpick_result;
 
 	ptr_doors = g_dungeon_doors_buf;
@@ -234,16 +234,16 @@ void DNG_door(const signed int action)
 
 				hero = get_first_hero_available_in_group();
 
-				if ((lockpick_pos = hero_has_lockpicks(hero)) != -1)
+				if ((lockpick_inv_slot = hero_has_lockpicks(hero)) != -1)
 				{
-					if (lockpick_pos != -2)
-					{
+					if (lockpick_inv_slot != -2)
+					{ // !=-1 and !=-2 means: leader has at least one non-broken set of lockpicks
 						lockpick_result = test_skill(hero, TA_SCHLOESSER, ptr_doors->lockpick_handicap);
 
 						play_voc(ARCHIVE_FILE_FX11_VOC);
 
 						g_lockpick_try_counter++;
-						/* Original-Bug: Why is this a global variable? Should be related to the door. */
+						/* Original-Bug: Why is this a global variable? Should be related to the door or to the lockpicks. */
 
 						if (lockpick_result == -99 || g_lockpick_try_counter > 3)
 						{
@@ -251,7 +251,7 @@ void DNG_door(const signed int action)
 								or when tried three times without moving */
 							print_msg_with_first_hero(get_ttx(533));
 
-							hero->inventory[lockpick_pos].flags.broken = 1;
+							hero->inventory[lockpick_inv_slot].flags.broken = 1;
 
 							g_lockpick_try_counter = 0;
 

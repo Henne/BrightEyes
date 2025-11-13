@@ -42,7 +42,7 @@ signed int DNG07_handler(void)
 	struct struct_hero *hero;
 	uint8_t *amap_ptr;
 	signed int spell_result;
-	signed int lockpick_pos;
+	signed int lockpick_inv_slot;
 	signed int skill_result;
 
 	amap_ptr = g_dng_map;
@@ -69,9 +69,9 @@ signed int DNG07_handler(void)
 
 			if (i == 1)
 			{
-				if ((lockpick_pos = hero_has_lockpicks(hero)) != -1)
+				if ((lockpick_inv_slot = hero_has_lockpicks(hero)) != -1)
 				{
-					if (lockpick_pos != -2)
+					if (lockpick_inv_slot != -2) // !=-1 and !=-2 means: hero has at least one non-broken set of lockpicks
 					{
 						skill_result = test_skill(hero, TA_SCHLOESSER, 7);
 
@@ -79,7 +79,7 @@ signed int DNG07_handler(void)
 
 							print_msg_with_first_hero(get_ttx(533));
 
-							hero->inventory[lockpick_pos].flags.broken = 1;
+							hero->inventory[lockpick_inv_slot].flags.broken = 1;
 
 							g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = target_pos;
 
@@ -102,9 +102,11 @@ signed int DNG07_handler(void)
 						}
 
 					} else {
+						// all lockpicks are broken
 						print_msg_with_first_hero(get_ttx(531));
 					}
 				} else {
+					// hero does not have lockpicks
 					print_msg_with_first_hero(get_ttx(530));
 				}
 

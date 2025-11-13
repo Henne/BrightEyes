@@ -116,14 +116,14 @@ signed int hero_has_ingrendients(struct struct_hero *hero, const signed int reci
 	signed int i = 0;
 	signed int retval = 1;
 	struct struct_recipe *r_ptr = &g_alchemy_recipes[recipe_id];
-	signed int item_pos;
+	signed int inv_slot;
 
 	/* loop over ingrendients */
 	while ((r_ptr->ingredients[i] != -1) && retval) {
 
-		item_pos = inv_slot_of_item(hero, r_ptr->ingredients[i]);
+		inv_slot = inv_slot_of_item(hero, r_ptr->ingredients[i]);
 
-		if (item_pos == -1) {
+		if (inv_slot == -1) {
 
 			/* needed item missing */
 			retval = 0;
@@ -132,7 +132,7 @@ signed int hero_has_ingrendients(struct struct_hero *hero, const signed int reci
 			g_alchemy_missing_item = r_ptr->ingredients[i];
 		} else {
 			/* drop all needed items */
-			drop_item(hero, item_pos, 1);
+			drop_item(hero, inv_slot, 1);
 		}
 
 		i++;
@@ -157,15 +157,15 @@ void hero_use_ingrendients(struct struct_hero *hero, const signed int recipe_id)
 {
 	signed int i = 0;
 	struct struct_recipe *r_ptr = &g_alchemy_recipes[recipe_id];
-	signed int item_pos;
+	signed int inv_slot;
 
 	/* loop over ingredients */
 	while (r_ptr->ingredients[i] != -1) {
 
-		item_pos = inv_slot_of_item(hero, r_ptr->ingredients[i]);
+		inv_slot = inv_slot_of_item(hero, r_ptr->ingredients[i]);
 
 		/* drop the needed item */
-		drop_item(hero, item_pos, 1);
+		drop_item(hero, inv_slot, 1);
 
 		/* exchange wine- or brandybottles into glass flask */
 		if ((r_ptr->ingredients[i] == ITEM_WEINFLASCHE) || (r_ptr->ingredients[i] == ITEM_SCHNAPSFLASCHE))
@@ -226,7 +226,7 @@ signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, cons
 signed int plan_alchemy(struct struct_hero *hero)
 {
 	signed int retval;
-	signed int item_pos;
+	signed int inv_slot;
 	signed int recipes;
 	signed int answer;
 	signed int decision;
@@ -240,9 +240,9 @@ signed int plan_alchemy(struct struct_hero *hero)
 
 	retval = 1;
 	recipes = 0;
-	item_pos = inv_slot_of_item(hero, ITEM_ALCHIMIESET);
+	inv_slot = inv_slot_of_item(hero, ITEM_ALCHIMIESET);
 
-	if (item_pos == -1) {
+	if (inv_slot == -1) {
 
 		/* no alchemy kit */
 		GUI_output(get_tx(42));
