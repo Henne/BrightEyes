@@ -377,7 +377,8 @@ struct struct_fighter {
 				 * head part: value can be used as index for g_fig_double_size_fighter_id_table which contains the fighter id);
 				 * tail part: entry is +20 of the double_size entry of the head part. */
 	signed char object_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
-	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
+	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */
+				/* strangly, at one position in seg039.cpp the value 2 is written */
 	signed char sprite_id;	/* 0x12c0, 0x1531, 0x1210 */
 	uint8_t* gfxbuf;
 	struct struct_fighter* next;	/* TODO: These should located at the start of the structure */
@@ -435,7 +436,7 @@ struct struct_smith_repairitems {
 };
 
 struct struct_informer_tab {
-	int16_t name_id;		/* in TEXT.LTX */
+	int16_t name_id;	/* index in TEXT.LTX */
 	int8_t town_id;		/* -1 = no city, else city id */
 	int8_t unkn;		/* {0, 1} */
 };
@@ -504,14 +505,23 @@ struct ship {
 struct sea_route {
 
 	unsigned char town_id_1;	/* one byte readonly */
-				/* ID of the first town of the connection. Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
-	unsigned char town_id_2;	/* one byte readonly */ /* ID of the second town of the connection */
-	unsigned char distance; /* one byte readonly */ /* TODO: But should be 2 Byte for Prem <-> Manrin to avoid an integer overflow */
-	signed char frequency;/* one byte readonly */ /* the higher this value, the rarer a passage on the route is offered */
-	signed char passage_timer;	/* one byte rw */ /* after how many days will a ship do a passage on this route? */
-	signed char coastal_route;	/* one byte readonly */ /* 0 = high seas route (= Hochseeroute), 1 = costal route */
-	signed char ship_type;	/* one byte rw */ /* passage type of the next passage on this route */
-	unsigned char price_mod;	/* one byte rw */ /* a number between 70 and 130 which serves as a percentage modifier to the price of the next ship on this route */
+					/* ID of the first town of the connection.
+					 * Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
+	unsigned char town_id_2;	/* one byte readonly */
+					/* ID of the second town of the connection */
+	unsigned char distance;		/* one byte readonly */
+					/* TODO: But should be 2 Byte for Prem <-> Manrin to avoid an integer overflow */
+	signed char frequency;		/* one byte readonly */
+					/* the higher this value, the rarer a passage on the route is offered */
+	signed char passage_timer;	/* one byte rw */
+					/* after how many days will a ship do a passage on this route? */
+	signed char coastal_route;	/* one byte readonly */
+					/* 0 = high seas route (= Hochseeroute), 1 = costal route */
+	signed char ship_type;		/* one byte rw */
+					/* passage type of the next passage on this route */
+	unsigned char price_mod;	/* one byte rw */
+					/* a number between 70 and 130 which serves as a percentage modifier
+					 * to the price of the next ship on this route */
 };
 
 /* structure of the entries of ITEMS.DAT */
@@ -526,8 +536,7 @@ struct item_flags {
 	unsigned short herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
 	unsigned short undropable	:1;	/* bit 6: personal item (cannot be dropped) */
 	unsigned short dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
-						 * But in is set for various items in ITEMS.DAT:
-						 * It seems that bit 7 is set for an item if and only if no other bit is set. */
+						 * In ITEMS.DAT, it seems that bit 7 is set for an item if and only if no other bit is set. */
 };
 
 struct item_stats {
