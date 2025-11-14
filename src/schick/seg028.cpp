@@ -113,8 +113,8 @@ void prepare_dungeon_area(void)
 void load_dungeon_ddt(void)
 {
 	signed int index;
-	signed int low;
-	signed int high;
+	int16_t low;
+	int16_t high;
 	signed int handle;
 
 	index = gs_dungeon_id + ARCHIVE_FILE_DNGS_DDT;
@@ -124,7 +124,7 @@ void load_dungeon_ddt(void)
 
 	read_archive_file(handle, g_dungeon_fights_buf, low);
 	read_archive_file(handle, (uint8_t*)g_dungeon_doors_buf, high - low);
-	read_archive_file(handle, g_dungeon_stairs_buf, 0x7d0);
+	read_archive_file(handle, g_dungeon_stairs_buf, 2000);
 
 	close(handle);
 }
@@ -244,9 +244,7 @@ uint8_t* load_city_textures(const signed int index, const signed int firstcol, c
 
 void load_special_textures(const signed int arg)
 {
-	signed int handle;
-
-	handle = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
+	const signed int handle = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
 
 	read_archive_file(handle, (uint8_t*)g_buffer7_ptr, 64000);
 
@@ -283,30 +281,32 @@ void prepare_area(const signed int town)
 void load_area_description(const signed int type)
 {
 	signed int f_index;
-	signed int handle;
 
-	if (g_areadescr_fileid) {
-		if (type != 2) {
-			handle = load_archive_file(g_areadescr_fileid + 0x8000);
+	if (g_areadescr_fileid && (type != 2)) {
 
-			if (!g_areadescr_dng_flag && (g_dng_map_size == 0x20)) {
-				write(handle, (void*)g_dng_map, 512);
-			} else {
-				lseek(handle, g_areadescr_dng_level * 0x140, 0);
-				write(handle, (void*)g_dng_map, 256);
-			}
-			/* write automap tiles */
-			write(handle, (void*)g_automap_buf, 64);
-			/* write location information */
-			write(handle, (void*)g_locations_tab, g_locations_tab_size);
+		signed int handle = load_archive_file(g_areadescr_fileid + 0x8000);
 
-			close(handle);
-
-			g_areadescr_fileid = g_areadescr_dng_level = g_locations_tab_size = g_areadescr_dng_flag = 0;
+		if (!g_areadescr_dng_flag && (g_dng_map_size == 0x20)) {
+			write(handle, (void*)g_dng_map, 512);
+		} else {
+			lseek(handle, g_areadescr_dng_level * 0x140, 0);
+			write(handle, (void*)g_dng_map, 256);
 		}
+
+		/* write automap tiles */
+		write(handle, (void*)g_automap_buf, 64);
+
+		/* write location information */
+		write(handle, (void*)g_locations_tab, g_locations_tab_size);
+
+		close(handle);
+
+		g_areadescr_fileid = g_areadescr_dng_level = g_locations_tab_size = g_areadescr_dng_flag = 0;
 	}
 
 	if (type != 0) {
+
+		signed int handle;
 
 		/* calc archive file index */
 		if (gs_dungeon_id != 0) {

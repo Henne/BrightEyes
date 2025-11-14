@@ -5563,7 +5563,7 @@ void check_group(void)
 int main(int argc, char** argv)
 {
 	signed int l_si;
-	signed int l_di;
+	signed int answer;
 	int32_t l3;
 	signed int savegame;
 	signed int len;
@@ -5673,11 +5673,11 @@ int main(int argc, char** argv)
 
 				/* ask for generation or game */
 				do {
-					l_di = GUI_radio(get_ttx(820), 2, get_ttx(821), get_ttx(822)) - 1;
+					answer = GUI_radio(get_ttx(820), 2, get_ttx(821), get_ttx(822)) - 1;
 
-				} while (l_di == -1);
+				} while (answer == -1);
 
-				if (l_di == 1) {
+				if (answer == 1) {
 					call_gen();
 				}
 

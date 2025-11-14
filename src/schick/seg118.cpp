@@ -236,15 +236,14 @@ void tevent_038(void)
 
 void tevent_078(void)
 {
-	signed int tmp;
-	signed int answer;
-	signed int found_path;
-	signed int days;
-	struct struct_hero *hero;
-
 	/* This event happens only in winter */
 	if (!get_current_season())
 	{
+		signed int tmp;
+		signed int answer;
+		signed int found_path;
+		signed int days;
+		struct struct_hero *hero;
 
 		do {
 			answer = GUI_radio(get_tx2(78), 2, get_tx2(79), get_tx2(80));

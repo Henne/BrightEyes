@@ -73,8 +73,6 @@ void FIG_draw_figures(void)
 	struct struct_fighter *list_i;
 	struct struct_rect rect_bak;
 	uint8_t* gfx_dst_bak;
-	signed int l_si;
-	signed int l_di;
 
 	/* TODO: potential bug: Just backup the pointer dst or the whole structure struct_pic_copy ? */
 	gfx_dst_bak = g_pic_copy.dst;
@@ -86,31 +84,30 @@ void FIG_draw_figures(void)
 	list_i = g_fig_list_head;
 
 	do {
-
 		if (list_i->visible == 1) {
 
-			l_si = (l1 - list_i->width / 2) + 10 * (list_i->cbx + list_i->cby);
-			l_di = (l2 - list_i->height) +	5 * (list_i->cbx - list_i->cby);
+			signed int x1 = (l1 - list_i->width / 2) + 10 * (list_i->cbx + list_i->cby);
+			signed int y1 = (l2 - list_i->height) +	5 * (list_i->cbx - list_i->cby);
 
-			l_si += list_i->offsetx;
-			l_di += list_i->offsety;
+			x1 += list_i->offsetx;
+			y1 += list_i->offsety;
 
-			g_pic_copy.x1 = l_si;
-			g_pic_copy.y1 = l_di;
-			g_pic_copy.x2 = l_si + list_i->width - 1;
-			g_pic_copy.y2 = l_di + list_i->height - 1;
+			g_pic_copy.x1 = x1;
+			g_pic_copy.y1 = y1;
+			g_pic_copy.x2 = x1 + list_i->width - 1;
+			g_pic_copy.y2 = y1 + list_i->height - 1;
 			g_pic_copy.src = list_i->gfxbuf;
 
-			g_pic_copy_rect.y1 = l_di + list_i->y1;
+			g_pic_copy_rect.y1 = y1 + list_i->y1;
 			if (g_pic_copy_rect.y1 < 0) g_pic_copy_rect.y1 = 0;
 
-			g_pic_copy_rect.x1 = l_si + list_i->x1;
+			g_pic_copy_rect.x1 = x1 + list_i->x1;
 			if (g_pic_copy_rect.x1 < 0) g_pic_copy_rect.x1 = 0;
 
-			g_pic_copy_rect.y2 = l_di + list_i->y2;
+			g_pic_copy_rect.y2 = y1 + list_i->y2;
 			if (g_pic_copy_rect.y2 > (200 - 1)) g_pic_copy_rect.y2 = (200 - 1);
 
-			g_pic_copy_rect.x2 = l_si + list_i->x2;
+			g_pic_copy_rect.x2 = x1 + list_i->x2;
 			if (g_pic_copy_rect.x2 > (320 - 1)) g_pic_copy_rect.x2 = (320 - 1);
 
 			do_pic_copy(2);
@@ -185,7 +182,7 @@ struct enemy_sheet* FIG_get_enemy_sheet(const signed int fighter_id)
 			return &g_enemy_sheets[i];
 	}
 
-	return NULL;
+	return (struct enemy_sheet*)NULL;
 }
 
 void FIG_set_sheet(const signed char fighter_id, const signed char sheet)

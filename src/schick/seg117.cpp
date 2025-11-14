@@ -597,17 +597,15 @@ void do_wild8_fight(void)
 
 void random_encounter(signed int arg)
 {
-	signed int l_si;
+	signed int skip_fight = 0;
 	signed int i;
 	signed int randval;
 	signed int x_bak;
 	signed int y_bak;
 	signed int wallclock_update_bak;
 
-	l_si = 0;
-
 	if (random_schick(100) > 33) {
-		l_si = 1;
+		skip_fight = 1;
 	}
 
 	x_bak = g_basepos_x;
@@ -630,14 +628,14 @@ void random_encounter(signed int arg)
 
 			switch (i) {
 				case 0: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(6) + 1;
 						do_fight(FIGHTS_WILD1);
 					}
 					break;
 				}
 				case 1: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD2);
 					}
@@ -648,7 +646,7 @@ void random_encounter(signed int arg)
 					break;
 				}
 				case 3: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(2);
 						do_fight(FIGHTS_WILD3);
 					}
@@ -659,21 +657,21 @@ void random_encounter(signed int arg)
 					break;
 				}
 				case 5: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(6) + 1;
 						do_fight(FIGHTS_WILD4);
 					}
 					break;
 				}
 				case 6: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(3) + 3;
 						do_fight(FIGHTS_WILD4);
 					}
 					break;
 				}
 				case 7: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(2) + 1;
 						do_fight(FIGHTS_WILD5);
 					}
@@ -688,7 +686,7 @@ void random_encounter(signed int arg)
 					break;
 				}
 				case 10: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD6);
 					}
@@ -699,7 +697,7 @@ void random_encounter(signed int arg)
 					break;
 				}
 				case 12: {
-					if (!l_si) {
+					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD7);
 					}

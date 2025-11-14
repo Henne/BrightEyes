@@ -192,7 +192,7 @@ void clear_ani(void)
 void interrupt timer_isr(void)
 {
 	signed int i;
-	signed int l_di;
+	signed int areacount;
 	signed char flag;
 	struct ani_area *ptr;
 	struct struct_pic_copy pic_copy_bak;
@@ -244,15 +244,15 @@ void interrupt timer_isr(void)
 		g_pic_copy_rect.x2 = g_ani_posx + 208;
 		pic_copy_bak = g_pic_copy;
 
-		l_di = g_ani_areacount;
+		areacount = g_ani_areacount;
 
-		if (!l_di && g_ani_busy) {
+		if (!areacount && g_ani_busy) {
 
 			g_ani_enabled = 0;
 			g_ani_busy = 0;
 		}
 
-		for (i = 0; i < l_di; i++) {
+		for (i = 0; i < areacount; i++) {
 
 			ptr = &g_ani_area_table[i];
 

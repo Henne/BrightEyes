@@ -359,9 +359,6 @@ void print_msg_with_first_hero(char *msg)
  */
 void DNG_fallpit_test(const signed int max_damage)
 {
-	signed int i;
-	struct struct_hero *hero;
-
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
 	*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) &= 0x0f; /* clear higher 4 bits */
@@ -369,6 +366,9 @@ void DNG_fallpit_test(const signed int max_damage)
 
 	if (gs_dungeon_light != 0)
 	{
+		signed int i;
+		struct struct_hero *hero;
+
 		/* light is on */
 		GUI_output(get_ttx(517));
 
@@ -666,9 +666,9 @@ signed int DNG_step(void)
 }
 
 struct stair_struct {
-	signed int pos;
-	signed char target_x;
-	signed char target_y;
+	int16_t pos;
+	int8_t target_x;
+	int8_t target_y;
 };
 
 void DNG_see_stairs(void)
@@ -682,7 +682,7 @@ void DNG_see_stairs(void)
 #if !defined(__BORLANDC__)
 	if (sizeof(stair_struct) != 4)
 	{
-		D1_INFO("sizeof(stair_struct) = %d\n", sizeof(stair_struct));
+		D1_INFO("sizeof(stair_struct) = %ld\n", sizeof(stair_struct));
 		exit(-1);
 	}
 #endif
