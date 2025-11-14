@@ -514,8 +514,7 @@ void mod_clock_pos(const signed int town_id)
 	signed int map_y;
 
 	map_x = g_town_positions[town_id - 1].x;
-	//map_y = g_town_positions[town_id - 1].y;
-	map_y = *(int16_t*)((uint8_t*)g_town_positions - sizeof(int16_t) + 2 * sizeof(int16_t) * town_id);
+	map_y = g_town_positions[town_id - 1].y;
 
 	val = map_x >= 0 && map_x <= 159 ?
 		(map_y >= 0 && map_y <= 99 ? 3 : 1) :
