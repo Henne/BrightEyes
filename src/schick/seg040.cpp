@@ -53,8 +53,8 @@ int32_t g_fightobj_buf_freespace;	// ds:0xe370
 unsigned char *g_buffer_weapanidat;	// ds:0xe374, pointer to WEAPANI.DAT
 unsigned char *g_buffer_anidat;		// ds:0xe378, pointer to ANI.DAT buffer
 struct struct_fighter *g_fig_list_buffer;	// ds:0xe37c;
-signed short *g_figobj_gfxheight_table; // ds:0xe380, to signed short[63]
-signed short *g_figobj_gfxwidth_table;	// ds:0xe384, to signed short[63]
+int16_t *g_figobj_gfxheight_table;	// ds:0xe380, to int16_t[63]
+int16_t *g_figobj_gfxwidth_table;	// ds:0xe384, to int16_t[63]
 unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388, to long[63]; uint8_t*
 signed char g_fig_spellgfx_id;		// ds:0xe38c
 signed char g_fig_shot_bolt_id;		// ds:0xe38d
@@ -141,8 +141,8 @@ void FIG_preload_gfx(void)
 	g_weapons_nvf_buf =(HugePt)g_current_fight + sizeof(struct fight);
 	g_spellobj_nvf_buf = g_weapons_nvf_buf + 0x1953;
 	g_figobj_gfxbuf_table = (unsigned char**)(((HugePt)g_spellobj_nvf_buf) + 0xf5fL);
-	g_figobj_gfxwidth_table = (signed short*)(((HugePt)g_figobj_gfxbuf_table) + 0xfcL);
-	g_figobj_gfxheight_table = (signed short*)(((HugePt)g_figobj_gfxwidth_table) + 0x7eL);
+	g_figobj_gfxwidth_table = (int16_t*)(((HugePt)g_figobj_gfxbuf_table) + 0xfcL);
+	g_figobj_gfxheight_table = (int16_t*)(((HugePt)g_figobj_gfxwidth_table) + 0x7eL);
 	g_fightobj_buf_seek_ptr = (unsigned char*)(((HugePt)g_figobj_gfxheight_table) + 0x7eL);
 	g_fightobj_buf = (unsigned char*)(((HugePt)g_fig_list_buffer) - 0x4217L);
 

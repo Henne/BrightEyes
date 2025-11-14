@@ -415,7 +415,7 @@ void show_outro(void)
 	signed int handle;
 	signed int width;
 	signed int height;
-	unsigned short len;
+	uint16_t len;		/* REMARK: check if read/writes with BCC can read more than 32k bytes at once */
 	uint8_t *pal_ptr;
 	struct struct_hero *hero;
 	signed int i;

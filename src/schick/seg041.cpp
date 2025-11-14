@@ -27,7 +27,7 @@
 namespace M302de {
 #endif
 
-static signed short g_force_weapons[9] = {
+static int16_t g_force_weapons[9] = {
 	ITEM_KNUEPPEL,
 	ITEM_MORGENSTERN,
 	ITEM_STREITKOLBEN,
@@ -39,7 +39,7 @@ static signed short g_force_weapons[9] = {
 	-1
 }; // ds:0x615c, terminated with -1
  
-static signed short g_knive_weapons[5] = {
+static int16_t g_knive_weapons[5] = {
 	ITEM_MESSER,
 	ITEM_DOLCH,
 	ITEM_VULKANGLASDOLCH,

@@ -60,7 +60,7 @@ namespace M302de {
 char ds[1];
 #endif
 
-signed short g_items_noplural[23] = {
+signed int g_items_noplural[23] = {
 	ITEM_LAKRITZE,
 	ITEM_BONBONS,
 	ITEM_SHURINKNOLLEKNOLLENGIFT,

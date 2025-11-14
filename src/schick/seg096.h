@@ -5,7 +5,7 @@ namespace M302de {
 //20
 void GUI_write_char_to_screen(uint8_t*, const signed int, const signed int);
 //25
-uint8_t* GUI_names_grammar(signed short, const signed int, const signed int);
+uint8_t* GUI_names_grammar(int16_t, const signed int, const signed int);
 //2a
 char* GUI_name_plural(const signed int, char*);
 //2f

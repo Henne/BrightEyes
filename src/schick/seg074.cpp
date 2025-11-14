@@ -181,7 +181,7 @@ signed int is_discovered(const signed int x, const signed int y)
  * \param   y           y-coordinate
  * \return              value of the field at (x,y)
  */
-unsigned short get_mapval_small(const signed int x, const signed int y)
+uint16_t get_mapval_small(const signed int x, const signed int y)
 {
 	uint8_t *map = g_dng_map;
 
@@ -195,7 +195,7 @@ unsigned short get_mapval_small(const signed int x, const signed int y)
  * \param   y           y-coordinate
  * \return              value of the field at (x,y)
  */
-unsigned short get_mapval_large(const signed int x, const signed int y)
+uint16_t get_mapval_large(const signed int x, const signed int y)
 {
 	uint8_t *map = g_dng_map;
 

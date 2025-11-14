@@ -55,19 +55,19 @@ static char* g_grammar_articles_index[15] = {
 	g_grammar_article_0,
 	g_grammar_article_von
 }; // ds:0xa917; uint8_t*
-static signed short g_grammar_def_table[24] = {
+static signed int g_grammar_def_table[24] = {
 	0, 1, 2, 3, 0, 3,
 	4, 1, 2, 5, 0, 5,
 	1, 1, 1, 0, 0, 0,
 	1, 1, 1, 4, 4, 4
 }; // ds:0xa953, [8], by case, then by gender
-static signed short g_grammar_indef_table[24] = {
+static signed int g_grammar_indef_table[24] = {
 	6, 7, 6, 8, 9, 8,
 	10, 11, 6, 12, 9, 12,
 	13, 13, 13, 13, 13, 13,
 	13, 13, 13, 13, 13, 13
 }; // ds:0xa983, [8], by case, then by gender
-static signed short g_grammar_noarticle_table[24] = {
+static signed int g_grammar_noarticle_table[24] = {
 	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
 	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
 	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
@@ -195,14 +195,14 @@ static char g_grammar_bufs[5][40];	// ds:0xe4e3
  * \param   index	index of the word of which a worgroup should be made
  * \param   type	if index is true the index is an enemy, if not it is an item
  */
-uint8_t* GUI_names_grammar(signed short flag, const signed int index, const signed int type)
+uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed int type)
 {
-	signed short *lp1;
+	signed int *lp1;
 	signed int l2 = 0;
 	char *p_name;
 	signed int l4;
 	struct int16_t_3 lp5 = g_grammar_gender_bitmasks;
-	//signed short lp5[3] = { {0x1000, 0x2000, 0x3000} };
+	//int16_t lp5[3] = { {0x1000, 0x2000, 0x3000} };
 
 	if (type == 0) {
 		/* string_array_itemnames */

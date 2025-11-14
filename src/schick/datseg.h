@@ -787,7 +787,7 @@ extern char g_fn_v302de_307[], g_fn_v302de_308[], g_fn_v302de_309[], g_fn_v302de
 extern unsigned short g_cd_init_successful;
 extern uint32_t g_cd_skipmagic;
 
-extern signed short g_items_noplural[23];				// ds:0x0270; seg096
+extern signed int g_items_noplural[23];					// ds:0x0270; seg096
 extern signed short g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
 extern signed short* g_forbidden_item_ids_table[12];			// ds:0x0638; seg048, seg056, seg105
