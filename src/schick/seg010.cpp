@@ -127,7 +127,7 @@ uint8_t* EMS_norm_ptr(uint8_t* p)
 #endif
 }
 
-signed short EMS_init(void)
+signed int EMS_init(void)
 {
 	if (EMS_installed()) {
 		g_ems_frame_ptr = EMS_get_frame_ptr();
