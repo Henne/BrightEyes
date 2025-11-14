@@ -286,7 +286,7 @@ void buy_screen(void)
 
 					} else {
 
-						if (!is_in_word_array(item_id, g_forbidden_item_ids_table[hero1->typus - 1])) {
+						if (!is_in_int_array(item_id, g_forbidden_item_ids_table[hero1->typus - 1])) {
 
 							set_textcolor(201, 0);
 						}

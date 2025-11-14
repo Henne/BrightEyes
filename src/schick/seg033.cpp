@@ -417,7 +417,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 					if (hero->fight_bp_left >= 3) {
 
-						if (is_in_word_array(hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, g_attack_items))
+						if (is_in_int_array(hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, g_attack_items))
 						{
 							target_x = x;
 							target_y = y;

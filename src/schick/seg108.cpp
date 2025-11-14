@@ -153,11 +153,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 		if (item_desc->subtype == HERB_POTION_TYPE_HERB_AND_POISON) {
 
-			if (is_in_word_array(item_id, g_herbs_uneatable)) {
+			if (is_in_int_array(item_id, g_herbs_uneatable)) {
 
 				GUI_output(get_ttx(499));
 
-			} else if (is_in_word_array(item_id, g_herbs_toxic) || is_in_word_array(item_id, g_weapon_poisons)) {
+			} else if (is_in_int_array(item_id, g_herbs_toxic) || is_in_int_array(item_id, g_weapon_poisons)) {
 				/* herbs and poisons */
 				GUI_output(get_ttx(500));
 
@@ -274,8 +274,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 		} else {
 
 			/* check if item is an elixir */
-			tmp2 = is_in_word_array(item_id, g_elixir_potions);
-			bad_elixir_item_id = is_in_word_array(item_id, g_bad_elixirs);
+			tmp2 = is_in_int_array(item_id, g_elixir_potions);
+			bad_elixir_item_id = is_in_int_array(item_id, g_bad_elixirs);
 
 			if (tmp2 != 0) {
 				/* handle good elixirs */

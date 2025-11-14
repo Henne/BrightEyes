@@ -85,7 +85,7 @@ signed int g_items_noplural[23] = {
 	ITEM_HYLAILER_FEUER,
 	-1
 }; // ds:0x0270
-const int16_t g_items_pluralwords[7] = {
+const signed int g_items_pluralwords[7] = {
 	ITEM_DIETRICHE,
 	ITEM_SCHUHE,
 	ITEM_STIEFEL,
@@ -351,7 +351,7 @@ signed char g_item_name_genders[254] = {
 	GENDER_FEMININE,
 }; // ds:0x02ac
 
-const int16_t g_forbidden_item_ids_gaukler[19] = {
+const signed int g_forbidden_item_ids_gaukler[19] = {
 	ITEM_KETTENHEMD,
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
@@ -372,7 +372,7 @@ const int16_t g_forbidden_item_ids_gaukler[19] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x03aa, array terminated by -1
-const int16_t g_forbidden_item_ids_jaeger[19] = {
+const signed int g_forbidden_item_ids_jaeger[19] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -393,7 +393,7 @@ const int16_t g_forbidden_item_ids_jaeger[19] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x03d0, array terminated by -1
-const int16_t g_forbidden_item_ids_krieger[12] = {
+const signed int g_forbidden_item_ids_krieger[12] = {
 	ITEM_ANGSTGIFT,
 	ITEM_SHURINKNOLLEKNOLLENGIFT,
 	ITEM_LOTUSGIFT,
@@ -407,7 +407,7 @@ const int16_t g_forbidden_item_ids_krieger[12] = {
 	ITEM_KUKRIS_MENGBILAR,
 	-1
 }; // ds:0x03f6, array terminated by -1
-const int16_t g_forbidden_item_ids_streuner[18] = {
+const signed int g_forbidden_item_ids_streuner[18] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -427,7 +427,7 @@ const int16_t g_forbidden_item_ids_streuner[18] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x040e, array terminated by -1
-const int16_t g_forbidden_item_ids_thorwaler[12] = {
+const signed int g_forbidden_item_ids_thorwaler[12] = {
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
 	ITEM_ZWEIHAENDER,
@@ -441,7 +441,7 @@ const int16_t g_forbidden_item_ids_thorwaler[12] = {
 	ITEM_ZWEIHAENDER__MAGIC,
 	-1
 }; // ds:0x0432, array terminated by -1
-const int16_t g_forbidden_item_ids_zwerg[9] = {
+const signed int g_forbidden_item_ids_zwerg[9] = {
 	ITEM_RONDRAKAMM,
 	ITEM_DOPPELKHUNCHOMER,
 	ITEM_ZWEIHAENDER,
@@ -452,7 +452,7 @@ const int16_t g_forbidden_item_ids_zwerg[9] = {
 	ITEM_DRESCHFLEGEL,
 	-1
 }; // ds:0x044a, array terminated by -1
-const int16_t g_forbidden_item_ids_hexe[64] = {
+const signed int g_forbidden_item_ids_hexe[64] = {
 	ITEM_SPEER,
 	ITEM_KNUEPPEL,
 	ITEM_SCHWERT,
@@ -517,7 +517,7 @@ const int16_t g_forbidden_item_ids_hexe[64] = {
 	ITEM_SILBERSTREITKOLBEN,
 	ITEM_SPEER__MAGIC,
 	-1 }; // ds:0x045c, array terminated by -1
-const int16_t g_forbidden_item_ids_druide[57] = {
+const signed int g_forbidden_item_ids_druide[57] = {
 	ITEM_SPEER,
 	ITEM_SCHWERT,
 	ITEM_SAEBEL,
@@ -576,7 +576,7 @@ const int16_t g_forbidden_item_ids_druide[57] = {
 	ITEM_SPEER__MAGIC,
 	-1
 }; // ds:0x04dc, array terminated by -1
-const int16_t g_forbidden_item_ids_magier[64] = {
+const signed int g_forbidden_item_ids_magier[64] = {
 	ITEM_SPEER,
 	ITEM_KNUEPPEL,
 	ITEM_SCHWERT,
@@ -642,7 +642,7 @@ const int16_t g_forbidden_item_ids_magier[64] = {
 	ITEM_SPEER__MAGIC,
 	-1
 }; // ds:0x054e, array terminated by -1
-const int16_t g_forbidden_item_ids_auelf[15] = {
+const signed int g_forbidden_item_ids_auelf[15] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -659,7 +659,7 @@ const int16_t g_forbidden_item_ids_auelf[15] = {
 	ITEM_ZWEIHAENDER__MAGIC,
 	-1
 }; // ds:0x05ce, array terminated by -1
-const int16_t g_forbidden_item_ids_firnelf[19] = {
+const signed int g_forbidden_item_ids_firnelf[19] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -680,7 +680,7 @@ const int16_t g_forbidden_item_ids_firnelf[19] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x05ec, array terminated by -1
-const int16_t g_forbidden_item_ids_waldelf[19] = {
+const signed int g_forbidden_item_ids_waldelf[19] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -702,7 +702,7 @@ const int16_t g_forbidden_item_ids_waldelf[19] = {
 	-1
 }; // ds:0x0612, array terminated by -1
 
-const int16_t *g_forbidden_item_ids_table[12] = {
+const signed int *g_forbidden_item_ids_table[12] = {
     g_forbidden_item_ids_gaukler,
     g_forbidden_item_ids_jaeger,
     g_forbidden_item_ids_krieger,
@@ -905,7 +905,7 @@ const struct usable_item_descr g_usable_items_table[14] = {
 
 }; // ds:0x08a9
 
-const int16_t g_weapon_poisons[10] = {
+const signed int g_weapon_poisons[10] = {
 	/* poisons, can be applied to a weapon */
 	ITEM_SHURINKNOLLEKNOLLENGIFT,
 	ITEM_ARAXGIFT,
@@ -918,14 +918,14 @@ const int16_t g_weapon_poisons[10] = {
 	ITEM_KROETENSCHEMELGIFT,
 	-1
 }; // ds:0x08d3
-const int16_t g_herbs_toxic[5] = {
+const signed int g_herbs_toxic[5] = {
 	ITEM_SHURINKNOLLE,
 	ITEM_ALRAUNE,
 	ITEM_LOTUSBLUETE,
 	ITEM_EITRIGER_KROETENSCHEMEL,
 	-1
 }; // ds:0x08e7
-const int16_t g_herbs_uneatable[7] = {
+const signed int g_herbs_uneatable[7] = {
 	ITEM_ILMENBLATT,
 	ITEM_FINAGEBAEMCHEN,
 	ITEM_JORUGAWURZEL,
@@ -934,7 +934,7 @@ const int16_t g_herbs_uneatable[7] = {
 	ITEM_DONFSTENGEL,
 	-1
 }; // ds:0x08f1
-const int16_t g_elixir_potions[8] = {
+const signed int g_elixir_potions[8] = {
 	ITEM_MU_ELIXIER,
 	ITEM_KL_ELIXIER,
 	ITEM_CH_ELIXIER,
@@ -944,7 +944,7 @@ const int16_t g_elixir_potions[8] = {
 	ITEM_KK_ELIXIER,
 	-1
 }; // ds:0x08ff
-const int16_t g_bad_elixirs[8] = {
+const signed int g_bad_elixirs[8] = {
 	ITEM_MU_ELIXIER__BAD,
 	ITEM_KL_ELIXIER__BAD,
 	ITEM_CH_ELIXIER__BAD,
@@ -954,7 +954,7 @@ const int16_t g_bad_elixirs[8] = {
 	ITEM_KK_ELIXIER__BAD,
 	-1
 }; // ds:0x090f
-const int16_t g_attack_items[3] = {
+const signed int g_attack_items[3] = {
 	ITEM_HYLAILER_FEUER,
 	ITEM_MIASTHMATICUM,
 	-1

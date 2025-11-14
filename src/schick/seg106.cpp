@@ -171,7 +171,7 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 						} else {
 							if (!can_hero_equip_item_at_slot(item_id_2, inv_slot_1)) {
 
-								if (is_in_word_array(item_id_2, g_items_pluralwords))
+								if (is_in_int_array(item_id_2, g_items_pluralwords))
 
 									sprintf(g_dtp2, get_ttx(222),
 										GUI_names_grammar(0x4000, item_id_2, 0), get_ttx(557));
@@ -241,7 +241,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 		/* normal item */
 
 		if (((inventory_p->quantity > 1) && g_itemsdat[inventory_p->item_id].flags.stackable) ||
-			is_in_word_array(inventory_p->item_id, g_items_pluralwords)) {
+			is_in_int_array(inventory_p->item_id, g_items_pluralwords)) {
 
 			/* more than one item or special */
 			sprintf(g_dtp2, get_tx2(72), get_ttx(305),
@@ -351,7 +351,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 		} else if (!can_hero_equip_item_at_slot(item_id1, pos2)) {
 
-			if (is_in_word_array(item_id1, g_items_pluralwords)) {
+			if (is_in_int_array(item_id1, g_items_pluralwords)) {
 
 				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id1, 0), get_ttx(557));
 			} else {
@@ -452,7 +452,7 @@ lab02:
 
 		} else if (!can_hero_equip_item_at_slot(item_id2, pos1)) {
 
-			if (is_in_word_array(item_id2, g_items_pluralwords)) {
+			if (is_in_int_array(item_id2, g_items_pluralwords)) {
 
 				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id2, 0), get_ttx(557));
 			} else {

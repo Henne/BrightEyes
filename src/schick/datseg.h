@@ -788,19 +788,19 @@ extern signed int g_cd_init_successful;
 extern uint32_t g_cd_skipmagic;
 
 extern signed int g_items_noplural[23];					// ds:0x0270; seg096
-extern const int16_t g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
+extern const signed int g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
-extern const int16_t* g_forbidden_item_ids_table[12];			// ds:0x0638; seg048, seg056, seg105
+extern const signed int* g_forbidden_item_ids_table[12];		// ds:0x0638; seg048, seg056, seg105
 extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
 extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
 extern struct armor_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
 extern const struct usable_item_descr g_usable_items_table[14];		// ds:0x08a9; seg105, seg107
-extern const int16_t g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
-extern const int16_t g_herbs_toxic[5];					// ds:0x08e7; seg108
-extern const int16_t g_herbs_uneatable[7];				// ds:0x08f1; seg108
-extern const int16_t g_elixir_potions[8];				// ds:0x08ff; seg108
-extern const int16_t g_bad_elixirs[8];					// ds:0x090f; seg108
-extern const int16_t g_attack_items[3];					// ds:0x091f; seg033
+extern const signed int g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
+extern const signed int g_herbs_toxic[5];				// ds:0x08e7; seg108
+extern const signed int g_herbs_uneatable[7];				// ds:0x08f1; seg108
+extern const signed int g_elixir_potions[8];				// ds:0x08ff; seg108
+extern const signed int g_bad_elixirs[8];				// ds:0x090f; seg108
+extern const signed int g_attack_items[3];				// ds:0x091f; seg033
 extern signed char g_monster_name_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
 extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
@@ -1588,7 +1588,7 @@ extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
 extern signed char g_finalfight_tumult;		//ds:0x5f30; seg033, seg041
 extern signed char g_autofight_magic;		//ds:0x5f31; seg033, seg036
-extern const int16_t g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
+extern const signed int g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
 
 extern signed char g_gfxtab_double_size_extra_ox[4];		//ds:0x6028; seg005, seg039
 extern signed char g_gfxtab_double_size_extra_oy[4];		//ds:0x602c; seg005, seg039

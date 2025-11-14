@@ -27,7 +27,7 @@
 namespace M302de {
 #endif
 
-static const int16_t g_force_weapons[9] = {
+static const signed int g_force_weapons[9] = {
 	ITEM_KNUEPPEL,
 	ITEM_MORGENSTERN,
 	ITEM_STREITKOLBEN,
@@ -39,7 +39,7 @@ static const int16_t g_force_weapons[9] = {
 	-1
 }; // ds:0x615c, terminated with -1
  
-static const int16_t g_knive_weapons[5] = {
+static const signed int g_knive_weapons[5] = {
 	ITEM_MESSER,
 	ITEM_DOLCH,
 	ITEM_VULKANGLASDOLCH,
@@ -597,11 +597,11 @@ signed int weapon_check(const struct struct_hero *hero)
 	{
 		retval = -1;
 	} else {
-		if (is_in_word_array(item_id, g_force_weapons)) {
+		if (is_in_int_array(item_id, g_force_weapons)) {
 
 			retval = 1;
 
-		} else if (is_in_word_array(item_id, g_knive_weapons)) {
+		} else if (is_in_int_array(item_id, g_knive_weapons)) {
 
 			retval = 0;
 

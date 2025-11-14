@@ -359,7 +359,7 @@ signed int AFIG_search_spell_target(const signed int x, const signed int y, cons
 					will_attack = 1;
 					done = 1;
 
-			} else if ( (target != 0) && (((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead) || ((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle))))
+			} else if ( (target != 0) && (((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead) || ((target >= 50) && !is_in_int_array(target - 50, g_cb_obj_nonobstacle))))
 				{
 					done = 1;
 				}
@@ -377,7 +377,7 @@ signed int AFIG_search_spell_target(const signed int x, const signed int y, cons
 						(target > 0) &&
 #endif
 						 (((target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious
-						) || ( (target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)
+						) || ( (target >= 50) && !is_in_int_array(target - 50, g_cb_obj_nonobstacle)
 						))
 					)
 				)

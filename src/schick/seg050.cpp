@@ -159,7 +159,7 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 		}
 
 		/* depending on the HERO_MAGIC_SCHOOL, the mage will get 3 possible increases on certain spells */
-		if (is_in_word_array(spell_id, (int16_t*)g_magic_schools_table[hero->spell_school]))
+		if (is_in_int_array(spell_id, g_magic_schools_table[hero->spell_school]))
 		{
 			max_incs = 3;
 		}

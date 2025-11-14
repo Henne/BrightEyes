@@ -73,7 +73,7 @@ void use_item(const signed int inv_slot, const signed int hero_pos)
 
 				/* item is not usable */
 
-				if (is_in_word_array(g_used_item_id, g_items_pluralwords))
+				if (is_in_int_array(g_used_item_id, g_items_pluralwords))
 				{
 					/* german grammar, singular and plural are the same */
 					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(g_itemsname[g_used_item_id]));
@@ -83,7 +83,7 @@ void use_item(const signed int inv_slot, const signed int hero_pos)
 
 				GUI_output(g_dtp2);
 
-			} else if (g_used_item_desc->flags.herb_potion && !is_in_word_array(g_used_item_id, g_weapon_poisons)) {
+			} else if (g_used_item_desc->flags.herb_potion && !is_in_int_array(g_used_item_id, g_weapon_poisons)) {
 
 				/* don't consume poison */
 				consume(g_itemuser, g_itemuser, inv_slot);

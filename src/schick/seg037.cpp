@@ -296,7 +296,7 @@ signed int FIG_search_range_target(const signed int x, const signed int y, const
 
 					/* an enemy or another object */
 					if ( ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead) ||
-						((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)))
+						((target >= 50) && !is_in_int_array(target - 50, g_cb_obj_nonobstacle)))
 					{
 							done = 1;
 					}
@@ -322,7 +322,7 @@ signed int FIG_search_range_target(const signed int x, const signed int y, const
 
 					/* handle heroes or walls */
 					if (((target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
-						((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)))
+						((target >= 50) && !is_in_int_array(target - 50, g_cb_obj_nonobstacle)))
 					{
 						done = 1;
 					}
@@ -346,7 +346,7 @@ signed int FIG_search_range_target(const signed int x, const signed int y, const
 #endif
 
 					if ( ((target < 10) && !get_hero(target - 1)->flags.dead && !get_hero(target - 1)->flags.unconscious) ||
-						((target >= 50) && !is_in_word_array(target - 50, g_cb_obj_nonobstacle)) ||
+						((target >= 50) && !is_in_int_array(target - 50, g_cb_obj_nonobstacle)) ||
 						((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead))
 					{
 						done = 1;
