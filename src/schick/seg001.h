@@ -3,13 +3,13 @@ namespace M302de {
 #endif
 
 void CD_enable_repeat(void);
-int CD_bioskey(const int);
+signed int CD_bioskey(const signed int);
 void CD_audio_stop(void);
 void CD_audio_pause(void);
 void CD_audio_play(void);
-void CD_set_track(const int);
+void CD_set_track(const signed int);
 void CD_check(void);
-int CD_init(void);
+signed int CD_init(void);
 
 #if !defined(__BORLANDC__)
 }

@@ -784,7 +784,7 @@ extern char g_fn_v302de_303[], g_fn_v302de_304[], g_fn_v302de_305[], g_fn_v302de
 extern char g_fn_v302de_307[], g_fn_v302de_308[], g_fn_v302de_309[], g_fn_v302de_310[];
 
 /* seg001 */
-extern unsigned short g_cd_init_successful;
+extern signed int g_cd_init_successful;
 extern uint32_t g_cd_skipmagic;
 
 extern signed int g_items_noplural[23];					// ds:0x0270; seg096

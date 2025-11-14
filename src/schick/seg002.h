@@ -31,7 +31,6 @@ signed int is_mouse_in_rect(const signed int, const signed int, const signed int
 void mouse_init(void);
 void disable_mouse(void);
 #if defined(__BORLANDC__)
-void mouse_get_button_press_info(unsigned short*, unsigned short*, unsigned short*, unsigned short*);
 void call_mouse_isr(void);
 void mouse_irq_init(const int16_t, void interrupt *);
 #endif
