@@ -397,7 +397,7 @@ void unused_store(const signed int image_num)
 	ptr->width = width;
 	ptr->height = height;
 
-	g_ems_unused_lpage = g_ems_unused_lpage + ((unsigned short)(g_ems_unused_offset + size) >> 14);
+	g_ems_unused_lpage = g_ems_unused_lpage + ((uint16_t)(g_ems_unused_offset + size) >> 14);
 	g_ems_unused_offset = ((((g_ems_unused_offset + size) & 0x3fff) + 0x100) & 0xff00);
 }
 

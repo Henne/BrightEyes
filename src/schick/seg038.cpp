@@ -48,7 +48,7 @@ signed int FIG_search_obj_on_cb(const signed int obj, signed int *px, signed int
 	return 0;
 }
 
-void FIG_init_list_elem(signed short obj)
+void FIG_init_list_elem(const signed int obj)
 {
 	signed int x;
 	signed int y;
@@ -58,8 +58,8 @@ void FIG_init_list_elem(signed short obj)
 	/* This initializes the global FIGHTER structure g_fig_list_elem */
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = 0;
-	g_fig_list_elem.cbx = (signed char)x;
-	g_fig_list_elem.cby = (signed char)y;
+	g_fig_list_elem.cbx = x;
+	g_fig_list_elem.cby = y;
 	g_fig_list_elem.offsetx = 0;
 	g_fig_list_elem.offsety = 4;
 	g_fig_list_elem.height = 11;
@@ -83,7 +83,7 @@ void FIG_init_list_elem(signed short obj)
 }
 
 #if defined(__BORLANDC__)
-void FIG_unused(const signed short a1, const signed short a2, signed short *p1, signed short *p2)
+void FIG_unused(const signed int a1, const signed int a2, signed int *p1, signed int *p2)
 {
 	signed int loc1 = 10;
 	signed int loc2 = 118;
@@ -106,9 +106,9 @@ static signed char *g_chessboard_cpy; // ds:0xe356
  * \param   mode              mode (see FIG_find_path_to_target)
  * \param   double_size       actor occupies two squares on the map (wolves, dogs, lions)
  */
-void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed short target_x, signed short target_y,
-			signed short dist, signed char bp_avail,
-			signed short mode, signed short double_size, signed short actor_id)
+void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int target_x, signed int target_y,
+			signed int dist, const signed char bp_avail,
+			const signed int mode, const signed int double_size, const signed int actor_id)
 {
 	signed int i;
 	signed int dist_duplicate; /* duplicates the dist variable. apparently redundant */
@@ -281,7 +281,7 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed short tar
 }
 
 //static
-signed short FIG_count_direction_changes_of_path(signed char *path_ptr)
+signed int FIG_count_direction_changes_of_path(signed char *path_ptr)
 {
 
 	signed int i = 0;
@@ -321,7 +321,7 @@ signed short FIG_count_direction_changes_of_path(signed char *path_ptr)
   * \param   mode           0: enemy to hero melee / 1: hero to hero melee / 2: enemy to enemy melee / 3: hero to enemy melee / 4: enemy is fleeing / 5: hero is fleeing / 6: enemy to hero ranged /  7: enemy to enemy ranged / 8: hero to hero ranged / 9: hero to enemy ranged / 10: hero movement (target marker 124 on the chess board)
   * \return                 1: reachable target found, path written / -1: no reachable target found.
   */
-signed short FIG_find_path_to_target(uint8_t *actor_ptr, signed short actor_id, signed short x_in, signed short y_in, signed short mode)
+signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id, const signed int x_in, const signed int y_in, const signed int mode)
  {
 	signed int nr_targets_reached;
 	signed int i;

@@ -8,7 +8,7 @@ void FIG_move_hero(struct struct_hero*, const signed int, signed int*, signed in
 signed int FIG_check_hero_attack(const signed int, const signed int, const signed int, const signed int,
                         const signed int, const signed int, const signed int);
 /* 0x2a */
-signed char FIG_cb_select_target(signed int*, signed int*, const signed short);
+signed char FIG_cb_select_target(signed int*, signed int*, const signed int);
 
 /* should be static */
 /* 0x2f */

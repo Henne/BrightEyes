@@ -1588,7 +1588,7 @@ extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
 extern signed char g_finalfight_tumult;		//ds:0x5f30; seg033, seg041
 extern signed char g_autofight_magic;		//ds:0x5f31; seg033, seg036
-extern signed short g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
+extern const int16_t g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
 
 extern signed char g_gfxtab_double_size_extra_ox[4];		//ds:0x6028; seg005, seg039
 extern signed char g_gfxtab_double_size_extra_oy[4];		//ds:0x602c; seg005, seg039

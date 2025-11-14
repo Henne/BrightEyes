@@ -26,7 +26,7 @@
 namespace M302de {
 #endif
 
-signed short g_cb_obj_nonobstacle[27] = { 0x0017, 0x0018, 0x0019, 0x001a, 0x001b, 0x0024, 0x0025, 0x0026, 0x0027, 0x0028, 0x0029, 0x002a, 0x002b, 0x002c, 0x002d, 0x002e, 0x002f, 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, -1 }; // ds:0x5f46, { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 }
+const int16_t g_cb_obj_nonobstacle[27] = { 0x0017, 0x0018, 0x0019, 0x001a, 0x001b, 0x0024, 0x0025, 0x0026, 0x0027, 0x0028, 0x0029, 0x002a, 0x002b, 0x002c, 0x002d, 0x002e, 0x002f, 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, -1 }; // ds:0x5f46, { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 }
 static struct viewdir_offsets g_viewdir_offsets1 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5f7c
 static struct viewdir_offsets g_viewdir_offsets2 = { { { 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } }; // ds:0x5f8c
 static char g_string_14spaces[15] = "              "; // ds:0x5f9c
@@ -155,7 +155,7 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
  * \param   max_range   maximal range for the weapon
  * \return              fight-id of the target
  */
-signed char FIG_cb_select_target(signed int *px, signed int *py, const signed short max_range)
+signed char FIG_cb_select_target(signed int *px, signed int *py, const signed int max_range)
 {
 	signed int x_diff;
 	signed int y_diff;
@@ -476,7 +476,7 @@ void FIG_latecomers(void)
 					}
 
 #if !defined(__BORLANDC__)
-					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, (signed short)g_current_fight->monsters[i].viewdir);
+					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, g_current_fight->monsters[i].viewdir);
 #else
 					place_obj_on_cb(x, y, i + 10, (_AX = (int16_t)p_enemy->gfx_id), (_AX = (int16_t)g_current_fight->monsters[i].viewdir));
 #endif

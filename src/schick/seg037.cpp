@@ -244,7 +244,7 @@ signed int FIG_enemy_can_attack_neighbour(const signed int x, const signed int y
 /*
  * Original-Bug: range attack of enemies is possible with direct contact
  */
-signed short FIG_search_range_target(const signed int x, const signed int y, const signed int dir, const signed int mode)
+signed int FIG_search_range_target(const signed int x, const signed int y, const signed int dir, const signed int mode)
 {
 	signed int done;
 	signed int x_diff;	/* run variables in dir */

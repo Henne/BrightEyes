@@ -70,8 +70,8 @@ signed int g_fig_dropped_weapons[30];	// ds:0xe31a
  *	is moving. The initial placements of static objects are also done
  *	with this function.
  */
-/* The functions in this file need object to be signed short.
- * All other callers use signed short from the header.
+/* The functions in this file need object to be int16_t.
+ * All other callers use int16_t from the header.
  */
 void FIG_set_cb_object(const signed int y, const signed int x, const signed int object_id)
 {

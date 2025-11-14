@@ -254,7 +254,7 @@ void FIG_split_ap(void)
  * \param   hero_pos    position of the hero
  * \return              1 = range attack is possible, 0 = ... not possible
  */
-signed short check_hero_range_attack(const struct struct_hero *hero, const signed int hero_pos)
+signed int check_hero_range_attack(const struct struct_hero *hero, const signed int hero_pos)
 {
 	signed int i;
 	signed int retval;	/* retval */

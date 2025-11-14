@@ -149,7 +149,7 @@ void diary_new_entry(void)
  *
  * \param   line        the line to start the entry
  */
-uint16_t diary_print_entry(uint16_t line)
+signed int diary_print_entry(signed int line)
 {
 	signed int day;
 	signed int month;
@@ -170,11 +170,11 @@ uint16_t diary_print_entry(uint16_t line)
 		town_name = get_ttx(entry->town_id + 0xeb);
 
 		if (di == 0) {
-			if ((signed short)strlen(town_name) > 24) {
+			if ((signed int)strlen(town_name) > 24) {
 
 				sprintf(g_dtp2, g_diary_string1, entry->day, get_ttx(entry->month + 0x15), town_name);
 
-			} else if ((signed short)strlen(town_name) > 15) {
+			} else if ((signed int)strlen(town_name) > 15) {
 
 				sprintf(g_dtp2, g_diary_string2, entry->day, get_ttx(entry->month + 0x15), town_name);
 
@@ -182,15 +182,15 @@ uint16_t diary_print_entry(uint16_t line)
 				sprintf(g_dtp2, g_diary_string3, entry->day, get_ttx(entry->month + 0x15), town_name);
 			}
 		} else {
-			if ((signed short)strlen(town_name) > 24) {
+			if ((signed int)strlen(town_name) > 24) {
 
 				sprintf(g_dtp2, g_diary_string4, town_name);
 
-			} else if ((signed short)strlen(town_name) > 15) {
+			} else if ((signed int)strlen(town_name) > 15) {
 
 				sprintf(g_dtp2, g_diary_string5, town_name);
 
-			} else if ((signed short)strlen(town_name) > 6) {
+			} else if ((signed int)strlen(town_name) > 6) {
 
 				sprintf(g_dtp2, g_diary_string6, town_name);
 

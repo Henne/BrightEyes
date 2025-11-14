@@ -143,7 +143,7 @@ uint8_t* load_fight_figs(signed int fig)
 	signed int i;
 
 	uint8_t* dst;
-	unsigned short ems_handle;
+	signed int ems_handle;
 	uint32_t offset;
 	uint32_t len;
 	signed int handle;
@@ -234,7 +234,7 @@ uint8_t* load_fight_figs(signed int fig)
 
 		seek_archive_file(handle, offset, 0);
 
-		read_archive_file(handle, (uint8_t*)src, (unsigned short)len);
+		read_archive_file(handle, (uint8_t*)src, (uint16_t)len);
 
 		close(handle);
 
@@ -254,7 +254,7 @@ uint8_t* load_fight_figs(signed int fig)
 			memslots[i].ems_handle = 0;
 			memslots[i].length = len;
 
-			memcpy((uint8_t*)dst, (uint8_t*)src, (unsigned short)len);
+			memcpy((uint8_t*)dst, (uint8_t*)src, (uint16_t)len);
 
 		}
 #if defined(__BORLANDC__)
@@ -297,7 +297,7 @@ void load_ani(const signed int no)
 	signed int handle;
 	signed int i;
 	struct ani_area_in *p_area;
-	unsigned short ems_handle;
+	signed int ems_handle;
 #if !defined(__BORLANDC__)
 	uint8_t* ani_buffer;
 	uint8_t *unplen_ptr;

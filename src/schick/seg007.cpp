@@ -97,7 +97,7 @@ void calc_damage_range(const signed int n, const signed int m, const signed int 
 /**
  * \brief   checks if val is in a word array
  */
-int is_in_word_array(const signed int val, int16_t *p)
+int is_in_word_array(const signed int val, const int16_t *p)
 {
 	int i;
 
