@@ -457,19 +457,19 @@ void init_text(void)
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TEXT_LTX);
-	len = (signed short)read_archive_file(handle, (uint8_t*)g_text_ltx_buffer, 64000);
+	len = (int16_t)read_archive_file(handle, (uint8_t*)g_text_ltx_buffer, 64000);
 	close(handle);
 
 	split_textbuffer((char**)g_text_ltx_index, g_text_ltx_buffer, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
-	len = (signed short)read_archive_file(handle, (uint8_t*)g_buffer5_ptr, 5000);
+	len = (int16_t)read_archive_file(handle, (uint8_t*)g_buffer5_ptr, 5000);
 	close(handle);
 
 	split_textbuffer((char**)g_itemsname, g_buffer5_ptr, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
-	len = (signed short)read_archive_file(handle, (uint8_t*)g_monnames_buffer, 5000);
+	len = (int16_t)read_archive_file(handle, (uint8_t*)g_monnames_buffer, 5000);
 	close(handle);
 
 	split_textbuffer((char**)g_monnames_index, g_monnames_buffer, len);
@@ -485,7 +485,7 @@ void load_tx(const signed int index)
 
 	archive_file_handle = load_archive_file(index);
 
-	archive_file_len = (signed short)read_archive_file(archive_file_handle, (uint8_t*)g_buffer7_ptr, 64000);
+	archive_file_len = (int16_t)read_archive_file(archive_file_handle, (uint8_t*)g_buffer7_ptr, 64000);
 
 	close(archive_file_handle);
 
@@ -504,7 +504,7 @@ void load_tx2(const signed int index)
 
 	g_text_file_index = index;
 	handle = load_archive_file(index);
-	len = (signed short)read_archive_file(handle, g_buffer8_ptr, 12000);
+	len = (int16_t)read_archive_file(handle, g_buffer8_ptr, 12000);
 	close(handle);
 
 	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, len);
@@ -515,13 +515,11 @@ void load_tx2(const signed int index)
 void load_ltx(const signed int index)
 {
 	int32_t len;
-	signed int handle;
-
-	handle = load_archive_file(index);
+	signed int handle = load_archive_file(index);
 
 	g_area_prepared = AREA_TYPE_NONE;
 
-	len = (signed short)read_archive_file(handle, ((uint8_t*)g_buffer9_ptr3) + 1000, 64000);
+	len = (int16_t)read_archive_file(handle, ((uint8_t*)g_buffer9_ptr3) + 1000, 64000);
 
 	close(handle);
 
@@ -702,7 +700,7 @@ signed int load_game_state(void)
 		/* TODO: check pointer arithmetics work with other pointers */
 		p_status_start = (HugePt)&gs_datseg_status_start;
 		p_status_end = (HugePt)&gs_datseg_status_end;
-		status_length = (signed short)(p_status_end - p_status_start);
+		status_length = p_status_end - p_status_start;	/* REMARK: pointer arithmetic */
 
 		_read(handle_sg, &gs_datseg_status_start, status_length);
 
@@ -722,8 +720,8 @@ signed int load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
 
-				_read(handle_sg, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[i]);
-				write(handle, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[i]);
+				_read(handle_sg, g_renderbuf_ptr, (uint16_t)g_saved_files_buf[i]);
+				write(handle, g_renderbuf_ptr, (uint16_t)g_saved_files_buf[i]);
 				close(handle);
 			}
 		}
@@ -837,7 +835,7 @@ signed int save_game_state(void)
 	signed int handle_sg;
 	HugePt p_status_start;
 	HugePt p_status_end;
-	unsigned short status_len;
+	unsigned int status_length;
 	signed int handle;
 	signed int tw_bak;
 	signed int l1;
@@ -964,7 +962,7 @@ signed int save_game_state(void)
 		/* TODO: check if pointer arithmetics work with other pointers */
 		p_status_start = (HugePt)&gs_datseg_status_start;
 		p_status_end = (HugePt)&gs_datseg_status_end;
-		status_len = (signed short)(p_status_end - p_status_start);
+		status_length = p_status_end - p_status_start;
 
 		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);
 		strcat(g_text_output_buf, g_savegame_suffix3);
@@ -991,10 +989,10 @@ signed int save_game_state(void)
 		filepos += write(handle_sg, &filepos, 4);
 
 		/* save the status section 5952 bytes */
-		filepos += write(handle_sg, p_status_start, status_len);
+		filepos += write(handle_sg, p_status_start, status_length);
 
 		/* check if enough bytes were written */
-		if (status_len + 16 + 4L != filepos) {
+		if (status_length + 16 + 4L != filepos) {
 
 			GUI_output(get_ttx(348));
 			close(handle_sg);
@@ -1024,10 +1022,10 @@ signed int save_game_state(void)
 
 				handle = load_archive_file(tw_bak + 0x8000);
 				g_saved_files_buf[tw_bak] = get_readlength2(handle);
-				_read(handle, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
+				_read(handle, g_renderbuf_ptr, (uint16_t)g_saved_files_buf[tw_bak]);
 				close(handle);
 
-				len = (uint16_t)write(handle_sg, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
+				len = (uint16_t)write(handle_sg, g_renderbuf_ptr, (uint16_t)g_saved_files_buf[tw_bak]);
 				filepos += len;
 
 				if ((uint16_t)g_saved_files_buf[tw_bak] != len) {
