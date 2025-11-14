@@ -3595,11 +3595,12 @@ void timewarp(const int32_t time)
 	 */
 
 	for (i = 0; i < time; i++) {
+
 		do_timers();
-#ifdef M302de_SPEEDFIX
-		if (i % 768 == 0)
-			wait_for_vsync();
-#endif
+
+		/* REMARK: SPEEDFIX
+		 if (i % 768 == 0) wait_for_vsync();
+		 */
 	}
 
 	sub_ingame_timers(time);
@@ -3721,10 +3722,11 @@ void timewarp_until_time_of_day(const int32_t time)
 	do {
 		do_timers();
 		i++;
-#ifdef M302de_SPEEDFIX
-		if (i % 768 == 0)
-			wait_for_vsync();
-#endif
+
+		/* REMARK: SPEEDFIX
+		 if (i % 768 == 0) wait_for_vsync();
+		 */
+
 	} while (gs_day_timer != time);
 
 	sub_ingame_timers(i);

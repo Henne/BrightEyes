@@ -133,9 +133,9 @@ void show_citizen(void)
 				}
 			} else {
 				GUI_print_loc_line(g_text_output_buf);
-#ifdef M302de_SPEEDFIX
+				/* REMARK: SPEEDFIX
 				vsync_or_key(200);
-#endif
+				*/
 			}
 		}
 

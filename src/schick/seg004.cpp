@@ -148,11 +148,10 @@ void init_ani_busy_loop(const signed int v1)
 	init_ani(v1);
 
 	 while (g_ani_busy) {
-#ifdef M302de_SPEEDFIX
-		/*	enter emulation mode frequently,
-			that the timer can reset this variable */
+		/* REMARK: SPEEDFIX
+		 * enter emulation mode frequently, that the timer can reset this variable
 		wait_for_vsync();
-#endif
+		 * */
 	 }
 }
 
@@ -1177,11 +1176,11 @@ void map_effect(uint8_t *src)
 
 		*(g_vga_memstart + si) = *(src + si);
 
-#ifdef M302de_SPEEDFIX
-		/* this too fast,  we slow it down a bit */
+		/* REMARK: SPEEDFIX
+		 * enter emulation mode frequently, that the timer can reset this variable
 		if ((i & 0x1ff) == 0x1ff)
 			wait_for_vsync();
-#endif
+		 **/
 	}
 
 	call_mouse();

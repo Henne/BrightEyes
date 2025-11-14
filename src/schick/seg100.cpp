@@ -47,7 +47,7 @@ void spell_eigenschaften(void)
 	min = min * 8 / 10;
 	max = max * 8 / 10;
 
-	sprintf(g_dtp2, get_tx(25), GUI_name_singular(get_monname(g_spelltarget_e->mon_id)),
+	sprintf(g_dtp2, get_tx(25), GUI_name_singular(g_monnames_index[g_spelltarget_e->mon_id]),
           g_spelltarget_e->level,	/* Level */
           g_spelltarget_e->at,		/* AT */
           g_spelltarget_e->pa,		/* PA */

@@ -118,15 +118,9 @@ static inline int bioskey(const int cmd) { return 0; }
  * comment this out to avoid the new features */
 #define M302de_FEATURE_MOD
 
-/* slow down when too fast */
-#define M302de_SPEEDFIX
-
-
 #define SCHICK_INFO
 #define SCHICK_INFO_VERBOSE
 //#define SCHICK_LOG
-//#define SCHICK_TRAC
-//#define SCHICK_GFX
 
 #define D1_ERR(...) fprintf(stderr, __VA_ARGS__)
 
@@ -146,18 +140,6 @@ static inline void D1_INFO(...) { }
 #define D1_INFO_VERBOSE(...) fprintf(stderr, __VA_ARGS__)
 #else
 static inline void D1_INFO_VERBOSE(...) { }
-#endif
-
-#ifdef SCHICK_TRAC
-#define D1_TRAC(...) fprintf(stderr, __VA_ARGS__)
-#else
-static inline void D1_TRAC(...) { }
-#endif
-
-#ifdef SCHICK_GFX
-#define D1_GFX(...) fprintf(stderr, __VA_ARGS__)
-#else
-static inline void D1_GFX(...) { }
 #endif
 
 /* help Visual C++ to know __func__ */
@@ -190,11 +172,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 	return string;
 }
 
-static inline uint8_t *get_spelltarget_e(void) {
-	return (uint8_t*)M302de::g_spelltarget_e;
-}
-
-
 #if !defined(__BORLANDC__)
 namespace M302de {
 
@@ -216,16 +193,6 @@ static inline struct struct_hero *get_spelluser(void) {
 }
 #endif
 
-
-static inline char *get_monname(const int no)
-{
-	if ((0 <= no) && (no < 77))
-		return M302de::g_monnames_index[no];
-	else {
-		fprintf(stderr, "ERROR: %s[%d] is out of bounds\n", __func__, no);
-		return NULL;
-	}
-}
 
 static inline char *get_tx2(unsigned short no) {
 	return (char*)M302de::g_tx2_index[no];
@@ -288,15 +255,12 @@ static inline void dump_cb(void)
 #define update_informer_cond(informer) (gs_informer_flags[informer] = 1)
 #endif
 
-#define get_spelltarget_e()	((uint8_t*)g_spelltarget_e)
 #define get_spelltarget()	((struct struct_hero*)g_spelltarget)
 #define get_spelluser()		((struct struct_hero*)g_spelluser)
 
 #define get_ttx(no) ((char*)(g_text_ltx_index[(no)]))
 #define get_tx(no) ((char*)(g_tx_index[(no)]))
 #define get_tx2(no) ((char*)(g_tx2_index[(no)]))
-#define get_monname(no) ((char*)g_monnames_index[no])
-#define give_new_item_to_groupname(item_id) ((char*)g_itemsname[(item_id)])
 
 #define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))
 

@@ -222,7 +222,7 @@ uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed in
 				l2 = 1;
 		}
 	} else {
-		p_name = get_monname(index);
+		p_name = g_monnames_index[index];
 		flag += lp5.a[g_monster_name_genders[index]];
 	}
 

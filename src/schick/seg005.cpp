@@ -997,9 +997,9 @@ when the Timer IRQ cannot set g_fig_continue_print to 0.
 So this call to wait_for_vsync() passes control
 to the DOSBox-CPU and may run the timer.
  */
-#ifdef M302de_SPEEDFIX
+			/* REMARK: SPEEDFIX
 			wait_for_vsync();
-#endif
+			*/
 			if (fight_printer()) {
 				g_pic_copy.x1 = 0;
 				g_pic_copy.y1 = 0;
