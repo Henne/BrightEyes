@@ -16,7 +16,7 @@ void play_voc_delay(const signed int);
 void alloc_voc_buffer(uint32_t);
 
 uint32_t get_readlength2(const signed int);
-unsigned short read_archive_file(const signed int, uint8_t *, uint16_t);
+uint16_t read_archive_file(const signed int, uint8_t *, uint16_t);
 void seek_archive_file(const signed int, int32_t, ...);
 signed int load_regular_file(const signed int);
 signed int load_archive_file(const signed int);
@@ -27,22 +27,16 @@ int32_t process_nvf_extraction(struct nvf_extract_desc *);
 #if defined(__BORLANDC__)
 void interrupt mouse_isr(void);
 #endif
-//static
-void mouse_action(unsigned short*, unsigned short*, unsigned short*, unsigned short*, unsigned short*);
 signed int is_mouse_in_rect(const signed int, const signed int, const signed int, const signed int);
 void mouse_init(void);
 void disable_mouse(void);
 #if defined(__BORLANDC__)
 void mouse_get_button_press_info(unsigned short*, unsigned short*, unsigned short*, unsigned short*);
 void call_mouse_isr(void);
-void mouse_irq_init(signed short, void interrupt *);
+void mouse_irq_init(const int16_t, void interrupt *);
 #endif
 void mouse_reset_ehandler(void);
 void mouse_move_cursor(const signed int, const signed int);
-#if defined(__BORLANDC__)
-void mouse_setGMask(const unsigned int, const unsigned int, signed short, signed short);
-void mouse_setCRTpage(const unsigned int);
-#endif
 void make_ggst_cursor(uint8_t *icon);
 void call_mouse_bg(void);
 void call_mouse(void);
@@ -87,7 +81,7 @@ void draw_loc_icons(const signed int, ...);
 signed int mod_day_timer(const signed int);
 void draw_compass(void);
 signed int can_merge_group(void);
-unsigned short div16(const unsigned char);
+uint16_t div16(const unsigned char);
 
 void select_with_mouse(signed int*, const struct shop_item*);
 void select_with_keyboard(signed int*, const struct shop_item*);

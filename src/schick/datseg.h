@@ -1753,10 +1753,10 @@ extern struct struct_memslot_ani *g_memslots_anis;	// ds:0xe121; seg027, seg120
 extern struct struct_memslot_fig *g_memslots_mfig;	// ds:0xe11d; seg027, seg120
 extern struct struct_memslot_fig *g_memslots_wfig;	// ds:0xe119; seg027, seg120
 extern struct struct_memslot_fig *g_memslots_mon;	// ds:0xe115; seg027, seg120
-extern signed short g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
-extern signed short g_wallclock_x;	// ds:0xe111; seg004, seg029, seg063, seg094
-extern signed short g_wallclock_y;	// ds:0xe10f; seg004, seg029, seg063, seg094
-extern signed short g_wallclock_redraw;	// ds:0xe10e; seg004, seg029
+extern signed int g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
+extern signed int g_wallclock_x;	// ds:0xe111; seg004, seg029, seg063, seg094
+extern signed int g_wallclock_y;	// ds:0xe10f; seg004, seg029, seg063, seg094
+extern signed int g_wallclock_redraw;	// ds:0xe10e; seg004, seg029
 extern signed char  g_location_market_flag;	// ds:0xe10c; seg066
 extern struct struct_fighter *g_fig_list_head;	// ds:0xe108; seg005, seg006, seg040
 extern signed char g_fig_list_array[127];	// ds:0xe089; seg006, seg040
@@ -1777,15 +1777,15 @@ extern signed char g_fig_actors_unkn[30];	// ds:0xd82d; seg032, seg042, seg043, 
 extern signed char g_fig_move_pathdir[10];	// ds:0xd823; seg034, seg036, seg037, seg038
 extern struct enemy_sheet g_enemy_sheets[20];	// ds:0xd34b; seg005, seg006, seg032-seg102
 extern struct fight_msg g_fig_msg_data[6];	// ds:0xd333; seg005, seg041
-extern signed short g_replenish_stocks_mod;	// ds:0xd331; seg051, seg109
-extern signed short g_gather_herbs_mod;		// ds:0xd32f; seg051, seg109
-extern signed short g_wildcamp_sleep_quality;	// ds:0xd32d; seg051, seg094, seg109, seg114, seg118
-extern signed short g_fig_escape_position[4];	// ds:0xd325; seg005, seg076-seg089
+extern signed int g_replenish_stocks_mod;	// ds:0xd331; seg051, seg109
+extern signed int g_gather_herbs_mod;		// ds:0xd32f; seg051, seg109
+extern signed int g_wildcamp_sleep_quality;	// ds:0xd32d; seg051, seg094, seg109, seg114, seg118
+extern signed int g_fig_escape_position[4];	// ds:0xd325; seg005, seg076-seg089
 extern unsigned char *g_townpal_buf;		// ds:0xd312; seg002, seg027, seg120
-extern signed short g_txt_tabpos[7];		// ds:0xd313; seg024, seg029, seg33, seg046, seg096, seg097
+extern signed int g_txt_tabpos[7];		// ds:0xd313; seg024, seg029, seg33, seg046, seg096, seg097
 #if defined (__BORLANDC__)
-extern signed short g_video_mode_bak;		// ds:0xd30d; seg002, seg004
-extern signed short g_video_page_bak;		// ds:0xd30b; seg002, seg004
+extern int16_t g_video_mode_bak;		// ds:0xd30d; seg002, seg004
+extern int16_t g_video_page_bak;		// ds:0xd30b; seg002, seg004
 #endif
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_vga_memstart;	// ds:0xd2ff; seg002-seg120 aka FRAMEBUF_PTR
@@ -1798,14 +1798,14 @@ extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
 extern unsigned char *g_objects_nvf_buf;// ds:0xd2e3; seg004, seg032, seg040, seg120
 extern unsigned char *g_fig_figure1_buf;// ds:0xd2df; seg027, seg055, seg056, seg057, seg058, seg120
 extern unsigned char *g_fig_figure2_buf;// ds:0xd2db; seg027, seg040, seg120
-extern signed short g_textline_posx;	// ds:0xd2d9; seg024, seg025, seg029, seg096, seg097
-extern signed short g_textline_posy;	// ds:0xd2d7; seg024, seg025, seg029, seg096, seg097
-extern signed short g_textline_maxlen;	// ds:0xd2d5; seg024, seg025, seg029, seg096, seg097
-extern signed short g_textline_unknown;	// ds:0xd2d3; seg029
-extern signed short g_gui_text_centered;// ds:0xd2d1; seg002, seg096, seg097
-extern signed short g_textcolor_fg[4];	// ds:0xd2c9; seg096, seg120
-extern signed short g_textcolor_bg;	// ds:0xd2c7; seg096
-extern signed short g_textcolor_index;	// ds:0xd2c5; seg096, seg097
+extern signed int g_textline_posx;	// ds:0xd2d9; seg024, seg025, seg029, seg096, seg097
+extern signed int g_textline_posy;	// ds:0xd2d7; seg024, seg025, seg029, seg096, seg097
+extern signed int g_textline_maxlen;	// ds:0xd2d5; seg024, seg025, seg029, seg096, seg097
+extern signed int g_textline_unknown;	// ds:0xd2d3; seg029
+extern signed int g_gui_text_centered;	// ds:0xd2d1; seg002, seg096, seg097
+extern signed int g_textcolor_fg[4];	// ds:0xd2c9; seg096, seg120
+extern signed int g_textcolor_bg;	// ds:0xd2c7; seg096
+extern signed int g_textcolor_index;	// ds:0xd2c5; seg096, seg097
 extern unsigned char *g_buf_font6;	// ds:0xd2c1; seg026, seg096, seg120
 extern unsigned char *g_splash_buffer;	// ds:0xd2bd; seg002, seg028, seg097, seg120
 extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
@@ -1823,9 +1823,9 @@ extern uint32_t g_buffer_wfigs_tab[43];	// ds:0xd0ad; seg027
 extern uint32_t g_buffer_monster_tab[36];	// ds:0xd01d; seg027
 extern HugePt g_buffer9_ptr3;		// ds:0xd019; seg003-seg120
 extern unsigned char *g_buffer9_ptr2;	// ds:0xd015; seg120
-extern signed short g_redraw_menuicons;	// ds:0xd013; seg066, seg076, seg099
-extern signed short g_dng_extra_action;	// ds:0xd011; seg076, seg099
-extern signed short g_dng_init_flag;	// ds:0xd00f; seg076,
+extern signed int g_redraw_menuicons;	// ds:0xd013; seg066, seg076, seg099
+extern signed int g_dng_extra_action;	// ds:0xd011; seg076, seg099
+extern signed int g_dng_init_flag;	// ds:0xd00f; seg076,
 extern unsigned char g_mouse_bg_bak[256];	// ds:0xcf0f; seg004
 extern struct mouse_cursor g_ggst_cursor;	// ds:0xcecf; seg002, seg048
 extern struct mouse_cursor *g_current_cursor;	// ds:0xcecb; seg002, seg004, seg024, seg25, seg048
@@ -1840,22 +1840,22 @@ extern unsigned char *g_ani_main_ptr;	// ds:0xce35; seg004, seg027
 extern struct ani_area g_ani_area_table[10];	// ds:0xc3ef; seg004, seg027
 extern signed char g_ani_areacount;	// ds:0xc3ee; seg004, seg027
 extern unsigned char g_ani_height;	// ds:0xc3ed; seg004, seg027
-extern unsigned short g_ani_unknown1;	// ds:0xc3eb; seg027
-extern unsigned short g_ani_unknown2;	// ds:0xc3e9; seg027
-extern signed short g_ani_width;	// ds:0xc3e7; seg004
+extern signed int g_ani_unknown1;	// ds:0xc3eb; seg027
+extern signed int g_ani_unknown2;	// ds:0xc3e9; seg027
+extern signed int g_ani_width;		// ds:0xc3e7; seg004
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
-extern signed short g_action;		// ds:0xc3d9; seg002, seg025-seg097
-extern signed short g_bioskey_event;	// ds:0xc3d7; seg002, seg097
-extern signed short g_mouse1_event2;	// ds:0xc3d5; seg002, seg004, seg025, seg049, seg066, seg097
-extern signed short g_mouse_rightclick_event;	// ds:0xc3d3; seg002, seg025-seg097
-extern signed short g_mouse_leftclick_event;	// ds:0xc3d1; seg002, seg034, seg093, seg097
-extern signed short g_mouse1_doubleclick;	// ds:0xc3cf; seg002, seg048
-extern signed short g_update_statusline;	// ds:0xc3cb; seg002, seg004, seg026, seg029, seg046, seg097
-extern signed short g_unused_spinlock_flag;	// ds:0xc3cb; seg002, seg004
-extern signed short g_have_mouse;	// ds:0xc3c7; seg002-seg058
-extern signed short g_bioskey_event10;	// ds:0xc3c5; seg002, seg097
-extern signed short g_game_state;	// ds:0xc3c1; seg002-seg116
-extern signed short g_random_schick_seed2;	// ds:0xc3bf; seg004, seg007
+extern signed int g_action;		// ds:0xc3d9; seg002, seg025-seg097
+extern signed int g_bioskey_event;	// ds:0xc3d7; seg002, seg097
+extern signed int g_mouse1_event2;	// ds:0xc3d5; seg002, seg004, seg025, seg049, seg066, seg097
+extern signed int g_mouse_rightclick_event;	// ds:0xc3d3; seg002, seg025-seg097
+extern signed int g_mouse_leftclick_event;	// ds:0xc3d1; seg002, seg034, seg093, seg097
+extern signed int g_mouse1_doubleclick;		// ds:0xc3cf; seg002, seg048
+extern signed int g_update_statusline;		// ds:0xc3cb; seg002, seg004, seg026, seg029, seg046, seg097
+extern signed int g_unused_spinlock_flag;	// ds:0xc3cb; seg002, seg004
+extern signed int g_have_mouse;		// ds:0xc3c7; seg002-seg058
+extern signed int g_bioskey_event10;	// ds:0xc3c5; seg002, seg097
+extern signed int g_game_state;		// ds:0xc3c1; seg002-seg116
+extern int16_t g_random_schick_seed2;	// ds:0xc3bf; seg004, seg007
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
@@ -1865,18 +1865,18 @@ extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
 extern struct shop_item *g_buyitems;	// ds:0xc009; seg055, seg056
 extern struct shop_item *g_sellitems;	// ds:0xc005; seg056, seg057, seg058
-extern signed short g_game_mode;	// ds:0xc003; seg002, seg046, seg048, seg050, seg097, seg098, seg103, seg120
-extern signed short g_textbox_pos_y;	// ds:0xc001; seg096, seg097
-extern signed short g_textbox_pos_x;	// ds:0xbfff; seg096, seg097
-extern signed short g_textbox_width;	// ds:0xbffd; seg002-seg120
+extern signed int g_game_mode;		// ds:0xc003; seg002, seg046, seg048, seg050, seg097, seg098, seg103, seg120
+extern signed int g_textbox_pos_y;	// ds:0xc001; seg096, seg097
+extern signed int g_textbox_pos_x;	// ds:0xbfff; seg096, seg097
+extern signed int g_textbox_width;	// ds:0xbffd; seg002-seg120
 extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, seg120
 extern char *g_radio_name_list[25];	// ds:0xbf95; seg033, seg047, seg048, seg098, seg103, seg104, seg105
 extern unsigned char g_dng_map[512];	// ds:0xbd95; seg002-seg107
 extern unsigned char g_dng_map_size;	// ds:0xbd94; seg002, seg003, seg028, seg066, seg074, seg100
 #if defined(__BORLANDC__)
-extern signed short g_ems_unused_handle;	// ds:0xbd92; seg028, seg120
+extern signed int g_ems_unused_handle;		// ds:0xbd92; seg028, seg120
 #endif
-extern signed short g_ems_travelmap_handle;	// ds:0xbd90; seg028, seg120
+extern signed int g_ems_travelmap_handle;	// ds:0xbd90; seg028, seg120
 #if defined(__BORLANDC__)
 extern struct ems_tab *g_ems_unused_tab;	// ds:0xbd8c; seg028
 #endif
@@ -1887,12 +1887,12 @@ extern unsigned char g_steptarget_back;		// ds:0xbd4e; seg003, seg066, seg076
 extern unsigned char g_steptarget_front;	// ds:0xbd4d; seg003, seg066, seg076, seg099
 extern signed char g_new_menu_icons[9];		// ds:0xbd38; seg002, seg026, seg066, seg076, seg099
 extern struct struct_hero *g_heroes;		// ds:0xbd34
-extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
-extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
-extern struct fight *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
+extern unsigned char *g_fightobj_buf;		// ds:0xbd30; seg032, seg040
+extern signed char *g_scenario_buf;		// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
+extern struct fight *g_current_fight;		// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern signed char g_area_camp_area_type;	// ds:0xbd27; seg052, seg066, seg076
-extern signed short g_pregame_state;	// ds:0xbd25; seg002, seg097
-extern signed short g_use_cdaudio_flag;		// ds:0xbcfd; seg002
+extern signed int g_pregame_state;		// ds:0xbd25; seg002, seg097
+extern signed int g_use_cdaudio_flag;		// ds:0xbcfd; seg002
 #if defined(__BORLANDC__)
 extern void interrupt far (*g_mouse_handler_bak)(...);	// ds:0xbcbd;
 #endif

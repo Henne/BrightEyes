@@ -5,9 +5,9 @@ extern "C" {
 #endif
 
 unsigned short swap_u16(unsigned short);
-void set_video_mode(signed short);
-void set_video_page(signed short);
-void save_display_stat(uint8_t*);
+void set_video_mode(int16_t);
+void set_video_page(int16_t);
+void save_display_stat(int16_t*);
 void set_color(uint8_t *ptr, unsigned char color);
 void set_palette(uint8_t *ptr, unsigned short first_color, unsigned short colors);
 void draw_h_line(uint8_t*, unsigned short, signed short);

@@ -97,28 +97,28 @@ static int32_t g_archive_file_length;	// ds:0xbce7
 static uint8_t *g_ail_digi_driver_buf2;		// ds:0xbceb, to buffer of size 5016
 static uint8_t *g_ail_voc_buffer;		// ds:0xbcef
 static uint8_t *g_ail_digi_driver_buf;		// ds:0xbcf3
-static int16_t *g_ail_digi_driver_descr;		// ds:0xbcf7
-static signed short g_ail_digi_driver_id;	// ds:0xbcfb
+static int16_t *g_ail_digi_driver_descr;	// ds:0xbcf7
+static signed int g_ail_digi_driver_id;		// ds:0xbcfb
 #endif
 
-signed short g_use_cdaudio_flag; // ds:0xbcfd
+signed int g_use_cdaudio_flag; // ds:0xbcfd
 
 #if defined(__BORLANDC__)
-static signed short g_load_sound_driver;	// ds:0xbcff
-static signed short g_sample_ad_handle;	// ds:0xbd01
-static unsigned short g_ail_timbre_cache_size; // ds:0xbd03
-static signed long g_ail_state_table_size;	// ds:0xbd05
-static uint8_t *g_ail_music_driver_buf2;		// ds:0xbd09
+static signed int g_load_sound_driver;		// ds:0xbcff
+static signed int g_sample_ad_handle;		// ds:0xbd01
+static uint16_t g_ail_timbre_cache_size;	// ds:0xbd03
+static int32_t g_ail_state_table_size;		// ds:0xbd05
+static uint8_t *g_ail_music_driver_buf2;	// ds:0xbd09
 static uint8_t *g_ail_midi_buffer;		// ds:0xbd0d
 static uint8_t *g_ail_timbre_cache;		// ds:0xbd11
 static uint8_t *g_ail_state_table;		// ds:0xbd15
 static uint8_t *g_ail_music_driver_buf;		// ds:0xbd19
 static int16_t *g_ail_music_driver_descr;	// ds:0xbd1d
-static signed short g_ail_sequence;		// ds:0xbd21
-static signed short g_ail_music_driver_id;	// ds:0xbd23
+static signed int g_ail_sequence;		// ds:0xbd21
+static signed int g_ail_music_driver_id;	// ds:0xbd23
 #endif
 
-signed short g_pregame_state;		// ds:0xbd25
+signed int g_pregame_state;			// ds:0xbd25
 signed char g_area_camp_area_type;		// ds:0xbd27, {0 = camp takes place in a dungeon, 1 = camp takes place in a town}
 struct fight *g_current_fight;		// ds:0xbd28
 signed char *g_scenario_buf;		// ds:0xbd2c
@@ -136,19 +136,19 @@ unsigned char g_unkn_075[1];		// ds:0xbd8b
 #if defined(__BORLANDC__)
 struct ems_tab *g_ems_unused_tab;	// ds:0xbd8c
 #endif
-signed short g_ems_travelmap_handle;	// ds:0xbd90
+signed int g_ems_travelmap_handle;	// ds:0xbd90
 #if defined(__BORLANDC__)
-signed short g_ems_unused_handle;	// ds:0xbd92
+signed int g_ems_unused_handle;		// ds:0xbd92
 #endif
 unsigned char g_dng_map_size;		// ds:0xbd94
 unsigned char g_dng_map[512];		// ds:0xbd95
 char *g_radio_name_list[25];		// ds:0xbf95, used for items, heroes, spells, skills, recipes
 unsigned char *g_gui_buffer_unkn;	// ds:0xbff9
-signed short g_textbox_width;		// ds:0xbffd
-signed short g_textbox_pos_x;		// ds:0xbfff, coordinate of upper left corner
+signed int g_textbox_width;		// ds:0xbffd
+signed int g_textbox_pos_x;		// ds:0xbfff, coordinate of upper left corner
+signed int g_textbox_pos_y;		// ds:0xc001, coordinate of upper left corner
+signed int g_game_mode;			// ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }
 
-signed short g_textbox_pos_y; // ds:0xc001, coordinate of upper left corner
-signed short g_game_mode; // ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }
 struct shop_item *g_sellitems; // ds:0xc005, also used for repair items
 struct shop_item *g_buyitems; // ds:0xc009, merchant's assortment
 struct struct_pic_copy g_pic_copy;	// ds:0xc00d
@@ -158,25 +158,25 @@ char **g_tx2_index; // ds:0xc3ad, to index table of secondary text file
 char **g_tx_index; // ds:0xc3b1, to index table of primary text file
 char **g_text_ltx_index; // ds:0xc3b5, to index table of TEXT.LTX
 unsigned char g_unkn_077[6]; // ds:0xc3b9
-signed short g_random_schick_seed2; // ds:0xc3bf
-signed short g_game_state; // ds:0xc3c1, see enum GAME_STATE_*
+int16_t g_random_schick_seed2; // ds:0xc3bf
+signed int g_game_state; // ds:0xc3c1, see enum GAME_STATE_*
 unsigned char g_unkn_078[2]; // ds:0xc3c3
-signed short g_bioskey_event10; // ds:0xc3c5
-signed short g_have_mouse; // ds:0xc3c7
-signed short g_unused_spinlock_flag; // ds:0xc3c9
-signed short g_update_statusline; // ds:0xc3cb
+signed int g_bioskey_event10; // ds:0xc3c5
+signed int g_have_mouse; // ds:0xc3c7
+signed int g_unused_spinlock_flag; // ds:0xc3c9
+signed int g_update_statusline; // ds:0xc3cb
 unsigned char g_unkn_079[2]; // ds:0xc3cd
-signed short g_mouse1_doubleclick; // ds:0xc3cf
-signed short g_mouse_leftclick_event; // ds:0xc3d1
-signed short g_mouse_rightclick_event; // ds:0xc3d3
-signed short g_mouse1_event2; // ds:0xc3d5
-signed short g_bioskey_event; // ds:0xc3d7
-signed short g_action; // ds:0xc3d9
+signed int g_mouse1_doubleclick; // ds:0xc3cf
+signed int g_mouse_leftclick_event; // ds:0xc3d1
+signed int g_mouse_rightclick_event; // ds:0xc3d3
+signed int g_mouse1_event2; // ds:0xc3d5
+signed int g_bioskey_event; // ds:0xc3d7
+signed int g_action; // ds:0xc3d9
 HugePt g_buffer9_ptr; // ds:0xc3db, to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF
 unsigned char g_unkn_080[8]; // ds:0xc3df
-signed short g_ani_width; // ds:0xc3e7
-unsigned short g_ani_unknown1; // ds:0xc3e9
-unsigned short g_ani_unknown2; // ds:0xc3eb
+signed int g_ani_width; // ds:0xc3e7
+signed int g_ani_unknown1; // ds:0xc3e9
+signed int g_ani_unknown2; // ds:0xc3eb
 unsigned char g_ani_height; // ds:0xc3ed
 signed char g_ani_areacount; // ds:0xc3ee
 struct ani_area g_ani_area_table[10]; // ds:0xc3ef
@@ -194,9 +194,9 @@ struct mouse_cursor *g_current_cursor; // ds:0xcecb
 struct mouse_cursor g_ggst_cursor; // ds:0xcecf
 unsigned char g_mouse_bg_bak[256]; // ds:0xcf0f
 
-signed short g_dng_init_flag;		// ds:0xd00f
-signed short g_dng_extra_action;	// ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
-signed short g_redraw_menuicons;	// ds:0xd013
+signed int g_dng_init_flag;		// ds:0xd00f
+signed int g_dng_extra_action;		// ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
+signed int g_redraw_menuicons;		// ds:0xd013
 unsigned char *g_buffer9_ptr2;		// ds:0xd015, copy of BUFFER9_PTR
 HugePt g_buffer9_ptr3;			// ds:0xd019, copy of BUFFER9_PTR
 uint32_t g_buffer_monster_tab[36];	// ds:0xd01d
@@ -215,14 +215,14 @@ char *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and tex
 char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
 unsigned char *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
 unsigned char *g_buf_font6; // ds:0xd2c1
-signed short g_textcolor_index; // ds:0xd2c5
-signed short g_textcolor_bg; // ds:0xd2c7
-signed short g_textcolor_fg[4]; // ds:0xd2c9
-signed short g_gui_text_centered; // ds:0xd2d1
-signed short g_textline_unknown; // ds:0xd2d3, writeonly (103)
-signed short g_textline_maxlen; // ds:0xd2d5
-signed short g_textline_posy; // ds:0xd2d7
-signed short g_textline_posx; // ds:0xd2d9
+signed int g_textcolor_index; // ds:0xd2c5
+signed int g_textcolor_bg; // ds:0xd2c7
+signed int g_textcolor_fg[4]; // ds:0xd2c9
+signed int g_gui_text_centered; // ds:0xd2d1
+signed int g_textline_unknown; // ds:0xd2d3, writeonly (103)
+signed int g_textline_maxlen; // ds:0xd2d5
+signed int g_textline_posy; // ds:0xd2d7
+signed int g_textline_posx; // ds:0xd2d9
 unsigned char *g_fig_figure2_buf; // ds:0xd2db, to buffer of size 20000
 unsigned char *g_fig_figure1_buf; // ds:0xd2df
 unsigned char *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
@@ -238,18 +238,18 @@ unsigned char *g_renderbuf_ptr; // ds:0xd303, to buffer of size 65000
 
 #if defined(__BORLANDC__)
 static unsigned char g_unkn_082[2]; // ds:0xd307
-static signed short g_gameinit_flag; // ds:0xd309, writeonly (1)
-signed short g_video_page_bak; // ds:0xd30b
-signed short g_video_mode_bak; // ds:0xd30d
+static signed int g_gameinit_flag; // ds:0xd309, writeonly (1)
+int16_t g_video_page_bak; // ds:0xd30b
+int16_t g_video_mode_bak; // ds:0xd30d
 static unsigned char g_unkn_083[4]; // ds:0xd30f
 #endif
 
-signed short g_txt_tabpos[7]; // ds:0xd313
+signed int g_txt_tabpos[7]; // ds:0xd313
 unsigned char *g_townpal_buf; // ds:0xd321
-signed short g_fig_escape_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
-signed short g_wildcamp_sleep_quality; // ds:0xd32d
-signed short g_gather_herbs_mod; // ds:0xd32f
-signed short g_replenish_stocks_mod; // ds:0xd331
+signed int g_fig_escape_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
+signed int g_wildcamp_sleep_quality; // ds:0xd32d
+signed int g_gather_herbs_mod; // ds:0xd32f
+signed int g_replenish_stocks_mod; // ds:0xd331
 struct fight_msg g_fig_msg_data[6]; // ds:0xd333
 struct enemy_sheet g_enemy_sheets[20]; // ds:0xd34b
 signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
@@ -271,10 +271,10 @@ struct struct_fighter g_fig_list_elem; // ds:0xe066
 signed char g_fig_list_array[127]; // ds:0xe089
 struct struct_fighter *g_fig_list_head; // ds:0xe108, to a list
 signed char g_location_market_flag; // ds:0xe10c
-signed short g_wallclock_redraw; // ds:0xe10d
-signed short g_wallclock_y; // ds:0xe10f
-signed short g_wallclock_x; // ds:0xe111
-signed short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
+signed int g_wallclock_redraw; // ds:0xe10d
+signed int g_wallclock_y; // ds:0xe10f
+signed int g_wallclock_x; // ds:0xe111
+signed int g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
 struct struct_memslot_fig *g_memslots_mon; // ds:0xe115
 struct struct_memslot_fig *g_memslots_wfig; // ds:0xe119
 struct struct_memslot_fig *g_memslots_mfig; // ds:0xe11d
@@ -443,7 +443,7 @@ void read_sound_cfg(void)
 		char question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
 		char opt1[] = "AUDIO-CD";
 		char opt2[] = "MIDI";
-		signed short answer;
+		signed int answer;
 
 		g_textbox_width = 3;
 		do {
@@ -566,7 +566,7 @@ static uint8_t* read_music_driver(const char* fname)
 		ptr = (uint32_t)g_ail_music_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((uint8_t*)ptr);
-		_read(handle, (uint8_t*)buf, (unsigned short)len);
+		_read(handle, buf, len);
 		_close(handle);
 		return buf;
 	}
@@ -577,7 +577,7 @@ static uint8_t* read_music_driver(const char* fname)
 static signed int prepare_midi_playback(const signed int sequence)
 {
 #if defined(__BORLANDC__)
-	unsigned short l_si;
+	uint16_t l_si;
 	signed int bank;
 	signed int patch;
 	uint8_t* ptr;
@@ -586,7 +586,7 @@ static signed int prepare_midi_playback(const signed int sequence)
 
 		if ((g_ail_sequence = AIL_register_sequence(g_ail_music_driver_id, g_ail_midi_buffer, sequence, g_ail_state_table, 0)) != -1) {
 
-			while ( (l_si = AIL_timbre_request(g_ail_music_driver_id, g_ail_sequence)) != (unsigned short)-1)
+			while ( (l_si = AIL_timbre_request(g_ail_music_driver_id, g_ail_sequence)) != (uint16_t)-1)
 			{
 				bank = l_si >> 8;
 				patch = l_si & 0xff;
@@ -995,7 +995,7 @@ static uint8_t* read_digi_driver(const char *fname)
 		ptr = (uint32_t)g_ail_digi_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((uint8_t*)ptr);
-		_read(handle, (uint8_t*)buf, (unsigned short)len);
+		_read(handle, buf, len);
 		_close(handle);
 		return buf;
 	}
@@ -1058,7 +1058,7 @@ uint32_t get_readlength2(const signed int index)
  * \param   len         number of bytes to read
  * \return              number of bytes read
  */
-unsigned short read_archive_file(const signed int handle, uint8_t *buffer, uint16_t len)
+uint16_t read_archive_file(const signed int handle, uint8_t *buffer, uint16_t len)
 {
 	/* no need to read */
 	if (g_archive_file_remaining != 0) {
@@ -1347,13 +1347,13 @@ int32_t process_nvf_extraction(struct nvf_extract_desc *nvf)
  * to call interrupts. We use the one of DOSBox, which means, that we
  * put the values in the emulated registers, instead in a structure.
  */
-void mouse_action(unsigned short *p1, unsigned short *p2, unsigned short *p3, unsigned short *p4, unsigned short *p5)
+static void mouse_action(int16_t *p1, int16_t *p2, int16_t *p3, int16_t *p4, int16_t *p5)
 {
 #if defined(__BORLANDC__)
 	struct SREGS sregs;
 	union REGS wregs;
 
-	if (*(signed short*)p1 >= 0) {
+	if (*p1 >= 0) {
 
 		wregs.x.ax = *p1;
 		wregs.x.bx = *p2;
@@ -1400,12 +1400,12 @@ void mouse_action(unsigned short *p1, unsigned short *p2, unsigned short *p3, un
 #if defined(__BORLANDC__)
 void interrupt mouse_isr(void)
 {
-	signed short l_si = _AX;
-	unsigned short l1;
-	unsigned short l3;
-	unsigned short l4;
-	unsigned short l5;
-	unsigned short l6;
+	int16_t l_si = _AX;
+	int16_t l1;
+	int16_t l3;
+	int16_t l4;
+	int16_t l5;
+	int16_t l6;
 
 	if (!g_mouse_locked) {
 
@@ -1489,13 +1489,13 @@ void mouse_init(void)
 	if (g_have_mouse == 2) {
 
 #if defined(__BORLANDC__)
-		unsigned short p1, p2, p3, p4, p5;
+		int16_t l1, l2, l3, l4, l5;
 
-		p1 = 0;
+		l1 = 0;
 
-		mouse_action(&p1, &p2, &p3, &p4, &p5);
+		mouse_action(&l1, &l2, &l3, &l4, &l5);
 
-		if (p1 == 0) {
+		if (l1 == 0) {
 			g_have_mouse = 0;
 		}
 #endif
@@ -1506,11 +1506,11 @@ void mouse_init(void)
 #if defined(__BORLANDC__)
 		if (g_have_mouse == 2) {
 
-			p1 = 4;
-			p3 = g_mouse_posx;
-			p4 = g_mouse_posy;
+			l1 = 4;
+			l3 = g_mouse_posx;
+			l4 = g_mouse_posy;
 
-			mouse_action(&p1, &p2, &p3, &p4, &p5);
+			mouse_action(&l1, &l2, &l3, &l4, &l5);
 
 			mouse_irq_init(0x1f, (unsigned char*)&mouse_isr);
 		}
@@ -1526,9 +1526,9 @@ void disable_mouse(void)
 }
 
 #if defined(__BORLANDC__)
-void mouse_get_button_press_info(unsigned short *a1, unsigned short *a2, unsigned short *a3, unsigned short *a4)
+void mouse_get_button_press_info(int16_t *a1, int16_t *a2, int16_t *a3, int16_t *a4)
 {
-	unsigned short tmp;
+	int16_t tmp;
 
 	*a1 = 5;
 
@@ -1540,13 +1540,13 @@ void call_mouse_isr(void)
 	mouse_isr();
 }
 
-void mouse_irq_init(signed short irq_no, void interrupt *(isr))
+void mouse_irq_init(const int16_t irq_no, void interrupt *(isr))
 {
-	unsigned short l1;
-	unsigned short l3;
-	unsigned short l4;
-	unsigned short l5;
-	unsigned short l6;
+	int16_t l1;
+	int16_t l3;
+	int16_t l4;
+	int16_t l5;
+	int16_t l6;
 
 	l1 = 12;
 	l4 = irq_no;
@@ -1567,11 +1567,11 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 void mouse_reset_ehandler(void)
 {
 #if defined(__BORLANDC__)
-	unsigned short l1;
-	unsigned short l2;
-	unsigned short l3;
-	unsigned short l4;
-	unsigned short l5;
+	int16_t l1;
+	int16_t l2;
+	int16_t l3;
+	int16_t l4;
+	int16_t l5;
 
 	setvect(0x78, g_mouse_handler_bak);
 
@@ -1595,11 +1595,11 @@ void mouse_reset_ehandler(void)
 void mouse_move_cursor(const signed int x, const signed int y)
 {
 #if defined(__BORLANDC__)
-	unsigned short l1 = 4;
-	unsigned short l3;
-	unsigned short l4 = x;
-	unsigned short l5 = y;
-	unsigned short l6;
+	int16_t l1 = 4;
+	int16_t l3;
+	int16_t l4 = x;
+	int16_t l5 = y;
+	int16_t l6;
 
 	mouse_action(&l1, &l3, &l4, &l5, &l6);
 #endif
@@ -1607,25 +1607,25 @@ void mouse_move_cursor(const signed int x, const signed int y)
 
 #if defined(__BORLANDC__)
 /* unused */
-void mouse_setGMask(const unsigned int h_spot, const unsigned int v_spot, signed short a3, signed short a4)
+static void mouse_setGMask(const uint16_t h_spot, const uint16_t v_spot, uint16_t a3, uint16_t a4)
 {
-	unsigned short l1 = 9;
-	unsigned short l3 = h_spot;
-	unsigned short l4 = v_spot;
-	unsigned short l5 = a3;
-	unsigned short l6 = a4;
+	int16_t l1 = 9;
+	int16_t l3 = h_spot;
+	int16_t l4 = v_spot;
+	int16_t l5 = a3;
+	int16_t l6 = a4;
 
 	mouse_action(&l1, &l3, &l4, &l5, &l6);
 }
 
 /* unused */
-void mouse_setCRTpage(const unsigned int page)
+static void mouse_setCRTpage(const uint16_t page)
 {
-	unsigned short l1 = 29;
-	unsigned short l3 = page;
-	unsigned short l4;
-	unsigned short l5;
-	unsigned short l6;
+	int16_t l1 = 29;
+	int16_t l3 = page;
+	int16_t l4;
+	int16_t l5;
+	int16_t l6;
 
 	mouse_action(&l1, &l3, &l4, &l5, &l6);
 }
@@ -3633,8 +3633,8 @@ void timewarp(const int32_t time)
 	 * For example, hour_new - hour_old == 1 could mean that 0 or 1 full hours have been passed.
 	 *
 	 * Again, sloppy treatment of modular arithmetics. */
-	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(gs_day_timer / HOURS(1));
+	hour_old = timer_bak / HOURS(1);
+	hour_new = gs_day_timer / HOURS(1);
 
 	if (hour_old != hour_new) {
 		if (hour_new > hour_old) {
@@ -3707,14 +3707,12 @@ void timewarp_until_time_of_day(const int32_t time)
 #else
 	signed int hour_old;
 	signed int hour_new;
-	int32_t i;
+	int32_t i = 0;
 	signed int td_bak;
 	signed int j;
 	signed int hour_diff;
-	int32_t timer_bak;
+	int32_t timer_bak = gs_day_timer;
 
-	i = 0;
-	timer_bak = gs_day_timer;
 	td_bak = g_timers_disabled;
 	g_timers_disabled = 0;
 
@@ -3737,8 +3735,8 @@ void timewarp_until_time_of_day(const int32_t time)
 	sub_heal_staffspell_timers(i / MINUTES(5));
 	sub_light_timers(i / MINUTES(15));
 
-	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(gs_day_timer / HOURS(1));
+	hour_old = timer_bak / HOURS(1);
+	hour_new = gs_day_timer / HOURS(1);
 
 	/* Original-Bug 38: see above */
 	if (hour_old != hour_new) {
@@ -4039,10 +4037,8 @@ uint32_t swap_u32_unused(uint32_t v)
  */
 signed int alloc_EMS(const int32_t bytes)
 {
-	signed int handle;
-
 	/* calculate the number of needed EMS pages */
-	handle = (signed short)((bytes / 0x4000) + 1);
+	signed int handle = bytes / 0x4000 + 1;
 
 	/* check if enought EMS is free */
 	if (EMS_get_num_pages_unalloced() >= handle) {
@@ -4236,7 +4232,7 @@ signed int can_merge_group(void)
 	return retval;
 }
 
-unsigned short div16(const unsigned char val)
+uint16_t div16(const unsigned char val)
 {
 	return val >> 4;
 }
@@ -5579,7 +5575,7 @@ int main(int argc, char** argv)
 #if defined(__BORLANDC__)
 	randomize();
 
-	save_display_stat((uint8_t*)&g_video_page_bak);
+	save_display_stat(&g_video_page_bak);
 #endif
 
 	if (!init_memory()) {

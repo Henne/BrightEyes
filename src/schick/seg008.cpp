@@ -25,15 +25,15 @@ unsigned short swap_u16(unsigned short val)
 	return (val << 8) | (val >> 8);
 }
 
-void set_video_mode(signed short mode)
+void set_video_mode(int16_t mode)
 {
 }
 
-void set_video_page(signed short page)
+void set_video_page(int16_t page)
 {
 }
 
-void save_display_stat(uint8_t* p)
+void save_display_stat(int16_t* p)
 {
 }
 
