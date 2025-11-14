@@ -507,11 +507,11 @@ void level_up(const signed int hero_pos)
 	g_action = 0;
 	g_status_page_mode = 1;
 
-	for (i = 0; i < 86; i++) {
+	for (i = 0; i < (SP__TAIL + 1); i++) {
 		g_inc_spells_counter[i].tries = g_inc_spells_counter[i].incs = 0;
 	}
 
-	for (i = 0; i < 52; i++) {
+	for (i = 0; i < (TA__TAIL + 1); i++) {
 		g_inc_skills_counter[i].tries = g_inc_skills_counter[i].incs = 0;
 	}
 
