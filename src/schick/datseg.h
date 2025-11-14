@@ -1897,14 +1897,14 @@ extern signed short g_use_cdaudio_flag;		// ds:0xbcfd; seg002
 extern void interrupt far (*g_mouse_handler_bak)(...);	// ds:0xbcbd;
 #endif
 extern signed char g_freeze_timers;	// ds:0xbcda; seg002, seg004
-extern signed short g_map_townmark_state;	// ds:0xbcd8; seg002
-extern signed short g_spinlock_flag;	// ds:0xbcd6; seg002
+//extern signed int g_map_townmark_state;	// ds:0xbcd8; seg002
+//extern signed int g_spinlock_flag;	// ds:0xbcd6; seg002
 extern uint8_t  g_hero_splash_timer[7];	// ds:0xbccf; seg002
 extern unsigned char *g_splash_le;	// ds:0xbccb; seg002, seg028
 extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
-extern unsigned short g_sample_ad_length;	// ds:0xbc5a; seg002
+//extern unsigned short g_sample_ad_length;	// ds:0xbc5a; seg002
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */

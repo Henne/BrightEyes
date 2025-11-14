@@ -4,66 +4,26 @@ namespace M302de {
 
 #include "datseg.h"
 
-void play_music_file(signed short);
-void set_audio_track(uint16_t);
+void set_audio_track(const signed int);
 void sound_menu(void);
-/* static */
 void read_sound_cfg(void);
-void init_AIL(uint32_t);
+void init_AIL(const uint32_t);
 void exit_AIL(void);
-/* static */
-uint8_t* read_music_driver(uint8_t*);
-/* static */
-signed short prepare_midi_playback(signed short);
-/* static */
-signed short start_midi_playback(signed short);
-/* static */
-uint8_t* prepare_timbre(signed short, signed short);
-/* static */
-signed short load_midi_file(signed short);
-/* static */
-signed short do_load_midi_file(signed short);
-/* static */
-signed short load_music_driver(uint8_t*, signed short, signed short);
-/* static */
-void do_play_music_file(signed short);
-/* static */
-void stop_midi_playback(void);
 void start_midi_playback_IRQ(void);
-signed short have_mem_for_sound(void);
-void play_voc(signed short);
-void play_voc_delay(signed short);
+signed int have_mem_for_sound(void);
+void play_voc(const signed int);
+void play_voc_delay(const signed int);
 void alloc_voc_buffer(uint32_t);
-/* static */
-void free_voc_buffer(void);
-/* static */
-signed short read_new_voc_file(signed short);
-/* static */
-signed short read_voc_file(signed short);
 
-/* static */
-void SND_play_voc(signed short);
-/* static */
-void SND_stop_digi(void);
-/* static */
-void SND_set_volume(unsigned short);
-/* static */
-signed short load_digi_driver(uint8_t*, signed short, signed short, signed short);
-/* static */
-unsigned char* read_digi_driver(char*);
-
-//static
-signed short open_and_seek_dat(unsigned short);
-uint32_t get_readlength2(signed short);
+uint32_t get_readlength2(const signed int);
 unsigned short read_archive_file(const signed int, uint8_t *, uint16_t);
 void seek_archive_file(const signed int, int32_t, ...);
 signed int load_regular_file(const signed int);
 signed int load_archive_file(const signed int);
-signed int open_temp_file(const signed int);
-void copy_from_archive_to_temp(const signed int, const char*);
 void copy_file_to_temp(const char*, const char*);
 
 int32_t process_nvf_extraction(struct nvf_extract_desc *);
+
 #if defined(__BORLANDC__)
 void interrupt mouse_isr(void);
 #endif

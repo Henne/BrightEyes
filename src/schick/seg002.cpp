@@ -73,16 +73,16 @@ namespace M302de {
 #endif
 
 /* BSS Variables */
-unsigned char dummy;
-unsigned short g_sample_ad_length;		// ds:0xbc5a
+static unsigned char dummy;
+static uint16_t g_sample_ad_length;		// ds:0xbc5a
 struct sample_idx g_sample_ad_idx_entry;	// ds:0xbc5c
 unsigned char g_playmask_us;			// ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
 unsigned char g_gfxbuf_wait_keypress[100];	// ds:0xbc63
 unsigned char *g_splash_ae;			// ds:0xbcc7
 unsigned char *g_splash_le;			// ds:0xbccb
 uint8_t g_hero_splash_timer[7];			// ds:0xbccf
-signed short g_spinlock_flag;			// ds:0xbcd6
-signed short g_map_townmark_state;		// ds:0xbcd8
+static signed int g_spinlock_flag;		// ds:0xbcd6
+static signed int g_map_townmark_state;		// ds:0xbcd8
 signed char g_freeze_timers;			// ds:0xbcda
 
 #if defined(__BORLANDC__)
@@ -311,6 +311,23 @@ static inline int32_t readds(uint8_t *p)
 #endif
 
 /* static prototypes */
+static signed int prepare_midi_playback(const signed int);
+static uint8_t* prepare_timbre(const signed int, const signed int);
+static signed int do_load_midi_file(const signed int);
+static signed int load_music_driver(const char*, const signed int, int16_t);
+static void do_play_music_file(const signed int);
+static void stop_midi_playback(void);
+static void free_voc_buffer(void);
+static signed int read_voc_file(const signed int);
+static void SND_play_voc(const signed int);
+static void SND_stop_digi(void);
+static void SND_set_volume(const uint16_t);
+static signed int load_digi_driver(const char*, const signed int, int16_t, int16_t);
+static uint8_t* read_digi_driver(const char*);
+
+static signed int open_temp_file(const signed int);
+static void copy_from_archive_to_temp(const signed int, const char*);
+
 static void mouse_bg(void);
 static void mouse_cursor(void);
 static void game_loop(void);
@@ -324,8 +341,7 @@ static signed int check_hero_no3(const struct struct_hero *hero);
 static void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type);
 static signed int copy_protection(void);
 
-/* static */
-void play_music_file(signed short index)
+static void play_music_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_music_enabled != 0) {
@@ -334,7 +350,7 @@ void play_music_file(signed short index)
 #endif
 }
 
-void set_audio_track(uint16_t index)
+void set_audio_track(const signed int index)
 {
 #if defined(__BORLANDC__)
 	CD_check();
@@ -357,9 +373,7 @@ void set_audio_track(uint16_t index)
 
 void sound_menu(void)
 {
-	signed int answer;
-
-	answer = GUI_radio(g_snd_menu_title, 4,
+	const signed int answer = GUI_radio(g_snd_menu_title, 4,
 				g_snd_menu_radio1, g_snd_menu_radio2,
 				g_snd_menu_radio3, g_snd_menu_radio4);
 
@@ -408,10 +422,10 @@ void sound_menu(void)
 void read_sound_cfg(void)
 {
 #if defined(__BORLANDC__)
-	signed short midi_port;
-	signed short dummy;
-	signed short digi_port;
-	signed short digi_irq;
+	int16_t midi_port;
+	int16_t dummy;
+	int16_t digi_port;
+	int16_t digi_irq;
 	signed int handle;
 
 	/* try to open SOUND.CFG */
@@ -494,7 +508,7 @@ void read_sound_cfg(void)
 #endif
 }
 
-void init_AIL(uint32_t size)
+void init_AIL(const uint32_t size)
 {
 #if defined(__BORLANDC__)
 	if ((g_ail_midi_buffer = (uint8_t*)schick_alloc(size))) {
@@ -534,7 +548,7 @@ void exit_AIL(void)
 #endif
 }
 
-uint8_t* read_music_driver(uint8_t* fname)
+static uint8_t* read_music_driver(const char* fname)
 {
 #if defined(__BORLANDC__)
 	uint32_t len;
@@ -560,13 +574,12 @@ uint8_t* read_music_driver(uint8_t* fname)
 	return NULL;
 }
 
-/* static */
-signed short prepare_midi_playback(signed short sequence)
+static signed int prepare_midi_playback(const signed int sequence)
 {
 #if defined(__BORLANDC__)
 	unsigned short l_si;
-	signed short l_di;
-	signed short patch;
+	signed int bank;
+	signed int patch;
 	uint8_t* ptr;
 
 	if ((g_sample_ad_handle = load_archive_file(ARCHIVE_FILE_SAMPLE_AD)) != -1) {
@@ -575,11 +588,11 @@ signed short prepare_midi_playback(signed short sequence)
 
 			while ( (l_si = AIL_timbre_request(g_ail_music_driver_id, g_ail_sequence)) != (unsigned short)-1)
 			{
-				l_di = l_si >> 8;
+				bank = l_si >> 8;
 				patch = l_si & 0xff;
 
-				if ( (ptr = prepare_timbre(l_di, patch))) {
-					AIL_install_timbre(g_ail_music_driver_id, l_di, patch, ptr);
+				if ( (ptr = prepare_timbre(bank, patch))) {
+					AIL_install_timbre(g_ail_music_driver_id, bank, patch, ptr);
 					free(ptr);
 				}
 			}
@@ -594,8 +607,7 @@ signed short prepare_midi_playback(signed short sequence)
 	return 0;
 }
 
-/* static */
-signed short start_midi_playback(signed short seq)
+static signed int start_midi_playback(const signed int seq)
 {
 #if defined(__BORLANDC__)
 	if (prepare_midi_playback(seq)) {
@@ -607,8 +619,7 @@ signed short start_midi_playback(signed short seq)
 }
 
 
-/* static */
-uint8_t* prepare_timbre(signed short a1, signed short patch)
+static uint8_t* prepare_timbre(const signed int bank, const signed int patch)
 {
 #if defined(__BORLANDC__)
 	char *buf;
@@ -622,7 +633,7 @@ uint8_t* prepare_timbre(signed short a1, signed short patch)
 			return NULL;
 		}
 
-	} while ((g_sample_ad_idx_entry.bank != a1) || (g_sample_ad_idx_entry.patch != patch));
+	} while ((g_sample_ad_idx_entry.bank != bank) || (g_sample_ad_idx_entry.patch != patch));
 
 	seek_archive_file(g_sample_ad_handle, g_sample_ad_idx_entry.offset, 0);
 
@@ -630,7 +641,7 @@ uint8_t* prepare_timbre(signed short a1, signed short patch)
 
 	buf = schick_alloc(g_sample_ad_length);
 
-	*((unsigned short*)buf) = g_sample_ad_length;
+	*((uint16_t*)buf) = g_sample_ad_length;
 
 	read_archive_file(g_sample_ad_handle, buf + 2, g_sample_ad_length - 2);
 
@@ -640,14 +651,12 @@ uint8_t* prepare_timbre(signed short a1, signed short patch)
 #endif
 }
 
-/* static */
-signed short load_midi_file(signed short index)
+static signed int load_midi_file(const signed int index)
 {
 	return do_load_midi_file(index);
 }
 
-/* static */
-signed short do_load_midi_file(signed short index)
+static signed int do_load_midi_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	signed int handle;
@@ -661,8 +670,7 @@ signed short do_load_midi_file(signed short index)
 	return 0;
 }
 
-/* static */
-signed short load_music_driver(uint8_t* fname, signed short type, signed short port)
+static signed int load_music_driver(const char* fname, const signed int type, int16_t port)
 {
 #if defined(__BORLANDC__)
 	if (port && (g_ail_music_driver_buf = (uint8_t*)read_music_driver(fname)) &&
@@ -716,8 +724,7 @@ signed short load_music_driver(uint8_t* fname, signed short type, signed short p
 	return 0;
 }
 
-/* static */
-void do_play_music_file(signed short index)
+static void do_play_music_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3)) {
@@ -729,8 +736,7 @@ void do_play_music_file(signed short index)
 #endif
 }
 
-/* static */
-void stop_midi_playback(void)
+static void stop_midi_playback(void)
 {
 #if defined(__BORLANDC__)
 	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3))
@@ -754,7 +760,7 @@ void start_midi_playback_IRQ(void)
 }
 
 #if defined(__BORLANDC__)
-void cruft_1(void)
+static void cruft_1(void)
 /* This function is never called */
 {
 	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3))
@@ -763,7 +769,7 @@ void cruft_1(void)
 	}
 }
 
-void cruft_2(signed short volume)
+static void cruft_2(const signed int volume)
 /* This function is never called */
 {
 	if (!g_load_sound_driver) {
@@ -779,11 +785,11 @@ void cruft_2(signed short volume)
 }
 #endif
 
-signed short have_mem_for_sound(void)
+signed int have_mem_for_sound(void)
 {
 #if defined(__BORLANDC__)
 	int32_t size;
-	signed short retval;
+	signed int retval;
 	struct ffblk blk;
 
 	if (!findfirst(g_fname_sound_adv, &blk, 0)) {
@@ -817,7 +823,7 @@ signed short have_mem_for_sound(void)
 #endif
 }
 
-void play_voc(signed short index)
+void play_voc(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled && g_snd_effects_enabled) {
@@ -827,7 +833,7 @@ void play_voc(signed short index)
 #endif
 }
 
-void play_voc_delay(signed short index)
+void play_voc_delay(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled && g_snd_effects_enabled) {
@@ -850,8 +856,7 @@ void alloc_voc_buffer(uint32_t size)
 #endif
 }
 
-/* static */
-void free_voc_buffer(void)
+static void free_voc_buffer(void)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled != 0) {
@@ -870,7 +875,7 @@ void free_voc_buffer(void)
 #endif
 }
 
-signed short read_new_voc_file(signed short index)
+static signed int read_new_voc_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (AIL_VOC_playback_status(g_ail_digi_driver_id) == 2) {
@@ -886,7 +891,7 @@ signed short read_new_voc_file(signed short index)
 	return 0;
 }
 
-signed short read_voc_file(signed short index)
+static signed int read_voc_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	signed int handle;
@@ -900,7 +905,7 @@ signed short read_voc_file(signed short index)
 	return 0;
 }
 
-void SND_play_voc(signed short index)
+static void SND_play_voc(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
@@ -913,7 +918,7 @@ void SND_play_voc(signed short index)
 #endif
 }
 
-void SND_stop_digi(void)
+static void SND_stop_digi(void)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
@@ -922,7 +927,7 @@ void SND_stop_digi(void)
 #endif
 }
 
-void SND_set_volume(unsigned short volume)
+static void SND_set_volume(const uint16_t volume)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
@@ -936,11 +941,10 @@ void SND_set_volume(unsigned short volume)
 #endif
 }
 
-/* static */
-signed short load_digi_driver(uint8_t* fname, signed short type, signed short io, signed short irq)
+static signed int load_digi_driver(const char* fname, const signed int type, int16_t io, int16_t irq)
 {
 #if defined(__BORLANDC__)
-	if (io && (g_ail_digi_driver_buf = (uint8_t*)read_digi_driver(fname)) &&
+	if (io && (g_ail_digi_driver_buf = read_digi_driver(fname)) &&
 		((g_ail_digi_driver_id = AIL_register_driver(g_ail_digi_driver_buf)) != -1))
 	{
 
@@ -974,7 +978,7 @@ signed short load_digi_driver(uint8_t* fname, signed short type, signed short io
 	return 0;
 }
 
-unsigned char* read_digi_driver(char *fname)
+static uint8_t* read_digi_driver(const char *fname)
 {
 #if defined(__BORLANDC__)
 	uint32_t len;
@@ -1005,8 +1009,7 @@ unsigned char* read_digi_driver(char *fname)
  * \param   fileindex   the index of the file in SCHICK.DAT
  * \return              the filehandle or 0xffff.
  */
-/* static */
-signed short open_and_seek_dat(unsigned short fileindex)
+static signed int open_and_seek_dat(const uint16_t fileindex)
 {
 	uint32_t start;
 	uint32_t end;
@@ -1025,6 +1028,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 		/* read the start offset of the desired file */
 		_read(handle, (uint8_t*)&start, 4);
 
+		/* REMARK: could fail on the last file */
 		/* read the start offset of the next file */
 		_read(handle, (uint8_t*)&end, 4);
 
@@ -1041,7 +1045,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 	return handle;
 }
 
-uint32_t get_readlength2(signed short index)
+uint32_t get_readlength2(const signed int index)
 {
 	return index != -1 ? g_archive_file_length : 0;
 }
@@ -1125,7 +1129,7 @@ signed int load_archive_file(const signed int index)
 	return (index & 0x8000) ? open_temp_file(index & 0x7fff) : open_and_seek_dat(index);
 }
 
-signed int open_temp_file(const signed int index)
+static signed int open_temp_file(const signed int index)
 {
 	char tmppath[40];
 	signed int handle;
@@ -1151,7 +1155,7 @@ signed int open_temp_file(const signed int index)
 	return handle;
 }
 
-void copy_from_archive_to_temp(const signed int index, const char* fname)
+static void copy_from_archive_to_temp(const signed int index, const char* fname)
 {
 	signed int handle1;
 	signed int handle2;
@@ -1203,12 +1207,12 @@ void copy_file_to_temp(const char* src_file, const char* fname)
 
 int32_t process_nvf_extraction(struct nvf_extract_desc *nvf)
 {
-	signed short i;
+	signed int i;
 	uint32_t offs;
-	signed short pics;
-	signed short width;
-	signed short height;
-	signed short va;
+	signed int pics;
+	signed int width;
+	signed int height;
+	signed int va;
 	uint32_t p_size;
 	uint32_t retval;
 	signed char nvf_type;
