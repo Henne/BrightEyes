@@ -470,6 +470,12 @@ enum {
 };
 
 enum {
+	MERCHANT_WEAPONS = 1,
+	MERCHANT_HERBS = 2,
+	MERCHANT_GENERAL = 3
+};
+
+enum {
 	GAME_STATE_MAIN		= 0,
 	GAME_STATE_DEAD		= 1, /* all heroes dead */
 	GAME_STATE_UNKNOWN	= 2,

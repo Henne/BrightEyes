@@ -3005,7 +3005,7 @@ void sub_light_timers(const int32_t quarter)
 					if (hero_i->inventory[j].lighting_timer <= 0)
 					{
 						/* decrement item counter */
-						hero_i->num_inv_slots_used--;
+						hero_i->num_filled_inv_slots--;
 
 						/* subtract weight of a torch */
 						hero_i->load -= g_itemsdat[ITEM_FACKEL__LIT].weight;
@@ -4237,7 +4237,7 @@ uint16_t div16(const unsigned char val)
 	return val >> 4;
 }
 
-void select_with_mouse(signed int *item_pos, const struct shop_item *shop_item)
+void select_with_mouse(signed int *shop_pos, const struct shop_item *shop_item)
 /* This function is called in shops at sell/buy screens */
 {
 	signed int i;
@@ -4253,15 +4253,15 @@ void select_with_mouse(signed int *item_pos, const struct shop_item *shop_item)
 			(g_merchant_items_posy[i] + 17 >= g_mouse_posy) &&
 			(shop_item[i].item_id != 0))
 		{
-			*item_pos = i;
+			*shop_pos = i;
 			return;
 		}
 	}
 }
 
-void select_with_keyboard(signed int *item_pos, const struct shop_item *shop_item)
+void select_with_keyboard(signed int *shop_pos, const struct shop_item *shop_item)
 {
-	signed int pos = *item_pos;
+	signed int pos = *shop_pos;
 
 	if (g_action == ACTION_ID_UP) {
 
@@ -4311,7 +4311,7 @@ void select_with_keyboard(signed int *item_pos, const struct shop_item *shop_ite
 		}
 	}
 
-	*item_pos = pos;
+	*shop_pos = pos;
 }
 
 /**

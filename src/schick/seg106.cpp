@@ -157,7 +157,7 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 						memset((uint8_t*)&hero->inventory[inv_slot_2], 0, sizeof(inventory));
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Decrement the item counter */
-						hero->num_inv_slots_used--;
+						hero->num_filled_inv_slots--;
 #endif
 					} else {
 						if (!can_hero_use_item(hero, item_id_2)) {
@@ -217,7 +217,7 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 				memset(&hero->inventory[inv_slot_2], 0, sizeof(inventory));
 #ifdef M302de_ORIGINAL_BUGFIX
 				/* Decrement the item counter */
-				hero->num_inv_slots_used--;
+				hero->num_filled_inv_slots--;
 #endif
 			} else {
 
@@ -553,8 +553,8 @@ lab04:
 				hero1->load += item_weight2;
 
 				/* item counter */
-				hero1->num_inv_slots_used--;
-				hero2->num_inv_slots_used++;
+				hero1->num_filled_inv_slots--;
+				hero2->num_filled_inv_slots++;
 
 				/* special items */
 				if (item_id2 == ITEM_SICHEL__MAGIC) {
@@ -634,8 +634,8 @@ lab04:
 		hero1->load -= item1_desc->weight;
 
 		/* adjust item counter */
-		hero1->num_inv_slots_used--;
-		hero2->num_inv_slots_used++;
+		hero1->num_filled_inv_slots--;
+		hero2->num_filled_inv_slots++;
 
 		/* clear slot */
 		memset(&hero1->inventory[pos1], 0, sizeof(inventory));

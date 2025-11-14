@@ -76,9 +76,9 @@ void buy_screen(void)
 	signed int percent;
 	signed int percent_old = 100;
 	signed int l6 = 1;
-	signed int item_pos = 0;
+	signed int shop_pos = 0;
 	signed int done = 0;
-	signed int item = 0;
+	signed int shop_pos_page_offset = 0;
 	signed int l8;
 	signed int item_id;
 	struct c_str_5 fmt_h = g_buy_screen_str_money_h;
@@ -191,7 +191,7 @@ void buy_screen(void)
 
 				for (l_di = 0; l_di < 5; l_di++) {
 
-					l3 = 5 * items_x + l_di + item;
+					l3 = 5 * items_x + l_di + shop_pos_page_offset;
 
 					if ((j = g_buyitems[l3].item_id)) {
 
@@ -219,33 +219,33 @@ void buy_screen(void)
 
 			call_mouse();
 			l6 = 1;
-			item_pos = 0;
+			shop_pos = 0;
 			l8 = 0;
 		}
 
 		if (g_have_mouse == 2) {
-			select_with_mouse(&item_pos, &g_buyitems[item]);
+			select_with_mouse(&shop_pos, &g_buyitems[shop_pos_page_offset]);
 		} else {
-			select_with_keyboard(&item_pos, &g_buyitems[item]);
+			select_with_keyboard(&shop_pos, &g_buyitems[shop_pos_page_offset]);
 		}
 
 		g_action_table_secondary = &g_action_table_merchant[0];
 		handle_gui_input();
 		g_action_table_secondary = NULL;
 
-		if (l6 != item_pos || l15 != 0) {
+		if (l6 != shop_pos || l15 != 0) {
 
 			do_border(g_vga_memstart, array3.a[l6 / 5] - 1, array5.a[l6 % 5] - 1, array3.a[l6 / 5] + 16,
 					array5.a[l6 % 5] + 16, 0);
 
-			do_border(g_vga_memstart, array3.a[item_pos / 5] - 1, array5.a[item_pos % 5] - 1, array3.a[item_pos / 5] + 16,
-					array5.a[item_pos % 5] + 16, -1);
+			do_border(g_vga_memstart, array3.a[shop_pos / 5] - 1, array5.a[shop_pos % 5] - 1, array3.a[shop_pos / 5] + 16,
+					array5.a[shop_pos % 5] + 16, -1);
 
-			l6 = item_pos;
+			l6 = shop_pos;
 
 			clear_loc_line();
 
-			item_id = g_buyitems[item_pos + item].item_id;
+			item_id = g_buyitems[shop_pos + shop_pos_page_offset].item_id;
 
 			l4 = 0;
 
@@ -331,7 +331,7 @@ void buy_screen(void)
 				}
 			}
 
-			item_id = g_buyitems[item_pos + item].item_id;
+			item_id = g_buyitems[shop_pos + shop_pos_page_offset].item_id;
 			l16 = -1;
 			l17 = 0;
 
@@ -374,7 +374,7 @@ void buy_screen(void)
 						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
-					l9 = (int32_t)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
+					l9 = (int32_t)g_buyitems[shop_pos + shop_pos_page_offset].shop_price *	g_buyitems[shop_pos + shop_pos_page_offset].price_unit * l4;
 
 					if (l3 == 1 && price + l9 > p_money) {
 
@@ -416,16 +416,16 @@ void buy_screen(void)
 
 					l4 = 1;
 
-					if (g_itemsdat[g_buyitems[item_pos + item].item_id].flags.stackable) {
+					if (g_itemsdat[g_buyitems[shop_pos + shop_pos_page_offset].item_id].flags.stackable) {
 
-						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[item_pos + item].item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[shop_pos + shop_pos_page_offset].item_id, 0));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
 
 					if (l4 > 0) {
 
-						l9 = (int32_t)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
+						l9 = (int32_t)g_buyitems[shop_pos + shop_pos_page_offset].shop_price *	g_buyitems[shop_pos + shop_pos_page_offset].price_unit * l4;
 
 						if (price + l9 > p_money) {
 
@@ -438,7 +438,7 @@ void buy_screen(void)
 						} else {
 							price += l9;
 
-							g_buy_shopping_cart[nice].item_id = g_buyitems[item_pos + item].item_id;
+							g_buy_shopping_cart[nice].item_id = g_buyitems[shop_pos + shop_pos_page_offset].item_id;
 
 							g_buy_shopping_cart[nice].quantity = l4;
 
@@ -457,15 +457,15 @@ void buy_screen(void)
 			}
 		}
 
-		if (g_action == ACTION_ID_ICON_3 && item) {
+		if (g_action == ACTION_ID_ICON_3 && shop_pos_page_offset) {
 
 			l8 = 1;
-			item -= 15;
+			shop_pos_page_offset -= 15;
 
-		} else if (g_action == ACTION_ID_ICON_2 && g_buyitems[item + 15].item_id) {
+		} else if (g_action == ACTION_ID_ICON_2 && g_buyitems[shop_pos_page_offset + 15].item_id) {
 
 			l8 = 1;
-			item += 15;
+			shop_pos_page_offset += 15;
 		}
 
 
@@ -593,15 +593,15 @@ void buy_screen(void)
  *
  * \param   shop_ptr    pointer to the shop description
  * \param   hero        pointer to the hero
- * \param   item_pos    position of the item in the heroes inventory
+ * \param   inv_slot    position of the item in the heroes inventory
  * \param   shop_pos    position if the item in the sales array
  */
-void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_hero *hero, const signed int item_pos, const signed int shop_pos)
+void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_hero *hero, const signed int inv_slot, const signed int shop_pos)
 {
 	signed int item_id;
 	signed int sellable = 0;
 
-	item_id = hero->inventory[item_pos].item_id;
+	item_id = hero->inventory[inv_slot].item_id;
 
 	g_sellitems[shop_pos].item_id = item_id;
 
@@ -627,7 +627,7 @@ void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_
 		g_sellitems[shop_pos].shop_price = 0;
 		g_sellitems[shop_pos].price_unit = 1;
 
-	} else if (hero->inventory[item_pos].flags.broken || (hero->inventory[item_pos].rs_lost != 0))
+	} else if (hero->inventory[inv_slot].flags.broken || (hero->inventory[inv_slot].rs_lost != 0))
 	{
 		/* this item is broken or RS of an armor got degraded => 1 HELLER */
 		g_sellitems[shop_pos].shop_price = 1;
@@ -646,7 +646,7 @@ void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_
 		g_sellitems[shop_pos].price_unit = g_itemsdat[item_id].price_unit;
 	}
 
-	g_sellitems[shop_pos].item_pos = item_pos;
+	g_sellitems[shop_pos].inv_slot = inv_slot;
 }
 
 #if !defined(__BORLANDC__)

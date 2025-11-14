@@ -427,7 +427,7 @@ struct shop_item {
 	int16_t item_id;
 	int16_t shop_price;
 	int16_t price_unit;	/* 1 = HELLER, 10 = SILVER, otherwise DUCATS */
-	int8_t item_pos;
+	int8_t inv_slot;
 };
 
 struct struct_smith_repairitems {
@@ -458,7 +458,7 @@ struct inn_descr {		/* INNS and TAVERNS */
 
 struct shop_descr {
 	int8_t price_mod;
-	int8_t type;
+	int8_t type; /* according to enum MERCHANT_WEAPONS = 1, MERCHANT_HERBS = 2, MERCHANT_GENERAL = 3 */
 	int8_t sortiment;
 	int16_t extra_items[3];
 };

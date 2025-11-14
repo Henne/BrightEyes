@@ -699,7 +699,7 @@ void THO_academy(void)
 /* should be static */
 signed int academy_get_equal_item(const signed int price)
 {
-	signed int item_pos;
+	signed int inv_slot;
 	signed int retval;
 	signed int i;
 	int32_t p_money;
@@ -717,16 +717,16 @@ signed int academy_get_equal_item(const signed int price)
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
-				for (item_pos = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++) {
+				for (inv_slot = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++) {
 
-					if ((hero->inventory[item_pos].item_id != ITEM_NONE) && !hero->inventory[item_pos].flags.broken)
+					if ((hero->inventory[inv_slot].item_id != ITEM_NONE) && !hero->inventory[inv_slot].flags.broken)
 						/* remark: armor with degraded RS is accepted */
 					{
-						p_item = &g_itemsdat[hero->inventory[item_pos].item_id];
+						p_item = &g_itemsdat[hero->inventory[inv_slot].item_id];
 
 						if (p_item->price * p_item->price_unit >= price)
 						{
-							retval = hero->inventory[item_pos].item_id;
+							retval = hero->inventory[inv_slot].item_id;
 							break;
 						}
 					}
