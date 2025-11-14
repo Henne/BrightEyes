@@ -14,7 +14,7 @@
 namespace M302de {
 #endif
 
-static unsigned short EMS_installed(void)
+static signed int EMS_installed(void)
 {
 #if 0
 	unsigned char *IRQ_67;
@@ -47,7 +47,7 @@ static uint8_t* EMS_get_frame_ptr()
 	return NULL;
 }
 
-signed short EMS_get_num_pages_unalloced(void)
+signed int EMS_get_num_pages_unalloced(void)
 {
 #if 0
 	reg_ax = 0x04200;
@@ -60,7 +60,7 @@ signed short EMS_get_num_pages_unalloced(void)
 	return 0;
 }
 
-unsigned short EMS_alloc_pages(unsigned short pages)
+signed int EMS_alloc_pages(const int16_t pages)
 {
 #if 0
 	reg_ax = 0x4300;
@@ -74,31 +74,38 @@ unsigned short EMS_alloc_pages(unsigned short pages)
 	return 0;
 }
 
-unsigned short EMS_free_pages(unsigned short handle)
+int16_t EMS_free_pages(const int16_t handle)
 {
-#if 0
-	reg_ax = 0x4500;
-	reg_dx = handle;
-	CALLBACK_RunRealInt(0x67);
+#if defined(__BORLANDC__)
+	asm {
+		mov ax, 0x4500
+		mov dx, handle;
 
-	reg_ah = reg_al;
-	return reg_ax;
+		int 0x67
+
+		mov ah, al
+	}
+	return _AX;
 #else
 	return 0;
 #endif
 }
 
-unsigned short EMS_map_memory(unsigned short handle, unsigned short lpage, unsigned char ppage)
+int16_t EMS_map_memory(const int16_t handle, const int16_t lpage, const int16_t ppage)
 {
-#if 0
-	reg_ax = 0x4400;
-	reg_al = ppage;
-	reg_bx = lpage;
-	reg_dx = handle;
-	CALLBACK_RunRealInt(0x67);
+#if defined(__BORLANDC__)
+	asm {
+		mov ax, 0x4400
+		mov al, ppage
+		mov bx, lpage
+		mov dx, handle
 
-	reg_ah = reg_al;
-	return reg_ax;
+		int 0x67
+
+		mov ah, al
+	}
+
+	return _AX;
 #else
 	return 0;
 #endif
@@ -120,8 +127,8 @@ uint8_t* EMS_norm_ptr(uint8_t* p)
 #endif
 }
 
-unsigned short EMS_init() {
-
+signed short EMS_init(void)
+{
 	if (EMS_installed()) {
 		g_ems_frame_ptr = EMS_get_frame_ptr();
 		return 1;

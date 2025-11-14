@@ -4,12 +4,12 @@ namespace M302de {
 extern "C" {
 #endif
 
-signed short EMS_get_num_pages_unalloced(void);
-unsigned short EMS_alloc_pages(unsigned short);
-unsigned short EMS_free_pages(unsigned short);
-unsigned short EMS_map_memory(unsigned short, unsigned short, unsigned char);
+signed int EMS_get_num_pages_unalloced(void);
+signed int EMS_alloc_pages(const int16_t);
+int16_t EMS_free_pages(const int16_t);
+int16_t EMS_map_memory(const int16_t, const int16_t, const int16_t);
 uint8_t* EMS_norm_ptr(uint8_t*);
-unsigned short EMS_init();
+signed int EMS_init(void);
 
 #if !defined(__BORLANDC__)
 }
