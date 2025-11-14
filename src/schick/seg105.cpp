@@ -380,13 +380,17 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 		} else {
 
 			/* Original-Bug: may lead to problems when the slot counter is broken */
-			if (hero->num_inv_slots_used < NR_HERO_INVENTORY_SLOTS) {
+
+			/* The following check is pretty weak.
+			 * If the condition is true, we know that there is a free inventory slot.
+			 * But we need a free inventory slot **in the knapsack**, and that is not guaranteed. */
+			if (hero->num_filled_inv_slots < NR_HERO_INVENTORY_SLOTS) {
 
 				done = 0;
 
 				do {
 					/* Original-Bug: may lead to problems when the slot counter is broken */
-					if (hero->num_inv_slots_used < NR_HERO_INVENTORY_SLOTS) {
+					if (hero->num_filled_inv_slots < NR_HERO_INVENTORY_SLOTS) {
 
 						/* look for a free place : tricky */
 						inv_slot_2 = HERO_INVENTORY_SLOT_KNAPSACK_1 - 1;
@@ -406,7 +410,7 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 							}
 
 							/* increment slot counter */
-							hero->num_inv_slots_used++;
+							hero->num_filled_inv_slots++;
 
 							/* write item id */
 							hero->inventory[inv_slot_2].item_id = item_id;
@@ -558,8 +562,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 					hero->load -= p_item->weight * hero->inventory[inv_slot].quantity;
 
 					/* decrement slot counter */
-					/* Original-Bug? do we need to check if the item was equipped or in the knapsack? */
-					hero->num_inv_slots_used--;
+					hero->num_filled_inv_slots--;
 
 					/* clear the inv_slot */
 					memset(&hero->inventory[inv_slot], 0, sizeof(inventory));
@@ -577,7 +580,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 					}
 
 					/* decrement slot counter */
-					hero->num_inv_slots_used--;
+					hero->num_filled_inv_slots--;
 
 					/* subtract item weight */
 					hero->load -= p_item->weight;

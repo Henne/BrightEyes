@@ -864,7 +864,7 @@ void DNG_fight(void)
  */
 void DNG_waterbarrel(uint8_t *unit_ptr)
 {
-	signed int item_pos;
+	signed int inv_slot;
 	signed int l_di;
 	signed int answer;
 	signed int units_needed;
@@ -928,17 +928,17 @@ void DNG_waterbarrel(uint8_t *unit_ptr)
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead)
 				{
-					for (item_pos = hero_refilled = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++)
+					for (inv_slot = hero_refilled = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++)
 					{
-						if (hero->inventory[item_pos].item_id == ITEM_WASSERSCHLAUCH)
+						if (hero->inventory[inv_slot].item_id == ITEM_WASSERSCHLAUCH)
 						{
 							units_needed = 0;
 
-							if (hero->inventory[item_pos].flags.half_empty) {
+							if (hero->inventory[inv_slot].flags.half_empty) {
 
 								units_needed = 1;
 
-							} else if (hero->inventory[item_pos].flags.empty) {
+							} else if (hero->inventory[inv_slot].flags.empty) {
 
 								units_needed = 2;
 							}
@@ -948,7 +948,7 @@ void DNG_waterbarrel(uint8_t *unit_ptr)
 								hero_refilled = 1;
 
 								/* refill waterskin */
-								hero->inventory[item_pos].flags.half_empty = hero->inventory[item_pos].flags.empty = 0;
+								hero->inventory[inv_slot].flags.half_empty = hero->inventory[inv_slot].flags.empty = 0;
 
 								if (*unit_ptr <= units_needed) {
 

@@ -147,11 +147,11 @@ void add_item_to_shop(const struct shop_descr *shop, const signed int item_id, c
 void do_merchant(void)
 {
 	signed int l_si;
-	signed int item_pos;
+	signed int shop_pos;
 	signed int done = 0;
 	signed int answer;
 	signed int refresh;
-	signed int armor_pos;
+	signed int armor_shop_pos;
 	int32_t party_money;
 	struct shop_descr *shop;
 
@@ -159,20 +159,19 @@ void do_merchant(void)
 	/* Print merchant values */
 	const uint8_t typi = gs_current_typeindex;
 	const int8_t price = g_shop_descr_table[typi].price_mod;
-	const int8_t h_type = g_shop_descr_table[typi].type;
+	const int8_t merchant_type = g_shop_descr_table[typi].type;
 	const int8_t sortiment = g_shop_descr_table[typi].sortiment;
-	const char h_type0[] = "UNGUELTIG";
-	const char h_type1[] = "Waffen";
-	const char h_type2[] = "Kraeuter";
-	const char h_type3[] = "Kraemer";
-	const char *const h_str = (h_type == 1 ? h_type1 :
-					(h_type == 2 ? h_type2 :
-					(h_type == 3 ? h_type3 : h_type0)));
+	const char type_string_invalid[] = "UNGUELTIG";
+	const char type_string_weapons[] = "Waffen";
+	const char type_string_herbs[] = "Kraeuter";
+	const char type_string_general[] = "Kraemer";
+	const char *const h_str = (merchant_type == MERCHANT_WEAPONS ? type_string_weapons :
+					(merchant_type == MERCHANT_HERBS ? type_string_herbs :
+					(merchant_type == MERCHANT_GENERAL ? type_string_general : type_string_invalid)));
 
 	D1_INFO("Haendler-no: %2d / Haendlertyp: %s\n", typi, h_str);
 	D1_INFO("\tPreise: %3d%% [70, 180]\n", 100 + price);
 	D1_INFO("\tAuswahl: %2d [0, 18] (je kleiner der Wert, desto groesser die Auswahl)\n", sortiment);
-
 #endif
 
 	if ((gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) && gs_current_loctype != LOCTYPE_MARKET)
@@ -186,7 +185,7 @@ void do_merchant(void)
 
 	if (gs_merchant_kicked_flags[gs_current_typeindex]) {
 
-		if (g_shop_descr_table[gs_current_typeindex].type != 3) {
+		if (g_shop_descr_table[gs_current_typeindex].type != MERCHANT_GENERAL) {
 			talk_merchant();
 			leave_location();
 			return;
@@ -215,8 +214,8 @@ void do_merchant(void)
 	}
 
 	l_si = 1;
-	item_pos = 0;
-	armor_pos = 70;
+	shop_pos = 0;
+	armor_shop_pos = 70;
 
 	while (g_itemsdat[l_si].gfx != -1) {
 
@@ -224,24 +223,24 @@ void do_merchant(void)
 
 			if (g_itemsdat[l_si].flags.armor || g_itemsdat[l_si].flags.weapon) {
 
-				if (shop->type == 1) {
+				if (shop->type == MERCHANT_WEAPONS) {
 
 					add_item_to_shop(shop, l_si,
-						g_itemsdat[l_si].flags.weapon ? item_pos++ : armor_pos++);
+						g_itemsdat[l_si].flags.weapon ? shop_pos++ : armor_shop_pos++);
 				}
 
 			} else if (g_itemsdat[l_si].flags.herb_potion) {
 
-				if (shop->type == 2) {
+				if (shop->type == MERCHANT_HERBS) {
 
-					add_item_to_shop(shop, l_si, item_pos++);
+					add_item_to_shop(shop, l_si, shop_pos++);
 				}
 
 			} else {
 
-				if (shop->type == 3) {
+				if (shop->type == MERCHANT_GENERAL) {
 
-					add_item_to_shop(shop, l_si, item_pos++);
+					add_item_to_shop(shop, l_si, shop_pos++);
 				}
 			}
 		}
@@ -252,29 +251,29 @@ void do_merchant(void)
 	for (l_si = 0; l_si < 3; l_si++) {
 
 		if (shop->extra_items[l_si]) {
-			add_item_to_shop(shop, shop->extra_items[l_si], item_pos++);
+			add_item_to_shop(shop, shop->extra_items[l_si], shop_pos++);
 		}
 	}
 
-	if (shop->type == 1) {
+	if (shop->type == MERCHANT_WEAPONS) {
 
-		qsort((uint8_t*)g_buyitems, item_pos, 7, shop_compar);
-		qsort((uint8_t*)g_buyitems + 7 * 70, armor_pos - 70, 7, shop_compar);
+		qsort((uint8_t*)g_buyitems, shop_pos, 7, shop_compar);
+		qsort((uint8_t*)g_buyitems + 7 * 70, armor_shop_pos - 70, 7, shop_compar);
 
 		/* copy the rest */
-		for (l_si = 0; armor_pos - 70 > l_si; l_si++) {
+		for (l_si = 0; armor_shop_pos - 70 > l_si; l_si++) {
 
-			g_buyitems[item_pos + l_si] = g_buyitems[l_si + 70];
+			g_buyitems[shop_pos + l_si] = g_buyitems[l_si + 70];
 
 		}
 
 		/* cleanup */
-		for (l_si = item_pos + armor_pos - 70; l_si < 100; l_si++) {
+		for (l_si = shop_pos + armor_shop_pos - 70; l_si < 100; l_si++) {
 			g_buyitems[l_si].item_id = 0;
 		}
 
 	} else {
-		qsort((uint8_t*)g_buyitems, item_pos, 7, shop_compar);
+		qsort((uint8_t*)g_buyitems, shop_pos, 7, shop_compar);
 	}
 
 	while (done == 0 && !gs_merchant_offended_flags[gs_current_typeindex]) {
@@ -287,7 +286,7 @@ void do_merchant(void)
 
 			disable_ani();
 
-			load_ani(shop->type == 1 ? 15 : (shop->type == 2 ? 22 : 14));
+			load_ani(shop->type == MERCHANT_WEAPONS ? 15 : (shop->type == MERCHANT_HERBS ? 22 : 14));
 
 			init_ani(0);
 
@@ -392,9 +391,9 @@ void talk_merchant(void)
 	signed int tlk_id;
 
 	switch (g_shop_descr_table[gs_current_typeindex].type) {
-		case 1: tlk_id = 16; break;
-		case 2: tlk_id = 15; break;
-		case 3: tlk_id = 14; break;
+		case MERCHANT_WEAPONS: tlk_id = 16; break;
+		case MERCHANT_HERBS: tlk_id = 15; break;
+		case MERCHANT_GENERAL: tlk_id = 14; break;
 	}
 
 	do_random_talk(tlk_id, 0);

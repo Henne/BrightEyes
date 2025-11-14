@@ -94,18 +94,18 @@ signed int g_price_modificator; // ds:0xe3f6, price modificator for smith and se
  *
  * \param   smith   pointer to the smith description
  * \param   hero        pointer to the hero
- * \param   item_pos    the position of the item in the inventory
+ * \param   inv_slot    the position of the item in the inventory
  * \param   smith_pos   the position of the item in the repair list
  */
-void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, const signed int item_pos, const signed int smith_pos)
+void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, const signed int inv_slot, const signed int smith_pos)
 {
-	const signed int item_id = hero->inventory[item_pos].item_id;
+	const signed int item_id = hero->inventory[inv_slot].item_id;
 
 	g_sellitems[smith_pos].item_id = item_id;
 
 	if (g_itemsdat[item_id].flags.armor || g_itemsdat[item_id].flags.weapon) {
 
-		if (((struct struct_hero*)hero)->inventory[item_pos].flags.broken) {
+		if (((struct struct_hero*)hero)->inventory[inv_slot].flags.broken) {
 
 			g_sellitems[smith_pos].shop_price =
 				(g_itemsdat[item_id].price + g_itemsdat[item_id].price * smith->price_mod / 100) / 2;
@@ -119,7 +119,7 @@ void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, cons
 
 		} else {
 
-			if (hero->inventory[item_pos].rs_lost) {
+			if (hero->inventory[inv_slot].rs_lost) {
 
 				/* armor has degraded RS */
 
@@ -145,7 +145,7 @@ void add_item_to_smith(struct smith_descr *smith, struct struct_hero *hero, cons
 		g_sellitems[smith_pos].price_unit = 1;
 	}
 
-	g_sellitems[smith_pos].item_pos = item_pos;
+	g_sellitems[smith_pos].inv_slot = inv_slot;
 }
 
 /**
@@ -167,11 +167,11 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 	signed int percent_old = 100;
 	signed int item_id;
 	signed int l6;
-	signed int item_pos;
-	signed int done = 0;
-	signed int item = 0;
-	signed int l8;
 	signed int smith_pos;
+	signed int done = 0;
+	signed int smith_pos_page_offset = 0;
+	signed int l8;
+	signed int num_filled_inv_slots;
 	signed int l10 = 1;
 	signed int l11 = 1;
 	signed int hero_pos_old = 1;
@@ -260,20 +260,21 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 				if (l11 != 0) {
 
-					smith_pos = 0;
+					num_filled_inv_slots = 0;
 					for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
 						if (hero2->inventory[i].item_id != ITEM_NONE) {
-							add_item_to_smith(smith, hero2, i, smith_pos++);
+							add_item_to_smith(smith, hero2, i, num_filled_inv_slots++);
 						}
 					}
 
-					for (i = smith_pos; i < 23; i++) {
+					for (i = num_filled_inv_slots; i < NR_HERO_INVENTORY_SLOTS; i++) {
 						g_sellitems[i].item_id = 0;
 					}
+					// assert(num_filled_inv_slots == hero2->num_filled_inv_slots)
 
 					l11 = 0;
 					l6 = 1;
-					item_pos = item = l12 = 0;
+					smith_pos = smith_pos_page_offset = l12 = 0;
 					percent_old = 100;
 
 					do_fill_rect(g_vga_memstart, 26, 26, 105, 33, 0);
@@ -299,7 +300,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 					for (i = 0; i < 5; i++) {
 
-						answer = 5 * items_x + i + item;
+						answer = 5 * items_x + i + smith_pos_page_offset;
 
 						if ((j = g_sellitems[answer].item_id)) {
 
@@ -317,7 +318,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 							if (g_itemsdat[j].flags.stackable) {
 
-								if ((val = hero2->inventory[g_sellitems[answer].item_pos].quantity) > 1)
+								if ((val = hero2->inventory[g_sellitems[answer].inv_slot].quantity) > 1)
 								{
 									my_itoa(val, g_dtp2, 10);
 
@@ -340,7 +341,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 				call_mouse();
 				l6 = 1;
-				item_pos = 0;
+				smith_pos = 0;
 				l8 = 0;
 
 			}
@@ -350,12 +351,12 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 			g_action_table_secondary = NULL;
 
 			if (g_have_mouse == 2) {
-				select_with_mouse(&item_pos, &g_sellitems[item]);
+				select_with_mouse(&smith_pos, &g_sellitems[smith_pos_page_offset]);
 			} else {
-				select_with_keyboard(&item_pos, &g_sellitems[item]);
+				select_with_keyboard(&smith_pos, &g_sellitems[smith_pos_page_offset]);
 			}
 
-			if (l6 != item_pos) {
+			if (l6 != smith_pos) {
 
 				do_border(g_vga_memstart,
 					array3.a[l6 / 5] - 1,
@@ -365,17 +366,17 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 					0);
 
 				do_border(g_vga_memstart,
-					array3.a[item_pos / 5] - 1,
-					array5.a[item_pos % 5] - 1,
-					array3.a[item_pos / 5] + 16,
-					array5.a[item_pos % 5] + 16,
+					array3.a[smith_pos / 5] - 1,
+					array5.a[smith_pos % 5] - 1,
+					array3.a[smith_pos / 5] + 16,
+					array5.a[smith_pos % 5] + 16,
 					-1);
 
-				l6 = item_pos;
+				l6 = smith_pos;
 
 				clear_loc_line();
 
-				GUI_print_loc_line(GUI_name_singular(g_itemsname[g_sellitems[item_pos + item].item_id]));
+				GUI_print_loc_line(GUI_name_singular(g_itemsname[g_sellitems[smith_pos + smith_pos_page_offset].item_id]));
 			}
 
 			if (g_mouse_rightclick_event  || g_action == ACTION_ID_PAGE_UP) {
@@ -387,26 +388,26 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 				}
 			}
 
-			if (g_action == ACTION_ID_ICON_3 && item) {
+			if (g_action == ACTION_ID_ICON_3 && smith_pos_page_offset) {
 
 				l8 = 1;
-				item -= 15;
+				smith_pos_page_offset -= 15;
 
-			} else if (g_action == ACTION_ID_ICON_2 && g_sellitems[item + 15].item_id) {
+			} else if (g_action == ACTION_ID_ICON_2 && g_sellitems[smith_pos_page_offset + 15].item_id) {
 
 				l8 = 1;
-				item += 15;
+				smith_pos_page_offset += 15;
 			}
 
 			if (g_action == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK || g_action == ACTION_ID_ICON_1 || g_action == ACTION_ID_RETURN) {
 				/* Is ACTION == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK possible at all?
 				 * ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK can be written to ACTION in buy_screen(), but where should it show up in repair_screen()?? */
 
-				item_id = g_sellitems[item_pos + item].item_id;
+				item_id = g_sellitems[smith_pos + smith_pos_page_offset].item_id;
 
 				p_money = get_party_money();
 
-				if (g_sellitems[item_pos + item].shop_price == 0) {
+				if (g_sellitems[smith_pos + smith_pos_page_offset].shop_price == 0) {
 
 					GUI_output(get_ttx(487));
 
@@ -417,8 +418,8 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 					while (l12 == 0 && j < 3) {
 
 
-						price = (g_sellitems[item_pos + item].shop_price
-							* g_sellitems[item_pos + item].price_unit * g_price_modificator) / 4;
+						price = (g_sellitems[smith_pos + smith_pos_page_offset].shop_price
+							* g_sellitems[smith_pos + smith_pos_page_offset].price_unit * g_price_modificator) / 4;
 
 						make_valuta_str(g_text_output_buf, price);
 
@@ -479,7 +480,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 									GUI_output(get_ttx(491));
 								}
 
-								drop_item(hero2, g_sellitems[item_pos + item].item_pos, 1);
+								drop_item(hero2, g_sellitems[smith_pos + smith_pos_page_offset].inv_slot, 1);
 								p_money -= price;
 								set_party_money(p_money);
 
