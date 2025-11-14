@@ -85,7 +85,7 @@ signed int g_items_noplural[23] = {
 	ITEM_HYLAILER_FEUER,
 	-1
 }; // ds:0x0270
-signed short g_items_pluralwords[7] = {
+const int16_t g_items_pluralwords[7] = {
 	ITEM_DIETRICHE,
 	ITEM_SCHUHE,
 	ITEM_STIEFEL,
@@ -351,7 +351,7 @@ signed char g_item_name_genders[254] = {
 	GENDER_FEMININE,
 }; // ds:0x02ac
 
-signed short g_forbidden_item_ids_gaukler[19] = {
+const int16_t g_forbidden_item_ids_gaukler[19] = {
 	ITEM_KETTENHEMD,
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
@@ -372,7 +372,7 @@ signed short g_forbidden_item_ids_gaukler[19] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x03aa, array terminated by -1
-signed short g_forbidden_item_ids_jaeger[19] = {
+const int16_t g_forbidden_item_ids_jaeger[19] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -393,7 +393,7 @@ signed short g_forbidden_item_ids_jaeger[19] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x03d0, array terminated by -1
-signed short g_forbidden_item_ids_krieger[12] = {
+const int16_t g_forbidden_item_ids_krieger[12] = {
 	ITEM_ANGSTGIFT,
 	ITEM_SHURINKNOLLEKNOLLENGIFT,
 	ITEM_LOTUSGIFT,
@@ -407,7 +407,7 @@ signed short g_forbidden_item_ids_krieger[12] = {
 	ITEM_KUKRIS_MENGBILAR,
 	-1
 }; // ds:0x03f6, array terminated by -1
-signed short g_forbidden_item_ids_streuner[18] = {
+const int16_t g_forbidden_item_ids_streuner[18] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -427,7 +427,7 @@ signed short g_forbidden_item_ids_streuner[18] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x040e, array terminated by -1
-signed short g_forbidden_item_ids_thorwaler[12] = {
+const int16_t g_forbidden_item_ids_thorwaler[12] = {
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
 	ITEM_ZWEIHAENDER,
@@ -441,7 +441,7 @@ signed short g_forbidden_item_ids_thorwaler[12] = {
 	ITEM_ZWEIHAENDER__MAGIC,
 	-1
 }; // ds:0x0432, array terminated by -1
-signed short g_forbidden_item_ids_zwerg[9] = {
+const int16_t g_forbidden_item_ids_zwerg[9] = {
 	ITEM_RONDRAKAMM,
 	ITEM_DOPPELKHUNCHOMER,
 	ITEM_ZWEIHAENDER,
@@ -452,7 +452,7 @@ signed short g_forbidden_item_ids_zwerg[9] = {
 	ITEM_DRESCHFLEGEL,
 	-1
 }; // ds:0x044a, array terminated by -1
-signed short g_forbidden_item_ids_hexe[64] = {
+const int16_t g_forbidden_item_ids_hexe[64] = {
 	ITEM_SPEER,
 	ITEM_KNUEPPEL,
 	ITEM_SCHWERT,
@@ -517,7 +517,7 @@ signed short g_forbidden_item_ids_hexe[64] = {
 	ITEM_SILBERSTREITKOLBEN,
 	ITEM_SPEER__MAGIC,
 	-1 }; // ds:0x045c, array terminated by -1
-signed short g_forbidden_item_ids_druide[57] = {
+const int16_t g_forbidden_item_ids_druide[57] = {
 	ITEM_SPEER,
 	ITEM_SCHWERT,
 	ITEM_SAEBEL,
@@ -576,7 +576,7 @@ signed short g_forbidden_item_ids_druide[57] = {
 	ITEM_SPEER__MAGIC,
 	-1
 }; // ds:0x04dc, array terminated by -1
-signed short g_forbidden_item_ids_magier[64] = {
+const int16_t g_forbidden_item_ids_magier[64] = {
 	ITEM_SPEER,
 	ITEM_KNUEPPEL,
 	ITEM_SCHWERT,
@@ -642,7 +642,7 @@ signed short g_forbidden_item_ids_magier[64] = {
 	ITEM_SPEER__MAGIC,
 	-1
 }; // ds:0x054e, array terminated by -1
-signed short g_forbidden_item_ids_auelf[15] = {
+const int16_t g_forbidden_item_ids_auelf[15] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -659,7 +659,7 @@ signed short g_forbidden_item_ids_auelf[15] = {
 	ITEM_ZWEIHAENDER__MAGIC,
 	-1
 }; // ds:0x05ce, array terminated by -1
-signed short g_forbidden_item_ids_firnelf[19] = {
+const int16_t g_forbidden_item_ids_firnelf[19] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -680,7 +680,7 @@ signed short g_forbidden_item_ids_firnelf[19] = {
 	ITEM_KETTENHEMD__MAGIC,
 	-1
 }; // ds:0x05ec, array terminated by -1
-signed short g_forbidden_item_ids_waldelf[19] = {
+const int16_t g_forbidden_item_ids_waldelf[19] = {
 	ITEM_STREITAXT,
 	ITEM_BASTARDSCHWERT,
 	ITEM_HELLEBARDE,
@@ -702,7 +702,7 @@ signed short g_forbidden_item_ids_waldelf[19] = {
 	-1
 }; // ds:0x0612, array terminated by -1
 
-signed short *g_forbidden_item_ids_table[12] = {
+const int16_t *g_forbidden_item_ids_table[12] = {
     g_forbidden_item_ids_gaukler,
     g_forbidden_item_ids_jaeger,
     g_forbidden_item_ids_krieger,
@@ -905,7 +905,7 @@ const struct usable_item_descr g_usable_items_table[14] = {
 
 }; // ds:0x08a9
 
-signed short g_weapon_poisons[10] = {
+const int16_t g_weapon_poisons[10] = {
 	/* poisons, can be applied to a weapon */
 	ITEM_SHURINKNOLLEKNOLLENGIFT,
 	ITEM_ARAXGIFT,
@@ -918,14 +918,14 @@ signed short g_weapon_poisons[10] = {
 	ITEM_KROETENSCHEMELGIFT,
 	-1
 }; // ds:0x08d3
-signed short g_herbs_toxic[5] = {
+const int16_t g_herbs_toxic[5] = {
 	ITEM_SHURINKNOLLE,
 	ITEM_ALRAUNE,
 	ITEM_LOTUSBLUETE,
 	ITEM_EITRIGER_KROETENSCHEMEL,
 	-1
 }; // ds:0x08e7
-signed short g_herbs_uneatable[7] = {
+const int16_t g_herbs_uneatable[7] = {
 	ITEM_ILMENBLATT,
 	ITEM_FINAGEBAEMCHEN,
 	ITEM_JORUGAWURZEL,
@@ -934,7 +934,7 @@ signed short g_herbs_uneatable[7] = {
 	ITEM_DONFSTENGEL,
 	-1
 }; // ds:0x08f1
-signed short g_elixir_potions[8] = {
+const int16_t g_elixir_potions[8] = {
 	ITEM_MU_ELIXIER,
 	ITEM_KL_ELIXIER,
 	ITEM_CH_ELIXIER,
@@ -944,7 +944,7 @@ signed short g_elixir_potions[8] = {
 	ITEM_KK_ELIXIER,
 	-1
 }; // ds:0x08ff
-signed short g_bad_elixirs[8] = {
+const int16_t g_bad_elixirs[8] = {
 	ITEM_MU_ELIXIER__BAD,
 	ITEM_KL_ELIXIER__BAD,
 	ITEM_CH_ELIXIER__BAD,
@@ -954,7 +954,7 @@ signed short g_bad_elixirs[8] = {
 	ITEM_KK_ELIXIER__BAD,
 	-1
 }; // ds:0x090f
-signed short g_attack_items[3] = {
+const int16_t g_attack_items[3] = {
 	ITEM_HYLAILER_FEUER,
 	ITEM_MIASTHMATICUM,
 	-1
@@ -1155,7 +1155,7 @@ const struct spells_index g_spells_index2[4] = {
 	{ 0x4c, 0x0a }
 }; // ds:0x0d13
 
-const signed short g_magic_school_antimagie_spell_ids[7] = {
+const signed int g_magic_school_antimagie_spell_ids[7] = {
 	SP_BEHERRSCHUNG_BRECHEN,
 	SP_DESTRUCTIBO_ARCANITAS,
 	SP_GARDIANUM_PARADEI,
@@ -1164,7 +1164,7 @@ const signed short g_magic_school_antimagie_spell_ids[7] = {
 	SP_ODEM_ARCANUM,
 	-1
 }; // ds:0x0d1b, array terminated by -1
-const signed short g_magic_school_beherrschung_spell_ids[6] = {
+const signed int g_magic_school_beherrschung_spell_ids[6] = {
 	SP_BANNBALADIN,
 	SP_HORRIPHOBUS,
 	SP_RESPONDAMI_VERITAR,
@@ -1172,7 +1172,7 @@ const signed short g_magic_school_beherrschung_spell_ids[6] = {
 	SP_SENSIBAR_WAHR_UND_KLAR,
 	-1
 }; // ds:0x0d29, array terminated by -1
-const signed short g_magic_school_beschwoerung_spell_ids[7] = {
+const signed int g_magic_school_beschwoerung_spell_ids[7] = {
 	SP_FUROR_BLUT_UND_SULPHURDAMPF,
 	SP_GEISTER_AUSTREIBEN,
 	SP_HEPTAGON_UND_KROETENEI,
@@ -1181,7 +1181,7 @@ const signed short g_magic_school_beschwoerung_spell_ids[7] = {
 	SP_NEKROPATHIA_MODERND_LEICH,
 	-1
 }; // ds:0x0d35, array terminated by -1
-const signed short g_magic_school_bewegung_spell_ids[6] = {
+const signed int g_magic_school_bewegung_spell_ids[6] = {
 	SP_AXXELERATUS_BLITZGESCHWIND,
 	SP_FORAMEN_FORAMINOR,
 	SP_MOTORICUS_MOTILITICH,
@@ -1189,7 +1189,7 @@ const signed short g_magic_school_bewegung_spell_ids[6] = {
 	SP_TRANSVERSALIS_TELEPORT,
 	-1
 }; // ds:0x0d43, array terminated by -1
-const signed short g_magic_school_heilung_spell_ids[6] = {
+const signed int g_magic_school_heilung_spell_ids[6] = {
 	SP_BALSAM_SALABUNDE,
 	SP_KLARUM_PURUM_KRAEUTERSUD,
 	SP_RUHE_KOERPER_RUHE_GEIST,
@@ -1197,7 +1197,7 @@ const signed short g_magic_school_heilung_spell_ids[6] = {
 	SP_MU_STEIGERN,
 	-1
 }; // ds:0x0d4f, array terminated by -1
-const signed short g_magic_school_hellsicht_spell_ids[8] = {
+const signed int g_magic_school_hellsicht_spell_ids[8] = {
 	SP_ADLERAUG_UND_LUCHSENOHR,
 	SP_ANALUES_ARCANSTRUKTUR,
 	SP_EXPOSAMI_CREATUR,
@@ -1207,7 +1207,7 @@ const signed short g_magic_school_hellsicht_spell_ids[8] = {
 	SP_SENSIBAR_WAHR_UND_KLAR,
 	-1
 }; // ds:0x0d5b, array terminated by -1
-const signed short g_magic_school_kampf_spell_ids[8] = {
+const signed int g_magic_school_kampf_spell_ids[8] = {
 	SP_BLITZ_DICH_FIND,
 	SP_EISENROST_UND_GRUENER_SPAN,
 	SP_FULMINICTUS_DONNERKEIL,
@@ -1217,7 +1217,7 @@ const signed short g_magic_school_kampf_spell_ids[8] = {
 	SP_ARMATRUTZ,
 	-1
 }; // ds:0x0d6b, array terminated by -1
-const signed short g_magic_school_verwandlung_spell_ids[6] = {
+const signed int g_magic_school_verwandlung_spell_ids[6] = {
 	SP_ADLER_WOLF_UND_HAMMERHAI,
 	SP_ARMATRUTZ,
 	SP_PARALUE_PARALEIN,
@@ -1225,7 +1225,7 @@ const signed short g_magic_school_verwandlung_spell_ids[6] = {
 	SP_VISIBILI_VANITAR,
 	-1
 }; // ds:0x0d7b, array terminated by -1
-const signed short g_magic_school_veraenderung_spell_ids[8] = {
+const signed int g_magic_school_veraenderung_spell_ids[8] = {
 	SP_ABVENENUM_PEST_UND_GALLE,
 	SP_BRENNE_TOTER_STOFF,
 	SP_CLAUDIBUS_CLAVISTIBOR,
@@ -1235,8 +1235,8 @@ const signed short g_magic_school_veraenderung_spell_ids[8] = {
 	SP_SILENTIUM_SILENTILLE,
 	-1
 }; // ds:0x0d87, array terminated by -1
-//long g_magic_schools_table[9] = { 0x14fc0d1b, 0x14fc0d29, 0x14fc0d35, 0x14fc0d43, 0x14fc0d4f, 0x14fc0d5b, 0x14fc0d6b, 0x14fc0d7b, 0x14fc0d87 }; // ds:0x0d97; uint8_t*
-const signed short* g_magic_schools_table[9] = {
+   //
+const signed int* g_magic_schools_table[9] = {
 	g_magic_school_antimagie_spell_ids,
 	g_magic_school_beherrschung_spell_ids,
 	g_magic_school_beschwoerung_spell_ids,
@@ -1833,7 +1833,7 @@ const struct point8s g_gfxtab_offsets_main[125][5] = {
 	{ { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
 	{ { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
 }; // ds:0x1531, ; by viewdir+dead
-signed short g_nvftab_figures_dead[22] = { 0x0000, 0x002f, 0x0033, 0x002f, 0x0033, 0x002f, 0x002d, 0x003e, 0x0042, 0x0031, 0x002f, 0x0000, 0x002f, 0x0038, 0x0038, 0x0033, 0x0038, 0x002d, 0x003e, 0x0044, 0x0031, 0x0038 }; // ds:0x1a13
+const signed int g_nvftab_figures_dead[22] = { 0x0000, 0x002f, 0x0033, 0x002f, 0x0033, 0x002f, 0x002d, 0x003e, 0x0042, 0x0031, 0x002f, 0x0000, 0x002f, 0x0038, 0x0038, 0x0033, 0x0038, 0x002d, 0x003e, 0x0044, 0x0031, 0x0038 }; // ds:0x1a13
 unsigned char g_unkn_005[38] = { 0x00, 0x00, 0x2c, 0x00, 0x38, 0x00, 0x38, 0x00, 0x3c, 0x00, 0x32, 0x00, 0x38, 0x00, 0x48, 0x00, 0x38, 0x00, 0x2c, 0x00, 0x30, 0x00, 0x44, 0x00, 0x3c, 0x00, 0x38, 0x00, 0x3c, 0x00, 0x40, 0x00, 0x48, 0x00, 0x3c, 0x00, 0x48, 0x00 }; // ds:0x1a3f
 short g_gfx_ani_descriptions_01[65] = { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x000a, 0x000b, 0x0018, 0x0019, 0x001a, 0x001b, 0x0028, 0x0029, 0x002a, 0x002b, 0x0044, 0x004d, 0x004e, 0x004f, 0x0050, 0x005b, 0x005c, 0x005d, 0x005e, -0x0001, -0x0001, -0x0001, -0x0001, 0x00a0, 0x00a1, 0x00a2, 0x00a3, -0x0001, -0x0001, -0x0001, -0x0001, 0x006e, 0x006f, 0x0070, 0x0071, 0x007a, 0x007b, 0x007c, 0x007d, 0x0088, 0x0089, 0x008a, 0x008b, 0x0098, 0x0099, 0x009a, 0x009b, 0x00a8, 0x00a9, 0x00aa, 0x00ab, 0x00b8, 0x00b9, 0x00ba, 0x00bb }; // ds:0x1a65
 short g_gfx_ani_descriptions_02[65] = { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x000a, 0x000b, 0x0018, 0x0019, 0x001a, 0x001b, 0x002c, 0x002d, 0x002e, 0x002f, 0x0045, 0x004d, 0x004e, 0x004f, 0x0050, 0x005b, 0x005c, 0x005d, 0x005e, -0x0001, -0x0001, -0x0001, -0x0001, 0x00a0, 0x00a1, 0x00a2, 0x00a3, -0x0001, -0x0001, -0x0001, -0x0001, 0x006e, 0x006f, 0x0070, 0x0071, 0x007a, 0x007b, 0x007c, 0x007d, 0x0088, 0x0089, 0x008a, 0x008b, 0x0098, 0x0099, 0x009a, 0x009b, 0x00a8, 0x00a9, 0x00aa, 0x00ab, 0x00b8, 0x00b9, 0x00ba, 0x00bb }; // ds:0x1ae7
@@ -1907,7 +1907,7 @@ int16_t *g_gfx_ani_index[41] = {
 	g_gfx_ani_descriptions_28,
 }; // ds:0x2555; uint8_t*
 signed char g_double_size_gfx_id_table[5] = { 0x1b, 0x26, 0x28, 0x27, -1 }; // ds:0x25f9
-signed short g_weaponani_table[72] = {
+const signed int g_weaponani_table[72] = {
 	0x0000, 0x0003, 0x0006, 0x0009, 0x000c, 0x000f, 0x0012, 0x0015,
 	0x0001, 0x0004, 0x0007, 0x000a, 0x000d, 0x0010, 0x0013, 0x0016,
 	0x0002, 0x0005, 0x0008, 0x000b, 0x000e, 0x0011, 0x0014, 0x0017,
@@ -1925,16 +1925,16 @@ signed char g_food_message_shown[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x26a4
 unsigned char g_ems_enabled = 0; // ds:0x26ab
 signed char g_fig_initiative = 0; // ds:0x26ac, 0 = random, 1 = enemies, 2 = heroes (attack first)
 signed int g_fig_msg_counter = 0; // ds:0x26ad
-unsigned short g_always_one = 0; // ds:0x26af, writeonly (1)
-signed short g_fig_continue_print = 0; // ds:0x26b1
-signed short g_fig_char_pic = 0; // ds:0x26b3
-signed short g_fig_enemy_pic = 0; // ds:0x26b5
-signed short g_gui_entering_savegame = 0; // ds:0x26b7
-signed short g_check_disease = 0; // ds:0x26b9
-signed short g_check_poison = 0; // ds:0x26bb
-signed short g_text_file_index = -1; // ds:0x26bd
-signed short g_tx_file_index = -1; // ds:0x26bf, index of file stored with load_tx
-signed short g_fig_discard = 0; // ds:0x26c1, whether to discard the fight data after the fight
+signed int g_always_one = 0; // ds:0x26af, writeonly (1)
+signed int g_fig_continue_print = 0; // ds:0x26b1
+signed int g_fig_char_pic = 0; // ds:0x26b3
+signed int g_fig_enemy_pic = 0; // ds:0x26b5
+signed int g_gui_entering_savegame = 0; // ds:0x26b7
+signed int g_check_disease = 0; // ds:0x26b9
+signed int g_check_poison = 0; // ds:0x26bb
+signed int g_text_file_index = -1; // ds:0x26bd
+signed int g_tx_file_index = -1; // ds:0x26bf, index of file stored with load_tx
+signed int g_fig_discard = 0; // ds:0x26c1, whether to discard the fight data after the fight
 uint8_t g_palette_allblack2[3 * 32] = {0}; // ds:0x26c3
 
 uint8_t g_palette_unknown1[32][3] = {
@@ -2042,7 +2042,7 @@ uint8_t g_palette_special[32][3] = {
 }; // ds:0x27e3
 unsigned char g_unkn_006[2] = { 0x32, 0x00 }; // ds:0x2843
 signed char g_pp20_index = -1; // ds:0x2845, archive file index of current pp20
-signed short g_request_refresh = 0; // ds:0x2846
+signed int g_request_refresh = 0; // ds:0x2846
 struct mouse_cursor g_default_mouse_cursor = {
 	{	0x7fff, 0x9fff, 0x87ff, 0xc1ff,
 		0xc07f, 0xe01f, 0xe007, 0xf00f,
@@ -2098,29 +2098,29 @@ struct mouse_cursor g_cursor_arrow_right = {
 		0x3e70, 0x7c60, 0x7c40, 0x7c00,
 		0x7c00, 0x7c00, 0x0000, 0x0000 }
 }; // ds:0x2948
-signed short g_mouse_posy_min = 0; // ds:0x2988
-signed short g_mouse_posx_min = 0; // ds:0x298a
-signed short g_mouse_posy_max = 0x00c7; // ds:0x298c
-signed short g_mouse_posx_max = 0x0136; // ds:0x298e
+signed int g_mouse_posy_min = 0; // ds:0x2988
+signed int g_mouse_posx_min = 0; // ds:0x298a
+signed int g_mouse_posy_max = 0x00c7; // ds:0x298c
+signed int g_mouse_posx_max = 0x0136; // ds:0x298e
 struct struct_rect g_pic_copy_rect = { 0, 0, 200 - 1, 320 - 1 }; // ds:0x2990, struct struct_rect
-signed short g_mouse_locked = 0; // ds:0x2998
-signed short g_mouse_refresh_flag = -1; // ds:0x299a
-signed short g_mouse_posx = 0x00a0; // ds:0x299c
-signed short g_mouse_posy = 0x0064; // ds:0x299e
-signed short g_mouse_posx_bak = 0x00a0; // ds:0x29a0
-signed short g_mouse_posy_bak = 0x0064; // ds:0x29a2
-signed short g_mouse_moved = 0; // ds:0x29a4
-signed short g_mouse_pointer_offsetx = 0; // ds:0x29a6
-signed short g_mouse_pointer_offsety = 0; // ds:0x29a8
-signed short g_mouse_pointer_offsetx_bak = 0; // ds:0x29aa
-signed short g_mouse_pointer_offsety_bak = 0; // ds:0x29ac
-signed short g_ani_enabled = 0; // ds:0x29ae
-unsigned short g_unkn_007 = 0xffff; // ds:0x29b0
-signed short g_statusmenu_allowed = 1; // ds:0x29b2, , readonly
-signed short g_heroswap_allowed = 1; // ds:0x29b4
-signed short g_intemple = 1; // ds:0x29b6, writeonly (0,1), 0 while in temple
-signed short g_intemple2 = 1; // ds:0x29b8, , copy of INTEMPLE
-signed short g_always_zero3 = 0; // ds:0x29ba, writeonly (0)
+signed int g_mouse_locked = 0; // ds:0x2998
+signed int g_mouse_refresh_flag = -1; // ds:0x299a
+signed int g_mouse_posx = 0x00a0; // ds:0x299c
+signed int g_mouse_posy = 0x0064; // ds:0x299e
+signed int g_mouse_posx_bak = 0x00a0; // ds:0x29a0
+signed int g_mouse_posy_bak = 0x0064; // ds:0x29a2
+signed int g_mouse_moved = 0; // ds:0x29a4
+signed int g_mouse_pointer_offsetx = 0; // ds:0x29a6
+signed int g_mouse_pointer_offsety = 0; // ds:0x29a8
+signed int g_mouse_pointer_offsetx_bak = 0; // ds:0x29aa
+signed int g_mouse_pointer_offsety_bak = 0; // ds:0x29ac
+signed int g_ani_enabled = 0; // ds:0x29ae
+signed int g_unkn_007 = 0xffff; // ds:0x29b0
+signed int g_statusmenu_allowed = 1; // ds:0x29b2, , readonly
+signed int g_heroswap_allowed = 1; // ds:0x29b4
+signed int g_intemple = 1; // ds:0x29b6, writeonly (0,1), 0 while in temple
+signed int g_intemple2 = 1; // ds:0x29b8, , copy of INTEMPLE
+signed int g_always_zero3 = 0; // ds:0x29ba, writeonly (0)
 unsigned char g_unkn_008[16] = { 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00 }; // ds:0x29bc
 struct mouse_action g_action_table_menu[2] = {
 	{ 0x0000, 0x0000, 0x013f, 0x00c7, 0x001c },
@@ -2199,34 +2199,34 @@ int16_t g_char_status_bars[7][4] = {
 	{ 0x0000, 0x0000, 0x0000, 0x0000 },
 	{ 0x0000, 0x0000, 0x0000, 0x0000 }
 }; // ds:0x2c18
-signed short g_disease_prices[8] = { 0x0000, 0x0006, 0x0004, 0x0009, 0x0008, 0x0008, 0x0007, 0x000a }; // ds:0x2c50
-signed short g_disease_delays[8] = { 0x0000, -0x000a, 0x0014, -0x0014, -0x001e, -0x0014, 0x0000, -0x001e }; // ds:0x2c60
-signed short g_poison_prices[10] = { 0x0000, 0x0006, 0x0005, 0x0004, 0x0005, 0x0005, 0x0004, 0x000a, 0x000c, 0x000f }; // ds:0x2c70
-signed short g_poison_delays[10] = { 0x0000, -0x001e, -0x0019, -0x0014, -0x0019, -0x0019, -0x0014, -0x0032, -0x003c, -0x004b }; // ds:0x2c84
+signed int g_disease_prices[8] = { 0x0000, 0x0006, 0x0004, 0x0009, 0x0008, 0x0008, 0x0007, 0x000a }; // ds:0x2c50
+signed int g_disease_delays[8] = { 0x0000, -0x000a, 0x0014, -0x0014, -0x001e, -0x0014, 0x0000, -0x001e }; // ds:0x2c60
+signed int g_poison_prices[10] = { 0x0000, 0x0006, 0x0005, 0x0004, 0x0005, 0x0005, 0x0004, 0x000a, 0x000c, 0x000f }; // ds:0x2c70
+signed int g_poison_delays[10] = { 0x0000, -0x001e, -0x0019, -0x0014, -0x0019, -0x0019, -0x0014, -0x0032, -0x003c, -0x004b }; // ds:0x2c84
 signed char  g_dialogbox_lock = 0; // ds:0x2c98
-signed short g_timers_disabled = 0; // ds:0x2c99
-signed short g_status_page_mode = 1; // ds:0x2c9b, one of 1,2,3,4,5
-signed short g_status_page_hero = 0; // ds:0x2c9d
+signed int g_timers_disabled = 0; // ds:0x2c99
+signed int g_status_page_mode = 1; // ds:0x2c9b, one of 1,2,3,4,5
+signed int g_status_page_hero = 0; // ds:0x2c9d
 signed char g_status_page_hunger = -1; // ds:0x2c9f
 signed char g_status_page_thirst = -1; // ds:0x2ca0
 signed char g_missing_file_guilock = 0; // ds:0x2ca1, writeonly (0,1)
-signed short g_basepos_x = 0; // ds:0x2ca2
-signed short g_basepos_y = 0; // ds:0x2ca4
+signed int g_basepos_x = 0; // ds:0x2ca2
+signed int g_basepos_y = 0; // ds:0x2ca4
 signed char g_dng_loaded_dungeon_id = 0; // ds:0x2ca6
 signed char g_town_loaded_town_id = 0; // ds:0x2ca7
 signed char g_travel_map_loaded = 0; // ds:0x2ca8
 unsigned char g_unkn_009[33] = { 0x00, 0x00, 0x0a, 0x46, 0x82, 0xbe, 0xff, 0xe5, 0xea, 0xf4, 0xf5, 0xf6, 0xff, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x01 }; // ds:0x2ca9
 signed char g_ani_unknown_flag = 1; // ds:0x2cca, writeonly (0,1)
-signed short g_area_prepared = AREA_TYPE_NONE; // ds:0x2ccb, -1 = unprepared, 0 = dungeon, 1 = town
+signed int g_area_prepared = AREA_TYPE_NONE; // ds:0x2ccb, -1 = unprepared, 0 = dungeon, 1 = town
 unsigned char g_unkn_010[1] = { 0x00 }; // ds:0x2ccd
 unsigned char g_always_zero4 = 0; // ds:0x2cce, writeonly (0)
-signed short g_current_ani = -1; // ds:0x2ccf
-signed short g_fig_figure1 = -1; // ds:0x2cd1
-signed short g_fig_figure2 = -1; // ds:0x2cd3
-signed short g_in_fight = 0; // ds:0x2cd5
-signed short g_fight_round = 0; // ds:0x2cd7
+signed int g_current_ani = -1; // ds:0x2ccf
+signed int g_fig_figure1 = -1; // ds:0x2cd1
+signed int g_fig_figure2 = -1; // ds:0x2cd3
+signed int g_in_fight = 0; // ds:0x2cd5
+signed int g_fight_round = 0; // ds:0x2cd7
 unsigned char g_unkn_011[2] = { 0, 0 }; // ds:0x2cd9
-signed short g_skilled_hero_pos = -1; // ds:0x2cdb, {-1, 0..6}
+signed int g_skilled_hero_pos = -1; // ds:0x2cdb, {-1, 0..6}
 const struct struct_point g_gui_buttons_pos[9] = {
 	{ 0x00f1, 0x0039 },
 	{ 0x010c, 0x0039 },
@@ -3485,8 +3485,8 @@ unsigned char g_fading_state = 0; // ds:0x4475
 unsigned char g_music_enabled = 1; // ds:0x4476
 unsigned char g_snd_effects_enabled = 0; // ds:0x4477
 unsigned char g_unkn_028[2] = { 0xff, 0xff }; // ds:0x4478
-signed short g_music_current_track = -1; // ds:0x447a
-signed short g_snd_voc_enabled = 0; // ds:0x447c
+signed int g_music_current_track = -1; // ds:0x447a
+signed int g_snd_voc_enabled = 0; // ds:0x447c
 
 #if defined(__BORLANDC__)
 extern unsigned _stklen = 0x2000; // ds:0x447e
@@ -3494,7 +3494,7 @@ extern unsigned _stklen = 0x2000; // ds:0x447e
 
 extern char g_str_file_missing[20];	//forward declaration
 char *g_str_file_missing_ptr = (char*)&g_str_file_missing; // ds:0x4480, to STR_FILE_MISSING; uint8_t*
-unsigned short g_mouse_irq_init = 0; // ds:0x4484
+signed int g_mouse_irq_init = 0; // ds:0x4484
 unsigned char g_unkn_030[4] = { 0xff, 0xff, 0x00, 0x00 }; // ds:0x4486
 char g_pause_string[10] = "P A U S E"; // ds:0x448a
 signed char g_npc_last_farewellcheck = 0; // ds:0x4494
@@ -3652,16 +3652,16 @@ struct special_day g_special_days[43] = {
 signed char g_months_spring[4] = { 10, 11, 12, -1 }; // ds:0x463a
 signed char g_months_winter[4] = { 7, 8, 9, -1 }; // ds:0x463e
 signed char g_months_summer[4] = { 1, 2, 3, -1 }; // ds:0x4642
-signed short g_bank_heller = 0; // ds:0x4646
+signed int g_bank_heller = 0; // ds:0x4646
 signed char g_consume_quiet = 0; // ds:0x4648
 unsigned char g_herokeeping_flag = 0; // ds:0x4649
 unsigned char g_unkn_031[4] = { 0x00, 0x00, 0x00, 0x00 }; // ds:0x464a
 
 // for the following there is an easy formula: g_level_ap_tab[i] = 50 * i * (i+1). therefore, these 84 bytes could be easily freed and reused */
-signed long g_level_ap_tab[21] = { 0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500, 6600, 7800, 9100, 10500, 12000, 13600, 15300, 17100, 19000, 21000 }; // ds:0x464e
+int32_t g_level_ap_tab[21] = { 0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500, 6600, 7800, 9100, 10500, 12000, 13600, 15300, 17100, 19000, 21000 }; // ds:0x464e
 unsigned char g_delay_or_keypress_flag = 0; // ds:0x46a2, writeonly (0,1)
-const signed short g_merchant_items_posx[15] = { 0x001e, 0x001e, 0x001e, 0x001e, 0x001e, 0x005f, 0x005f, 0x005f, 0x005f, 0x005f, 0x00a0, 0x00a0, 0x00a0, 0x00a0, 0x00a0 }; // ds:0x46a3
-const signed short g_merchant_items_posy[15] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x46c1
+const int16_t g_merchant_items_posx[15] = { 0x001e, 0x001e, 0x001e, 0x001e, 0x001e, 0x005f, 0x005f, 0x005f, 0x005f, 0x005f, 0x00a0, 0x00a0, 0x00a0, 0x00a0, 0x00a0 }; // ds:0x46a3
+const int16_t g_merchant_items_posy[15] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x46c1
 signed char g_refresh_status_line = 0; // ds:0x46df
 char g_dsa_version_string[12] = "DSA VERSION"; // ds:0x46e0
 char g_game_version[6] = "V3.02"; // ds:0x46ec

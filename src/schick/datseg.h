@@ -788,25 +788,25 @@ extern signed int g_cd_init_successful;
 extern uint32_t g_cd_skipmagic;
 
 extern signed int g_items_noplural[23];					// ds:0x0270; seg096
-extern signed short g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
+extern const int16_t g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
-extern signed short* g_forbidden_item_ids_table[12];			// ds:0x0638; seg048, seg056, seg105
+extern const int16_t* g_forbidden_item_ids_table[12];			// ds:0x0638; seg048, seg056, seg105
 extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
 extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
 extern struct armor_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
 extern const struct usable_item_descr g_usable_items_table[14];		// ds:0x08a9; seg105, seg107
-extern signed short g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
-extern signed short g_herbs_toxic[5];					// ds:0x08e7; seg108
-extern signed short g_herbs_uneatable[7];				// ds:0x08f1; seg108
-extern signed short g_elixir_potions[8];				// ds:0x08ff; seg108
-extern signed short g_bad_elixirs[8];					// ds:0x090f; seg108
-extern signed short g_attack_items[3];					// ds:0x091f; seg033
+extern const int16_t g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
+extern const int16_t g_herbs_toxic[5];					// ds:0x08e7; seg108
+extern const int16_t g_herbs_uneatable[7];				// ds:0x08f1; seg108
+extern const int16_t g_elixir_potions[8];				// ds:0x08ff; seg108
+extern const int16_t g_bad_elixirs[8];					// ds:0x090f; seg108
+extern const int16_t g_attack_items[3];					// ds:0x091f; seg033
 extern signed char g_monster_name_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
 extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
 extern const struct spells_index g_spells_index[8];			// ds:0x0d03; seg046, seg098
 extern const struct spells_index g_spells_index2[4];			// ds:0x0d13; seg046
-extern const signed short* g_magic_schools_table[9];
+extern const signed int* g_magic_schools_table[9];
 extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
 extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
 extern int8_t g_mon_spellbooks[11][5];				// ds:0x0f8b; seg037
@@ -818,58 +818,58 @@ extern signed short g_nvftab_figures_unconscious[22];			//ds:0x11e4; seg002, seg
 extern const struct point8s g_gfxtab_offsets_unconscious[22][4];	//ds:0x1210; seg002, seg005, seg039
 extern const int8_t g_gfxtab_figures_main[125][5];			//ds:0x12c0; seg005, seg006, seg039, seg043
 extern const struct point8s g_gfxtab_offsets_main[125][5];		//ds:0x1531; seg005, seg039, seg043
-extern signed short g_nvftab_figures_dead[22];		//ds:0x1a13; seg005, seg039
+extern const signed int g_nvftab_figures_dead[22];	//ds:0x1a13; seg005, seg039
 extern int16_t *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
-extern signed char g_double_size_gfx_id_table[5];		//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
-extern signed short g_weaponani_table[72];		//ds:0x25fe; seg044
+extern signed char g_double_size_gfx_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
+extern const signed int g_weaponani_table[72];		//ds:0x25fe; seg044
 extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093
 extern unsigned char g_ems_enabled;			//ds:0x26ab; seg027-seg028, seg120
 extern signed char g_fig_initiative;			//ds:0x26ac; seg032,seg051,seg052,seg110-seg113
 extern signed int g_fig_msg_counter;			//ds:0x26ad; seg041
-extern unsigned short g_always_one;			//ds:0x26af; seg006
-extern signed short g_fig_continue_print;		//ds:0x26b1; seg004,seg005,seg042,seg043
-extern signed short g_fig_char_pic;			//ds:0x26b3; seg006,seg032
-extern signed short g_fig_enemy_pic;			//ds:0x26b5; seg006,seg032
-extern signed short g_gui_entering_savegame;		//ds:0x26b7; seg026,seg097
-extern signed short g_check_disease;			//ds:0x26b9; seg002,seg026,seg063,seg094,seg119
-extern signed short g_check_poison;			//ds:0x26bb; seg002,seg026,seg121
-extern signed short g_text_file_index;			//ds:0x26bd; seg026-seg065
-extern signed short g_tx_file_index;			//ds:0x26bf; seg026-seg107
-extern signed short g_fig_discard;			//ds:0x26c1; seg030-seg117
+extern signed int g_always_one;				//ds:0x26af; seg006
+extern signed int g_fig_continue_print;			//ds:0x26b1; seg004,seg005,seg042,seg043
+extern signed int g_fig_char_pic;			//ds:0x26b3; seg006,seg032
+extern signed int g_fig_enemy_pic;			//ds:0x26b5; seg006,seg032
+extern signed int g_gui_entering_savegame;		//ds:0x26b7; seg026,seg097
+extern signed int g_check_disease;			//ds:0x26b9; seg002,seg026,seg063,seg094,seg119
+extern signed int g_check_poison;			//ds:0x26bb; seg002,seg026,seg121
+extern signed int g_text_file_index;			//ds:0x26bd; seg026-seg065
+extern signed int g_tx_file_index;			//ds:0x26bf; seg026-seg107
+extern signed int g_fig_discard;			//ds:0x26c1; seg030-seg117
 extern uint8_t g_palette_allblack2[3 * 32];		//ds:0x26c3; seg025,seg029,seg049,seg066,seg120
-extern uint8_t g_palette_unknown1[32][3];			//ds:0x2723; seg120
+extern uint8_t g_palette_unknown1[32][3];		//ds:0x2723; seg120
 extern uint8_t g_palette_fight1[32][3];			//ds:0x2783; seg032
-extern uint8_t g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
+extern uint8_t g_palette_special[32][3];		//ds:0x27e3; seg029, seg093
 extern signed char g_pp20_index;			//ds:0x2845; seg004-seg120
-extern signed short g_request_refresh;			//ds:0x2846; seg002-seg118
+extern signed int g_request_refresh;			//ds:0x2846; seg002-seg118
 extern struct mouse_cursor g_default_mouse_cursor;	//ds:0x2848; seg002, seg024, seg025, seg048
 extern struct mouse_cursor g_cursor_arrow_up;		//ds:0x2888; seg002
 extern struct mouse_cursor g_cursor_arrow_down;		//ds:0x28c8; seg002
 extern struct mouse_cursor g_cursor_arrow_left;		//ds:0x2908; seg002
 extern struct mouse_cursor g_cursor_arrow_right;	//ds:0x2948; seg002
-extern signed short g_mouse_posy_min;			//ds:0x2988; seg002, seg049, seg097
-extern signed short g_mouse_posx_min;			//ds:0x298a; seg002, seg049, seg097
-extern signed short g_mouse_posy_max;			//ds:0x298c; seg002, seg049, seg097
-extern signed short g_mouse_posx_max;			//ds:0x298e; seg002, seg049, seg097
+extern signed int g_mouse_posy_min;			//ds:0x2988; seg002, seg049, seg097
+extern signed int g_mouse_posx_min;			//ds:0x298a; seg002, seg049, seg097
+extern signed int g_mouse_posy_max;			//ds:0x298c; seg002, seg049, seg097
+extern signed int g_mouse_posx_max;			//ds:0x298e; seg002, seg049, seg097
 extern struct struct_rect g_pic_copy_rect;		//ds:0x2990; seg004-seg008, seg074
-extern signed short g_mouse_locked;			//ds:0x2998; seg002, seg049
-extern signed short g_mouse_refresh_flag;		//ds:0x299a; seg002, seg032
-extern signed short g_mouse_posx;			//ds:0x299c; seg002-seg097
-extern signed short g_mouse_posy;			//ds:0x299e; seg002-seg097
-extern signed short g_mouse_posx_bak;			//ds:0x29a0; seg002, seg004, seg049
-extern signed short g_mouse_posy_bak;			//ds:0x29a2; seg002, seg004, seg049
-extern signed short g_mouse_moved;			//ds:0x29a4; seg002, seg049
-extern signed short g_mouse_pointer_offsetx;		//ds:0x29a6; seg002, seg004
-extern signed short g_mouse_pointer_offsety;		//ds:0x29a8; seg002, seg004
-extern signed short g_mouse_pointer_offsetx_bak;	//ds:0x29aa; seg002, seg004
-extern signed short g_mouse_pointer_offsety_bak;	//ds:0x29ac; seg002, seg004
-extern signed short g_ani_enabled;			//ds:0x29ae; seg004, seg026, seg027, seg097
-extern signed short g_statusmenu_allowed;		//ds:0x29b4; seg048
-extern signed short g_heroswap_allowed;			//ds:0x29b4; seg002, seg049, seg057
-extern signed short g_intemple;				//ds:0x29b6; seg061
-extern signed short g_intemple2;			//ds:0x29b8; seg061
-extern signed short g_always_zero3;			//ds:0x29ba; seg002
+extern signed int g_mouse_locked;			//ds:0x2998; seg002, seg049
+extern signed int g_mouse_refresh_flag;			//ds:0x299a; seg002, seg032
+extern signed int g_mouse_posx;				//ds:0x299c; seg002-seg097
+extern signed int g_mouse_posy;				//ds:0x299e; seg002-seg097
+extern signed int g_mouse_posx_bak;			//ds:0x29a0; seg002, seg004, seg049
+extern signed int g_mouse_posy_bak;			//ds:0x29a2; seg002, seg004, seg049
+extern signed int g_mouse_moved;			//ds:0x29a4; seg002, seg049
+extern signed int g_mouse_pointer_offsetx;		//ds:0x29a6; seg002, seg004
+extern signed int g_mouse_pointer_offsety;		//ds:0x29a8; seg002, seg004
+extern signed int g_mouse_pointer_offsetx_bak;		//ds:0x29aa; seg002, seg004
+extern signed int g_mouse_pointer_offsety_bak;		//ds:0x29ac; seg002, seg004
+extern signed int g_ani_enabled;			//ds:0x29ae; seg004, seg026, seg027, seg097
+extern signed int g_statusmenu_allowed;			//ds:0x29b4; seg048
+extern signed int g_heroswap_allowed;			//ds:0x29b4; seg002, seg049, seg057
+extern signed int g_intemple;				//ds:0x29b6; seg061
+extern signed int g_intemple2;				//ds:0x29b8; seg061
+extern signed int g_always_zero3;			//ds:0x29ba; seg002
 extern struct mouse_action g_action_table_menu[2];	//ds:0x29cc; seg032, seg097
 extern struct mouse_action *g_action_table_primary;	//ds:0x29e0; seg002, seg029, seg032, seg046
 extern struct mouse_action *g_action_table_secondary;	//ds:0x29e4; seg002, seg025, seg029-seg097
@@ -878,31 +878,31 @@ extern struct mouse_action g_action_table_status[30];	//ds:0x2ad8; seg046
 extern struct mouse_action g_action_table_merchant[2];	//ds:0x2c04; seg056, seg057, seg058
 extern int16_t g_char_status_bars[7][4];			//ds:0x2c18; seg004, seg029
 
-extern signed short g_disease_prices[8];		//ds:0x2c50; seg053, seg104
-extern signed short g_disease_delays[8];		//ds:0x2c60; seg053
-extern signed short g_poison_prices[10];		//ds:0x2c70; seg041, seg053, seg099, seg103
-extern signed short g_poison_delays[10];		//ds:0x2c84; seg053;
+extern signed int g_disease_prices[8];		//ds:0x2c50; seg053, seg104
+extern signed int g_disease_delays[8];		//ds:0x2c60; seg053
+extern signed int g_poison_prices[10];		//ds:0x2c70; seg041, seg053, seg099, seg103
+extern signed int g_poison_delays[10];		//ds:0x2c84; seg053;
 extern signed char  g_dialogbox_lock;			//ds:0x2c98; seg002, seg004, seg097, seg109
-extern signed short g_timers_disabled;			//ds:0x2c99; seg002-seg050
-extern signed short g_status_page_mode;			//ds:0x2c9b; seg046, seg048, seg050
-extern signed short g_status_page_hero;			//ds:0x2c9d; seg004, seg048, seg050
+extern signed int g_timers_disabled;			//ds:0x2c99; seg002-seg050
+extern signed int g_status_page_mode;			//ds:0x2c9b; seg046, seg048, seg050
+extern signed int g_status_page_hero;			//ds:0x2c9d; seg004, seg048, seg050
 extern signed char  g_status_page_hunger;		//ds:0x2c9f; seg004, seg048, seg050
 extern signed char  g_status_page_thirst;		//ds:0x2ca0; seg004, seg048, seg050
 extern signed char  g_missing_file_guilock;		//ds:0x2ca1; seg002
-extern signed short g_basepos_x;			//ds:0x2ca2; seg025-seg117
-extern signed short g_basepos_y;			//ds:0x2ca4; seg025-seg117
-extern signed char g_dng_loaded_dungeon_id;			//ds:0x2ca6; seg028-seg106
-extern signed char g_town_loaded_town_id;			//ds:0x2ca7; seg025-seg106
+extern signed int  g_basepos_x;				//ds:0x2ca2; seg025-seg117
+extern signed int  g_basepos_y;				//ds:0x2ca4; seg025-seg117
+extern signed char g_dng_loaded_dungeon_id;		//ds:0x2ca6; seg028-seg106
+extern signed char g_town_loaded_town_id;		//ds:0x2ca7; seg025-seg106
 extern signed char g_travel_map_loaded;			//ds:0x2ca8; seg025, seg093
 extern signed char g_ani_unknown_flag;			//ds:0x2cca; seg004 WRITEONLY
-extern signed short g_area_prepared;			//ds:0x2ccb; seg024-seg089
+extern signed int g_area_prepared;			//ds:0x2ccb; seg024-seg089
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
-extern signed short g_current_ani;			//ds:0x2ccf; seg004-seg120
-extern signed short g_fig_figure1;			//ds:0x2cd1; seg025, seg027, seg032
-extern signed short g_fig_figure2;			//ds:0x2cd3; seg025, seg027, seg032
-extern signed short g_in_fight;				//ds:0x2cd5; seg002-seg107
-extern signed short g_fight_round;			//ds:0x2cd7; seg032, seg036, seg037
-extern signed short g_skilled_hero_pos;			//ds:0x2cdb; seg047, seg051, seg056, seg057, seg097, seg103
+extern signed int g_current_ani;			//ds:0x2ccf; seg004-seg120
+extern signed int g_fig_figure1;			//ds:0x2cd1; seg025, seg027, seg032
+extern signed int g_fig_figure2;			//ds:0x2cd3; seg025, seg027, seg032
+extern signed int g_in_fight;				//ds:0x2cd5; seg002-seg107
+extern signed int g_fight_round;			//ds:0x2cd7; seg032, seg036, seg037
+extern signed int g_skilled_hero_pos;			//ds:0x2cdb; seg047, seg051, seg056, seg057, seg097, seg103
 extern const struct struct_point g_gui_buttons_pos[9];	//ds:0x2cdd; seg029
 extern const signed int g_hero_pic_posx[7];		//ds:0x2d01; seg002-seg098
 extern signed char g_levelup_ta_rise[12];		//ds:0x2d0f; seg050
@@ -1507,7 +1507,7 @@ extern uint8_t  gs_datseg_status_end;		//ds:0x4474; seg026
 extern unsigned char g_fading_state;		//ds:0x4475; seg002-seg095
 extern unsigned char g_music_enabled;		//ds:0x4476; seg002
 extern unsigned char g_snd_effects_enabled;	//ds:0x4477; seg002
-extern signed short g_music_current_track;	//ds:0x447a; seg002
+extern signed int g_music_current_track;	//ds:0x447a; seg002
 extern char* g_str_file_missing_ptr;		//ds:0x4480; seg002
 extern char g_pause_string[10];			//ds:0x448a; seg002
 extern signed char g_npc_last_farewellcheck;	//ds:0x4494; seg002
@@ -1522,12 +1522,12 @@ extern struct special_day g_special_days[43];	//ds:0x45b9; seg002
 extern signed char g_months_spring[4];		//ds:0x463a; seg002
 extern signed char g_months_winter[4];		//ds:0x463e; seg002
 extern signed char g_months_summer[4];		//ds:0x4642; seg002
-extern signed short g_bank_heller;		//ds:0x4646; seg002
+extern signed int g_bank_heller;		//ds:0x4646; seg002
 extern signed char g_consume_quiet;		//ds:0x4648; seg002, seg108
 extern unsigned char g_herokeeping_flag;	//ds:0x4649; seg002
 extern unsigned char g_delay_or_keypress_flag;	//ds:0x46a2; seg002
-extern const signed short g_merchant_items_posx[15];	//ds:0x46a3; seg002
-extern const signed short g_merchant_items_posy[15];	//ds:0x46c1; seg002
+extern const int16_t g_merchant_items_posx[15];	//ds:0x46a3; seg002
+extern const int16_t g_merchant_items_posy[15];	//ds:0x46c1; seg002
 extern signed char g_refresh_status_line;	//ds:0x46df; seg002, seg095
 extern char g_dsa_version_string[12];		//ds:0x46e0; seg026
 extern char g_game_version[6];			//ds:0x46ec; seg002
