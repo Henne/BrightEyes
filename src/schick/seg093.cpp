@@ -85,11 +85,11 @@ struct struct_land_route g_land_routes[59] = {
 	{ TOWN_ID_LJASDAHL           , TOWN_ID_LJASDAHL           ,  70, -3, 35,   0,  0,  0,   0 }, // 52 // circular route
 	{ TOWN_ID_LJASDAHL           , TOWN_ID_HJALLANDER_HOF     ,   9, -2, 40,   5,  5,  0,   0 }, // 53
 	{ TOWN_ID_RUNINSHAVEN        , TOWN_ID_LEUCHTTURM_RUNIN   ,  24, -3, 30,   0,  0,  0,   0 }, // 54 // not linked at LEUCHTTURM_RUNIN
-	{ TOWN_ID_RUNINSHAVEN        , TOWN_ID_LEUCHTTURM_RUNIN   ,  17, -2, 35,   5,  5,  0,   0 }, // 55 // middle route; only route linked at LEUCHTTURM_RUNIN
+	{ TOWN_ID_RUNINSHAVEN        , TOWN_ID_LEUCHTTURM_RUNIN   ,  17, -2, 35,   5,  5,  0,   0 }, // 55 // middle route; the only route linked at LEUCHTTURM_RUNIN
 	{ TOWN_ID_BRENDHIL           , TOWN_ID_MANRIN             ,  30, -3, 35,   0,  0,  0,   0 }, // 56
 	{ TOWN_ID_EINSIEDLERSEE      , TOWN_ID_EINSIEDLERSEE      ,  47, -3, 35,   0,  0, 50, 100 }, // 57 // circular route
 	{ TOWN_ID_LEUCHTTURM_RUNIN   , TOWN_ID_RUNINSHAVEN        ,  27, -3, 25,   0,  0,  0,   0 }, // 58 // not linked at LEUCHTTURM_RUNIN
-	{ 0                        , 0                        ,  50, -4, 50,   0,  0,  5,   9 }
+	{ 0                          , 0                          ,  50, -4, 50,   0,  0,  5,   9 }
 }; // ds:0x9dc6
 // towns not connected to any land route: TOWN_ID_OVERTHORN, TOWN_ID_HJALSINGOR, TOWN_ID_GUDDASUNDEN, TOWN_ID_TREBAN, TOWN_ID_ARYN
 
@@ -638,19 +638,19 @@ struct struct_tevent g_tevents_tab[156] = {
 
 signed int do_travel_mode(void)
 {
-	signed int l_di;
+	signed int tmp1; /* multiple use: route_id, screen coordinate, etc. */
 	signed int i;
-	signed int answer;
+	signed int tmp2; /* multiple use: tmp2, screen coordinate, etc. */
 	signed int l4;
 	signed int route_id;
 	struct trv_start_point *signpost_ptr;
 	signed int l6;
 	signed int l7;
-	signed int bak1;
+	signed int wallclock_update_bak;
 	signed int tw_bak;
 	char *destinations_tab[6];
 
-	bak1 = g_wallclock_update;
+	wallclock_update_bak = g_wallclock_update;
 	g_route59_flag = g_wallclock_update = gs_travel_detour = 0;
 	gs_town_id = gs_current_typeindex;
 
@@ -714,11 +714,11 @@ signed int do_travel_mode(void)
 				if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP)
 				{
 					i = 0;
-					while ((l_di = signpost_ptr->linked_travel_routes[i]) != 0xff)
+					while ((tmp1 = signpost_ptr->linked_travel_routes[i]) != 0xff)
 					{
 						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
-							(answer = g_land_routes[l_di - 1].town_id_1) != gs_town_id ?
-							(signed char) answer : g_land_routes[l_di - 1].town_id_2)));
+							(tmp2 = g_land_routes[tmp1 - 1].town_id_1) != gs_town_id ?
+							(signed char) tmp2 : g_land_routes[tmp1 - 1].town_id_2)));
 
 						i++;
 					}
@@ -732,7 +732,7 @@ signed int do_travel_mode(void)
 					tw_bak = g_textbox_width;
 					g_textbox_width = 4;
 
-					answer = GUI_radio(g_text_output_buf, i,
+					tmp2 = GUI_radio(g_text_output_buf, i,
 								destinations_tab[0], destinations_tab[1], destinations_tab[2],
 								destinations_tab[3], destinations_tab[4], destinations_tab[5]) - 1;
 
@@ -742,15 +742,15 @@ signed int do_travel_mode(void)
 
 					set_and_spin_lock();
 
-					if (i - 1 == answer || answer == -2)
+					if (i - 1 == tmp2 || tmp2 == -2)
 					{
 						gs_show_travel_map = 0;
 						gs_direction = ((gs_direction + 2) & 3);
 						break;
 					}
 
-					route_id = signpost_ptr->linked_travel_routes[answer];
-					gs_trv_destination = gs_trv_menu_towns[answer];
+					route_id = signpost_ptr->linked_travel_routes[tmp2];
+					gs_trv_destination = gs_trv_menu_towns[tmp2];
 
 					if (!get_current_season() &&
 						(route_id == 31 || route_id == 41 || route_id == 47 || route_id == 48 || route_id == 49))
@@ -765,8 +765,8 @@ signed int do_travel_mode(void)
 
 					g_wallclock_update = 1;
 
-					TM_func1(signpost_ptr->linked_travel_routes[answer],
-						(g_land_routes[signpost_ptr->linked_travel_routes[answer] - 1].town_id_1 == gs_town_id ? 0 : 1));
+					TM_func1(signpost_ptr->linked_travel_routes[tmp2],
+						(g_land_routes[signpost_ptr->linked_travel_routes[tmp2] - 1].town_id_1 == gs_town_id ? 0 : 1));
 					g_wallclock_update = 0;
 
 					if (g_route59_flag)
@@ -804,23 +804,23 @@ signed int do_travel_mode(void)
 
 					for (i = 0, l4 = -1; i < TOWN_ID__TAIL; i++)
 					{
-						if (is_mouse_in_rect(l_di - 4, answer - 4,
-								(l_di = g_town_positions[i].x) + 4,
-								(answer = g_town_positions[i].y) + 4))
+						if (is_mouse_in_rect(tmp1 - 4, tmp2 - 4,
+								(tmp1 = g_town_positions[i].x) + 4,
+								(tmp2 = g_town_positions[i].y) + 4))
 						{
 							l4 = i;
 							break;
 						}
 					}
 
-					if (l4 == -1 && (l_di = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_travelmap)))
+					if (l4 == -1 && (tmp1 = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_travelmap)))
 					{
-						l4 = l_di + 51;
+						l4 = tmp1 + 51;
 					}
 
 					if (l4 != -1)
 					{
-						answer = g_current_town_anix;
+						tmp2 = g_current_town_anix;
 						g_current_town_anix = 0;
 						l6 = g_basepos_x;
 						l7 = g_basepos_y;
@@ -833,7 +833,7 @@ signed int do_travel_mode(void)
 
 						g_basepos_x = l6;
 						g_basepos_y = l7;
-						g_current_town_anix = answer;
+						g_current_town_anix = tmp2;
 					}
 
 					g_mouse_leftclick_event = 0;
@@ -890,7 +890,7 @@ signed int do_travel_mode(void)
 
 	g_current_ani = g_town_loaded_town_id = g_pp20_index = -1;
 	g_request_refresh = g_fading_state = 1;
-	g_wallclock_update = bak1;
+	g_wallclock_update = wallclock_update_bak;
 
 	return 0;
 }
