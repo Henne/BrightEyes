@@ -4,36 +4,35 @@ namespace M302de {
 extern "C" {
 #endif
 
-unsigned short swap_u16(unsigned short);
-void set_video_mode(int16_t);
-void set_video_page(int16_t);
+uint16_t swap_u16(const uint16_t);
+void set_video_mode(const int16_t);
+void set_video_page(const int16_t);
 void save_display_stat(int16_t*);
-void set_color(uint8_t *ptr, unsigned char color);
-void set_palette(uint8_t *ptr, unsigned short first_color, unsigned short colors);
-void draw_h_line(uint8_t*, unsigned short, signed short);
-void draw_h_spaced_dots(uint8_t*, signed short, signed short, signed short);
+void set_color(uint8_t*, const uint8_t);
+void set_palette(uint8_t*, const signed int, const signed int);
+void draw_h_line(uint8_t*, signed int, const signed int);
+void draw_h_spaced_dots(uint8_t*, const signed int, const signed int, const signed int);
 
-void pic_copy(uint8_t *dst, short x1, short y1, short x2, short y2,
-        unsigned short val1, unsigned short val2,
-        unsigned short val3, unsigned short val4,
-        unsigned short width, unsigned short height,
-        uint8_t *src, unsigned short mode);
+void pic_copy(uint8_t*, const signed int, const signed int, const signed int, const signed int,
+        const signed int, const signed int, const signed int, const signed int,
+        const signed int, const signed int, uint8_t*, const signed int);
 
 #if defined(__BORLANDC__)
-void save_rect(uint16_t, uint16_t, uint8_t*, unsigned short, unsigned short);
+void save_rect(uint16_t, uint16_t, uint8_t*, const signed int, signed int);
 void fill_rect(uint16_t, uint16_t, signed short, signed short, signed short);
 #else
-void save_rect(uint8_t*, uint8_t*, unsigned short, unsigned short);
-void fill_rect(uint8_t*, signed short, signed short, signed short);
+void save_rect(uint8_t*, uint8_t*, const signed int, signed int);
+void fill_rect(uint8_t*, const signed int, const signed int, signed int);
 #endif
-void copy_solid_permuted(uint8_t *dst, uint8_t *src, unsigned short width_to_copy,
-	unsigned short height, unsigned short dst_width,
-	unsigned short src_width, unsigned short solid);
-void copy_solid(uint8_t *dst, uint8_t *src, unsigned short width_to_copy,
-	unsigned short height, unsigned short dst_width,
-	unsigned short src_width, unsigned short solid);
-void decomp_rle(unsigned short width, unsigned short height,
-	uint8_t *dst, uint8_t *src, uint8_t *tmp_buffer, unsigned short mode);
+
+void copy_solid_permuted(uint8_t*, uint8_t*, const signed int,
+	const signed int, const signed int, const signed int, const signed int);
+
+void copy_solid(uint8_t *dst, uint8_t *src, const signed int width_to_copy,
+	const signed int height, const signed int dst_width,
+	const signed int src_width, const signed int solid);
+
+void decomp_rle(const signed int, signed int, uint8_t*, uint8_t*, uint8_t*, const signed int);
 
 #if !defined(__BORLANDC__)
 }
