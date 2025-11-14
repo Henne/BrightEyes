@@ -370,7 +370,7 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
  * \param   hero        pointer to the hero
  * \return              -1 = no lockpicks, -2 = all lockpicks are broken, else position of the lockpicks
  */
-signed short hero_has_lockpicks(const struct struct_hero *hero)
+signed int hero_has_lockpicks(const struct struct_hero *hero)
 {
 	signed int retval = -1;
 	signed int inv_slot;
@@ -491,7 +491,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 
 		if (inv_slot != -2) {
 
-			test_val = test_skill(hero, TA_SCHLOESSER, (chest_ptr)->mod);
+			test_val = test_skill(hero, TA_SCHLOESSER, chest_ptr->mod);
 
 			if (test_val == -99) {
 
@@ -501,15 +501,15 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 				hero->inventory[inv_slot].flags.broken = 1;
 
 				/* ... and you trigger the trap */
-				if ((chest_ptr)->trap) {
-					(chest_ptr)->trap();
+				if (chest_ptr->trap) {
+					chest_ptr->trap();
 				}
 
 			} else if (test_val <= 0) {
 
 				/* trigger the trap */
-				if ((chest_ptr)->trap) {
-					(chest_ptr)->trap();
+				if (chest_ptr->trap) {
+					chest_ptr->trap();
 				}
 
 			} else {
@@ -518,11 +518,11 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 				add_hero_ap(hero, 1);
 
 
-				if ((chest_ptr)->loot) {
+				if (chest_ptr->loot) {
 
-					(chest_ptr)->loot(chest_ptr);
+					chest_ptr->loot(chest_ptr);
 
-					if ((chest_ptr)->trap == chest_protected_heavy) {
+					if (chest_ptr->trap == chest_protected_heavy) {
 						add_hero_ap(hero, 5);
 					}
 				}
@@ -595,7 +595,7 @@ void loot_multi_chest(uint8_t *content, char *msg)
 				strcat(names[pos], g_str_single_space);
 			}
 
-			strcat(names[pos++], GUI_name_plural( ((signed short)(quantity > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, g_itemsname[i]));
+			strcat(names[pos++], GUI_name_plural( ((int16_t)(quantity > 1 ? (uint16_t)1 : (uint16_t)0)) ? 4 : 0, g_itemsname[i]));
 		}
 
 		if (pos != 0) {

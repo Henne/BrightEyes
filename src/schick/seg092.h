@@ -66,7 +66,7 @@ void chest_ignifax_heavy(void);
 void chest_crossbow_bolts(void);
 
 /* 0x89 */
-signed short hero_has_lockpicks(const struct struct_hero*);
+signed int hero_has_lockpicks(const struct struct_hero*);
 
 #if !defined(__BORLANDC__)
 }

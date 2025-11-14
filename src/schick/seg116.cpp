@@ -198,7 +198,7 @@ void tevent_135(void)
 /* Einsiedlersee <-> Einsiedlersee: Monolith */
 {
 	signed int tmp; /* used for (1) fall_height; (2) LE of the hero after falling */
-	signed short tmp2; /* used for (1) map tile position (2) falling damage */
+	int16_t tmp2;	/* used for (1) map tile position (2) falling damage */
 	signed int answer;
 	signed int done;
 	signed int count;
