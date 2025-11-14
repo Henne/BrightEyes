@@ -187,15 +187,6 @@ static char *FIG_name_1st_case(const signed int type, volatile const signed int 
 
 static signed int fight_printer(void)
 {
-	signed int fg_bak;
-	signed int bg_bak;
-	uint8_t* gfx_pos_bak;
-	uint16_t x;
-	char str[6];
-	uint8_t* gfx_dst_bak;
-
-	int16_t f_action;
-
 	if (!g_fig_msg_data[0].f_action) {
 		g_fig_continue_print = 0;
 	}
@@ -208,13 +199,22 @@ static signed int fight_printer(void)
 
 		g_fig_star_timer = g_autofight ? 10 : g_delay_factor * 6;
 
-		if (!g_fig_msg_data[g_fig_star_counter].f_action)
+		if (!g_fig_msg_data[g_fig_star_counter].f_action) {
 			g_fig_continue_print = 0;
+		}
 	}
 
 	if (g_fig_continue_print) {
 
 		if (g_fig_star_counter != g_fig_star_last_count) {
+
+			signed int fg_bak;
+			signed int bg_bak;
+			uint8_t* gfx_pos_bak;
+			uint16_t x;
+			char str[6];
+			uint8_t* gfx_dst_bak;
+			int16_t f_action;
 
 			g_fig_star_printed = 1;
 
