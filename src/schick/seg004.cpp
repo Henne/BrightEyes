@@ -620,7 +620,7 @@ void mouse_cursor_draw(void)
 	signed char i;
 	signed char j;
 	uint8_t *dst;
-	unsigned short *mouse_cursor;
+	uint16_t *mouse_cursor;
 	signed int y;
 	signed int width;
 	signed int height;
