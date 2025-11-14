@@ -115,4 +115,10 @@
 ..\BIN\BCC.EXE -mlarge -O- -c -1 -Yo SEG121.CPP
 ..\BIN\BCC.EXE -mlarge -O- -c -1 -Yo SEG122.CPP
 ..\BIN\BCC.EXE -mlarge -O- -c -1 -Yo DATSEG.CPP
+
+@REM set date of DOSBox to the 12.01.1994
+@REM when BLADEM.EXE v3.02de was linked (thanks to siebenstreich)
+..\BIN\BCC.EXE -mlarge SETDATE.CPP
+SETDATE
+
 TLINK @TLINK.RES
