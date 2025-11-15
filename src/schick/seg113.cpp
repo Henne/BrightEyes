@@ -581,14 +581,12 @@ void tevent_103(void)
 
 void tevent_104(void)
 {
-	signed int l_si;
-	signed int done;
+	signed int answer; /* resused variable: answer and number of heroes with a failed HA test */
+	signed int done = 0;
 	signed int i;
 	signed int nr_heroes;
 	struct struct_hero *hero;
 	signed int spell_result;
-
-	done = 0;
 
 	load_in_head(57);
 
@@ -598,7 +596,7 @@ void tevent_104(void)
 
 		hero = get_hero(0);
 
-		for (i = l_si = nr_heroes = 0; i <= 6; i++, hero++)
+		for (i = answer = nr_heroes = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
@@ -615,29 +613,28 @@ void tevent_104(void)
 
 					GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
-					l_si++;
+					answer++;
 				}
 			}
 		}
 
-		if (!l_si) {
+		if (!answer) {
 
 			/* everything is fine */
 
 			GUI_dialog_na(0, get_tx2(63));
 			done = 1;
 
-		} else if (l_si == nr_heroes) {
+		} else if (answer == nr_heroes) {
 
 			/* all heroes have failed the test */
 
 			do {
-				l_si = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-							get_tx2(56), 2, get_tx2(57), get_tx2(58));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(56), 2, get_tx2(57), get_tx2(58));
 
-			} while (l_si == -1);
+			} while (answer == -1);
 
-			if (l_si == 2) {
+			if (answer == 2) {
 				/* make a camp */
 
 				gs_current_loctype = LOCTYPE_WILDCAMP;
@@ -665,12 +662,12 @@ void tevent_104(void)
 			do {
 
 				do {
-					l_si = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 								(nr_heroes == 0 ? get_tx2(59) : get_tx2(87)), 3,
 								get_tx2(60), get_tx2(61), get_tx2(62));
-				} while (l_si == -1);
+				} while (answer == -1);
 
-				if (l_si == 1) {
+				if (answer == 1) {
 
 					timewarp(HOURS(2));
 
@@ -678,7 +675,7 @@ void tevent_104(void)
 
 					done = 1;
 
-				} else if (l_si == 2) {
+				} else if (answer == 2) {
 
 					hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 

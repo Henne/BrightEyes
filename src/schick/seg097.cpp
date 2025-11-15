@@ -39,7 +39,7 @@
 namespace M302de {
 #endif
 
-static struct struct_char_height g_gui_char_height[67] = {
+static const struct struct_char_height g_gui_char_height[67] = {
 	{ 0x20, 0x00, 0x08 },
 	{ 0x41, 0x01, 0x08 },
 	{ 0x42, 0x02, 0x08 },
@@ -118,11 +118,9 @@ signed int g_menu_selected;		// ds:0xe5b0
 #if defined(__BORLANDC__)
 void GUI_unused1(char *a1, signed int a2, signed int a3)
 {
-	signed int l1;
+	signed int l1 = 0;
 	signed int l2;
 	signed char c;
-
-	l1 = 0;
 
 	call_mouse_bg();
 
@@ -179,7 +177,7 @@ signed int GUI_unused2(const int c, const int x, const int y)
 }
 #endif
 
-signed int GUI_lookup_char_height(signed char c, signed int *p)
+signed int GUI_lookup_char_height(const signed char c, signed int *p)
 {
 	signed int i;
 
@@ -202,7 +200,7 @@ signed int GUI_lookup_char_height(signed char c, signed int *p)
 }
 
 #if defined(__BORLANDC__)
-void GUI_1c2(const int index, const int v2, const int x, const int y)
+void GUI_1c2(const signed int index, const signed int v2, const signed int x, const signed int y)
 {
 
 	GUI_blank_char();
@@ -345,7 +343,7 @@ dummy:
 }
 
 //static
-void GUI_draw_radio_bg(signed int header, signed int options, signed int width, signed int height)
+void GUI_draw_radio_bg(const signed int header, const signed int options, const signed int width, const signed int height)
 {
 	signed int i;
 
@@ -378,7 +376,7 @@ void GUI_draw_radio_bg(signed int header, signed int options, signed int width, 
 	flush_keyboard_queue_alt();
 }
 
-void GUI_copy_smth(signed int width, signed int height)
+void GUI_copy_smth(const signed int width, const signed int height)
 {
 	g_pic_copy.x1 = g_textbox_pos_x;
 	g_pic_copy.y1 = g_textbox_pos_y;
@@ -393,9 +391,9 @@ void GUI_output(char *str)
 	GUI_input(str, 0);
 }
 
-signed int GUI_input(char *str, signed int num)
+signed int GUI_input(char *str, const signed int digits)
 {
-	signed int retval;
+	signed int retval = 0;
 	signed int l2;
 	signed int fg_bak;
 	signed int bg_bak;
@@ -403,13 +401,11 @@ signed int GUI_input(char *str, signed int num)
 	signed int l4;
 	signed int l5;
 	signed int l6;
-	signed int l7;
-	signed int l_si;
+	signed int usl_bak;
+	signed int lines;
 	signed int l_di;
 
-	retval = 0;
-
-	l7 = g_update_statusline;
+	usl_bak = g_update_statusline;
 	g_update_statusline = 0;
 
 	if (!str || !(*str) || g_autofight != 0)
@@ -427,24 +423,24 @@ signed int GUI_input(char *str, signed int num)
 	l_di = (g_textbox_width * 32) + 32;
 	g_textbox_pos_x = ((signed int)(320u - l_di) >> 1) + g_basepos_x;
 
-	g_textline_posx = (g_textbox_pos_x + 5);
-	g_textline_maxlen = (l_di - 8);
+	g_textline_posx = g_textbox_pos_x + 5;
+	g_textline_maxlen = l_di - 8;
 
-	l_si = GUI_count_lines(str);
+	lines = GUI_count_lines(str);
 
-	if (num != 0)
-		l_si += 2;
+	if (digits != 0)
+		lines += 2;
 
-	l2 = (l_si + 2) * 8;
+	l2 = (lines + 2) * 8;
 
 	g_textbox_pos_y = ((signed int)(200u - l2) >> 1) + g_basepos_y;
-	g_textline_posy = (g_textbox_pos_y + 7);
+	g_textline_posy = g_textbox_pos_y + 7;
 
 	get_textcolor(&fg_bak, &bg_bak);
 
 	call_mouse_bg();
 
-	GUI_draw_radio_bg(l_si, 0, l_di, l2);
+	GUI_draw_radio_bg(lines, 0, l_di, l2);
 
 	GUI_print_header(str);
 
@@ -452,8 +448,8 @@ signed int GUI_input(char *str, signed int num)
 
 	call_mouse();
 
-	if (num != 0) {
-		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed int)(l_di - num * 6) >> 1), g_textbox_pos_y + l_si * 8 -2, num, 0) != -1) {
+	if (digits != 0) {
+		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed int)(l_di - digits * 6) >> 1), g_textbox_pos_y + lines * 8 -2, digits, 0) != -1) {
 			retval = (signed int)atol(g_text_input_buf);
 		} else {
 			retval = -1;
@@ -465,7 +461,7 @@ signed int GUI_input(char *str, signed int num)
 		if (g_bioskey_event10 != 0) {
 			wait_for_keypress();
 		} else {
-			vsync_or_key(l_si * g_textbox_width * 50);
+			vsync_or_key(lines * g_textbox_width * 50);
 		}
 
 		/* delete action table */
@@ -489,7 +485,7 @@ signed int GUI_input(char *str, signed int num)
 
 	g_wallclock_update = l6;
 	g_gui_text_centered = 0;
-	g_update_statusline = l7;
+	g_update_statusline = usl_bak;
 
 	return retval;
 }
@@ -499,13 +495,13 @@ signed int GUI_input(char *str, signed int num)
  *
  * \param   text	the displayed text
  */
-signed int GUI_bool(char *text)
+signed int GUI_bool(char *header)
 {
 	signed int ret_radio;
 
 	g_gui_bool_flag = 1;
 
-	ret_radio = GUI_radio(text, 2, get_ttx(2), get_ttx(3));
+	ret_radio = GUI_radio(header, 2, get_ttx(2), get_ttx(3));
 
 	g_gui_bool_flag = 0;
 
@@ -514,7 +510,7 @@ signed int GUI_bool(char *text)
 
 
 //static
-void GUI_fill_radio_button(signed int old_pos, signed int new_pos, signed int offset)
+void GUI_fill_radio_button(const signed int old_pos, const signed int new_pos, const signed int offset)
 {
 	signed int i;
 	signed int x;
@@ -546,17 +542,26 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 {
 	va_list arguments;
 	signed int i;
-	signed int l2, l3, l4, l5;
+	signed int l2;
+	signed int l3;
+	signed int l4;
+	signed int l5;
 	signed int tw_bak;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed int l7, l8, l9, l10;
+	signed int l7;
+	signed int l8;
+	signed int l9;
+	signed int l10;
 	signed int retval;
-	signed int l11, l12, l13;
-	signed int l_si, l_di;
+	signed int l11;
+	signed int usl_bak;
+	signed int l13;
+	signed int lines;
+	signed int l_di;
 
 	l13 = g_ani_enabled;
-	l12 = g_update_statusline;
+	usl_bak = g_update_statusline;
 	g_update_statusline = 0;
 
 	disable_ani();
@@ -572,30 +577,30 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 
 	l_di = g_textbox_width * 32 + 32;
 	g_textbox_pos_x = ((signed int)(320 - l_di) >> 1) + g_basepos_x;
-	g_textline_posx = (g_textbox_pos_x + 5);
-	g_textline_maxlen = (l_di - 8);
+	g_textline_posx = g_textbox_pos_x + 5;
+	g_textline_maxlen = l_di - 8;
 	l10 = g_txt_tabpos[0];
 	g_txt_tabpos[0] = (g_textline_posx + g_textline_maxlen - 24);
 	g_dialogbox_indent_width = 40;
 	g_dialogbox_indent_height = 5;
 
-	l_si = GUI_count_lines(text) - 1;
+	lines = GUI_count_lines(text) - 1;
 
 	if (name)
-		l_si += 2;
+		lines += 2;
 
-	if (l_si < g_dialogbox_indent_height)
-		l_si = g_dialogbox_indent_height - 1;
+	if (lines < g_dialogbox_indent_height)
+		lines = g_dialogbox_indent_height - 1;
 
-	l4 = l_si + (signed char)options;
+	l4 = lines + (signed char)options;
 	l5 = (l4 + 2) * 8;
 	g_textbox_pos_y = (200 - (l5 + 2)) >> 1;
-	g_textline_posy = (g_textbox_pos_y + 5);
+	g_textline_posy = g_textbox_pos_y + 5;
 
 	call_mouse_bg();
 	get_textcolor(&fg_bak, &bg_bak);
 
-	GUI_draw_radio_bg(l_si, (signed char)options, l_di, l5);
+	GUI_draw_radio_bg(lines, (signed char)options, l_di, l5);
 
 	if (picture != 0) {
 
@@ -625,7 +630,7 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 		g_dialogbox_indent_height -= 2;
 	}
 
-	if (l_si != 0) {
+	if (lines != 0) {
 		GUI_print_header(text);
 	}
 
@@ -634,7 +639,7 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 	if ((signed char)options != 0) {
 
 		l2 = g_textline_posx + 8;
-		l3 = g_textbox_pos_y + (l_si + 1) * 8;
+		l3 = g_textbox_pos_y + (lines + 1) * 8;
 
 		va_start(arguments, options);
 		for (i = 0; i < (signed char)options; l3 += 8, i++) {
@@ -644,7 +649,7 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 
 	va_end(arguments);
 
-	retval = GUI_menu_input((signed char)options, l_si + 1, l_di);
+	retval = GUI_menu_input((signed char)options, lines + 1, l_di);
 
 	GUI_copy_smth(l_di, l5);
 
@@ -663,7 +668,7 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 
 	g_action = g_dialogbox_lock = 0;
 
-	g_update_statusline = l12;
+	g_update_statusline = usl_bak;
 
 	if (l13 != 0)
 		init_ani(2);
@@ -672,14 +677,16 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 }
 
 //static
-signed int GUI_menu_input(signed int positions, signed int h_lines, signed int width)
+signed int GUI_menu_input(const signed int positions, const signed int h_lines, const signed int width)
 {
-	volatile signed int l1, l2, l3, l4, l5, l6;
-	signed int done;
+	signed int l1;
+	signed int l2;
+	signed int l3;
+	signed int l4;
+	signed int l5 = -1;
+	signed int l6;
+	signed int done = 0;
 	signed int retval;
-
-	l5 = -1;
-	done = 0;
 
 	g_menu_selected = g_menu_input_busy = 1;
 	g_menu_selected += g_menu_default_select;
@@ -744,11 +751,15 @@ signed int GUI_menu_input(signed int positions, signed int h_lines, signed int w
 			}
 
 			if (g_gui_bool_flag) {
+
 				/* in yes-no-mode, answer "Ja" (yes) can be selected with the 'J' key,
 				 * and answer "Nein" (no) can be selected with the 'N' key. */
 				if (g_action == ACTION_ID_J) {
+
 					retval = done = 1;
+
 				} else if (g_action == ACTION_ID_N) {
+
 					retval = 2;
 					done = 1;
 				}
@@ -780,7 +791,7 @@ signed int GUI_menu_input(signed int positions, signed int h_lines, signed int w
 	return retval;
 }
 
-signed int GUI_radio(char *text, signed char options, ...)
+signed int GUI_radio(char *header, signed char options, ...)
 {
 	signed int i;
 	signed int l_di;
@@ -791,13 +802,13 @@ signed int GUI_radio(char *text, signed char options, ...)
 	signed int bg_bak;
 	signed int l7, l8, l9, l10, l11;
 	signed int retval;
-	signed int l12;
+	signed int usl_bak;
 
-	l12 = g_update_statusline;
+	usl_bak = g_update_statusline;
 	g_update_statusline = 0;
 
 	if (!options) {
-		GUI_output(text);
+		GUI_output(header);
 		return 0;
 	}
 
@@ -808,17 +819,17 @@ signed int GUI_radio(char *text, signed char options, ...)
 
 	l11 = g_textbox_width * 32 + 32;
 	g_textbox_pos_x = ((320 - l11) >> 1) + g_basepos_x;
-	g_textline_posx = (g_textbox_pos_x + 5);
-	g_textline_maxlen = (l11 - 8);
+	g_textline_posx = g_textbox_pos_x + 5;
+	g_textline_maxlen = l11 - 8;
 
 	l10 = g_txt_tabpos[0];
-	g_txt_tabpos[0] = (g_textline_posx + g_textline_maxlen - 24);
+	g_txt_tabpos[0] = g_textline_posx + g_textline_maxlen - 24;
 
-	l_di = GUI_count_lines(text);
+	l_di = GUI_count_lines(header);
 	l5 = l_di + options;
 	l6 = (l5 + 2) * 8;
 	g_textbox_pos_y = ((200 - l6 + 2) >> 1) + g_basepos_y;
-	g_textline_posy = (g_textbox_pos_y + 7);
+	g_textline_posy = g_textbox_pos_y + 7;
 
 	call_mouse_bg();
 	get_textcolor(&fg_bak, &bg_bak);
@@ -826,7 +837,7 @@ signed int GUI_radio(char *text, signed char options, ...)
 	GUI_draw_radio_bg(l_di, options, l11, l6);
 
 	if (l_di != 0)
-		GUI_print_header(text);
+		GUI_print_header(header);
 
 	l3 = g_textline_posx + 8;
 	l4 = g_textbox_pos_y + (l_di + 1) * 8;
@@ -856,7 +867,7 @@ signed int GUI_radio(char *text, signed char options, ...)
 	g_textline_maxlen = l9;
 	g_txt_tabpos[0] = l10;
 	g_action = g_dialogbox_lock = 0;
-	g_update_statusline = l12;
+	g_update_statusline = usl_bak;
 
 	return retval;
 }

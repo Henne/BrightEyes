@@ -661,13 +661,12 @@ void tevent_065(void)
 
 void tevent_066(void)
 {
-	signed int l_si;
-	signed int l_di;
+	signed int answer;
+	signed int i;
 	signed int count;
 	struct struct_hero *hero;
 
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent066_flag) ||
-		gs_tevent066_flag)
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent066_flag) || gs_tevent066_flag)
 	{
 		TRV_found_replenish_place(0);
 		gs_tevent066_flag = 1;
@@ -676,16 +675,16 @@ void tevent_066(void)
 		{
 
 			do {
-				l_si = GUI_radio(get_tx2(81), 2, get_tx2(82), get_tx2(83));
+				answer = GUI_radio(get_tx2(81), 2, get_tx2(82), get_tx2(83));
 
-			} while (l_si == -1);
+			} while (answer == -1);
 
-			if (l_si == 1) {
+			if (answer == 1) {
 
 				GUI_output(get_tx2(84));
 
 				hero = get_hero(0);
-				for (l_di = count = 0; l_di <= 6; l_di++, hero++)
+				for (i = count = 0; i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -2) <= 0)
@@ -700,11 +699,11 @@ void tevent_066(void)
 
 				} else {
 					do {
-						l_si = GUI_radio(get_tx2(86), 2, get_tx2(87), get_tx2(88));
+						answer = GUI_radio(get_tx2(86), 2, get_tx2(87), get_tx2(88));
 
-					} while (l_si == -1);
+					} while (answer == -1);
 
-					if (l_si == 1) {
+					if (answer == 1) {
 
 						GUI_output(get_tx2(89));
 						return;

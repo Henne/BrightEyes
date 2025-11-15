@@ -142,25 +142,24 @@ void tevent_069(void)
 
 void tevent_070(void)
 {
-	signed int l_si;
+	signed int answer;
 
-	if (test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 ||
-		gs_tevent070_flag)
+	if (test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 || gs_tevent070_flag)
 	{
 		gs_tevent070_flag = 1;
 
-		if (test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 ||
-			gs_tevent070_herb_flag)
+		if (test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 || gs_tevent070_herb_flag)
 		{
 			gs_tevent070_herb_flag = 1;
 			g_gather_herbs_special = 130;
-			l_si = TRV_found_camp_place(2);
+			answer = TRV_found_camp_place(2);
 			g_gather_herbs_special = -1;
+
 		} else {
-			l_si = TRV_found_camp_place(0);
+			answer = TRV_found_camp_place(0);
 		}
 
-		if ((l_si && !gs_tevent070_trail_flag && test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0) ||
+		if ((answer && !gs_tevent070_trail_flag && test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0) ||
 			gs_tevent070_trail_flag != 0) {
 
 			gs_tevent070_trail_flag = 1;
@@ -168,11 +167,11 @@ void tevent_070(void)
 			if (!TRV_follow_trail_question()) {
 
 				do {
-					l_si = GUI_radio(get_tx2(0), 2, get_tx2(1), get_tx2(2));
+					answer = GUI_radio(get_tx2(0), 2, get_tx2(1), get_tx2(2));
 
-				} while (l_si == -1);
+				} while (answer == -1);
 
-				if (l_si == 1) {
+				if (answer == 1) {
 					TRV_hunt_generic(25, 3, -1, 3, 8, 3, 7, 2, 4, 35, 0);
 				}
 			}
@@ -183,16 +182,13 @@ void tevent_070(void)
 /* Orc-Monolith */
 void tevent_071(void)
 {
-	signed int l_si;
-	signed int have_raft;
+	signed int answer;
+	signed int have_raft = 0;
 	signed int i;
 	struct struct_hero *hero;
 
-	have_raft = 0;
-
 	/* Perception + 8, Sinnesschaerfe + 8 */
-	if (test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 &&
-		!gs_tevent071_flag)
+	if ((test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0) && !gs_tevent071_flag)
 	{
 		gs_tevent071_flag = 1;
 
@@ -202,25 +198,25 @@ void tevent_071(void)
 			sprintf(g_dtp2,	get_tx2(13), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 3));
 
 			do {
-				l_si = GUI_radio(g_dtp2, 2, get_tx2(14), get_tx2(15));
+				answer = GUI_radio(g_dtp2, 2, get_tx2(14), get_tx2(15));
 
-			} while (l_si == -1);
+			} while (answer == -1);
 
-			if (l_si == 2) {
+			if (answer == 2) {
 
 				/* investigate */
 
 				do {
-					l_si = GUI_radio(get_tx2(16), 3, get_tx2(17), get_tx2(18), get_tx2(19));
+					answer = GUI_radio(get_tx2(16), 3, get_tx2(17), get_tx2(18), get_tx2(19));
 
-				} while (l_si == -1);
+				} while (answer == -1);
 
-				if (l_si == 1) {
+				if (answer == 1) {
 
 					/* just swim */
 					TRV_swimm(2, 5);
 
-				} else if (l_si == 2) {
+				} else if (answer == 2) {
 
 					/* build a raft before swimming */
 					have_raft = 1;
@@ -228,16 +224,16 @@ void tevent_071(void)
 					TRV_swimm(-1, 0);
 				}
 
-				if (l_si == 1 || l_si == 2) {
+				if (answer == 1 || answer == 2) {
 
 					sprintf(g_dtp2,	get_tx2(22), hero->alias);
 
 					do {
-						l_si = GUI_radio(g_dtp2, 2, get_tx2(23), get_tx2(24));
+						answer = GUI_radio(g_dtp2, 2, get_tx2(23), get_tx2(24));
 
-					} while (l_si == -1);
+					} while (answer == -1);
 
-					if (l_si == 1) {
+					if (answer == 1) {
 						/* destroy monolith */
 
 						GUI_output(get_tx2(25));
@@ -264,11 +260,11 @@ void tevent_071(void)
 					i = (!have_raft ? 1 : 2);
 
 					do {
-						l_si = GUI_radio(get_tx2(26), (signed char)i, get_tx2(27), get_tx2(28));
+						answer = GUI_radio(get_tx2(26), (signed char)i, get_tx2(27), get_tx2(28));
 
-					} while (l_si == -1);
+					} while (answer == -1);
 
-					if (l_si == 1) {
+					if (answer == 1) {
 						TRV_swimm(2, 5);
 					} else {
 						timewarp(HOURS(1));
