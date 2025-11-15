@@ -1419,7 +1419,7 @@ void interrupt mouse_isr(void)
 		}
 
 		if (((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_town_id != TOWN_ID_NONE)) &&
-				!gs_current_loctype && !g_dialogbox_lock && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+				!gs_town_loc_type && !g_dialogbox_lock && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			g_current_cursor =	(is_mouse_in_rect( 68,  4, 171,  51) ?	&g_cursor_arrow_up :
 						(is_mouse_in_rect( 68, 89, 171, 136) ?	&g_cursor_arrow_down :
@@ -2023,7 +2023,7 @@ static void game_loop(void)
 
 	while (g_game_state == GAME_STATE_MAIN) {
 
-		if (gs_current_loctype != LOCTYPE_NONE) {
+		if (gs_town_loc_type != LOCTYPE_NONE) {
 			do_location();
 		} else if (gs_town_id != TOWN_ID_NONE) {
 			do_town();
@@ -2074,7 +2074,7 @@ static void game_loop(void)
 
 		if (!g_in_fight &&
 			((g_game_state == GAME_STATE_MAIN) || (g_game_state == GAME_STATE_VICTORY)) &&
-			!gs_current_loctype)
+			!gs_town_loc_type)
 		{
 			check_level_up();
 		}
@@ -2106,7 +2106,7 @@ static void game_loop(void)
 			g_game_state == GAME_STATE_OUTRO ||
 			g_game_state == GAME_STATE_FIGQUIT)
 		{
-			gs_current_loctype = LOCTYPE_NONE;
+			gs_town_loc_type = LOCTYPE_NONE;
 
 			do {
 				answer = load_game_state();
@@ -2287,7 +2287,7 @@ static void dawning(void)
 		pal_fade((int8_t*)gs_palette_sky, (int8_t*)g_townpal_buf + 0xc0);
 
 		/* in a town */
-		if (gs_town_id && !gs_dungeon_id && !gs_current_loctype && !gs_show_travel_map &&
+		if (gs_town_id && !gs_dungeon_id && !gs_town_loc_type && !gs_show_travel_map &&
 			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
@@ -2316,7 +2316,7 @@ static void nightfall(void)
 		pal_fade((int8_t*)gs_palette_sky, (int8_t*)&g_sky_fade_palette[0][0]);
 
 		/* in a town */
-		if (gs_town_id && !gs_dungeon_id && !gs_current_loctype && !gs_show_travel_map &&
+		if (gs_town_id && !gs_dungeon_id && !gs_town_loc_type && !gs_show_travel_map &&
 			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
@@ -4165,7 +4165,7 @@ void draw_compass(void)
 	struct nvf_extract_desc nvf;
 
 	/* No compass in a location */
-	if (!gs_current_loctype &&
+	if (!gs_town_loc_type &&
 		/* Has something to do with traveling */
 		!g_travel_event_active &&
 		/* Not in town or dungeon */
@@ -4221,7 +4221,7 @@ signed int can_merge_group(void)
 				(0 != gs_group_member_counts[i]) &&
 				(gs_groups_x_target[i] == gs_x_target) &&
 				(gs_groups_y_target[i] == gs_y_target) &&
-				(gs_town_groups_loctype[i] == gs_current_loctype) &&
+				(gs_town_groups_loctype[i] == gs_town_loc_type) &&
 				(gs_groups_town_id[i] == gs_town_id) &&
 				(gs_groups_dungeon_id[i] == gs_dungeon_id) &&
 				(gs_groups_dng_level[i] == gs_dungeon_level))

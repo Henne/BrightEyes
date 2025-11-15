@@ -215,7 +215,7 @@ void THO_tav_inn_combi(void)
 
 			g_textbox_width = 3;
 
-			gs_current_loctype = LOCTYPE_TAVERN;
+			gs_town_loc_type = LOCTYPE_TAVERN;
 			do_tavern();
 
 			/* leave the loop or enter the inn in the next iteration */
@@ -237,7 +237,7 @@ void THO_tav_inn_combi(void)
 
 			g_textbox_width = 3;
 
-			gs_current_loctype = LOCTYPE_INN;
+			gs_town_loc_type = LOCTYPE_INN;
 			do_inn();
 
 			/* leave the loop or enter the tavern in the next iteration */

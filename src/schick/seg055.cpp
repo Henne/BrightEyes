@@ -174,7 +174,7 @@ void do_merchant(void)
 	D1_INFO("\tAuswahl: %2d [0, 18] (je kleiner der Wert, desto groesser die Auswahl)\n", sortiment);
 #endif
 
-	if ((gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) && gs_current_loctype != LOCTYPE_MARKET)
+	if ((gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) && gs_town_loc_type != LOCTYPE_MARKET)
 	{
 		/* shop closed */
 
@@ -292,7 +292,7 @@ void do_merchant(void)
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-			GUI_print_loc_line(gs_current_loctype == LOCTYPE_MARKET ? get_ttx(679) : (gs_town_typeindex == 93 ?  get_ttx(46) : get_tx(gs_town_locdata)));
+			GUI_print_loc_line(gs_town_loc_type == LOCTYPE_MARKET ? get_ttx(679) : (gs_town_typeindex == 93 ?  get_ttx(46) : get_tx(gs_town_locdata)));
 			// typeindex 93 is the merchant from random city event 6.
 
 			g_request_refresh = refresh = 0;

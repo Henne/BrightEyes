@@ -630,7 +630,7 @@ signed int DNG14_handler(void)
 			leave_dungeon();
 			gs_x_target = 22;
 			gs_y_target = 5;
-			gs_current_loctype = LOCTYPE_NONE;
+			gs_town_loc_type = LOCTYPE_NONE;
 			gs_direction = SOUTH;
 		}
 
@@ -662,7 +662,7 @@ signed int DNG14_handler(void)
 		leave_dungeon();
 		gs_x_target = 2;
 		gs_y_target = 13;
-		gs_current_loctype = LOCTYPE_NONE;
+		gs_town_loc_type = LOCTYPE_NONE;
 		gs_direction = NORTH;
 	}
 

@@ -92,12 +92,12 @@ void show_automap(void)
 
 			if (g_request_refresh != 0) {
 
-				loc_bak = gs_current_loctype;
-				gs_current_loctype = LOCTYPE_UNKN1;
+				loc_bak = gs_town_loc_type;
+				gs_town_loc_type = LOCTYPE_UNKN1;
 
 				draw_main_screen();
 
-				gs_current_loctype = loc_bak;
+				gs_town_loc_type = loc_bak;
 
 				if (g_map_size_x == 16) {
 					draw_loc_icons(1, MENU_ICON_LEAVE);

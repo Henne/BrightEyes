@@ -156,9 +156,9 @@ void tevent_059(void)
 	if (TRV_enter_hut_question())
 	{
 		gs_camp_incident = 0;
-		gs_current_loctype = LOCTYPE_WILDCAMP;
+		gs_town_loc_type = LOCTYPE_WILDCAMP;
 		do_location();
-		gs_current_loctype = LOCTYPE_NONE;
+		gs_town_loc_type = LOCTYPE_NONE;
 		gs_camp_incident = -1;
 
 		TRV_load_textfile(-1);
@@ -195,9 +195,9 @@ void tevent_059(void)
 			}
 		}
 
-		gs_current_loctype = LOCTYPE_WILDCAMP;
+		gs_town_loc_type = LOCTYPE_WILDCAMP;
 		do_location();
-		gs_current_loctype = LOCTYPE_NONE;
+		gs_town_loc_type = LOCTYPE_NONE;
 	}
 }
 

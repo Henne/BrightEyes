@@ -257,11 +257,11 @@ signed int TRV_found_camp_place(const signed int a0)
 		}
 
 		g_good_camp_place = 1;
-		gs_current_loctype = LOCTYPE_WILDCAMP;
+		gs_town_loc_type = LOCTYPE_WILDCAMP;
 
 		do_location();
 
-		gs_current_loctype = g_good_camp_place = LOCTYPE_NONE; /* == 0 */
+		gs_town_loc_type = g_good_camp_place = LOCTYPE_NONE; /* == 0 */
 
 		TRV_load_textfile(-1);
 
@@ -341,11 +341,11 @@ void TRV_found_inn(const signed int town_id, const signed int type)
 
 		gs_town_locdata = town_id;
 		gs_town_typeindex = type;
-		gs_current_loctype = LOCTYPE_INN;
+		gs_town_loc_type = LOCTYPE_INN;
 
 		do_location();
 
-		gs_current_loctype = LOCTYPE_NONE;
+		gs_town_loc_type = LOCTYPE_NONE;
 
 		TRV_load_textfile(-1);
 	}

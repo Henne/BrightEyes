@@ -308,7 +308,7 @@ void tevent_113(void)
 		/* enter the temple */
 		gs_town_typeindex = 58;
 		est_old = gs_gods_estimation[GOD_FIRUN];
-		gs_current_loctype = LOCTYPE_TEMPLE;
+		gs_town_loc_type = LOCTYPE_TEMPLE;
 		do_location();
 		TRV_load_textfile(-1);
 
@@ -322,9 +322,9 @@ void tevent_113(void)
 		/* the more money you spend, the better the group will sleep */
 		g_wildcamp_sleep_quality = (est_diff <= 10 ? 1 : (est_diff <= 50 ? 2 : (est_diff <= 100 ? 3 : 4)));
 
-		gs_current_loctype = LOCTYPE_WILDCAMP;
+		gs_town_loc_type = LOCTYPE_WILDCAMP;
 		do_location();
-		gs_current_loctype = LOCTYPE_NONE;
+		gs_town_loc_type = LOCTYPE_NONE;
 
 		g_textbox_width = 9;
 		g_request_refresh = 2;

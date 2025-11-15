@@ -806,7 +806,7 @@ signed int load_game_state(void)
 		g_check_poison = 0;
 		g_fading_state = 3;
 
-		if (gs_current_loctype != LOCTYPE_TEMPLE) {
+		if (gs_town_loc_type != LOCTYPE_TEMPLE) {
 			g_new_menu_icons[6] = g_new_menu_icons[7] = g_new_menu_icons[8] = MENU_ICON_NONE;
 		}
 
@@ -860,7 +860,7 @@ signed int save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This feature mod stops the AP decrease.
 		 * Here, the warning message "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" is displayed. */
-		if ((gs_current_loctype != LOCTYPE_TEMPLE) && (g_game_state != GAME_STATE_VICTORY)) {
+		if ((gs_town_loc_type != LOCTYPE_TEMPLE) && (g_game_state != GAME_STATE_VICTORY)) {
 
 			/* create savegame not in a temple */
 
@@ -940,7 +940,7 @@ signed int save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
 				 * Here, the actual decrease is executed */
-				if ((g_game_state != GAME_STATE_VICTORY) && (gs_current_loctype != LOCTYPE_TEMPLE) && (get_hero(tw_bak)->ap > 0))
+				if ((g_game_state != GAME_STATE_VICTORY) && (gs_town_loc_type != LOCTYPE_TEMPLE) && (get_hero(tw_bak)->ap > 0))
 				{
 					add_hero_ap(get_hero(tw_bak), -1L);
 				}

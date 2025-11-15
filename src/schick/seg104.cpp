@@ -294,7 +294,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 					} else {
 						/* AE sufficient */
 
-						if ((gs_current_loctype == LOCTYPE_INN) && (g_sleep_quality == -1)) {
+						if ((gs_town_loc_type == LOCTYPE_INN) && (g_sleep_quality == -1)) {
 
 							/* no room booked => brewing not possible */
 							GUI_output(get_ttx(346));
@@ -302,7 +302,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 							return 0;
 						}
 
-						if ((g_alchemy_recipes[recipe_index].duration > 8) && (gs_current_loctype != LOCTYPE_INN)) {
+						if ((g_alchemy_recipes[recipe_index].duration > 8) && (gs_town_loc_type != LOCTYPE_INN)) {
 
 							/* recipes with durations > 8 hours have to be done in a inn. */
 							sprintf(g_dtp2,	get_tx(44), g_alchemy_recipes[recipe_index].duration);
@@ -319,7 +319,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 #else
 								((hero == get_hero(6)) || (count_heroes_available_in_group_ignore_npc() > 1)) && /* still allow to single out the NPC if he is the brewing hero */
 #endif
-								(gs_current_loctype != LOCTYPE_WILDCAMP) &&
+								(gs_town_loc_type != LOCTYPE_WILDCAMP) &&
 								(g_alchemy_recipes[recipe_index].duration > 8)
 							) {
 
@@ -346,7 +346,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 								/* rest of group waits */
 								timewarp(HOURS(g_alchemy_recipes[recipe_index].duration));
 
-								if (gs_current_loctype != LOCTYPE_WILDCAMP) {
+								if (gs_town_loc_type != LOCTYPE_WILDCAMP) {
 
 									hero_p = get_hero(0);
 									for (i = 0; i <= 6; i++, hero_p++) {

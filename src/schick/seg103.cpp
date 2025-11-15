@@ -258,7 +258,7 @@ signed int select_skill(void)
 	struct dummy2 a = *(struct dummy2*)g_select_skill_defaults;
 
 	/* add skills for special location */
-	if (gs_current_loctype == LOCTYPE_TAVERN) {
+	if (gs_town_loc_type == LOCTYPE_TAVERN) {
 		a.a[nr_skills] = TA_AKROBATIK;
 		nr_skills++;
 
@@ -269,15 +269,15 @@ signed int select_skill(void)
 
 		a.a[nr_skills] = TA_MUSIZIEREN;
 		nr_skills++;
-	} else if ((gs_current_loctype == LOCTYPE_WILDCAMP) || (gs_current_loctype == LOCTYPE_INN)) {
+	} else if ((gs_town_loc_type == LOCTYPE_WILDCAMP) || (gs_town_loc_type == LOCTYPE_INN)) {
 		a.a[nr_skills] = TA_ALCHIMIE;
 		nr_skills++;
-	} else if (gs_current_loctype == LOCTYPE_MARKET) {
+	} else if (gs_town_loc_type == LOCTYPE_MARKET) {
 		a.a[nr_skills] = TA_AKROBATIK;
 		nr_skills++;
 		a.a[nr_skills] = TA_TASCHENDIEBSTAHL;
 		nr_skills++;
-	} else if (gs_current_loctype == LOCTYPE_MERCHANT) {
+	} else if (gs_town_loc_type == LOCTYPE_MERCHANT) {
 		a.a[nr_skills] = TA_TASCHENDIEBSTAHL;
 		nr_skills++;
 	}
