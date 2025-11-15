@@ -450,7 +450,7 @@ signed int DNG12_handler(void)
 					sprintf(g_dtp2,
 						"ALS %s MIT DER BARRIERE KOLLIDIERT, BRICHT SIE IN ST""\x9a""CKE.\x40"
 						"DAS GANZE WAR NUR EIN BILD!\x40"
-						"SCHADE DASS IHR DAS NICHT FR""\x9a""HER BEMERKT HABT.\0",
+						"SCHADE DASS IHR DAS NICHT FR""\x9a""HER BEMERKT HABT.",
 					hero->alias);
 #endif
 				}
