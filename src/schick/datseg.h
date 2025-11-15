@@ -922,7 +922,7 @@ extern int16_t gs_y_target;			//ds:0x2d46; seg002-seg120
 extern int16_t gs_groups_x_target[6];		//ds:0x2d48; seg002-seg089
 extern int16_t gs_groups_y_target[6];		//ds:0x2d54; seg002-seg089
 extern int8_t  gs_current_loctype;		//ds:0x2d60; seg002-seg120
-extern int8_t  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
+extern int8_t  gs_town_groups_loctype[6];	//ds:0x2d61; seg002, seg049
 extern int8_t  gs_town_id;			//ds:0x2d67; seg002-seg120
 extern int8_t  gs_groups_town_id[6];		//ds:0x2d68; seg002-seg074
 extern int8_t  gs_dungeon_id;			//ds:0x2d6e; seg002-seg120
@@ -936,7 +936,7 @@ extern int16_t gs_y_target_bak;			//ds:0x2d85; seg025-seg120
 extern int16_t gs_groups_x_target_bak[6];	//ds:0x2d87; seg002, seg049, seg054
 extern int16_t gs_groups_y_target_bak[6];	//ds:0x2d93; seg002, seg049, seg054
 extern int8_t  gs_current_loctype_bak;		//ds:0x2d9f; seg002-seg120
-extern int8_t  gs_groups_current_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
+extern int8_t  gs_town_groups_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
 extern int8_t  gs_town_id_bak;		//ds:0x2da6; seg025, seg049, seg066, seg075, seg120
 extern int8_t  gs_groups_town_id_bak[6];		//ds:0x2da7; seg049, seg054
 extern int8_t  gs_dungeon_id_bak;		//ds:0x2dad; seg025, seg049, seg076
@@ -1423,8 +1423,8 @@ extern uint8_t  gs_dng01_chest5_content[13];	//ds:0x4200; seg077
 extern uint8_t  gs_dng01_chest7_content[5];	//ds:0x420d; seg077
 extern int8_t  gs_unconscious_message[7];	//ds:0x4212; seg002, seg049
 extern int8_t  gs_food_message[7];		//ds:0x4212; seg002, seg049, seg059
-extern int16_t gs_current_locdata;		//ds:0x4222; seg025-seg109
-extern int16_t gs_current_typeindex;		//ds:0x4224; seg025-seg120
+extern int16_t gs_town_locdata;		//ds:0x4222; seg025-seg109
+extern int16_t gs_town_typeindex;		//ds:0x4224; seg025-seg120
 extern uint8_t  gs_dng03_highpriest_killed;	//ds:0x4226; seg079
 extern int8_t  gs_dng03_chest12_loads;		//ds:0x4227; seg079
 extern int16_t gs_trv_i;				//ds:0x4228; seg063, seg094
@@ -1628,7 +1628,7 @@ extern const uint8_t g_hyg_ani_x6;		//ds:0x71c3; seg065
 extern const uint8_t g_hyg_ani_x7[3];		//ds:0x71c4; seg065
 extern const uint8_t g_hyg_ani_x9[3];		//ds:0x71c7; seg065
 extern signed char g_can_merge_group;				//ds:0x7c41; seg066, seg076
-extern signed char g_c_event_active;				//ds:0x7c42; seg002, seg067
+extern signed char g_town_city_event_active;				//ds:0x7c42; seg002, seg067
 extern signed char g_tmap_double1;				//ds:0x7c9a; seg025, seg072
 extern signed char g_tmap_double2;				//ds:0x7c9b; seg025, seg072, seg082
 extern signed char g_swafnild_traveled;				//ds:0x7c9c; seg063, seg072
@@ -1700,7 +1700,7 @@ extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
 extern signed int g_combo_mode;			// ds:0xe42c; seg054, seg059, seg069
 extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
-extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066
+extern unsigned char g_town_house_count[4];	// ds:0xe400; seg028, seg066
 extern HugePt g_buffer9_ptr4;			// ds:0xe3fc; seg028
 extern signed int g_temple_god;			// ds:0xe3f8; seg061, seg062
 extern signed int g_price_modificator;		// ds:0xe3f6; seg055, seg057, seg058

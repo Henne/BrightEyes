@@ -588,7 +588,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 			} else {
 				GUI_output(get_tx(39));
 
-				gs_tav_cheated_flags[gs_current_typeindex] = 1;
+				gs_tav_cheated_flags[gs_town_typeindex] = 1;
 
 				retval = -1;
 			}

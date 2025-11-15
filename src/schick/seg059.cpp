@@ -39,12 +39,12 @@ void do_tavern(void)
 	signed int l3;
 	int32_t p_money_before;
 	int32_t p_money_after;
-	const struct inn_descr *tavern = &g_tavern_descr_table[gs_current_typeindex];
+	const struct inn_descr *tavern = &g_tavern_descr_table[gs_town_typeindex];
 	signed int bonus;
 	time_t timeval;
 
 
-	GUI_print_loc_line(get_tx(gs_current_locdata));
+	GUI_print_loc_line(get_tx(gs_town_locdata));
 
 	g_request_refresh = 1;
 
@@ -74,14 +74,14 @@ void do_tavern(void)
 			disable_ani();
 			load_ani(27);
 			init_ani(0);
-			GUI_print_loc_line(get_tx(gs_current_locdata));
+			GUI_print_loc_line(get_tx(gs_town_locdata));
 			set_audio_track(ARCHIVE_FILE_INN_XMI);
 			g_request_refresh = 0;
 		}
 
 		handle_gui_input();
 
-		if (gs_tav_cheated_flags[gs_current_typeindex]) {
+		if (gs_tav_cheated_flags[gs_town_typeindex]) {
 
 			GUI_output(get_ttx(472));
 			done = 1;
@@ -184,7 +184,7 @@ void do_tavern(void)
 
 					GUI_output(get_ttx(474));
 
-					gs_tav_cheated_flags[gs_current_typeindex] = 1;
+					gs_tav_cheated_flags[gs_town_typeindex] = 1;
 					done = 1;
 					g_combo_mode = 0;
 

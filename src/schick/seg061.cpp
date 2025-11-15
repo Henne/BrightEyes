@@ -99,7 +99,7 @@ void do_temple(void)
 			/* search which god owns this temple */
 			g_temple_god = 1;
 			for (i = 1; i < 15; i++) {
-				if (is_in_byte_array(gs_current_typeindex, g_god_temples_index[i]))
+				if (is_in_byte_array(gs_town_typeindex, g_god_temples_index[i]))
 				{
 					g_temple_god = i;
 					break;
@@ -127,7 +127,7 @@ void do_temple(void)
 			/* location string */
 			sprintf(g_dtp2, get_ttx(235),
 				get_ttx(g_temple_god + 21),	/* name of the god */
-				(char*)(gs_current_typeindex != 58 ? get_ttx(gs_town_id + 235): get_ttx(622)));
+				(char*)(gs_town_typeindex != 58 ? get_ttx(gs_town_id + 235): get_ttx(622)));
 
 			GUI_print_loc_line(g_dtp2);
 
@@ -158,18 +158,18 @@ void do_temple(void)
 			}
 		} else if (g_action == ACTION_ID_ICON_1) {
 			/* add character */
-			char_add(gs_current_typeindex);
+			char_add(gs_town_typeindex);
 			draw_status_line();
 		} else if (g_action == ACTION_ID_ICON_2) {
 			/* let go character */
-			char_letgo(gs_current_typeindex);
+			char_letgo(gs_town_typeindex);
 			draw_status_line();
 		} else if (g_action == ACTION_ID_ICON_3) {
 			/* erase character */
 			char_erase();
 		} else if (g_action == ACTION_ID_ICON_4) {
 			/* load game */
-			if (gs_current_typeindex != 58) {
+			if (gs_town_typeindex != 58) {
 
 				do {
 					game_state = load_game_state();
@@ -190,7 +190,7 @@ void do_temple(void)
 		} else if (g_action == ACTION_ID_ICON_5) {
 
 			/* save game */
-			if (gs_current_typeindex != 58) {
+			if (gs_town_typeindex != 58) {
 
 				if (!gs_group_member_counts[gs_active_group_id]) {
 					GUI_output(get_ttx(232));

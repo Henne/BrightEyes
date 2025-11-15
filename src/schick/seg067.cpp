@@ -24,7 +24,7 @@
 #if !defined(__BORLANDC__)
 namespace M302de {
 #endif
-signed char g_c_event_active = 0; // ds:0x7c42, 0 = default, 1 = city event active
+signed char g_town_city_event_active = 0; // ds:0x7c42, 0 = default, 1 = city event active
 
 /**
  * \brief   select a random city event type
@@ -35,7 +35,7 @@ void city_event_switch(void)
 	load_tx(ARCHIVE_FILE_STRASSE_LTX);
 
 	/* set city flag */
-	g_c_event_active = 1;
+	g_town_city_event_active = 1;
 
 	switch (random_schick(9)) {
 		case 1: city_event_1(); break;
@@ -50,7 +50,7 @@ void city_event_switch(void)
 	}
 
 	/* reset city flag */
-	g_c_event_active = 0;
+	g_town_city_event_active = 0;
 
 	/* load the LTX-file of the current town */
 	load_tx(gs_town_id + 77);
@@ -280,14 +280,14 @@ void city_event_6(void)
 	/* Original-Bug 24:
 	 * When entering a building in Thorwal, Prem, Phexcaer or Oberorken between 8:00 and 20:00 o'clock, the street merchant (random city event) shows up with a chance 1:900. Selecting the third answer in the text box, the shop screen appears. After leaving the street merchant, the entered building is corrupted. For example, an entered temple will be a Praios temple (which otherwise does not exist in the game), or an entered tavern may offer negative food prices.
 	 */
-			type_bak = gs_current_typeindex;
+			type_bak = gs_town_typeindex;
 #endif
-			gs_current_typeindex = 93;
+			gs_town_typeindex = 93;
 			do_merchant();
 			gs_current_loctype = loc_bak;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 24 */
-			gs_current_typeindex = type_bak;
+			gs_town_typeindex = type_bak;
 #endif
 	/* Original-Bug 27: After leaving the street merchant (random city event), the party is rotated by 180 degrees. This doesn't make too much sense, and it is inconsistent to the similar situation of visiting a merchant at a market, where no rotation is performed. If moreover the street merchant happens to appear when the party is about to enter some building, after leaving the street merchant and then leaving the building the party will *not* be rotated. */
 #ifdef M302de_ORIGINAL_BUGFIX

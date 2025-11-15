@@ -139,7 +139,7 @@ void diary_new_entry(void)
 		entry->month = gs_month;
 		/* Write year */
 		entry->year = gs_year;
-		/* Write city */
+		/* Write town */
 		entry->town_id = gs_town_id;
 	}
 }

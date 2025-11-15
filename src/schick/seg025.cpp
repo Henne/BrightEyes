@@ -98,7 +98,7 @@ void show_entrance(void)
 	if (GUI_bool(get_ttx(760))) {
 
 		init_ani_busy_loop(2);
-		DNG_enter_dungeon(gs_current_typeindex);
+		DNG_enter_dungeon(gs_town_typeindex);
 	} else {
 
 		leave_location();
@@ -106,7 +106,7 @@ void show_entrance(void)
 }
 
 /**
- * \brief   the screen when entering a house in the city
+ * \brief   the screen when entering a house in a town
  */
 void show_citizen(void)
 {
@@ -122,7 +122,7 @@ void show_citizen(void)
 			load_ani(20);
 			init_ani(g_request_refresh = 0);
 
-			strcpy(g_text_output_buf, get_tx(gs_current_locdata));
+			strcpy(g_text_output_buf, get_tx(gs_town_locdata));
 
 			if ((gs_year == 15) && (gs_month == 1) && (random_schick(100) <= 20)) {
 
@@ -157,7 +157,7 @@ void do_house(void)
 	struct struct_hero *hero;
 
 	/* prepare the question */
-	strcpy(g_dtp2, get_tx(gs_current_locdata));
+	strcpy(g_dtp2, get_tx(gs_town_locdata));
 
 	strcat(g_dtp2, get_ttx(623));
 
@@ -245,7 +245,7 @@ void do_house(void)
 
 void do_informer(void)
 {
-	signed int no = gs_current_typeindex - 1;
+	signed int no = gs_town_typeindex - 1;
 
 	if (no == INFORMER_JURGE)	do_talk(6, 0); else
 	if (no == INFORMER_HJORE)	do_talk(6, 1); else
@@ -268,9 +268,9 @@ void do_informer(void)
 
 void enter_map(void)
 {
-	gs_current_signpost_typeindex = gs_current_typeindex;
+	gs_current_signpost_typeindex = gs_town_typeindex;
 
-	gs_current_typeindex = gs_town_id;
+	gs_town_typeindex = gs_town_id;
 
 	gs_current_loctype = gs_town_id = TOWN_ID_NONE;
 

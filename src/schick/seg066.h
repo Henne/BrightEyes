@@ -16,28 +16,28 @@ void TLK_eremit(const signed int);
 void do_town(void);
 /* should be static */
 /* 0x3e */
-void city_update_view(void);
+void town_update_view(void);
 /* 0x43 */
-void city_building_textures(void);
+void town_building_textures(void);
 /* should be static */
 /* 0x48 */
-void city_direction_change(void);
+void town_direction_change(void);
 /* 0x4d */
-void load_city_texture(signed int, signed int, signed int, signed int);
+void load_town_texture(signed int, signed int, signed int, signed int);
 /* 0x52 */
-void city_water_and_grass(void);
+void town_water_and_grass(void);
 /* 0x57 */
-void city_do_step(const signed int);
+void town_do_step(const signed int);
 /* 0x5c */
-void city_fade_and_colors(void);
+void town_fade_and_colors(void);
 /* 0x61 */
-void city_update_house_count(void);
+void town_update_house_count(void);
 /* 0x66 */
-void city_set_vis_field_tex(void);
+void town_set_vis_field_tex(void);
 /* 0x6b */
-void city_set_vis_field_vals(void);
+void town_set_vis_field_vals(void);
 /* 0x70 */
-signed int city_step(void);
+signed int town_step(void);
 
 #if !defined(__BORLANDC__)
 }

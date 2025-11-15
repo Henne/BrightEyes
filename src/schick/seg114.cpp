@@ -306,7 +306,7 @@ void tevent_113(void)
 		GUI_output(get_tx2(17));
 
 		/* enter the temple */
-		gs_current_typeindex = 58;
+		gs_town_typeindex = 58;
 		est_old = gs_gods_estimation[GOD_FIRUN];
 		gs_current_loctype = LOCTYPE_TEMPLE;
 		do_location();

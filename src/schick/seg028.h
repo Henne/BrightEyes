@@ -21,9 +21,9 @@ void load_map(void);
 //0x3e
 void load_dungeon_ddt(void);
 //0x43
-uint8_t* load_city_textures(const signed int, const signed int, const signed int, const signed int);
+uint8_t* load_town_textures(const signed int, const signed int, const signed int, const signed int);
 //0x48
-void prepare_city_area(void);
+void prepare_town_area(void);
 //0x4d
 void load_special_textures(const signed int);
 //0x52

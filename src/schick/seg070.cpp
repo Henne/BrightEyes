@@ -452,8 +452,8 @@ void PHX_healer(void)
 			GUI_output(get_tx2(82));
 
 			/* enter the healer */
-			gs_current_typeindex = 13;
-			gs_current_locdata = (15);
+			gs_town_typeindex = 13;
+			gs_town_locdata = (15);
 
 			do_healer();
 

@@ -540,7 +540,7 @@ signed int DNG_step(void)
 			GRP_merge();
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug 19: After merging groups in a dungeon, the icon "merge groups" is not grayed.
-			 * Compare to the corresponding code in city_step() in seg066.cpp, where the following line is present. */
+			 * Compare to the corresponding code in town_step() in seg066.cpp, where the following line is present. */
 			g_can_merge_group = -1;
 #endif
 			/* TODO: if a "dark" group was merged with a "lighted" group, make group "lighted". */

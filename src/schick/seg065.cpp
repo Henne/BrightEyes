@@ -69,11 +69,11 @@ void do_market(void)
 		} else {
 
 			/* set up parameters for this merchant */
-			g_shop_descr_table[90].price_mod = g_market_descr_table[gs_current_typeindex].price_mod;
-			g_shop_descr_table[90].sortiment = g_market_descr_table[gs_current_typeindex].size;
+			g_shop_descr_table[90].price_mod = g_market_descr_table[gs_town_typeindex].price_mod;
+			g_shop_descr_table[90].sortiment = g_market_descr_table[gs_town_typeindex].size;
 			g_shop_descr_table[90].type = answer;
-			type_bak = gs_current_typeindex;
-			gs_current_typeindex = 90;
+			type_bak = gs_town_typeindex;
+			gs_town_typeindex = 90;
 
 			/* visit this merchant */
 			do_merchant();
@@ -82,7 +82,7 @@ void do_market(void)
 			gs_current_loctype = LOCTYPE_MARKET;
 
 			/* clean up */
-			gs_current_typeindex = type_bak;
+			gs_town_typeindex = type_bak;
 			gs_direction_bak = dir_bak_bak;
 			gs_direction = dir_bak; /* by this line, the party will *not* be rotated after leaving the market */
 

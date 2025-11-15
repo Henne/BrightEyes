@@ -510,7 +510,7 @@ void init_game_state(void)
 	gs_current_loctype_bak = LOCTYPE_NONE;
 	/* Travia Temple in Thorwal */
 	gs_current_loctype = LOCTYPE_TEMPLE;
-	gs_current_typeindex = 1;
+	gs_town_typeindex = 1;
 	gs_x_target_bak = 9;
 	gs_y_target_bak = 9;
 	gs_x_target = 9;

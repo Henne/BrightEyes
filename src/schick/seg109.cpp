@@ -339,8 +339,8 @@ void TRV_found_inn(const signed int town_id, const signed int type)
 
 	if (GUI_bool(get_tx(23))) {
 
-		gs_current_locdata = town_id;
-		gs_current_typeindex = type;
+		gs_town_locdata = town_id;
+		gs_town_typeindex = type;
 		gs_current_loctype = LOCTYPE_INN;
 
 		do_location();

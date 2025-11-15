@@ -138,7 +138,7 @@ struct struct_hero* get_first_brewing_hero(void)
 # endif
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_active_group_id) &&
-			hero->flags.brewing && (hero->alchemy_inn_id == gs_current_typeindex))
+			hero->flags.brewing && (hero->alchemy_inn_id == gs_town_typeindex))
 		{
 			return hero;
 		}
@@ -316,7 +316,7 @@ void do_inn(void)
 		hero = get_hero(0);
 		for (i = 0; i < 7; i++, hero++) {
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_active_group_id) &&
-				hero->flags.brewing && (hero->alchemy_inn_id == gs_current_typeindex))
+				hero->flags.brewing && (hero->alchemy_inn_id == gs_town_typeindex))
 			{
 				draw_status_line();
 
@@ -369,7 +369,7 @@ void do_inn(void)
 					gs_groups_direction_bak[group_nr] = 0;
 					gs_groups_x_target_bak[group_nr] = 0;
 					gs_groups_y_target_bak[group_nr] = 0;
-					gs_groups_current_loctype_bak[group_nr] = LOCTYPE_NONE;
+					gs_town_groups_loctype_bak[group_nr] = LOCTYPE_NONE;
 					gs_groups_town_id_bak[group_nr] = 0;
 					gs_groups_dungeon_id_bak[group_nr] = 0;
 					gs_groups_dng_level_bak[group_nr] = 0;
@@ -414,19 +414,19 @@ void do_inn(void)
 
 			init_ani(0);
 
-			GUI_print_loc_line(get_tx(gs_current_locdata));
+			GUI_print_loc_line(get_tx(gs_town_locdata));
 
 			g_request_refresh = refresh = 0;
 		}
 
 		if (refresh != 0) {
 
-			GUI_print_loc_line(get_tx(gs_current_locdata));
+			GUI_print_loc_line(get_tx(gs_town_locdata));
 
 			refresh = 0;
 		}
 
-		inn = &g_inn_descr_table[gs_current_typeindex];
+		inn = &g_inn_descr_table[gs_town_typeindex];
 
 		handle_gui_input();
 
@@ -666,7 +666,7 @@ void do_inn(void)
 
 		} else if (g_action == ACTION_ID_ICON_8 && g_combo_mode != 0) {
 
-			const struct inn_descr *tavern = &g_tavern_descr_table[gs_current_typeindex];
+			const struct inn_descr *tavern = &g_tavern_descr_table[gs_town_typeindex];
 
 			if (tavern->quality >= 6 && tavern->quality <= 13 && gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
@@ -703,13 +703,13 @@ void TLK_herberg(const signed int state)
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (!state) {
-		g_dialog_next_state = (gs_herberg_kicked_flags[gs_current_typeindex] ? 1 : 2);
+		g_dialog_next_state = (gs_herberg_kicked_flags[gs_town_typeindex] ? 1 : 2);
 	} else if (state == 1 || state == 14) {
-		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
+		gs_herberg_kicked_flags[gs_town_typeindex] = 1;
 	} else if (state == 11) {
 		tumult();
 		gs_town_outlawed_flags[gs_town_id] = 1;
-		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
+		gs_herberg_kicked_flags[gs_town_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
 		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);

@@ -129,7 +129,7 @@ void load_dungeon_ddt(void)
 	close(handle);
 }
 
-void prepare_city_area(void)
+void prepare_town_area(void)
 {
 	signed int i;
 	const signed int ltx_index = gs_town_id + ARCHIVE_FILE_CITY_LTX;
@@ -149,15 +149,15 @@ void prepare_city_area(void)
 
 		g_current_ani = -1;
 
-		city_update_house_count();
+		town_update_house_count();
 
 		g_buffer9_ptr4 = g_buffer9_ptr3;
 
 		for (i = 0; i < 4; i++) {
 
-			if (g_city_house_count[i]) {
+			if (g_town_house_count[i]) {
 
-				arr[i] = load_city_textures(!i ? ARCHIVE_FILE_HOUSE1_NVF :
+				arr[i] = load_town_textures(!i ? ARCHIVE_FILE_HOUSE1_NVF :
 				    (i == 1 ? ARCHIVE_FILE_HOUSE2_NVF :
 				        (i == 2 ? ARCHIVE_FILE_HOUSE3_NVF :
 				            ARCHIVE_FILE_HOUSE4_NVF)), 0, 0, 0);
@@ -168,7 +168,7 @@ void prepare_city_area(void)
 
 		for (i = 0; i < 4; i++) {
 
-			if (!g_city_house_count[i]) {
+			if (!g_town_house_count[i]) {
 
 				arr[i] = (!i ? arr[i + 1] : arr[i - 1]);
 			}
@@ -182,14 +182,14 @@ void prepare_city_area(void)
 		/* load tex_sky */
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
-			g_tex_floor[1] = load_city_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
+			g_tex_floor[1] = load_town_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 
 			memcpy(gs_palette_buildings, g_buffer11_ptr, 0xc0);
 		} else {
-			g_tex_floor[1] = load_city_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
+			g_tex_floor[1] = load_town_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 		}
 
-		g_tex_floor[0] = load_city_textures(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0);
+		g_tex_floor[0] = load_town_textures(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0);
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
@@ -205,7 +205,7 @@ void prepare_city_area(void)
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
 
-uint8_t* load_city_textures(const signed int index, const signed int firstcol, const signed int colors, const signed int ref)
+uint8_t* load_town_textures(const signed int index, const signed int firstcol, const signed int colors, const signed int ref)
 {
 	signed int handle;
 	int32_t file_len;
@@ -263,7 +263,7 @@ void call_load_buffer(void)
 void prepare_area(const signed int town)
 {
 	if (town == 1) {
-		prepare_city_area();
+		prepare_town_area();
 	} else {
 		prepare_dungeon_area();
 	}
@@ -314,7 +314,7 @@ void load_area_description(const signed int type)
 			/* dungeon */
 			g_areadescr_fileid = f_index = gs_dungeon_id + (ARCHIVE_FILE_DNGS-1);
 		} else {
-			/* city */
+			/* town */
 			g_areadescr_fileid = f_index = gs_town_id + (ARCHIVE_FILE_CITY_DAT-1);
 		}
 
@@ -329,7 +329,7 @@ void load_area_description(const signed int type)
 
 		if (!gs_dungeon_id && (gs_town_id == TOWN_ID_THORWAL || gs_town_id == TOWN_ID_PREM || gs_town_id == TOWN_ID_PHEXCAER))
 		{
-			/* A city, i.e. x coordinates up to 32 */
+			/* A large city, i.e. x coordinates up to 32 */
 			/* path taken in THORWAL PREM and PHEXCAER */
 			_read(handle, g_dng_map, 512);
 			/* read automap tiles */

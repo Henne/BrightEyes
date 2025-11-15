@@ -34,28 +34,28 @@ signed int npc_meetings(const signed int type_index)
 		gs_npc_meet_tavern = type_index;
 
 		/* Nariell */
-		if (gs_town_id == TOWN_ID_CLANEGH && gs_current_typeindex == 0x30 &&
+		if (gs_town_id == TOWN_ID_CLANEGH && gs_town_typeindex == 0x30 &&
 			!((uint8_t)gs_npc_timers[NPC_NARIELL])) {
 
 			npc_nariell();
 		} else
 
 		/* Harika */
-		if (gs_town_id == TOWN_ID_PHEXCAER && gs_current_typeindex == 0x28 &&
+		if (gs_town_id == TOWN_ID_PHEXCAER && gs_town_typeindex == 0x28 &&
 			!((uint8_t)gs_npc_timers[NPC_HARIKA])) {
 
 			npc_harika();
 		} else
 
 		/* Curian */
-		if (gs_town_id == TOWN_ID_OVERTHORN && gs_current_typeindex == 0x3c &&
+		if (gs_town_id == TOWN_ID_OVERTHORN && gs_town_typeindex == 0x3c &&
 			!((uint8_t)gs_npc_timers[NPC_CURIAN])) {
 
 			npc_curian();
 		} else
 
 		/* Ardora */
-		if (gs_town_id == TOWN_ID_THORWAL &&	gs_current_typeindex == 0x6 &&
+		if (gs_town_id == TOWN_ID_THORWAL &&	gs_town_typeindex == 0x6 &&
 			!((uint8_t)gs_npc_timers[NPC_ARDORA]) &&
 			gs_dng01_ardora_freed) {
 
@@ -63,14 +63,14 @@ signed int npc_meetings(const signed int type_index)
 		} else
 
 		/* Garsvik */
-		if (gs_town_id == TOWN_ID_PREM && gs_current_typeindex == 0x4a &&
+		if (gs_town_id == TOWN_ID_PREM && gs_town_typeindex == 0x4a &&
 			!((uint8_t)gs_npc_timers[NPC_GARSVIK])) {
 
 			npc_garsvik();
 		} else
 
 		/* Erwo */
-		if (gs_town_id == TOWN_ID_MANRIN && gs_current_typeindex == 0x57 &&
+		if (gs_town_id == TOWN_ID_MANRIN && gs_town_typeindex == 0x57 &&
 			!((uint8_t)gs_npc_timers[NPC_ERWO])) {
 
 			npc_erwo();

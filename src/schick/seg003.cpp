@@ -96,7 +96,7 @@ void move(void)
 		mapval = (g_map_size_x == 16) ?
 			/* dungeon or small town */
 			*(p_map_small + MAP_POS(x,y )) :
-			/* city */
+			/* large city */
 			*(p_map_large + LARGE_MAP_POS(x, y));
 
 		if (boundary_flag != 0) {
@@ -112,7 +112,7 @@ void move(void)
 
 		g_steptarget_back  = *(p_map_small + MAP_POS(gs_x_target + p_vis_field[1].x, gs_y_target + p_vis_field[1].y));
 	} else {
-		/* city */
+		/* large city */
 		g_steptarget_front = *(p_map_large + LARGE_MAP_POS(gs_x_target + p_vis_field[0].x, gs_y_target + p_vis_field[0].y));
 
 		g_steptarget_back  = *(p_map_large + LARGE_MAP_POS(gs_x_target + p_vis_field[1].x, gs_y_target + p_vis_field[1].y));

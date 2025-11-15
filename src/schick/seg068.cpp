@@ -44,7 +44,7 @@ void THO_eisenhof(void)
 
 	if (answer == 1) {
 
-		gs_current_typeindex = 41;
+		gs_town_typeindex = 41;
 		do_smith();
 
 	} else if (answer == 2) {
@@ -260,7 +260,7 @@ void THO_arsenal(void)
 
 		GUI_output(get_ttx(482));
 
-	} else if (gs_merchant_kicked_flags[gs_current_typeindex]) {
+	} else if (gs_merchant_kicked_flags[gs_town_typeindex]) {
 
 		talk_merchant();
 
@@ -294,7 +294,7 @@ void THO_arsenal(void)
 			p_money = get_party_money();
 			set_party_money(gs_arsenal_money);
 
-			gs_current_typeindex = 92;
+			gs_town_typeindex = 92;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
 

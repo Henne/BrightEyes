@@ -378,7 +378,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 								hero->recipe_timer = g_alchemy_recipes[recipe_index].duration / 24;
 
 								hero->recipe_id = recipe_index;
-								hero->alchemy_inn_id = gs_current_typeindex;
+								hero->alchemy_inn_id = gs_town_typeindex;
 
 								hero->flags.brewing = 1;
 
