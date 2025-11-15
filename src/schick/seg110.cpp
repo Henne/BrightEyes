@@ -697,9 +697,9 @@ void tevent_046(void)
 	{
 		/* make a camp */
 		gs_camp_incident = 1;
-		gs_current_loctype = LOCTYPE_WILDCAMP;
+		gs_town_loc_type = LOCTYPE_WILDCAMP;
 		do_location();
-		gs_current_loctype = LOCTYPE_NONE;
+		gs_town_loc_type = LOCTYPE_NONE;
 		TRV_load_textfile(-1);
 
 		hero = (struct struct_hero*)(gs_camp_incident != -1 ? (uint8_t*)get_hero(gs_camp_incident) : (uint8_t*)get_first_hero_available_in_group());

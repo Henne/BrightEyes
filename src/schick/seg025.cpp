@@ -237,7 +237,7 @@ void do_house(void)
 		leave_location();
 
 	} else {
-		gs_current_loctype = gs_current_loctype_bak;
+		gs_town_loc_type = gs_town_loc_type_bak;
 		gs_x_target = gs_x_target_bak;
 		gs_y_target = gs_y_target_bak;
 	}
@@ -272,7 +272,7 @@ void enter_map(void)
 
 	gs_town_typeindex = gs_town_id;
 
-	gs_current_loctype = gs_town_id = TOWN_ID_NONE;
+	gs_town_loc_type = gs_town_id = TOWN_ID_NONE;
 
 	gs_show_travel_map = 1;
 }
@@ -723,7 +723,7 @@ void do_location(void)
 	gs_show_travel_map = 0;
 	g_textbox_width = 3;
 
-	func = g_location_handlers[gs_current_loctype];
+	func = g_location_handlers[gs_town_loc_type];
 
 	g_current_cursor = &g_default_mouse_cursor;
 
@@ -750,7 +750,7 @@ void leave_location(void)
 	disable_ani();
 
 	/* reset location */
-	gs_current_loctype = gs_current_loctype_bak;
+	gs_town_loc_type = gs_town_loc_type_bak;
 
 	/* set target  coordinates*/
 	gs_x_target = gs_x_target_bak;
@@ -782,7 +782,7 @@ void leave_dungeon(void)
 		set_palette(ptr, 0x80, 0x40);
 	}
 
-	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
+	gs_town_loc_type = gs_town_loc_type_bak = LOCTYPE_NONE;
 	gs_town_id = gs_town_id_bak;
 	gs_dungeon_id_bak = gs_dungeon_id;
 	gs_dungeon_id = gs_dungeon_level = gs_dungeon_light = 0;

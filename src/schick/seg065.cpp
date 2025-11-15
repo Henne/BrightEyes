@@ -79,7 +79,7 @@ void do_market(void)
 			do_merchant();
 
 			/* change back to market */
-			gs_current_loctype = LOCTYPE_MARKET;
+			gs_town_loc_type = LOCTYPE_MARKET;
 
 			/* clean up */
 			gs_town_typeindex = type_bak;
@@ -93,7 +93,7 @@ void do_market(void)
 
 	} while (!done);
 
-	gs_current_loctype = LOCTYPE_NONE;
+	gs_town_loc_type = LOCTYPE_NONE;
 	copy_palette();
 }
 

@@ -272,9 +272,9 @@ void tevent_078(void)
 
 			g_wildcamp_sleep_quality = -6;
 
-			gs_current_loctype = LOCTYPE_WILDCAMP;
+			gs_town_loc_type = LOCTYPE_WILDCAMP;
 			do_location();
-			gs_current_loctype = LOCTYPE_NONE;
+			gs_town_loc_type = LOCTYPE_NONE;
 
 			TRV_load_textfile(-1);
 
@@ -310,9 +310,9 @@ void tevent_078(void)
 
 					g_wildcamp_sleep_quality = -6;
 					/* make a camp */
-					gs_current_loctype = LOCTYPE_WILDCAMP;
+					gs_town_loc_type = LOCTYPE_WILDCAMP;
 					do_location();
-					gs_current_loctype = LOCTYPE_NONE;
+					gs_town_loc_type = LOCTYPE_NONE;
 
 					TRV_load_textfile(-1);
 

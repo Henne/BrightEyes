@@ -713,7 +713,7 @@ void INF_treborn_unicorn(const signed int informer, const signed int state)
 			/* the hero gets heavily wounded, 1 LE left */
 			sub_hero_le((struct struct_hero*)gs_unicorn_hero_ptr, ((struct struct_hero*)gs_unicorn_hero_ptr)->le - 1);
 			/* the party opens a camp */
-			gs_current_loctype = LOCTYPE_WILDCAMP;
+			gs_town_loc_type = LOCTYPE_WILDCAMP;
 			do_location();
 		} else if (state == 18) {
 			timewarp(HOURS(2));
@@ -810,7 +810,7 @@ void INF_swafnild_unicorn(const signed int informer, const signed int state)
 				case TOWN_ID_RUNINSHAVEN: gs_x_target_bak =  6; gs_y_target_bak =  6; break;
 			}
 
-			gs_current_loctype_bak = LOCTYPE_NONE;
+			gs_town_loc_type_bak = LOCTYPE_NONE;
 			g_swafnild_traveled = 1;
 
 			timewarp_until_midnight();

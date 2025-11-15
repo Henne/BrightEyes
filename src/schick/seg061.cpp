@@ -181,7 +181,7 @@ void do_temple(void)
 
 				draw_status_line();
 
-				if (gs_current_loctype != LOCTYPE_TEMPLE) {
+				if (gs_town_loc_type != LOCTYPE_TEMPLE) {
 					done = 1;
 				}
 			} else {

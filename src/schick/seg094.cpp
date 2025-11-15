@@ -293,11 +293,11 @@ void TM_func1(const signed int route_id, const signed int backwards)
 				/* make gather_herbs and replenish_stocks practically impossible */
 				g_wildcamp_sleep_quality = -3;
 				g_good_camp_place = 99;
-				gs_current_loctype = LOCTYPE_WILDCAMP;
+				gs_town_loc_type = LOCTYPE_WILDCAMP;
 
 				do_location();
 
-				g_good_camp_place = gs_current_loctype = g_wildcamp_sleep_quality = 0;
+				g_good_camp_place = gs_town_loc_type = g_wildcamp_sleep_quality = 0;
 				g_wallclock_update = 0;
 				g_request_refresh = 2;
 			}
@@ -373,9 +373,9 @@ void TM_func1(const signed int route_id, const signed int backwards)
 
 			GUI_input(get_tx(70), 0);
 
-			gs_current_loctype = LOCTYPE_WILDCAMP;
+			gs_town_loc_type = LOCTYPE_WILDCAMP;
 			do_location();
-			gs_current_loctype = LOCTYPE_NONE;
+			gs_town_loc_type = LOCTYPE_NONE;
 
 			g_request_refresh = 2;
 			g_wallclock_update = 0;

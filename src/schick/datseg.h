@@ -921,7 +921,7 @@ extern int16_t gs_x_target;			//ds:0x2d44; seg002-seg120
 extern int16_t gs_y_target;			//ds:0x2d46; seg002-seg120
 extern int16_t gs_groups_x_target[6];		//ds:0x2d48; seg002-seg089
 extern int16_t gs_groups_y_target[6];		//ds:0x2d54; seg002-seg089
-extern int8_t  gs_current_loctype;		//ds:0x2d60; seg002-seg120
+extern int8_t  gs_town_loc_type;		//ds:0x2d60; seg002-seg120
 extern int8_t  gs_town_groups_loctype[6];	//ds:0x2d61; seg002, seg049
 extern int8_t  gs_town_id;			//ds:0x2d67; seg002-seg120
 extern int8_t  gs_groups_town_id[6];		//ds:0x2d68; seg002-seg074
@@ -935,7 +935,7 @@ extern int16_t gs_x_target_bak;			//ds:0x2d83; seg025-seg120
 extern int16_t gs_y_target_bak;			//ds:0x2d85; seg025-seg120
 extern int16_t gs_groups_x_target_bak[6];	//ds:0x2d87; seg002, seg049, seg054
 extern int16_t gs_groups_y_target_bak[6];	//ds:0x2d93; seg002, seg049, seg054
-extern int8_t  gs_current_loctype_bak;		//ds:0x2d9f; seg002-seg120
+extern int8_t  gs_town_loc_type_bak;		//ds:0x2d9f; seg002-seg120
 extern int8_t  gs_town_groups_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
 extern int8_t  gs_town_id_bak;		//ds:0x2da6; seg025, seg049, seg066, seg075, seg120
 extern int8_t  gs_groups_town_id_bak[6];		//ds:0x2da7; seg049, seg054

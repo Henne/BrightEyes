@@ -442,13 +442,13 @@ signed int enter_location(const signed int town_id)
 		if (locations_tab_ptr->pos == map_pos) {
 
 			/* found the location */
-			gs_current_loctype_bak = LOCTYPE_NONE;
-			gs_current_loctype = locations_tab_ptr->loctype;
+			gs_town_loc_type_bak = LOCTYPE_NONE;
+			gs_town_loc_type = locations_tab_ptr->loctype;
 			gs_town_typeindex = locations_tab_ptr->typeindex;
 			gs_town_locdata = locations_tab_ptr->locdata;
 
-			if (gs_current_loctype == LOCTYPE_MARKET) {
-				gs_current_loctype = LOCTYPE_NONE;
+			if (gs_town_loc_type == LOCTYPE_MARKET) {
+				gs_town_loc_type = LOCTYPE_NONE;
 				g_location_market_flag = 1;
 			}
 
@@ -463,14 +463,14 @@ signed int enter_location(const signed int town_id)
 
 	if (((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2) && (b_index <= 5)) {
 
-		gs_current_loctype_bak = LOCTYPE_NONE;
+		gs_town_loc_type_bak = LOCTYPE_NONE;
 		// assert(g_town_num_locations_table[town_id - 1] == (locations_tab_ptr - g_locations_tab)
 		gs_town_locdata = g_town_num_locations_table[town_id - 1];
 
 		if (!((gs_direction + gs_x_target + gs_y_target) & 1)) {
-			gs_current_loctype = LOCTYPE_CITIZEN;
+			gs_town_loc_type = LOCTYPE_CITIZEN;
 		} else {
-			gs_current_loctype = LOCTYPE_HOUSE;
+			gs_town_loc_type = LOCTYPE_HOUSE;
 
 			gs_town_locdata++;
 			// gs_town_locdata is now number_of_locations + 1.
@@ -552,8 +552,8 @@ signed int enter_location_daspota(void)
 				leave_location();
 
 			} else {
-				gs_current_loctype_bak = LOCTYPE_NONE;
-				gs_current_loctype = locations_tab_ptr->loctype;
+				gs_town_loc_type_bak = LOCTYPE_NONE;
+				gs_town_loc_type = locations_tab_ptr->loctype;
 				gs_town_locdata = locations_tab_ptr->locdata;
 			}
 
@@ -568,8 +568,8 @@ signed int enter_location_daspota(void)
 
 	if ((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2 && b_index <= 5) {
 
-		gs_current_loctype_bak = LOCTYPE_NONE;
-		gs_current_loctype = LOCTYPE_CITIZEN;
+		gs_town_loc_type_bak = LOCTYPE_NONE;
+		gs_town_loc_type = LOCTYPE_CITIZEN;
 		gs_town_locdata = 19;
 		return 1;
 	}
@@ -1327,13 +1327,13 @@ signed int town_step(void)
 
 	} else if (g_action == ACTION_ID_ICON_7) {
 
-		gs_current_loctype = LOCTYPE_AREA_CAMP;
+		gs_town_loc_type = LOCTYPE_AREA_CAMP;
 		g_area_camp_area_type = AREA_TYPE_TOWN; /* AREA_CAMP takes place in a town */
 		i = 1;
 
 	} else if (g_action == ACTION_ID_ICON_8 && g_new_menu_icons[7] != MENU_ICON_NONE) {
 
-		gs_current_loctype = LOCTYPE_MARKET;
+		gs_town_loc_type = LOCTYPE_MARKET;
 		i = 1;
 
 	} else if (g_action == ACTION_ID_LEFT) {

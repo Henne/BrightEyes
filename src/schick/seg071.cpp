@@ -240,13 +240,13 @@ void PHX_phextempel(void)
 
 				g_textbox_width = 3;
 
-				loc_bak = gs_current_loctype;
+				loc_bak = gs_town_loc_type;
 
-				gs_current_loctype = LOCTYPE_TEMPLE;
+				gs_town_loc_type = LOCTYPE_TEMPLE;
 
 				do_temple();
 
-				gs_current_loctype = loc_bak;
+				gs_town_loc_type = loc_bak;
 
 				g_textbox_width = tw_bak;
 			}
@@ -292,13 +292,13 @@ void PHX_phextempel(void)
 
 				g_textbox_width = 3;
 
-				loc_bak = gs_current_loctype;
+				loc_bak = gs_town_loc_type;
 
-				gs_current_loctype = LOCTYPE_TEMPLE;
+				gs_town_loc_type = LOCTYPE_TEMPLE;
 
 				do_temple();
 
-				gs_current_loctype = loc_bak;
+				gs_town_loc_type = loc_bak;
 
 				g_textbox_width = tw_bak;
 			}
@@ -329,13 +329,13 @@ void PHX_phextempel(void)
 
 			g_textbox_width = 3;
 
-			loc_bak = gs_current_loctype;
+			loc_bak = gs_town_loc_type;
 
-			gs_current_loctype = LOCTYPE_TEMPLE;
+			gs_town_loc_type = LOCTYPE_TEMPLE;
 
 			do_temple();
 
-			gs_current_loctype = loc_bak;
+			gs_town_loc_type = loc_bak;
 
 			g_textbox_width = tw_bak;
 		}
