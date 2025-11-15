@@ -744,9 +744,7 @@ void TLK_way_to_ruin(const signed int state)
 {
 	signed int i;
 	struct struct_hero *hero;
-	struct struct_hero *hero2;
-
-	hero2 = get_first_hero_available_in_group();
+	struct struct_hero *hero2 = get_first_hero_available_in_group();
 
 	if (!state) {
 
