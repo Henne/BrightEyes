@@ -23,7 +23,7 @@
 namespace M302de {
 #endif
 
-uint8_t g_palette_fight2[20][3] = {
+const uint8_t g_palette_fight2[20][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x3f, 0x00, 0x00 },
 	{ 0x00, 0x3f, 0x00 },

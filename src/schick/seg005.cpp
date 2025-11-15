@@ -483,7 +483,7 @@ void draw_fight_screen(const signed int val)
 
 			if ((p_fighter->sheet != -1) && (g_fig_ani_state[p_fighter->sheet] != -1)) {
 
-				sheet = (int8_t*)g_fig_anisheets[p_fighter->sheet];
+				sheet = g_fig_anisheets[p_fighter->sheet];
 
 				if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -1) {
 

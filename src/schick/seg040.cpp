@@ -66,7 +66,6 @@ void FIG_chessboard_init(void)
 	signed int i;
 	signed int cb_x;
 	signed int cb_y;
-	signed int object_id;
 
 	/* initialize the chessboard */
 	memset(g_chessboard, 0, 600);
@@ -75,7 +74,7 @@ void FIG_chessboard_init(void)
 
 		for (cb_x = 0; cb_x < 24; cb_x++) {
 
-			object_id = *(g_scenario_buf + cb_y * 25 + cb_x + 0x15);
+			signed int object_id = *(g_scenario_buf + cb_y * 25 + cb_x + 21);
 
 			if (object_id < 0) {
 
@@ -83,17 +82,17 @@ void FIG_chessboard_init(void)
 
 			} else {
 
-				if (object_id >= 0x6c && object_id <= 0x6f) {
+				if ((object_id >= 108) && (object_id <= 111)) {
 
-					object_id -= 0x32;
+					object_id -= 50;
 
-					if (object_id == 0x3c) {
+					if (object_id == 60) {
 
 						for (i = 1; i < 8; i++) {
 							FIG_set_cb_object(cb_y + i, cb_x, -3);
 						}
 
-					} else if (object_id == 0x3d) {
+					} else if (object_id == 61) {
 
 						for (i = 1; i < 8; i++) {
 							FIG_set_cb_object(cb_y, cb_x + i, -3);
@@ -108,7 +107,7 @@ void FIG_chessboard_init(void)
 
 	i = 0;
 
-	if (g_scenario_buf[0x14] <= 3) {
+	if (g_scenario_buf[20] <= 3) {
 
 		while (g_cb_rear_border[i].x != -1) {
 
@@ -235,73 +234,72 @@ void FIG_draw_scenario(void)
 {
 	signed int cb_x;
 	signed int cb_y;
-	signed int object_id;
-	signed int width;
-	signed int height;
-	uint8_t *ptr;
-	struct nvf_extract_desc nvf;
-
 
 	for (cb_x = 0; cb_x < 24; cb_x++) {
+
 		for (cb_y = 0; cb_y < 24; cb_y++) {
 
-			object_id = *(g_scenario_buf + cb_y * 25 + cb_x + 0x15);
+			signed int object_id;
+			signed int width;
+			signed int height;
+			uint8_t *ptr;
+			struct nvf_extract_desc nvf;
 
-			if (object_id >= 0x32) {
-				if (object_id < 0x6c || object_id > 0x6f) {
+			object_id = *(g_scenario_buf + cb_y * 25 + cb_x + 21);
 
-					object_id -= 50;
+			if ((object_id >= 50) && (object_id < 108 || object_id > 111)) {
 
-					/* NULL check */
-					if (g_figobj_gfxbuf_table[object_id]) {
-						ptr = g_figobj_gfxbuf_table[object_id];
-					} else {
-						ptr = g_fightobj_buf_seek_ptr;
+				object_id -= 50;
 
-						nvf.dst = ptr;
-						nvf.src = g_fightobj_buf;
-						nvf.image_num = object_id;
-						nvf.compression_type = 0;
-						nvf.width = &width;
-						nvf.height = &height;
-						process_nvf_extraction(&nvf);
+				/* NULL check */
+				if (g_figobj_gfxbuf_table[object_id]) {
+					ptr = g_figobj_gfxbuf_table[object_id];
+				} else {
+					ptr = g_fightobj_buf_seek_ptr;
 
-						/* save sprite info */
-						g_figobj_gfxbuf_table[object_id] = g_fightobj_buf_seek_ptr;
-						g_figobj_gfxwidth_table[object_id] = width;
-						g_figobj_gfxheight_table[object_id] = height;
+					nvf.dst = ptr;
+					nvf.src = g_fightobj_buf;
+					nvf.image_num = object_id;
+					nvf.compression_type = 0;
+					nvf.width = &width;
+					nvf.height = &height;
+					process_nvf_extraction(&nvf);
 
-						/* adjust pointer */
-						g_fightobj_buf_seek_ptr += width * height + 8;
-						g_fightobj_buf_freespace -= width * height + 8L;
-					}
+					/* save sprite info */
+					g_figobj_gfxbuf_table[object_id] = g_fightobj_buf_seek_ptr;
+					g_figobj_gfxwidth_table[object_id] = width;
+					g_figobj_gfxheight_table[object_id] = height;
 
-					g_fig_list_elem.figure = 0;
-					g_fig_list_elem.nvf_no = object_id;
-					g_fig_list_elem.cbx = cb_x;
-					g_fig_list_elem.cby = cb_y;
-					g_fig_list_elem.offsetx = g_gfxtab_obj_offset_x[object_id];
-					g_fig_list_elem.offsety = g_gfxtab_obj_offset_y[object_id];
-					g_fig_list_elem.height = g_figobj_gfxheight_table[object_id];
-					g_fig_list_elem.width = g_figobj_gfxwidth_table[object_id];
-					g_fig_list_elem.x1 = 0;
-					g_fig_list_elem.y1 = 0;
-					g_fig_list_elem.x2 = g_figobj_gfxwidth_table[object_id] - 1;
-					g_fig_list_elem.y2 = g_figobj_gfxheight_table[object_id] - 1;
-					g_fig_list_elem.is_enemy = 0;
-					g_fig_list_elem.reload = 0;
-					g_fig_list_elem.wsheet = -1;
-					g_fig_list_elem.sheet = -1;
-					g_fig_list_elem.gfxbuf = ptr;
-					g_fig_list_elem.z = (object_id >= 58 && object_id <= 61 ? -1 : 50);
-					g_fig_list_elem.visible = 1;
-					g_fig_list_elem.double_size = -1;
-
-					g_fightobj_list[g_fightobj_count] = FIG_add_to_list(-1);
-					g_fightobj_count++;
-
-					place_obj_on_cb(cb_x, cb_y, object_id + 50, object_id, 0);
+					/* adjust pointer */
+					g_fightobj_buf_seek_ptr += width * height + 8;
+					g_fightobj_buf_freespace -= width * height + 8L;
 				}
+
+				g_fig_list_elem.figure = 0;
+				g_fig_list_elem.nvf_no = object_id;
+				g_fig_list_elem.cbx = cb_x;
+				g_fig_list_elem.cby = cb_y;
+				g_fig_list_elem.offsetx = g_gfxtab_obj_offset_x[object_id];
+				g_fig_list_elem.offsety = g_gfxtab_obj_offset_y[object_id];
+				g_fig_list_elem.height = g_figobj_gfxheight_table[object_id];
+				g_fig_list_elem.width = g_figobj_gfxwidth_table[object_id];
+				g_fig_list_elem.x1 = 0;
+				g_fig_list_elem.y1 = 0;
+				g_fig_list_elem.x2 = g_figobj_gfxwidth_table[object_id] - 1;
+				g_fig_list_elem.y2 = g_figobj_gfxheight_table[object_id] - 1;
+				g_fig_list_elem.is_enemy = 0;
+				g_fig_list_elem.reload = 0;
+				g_fig_list_elem.wsheet = -1;
+				g_fig_list_elem.sheet = -1;
+				g_fig_list_elem.gfxbuf = ptr;
+				g_fig_list_elem.z = (object_id >= 58 && object_id <= 61 ? -1 : 50);
+				g_fig_list_elem.visible = 1;
+				g_fig_list_elem.double_size = -1;
+
+				g_fightobj_list[g_fightobj_count] = FIG_add_to_list(-1);
+				g_fightobj_count++;
+
+				place_obj_on_cb(cb_x, cb_y, object_id + 50, object_id, 0);
 			}
 		}
 	}
