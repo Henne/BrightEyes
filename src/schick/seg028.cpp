@@ -286,10 +286,10 @@ void load_area_description(const signed int type)
 
 		signed int handle = load_archive_file(g_areadescr_fileid + 0x8000);
 
-		if (!g_areadescr_dng_flag && (g_dng_map_size == 32)) {
+		if (!g_areadescr_dng_flag && (g_map_size_x == 32)) {
 			write(handle, (void*)g_dng_map, 512);
 		} else {
-			// assert(g_dng_map_size == 16)
+			// assert(g_map_size_x == 16)
 			lseek(handle, g_areadescr_dng_level * 0x140, 0);
 			write(handle, (void*)g_dng_map, 256);
 		}
@@ -340,7 +340,7 @@ void load_area_description(const signed int type)
 
 			g_locations_tab_size = _read(handle, g_locations_tab, 1000);
 
-			g_dng_map_size = 32;
+			g_map_size_x = 32;
 		} else {
 			/* Seek to Dungeon Level * 320 */
 			lseek(handle, gs_dungeon_level * 320, 0);
@@ -356,7 +356,7 @@ void load_area_description(const signed int type)
 				g_locations_tab_size = _read(handle, g_locations_tab, 1000);
 			}
 
-			g_dng_map_size = 16;
+			g_map_size_x = 16;
 		}
 		close(handle);
 	}

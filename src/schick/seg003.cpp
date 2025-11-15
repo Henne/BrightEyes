@@ -77,8 +77,8 @@ void move(void)
 			x = 0;
 			boundary_flag = 1;
 		} else {
-			if (g_dng_map_size - 1 < x) {
-				x = g_dng_map_size - 1;
+			if (g_map_size_x - 1 < x) {
+				x = g_map_size_x - 1;
 				boundary_flag = 1;
 			}
 		}
@@ -93,7 +93,7 @@ void move(void)
 			}
 		}
 
-		mapval = (g_dng_map_size == 16) ?
+		mapval = (g_map_size_x == 16) ?
 			/* dungeon or small town */
 			*(p_map_small + MAP_POS(x,y )) :
 			/* city */
@@ -106,7 +106,7 @@ void move(void)
 		}
 	}
 
-	if (g_dng_map_size == 16) {
+	if (g_map_size_x == 16) {
 		/* dungeon or small town */
 		g_steptarget_front = *(p_map_small + MAP_POS(gs_x_target + p_vis_field[0].x, gs_y_target + p_vis_field[0].y));
 

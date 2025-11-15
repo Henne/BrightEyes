@@ -79,7 +79,7 @@ void show_automap(void)
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
 
-		l_si = (g_dng_map_size == 16) ? 0 :
+		l_si = (g_map_size_x == 16) ? 0 :
 				((gs_x_target - 8 < 0) ? 0 :
 				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
@@ -99,7 +99,7 @@ void show_automap(void)
 
 				gs_current_loctype = loc_bak;
 
-				if (g_dng_map_size == 16) {
+				if (g_map_size_x == 16) {
 					draw_loc_icons(1, MENU_ICON_LEAVE);
 				} else {
 					draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_LEAVE);
@@ -118,7 +118,7 @@ void show_automap(void)
 
 			if ((g_mouse_rightclick_event) || (g_action == ACTION_ID_PAGE_UP)) {
 
-				if (g_dng_map_size == 16) {
+				if (g_map_size_x == 16) {
 
 					l_di = GUI_radio(get_ttx(612), 1, get_ttx(613)) - 1;
 
@@ -133,7 +133,7 @@ void show_automap(void)
 				}
 			}
 
-			if (g_dng_map_size != 16) {
+			if (g_map_size_x != 16) {
 
 				if ((g_action == ACTION_ID_ICON_1) || (g_action == ACTION_ID_LEFT)) {
 
@@ -152,8 +152,8 @@ void show_automap(void)
 				}
 			}
 
-			if (((g_action == ACTION_ID_ICON_1) && (g_dng_map_size == 16)) ||
-				((g_action == ACTION_ID_ICON_3) && (g_dng_map_size != 16)))
+			if (((g_action == ACTION_ID_ICON_1) && (g_map_size_x == 16)) ||
+				((g_action == ACTION_ID_ICON_3) && (g_map_size_x != 16)))
 			{
 				done = 1;
 			}
@@ -267,7 +267,7 @@ void render_automap(const signed int x_off)
 					/* in a town */
 
 					if (!(tile_type = get_maploc(x + x_off, y))) {
-						tile_type = get_border_index((g_dng_map_size == 16 ? get_mapval_small(x, y) : get_mapval_large(x + x_off, y)));
+						tile_type = get_border_index((g_map_size_x == 16 ? get_mapval_small(x, y) : get_mapval_large(x + x_off, y)));
 					}
 
 					draw_automap_square(x, y,
@@ -285,7 +285,7 @@ void render_automap(const signed int x_off)
 
 					if ((tile_type != TOWN_TILE_STREET) && (tile_type != TOWN_TILE_GRASS) && (tile_type != TOWN_TILE_WATER) && (tile_type != TOWN_TILE_SIGNPOST)) {
 
-						entrance_dir = (g_dng_map_size == 16) ?
+						entrance_dir = (g_map_size_x == 16) ?
 										get_mapval_small(x, y) :
 										get_mapval_large(x + x_off, y);
 
@@ -514,7 +514,7 @@ signed int select_teleport_dest(void)
 	town = gs_town_id;
 	gs_town_id = gs_dungeon_id = 0;
 
-	l_si = ((g_dng_map_size == 16) ? 0 :
+	l_si = ((g_map_size_x == 16) ? 0 :
 			((gs_x_target - 8 < 0) ? 0 :
 			((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8)));
 
@@ -533,7 +533,7 @@ signed int select_teleport_dest(void)
 
 	set_ani_pal((uint8_t*)g_palette_fight2);
 
-	if (g_dng_map_size == 16) {
+	if (g_map_size_x == 16) {
 		draw_loc_icons(1, MENU_ICON_MAGIC);
 	} else {
 		draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_MAGIC);
@@ -546,7 +546,7 @@ signed int select_teleport_dest(void)
 
 		if ((g_mouse_rightclick_event) || (g_action == ACTION_ID_PAGE_UP)) {
 
-			if (g_dng_map_size == 16) {
+			if (g_map_size_x == 16) {
 				answer = GUI_radio(get_ttx(616), 1, get_ttx(617)) - 1;
 			} else {
 				answer = GUI_radio(get_ttx(616), 3, get_ttx(614), get_ttx(615), get_ttx(617)) - 1;
@@ -574,7 +574,7 @@ signed int select_teleport_dest(void)
 			draw_automap_to_screen();
 
 		} else if ((g_action == ACTION_ID_RIGHT) &&
-			(g_dng_map_size - 1 > g_automap_selx) &&
+			(g_map_size_x - 1 > g_automap_selx) &&
 			is_discovered(g_automap_selx + 1, g_automap_sely))
 		{
 			g_automap_selx++;
@@ -590,7 +590,7 @@ signed int select_teleport_dest(void)
 			draw_automap_to_screen();
 		}
 
-		if (g_dng_map_size != 16) {
+		if (g_map_size_x != 16) {
 
 			if ((g_action == ACTION_ID_ICON_1) && (l_si > 0)) {
 				render_automap(--l_si);
@@ -603,8 +603,8 @@ signed int select_teleport_dest(void)
 			}
 		}
 
-		if (((g_action == ACTION_ID_ICON_1) && (g_dng_map_size == 16)) ||
-			((g_action == ACTION_ID_ICON_3) && (g_dng_map_size != 16)))
+		if (((g_action == ACTION_ID_ICON_1) && (g_map_size_x == 16)) ||
+			((g_action == ACTION_ID_ICON_3) && (g_map_size_x != 16)))
 		{
 			done = 1;
 		}
@@ -613,7 +613,7 @@ signed int select_teleport_dest(void)
 	} while (done == 0);
 
 #if !defined(__BORLANDC__)
-	l_di = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
+	l_di = (g_map_size_x == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
 	if (gs_town_id != TOWN_ID_NONE) {
 		l_di = get_border_index(l_di);
@@ -622,7 +622,7 @@ signed int select_teleport_dest(void)
 	}
 #else
 	/* REMARK: enforce the use of register DI */
-	_DI = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
+	_DI = (g_map_size_x == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
 	if (gs_town_id != TOWN_ID_NONE) {
 		_DI = get_border_index(_DI);
