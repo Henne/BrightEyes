@@ -103,7 +103,7 @@ void do_healer(void)
 	signed int disease;
 
 #if !defined(__BORLANDC__)
-	const uint8_t typi = gs_current_typeindex;
+	const uint8_t typi = gs_town_typeindex;
 	const int8_t h_price = g_healer_descr_table[typi].price_mod;
 	const uint8_t h_qual = g_healer_descr_table[typi].quality;
 
@@ -113,7 +113,7 @@ void do_healer(void)
 #endif
 
 	request_refresh = g_request_refresh = 1;
-	healer = &g_healer_descr_table[gs_current_typeindex];
+	healer = &g_healer_descr_table[gs_town_typeindex];
 	draw_loc_icons(4, MENU_ICON_HEAL_WOUNDS, MENU_ICON_HEAL_DISEASE, MENU_ICON_HEAL_POISON, MENU_ICON_LEAVE);
 
 	while (leave_healer == 0) {
@@ -124,7 +124,7 @@ void do_healer(void)
 			load_ani(23);
 			init_ani(0);
 
-			GUI_print_loc_line(get_tx(gs_current_locdata));
+			GUI_print_loc_line(get_tx(gs_town_locdata));
 
 			set_audio_track(ARCHIVE_FILE_HEALER_XMI);
 
@@ -143,7 +143,7 @@ void do_healer(void)
 		}
 
 		if (request_refresh != 0) {
-			GUI_print_loc_line(get_tx(gs_current_locdata));
+			GUI_print_loc_line(get_tx(gs_town_locdata));
 			request_refresh = 0;
 		}
 

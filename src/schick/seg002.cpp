@@ -2494,8 +2494,8 @@ void do_timers(void)
 			{
 				hero_i->jail = 0;
 
-				gs_groups_current_loctype[hero_i->group_id] =
-					gs_groups_current_loctype_bak[hero_i->group_id];
+				gs_town_groups_loctype[hero_i->group_id] =
+					gs_town_groups_loctype_bak[hero_i->group_id];
 
 				gs_groups_x_target[hero_i->group_id] =
 					gs_groups_x_target_bak[hero_i->group_id];
@@ -3909,7 +3909,7 @@ void vsync_or_key(const signed int duration)
 		handle_input();
 		g_delay_or_keypress_flag = 0;
 
-		if (g_c_event_active) {
+		if (g_town_city_event_active) {
 
 			if (g_action != 0) {
 
@@ -4221,7 +4221,7 @@ signed int can_merge_group(void)
 				(0 != gs_group_member_counts[i]) &&
 				(gs_groups_x_target[i] == gs_x_target) &&
 				(gs_groups_y_target[i] == gs_y_target) &&
-				(gs_groups_current_loctype[i] == gs_current_loctype) &&
+				(gs_town_groups_loctype[i] == gs_current_loctype) &&
 				(gs_groups_town_id[i] == gs_town_id) &&
 				(gs_groups_dungeon_id[i] == gs_dungeon_id) &&
 				(gs_groups_dng_level[i] == gs_dungeon_level))

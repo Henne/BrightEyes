@@ -652,7 +652,7 @@ signed int do_travel_mode(void)
 
 	wallclock_update_bak = g_wallclock_update;
 	g_route59_flag = g_wallclock_update = gs_travel_detour = 0;
-	gs_town_id = gs_current_typeindex;
+	gs_town_id = gs_town_typeindex;
 
 	call_mouse_bg();
 

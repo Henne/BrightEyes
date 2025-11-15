@@ -476,7 +476,7 @@ void level_up(const signed int hero_pos)
 	signed char v3;
 	signed int i;
 	struct struct_hero *hero;
-	signed int city_bak;
+	signed int text_file_index_bak;
 
 	hero = get_hero(hero_pos);
 
@@ -486,7 +486,7 @@ void level_up(const signed int hero_pos)
 
 	g_timers_disabled = 1;
 
-	city_bak = g_text_file_index;
+	text_file_index_bak = g_text_file_index;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 
@@ -1020,10 +1020,10 @@ void level_up(const signed int hero_pos)
 	g_current_ani = -1;
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
-	if (city_bak != -1 && city_bak != ARCHIVE_FILE_CHARTEXT_LTX
-	    && city_bak != ARCHIVE_FILE_TAVERN_TLK
-	    && (city_bak < 156 || city_bak > 176)) {
-		load_tx2(city_bak);
+	if (text_file_index_bak != -1 && text_file_index_bak != ARCHIVE_FILE_CHARTEXT_LTX
+	    && text_file_index_bak != ARCHIVE_FILE_TAVERN_TLK
+	    && (text_file_index_bak < 156 || text_file_index_bak > 176)) {
+		load_tx2(text_file_index_bak);
 	}
 }
 

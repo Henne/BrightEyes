@@ -21,9 +21,9 @@
 namespace M302de {
 #endif
 
-static const uint8_t g_towns_gossip_max[TOWN_ID__TAIL] = { 0x1a, 0x0e, 0x0d, 0x05, 0x09, 0x06, 0x06, 0x07, 0x10, 0x07, 0x0b, 0x08, 0x0a, 0x0c, 0x11, 0x12, 0x0e, 0x10, 0x02, 0x0e, 0x00, 0x09, 0x0c, 0x0d, 0x0c, 0x0b, 0x07, 0x0a, 0x0c, 0x0a, 0x0c, 0x06, 0x0a, 0x09, 0x09, 0x08, 0x11, 0x0e, 0x0c, 0x00, 0x02, 0x07, 0x0f, 0x0b, 0x06, 0x0a, 0x08, 0x09, 0x0b, 0x0a, 0x00 }; // ds:0x7c9d
+static const uint8_t g_town_gossip_max[TOWN_ID__TAIL] = { 0x1a, 0x0e, 0x0d, 0x05, 0x09, 0x06, 0x06, 0x07, 0x10, 0x07, 0x0b, 0x08, 0x0a, 0x0c, 0x11, 0x12, 0x0e, 0x10, 0x02, 0x0e, 0x00, 0x09, 0x0c, 0x0d, 0x0c, 0x0b, 0x07, 0x0a, 0x0c, 0x0a, 0x0c, 0x06, 0x0a, 0x09, 0x09, 0x08, 0x11, 0x0e, 0x0c, 0x00, 0x02, 0x07, 0x0f, 0x0b, 0x06, 0x0a, 0x08, 0x09, 0x0b, 0x0a, 0x00 }; // ds:0x7c9d
 
-static const uint8_t g_towns_gossip_off[TOWN_ID__TAIL] = { 0x38, 0x06, 0x0a, 0x09, 0x0c, 0x06, 0x04, 0x06, 0x06, 0x0e, 0x05, 0x06, 0x08, 0x05, 0x0e, 0x04, 0x14, 0x1a, 0x05, 0x08, 0x00, 0x09, 0x0c, 0x09, 0x08, 0x0a, 0x05, 0x0d, 0x0c, 0x05, 0x0a, 0x06, 0x0e, 0x05, 0x07, 0x06, 0x0a, 0x0b, 0x18, 0x00, 0x05, 0x0c, 0x0c, 0x09, 0x08, 0x0c, 0x05, 0x0e, 0x04, 0x03, 0x00 }; // ds:0x7cd1
+static const uint8_t g_town_gossip_off[TOWN_ID__TAIL] = { 0x38, 0x06, 0x0a, 0x09, 0x0c, 0x06, 0x04, 0x06, 0x06, 0x0e, 0x05, 0x06, 0x08, 0x05, 0x0e, 0x04, 0x14, 0x1a, 0x05, 0x08, 0x00, 0x09, 0x0c, 0x09, 0x08, 0x0a, 0x05, 0x0d, 0x0c, 0x05, 0x0a, 0x06, 0x0e, 0x05, 0x07, 0x06, 0x0a, 0x0b, 0x18, 0x00, 0x05, 0x0c, 0x0c, 0x09, 0x08, 0x0c, 0x05, 0x0e, 0x04, 0x03, 0x00 }; // ds:0x7cd1
 
 static const char g_gossip_str_triple_wildcard[8] = "%s %s%s"; // ds:0x7d06
 
@@ -40,7 +40,7 @@ signed int get_tavern_gossip(void)
 	signed int randval;
 	signed int max_gossip_texts;
 
-	max_gossip_texts = g_towns_gossip_max[gs_town_id - 1];
+	max_gossip_texts = g_town_gossip_max[gs_town_id - 1];
 
 	randval = max_gossip_texts = random_schick(max_gossip_texts) - 1;
 
@@ -444,7 +444,7 @@ signed int get_tavern_gossip(void)
 	}
 	}
 
-	return max_gossip_texts + g_towns_gossip_off[gs_town_id - 1];
+	return max_gossip_texts + g_town_gossip_off[gs_town_id - 1];
 }
 
 /**
@@ -498,7 +498,7 @@ signed int tavern_quest_infos(void)
 
 		/* Original-Bug: which return value here? */
 
-	} else if ((gs_town_id == TOWN_ID_THORWAL) && !gs_quest_deadship && (gs_current_typeindex == 6))
+	} else if ((gs_town_id == TOWN_ID_THORWAL) && !gs_quest_deadship && (gs_town_typeindex == 6))
 	{
 		/* print the message about a ghost ship */
 		GUI_output(get_tx(209));
@@ -506,7 +506,7 @@ signed int tavern_quest_infos(void)
 		/* remember that */
 		gs_quest_deadship = relevant_info = 1;
 
-	} else if ((gs_town_id == TOWN_ID_SKJAL) &&	(gs_current_typeindex == 69) &&
+	} else if ((gs_town_id == TOWN_ID_SKJAL) &&	(gs_town_typeindex == 69) &&
 			(gs_informer_flags[INFORMER_JURGE] != 2) && (gs_informer_flags[INFORMER_JURGE] != 0) &&
 			!gs_jurge_awaits_letter)
 	{
@@ -516,7 +516,7 @@ signed int tavern_quest_infos(void)
 			gs_current_informer = relevant_info = 1;
 		}
 
-	} else if ((gs_town_id == TOWN_ID_VIDSAND) && (gs_current_typeindex == 84) &&
+	} else if ((gs_town_id == TOWN_ID_VIDSAND) && (gs_town_typeindex == 84) &&
 			(gs_informer_flags[INFORMER_RAGNA] != 2) && (gs_informer_flags[INFORMER_RAGNA] != 0))
 	{
 		/* meet Informer Ragna */
@@ -525,19 +525,19 @@ signed int tavern_quest_infos(void)
 			gs_current_informer = relevant_info = 6;
 		}
 
-	} else if ((gs_town_id == TOWN_ID_ANGBODIRTAL) && ((gs_current_typeindex == 27) || (gs_current_typeindex == 28)) &&
+	} else if ((gs_town_id == TOWN_ID_ANGBODIRTAL) && ((gs_town_typeindex == 27) || (gs_town_typeindex == 28)) &&
 			(gs_informer_flags[INFORMER_BEORN] != 2) && (gs_informer_flags[INFORMER_BEORN] != 0))
 	{
 		/* meet Informer Beorn */
 
-		if (((gs_current_typeindex == 27) && (random_schick(100) <= 50)) ||
-			((gs_current_typeindex == 28) && (random_schick(100) <= 20)))
+		if (((gs_town_typeindex == 27) && (random_schick(100) <= 50)) ||
+			((gs_town_typeindex == 28) && (random_schick(100) <= 20)))
 		{
 			gs_current_informer = relevant_info = 7;
 		}
 
 
-	} else if ((gs_town_id == TOWN_ID_BREIDA) && ((gs_current_typeindex == 14) || (gs_current_typeindex == 15)) &&
+	} else if ((gs_town_id == TOWN_ID_BREIDA) && ((gs_town_typeindex == 14) || (gs_town_typeindex == 15)) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 2) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 0) &&
 			(gs_got_main_quest != 0))
@@ -549,14 +549,14 @@ signed int tavern_quest_infos(void)
 		}
 
 	} else if ((gs_town_id == TOWN_ID_HJALSINGOR) &&
-			((gs_current_typeindex == 61) || (gs_current_typeindex == 62)) &&
+			((gs_town_typeindex == 61) || (gs_town_typeindex == 62)) &&
 			(gs_informer_flags[INFORMER_ALGRID] != 2) &&
 			(gs_informer_flags[INFORMER_ALGRID] != 0))
 	{
 		/* meet Informer Algrid */
 
-		if (((gs_current_typeindex == 61) && (random_schick(100) <= 50)) ||
-			((gs_current_typeindex == 62) && (random_schick(100) <= 20)))
+		if (((gs_town_typeindex == 61) && (random_schick(100) <= 50)) ||
+			((gs_town_typeindex == 62) && (random_schick(100) <= 20)))
 		{
 			gs_current_informer = relevant_info = 14;
 		}

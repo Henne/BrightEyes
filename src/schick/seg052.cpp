@@ -42,7 +42,7 @@ static signed char g_area_camp_magicstatus[7];	// ds:0xe3e1
 static signed char g_area_camp_guardstatus[8];	// ds:0xe3e8
 
 /**
- * \brief   camp in a city or a dungeon
+ * \brief   camp in a town or a dungeon
  */
 void do_area_camp(void)
 {

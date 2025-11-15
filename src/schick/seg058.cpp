@@ -544,9 +544,9 @@ void do_smith(void)
 		return;
 	}
 
-	if (gs_smith_kicked_flags[gs_current_typeindex] ||
-		gs_smith_flogged_flags[gs_current_typeindex] ||
-		(gs_current_typeindex == 1 && gs_dng14_cellarexit_flag)) {
+	if (gs_smith_kicked_flags[gs_town_typeindex] ||
+		gs_smith_flogged_flags[gs_town_typeindex] ||
+		(gs_town_typeindex == 1 && gs_dng14_cellarexit_flag)) {
 
 		talk_smith();
 		leave_location();
@@ -555,7 +555,7 @@ void do_smith(void)
 
 	load_ggsts_nvf();
 	g_request_refresh = 1;
-	smith = &g_smith_descr_table[gs_current_typeindex];
+	smith = &g_smith_descr_table[gs_town_typeindex];
 	g_price_modificator = 4;
 
 	while (!done) {
@@ -567,7 +567,7 @@ void do_smith(void)
 			disable_ani();
 			load_ani(5);
 			init_ani(0);
-			GUI_print_loc_line(get_tx(gs_current_locdata));
+			GUI_print_loc_line(get_tx(gs_town_locdata));
 			set_audio_track(ARCHIVE_FILE_SMITH_XMI);
 			g_request_refresh = 0;
 		}
@@ -595,14 +595,14 @@ void do_smith(void)
 			talk_smith();
 			g_request_refresh = 1;
 
-			if (gs_smith_kicked_flags[gs_current_typeindex] ||
-				gs_smith_flogged_flags[gs_current_typeindex] ||
+			if (gs_smith_kicked_flags[gs_town_typeindex] ||
+				gs_smith_flogged_flags[gs_town_typeindex] ||
 				gs_dungeon_id != DUNGEON_ID_NONE)
 			{
 				done = 1;
 			}
 		} else if (g_action == ACTION_ID_ICON_2) {
-			repair_screen(smith, gs_current_typeindex);
+			repair_screen(smith, gs_town_typeindex);
 		}
 	}
 
@@ -618,18 +618,18 @@ void talk_smith(void)
 void TLK_schmied(const signed int state)
 {
 	if (!state) {
-		g_dialog_next_state = (gs_smith_kicked_flags[gs_current_typeindex] ? 1 :
-					(gs_current_typeindex == 17 ? 27 :
-					(gs_current_typeindex == 1 && gs_dng14_cellarexit_flag ? 28 : 4)));
+		g_dialog_next_state = (gs_smith_kicked_flags[gs_town_typeindex] ? 1 :
+					(gs_town_typeindex == 17 ? 27 :
+					(gs_town_typeindex == 1 && gs_dng14_cellarexit_flag ? 28 : 4)));
 	} else if (state == 1) {
-		g_dialog_next_state = (gs_smith_flogged_flags[gs_current_typeindex] ? 2 : 3);
+		g_dialog_next_state = (gs_smith_flogged_flags[gs_town_typeindex] ? 2 : 3);
 	} else if (state == 3) {
-		gs_smith_flogged_flags[gs_current_typeindex] = 1;
+		gs_smith_flogged_flags[gs_town_typeindex] = 1;
 	} else if (state == 6 || state == 26) {
 		tumult();
-		gs_smith_kicked_flags[gs_current_typeindex] = gs_smith_flogged_flags[gs_current_typeindex] = 1;
+		gs_smith_kicked_flags[gs_town_typeindex] = gs_smith_flogged_flags[gs_town_typeindex] = 1;
 	} else if (state == 11 || state == 14 || state == 16 || state == 23) {
-		gs_smith_kicked_flags[gs_current_typeindex] = 1;
+		gs_smith_kicked_flags[gs_town_typeindex] = 1;
 	} else if (state == 19 || state == 31) {
 		g_price_modificator = 3;
 	} else if (state == 30) {

@@ -492,7 +492,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 				if (j == 2) {
 					GUI_output(get_ttx(453));
-					gs_merchant_offended_flags[gs_current_typeindex] = 1;
+					gs_merchant_offended_flags[gs_town_typeindex] = 1;
 					done = 1;
 				} else {
 					GUI_output(get_ttx(450));

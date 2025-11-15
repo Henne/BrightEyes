@@ -236,7 +236,7 @@ void PHX_phextempel(void)
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(51), 0);
 
-				gs_current_typeindex = 59;
+				gs_town_typeindex = 59;
 
 				g_textbox_width = 3;
 
@@ -288,7 +288,7 @@ void PHX_phextempel(void)
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(51), 0);
 
-				gs_current_typeindex = 59;
+				gs_town_typeindex = 59;
 
 				g_textbox_width = 3;
 
@@ -325,7 +325,7 @@ void PHX_phextempel(void)
 
 			/* enter the temple */
 
-			gs_current_typeindex = 59;
+			gs_town_typeindex = 59;
 
 			g_textbox_width = 3;
 

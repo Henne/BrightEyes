@@ -1,5 +1,5 @@
 /**
- *	Rewrite of DSA1 v3.02_de functions of seg066 (city)
+ *	Rewrite of DSA1 v3.02_de functions of seg066 (town)
  *	Functions rewritten: 18/18 (complete)
  *
  *	Borlandified and identical
@@ -87,8 +87,65 @@ const uint8_t g_hyg_ani_x6 = 0xba; // ds:0x71c3
 const uint8_t g_hyg_ani_x7[3] = { 0xb1, 0xa8, 0xa4 }; // ds:0x71c4
 const uint8_t g_hyg_ani_x9[3] = { 0x30, 0x26, 0x26 }; // ds:0x71c7
 
-
-static const uint8_t  g_towns_cityindex_table[TOWN_ID__TAIL] = { 0x36, 0x04, 0x08, 0x07, 0x0a, 0x04, 0x02, 0x04, 0x04, 0x0c, 0x03, 0x04, 0x06, 0x03, 0x0c, 0x02, 0x12, 0x18, 0x03, 0x06, 0x01, 0x07, 0x0a, 0x07, 0x06, 0x08, 0x03, 0x0b, 0x0a, 0x03, 0x08, 0x04, 0x0c, 0x03, 0x05, 0x04, 0x08, 0x09, 0x16, 0x13, 0x03, 0x0a, 0x0a, 0x07, 0x06, 0x0a, 0x03, 0x0c, 0x02, 0x01, 0x01, 0x03 }; // ds:0x71ca
+/* The following table is unnecessary, basically.
+ * It seems that its only purpose is the retrieval of the message when entering an ordinary house.
+ * In this case, this info would also be available from the preceding loop, see the line
+ * assert(g_town_num_locations_table[town_id - 1] == (locations_tab_ptr - g_locations_tab)
+ * below */
+static const uint8_t g_town_num_locations_table[TOWN_ID__TAIL] = {
+	54, // TOWN_ID_THORWAL
+	 4, // TOWN_ID_SERSKE
+	 8, // TOWN_ID_BREIDA
+	 7, // TOWN_ID_PEILINEN
+	10, // TOWN_ID_ROVAMUND
+	 4, // TOWN_ID_NORDVEST
+	 2, // TOWN_ID_KRAVIK
+	 4, // TOWN_ID_SKELELLEN
+	 4, // TOWN_ID_MERSKE
+	12, // TOWN_ID_EFFERDUN
+	 3, // TOWN_ID_TJOILA
+	 4, // TOWN_ID_RUKIAN
+	 6, // TOWN_ID_ANGBODIRTAL
+	 3, // TOWN_ID_AUPLOG
+	12, // TOWN_ID_VILNHEIM
+	 2, // TOWN_ID_BODON
+	18, // TOWN_ID_OBERORKEN
+	24, // TOWN_ID_PHEXCAER
+	 3, // TOWN_ID_GROENVELDEN
+	 6, // TOWN_ID_FELSTEYN
+	 1, // TOWN_ID_EINSIEDLERSEE
+	 7, // TOWN_ID_ORKANGER
+	10, // TOWN_ID_CLANEGH
+	 7, // TOWN_ID_LISKOR
+	 6, // TOWN_ID_THOSS
+	 8, // TOWN_ID_TJANSET
+	 3, // TOWN_ID_ALA
+	11, // TOWN_ID_ORVIL
+	10, // TOWN_ID_OVERTHORN
+	 3, // TOWN_ID_ROVIK
+	 8, // TOWN_ID_HJALSINGOR
+	 4, // TOWN_ID_GUDDASUNDEN
+	12, // TOWN_ID_KORD
+	 3, // TOWN_ID_TREBAN
+	 5, // TOWN_ID_ARYN
+	 4, // TOWN_ID_RUNINSHAVEN
+	 8, // TOWN_ID_OTTARJE
+	 9, // TOWN_ID_SKJAL
+	22, // TOWN_ID_PREM
+	19, // TOWN_ID_DASPOTA
+	 3, // TOWN_ID_RYBON
+	10, // TOWN_ID_LJASDAHL
+	10, // TOWN_ID_VARNHEIM
+	 7, // TOWN_ID_VAERMHAG
+	 6, // TOWN_ID_TYLDON
+	10, // TOWN_ID_VIDSAND
+	 3, // TOWN_ID_BRENDHIL
+	12, // TOWN_ID_MANRIN
+	 2, // TOWN_ID_FAEHRSTATION_TJOILA
+	 1, // TOWN_ID_FAEHRE_ANGBODIRTAL
+	 1, // TOWN_ID_HJALLANDER_HOF
+	 3  // TOWN_ID_LEUCHTTURM_RUNIN
+}; // ds:0x71ca
 
 static uint8_t* g_daspota_locloot_index[18] = {
 	gs_daspota_location01_loot,
@@ -349,16 +406,18 @@ static const unsigned char g_tex_descr_table[101][18] = {
 	{ 0xfe, 0xff, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff },
 	{ 0x00, 0x00, 0xf3, 0xff, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff }
 }; // ds:0x750a
-static const signed char g_visual_field_draw_order[29] = { 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x0f, 0x10, 0x15, 0x14, 0x11, 0x13, 0x12, 0x08, 0x09, 0x0e, 0x0d, 0x0a, 0x0c, 0x0b, 0x03, 0x04, 0x07, 0x06, 0x05, 0x00, 0x02, 0x01 }; // ds:0x7c24
+static const signed char g_visual_field_draw_order[29] = {
+	22, 23, 24, 25, 26, 27, 28, 15, 16, 21, 20, 17, 19, 18, 8, 9, 14, 13, 10, 12, 11, 3, 4, 7, 6, 5, 0, 2, 1
+}; // ds:0x7c24
 signed char g_can_merge_group = -1; // ds:0x7c41, {-1,1}
 
 
 HugePt g_buffer9_ptr4;				// ds:0xe3fc, copy of BUFFER9_PTR
-unsigned char g_city_house_count[4];		// ds:0xe400, counts of the four different kinds of houses on the current map
+unsigned char g_town_house_count[4];		// ds:0xe400, counts of the four different kinds of houses on the current map
 unsigned char *g_buffer11_ptr;			// ds:0xe404, to buffer of size 192, used for palettes
-static signed int g_city_refresh_direction;	// ds:0xe408
-static signed int g_city_refresh_y_target;	// ds:0xe40a
-static signed int g_city_refresh_x_target;	// ds:0xe40c
+static signed int g_town_refresh_direction;	// ds:0xe408
+static signed int g_town_refresh_y_target;	// ds:0xe40a
+static signed int g_town_refresh_x_target;	// ds:0xe40c
 static signed int g_always_zero1;		// ds:0xe40e, writeonly (0)
 static signed int g_always_zero2;		// ds:0xe410, writeonly (0)
 static signed int g_entrance_angle;		// ds:0xe412
@@ -385,8 +444,8 @@ signed int enter_location(const signed int town_id)
 			/* found the location */
 			gs_current_loctype_bak = LOCTYPE_NONE;
 			gs_current_loctype = locations_tab_ptr->loctype;
-			gs_current_typeindex = locations_tab_ptr->typeindex;
-			gs_current_locdata = locations_tab_ptr->locdata;
+			gs_town_typeindex = locations_tab_ptr->typeindex;
+			gs_town_locdata = locations_tab_ptr->locdata;
 
 			if (gs_current_loctype == LOCTYPE_MARKET) {
 				gs_current_loctype = LOCTYPE_NONE;
@@ -405,13 +464,19 @@ signed int enter_location(const signed int town_id)
 	if (((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2) && (b_index <= 5)) {
 
 		gs_current_loctype_bak = LOCTYPE_NONE;
-		gs_current_locdata = g_towns_cityindex_table[town_id - 1];
+		// assert(g_town_num_locations_table[town_id - 1] == (locations_tab_ptr - g_locations_tab)
+		gs_town_locdata = g_town_num_locations_table[town_id - 1];
 
 		if (!((gs_direction + gs_x_target + gs_y_target) & 1)) {
 			gs_current_loctype = LOCTYPE_CITIZEN;
 		} else {
 			gs_current_loctype = LOCTYPE_HOUSE;
-			gs_current_locdata++;
+
+			gs_town_locdata++;
+			// gs_town_locdata is now number_of_locations + 1.
+			// It will be used in do_house() as index for the text retrieval for the status line from <TOWN>.LTX,
+			// In this file, the first entries are the names of the locations, followed by the message entering a house.
+			// Example for Thorwal: <TAGCHEN! IHR WOLLT SICHER NICHT ZU MIR. ALSO RAUS!>
 		}
 
 		return 1;
@@ -438,7 +503,7 @@ signed int enter_location_daspota(void)
 
 		if (locations_tab_ptr->pos == map_pos) {
 
-			gs_current_typeindex = locations_tab_ptr->typeindex;
+			gs_town_typeindex = locations_tab_ptr->typeindex;
 
 			if (locations_tab_ptr->loctype != LOCTYPE_SIGNPOST) {
 
@@ -489,7 +554,7 @@ signed int enter_location_daspota(void)
 			} else {
 				gs_current_loctype_bak = LOCTYPE_NONE;
 				gs_current_loctype = locations_tab_ptr->loctype;
-				gs_current_locdata = locations_tab_ptr->locdata;
+				gs_town_locdata = locations_tab_ptr->locdata;
 			}
 
 			return 1;
@@ -505,7 +570,7 @@ signed int enter_location_daspota(void)
 
 		gs_current_loctype_bak = LOCTYPE_NONE;
 		gs_current_loctype = LOCTYPE_CITIZEN;
-		gs_current_locdata = 19;
+		gs_town_locdata = 19;
 		return 1;
 	}
 
@@ -517,7 +582,7 @@ void do_special_buildings(void)
 	signed int type;
 	const signed int tw_bak = g_textbox_width;
 
-	type = gs_current_typeindex;
+	type = gs_town_typeindex;
 
 	if (gs_town_id == TOWN_ID_THORWAL) {
 
@@ -659,7 +724,7 @@ void do_town(void)
 
 	gs_town_id_bak = gs_town_id;
 
-	city_step();
+	town_step();
 }
 
 static void refresh_floor_and_sky(void)
@@ -687,22 +752,22 @@ static void refresh_floor_and_sky(void)
 	process_nvf_extraction(&nvf);
 }
 
-void city_update_view(void)
+void town_update_view(void)
 {
 	refresh_floor_and_sky();
 	move();
-	city_set_vis_field_vals();
-	city_set_vis_field_tex();
+	town_set_vis_field_vals();
+	town_set_vis_field_tex();
 
 	/* TODO: these are write only variables */
 	g_always_zero2 = g_always_zero1 = 0;
 
-	city_water_and_grass();
-	city_building_textures();
-	city_fade_and_colors();
+	town_water_and_grass();
+	town_building_textures();
+	town_fade_and_colors();
 }
 
-void city_set_vis_field_vals(void)
+void town_set_vis_field_vals(void)
 {
 	signed int bi;
 
@@ -898,7 +963,7 @@ signed int get_border_index(const unsigned char val)
 	return i;
 }
 
-void city_set_vis_field_tex(void)
+void town_set_vis_field_tex(void)
 {
 	signed int i;
 	signed int bi;
@@ -928,7 +993,7 @@ void city_set_vis_field_tex(void)
 /**
  * \brief   draws water and grass textures
  */
-void city_water_and_grass(void)
+void town_water_and_grass(void)
 {
 	signed int i;
 	signed int nvf_no;
@@ -968,7 +1033,7 @@ void city_water_and_grass(void)
 							nvf_no += 15;
 						}
 
-						load_city_texture(x + ptr[0], y + ptr[1], nvf_no, 184);
+						load_town_texture(x + ptr[0], y + ptr[1], nvf_no, 184);
 					}
 				}
 			}
@@ -979,7 +1044,7 @@ void city_water_and_grass(void)
 /**
  * \brief   draws building textures
  */
-void city_building_textures(void)
+void town_building_textures(void)
 {
 	signed int nvf_no;
 	signed int i;
@@ -1046,7 +1111,7 @@ void city_building_textures(void)
 							load_special_textures(bi);
 						}
 
-						load_city_texture(x + ptr[0], y + ptr[1], nvf_no, l4);
+						load_town_texture(x + ptr[0], y + ptr[1], nvf_no, l4);
 
 						if (bi == 9 || bi == 10) {
 							call_load_buffer();
@@ -1069,11 +1134,11 @@ void city_building_textures(void)
 							nvf_no = ((uint16_t)(nvf_no & 0x7fff) - 10) | 0x8000;
 						}
 
-						load_city_texture(x + ptr[3], y + ptr[4], nvf_no, l4);
+						load_town_texture(x + ptr[3], y + ptr[4], nvf_no, l4);
 					}
 
 					if ((nvf_no = ptr[8]) != -1) {
-						load_city_texture(x + ptr[6], y + ptr[7], nvf_no, l4);
+						load_town_texture(x + ptr[6], y + ptr[7], nvf_no, l4);
 					}
 				}
 			}
@@ -1081,7 +1146,7 @@ void city_building_textures(void)
 	}
 }
 
-void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int v4)
+void load_town_texture(signed int x, signed int y, signed int nvf_no, signed int v4)
 {
 	signed int width;
 	signed int height;
@@ -1150,16 +1215,16 @@ void load_city_texture(signed int x, signed int y, signed int nvf_no, signed int
 	}
 }
 
-void city_direction_change(void)
+void town_direction_change(void)
 {
 	disable_ani();
-	city_update_view();
-	g_city_refresh_x_target = gs_x_target;
-	g_city_refresh_y_target = gs_y_target;
-	g_city_refresh_direction = gs_direction;
+	town_update_view();
+	g_town_refresh_x_target = gs_x_target;
+	g_town_refresh_y_target = gs_y_target;
+	g_town_refresh_direction = gs_direction;
 }
 
-signed int city_step(void)
+signed int town_step(void)
 {
 	signed int i;
 	signed int bi;
@@ -1186,7 +1251,7 @@ signed int city_step(void)
 		GUI_print_loc_line(get_tx(0));
 
 		g_request_refresh = g_redraw_menuicons = 0;
-		g_city_refresh_x_target = -1;
+		g_town_refresh_x_target = -1;
 	}
 
 	if (g_redraw_menuicons && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK)) {
@@ -1195,11 +1260,11 @@ signed int city_step(void)
 	}
 
 	/* check if position or direction has changed */
-	if (gs_direction != g_city_refresh_direction ||
-		gs_x_target != g_city_refresh_x_target ||
-		gs_y_target != g_city_refresh_y_target)
+	if (gs_direction != g_town_refresh_direction ||
+		gs_x_target != g_town_refresh_x_target ||
+		gs_y_target != g_town_refresh_y_target)
 	{
-		city_direction_change();
+		town_direction_change();
 	}
 
 	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak))
@@ -1284,9 +1349,9 @@ signed int city_step(void)
 		bi = get_border_index(g_steptarget_front);
 
 		if (!bi || bi == 7 || bi == 8) {
-			city_do_step(1);
+			town_do_step(1);
 		} else if (bi >= 1 && bi <= 5 && g_entrance_angle == 2) {
-			city_do_step(1);
+			town_do_step(1);
 		} else {
 			no_way();
 		}
@@ -1296,7 +1361,7 @@ signed int city_step(void)
 		bi = get_border_index(g_steptarget_back);
 
 		if (!bi || bi == 7 || bi == 8) {
-			city_do_step(-1);
+			town_do_step(-1);
 		} else {
 			no_way();
 		}
@@ -1326,7 +1391,7 @@ signed int city_step(void)
 
 		if (g_location_market_flag && g_new_menu_icons[7] != MENU_ICON_MARKET) {
 
-			if (((i = g_market_descr_table[gs_current_typeindex].market_day) == -1 || gs_day_of_week == i) &&
+			if (((i = g_market_descr_table[gs_town_typeindex].market_day) == -1 || gs_day_of_week == i) &&
 				gs_day_timer >= HOURS(6) && gs_day_timer <= HOURS(16))
 			{
 				g_new_menu_icons[7] = MENU_ICON_MARKET;
@@ -1347,7 +1412,7 @@ signed int city_step(void)
  * \brief execute a step if possible
  * \param[in] forward {-1 = no, 1 = yes}
  */
-void city_do_step(const signed int forward)
+void town_do_step(const signed int forward)
 {
 	signed int dir;
 
@@ -1403,7 +1468,7 @@ void city_do_step(const signed int forward)
 	}
 }
 
-void city_fade_and_colors(void)
+void town_fade_and_colors(void)
 {
 	signed int i;
 	uint8_t *dst;
@@ -1472,14 +1537,14 @@ void city_fade_and_colors(void)
 	}
 }
 
-void city_update_house_count(void)
+void town_update_house_count(void)
 {
 	signed int l_si;
 	signed int i;
 	uint8_t *map_ptr = g_dng_map;
 
-	g_city_house_count[0] = g_city_house_count[1]
-				= g_city_house_count[2] = g_city_house_count[3] = 0;
+	g_town_house_count[0] = g_town_house_count[1]
+				= g_town_house_count[2] = g_town_house_count[3] = 0;
 
 	for (i = 0; g_map_size_x * 16 > i; i++) {
 
@@ -1487,13 +1552,13 @@ void city_update_house_count(void)
 
 		/* count number of houses of certain kind */
 		if (l_si == 2) {
-			g_city_house_count[0]++;
+			g_town_house_count[0]++;
 		} else if (l_si == 3) {
-			g_city_house_count[1]++;
+			g_town_house_count[1]++;
 		} else if ((l_si == 4) || (l_si == 1)) {
-			g_city_house_count[2]++;
+			g_town_house_count[2]++;
 		} else if (l_si == 5) {
-			g_city_house_count[3]++;
+			g_town_house_count[3]++;
 		}
 	}
 
@@ -1501,25 +1566,25 @@ void city_update_house_count(void)
 	l_si = 2000;
 
 	/* find house with lowest count on current map */
-	if (g_city_house_count[0] < l_si) {
-		l_si = g_city_house_count[(i = 0)];
+	if (g_town_house_count[0] < l_si) {
+		l_si = g_town_house_count[(i = 0)];
 	}
 
-	if (g_city_house_count[1] < l_si) {
-		l_si = g_city_house_count[(i = 1)];
+	if (g_town_house_count[1] < l_si) {
+		l_si = g_town_house_count[(i = 1)];
 	}
 
-	if (g_city_house_count[2] < l_si) {
-		l_si = g_city_house_count[(i = 2)];
+	if (g_town_house_count[2] < l_si) {
+		l_si = g_town_house_count[(i = 2)];
 	}
 
-	if (g_city_house_count[3] < l_si) {
-		l_si = g_city_house_count[(i = 3)];
+	if (g_town_house_count[3] < l_si) {
+		l_si = g_town_house_count[(i = 3)];
 	}
 
 	/* the kind of house with lowest count is deactivated, i.e. it's texture is
-	 * not loaded and replaced by another texture in prepare_city_area */
-	g_city_house_count[i] = 0;
+	 * not loaded and replaced by another texture in prepare_town_area */
+	g_town_house_count[i] = 0;
 }
 
 #if !defined(__BORLANDC__)
