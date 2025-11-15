@@ -669,7 +669,7 @@ signed int select_teleport_dest(void)
 signed int get_maploc(const signed int x, const signed int y)
 {
 	struct location *locations_tab_ptr;
-	signed int pos_xy = TOWN_POS(x,y);
+	const signed int pos_xy = TOWN_POS(x,y);
 
 	// Wow. Original game has these hard-coded manipulation of the data.
 	if (gs_town_id == TOWN_ID_THORWAL) {

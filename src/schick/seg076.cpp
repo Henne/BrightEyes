@@ -419,8 +419,8 @@ void DNG_fallpit_test(const signed int max_damage)
 
 signed int DNG_step(void)
 {
-	signed int l_si;
-	signed int l_di;
+	signed int dng_tile;
+	signed int l_di; /* REMARK: answer, i, ... */
 	signed int (*dungeon_handler)(void);
 	signed int retval;
 	signed int tw_bak;
@@ -583,21 +583,21 @@ signed int DNG_step(void)
 
 	} else if (g_action == ACTION_ID_UP)
 	{
-		if ((l_si = div16(g_steptarget_front)) == DNG_TILE_SEMIPERMEABLE_WALL)
+		if ((dng_tile = div16(g_steptarget_front)) == DNG_TILE_SEMIPERMEABLE_WALL)
 		{
-			l_si = 1 << gs_direction;
+			dng_tile = 1 << gs_direction;
 
-			if (g_steptarget_front & l_si & 0x0f)
+			if (g_steptarget_front & dng_tile & 0x0f)
 				/* can only be entered if flag no. <direction> is set. */
 			{
 				DNG_timestep(1);
 			}
 
-		} else if ((l_si = div16(g_steptarget_front)) != DNG_TILE_WALL &&
-				l_si != DNG_TILE_CLOSED_DOOR && /* closed door */
-				l_si != DNG_TILE_REMOVABLE_WALL &&
-				l_si != DNG_TILE_CHEST &&
-				l_si != DNG_TILE_BLOCKER)
+		} else if ((dng_tile = div16(g_steptarget_front)) != DNG_TILE_WALL &&
+				dng_tile != DNG_TILE_CLOSED_DOOR && /* closed door */
+				dng_tile != DNG_TILE_REMOVABLE_WALL &&
+				dng_tile != DNG_TILE_CHEST &&
+				dng_tile != DNG_TILE_BLOCKER)
 		{
 			DNG_timestep(1);
 		} else {
@@ -606,11 +606,11 @@ signed int DNG_step(void)
 
 	} else if (g_action == ACTION_ID_DOWN)
 	{
-		if ((l_si = div16(g_steptarget_back)) != DNG_TILE_WALL &&
-				l_si != DNG_TILE_CLOSED_DOOR &&
-				l_si != DNG_TILE_REMOVABLE_WALL &&
-				l_si != DNG_TILE_CHEST &&
-				l_si != DNG_TILE_BLOCKER)
+		if ((dng_tile = div16(g_steptarget_back)) != DNG_TILE_WALL &&
+				dng_tile != DNG_TILE_CLOSED_DOOR &&
+				dng_tile != DNG_TILE_REMOVABLE_WALL &&
+				dng_tile != DNG_TILE_CHEST &&
+				dng_tile != DNG_TILE_BLOCKER)
 		{
 			DNG_timestep(-1);
 		} else {
@@ -725,9 +725,9 @@ void DNG_see_stairs(void)
 
 void DNG_see_door(void)
 {
-	signed int l_si;
+	signed int dng_tile;
 
-	if ((l_si = div16(g_steptarget_front)) == 1 || l_si == 2)
+	if ((dng_tile = div16(g_steptarget_front)) == 1 || dng_tile == 2)
 	{
 		/* standing direct in front of a door with view to it */
 		if (g_new_menu_icons[6] != MENU_ICON_OPEN_CLOSE_DOOR && g_new_menu_icons[6] != MENU_ICON_SMASH_DOOR)
@@ -738,7 +738,7 @@ void DNG_see_door(void)
 
 		if (g_new_menu_icons[6] != MENU_ICON_SMASH_DOOR)
 		{
-			g_dng_extra_action = (l_si == 1 ? DNG_MENU_MODE_OPEN_DOOR : DNG_MENU_MODE_CLOSE_DOOR);
+			g_dng_extra_action = (dng_tile == 1 ? DNG_MENU_MODE_OPEN_DOOR : DNG_MENU_MODE_CLOSE_DOOR);
 		}
 
 	} else {

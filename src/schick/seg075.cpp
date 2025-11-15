@@ -1097,7 +1097,7 @@ void DNG_stub6(void)
 		}
 	} else {
 
-		signed int l_si;
+		signed int l_si; /* REMARK: climb_result, counter, le_damage */
 		signed int l_di;
 		signed int strongest_hero_pos;
 		struct struct_hero *hero_auto;
