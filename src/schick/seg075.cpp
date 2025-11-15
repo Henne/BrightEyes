@@ -734,8 +734,8 @@ void DNG_draw_walls(signed int x, signed int y, signed int a3)
 
 void DNG_stub4(void)
 {
-	signed int l1;
-	signed int l2;
+	signed int x;
+	signed int y;
 	signed char l3;
 	unsigned char l4;
 	unsigned char l5;
@@ -759,8 +759,8 @@ void DNG_stub4(void)
 			(l4 == 3) ? &g_dng_stub4_unkn1[l3] : &g_dng_stub4_unkn0[l3];
 
 
-		l1 = ptr[0].x;
-		l2 = ptr[0].y;
+		x = ptr[0].x;
+		y = ptr[0].y;
 
 		l3 = g_visual_fields_tex[l3];
 
@@ -772,7 +772,7 @@ void DNG_stub4(void)
 
 				if ((j & 0x4000) && ((((l5 & 3) + 2) & 3) != gs_direction)) {
 				} else {
-					DNG_draw_walls(l1 + ptr[0].x, l2 + ptr[0].y, j);
+					DNG_draw_walls(x + ptr[0].x, y + ptr[0].y, j);
 				}
 			}
 
@@ -780,7 +780,7 @@ void DNG_stub4(void)
 
 				if ((j & 0x4000) && ((((l5 & 3) + 2) & 3) != gs_direction)) {
 				} else {
-					DNG_draw_walls(l1 + ptr[1].y, l2 + ptr[2].x, j);
+					DNG_draw_walls(x + ptr[1].y, y + ptr[2].x, j);
 				}
 			}
 
@@ -788,7 +788,7 @@ void DNG_stub4(void)
 
 				if ((j & 0x4000) && ((((l5 & 3) + 2) & 3) != gs_direction)) {
 				} else {
-					DNG_draw_walls(l1 + ptr[3].x, l2 + ptr[3].y, j);
+					DNG_draw_walls(x + ptr[3].x, y + ptr[3].y, j);
 				}
 			}
 		}
@@ -843,12 +843,11 @@ signed int is_staff_lvl2_in_group(void)
 
 void DNG_lights(void)
 {
-	signed int l1;
-	signed char l2;
-
-	signed int i;
-
 	if (div16(g_visual_field_vals[1]) != 11) {
+
+		signed int light_attenuation;
+		signed char color;
+		signed int i;
 
 		/* copy palette */
 		memcpy(g_text_output_buf, g_buffer11_ptr, 0xc0);
@@ -856,36 +855,38 @@ void DNG_lights(void)
 		if (!(g_visual_field_vals[1] & 1)) {
 
 			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
-				l1 = 10;
+				light_attenuation = 10;
 			} else if (gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] || is_staff_lvl2_in_group()) {
-				l1 = 0;
+				light_attenuation = 0;
 			} else {
-				if ( (l1 = get_max_light_time()) != -1) {
-					l1 = 10 - l1;
+				if ( (light_attenuation = get_max_light_time()) != -1) {
+					light_attenuation = 10 - light_attenuation;
 				} else {
-					l1 = 10;
+					light_attenuation = 10;
 				}
 			}
 		} else {
 			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
-				l1 = 10;
+				light_attenuation = 10;
 			} else {
-				l1 = 0;
+				light_attenuation = 0;
 			}
 		}
 
-		gs_dungeon_light = ((l1 == 9) ? 1 : (l1 == 10) ? 2 : 0);
-		l1 *= 3;
+		gs_dungeon_light = ((light_attenuation == 9) ? 1 : (light_attenuation == 10) ? 2 : 0);
+
+		/* set the color palette with respect to the lighting timer */
+		light_attenuation *= 3;
 
 		for (i = 0; i < 0xc0; i++) {
 
-			l2 = g_text_output_buf[i] - l1;
+			color = g_text_output_buf[i] - light_attenuation;
 
-			if (l2 < 0) {
-				l2 = 0;
+			if (color < 0) {
+				color = 0;
 			}
 
-			g_text_output_buf[i] = l2;
+			g_text_output_buf[i] = color;
 		}
 
 		wait_for_vsync();
@@ -896,7 +897,7 @@ void DNG_lights(void)
 /**
  * \brief   performs a step (forward or backward) in a dungeon. time advances by 1 minute.
  *
- * \param 	foward	1: forward step; -1: backward step
+ * \param forward[in]	{ 1 = forward step, -1 = backward step}
  */
 void DNG_timestep(const signed int forward)
 {
@@ -1086,13 +1087,6 @@ void DNG_close_door(void)
 
 void DNG_stub6(void)
 {
-	signed int l_si;
-	signed int l_di;
-	signed int l1;
-	struct struct_hero *hero_auto;
-	struct struct_hero *hero1;
-	struct struct_hero *hero2;
-
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
 	if (gs_dungeon_light) {
@@ -1102,6 +1096,13 @@ void DNG_stub6(void)
 			gs_y_target = gs_y_target_bak;
 		}
 	} else {
+
+		signed int l_si;
+		signed int l_di;
+		signed int strongest_hero_pos;
+		struct struct_hero *hero_auto;
+		struct struct_hero *hero1;
+		struct struct_hero *hero2;
 
 		if (((l_si = DNG_check_climb_tools()) != -1) && ((l_di = count_heroes_available_in_group()) > 1))
 		{
@@ -1134,7 +1135,7 @@ void DNG_stub6(void)
 				}
 			} else {
 
-				hero_auto = get_hero((l1 = get_hero_KK_best()));
+				hero_auto = get_hero((strongest_hero_pos = get_hero_KK_best()));
 
 				l_di--;
 
@@ -1142,7 +1143,7 @@ void DNG_stub6(void)
 
 				do {
 
-					if (l_si == l1) {
+					if (l_si == strongest_hero_pos) {
 						l_si++;
 					}
 
@@ -1172,7 +1173,10 @@ void DNG_stub6(void)
 	}
 }
 
-
+/**
+ * \brief check for climb tools in the inventory (stafflevel included)
+ * \return {-1 = no, 0 = rope or ladder, otherwise position of a hero with stafflevel > 2}
+ **/
 signed int DNG_check_climb_tools(void)
 {
 	signed int i;

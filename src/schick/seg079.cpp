@@ -56,8 +56,8 @@ signed int DNG03_handler(void)
 	signed int j;
 	signed int tw_bak;
 	struct struct_hero *hero;
-	signed int l3;
-	signed int l4;
+	signed int armor_rs;
+	signed int armor_malus;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -154,9 +154,7 @@ signed int DNG03_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,5,14) &&
-			gs_direction != gs_direction_bak &&
-			gs_direction == SOUTH)
+	} else if ((target_pos == DNG_POS(0,5,14)) && (gs_direction != gs_direction_bak) && (gs_direction == SOUTH))
 	{
 		GUI_input(get_tx(7), 15);
 
@@ -185,7 +183,7 @@ signed int DNG03_handler(void)
 			gs_direction = WEST;
 		}
 
-	} else if (target_pos == DNG_POS(0,9,11) && gs_direction == WEST &&
+	} else if (target_pos == DNG_POS(0,9,11) && (gs_direction == WEST) &&
 			target_pos != gs_dng_handled_pos && gs_direction != gs_direction_bak)
 	{
 		/* LEVER: */
@@ -195,7 +193,7 @@ signed int DNG03_handler(void)
 			GUI_output(get_tx(9));
 		}
 
-	} else if (target_pos == DNG_POS(1,3,11) && gs_direction == EAST &&
+	} else if (target_pos == DNG_POS(1,3,11) && (gs_direction == EAST) &&
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak))
 	{
 		if (GUI_bool(get_tx(8)))
@@ -237,13 +235,13 @@ signed int DNG03_handler(void)
 			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				l3 = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
+				armor_rs = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
 				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
-				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));
+				armor_malus = (armor_rs > 3 ? 3 : (armor_rs > 0 ? armor_rs : 0));
 
-				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += l4;
-				hero->rs_bonus -= l4;
+				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += armor_malus;
+				hero->rs_bonus -= armor_malus;
 			}
 		}
 
@@ -265,13 +263,13 @@ signed int DNG03_handler(void)
 			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				l3 = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
+				armor_rs = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
 				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
-				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));
+				armor_malus = (armor_rs > 3 ? 3 : (armor_rs > 0 ? armor_rs : 0));
 
-				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += l4;
-				hero->rs_bonus -= l4;
+				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += armor_malus;
+				hero->rs_bonus -= armor_malus;
 			}
 		}
 
@@ -388,7 +386,7 @@ signed int DNG03_handler(void)
 			target_pos == DNG_POS(0,0,8))
 	{
 		leave_dungeon();
-		gs_town_id = ((signed char)gs_travel_destination_town_id);
+		gs_town_id = gs_travel_destination_town_id;
 		gs_x_target = gs_travel_destination_x;
 		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
@@ -528,13 +526,9 @@ void DNG03_chest09_loot(struct struct_chest* chest)
 void DNG03_chest12_loot(struct struct_chest* chest)
 {
 	uint8_t* ptr_bak;
-	signed char crystals;
+	signed char crystals = 0;
 	signed char i;
-	struct struct_hero *hero;
-
-	crystals = 0;
-
-	hero = get_first_hero_available_in_group();
+	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	/* count the crystals in the knapsack of the leader */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++)
@@ -568,31 +562,29 @@ void DNG03_chest10_loot(struct struct_chest*)
 
 void DNG03_chest11_loot(struct struct_chest*)
 {
-	signed int l_si;
-	signed int l_di;
-	signed int counter;
-	signed int mod;
-	struct struct_hero *hero;
+	signed int heroes_num;
+	signed int i;
+	signed int test_failed_num;
+	signed int handicap;
 
 	if (!gs_dng03_lever_chest11)
 	{
 		GUI_output(get_tx(25));
 
 	} else {
-		hero = get_hero(0);
-		for (l_di = counter = l_si = 0; l_di <= 6; l_di++, hero++)
+		struct struct_hero *hero = get_hero(0);
+
+		for (i = test_failed_num = heroes_num = 0; i <= 6; i++, hero++)
 		{
-			if ((hero->typus != HERO_TYPE_NONE) &&
-				(hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 			{
-				l_si++;
+				heroes_num++;
 
-				mod = l_si < 2 ? 6 : (l_si < 4 ? 2 : -2);
+				handicap = heroes_num < 2 ? 6 : (heroes_num < 4 ? 2 : -2);
 
-				if (test_attrib(hero, ATTRIB_GE, mod) <= 0) {
+				if (test_attrib(hero, ATTRIB_GE, handicap) <= 0) {
 
-					counter++;
+					test_failed_num++;
 
 					sprintf(g_dtp2, get_tx(27), hero->alias);
 					GUI_output(g_dtp2);
@@ -602,7 +594,7 @@ void DNG03_chest11_loot(struct struct_chest*)
 			}
 		}
 
-		if (counter == l_si)
+		if (test_failed_num == heroes_num)
 		{
 			/* end of game */
 			GUI_output(get_tx(26));

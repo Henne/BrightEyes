@@ -249,20 +249,17 @@ signed int get_spell_cost(const signed int spell_id, const signed int half_cost)
 signed int use_magic(struct struct_hero *hero)
 {
 	signed int ae;
-	signed int retval;
-	signed int answer;
-	signed int thonnys_inv_slot;
-
-	retval = 0;
-
-	answer = GUI_radio(get_ttx(329), 3, get_ttx(311), get_ttx(312), get_ttx(213));
+	signed int retval = 0;
+	const signed int answer = GUI_radio(get_ttx(329), 3, get_ttx(311), get_ttx(312), get_ttx(213));
 
 	if (answer != -1) {
 
-		switch(answer) {
+		switch (answer) {
 
 		case 1: {
 			/* Meditation */
+
+			signed int thonnys_inv_slot;
 
 			if (hero->typus != HERO_TYPE_MAGIER) {
 				/* not a mage, need thonnys */
@@ -277,7 +274,7 @@ signed int use_magic(struct struct_hero *hero)
 				thonnys_inv_slot = -1;
 			}
 
-			/* Asks how many AE should be generated */
+			/* Ask how many AE should be generated */
 			ae = GUI_input(get_ttx(333), 2);
 
 			if (ae != -1) {

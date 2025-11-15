@@ -706,6 +706,8 @@ void startup_equipment(struct struct_hero *hero)
 
 /**
  * \brief   get the maximum time of a burning lightsource
+ * \return {-1 = no lightsource, otherwise a value in {0, ..., 10}
+ * \todo: rethink this function with (groups, dead heroes, empty slots, ...) in mind
  */
 /* Borlandified and identical */
 signed int get_max_light_time(void)

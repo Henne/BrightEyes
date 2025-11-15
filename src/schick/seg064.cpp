@@ -100,13 +100,13 @@ signed int prepare_passages(void)
 				/* store the other town of the connection */
 			prepared++;
 		} else {
-			if (((signed long)gs_day_timer > HOURS(14)) && (ent->passage_timer == 1)
+			if ((gs_day_timer > HOURS(14)) && (ent->passage_timer == 1)
 				&& ((ent->town_id_1 == gs_town_id) || (ent->town_id_2 == gs_town_id)))
 		        {
 				/* ship is leaving tomorrow and it is later than 14:00 */
 
 				/* prepare a 12-byte entry in gs_harbor_options */
-				gs_harbor_options[prepared].route_id = (unsigned char)i;
+				gs_harbor_options[prepared].route_id = i;
 				gs_harbor_options[prepared].sea_route_ptr = ent;
 				gs_harbor_options[prepared].ship_timer = 1;
 				gs_harbor_options[prepared].ship_type = ent->ship_type;
@@ -229,11 +229,9 @@ signed int get_passage_travel_hours(const signed int distance, signed int base_s
  */
 signed int get_next_passages(const signed int type)
 {
-	sea_route *entry;
+	sea_route *entry = &g_sea_routes[0];
 	signed int option;
 	signed int i;
-
-	entry = &g_sea_routes[0];
 
 	for (i = option = 0; i < NR_SEA_ROUTES; entry++, i++) {
 
@@ -295,7 +293,8 @@ signed int passage_arrival(void)
 				/* tmp ranges over the IDs of the linked sea routes, diminished by 1. */
 				tmp = harbor_ptr->linked_travel_routes[si] - 1;
 				if (g_sea_routes[tmp].town_id_1 == gs_town_id || g_sea_routes[tmp].town_id_2 == gs_town_id) {
-					harbor_typeindex = (unsigned char)harbor_ptr->typeindex;
+					//harbor_typeindex = (unsigned char)harbor_ptr->typeindex;
+					harbor_typeindex = harbor_ptr->typeindex;
 					break;
 				}
 
@@ -311,7 +310,7 @@ signed int passage_arrival(void)
 	if (harbor_typeindex) {
 
 		/* save the old town in tmp */
-		tmp = (signed char)gs_town_id;
+		tmp = gs_town_id;
 		/* set the new town in current_town */
 		gs_town_id = gs_travel_destination_town_id;
 
@@ -332,7 +331,7 @@ signed int passage_arrival(void)
 		gs_travel_destination_viewdir = (si >> 4) & 0x0f;	/* = (si / 16) % 15 */
 
 		/* restore the old town area / TODO: a bit bogus */
-		gs_town_id = (unsigned char)tmp;
+		gs_town_id = tmp;
 		call_load_area(1);
 	}
 
