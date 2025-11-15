@@ -1872,7 +1872,9 @@ extern signed int g_textbox_width;	// ds:0xbffd; seg002-seg120
 extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, seg120
 extern char *g_radio_name_list[25];	// ds:0xbf95; seg033, seg047, seg048, seg098, seg103, seg104, seg105
 extern unsigned char g_dng_map[512];	// ds:0xbd95; seg002-seg107
-extern unsigned char g_dng_map_size;	// ds:0xbd94; seg002, seg003, seg028, seg066, seg074, seg100
+extern unsigned char g_map_size_x;	// ds:0xbd94; seg002, seg003, seg028, seg066, seg074, seg100
+					// All dungeon maps and most town maps have g_map_size_x == 16.
+					// Cities TOWN_ID_THORWAL, TOWN_ID_PREM and TOWN_ID_PHEXCAER have g_map_size_x == 32
 #if defined(__BORLANDC__)
 extern signed int g_ems_unused_handle;		// ds:0xbd92; seg028, seg120
 #endif

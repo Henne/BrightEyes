@@ -1385,9 +1385,9 @@ void city_do_step(const signed int forward)
 		gs_x_target = 0;
 		no_way();
 
-	} else if ((g_dng_map_size - 1) < gs_x_target) {
+	} else if ((g_map_size_x - 1) < gs_x_target) {
 
-		gs_x_target = g_dng_map_size - 1;
+		gs_x_target = g_map_size_x - 1;
 		no_way();
 	}
 
@@ -1481,7 +1481,7 @@ void city_update_house_count(void)
 	g_city_house_count[0] = g_city_house_count[1]
 				= g_city_house_count[2] = g_city_house_count[3] = 0;
 
-	for (i = 0; g_dng_map_size * 16 > i; i++) {
+	for (i = 0; g_map_size_x * 16 > i; i++) {
 
 		l_si = get_border_index(map_ptr[i]);
 

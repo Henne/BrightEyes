@@ -140,7 +140,7 @@ signed int g_ems_travelmap_handle;	// ds:0xbd90
 #if defined(__BORLANDC__)
 signed int g_ems_unused_handle;		// ds:0xbd92
 #endif
-unsigned char g_dng_map_size;		// ds:0xbd94
+unsigned char g_map_size_x;		// ds:0xbd94
 unsigned char g_dng_map[512];		// ds:0xbd95
 char *g_radio_name_list[25];		// ds:0xbf95, used for items, heroes, spells, skills, recipes
 unsigned char *g_gui_buffer_unkn;	// ds:0xbff9
@@ -3610,7 +3610,7 @@ void timewarp(const int32_t time)
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 37:
 	 * Healing time-offs, staffspell time-offs and timers for the consumption of burning lanterns and torches
-	 * do not get updated in certain situations, like a step forward in a city or dungeon.
+	 * do not get updated in certain situations, like a step forward in a town or dungeon.
 	 * Reason: Because of rounding down, time / MINUTES(5) and time / MINUTES(15) will be 0 in many situations.
 	 *
 	 * Not exactly a masterpiece in modular arithmetics...
@@ -4344,7 +4344,7 @@ void set_automap_tiles(const signed int x, const signed int y)
 
 		set_automap_tile(x, y - 1);
 
-		if (g_dng_map_size - 1 > x) {
+		if (g_map_size_x - 1 > x) {
 			set_automap_tile(x + 1, y - 1);
 		}
 	}
@@ -4356,7 +4356,7 @@ void set_automap_tiles(const signed int x, const signed int y)
 
 	set_automap_tile(x, y);
 
-	if (g_dng_map_size - 1 > x) {
+	if (g_map_size_x - 1 > x) {
 		set_automap_tile(x + 1, y);
 	}
 
@@ -4368,7 +4368,7 @@ void set_automap_tiles(const signed int x, const signed int y)
 
 		set_automap_tile(x, y + 1);
 
-		if (g_dng_map_size - 1 > x) {
+		if (g_map_size_x - 1 > x) {
 			set_automap_tile(x + 1, y + 1);
 		}
 	}
