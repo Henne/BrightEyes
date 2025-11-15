@@ -286,9 +286,10 @@ void load_area_description(const signed int type)
 
 		signed int handle = load_archive_file(g_areadescr_fileid + 0x8000);
 
-		if (!g_areadescr_dng_flag && (g_dng_map_size == 0x20)) {
+		if (!g_areadescr_dng_flag && (g_dng_map_size == 32)) {
 			write(handle, (void*)g_dng_map, 512);
 		} else {
+			// assert(g_dng_map_size == 16)
 			lseek(handle, g_areadescr_dng_level * 0x140, 0);
 			write(handle, (void*)g_dng_map, 256);
 		}
@@ -328,6 +329,7 @@ void load_area_description(const signed int type)
 
 		if (!gs_dungeon_id && (gs_town_id == TOWN_ID_THORWAL || gs_town_id == TOWN_ID_PREM || gs_town_id == TOWN_ID_PHEXCAER))
 		{
+			/* A city, i.e. x coordinates up to 32 */
 			/* path taken in THORWAL PREM and PHEXCAER */
 			_read(handle, g_dng_map, 512);
 			/* read automap tiles */

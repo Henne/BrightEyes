@@ -97,6 +97,9 @@ struct screen_rect {
 /* for positions stored in 1 byte, containing x and y. */
 #define MAP_POS(x,y) ((y) << 4) + (x) /* no outer parantheses, otherwise binary BCC-check will be broken! */
 
+/* for positions in cities (i.e, x_size 32) stored in 2 bytes */
+#define LARGE_MAP_POS(x,y) ((y) << 5) + (x) /* no outer parantheses, otherwise binary BCC-check will be broken! */
+
 /* HACK: this cast is not optimized by Borland C++ 3.1 */
 static inline unsigned short cast_u16(unsigned char v)
 {
