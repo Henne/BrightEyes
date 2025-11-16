@@ -128,10 +128,10 @@ struct shop_descr g_shop_descr_table[95] = {
 	{  10, MERCHANT_HERBS  , 15, 0, 0, 0 },
 	{  20, MERCHANT_WEAPONS, 18, 0, 0, 0 },
 	{  40, MERCHANT_GENERAL, 17, 0, 0, 0 },
-	{   0,                0,  0, 0, 0, 0 },
-	{  25, MERCHANT_GENERAL,  2, 0, 0, 0 },
-	{   0, MERCHANT_WEAPONS, 10, 0, 0, 0 },
-	{   0, MERCHANT_GENERAL,  6, 0, 0, 0 },
+	{   0,                0,  0, 0, 0, 0 }, // market
+	{  25, MERCHANT_GENERAL,  2, 0, 0, 0 }, // Treborn Kolberg
+	{   0, MERCHANT_WEAPONS, 10, 0, 0, 0 }, // Thorwal, Zeughaus
+	{   0, MERCHANT_GENERAL,  6, 0, 0, 0 }, // street merchant from city event 6
 	{ -1, 0, 0, 0, 0, 0 }
 }; // ds:0x6870
 
@@ -299,8 +299,8 @@ void do_merchant(void)
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-			GUI_print_loc_line(gs_town_loc_type == LOCTYPE_MARKET ? get_ttx(679) : (gs_town_typeindex == 93 ?  get_ttx(46) : get_tx(gs_town_locdata)));
-			// typeindex 93 is the merchant from random city event 6.
+			GUI_print_loc_line(gs_town_loc_type == LOCTYPE_MARKET ? get_ttx(679) : (gs_town_typeindex == MERCHANT_TYPEINDEX_STREET_MERCHANT ?  get_ttx(46) : get_tx(gs_town_locdata)));
+			// typeindex MERCHANT_TYPEINDEX_STREET_MERCHANT == 93 is the street merchant from random city event 6.
 
 			g_request_refresh = refresh = 0;
 		}
@@ -413,7 +413,7 @@ void TLK_ghandel(const signed int state)
 	} else if (state == 1) {
 		/* REMARK: gs_merchant_kicked2_flags[0] is always zero */
 		g_dialog_next_state = (gs_merchant_kicked2_flags[gs_town_typeindex] ? 2 : 3);
-	} else if (state == 6 && gs_town_typeindex != 90) {
+	} else if (state == 6 && gs_town_typeindex != MERCHANT_TYPEINDEX_MARKET) {
 		gs_merchant_kicked_flags[gs_town_typeindex] = 1;
 	} else if (state == 10) {
 		/* test CH+0 */
@@ -427,11 +427,11 @@ void TLK_khandel(const signed int state)
 		g_dialog_next_state = (gs_merchant_kicked_flags[gs_town_typeindex] ? 1 : 2);
 	} else if (state == 5) {
 		tumult();
-		if (gs_town_typeindex != 90) {
+		if (gs_town_typeindex != MERCHANT_TYPEINDEX_MARKET) {
 			gs_merchant_kicked_flags[gs_town_typeindex] = 1;
 		}
 
-	} else if (state == 7 && gs_town_typeindex != 90) {
+	} else if (state == 7 && gs_town_typeindex != MERCHANT_TYPEINDEX_MARKET) {
 		gs_merchant_kicked_flags[gs_town_typeindex] = 1;
 	} else if (state == 8) {
 		g_dialog_next_state = (random_schick(20) <= 3 ? 9 : -1);
@@ -453,11 +453,11 @@ void TLK_whandel(const signed int state)
 
 		tumult();
 
-		if (gs_town_typeindex != 90) {
+		if (gs_town_typeindex != MERCHANT_TYPEINDEX_MARKET) {
 			gs_merchant_kicked_flags[gs_town_typeindex] = 1;
 		}
 
-	} else if ((state == 8 || state == 16) && gs_town_typeindex != 90) {
+	} else if ((state == 8 || state == 16) && gs_town_typeindex != MERCHANT_TYPEINDEX_MARKET) {
 
 		gs_merchant_kicked_flags[gs_town_typeindex] = 1;
 
