@@ -837,12 +837,13 @@ void tevent_008(void)
 
 void tevent_009(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||
-		gs_tevent009_flag)
+	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||	gs_tevent009_flag)
 	{
-		g_gather_herbs_special = 60;
+		g_gather_herbs_special = ITEM_EINBEERE;
+
 		TRV_found_herb_place(0);
-		g_gather_herbs_special = 255;
+
+		g_gather_herbs_special = -1;
 
 		gs_tevent009_flag = 1;
 	}

@@ -151,8 +151,11 @@ void tevent_070(void)
 		if (test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 || gs_tevent070_herb_flag)
 		{
 			gs_tevent070_herb_flag = 1;
-			g_gather_herbs_special = 130;
+
+			g_gather_herbs_special = (int8_t)ITEM_JORUGAWURZEL; /* REMARK: item_id > 127 */
+
 			answer = TRV_found_camp_place(2);
+
 			g_gather_herbs_special = -1;
 
 		} else {
@@ -359,8 +362,10 @@ void tevent_unused01(void)
 
 				GUI_output(get_tx2(38));
 
-				g_gather_herbs_special = 63;
+				g_gather_herbs_special = ITEM_GULMOND_BLATT;
+
 				TRV_inside_herb_place();
+
 				g_gather_herbs_special = -1;
 
 				options = (!has_raft ? 1 : 2);

@@ -55,11 +55,11 @@ struct gather_herbs g_gather_herbs_table[13] = {
 	{ ITEM_EITRIGER_KROETENSCHEMEL,	20, 2,  4 },
 	{ 0xff,				 0, 0,  0 }
 }; // ds:0x669c
-signed char g_gather_herbs_special = -1; // ds:0x66d0
-static char g_gather_herbs_str_found[6] = "%d^%s"; // ds:0x66d1
-static char g_gather_herbs_str_comma[3] = ", "; // ds:0x66d7
-static char g_gather_herbs_str_and[6] = " UND "; // ds:0x66da
-static char g_gather_herbs_str_dot[2] = "."; // ds:0x66e0
+int8_t g_gather_herbs_special = -1; 			// ds:0x66d0	/* REMARK: should be signed int */
+static char g_gather_herbs_str_found[6] = "%d^%s";	// ds:0x66d1
+static char g_gather_herbs_str_comma[3] = ", ";		// ds:0x66d7
+static char g_gather_herbs_str_and[6] = " UND ";	// ds:0x66da
+static char g_gather_herbs_str_dot[2] = ".";		// ds:0x66e0
 
 
 signed char g_wildcamp_guards[3];	// ds:0xe3be

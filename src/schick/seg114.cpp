@@ -270,18 +270,18 @@ void tevent_111(void)
 /* a camp place */
 void tevent_112(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent112_flag) ||
-		gs_tevent112_flag)
+	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent112_flag) || gs_tevent112_flag)
 	{
 		gs_tevent112_flag = 1;
 
-		if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 2) > 0 && !gs_tevent112_herb_flag) ||
-			gs_tevent112_herb_flag)
+		if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 2) > 0 && !gs_tevent112_herb_flag) || gs_tevent112_herb_flag)
 		{
 			gs_tevent112_herb_flag = 1;
 
-			g_gather_herbs_special = 131;
+			g_gather_herbs_special = (int8_t)ITEM_THONNYSBLUETE;	/* REMARK: item_id > 127 */
+
 			TRV_found_camp_place(2);
+
 			g_gather_herbs_special = -1;
 		} else {
 			TRV_found_camp_place(0);
@@ -490,12 +490,14 @@ void tevent_117(void)
 /* a herb place */
 void tevent_118(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent118_flag) ||
-		gs_tevent118_flag)
+	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent118_flag) ||	gs_tevent118_flag)
 	{
-		g_gather_herbs_special = 60;
+		g_gather_herbs_special = ITEM_EINBEERE;
+
 		TRV_found_herb_place(0);
+
 		g_gather_herbs_special = -1;
+
 		gs_tevent118_flag = 1;
 	}
 }
@@ -506,6 +508,7 @@ void tevent_119(void)
 	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent119_flag) || gs_tevent119_flag)
 	{
 		gs_tevent119_flag = 1;
+
 		TRV_found_camp_place(0);
 	}
 }
