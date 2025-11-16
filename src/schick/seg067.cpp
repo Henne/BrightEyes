@@ -282,7 +282,7 @@ void city_event_6(void)
 	 */
 			type_bak = gs_town_typeindex;
 #endif
-			gs_town_typeindex = 93;
+			gs_town_typeindex = MERCHANT_TYPEINDEX_STREET_MERCHANT;
 			do_merchant();
 			gs_town_loc_type = loc_bak;
 #ifdef M302de_ORIGINAL_BUGFIX

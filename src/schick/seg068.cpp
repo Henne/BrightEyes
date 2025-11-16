@@ -294,7 +294,7 @@ void THO_arsenal(void)
 			p_money = get_party_money();
 			set_party_money(gs_arsenal_money);
 
-			gs_town_typeindex = 92;
+			gs_town_typeindex = MERCHANT_TYPEINDEX_THORWAL_ZEUGHAUS;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
 

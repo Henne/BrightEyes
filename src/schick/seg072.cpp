@@ -637,7 +637,7 @@ void INF_treborn_unicorn(const signed int informer, const signed int state)
 			g_dialog_next_state = (enough_money ? 19 : 20);
 		} else if (state == 18) {
 			/* visit the shop of Treborn Kolberg */
-			gs_town_typeindex = 91;
+			gs_town_typeindex = MERCHANT_TYPEINDEX_TREBORN_KOLBERG;
 			do_merchant();
 		} else if (state == 21) {
 			gs_treborn_date = 1;
