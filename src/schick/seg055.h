@@ -7,7 +7,7 @@ void do_merchant(void);
 /* 0x25 */
 void talk_merchant(void);
 /* 0x2a */
-void add_item_to_buy_selector(const struct shop_descr*, const signed int, const signed int);
+void add_item_to_buy_selector(const struct merchant_descr*, const signed int, const signed int);
 /* 0x2f */
 void TLK_ghandel(const signed int);
 /* 0x34 */

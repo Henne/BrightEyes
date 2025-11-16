@@ -33,11 +33,11 @@ namespace M302de {
 enum{
 	ITEM_ARMOR_POS_HEAD = 70,
 	ITEM_POS_MAX = 100
-	/* these settings rely on the number of armor items in a shop being at most 30. */
+	/* these settings rely on the number of armor items in the sell list being at most 30. */
 
 };
 
-struct shop_descr g_shop_descr_table[95] = {
+struct merchant_descr g_merchant_descr_table[95] = {
 	{  50, MERCHANT_GENERAL,  1, 0, 0, 0 },
 	{  40, MERCHANT_GENERAL,  2, 0, 0, 0 },
 	{  30, MERCHANT_GENERAL,  8, 0, 0, 0 },
@@ -136,17 +136,17 @@ struct shop_descr g_shop_descr_table[95] = {
 }; // ds:0x6870
 
 /**
- * \brief   add an item to the shop
+ * \brief   add an item to the buy item selector of a merchant
  *
- * \param   shop_ptr    pointer to the shop descrition
- * \param   item_id     item_id
- * \param   pos         position in the shop
+ * \param   merchant    pointer to the merchant descrition
+ * \param   item_id           item_id
+ * \param   pos               position in the item selector
  */
-void add_item_to_buy_selector(const struct shop_descr *shop, const signed int item_id, const signed int pos)
+void add_item_to_buy_selector(const struct merchant_descr *merchant, const signed int item_id, const signed int pos)
 {
 	g_item_selector_buy[pos].item_id = item_id;
 
-	g_item_selector_buy[pos].price = g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop->price_mod / 100;
+	g_item_selector_buy[pos].price = g_itemsdat[item_id].price + g_itemsdat[item_id].price * merchant->price_mod / 100;
 
 	g_item_selector_buy[pos].price_unit = g_itemsdat[item_id].price_unit;
 }
@@ -160,14 +160,14 @@ void do_merchant(void)
 	signed int refresh;
 	signed int item_selector_pos_tail_2;
 	int32_t party_money;
-	struct shop_descr *shop;
+	struct merchant_descr *merchant;
 
 #if !defined(__BORLANDC__)
 	/* Print merchant values */
 	const uint8_t typi = gs_town_typeindex;
-	const int8_t price = g_shop_descr_table[typi].price_mod;
-	const int8_t merchant_type = g_shop_descr_table[typi].type;
-	const int8_t sortiment = g_shop_descr_table[typi].sortiment;
+	const int8_t price = g_merchant_descr_table[typi].price_mod;
+	const int8_t merchant_type = g_merchant_descr_table[typi].type;
+	const int8_t sortiment = g_merchant_descr_table[typi].sortiment;
 	const char type_string_invalid[] = "UNGUELTIG";
 	const char type_string_weapons[] = "Waffen";
 	const char type_string_herbs[] = "Kraeuter";
@@ -192,7 +192,7 @@ void do_merchant(void)
 
 	if (gs_merchant_kicked_flags[gs_town_typeindex]) {
 
-		if (g_shop_descr_table[gs_town_typeindex].type != MERCHANT_GENERAL) {
+		if (g_merchant_descr_table[gs_town_typeindex].type != MERCHANT_GENERAL) {
 			talk_merchant();
 			leave_location();
 			return;
@@ -213,7 +213,7 @@ void do_merchant(void)
 
 	g_price_modificator = 4;
 
-	shop = &g_shop_descr_table[gs_town_typeindex];
+	merchant = &g_merchant_descr_table[gs_town_typeindex];
 
 	/* redundant by memset() */
 	for (item_selector_pos = 0; item_selector_pos < ITEM_POS_MAX; item_selector_pos++) {
@@ -226,28 +226,28 @@ void do_merchant(void)
 
 	while (g_itemsdat[item_selector_pos].gfx != -1) {
 
-		if (shop->sortiment <= g_itemsdat[item_selector_pos].commonness) {
+		if (merchant->sortiment <= g_itemsdat[item_selector_pos].commonness) {
 
 			if (g_itemsdat[item_selector_pos].flags.armor || g_itemsdat[item_selector_pos].flags.weapon) {
 
-				if (shop->type == MERCHANT_WEAPONS) {
+				if (merchant->type == MERCHANT_WEAPONS) {
 
-					add_item_to_buy_selector(shop, item_selector_pos,
+					add_item_to_buy_selector(merchant, item_selector_pos,
 						g_itemsdat[item_selector_pos].flags.weapon ? item_selector_pos_tail++ : item_selector_pos_tail_2++);
 				}
 
 			} else if (g_itemsdat[item_selector_pos].flags.herb_potion) {
 
-				if (shop->type == MERCHANT_HERBS) {
+				if (merchant->type == MERCHANT_HERBS) {
 
-					add_item_to_buy_selector(shop, item_selector_pos, item_selector_pos_tail++);
+					add_item_to_buy_selector(merchant, item_selector_pos, item_selector_pos_tail++);
 				}
 
 			} else {
 
-				if (shop->type == MERCHANT_GENERAL) {
+				if (merchant->type == MERCHANT_GENERAL) {
 
-					add_item_to_buy_selector(shop, item_selector_pos, item_selector_pos_tail++);
+					add_item_to_buy_selector(merchant, item_selector_pos, item_selector_pos_tail++);
 				}
 			}
 		}
@@ -258,15 +258,15 @@ void do_merchant(void)
 	/* new scope for item_selector_pos, should be sth. like extra_items_pos */
 	for (item_selector_pos = 0; item_selector_pos < 3; item_selector_pos++) {
 
-		if (shop->extra_items[item_selector_pos]) {
-			add_item_to_buy_selector(shop, shop->extra_items[item_selector_pos], item_selector_pos_tail++);
+		if (merchant->extra_items[item_selector_pos]) {
+			add_item_to_buy_selector(merchant, merchant->extra_items[item_selector_pos], item_selector_pos_tail++);
 		}
 	}
 
-	if (shop->type == MERCHANT_WEAPONS) {
+	if (merchant->type == MERCHANT_WEAPONS) {
 
-		qsort((uint8_t*)g_item_selector_buy, item_selector_pos_tail, sizeof(item_selector_item), shop_compar);
-		qsort((uint8_t*)g_item_selector_buy + sizeof(item_selector_item) * ITEM_ARMOR_POS_HEAD, item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD, sizeof(item_selector_item), shop_compar);
+		qsort((uint8_t*)g_item_selector_buy, item_selector_pos_tail, sizeof(item_selector_item), item_selector_item_compare);
+		qsort((uint8_t*)g_item_selector_buy + sizeof(item_selector_item) * ITEM_ARMOR_POS_HEAD, item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD, sizeof(item_selector_item), item_selector_item_compare);
 
 		/* copy the rest */
 		for (item_selector_pos = 0; item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD > item_selector_pos; item_selector_pos++) {
@@ -281,7 +281,7 @@ void do_merchant(void)
 		}
 
 	} else {
-		qsort((uint8_t*)g_item_selector_buy, item_selector_pos_tail, sizeof(item_selector_item), shop_compar);
+		qsort((uint8_t*)g_item_selector_buy, item_selector_pos_tail, sizeof(item_selector_item), item_selector_item_compare);
 	}
 
 	while (done == 0 && !gs_merchant_offended_flags[gs_town_typeindex]) {
@@ -294,7 +294,7 @@ void do_merchant(void)
 
 			disable_ani();
 
-			load_ani(shop->type == MERCHANT_WEAPONS ? 15 : (shop->type == MERCHANT_HERBS ? 22 : 14));
+			load_ani(merchant->type == MERCHANT_WEAPONS ? 15 : (merchant->type == MERCHANT_HERBS ? 22 : 14));
 
 			init_ani(0);
 
@@ -319,7 +319,7 @@ void do_merchant(void)
 			gs_town_id == TOWN_ID_OBERORKEN)
 		{
 
-			/* debt logic in shops */
+			/* debt logic for merchants */
 
 			if ((gs_bank_deposit <= -1000) && !gs_debt_days) {
 
@@ -377,7 +377,7 @@ void do_merchant(void)
 
 		} else if (g_action == ACTION_ID_ICON_2) {
 
-			sell_screen(shop);
+			sell_screen(merchant);
 
 		} else if (g_action == ACTION_ID_ICON_3) {
 
@@ -398,7 +398,7 @@ void talk_merchant(void)
 {
 	signed int tlk_id;
 
-	switch (g_shop_descr_table[gs_town_typeindex].type) {
+	switch (g_merchant_descr_table[gs_town_typeindex].type) {
 		case MERCHANT_WEAPONS: tlk_id = 16; break;
 		case MERCHANT_HERBS: tlk_id = 15; break;
 		case MERCHANT_GENERAL: tlk_id = 14; break;

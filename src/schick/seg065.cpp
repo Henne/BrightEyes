@@ -69,9 +69,9 @@ void do_market(void)
 		} else {
 
 			/* set up parameters for this merchant */
-			g_shop_descr_table[MERCHANT_TYPEINDEX_MARKET].price_mod = g_market_descr_table[gs_town_typeindex].price_mod;
-			g_shop_descr_table[MERCHANT_TYPEINDEX_MARKET].sortiment = g_market_descr_table[gs_town_typeindex].size;
-			g_shop_descr_table[MERCHANT_TYPEINDEX_MARKET].type = answer;
+			g_merchant_descr_table[MERCHANT_TYPEINDEX_MARKET].price_mod = g_market_descr_table[gs_town_typeindex].price_mod;
+			g_merchant_descr_table[MERCHANT_TYPEINDEX_MARKET].sortiment = g_market_descr_table[gs_town_typeindex].size;
+			g_merchant_descr_table[MERCHANT_TYPEINDEX_MARKET].type = answer;
 			type_bak = gs_town_typeindex;
 			gs_town_typeindex = MERCHANT_TYPEINDEX_MARKET;
 
@@ -86,9 +86,9 @@ void do_market(void)
 			gs_direction_bak = dir_bak_bak;
 			gs_direction = dir_bak; /* by this line, the party will *not* be rotated after leaving the market */
 
-			g_shop_descr_table[MERCHANT_TYPEINDEX_MARKET].price_mod = 0;
-			g_shop_descr_table[MERCHANT_TYPEINDEX_MARKET].sortiment = 0;
-			g_shop_descr_table[MERCHANT_TYPEINDEX_MARKET].type = 0;
+			g_merchant_descr_table[MERCHANT_TYPEINDEX_MARKET].price_mod = 0;
+			g_merchant_descr_table[MERCHANT_TYPEINDEX_MARKET].sortiment = 0;
+			g_merchant_descr_table[MERCHANT_TYPEINDEX_MARKET].type = 0;
 		}
 
 	} while (!done);

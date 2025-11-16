@@ -40,7 +40,7 @@ static struct int16_t_5 g_sell_screen_items_posy = { 35, 55, 75, 95, 115 }; // d
 /**
  * \brief   shows the sell-screen an provides interaction
  */
-void sell_screen(struct shop_descr *shop_descr)
+void sell_screen(struct merchant_descr *merchant_descr)
 {
 	signed int tmp; /* multi use: inv_slot, y-coordinate for table, and others. */
 	signed int j;
@@ -153,7 +153,7 @@ void sell_screen(struct shop_descr *shop_descr)
 				num_filled_inv_slots = 0;
 				for (tmp = 0; tmp < NR_HERO_INVENTORY_SLOTS; tmp++) {
 					if (hero1->inventory[tmp].item_id != ITEM_NONE) {
-						insert_sell_items(shop_descr, hero1, tmp, num_filled_inv_slots++);
+						add_item_to_sell_selector(merchant_descr, hero1, tmp, num_filled_inv_slots++);
 					}
 				}
 				// assert(num_filled_inv_slots == hero1->num_filled_inv_slots)
