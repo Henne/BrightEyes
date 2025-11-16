@@ -3,11 +3,11 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed int shop_compar(const void*, const void*);
+signed int item_selector_item_compare(const void*, const void*);
 /* 0x25 */
 void buy_screen(void);
 /* 0x2a */
-void insert_sell_items(const struct shop_descr*, const struct struct_hero*, const signed int, const signed int);
+void add_item_to_sell_selector(const struct merchant_descr*, const struct struct_hero*, const signed int, const signed int);
 
 #if !defined(__BORLANDC__)
 }

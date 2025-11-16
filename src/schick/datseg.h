@@ -458,7 +458,7 @@ struct inn_descr {		/* INNS and TAVERNS */
 	int16_t price_mod;	/* price modification, range [-40..70], absolute difference as percentage value */
 };
 
-struct shop_descr {
+struct merchant_descr {
 	int8_t price_mod;
 	int8_t type; /* according to enum MERCHANT_WEAPONS = 1, MERCHANT_HERBS = 2, MERCHANT_GENERAL = 3 */
 	int8_t sortiment;
@@ -472,7 +472,7 @@ struct gather_herbs {
 	int8_t handicap;
 };
 
-struct struct_shopping_cart {
+struct struct_shopping_cart_item {
 	int item_id;
 	int quantity;
 };
@@ -567,7 +567,7 @@ struct item_stats {
 	int16_t weight;		/* weight in ounces */
 	int8_t price_unit;	/* 1: Heller / 10: Silberstücke / 100: Dukaten */
 	int16_t price;		/* base unit is price_unit. So the price in Heller is price_unit * price */
-	int8_t commonness;	/* which shops do offer this item? */
+	int8_t commonness;	/* which merchants do offer this item? */
 	int8_t magic;		/* 0: not magic / 1: magic */
 };
 
@@ -1614,7 +1614,7 @@ extern signed int g_cheatskill_usable;		//ds:0x6532; seg048, seg103
 
 extern int8_t g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg112, seg113, seg114, seg115, seg116
 
-extern struct shop_descr g_shop_descr_table[95];	//ds:0x6870; seg055, seg065
+extern struct merchant_descr g_merchant_descr_table[95];	//ds:0x6870; seg055, seg065
 
 extern const struct inn_descr g_tavern_descr_table[89];	//ds:0x6c84; seg054, seg059, seg060
 

@@ -39,7 +39,7 @@ static struct int16_t_5 g_buy_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds
 static struct c_str_6 g_buy_screen_str_d_s = { "%d %s" }; // ds:0x6be7
 static char g_buy_screen_str_comma_space[3] = ", "; // ds:0x6bed
 
-static struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
+static struct struct_shopping_cart_item *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
 
 /**
  * \brief   compare function for qsort()
@@ -48,17 +48,17 @@ static struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer
  * \param   p2_in       second pointer
  * \return              -1 -> p1 < p2; 0 -> p1 == p2; 1 -> p1 > p1
  */
-signed int shop_compar(const void *p1_in, const void *p2_in)
+signed int item_selector_item_compare(const void *p_item_1, const void *p_item_2)
 {
-	int32_t v1;
-	int32_t v2;
-	const struct item_selector_item *p1 = (const struct item_selector_item*)p1_in;
-	const struct item_selector_item *p2 = (const struct item_selector_item*)p2_in;
+	int32_t price1;
+	int32_t price2;
+	const struct item_selector_item *item1 = (const struct item_selector_item*)p_item_1;
+	const struct item_selector_item *item2 = (const struct item_selector_item*)p_item_2;
 
-	v1 = p1->price * p1->price_unit;
-	v2 = p2->price * p2->price_unit;
+	price1 = item1->price * item1->price_unit;
+	price2 = item2->price * item2->price_unit;
 
-	return v1 < v2 ? -1 : (v1 == v2 ? 0 : 1);
+	return price1 < price2 ? -1 : (price1 == price2 ? 0 : 1);
 }
 
 /**
@@ -111,7 +111,7 @@ void buy_screen(void)
 	struct nvf_extract_desc nvf;
 
 	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
-	g_buy_shopping_cart = (struct struct_shopping_cart*)g_fig_figure1_buf + 2800 / 4;
+	g_buy_shopping_cart = (struct struct_shopping_cart_item*)g_fig_figure1_buf + 2800 / 4;
 	memset((uint8_t*)g_buy_shopping_cart, 0, 250);
 
 	g_request_refresh = 1;
@@ -596,7 +596,8 @@ void buy_screen(void)
  * \param   inv_slot    position of the item in the heroes inventory
  * \param   item_selector_pos    position if the item in the sales array
  */
-void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_hero *hero, const signed int inv_slot, const signed int item_selector_pos)
+
+void add_item_to_sell_selector(const struct merchant_descr *merchant, const struct struct_hero *hero, const signed int inv_slot, const signed int item_selector_pos)
 {
 	signed int item_id;
 	signed int sellable = 0;
@@ -607,18 +608,15 @@ void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_
 
 	if (g_itemsdat[item_id].flags.armor || g_itemsdat[item_id].flags.weapon) {
 
-		/* WEAPON SHOP */
-		if (shop_descr->type == 1) sellable = 1;
+		if (merchant->type == MERCHANT_WEAPONS) sellable = 1;
 
 	} else if (g_itemsdat[item_id].flags.herb_potion) {
 
-		/* HERB SHOP */
-		if (shop_descr->type == 2) sellable = 1;
+		if (merchant->type == MERCHANT_HERBS) sellable = 1;
 
 	} else {
 
-		/* CHANDLER SHOP */
-		if (shop_descr->type == 3) sellable = 1;
+		if (merchant->type == MERCHANT_GENERAL) sellable = 1;
 	}
 
 	if (!sellable) {
@@ -636,7 +634,7 @@ void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_
 	} else {
 		/* calculate the price */
 		g_item_selector_sell[item_selector_pos].price =
-			(g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop_descr->price_mod / 100) / 2;
+			(g_itemsdat[item_id].price + g_itemsdat[item_id].price * merchant->price_mod / 100) / 2;
 
 		/* adjust price to 1 if zero */
 		if (g_item_selector_sell[item_selector_pos].price == 0) {
