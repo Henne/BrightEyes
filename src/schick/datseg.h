@@ -423,9 +423,11 @@ struct mon_spell_description {
 	int8_t ani_id;
 };
 
-struct shop_item {
+struct item_selector_item {
+	/* item selector, 15 items per page */
+	/* used for merchant (buy and sell screen), smith (select item to repair) */
 	int16_t item_id;
-	int16_t shop_price;
+	int16_t price;
 	int16_t price_unit;	/* 1 = HELLER, 10 = SILVER, otherwise DUCATS */
 	int8_t inv_slot;
 };
@@ -1863,8 +1865,8 @@ extern unsigned char *g_buffer8_ptr;	// ds:0xc3a9; seg005, seg026, seg028, seg03
 extern struct location g_locations_tab[150];	//ds:0xc025; seg028, seg64, seg066, seg74, seg094
 extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
-extern struct shop_item *g_buyitems;	// ds:0xc009; seg055, seg056
-extern struct shop_item *g_sellitems;	// ds:0xc005; seg056, seg057, seg058
+extern struct item_selector_item *g_item_selector_buy; /* used for merchant buy screen */	// ds:0xc009; seg055, seg056
+extern struct item_selector_item *g_item_selector_sell;	/* used for merchant sell screen and smith */ // ds:0xc005; seg056, seg057, seg058
 extern signed int g_game_mode;		// ds:0xc003; seg002, seg046, seg048, seg050, seg097, seg098, seg103, seg120
 extern signed int g_textbox_pos_y;	// ds:0xc001; seg096, seg097
 extern signed int g_textbox_pos_x;	// ds:0xbfff; seg096, seg097

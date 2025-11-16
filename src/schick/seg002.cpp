@@ -149,8 +149,8 @@ signed int g_textbox_pos_x;		// ds:0xbfff, coordinate of upper left corner
 signed int g_textbox_pos_y;		// ds:0xc001, coordinate of upper left corner
 signed int g_game_mode;			// ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }
 
-struct shop_item *g_sellitems; // ds:0xc005, also used for repair items
-struct shop_item *g_buyitems; // ds:0xc009, merchant's assortment
+struct item_selector_item *g_item_selector_sell; // ds:0xc005, also used for repair items
+struct item_selector_item *g_item_selector_buy; // ds:0xc009, merchant's assortment
 struct struct_pic_copy g_pic_copy;	// ds:0xc00d
 struct location g_locations_tab[150]; // ds:0xc025
 unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
@@ -4239,81 +4239,82 @@ uint16_t div16(const unsigned char val)
 	return val >> 4;
 }
 
-void select_with_mouse(signed int *shop_pos, const struct shop_item *shop_item)
-/* This function is called in shops at sell/buy screens */
+void item_selector_mouse_select(signed int *result_ptr, const struct item_selector_item *item_selector)
+/* This function is called in shops at sell/buy screens and at smiths */
 {
-	signed int i;
+	signed int item_selector_pos;
 
 	if (g_have_mouse != 2) {
 		return;
 	}
 
-	for (i = 0; i < 15; i++) {
-		if ((g_merchant_items_posx[i] <= g_mouse_posx) &&
-			(g_merchant_items_posx[i] + 50 >= g_mouse_posx) &&
-			(g_merchant_items_posy[i] <= g_mouse_posy) &&
-			(g_merchant_items_posy[i] + 17 >= g_mouse_posy) &&
-			(shop_item[i].item_id != 0))
+	for (item_selector_pos = 0; item_selector_pos < 15; item_selector_pos++) {
+		if ((g_merchant_items_posx[item_selector_pos] <= g_mouse_posx) &&
+			(g_merchant_items_posx[item_selector_pos] + 50 >= g_mouse_posx) &&
+			(g_merchant_items_posy[item_selector_pos] <= g_mouse_posy) &&
+			(g_merchant_items_posy[item_selector_pos] + 17 >= g_mouse_posy) &&
+			(item_selector[item_selector_pos].item_id != 0))
 		{
-			*shop_pos = i;
+			*result_ptr = item_selector_pos;
 			return;
 		}
 	}
 }
 
-void select_with_keyboard(signed int *shop_pos, const struct shop_item *shop_item)
+void item_selector_keyboard_select(signed int *result_ptr, const struct item_selector_item *item_selector)
+/* This function is called in shops at sell/buy screens and at smiths */
 {
-	signed int pos = *shop_pos;
+	signed int item_selector_pos = *result_ptr;
 
 	if (g_action == ACTION_ID_UP) {
 
 		/* Key UP */
-		if (pos) {
-			pos--;
+		if (item_selector_pos) {
+			item_selector_pos--;
 		} else {
-			pos = 14;
-			while (shop_item[pos].item_id == 0) {
-				pos--;
+			item_selector_pos = 14;
+			while (item_selector[item_selector_pos].item_id == 0) {
+				item_selector_pos--;
 			}
 		}
 
 	} else if (g_action == ACTION_ID_DOWN) {
 
 		/* Key DOWN */
-		if (pos < 14) {
-			if (shop_item[pos + 1].item_id != 0) {
-				pos++;
+		if (item_selector_pos < 14) {
+			if (item_selector[item_selector_pos + 1].item_id != 0) {
+				item_selector_pos++;
 			} else {
-				pos = 0;
+				item_selector_pos = 0;
 			}
 		} else {
-			pos = 0;
+			item_selector_pos = 0;
 		}
 
 	} else if (g_action == ACTION_ID_RIGHT) {
 
 		/* Key RIGHT */
-		if (pos < 10) {
-			if (shop_item[pos + 5].item_id != 0) {
-				pos += 5;
+		if (item_selector_pos < 10) {
+			if (item_selector[item_selector_pos + 5].item_id != 0) {
+				item_selector_pos += 5;
 			}
 		} else {
-			pos -= 10;
+			item_selector_pos -= 10;
 		}
 
 	} else if (g_action == ACTION_ID_LEFT) {
 
 		/* Key LEFT */
-		if (pos > 4) {
-			pos -= 5;
+		if (item_selector_pos > 4) {
+			item_selector_pos -= 5;
 		} else {
-			if (shop_item[pos + 10].item_id != 0) {
-				pos += 10;
+			if (item_selector[item_selector_pos + 10].item_id != 0) {
+				item_selector_pos += 10;
 			}
 		}
 	}
 
-	*shop_pos = pos;
+	*result_ptr = item_selector_pos;
 }
 
 /**
