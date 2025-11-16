@@ -336,9 +336,13 @@ void load_area_description(const signed int type)
 			_read(handle, g_automap_buf, 64);
 
 			/* TODO: is that neccessary ? */
-			memset(g_locations_tab, -1, 900);
+			memset(g_locations_tab, -1, 150 * sizeof(struct location));
 
-			g_locations_tab_size = _read(handle, g_locations_tab, 1000);
+#if defined(__BORLANDC__)
+			g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location) + 100);
+#else
+			g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location));
+#endif
 
 			g_map_size_x = 32;
 		} else {
@@ -352,8 +356,12 @@ void load_area_description(const signed int type)
 
 			if (!gs_dungeon_id) {
 				/* TODO: is that neccessary ? */
-				memset(g_locations_tab, -1, 900);
-				g_locations_tab_size = _read(handle, g_locations_tab, 1000);
+				memset(g_locations_tab, -1, 150 * sizeof(struct location));
+#if defined(__BORLANDC__)
+				g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location) + 100);
+#else
+				g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location));
+#endif
 			}
 
 			g_map_size_x = 16;

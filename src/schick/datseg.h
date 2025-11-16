@@ -286,7 +286,7 @@ struct location {
 	int16_t pos;		// coordinates of the location within its town
 	int8_t loctype;		// the type of the location
 	uint8_t typeindex;	// Index among the locations of the same type.
-	int16_t locdata;		// Additional data, depending on the LOCTYPE.
+	int16_t locdata;	// Additional data, depending on the LOCTYPE.
 };
 
 struct struct_msg {
