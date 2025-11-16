@@ -910,7 +910,7 @@ signed int do_fight(const signed int fight_id)
 	signed int handle;
 	signed int j;
 	signed int new_escape_position_found;
-	signed int group_nr;
+	signed int group_id;
 	signed int group_size;
 	signed int retval = 0;
 	struct struct_hero *hero;
@@ -1203,9 +1203,9 @@ signed int do_fight(const signed int fight_id)
 
 				for (i = 0; nr_escape_positions - 1 > i; i++) {
 
-					group_nr = 0;
-					while (gs_group_member_counts[group_nr] != 0) {
-						group_nr++;
+					group_id = 0;
+					while (gs_group_member_counts[group_id] != 0) {
+						group_id++;
 					}
 
 					group_size = gs_group_member_counts[gs_active_group_id];
@@ -1225,14 +1225,14 @@ signed int do_fight(const signed int fight_id)
 
 						if (escape_positions[i] == hero->escape_position) {
 
-							hero->group_id = (signed char)group_nr;
+							hero->group_id = (signed char)group_id;
 							hero->escape_position = 0;
-							gs_group_member_counts[group_nr]++;
+							gs_group_member_counts[group_id]++;
 							gs_group_member_counts[gs_active_group_id]--;
 						}
 					}
 
-					GRP_save_pos(group_nr | 0x8000);
+					GRP_save_pos(group_id | 0x8000);
 					gs_x_target = x_target_bak;
 					gs_y_target = y_target_bak;
 					gs_direction = (signed char)direction_bak;

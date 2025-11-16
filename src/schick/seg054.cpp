@@ -349,31 +349,31 @@ void do_inn(void)
 
 					do_alchemy(hero, hero->recipe_id, finalize_alchemy);
 
-					signed char group_nr = hero->group_id;
+					signed char group_id = hero->group_id;
 
 					/* ASSERT */
 					/*
-					if (gs_group_member_counts[group_nr] != 1) {
+					if (gs_group_member_counts[group_id] != 1) {
 						D1_INFO("FEHLER: Gruppengroesse eines brauenden Helden ist nicht 1.");
 					}
 					*/
 
 					/* the following lines are taken (& adjusted) from function GRP_merge (seg049.cpp) */
-					gs_groups_direction[group_nr] = 0;
-					gs_groups_x_target[group_nr] = 0;
-					gs_groups_y_target[group_nr] = 0; /* TODO: remove one of them */
-					gs_groups_y_target[group_nr] = 0;
-					gs_groups_town_id[group_nr] = 0;
-					gs_groups_dungeon_id[group_nr] = 0;
-					gs_groups_dng_level[group_nr] = 0;
-					gs_groups_direction_bak[group_nr] = 0;
-					gs_groups_x_target_bak[group_nr] = 0;
-					gs_groups_y_target_bak[group_nr] = 0;
-					gs_town_groups_loctype_bak[group_nr] = LOCTYPE_NONE;
-					gs_groups_town_id_bak[group_nr] = 0;
-					gs_groups_dungeon_id_bak[group_nr] = 0;
-					gs_groups_dng_level_bak[group_nr] = 0;
-					gs_group_member_counts[group_nr] = 0;
+					gs_groups_direction[group_id] = 0;
+					gs_groups_x_target[group_id] = 0;
+					gs_groups_y_target[group_id] = 0; /* TODO: remove one of them */
+					gs_groups_y_target[group_id] = 0;
+					gs_groups_town_id[group_id] = 0;
+					gs_groups_dungeon_id[group_id] = 0;
+					gs_groups_dng_level[group_id] = 0;
+					gs_groups_direction_bak[group_id] = 0;
+					gs_groups_x_target_bak[group_id] = 0;
+					gs_groups_y_target_bak[group_id] = 0;
+					gs_town_groups_loctype_bak[group_id] = LOCTYPE_NONE;
+					gs_groups_town_id_bak[group_id] = 0;
+					gs_groups_dungeon_id_bak[group_id] = 0;
+					gs_groups_dng_level_bak[group_id] = 0;
+					gs_group_member_counts[group_id] = 0;
 
 					gs_group_member_counts[gs_active_group_id]++;
 					hero->group_id = gs_active_group_id;
