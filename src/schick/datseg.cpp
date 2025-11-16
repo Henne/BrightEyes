@@ -3671,16 +3671,16 @@ char g_version_token2 = 1; // ds:0x46f9, = 1
 char g_version_token3 = 1; // ds:0x46fa, = 1
 char g_version_token4 = 1; // ds:0x46fb, = 1
 const char g_questions_handbook[10][19] = {
-	{ 1, 6, 2, 7,  ~'T', ~'H', ~'O', ~'R', ~'W', ~'A', ~'L', 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
-	{ 1, 7, 1, 12, ~'V', ~'O', ~'R', ~'S', ~'I', ~'C', ~'H', ~'T', 0x00, 0x00, 0x00, 0, 0, 0, 0 },
-	{ 2, 2, 1, 17, ~'W', ~'I', ~'S', ~'S', ~'E', ~'N', 0x00, 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
-	{ 4, 3, 2, 25, ~'O', ~'R', ~'T', ~'E', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
-	{ 1, 5, 2, 58, ~'H', ~'E', ~'X', ~'E', ~'N', ~'K', ~'N', ~'O', ~'T', ~'E', ~'N', 0, 0, 0, 0 },
-	{ 1, 1, 1, 60, ~'S', ~'T', ~'A', ~'B', ~'Z', ~'A', ~'U', ~'B', ~'E', ~'R', 0x00, 0, 0, 0, 0 },
-	{ 4, 5, 1, 67, ~'P', ~'A', ~'R', ~'A', ~'D', ~'E', ~'W', ~'E', ~'R', ~'T', 0x00, 0, 0, 0, 0 },
-	{ 1, 1, 1, 74, ~'S', ~'K', ~'E', ~'L', ~'E', ~'T', ~'T', 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
-	{ 1, 5, 2, 77, ~'O', ~'L', ~'G', ~'I', ~'N', ~'W', ~'U', ~'R', ~'Z', 0x00, 0x00, 0, 0, 0, 0 },
-	{ 3, 2, 1, 87, ~'A', ~'B', ~'S', ~'C', ~'H', ~'N', ~'I', ~'T', ~'T', 0x00, 0x00, 0, 0, 0, 0 }
+	{ 1, 6, 2, 7,  (char)~'T', (char)~'H', (char)~'O', (char)~'R', (char)~'W', (char)~'A', (char)~'L', 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
+	{ 1, 7, 1, 12, (char)~'V', (char)~'O', (char)~'R', (char)~'S', (char)~'I', (char)~'C', (char)~'H', (char)~'T', 0x00, 0x00, 0x00, 0, 0, 0, 0 },
+	{ 2, 2, 1, 17, (char)~'W', (char)~'I', (char)~'S', (char)~'S', (char)~'E', (char)~'N', 0x00, 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
+	{ 4, 3, 2, 25, (char)~'O', (char)~'R', (char)~'T', (char)~'E', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
+	{ 1, 5, 2, 58, (char)~'H', (char)~'E', (char)~'X', (char)~'E', (char)~'N', (char)~'K', (char)~'N', (char)~'O', (char)~'T', (char)~'E', (char)~'N', 0, 0, 0, 0 },
+	{ 1, 1, 1, 60, (char)~'S', (char)~'T', (char)~'A', (char)~'B', (char)~'Z', (char)~'A', (char)~'U', (char)~'B', (char)~'E', (char)~'R', 0x00, 0, 0, 0, 0 },
+	{ 4, 5, 1, 67, (char)~'P', (char)~'A', (char)~'R', (char)~'A', (char)~'D', (char)~'E', (char)~'W', (char)~'E', (char)~'R', (char)~'T', 0x00, 0, 0, 0, 0 },
+	{ 1, 1, 1, 74, (char)~'S', (char)~'K', (char)~'E', (char)~'L', (char)~'E', (char)~'T', (char)~'T', 0x00, 0x00, 0x00, 0x00, 0, 0, 0, 0 },
+	{ 1, 5, 2, 77, (char)~'O', (char)~'L', (char)~'G', (char)~'I', (char)~'N', (char)~'W', (char)~'U', (char)~'R', (char)~'Z', 0x00, 0x00, 0, 0, 0, 0 },
+	{ 3, 2, 1, 87, (char)~'A', (char)~'B', (char)~'S', (char)~'C', (char)~'H', (char)~'N', (char)~'I', (char)~'T', (char)~'T', 0x00, 0x00, 0, 0, 0, 0 }
 }; // ds:0x46fc
 const signed char g_questions_map[10][3] = {
 	{ 0x00, 0x0a, 0x09 },
