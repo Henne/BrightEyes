@@ -66,12 +66,12 @@ signed int item_selector_item_compare(const void *p_item_1, const void *p_item_2
  */
 void buy_screen(void)
 {
-	signed int l_di;
+	signed int l_di; /* multi use: handle, hero_pos */
 	signed int j;
 	signed int items_x;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed int l3;
+	signed int l3; /* multi use */
 	signed int l4;
 	signed int percent;
 	signed int percent_old = 100;
@@ -99,7 +99,7 @@ void buy_screen(void)
 	struct struct_hero *hero2;
 	signed int width;
 	signed int height;
-	signed int given_items;
+	signed int num_given_items;
 	signed int l12;
 	signed int l13;
 	struct c_str_6 fmt_d_s = g_buy_screen_str_d_s;
@@ -107,7 +107,7 @@ void buy_screen(void)
 	//
 	signed int l15 = 0;
 	signed int l16;
-	signed int l17;
+	signed int num_slots_needed;
 	struct nvf_extract_desc nvf;
 
 	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
@@ -333,7 +333,7 @@ void buy_screen(void)
 
 			item_id = g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id;
 			l16 = -1;
-			l17 = 0;
+			num_slots_needed = 0;
 
 			for (l_di = 0; l_di < nice; l_di++) {
 
@@ -341,7 +341,9 @@ void buy_screen(void)
 					l16 = l_di;
 				}
 
-				l17 += (g_buy_shopping_cart[l_di].item_id != 0) && g_itemsdat[item_id].flags.stackable ?
+				num_slots_needed += (g_buy_shopping_cart[l_di].item_id != 0) && g_itemsdat[item_id].flags.stackable ?
+					/* Original-Bug: the following formula is wrong.
+					 * 199 stackable items need 3 slots (99 + 99 + 1), not 2. */
 						g_buy_shopping_cart[l_di].quantity / 100 + 1 :
 						g_buy_shopping_cart[l_di].quantity;
 			}
@@ -374,13 +376,13 @@ void buy_screen(void)
 						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
-					l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price *	g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
+					l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price * g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
 
 					if (l3 == 1 && price + l9 > p_money) {
 
 						GUI_output(get_ttx(401));
 
-					} else if (l3 == 1 && free_slots < l17) {
+					} else if (l3 == 1 && free_slots < num_slots_needed) {
 
 						GUI_output(get_ttx(438));
 
@@ -431,7 +433,7 @@ void buy_screen(void)
 
 							GUI_output(get_ttx(401));
 
-						} else if (free_slots < l17) {
+						} else if (free_slots < num_slots_needed) {
 
 							GUI_output(get_ttx(438));
 
@@ -521,9 +523,9 @@ void buy_screen(void)
 					for (l_di = 0; l_di < nice; l_di++) {
 
 						item_id = g_buy_shopping_cart[l_di].item_id;
-						given_items = give_new_item_to_group(item_id, 1, g_buy_shopping_cart[l_di].quantity);
+						num_given_items = give_new_item_to_group(item_id, 1, g_buy_shopping_cart[l_di].quantity);
 
-						g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] + given_items;
+						g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] + num_given_items;
 
 						if (g_market_itemsaldo_table[item_id] >= 10) {
 
@@ -533,11 +535,11 @@ void buy_screen(void)
 							g_itemsdat[item_id].price += g_itemsdat[item_id].price * 10 / 100;
 						}
 
-						if (given_items == 0 && !l_di) {
+						if (num_given_items == 0 && !l_di) {
 							l12 = 1;
 						}
 
-						if (g_buy_shopping_cart[l_di].quantity > given_items) {
+						if (g_buy_shopping_cart[l_di].quantity > num_given_items) {
 							l13 = 1;
 							break;
 						}
