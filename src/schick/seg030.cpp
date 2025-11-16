@@ -779,7 +779,7 @@ void talk_switch(void)
 
 	} else if (g_tlk_id == 1) {
 		/* HERBERG.TLK */
-		TLK_herberg(state);
+		TLK_inn(state);
 
 	} else if (g_tlk_id == 0) {
 		/* F092.TLK */
