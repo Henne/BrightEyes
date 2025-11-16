@@ -52,11 +52,11 @@ signed int shop_compar(const void *p1_in, const void *p2_in)
 {
 	int32_t v1;
 	int32_t v2;
-	const struct shop_item *p1 = (const struct shop_item*)p1_in;
-	const struct shop_item *p2 = (const struct shop_item*)p2_in;
+	const struct item_selector_item *p1 = (const struct item_selector_item*)p1_in;
+	const struct item_selector_item *p2 = (const struct item_selector_item*)p2_in;
 
-	v1 = p1->shop_price * p1->price_unit;
-	v2 = p2->shop_price * p2->price_unit;
+	v1 = p1->price * p1->price_unit;
+	v2 = p2->price * p2->price_unit;
 
 	return v1 < v2 ? -1 : (v1 == v2 ? 0 : 1);
 }
@@ -76,9 +76,9 @@ void buy_screen(void)
 	signed int percent;
 	signed int percent_old = 100;
 	signed int l6 = 1;
-	signed int shop_pos = 0;
+	signed int item_selector_pos = 0;
 	signed int done = 0;
-	signed int shop_pos_page_offset = 0;
+	signed int item_selector_page_offset = 0;
 	signed int l8;
 	signed int item_id;
 	struct c_str_5 fmt_h = g_buy_screen_str_money_h;
@@ -191,9 +191,9 @@ void buy_screen(void)
 
 				for (l_di = 0; l_di < 5; l_di++) {
 
-					l3 = 5 * items_x + l_di + shop_pos_page_offset;
+					l3 = 5 * items_x + l_di + item_selector_page_offset;
 
-					if ((j = g_buyitems[l3].item_id)) {
+					if ((j = g_item_selector_buy[l3].item_id)) {
 
 						g_pic_copy.x1 = array3.a[items_x];
 						g_pic_copy.y1 = array5.a[l_di];
@@ -208,9 +208,9 @@ void buy_screen(void)
 						do_pic_copy(0);
 
 						sprintf(g_dtp2,
-							g_buyitems[l3].price_unit == 1 ? fmt_h.a :
-									(g_buyitems[l3].price_unit == 10 ? fmt_s.a : fmt_d.a),
-								g_buyitems[l3].shop_price);
+							g_item_selector_buy[l3].price_unit == 1 ? fmt_h.a :
+									(g_item_selector_buy[l3].price_unit == 10 ? fmt_s.a : fmt_d.a),
+								g_item_selector_buy[l3].price);
 
 						GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_di] + 5);
 					}
@@ -219,33 +219,33 @@ void buy_screen(void)
 
 			call_mouse();
 			l6 = 1;
-			shop_pos = 0;
+			item_selector_pos = 0;
 			l8 = 0;
 		}
 
 		if (g_have_mouse == 2) {
-			select_with_mouse(&shop_pos, &g_buyitems[shop_pos_page_offset]);
+			item_selector_mouse_select(&item_selector_pos, &g_item_selector_buy[item_selector_page_offset]);
 		} else {
-			select_with_keyboard(&shop_pos, &g_buyitems[shop_pos_page_offset]);
+			item_selector_keyboard_select(&item_selector_pos, &g_item_selector_buy[item_selector_page_offset]);
 		}
 
 		g_action_table_secondary = &g_action_table_merchant[0];
 		handle_gui_input();
 		g_action_table_secondary = NULL;
 
-		if (l6 != shop_pos || l15 != 0) {
+		if (l6 != item_selector_pos || l15 != 0) {
 
 			do_border(g_vga_memstart, array3.a[l6 / 5] - 1, array5.a[l6 % 5] - 1, array3.a[l6 / 5] + 16,
 					array5.a[l6 % 5] + 16, 0);
 
-			do_border(g_vga_memstart, array3.a[shop_pos / 5] - 1, array5.a[shop_pos % 5] - 1, array3.a[shop_pos / 5] + 16,
-					array5.a[shop_pos % 5] + 16, -1);
+			do_border(g_vga_memstart, array3.a[item_selector_pos / 5] - 1, array5.a[item_selector_pos % 5] - 1, array3.a[item_selector_pos / 5] + 16,
+					array5.a[item_selector_pos % 5] + 16, -1);
 
-			l6 = shop_pos;
+			l6 = item_selector_pos;
 
 			clear_loc_line();
 
-			item_id = g_buyitems[shop_pos + shop_pos_page_offset].item_id;
+			item_id = g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id;
 
 			l4 = 0;
 
@@ -331,7 +331,7 @@ void buy_screen(void)
 				}
 			}
 
-			item_id = g_buyitems[shop_pos + shop_pos_page_offset].item_id;
+			item_id = g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id;
 			l16 = -1;
 			l17 = 0;
 
@@ -374,7 +374,7 @@ void buy_screen(void)
 						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
-					l9 = (int32_t)g_buyitems[shop_pos + shop_pos_page_offset].shop_price *	g_buyitems[shop_pos + shop_pos_page_offset].price_unit * l4;
+					l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price *	g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
 
 					if (l3 == 1 && price + l9 > p_money) {
 
@@ -416,16 +416,16 @@ void buy_screen(void)
 
 					l4 = 1;
 
-					if (g_itemsdat[g_buyitems[shop_pos + shop_pos_page_offset].item_id].flags.stackable) {
+					if (g_itemsdat[g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id].flags.stackable) {
 
-						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[shop_pos + shop_pos_page_offset].item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id, 0));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
 
 					if (l4 > 0) {
 
-						l9 = (int32_t)g_buyitems[shop_pos + shop_pos_page_offset].shop_price *	g_buyitems[shop_pos + shop_pos_page_offset].price_unit * l4;
+						l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price *	g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
 
 						if (price + l9 > p_money) {
 
@@ -438,7 +438,7 @@ void buy_screen(void)
 						} else {
 							price += l9;
 
-							g_buy_shopping_cart[nice].item_id = g_buyitems[shop_pos + shop_pos_page_offset].item_id;
+							g_buy_shopping_cart[nice].item_id = g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id;
 
 							g_buy_shopping_cart[nice].quantity = l4;
 
@@ -457,15 +457,15 @@ void buy_screen(void)
 			}
 		}
 
-		if (g_action == ACTION_ID_ICON_3 && shop_pos_page_offset) {
+		if (g_action == ACTION_ID_ICON_3 && item_selector_page_offset) {
 
 			l8 = 1;
-			shop_pos_page_offset -= 15;
+			item_selector_page_offset -= 15;
 
-		} else if (g_action == ACTION_ID_ICON_2 && g_buyitems[shop_pos_page_offset + 15].item_id) {
+		} else if (g_action == ACTION_ID_ICON_2 && g_item_selector_buy[item_selector_page_offset + 15].item_id) {
 
 			l8 = 1;
-			shop_pos_page_offset += 15;
+			item_selector_page_offset += 15;
 		}
 
 
@@ -594,16 +594,16 @@ void buy_screen(void)
  * \param   shop_ptr    pointer to the shop description
  * \param   hero        pointer to the hero
  * \param   inv_slot    position of the item in the heroes inventory
- * \param   shop_pos    position if the item in the sales array
+ * \param   item_selector_pos    position if the item in the sales array
  */
-void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_hero *hero, const signed int inv_slot, const signed int shop_pos)
+void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_hero *hero, const signed int inv_slot, const signed int item_selector_pos)
 {
 	signed int item_id;
 	signed int sellable = 0;
 
 	item_id = hero->inventory[inv_slot].item_id;
 
-	g_sellitems[shop_pos].item_id = item_id;
+	g_item_selector_sell[item_selector_pos].item_id = item_id;
 
 	if (g_itemsdat[item_id].flags.armor || g_itemsdat[item_id].flags.weapon) {
 
@@ -624,29 +624,29 @@ void insert_sell_items(const struct shop_descr *shop_descr, const struct struct_
 	if (!sellable) {
 
 		/* this item cannot be sold here => 0 HELLER */
-		g_sellitems[shop_pos].shop_price = 0;
-		g_sellitems[shop_pos].price_unit = 1;
+		g_item_selector_sell[item_selector_pos].price = 0;
+		g_item_selector_sell[item_selector_pos].price_unit = 1;
 
 	} else if (hero->inventory[inv_slot].flags.broken || (hero->inventory[inv_slot].rs_lost != 0))
 	{
 		/* this item is broken or RS of an armor got degraded => 1 HELLER */
-		g_sellitems[shop_pos].shop_price = 1;
-		g_sellitems[shop_pos].price_unit = 1;
+		g_item_selector_sell[item_selector_pos].price = 1;
+		g_item_selector_sell[item_selector_pos].price_unit = 1;
 
 	} else {
 		/* calculate the price */
-		g_sellitems[shop_pos].shop_price =
+		g_item_selector_sell[item_selector_pos].price =
 			(g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop_descr->price_mod / 100) / 2;
 
 		/* adjust price to 1 if zero */
-		if (g_sellitems[shop_pos].shop_price == 0) {
-			g_sellitems[shop_pos].shop_price = 1;
+		if (g_item_selector_sell[item_selector_pos].price == 0) {
+			g_item_selector_sell[item_selector_pos].price = 1;
 		}
 
-		g_sellitems[shop_pos].price_unit = g_itemsdat[item_id].price_unit;
+		g_item_selector_sell[item_selector_pos].price_unit = g_itemsdat[item_id].price_unit;
 	}
 
-	g_sellitems[shop_pos].inv_slot = inv_slot;
+	g_item_selector_sell[item_selector_pos].inv_slot = inv_slot;
 }
 
 #if !defined(__BORLANDC__)

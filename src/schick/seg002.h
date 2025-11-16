@@ -82,8 +82,8 @@ void draw_compass(void);
 signed int can_merge_group(void);
 uint16_t div16(const unsigned char);
 
-void select_with_mouse(signed int*, const struct shop_item*);
-void select_with_keyboard(signed int*, const struct shop_item*);
+void item_selector_mouse_select(signed int*, const struct item_selector_item*);
+void item_selector_keyboard_select(signed int*, const struct item_selector_item*);
 
 void set_automap_tile(const signed int, const signed int);
 void set_automap_tiles(const signed int, const signed int);

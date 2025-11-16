@@ -142,23 +142,23 @@ struct shop_descr g_shop_descr_table[95] = {
  * \param   item_id     item_id
  * \param   pos         position in the shop
  */
-void add_item_to_shop(const struct shop_descr *shop, const signed int item_id, const signed int pos)
+void add_item_to_buy_selector(const struct shop_descr *shop, const signed int item_id, const signed int pos)
 {
-	g_buyitems[pos].item_id = item_id;
+	g_item_selector_buy[pos].item_id = item_id;
 
-	g_buyitems[pos].shop_price = g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop->price_mod / 100;
+	g_item_selector_buy[pos].price = g_itemsdat[item_id].price + g_itemsdat[item_id].price * shop->price_mod / 100;
 
-	g_buyitems[pos].price_unit = g_itemsdat[item_id].price_unit;
+	g_item_selector_buy[pos].price_unit = g_itemsdat[item_id].price_unit;
 }
 
 void do_merchant(void)
 {
-	signed int shop_pos;
-	signed int shop_pos_tail;
+	signed int item_selector_pos; /* dual use */
+	signed int item_selector_pos_tail;
 	signed int done = 0;
 	signed int answer;
 	signed int refresh;
-	signed int armor_shop_pos_tail;
+	signed int item_selector_pos_tail_2;
 	int32_t party_money;
 	struct shop_descr *shop;
 
@@ -208,79 +208,80 @@ void do_merchant(void)
 	load_ggsts_nvf();
 	refresh = g_request_refresh = 1;
 
-	g_buyitems = (struct shop_item*)g_fig_figure1_buf;
-	memset((uint8_t*)g_buyitems, 0, 500 * sizeof(struct shop_item));
+	g_item_selector_buy = (struct item_selector_item*)g_fig_figure1_buf;
+	memset((uint8_t*)g_item_selector_buy, 0, 500 * sizeof(struct item_selector_item));
 
 	g_price_modificator = 4;
 
 	shop = &g_shop_descr_table[gs_town_typeindex];
 
 	/* redundant by memset() */
-	for (shop_pos = 0; shop_pos < ITEM_POS_MAX; shop_pos++) {
-		g_buyitems[shop_pos].item_id = 0;
+	for (item_selector_pos = 0; item_selector_pos < ITEM_POS_MAX; item_selector_pos++) {
+		g_item_selector_buy[item_selector_pos].item_id = 0;
 	}
 
-	shop_pos = 1;
-	shop_pos_tail = 0;
-	armor_shop_pos_tail = ITEM_ARMOR_POS_HEAD;
+	item_selector_pos = 1;
+	item_selector_pos_tail = 0;
+	item_selector_pos_tail_2 = ITEM_ARMOR_POS_HEAD;
 
-	while (g_itemsdat[shop_pos].gfx != -1) {
+	while (g_itemsdat[item_selector_pos].gfx != -1) {
 
-		if (shop->sortiment <= g_itemsdat[shop_pos].commonness) {
+		if (shop->sortiment <= g_itemsdat[item_selector_pos].commonness) {
 
-			if (g_itemsdat[shop_pos].flags.armor || g_itemsdat[shop_pos].flags.weapon) {
+			if (g_itemsdat[item_selector_pos].flags.armor || g_itemsdat[item_selector_pos].flags.weapon) {
 
 				if (shop->type == MERCHANT_WEAPONS) {
 
-					add_item_to_shop(shop, shop_pos,
-						g_itemsdat[shop_pos].flags.weapon ? shop_pos_tail++ : armor_shop_pos_tail++);
+					add_item_to_buy_selector(shop, item_selector_pos,
+						g_itemsdat[item_selector_pos].flags.weapon ? item_selector_pos_tail++ : item_selector_pos_tail_2++);
 				}
 
-			} else if (g_itemsdat[shop_pos].flags.herb_potion) {
+			} else if (g_itemsdat[item_selector_pos].flags.herb_potion) {
 
 				if (shop->type == MERCHANT_HERBS) {
 
-					add_item_to_shop(shop, shop_pos, shop_pos_tail++);
+					add_item_to_buy_selector(shop, item_selector_pos, item_selector_pos_tail++);
 				}
 
 			} else {
 
 				if (shop->type == MERCHANT_GENERAL) {
 
-					add_item_to_shop(shop, shop_pos, shop_pos_tail++);
+					add_item_to_buy_selector(shop, item_selector_pos, item_selector_pos_tail++);
 				}
 			}
 		}
 
-		shop_pos ++;
+		item_selector_pos ++;
 	}
 
-	for (shop_pos = 0; shop_pos < 3; shop_pos++) {
+	/* new scope for item_selector_pos, should be sth. like extra_items_pos */
+	for (item_selector_pos = 0; item_selector_pos < 3; item_selector_pos++) {
 
-		if (shop->extra_items[shop_pos]) {
-			add_item_to_shop(shop, shop->extra_items[shop_pos], shop_pos_tail++);
+		if (shop->extra_items[item_selector_pos]) {
+			add_item_to_buy_selector(shop, shop->extra_items[item_selector_pos], item_selector_pos_tail++);
 		}
 	}
 
 	if (shop->type == MERCHANT_WEAPONS) {
 
-		qsort((uint8_t*)g_buyitems, shop_pos_tail, sizeof(shop_item), shop_compar);
-		qsort((uint8_t*)g_buyitems + sizeof(shop_item) * ITEM_ARMOR_POS_HEAD, armor_shop_pos_tail - ITEM_ARMOR_POS_HEAD, sizeof(shop_item), shop_compar);
+		qsort((uint8_t*)g_item_selector_buy, item_selector_pos_tail, sizeof(item_selector_item), shop_compar);
+		qsort((uint8_t*)g_item_selector_buy + sizeof(item_selector_item) * ITEM_ARMOR_POS_HEAD, item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD, sizeof(item_selector_item), shop_compar);
 
 		/* copy the rest */
-		for (shop_pos = 0; armor_shop_pos_tail - ITEM_ARMOR_POS_HEAD > shop_pos; shop_pos++) {
+		for (item_selector_pos = 0; item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD > item_selector_pos; item_selector_pos++) {
 
-			g_buyitems[shop_pos_tail + shop_pos] = g_buyitems[shop_pos + ITEM_ARMOR_POS_HEAD];
+			g_item_selector_buy[item_selector_pos_tail + item_selector_pos] = g_item_selector_buy[item_selector_pos + ITEM_ARMOR_POS_HEAD];
 
 		}
 
 		/* cleanup */
-		for (shop_pos = shop_pos_tail + armor_shop_pos_tail - ITEM_ARMOR_POS_HEAD; shop_pos < ITEM_POS_MAX; shop_pos++) {
-			g_buyitems[shop_pos].item_id = 0;
+		for (item_selector_pos = item_selector_pos_tail + item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD; item_selector_pos < ITEM_POS_MAX; item_selector_pos++) {
+			g_item_selector_buy[item_selector_pos].item_id = 0;
 		}
 
 	} else {
-		qsort((uint8_t*)g_buyitems, shop_pos_tail, sizeof(shop_item), shop_compar);
+		qsort((uint8_t*)g_item_selector_buy, item_selector_pos_tail, sizeof(item_selector_item), shop_compar);
 	}
 
 	while (done == 0 && !gs_merchant_offended_flags[gs_town_typeindex]) {
