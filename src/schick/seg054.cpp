@@ -672,7 +672,7 @@ void do_inn(void)
 
 				GUI_output(get_ttx(801));
 
-			} else if ((tavern->quality < 6 || tavern->quality > 13) &&	gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
+			} else if ((tavern->quality < 6 || tavern->quality > 13) && gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
 
 				GUI_output(get_ttx(481));
 
@@ -698,18 +698,18 @@ void do_inn(void)
 	}
 }
 
-void TLK_herberg(const signed int state)
+void TLK_inn(const signed int state)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
 	if (!state) {
-		g_dialog_next_state = (gs_herberg_kicked_flags[gs_town_typeindex] ? 1 : 2);
+		g_dialog_next_state = (gs_inn_kicked_flags[gs_town_typeindex] ? 1 : 2);
 	} else if (state == 1 || state == 14) {
-		gs_herberg_kicked_flags[gs_town_typeindex] = 1;
+		gs_inn_kicked_flags[gs_town_typeindex] = 1;
 	} else if (state == 11) {
 		tumult();
 		gs_town_outlawed_flags[gs_town_id] = 1;
-		gs_herberg_kicked_flags[gs_town_typeindex] = 1;
+		gs_inn_kicked_flags[gs_town_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
 		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);

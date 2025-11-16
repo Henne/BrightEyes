@@ -993,7 +993,7 @@ extern int16_t gs_in_academy;			//ds:0x3362; seg068, seg099
 extern uint8_t  gs_informer_flags[16];		//ds:0x3364; seg030-seg116
 extern uint8_t  gs_tav_kicked_flags[88];		//ds:0x3374; seg060;
 extern uint8_t  gs_town_outlawed_flags[52];	//ds:0x33cc; seg054, seg060;
-extern uint8_t  gs_herberg_kicked_flags[74];	//ds:0x3400; seg060
+extern uint8_t  gs_inn_kicked_flags[74];	//ds:0x3400; seg060
 extern uint8_t  gs_got_letter_het;		//ds:0x344a; seg069
 extern uint8_t  gs_jurge_awaits_letter;		//ds:0x344c; seg069, seg072, seg073
 extern uint8_t  gs_umbrik_quest_gorah;		//ds:0x344d; seg072, seg111
