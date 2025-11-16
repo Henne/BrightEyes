@@ -203,7 +203,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 		} else if (give_new_item_to_group(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
-			sprintf(g_dtp2, get_ttx(486), GUI_names_grammar((signed int)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
+			sprintf(g_dtp2, get_ttx(486), GUI_names_grammar(0x8002, gs_smith_repairitems[smith_id].item_id, 0));
 
 			GUI_output(g_dtp2);
 
@@ -423,7 +423,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 						make_valuta_str(g_text_output_buf, price);
 
-						sprintf(g_dtp2, get_ttx(488), GUI_names_grammar((signed int)0x8002, item_id, 0), g_text_output_buf);
+						sprintf(g_dtp2, get_ttx(488), GUI_names_grammar(0x8002, item_id, 0), g_text_output_buf);
 
 						do {
 							percent = GUI_input(g_dtp2, 2);

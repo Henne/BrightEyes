@@ -324,7 +324,7 @@ void sell_screen(struct shop_descr *shop_descr)
 
 				if (g_itemsdat[item_id].flags.undropable) {
 
-					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar((signed int)0x8002, item_id, 0));
+					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar(0x8002, item_id, 0));
 					GUI_output(g_dtp2);
 
 				} else {

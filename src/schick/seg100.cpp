@@ -158,12 +158,12 @@ void spell_odem_arcanum(void)
 
 		if (get_spelluser()->inventory[inv_pos].flags.magic) {
 
-			sprintf(g_dtp2, get_tx(81), GUI_names_grammar((signed int)0x8000, item_id, 0));
+			sprintf(g_dtp2, get_tx(81), GUI_names_grammar(0x8000, item_id, 0));
 
 			get_spelluser()->inventory[inv_pos].flags.magic_revealed = 1;
 
 		} else {
-			sprintf(g_dtp2, get_tx(82), GUI_names_grammar((signed int)0x8000, item_id, 0));
+			sprintf(g_dtp2, get_tx(82), GUI_names_grammar(0x8000, item_id, 0));
 		}
 	}
 }
@@ -335,7 +335,7 @@ void spell_blitz(void)
 		g_spelltarget_e->blind = 3;
 
 		/* prepare the message */
-		sprintf(g_dtp2, get_tx(85), GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(85), GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -405,7 +405,7 @@ void spell_eisenrost(void)
 
 						get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
 
-						sprintf(g_dtp2, get_tx(92), GUI_names_grammar((signed int)0x8000, id, 0),
+						sprintf(g_dtp2, get_tx(92), GUI_names_grammar(0x8000, id, 0),
 							(char*)get_spelltarget()->alias);
 					} else {
 						g_spell_special_aecost = -2;
@@ -431,7 +431,7 @@ void spell_eisenrost(void)
 				g_spelltarget_e->weapon_broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2, get_tx(91), GUI_names_grammar((signed int)0x8000, g_spelltarget_e->mon_id, 1));
+				sprintf(g_dtp2, get_tx(91), GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
 			}
 		}
 	}
@@ -650,7 +650,7 @@ void spell_plumbumbarum(void)
 	g_spelltarget_e->at -= 3;
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(95), GUI_names_grammar((signed int)0x8001, g_spelltarget_e->mon_id, 1));
+	sprintf(g_dtp2, get_tx(95), GUI_names_grammar(0x8001, g_spelltarget_e->mon_id, 1));
 }
 
 void spell_radau(void)

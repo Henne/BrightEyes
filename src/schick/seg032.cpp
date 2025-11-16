@@ -118,7 +118,7 @@ signed int FIG_choose_next_hero(void)
 {
 #if !defined(__BORLANDC__)
 	signed int loop_cnt = 0;
-	long tries[7] = {0, 0, 0, 0, 0, 0, 0};
+	signed int tries[7] = {0, 0, 0, 0, 0, 0, 0};
 #endif
 
 	signed int retval;
@@ -139,7 +139,7 @@ signed int FIG_choose_next_hero(void)
 			 * print random statistic
 			 */
 			for (int i = 0; i < 7; i++)
-				D1_ERR("tries[%d] = %ld\n", i, tries[i]);
+				D1_ERR("tries[%d] = %d\n", i, tries[i]);
 
 			/*
 			 * search by hand for a hero and dump the
@@ -191,9 +191,9 @@ signed int FIG_choose_next_enemy(void)
 
 #if !defined(__BORLANDC__)
 	struct enemy_sheet *enemy;
-	int32_t i;
-	int32_t loop_cnt = 0;
-	int32_t tries[20] = {	0, 0, 0, 0, 0,
+	signed int i;
+	signed int loop_cnt = 0;
+	signed int tries[20] = {	0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0};
@@ -216,7 +216,7 @@ signed int FIG_choose_next_enemy(void)
 			 * print random statistic
 			 */
 			for (i = 0; i < 20; i++)
-				D1_ERR("tries[%d] = %ld\n", i, tries[i]);
+				D1_ERR("tries[%d] = %d\n", i, tries[i]);
 
 			/* search by hand for an enemy and dump	the interesting bits */
 			enemy = &g_enemy_sheets[0];

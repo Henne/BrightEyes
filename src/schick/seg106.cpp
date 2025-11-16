@@ -318,7 +318,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	if (item1_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed int)0x8002, item_id1, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar(0x8002, item_id1, 0));
 
 		GUI_output(g_dtp2);
 		return;
@@ -326,7 +326,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	if (item2_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed int)0x8002, item_id2, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar(0x8002, item_id2, 0));
 		GUI_output(g_dtp2);
 		return;
 

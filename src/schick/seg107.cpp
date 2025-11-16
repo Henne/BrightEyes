@@ -407,7 +407,7 @@ void item_apply_weapon_poison(void)
 		give_new_item_to_hero(g_itemuser, bottle_id, 1, 1);
 
 		sprintf(g_dtp2, get_ttx(739),
-			(char*)GUI_names_grammar((signed int)0x8000, g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
+			(char*)GUI_names_grammar(0x8000, g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
 
 	} else {
 		sprintf(g_dtp2, get_ttx(805), g_itemuser->alias);

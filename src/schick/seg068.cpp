@@ -571,7 +571,7 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed int)0x8002, item_id, 0));
+					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar(0x8002, item_id, 0));
 
 					do {
 						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
@@ -642,7 +642,7 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed int)0x8002, item_id, 0));
+					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar(0x8002, item_id, 0));
 
 					do {
 						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));

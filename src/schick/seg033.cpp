@@ -476,7 +476,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 								sprintf(g_text_output_buf, get_tx(60), hero->alias);
 							} else {
 								sprintf(g_text_output_buf, get_tx(31), hero->alias,
-									GUI_names_grammar((signed int)0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
+									GUI_names_grammar(0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
 							}
 
 							call_mouse();
@@ -540,7 +540,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							GUI_output(g_dtp2);
 						} else {
 							sprintf(g_text_output_buf, get_tx(2), hero->alias,
-								GUI_names_grammar((signed int)0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
+								GUI_names_grammar(0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
 
 							call_mouse();
 							tw_bak = g_textbox_width;

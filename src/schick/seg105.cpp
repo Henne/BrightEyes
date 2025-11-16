@@ -527,7 +527,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 		if (p_item->flags.undropable) {
 
 			/* this item is not droppable */
-			sprintf(g_dtp2,get_ttx(454), (char*)GUI_names_grammar((signed int)0x8002, item_id, 0));
+			sprintf(g_dtp2,get_ttx(454), (char*)GUI_names_grammar(0x8002, item_id, 0));
 			GUI_output(g_dtp2);
 
 		} else {
