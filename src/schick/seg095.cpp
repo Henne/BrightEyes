@@ -27,53 +27,35 @@ namespace M302de {
 
 signed int npc_meetings(const signed int type_index)
 {
-	/* check if an NPC is in the party and if we
-		already had an NPC conversation here */
+	/* check if an NPC is in the party and if we already had an NPC conversation here */
 	if (!get_hero(6)->typus && (type_index != gs_npc_meet_tavern)) {
 
 		gs_npc_meet_tavern = type_index;
 
-		/* Nariell */
-		if (gs_town_id == TOWN_ID_CLANEGH && gs_town_typeindex == 0x30 &&
-			!((uint8_t)gs_npc_timers[NPC_NARIELL])) {
+		if ((gs_town_id == TOWN_ID_CLANEGH) && (gs_town_typeindex == 48) && !((uint8_t)gs_npc_timers[NPC_NARIELL])) {
 
 			npc_nariell();
-		} else
 
-		/* Harika */
-		if (gs_town_id == TOWN_ID_PHEXCAER && gs_town_typeindex == 0x28 &&
-			!((uint8_t)gs_npc_timers[NPC_HARIKA])) {
+		} else if ((gs_town_id == TOWN_ID_PHEXCAER) && (gs_town_typeindex == 40) && !((uint8_t)gs_npc_timers[NPC_HARIKA])) {
 
 			npc_harika();
-		} else
 
-		/* Curian */
-		if (gs_town_id == TOWN_ID_OVERTHORN && gs_town_typeindex == 0x3c &&
-			!((uint8_t)gs_npc_timers[NPC_CURIAN])) {
+		} else if ((gs_town_id == TOWN_ID_OVERTHORN) && (gs_town_typeindex == 60) && !((uint8_t)gs_npc_timers[NPC_CURIAN])) {
 
 			npc_curian();
-		} else
 
-		/* Ardora */
-		if (gs_town_id == TOWN_ID_THORWAL &&	gs_town_typeindex == 0x6 &&
-			!((uint8_t)gs_npc_timers[NPC_ARDORA]) &&
-			gs_dng01_ardora_freed) {
+		} else if ((gs_town_id == TOWN_ID_THORWAL) && (gs_town_typeindex == 6) && !((uint8_t)gs_npc_timers[NPC_ARDORA]) && gs_dng01_ardora_freed) {
 
 			npc_ardora();
-		} else
 
-		/* Garsvik */
-		if (gs_town_id == TOWN_ID_PREM && gs_town_typeindex == 0x4a &&
-			!((uint8_t)gs_npc_timers[NPC_GARSVIK])) {
+		} else if ((gs_town_id == TOWN_ID_PREM) && (gs_town_typeindex == 74) && !((uint8_t)gs_npc_timers[NPC_GARSVIK])) {
 
 			npc_garsvik();
-		} else
 
-		/* Erwo */
-		if (gs_town_id == TOWN_ID_MANRIN && gs_town_typeindex == 0x57 &&
-			!((uint8_t)gs_npc_timers[NPC_ERWO])) {
+		} else if ((gs_town_id == TOWN_ID_MANRIN) && (gs_town_typeindex == 87) && !((uint8_t)gs_npc_timers[NPC_ERWO])) {
 
 			npc_erwo();
+
 		} else {
 			return 0;
 		}
@@ -109,7 +91,7 @@ void npc_farewell(void)
 
 		case NPC_NARIELL: {
 			if (gs_npc_months >= 2)
-				remove_npc(0x14, 0x1f, 0xe2, get_ttx(753), get_tx(9));
+				remove_npc(20, 31, ARCHIVE_FILE_NPCS + 0, get_ttx(753), get_tx(9));
 			break;
 		}
 		case NPC_HARIKA: {
@@ -120,7 +102,7 @@ void npc_farewell(void)
 					gs_town_id == TOWN_ID_PREM ||
 					gs_town_id == TOWN_ID_OBERORKEN) {
 
-					remove_npc(0x16, 0x1f, 0xe3, get_ttx(754), get_tx(19));
+					remove_npc(22, 31, ARCHIVE_FILE_NPCS + 1, get_ttx(754), get_tx(19));
 
 					hero_i = get_hero(0);
 					for (i = 0; i < 6; i++, hero_i++) {
@@ -150,27 +132,27 @@ void npc_farewell(void)
 		}
 		case NPC_CURIAN: {
 			if (gs_npc_months >= 6)
-				remove_npc(0x19, 0x40, 0xe4, get_ttx(755), get_tx(29));
+				remove_npc(25, 64, ARCHIVE_FILE_NPCS + 2, get_ttx(755), get_tx(29));
 			break;
 		}
 		case NPC_ARDORA: {
 			if (gs_npc_months >= 1)
-				remove_npc(0x15, 0x1f, 0xe5, get_ttx(756), get_tx(43));
+				remove_npc(21, 31, ARCHIVE_FILE_NPCS + 3, get_ttx(756), get_tx(43));
 			break;
 		}
 		case NPC_GARSVIK: {
 			if (gs_npc_months >= 2)
-				remove_npc(0x17, 0x1f, 0xe6, get_ttx(757), get_tx(53));
+				remove_npc(23, 31, ARCHIVE_FILE_NPCS + 4, get_ttx(757), get_tx(53));
 			break;
 		}
 		case NPC_ERWO: {
 			if (gs_npc_months >= 2)
-				remove_npc(0x18, 0x1f, 0xe7, get_ttx(758), get_tx(63));
+				remove_npc(24, 31, ARCHIVE_FILE_NPCS + 5, get_ttx(758), get_tx(63));
 			break;
 		}
 	}
 
-	if (tmp != -1 && tmp != 0xe1)
+	if ((tmp != -1) && (tmp != (ARCHIVE_FILE_NPCS - 1)))
 		load_tx(tmp);
 }
 
@@ -187,21 +169,19 @@ void npc_nariell(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2,
-				get_ttx(753), get_tx(0),
-				3,
-				get_tx(1), get_tx(2),
-				get_tx(3));
+		answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(753), get_tx(0),
+				3, get_tx(1), get_tx(2), get_tx(3));
+
 	} while (answer == -1);
 
 	/* process the answer */
 	if (answer == 1) {
 
-		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(753), get_tx(4), 0);
+		GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(753), get_tx(4), 0);
 
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(753),
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(753),
 					(answer == 2) ? get_tx(5): get_tx(6),
 					2, get_tx(7), get_tx(8));
 
@@ -209,7 +189,7 @@ void npc_nariell(void)
 
 		/* add nariell */
 		if (answer == 2)
-			add_npc(0xe2);
+			add_npc(ARCHIVE_FILE_NPCS + 0);
 	}
 
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
@@ -229,16 +209,14 @@ void npc_harika(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2,
-				get_ttx(754), get_tx(10),
-				3,
-				get_tx(11), get_tx(12),
-				get_tx(13));
+		answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(754), get_tx(10),
+				3, get_tx(11), get_tx(12), get_tx(13));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
 
-		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(754), get_tx(14), 0);
+		GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(754), get_tx(14), 0);
 
 	} else if (answer == 2) {
 
@@ -247,7 +225,7 @@ void npc_harika(void)
 		answer = (money >= 2000) ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(754), get_tx(15),
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(754), get_tx(15),
 					answer,	get_tx(17), get_tx(18));
 
 		} while (answer == -1);
@@ -259,7 +237,7 @@ void npc_harika(void)
 			set_party_money(money);
 
 			/* add her to the party */
-			add_npc(0xe3);
+			add_npc(ARCHIVE_FILE_NPCS + 1);
 		}
 	} else {
 		money = get_party_money();
@@ -267,7 +245,7 @@ void npc_harika(void)
 		answer = (money >= 1500) ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(754), get_tx(16),
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(754), get_tx(16),
 					answer,	get_tx(17), get_tx(18));
 
 		} while (answer == -1);
@@ -279,7 +257,7 @@ void npc_harika(void)
 			set_party_money(money);
 
 			/* add her to the party */
-			add_npc(0xe3);
+			add_npc(ARCHIVE_FILE_NPCS + 1);
 		}
 	}
 
@@ -298,26 +276,26 @@ void npc_curian(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(755), get_tx(20),
+		answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(755), get_tx(20),
 				3, get_tx(21), get_tx(22), get_tx(23));
 
 	} while (answer == -1);
 
 	if (answer == 1) {
 
-		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(755), get_tx(24), 0);
+		GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(755), get_tx(24), 0);
 
 	} else {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(755),
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(755),
 					(answer == 2) ? get_tx(25): get_tx(26),
 					2, get_tx(27), get_tx(28));
 		} while (answer == -1);
 
 		/* add NPC */
 		if (answer == 2)
-			add_npc(0xe4);
+			add_npc(ARCHIVE_FILE_NPCS + 2);
 	}
 
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
@@ -336,54 +314,56 @@ void npc_ardora(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(30), 3,
+		answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(30), 3,
 					get_tx(31), get_tx(32),	get_tx(33));
 
 	} while (answer == -1);
 
 	if (answer == 1) {
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(34), 2,
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(34), 2,
 					get_tx(35), get_tx(36));
 
 		} while (answer == -1);
 
 		if (answer == 2) {
 
-			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(37), 0);
+			GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(37), 0);
 
 		} else {
 			do {
-				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(39), 2,
+				answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(39), 2,
 					get_tx(40), get_tx(41));
 
 			} while (answer == -1);
 
 			if (answer == 1) {
 
-				add_npc(0xe5);
+				add_npc(ARCHIVE_FILE_NPCS + 3);
 
 			} else {
 
-				GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(42), 0);
+				GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(42), 0);
 			}
 		}
 	} else {
 		if (answer == 2) {
 
-			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(38), 0);
+			GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(38), 0);
 		}
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(39), 2,
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(39), 2,
 					get_tx(40), get_tx(41));
 
 		} while (answer == -1);
 
 		if (answer == 1) {
-			add_npc(0xe5);
+
+			add_npc(ARCHIVE_FILE_NPCS + 3);
+
 		} else {
-			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(42), 0);
+			GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(756), get_tx(42), 0);
 		}
 	}
 
@@ -403,18 +383,18 @@ void npc_garsvik(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(757), get_tx(44), 3,
+		answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(757), get_tx(44), 3,
 				get_tx(45), get_tx(46),	get_tx(47));
 
 	} while (answer == -1);
 
 	if (answer == 1) {
 
-		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(757), get_tx(48), 0);
+		GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(757), get_tx(48), 0);
 
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(757),
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(757),
 					(answer == 2) ? get_tx(49) : get_tx(50),
 					2, get_tx(51), get_tx(52));
 
@@ -422,7 +402,7 @@ void npc_garsvik(void)
 
 		/* add NPC */
 		if (answer == 2)
-			add_npc(0xe6);
+			add_npc(ARCHIVE_FILE_NPCS + 4);
 	}
 
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
@@ -441,18 +421,18 @@ void npc_erwo(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(758), get_tx(54),
+		answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(758), get_tx(54),
 				3, get_tx(55), get_tx(56), get_tx(57));
 
 	} while (answer == -1);
 
 	if (answer == 1) {
 
-		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(758), get_tx(58), 0);
+		GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(758), get_tx(58), 0);
 
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(758),
+			answer = GUI_dialogbox((uint8_t*)g_dtp2, get_ttx(758),
 					(answer == 2) ? get_tx(59): get_tx(60),
 					2, get_tx(61), get_tx(62));
 
@@ -460,7 +440,7 @@ void npc_erwo(void)
 
 		/* add NPC */
 		if (answer == 2)
-			add_npc(0xe7);
+			add_npc(ARCHIVE_FILE_NPCS + 5);
 
 		}
 
@@ -485,7 +465,7 @@ void remove_npc(const signed int head_index, const signed char days,
         if (text && check_hero(get_hero(6))) {
 
 		load_in_head(head_index);
-		GUI_dialogbox((unsigned char*)g_dtp2, name, text, 0);
+		GUI_dialogbox((uint8_t*)g_dtp2, name, text, 0);
 	}
 
 	/* clear the NPC from memory */
@@ -502,9 +482,9 @@ void remove_npc(const signed int head_index, const signed char days,
 	/* TODO:	check_hero() will now, after memset() return 0,
 			so the parameter days is useless */
 	if (check_hero(get_hero(6)))
-		gs_npc_timers[index - 0xe1] = days;
+		gs_npc_timers[index - ARCHIVE_FILE_NPCS + 1] = days;
 	else
-		gs_npc_timers[index - 0xe1] = -1;
+		gs_npc_timers[index - ARCHIVE_FILE_NPCS + 1] = -1;
 
 }
 
@@ -525,7 +505,7 @@ void add_npc(const signed int index)
 	gs_npc_months = 0;
 
 	/* set a number to decide between the NPCs (1-6) */
-	get_hero(6)->npc_id = index - 0xe1;
+	get_hero(6)->npc_id = index - ARCHIVE_FILE_NPCS + 1;
 
 	/* set the group the NPC contains in */
 	get_hero(6)->group_id = gs_active_group_id;
