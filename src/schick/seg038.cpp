@@ -55,7 +55,7 @@ void FIG_init_list_elem(const signed int obj)
 
 	FIG_search_obj_on_cb(obj, &x, &y);
 
-	/* This initializes the global FIGHTER structure g_fig_list_elem */
+	/* This initializes the global fighter structure g_fig_list_elem */
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = 0;
 	g_fig_list_elem.cbx = x;

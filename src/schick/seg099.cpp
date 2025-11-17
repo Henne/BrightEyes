@@ -634,7 +634,7 @@ void spell_skelettarius(void)
 		 * If the dead target monster is lying on top of the body of another dead monster,
 		 * after the 'Skelettarius' the other body is still displayed, but cannot be selected for 'Skelettarius'.
 		 *
-		 * Fix: store and restore the FIGHTER_OBJ_ID value. */
+		 * Fix: store and restore the fighter.object_id value. */
 		signed char object_id_bak = fighter->object_id;
 #endif
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -675,7 +675,7 @@ void spell_skelettarius(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:
-		 * restore the FIGHTER_OBJ_ID value. */
+		 * restore the fighter.object_id value. */
 		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 		fighter->object_id = object_id_bak;
 #endif
