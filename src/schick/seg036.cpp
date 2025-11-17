@@ -115,7 +115,7 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	g_fig_anisheets[0][0] = 0;
 	g_fig_anisheets[0][242] = hero->sprite_id;
 
-	sheet_ptr = (int8_t*)&g_fig_anisheets[0][1];
+	sheet_ptr = &g_fig_anisheets[0][1];
 	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
 
 	i = 0;
@@ -180,7 +180,7 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	FIG_set_sheet(hero->fighter_id, 0);
 
 	draw_fight_screen(0);
-	memset(&g_fig_anisheets[0], -1, 0xf3);
+	memset(&g_fig_anisheets[0], -1, 243);
 	FIG_init_list_elem(hero_pos + 1);
 }
 

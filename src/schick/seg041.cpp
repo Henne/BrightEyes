@@ -558,10 +558,10 @@ void clear_anisheets(void)
 	signed int i;
 
 	for (i = 0; i < 8; i++)
-		memset(&g_fig_anisheets[i], -1, 0xf3);
+		memset(&g_fig_anisheets[i], -1, 243);
 
 	/* That would be better */
-	/* memset(&g_fig_anisheets[0], -1, 0xf3 * 8); */
+	/* memset(&g_fig_anisheets[0], -1, 243 * 8); */
 }
 
 /**

@@ -96,7 +96,7 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	g_fig_anisheets[1][0] = 0;
 	g_fig_anisheets[1][242] = enemy->gfx_id;
 
-	sheet_ptr = (int8_t*)&g_fig_anisheets[1][1];
+	sheet_ptr = &g_fig_anisheets[1][1];
 	i = 0;
 	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
 
@@ -164,7 +164,7 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 
 	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
 
-		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 0xf3);
+		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 243);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
@@ -173,8 +173,8 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 
 	/* draw_fight_screen */
 	draw_fight_screen(0);
-	memset(&g_fig_anisheets[1], -1, 0xf3);
-	memset(&g_fig_anisheets[3], -1, 0xf3);
+	memset(&g_fig_anisheets[1], -1, 243);
+	memset(&g_fig_anisheets[3], -1, 243);
 	FIG_init_list_elem(enemy_no + 10);
 }
 

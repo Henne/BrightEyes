@@ -39,11 +39,11 @@ namespace M302de {
 signed int g_delay_factor = 4; // ds:0x4b66
 extern char g_str_temp_xx[8];
 static char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; uint8_t*
-static signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
+static const signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
 static signed char g_fig_star_counter = 0; // ds:0x4b78
 signed int g_fig_star_timer = 0; // ds:0x4b79
 static signed char g_fig_star_last_count = -1; // ds:0x4b7b
-static signed int g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
+static const signed int g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
 signed char g_fig_star_printed = 0; // ds:0x4b94
 char g_str_temp_xx[8] = "TEMP\\XX"; // ds:0x4b95
 
@@ -130,6 +130,7 @@ static void FIG_set_star_color(uint8_t *ptr, signed int count, signed char color
 
 	color += 0x80;
 
+	/* REMARK: memset(ptr, color + 0x80, count); */
 	for (p = ptr; count--; p++) {
 		if (*p) *p = color;
 	}
@@ -513,7 +514,7 @@ void draw_fight_screen(const signed int val)
 
 						if (p_fighter->wsheet != -1) {
 
-							p_weapon_anisheet = (int8_t*)&g_fig_anisheets[p_fighter->wsheet];
+							p_weapon_anisheet = &g_fig_anisheets[p_fighter->wsheet][0];
 
 							if (*(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
 							{
@@ -825,7 +826,7 @@ void draw_fight_screen(const signed int val)
 
 							if (p_fighter->wsheet != -1) {
 
-								p_weapon_anisheet = (int8_t*)&g_fig_anisheets[p_fighter->wsheet];
+								p_weapon_anisheet = &g_fig_anisheets[p_fighter->wsheet][0];
 
 								if (*(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3) == -1)
 								{

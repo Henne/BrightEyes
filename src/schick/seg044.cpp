@@ -84,8 +84,8 @@ static signed int copy_ani_seq(int8_t *dst, const signed int ani_num, const sign
 /**
  * \brief   TODO
  *
- * \param   ani         the number of the animation sequence
- * \return              the first byte of the sequence from ANI.DAT {0,1,2,3,4}
+ * \param[in]  ani_num the number of the animation sequence
+ * \return  the first byte of the sequence from ANI.DAT {0,1,2,3,4}
  */
 /* Borlandified and identical */
 static signed char get_seq_header(const signed int ani_num)
@@ -194,8 +194,8 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	}
 
 	l1 += dir;
-	sheet_ptr1 = (int8_t*)&g_fig_anisheets[sheet_id][1];
-	sheet_ptr2 = (int8_t*)&g_fig_anisheets[sheet_id + 4][1];
+	sheet_ptr1 = &g_fig_anisheets[sheet_id][1];
+	sheet_ptr2 = &g_fig_anisheets[sheet_id + 4][1];
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
 	g_fig_anisheets[sheet_id][242] = hero->sprite_id;
@@ -393,8 +393,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 	l1 += dir;
 
-	sheet_ptr1 = (int8_t*)&g_fig_anisheets[sheet_id][1];
-	sheet_ptr2 = (int8_t*)&g_fig_anisheets[sheet_id + 4][1];
+	sheet_ptr1 = &g_fig_anisheets[sheet_id][1];
+	sheet_ptr2 = &g_fig_anisheets[sheet_id + 4][1];
 
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
@@ -518,7 +518,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	/* does this sprite need two fields */
 	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table))	{
 
-		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 0xf3);
+		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
@@ -541,9 +541,9 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 /**
  *
- * \param   v1          0 or 1
+ * \param[in] sheet_id  0 or 1
  * \param   hero        pointer to a hero
- * \param   v2          99 or 4
+ * \param   max_range          99 or 4
  * \param   obj1
  * \param   obj2
  * \param   v5		-1 or a var
@@ -551,7 +551,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
  */
 
 /* Borlandified and identical */
-void FANI_prepare_spell_hero(const signed int v1, struct struct_hero *hero, const signed int v2, const signed int obj1, const signed int obj2, const signed int v5, const signed int v6)
+void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero, const signed int max_range, const signed int obj1, const signed int obj2, const signed int v5, const signed int v6)
 {
 	signed int x_obj1;
 	signed int y_obj1;
@@ -564,7 +564,6 @@ void FANI_prepare_spell_hero(const signed int v1, struct struct_hero *hero, cons
 	int16_t *ani_index_ptr;
 
 	signed int l_di;
-	signed int l_si;
 
 	/* get a pointer from an array where the Monster-ID serves as index */
 	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
@@ -588,34 +587,36 @@ void FANI_prepare_spell_hero(const signed int v1, struct struct_hero *hero, cons
 		dir = hero->viewdir;
 
 
-	l_di = (v2 == 4) ? ((v5 == 1) ? 37 : 29) : 16;
+	l_di = (max_range == 4) ? ((v5 == 1) ? 37 : 29) : 16;
 
-	l_di += (v2 == 4) ? dir : hero->viewdir;
+	l_di += (max_range == 4) ? dir : hero->viewdir;
 
-	sheet_ptr = (int8_t*)&g_fig_anisheets[v1][1];
+	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
-	g_fig_anisheets[v1][0] = get_seq_header(ani_index_ptr[l_di]);
+	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l_di]);
 
-	g_fig_anisheets[v1][242] = hero->sprite_id;
+	g_fig_anisheets[sheet_id][242] = hero->sprite_id;
 
-	if ((hero->viewdir != dir) && (v2 == 4)) {
+	if ((hero->viewdir != dir) && (max_range == 4)) {
 
-		g_fig_anisheets[v1][0] = 0;
+		signed int viewdir;
+
+		g_fig_anisheets[sheet_id][0] = 0;
 
 		l3 = l2 = -1;
-		l_si = hero->viewdir;
-		l3 = l_si;
-		l_si++;
-		if (l_si == 4)
-			l_si = 0;
+		viewdir = hero->viewdir;
+		l3 = viewdir;
+		viewdir++;
+		if (viewdir == 4)
+			viewdir = 0;
 
-		if (l_si != dir) {
-			l2 = l_si;
-			l_si++;
-			if (l_si == 4)
-				l_si = 0;
+		if (viewdir != dir) {
+			l2 = viewdir;
+			viewdir++;
+			if (viewdir == 4)
+				viewdir = 0;
 
-			if (l_si != dir) {
+			if (viewdir != dir) {
 				l3 = hero->viewdir + 4;
 				l2 = -1;
 			}
@@ -638,7 +639,7 @@ void FANI_prepare_spell_hero(const signed int v1, struct struct_hero *hero, cons
 		sheet_ptr++;
 	}
 
-	if ((v2 == 4) || check_hero(hero) ||
+	if ((max_range == 4) || check_hero(hero) ||
 		((g_attacker_dead != 0) && (v6 == 0)) ||
 		((g_defender_dead != 0) && (v6 == 1))) {
 
@@ -669,15 +670,15 @@ void FANI_prepare_spell_hero(const signed int v1, struct struct_hero *hero, cons
  *
  *          This is used for "Blitz", "Fulminictus", "Ignifaxius"
  *
- * \param   v1          0 or 1
+ * \param[in] sheet_id  0 or 1
  * \param   p           pointer to an entry of g_enemy_sheets
- * \param   v2          4 of 99
+ * \param   max_range          4 of 99
  * \param   target      the id of the target
  * \param   caster      the id of the caster
  * \param   v5          0 or 1
  */
 /* Borlandified and identical */
-void FANI_prepare_spell_enemy(const signed int v1, struct enemy_sheet *enemy, const signed int v2, const signed int target, const signed int caster, const signed int v5)
+void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *enemy, const signed int max_range, const signed int target, const signed int caster, const signed int v5)
 {
 	signed int l1;
 	signed int x_target;
@@ -715,20 +716,20 @@ void FANI_prepare_spell_enemy(const signed int v1, struct enemy_sheet *enemy, co
 		dir = enemy->viewdir;
 
 	/* this is true if a monster attacks a hero */
-	l1 = (v2 == 4) ? 29 : 16;
+	l1 = (max_range == 4) ? 29 : 16;
 
-	sheet_ptr = (int8_t*)&g_fig_anisheets[v1][1];
+	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
 	/* this is true if a monster attacks a hero */
-	l1 += (v2 == 4) ? dir : enemy->viewdir;
+	l1 += (max_range == 4) ? dir : enemy->viewdir;
 
-	g_fig_anisheets[v1][0] = get_seq_header(ani_index_ptr[l1]);
+	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
 
-	g_fig_anisheets[v1][242] = enemy->gfx_id;
+	g_fig_anisheets[sheet_id][242] = enemy->gfx_id;
 
-	if ((enemy->viewdir != dir) && (v2 == 4)) {
+	if ((enemy->viewdir != dir) && (max_range == 4)) {
 
-		g_fig_anisheets[v1][0] = 0;
+		g_fig_anisheets[sheet_id][0] = 0;
 
 		l3 = l2 = -1;
 
@@ -787,7 +788,7 @@ void FANI_prepare_spell_enemy(const signed int v1, struct enemy_sheet *enemy, co
 
 	/* check if the moster sprite ID needs two fields */
 	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
-		memcpy(&g_fig_anisheets[v1 + 2], &g_fig_anisheets[v1], 0xf3);
+		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
 	}
 }
 
