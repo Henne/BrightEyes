@@ -101,81 +101,81 @@ static char *g_grammar_pronouns_index[7] = {
 static const signed char g_grammar_pronouns_table2[33] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x05, 0x01, 0x02, 0x06, 0x04, 0x06, 0x01, 0x01, 0x01, 0x04, 0x04, 0x04, 0x01, 0x01, 0x01, 0x07, 0x07, 0x07, 0x00, -128, -64, -32, -16, -8, -4, -2, -1 }; // ds:0xaa30, by gender and ??
 
 static const struct struct_char_width g_gui_char_width[75] = {
-	{ 0x20, 0x00, 0x06 },
-	{ 0x41, 0x01, 0x06 },
-	{ 0x42, 0x02, 0x06 },
-	{ 0x43, 0x03, 0x06 },
-	{ 0x44, 0x04, 0x06 },
-	{ 0x45, 0x05, 0x06 },
-	{ 0x46, 0x06, 0x06 },
-	{ 0x47, 0x07, 0x06 },
-	{ 0x48, 0x08, 0x06 },
-	{ 0x49, 0x09, 0x04 },
-	{ 0x4a, 0x0a, 0x06 },
-	{ 0x4b, 0x0b, 0x06 },
-	{ 0x4c, 0x0c, 0x05 },
-	{ 0x4d, 0x0d, 0x06 },
-	{ 0x4e, 0x0e, 0x06 },
-	{ 0x4f, 0x0f, 0x06 },
-	{ 0x50, 0x10, 0x06 },
-	{ 0x51, 0x11, 0x06 },
-	{ 0x52, 0x12, 0x06 },
-	{ 0x53, 0x13, 0x06 },
-	{ 0x54, 0x14, 0x06 },
-	{ 0x55, 0x15, 0x06 },
-	{ 0x56, 0x16, 0x06 },
-	{ 0x57, 0x17, 0x06 },
-	{ 0x58, 0x18, 0x06 },
-	{ 0x59, 0x19, 0x06 },
-	{ 0x5a, 0x1a, 0x06 },
-	{ (char)-0x72, 0x1b, 0x06 },
-	{ (char)-0x67, 0x1c, 0x06 },
-	{ (char)-0x66, 0x1d, 0x06 },
-	{ 0x2c, 0x1e, 0x03 },
-	{ 0x2e, 0x1f, 0x02 },
-	{ 0x2d, 0x20, 0x06 },
-	{ 0x28, 0x21, 0x04 },
-	{ 0x29, 0x22, 0x04 },
-	{ 0x21, 0x23, 0x03 },
-	{ 0x3f, 0x24, 0x05 },
-	{ 0x30, 0x25, 0x06 },
-	{ 0x31, 0x26, 0x03 },
-	{ 0x32, 0x27, 0x06 },
-	{ 0x33, 0x28, 0x06 },
-	{ 0x34, 0x29, 0x06 },
-	{ 0x35, 0x2a, 0x06 },
-	{ 0x36, 0x2b, 0x06 },
-	{ 0x37, 0x2c, 0x06 },
-	{ 0x38, 0x2d, 0x06 },
-	{ 0x39, 0x2e, 0x06 },
-	{ 0x27, 0x2f, 0x03 },
-	{ 0x3a, 0x30, 0x03 },
-	{ 0x23, 0x31, 0x06 },
-	{ 0x26, 0x32, 0x05 },
-	{ 0x25, 0x33, 0x05 },
-	{ 0x3c, 0x35, 0x05 },
-	{ 0x3e, 0x34, 0x05 },
-	{ 0x2f, 0x36, 0x06 },
-	{ 0x5f, 0x37, 0x06 },
-	{ (char)-0x38, 0x38, 0x06 },
-	{ (char)-0x37, 0x39, 0x06 },
-	{ (char)-0x36, 0x3a, 0x06 },
-	{ (char)-0x35, 0x3b, 0x05 },
-	{ (char)-0x34, 0x3c, 0x05 },
-	{ (char)-0x33, 0x3d, 0x04 },
-	{ (char)-0x32, 0x3e, 0x05 },
-	{ (char)-0x31, 0x3f, 0x05 },
-	{ (char)-0x30, 0x40, 0x02 },
-	{ (char)-0x2f, 0x41, 0x06 },
-	{ (char)-0x2e, 0x42, 0x06 },
-	{ (char)-0x2d, 0x43, 0x05 },
-	{ (char)-0x2c, 0x44, 0x06 },
-	{ (char)-0x2b, 0x45, 0x05 },
-	{ (char)-0x2a, 0x46, 0x06 },
-	{ (char)-0x29, 0x47, 0x05 },
-	{ (char)-0x28, 0x48, 0x06 },
-	{ (char)-0x27, 0x49, 0x05 },
-	{ 0x2b, 0x00, 0x06 }
+	{        ' ',  0, 6 },
+	{        'A',  1, 6 },
+	{        'B',  2, 6 },
+	{        'C',  3, 6 },
+	{        'D',  4, 6 },
+	{        'E',  5, 6 },
+	{        'F',  6, 6 },
+	{        'G',  7, 6 },
+	{        'H',  8, 6 },
+	{        'I',  9, 4 },
+	{        'J', 10, 6 },
+	{        'K', 11, 6 },
+	{        'L', 12, 5 },
+	{        'M', 13, 6 },
+	{        'N', 14, 6 },
+	{        'O', 15, 6 },
+	{        'P', 16, 6 },
+	{        'Q', 17, 6 },
+	{        'R', 18, 6 },
+	{        'S', 19, 6 },
+	{        'T', 20, 6 },
+	{        'U', 21, 6 },
+	{        'V', 22, 6 },
+	{        'W', 23, 6 },
+	{        'X', 24, 6 },
+	{        'Y', 25, 6 },
+	{        'Z', 26, 6 },
+	{ (char)0x8e, 27, 6 },
+	{ (char)0x99, 28, 6 },
+	{ (char)0x9a, 29, 6 },
+	{        ',', 30, 3 },
+	{        '.', 31, 2 },
+	{        '-', 32, 6 },
+	{        '(', 33, 4 },
+	{        ')', 34, 4 },
+	{        '!', 35, 3 },
+	{        '?', 36, 5 },
+	{        '0', 37, 6 },
+	{        '1', 38, 3 },
+	{        '2', 39, 6 },
+	{        '3', 40, 6 },
+	{        '4', 41, 6 },
+	{        '5', 42, 6 },
+	{        '6', 43, 6 },
+	{        '7', 44, 6 },
+	{        '8', 45, 6 },
+	{        '9', 46, 6 },
+	{       '\'', 47, 3 },
+	{        ':', 48, 3 }, /* NOT IN HEIGHT TABLE */
+	{        '#', 49, 6 },
+	{        '&', 50, 5 },
+	{        '%', 51, 5 },
+	{        '<', 53, 5 },
+	{        '>', 52, 5 },
+	{        '/', 54, 6 },
+	{        '_', 55, 6 }, /* NOT IN HEIGHT TABLE */
+	{ (char)0xc8, 56, 6 },
+	{ (char)0xc9, 57, 6 },
+	{ (char)0xca, 58, 6 },
+	{ (char)0xcb, 59, 5 },
+	{ (char)0xcc, 60, 5 },
+	{ (char)0xcd, 61, 4 },
+	{ (char)0xce, 62, 5 },
+	{ (char)0xcf, 63, 5 },
+	{ (char)0xd0, 64, 2 },
+	{ (char)0xd1, 65, 6 },
+	{ (char)0xd2, 66, 6 },
+	{ (char)0xd3, 67, 5 },
+	{ (char)0xd4, 68, 6 },
+	{ (char)0xd5, 69, 5 },
+	{ (char)0xd6, 70, 6 },
+	{ (char)0xd7, 71, 5 },
+	{ (char)0xd8, 72, 6 },
+	{ (char)0xd9, 73, 5 },
+	{        '+',  0, 6 } /* NOT IN HEIGHT TABLE */
 }; // ds:0xaa51
 char g_str_s_s[6] = "%s %s"; // ds:0xab32
 char g_str_von_s_s[9] = "VON%s %s"; // ds:0xab38
@@ -199,9 +199,9 @@ static char g_grammar_bufs[5][40];	// ds:0xe4e3
 uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed int type)
 {
 	signed int *lp1;
-	signed int l2 = 0;
+	signed int bit_set = 0;
 	char *p_name;
-	signed int l4;
+	signed int tmp;
 	struct int16_t_3 lp5 = g_grammar_gender_bitmasks;
 	//int16_t lp5[3] = { {0x1000, 0x2000, 0x3000} };
 
@@ -213,14 +213,14 @@ uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed in
 
 		lp1 = &g_items_noplural[0];
 
-		while (((l4 = *lp1++) != -1) && (l4 != index));
+		while (((tmp = *lp1++) != -1) && (tmp != index));
 
-		if (l4 == index) {
+		if (tmp == index) {
 			flag += 4;
 			flag &= 0x7fff;
 			flag |= 0x4000;
 			if (flag & 1)
-				l2 = 1;
+				bit_set = 1;
 		}
 	} else {
 		p_name = g_monnames_index[index];
@@ -231,25 +231,25 @@ uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed in
 		((flag & 0x4000) ? &g_grammar_noarticle_table[0] : &g_grammar_indef_table[(flag & 0xf) * 3]);
 
 
-	sprintf(g_grammar_bufs[g_grammar_buf_no + 1], (l2 == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
+	sprintf(g_grammar_bufs[g_grammar_buf_no + 1], (bit_set == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
 		g_grammar_articles_index[lp1[((flag & 0x3000) - 1) >> 12]], GUI_name_plural(flag, p_name));
 
 	p_name = g_grammar_bufs[g_grammar_buf_no + 1];
 
 	if (*p_name == 0x20) {
 		do {
-			l4 = *(++p_name);
-			*(p_name - 1) = (signed char)l4;
+			tmp = *(++p_name);
+			*(p_name - 1) = tmp;
 
-		} while (l4 != 0);
+		} while (tmp != 0);
 	}
 
-	l4 = g_grammar_buf_no;
+	tmp = g_grammar_buf_no;
 
 	if (++g_grammar_buf_no == 4)
 		g_grammar_buf_no = 0;
 
-	return (uint8_t*)g_grammar_bufs[1 + l4];
+	return (uint8_t*)g_grammar_bufs[1 + tmp];
 }
 
 //1a7
@@ -380,12 +380,10 @@ signed int GUI_count_lines(char *str)
 	signed int last_ws;
 	char *str_loc;
 	signed int always_zero;
-	signed int lines;
+	signed int lines = 0;
 	signed int max_line_width;
 	signed int width_char;
 	signed int width_line;
-
-	lines = 0;
 
 	if (!str) return 0;
 
@@ -505,13 +503,10 @@ void GUI_print_loc_line(char *str)
 //691
 void GUI_print_string(char *str, signed int x, signed int y)
 {
-	signed int l1;
-	signed int l2;
-	signed int l3;
-	unsigned char l4;
-
-	l1 = 0;
-	l2 = 0;
+	signed int l1 = 0;
+	signed int i = 0;
+	signed int x_bak;
+	unsigned char c;
 
 	call_mouse_bg();
 
@@ -520,23 +515,23 @@ void GUI_print_string(char *str, signed int x, signed int y)
 	} else
 		if (g_dialogbox_indent_width)
 			x += g_dialogbox_indent_width;
-	l3 = x;
+	x_bak = x;
 
-	while ((l4 = str[l2++])) {
+	while ((c = str[i++])) {
 
 		/* handle line breaks */
-		if ((l4 == 0x0d) || (l4 == 0x40)) {
+		if ((c == 0x0d) || (c == '@')) {
 
 			if (++l1 == g_dialogbox_indent_height) {
 				g_textline_maxlen += g_dialogbox_indent_width;
-				l3 -= g_dialogbox_indent_width;
+				x_bak -= g_dialogbox_indent_width;
 			}
 
 			y += 7;
 			x = (g_gui_text_centered == 1) ?
-				GUI_get_first_pos_centered(str + l2, g_textline_posx, g_textline_maxlen, 0) : l3;
+				GUI_get_first_pos_centered(str + i, g_textline_posx, g_textline_maxlen, 0) : x_bak;
 
-		} else	if (l4 == '~') {
+		} else	if (c == '~') {
 
 			if (x < g_txt_tabpos[0])
 				x = g_txt_tabpos[0];
@@ -553,20 +548,17 @@ void GUI_print_string(char *str, signed int x, signed int y)
 			else if (x < g_txt_tabpos[6])
 				x = g_txt_tabpos[6];
 
-		} else if (l4 == (unsigned char)0xf0 ||
-				l4 == (unsigned char)0xf1 ||
-				l4 == (unsigned char)0xf2 ||
-				l4 == (unsigned char)0xf3)
+		} else if (c == (unsigned char)0xf0 ||	c == (unsigned char)0xf1 || c == (unsigned char)0xf2 ||	c == (unsigned char)0xf3)
 		{
 			/* changes of the text color are only control bytes */
-			g_textcolor_index = l4 - 0xf0;
+			g_textcolor_index = c - 0xf0;
 		} else	{
 
-			if (l4 == 0x3c) {
-				l4 = 0x3e;
+			if (c == '<') {
+				c = '>';
 			} else { }
 
-			x += GUI_print_char(l4, x, y);
+			x += GUI_print_char(c, x, y);
 		}
 	}
 
@@ -732,7 +724,7 @@ signed int GUI_get_first_pos_centered(char *p, const signed int x, signed int v2
 	register signed int c;
 	signed int tmp;
 
-	for (i = 0; (c = *p) && (c != 0x40) && (c != 0x0d); i += tmp) {
+	for (i = 0; (c = *p) && (c != '@') && (c != 0x0d); i += tmp) {
 		if (dir)
 			GUI_lookup_char_height(*p++, &tmp);
 		else

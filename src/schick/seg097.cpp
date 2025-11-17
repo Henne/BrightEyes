@@ -40,73 +40,73 @@ namespace M302de {
 #endif
 
 static const struct struct_char_height g_gui_char_height[67] = {
-	{ 0x20, 0x00, 0x08 },
-	{ 0x41, 0x01, 0x08 },
-	{ 0x42, 0x02, 0x08 },
-	{ 0x43, 0x03, 0x07 },
-	{ 0x44, 0x04, 0x07 },
-	{ 0x45, 0x05, 0x07 },
-	{ 0x46, 0x06, 0x07 },
-	{ 0x47, 0x07, 0x08 },
-	{ 0x48, 0x08, 0x08 },
-	{ 0x49, 0x09, 0x06 },
-	{ 0x4a, 0x0a, 0x08 },
-	{ 0x4b, 0x0b, 0x08 },
-	{ 0x4c, 0x0c, 0x06 },
-	{ 0x4d, 0x0d, 0x08 },
-	{ 0x4e, 0x0e, 0x08 },
-	{ 0x4f, 0x0f, 0x08 },
-	{ 0x50, 0x10, 0x07 },
-	{ 0x51, 0x11, 0x08 },
-	{ 0x52, 0x12, 0x08 },
-	{ 0x53, 0x13, 0x07 },
-	{ 0x54, 0x14, 0x07 },
-	{ 0x55, 0x15, 0x08 },
-	{ 0x56, 0x16, 0x08 },
-	{ 0x57, 0x17, 0x08 },
-	{ 0x58, 0x18, 0x07 },
-	{ 0x59, 0x19, 0x07 },
-	{ 0x5a, 0x1a, 0x07 },
-	{ (char)-0x72, 0x1b, 0x08 },
-	{ (char)-0x67, 0x1c, 0x08 },
-	{ (char)-0x66, 0x1d, 0x08 },
-	{ 0x2c, 0x1e, 0x05 },
-	{ 0x2e, 0x1f, 0x04 },
-	{ 0x2d, 0x20, 0x06 },
-	{ 0x28, 0x21, 0x06 },
-	{ 0x29, 0x22, 0x06 },
-	{ 0x21, 0x23, 0x04 },
-	{ 0x3f, 0x24, 0x08 },
-	{ 0x30, 0x25, 0x08 },
-	{ 0x31, 0x26, 0x06 },
-	{ 0x32, 0x27, 0x08 },
-	{ 0x33, 0x28, 0x08 },
-	{ 0x34, 0x29, 0x08 },
-	{ 0x35, 0x2a, 0x08 },
-	{ 0x36, 0x2b, 0x08 },
-	{ 0x37, 0x2c, 0x07 },
-	{ 0x38, 0x2d, 0x08 },
-	{ 0x39, 0x2e, 0x08 },
-	{ 0x27, 0x2f, 0x05 },
-	{ 0x3a, 0x30, 0x05 },
-	{ (char)-0x38, 0x31, 0x08 },
-	{ (char)-0x37, 0x32, 0x08 },
-	{ (char)-0x36, 0x33, 0x06 },
-	{ (char)-0x35, 0x34, 0x05 },
-	{ (char)-0x34, 0x35, 0x06 },
-	{ (char)-0x33, 0x36, 0x06 },
-	{ (char)-0x32, 0x37, 0x07 },
-	{ (char)-0x31, 0x38, 0x06 },
-	{ (char)-0x30, 0x39, 0x03 },
-	{ (char)-0x2f, 0x3a, 0x08 },
-	{ (char)-0x2e, 0x3b, 0x08 },
-	{ (char)-0x2d, 0x3c, 0x06 },
-	{ (char)-0x2c, 0x3d, 0x08 },
-	{ (char)-0x2b, 0x3e, 0x05 },
-	{ (char)-0x2a, 0x3f, 0x08 },
-	{ (char)-0x29, 0x40, 0x06 },
-	{ (char)-0x28, 0x41, 0x08 },
-	{ (char)-0x27, 0x42, 0x06 }
+	{        ' ',  0, 8 },
+	{        'A',  1, 8 },
+	{        'B',  2, 8 },
+	{        'C',  3, 7 },
+	{        'D',  4, 7 },
+	{        'E',  5, 7 },
+	{        'F',  6, 7 },
+	{        'G',  7, 8 },
+	{        'H',  8, 8 },
+	{        'I',  9, 6 },
+	{        'J', 10, 8 },
+	{        'K', 11, 8 },
+	{        'L', 12, 6 },
+	{        'M', 13, 8 },
+	{        'N', 14, 8 },
+	{        'O', 15, 8 },
+	{        'P', 16, 7 },
+	{        'Q', 17, 8 },
+	{        'R', 18, 8 },
+	{        'S', 19, 7 },
+	{        'T', 20, 7 },
+	{        'U', 21, 8 },
+	{        'V', 22, 8 },
+	{        'W', 23, 8 },
+	{        'X', 24, 7 },
+	{        'Y', 25, 7 },
+	{        'Z', 26, 7 },
+	{ (char)0x8e, 27, 8 },
+	{ (char)0x99, 28, 8 },
+	{ (char)0x9a, 29, 8 },
+	{        ',', 30, 5 },
+	{        '.', 31, 4 },
+	{        '-', 32, 6 },
+	{        '(', 33, 6 },
+	{        ')', 34, 6 },
+	{        '!', 35, 4 },
+	{        '?', 36, 8 },
+	{        '0', 37, 8 },
+	{        '1', 38, 6 },
+	{        '2', 39, 8 },
+	{        '3', 40, 8 },
+	{        '4', 41, 8 },
+	{        '5', 42, 8 },
+	{        '6', 43, 8 },
+	{        '7', 44, 7 },
+	{        '8', 45, 8 },
+	{        '9', 46, 8 },
+	{       '\'', 47, 5 },
+	{        ':', 48, 5 },
+	{ (char)0xc8, 49, 8 },
+	{ (char)0xc9, 50, 8 },
+	{ (char)0xca, 51, 6 },
+	{ (char)0xcb, 52, 5 },
+	{ (char)0xcc, 53, 6 },
+	{ (char)0xcd, 54, 6 },
+	{ (char)0xce, 55, 7 },
+	{ (char)0xcf, 56, 6 },
+	{ (char)0xd0, 57, 3 },
+	{ (char)0xd1, 58, 8 },
+	{ (char)0xd2, 59, 8 },
+	{ (char)0xd3, 60, 6 },
+	{ (char)0xd4, 61, 8 },
+	{ (char)0xd5, 62, 5 },
+	{ (char)0xd6, 63, 8 },
+	{ (char)0xd7, 64, 6 },
+	{ (char)0xd8, 65, 8 },
+	{ (char)0xd9, 66, 6 }
 }; // ds:0xab42
 static signed int g_gui_bool_flag = 0; // ds:0xac0b
 
@@ -116,48 +116,49 @@ signed int g_menu_input_busy;		// ds:0xe5ae
 signed int g_menu_selected;		// ds:0xe5b0
 
 #if defined(__BORLANDC__)
-void GUI_unused1(char *a1, signed int a2, signed int a3)
+void GUI_unused1(char *str, signed int x, signed int y)
 {
-	signed int l1 = 0;
-	signed int l2;
+	signed int i = 0;
+	signed int x_bak;
 	signed char c;
 
 	call_mouse_bg();
 
 	if (g_gui_text_centered == 1) {
-		a2 = GUI_get_first_pos_centered(a1, a2, g_textline_maxlen, 1);
+		x = GUI_get_first_pos_centered(str, x, g_textline_maxlen, 1);
 	}
 
-	l2 = a2;
+	x_bak = x;
 
-	while ((c = a1[l1++])) {
+	while ((c = str[i++])) {
 
-		if ((c == 0x0d) || (c == 0x40)) {
-			a3 += 10;
+		if ((c == 0x0d) || (c == '@')) {
 
-			a2 = (g_gui_text_centered == 1) ?
-				GUI_get_first_pos_centered(a1 + l1, g_textline_posx, g_textline_maxlen, 1) : l2;
+			y += 10;
+
+			x = (g_gui_text_centered == 1) ?
+				GUI_get_first_pos_centered(str + i, g_textline_posx, g_textline_maxlen, 1) : x_bak;
 
 		} else if (c == '~') {
-			if (a2 < g_txt_tabpos[0]) {
-				a2 = g_txt_tabpos[0];
-			} else if (a2 < g_txt_tabpos[1]) {
-				a2 = g_txt_tabpos[1];
-			} else if (a2 < g_txt_tabpos[2]) {
-				a2 = g_txt_tabpos[2];
-			} else if (a2 < g_txt_tabpos[3]) {
-				a2 = g_txt_tabpos[3];
-			} else if (a2 < g_txt_tabpos[4]) {
-				a2 = g_txt_tabpos[4];
-			} else if (a2 < g_txt_tabpos[5]) {
-				a2 = g_txt_tabpos[5];
-			} else if (a2 < g_txt_tabpos[6]) {
-				a2 = g_txt_tabpos[6];
+			if (x < g_txt_tabpos[0]) {
+				x = g_txt_tabpos[0];
+			} else if (x < g_txt_tabpos[1]) {
+				x = g_txt_tabpos[1];
+			} else if (x < g_txt_tabpos[2]) {
+				x = g_txt_tabpos[2];
+			} else if (x < g_txt_tabpos[3]) {
+				x = g_txt_tabpos[3];
+			} else if (x < g_txt_tabpos[4]) {
+				x = g_txt_tabpos[4];
+			} else if (x < g_txt_tabpos[5]) {
+				x = g_txt_tabpos[5];
+			} else if (x < g_txt_tabpos[6]) {
+				x = g_txt_tabpos[6];
 			}
 		} else if ((c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3)) {
 			g_textcolor_index = (unsigned char)c + 0xff10;
 		} else {
-			a2 += GUI_unused2(c, a2, a3);
+			x += GUI_unused2(c, x, y);
 		}
 	}
 
@@ -167,9 +168,7 @@ void GUI_unused1(char *a1, signed int a2, signed int a3)
 signed int GUI_unused2(const int c, const int x, const int y)
 {
 	signed int v1;
-	signed int v2;
-
-	v2 = GUI_lookup_char_height((signed char)c, &v1);
+	const signed int v2 = GUI_lookup_char_height((signed char)c, &v1);
 
 	GUI_1c2(v2, v1, x, y);
 
