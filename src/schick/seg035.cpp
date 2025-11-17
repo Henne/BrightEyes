@@ -191,12 +191,10 @@ void FIG_loot_monsters(void)
 void FIG_split_ap(void)
 {
 	signed int i;
-	signed int ap;
+	signed int ap = 0;
 	signed int known_ap;
-	signed int autofight_bak;
+	const signed int autofight_bak = g_autofight;
 
-	ap = 0;
-	autofight_bak = g_autofight;
 	g_autofight = 0;
 
 	/* calculate ap from all monsters in that fight */
