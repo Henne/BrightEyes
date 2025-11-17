@@ -612,19 +612,19 @@ void FIG_do_round(void)
 									/* goal: remove tail part */
 
 									FIG_search_obj_on_cb(hero->target_object_id + 20, &x, &y);
-									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
+									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr->cbx, fighter_ptr->cby could have been used later. */
 
 
 									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->target_object_id - 10].fighter_id);
-									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
+									/* intermediate: fighter_ptr points to the fighter entry of the enemy */
 
 									fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
-									/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
+									/* fighter_ptr now points the fighter entry of the tail part of the enemy */
 									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
 									if (fighter_ptr->object_id >= 0) {
-										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
+										/* if the id of a cb_entry has been saved in fighter.object_id (meaning that the tail part is standing on it),
 										 * restore that to the cb */
 										/* BAE-TODO: passing of the 3rd parameter is different */
 #if !defined(__BORLANDC__)
@@ -711,15 +711,15 @@ void FIG_do_round(void)
 
 
 									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->target_object_id - 10].fighter_id);
-									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
+									/* intermediate: fighter_ptr points to the fighter entry of the killed enemy */
 
 									fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
-									/* fighter_ptr now points the FIGHTER entry of the tail part of the killed enemy */
-									/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
+									/* fighter_ptr now points the fighter entry of the tail part of the killed enemy */
+									/* assert((fighter_ptr->cbx == x) && (fighter_ptr->cby == y)) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
 									if (fighter_ptr->object_id >= 0) {
-										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
+										/* if the id of a cb_entry has been saved in fighter.object_id (meaning that the tail part is standing on it),
 										 * restore that to the cb */
 #if !defined(__BORLANDC__)
 										FIG_set_cb_object(y, x, fighter_ptr->object_id);
@@ -747,7 +747,7 @@ void FIG_do_round(void)
 						 *
 						 * The following adds the missing code for self-killed enemies.
 						 * The case of escaped enemies is dealt with in seg005.cpp
-						 * It cannot be treated here as the FIGHTER entry of the tail is
+						 * It cannot be treated here as the fighter entry of the tail is
 						 * removed in seg005.cpp, which is needed to restore the object under the tail. */
 
 						if (enemy->flags.dead) { /* check 'dead' flag */
@@ -758,13 +758,13 @@ void FIG_do_round(void)
 								/* goal: remove tail part */
 
 								fighter_ptr = FIG_get_fighter(enemy->fighter_id);
-								/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
+								/* intermediate: fighter_ptr points to the fighter entry of the enemy */
 
 								fighter_ptr = FIG_get_fighter(g_fig_double_size_fighter_id_table[fighter_ptr->double_size]);
-								/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
-								/* should be true: (fighter_ptr->cbx == x) and (fighter_ptr->cby == y) */
+								/* fighter_ptr now points the fighter entry of the tail part of the enemy */
+								/* assert((fighter_ptr->cbx == x) && (fighter_ptr->cby == y)) */
 
-								/* restore the cb_entry stored at FIGHTER_OBJ_ID (meaning that the tail part is standing on it). */
+								/* restore the cb_entry stored at fighter.object_id (meaning that the tail part is standing on it). */
 								FIG_set_cb_object(fighter_ptr->cby, fighter_ptr->cbx, fighter_ptr->object_id);
 							}
 						}
