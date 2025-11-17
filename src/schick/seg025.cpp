@@ -129,7 +129,7 @@ void show_citizen(void)
 				if (!show_storytext()) {
 					GUI_print_loc_line(g_text_output_buf);
 				} else {
-					g_action = (ACTION_ID_ESC);
+					g_action = ACTION_ID_ESC;
 				}
 			} else {
 				GUI_print_loc_line(g_text_output_buf);
@@ -541,7 +541,7 @@ signed int game_options(void)
 						get_ttx(831), get_ttx(588), get_ttx(589)) - 1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 

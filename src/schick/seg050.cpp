@@ -403,10 +403,8 @@ void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
  */
 void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
 {
-	signed int done;
+	signed int done = 0;
 	signed int randval;
-
-	done = 0;
 
 	while (!done) {
 		/* leave the loop if 3 tries to increase have failed or if the spell is already at the max value 18 */
@@ -470,7 +468,6 @@ void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
 void level_up(const signed int hero_pos)
 {
 	signed int l_si;
-	signed int l_di;
 	signed char mr;
 	signed char v2;
 	signed char v3;
@@ -546,13 +543,10 @@ void level_up(const signed int hero_pos)
 			g_basepos_x = -30;
 
 			l_si = GUI_radio(get_tx2(35), 7,
-						get_ttx(412),
-						get_ttx(413),
-						get_ttx(414),
-						get_ttx(415),
-						get_ttx(416),
-						get_ttx(417),
-						get_ttx(418)) - 1;
+					get_ttx(412), get_ttx(413),
+					get_ttx(414), get_ttx(415),
+					get_ttx(416), get_ttx(417),
+					get_ttx(418)) - 1;
 
 			if (hero->attrib[l_si].normal >= 20) {
 
@@ -588,13 +582,10 @@ void level_up(const signed int hero_pos)
 		do {
 
 			l_si = GUI_radio(get_tx2(36), 7,
-						get_ttx(419),
-						get_ttx(420),
-						get_ttx(421),
-						get_ttx(422),
-						get_ttx(423),
-						get_ttx(424),
-						get_ttx(425)) - 1;
+					get_ttx(419), get_ttx(420),
+					get_ttx(421), get_ttx(422),
+					get_ttx(423), get_ttx(424),
+					get_ttx(425)) - 1;
 
 			if (hero->attrib[l_si + 7].normal <= 2) {
 
@@ -944,34 +935,35 @@ void level_up(const signed int hero_pos)
 		}
 
 	} else {
+		signed int spta_convs;
 
-		if ((hero->typus >= HERO_TYPE_HEXE) && (l_di = g_levelup_spta_conv[hero->typus - 7]) && GUI_bool(get_tx2(45)))
+		if ((hero->typus >= HERO_TYPE_HEXE) && (spta_convs = g_levelup_spta_conv[hero->typus - 7]) && GUI_bool(get_tx2(45)))
 		{
 
-			sprintf(g_dtp2, get_tx2(46), l_di);
+			sprintf(g_dtp2, get_tx2(46), spta_convs);
 
 			i = GUI_input(g_dtp2, 1);
 
 			if (i > 0) {
 
-				if (i > l_di) {
-					i = l_di;
+				if (i > spta_convs) {
+					i = spta_convs;
 				}
-				l_di -= i;
+				spta_convs -= i;
 
 				hero->saved_spell_increases -= i;
 				hero->saved_skill_increases += i;
 
 			} else {
 
-				sprintf(g_dtp2, get_tx2(47), l_di);
+				sprintf(g_dtp2, get_tx2(47), spta_convs);
 
 				i = GUI_input(g_dtp2, 1);
 
 				if (i > 0) {
 
-					if (i > l_di) {
-						i = l_di;
+					if (i > spta_convs) {
+						i = spta_convs;
 					}
 
 					hero->saved_spell_increases += i;

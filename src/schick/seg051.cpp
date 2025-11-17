@@ -131,7 +131,7 @@ void do_wildcamp(void)
 						get_ttx(814)) -1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -330,7 +330,7 @@ void do_wildcamp(void)
 					l8++;
 					l6--;
 
-					if (l_si == gs_camp_incident && l4 / 2 >= l5) {
+					if ((l_si == gs_camp_incident) && (l4 / 2 >= l5)) {
 						done = 1;
 					}
 
@@ -498,7 +498,7 @@ signed int gather_herbs(struct struct_hero *hero, const signed int hours, const 
 signed int replenish_stocks(signed int mod, const signed int tries)
 {
 	signed int hero_pos;
-	signed int l_di;
+	signed int i;
 	signed int retval = 0;
 	signed int j;
 	struct struct_hero* hero;
@@ -548,7 +548,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 						/* fill up all waterskins and remove thirst of all living heroes in the current group */
 						hero2 = get_hero(0);
 
-						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
+						for (i = 0; i <= 6; i++, hero2++) {
 
 							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_id == gs_active_group_id) &&
 								!hero2->flags.dead)
@@ -578,7 +578,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 
 						/* remove hunger of all living heroes in the current group */
 						hero2 = get_hero(0);
-						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
+						for (i = 0; i <= 6; i++, hero2++) {
 
 							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_id == gs_active_group_id) &&
 								!hero2->flags.dead)

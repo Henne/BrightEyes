@@ -129,7 +129,7 @@ void show_automap(void)
 				}
 
 				if (l_di != -2) {
-					g_action = (l_di + ACTION_ID_ICON_1);
+					g_action = l_di + ACTION_ID_ICON_1;
 				}
 			}
 

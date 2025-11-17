@@ -577,7 +577,7 @@ static uint8_t* read_music_driver(const char* fname)
 static signed int prepare_midi_playback(const signed int sequence)
 {
 #if defined(__BORLANDC__)
-	uint16_t l_si;
+	uint16_t answer;
 	signed int bank;
 	signed int patch;
 	uint8_t* ptr;
@@ -586,10 +586,10 @@ static signed int prepare_midi_playback(const signed int sequence)
 
 		if ((g_ail_sequence = AIL_register_sequence(g_ail_music_driver_id, g_ail_midi_buffer, sequence, g_ail_state_table, 0)) != -1) {
 
-			while ( (l_si = AIL_timbre_request(g_ail_music_driver_id, g_ail_sequence)) != (uint16_t)-1)
+			while ((answer = AIL_timbre_request(g_ail_music_driver_id, g_ail_sequence)) != (uint16_t)-1)
 			{
-				bank = l_si >> 8;
-				patch = l_si & 0xff;
+				bank = answer >> 8;
+				patch = answer & 0xff;
 
 				if ( (ptr = prepare_timbre(bank, patch))) {
 					AIL_install_timbre(g_ail_music_driver_id, bank, patch, ptr);
@@ -3326,7 +3326,7 @@ static void check_level_up(void)
 
 void update_travelmap(void)
 {
-	signed int l_si = 0;
+	signed int in_rect = 0;
 	uint8_t* p1;
 	uint8_t* p2;
 	uint8_t* p3;
@@ -3350,16 +3350,16 @@ void update_travelmap(void)
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			call_mouse_bg();
-			l_si = 1;
+			in_rect = 1;
 		}
 
 		do_pic_copy(0);
 
-		if (l_si) {
+		if (in_rect) {
 			call_mouse();
 		}
 
-		g_trv_menu_selection = l_si = 0;
+		g_trv_menu_selection = in_rect = 0;
 	}
 
 	if (g_current_town_over) {
@@ -3373,18 +3373,18 @@ void update_travelmap(void)
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			call_mouse_bg();
-			l_si = 1;
+			in_rect = 1;
 		}
 
 		if (g_current_town_over) {
 			do_pic_copy(0);
 		}
 
-		if (l_si) {
+		if (in_rect) {
 			call_mouse();
 		}
 
-		l_si = g_current_town_over = 0;
+		in_rect = g_current_town_over = 0;
 	}
 
 	if (g_current_town_anix) {
@@ -3398,19 +3398,19 @@ void update_travelmap(void)
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			call_mouse_bg();
-			l_si = 1;
+			in_rect = 1;
 		}
 
 		do_save_rect();
 
-		if (l_si) {
+		if (in_rect) {
 			call_mouse();
 		}
 
 		g_current_town_over = 1;
 		g_current_town_overx = g_current_town_anix;
 		g_current_town_overy = g_current_town_aniy;
-		l_si = 0;
+		in_rect = 0;
 
 		if (g_menu_input_busy && gs_show_travel_map) {
 
@@ -3426,20 +3426,20 @@ void update_travelmap(void)
 			if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 			{
 				call_mouse_bg();
-				l_si = 1;
+				in_rect = 1;
 			}
 
 			do_save_rect();
 			g_pic_copy.src = p3 + 100 * g_map_townmark_state;
 			do_pic_copy(2);
 
-			if (l_si) {
+			if (in_rect) {
 				call_mouse();
 			}
 
 			g_trv_menu_selection = g_menu_selected;
 
-			l_si = 0;
+			in_rect = 0;
 		}
 
 		g_pic_copy.x1 = g_current_town_anix - 4;
@@ -3451,12 +3451,12 @@ void update_travelmap(void)
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			call_mouse_bg();
-			l_si = 1;
+			in_rect = 1;
 		}
 
 		do_pic_copy(2);
 
-		if (l_si) {
+		if (in_rect) {
 			call_mouse();
 		}
 
@@ -5033,18 +5033,18 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 #if defined(__BORLANDC__)
 signed int unused_cruft(void)
 {
-	signed int l_si;
+	signed int hero_pos;
 
 	if (!gs_total_hero_counter) {
 		return -1;
 	}
 
 	do {
-		l_si = random_schick(6) - 1;
+		hero_pos = random_schick(6) - 1;
 
-	} while (!get_hero(l_si)->typus || (get_hero(l_si)->group_id != gs_active_group_id));
+	} while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_active_group_id));
 
-	return l_si;
+	return hero_pos;
 }
 #endif
 
@@ -5563,7 +5563,7 @@ void check_group(void)
 
 int main(int argc, char** argv)
 {
-	signed int l_si;
+	signed int argv1_len;
 	signed int answer;
 	int32_t l3;
 	signed int savegame;
@@ -5614,15 +5614,15 @@ int main(int argc, char** argv)
 
 			len = strlen(argv[1]);
 
-			l_si = 0;
+			argv1_len = 0;
 
 			g_cd_skipmagic = 1;
-			while (l_si < len) {
+			while (argv1_len < len) {
 
 
 				g_cd_skipmagic = argv[1][0] * g_cd_skipmagic;
 				argv[1]++;
-				l_si++;
+				argv1_len++;
 			}
 #endif
 		}

@@ -14,7 +14,8 @@ signed int GUI_lookup_char_height(const signed char c, signed int *p);
 void GUI_1c2(const signed int, const signed int, const signed int, const signed int);
 #endif
 //2f
-signed int GUI_enter_text(char*, signed int, signed int, signed int, signed int);
+/* should be static */
+signed int GUI_enter_string(char*, signed int, const signed int, const signed int, const signed int);
 //0x34
 signed int GUI_input(char*, const signed int);
 //0x39

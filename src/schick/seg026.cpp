@@ -620,14 +620,14 @@ signed int load_game_state(void)
 	signed int i;
 	signed int handle;
 	signed int answer;
-	signed int l1;
+	signed int sl_bak;
 	HugePt p_status_start;
 	HugePt p_status_end;
 	signed int status_length;
-	signed int l2;
-	signed int l3;
+	signed int done;
+	signed int length_hero;
 	signed int retval;
-	signed int l4;
+	signed int ani_bak;
 	struct struct_hero* hero_i;
 	signed char version[4];
 	struct ffblk blk;
@@ -659,27 +659,27 @@ signed int load_game_state(void)
 		call_mouse_bg();
 
 		/* something ani related */
-		l1 = g_update_statusline;
+		sl_bak = g_update_statusline;
 		g_update_statusline = 0;
 
-		l4 = g_ani_enabled;
+		ani_bak = g_ani_enabled;
 		g_ani_enabled = 0;
 
 		/* delete every file TEMP\\*.* */
 		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard);
 
 #if defined(__BORLANDC__)
-		l2 = findfirst(g_text_output_buf, &blk, 0);
+		done = findfirst(g_text_output_buf, &blk, 0);
 
-		if (l2 == 0) {
+		if (done == 0) {
 
 			do {
 				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk))+ 30);
 				unlink(g_text_output_buf);
 
-				l2 = findnext(&blk);
+				done = findnext(&blk);
 
-			} while (l2 == 0);
+			} while (done == 0);
 		}
 #endif
 
@@ -735,9 +735,9 @@ signed int load_game_state(void)
 		hero_i = (struct struct_hero*)g_renderbuf_ptr;
 
 		do {
-			l3 = _read(handle_sg, (uint8_t*)hero_i, sizeof(struct struct_hero));
+			length_hero = _read(handle_sg, (uint8_t*)hero_i, sizeof(struct struct_hero));
 
-			if (l3 != 0) {
+			if (length_hero != 0) {
 
 				prepare_chr_name(name, (char*)hero_i);
 
@@ -758,15 +758,15 @@ signed int load_game_state(void)
 				}
 			}
 
-		} while (l3 != 0);
+		} while (length_hero != 0);
 
 		close(handle_sg);
 
 #if defined(__BORLANDC__)
 		/* search for "*.CHR" */
-		l2 = findfirst(g_all_chr_wildcard, &blk, 0);
+		done = findfirst(g_all_chr_wildcard, &blk, 0);
 
-		while (l2 == 0) {
+		while (done == 0) {
 
 			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
 
@@ -784,7 +784,7 @@ signed int load_game_state(void)
 
 			close(handle_sg);
 
-			l2 = findnext(&blk);
+			done = findnext(&blk);
 		}
 #endif
 
@@ -812,8 +812,8 @@ signed int load_game_state(void)
 
 		load_area_description(2);
 
-		g_update_statusline = l1;
-		g_ani_enabled = l4;
+		g_update_statusline = sl_bak;
+		g_ani_enabled = ani_bak;
 
 		call_mouse();
 	}
@@ -838,7 +838,7 @@ signed int save_game_state(void)
 	unsigned int status_length;
 	signed int handle;
 	signed int tw_bak;
-	signed int l1;
+	signed int done;
 	signed int slot;
 	uint32_t filepos;
 	uint32_t filepos2;
@@ -1015,10 +1015,10 @@ signed int save_game_state(void)
 
 			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_fnames_v302de[tw_bak]);
 
-			l1 = findfirst(g_text_output_buf, &blk, 0);
+			done = findfirst(g_text_output_buf, &blk, 0);
 
 
-			if (l1 == 0) {
+			if (done == 0) {
 
 				handle = load_archive_file(tw_bak + 0x8000);
 				g_saved_files_buf[tw_bak] = get_readlength2(handle);
@@ -1048,7 +1048,7 @@ signed int save_game_state(void)
 		lseek(handle_sg, filepos, 0);
 		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard2);
 
-		l1 = findfirst(g_text_output_buf, &blk, 0);
+		done = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
 			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
@@ -1068,9 +1068,9 @@ signed int save_game_state(void)
 				return 0;
 			}
 
-			l1 = findnext(&blk);
+			done = findnext(&blk);
 
-		} while (l1 == 0);
+		} while (done == 0);
 
 		close(handle_sg);
 
@@ -1185,7 +1185,7 @@ signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
 {
 #if defined(__BORLANDC__)
 	signed int count = 0;
-	signed int l_di;
+	signed int done;
 	signed int handle;
 	struct struct_hero *hero;
 	struct ffblk blk;
@@ -1194,9 +1194,9 @@ signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
 
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard3);
 
-	l_di = findfirst(g_text_output_buf, &blk, 0);
+	done = findfirst(g_text_output_buf, &blk, 0);
 
-	if (!l_di) {
+	if (!done) {
 
 		do {
 			/* create the CHR filename */
@@ -1215,9 +1215,9 @@ signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
 				count++;
 			}
 
-			l_di = findnext(&blk);
+			done = findnext(&blk);
 
-		} while (!l_di);
+		} while (!done);
 
 		return count;
 	} else {

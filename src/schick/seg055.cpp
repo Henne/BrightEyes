@@ -362,7 +362,7 @@ void do_merchant(void)
 			answer = GUI_radio(get_ttx(430), 4, get_ttx(431), get_ttx(432),	get_ttx(343), get_ttx(434)) - 1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 

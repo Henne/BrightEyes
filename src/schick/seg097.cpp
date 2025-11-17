@@ -208,41 +208,43 @@ void GUI_1c2(const signed int index, const signed int v2, const signed int x, co
 }
 #endif
 
-//static
-signed int GUI_enter_text(char* dst, signed int x, signed int y, signed int num, signed int zero)
+//should be static
+signed int GUI_enter_string(char* dst, signed int x, const signed int y, const signed int num, const signed int zero)
 {
-	signed int di;
+	signed int x_pos;
 	register signed int si;
 	signed int pos;
 	signed int c;
-	char *dst_start;
+	char *dst_start = dst;
 	signed int length;
 
-	dst_start = dst;
 	call_mouse_bg();
-	di = x;
+
+	x_pos = x;
+
 	pos = 0;
+
 	length = strlen((char*)dst);
 
 	if (zero == 0) {
 		for (si = 0; si < num; si++) {
 			if ((g_gui_entering_savegame) && (length >= si)) {
-				GUI_print_char(0x20, di, y);
-				GUI_print_char(*dst, di, y);
+				GUI_print_char(' ', x_pos, y);
+				GUI_print_char(*dst, x_pos, y);
 				pos++;
 				dst++;
-				di += 6;
-				x = di;
+				x_pos += 6;
+				x = x_pos;
 			} else {
-				GUI_print_char(0x20, di, y);
-				GUI_print_char(0x5f, di, y);
-				di += 6;
+				GUI_print_char(' ', x_pos, y);
+				GUI_print_char('_', x_pos, y);
+				x_pos += 6;
 			}
 		}
-		di = x;
+		x_pos = x;
 	} else {
-		GUI_print_char(0x20, di, y);
-		GUI_print_char(0x5f, di, y);
+		GUI_print_char(' ', x_pos, y);
+		GUI_print_char('_', x_pos, y);
 	}
 
 	flush_keyboard_queue();
@@ -280,20 +282,19 @@ dummy:
 			if (pos > 0) {
 
 				if ((zero == 1) && (pos != num)) {
-					GUI_print_char(0x20, di, y);
+					GUI_print_char(0x20, x_pos, y);
 				}
 
-				di -= 6;
+				x_pos -= 6;
 				pos--;
 				dst--;
-				GUI_print_char(0x20, di, y);
-				GUI_print_char(0x5f, di, y);
+				GUI_print_char(0x20, x_pos, y);
+				GUI_print_char(0x5f, x_pos, y);
 			}
 		} else
 
 		/* check if character is valid */
-		if (((c >= 0x20) && (c <= 0x7a)) ||
-			(c == 0x81) || (c == 0x84) || (c == 0x94))
+		if (((c >= 0x20) && (c <= 0x7a)) || (c == 0x81) || (c == 0x84) || (c == 0x94))
 		{
 			if (isalpha(c)) c = toupper(c);
 
@@ -310,27 +311,27 @@ dummy:
 			/* are we at the end of the input field ? */
 			if (pos == num) {
 				dst--;
-				di -= 6;
+				x_pos -= 6;
 				pos--;
 			}
 
 			*dst++ = (unsigned char)c;
-			GUI_print_char(0x20, di, y);
-			GUI_print_char((unsigned char)c, di, y);
-			di += 6;
+			GUI_print_char(' ', x_pos, y);
+			GUI_print_char((unsigned char)c, x_pos, y);
+			x_pos += 6;
 			pos++;
 
 			if ((zero == 1) && (pos != num)) {
-				GUI_print_char(0x20, di, y);
-				GUI_print_char(0x5f, di, y);
+				GUI_print_char(' ', x_pos, y);
+				GUI_print_char('_', x_pos, y);
 			}
 		}
 	}
 
 	if (zero == 0) {
 		while (pos < num) {
-			GUI_print_char(0x20, di, y);
-			di += 6;
+			GUI_print_char(' ', x_pos, y);
+			x_pos += 6;
 			pos++;
 		}
 	}
@@ -402,7 +403,7 @@ signed int GUI_input(char *str, const signed int digits)
 	signed int l6;
 	signed int usl_bak;
 	signed int lines;
-	signed int l_di;
+	signed int width;
 
 	usl_bak = g_update_statusline;
 	g_update_statusline = 0;
@@ -419,11 +420,11 @@ signed int GUI_input(char *str, const signed int digits)
 	l4 = g_textline_posy;
 	l5 = g_textline_maxlen;
 
-	l_di = (g_textbox_width * 32) + 32;
-	g_textbox_pos_x = ((signed int)(320u - l_di) >> 1) + g_basepos_x;
+	width = (g_textbox_width * 32) + 32;
+	g_textbox_pos_x = ((signed int)(320u - width) >> 1) + g_basepos_x;
 
 	g_textline_posx = g_textbox_pos_x + 5;
-	g_textline_maxlen = l_di - 8;
+	g_textline_maxlen = width - 8;
 
 	lines = GUI_count_lines(str);
 
@@ -439,7 +440,7 @@ signed int GUI_input(char *str, const signed int digits)
 
 	call_mouse_bg();
 
-	GUI_draw_radio_bg(lines, 0, l_di, l2);
+	GUI_draw_radio_bg(lines, 0, width, l2);
 
 	GUI_print_header(str);
 
@@ -448,7 +449,7 @@ signed int GUI_input(char *str, const signed int digits)
 	call_mouse();
 
 	if (digits != 0) {
-		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed int)(l_di - digits * 6) >> 1), g_textbox_pos_y + lines * 8 -2, digits, 0) != -1) {
+		if (GUI_enter_string(g_text_input_buf, g_textbox_pos_x + ((signed int)(width - digits * 6) >> 1), g_textbox_pos_y + lines * 8 -2, digits, 0) != -1) {
 			retval = (signed int)atol(g_text_input_buf);
 		} else {
 			retval = -1;
@@ -471,7 +472,7 @@ signed int GUI_input(char *str, const signed int digits)
 
 	call_mouse_bg();
 
-	GUI_copy_smth(l_di, l2);
+	GUI_copy_smth(width, l2);
 
 	call_mouse();
 
@@ -548,36 +549,35 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 	signed int tw_bak;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed int l7;
-	signed int l8;
-	signed int l9;
+	signed int x_bak;
+	signed int y_bak;
+	signed int ml_bak;
 	signed int l10;
 	signed int retval;
-	signed int l11;
+	signed int wc_bak;
 	signed int usl_bak;
-	signed int l13;
+	const signed int ani_bak = g_ani_enabled;
 	signed int lines;
-	signed int l_di;
+	signed int width;
 
-	l13 = g_ani_enabled;
 	usl_bak = g_update_statusline;
 	g_update_statusline = 0;
 
 	disable_ani();
 
-	l11 = g_wallclock_update;
+	wc_bak = g_wallclock_update;
 	g_wallclock_update = 0;
 	g_dialogbox_lock = 1;
-	l7 = g_textline_posx;
-	l8 = g_textline_posy;
-	l9 = g_textline_maxlen;
+	x_bak = g_textline_posx;
+	y_bak = g_textline_posy;
+	ml_bak = g_textline_maxlen;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 9;
 
-	l_di = g_textbox_width * 32 + 32;
-	g_textbox_pos_x = ((signed int)(320 - l_di) >> 1) + g_basepos_x;
+	width = g_textbox_width * 32 + 32;
+	g_textbox_pos_x = ((signed int)(320 - width) >> 1) + g_basepos_x;
 	g_textline_posx = g_textbox_pos_x + 5;
-	g_textline_maxlen = l_di - 8;
+	g_textline_maxlen = width - 8;
 	l10 = g_txt_tabpos[0];
 	g_txt_tabpos[0] = (g_textline_posx + g_textline_maxlen - 24);
 	g_dialogbox_indent_width = 40;
@@ -599,7 +599,7 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 	call_mouse_bg();
 	get_textcolor(&fg_bak, &bg_bak);
 
-	GUI_draw_radio_bg(lines, (signed char)options, l_di, l5);
+	GUI_draw_radio_bg(lines, (signed char)options, width, l5);
 
 	if (picture != 0) {
 
@@ -648,28 +648,28 @@ signed int GUI_dialogbox(uint8_t* picture, char *name, char *text, signed int op
 
 	va_end(arguments);
 
-	retval = GUI_menu_input((signed char)options, lines + 1, l_di);
+	retval = GUI_menu_input((signed char)options, lines + 1, width);
 
-	GUI_copy_smth(l_di, l5);
+	GUI_copy_smth(width, l5);
 
 	call_mouse();
 	set_textcolor(fg_bak, bg_bak);
 
-	g_textline_posx = l7;
-	g_textline_posy = l8;
-	g_textline_maxlen = l9;
+	g_textline_posx = x_bak;
+	g_textline_posy = y_bak;
+	g_textline_maxlen = ml_bak;
 
 	g_textbox_width = tw_bak;
 
 	g_txt_tabpos[0] = l10;
 
-	g_wallclock_update = l11;
+	g_wallclock_update = wc_bak;
 
 	g_action = g_dialogbox_lock = 0;
 
 	g_update_statusline = usl_bak;
 
-	if (l13 != 0)
+	if (ani_bak != 0)
 		init_ani(2);
 
 	return retval;
@@ -683,7 +683,7 @@ signed int GUI_menu_input(const signed int positions, const signed int h_lines, 
 	signed int l3;
 	signed int l4;
 	signed int l5 = -1;
-	signed int l6;
+	signed int height;
 	signed int done = 0;
 	signed int retval;
 
@@ -691,11 +691,11 @@ signed int GUI_menu_input(const signed int positions, const signed int h_lines, 
 	g_menu_selected += g_menu_default_select;
 
 	if (positions != 0) {
-		l6 = h_lines * 8;
+		height = h_lines * 8;
 		l3 = g_mouse_posx;
 		l4 = g_mouse_posy;
 		g_mouse_posx_bak = g_mouse_posx = g_textbox_pos_x + 90;
-		l1 = g_textbox_pos_y + l6;
+		l1 = g_textbox_pos_y + height;
 
 		g_mouse_posy_bak = g_mouse_posy = l2 = l1 + 8 * g_menu_default_select;
 
@@ -703,9 +703,9 @@ signed int GUI_menu_input(const signed int positions, const signed int h_lines, 
 
 		g_mouse_posx_max = g_textbox_pos_x + width - 16;
 		g_mouse_posx_min = g_textbox_pos_x;
-		g_mouse_posy_min = g_textbox_pos_y + l6;
+		g_mouse_posy_min = g_textbox_pos_y + height;
 
-		g_mouse_posy_max = l6 + g_textbox_pos_y - 1 + positions * 8;
+		g_mouse_posy_max = height + g_textbox_pos_y - 1 + positions * 8;
 		call_mouse();
 
 		g_mouse1_event2 = g_mouse_leftclick_event = g_mouse_rightclick_event = 0;
@@ -793,17 +793,23 @@ signed int GUI_menu_input(const signed int positions, const signed int h_lines, 
 signed int GUI_radio(char *header, signed char options, ...)
 {
 	signed int i;
-	signed int l_di;
+	signed int lines_header;
 
 	va_list arguments;
-	signed int l3, l4, l5, l6;
+	signed int l3;
+	signed int l4;
+	signed int lines;
+	signed int height;
 	signed int fg_bak;
 	signed int bg_bak;
-	signed int l7, l8, l9, l10, l11;
+	signed int x_bak;
+	signed int y_bak;
+	signed int ml_bak;
+	signed int l10;
+	signed int width;
 	signed int retval;
-	signed int usl_bak;
+	const signed int usl_bak = g_update_statusline;
 
-	usl_bak = g_update_statusline;
 	g_update_statusline = 0;
 
 	if (!options) {
@@ -812,34 +818,34 @@ signed int GUI_radio(char *header, signed char options, ...)
 	}
 
 	g_dialogbox_lock = 1;
-	l7 = g_textline_posx;
-	l8 = g_textline_posy;
-	l9 = g_textline_maxlen;
+	x_bak = g_textline_posx;
+	y_bak = g_textline_posy;
+	ml_bak = g_textline_maxlen;
 
-	l11 = g_textbox_width * 32 + 32;
-	g_textbox_pos_x = ((320 - l11) >> 1) + g_basepos_x;
+	width = g_textbox_width * 32 + 32;
+	g_textbox_pos_x = ((320 - width) >> 1) + g_basepos_x;
 	g_textline_posx = g_textbox_pos_x + 5;
-	g_textline_maxlen = l11 - 8;
+	g_textline_maxlen = width - 8;
 
 	l10 = g_txt_tabpos[0];
 	g_txt_tabpos[0] = g_textline_posx + g_textline_maxlen - 24;
 
-	l_di = GUI_count_lines(header);
-	l5 = l_di + options;
-	l6 = (l5 + 2) * 8;
-	g_textbox_pos_y = ((200 - l6 + 2) >> 1) + g_basepos_y;
+	lines_header = GUI_count_lines(header);
+	lines = lines_header + options;
+	height = (lines + 2) * 8;
+	g_textbox_pos_y = ((200 - height + 2) >> 1) + g_basepos_y;
 	g_textline_posy = g_textbox_pos_y + 7;
 
 	call_mouse_bg();
 	get_textcolor(&fg_bak, &bg_bak);
 
-	GUI_draw_radio_bg(l_di, options, l11, l6);
+	GUI_draw_radio_bg(lines_header, options, width, height);
 
-	if (l_di != 0)
+	if (lines_header != 0)
 		GUI_print_header(header);
 
 	l3 = g_textline_posx + 8;
-	l4 = g_textbox_pos_y + (l_di + 1) * 8;
+	l4 = g_textbox_pos_y + (lines_header + 1) * 8;
 
 	va_start(arguments, options);
 	for (i = 0; i < options; l4 += 8, i++) {
@@ -855,15 +861,15 @@ signed int GUI_radio(char *header, signed char options, ...)
 			set_textcolor(0xff, 0xdf);
 	}
 
-	retval = GUI_menu_input(options, l_di + 1, l11);
+	retval = GUI_menu_input(options, lines_header + 1, width);
 
-	GUI_copy_smth(l11, l6);
+	GUI_copy_smth(width, height);
 	call_mouse();
 	set_textcolor(fg_bak, bg_bak);
 
-	g_textline_posx = l7;
-	g_textline_posy = l8;
-	g_textline_maxlen = l9;
+	g_textline_posx = x_bak;
+	g_textline_posy = y_bak;
+	g_textline_maxlen = ml_bak;
 	g_txt_tabpos[0] = l10;
 	g_action = g_dialogbox_lock = 0;
 	g_update_statusline = usl_bak;
