@@ -6,9 +6,9 @@ In this directory are small helpers to prepare manual and automated testing.
 ### Preparation (disassemble.sh)
 This needs only to be done once, but it needs to be done the right way.
 1. make sure you have installed: Nasm, Python3, DOSBox
-2. place an executable into this directory, e.g. GAME.EXE
+2. place an executable into ../orig/, e.g. GAME.EXE
 3. edit disassemble.sh (GAMEFILE, offsets/lengths of EACH segment inside GAME.EXE) MAGIC!!!
-4. run it, check in ../TEMP/disasm_orig for the disassembly files
+4. run it from the tools drectory, check in ../TEMP/disasm_orig for the disassembly files
 
 ### Manual check (compile.sh)
 This should be used while working on a specific segment.
