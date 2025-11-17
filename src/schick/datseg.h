@@ -1592,12 +1592,12 @@ extern signed char g_finalfight_tumult;		//ds:0x5f30; seg033, seg041
 extern signed char g_autofight_magic;		//ds:0x5f31; seg033, seg036
 extern const signed int g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
 
-extern signed char g_gfxtab_double_size_extra_ox[4];		//ds:0x6028; seg005, seg039
-extern signed char g_gfxtab_double_size_extra_oy[4];		//ds:0x602c; seg005, seg039
-extern signed char g_gfxtab_double_size_x1[4];			//ds:0x6030; seg005, seg039, seg043
-extern signed char g_gfxtab_double_size_x2[4];			//ds:0x6034; seg005, seg039, seg043
-extern signed char g_gfxtab_double_size_extra_x1[4];		//ds:0x6038; seg005, seg039
-extern signed char g_gfxtab_double_size_extra_x2[4];		//ds:0x603c; seg005, seg039
+extern const signed char g_gfxtab_double_size_extra_ox[4];		//ds:0x6028; seg005, seg039
+extern const signed char g_gfxtab_double_size_extra_oy[4];		//ds:0x602c; seg005, seg039
+extern const signed char g_gfxtab_double_size_x1[4];			//ds:0x6030; seg005, seg039, seg043
+extern const signed char g_gfxtab_double_size_x2[4];			//ds:0x6034; seg005, seg039, seg043
+extern const signed char g_gfxtab_double_size_extra_x1[4];		//ds:0x6038; seg005, seg039
+extern const signed char g_gfxtab_double_size_extra_x2[4];		//ds:0x603c; seg005, seg039
 extern const signed int g_gfxtab_obj_offset_x[63];	//ds:0x6060; seg032, seg040
 extern const signed int g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
 

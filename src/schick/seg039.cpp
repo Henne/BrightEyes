@@ -22,14 +22,14 @@
 namespace M302de {
 #endif
 
-static struct struct_point g_gfxtab_double_size_extra_cb[4] = {
+static const struct struct_point g_gfxtab_double_size_extra_cb[4] = {
 	{ -1,  0 }, {  0,  1 }, {  1,  0 }, {  0, -1 } }; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
-signed char g_gfxtab_double_size_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
-signed char g_gfxtab_double_size_extra_oy[4] = { 5, 5, -5, -5 }; // ds:0x602c, { 10,-10,-5,-5 }
-signed char g_gfxtab_double_size_x1[4] = { 16, 0, 0, 16 }; // ds:0x6030
-signed char g_gfxtab_double_size_x2[4] = { 31, 15, 15, 31 }; // ds:0x6034
-signed char g_gfxtab_double_size_extra_x1[4] = { 0, 16, 16, 0 }; // ds:0x6038
-signed char g_gfxtab_double_size_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0x603c
+const signed char g_gfxtab_double_size_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
+const signed char g_gfxtab_double_size_extra_oy[4] = { 5, 5, -5, -5 }; // ds:0x602c, { 10,-10,-5,-5 }
+const signed char g_gfxtab_double_size_x1[4] = { 16, 0, 0, 16 }; // ds:0x6030
+const signed char g_gfxtab_double_size_x2[4] = { 31, 15, 15, 31 }; // ds:0x6034
+const signed char g_gfxtab_double_size_extra_x1[4] = { 0, 16, 16, 0 }; // ds:0x6038
+const signed char g_gfxtab_double_size_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0x603c
 
 
 /**
@@ -197,57 +197,58 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 /**
  * \brief   places an object on the chessboard
  *
- * \param   x           X-Coordinate
- * \param   y           Y-Coordinate
- * \param   object      object ID
- * \param   type        typus for heroes, monster_id for enemies
- * \param   dir         looking direction
- * \return              1 if the placement was successful or 0 if not.
+ * \param[in]   x           X-Coordinate
+ * \param[in]   y           Y-Coordinate
+ * \param[in]   object_id   object ID
+ * \param[in]   type        typus for heroes, monster_id for enemies
+ * \param[in]   dir         looking direction
+ * \return  1 if the placement was successful or 0 if not.
  */
-signed int place_obj_on_cb(const signed int x, const signed int y, const signed int object, const signed int type, const signed char dir)
+signed int place_obj_on_cb(const signed int x, const signed int y, const signed int object_id, const signed int type, const signed char dir)
 {
-	signed int i;
-
 	/* check if an object is already on that field
 		check if the object no is valid */
-	if ((get_cb_val(x, y) > 0) || (object < 0)) {
+	if ((get_cb_val(x, y) > 0) || (object_id < 0)) {
 		return 0;
 	}
 
 	/* check if the object is decoration */
-	if (object >= 50) {
+	if (object_id >= 50) {
+
+		signed int i;
+
 		if ((signed char)type == 57 || (signed char)type == 56 || (signed char)type == 62) {
 
-			FIG_set_cb_object(y + 1, x, object);
-			FIG_set_cb_object(y + 1, x - 1, object);
-			FIG_set_cb_object(y, x - 1, object);
+			FIG_set_cb_object(y + 1, x, object_id);
+			FIG_set_cb_object(y + 1, x - 1, object_id);
+			FIG_set_cb_object(y, x - 1, object_id);
 
 		} else if ((signed char)type == 9) {
 
-			FIG_set_cb_object(y, x + 1, object);
-			FIG_set_cb_object(y - 1, x, object);
+			FIG_set_cb_object(y, x + 1, object_id);
+			FIG_set_cb_object(y - 1, x, object_id);
 
 		} else if ((signed char)type == 43 || (signed char)type == 44 || (signed char)type == 48 ||
 				(signed char)type == 49 || (signed char)type == 50 || (signed char)type == 51 ||
 				(signed char)type == 52 || (signed char)type == 53 || (signed char)type == 54 ||
 				(signed char)type == 55) {
 
-			FIG_set_cb_object(y + 1, x, object);
+			FIG_set_cb_object(y + 1, x, object_id);
 
 		} else if ((signed char)type == 60) {
 
 			for (i = 0; i < 7; i++)
-				FIG_set_cb_object(y + i, x, object);
+				FIG_set_cb_object(y + i, x, object_id);
 
 		} else if ((signed char)type == 61) {
 
 			for (i = 0; i < 7; i++)
-				FIG_set_cb_object(y, x + i, object);
+				FIG_set_cb_object(y, x + i, object_id);
 		}
 
 	} else {
 		/* if object is an enemy and needs 2 fields */
-		if (object >= 10 && is_in_byte_array(type, g_double_size_gfx_id_table))
+		if (object_id >= 10 && is_in_byte_array(type, g_double_size_gfx_id_table))
 		{
 
 			/* check if field is empty */
@@ -260,12 +261,12 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 				return 0;
 			}
 
-			FIG_set_cb_object(y + g_gfxtab_double_size_extra_cb[dir].y, x + g_gfxtab_double_size_extra_cb[dir].x, object + 20);
+			FIG_set_cb_object(y + g_gfxtab_double_size_extra_cb[dir].y, x + g_gfxtab_double_size_extra_cb[dir].x, object_id + 20);
 		}
 	}
 
 	/* set the object to the chessboard */
-	FIG_set_cb_object(y, x, object);
+	FIG_set_cb_object(y, x, object_id);
 
 	return 1;
 }
@@ -362,8 +363,6 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 void FIG_init_enemies(void)
 {
 	signed int i;
-	signed int x;
-	signed int y;
 
 	/* Cleanup the old enemy tables */
 	for (i = 0; i < 20; i++) {
@@ -394,8 +393,8 @@ void FIG_init_enemies(void)
 	/* place the enemies on the chessboard */
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		x = g_current_fight->monsters[i].x;
-		y = g_current_fight->monsters[i].y;
+		const signed int x = g_current_fight->monsters[i].x;
+		const signed int y = g_current_fight->monsters[i].y;
 
 		/* place only the enemies from round 0 */
 		if (!g_current_fight->monsters[i].round_appear) {
@@ -416,128 +415,124 @@ void FIG_init_heroes(void)
 	struct struct_hero *hero;
 	signed int cb_x;
 	signed int cb_y;
-	signed int l_si;
-	signed int l_di; /* player char no */
+	signed int i;
+	signed int hero_pos; /* REMARK: double use: also range_weapon_type */
 
-	for (l_si = 0; l_si <= 6; l_si++) {
+	for (i = 0; i <= 6; i++) {
 
-		if (get_hero(l_si)->fighter_id != -1) {
+		if (get_hero(i)->fighter_id != -1) {
 
-			FIG_remove_from_list(get_hero(l_si)->fighter_id, 0);
+			FIG_remove_from_list(get_hero(i)->fighter_id, 0);
 
-			get_hero(l_si)->fighter_id = -1;
+			get_hero(i)->fighter_id = -1;
 		}
 	}
 
-	for (l_si = 0; l_si <= 6; l_si++) {
+	for (i = 0; i <= 6; i++) {
 
-		hero = get_hero(l_si);
+		hero = get_hero(i);
 
-		if (hero->typus == HERO_TYPE_NONE)
-			continue;
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id)) {
 
-		/* check group */
-		if (hero->group_id != gs_active_group_id)
-			continue;
+			hero->action_id = FIG_ACTION_WAIT;
+			hero->target_object_id = 0;
 
-		hero->action_id = FIG_ACTION_WAIT;
-		hero->target_object_id = 0;
+			/* FINAL FIGHT */
+			if (g_current_fight_no == FIGHTS_F144) {
 
-		/* FINAL FIGHT */
-		if (g_current_fight_no == FIGHTS_F144) {
+				if (hero == gs_main_acting_hero) {
 
-			if (hero == gs_main_acting_hero) {
+					cb_x = g_current_fight->heroes[0].x;
+					cb_y = g_current_fight->heroes[0].y;
 
-				cb_x = g_current_fight->heroes[0].x;
-				cb_y = g_current_fight->heroes[0].y;
+					hero->viewdir = g_current_fight->heroes[0].viewdir;
 
-				hero->viewdir = g_current_fight->heroes[0].viewdir;
+				} else {
+					do {
+						hero_pos = random_schick(6);
 
+						cb_x = g_current_fight->heroes[hero_pos].x;
+						cb_y = g_current_fight->heroes[hero_pos].y;
+						hero->viewdir = g_current_fight->heroes[hero_pos].viewdir;
+
+					} while (get_cb_val(cb_x, cb_y) != 0);
+				}
 			} else {
-				do {
-					l_di = random_schick(6);
 
-					cb_x = g_current_fight->heroes[l_di].x;
-					cb_y = g_current_fight->heroes[l_di].y;
-					hero->viewdir = g_current_fight->heroes[l_di].viewdir;
-
-				} while (get_cb_val(cb_x, cb_y) != 0);
+				cb_x = g_current_fight->heroes[i].x;
+				cb_y = g_current_fight->heroes[i].y;
+				hero->viewdir = g_current_fight->heroes[i].viewdir;
 			}
-		} else {
 
-			cb_x = g_current_fight->heroes[l_si].x;
-			cb_y = g_current_fight->heroes[l_si].y;
-			hero->viewdir = g_current_fight->heroes[l_si].viewdir;
-		}
+			/* heroes sleep until they appear */
+			if (g_current_fight->heroes[i].round_appear) {
 
-		/* heroes sleep until they appear */
-		if (g_current_fight->heroes[l_si].round_appear) {
-
-			if (!hero->flags.dead) {
-				hero->flags.asleep = 1;
+				if (!hero->flags.dead) {
+					hero->flags.asleep = 1;
+				}
 			}
-		}
 
 #if !defined(__BORLANDC__)
-		place_obj_on_cb(cb_x, cb_y, l_si + 1, hero->typus, hero->viewdir);
+			place_obj_on_cb(cb_x, cb_y, i + 1, hero->typus, hero->viewdir);
 #else
-		place_obj_on_cb(cb_x, cb_y, l_si + 1, (_AL = hero->typus, _AX), hero->viewdir);
+			place_obj_on_cb(cb_x, cb_y, i + 1, (_AL = hero->typus, _AX), hero->viewdir);
 #endif
 
-		l_di = FIG_get_range_weapon_type(hero);
+			hero_pos = FIG_get_range_weapon_type(hero);
 
-		if (l_di != -1) {
-			g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][l_di][hero->viewdir];
-		} else {
-			g_fig_list_elem.nvf_no = hero->viewdir;
+			if (hero_pos != -1) {
+				g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][hero_pos][hero->viewdir];
+			} else {
+				g_fig_list_elem.nvf_no = hero->viewdir;
+			}
+
+			g_fig_list_elem.figure = g_gfxtab_figures_main[hero->sprite_id][0];
+			g_fig_list_elem.cbx = cb_x;
+			g_fig_list_elem.cby = cb_y;
+			g_fig_list_elem.offsetx = 0;
+			g_fig_list_elem.offsety = 0;
+
+			if (hero->flags.dead) {
+
+				/* hero is dead */
+				g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->sprite_id];
+				g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->sprite_id][4].x;
+				g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->sprite_id][4].y;
+
+			} else if (hero->flags.asleep || hero->flags.unconscious) {
+
+				/* hero is asleep or unconscious */
+				g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->sprite_id] + hero->viewdir;
+				g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].x;
+				g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].y;
+			}
+
+
+			g_fig_list_elem.height = 40;
+			g_fig_list_elem.width = 32;
+			g_fig_list_elem.x1 = 0;
+			g_fig_list_elem.y1 = 0;
+			g_fig_list_elem.x2 = 31;
+			g_fig_list_elem.y2 = 39;
+
+			/* in the next line, value 0 (hero) would make better sense.
+			 * however, the apparently only read operation checks for ==1, so the value 2 does not make a difference */
+			g_fig_list_elem.is_enemy = 2;
+
+			g_fig_list_elem.sprite_id = hero->sprite_id;
+			g_fig_list_elem.reload = -1;
+			g_fig_list_elem.wsheet = -1;
+			g_fig_list_elem.sheet = -1;
+			g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr;
+			g_fig_list_elem.object_id = 0;
+			g_fightobj_buf_seek_ptr += 0x508;
+			g_fightobj_buf_freespace -= 0x508L;
+			g_fig_list_elem.z = 99;
+			g_fig_list_elem.visible = 1;
+			g_fig_list_elem.double_size = -1;
+
+			get_hero(i)->fighter_id = FIG_add_to_list(-1);
 		}
-
-		g_fig_list_elem.figure = g_gfxtab_figures_main[hero->sprite_id][0];
-		g_fig_list_elem.cbx = cb_x;
-		g_fig_list_elem.cby = cb_y;
-		g_fig_list_elem.offsetx = 0;
-		g_fig_list_elem.offsety = 0;
-
-		if (hero->flags.dead) {
-
-			/* hero is dead */
-			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->sprite_id];
-			g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->sprite_id][4].x;
-			g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->sprite_id][4].y;
-
-		} else if (hero->flags.asleep || hero->flags.unconscious) {
-
-			/* hero is asleep or unconscious */
-			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->sprite_id] + hero->viewdir;
-			g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].x;
-			g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].y;
-		}
-
-
-		g_fig_list_elem.height = 40;
-		g_fig_list_elem.width = 32;
-		g_fig_list_elem.x1 = 0;
-		g_fig_list_elem.y1 = 0;
-		g_fig_list_elem.x2 = 31;
-		g_fig_list_elem.y2 = 39;
-
-		/* in the next line, value 0 (hero) would make better sense.
-		 * however, the apparently only read operation checks for ==1, so the value 2 does not make a difference */
-		g_fig_list_elem.is_enemy = 2;
-
-		g_fig_list_elem.sprite_id = hero->sprite_id;
-		g_fig_list_elem.reload = -1;
-		g_fig_list_elem.wsheet = -1;
-		g_fig_list_elem.sheet = -1;
-		g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr;
-		g_fig_list_elem.object_id = 0;
-		g_fightobj_buf_seek_ptr += 0x508;
-		g_fightobj_buf_freespace -= 0x508L;
-		g_fig_list_elem.z = 99;
-		g_fig_list_elem.visible = 1;
-		g_fig_list_elem.double_size = -1;
-
-		get_hero(l_si)->fighter_id = FIG_add_to_list(-1);
 	}
 }
 
