@@ -1,0 +1,346 @@
+CC=gcc
+CFLAGS=-Og -g -fno-asm -Wno-register -fsanitize=address -fno-omit-frame-pointer
+OBJFILES=datseg.o seg001.o seg002.o seg003.o seg004.o seg005.o seg006.o seg007.o seg008.o seg009.o seg010.o seg011.o seg024.o seg025.o seg026.o seg027.o seg028.o seg029.o seg030.o seg031.o seg032.o seg033.o seg034.o seg035.o seg036.o seg037.o seg038.o seg039.o seg040.o seg041.o seg042.o seg043.o seg044.o seg045.o seg046.o seg047.o seg048.o seg049.o seg050.o seg051.o seg052.o seg053.o seg054.o seg055.o seg056.o seg057.o seg058.o seg059.o seg060.o seg061.o seg062.o seg063.o seg064.o seg065.o seg066.o seg067.o seg068.o seg069.o seg070.o seg071.o seg072.o seg073.o seg074.o seg075.o seg076.o seg077.o seg078.o seg079.o seg080.o seg081.o seg082.o seg083.o seg084.o seg085.o seg086.o seg087.o seg088.o seg089.o seg090.o seg091.o seg092.o seg093.o seg094.o seg095.o seg096.o seg097.o seg098.o seg099.o seg100.o seg101.o seg102.o seg103.o seg104.o seg105.o seg106.o seg107.o seg108.o seg109.o seg110.o seg111.o seg112.o seg113.o seg114.o seg115.o seg116.o seg117.o seg118.o seg119.o seg120.o seg121.o seg122.o
+
+schick: $(OBJFILES)
+	$(CC) $(CFLAGS) -o schick_$(CC) $(OBJFILES)
+
+clean:
+	rm -f schick_$(CC) *.o
+
+seg001.o: seg001.cpp seg001.h
+	$(CC) $(CFLAGS) -c seg001.cpp
+
+seg002.o: seg002.cpp seg002.h
+	$(CC) $(CFLAGS) -c seg002.cpp
+
+seg003.o: seg003.cpp seg003.h
+	$(CC) $(CFLAGS) -c seg003.cpp
+
+seg004.o: seg004.cpp seg004.h
+	$(CC) $(CFLAGS) -c seg004.cpp
+
+seg005.o: seg005.cpp seg005.h
+	$(CC) $(CFLAGS) -c seg005.cpp
+
+seg006.o: seg006.cpp seg006.h
+	$(CC) $(CFLAGS) -c seg006.cpp
+
+seg007.o: seg007.cpp seg007.h
+	$(CC) $(CFLAGS) -c seg007.cpp
+
+seg008.o: seg008.cpp seg008.h
+	$(CC) $(CFLAGS) -c seg008.cpp
+
+seg009.o: seg009.cpp seg009.h
+	$(CC) $(CFLAGS) -c seg009.cpp
+
+seg010.o: seg010.cpp seg010.h
+	$(CC) $(CFLAGS) -c seg010.cpp
+
+seg011.o: seg011.cpp seg011.h
+	$(CC) $(CFLAGS) -c -Wno-unused-parameters seg011.cpp
+
+seg024.o: seg024.cpp seg024.h
+	$(CC) $(CFLAGS) -c seg024.cpp
+
+seg025.o: seg025.cpp seg025.h
+	$(CC) $(CFLAGS) -c seg025.cpp
+
+seg026.o: seg026.cpp seg026.h
+	$(CC) $(CFLAGS) -c seg026.cpp
+
+seg027.o: seg027.cpp seg027.h
+	$(CC) $(CFLAGS) -c seg027.cpp
+
+seg028.o: seg028.cpp seg028.h
+	$(CC) $(CFLAGS) -c seg028.cpp
+
+seg029.o: seg029.cpp seg029.h
+	$(CC) $(CFLAGS) -c seg029.cpp
+
+seg030.o: seg030.cpp seg030.h
+	$(CC) $(CFLAGS) -c seg030.cpp
+
+seg031.o: seg031.cpp seg031.h
+	$(CC) $(CFLAGS) -c seg031.cpp
+
+seg032.o: seg032.cpp seg032.h
+	$(CC) $(CFLAGS) -c seg032.cpp
+
+seg033.o: seg033.cpp seg033.h
+	$(CC) $(CFLAGS) -c seg033.cpp
+
+seg034.o: seg034.cpp seg034.h
+	$(CC) $(CFLAGS) -c seg034.cpp
+
+seg035.o: seg035.cpp seg035.h
+	$(CC) $(CFLAGS) -c seg035.cpp
+
+seg036.o: seg036.cpp seg036.h
+	$(CC) $(CFLAGS) -c seg036.cpp
+
+seg037.o: seg037.cpp seg037.h
+	$(CC) $(CFLAGS) -c seg037.cpp
+
+seg038.o: seg038.cpp seg038.h
+	$(CC) $(CFLAGS) -c seg038.cpp
+
+seg039.o: seg039.cpp seg039.h
+	$(CC) $(CFLAGS) -c seg039.cpp
+
+seg040.o: seg040.cpp seg040.h
+	$(CC) $(CFLAGS) -c seg040.cpp
+
+seg041.o: seg041.cpp seg041.h
+	$(CC) $(CFLAGS) -c seg041.cpp
+
+seg042.o: seg042.cpp seg042.h
+	$(CC) $(CFLAGS) -c seg042.cpp
+
+seg043.o: seg043.cpp seg043.h
+	$(CC) $(CFLAGS) -c seg043.cpp
+
+seg044.o: seg044.cpp seg044.h
+	$(CC) $(CFLAGS) -c seg044.cpp
+
+seg045.o: seg045.cpp seg045.h
+	$(CC) $(CFLAGS) -c seg045.cpp
+
+seg046.o: seg046.cpp seg046.h
+	$(CC) $(CFLAGS) -c seg046.cpp
+
+seg047.o: seg047.cpp seg047.h
+	$(CC) $(CFLAGS) -c seg047.cpp
+
+seg048.o: seg048.cpp seg048.h
+	$(CC) $(CFLAGS) -c seg048.cpp
+
+seg049.o: seg049.cpp seg049.h
+	$(CC) $(CFLAGS) -c seg049.cpp
+
+seg050.o: seg050.cpp seg050.h
+	$(CC) $(CFLAGS) -c seg050.cpp
+
+seg051.o: seg051.cpp seg051.h
+	$(CC) $(CFLAGS) -c seg051.cpp
+
+seg052.o: seg052.cpp seg052.h
+	$(CC) $(CFLAGS) -c seg052.cpp
+
+seg053.o: seg053.cpp seg053.h
+	$(CC) $(CFLAGS) -c seg053.cpp
+
+seg054.o: seg054.cpp seg054.h
+	$(CC) $(CFLAGS) -c seg054.cpp
+
+seg055.o: seg055.cpp seg055.h
+	$(CC) $(CFLAGS) -c seg055.cpp
+
+seg056.o: seg056.cpp seg056.h
+	$(CC) $(CFLAGS) -c seg056.cpp
+
+seg057.o: seg057.cpp seg057.h
+	$(CC) $(CFLAGS) -c seg057.cpp
+
+seg058.o: seg058.cpp seg058.h
+	$(CC) $(CFLAGS) -c seg058.cpp
+
+seg059.o: seg059.cpp seg059.h
+	$(CC) $(CFLAGS) -c seg059.cpp
+
+seg060.o: seg060.cpp seg060.h
+	$(CC) $(CFLAGS) -c seg060.cpp
+
+seg061.o: seg061.cpp seg061.h
+	$(CC) $(CFLAGS) -c seg061.cpp
+
+seg062.o: seg062.cpp seg062.h
+	$(CC) $(CFLAGS) -c seg062.cpp
+
+seg063.o: seg063.cpp seg063.h
+	$(CC) $(CFLAGS) -c seg063.cpp
+
+seg064.o: seg064.cpp seg064.h
+	$(CC) $(CFLAGS) -c seg064.cpp
+
+seg065.o: seg065.cpp seg065.h
+	$(CC) $(CFLAGS) -c seg065.cpp
+
+seg066.o: seg066.cpp seg066.h
+	$(CC) $(CFLAGS) -c seg066.cpp
+
+seg067.o: seg067.cpp seg067.h
+	$(CC) $(CFLAGS) -c seg067.cpp
+
+seg068.o: seg068.cpp seg068.h
+	$(CC) $(CFLAGS) -c seg068.cpp
+
+seg069.o: seg069.cpp seg069.h
+	$(CC) $(CFLAGS) -c seg069.cpp
+
+seg070.o: seg070.cpp seg070.h
+	$(CC) $(CFLAGS) -c seg070.cpp
+
+seg071.o: seg071.cpp seg071.h
+	$(CC) $(CFLAGS) -c seg071.cpp
+
+seg072.o: seg072.cpp seg072.h
+	$(CC) $(CFLAGS) -c seg072.cpp
+
+seg073.o: seg073.cpp seg073.h
+	$(CC) $(CFLAGS) -c seg073.cpp
+
+seg074.o: seg074.cpp seg074.h
+	$(CC) $(CFLAGS) -c seg074.cpp
+
+seg075.o: seg075.cpp seg075.h
+	$(CC) $(CFLAGS) -c seg075.cpp
+
+seg076.o: seg076.cpp seg076.h
+	$(CC) $(CFLAGS) -c seg076.cpp
+
+seg077.o: seg077.cpp seg077.h
+	$(CC) $(CFLAGS) -c seg077.cpp
+
+seg078.o: seg078.cpp seg078.h
+	$(CC) $(CFLAGS) -c seg078.cpp
+
+seg079.o: seg079.cpp seg079.h
+	$(CC) $(CFLAGS) -c seg079.cpp
+
+seg080.o: seg080.cpp seg080.h
+	$(CC) $(CFLAGS) -c seg080.cpp
+
+seg081.o: seg081.cpp seg081.h
+	$(CC) $(CFLAGS) -c seg081.cpp
+
+seg082.o: seg082.cpp seg082.h
+	$(CC) $(CFLAGS) -c seg082.cpp
+
+seg083.o: seg083.cpp seg083.h
+	$(CC) $(CFLAGS) -c seg083.cpp
+
+seg084.o: seg084.cpp seg084.h
+	$(CC) $(CFLAGS) -c seg084.cpp
+
+seg085.o: seg085.cpp seg085.h
+	$(CC) $(CFLAGS) -c seg085.cpp
+
+seg086.o: seg086.cpp seg086.h
+	$(CC) $(CFLAGS) -c seg086.cpp
+
+seg087.o: seg087.cpp seg087.h
+	$(CC) $(CFLAGS) -c seg087.cpp
+
+seg088.o: seg088.cpp seg088.h
+	$(CC) $(CFLAGS) -c seg088.cpp
+
+seg089.o: seg089.cpp seg089.h
+	$(CC) $(CFLAGS) -c seg089.cpp
+
+seg090.o: seg090.cpp seg090.h
+	$(CC) $(CFLAGS) -c seg090.cpp
+
+seg091.o: seg091.cpp seg091.h
+	$(CC) $(CFLAGS) -c seg091.cpp
+
+seg092.o: seg092.cpp seg092.h
+	$(CC) $(CFLAGS) -c seg092.cpp
+
+seg093.o: seg093.cpp seg093.h
+	$(CC) $(CFLAGS) -c seg093.cpp
+
+seg094.o: seg094.cpp seg094.h
+	$(CC) $(CFLAGS) -c seg094.cpp
+
+seg095.o: seg095.cpp seg095.h
+	$(CC) $(CFLAGS) -c seg095.cpp
+
+seg096.o: seg096.cpp seg096.h
+	$(CC) $(CFLAGS) -c seg096.cpp
+
+seg097.o: seg097.cpp seg097.h
+	$(CC) $(CFLAGS) -c seg097.cpp
+
+seg098.o: seg098.cpp seg098.h
+	$(CC) $(CFLAGS) -c seg098.cpp
+
+seg099.o: seg099.cpp seg099.h
+	$(CC) $(CFLAGS) -c seg099.cpp
+
+seg100.o: seg100.cpp seg100.h
+	$(CC) $(CFLAGS) -c seg100.cpp
+
+seg101.o: seg101.cpp seg101.h
+	$(CC) $(CFLAGS) -c seg101.cpp
+
+seg102.o: seg102.cpp seg102.h
+	$(CC) $(CFLAGS) -c seg102.cpp
+
+seg103.o: seg103.cpp seg103.h
+	$(CC) $(CFLAGS) -c seg103.cpp
+
+seg104.o: seg104.cpp seg104.h
+	$(CC) $(CFLAGS) -c seg104.cpp
+
+seg105.o: seg105.cpp seg105.h
+	$(CC) $(CFLAGS) -c seg105.cpp
+
+seg106.o: seg106.cpp seg106.h
+	$(CC) $(CFLAGS) -c seg106.cpp
+
+seg107.o: seg107.cpp seg107.h
+	$(CC) $(CFLAGS) -c seg107.cpp
+
+seg108.o: seg108.cpp seg108.h
+	$(CC) $(CFLAGS) -c seg108.cpp
+
+seg109.o: seg109.cpp seg109.h
+	$(CC) $(CFLAGS) -c seg109.cpp
+
+seg110.o: seg110.cpp seg110.h
+	$(CC) $(CFLAGS) -c seg110.cpp
+
+seg111.o: seg111.cpp seg111.h
+	$(CC) $(CFLAGS) -c seg111.cpp
+
+seg112.o: seg112.cpp seg112.h
+	$(CC) $(CFLAGS) -c seg112.cpp
+
+seg113.o: seg113.cpp seg113.h
+	$(CC) $(CFLAGS) -c seg113.cpp
+
+seg114.o: seg114.cpp seg114.h
+	$(CC) $(CFLAGS) -c seg114.cpp
+
+seg115.o: seg115.cpp seg115.h
+	$(CC) $(CFLAGS) -c seg115.cpp
+
+seg116.o: seg116.cpp seg116.h
+	$(CC) $(CFLAGS) -c seg116.cpp
+
+seg117.o: seg117.cpp seg117.h
+	$(CC) $(CFLAGS) -c seg117.cpp
+
+seg118.o: seg118.cpp seg118.h
+	$(CC) $(CFLAGS) -c seg118.cpp
+
+seg119.o: seg119.cpp seg119.h
+	$(CC) $(CFLAGS) -c seg119.cpp
+
+seg120.o: seg120.cpp seg120.h
+	$(CC) $(CFLAGS) -c seg120.cpp
+
+seg121.o: seg121.cpp seg121.h
+	$(CC) $(CFLAGS) -c seg121.cpp
+
+seg122.o: seg122.cpp seg122.h
+	$(CC) $(CFLAGS) -c seg122.cpp
+
+datseg.o: datseg.cpp datseg.h
+	$(CC) $(CFLAGS) -c datseg.cpp
+
+t_map.o: t_map.cpp t_map.h
+	$(CC) $(CFLAGS) -c t_map.cpp
+
