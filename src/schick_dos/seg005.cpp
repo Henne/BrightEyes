@@ -68,7 +68,7 @@ static void fight_delay(void);
 
 
 /**
- * \param     fighter pointer to a FIGHTER object
+ * \param     fighter pointer to a fighter object
  * \param[in] x       x coordinate on the screen
  * \param[in] y       y coordinate on the screen
  */
@@ -654,7 +654,7 @@ void draw_fight_screen(const signed int val)
 							}
 
 							object_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* object id of the square the tail moves to */
-							p_fighter->object_id = object_id; /* move it to FIGHTER_OBJ_ID */
+							p_fighter->object_id = object_id; /* move it to fighter.object_id */
 							FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, object_id_bak); /* set object id of the target square to enemy_id + 30 */
 
 							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
@@ -675,7 +675,7 @@ void draw_fight_screen(const signed int val)
 
 								object_id_bak = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
-								/* copy FIGHTER_OBJ_ID back to the chessboard */
+								/* copy fighter.object_id back to the chessboard */
 								FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, p_fighter->object_id);
 
 								p_fighter->cbx = (p_fighter->cbx + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
@@ -703,15 +703,15 @@ void draw_fight_screen(const signed int val)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
-									/* The FIGHTER_OBJ_ID entry of the head part will be overwritten by the next line in the original code.
+									/* The fighter.object_id entry of the head part will be overwritten by the next line in the original code.
 									 * In this way, sometimes dead bodies are lost from the chessboard after a double-size enemy walks over it.
-									 * The right thing is to copy it to the FIGHTER_OBJ_ID of tail part. */
+									 * The right thing is to copy it to the fighter.object_id of tail part. */
 									p_fighter->object_id = p_fighter_tmp->object_id;
 #endif
 									p_fighter_tmp->object_id = object_id_bak;
-									/* write cb_id of the tail part at FIGHTER_OBJ_ID of the head part.
+									/* write cb_id of the tail part at fighter.object_id of the head part.
 									 * when the head part moves lated, it will be written to the cb.
-									 * possible bug: the overwritten FIGHTER_OBJ_ID is lost! */
+									 * possible bug: the overwritten fighter.object_id is lost! */
 								} else {
 									p_fighter->object_id = object_id;
 								}
