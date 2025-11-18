@@ -316,7 +316,7 @@ signed int FIG_count_direction_changes_of_path(signed char *path_ptr)
   * A return value of 1 means that there is a path of length <50 from the actor to a target (depending on mode), independently of the available BP.
   *
   * \param   actor_ptr      pointer to a actor (hero or enemy, depending on mode)
-  * \param   actor_id       id of actor. hero: range 1..9 or; monster: range 10..29.
+  * \param   object_id      either hero_id or enemy_id of the actor
   * \param   x_in           x-coordinate of actor
   * \param   y_in           y-coordinate of actor
   * \param   mode           0: enemy to hero melee / 1: hero to hero melee / 2: enemy to enemy melee / 3: hero to enemy melee / 4: enemy is fleeing / 5: hero is fleeing / 6: enemy to hero ranged /  7: enemy to enemy ranged / 8: hero to hero ranged / 9: hero to enemy ranged / 10: hero movement (target marker 124 on the chess board)
@@ -336,11 +336,11 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 	signed int tail_x;
 	signed int tail_y;
 	signed int dir;
-	signed int nr_dir_changes;
-	signed int lowest_nr_dir_changes;
+	signed int num_dir_changes;
+	signed int lowest_num_dir_changes;
 	signed int best_target;
-	signed char cb_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
-	signed char cb_entry;
+	signed char object_id_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
+	signed char object_id;
 	uint8_t *dist_table_ptr;
 	struct struct_hero *hero_ptr;
 	struct enemy_sheet *enemy_ptr;
@@ -381,18 +381,18 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 	for (y = 0; y < 24; y++) {
 		for (x = 0; x < 24; x++) {
 
-			cb_or_dist_entry = *(g_chessboard_cpy + (y * 25) + x);
+			object_id_or_dist_entry = *(g_chessboard_cpy + (y * 25) + x);
 
-			if (cb_or_dist_entry > 0) {
-				if ((cb_or_dist_entry < 10) && (get_hero(cb_or_dist_entry - 1)->flags.dead || get_hero(cb_or_dist_entry - 1)->flags.unconscious))
+			if (object_id_or_dist_entry > 0) {
+				if ((object_id_or_dist_entry < 10) && (get_hero(object_id_or_dist_entry - 1)->flags.dead || get_hero(object_id_or_dist_entry - 1)->flags.unconscious))
 				{
-					/* cb_or_dist_entry is a dead or unsonscious hero */
+					/* object_id_or_dist_entry is a dead or unsonscious hero */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
 
-				} else if ((cb_or_dist_entry >= 10) && (cb_or_dist_entry < 30) && ((struct enemy_flags)g_enemy_sheets[cb_or_dist_entry - 10].flags).dead) {
+				} else if ((object_id_or_dist_entry >= 10) && (object_id_or_dist_entry < 30) && ((struct enemy_flags)g_enemy_sheets[object_id_or_dist_entry - 10].flags).dead) {
 
 					/* test 'dead' flag */
-					/* cb_or_dist_entry is a dead enemy. tail parts of double-size enemies are not considered. */
+					/* object_id_or_dist_entry is a dead enemy. tail parts of double-size enemies are not considered. */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
 					/* Original-Bug: The tail parts of dead double-size enemies have been forgotten,
 					 * meaning that they are not walkable.
@@ -402,7 +402,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 					 * For enemies, squares with dead tail-parts are blocked completely. */
 #ifdef M302de_ORIGINAL_BUGFIX
 					/* make dead tail-parts walkable */
-				} else if ((cb_or_dist_entry >= 30) && (cb_or_dist_entry < 50) && g_enemy_sheets[cb_or_dist_entry - 30].flags.dead) {
+				} else if ((object_id_or_dist_entry >= 30) && (object_id_or_dist_entry < 50) && g_enemy_sheets[object_id_or_dist_entry - 30].flags.dead) {
 					/* test 'dead' flag */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
 #endif
@@ -549,12 +549,12 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 
 						if ((new_y < 24) && (new_y >= 0) && (new_x < 24) && (new_x >= 0)) {
 
-							cb_or_dist_entry = *((int8_t*)(dist_table_ptr + new_y * 25 + new_x));
-							cb_entry = *(g_chessboard_cpy + (new_y * 25) + new_x);
+							object_id_or_dist_entry = *((int8_t*)(dist_table_ptr + new_y * 25 + new_x));
+							object_id = *(g_chessboard_cpy + (new_y * 25) + new_x);
 
-							if (cb_or_dist_entry < 0) { /* square has not been reached before */
+							if (object_id_or_dist_entry < 0) { /* square has not been reached before */
 
-								if (cb_entry == 0) { /* square is empty */
+								if (object_id == 0) { /* square is empty */
 
 									if (!actor_enemy_ptr ||
 										(actor_enemy_ptr && (!double_size ||
@@ -568,7 +568,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 										new_squares_reached = 1;
 									}
 								} else {
-									if (cb_entry < 0) { /* escape square */
+									if (object_id < 0) { /* escape square */
 
 										if ((mode == 4) || (mode == 5)) { /* actor is fleeing */
 											/* it is not tested if there is space for the tail of a double-size monster! */
@@ -582,7 +582,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 										} else {
 											*(dist_table_ptr + (new_y * 25) + new_x) = 100; /* for all other modes: square is blocked */
 										}
-									} else if (cb_entry == 124) { /* target marker for hero movement (implies mode == 10 (hero movement)) */
+									} else if (object_id == 124) { /* target marker for hero movement (implies mode == 10 (hero movement)) */
 										/* test of the tail-condition not needed here, as the active actor is a hero */
 										unused[nr_targets_reached] = 1;
 										target_reached_x[nr_targets_reached] = new_x;
@@ -591,11 +591,11 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 										if (nr_targets_reached == 10) {
 											break;
 										}
-									} else if (cb_entry >= 50) { /* square is blocked */
+									} else if (object_id >= 50) { /* square is blocked */
 										*(dist_table_ptr + (new_y * 25) + new_x) = 100;
-									} else if (cb_entry < 10) {
+									} else if (object_id < 10) {
 
-										if (cb_entry == 9) { /* target marker for ranged attack to some hero (implies mode == 6 or mode == 8) */
+										if (object_id == 9) { /* target marker for ranged attack to some hero (implies mode == 6 or mode == 8) */
 											/* test of the tail-condition not needed here, as double-size enemies don't have ranged attacks */
 											unused[nr_targets_reached] = 1;
 											target_reached_x[nr_targets_reached] = new_x;
@@ -623,8 +623,8 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 											} /* if a double-size monster cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
 											     In this way, later the hero may be considered again as a target from a different direction. */
 										}
-									} else if (cb_entry < 50) {
-										if (cb_entry == 49) { /* target marker for ranged attack to enemy (implies mode == 7 or mode == 9) */
+									} else if (object_id < 50) {
+										if (object_id == 49) { /* target marker for ranged attack to enemy (implies mode == 7 or mode == 9) */
 											/* test of the tail-condition not needed here, as double-size enemies don't have ranged attacks */
 											unused[nr_targets_reached] = 1;
 											target_reached_x[nr_targets_reached] = new_x;
@@ -635,7 +635,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 											}
 										} else { /* enemy on square */
 											if (((mode == 2) || (mode == 3)) && /* melee attack */
-												(cb_entry < 30) && (!actor_enemy_ptr || (actor_enemy_ptr && (!double_size ||
+												(object_id < 30) && (!actor_enemy_ptr || (actor_enemy_ptr && (!double_size ||
 															((double_size != 0) &&
 																((!*(g_chessboard_cpy + (tail_y * 25) + tail_x)) ||
 																(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 10) ||
@@ -680,7 +680,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 		if (nr_targets_reached) {
 			target_reached = 1;
 			best_target = 0;
-			lowest_nr_dir_changes = 99;
+			lowest_num_dir_changes = 99;
 
 			/* find target whose path has the lowest number of direction changes */
 			for (i = 0; i < nr_targets_reached; i++) {
@@ -691,15 +691,15 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, ((struct struct_hero*)actor_ptr)->fight_bp_left, mode, double_size, actor_id);
 				}
 
-				nr_dir_changes = FIG_count_direction_changes_of_path(g_fig_move_pathdir);
+				num_dir_changes = FIG_count_direction_changes_of_path(g_fig_move_pathdir);
 
-				if (nr_dir_changes == 0) {
+				if (num_dir_changes == 0) {
 					best_target = i;
 					break;
 				}
 
-				if (nr_dir_changes < lowest_nr_dir_changes) {
-					lowest_nr_dir_changes = nr_dir_changes;
+				if (num_dir_changes < lowest_num_dir_changes) {
+					lowest_num_dir_changes = num_dir_changes;
 					best_target = i;
 				}
 			}
