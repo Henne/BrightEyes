@@ -301,19 +301,19 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			distance = manhattan_distance(x_hero, y_hero, x_target, y_target);
 
 			if (distance <= 2) {
-				ranged_distance_type = 0;
+				ranged_distance_type = RANGED_DISTANCE_TYPE_EXTREM_NAH;
 			} else if (distance <= 4) {
-				ranged_distance_type = 1;
+				ranged_distance_type = RANGED_DISTANCE_TYPE_SEHR_NAH;
 			} else if (distance <= 6) {
-				ranged_distance_type = 2;
+				ranged_distance_type = RANGED_DISTANCE_TYPE_NAH;
 			} else if (distance <= 9) {
-				ranged_distance_type = 3;
+				ranged_distance_type = RANGED_DISTANCE_TYPE_MITTEL;
 			} else if (distance <= 15) {
-				ranged_distance_type = 4;
+				ranged_distance_type = RANGED_DISTANCE_TYPE_WEIT;
 			} else if (distance <= 20) {
-				ranged_distance_type = 5;
+				ranged_distance_type = RANGED_DISTANCE_TYPE_SEHR_WEIT;
 			} else {
-				ranged_distance_type = 6;
+				ranged_distance_type = RANGED_DISTANCE_TYPE_EXTREM_WEIT;
 			}
 
 			p_rangedtab = &g_ranged_weapons_table[weapon->ranged_index];
