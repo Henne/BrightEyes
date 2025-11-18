@@ -345,7 +345,7 @@ struct struct_monster {
 	int8_t magic;
 	int8_t spellbook_id;
 	int8_t level;
-	int8_t size;
+	int8_t target_size; /* for details, see enum TARGET_SIZE */
 	int8_t is_animal;
 	int8_t shots;
 	int16_t shot_dam;
@@ -689,7 +689,7 @@ struct enemy_sheet {
 	int8_t  weapon_broken;	/* weapon broken? 0	= no, 1	= yes */
 	struct enemy_flags flags;
 	int8_t	unused8;
-	int8_t	size;
+	int8_t	target_size; /* for details, see enum TARGET_SIZE */
 	int8_t	round_appear;
 	int8_t	is_animal;		/* is the enemy an animal? */
 	int8_t	shots;

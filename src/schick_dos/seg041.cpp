@@ -321,14 +321,14 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			if (attack_hero) {
 				if (target->typus == HERO_TYPE_ZWERG) {
 					/* ZWERG / DWARF */
-					target_size = 2;
+					target_size = TARGET_SIZE_KLEIN;
 				} else {
-					target_size = 3;
+					target_size = TARGET_SIZE_MITTEL;
 				}
 			} else {
 				/* size of the enemy */
 				/* TODO: use enemy_p instead of a casted target */
-				target_size = ((struct enemy_sheet*)target)->size;
+				target_size = ((struct enemy_sheet*)target)->target_size;
 			}
 
 			/* Original-Bug: For ITEM_SPEER and ITEM_SPEER__MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
