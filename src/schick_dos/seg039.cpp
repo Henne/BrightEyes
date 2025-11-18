@@ -172,7 +172,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 
 	sheet->fighter_id = -1;
 	sheet->level = monster->level;
-	sheet->size = monster->size;
+	sheet->target_size = monster->target_size;
 	sheet->is_animal = monster->is_animal;
 	sheet->round_appear = round;
 

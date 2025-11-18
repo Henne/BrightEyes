@@ -419,6 +419,17 @@ enum {
 	RANGED_DISTANCE_TYPE_EXTREM_WEIT = 6  /* 21--        61--100 */
 };
 
+/* target sizes (for ranged attack), named according to DSA3 rules. */
+enum {
+	/*                             examples according to DSA3 rules */
+	TARGET_SIZE_WINZIG     = 0, /* Silbertaler, Drachenauge, Maus, Ratte, Kroete */
+	TARGET_SIZE_SEHR_KLEIN = 1, /* Schlange, Fasan, Katze, Rabe */
+	TARGET_SIZE_KLEIN      = 2, /* Wolf, Reh, Kobold, Zwerg */
+	TARGET_SIZE_MITTEL     = 3, /* Goblin, Elf, Mensch, Ork */
+	TARGET_SIZE_GROSS      = 4, /* Pferd, Elch, Oger, Troll */
+	TARGET_SIZE_SEHR_GROSS = 5  /* Scheunentor, Drache, Elefant, Riese */
+};
+
 enum {
 	NUTRITION_TYPE_DRINK	= 0,
 	NUTRITION_TYPE_FOOD	= 1
