@@ -36,8 +36,22 @@ static const char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
 signed int g_spell_illusionen;		// ds:0xe3a4, 1 = spell has effect
 signed int g_defender_dead;		// ds:0xe3a6
 signed int g_attacker_dead;		// ds:0xe3a8
-signed int g_defender_attacks;		// ds:0xe3aa
-signed int g_attacker_attacks_again;	// ds:0xe3ac
+signed int g_fig_critical_fail_backfire_1;	// ds:0xe3aa
+	/* either: critical attack failure, defender gets a free attack
+	 * or: critical defense failure, attacker gets another free attack.
+	 * Exception: see g_fig_critical_fail_backfire_2 below. */
+signed int g_fig_critical_fail_backfire_2;	// ds:0xe3ac
+	/* Used instead of critical attack failure_1 in this special situation:
+	 * The attacker is an enemy, the defender does a critical parry failure,
+	 * and the attacking enemy gets a free attack.
+	 * It is not clear why g_fig_critical_fail_backfire_2 exists next to critical attack failure_1.
+	 * Maybe the intention was:
+	 * g_fig_critical_fail_backfire_1 for backfire from a critical attack failure,
+	 * g_fig_critical_fail_backfire_2 for backfire from a critical parry failure?
+	 * In this case, one assignment g_fig_critical_fail_backfire_1 = 1 below should rather be g_fig_critical_fail_backfire_2 = 1.
+	 */
+
+
 
 /**
  * \brief   executes the fight action of hero
@@ -90,7 +104,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 		FIG_clear_msgs();
 
-		l5 = g_attacker_attacks_again = g_defender_attacks =
+		l5 = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 =
 			g_spell_illusionen = g_attacker_dead = g_defender_dead = 0;
 
 		weapon_type = weapon_type_target = -1;
@@ -273,7 +287,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				} else if ((two_w_6 >= 3) && (two_w_6 <= 8) && (l16 == 0)) {
 					/* defender gets a free attack */
 
-					g_defender_attacks = 1;
+					g_fig_critical_fail_backfire_1 = 1;
 
 					if (target_is_hero != 0) {
 
@@ -384,7 +398,10 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 						if ((two_w_6 >= 3) && (two_w_6 <= 8)) {
 
-							g_defender_attacks = 1;
+							g_fig_critical_fail_backfire_1 = 1;
+							/* Maybe the intention was:
+							 * g_fig_critical_fail_backfire_2 = 1
+							 * See comment at the declaration of g_fig_critical_fail_backfire_2. */
 
 							if (random_schick(20) <= atpa) {
 

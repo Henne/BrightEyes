@@ -204,8 +204,8 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 
 		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1]) ||
-			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
-			((g_defender_attacks != 0) && (a7 == 1))))
+			((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0)) ||
+			((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))))
 	{
 			g_fig_anisheets[sheet_id][0] = 0;
 			l8 = l7 = -1;
@@ -279,7 +279,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		}
 	}
 
-	if ((check_hero(hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
+	if ((check_hero(hero) && g_fig_critical_fail_backfire_2 && !a7) || (g_fig_critical_fail_backfire_1 && (a7 == 1))) {
 
 			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
@@ -404,8 +404,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	if ((enemy->viewdir != dir) &&
 		(	((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)fid_attacker])) ||
-			(g_attacker_attacks_again && !a7) ||
-			(g_defender_attacks && (a7 == 1))))
+			(g_fig_critical_fail_backfire_2 && !a7) ||
+			(g_fig_critical_fail_backfire_1 && (a7 == 1))))
 		{
 
 		g_fig_anisheets[sheet_id][0] = 0;
@@ -487,8 +487,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		}
 	}
 
-	if (((g_attacker_attacks_again != 0) && (a7 == 0)) ||
-		((g_defender_attacks != 0) && (a7 == 1))) {
+	if (((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0)) ||
+		((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))) {
 
 			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 

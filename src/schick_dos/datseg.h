@@ -1712,8 +1712,8 @@ extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg1
 extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg049, seg052
 extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg049, seg052
 extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg049, seg052
-extern signed int  g_attacker_attacks_again;	// ds:0xe3ac; seg042, seg043, seg044
-extern signed int  g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044
+extern signed int  g_fig_critical_fail_backfire_2;	// ds:0xe3ac; seg042, seg043, seg044
+extern signed int  g_fig_critical_fail_backfire_1;		// ds:0xe3aa; seg042, seg043, seg044
 extern signed int  g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
 extern signed int  g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg098, seg102
 extern signed int  g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099

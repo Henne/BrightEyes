@@ -75,8 +75,8 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 		FIG_clear_msgs();
 
-		defender_gets_hit = g_attacker_attacks_again =
-			g_defender_attacks = g_attacker_dead = g_defender_dead = 0;
+		defender_gets_hit = g_fig_critical_fail_backfire_2 =
+			g_fig_critical_fail_backfire_1 = g_attacker_dead = g_defender_dead = 0;
 
 		g_fig_actor_grammar.type = 1;
 		g_fig_actor_grammar.id = monster->mon_id;
@@ -246,7 +246,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 						D1_INFO("defender gets a free attack.\n");
 #endif
 
-						g_defender_attacks = 1;
+						g_fig_critical_fail_backfire_1 = 1;
 
 						if (random_schick(20) <= defender_at) {
 
@@ -330,7 +330,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 								D1_INFO("attacker gets a free attack.\n");
 #endif
 
-								g_attacker_attacks_again = 1;
+								g_fig_critical_fail_backfire_2 = 1;
 
 								if (random_schick(20) <= attacker_at) {
 
