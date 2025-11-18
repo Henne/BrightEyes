@@ -406,6 +406,19 @@ enum {
 
 /* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
 
+/* ranged distance types, named according to DSA3 rules. */
+enum {
+	/*                                       implemented distance on chessboard */
+	/*                                                    distance in Schritt according to DSA3 rules */
+	RANGED_DISTANCE_TYPE_EXTREM_NAH  = 0, /*  1-- 2       1--  5 */
+	RANGED_DISTANCE_TYPE_SEHR_NAH    = 1, /*  3-- 4       5-- 10 */
+	RANGED_DISTANCE_TYPE_NAH         = 2, /*  5-- 6      10-- 15 */
+	RANGED_DISTANCE_TYPE_MITTEL      = 3, /*  7-- 9      15-- 25 */
+	RANGED_DISTANCE_TYPE_WEIT        = 4, /* 10-- 15     25-- 40 */
+	RANGED_DISTANCE_TYPE_SEHR_WEIT   = 5, /* 16-- 20     40-- 60 */
+	RANGED_DISTANCE_TYPE_EXTREM_WEIT = 6  /* 21--        61--100 */
+};
+
 enum {
 	NUTRITION_TYPE_DRINK	= 0,
 	NUTRITION_TYPE_FOOD	= 1
