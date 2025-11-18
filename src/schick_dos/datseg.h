@@ -217,7 +217,7 @@ struct ranged_weapon_descr {
 	 *
 	 * The skill test handicap for the ranged attack depends on the distance and the size of the target.
 	 * In Schicksalsklinge, RANGED_WEAPON_STATS_BASE_HANDICAP is the skill test handicap vs. a target which is extrem nah and winzig (0,0).
-	 * The general formula for the handicap is base_handicap + 2 * distance - 2 * target_size.
+	 * The general formula for the handicap is base_handicap + 2 * distance_type - 2 * target_size.
 	 *
 	 * The damage is calculated as the base damage of the weapon (like D6 + 3 for the shortbow) + a distance modifier.
 	 * The modifier is given in the RANGED_WEAPON_STATS_DAMAGE_MODIFIER array. */

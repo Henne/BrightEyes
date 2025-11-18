@@ -247,8 +247,8 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	const struct ranged_weapon_descr *p_rangedtab;
 	signed int target_size;
 	signed int right_hand;
-	signed int beeline;
 	signed int distance;
+	signed int ranged_distance_type;
 	signed int x_hero;
 	signed int y_hero;
 	signed int x_target;
@@ -298,22 +298,22 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			FIG_search_obj_on_cb(hero_idx + 1, &x_hero, &y_hero);
 			FIG_search_obj_on_cb(hero->target_object_id, &x_target, &y_target);
 
-			beeline = calc_beeline(x_hero, y_hero, x_target, y_target);
+			distance = manhattan_distance(x_hero, y_hero, x_target, y_target);
 
-			if (beeline <= 2) {
-				distance = 0;
-			} else if (beeline <= 4) {
-				distance = 1;
-			} else if (beeline <= 6) {
-				distance = 2;
-			} else if (beeline <= 9) {
-				distance = 3;
-			} else if (beeline <= 15) {
-				distance = 4;
-			} else if (beeline <= 20) {
-				distance = 5;
+			if (distance <= 2) {
+				ranged_distance_type = 0;
+			} else if (distance <= 4) {
+				ranged_distance_type = 1;
+			} else if (distance <= 6) {
+				ranged_distance_type = 2;
+			} else if (distance <= 9) {
+				ranged_distance_type = 3;
+			} else if (distance <= 15) {
+				ranged_distance_type = 4;
+			} else if (distance <= 20) {
+				ranged_distance_type = 5;
 			} else {
-				distance = 6;
+				ranged_distance_type = 6;
 			}
 
 			p_rangedtab = &g_ranged_weapons_table[weapon->ranged_index];
@@ -334,8 +334,8 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			/* Original-Bug: For ITEM_SPEER and ITEM_SPEER__MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
 			damage_mod = (test_skill(hero,
 						(item_p_rh->subtype == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
-						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
-					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[distance] : -damage;
+						p_rangedtab->base_handicap + 2 * ranged_distance_type - 2 * target_size) > 0) ?
+					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[ranged_distance_type] : -damage;
 
 			if (damage_mod != 0) { /* test is redundant */
 				damage += damage_mod;

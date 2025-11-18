@@ -58,15 +58,15 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 {
 	signed int fighter_id_target;
 	signed int fighter_id;
-	signed int beeline;
+	signed int distance;
 
 	fighter_id = get_cb_val(x, y);
 	fighter_id_target = get_cb_val(x + x_diff, y + y_diff);
 
-	beeline = calc_beeline(x + x_diff, y + y_diff, x_hero, y_hero);
+	distance = manhattan_distance(x + x_diff, y + y_diff, x_hero, y_hero);
 
 	/* distance actions */
-	if ((fighter_id != 0) && (calc_beeline(x, y, x_hero, y_hero) < beeline) && (beeline <= max_range)) {
+	if ((fighter_id != 0) && (manhattan_distance(x, y, x_hero, y_hero) < distance) && (distance <= max_range)) {
 
 		if ((x_hero == x) && (y_hero == y)) {
 
@@ -103,7 +103,7 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 	if (x_diff == 1) {
 		if ((fighter_id_target >= 0) &&
 			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((x < 23) && (y == y_hero) && (calc_beeline(x_hero, y_hero, x + 1, y) <= max_range)))
+			&& ((x < 23) && (y == y_hero) && (manhattan_distance(x_hero, y_hero, x + 1, y) <= max_range)))
 		{
 			return 1;
 		} else {
@@ -116,7 +116,7 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 	if (x_diff == -1) {
 		if ((fighter_id_target >= 0) &&
 			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((x > 0) && (y == y_hero) && (calc_beeline(x_hero, y_hero, x - 1, y) <= max_range)))
+			&& ((x > 0) && (y == y_hero) && (manhattan_distance(x_hero, y_hero, x - 1, y) <= max_range)))
 		{
 			return 1;
 		} else {
@@ -130,7 +130,7 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 	if (y_diff == 1) {
 		if ((fighter_id_target >= 0) &&
 			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((y < 23) && (x == x_hero) && (calc_beeline(x_hero, y_hero, x, y + 1) <= max_range)))
+			&& ((y < 23) && (x == x_hero) && (manhattan_distance(x_hero, y_hero, x, y + 1) <= max_range)))
 		{
 			return 1;
 		} else {
@@ -144,7 +144,7 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 	if (y_diff == -1) {
 		if ((fighter_id_target >= 0) &&
 			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((y > 0) && (x == x_hero) && (calc_beeline(x_hero, y_hero, x, y - 1) <= max_range)))
+			&& ((y > 0) && (x == x_hero) && (manhattan_distance(x_hero, y_hero, x, y - 1) <= max_range)))
 		{
 			return 1;
 		} else {
