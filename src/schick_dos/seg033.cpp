@@ -261,7 +261,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							/* set target id to 0 */
 							hero->target_object_id = 0;
 
-						} else if ((range_weapon != -1) && (calc_beeline(x, y, target_x, target_y) < 2)) {
+						} else if ((range_weapon != -1) && (manhattan_distance(x, y, target_x, target_y) < 2)) {
 
 							GUI_output(get_ttx(508));
 

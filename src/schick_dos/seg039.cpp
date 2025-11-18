@@ -33,18 +33,17 @@ const signed char g_gfxtab_double_size_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0
 
 
 /**
- * \brief   calculates the beeline
+ * \brief   calculates the Manhattan distance between (x1, y1) and (x2, y2).
  *
- *          This function calculates the between two points on the chessboard.
- *          It is also used as a heuristic.
+ *          This function is also used as a heuristic.
  *
  * \param   x1          x-coordinate of the first point
  * \param   y1          y-coordinate of the first point
  * \param   x2          x-coordinate of the second point
  * \param   y2          y-coordinate of the seconn point
- * \return              beeline between the two points
+ * \return              Manhattan distance |x1 - x2| + |y1 - y2| between the two points
  */
-signed int calc_beeline(const signed int x1, const signed int y1, const signed int x2, const signed int y2)
+signed int manhattan_distance(const signed int x1, const signed int y1, const signed int x2, const signed int y2)
 {
 	return __abs__(x1 - x2) + __abs__(y1 - y2);
 }

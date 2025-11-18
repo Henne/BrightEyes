@@ -449,7 +449,7 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 
 			FIG_search_obj_on_cb(hero->target_object_id, &target_x, &target_y);
 
-			if (calc_beeline(target_x, target_y, x, y) < 2) {
+			if (manhattan_distance(target_x, target_y, x, y) < 2) {
 				retval = 2;
 			} else {
 				retval = 1;
