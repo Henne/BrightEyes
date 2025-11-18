@@ -77,7 +77,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed int hero_y;
 	signed int target_x;
 	signed int target_y;
-	signed int dir;
+	signed int viewdir;
 	struct struct_fighter *fighter;
 	struct struct_msg tmp;
 	signed int fg_bak;
@@ -127,24 +127,24 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				FIG_search_obj_on_cb(hero->target_object_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);
 
+				/* In the following, viewdir is pointing from the target to the attacker */
 				if (hero_x == target_x) {
-
 					if (target_y < hero_y) {
-						dir = 3;
+						viewdir = FIG_VIEWDIR_UP;
 					} else {
-						dir = 1;
+						viewdir = FIG_VIEWDIR_DOWN;
 					}
 				} else {
 					if (target_x < hero_x) {
-						dir = 0;
+						viewdir = FIG_VIEWDIR_RIGHT;
 					} else {
-						dir = 2;
+						viewdir = FIG_VIEWDIR_LEFT;
 					}
 				}
 
-				if (target_monster->viewdir != dir) {
+				if (target_monster->viewdir != viewdir) {
 
-					fighter_id = get_cb_val(hero_x + dst.offset[dir].x, hero_y + dst.offset[dir].y);
+					fighter_id = get_cb_val(hero_x + dst.offset[viewdir].x, hero_y + dst.offset[viewdir].y);
 
 					if (fighter_id != 0) {
 

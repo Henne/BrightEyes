@@ -8,6 +8,17 @@ enum {
 	WEST	= 3
 };
 
+/* viewing directions in fight mode, according to keyboard input in fight, 
+ * and also according to the chessboard x- and y-coordinates,
+ * i.e. positive x-direction is "right", positive y-direction is "up" etc.
+ */
+enum {
+	FIG_VIEWDIR_RIGHT = 0,
+	FIG_VIEWDIR_DOWN  = 1,
+	FIG_VIEWDIR_LEFT  = 2,
+	FIG_VIEWDIR_UP    = 3
+};
+
 enum {
 	SEASON_WINTER = 0,
 	SEASON_SPRING = 1,
