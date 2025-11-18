@@ -104,25 +104,26 @@ static signed char *g_chessboard_cpy; // ds:0xe356
  * \param   dist              distance to the target
  * \param   bp_avail          left BP of the actor
  * \param   mode              mode (see FIG_find_path_to_target)
- * \param   double_size       actor occupies two squares on the map (wolves, dogs, lions)
+ * \param   double_size       actor is a double-sized enemy (wolves, dogs, lions)
+ * \param   enemy_id	      only relevant if double_size is true: the enemy_id of the double-sized enemy.
  */
 void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int target_x, signed int target_y,
 			signed int dist, const signed char bp_avail,
-			const signed int mode, const signed int double_size, const signed int actor_id)
+			const signed int mode, const signed int double_size, const signed int enemy_id)
 {
 	signed int i;
 	signed int dist_duplicate; /* duplicates the dist variable. apparently redundant */
 	signed int backtrack_x;
 	signed int backtrack_y;
-	signed int cb_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
+	signed int object_id_or_dist_entry; /* dual use: object id, distance table entry */
 	signed int dist_bak;
 	signed int target_is_escape_square = 0;
 	signed int tail_x;
 	signed int tail_y;
 	signed int dir;
 	signed int success;
-	signed int lowest_nr_dir_changes;
-	signed int nr_dir_changes;
+	signed int lowest_num_dir_changes;
+	signed int num_dir_changes;
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* potential Original-Bug:
 	 * best_dir is not initialized and may stay so in case that FIG_find_path_to_target_backtrack is called with equal target and hero/enemy position.
@@ -142,7 +143,7 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 	int8_t *path_table[4];
 
 	target_out_of_reach = 0;
-	lowest_nr_dir_changes = 99;
+	lowest_num_dir_changes = 99;
 
 	memset(g_text_output_buf, 0, 80);
 	path_table[0] = (int8_t*)g_text_output_buf;
@@ -150,9 +151,9 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 	path_table[2] = (int8_t*)g_text_output_buf + 40;
 	path_table[3] = (int8_t*)g_text_output_buf + 60;
 
-	cb_or_dist_entry = get_cb_val(target_x, target_y); /* possibly reads out of the boundary of the chessboard. not critical, as the following condition is always true for coordinates (target_x, target_y) out of the map. */
+	object_id_or_dist_entry = get_cb_val(target_x, target_y); /* possibly reads out of the boundary of the chessboard. not critical, as the following condition is always true for coordinates (target_x, target_y) out of the map. */
 
-	if ((cb_or_dist_entry < 0) || (target_y < 0) || (target_y > 23) || (target_x < 0) || (target_x > 23)) {
+	if ((object_id_or_dist_entry < 0) || (target_y < 0) || (target_y > 23) || (target_x < 0) || (target_x > 23)) {
 		target_is_escape_square = 1;
 	}
 
@@ -189,9 +190,9 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 
 				if ((backtrack_y < 24) && (backtrack_y >= 0) && (backtrack_x < 24) && (backtrack_x >= 0))
 				{
-					cb_or_dist_entry = *((int8_t*)(dist_table_ptr + 25 * backtrack_y + backtrack_x));
+					object_id_or_dist_entry = *((int8_t*)(dist_table_ptr + 25 * backtrack_y + backtrack_x));
 
-					if ((cb_or_dist_entry == dist)	&&
+					if ((object_id_or_dist_entry == dist)	&&
 						((!double_size) ||
 						/* Original-Bug
 						 * A fight with double-size enemies may freeze in an infinite loop here.
@@ -207,8 +208,8 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 						(
 							double_size && /* this check is redundant, as we had (!double_size) || ... before */
 							(!*(g_chessboard_cpy + (tail_y * 25) + tail_x) || /* square is empty */
-							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (actor_id + 10)) || /* head of active enemy is on square */
-							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (actor_id + 30))) && /* tail of active enemy is on square */
+							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (enemy_id + 10)) || /* head of active enemy is on square */
+							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (enemy_id + 30))) && /* tail of active enemy is on square */
 							(tail_y < 24) && (tail_y >= 0) && (tail_x < 24) && (tail_x >= 0))))
 					{
 						target_y = backtrack_y;
@@ -251,14 +252,14 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 
 		if (*path_cur != -1) {
 
-			nr_dir_changes = FIG_count_direction_changes_of_path(path_cur);
+			num_dir_changes = FIG_count_direction_changes_of_path(path_cur);
 
-			if (nr_dir_changes < lowest_nr_dir_changes) {
+			if (num_dir_changes < lowest_num_dir_changes) {
 
 				best_dir = i;
-				lowest_nr_dir_changes = nr_dir_changes;
+				lowest_num_dir_changes = num_dir_changes;
 
-				if (nr_dir_changes == 0) {
+				if (num_dir_changes == 0) {
 					break;
 				}
 			}
