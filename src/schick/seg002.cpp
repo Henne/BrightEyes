@@ -23,7 +23,11 @@
 #include <IO.H>
 #include "AIL/AIL.H"
 #else
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include "seg011.h"
 #endif
 
