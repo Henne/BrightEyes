@@ -524,7 +524,7 @@ signed int FIG_move_pathlen(void)
  * \param   px          pointer to the x-coordinate on the chessboard
  * \param   py          pointer to the y-coordinate on the chessboard
  */
-void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed int *px, signed int *py)
+void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed int *px, signed int *py)
 {
 	signed int problem;
 	signed int path_end;
@@ -540,9 +540,9 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 	signed int from_kbd;
 	signed int base_x = 9;
 	signed int base_y = 116;
-	signed char cb_entry_bak;
+	signed char object_id_bak;
 	signed char bp_cost;
-	signed char cb_entry_bak_escape;
+	signed char object_id_bak_escape;
 	signed int escape_dir; /* 0: no escape; 1: left; 2: down; 3: up. not compatible with the directions in the path! */
 	signed int mouse_cb_x;
 	signed int mouse_cb_y;
@@ -724,10 +724,10 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 						}
 
 					} else {
-						cb_entry_bak_escape = get_cb_val(sel_x, sel_y);
+						object_id_bak_escape = get_cb_val(sel_x, sel_y);
 					}
 				} else {
-					cb_entry_bak = get_cb_val(sel_x, sel_y);
+					object_id_bak = get_cb_val(sel_x, sel_y);
 				}
 
 				if (problem != 3) {
@@ -740,21 +740,21 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 
 					} else {
 
-						FIG_set_cb_object(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
-						target_reachable = FIG_find_path_to_target((uint8_t*)hero, actor_id, *px, *py, 10);
+						FIG_set_cb_object(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'object_id_bak' or 'object_id_bak_escape'. */
+						target_reachable = FIG_find_path_to_target((uint8_t*)hero, hero_pos, *px, *py, 10);
 						/* target_reachable = 1: there is a path of length < 50 to the target square; target_reachable = -1: there is no such path */
 						bp_cost = FIG_move_pathlen();
 #if !defined(__BORLANDC__)
 						D1_INFO("x: %d, y: %d, target id: %d, reachable: %d, distance: %d\n",
-								escape_dir?cb_entry_bak_escape:sel_x, sel_y,
-								cb_entry_bak, target_reachable, bp_cost);
+								escape_dir?object_id_bak_escape:sel_x, sel_y,
+								object_id_bak, target_reachable, bp_cost);
 #endif
 					}
 
 					if (escape_dir != 0) {
 
 						/* restore the original entry of the target square, which has been overwritten by the target marker. */
-						FIG_set_cb_object(sel_y, sel_x, cb_entry_bak_escape);
+						FIG_set_cb_object(sel_y, sel_x, object_id_bak_escape);
 
 						path_end = 0;
 						while (g_fig_move_pathdir[path_end] != -1) {
@@ -797,17 +797,17 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 
 					} else {
 						/* restore the original entry of the target square, which has been overwritten by the target marker. */
-						FIG_set_cb_object(sel_y, sel_x, cb_entry_bak);
+						FIG_set_cb_object(sel_y, sel_x, object_id_bak);
 					}
 
-					if (cb_entry_bak >= 50) {
+					if (object_id_bak >= 50) {
 
 						problem = 3; /* target square blocked */
 #ifndef M302de_ORIGINAL_BUGFIX
-					} else if (cb_entry_bak >= 10) {
+					} else if (object_id_bak >= 10) {
 
 						/* target square contains a monster (including the tail of a double-size monster) */
-						if (!g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) /* check 'dead' flag */
+						if (!g_enemy_sheets[(object_id_bak - 10 - (object_id_bak >= 30 ? 20 : 0))].flags.dead) /* check 'dead' flag */
 						{
 							/* monster is not dead */
 							problem = 3;
@@ -819,12 +819,12 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 						 * This results in the incorrect message "ZIEL: 99 BP" if the target is pointing at a dead monster
 						 * which is not reachable within the available BP or not reachable at all. */
 
-					} else if (cb_entry_bak > 0) {
+					} else if (object_id_bak > 0) {
 
 						/* target square contains a hero */
-						if (!get_hero(cb_entry_bak - 1)->flags.dead &&
-							!get_hero(cb_entry_bak - 1)->flags.unconscious &&
-							(cb_entry_bak != actor_id + 1))
+						if (!get_hero(object_id_bak - 1)->flags.dead &&
+							!get_hero(object_id_bak - 1)->flags.unconscious &&
+							(object_id_bak != hero_pos + 1))
 						{
 							/* hero is not dead, not unconscious, and not the active hero */
 							problem = 3;
@@ -839,11 +839,11 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 						/* Bug fix:
 						 * flatten the nested if branches. */
 
-					} else if ((cb_entry_bak >= 10) && !g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) { /* check 'dead' flag */
+					} else if ((object_id_bak >= 10) && !g_enemy_sheets[(object_id_bak - 10 - (object_id_bak >= 30 ? 20 : 0))].flags.dead) { /* check 'dead' flag */
 						/* target square contains a non-dead monster (including the tail of a double-size monster) */
 						problem = 3;
 
-					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !get_hero(cb_entry_bak - 1)->flags.dead && !get_hero(cb_entry_bak - 1)->flags.unconscious && (cb_entry_bak != actor_id + 1)) {
+					} else if ((object_id_bak > 0) && (object_id_bak < 10) && !get_hero(object_id_bak - 1)->flags.dead && !get_hero(object_id_bak - 1)->flags.unconscious && (object_id_bak != hero_pos + 1)) {
 
 						/* target square contains a non-dead and non-unconscious hero different from the active hero */
 						problem = 3;
@@ -920,14 +920,14 @@ void FIG_move_hero(struct struct_hero *hero, const signed int actor_id, signed i
 				FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 				g_fig_cb_selector_id[0] = -1;
 
-				FIG_prepare_hero_ani(hero, actor_id);
+				FIG_prepare_hero_ani(hero, hero_pos);
 
 				if (hero->action_id == FIG_ACTION_FLEE) {
 
 					hero->fight_bp_left = 0;
 
 				} else {
-					FIG_search_obj_on_cb(actor_id + 1, px, py);
+					FIG_search_obj_on_cb(hero_pos + 1, px, py);
 				}
 			}
 
