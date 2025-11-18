@@ -30,7 +30,7 @@
 namespace M302de {
 #endif
 
-static struct viewdir_offsets8s g_viewdir_invoffsets2 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6178
+static struct viewdir_offsets8s g_fig_viewdir_inverse_offsets2 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6178
 static const char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
 
 signed int g_spell_illusionen;		// ds:0xe3a4, 1 = spell has effect
@@ -72,7 +72,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed int l16 = 0;
 	signed int l17 = 0;
 	signed int fighter_id;
-	struct viewdir_offsets8s dst = g_viewdir_invoffsets2;
+	struct viewdir_offsets8s dst = g_fig_viewdir_inverse_offsets2;
 	signed int hero_x;
 	signed int hero_y;
 	signed int target_x;
@@ -144,7 +144,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (target_monster->viewdir != dir) {
 
-					fighter_id = get_cb_val(hero_x + dst.a[dir].x, hero_y + dst.a[dir].y);
+					fighter_id = get_cb_val(hero_x + dst.offset[dir].x, hero_y + dst.offset[dir].y);
 
 					if (fighter_id != 0) {
 

@@ -124,11 +124,11 @@ struct dng_gfxtab {
 };
 
 struct viewdir_offsets {
-	struct struct_point a[4];
+	struct struct_point offset[4];
 };
 
 struct viewdir_offsets8s {
-	struct point8s a[4];
+	struct point8s offset[4];
 };
 
 struct struct_rect {
