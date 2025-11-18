@@ -30,7 +30,7 @@ namespace M302de {
 #endif
 
 signed int g_mspell_awake_flag = 0; // ds:0x618e
-static struct viewdir_offsets8s g_viewdir_invoffsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
+static struct viewdir_offsets8s g_fig_viewdir_inverse_offsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
 
 /**
  * \brief   execute the fight action of a monster
@@ -66,7 +66,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 	signed int target_x;
 	signed int target_y;
 	signed int dir;
-	struct viewdir_offsets8s dst = g_viewdir_invoffsets3;
+	struct viewdir_offsets8s dst = g_fig_viewdir_inverse_offsets3;
 	struct struct_msg tmp;
 
 	call_mouse_bg();
@@ -130,7 +130,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 				if (target_enemy->viewdir != dir) {
 
-					fighter_id = get_cb_val(hero_x + dst.a[dir].x, hero_y + dst.a[dir].y);
+					fighter_id = get_cb_val(hero_x + dst.offset[dir].x, hero_y + dst.offset[dir].y);
 
 					if (fighter_id != 0) {
 

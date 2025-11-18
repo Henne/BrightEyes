@@ -35,8 +35,8 @@ const signed int g_cb_obj_nonobstacle[27] = {
 	0x0038, -1
 }; // ds:0x5f46, { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 }
    //
-static struct viewdir_offsets g_viewdir_offsets1 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5f7c
-static struct viewdir_offsets g_viewdir_offsets2 = { { { 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } }; // ds:0x5f8c
+static struct viewdir_offsets g_fig_viewdir_offsets1 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5f7c
+static struct viewdir_offsets g_fig_viewdir_offsets2 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5f8c
 static char g_string_14spaces[15] = "              "; // ds:0x5f9c
 
 /**
@@ -369,7 +369,7 @@ void FIG_find_latecomer_position(const signed int x, const signed int y, signed 
 	signed int new_y;
 	signed char done;
 
-	struct viewdir_offsets a = g_viewdir_offsets1;
+	struct viewdir_offsets a = g_fig_viewdir_offsets1;
 
 	done = 0;
 
@@ -382,7 +382,7 @@ void FIG_find_latecomer_position(const signed int x, const signed int y, signed 
 			return;
 		}
 
-		if (get_cb_val(x - a.a[dir].x, y - a.a[dir].y) == 0) {
+		if (get_cb_val(x - a.offset[dir].x, y - a.offset[dir].y) == 0) {
 			return;
 		}
 	}
@@ -393,13 +393,13 @@ void FIG_find_latecomer_position(const signed int x, const signed int y, signed 
 
 		for (new_dir = 0; new_dir < 4; new_dir++) {
 
-			new_x = *px + a.a[new_dir].x * dist;
-			new_y = *py + a.a[new_dir].y * dist;
+			new_x = *px + a.offset[new_dir].x * dist;
+			new_y = *py + a.offset[new_dir].y * dist;
 
 			if ((new_x >= 0) && (new_x < 24) && (new_y >= 0) && (new_y < 24) && !get_cb_val(new_x, new_y))
 			{
 
-				if ((mode == 0) || (!get_cb_val(new_x - a.a[dir].x, new_y - a.a[dir].y)))
+				if ((mode == 0) || (!get_cb_val(new_x - a.offset[dir].x, new_y - a.offset[dir].y)))
 				{
 					done = 1;
 					*px = new_x;
@@ -426,7 +426,7 @@ void FIG_latecomers(void)
 	struct struct_fighter *fighter;
 	struct struct_fighter *fighter_add;
 
-	struct viewdir_offsets a = g_viewdir_offsets2;
+	struct viewdir_offsets a = g_fig_viewdir_offsets2;
 
 	/* for all enemies in this fight */
 	for (i = 0; i < g_nr_of_enemies; i++) {
@@ -459,8 +459,8 @@ void FIG_latecomers(void)
 
 						fighter_add = FIG_get_fighter((signed char)l4);
 
-						fighter_add->cbx = x - a.a[g_current_fight->monsters[i].viewdir].x;
-						fighter_add->cby = y - a.a[g_current_fight->monsters[i].viewdir].y;
+						fighter_add->cbx = x - a.offset[g_current_fight->monsters[i].viewdir].x;
+						fighter_add->cby = y - a.offset[g_current_fight->monsters[i].viewdir].y;
 
 						FIG_remove_from_list(p_enemy->fighter_id, 1);
 

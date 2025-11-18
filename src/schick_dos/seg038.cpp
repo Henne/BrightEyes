@@ -22,8 +22,8 @@
 namespace M302de {
 #endif
 
-static struct viewdir_offsets g_viewdir_invoffsets1 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } };	// ds:0x5ff8
-static struct viewdir_offsets g_viewdir_offsets7 = { {	{ 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } };	// ds:0x6008
+static struct viewdir_offsets g_fig_viewdir_inverse_offsets1 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } };	// ds:0x5ff8
+static struct viewdir_offsets g_fig_viewdir_offsets7 = { {	{ 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } };	// ds:0x6008
 
 /**
  * \brief   searches an object on the chessboard
@@ -137,7 +137,7 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 	signed int x_bak;
 	signed int y_bak;
 	signed int target_out_of_reach; /* will be set to 1 if the target is out of reach with avail_bp steps. Redundant, as this could simply be tested by (avail_bp < dist). */
-	struct viewdir_offsets inverse_coordinate_offset = g_viewdir_invoffsets1;
+	struct viewdir_offsets inverse_coordinate_offset = g_fig_viewdir_inverse_offsets1;
 
 	int8_t *path_table[4];
 
@@ -182,10 +182,10 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 
 			while (success == 0) {
 
-				backtrack_y = target_y + inverse_coordinate_offset.a[dir].y;
-				backtrack_x = target_x + inverse_coordinate_offset.a[dir].x;
-				tail_y = backtrack_y + inverse_coordinate_offset.a[dir].y;
-				tail_x = backtrack_x + inverse_coordinate_offset.a[dir].x;
+				backtrack_y = target_y + inverse_coordinate_offset.offset[dir].y;
+				backtrack_x = target_x + inverse_coordinate_offset.offset[dir].x;
+				tail_y = backtrack_y + inverse_coordinate_offset.offset[dir].y;
+				tail_x = backtrack_x + inverse_coordinate_offset.offset[dir].x;
 
 				if ((backtrack_y < 24) && (backtrack_y >= 0) && (backtrack_x < 24) && (backtrack_x >= 0))
 				{
@@ -351,7 +351,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 	signed int target_reached_y[10];
 	signed int unused[10]; /* array gets only written, but never read */
 
-	struct viewdir_offsets coordinate_offset = g_viewdir_offsets7;
+	struct viewdir_offsets coordinate_offset = g_fig_viewdir_offsets7;
 
 	actor_enemy_ptr = NULL;
 	double_size = 0;
@@ -431,8 +431,8 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 
 						while (done == 0) {
 
-							new_y = y + ranged_dist * coordinate_offset.a[dir].y;
-							new_x = x + ranged_dist * coordinate_offset.a[dir].x;
+							new_y = y + ranged_dist * coordinate_offset.offset[dir].y;
+							new_x = x + ranged_dist * coordinate_offset.offset[dir].x;
 
 
 							if ((new_y < 0) || (new_y > 23) || (new_x < 0) ||
@@ -482,8 +482,8 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 						ranged_dist = 1;
 
 						while (done == 0) {
-							new_y = y + ranged_dist * coordinate_offset.a[dir].y;
-							new_x = x + ranged_dist * coordinate_offset.a[dir].x;
+							new_y = y + ranged_dist * coordinate_offset.offset[dir].y;
+							new_x = x + ranged_dist * coordinate_offset.offset[dir].x;
 
 							if ((new_y < 0) || (new_y > 23) || (new_x < 0) ||
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -541,10 +541,10 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 
 					for (i = 0; i < 4; i++) {
 
-						new_y = y + coordinate_offset.a[i].y;
-						new_x = x + coordinate_offset.a[i].x;
-						tail_y = y - coordinate_offset.a[i].y; /* for movement of double-size actors */
-						tail_x = x - coordinate_offset.a[i].x; /* for movement of double-size actors */
+						new_y = y + coordinate_offset.offset[i].y;
+						new_x = x + coordinate_offset.offset[i].x;
+						tail_y = y - coordinate_offset.offset[i].y; /* for movement of double-size actors */
+						tail_x = x - coordinate_offset.offset[i].x; /* for movement of double-size actors */
 
 						if ((new_y < 24) && (new_y >= 0) && (new_x < 24) && (new_x >= 0)) {
 
