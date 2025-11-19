@@ -46,11 +46,11 @@ static const char g_empty_string5[1] = ""; // ds:0x5f44
  * \brief   combat menu
  *
  * \param   hero        pointer to the hero
- * \param   actor_id    position of the hero
+ * \param   hero_pos    position of the hero
  * \param   x           x-coordinate on the chessboard
  * \param   y           y-coordinate on the chessboard
  */
-void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x, signed int y)
+void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x, signed int y)
 {
 	signed int selected;
 	signed int l1;
@@ -86,7 +86,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			g_fig_cb_marker_id = -1;
 		}
 
-		FIG_init_list_elem(actor_id + 1);
+		FIG_init_list_elem(hero_pos + 1);
 		draw_fight_screen_pal(0);
 
 		if (hero->flags.scared || (hero->action_id == FIG_ACTION_FLEE)) {
@@ -94,8 +94,8 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			hero->flags.tied = 0; /* unset 'tied' flag (why??) */
 			hero->flags.petrified = 0; /* unset 'petrified' flag (why???) */
 
-			if (FIG_find_path_to_target((uint8_t*)hero, actor_id, x, y, 5) != -1) {
-				FIG_prepare_hero_ani(hero, actor_id); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
+			if (FIG_find_path_to_target((uint8_t*)hero, hero_pos, x, y, 5) != -1) {
+				FIG_prepare_hero_ani(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
 
@@ -106,7 +106,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
 				(hero->fight_bp_left >= 3))
 			{
-				AFIG_hero_turn(hero, actor_id, x, y);
+				AFIG_hero_turn(hero, hero_pos, x, y);
 			}
 			done = 1;
 		} else {
@@ -183,7 +183,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 						/* Failure */
 						/* MU - 2 for 7 hours */
 						i = get_free_mod_slot();
-						set_mod_slot(i, HOURS(7), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)actor_id);
+						set_mod_slot(i, HOURS(7), (uint8_t*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)hero_pos);
 					}
 				}
 
@@ -196,7 +196,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 						call_mouse();
 
-						FIG_move_hero(hero, actor_id, &x, &y);
+						FIG_move_hero(hero, hero_pos, &x, &y);
 
 						call_mouse_bg();
 
@@ -245,7 +245,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 						if ((target_object_id <= 0) || (target_object_id >= 50)) {
 							GUI_output(get_tx(28));
-						} else if (target_object_id == (actor_id + 1)) {
+						} else if (target_object_id == (hero_pos + 1)) {
 							GUI_output(get_tx(3));
 						} else if (((target_object_id < 10) && get_hero(target_object_id - 1)->flags.dead) ||
 								//((target_object_id >= 10) && (target_object_id < 30) && (g_enemy_sheets[target_object_id - 10].flags.dead || g_enemy_sheets[target_object_id - 10].flags.dead)) ||
@@ -261,7 +261,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 							/* set target id to 0 */
 							hero->target_object_id = 0;
 
-						} else if ((range_weapon != -1) && (calc_beeline(x, y, target_x, target_y) < 2)) {
+						} else if ((range_weapon != -1) && (manhattan_distance(x, y, target_x, target_y) < 2)) {
 
 							GUI_output(get_ttx(508));
 
@@ -823,7 +823,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 						hero->target_object_id = 0;
 						done = 0;
 
-					} else if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, actor_id))
+					} else if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, hero_pos))
 					{
 						/* GUI_output(get_tx(29)); */
 						hero->action_id = FIG_ACTION_WAIT;
@@ -837,7 +837,7 @@ void FIG_menu(struct struct_hero *hero, const signed int actor_id, signed int x,
 
 	/* final fight vs. Orkchampion */
 	if ((g_current_fight_no == FIGHTS_F144) &&
-		(get_hero_index(gs_main_acting_hero) != actor_id) &&
+		(get_hero_index(gs_main_acting_hero) != hero_pos) &&
 		((hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_RANGE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_SPELL) ||

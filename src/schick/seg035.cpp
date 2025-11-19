@@ -275,7 +275,7 @@ signed int check_hero_range_attack(const struct struct_hero *hero, const signed 
 		retval = 0;
 	}
 
-	if (calc_beeline(hero_x, hero_y, target_x, target_y) != 1) {
+	if (manhattan_distance(hero_x, hero_y, target_x, target_y) != 1) {
 
 		/* exchange coordinates if needed */
 		if (hero_x > target_x) {
