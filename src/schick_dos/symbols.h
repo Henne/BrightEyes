@@ -1478,7 +1478,7 @@
 //#define FIG_MSG_DATA                    (0xd333)    /* struct(4)[6]; struct{signed short type, damage;} */
 //#define ENEMY_SHEETS                    (0xd34b)    /* struct(62)[20]; struct enemy[20] */
 //#define FIG_MOVE_PATHDIR                (0xd823)    /* signed char[10] */
-//#define FIG_ACTORS_UNKN                 (0xd82d)    /* signed char[30]; see FIG_ACTION_UNKNOWN2 */
+//#define FIG_ACTORS_UNKN                 (0xd82d)    /* signed char[30]; see FIG_ACTION_PARRY */
 //#define HERO_IS_TARGET                  (0xd84b)    /* signed char[7] */
 //#define CHESSBOARD                      (0xd852)    /* uint8_t* */
 //#define FIG_SPELLGFX_BUF                (0xd856)    /* uint8_t* */

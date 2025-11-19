@@ -131,7 +131,7 @@ enum {
 	FIG_ACTION_REPEAT_OPTION	= 13,
 	FIG_ACTION_RANGE_ATTACK		= 15,
 	FIG_ACTION_FLEE			= 16,
-	FIG_ACTION_UNKNOWN2		= 100,
+	FIG_ACTION_PARRY		= 100, /* is set in sub_hero_le() when all le are lost */
 	FIG_ACTION_UNKNOWN3		= 102, /* drink potion? */
 	FIG_ACTION_UNKNOWN4		= 103  /* cast spell? */
 };
