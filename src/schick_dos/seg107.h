@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void use_item(const signed int, const signed int);
 
@@ -43,7 +39,3 @@ void item_ignite(void);
 
 /* 0x61 */
 void item_use_beutel(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

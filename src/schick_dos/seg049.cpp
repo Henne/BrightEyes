@@ -25,10 +25,6 @@
 #include "seg097.h"
 #include "seg104.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 int GRP_compare_heroes(const void *p1, const void *p2)
 {
 	struct struct_hero *hero1 = (struct struct_hero*)p1;
@@ -748,7 +744,3 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

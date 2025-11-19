@@ -32,10 +32,6 @@
 #include "seg098.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const struct analues_item g_analues_items[28] = {
 	/* messages from SPELLTXT.LTX */
 
@@ -1094,7 +1090,3 @@ char* spell_analues(void)
 
 	return g_text_output_buf;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

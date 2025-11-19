@@ -24,10 +24,6 @@
 #include "seg103.h"
 #include "seg113.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* REMARK: These 400 D might result in an integer overflow. */
 struct struct_chest g_dng12_specialchests[3] = {
 	{ DNG_POS(0,8,10), 6, use_lockpicks_on_chest,	chest_crossbow_bolts,	DNG12_chest00_loot, 0, 0, 0 },
@@ -554,7 +550,3 @@ void DNG12_fight_intro(const signed int fight_id)
 		GUI_output(get_tx(12));
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

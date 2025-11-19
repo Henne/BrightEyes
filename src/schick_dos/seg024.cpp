@@ -19,10 +19,6 @@
 #include "seg027.h"
 #include "seg096.h"
 
-#if !defined (__BORLANDC__)
-namespace M302de {
-#endif
-
 #if 0
 /* That comes in a later phase of development */
 
@@ -218,7 +214,3 @@ signed int diary_print_entry(signed int line)
 	return line;
 
 }
-
-#if !defined (__BORLANDC__)
-}
-#endif

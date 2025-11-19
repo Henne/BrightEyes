@@ -1,6 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
 
 #include "datseg.h"
 
@@ -129,7 +126,3 @@ signed int count_heroes_available_in_group_ignore_npc(void);
 
 void check_group(void);
 uint8_t* schick_alloc(uint32_t);
-
-#if !defined(__BORLANDC__)
-}
-#endif

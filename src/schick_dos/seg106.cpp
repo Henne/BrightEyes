@@ -25,10 +25,6 @@
 #include "seg105.h"
 #include "seg106.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const signed int g_hero_startup_items[12][4] = {
 	{ ITEM_DOLCH, ITEM_WURFMESSER, ITEM_WURFMESSER, -1 }, /* Gaukler */
 	{ ITEM_LANGBOGEN, ITEM_DOLCH, -1, -1 }, /* Jaeger */
@@ -874,7 +870,3 @@ signed int get_full_waterskin_pos(const struct struct_hero *hero)
 
 	return inv_pos;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -26,10 +26,6 @@
 #include "seg099.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static unsigned char *g_hexenknoten_gfx_buf = NULL; // ds:0xacc8;
 
 /* Clairvoyance / Hellsicht */
@@ -748,7 +744,3 @@ void spell_necropathia(void)
         D1_INFO("Zauberspruch \"Necropathia\" ist nicht implementiert\n");
 #endif
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

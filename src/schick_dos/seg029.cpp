@@ -22,10 +22,6 @@
 #include "seg029.h"
 #include "seg096.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static signed char g_loaded_menu_icons[9] = { -2, -2, -2, -2, -2, -2, -2, -2, -2 }; // ds:0x5ecc
 
 #if 0
@@ -427,7 +423,3 @@ void deselect_hero_icon(const signed int pos)
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

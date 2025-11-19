@@ -35,10 +35,6 @@
 #include "seg097.h"
 #include "seg119.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const signed int g_passage_type_to_name[7] = {
 	/* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
 	0x001d, /* HEUER */
@@ -777,7 +773,3 @@ signed int get_srout_len(struct struct_point *ptr)
 
 	return i;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -30,10 +30,6 @@
 #include "seg028.h"
 #include "seg066.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static signed int g_locations_tab_size = 0;	// ds:0x5eb8
 static signed int g_areadescr_dng_level = 0;	// ds:0x5eba
 static signed int g_areadescr_fileid = 0;	// ds:0x5ebc
@@ -683,7 +679,3 @@ void load_fightbg(const signed int index)
 
 	close(handle);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -20,10 +20,6 @@
 #include "seg097.h"
 #include "seg103.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_chest g_dng14_specialchests[9] = {
 	{ DNG_POS(0,1,1),	0, NULL,			NULL,			DNG14_chest00_loot, 0, 0, 0 },
 	{ DNG_POS(0,10,2),	0, NULL,			NULL,			DNG14_chest01_loot, 0, 0, 0 },
@@ -264,7 +260,3 @@ void DNG15_riddle(void)
 
 	g_textbox_width = tw_bak;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

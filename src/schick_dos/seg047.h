@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void make_valuta_str(char* dst, int32_t money);
 /* 0x25 */
@@ -38,7 +34,3 @@ void hero_gets_diseased(struct struct_hero*, const signed int);
 void hero_disease_test(struct struct_hero*, const signed int, const signed int);
 /* 0x75 */
 signed int select_hero_ok_forced(char*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

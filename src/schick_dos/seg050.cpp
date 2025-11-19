@@ -26,10 +26,6 @@
 #include "seg103.h"
 #include "seg120.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 const signed int g_autoinc_spells_witch[3] = { SP_ODEM_ARCANUM, SP_BLITZ_DICH_FIND, -1 }; // ds:25924
 const signed int g_autoinc_spells_druid[4] = { SP_ODEM_ARCANUM, SP_VERWANDLUNG_BEENDEN, SP_EXPOSAMI_CREATUR, -1 }; // ds:25930
 
@@ -1018,7 +1014,3 @@ void level_up(const signed int hero_pos)
 		load_tx2(text_file_index_bak);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

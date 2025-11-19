@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void do_temple(void);
 /* 0x25 */
@@ -18,7 +14,3 @@ void miracle_resurrect(const char*);
 void miracle_modify(const unsigned int, const int32_t, const signed int);
 /* 0x43 */
 void miracle_weapon(const char*, const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

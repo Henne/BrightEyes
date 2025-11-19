@@ -28,10 +28,6 @@
 #include "seg113.h"
 #include "seg114.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* wall of rock */
 void tevent_110(void)
 {
@@ -713,7 +709,3 @@ void tevent_123(void)
 
 	} while (done == 0);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

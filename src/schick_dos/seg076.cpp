@@ -49,10 +49,6 @@
 #include "seg098.h"
 #include "seg103.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static signed int (*g_dng_handlers[15])(void) = {
 	DNG01_handler,
 	DNG02_handler,
@@ -1009,7 +1005,3 @@ void DNG_see_lever(void)
 			g_dng_extra_action = DNG_MENU_MODE_PLAIN;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

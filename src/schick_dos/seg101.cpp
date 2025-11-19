@@ -21,10 +21,6 @@
 #include "seg097.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* Transformation / Verwandlung */
 void spell_adler(void)
 {
@@ -728,7 +724,3 @@ void spell_sturmgebr(void)
 	D1_INFO("Zauberspruch \"Sturmgebruell\" ist nicht implementiert\n");
 #endif
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

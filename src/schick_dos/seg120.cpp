@@ -41,10 +41,6 @@
 #include "seg104.h"
 #include "seg120.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static uint8_t g_color_white[3] = { 0x3f, 0x3f, 0x3f }; // ds:0xb22a
 
 uint8_t g_color_black[3] = { 0, 0, 0 }; // ds:0xb22d
@@ -887,7 +883,3 @@ void call_gen(void)
 		gs_year = 15;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

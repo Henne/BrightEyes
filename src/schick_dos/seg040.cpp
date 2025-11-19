@@ -21,10 +21,6 @@
 #include "seg032.h"
 #include "seg039.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct point8s g_cb_rear_border[15] = {
 	{ 0x00, 0x10 },
 	{ 0x01, 0x10 },
@@ -304,8 +300,3 @@ void FIG_draw_scenario(void)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif
-

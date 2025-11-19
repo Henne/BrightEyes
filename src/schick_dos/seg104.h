@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int do_alchemy(struct struct_hero*, const signed int, const signed int);
 
@@ -30,7 +26,3 @@ signed int get_hero_weight(const struct struct_hero*);
 
 /* 0x48 */
 signed int get_skilled_hero_pos(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

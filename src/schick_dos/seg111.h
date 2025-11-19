@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void tevent_064_chest(struct struct_chest*);
 /* 0x25 */
@@ -32,7 +28,3 @@ void tevent_057(void);
 void tevent_058(void);
 /* 0x66 */
 void tevent_059(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

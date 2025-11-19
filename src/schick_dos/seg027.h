@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void load_pp20(const signed int);
 /* 0x25 */
@@ -18,7 +14,3 @@ signed int count_fight_enemies(signed int);
 void read_fight_lst(signed int);
 /* 0x43 */
 void write_fight_lst(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

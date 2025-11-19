@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void DNG_update_pos(void);
 /* 0x25 */
@@ -40,7 +36,3 @@ void DNG_stub6(void);
 signed int DNG_check_climb_tools(void);
 /* 0x7a */
 void DNG_enter_dungeon(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

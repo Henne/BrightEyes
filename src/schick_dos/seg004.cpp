@@ -22,10 +22,6 @@
 #include "seg004.h"
 #include "seg008.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static int16_t g_ani_busy = 0; // ds:0x4a90
 int16_t g_pic_copy_flag = 0; // ds:0x4a92
 static uint16_t  g_status_bar_colors[2] = { 0xf0, 0xf9 }; // ds:0x4a94, {le_color, 0, ae_color, 0}
@@ -1187,7 +1183,3 @@ void map_effect(uint8_t *src)
 
 	g_wallclock_update = wallclock_update_bak;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

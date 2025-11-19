@@ -26,10 +26,6 @@
 #include "seg097.h"
 #include "seg120.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_ani {
 	uint8_t* ptr;
 	signed int width;
@@ -626,7 +622,3 @@ void show_outro(void)
 	/* save the game */
 	save_game_state();
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

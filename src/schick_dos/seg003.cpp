@@ -17,10 +17,6 @@
 #include "seg008.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 #if 0
 static const char no_way_msg[][41] = {
 	"IN DIESE RICHTUNG GEHT ES NICHT WEITER.",
@@ -223,7 +219,3 @@ void no_way(void)
 {
 	GUI_output(g_noway_string);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* should be static */
 /* 0x20 */
 void FANI_add_shotbolt(const signed int, const signed int, const signed int);
@@ -24,7 +20,3 @@ void FANI_prepare_hero_spell_ani(const signed int, const struct struct_hero*, co
 
 /* 0x43 */
 void FANI_prepare_enemy_spell_ani(const signed int, const struct enemy_sheet*, const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

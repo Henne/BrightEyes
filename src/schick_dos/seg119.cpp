@@ -20,11 +20,6 @@
 #include "seg097.h"
 #include "seg120.h"
 
-
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /*
  * Each disease is described by 5 consecutive bytes.
  * The first two bytes have for all diseases the same meaning.
@@ -539,7 +534,3 @@ void disease_effect(void)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

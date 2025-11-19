@@ -29,10 +29,6 @@
 #include "seg105.h"
 #include "seg106.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed char g_finalfight_tumult = 0; // ds:0x5f30
 signed char g_autofight_magic = 0; // ds:0x5f31
 static const char g_red_string1[5] = "\xf1%s\xf0"; // ds:0x5f32
@@ -851,7 +847,3 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 		g_finalfight_tumult = 1;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

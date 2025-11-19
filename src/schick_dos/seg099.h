@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* Dispel / Antimagie */
 
 /* 0x20 */
@@ -101,8 +97,3 @@ void spell_tiere_heilen(void);
 void spell_adleraug(void);
 /* 0xde */
 char* spell_analues(void);
-
-
-#if !defined(__BORLANDC__)
-}
-#endif

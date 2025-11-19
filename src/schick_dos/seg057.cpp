@@ -27,10 +27,6 @@
 #include "seg104.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct c_str_5 g_sell_screen_str_money_h = { "H %d" }; // ds:0x6bf0
 static struct c_str_5 g_sell_screen_str_money_s = { "S %d" }; // ds:0x6bf5
 static struct c_str_5 g_sell_screen_str_money_d = { "D %d" }; // ds:0x6bfa
@@ -536,7 +532,3 @@ void sell_screen(struct merchant_descr *merchant_descr)
 	g_pp20_index = -1;
 	g_heroswap_allowed = 1;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

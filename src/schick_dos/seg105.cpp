@@ -23,10 +23,6 @@
 #include "seg105.h"
 #include "seg106.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static signed char g_prevent_drop_equipped_items = 0; // ds:0xae46
 unsigned char g_unkn_067[1] = { 0x00 }; // ds:0xae47
 
@@ -870,7 +866,3 @@ signed int select_item_to_drop(struct struct_hero *hero)
 
 	return -1;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

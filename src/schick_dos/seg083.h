@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 extern struct struct_chest g_dng08_specialchests[7];
 
 /* 0x20 */
@@ -28,7 +24,3 @@ void DNG08_chest04_open(struct struct_chest*);
 void DNG08_chest05_open(struct struct_chest*);
 /* 0x57 */
 signed int DNG08_handler(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

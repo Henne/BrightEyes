@@ -23,10 +23,6 @@
 #include "seg105.h"
 #include "seg113.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed char g_tmap_double1 = 0; // ds:0x7c9a, 1 = unicorn brought a piece you already have
 signed char g_tmap_double2 = 0; // ds:0x7c9b, 1 = you got a piece you already have from the unicorn
 signed char g_swafnild_traveled = 0; // ds:0x7c9c
@@ -875,8 +871,3 @@ signed int has_intro_letter(void)
 	/* check for the introduction letter / Empfehlungsschreiben */
 	return (get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN) != -1 ? 1 : 0);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif
-

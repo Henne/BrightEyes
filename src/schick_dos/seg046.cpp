@@ -21,10 +21,6 @@
 #include "seg047.h"
 #include "seg096.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 int8_t g_statuspage_sel_inv_slot_1 = 1; // ds:0x636e
 int8_t g_statuspage_sel_inv_slot_2 = 1; // ds:0x636f
 int8_t g_statuspage_sel_inv_slot_3 = 7; // ds:0x6370
@@ -797,7 +793,3 @@ void status_show(const signed int index)
 
 	call_mouse();
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

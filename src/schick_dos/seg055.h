@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void do_merchant(void);
 /* 0x25 */
@@ -14,7 +10,3 @@ void TLK_ghandel(const signed int);
 void TLK_khandel(const signed int);
 /* 0x39 */
 void TLK_whandel(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

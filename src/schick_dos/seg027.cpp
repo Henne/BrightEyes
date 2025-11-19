@@ -24,10 +24,6 @@
 #include "seg009.h"
 #include "seg027.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static uint8_t *g_pp20_buffers[9] = { 0 };			// ds:0x5e6a; uint8_t*
 static signed long g_pp20_buffer_lengths[9] = {0};		// ds:0x5e8e
 static signed int g_current_fight_id = 0;			// ds:0x5eb2
@@ -723,7 +719,3 @@ void init_common_buffers(void)
 	read_archive_file(handle, g_townpal_buf, 288);
 	close(handle);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

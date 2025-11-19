@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int use_magic(struct struct_hero*);
 /* 0x25 */
@@ -28,7 +24,3 @@ signed int can_use_spellclass(const struct struct_hero*, const signed int);
 signed int test_spell_group(const signed int, const signed char);
 /* 0x57 */
 signed int select_magic_user(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

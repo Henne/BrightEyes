@@ -35,10 +35,6 @@
 #include "seg096.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const struct struct_char_height g_gui_char_height[67] = {
 	{        ' ',  0, 8 },
 	{        'A',  1, 8 },
@@ -930,7 +926,3 @@ void GUI_dialog_na(const signed int head_index, char *text)
 	GUI_dialogbox((unsigned char*)g_dtp2, NULL, text, 0);
 
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

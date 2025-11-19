@@ -17,10 +17,6 @@
 #include "seg047.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed char g_hero_sel_exclude = -1; // ds:0x64a2
 static struct int16_t_7 g_seg047_init1 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64a3, filled with zeroes
 static struct int16_t_7 g_seg047_init2 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64b1, filled with zeroes
@@ -693,7 +689,3 @@ void hero_get_sober(struct struct_hero *hero)
 	if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK)
 		g_request_refresh = 1;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

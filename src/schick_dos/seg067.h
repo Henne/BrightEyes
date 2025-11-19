@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void city_event_1(void);
 /* 0x25 */
@@ -28,7 +24,3 @@ char* waffinfo_weapons(void);
 char* waffinfo_herbs(void);
 /* 0x5c */
 char* waffinfo_general(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

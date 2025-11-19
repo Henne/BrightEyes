@@ -78,10 +78,6 @@ static unsigned char g_unkn_072[4]; // ds:0xbc54
 /* static prototypes */
 static void CD_audio_stop_hsg(void);
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 #if defined(__BORLANDC__)
 /**
  * \brief   check if cdrom-drives are installed
@@ -512,7 +508,3 @@ signed int CD_init(void)
 	return 1;
 #endif
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

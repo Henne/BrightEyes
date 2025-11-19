@@ -68,10 +68,6 @@
 #include "seg120.h"
 #include "seg121.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* BSS Variables */
 static unsigned char dummy;
 static uint16_t g_sample_ad_length;		// ds:0xbc5a
@@ -5810,15 +5806,3 @@ static signed int copy_protection(void)
 	return 1;
 #endif
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif
-
-#if !defined(__BORLANDC__)
-/* REMARK: reason == namespaces */
-int main(int argc, char** argv)
-{
-	return M302de::main(argc, argv);
-}
-#endif

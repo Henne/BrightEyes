@@ -30,10 +30,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_chest g_dng01_specialchests[9] = {
 	{ DNG_POS(0,12,9),	(signed char)ITEM_GOLDSCHLUESSEL,	use_key_on_chest,	chest_protected_normal, DNG01_chest00_loot,	 0,    0, 0 },
 	{ DNG_POS(1,5,8),	2,					use_lockpicks_on_chest,	chest_closed,		DNG01_chest01_loot,	 0,    0, 0 },
@@ -388,7 +384,3 @@ void DNG01_chest00_loot(struct struct_chest* chest)
 		gs_quest_deadship_done = 1;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

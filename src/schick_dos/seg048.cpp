@@ -25,10 +25,6 @@
 #include "seg107.h"
 #include "seg108.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const struct struct_point g_invslot_borderxy_table[25] = {
 	{ 0x0044, 0x0037 },
 	{ 0x003a, 0x0050 },
@@ -933,7 +929,3 @@ void status_select_hero(void)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

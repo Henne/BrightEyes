@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 //0x20
 //static
 void draw_playmask(void);
@@ -24,7 +20,3 @@ void copy_forename(char*, char*);
 //0x4d
 //static
 void load_icon(const signed int, const signed int, const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

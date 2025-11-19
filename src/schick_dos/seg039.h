@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int manhattan_distance(const signed int, const signed int, const signed int, const signed int);
 /* 0x25 */
@@ -16,7 +12,3 @@ void FIG_load_enemy_sprites(struct enemy_sheet*, const signed int, const signed 
 void FIG_init_enemies(void);
 /* 0x3e */
 void FIG_init_heroes(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

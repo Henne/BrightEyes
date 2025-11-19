@@ -27,10 +27,6 @@
 #include "seg103.h"
 #include "seg117.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 void do_tavern(void)
 {
 	signed int i;
@@ -278,7 +274,3 @@ void prolog_ghostship(void)
 	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

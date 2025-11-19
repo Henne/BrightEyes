@@ -23,10 +23,6 @@
 #include "seg104.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct struct_recipe g_alchemy_recipes[13] = {
 	{
 		ITEM_REZEPT_FUER_HEILTRANK,
@@ -617,7 +613,3 @@ signed int get_skilled_hero_pos(const signed int skill_id)
 
 	return pos;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -8,7 +8,7 @@ enum {
 	WEST	= 3
 };
 
-/* viewing directions in fight mode, according to keyboard input in fight, 
+/* viewing directions in fight mode, according to keyboard input in fight,
  * and also according to the chessboard x- and y-coordinates,
  * i.e. positive x-direction is "right", positive y-direction is "up" etc.
  */

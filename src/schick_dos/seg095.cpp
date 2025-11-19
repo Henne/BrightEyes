@@ -21,10 +21,6 @@
 #include "seg097.h"
 #include "seg120.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int npc_meetings(const signed int type_index)
 {
 	/* check if an NPC is in the party and if we already had an NPC conversation here */
@@ -512,7 +508,3 @@ void add_npc(const signed int index)
 
 	draw_status_line();
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

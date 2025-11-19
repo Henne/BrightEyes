@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* Clairvoyance / Hellsicht */
 
 /* 0x20 */
@@ -56,7 +52,3 @@ void spell_scharfes_auge(void);
 void spell_hexenblick(void);
 /* 0x7f */
 void spell_necropathia(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

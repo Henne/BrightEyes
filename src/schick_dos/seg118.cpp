@@ -29,10 +29,6 @@
 #include "seg109.h"
 #include "seg113.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const char g_str_rad1[4] = "RAD"; // ds:0xb21e
 static const char g_str_rad2[4] = "RAD"; // ds:0xb222
 static const char g_str_rad3[4] = "RAD"; // ds:0xb226
@@ -606,7 +602,3 @@ void tevent_145(void)
 	sprintf(g_dtp2, get_tx2(45), get_ttx(gs_trv_destination + 0xeb));
 	GUI_output(g_dtp2);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

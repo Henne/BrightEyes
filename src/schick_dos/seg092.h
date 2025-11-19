@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void delete_chest_item(struct struct_chest*, signed int);
 
@@ -67,7 +63,3 @@ void chest_crossbow_bolts(void);
 
 /* 0x89 */
 signed int hero_has_lockpicks(const struct struct_hero*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

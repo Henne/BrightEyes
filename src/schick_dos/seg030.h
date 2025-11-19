@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void do_talk(const signed int, const signed int);
 /* 0x25 */
@@ -14,7 +10,3 @@ void talk_switch(void);
 char* get_random_unknown_informer_name(const int);
 /* 0x39 */
 char* get_random_known_informer_name(const int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

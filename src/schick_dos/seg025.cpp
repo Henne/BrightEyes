@@ -46,10 +46,6 @@
 #include "seg066.h"
 #include "seg122.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct mouse_action g_action_table_options[10] = {
 	{ 0x05, 0x1e, 0x001c, 0x35, 0x81 },
 	{ 0x05, 0x3c, 0x001c, 0x53, 0x82 },
@@ -866,7 +862,3 @@ void copy_palette(void)
 	memcpy(g_renderbuf_ptr + 320 * 200, (uint8_t*)g_ani_palette, 0x60);
 	g_fading_state = 2;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

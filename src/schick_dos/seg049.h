@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void GRP_swap_heroes(void);
 /* 0x25 */
@@ -20,7 +16,3 @@ void GRP_switch_to_next(const signed int);
 int GRP_compare_heroes(const void*, const void*);
 /* 0x48 */
 void GRP_save_pos(signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -16,10 +16,6 @@
 #include "seg007.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 void poison_effect(void)
 {
 	signed int i;
@@ -408,7 +404,3 @@ void poison_effect(void)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

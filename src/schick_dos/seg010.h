@@ -1,6 +1,4 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#else
+#if defined(__BORLANDC__)
 extern "C" {
 #endif
 
@@ -11,8 +9,6 @@ int16_t EMS_map_memory(const int16_t, const int16_t, const int16_t);
 uint8_t* EMS_norm_ptr(uint8_t*);
 signed int EMS_init(void);
 
-#if !defined(__BORLANDC__)
-}
-#else
+#if defined(__BORLANDC__)
 }
 #endif

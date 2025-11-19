@@ -32,10 +32,6 @@
 #include "seg096.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static int8_t g_god_temples_table_01[2] = { 0x3d, -1 }; // ds:0x6de8, array terminated by -1
 static int8_t g_god_temples_table_02[6] = { 0x0b, 0x1c, 0x25, 0x2d, 0x33, -1 }; // ds:0x6dea, array terminated by -1
 static int8_t g_god_temples_table_03[11] = { 0x03, 0x0d, 0x0e, 0x21, 0x22, 0x26, 0x29, 0x2c, 0x35, 0x39, -1 }; // ds:0x6df0, array terminated by -1
@@ -593,7 +589,3 @@ void miracle_weapon(const char *str, const signed int mode)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 #if defined(__BORLANDC__)
 //0x20
 void unused_store(const signed int);
@@ -44,7 +40,3 @@ void load_informer_tlk(const signed int);
 void load_tlk(const signed int);
 //0x7a
 void load_fightbg(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

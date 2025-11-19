@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int range_attack_check_ammo(struct struct_hero*, const signed int);
 //0x25
@@ -20,7 +16,3 @@ signed int weapon_check(const struct struct_hero*);
 signed int FIG_get_enemy_attack_damage(const struct enemy_sheet*, struct enemy_sheet*, const signed int);
 //0x48
 void clear_anisheets(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

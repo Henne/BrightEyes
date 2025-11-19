@@ -42,10 +42,6 @@
 #include "seg113.h"
 #include "seg120.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int g_fig_dropped_counter = 0;	// ds:0x5f12
 static signed int g_fig_all_heroes_withdrawn = 0; // ds:0x5f14
 signed int g_max_enemies = 0; // ds:0x5f16, an upper bound for the number of enemies
@@ -1299,7 +1295,3 @@ signed int do_fight(const signed int fight_id)
 
 	return retval;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

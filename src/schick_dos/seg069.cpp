@@ -19,10 +19,6 @@
 #include "seg097.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int g_combo_mode; // ds:0xe42c
 
 void THO_hetmann(void)
@@ -323,7 +319,3 @@ void THO_garaldsson(void)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

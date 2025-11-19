@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void hero_disappear(struct struct_hero*, const signed int, const signed int);
 /* 0x25 */
@@ -46,7 +42,3 @@ void tevent_086(void);
 void tevent_088(void);
 /* 0x89 */
 void tevent_089(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

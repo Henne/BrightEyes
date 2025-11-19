@@ -38,10 +38,6 @@
 #include "seg117.h"
 #include "seg118.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static void (*g_travel_event_handlers[146])(void) = {
 	NULL,
 	tevent_001, tevent_002, tevent_003, tevent_004, tevent_005,
@@ -878,7 +874,3 @@ void tevent_092(void)
 {
 	do_talk(0, 0);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

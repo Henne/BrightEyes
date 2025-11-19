@@ -27,10 +27,6 @@
 #include "seg097.h"
 #include "seg106.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct dng_gfxtab g_dng_gfxtab_wood[88] = {
 	 { { {      0,      0 }, {      8,      0 }, {      0,     -1 }, {      0,      0 } },     -1 },
 	 { { {      0,      0 }, { -32754,      0 }, {      0,     -1 }, {      0,      0 } },     -1 },
@@ -1366,7 +1362,3 @@ mark2:			   goto mark1;
 		call_mouse();
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

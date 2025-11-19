@@ -1,6 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
 /* 0x20 */
 void do_location(void);
 /* 0x25 */
@@ -31,6 +28,3 @@ void leave_dungeon(void);
 void tumult(void);
 /* 0x66 */
 void fade_into(void);
-#if !defined(__BORLANDC__)
-}
-#endif

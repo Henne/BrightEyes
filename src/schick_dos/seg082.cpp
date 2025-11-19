@@ -24,10 +24,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* REMARK: These 500 D might result in an integer overflow. */
 struct struct_chest g_dng07_specialchests[2] = {
 	{ DNG_POS(2,8,5), 5, use_lockpicks_on_chest, chest_ignifax_normal, NULL, 0, 50000L, 0 },
@@ -372,7 +368,3 @@ void DNG09_statues(const signed int prob, const signed int bonus)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

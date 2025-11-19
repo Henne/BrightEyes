@@ -10,10 +10,6 @@
 
 #include "v302de.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static signed int EMS_installed(void)
 {
 #if 0
@@ -136,7 +132,3 @@ signed int EMS_init(void)
 
 	return 0;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

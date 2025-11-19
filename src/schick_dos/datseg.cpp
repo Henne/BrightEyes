@@ -52,10 +52,6 @@
 #include "seg118.h"
 #include "seg122.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 #if defined(__BORLANDC__)
 char ds[1];
 #endif
@@ -3916,8 +3912,4 @@ const char* names_mspell[14] = {
     "Paralü"
 };
 
-#endif
-
-#if !defined(__BORLANDC__)
-}
 #endif

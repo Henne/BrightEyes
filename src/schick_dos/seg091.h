@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 extern struct struct_chest g_dng13_specialchests[3];
 
 /* 0x20 */
@@ -22,7 +18,3 @@ void DNG13_chest00_loot(struct struct_chest*);
 signed int DNG13_handler(void);
 /* 0x48 */
 void DNG13_fight_intro(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

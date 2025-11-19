@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void THO_eisenhof(void);
 /* 0x25 */
@@ -31,7 +27,3 @@ void THO_academy(void);
 /* 0x5c */
 /* should be static */
 signed int academy_get_equal_item(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

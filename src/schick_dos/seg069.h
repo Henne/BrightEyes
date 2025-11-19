@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void THO_hetmann(void);
 /* 0x25 */
@@ -12,7 +8,3 @@ void THO_tav_inn_combi(void);
 void THO_stormchildren(void);
 /* 0x34 */
 void THO_garaldsson(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

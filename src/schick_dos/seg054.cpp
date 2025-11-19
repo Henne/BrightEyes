@@ -26,10 +26,6 @@
 #include "seg103.h"
 #include "seg104.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const struct inn_descr g_inn_descr_table[77] = {
 	{ 14,   0 },
 	{  7,  30 },
@@ -723,7 +719,3 @@ void TLK_inn(const signed int state)
 		g_action = ACTION_ID_ICON_2;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

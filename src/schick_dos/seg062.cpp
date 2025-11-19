@@ -19,10 +19,6 @@
 #include "seg061.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct int8_t_15 g_temple_miracle_bonus = { 0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0, 1 }; // ds:0x6ea4
 static struct int8_t_15 g_temple_miracle_dice = { 0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10 }; // ds:0x6eb3
 
@@ -494,7 +490,3 @@ void ask_miracle(void)
 		load_tx2(fi_bak);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

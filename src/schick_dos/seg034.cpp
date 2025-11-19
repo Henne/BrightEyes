@@ -22,10 +22,6 @@
 #include "seg096.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 const signed int g_cb_obj_nonobstacle[27] = {
        	0x0017, 0x0018, 0x0019, 0x001a, 0x001b,
 	0x0024, 0x0025, 0x0026, 0x0027, 0x0028,
@@ -946,7 +942,3 @@ void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed i
 		g_fig_cb_selector_id[0] = -1;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

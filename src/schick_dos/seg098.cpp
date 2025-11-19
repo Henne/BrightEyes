@@ -32,10 +32,6 @@
 #include "seg101.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int g_spell_special_aecost = -1; // ds:0xac0e
 static struct int16_t_5 g_ani_heal_picstars = { 0, 1, 2, 1, 0 };	// ds:0xac10
 static struct c_str_6 g_spell_select_str_keyval = { "%s~%d" };		// ds:0xac1a
@@ -889,7 +885,3 @@ signed int use_spell(struct struct_hero* hero, const signed int selection_menu, 
 
 	return retval;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

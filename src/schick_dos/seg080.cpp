@@ -27,10 +27,6 @@
 #include "seg105.h"
 #include "seg113.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_chest g_dng04_specialchests[4] = {
 	{ DNG_POS(0,6,7),	1, DNG04_chest00_open, NULL, DNG04_chest00_loot, 0, 0, 0 },
 	{ DNG_POS(0,1,12),	1, DNG04_chest01_open, NULL, DNG04_chest01_loot, 0, 0, 0 },
@@ -473,7 +469,3 @@ void DNG05_fight_intro(const signed int fight_id)
 		GUI_output(get_tx(10));
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

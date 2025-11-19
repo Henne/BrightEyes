@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void hunt_karen(void);
 
@@ -44,7 +40,3 @@ void TLK_way_to_ruin(const signed int);
 
 /* 0x61 */
 void tevent_087(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

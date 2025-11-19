@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 //20
 #if defined(__BORLANDC__)
 void GUI_unused1(char*, signed int, signed int);
@@ -46,7 +42,3 @@ signed int GUI_menu_input(const signed int, const signed int, const signed int);
 void GUI_print_fight_intro_msg(const signed int);
 //0x6b
 void GUI_dialog_na(const signed int, char*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

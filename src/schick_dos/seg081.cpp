@@ -27,10 +27,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_chest g_dng06_specialchests[3] = {
 	{ DNG_POS(0,7,3), 0, NULL,			NULL,			DNG06_chest00_loot, 0, 0, 40, },
 	{ DNG_POS(1,9,4), 0, use_lockpicks_on_chest,	chest_poisoned2,	DNG06_chest01_loot, 0, 0, 0 },
@@ -633,8 +629,3 @@ void DNG09_pitfall(void)
 		}
 	}
 }
-
-
-#if !defined(__BORLANDC__)
-}
-#endif

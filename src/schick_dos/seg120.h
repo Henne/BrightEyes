@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int init_memory(void);
 /* 0x25 */
@@ -25,7 +21,3 @@ int err_handler(void);
 void game_over_screen(void);
 /* 0x52 */
 void call_gen(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

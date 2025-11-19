@@ -16,10 +16,6 @@
 #include "v302de.h"
 
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 uint16_t swap_u16(const uint16_t val)
 {
 	return (val << 8) | (val >> 8);
@@ -346,7 +342,3 @@ void decomp_rle(const signed int width, signed int height, uint8_t *dst,
 
 	} while (--height);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

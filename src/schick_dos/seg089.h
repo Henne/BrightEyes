@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 extern struct struct_chest g_dng15_specialchests[33];
 
 /* 0x20 */
@@ -28,8 +24,3 @@ void DNG15_smelling_chest(struct struct_chest*);
 void DNG15_figures_chest(struct struct_chest*);
 /* 0x57 */
 void DNG15_cursed_money_chest(struct struct_chest*);
-
-
-#if !defined(__BORLANDC__)
-}
-#endif

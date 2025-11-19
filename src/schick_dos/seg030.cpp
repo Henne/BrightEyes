@@ -28,10 +28,6 @@
 #include "seg116.h"
 #include "seg117.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 char *g_dialog_title;		// ds:0xe308
 signed int g_dialog_informer;	// ds:0xe30c
 signed int g_dialog_next_state; // ds:0xe30e
@@ -794,7 +790,3 @@ void talk_switch(void)
 		TLK_eremit(state);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif
