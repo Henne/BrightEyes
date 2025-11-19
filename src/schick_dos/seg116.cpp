@@ -655,7 +655,7 @@ void TLK_old_woman(const signed int state)
 
 		hero = get_hero(0);
 		for (l_di = counter = 0; l_di <= 6; l_di++, hero++) {
-			/* Original-Bug: check if this is realy a hero in the current group and alive before test_skill((struct struct_hero*)) */
+			/* Original-Bug: check if this is really a hero in the current group and alive before test_skill((struct struct_hero*)) */
 			if (test_skill(hero, TA_VERSTECKEN, -5) > 0) {
 				counter++;
 			}
@@ -675,7 +675,7 @@ void TLK_old_woman(const signed int state)
 
 		hero = get_hero(0);
 		for (l_di = counter = 0; l_di <= 6; l_di++, hero++) {
-			/* Original-Bug: check if this is realy a hero in the current group and alive before test_skill((struct struct_hero*)) */
+			/* Original-Bug: check if this is really a hero in the current group and alive before test_skill((struct struct_hero*)) */
 			if (test_skill(hero, TA_VERSTECKEN, -5) > 0) {
 				counter++;
 			}
