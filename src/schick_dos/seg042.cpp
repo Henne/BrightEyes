@@ -546,12 +546,12 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
 					FANI_prepare_fight_hero_ani(1, target_hero, weapon_type_target,
-								100, hero->target_object_id, hero_pos + 1, 1);
+								FIG_ACTION_PARRY, hero->target_object_id, hero_pos + 1, 1);
 				}
 			} else {
 
 				if (l16 == 0) {
-					FANI_prepare_fight_enemy_ani(1, target_monster, 100, hero->target_object_id, hero_pos + 1, 1);
+					FANI_prepare_fight_enemy_ani(1, target_monster, FIG_ACTION_PARRY, hero->target_object_id, hero_pos + 1, 1);
 				} else {
 					if (g_defender_dead != 0) {
 						FANI_prepare_fight_enemy_ani(1, target_monster, 0, hero->target_object_id, hero_pos + 1, 1);

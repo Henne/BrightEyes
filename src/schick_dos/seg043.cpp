@@ -488,11 +488,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 				if (check_hero(hero) || (g_defender_dead != 0)) {
 
-					FANI_prepare_fight_hero_ani(0, hero, weapon_type, 100, monster->target_object_id, monster_pos + 10, 1);
+					FANI_prepare_fight_hero_ani(0, hero, weapon_type, FIG_ACTION_PARRY, monster->target_object_id, monster_pos + 10, 1);
 				}
 
 			} else if (l17 == 0) {
-				FANI_prepare_fight_enemy_ani(0, target_enemy, 100, monster->target_object_id, monster_pos + 10, 1);
+				FANI_prepare_fight_enemy_ani(0, target_enemy, FIG_ACTION_PARRY, monster->target_object_id, monster_pos + 10, 1);
 			} else if (g_defender_dead != 0) {
 				FANI_prepare_fight_enemy_ani(0, target_enemy, 0, monster->target_object_id, monster_pos + 10, 1);
 			}

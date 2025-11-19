@@ -253,7 +253,7 @@ signed int g_replenish_stocks_mod; // ds:0xd331
 struct fight_msg g_fig_msg_data[6]; // ds:0xd333
 struct enemy_sheet g_enemy_sheets[20]; // ds:0xd34b
 signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
-signed char g_fig_actors_unkn[30]; // ds:0xd82d, see FIG_ACTION_UNKNOWN2
+signed char g_fig_actors_unkn[30]; // ds:0xd82d, see FIG_ACTION_PARRY
 signed char g_hero_is_target[7]; // ds:0xd84b
 signed char *g_chessboard;// ds:0xd852
 uint8_t *g_fig_spellgfx_buf; // ds:0xd856
@@ -4603,7 +4603,7 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 			gs_unconscious_message[get_hero_index(hero)] = 0;
 
 			/* unknown */
-			hero->action_id = FIG_ACTION_UNKNOWN2;
+			hero->action_id = FIG_ACTION_PARRY;
 
 			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 				g_refresh_status_line = 1;

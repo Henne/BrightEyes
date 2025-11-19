@@ -131,7 +131,7 @@ static signed char get_seq_header(const signed int ani_num)
  * \param   sheet_id          [0, 1]
  * \param   hero        pointer to hero
  * \param   weapon_type the type of weapon for the animation [-1, 5], 3,4,5 are range weapons
- * \param   action_type {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_UNKNOWN2 = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
+ * \param   action_type {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_PARRY = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
  */
 /* Borlandified and identical */
 void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *hero, const signed int weapon_type, const signed int f_action, const signed int object_id_attacker, const signed int object_id_target, const signed int a7)
@@ -203,7 +203,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	if (check_hero(hero) && (hero->viewdir != dir) &&
 
 		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)object_id_attacker - 1]) ||
+			((f_action == FIG_ACTION_PARRY) && !g_hero_is_target[(signed char)object_id_attacker - 1]) ||
 			((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0)) ||
 			((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))))
 	{
@@ -259,7 +259,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 
 	if ((check_hero(hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
 		((f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN3) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)object_id_attacker - 1])))
+			((f_action == FIG_ACTION_PARRY) && !g_hero_is_target[(signed char)object_id_attacker - 1])))
 	{
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
@@ -313,7 +313,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	}
 
 	*sheet_ptr1 = -1;
-	if (f_action == FIG_ACTION_UNKNOWN2) {
+	if (f_action == FIG_ACTION_PARRY) {
 		g_hero_is_target[(signed char)object_id_attacker - 1] = 1;
 	}
 }
@@ -403,7 +403,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	/* first the enemy may turn */
 	if ((enemy->viewdir != dir) &&
 		(	((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-			((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)object_id_attacker])) ||
+			((f_action == FIG_ACTION_PARRY) && !g_fig_actors_unkn[(signed char)object_id_attacker])) ||
 			(g_fig_critical_fail_backfire_2 && !a7) ||
 			(g_fig_critical_fail_backfire_1 && (a7 == 1))))
 		{
@@ -468,7 +468,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	}
 
 	if ((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-		((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)object_id_attacker]))
+		((f_action == FIG_ACTION_PARRY) && !g_fig_actors_unkn[(signed char)object_id_attacker]))
 	{
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 
@@ -533,7 +533,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		*sheet_ptr2 = -1;
 	}
 
-	if (f_action == FIG_ACTION_UNKNOWN2) {
+	if (f_action == FIG_ACTION_PARRY) {
 		g_fig_actors_unkn[(signed char)object_id_attacker] = 1;
 	}
 }

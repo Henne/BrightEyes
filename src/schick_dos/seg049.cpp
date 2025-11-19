@@ -441,11 +441,11 @@ void GRP_swap_heroes(void)
 			g_wildcamp_herbstatus[hero_pos_2] = l5;
 
 			if (get_hero(hero_pos_1)->typus) {
-				get_hero(hero_pos_1)->action_id = FIG_ACTION_UNKNOWN2;
+				get_hero(hero_pos_1)->action_id = FIG_ACTION_PARRY;
 			}
 
 			if (get_hero(hero_pos_2)->typus) {
-				get_hero(hero_pos_2)->action_id = FIG_ACTION_UNKNOWN2;
+				get_hero(hero_pos_2)->action_id = FIG_ACTION_PARRY;
 			}
 
 			get_hero(hero_pos_1)->slot_pos = hero_pos_1 + 1;
