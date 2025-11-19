@@ -291,7 +291,7 @@ struct location {
 
 struct struct_msg {
 	signed int type;
-	signed int id;
+	signed int id; /* hero_pos or monster_id */
 };
 
 struct statuspage_line {
