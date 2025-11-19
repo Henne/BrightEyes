@@ -27,6 +27,11 @@
 #include "seg008.h"
 
 #if !defined(__BORLANDC__)
+#include <SDL2/SDL.h>
+#include "vgalib.h"
+#endif
+
+#if !defined(__BORLANDC__)
 namespace M302de {
 #endif
 
@@ -921,8 +926,12 @@ void schick_set_video(void)
 {
 	struct uint8_t_3 pal_white = g_color_pal_white;;
 
+#if defined(__BORLANDC__)
 	set_video_mode(0x13);
 	set_color((uint8_t*)&pal_white, 0xff);
+#else
+	sdl_init_video();
+#endif
 }
 
 void schick_reset_video(void)
@@ -930,6 +939,8 @@ void schick_reset_video(void)
 #if defined(__BORLANDC__)
 	set_video_mode(g_video_mode_bak);
 	set_video_page(g_video_page_bak);
+#else
+	sdl_exit_video();
 #endif
 }
 

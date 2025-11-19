@@ -5,11 +5,22 @@ extern "C" {
 #endif
 
 uint16_t swap_u16(const uint16_t);
+#if defined(__BORLANDC__)
 void set_video_mode(const int16_t);
 void set_video_page(const int16_t);
 void save_display_stat(int16_t*);
 void set_color(uint8_t*, const uint8_t);
 void set_palette(uint8_t*, const signed int, const signed int);
+#else
+
+/* use set_palette from vgalib.h */
+void set_palette(const unsigned char*, const unsigned char, const unsigned short);
+
+static inline void set_color(uint8_t *pal, const uint8_t color)
+{
+	set_palette(pal, color, 1);
+}
+#endif
 void draw_h_line(uint8_t*, signed int, const signed int);
 void draw_h_spaced_dots(uint8_t*, const signed int, const signed int, const signed int);
 

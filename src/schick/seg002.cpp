@@ -73,6 +73,11 @@
 #include "seg121.h"
 
 #if !defined(__BORLANDC__)
+#include <SDL2/SDL.h>
+#include "vgalib.h"
+#endif
+
+#if !defined(__BORLANDC__)
 namespace M302de {
 #endif
 
@@ -5659,6 +5664,9 @@ int main(int argc, char** argv)
 		g_game_mode = GAME_MODE_UNSPECIFIED;
 
 		while (g_game_mode == GAME_MODE_UNSPECIFIED) {
+#if !defined(__BORLANDC__)
+			sdl_forced_update();
+#endif
 			g_game_mode = GUI_radio(get_ttx(5), 2, get_ttx(6), get_ttx(7));
 		}
 
