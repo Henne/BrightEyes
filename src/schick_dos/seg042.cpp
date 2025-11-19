@@ -69,17 +69,17 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed int attacker_weapon_type;
 	signed int target_weapon_type;
 	signed int critical_failure_roll_2d6;
-	signed int l5;
-	signed int l6;
+	signed int attacker_hits_target;
+	signed int spell_ani;
 	signed int at_roll_d20;
 	signed int pa_roll_d20;
 	signed int atpa;
 	signed int target_pa_val; /* of attacked enemy or hero */
 	signed int target_hero_at_val;
 	signed int l12; /* some ani related value */
-	signed int l13;
+	signed int ranged_attack_possible;
 	signed int target_is_hero = 0;
-	signed int l15;
+	signed int spell_test_result;
 	struct struct_fighter *fighter_add;
 	signed int width;
 	signed int height;
@@ -111,7 +111,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 		FIG_clear_msgs();
 
-		l5 = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 =
+		attacker_hits_target = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 =
 			g_spell_illusionen = g_attacker_dead = g_defender_dead = 0;
 
 		attacker_weapon_type = target_weapon_type = -1;
@@ -498,7 +498,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 						if (pa_roll_d20 > target_pa_val) {
 							/* parry failed, but not critical */
-							l5 = 1;
+							attacker_hits_target = 1;
 						} else {
 							/* parry succeeded */
 							FIG_add_msg(5, 0);
@@ -550,10 +550,10 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						}
 					}
 				} else {
-					l5 = 1;
+					attacker_hits_target = 1;
 				}
 
-				if (l5 != 0) {
+				if (attacker_hits_target != 0) {
 
 					if (target_is_hero != 0) {
 
@@ -690,7 +690,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					clear_anisheets();
 
 					l12 = attacker_weapon_type;
-					l13 = 0;
+					ranged_attack_possible = 0;
 
 					FIG_call_draw_pic();
 
@@ -698,7 +698,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							FIG_ACTION_RANGE_ATTACK, hero_pos + 1,
 							target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20, 0);
 
-					l13 = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
+					ranged_attack_possible = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
 						target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 						hero->viewdir);
 
@@ -714,11 +714,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						fighter->reload = -1;
 					}
 
-					if (l13 != 0) {
+					if (ranged_attack_possible != 0) {
 
 						FIG_set_sheet(g_fig_shot_bolt_id, 7);
 
-						draw_fight_screen(l13 == 0 && g_defender_dead == 0 ? 0 : 1);
+						draw_fight_screen(ranged_attack_possible == 0 && g_defender_dead == 0 ? 0 : 1);
 
 						FIG_make_invisible(g_fig_shot_bolt_id);
 					}
@@ -755,11 +755,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					g_attacker_dead = 1;
 				}
 
-				l6 = g_spell_descriptions[hero->spell_id].ani;
+				spell_ani = g_spell_descriptions[hero->spell_id].ani;
 
 				*g_dtp2 = '\0';
 
-				l15 = use_spell(hero, 0, 0);
+				spell_test_result = use_spell(hero, 0, 0);
 
 				clear_anisheets();
 
@@ -787,7 +787,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (hero->target_object_id != 0) {
 
-					l12 = l13 = 0;
+					l12 = ranged_attack_possible = 0;
 
 					if (random_schick(100) > 50) {
 						l12 = 1;
@@ -800,18 +800,18 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					FIG_call_draw_pic();
 
-					if (l15 != -1) {
+					if (spell_test_result != -1) {
 
 						FANI_prepare_spell_hero(0, hero, 4, hero_pos + 1,
 								target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20, l12, 0);
 					}
 
-					if (l15 > 0) {
+					if (spell_test_result > 0) {
 
-						if (l6 > 0) {
+						if (spell_ani > 0) {
 
-							if (l6 != 4) {
-								FANI_prepare_hero_spell_ani(6, hero, l6);
+							if (spell_ani != 4) {
+								FANI_prepare_hero_spell_ani(6, hero, spell_ani);
 							}
 
 						} else {
@@ -838,21 +838,21 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							(hero->target_object_id > 0 ))
 						{
 
-							l13 = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
+							ranged_attack_possible = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
 								target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 								hero->viewdir);
 						}
 					}
 
-					if (l15 != -1) {
+					if (spell_test_result != -1) {
 
 						FIG_set_sheet(hero->fighter_id, 0);
 						draw_fight_screen_pal(1);
 					}
 
-					if (l15 > 0) {
+					if (spell_test_result > 0) {
 
-						if (l13 != 0) {
+						if (ranged_attack_possible != 0) {
 
 							FIG_set_sheet(g_fig_shot_bolt_id, 7);
 
@@ -861,9 +861,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							FIG_make_invisible(g_fig_shot_bolt_id);
 						}
 
-						if (l6 > 0) {
+						if (spell_ani > 0) {
 
-							if (l6 != 4) {
+							if (spell_ani != 4) {
 								FIG_set_sheet(g_fig_spellgfx_id, 6);
 							} else {
 
@@ -920,7 +920,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 						draw_fight_screen(1);
 
-						if (l6 > 0) {
+						if (spell_ani > 0) {
 							FIG_make_invisible(g_fig_shot_bolt_id);
 						}
 
@@ -944,11 +944,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							}
 						}
 
-						if (l13 != 0) {
+						if (ranged_attack_possible != 0) {
 							FANI_remove_shotbolt();
 						}
 
-						if ((l6 > 0) && (l6 != 3) && (l6 != 4)) {
+						if ((spell_ani > 0) && (spell_ani != 3) && (spell_ani != 4)) {
 							FANI_remove_spell();
 						}
 
@@ -973,6 +973,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	call_mouse();
 
 	if (target_object_id_was_modified != 0) {
+		/* restore target_object_id */
 		hero->target_object_id += 20;
 	}
 }
