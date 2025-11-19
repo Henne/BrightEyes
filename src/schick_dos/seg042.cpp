@@ -57,43 +57,50 @@ signed int g_fig_critical_fail_backfire_2;	// ds:0xe3ac
  * \brief   executes the fight action of hero
  *
  * \param   hero        pointer to the hero
- * \param   hero_pos    position in the group (fighter_id = hero_pos + 1)
+ * \param   hero_pos    position in the group (object_id = hero_pos + 1)
  */
 void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 {
 	signed int damage;
-	struct enemy_sheet *target_monster;
-	struct struct_hero *target_hero;
-	struct inventory *p_weapon;
+	struct enemy_sheet *p_target_enemy;
+	struct struct_hero *p_target_hero;
+	struct inventory *p_weapon_attacker;
 	struct inventory *p_weapon_target;
-	signed int weapon_type;
-	signed int weapon_type_target;
-	signed int two_w_6;
+	signed int attacker_weapon_type;
+	signed int target_weapon_type;
+	signed int critical_failure_roll_2d6;
 	signed int l5;
 	signed int l6;
-	signed int randval1;
-	signed int randval2;
+	signed int at_roll_d20;
+	signed int pa_roll_d20;
 	signed int atpa;
-	signed int l10;
-	signed int l11;
-	signed int l12;
+	signed int target_pa_val; /* of attacked enemy or hero */
+	signed int target_hero_at_val;
+	signed int l12; /* some ani related value */
 	signed int l13;
 	signed int target_is_hero = 0;
 	signed int l15;
 	struct struct_fighter *fighter_add;
 	signed int width;
 	signed int height;
-	signed int l16 = 0;
-	signed int l17 = 0;
-	signed int fighter_id;
-	struct viewdir_offsets8s dst = g_fig_viewdir_inverse_offsets2;
+
+	signed int target_cannot_parry = 0;
+	/* The target cannot parry if it is a double-size enemy,
+	 * which is attacked either at the tail part or at a flank (i.e., not at the front) of the head part */
+
+	signed int target_object_id_was_modified = 0;
+	/* This happens when the target is the tail part of a double-size enemy.
+	 * In this case, the object_id entry will be adjusted to the head part. */
+	
+	signed int object_id;
+	struct viewdir_offsets8s inverse_offset = g_fig_viewdir_inverse_offsets2;
 	signed int hero_x;
 	signed int hero_y;
 	signed int target_x;
 	signed int target_y;
 	signed int viewdir;
 	struct struct_fighter *fighter;
-	struct struct_msg tmp;
+	struct struct_msg grammar_tmp;
 	signed int fg_bak;
 	signed int bg_bak;
 	struct nvf_extract_desc nvf;
@@ -107,7 +114,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 		l5 = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 =
 			g_spell_illusionen = g_attacker_dead = g_defender_dead = 0;
 
-		weapon_type = weapon_type_target = -1;
+		attacker_weapon_type = target_weapon_type = -1;
 
 		g_fig_actor_grammar.type = 2;
 		g_fig_actor_grammar.id = hero_pos;
@@ -118,31 +125,35 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			if (hero->target_object_id >= 30) {
 				/* tail part of double-size enemy */
 				hero->target_object_id -= 20;
-				l16 = 1;
-				l17 = 1;
+				/* set target_object_id to the head part of the double-size enemy */
+				target_cannot_parry = 1;
+				target_object_id_was_modified = 1;
 			}
 
-			target_monster = &g_enemy_sheets[hero->target_object_id - 10];
+			p_target_enemy = &g_enemy_sheets[hero->target_object_id - 10];
 
 			/* attacked enemy won't be asleep any more */
-			target_monster->flags.asleep = 0;
+			p_target_enemy->flags.asleep = 0;
 
 			g_fig_target_grammar.type = 1;
-			g_fig_target_grammar.id = target_monster->mon_id;
+			g_fig_target_grammar.id = p_target_enemy->mon_id;
 
-			if (!target_monster->mon_id || (target_monster->flags.dead && ((hero->action_id != FIG_ACTION_SPELL) || (hero->spell_id != SP_SKELETTARIUS_KRYPTADUFT))))
+			if (!p_target_enemy->mon_id || (p_target_enemy->flags.dead && ((hero->action_id != FIG_ACTION_SPELL) || (hero->spell_id != SP_SKELETTARIUS_KRYPTADUFT))))
 			{
 				call_mouse();
 				return;
 			}
 
-			if ((is_in_byte_array(target_monster->gfx_id, g_double_size_gfx_id_table)) && (l16 == 0))
+			if ((is_in_byte_array(p_target_enemy->gfx_id, g_double_size_gfx_id_table)) && (target_cannot_parry == 0))
+					/* attack head part of double-size enemy */
 			{
 				FIG_search_obj_on_cb(hero->target_object_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(hero_pos + 1, &hero_x, &hero_y);
 
 				/* In the following, viewdir is pointing from the target to the attacker */
 				if (hero_x == target_x) {
+
+					/* set dir to the direction from the attacker towards the enemy */
 					if (target_y < hero_y) {
 						viewdir = FIG_VIEWDIR_UP;
 					} else {
@@ -156,18 +167,26 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					}
 				}
 
-				if (target_monster->viewdir != viewdir) {
+				if (p_target_enemy->viewdir != viewdir) {
 
-					fighter_id = get_cb_val(hero_x + dst.offset[viewdir].x, hero_y + dst.offset[viewdir].y);
+					/* target enemy is not looking towards the attacker */
 
-					if (fighter_id != 0) {
+					object_id = get_cb_val(hero_x + inverse_offset.offset[viewdir].x, hero_y + inverse_offset.offset[viewdir].y);
+					/* object_id now refers to the target */
 
-						if ((fighter_id >= 50) ||
-							((fighter_id < 10) && !get_hero(fighter_id - 1)->flags.dead) ||
-							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags.dead) ||
-							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags.dead))
+					/* the following if looks pretty redundant.
+					 * object_id refers to the target, which in this branch is the head of a double-size enemy.
+					 * So, automatically, 10 <= object_id < 30, and we only have to check g_enemy_sheets[object_id - 10].flags.dead
+					 */
+					if (object_id != 0) {
+
+						if ((object_id >= 50) ||
+							((object_id < 10) && !get_hero(object_id - 1)->flags.dead) ||
+							((object_id >= 10) && (object_id < 30) && !g_enemy_sheets[object_id - 10].flags.dead) ||
+							((object_id >= 30) && (object_id < 50) && !g_enemy_sheets[object_id - 30].flags.dead))
 						{
-							l16 = 1;
+							/* the attacker attacks the head, but the enemy's viewdir is not pointing to the attacker. */
+							target_cannot_parry = 1;
 						}
 					}
 				}
@@ -176,25 +195,25 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			if (hero->target_object_id > 0) {
 
 				/* hero attacks another hero */
-				target_hero = get_hero(hero->target_object_id - 1);
+				p_target_hero = get_hero(hero->target_object_id - 1);
 
 				g_fig_target_grammar.type = 2;
 				g_fig_target_grammar.id = hero->target_object_id - 1;
 
-				if (target_hero->flags.asleep) {
+				if (p_target_hero->flags.asleep) {
 
 					/* wake up target hero */
-					target_hero->flags.asleep = 0;
+					p_target_hero->flags.asleep = 0;
 
-					fighter = FIG_get_fighter(target_hero->fighter_id);
+					fighter = FIG_get_fighter(p_target_hero->fighter_id);
 
-					fighter->nvf_no = target_hero->viewdir;
+					fighter->nvf_no = p_target_hero->viewdir;
 					fighter->reload = -1;
 					fighter->offsetx = 0;
 					fighter->offsety = 0;
 				}
 
-				if (target_hero->flags.dead || !target_hero->typus) {
+				if (p_target_hero->flags.dead || !p_target_hero->typus) {
 					call_mouse();
 					return;
 				}
@@ -205,17 +224,17 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 		if (hero->action_id == FIG_ACTION_MELEE_ATTACK) {
 
-			p_weapon = &hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
+			p_weapon_attacker = &hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-			weapon_type = weapon_check(hero);
+			attacker_weapon_type = weapon_check(hero);
 
 			if (target_is_hero != 0) {
-				p_weapon_target = &target_hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
+				p_weapon_target = &p_target_hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-				weapon_type_target = weapon_check(target_hero);
+				target_weapon_type = weapon_check(p_target_hero);
 			}
 
-			if (weapon_type == -1) {
+			if (attacker_weapon_type == -1) {
 				/* no valid weapon == bare hands */
 				atpa = hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + hero->fight_atpa_mod - hero->rs_be / 2;
 			} else {
@@ -227,79 +246,93 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				atpa--;
 			}
 
-			/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get an AT-bonus against orcs */
+			/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a AT+1 bonus against orcs */
 			if (gs_tevent071_orcstatue &&
 				(hero->typus == HERO_TYPE_ZWERG) &&
 				!target_is_hero &&
-				(target_monster->gfx_id == 24))
+				(p_target_enemy->gfx_id == 24))
 			{
 				atpa++;
 			}
 
-			/* spell_dunkelheit is active */
+			/* spell_dunkelheit is active -> AT-4 */
 			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				atpa -= 4;
 			}
 
 			if (target_is_hero) {
 
-				if (weapon_type_target == -1) {
-					l11 = target_hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + target_hero->fight_atpa_mod - hero->rs_be / 2;
+				if (target_weapon_type == -1) {
+					/* Original-Bug? Why is target_hero mixed with hero??
+					 * Probably, the intention was
+					 * target_hero_at_val = p_target_hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + p_target_hero->fight_atpa_mod - p_target_hero->rs_be / 2;
+					 */
+					target_hero_at_val = p_target_hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + p_target_hero->fight_atpa_mod - hero->rs_be / 2;
 				} else {
-					l11 = target_hero->at_talent_bonus[target_hero->weapon_type] + target_hero->fight_atpa_mod - hero->rs_be / 2;
+					/* Probably, the intention was
+					 * target_hero_at_val = p_target_hero->at_talent_bonus[p_target_hero->weapon_type] + p_target_hero->fight_atpa_mod - p_target_hero->rs_be / 2;
+					 */
+					target_hero_at_val = p_target_hero->at_talent_bonus[p_target_hero->weapon_type] + p_target_hero->fight_atpa_mod - hero->rs_be / 2;
 				}
 
+				/* Probably, the intention was
+				 * if (target_hero->rs_be & 1) {
+				 */
 				if (hero->rs_be & 1) {
-					l11--;
+					/* if rs_be is odd, subtract another point. Changes the rounding behavior of 'target_hero->rs_be / 2' above to "round up". */
+					target_hero_at_val--;
 				}
 
-				/* spell_dunkelheit is active */
+				/* spell_dunkelheit is active -> AT-4 */
 				if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
-					l11 -= 4;
+					target_hero_at_val -= 4;
 				}
 
+				/* attacked hero is dead -> AT+2 ?? */
 				if (g_hero_is_target[hero->target_object_id - 1] == 1) {
 					atpa += 2;
 				}
 
 			} else {
-				if ((g_fig_actors_unkn[hero->target_object_id] == 1) || (l16 != 0)) {
+				/* target is enemy */
+				if ((g_fig_actors_unkn[hero->target_object_id] == 1) || (target_cannot_parry != 0)) {
+					/* attack flank or rear -> AT+2 */
 					atpa += 2;
 				}
 			}
 
-			randval1 = random_schick(20);
+			at_roll_d20 = random_schick(20);
 
-			if ((randval1 == 20) && (random_schick(20) > atpa - 9)) {
+			if ((at_roll_d20 == 20) && (random_schick(20) > atpa - 9)) {
 				/* critical attack failure */
 
 				damage = 0;
 				FIG_add_msg(1, 0);
 
-				two_w_6 = random_interval(2, 12);
+				critical_failure_roll_2d6 = random_interval(2, 12);
 
-				if ((two_w_6 == 2) && (weapon_type != -1) && (p_weapon->bf != -99))
+				if ((critical_failure_roll_2d6 == 2) && (attacker_weapon_type != -1) && (p_weapon_attacker->bf != -99))
 				{
 					/* weapon broken */
-					p_weapon->flags.broken = 1;
+					p_weapon_attacker->flags.broken = 1;
 					FIG_add_msg(6, 0);
 
-				} else if ((two_w_6 >= 3) && (two_w_6 <= 8) && (l16 == 0)) {
+				} else if ((critical_failure_roll_2d6 >= 3) && (critical_failure_roll_2d6 <= 8) && (target_cannot_parry == 0)) {
 					/* defender gets a free attack */
 
 					g_fig_critical_fail_backfire_1 = 1;
 
 					if (target_is_hero != 0) {
 
-						if (random_schick(20) <= l11) {
-							damage = FIG_get_hero_weapon_attack_damage(target_hero, hero, 1);
+						if (random_schick(20) <= target_hero_at_val) {
+							damage = FIG_get_hero_weapon_attack_damage(p_target_hero, hero, 1);
 						}
 
 					} else {
 
-						if (random_schick(20) <= target_monster->at) {
+						if (random_schick(20) <= p_target_enemy->at) {
 
-							damage = FIG_get_enemy_attack_damage(target_monster, (struct enemy_sheet*)hero, 0);
+							damage = FIG_get_enemy_attack_damage(p_target_enemy, (struct enemy_sheet*)hero, 0);
 						}
 					}
 
@@ -310,16 +343,16 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						FIG_add_msg(8, damage);
 
 						/* swap msg struct */
-						tmp = g_fig_target_grammar;
+						grammar_tmp = g_fig_target_grammar;
 						g_fig_target_grammar = g_fig_actor_grammar;
-						g_fig_actor_grammar = tmp;
+						g_fig_actor_grammar = grammar_tmp;
 					}
 
 					if (hero->flags.dead) {
 						g_attacker_dead = 1;
 					}
 
-				} else if ((two_w_6 >= 9) && (two_w_6 <= 11)) {
+				} else if ((critical_failure_roll_2d6 >= 9) && (critical_failure_roll_2d6 <= 11)) {
 					/* attacker hurts himself. 1W6 damage. */
 
 					damage = random_schick(6);
@@ -335,68 +368,71 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					}
 				}
 
-			} else if (randval1 <= atpa) {
+				// critical_failure_roll_2d6 == 12: luck in misfortune. No further effect.
 
-				if (((target_is_hero == 0) && !g_fig_actors_unkn[hero->target_object_id] && (l16 == 0)) ||
+			} else if (at_roll_d20 <= atpa) {
+				/* attack succeeded */
+
+				if (((target_is_hero == 0) && !g_fig_actors_unkn[hero->target_object_id] && (target_cannot_parry == 0)) ||
 					((target_is_hero) && !g_hero_is_target[hero->target_object_id - 1]))
 				{
 
 					if (target_is_hero != 0) {
 
-						if (weapon_type_target == -1) {
-							l10 = target_hero->pa_talent_bonus[WEAPON_TYPE_WAFFENLOS] - target_hero->fight_atpa_mod - target_hero->rs_be / 2;
+						if (target_weapon_type == -1) {
+							target_pa_val = p_target_hero->pa_talent_bonus[WEAPON_TYPE_WAFFENLOS] - p_target_hero->fight_atpa_mod - p_target_hero->rs_be / 2;
 						} else {
-							l10 = target_hero->pa_talent_bonus[target_hero->weapon_type] - target_hero->fight_atpa_mod - target_hero->rs_be / 2 + target_hero->weapon_at_mod;
+							target_pa_val = p_target_hero->pa_talent_bonus[p_target_hero->weapon_type] - p_target_hero->fight_atpa_mod - p_target_hero->rs_be / 2 + p_target_hero->weapon_at_mod;
 						}
 
-						if (target_hero->action_id == FIG_ACTION_GUARD) {
-							l10 += 3;
+						if (p_target_hero->action_id == FIG_ACTION_GUARD) {
+							target_pa_val += 3;
 						}
 					} else {
 
-						l10 = target_monster->pa;
+						target_pa_val = p_target_enemy->pa;
 
-						if (target_monster->blind) {
-							l10 -= 5;
+						if (p_target_enemy->blind) {
+							target_pa_val -= 5;
 						}
 
-						if (target_monster->flags.tied) { /* check 'tied' flag */
-							l10 -= 2;
-						} else if (target_monster->flags.dancing) { /* check 'dancing' flag */
-							l10 -= 3;
+						if (p_target_enemy->flags.tied) { /* check 'tied' flag */
+							target_pa_val -= 2;
+						} else if (p_target_enemy->flags.dancing) { /* check 'dancing' flag */
+							target_pa_val -= 3;
 						}
 
-						if (target_monster->flags.petrified || /* check 'petrified' flag */
-							target_monster->flags.busy || /* check 'busy' flag */
-							target_monster->flags.mushroom || /* check 'mushroom' flag */
-							target_monster->flags.tame || /* check 'tame' flag */
-							target_monster->flags.renegade) /* check 'renegade' flag */
+						if (p_target_enemy->flags.petrified || /* check 'petrified' flag */
+							p_target_enemy->flags.busy || /* check 'busy' flag */
+							p_target_enemy->flags.mushroom || /* check 'mushroom' flag */
+							p_target_enemy->flags.tame || /* check 'tame' flag */
+							p_target_enemy->flags.renegade) /* check 'renegade' flag */
 						{
-							l10 = 0;
+							target_pa_val = 0;
 						}
 					}
 
 					/* spell_dunkelheit is active */
 					if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
-						l10 -= 4;
+						target_pa_val -= 4;
 					}
 
-					if (l10 < 0) {
-						l10 = 0;
+					if (target_pa_val < 0) {
+						target_pa_val = 0;
 					}
 
-					randval2 = random_schick(20);
+					pa_roll_d20 = random_schick(20);
 
-					if ((randval2 == 20) && (random_schick(20) > l10 - 7)) {
+					if ((pa_roll_d20 == 20) && (random_schick(20) > target_pa_val - 7)) {
 						/* critical defense failure */
 
 						damage = 0;
 
 						FIG_add_msg(4, 0);
 
-						two_w_6 = random_interval(2, 12);
+						critical_failure_roll_2d6 = random_interval(2, 12);
 
-						if ((two_w_6 >= 3) && (two_w_6 <= 8)) {
+						if ((critical_failure_roll_2d6 >= 3) && (critical_failure_roll_2d6 <= 8)) {
 
 							g_fig_critical_fail_backfire_1 = 1;
 							/* Maybe the intention was:
@@ -407,76 +443,91 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								if (target_is_hero != 0) {
 
-									damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
+									damage = FIG_get_hero_weapon_attack_damage(hero, p_target_hero, 1);
 
 									if (damage > 0) {
 
-										sub_hero_le(target_hero, damage);
+										sub_hero_le(p_target_hero, damage);
 
 										FIG_add_msg(8, damage);
 
-										if (target_hero->flags.dead) {
+										if (p_target_hero->flags.dead) {
 											g_defender_dead = 1;
 										}
 									}
 								} else {
 
-									damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)target_monster, 0);
+									damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)p_target_enemy, 0);
 
 									if (damage > 0) {
 
-										FIG_damage_enemy(target_monster, damage, 0);
+										FIG_damage_enemy(p_target_enemy, damage, 0);
 
 										FIG_add_msg(11, damage);
 
-										if (target_monster->flags.dead) {
+										if (p_target_enemy->flags.dead) {
 											g_defender_dead = 1;
 										}
 									}
 								}
 							}
-						} else if ((two_w_6 >= 9) && (two_w_6 <= 11)) {
+						} else if ((critical_failure_roll_2d6 >= 9) && (critical_failure_roll_2d6 <= 11)) {
 
 							damage = random_schick(6);
 
 							if (target_is_hero != 0) {
 
-								sub_hero_le(target_hero, damage);
+								sub_hero_le(p_target_hero, damage);
 
 								FIG_add_msg(8, damage);
 
-								if (target_hero->flags.dead) {
+								if (p_target_hero->flags.dead) {
 									g_defender_dead = 1;
 								}
 							} else {
-								FIG_damage_enemy(target_monster, damage, 1);
+								FIG_damage_enemy(p_target_enemy, damage, 1);
 
 								FIG_add_msg(11, damage);
 
-								if (target_monster->flags.dead) {
+								if (p_target_enemy->flags.dead) {
 									g_defender_dead = 1;
 								}
 							}
 						}
 					} else {
 
-						if (randval2 > l10) {
+						if (pa_roll_d20 > target_pa_val) {
+							/* parry failed, but not critical */
 							l5 = 1;
 						} else {
+							/* parry succeeded */
 							FIG_add_msg(5, 0);
 
-							if ((randval2 == randval1) && (p_weapon->bf != -99)) {
+							if ((pa_roll_d20 == at_roll_d20) && (p_weapon_attacker->bf != -99)) {
+							/* both attacker and defender damage their weapon.
+							 *
+							 * Original-Bug? The following logic is quite strange.
+							 *
+							 * If the attacker has an indestructible weapon (bf == 99),
+							 * neither weapon is damaged (i.e., also the defender is saved)
+							 *
+							 * Usually, the attacker weapon and the weapon of a defending hero will damaged,
+							 * and if the bf of attacking weapon is >= 4, there is a chance that *both* are broken instead.
+							 *
+							 * In all above situations, the weapon of a defending *enemy* will never be damaged,
+							 * only defending *heroes* are affected.
+							 */
 
-								if (p_weapon->bf > 3) {
+								if (p_weapon_attacker->bf > 3) {
 
-									if ((random_schick(12) + p_weapon->bf) > 15) {
+									if ((random_schick(12) + p_weapon_attacker->bf) > 15) {
 
 										if ((target_is_hero != 0) && (p_weapon_target->bf != -99))
 										{
 											p_weapon_target->flags.broken = 1;
 										}
 
-										p_weapon->flags.broken = 1; /* set 'broken' flag */
+										p_weapon_attacker->flags.broken = 1; /* set 'broken' flag */
 
 										FIG_add_msg(6, 0);
 
@@ -485,7 +536,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 											p_weapon_target->bf++;
 										}
 
-										p_weapon->bf++;
+										p_weapon_attacker->bf++;
 									}
 								} else {
 
@@ -493,7 +544,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 										p_weapon_target->bf++;
 									}
 
-									p_weapon->bf++;
+									p_weapon_attacker->bf++;
 								}
 							}
 						}
@@ -506,29 +557,29 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					if (target_is_hero != 0) {
 
-						damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
+						damage = FIG_get_hero_weapon_attack_damage(hero, p_target_hero, 1);
 
 						if (damage > 0) {
 
-							sub_hero_le(target_hero, damage);
+							sub_hero_le(p_target_hero, damage);
 
 							FIG_add_msg(8, damage);
 
-							if (target_hero->flags.dead) {
+							if (p_target_hero->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}
 					} else {
 
-						damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)target_monster, 0);
+						damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)p_target_enemy, 0);
 
 						if (damage > 0 ) {
 
-							FIG_damage_enemy(target_monster, damage, 0);
+							FIG_damage_enemy(p_target_enemy, damage, 0);
 
 							FIG_add_msg(11, damage);
 
-							if (target_monster->flags.dead) {
+							if (p_target_enemy->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}
@@ -538,23 +589,26 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			clear_anisheets();
 
-			FANI_prepare_fight_hero_ani(0, hero, weapon_type, 2, hero_pos + 1,
-							l17 == 0 ? hero->target_object_id : hero->target_object_id + 20, 0);
+			FANI_prepare_fight_hero_ani(0, hero, attacker_weapon_type, FIG_ACTION_MELEE_ATTACK, hero_pos + 1,
+							target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20, 0);
 
 			if (target_is_hero != 0) {
+				/* target is hero */
 
-				if (check_hero(target_hero) || (g_defender_dead != 0)) {
+				if (check_hero(p_target_hero) || (g_defender_dead != 0)) {
 
-					FANI_prepare_fight_hero_ani(1, target_hero, weapon_type_target,
+					FANI_prepare_fight_hero_ani(1, p_target_hero, target_weapon_type,
 								FIG_ACTION_PARRY, hero->target_object_id, hero_pos + 1, 1);
 				}
 			} else {
+				/* target is enemy */
 
-				if (l16 == 0) {
-					FANI_prepare_fight_enemy_ani(1, target_monster, FIG_ACTION_PARRY, hero->target_object_id, hero_pos + 1, 1);
+				if (target_cannot_parry == 0) {
+					FANI_prepare_fight_enemy_ani(1, p_target_enemy, FIG_ACTION_PARRY, hero->target_object_id, hero_pos + 1, 1);
 				} else {
+					/* flank or rear is attacked -> no parry animation */
 					if (g_defender_dead != 0) {
-						FANI_prepare_fight_enemy_ani(1, target_monster, 0, hero->target_object_id, hero_pos + 1, 1);
+						FANI_prepare_fight_enemy_ani(1, p_target_enemy, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
 					}
 				}
 			}
@@ -569,9 +623,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			if (hero->action_id == FIG_ACTION_RANGE_ATTACK) {
 
-				weapon_type = FIG_get_range_weapon_type(hero);
+				attacker_weapon_type = FIG_get_range_weapon_type(hero);
 
-				if (weapon_type != -1) {
+				if (attacker_weapon_type != -1) {
 
 #ifndef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 32: throwing weapon in a ranged attack is dropped before the damage logic is done.
@@ -588,7 +642,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (target_is_hero != 0) {
 
 						/* note that for ranged attacks, the skill test will be done in the following function call. */
-						damage = FIG_get_hero_weapon_attack_damage(hero, target_hero, 1);
+						damage = FIG_get_hero_weapon_attack_damage(hero, p_target_hero, 1);
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 32:
 						 * Fix: move the function call after the damage calculation.
@@ -600,18 +654,18 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 						if (damage > 0) {
 
-							sub_hero_le(target_hero, damage);
+							sub_hero_le(p_target_hero, damage);
 
 							FIG_add_msg(8, damage);
 
-							if (target_hero->flags.dead) {
+							if (p_target_hero->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}
 					} else {
 
 						/* note that for ranged attacks, the skill test will be done in the following function call. */
-						damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)target_monster, 0);
+						damage = FIG_get_hero_weapon_attack_damage(hero, (struct struct_hero*)p_target_enemy, 0);
 #ifdef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 32:
 						 * Fix: move the function call after the damage calculation.
@@ -623,11 +677,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 						if (damage > 0 ) {
 
-							FIG_damage_enemy(target_monster, damage, 0);
+							FIG_damage_enemy(p_target_enemy, damage, 0);
 
 							FIG_add_msg(11, damage);
 
-							if (target_monster->flags.dead) {
+							if (p_target_enemy->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}
@@ -635,17 +689,17 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					clear_anisheets();
 
-					l12 = weapon_type;
+					l12 = attacker_weapon_type;
 					l13 = 0;
 
 					FIG_call_draw_pic();
 
-					FANI_prepare_fight_hero_ani(0, hero, weapon_type,
-							15, hero_pos + 1,
-							l17 == 0 ? hero->target_object_id : hero->target_object_id + 20, 0);
+					FANI_prepare_fight_hero_ani(0, hero, attacker_weapon_type,
+							FIG_ACTION_RANGE_ATTACK, hero_pos + 1,
+							target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20, 0);
 
 					l13 = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
-						l17 == 0 ? hero->target_object_id : hero->target_object_id + 20,
+						target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 						hero->viewdir);
 
 					FIG_set_sheet(hero->fighter_id, 0);
@@ -674,9 +728,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (g_defender_dead != 0) {
 
 						if (target_is_hero != 0) {
-							FANI_prepare_fight_hero_ani(1, target_hero, -1, 0, hero->target_object_id, hero_pos + 1, 1);
+							/* target is hero */
+							FANI_prepare_fight_hero_ani(1, p_target_hero, -1, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
 						} else {
-							FANI_prepare_fight_enemy_ani(1, target_monster, 0, hero->target_object_id, hero_pos + 1, 1);
+							/* target is enemy */
+							FANI_prepare_fight_enemy_ani(1, p_target_enemy, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
 						}
 					}
 
@@ -692,7 +748,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				/* cast a spell */
 
 				if (g_current_fight_no == FIGHTS_F144) {
-					/* no spells allowed in the final fight */
+					/* No spells allowed in the final fight -> instant death */
 
 					sub_hero_le(hero, hero->le + 1);
 
@@ -738,6 +794,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					}
 
 					if (hero->target_object_id < 10) {
+						/* target is a hero */
 						l12 = 2;
 					}
 
@@ -746,7 +803,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (l15 != -1) {
 
 						FANI_prepare_spell_hero(0, hero, 4, hero_pos + 1,
-								l17 == 0 ? hero->target_object_id : hero->target_object_id + 20, l12, 0);
+								target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20, l12, 0);
 					}
 
 					if (l15 > 0) {
@@ -763,14 +820,14 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								if (target_is_hero == 0) {
 
-									FANI_prepare_spell_enemy(1, target_monster, 99,
-											l17 == 0 ? hero->target_object_id : hero->target_object_id + 20,
+									FANI_prepare_spell_enemy(1, p_target_enemy, 99,
+											target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 											hero_pos + 1, 1);
 								} else {
 
-									if (check_hero(target_hero) || (g_defender_dead != 0)) {
+									if (check_hero(p_target_hero) || (g_defender_dead != 0)) {
 
-										FANI_prepare_spell_hero(1, target_hero, 99, hero->target_object_id, 0 , -1, 1);
+										FANI_prepare_spell_hero(1, p_target_hero, 99, hero->target_object_id, 0 , -1, 1);
 									}
 								}
 							}
@@ -782,7 +839,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						{
 
 							l13 = FANI_prepare_shotbolt_ani(7, l12, hero_pos + 1,
-								l17 == 0 ? hero->target_object_id : hero->target_object_id + 20,
+								target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 								hero->viewdir);
 						}
 					}
@@ -812,7 +869,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_call_draw_pic();
 
-								FIG_remove_from_list(target_monster->fighter_id, 1);
+								FIG_remove_from_list(p_target_enemy->fighter_id, 1);
 
 
 								nvf.dst = g_fig_list_elem.gfxbuf;
@@ -834,18 +891,18 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 								g_fig_list_elem.y2 = (signed char)(height - 1);
 								g_fig_list_elem.reload = 0;
 
-								FIG_add_to_list(target_monster->fighter_id);
+								FIG_add_to_list(p_target_enemy->fighter_id);
 
 							}
 						} else {
 
 							if (target_is_hero == 0) {
 
-								FIG_set_sheet(target_monster->fighter_id, 1);
+								FIG_set_sheet(p_target_enemy->fighter_id, 1);
 
-								if (is_in_byte_array(target_monster->gfx_id, g_double_size_gfx_id_table))
+								if (is_in_byte_array(p_target_enemy->gfx_id, g_double_size_gfx_id_table))
 								{
-									fighter_add = FIG_get_fighter(target_monster->fighter_id);
+									fighter_add = FIG_get_fighter(p_target_enemy->fighter_id);
 
 									FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter_add->double_size], 3);
 								}
@@ -854,7 +911,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								if (hero->target_object_id > 0) {
 
-									FIG_set_sheet(target_hero->fighter_id, 1);
+									FIG_set_sheet(p_target_hero->fighter_id, 1);
 								}
 							}
 						}
@@ -871,18 +928,18 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 							if (hero->target_object_id >= 10) {
 
-								FIG_make_invisible(target_monster->fighter_id);
+								FIG_make_invisible(p_target_enemy->fighter_id);
 
-								if (is_in_byte_array(target_monster->gfx_id, g_double_size_gfx_id_table))
+								if (is_in_byte_array(p_target_enemy->gfx_id, g_double_size_gfx_id_table))
 								{
-									fighter_add = FIG_get_fighter(target_monster->fighter_id);
+									fighter_add = FIG_get_fighter(p_target_enemy->fighter_id);
 
 									FIG_make_invisible(g_fig_double_size_fighter_id_table[fighter_add->double_size]);
 								}
 							} else {
 								if (hero->target_object_id > 0) {
 
-									FIG_make_invisible(target_hero->fighter_id);
+									FIG_make_invisible(p_target_hero->fighter_id);
 								}
 							}
 						}
@@ -908,14 +965,14 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			} else if (hero->action_id == FIG_ACTION_USE_ITEM) {
 
-				FIG_use_item(hero, target_monster, target_hero, target_is_hero, hero_pos);
+				FIG_use_item(hero, p_target_enemy, p_target_hero, target_is_hero, hero_pos);
 			}
 		}
 	}
 
 	call_mouse();
 
-	if (l17 != 0) {
+	if (target_object_id_was_modified != 0) {
 		hero->target_object_id += 20;
 	}
 }

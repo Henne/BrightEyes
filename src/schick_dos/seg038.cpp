@@ -104,8 +104,8 @@ static signed char *g_chessboard_cpy; // ds:0xe356
  * \param   dist              distance to the target
  * \param   bp_avail          left BP of the actor
  * \param   mode              mode (see FIG_find_path_to_target)
- * \param   double_size       actor is a double-sized enemy (wolves, dogs, lions)
- * \param   enemy_id	      only relevant if double_size is true: the enemy_id of the double-sized enemy.
+ * \param   double_size       actor is a double-size enemy (wolves, dogs, lions)
+ * \param   enemy_id	      only relevant if double_size is true: the enemy_id of the double-size enemy.
  */
 void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int target_x, signed int target_y,
 			signed int dist, const signed char bp_avail,
