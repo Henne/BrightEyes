@@ -288,15 +288,15 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					target_hero_at_val -= 4;
 				}
 
-				/* attacked hero is dead -> AT+2 ?? */
-				if (g_hero_is_target[hero->target_object_id - 1] == 1) {
+				/* target hero has already parried another atack => AT+2 */
+				if (g_fig_hero_has_parried[hero->target_object_id - 1] == 1) {
 					atpa += 2;
 				}
 
 			} else {
 				/* target is enemy */
-				if ((g_fig_actors_unkn[hero->target_object_id] == 1) || (target_cannot_parry != 0)) {
-					/* attack flank or rear -> AT+2 */
+				if ((g_fig_enemy_has_parried[hero->target_object_id] == 1) || (target_cannot_parry != 0)) {
+					/* target monster has already parried another atack or cannot parry => AT+2 */
 					atpa += 2;
 				}
 			}
@@ -373,8 +373,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			} else if (at_roll_d20 <= atpa) {
 				/* attack succeeded */
 
-				if (((target_is_hero == 0) && !g_fig_actors_unkn[hero->target_object_id] && (target_cannot_parry == 0)) ||
-					((target_is_hero) && !g_hero_is_target[hero->target_object_id - 1]))
+				/* check if parry is allowed */
+				if (((target_is_hero == 0) && !g_fig_enemy_has_parried[hero->target_object_id] && (target_cannot_parry == 0)) ||
+					((target_is_hero) && !g_fig_hero_has_parried[hero->target_object_id - 1]))
 				{
 
 					if (target_is_hero != 0) {
