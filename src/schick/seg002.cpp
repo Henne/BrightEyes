@@ -4150,8 +4150,14 @@ void draw_loc_icons(const signed int icons, ...)
 
 	va_end(arguments);
 
+#if defined(__BORLANDC__)
 	if (icons_bak[i] != -1)
 		changed = 1;
+#else
+	if ((i < 9) && (icons_bak[i] != -1)) {
+		changed = 1;
+	}
+#endif
 
 	if (changed && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_icons();
@@ -5656,13 +5662,23 @@ int main(int argc, char** argv)
 		}
 #endif
 
+#if !defined(__BORLANDC__)
+		/* Playground 1 / 2 */
+		sdl_forced_update();
+
+		g_textbox_width = 3;
+
+		game_loop();
+
+		cleanup_game();
+
+		return 0;
+#endif
+
 		/* select game mode */
 		g_game_mode = GAME_MODE_UNSPECIFIED;
 
 		while (g_game_mode == GAME_MODE_UNSPECIFIED) {
-#if !defined(__BORLANDC__)
-			sdl_forced_update();
-#endif
 			g_game_mode = GUI_radio(get_ttx(5), 2, get_ttx(6), get_ttx(7));
 		}
 

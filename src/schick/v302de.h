@@ -71,6 +71,10 @@ struct screen_rect {
 	short y1, x1, y2, x2;
 };
 
+#if !defined(__BORLANDC__)
+#include <SDL2/SDL.h>
+#include "vgalib.h"
+#endif
 
 #include "common.h"
 #include "datseg.h"

@@ -1,3 +1,6 @@
+#ifndef VGALIB
+#define VGALIB
+
 enum FB_VALUES {
 	O_WIDTH = 320,
 	O_HEIGHT = 200,
@@ -29,4 +32,6 @@ SDL_Window* sdl_get_window(void);
 int sdl_get_ratio(void);
 void sdl_toggle_pal_logic(void);
 void sdl_change_window_size(SDL_mutex*);
+#endif
+
 #endif

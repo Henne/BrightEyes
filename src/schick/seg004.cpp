@@ -1081,6 +1081,12 @@ void do_pic_copy(const signed int mode)
 	dst = g_pic_copy.dst;
 
 	pic_copy(dst, x1, y1, x2, y2, v1, v2, v3, v4, width, height, src, mode);
+
+#if !defined(__BORLANDC__)
+	/* Playground 2 / 2 */
+	sdl_forced_update();
+#endif
+
 }
 
 void do_save_rect(void)
