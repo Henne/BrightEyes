@@ -41,8 +41,8 @@ static const signed char g_af_spell_list[11] = {
 	SP_PARALUE_PARALEIN
 }; // ds:0x5fac
 
-static struct viewdir_offsets g_fig_viewdir_offsets3 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fb7
-static struct viewdir_offsets g_fig_viewdir_offsets4 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fc7
+static struct viewdir_offsets g_viewdir_offsets3 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fb7
+static struct viewdir_offsets g_viewdir_offsets4 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fc7
 
 /**
  * \brief   copies an ani sequence
@@ -449,7 +449,7 @@ signed int AFIG_select_range_target(struct struct_hero *hero, const signed int h
 
 			FIG_search_obj_on_cb(hero->target_object_id, &target_x, &target_y);
 
-			if (manhattan_distance(target_x, target_y, x, y) < 2) {
+			if (calc_beeline(target_x, target_y, x, y) < 2) {
 				retval = 2;
 			} else {
 				retval = 1;
@@ -547,7 +547,7 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 	signed int target_found;
 	signed int decided;
 
-	struct viewdir_offsets a = g_fig_viewdir_offsets3;
+	struct viewdir_offsets a = g_viewdir_offsets3;
 
 	retval = 0;
 	done = 0;
@@ -603,8 +603,8 @@ signed int AFIG_select_autospell(struct struct_hero *hero, const signed int hero
 						count = 0;
 						while ((!hero->target_object_id) && (count < 4)) {
 
-							if (AFIG_can_attack_neighbour(x, y, a.offset[i].x, a.offset[i].y, spell_mode)) {
-								hero->target_object_id = get_cb_val(x + a.offset[i].x, y + a.offset[i].y);
+							if (AFIG_can_attack_neighbour(x, y, a.a[i].x, a.a[i].y, spell_mode)) {
+								hero->target_object_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
 							}
 
 							count++;
@@ -757,7 +757,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 	signed int hero_x;
 	signed int hero_y;
 
-	struct viewdir_offsets a = g_fig_viewdir_offsets4;
+	struct viewdir_offsets a = g_viewdir_offsets4;
 
 	done = 0;
 	try_autospell = 1;
@@ -956,9 +956,9 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 
 						while (!hero->target_object_id && (cnt < 4)) {
 
-							if (AFIG_can_attack_neighbour(x, y, a.offset[i].x, a.offset[i].y, hero->flags.renegade))
+							if (AFIG_can_attack_neighbour(x, y, a.a[i].x, a.a[i].y, hero->flags.renegade))
 							{
-								hero->target_object_id = get_cb_val(x + a.offset[i].x, y + a.offset[i].y);
+								hero->target_object_id = get_cb_val(x + a.a[i].x, y + a.a[i].y);
 							}
 
 							cnt++;

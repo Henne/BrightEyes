@@ -131,10 +131,10 @@ static signed char get_seq_header(const signed int ani_num)
  * \param   sheet_id          [0, 1]
  * \param   hero        pointer to hero
  * \param   weapon_type the type of weapon for the animation [-1, 5], 3,4,5 are range weapons
- * \param   action_type {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_PARRY = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
+ * \param   action_type {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_UNKNOWN2 = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
  */
 /* Borlandified and identical */
-void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *hero, const signed int weapon_type, const signed int f_action, const signed int object_id_attacker, const signed int object_id_target, const signed int a7)
+void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *hero, const signed int weapon_type, const signed int f_action, const signed int fid_attacker, const signed int fid_target, const signed int a7)
 {
 	signed int l1;
 	signed int attacker_x;
@@ -154,10 +154,10 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
 	weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-	if ((signed char)object_id_target) {
+	if ((signed char)fid_target) {
 
-		FIG_search_obj_on_cb((signed char)object_id_target, &target_x, &target_y);
-		FIG_search_obj_on_cb((signed char)object_id_attacker, &attacker_x, &attacker_y);
+		FIG_search_obj_on_cb((signed char)fid_target, &target_x, &target_y);
+		FIG_search_obj_on_cb((signed char)fid_attacker, &attacker_x, &attacker_y);
 
 		if (attacker_x == target_x) {
 			if (target_y < attacker_y) {
@@ -203,9 +203,9 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	if (check_hero(hero) && (hero->viewdir != dir) &&
 
 		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_PARRY) && !g_fig_hero_has_parried[(signed char)object_id_attacker - 1]) ||
-			((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0)) ||
-			((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))))
+			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1]) ||
+			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
+			((g_defender_attacks != 0) && (a7 == 1))))
 	{
 			g_fig_anisheets[sheet_id][0] = 0;
 			l8 = l7 = -1;
@@ -259,7 +259,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 
 	if ((check_hero(hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
 		((f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN3) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_PARRY) && !g_fig_hero_has_parried[(signed char)object_id_attacker - 1])))
+			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1])))
 	{
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
@@ -279,7 +279,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		}
 	}
 
-	if ((check_hero(hero) && g_fig_critical_fail_backfire_2 && !a7) || (g_fig_critical_fail_backfire_1 && (a7 == 1))) {
+	if ((check_hero(hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
 
 			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
@@ -313,8 +313,8 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	}
 
 	*sheet_ptr1 = -1;
-	if (f_action == FIG_ACTION_PARRY) {
-		g_fig_hero_has_parried[(signed char)object_id_attacker - 1] = 1;
+	if (f_action == FIG_ACTION_UNKNOWN2) {
+		g_hero_is_target[(signed char)fid_attacker - 1] = 1;
 	}
 }
 
@@ -322,7 +322,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
  * \brief   prepares the animation sequence of a hero in fights
  */
 /* Borlandified and identical */
-void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet *enemy, const signed int f_action, const signed int object_id_attacker, const signed int object_id_target, const signed int a7)
+void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet *enemy, const signed int f_action, const signed int fid_attacker, const signed int fid_target, const signed int a7)
 {
 	signed int l1;
 	signed int attacker_x;
@@ -357,8 +357,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
 
 	/* find both actors on the chessboard */
-	FIG_search_obj_on_cb((signed char)object_id_target, &target_x, &target_y);
-	FIG_search_obj_on_cb((signed char)object_id_attacker, &attacker_x, &attacker_y);
+	FIG_search_obj_on_cb((signed char)fid_target, &target_x, &target_y);
+	FIG_search_obj_on_cb((signed char)fid_attacker, &attacker_x, &attacker_y);
 
 	/* find out which direction the action will have */
 	if (attacker_x == target_x) {
@@ -403,9 +403,9 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	/* first the enemy may turn */
 	if ((enemy->viewdir != dir) &&
 		(	((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-			((f_action == FIG_ACTION_PARRY) && !g_fig_enemy_has_parried[(signed char)object_id_attacker])) ||
-			(g_fig_critical_fail_backfire_2 && !a7) ||
-			(g_fig_critical_fail_backfire_1 && (a7 == 1))))
+			((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)fid_attacker])) ||
+			(g_attacker_attacks_again && !a7) ||
+			(g_defender_attacks && (a7 == 1))))
 		{
 
 		g_fig_anisheets[sheet_id][0] = 0;
@@ -468,7 +468,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	}
 
 	if ((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-		((f_action == FIG_ACTION_PARRY) && !g_fig_enemy_has_parried[(signed char)object_id_attacker]))
+		((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)fid_attacker]))
 	{
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 
@@ -487,8 +487,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		}
 	}
 
-	if (((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0)) ||
-		((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))) {
+	if (((g_attacker_attacks_again != 0) && (a7 == 0)) ||
+		((g_defender_attacks != 0) && (a7 == 1))) {
 
 			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 
@@ -533,8 +533,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		*sheet_ptr2 = -1;
 	}
 
-	if (f_action == FIG_ACTION_PARRY) {
-		g_fig_enemy_has_parried[(signed char)object_id_attacker] = 1;
+	if (f_action == FIG_ACTION_UNKNOWN2) {
+		g_fig_actors_unkn[(signed char)fid_attacker] = 1;
 	}
 }
 

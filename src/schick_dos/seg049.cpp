@@ -390,8 +390,8 @@ void GRP_switch_to_next(const signed int mode)
 
 void GRP_swap_heroes(void)
 {
-	signed int hero_pos_1;
-	signed int hero_pos_2;
+	signed int hero1_no;
+	signed int hero2_no;
 	signed char l2;
 	signed char l3;
 	signed char l4;
@@ -403,53 +403,53 @@ void GRP_swap_heroes(void)
 		return;
 	}
 
-	hero_pos_1 = select_hero_from_group(get_ttx(302));
+	hero1_no = select_hero_from_group(get_ttx(302));
 
-	if ((hero_pos_1 != -1) && (hero_pos_1 < 6)) {
+	if ((hero1_no != -1) && (hero1_no < 6)) {
 
-		hero_pos_2 = select_hero_from_group(get_ttx(303));
+		hero2_no = select_hero_from_group(get_ttx(303));
 
-		if ((hero_pos_2 != -1) && (hero_pos_1 != hero_pos_2) && (hero_pos_2 < 6)) {
+		if ((hero2_no != -1) && (hero1_no != hero2_no) && (hero2_no < 6)) {
 
 			for (i = 0; i < 3; i++) {
 
-				if (g_wildcamp_guards[i] == hero_pos_1) {
-					g_wildcamp_guards[i] = hero_pos_2;
+				if (g_wildcamp_guards[i] == hero1_no) {
+					g_wildcamp_guards[i] = hero2_no;
 				}
 			}
 
 			/* save hero1 in tmp */
-			tmp = *get_hero(hero_pos_1);	/* struct_copy */
+			tmp = *get_hero(hero1_no);	/* struct_copy */
 
-			l2 = g_wildcamp_guardstatus[hero_pos_1];
-			l3 = g_wildcamp_magicstatus[hero_pos_1];
-			l4 = g_wildcamp_replstatus[hero_pos_1];
-			l5 = g_wildcamp_herbstatus[hero_pos_1];
+			l2 = g_wildcamp_guardstatus[hero1_no];
+			l3 = g_wildcamp_magicstatus[hero1_no];
+			l4 = g_wildcamp_replstatus[hero1_no];
+			l5 = g_wildcamp_herbstatus[hero1_no];
 
-			*(get_hero(hero_pos_1)) = *(get_hero(hero_pos_2)); /* struct_copy */
+			*(get_hero(hero1_no)) = *(get_hero(hero2_no)); /* struct_copy */
 
-			g_wildcamp_guardstatus[hero_pos_1] = g_wildcamp_guardstatus[hero_pos_2];
-			g_wildcamp_magicstatus[hero_pos_1] = g_wildcamp_magicstatus[hero_pos_2];
-			g_wildcamp_replstatus[hero_pos_1] = g_wildcamp_replstatus[hero_pos_2];
-			g_wildcamp_herbstatus[hero_pos_1] = g_wildcamp_herbstatus[hero_pos_2];
+			g_wildcamp_guardstatus[hero1_no] = g_wildcamp_guardstatus[hero2_no];
+			g_wildcamp_magicstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
+			g_wildcamp_replstatus[hero1_no] = g_wildcamp_replstatus[hero2_no];
+			g_wildcamp_herbstatus[hero1_no] = g_wildcamp_herbstatus[hero2_no];
 
-			*(get_hero(hero_pos_2)) = tmp; /* struct_copy */
+			*(get_hero(hero2_no)) = tmp; /* struct_copy */
 
-			g_wildcamp_guardstatus[hero_pos_2] = l2;
-			g_wildcamp_magicstatus[hero_pos_2] = l3;
-			g_wildcamp_replstatus[hero_pos_2] = l4;
-			g_wildcamp_herbstatus[hero_pos_2] = l5;
+			g_wildcamp_guardstatus[hero2_no] = l2;
+			g_wildcamp_magicstatus[hero2_no] = l3;
+			g_wildcamp_replstatus[hero2_no] = l4;
+			g_wildcamp_herbstatus[hero2_no] = l5;
 
-			if (get_hero(hero_pos_1)->typus) {
-				get_hero(hero_pos_1)->action_id = FIG_ACTION_PARRY;
+			if (get_hero(hero1_no)->typus) {
+				get_hero(hero1_no)->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			if (get_hero(hero_pos_2)->typus) {
-				get_hero(hero_pos_2)->action_id = FIG_ACTION_PARRY;
+			if (get_hero(hero2_no)->typus) {
+				get_hero(hero2_no)->action_id = FIG_ACTION_UNKNOWN2;
 			}
 
-			get_hero(hero_pos_1)->slot_pos = hero_pos_1 + 1;
-			get_hero(hero_pos_2)->slot_pos = hero_pos_2 + 1;
+			get_hero(hero1_no)->slot_pos = hero1_no + 1;
+			get_hero(hero2_no)->slot_pos = hero2_no + 1;
 		}
 	}
 

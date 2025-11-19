@@ -22,8 +22,8 @@
 namespace M302de {
 #endif
 
-static struct viewdir_offsets g_fig_viewdir_offsets5 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fd8
-static struct viewdir_offsets g_fig_viewdir_offsets6 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fe8
+static struct viewdir_offsets g_viewdir_offsets5 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fd8
+static struct viewdir_offsets g_viewdir_offsets6 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fe8
 
 /**
  * \brief   copies something from ANI.DAT
@@ -401,7 +401,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 	signed int mode;
 	signed int target_found;
 	signed int decided;
-	struct viewdir_offsets diff = g_fig_viewdir_offsets5;
+	struct viewdir_offsets diff = g_viewdir_offsets5;
 
 	signed int i;
 	signed int cnt;
@@ -456,8 +456,8 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 
 						while (!enemy->target_object_id && (cnt < 4)) {
 
-							if (FIG_enemy_can_attack_neighbour(x, y, diff.offset[i].x, diff.offset[i].y, mode)) {
-								enemy->target_object_id = get_cb_val(x + diff.offset[i].x, y + diff.offset[i].y);
+							if (FIG_enemy_can_attack_neighbour(x, y, diff.a[i].x, diff.a[i].y, mode)) {
+								enemy->target_object_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
 							}
 
 							cnt++;
@@ -640,7 +640,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 	signed int y_bak;
 	signed int target;
 
-	struct viewdir_offsets diff = g_fig_viewdir_offsets6;
+	struct viewdir_offsets diff = g_viewdir_offsets6;
 
 	/* check if we are in a special fight */
 
@@ -753,14 +753,14 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			cnt = 0;
 			while (!enemy->target_object_id && (cnt < 4)) {
 
-				if (FIG_enemy_can_attack_neighbour(x, y, diff.offset[i].x, diff.offset[i].y, attack_foe)) {
+				if (FIG_enemy_can_attack_neighbour(x, y, diff.a[i].x, diff.a[i].y, attack_foe)) {
 
 					flag = 1;
 
 					if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table))
 					{
 
-						target = get_cb_val(x - diff.offset[i].x, y - diff.offset[i].y);
+						target = get_cb_val(x - diff.a[i].x, y - diff.a[i].y);
 
 						if (target && (enemy_no + 30 != target)) {
 
@@ -774,7 +774,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 					}
 
 					if (flag != 0) {
-						enemy->target_object_id = get_cb_val(x + diff.offset[i].x, y + diff.offset[i].y);
+						enemy->target_object_id = get_cb_val(x + diff.a[i].x, y + diff.a[i].y);
 					}
 				}
 

@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed int manhattan_distance(const signed int, const signed int, const signed int, const signed int);
+signed int calc_beeline(const signed int, const signed int, const signed int, const signed int);
 /* 0x25 */
 signed int FIG_get_range_weapon_type(const struct struct_hero*);
 /* 0x2a */
