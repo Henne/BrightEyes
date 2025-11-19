@@ -8,11 +8,7 @@
  */
 #include <stdio.h>
 #if !defined(__BORLANDC__)
-#if defined(_WIN32)
-#include <io.h>
-#else
 #include <unistd.h>
-#endif
 #endif
 
 #include "v302de.h"

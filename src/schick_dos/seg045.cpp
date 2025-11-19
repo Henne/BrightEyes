@@ -209,14 +209,14 @@ signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int
 	signed int fighter_y;
 	signed int target_x;
 	signed int target_y;
-	signed int beeline;
+	signed int distance;
 
 	FIG_search_obj_on_cb(target_object_id, &target_x, &target_y);
 	FIG_search_obj_on_cb(fighter_id, &fighter_x, &fighter_y);
 
-	beeline = calc_beeline(fighter_x, fighter_y, target_x, target_y);
+	distance = manhattan_distance(fighter_x, fighter_y, target_x, target_y);
 
-	if (beeline <= 1) {
+	if (distance <= 1) {
 		return 0;
 	}
 
@@ -224,7 +224,7 @@ signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int
 	g_fig_anisheets[sheet_id][0] = 0;
 	g_fig_anisheets[sheet_id][242] = 0;
 
-	for (i = 0; beeline - 1 > i; i++) {
+	for (i = 0; distance - 1 > i; i++) {
 		sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_shotbolt_index[type][dir], -1);
 	}
 	*sheet_ptr = -1;

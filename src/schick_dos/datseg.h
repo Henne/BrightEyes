@@ -124,11 +124,11 @@ struct dng_gfxtab {
 };
 
 struct viewdir_offsets {
-	struct struct_point a[4];
+	struct struct_point offset[4];
 };
 
 struct viewdir_offsets8s {
-	struct point8s a[4];
+	struct point8s offset[4];
 };
 
 struct struct_rect {
@@ -217,7 +217,7 @@ struct ranged_weapon_descr {
 	 *
 	 * The skill test handicap for the ranged attack depends on the distance and the size of the target.
 	 * In Schicksalsklinge, RANGED_WEAPON_STATS_BASE_HANDICAP is the skill test handicap vs. a target which is extrem nah and winzig (0,0).
-	 * The general formula for the handicap is base_handicap + 2 * distance - 2 * target_size.
+	 * The general formula for the handicap is base_handicap + 2 * distance_type - 2 * target_size.
 	 *
 	 * The damage is calculated as the base damage of the weapon (like D6 + 3 for the shortbow) + a distance modifier.
 	 * The modifier is given in the RANGED_WEAPON_STATS_DAMAGE_MODIFIER array. */
@@ -291,7 +291,7 @@ struct location {
 
 struct struct_msg {
 	signed int type;
-	signed int id;
+	signed int id; /* hero_pos or monster_id */
 };
 
 struct statuspage_line {
@@ -345,7 +345,7 @@ struct struct_monster {
 	int8_t magic;
 	int8_t spellbook_id;
 	int8_t level;
-	int8_t size;
+	int8_t target_size; /* for details, see enum TARGET_SIZE */
 	int8_t is_animal;
 	int8_t shots;
 	int16_t shot_dam;
@@ -689,7 +689,7 @@ struct enemy_sheet {
 	int8_t  weapon_broken;	/* weapon broken? 0	= no, 1	= yes */
 	struct enemy_flags flags;
 	int8_t	unused8;
-	int8_t	size;
+	int8_t	target_size; /* for details, see enum TARGET_SIZE */
 	int8_t	round_appear;
 	int8_t	is_animal;		/* is the enemy an animal? */
 	int8_t	shots;
@@ -1712,8 +1712,8 @@ extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg1
 extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg049, seg052
 extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg049, seg052
 extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg049, seg052
-extern signed int  g_attacker_attacks_again;	// ds:0xe3ac; seg042, seg043, seg044
-extern signed int  g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044
+extern signed int  g_fig_critical_fail_backfire_2;	// ds:0xe3ac; seg042, seg043, seg044
+extern signed int  g_fig_critical_fail_backfire_1;		// ds:0xe3aa; seg042, seg043, seg044
 extern signed int  g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
 extern signed int  g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg098, seg102
 extern signed int  g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099
@@ -1774,8 +1774,8 @@ extern uint8_t* g_fig_cb_selector_buf;	// ds:0xd85e; seg034, seg040
 extern uint8_t* g_fig_shot_bolt_buf;	// ds:0xd85a; seg040, seg045
 extern uint8_t* g_fig_spellgfx_buf;	// ds:0xd856; seg040, seg045
 extern signed char *g_chessboard;	// ds:0xd852;
-extern signed char g_hero_is_target[7];	// ds:0xd84b; seg032, seg042, seg043, seg044
-extern signed char g_fig_actors_unkn[30];	// ds:0xd82d; seg032, seg042, seg043, seg044
+extern signed char g_fig_hero_has_parried[7];	// ds:0xd84b; seg032, seg042, seg043, seg044
+extern signed char g_fig_enemy_has_parried[30];	// ds:0xd82d; seg032, seg042, seg043, seg044 /* indexed by object_id. Better index by enemy_id or combine with g_fig_hero_has_parried */
 extern signed char g_fig_move_pathdir[10];	// ds:0xd823; seg034, seg036, seg037, seg038
 extern struct enemy_sheet g_enemy_sheets[20];	// ds:0xd34b; seg005, seg006, seg032-seg102
 extern struct fight_msg g_fig_msg_data[6];	// ds:0xd333; seg005, seg041

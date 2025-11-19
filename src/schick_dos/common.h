@@ -8,6 +8,17 @@ enum {
 	WEST	= 3
 };
 
+/* viewing directions in fight mode, according to keyboard input in fight, 
+ * and also according to the chessboard x- and y-coordinates,
+ * i.e. positive x-direction is "right", positive y-direction is "up" etc.
+ */
+enum {
+	FIG_VIEWDIR_RIGHT = 0,
+	FIG_VIEWDIR_DOWN  = 1,
+	FIG_VIEWDIR_LEFT  = 2,
+	FIG_VIEWDIR_UP    = 3
+};
+
 enum {
 	SEASON_WINTER = 0,
 	SEASON_SPRING = 1,
@@ -105,6 +116,7 @@ enum {
 };
 
 enum {
+	FIG_ACTION_NONE			= 0,
 	FIG_ACTION_MOVE			= 1,
 	FIG_ACTION_MELEE_ATTACK		= 2,
 	FIG_ACTION_GUARD		= 3,
@@ -120,7 +132,7 @@ enum {
 	FIG_ACTION_REPEAT_OPTION	= 13,
 	FIG_ACTION_RANGE_ATTACK		= 15,
 	FIG_ACTION_FLEE			= 16,
-	FIG_ACTION_UNKNOWN2		= 100,
+	FIG_ACTION_PARRY		= 100, /* is set in sub_hero_le() when all le are lost */
 	FIG_ACTION_UNKNOWN3		= 102, /* drink potion? */
 	FIG_ACTION_UNKNOWN4		= 103  /* cast spell? */
 };
@@ -405,6 +417,30 @@ enum {
 };
 
 /* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
+
+/* ranged distance types, named according to DSA3 rules. */
+enum {
+	/*                                       implemented distance on chessboard */
+	/*                                                    distance in Schritt according to DSA3 rules */
+	RANGED_DISTANCE_TYPE_EXTREM_NAH  = 0, /*  1-- 2       1--  5 */
+	RANGED_DISTANCE_TYPE_SEHR_NAH    = 1, /*  3-- 4       5-- 10 */
+	RANGED_DISTANCE_TYPE_NAH         = 2, /*  5-- 6      10-- 15 */
+	RANGED_DISTANCE_TYPE_MITTEL      = 3, /*  7-- 9      15-- 25 */
+	RANGED_DISTANCE_TYPE_WEIT        = 4, /* 10-- 15     25-- 40 */
+	RANGED_DISTANCE_TYPE_SEHR_WEIT   = 5, /* 16-- 20     40-- 60 */
+	RANGED_DISTANCE_TYPE_EXTREM_WEIT = 6  /* 21--        61--100 */
+};
+
+/* target sizes (for ranged attack), named according to DSA3 rules. */
+enum {
+	/*                             examples according to DSA3 rules */
+	TARGET_SIZE_WINZIG     = 0, /* Silbertaler, Drachenauge, Maus, Ratte, Kroete */
+	TARGET_SIZE_SEHR_KLEIN = 1, /* Schlange, Fasan, Katze, Rabe */
+	TARGET_SIZE_KLEIN      = 2, /* Wolf, Reh, Kobold, Zwerg */
+	TARGET_SIZE_MITTEL     = 3, /* Goblin, Elf, Mensch, Ork */
+	TARGET_SIZE_GROSS      = 4, /* Pferd, Elch, Oger, Troll */
+	TARGET_SIZE_SEHR_GROSS = 5  /* Scheunentor, Drache, Elefant, Riese */
+};
 
 enum {
 	NUTRITION_TYPE_DRINK	= 0,

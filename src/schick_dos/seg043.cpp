@@ -1,5 +1,5 @@
 /**
- *	Rewrite of DSA1 v3.02_de functions of seg043 (fightsystem: monster action, use item)
+ *	Rewrite of DSA1 v3.02_de functions of seg043 (fightsystem: enemy action, use item)
  *	Functions rewritten: 2/2 (complete)
  *
  *	Borlandified and identical
@@ -30,15 +30,15 @@ namespace M302de {
 #endif
 
 signed int g_mspell_awake_flag = 0; // ds:0x618e
-static struct viewdir_offsets8s g_viewdir_invoffsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
+static struct viewdir_offsets8s g_fig_viewdir_inverse_offsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
 
 /**
- * \brief   execute the fight action of a monster
+ * \brief   execute the fight action of an enemy
  *
- * \param   monster     pointer to a monster datasheet
- * \param   monster_pos position of the monster (fighter_id = monster_pos + 10)
+ * \param   enemy     pointer to the enemy sheet
+ * \param   enemy_id  id of the enemy
  */
-void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_pos)
+void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 {
 	signed int damage;
 	struct struct_hero *hero;
@@ -66,7 +66,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 	signed int target_x;
 	signed int target_y;
 	signed int dir;
-	struct viewdir_offsets8s dst = g_viewdir_invoffsets3;
+	struct viewdir_offsets8s dst = g_fig_viewdir_inverse_offsets3;
 	struct struct_msg tmp;
 
 	call_mouse_bg();
@@ -75,19 +75,19 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 		FIG_clear_msgs();
 
-		defender_gets_hit = g_attacker_attacks_again =
-			g_defender_attacks = g_attacker_dead = g_defender_dead = 0;
+		defender_gets_hit = g_fig_critical_fail_backfire_2 =
+			g_fig_critical_fail_backfire_1 = g_attacker_dead = g_defender_dead = 0;
 
 		g_fig_actor_grammar.type = 1;
-		g_fig_actor_grammar.id = monster->mon_id;
+		g_fig_actor_grammar.id = p_enemy->mon_id;
 
-		if (monster->target_object_id < 10) {
+		if (p_enemy->target_object_id < 10) {
 
 			/* monster attacks hero */
-			hero = get_hero(monster->target_object_id - 1);
+			hero = get_hero(p_enemy->target_object_id - 1);
 
 			g_fig_target_grammar.type = 2;
-			g_fig_target_grammar.id = monster->target_object_id - 1;
+			g_fig_target_grammar.id = p_enemy->target_object_id - 1;
 
 			if (hero->flags.dead || !hero->typus) {
 				return;
@@ -97,7 +97,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 		} else {
 			/* monster attacks monster */
 
-			target_enemy = &g_enemy_sheets[monster->target_object_id - 10];
+			target_enemy = &g_enemy_sheets[p_enemy->target_object_id - 10];
 
 			g_fig_target_grammar.type = 1;
 			g_fig_target_grammar.id = target_enemy->mon_id;
@@ -110,8 +110,8 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 			if ((is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) && (l17 == 0))
 			{
-				FIG_search_obj_on_cb(monster->target_object_id, &target_x, &target_y);
-				FIG_search_obj_on_cb(monster_pos + 10, &hero_x, &hero_y);
+				FIG_search_obj_on_cb(p_enemy->target_object_id, &target_x, &target_y);
+				FIG_search_obj_on_cb(enemy_id + 10, &hero_x, &hero_y);
 
 				if (hero_x == target_x) {
 
@@ -130,7 +130,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 				if (target_enemy->viewdir != dir) {
 
-					fighter_id = get_cb_val(hero_x + dst.a[dir].x, hero_y + dst.a[dir].y);
+					fighter_id = get_cb_val(hero_x + dst.offset[dir].x, hero_y + dst.offset[dir].y);
 
 					if (fighter_id != 0) {
 
@@ -147,9 +147,9 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 			}
 		}
 
-		if (monster->action_id == FIG_ACTION_MELEE_ATTACK) {
+		if (p_enemy->action_id == FIG_ACTION_MELEE_ATTACK) {
 
-			if (monster->target_object_id < 10) {
+			if (p_enemy->target_object_id < 10) {
 
 				/* attack a hero */
 
@@ -172,7 +172,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 				}
 
 				/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a PA-bonus against orcs */
-				if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (monster->gfx_id == 24))
+				if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (p_enemy->gfx_id == 24))
 				{
 					defender_pa++;
 				}
@@ -182,7 +182,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 				defender_pa -= hero->rs_be / 2;
 
 			} else {
-				/* attack a monster */
+				/* target is an enemy */
 				defender_at = target_enemy->at;
 				defender_pa = target_enemy->pa;
 			}
@@ -193,15 +193,15 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 				defender_pa -= 4;
 			}
 
-			attacker_at = monster->at;
+			attacker_at = p_enemy->at;
 			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				attacker_at -= 4;
 			}
 
 			if (target_is_hero) {
 
-				/* TODO */
-				if (g_hero_is_target[monster->target_object_id - 1] == 1) {
+				/* target hero has already parried another atack => AT+2 */
+				if (g_fig_hero_has_parried[p_enemy->target_object_id - 1] == 1) {
 					attacker_at += 2;
 				}
 
@@ -215,8 +215,8 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 					attacker_at /= 2;
 				}
 			} else {
-				/* TODO */
-				if (g_fig_actors_unkn[monster->target_object_id] == 1) {
+				/* target enemy has already parried another atack => AT+2 */
+				if (g_fig_enemy_has_parried[p_enemy->target_object_id] == 1) {
 					attacker_at += 2;
 				}
 			}
@@ -246,19 +246,19 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 						D1_INFO("defender gets a free attack.\n");
 #endif
 
-						g_defender_attacks = 1;
+						g_fig_critical_fail_backfire_1 = 1;
 
 						if (random_schick(20) <= defender_at) {
 
 							if (target_is_hero != 0) {
-								damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)monster, 0);
+								damage = FIG_get_hero_weapon_attack_damage((struct struct_hero*)hero, (struct struct_hero*)p_enemy, 0);
 							} else {
-								damage = FIG_get_enemy_attack_damage(target_enemy, monster, 1);
+								damage = FIG_get_enemy_attack_damage(target_enemy, p_enemy, 1);
 							}
 
 							if (damage > 0) {
 
-								FIG_damage_enemy(monster, damage, 1);
+								FIG_damage_enemy(p_enemy, damage, 1);
 
 								FIG_add_msg(11, damage);
 
@@ -267,7 +267,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 								g_fig_target_grammar = g_fig_actor_grammar;
 								g_fig_actor_grammar = tmp;
 
-								if (monster->flags.dead) {
+								if (p_enemy->flags.dead) {
 									g_attacker_dead = 1;
 								}
 							}
@@ -280,13 +280,13 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 						damage = random_schick(6);
 
-						FIG_damage_enemy(monster, damage, 1);
+						FIG_damage_enemy(p_enemy, damage, 1);
 
 						FIG_add_msg(11, damage);
 
 						g_fig_target_grammar = g_fig_actor_grammar;
 
-						if (monster->flags.dead) {
+						if (p_enemy->flags.dead) {
 							g_attacker_dead = 1;
 						}
 					} else if (two_w_6 == 12) {
@@ -304,8 +304,9 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 				if (randval <= attacker_at) {
 
-					if ((target_is_hero && !g_hero_is_target[monster->target_object_id - 1] && check_hero(hero)) ||
-						(!target_is_hero && !g_fig_actors_unkn[monster->target_object_id]))
+					/* check if parry is allowed */
+					if ((target_is_hero && !g_fig_hero_has_parried[p_enemy->target_object_id - 1] && check_hero(hero)) ||
+						(!target_is_hero && !g_fig_enemy_has_parried[p_enemy->target_object_id]))
 					{
 
 						randval2 = random_schick(20);
@@ -330,18 +331,18 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 								D1_INFO("attacker gets a free attack.\n");
 #endif
 
-								g_attacker_attacks_again = 1;
+								g_fig_critical_fail_backfire_2 = 1;
 
 								if (random_schick(20) <= attacker_at) {
 
 									if (target_is_hero != 0) {
 
-										damage = FIG_get_enemy_attack_damage(monster, (struct enemy_sheet*)hero, 0);
+										damage = FIG_get_enemy_attack_damage(p_enemy, (struct enemy_sheet*)hero, 0);
 
 										if (damage > 0) {
 
 											/* HESHTHOT */
-											if (monster->mon_id != 0x4d) {
+											if (p_enemy->mon_id != 0x4d) {
 												sub_hero_le(hero, damage);
 											}
 
@@ -352,7 +353,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 											}
 										}
 									} else {
-										damage = FIG_get_enemy_attack_damage(monster, target_enemy, 1);
+										damage = FIG_get_enemy_attack_damage(p_enemy, target_enemy, 1);
 
 										if (damage > 0) {
 
@@ -449,11 +450,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 						if (target_is_hero != 0) {
 
-							damage = FIG_get_enemy_attack_damage(monster, (struct enemy_sheet*)hero, 0);
+							damage = FIG_get_enemy_attack_damage(p_enemy, (struct enemy_sheet*)hero, 0);
 
 							if (damage > 0) {
 
-								if (monster->mon_id != 0x4d) {
+								if (p_enemy->mon_id != 0x4d) {
 									sub_hero_le(hero, damage);
 								}
 
@@ -465,7 +466,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 							}
 						} else {
 
-							damage = FIG_get_enemy_attack_damage(monster, target_enemy, 1);
+							damage = FIG_get_enemy_attack_damage(p_enemy, target_enemy, 1);
 
 							if (damage > 0) {
 
@@ -488,37 +489,37 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 				if (check_hero(hero) || (g_defender_dead != 0)) {
 
-					FANI_prepare_fight_hero_ani(0, hero, weapon_type, 100, monster->target_object_id, monster_pos + 10, 1);
+					FANI_prepare_fight_hero_ani(0, hero, weapon_type, FIG_ACTION_PARRY, p_enemy->target_object_id, enemy_id + 10, 1);
 				}
 
 			} else if (l17 == 0) {
-				FANI_prepare_fight_enemy_ani(0, target_enemy, 100, monster->target_object_id, monster_pos + 10, 1);
+				FANI_prepare_fight_enemy_ani(0, target_enemy, FIG_ACTION_PARRY, p_enemy->target_object_id, enemy_id + 10, 1);
 			} else if (g_defender_dead != 0) {
-				FANI_prepare_fight_enemy_ani(0, target_enemy, 0, monster->target_object_id, monster_pos + 10, 1);
+				FANI_prepare_fight_enemy_ani(0, target_enemy, FIG_ACTION_NONE, p_enemy->target_object_id, enemy_id + 10, 1);
 			}
 
-			FANI_prepare_fight_enemy_ani(1, monster, 2, monster_pos + 10, monster->target_object_id, 0);
+			FANI_prepare_fight_enemy_ani(1, p_enemy, FIG_ACTION_MELEE_ATTACK, enemy_id + 10, p_enemy->target_object_id, 0);
 			g_fig_continue_print = 1;
 			draw_fight_screen_pal(0);
 			clear_anisheets();
 
 		} else {
 
-			if (monster->action_id == FIG_ACTION_RANGE_ATTACK) {
+			if (p_enemy->action_id == FIG_ACTION_RANGE_ATTACK) {
 
-				if (monster->shots > 0) {
+				if (p_enemy->shots > 0) {
 					l15 = 3;
-					monster->shots--;
+					p_enemy->shots--;
 				} else {
 					l15 = 4;
-					monster->throws--;
+					p_enemy->throws--;
 				}
 
 				if (target_is_hero != 0) {
 
 					/* attack hero */
 
-					damage = dice_template(l15 == 3 ? monster->shot_dam : monster->throw_dam);
+					damage = dice_template(l15 == 3 ? p_enemy->shot_dam : p_enemy->throw_dam);
 
 					damage = (damage * 8) / 10;
 
@@ -537,9 +538,9 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 					}
 
 				} else {
+					/* target is an enemy */
 
-					/* attack monster */
-					damage = dice_template(l15 == 3 ? monster->shot_dam : monster->throw_dam) - target_enemy->rs;
+					damage = dice_template(l15 == 3 ? p_enemy->shot_dam : p_enemy->throw_dam) - target_enemy->rs;
 
 					if (damage > 0) {
 
@@ -560,11 +561,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 				FIG_call_draw_pic();
 
-				FANI_prepare_fight_enemy_ani(0, monster, 15, monster_pos + 10, monster->target_object_id, 0);
+				FANI_prepare_fight_enemy_ani(0, p_enemy, FIG_ACTION_RANGE_ATTACK, enemy_id + 10, p_enemy->target_object_id, 0);
 
-				l12 = FANI_prepare_shotbolt_ani(7, l11, monster_pos + 10, monster->target_object_id, monster->viewdir);
+				l12 = FANI_prepare_shotbolt_ani(7, l11, enemy_id + 10, p_enemy->target_object_id, p_enemy->viewdir);
 
-				FIG_set_sheet(monster->fighter_id, 0);
+				FIG_set_sheet(p_enemy->fighter_id, 0);
 
 				draw_fight_screen_pal(0);
 
@@ -583,10 +584,10 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 					if (target_is_hero != 0) {
 
-						FANI_prepare_fight_hero_ani(1, hero, -1, 0, monster->target_object_id, monster_pos + 10, 1);
+						FANI_prepare_fight_hero_ani(1, hero, -1, FIG_ACTION_NONE, p_enemy->target_object_id, enemy_id + 10, 1);
 					} else {
 
-						FANI_prepare_fight_enemy_ani(1, target_enemy, 0, monster->target_object_id, monster_pos + 10, 1);
+						FANI_prepare_fight_enemy_ani(1, target_enemy, FIG_ACTION_NONE, p_enemy->target_object_id, enemy_id + 10, 1);
 					}
 				}
 
@@ -594,19 +595,19 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 				draw_fight_screen(0);
 				clear_anisheets();
 
-			} else if (monster->action_id == FIG_ACTION_SPELL) {
+			} else if (p_enemy->action_id == FIG_ACTION_SPELL) {
 
 				/* spellcast */
 
-				l14 = g_mon_spell_descriptions[monster->mspell_id].ani_id;
+				l14 = g_mon_spell_descriptions[p_enemy->mspell_id].ani_id;
 
 				*g_dtp2 = '\0';
 
-				l13 = MON_cast_spell(monster, 0);
+				l13 = MON_cast_spell(p_enemy, 0);
 
 				clear_anisheets();
 
-				if (monster->target_object_id) {
+				if (p_enemy->target_object_id) {
 
 					l11 = l12 = 0;
 
@@ -614,7 +615,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 						l11 = 1;
 					}
 
-					if (monster->target_object_id < 10) {
+					if (p_enemy->target_object_id < 10) {
 						l11 = 2;
 					}
 
@@ -622,41 +623,41 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 					if (l13 != -1) {
 
-						FANI_prepare_spell_enemy(0, monster, 4, monster_pos + 10, monster->target_object_id, 0);
+						FANI_prepare_spell_enemy(0, p_enemy, 4, enemy_id + 10, p_enemy->target_object_id, 0);
 					}
 
 					if (l13 > 0) {
 
 						if (l14 > 0) {
 
-							FANI_prepare_enemy_spell_ani(6, monster, l14);
+							FANI_prepare_enemy_spell_ani(6, p_enemy, l14);
 
 						} else {
 
-							if (monster->target_object_id > 0) {
+							if (p_enemy->target_object_id > 0) {
 
 								if (!target_is_hero) {
 
-									FANI_prepare_spell_enemy(1, target_enemy, 99, monster->target_object_id, monster_pos + 10, 1);
+									FANI_prepare_spell_enemy(1, target_enemy, 99, p_enemy->target_object_id, enemy_id + 10, 1);
 								} else {
 
 									if (check_hero(hero) || (g_defender_dead != 0)) {
 
-										FANI_prepare_spell_hero(1, hero, 99, monster->target_object_id, 0, -1, 1);
+										FANI_prepare_spell_hero(1, hero, 99, p_enemy->target_object_id, 0, -1, 1);
 									}
 								}
 							}
 						}
 
-						if ((monster->gfx_id != 0x12) && (monster->gfx_id != 7) && (monster->target_object_id > 0)) {
+						if ((p_enemy->gfx_id != 0x12) && (p_enemy->gfx_id != 7) && (p_enemy->target_object_id > 0)) {
 
-							l12 = FANI_prepare_shotbolt_ani(7, l11, monster_pos + 10, monster->target_object_id, monster->viewdir);
+							l12 = FANI_prepare_shotbolt_ani(7, l11, enemy_id + 10, p_enemy->target_object_id, p_enemy->viewdir);
 						}
 
 					}
 					if (l13 != -1) {
 
-						FIG_set_sheet(monster->fighter_id, 0);
+						FIG_set_sheet(p_enemy->fighter_id, 0);
 
 						draw_fight_screen_pal(1);
 					}
@@ -689,7 +690,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 							}
 						} else {
 
-							if (monster->target_object_id > 0) {
+							if (p_enemy->target_object_id > 0) {
 
 								FIG_set_sheet(hero->fighter_id, 1);
 							}
@@ -738,7 +739,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 
 						if (g_spell_illusionen) {
 
-							if (monster->target_object_id >= 10) {
+							if (p_enemy->target_object_id >= 10) {
 
 								FIG_make_invisible(target_enemy->fighter_id);
 
@@ -750,7 +751,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, const signed int monster_p
 								}
 							} else {
 
-								if (monster->target_object_id > 0) {
+								if (p_enemy->target_object_id > 0) {
 
 									FIG_make_invisible(hero->fighter_id);
 								}
@@ -923,9 +924,9 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 		if (g_defender_dead != 0) {
 
 			if (flag != 0) {
-				FANI_prepare_fight_hero_ani(1, target_hero, -1, 0, hero->target_object_id, hero_pos + 1, 1);
+				FANI_prepare_fight_hero_ani(1, target_hero, -1, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
 			} else {
-				FANI_prepare_fight_enemy_ani(1, target_monster, 0, hero->target_object_id, hero_pos + 1, 1);
+				FANI_prepare_fight_enemy_ani(1, target_monster, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
 			}
 
 		}

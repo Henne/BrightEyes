@@ -12,11 +12,7 @@
 #if defined(__BORLANDC__)
 #include <DOS.H>
 #else
-#if defined(_WIN32)
-#include <io.h>
-#else
 #include <unistd.h>
-#endif
 #endif
 
 #include "v302de.h"
