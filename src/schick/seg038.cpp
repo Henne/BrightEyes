@@ -34,12 +34,12 @@ static struct viewdir_offsets g_fig_viewdir_offsets7 = { {	{ 1, 0 }, { 0, -1 }, 
  * \return              0 if the object was not found. If the object was
  * found it returns 1 and stores the coordinates at the pointers.
  */
-signed int FIG_search_obj_on_cb(const signed int obj, signed int *px, signed int *py)
+signed int FIG_search_obj_on_cb(const signed int object_id, signed int *px, signed int *py)
 {
 	/* This is the Endian save version */
 	for (*px = 0; *px < 25; (*px)++) {
 		for (*py = 0; *py < 24; (*py)++) {
-			if (get_cb_val(*px, *py) == obj) {
+			if (get_cb_val(*px, *py) == object_id) {
 				return 1;
 			}
 		}
@@ -48,12 +48,12 @@ signed int FIG_search_obj_on_cb(const signed int obj, signed int *px, signed int
 	return 0;
 }
 
-void FIG_init_list_elem(const signed int obj)
+void FIG_init_list_elem(const signed int object_id)
 {
 	signed int x;
 	signed int y;
 
-	FIG_search_obj_on_cb(obj, &x, &y);
+	FIG_search_obj_on_cb(object_id, &x, &y);
 
 	/* This initializes the global fighter structure g_fig_list_elem */
 	g_fig_list_elem.figure = 0;
@@ -93,7 +93,7 @@ void FIG_unused(const signed int a1, const signed int a2, signed int *p1, signed
 }
 #endif
 
-static signed char *g_chessboard_cpy; // ds:0xe356
+static int8_t *g_chessboard_cpy; // ds:0xe356
 
 /**
  * \brief  Computes path via backtracking on the distance table
@@ -107,7 +107,7 @@ static signed char *g_chessboard_cpy; // ds:0xe356
  * \param   double_size       actor is a double-size enemy (wolves, dogs, lions)
  * \param   enemy_id	      only relevant if double_size is true: the enemy_id of the double-size enemy.
  */
-void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int target_x, signed int target_y,
+void FIG_find_path_to_target_backtrack(int8_t *dist_table_ptr, signed int target_x, signed int target_y,
 			signed int dist, const signed char bp_avail,
 			const signed int mode, const signed int double_size, const signed int enemy_id)
 {
@@ -190,7 +190,7 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 
 				if ((backtrack_y < 24) && (backtrack_y >= 0) && (backtrack_x < 24) && (backtrack_x >= 0))
 				{
-					object_id_or_dist_entry = *((int8_t*)(dist_table_ptr + 25 * backtrack_y + backtrack_x));
+					object_id_or_dist_entry = *(dist_table_ptr + 25 * backtrack_y + backtrack_x);
 
 					if ((object_id_or_dist_entry == dist)	&&
 						((!double_size) ||
@@ -207,9 +207,9 @@ void FIG_find_path_to_target_backtrack(uint8_t *dist_table_ptr, signed int targe
 #endif
 						(
 							double_size && /* this check is redundant, as we had (!double_size) || ... before */
-							(!*(g_chessboard_cpy + (tail_y * 25) + tail_x) || /* square is empty */
-							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (enemy_id + 10)) || /* head of active enemy is on square */
-							(*(g_chessboard_cpy + (tail_y * 25) + tail_x) == (enemy_id + 30))) && /* tail of active enemy is on square */
+							(!*(g_chessboard_cpy + tail_y * 25 + tail_x) || /* square is empty */
+							(*(g_chessboard_cpy + tail_y * 25 + tail_x) == (enemy_id + 10)) || /* head of active enemy is on square */
+							(*(g_chessboard_cpy + tail_y * 25 + tail_x) == (enemy_id + 30))) && /* tail of active enemy is on square */
 							(tail_y < 24) && (tail_y >= 0) && (tail_x < 24) && (tail_x >= 0))))
 					{
 						target_y = backtrack_y;
@@ -341,7 +341,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 	signed int best_target;
 	signed char object_id_or_dist_entry; /* used for both a chessboard entry and as a distance table entry */
 	signed char object_id;
-	uint8_t *dist_table_ptr;
+	int8_t *dist_table_ptr;
 	struct struct_hero *hero_ptr;
 	struct enemy_sheet *enemy_ptr;
 	signed int done;
@@ -366,11 +366,11 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 		}
 	}
 
-	dist_table_ptr = (uint8_t*)g_dtp2;
-	g_chessboard_cpy = (signed char*)(g_dtp2 + 600);
+	dist_table_ptr = (int8_t*)g_dtp2;
+	g_chessboard_cpy = (int8_t*)(g_dtp2 + 600);
 	new_squares_reached = 1;
 	memset(dist_table_ptr, -1, 600);
-	*(dist_table_ptr + (y_in * 25) + x_in) = 0;
+	*(dist_table_ptr + y_in * 25 + x_in) = 0;
 	memcpy(g_chessboard_cpy, g_chessboard, 600);
 
 	for (i = 0; i < 10; i++) {
@@ -381,19 +381,19 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 	for (y = 0; y < 24; y++) {
 		for (x = 0; x < 24; x++) {
 
-			object_id_or_dist_entry = *(g_chessboard_cpy + (y * 25) + x);
+			object_id_or_dist_entry = *(g_chessboard_cpy + y * 25 + x);
 
 			if (object_id_or_dist_entry > 0) {
 				if ((object_id_or_dist_entry < 10) && (get_hero(object_id_or_dist_entry - 1)->flags.dead || get_hero(object_id_or_dist_entry - 1)->flags.unconscious))
 				{
 					/* object_id_or_dist_entry is a dead or unsonscious hero */
-					*(g_chessboard_cpy + (y * 25) + x) = 0;
+					*(g_chessboard_cpy + y * 25 + x) = 0;
 
 				} else if ((object_id_or_dist_entry >= 10) && (object_id_or_dist_entry < 30) && ((struct enemy_flags)g_enemy_sheets[object_id_or_dist_entry - 10].flags).dead) {
 
 					/* test 'dead' flag */
 					/* object_id_or_dist_entry is a dead enemy. tail parts of double-size enemies are not considered. */
-					*(g_chessboard_cpy + (y * 25) + x) = 0;
+					*(g_chessboard_cpy + y * 25 + x) = 0;
 					/* Original-Bug: The tail parts of dead double-size enemies have been forgotten,
 					 * meaning that they are not walkable.
 					 * The fact that they are invisible does not make things better.
@@ -404,7 +404,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 					/* make dead tail-parts walkable */
 				} else if ((object_id_or_dist_entry >= 30) && (object_id_or_dist_entry < 50) && g_enemy_sheets[object_id_or_dist_entry - 30].flags.dead) {
 					/* test 'dead' flag */
-					*(g_chessboard_cpy + (y * 25) + x) = 0;
+					*(g_chessboard_cpy + y * 25 + x) = 0;
 #endif
 				}
 			}
@@ -447,10 +447,10 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 								/* search passed the border of the map */
 								done = 1;
 							} else {
-								if (!*(g_chessboard_cpy + (25 * new_y) + new_x))
+								if (!*(g_chessboard_cpy + 25 * new_y + new_x))
 								{
 									/* sqare empty and may be used as base square for launching the ranged attack. set target marker */
-									*(g_chessboard_cpy + (25 * new_y) + new_x) = 9;
+									*(g_chessboard_cpy + 25 * new_y + new_x) = 9;
 									/* DANGER: The id 9 is in the range [1..9] which is typically considered as a hero.
 									 * However, as there are at most 7 heroes, this should not be a problem, hopefully. */
 								} else {
@@ -497,10 +497,10 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 								/* search passed the border of the map */
 								done =1;
 							} else {
-								if (!*(g_chessboard_cpy + (25 * new_y) + new_x))
+								if (!*(g_chessboard_cpy + 25 * new_y + new_x))
 								{
 									/* sqare empty and may be used as base square for launching the ranged attack. set target marker */
-									*(g_chessboard_cpy + (25 * new_y) + new_x) = 49;
+									*(g_chessboard_cpy + 25 * new_y + new_x) = 49;
 									/* DANGER: The id 49 is in the range [30..49] which is typically considered as the tail of a double-size enemy.
 									 * However, presumably there is no fight involving the last id 49 in this range.
 									 * So hopefully, there is no collision. */
@@ -538,7 +538,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 					break;
 				}
 
-				if (*((int8_t*)(dist_table_ptr + (y * 25) + x)) == (dist - 1)) {
+				if (*(dist_table_ptr + y * 25 + x) == (dist - 1)) {
 
 					for (i = 0; i < 4; i++) {
 
@@ -549,8 +549,8 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 
 						if ((new_y < 24) && (new_y >= 0) && (new_x < 24) && (new_x >= 0)) {
 
-							object_id_or_dist_entry = *((int8_t*)(dist_table_ptr + new_y * 25 + new_x));
-							object_id = *(g_chessboard_cpy + (new_y * 25) + new_x);
+							object_id_or_dist_entry = *(dist_table_ptr + new_y * 25 + new_x);
+							object_id = *(g_chessboard_cpy + new_y * 25 + new_x);
 
 							if (object_id_or_dist_entry < 0) { /* square has not been reached before */
 
@@ -559,12 +559,12 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 									if (!actor_enemy_ptr ||
 										(actor_enemy_ptr && (!double_size ||
 													((double_size != 0) &&
-														((!*(g_chessboard_cpy + (tail_y * 25) + tail_x)) || /* square is empty */
-														(*(g_chessboard_cpy + (tail_y * 25) + tail_x))  == (actor_id + 10) || /* head of active enemy is on square */
-														(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 30)) && /* tail of active enemy is on square */
+														((!*(g_chessboard_cpy + tail_y * 25 + tail_x)) || /* square is empty */
+														(*(g_chessboard_cpy + tail_y * 25 + tail_x))  == (actor_id + 10) || /* head of active enemy is on square */
+														(*(g_chessboard_cpy + tail_y * 25 + tail_x)) == (actor_id + 30)) && /* tail of active enemy is on square */
 														((tail_y < 24) && (tail_y >= 0) && (tail_x < 24) && (tail_x >= 0))))))
 									{
-										*(dist_table_ptr + (new_y * 25) + new_x) = (signed char)dist;
+										*(dist_table_ptr + new_y * 25 + new_x) = dist;
 										new_squares_reached = 1;
 									}
 								} else {
@@ -580,7 +580,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 												break;
 											}
 										} else {
-											*(dist_table_ptr + (new_y * 25) + new_x) = 100; /* for all other modes: square is blocked */
+											*(dist_table_ptr + new_y * 25 + new_x) = 100; /* for all other modes: square is blocked */
 										}
 									} else if (object_id == 124) { /* target marker for hero movement (implies mode == 10 (hero movement)) */
 										/* test of the tail-condition not needed here, as the active actor is a hero */
@@ -592,7 +592,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 											break;
 										}
 									} else if (object_id >= 50) { /* square is blocked */
-										*(dist_table_ptr + (new_y * 25) + new_x) = 100;
+										*(dist_table_ptr + new_y * 25 + new_x) = 100;
 									} else if (object_id < 10) {
 
 										if (object_id == 9) { /* target marker for ranged attack to some hero (implies mode == 6 or mode == 8) */
@@ -608,9 +608,9 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 											if (((mode == 0) || (mode == 1)) /* melee attack */
 												&& (!actor_enemy_ptr || (actor_enemy_ptr && (!double_size ||
 															((double_size != 0) &&
-																((!*(g_chessboard_cpy + (tail_y * 25) + tail_x)) ||
-																(*(g_chessboard_cpy + (tail_y * 25) + tail_x))  == (actor_id + 10) ||
-																(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 30)) &&
+																((!*(g_chessboard_cpy + tail_y * 25 + tail_x)) ||
+																(*(g_chessboard_cpy + tail_y * 25 + tail_x))  == (actor_id + 10) ||
+																(*(g_chessboard_cpy + tail_y * 25 + tail_x)) == (actor_id + 30)) &&
 																((tail_y < 24) && (tail_y >= 0) && (tail_x < 24) && (tail_x >= 0)))))))
 											{
 												unused[nr_targets_reached] = 1;
@@ -637,9 +637,9 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 											if (((mode == 2) || (mode == 3)) && /* melee attack */
 												(object_id < 30) && (!actor_enemy_ptr || (actor_enemy_ptr && (!double_size ||
 															((double_size != 0) &&
-																((!*(g_chessboard_cpy + (tail_y * 25) + tail_x)) ||
-																(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 10) ||
-																(*(g_chessboard_cpy + (tail_y * 25) + tail_x)) == (actor_id + 30)) &&
+																((!*(g_chessboard_cpy + tail_y * 25 + tail_x)) ||
+																(*(g_chessboard_cpy + tail_y * 25 + tail_x)) == (actor_id + 10) ||
+																(*(g_chessboard_cpy + tail_y * 25 + tail_x)) == (actor_id + 30)) &&
 																((tail_y < 24) && (tail_y >= 0) && (tail_x < 24) && (tail_x >= 0)))))))
 											{
 												unused[nr_targets_reached] = 1;
