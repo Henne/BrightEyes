@@ -286,10 +286,9 @@ uint8_t* load_fight_figs(signed int fig)
 
 /**
  * \brief   loads an animation
- *
- * \param   no          number of the animation
+ * \param[in] ani_id number of the animation
  */
-void load_ani(const signed int no)
+void load_ani(const signed int ani_id)
 {
 	signed int i_area;
 	signed int area_pics;
@@ -329,24 +328,29 @@ void load_ani(const signed int no)
 
 
 	/* sanity check */
-	if (no == -1)
+	if (ani_id == -1)
 		return;
 
 	/* no need to reload  the same ani*/
-	if (no == g_current_ani)
+	if (ani_id == g_current_ani)
 		return;
 
 	g_ani_enabled = 0;
-	/* set the new ani no*/
-	g_current_ani = no;
+	/* set the new ani_id */
+	g_current_ani = ani_id;
 	/* clear the old ani */
 	clear_ani();
 
-	/* count to the ordered ani in an array*/
+#if defined(__BORLANDC__)
+	/* count to the ordered ani in an array */
 	for (i = 0; i < 37; i++) {
-		if (no == g_memslots_anis[i].figure)
+		if (ani_id == g_memslots_anis[i].figure)
 			break;
 	}
+#else
+	/* Remark: temporary disable this logic */
+	i = 37;
+#endif
 
 	if (i != 37) {
 #if defined(__BORLANDC__)
@@ -356,8 +360,8 @@ void load_ani(const signed int no)
 #endif
 	} else {
 		/* load it from file */
-		ani_off = g_buffer_anis_tab[no - 1];
-		ani_len = g_buffer_anis_tab[no]- ani_off;
+		ani_off = g_buffer_anis_tab[ani_id - 1];
+		ani_len = g_buffer_anis_tab[ani_id]- ani_off;
 
 		/* load ANIS */
 		handle = load_archive_file(ARCHIVE_FILE_ANIS);
@@ -377,7 +381,7 @@ void load_ani(const signed int no)
 			}
 
 			/* fill the entry */
-			g_memslots_anis[i].figure = no;
+			g_memslots_anis[i].figure = ani_id;
 			g_memslots_anis[i].ems_handle = ems_handle;
 			g_memslots_anis[i].length = ani_len;
 
