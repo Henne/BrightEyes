@@ -19,10 +19,6 @@
 #include "seg027.h"
 #include "seg096.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int g_fight_figs_index = -1; // ds:0x4b9e
 
 /**
@@ -551,7 +547,3 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int id)
 
 	set_textcolor(fg_bak, bg_bak);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

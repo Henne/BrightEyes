@@ -24,10 +24,6 @@
 #include "seg107.h"
 #include "seg108.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static void (*g_use_item_handlers[14])(void) = {
 	NULL,
 	item_invoke_arcano_psychostabilils,
@@ -555,7 +551,3 @@ void item_use_beutel(void)
 	/* drop the BAG */
 	drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_BEUTEL), 1);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

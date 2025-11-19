@@ -26,15 +26,10 @@
 #include "seg097.h"
 #include "seg103.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
-enum{
+enum {
 	ITEM_ARMOR_POS_HEAD = 70,
 	ITEM_POS_MAX = 100
 	/* these settings rely on the number of armor items in the sell list being at most 30. */
-
 };
 
 struct merchant_descr g_merchant_descr_table[95] = {
@@ -478,7 +473,3 @@ void TLK_whandel(const signed int state)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

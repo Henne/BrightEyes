@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 //0x20
 void npc_nariell(void);
 //0x25
@@ -22,7 +18,3 @@ void add_npc(const signed int);
 signed int npc_meetings(const signed int);
 //0x4d
 void npc_farewell(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

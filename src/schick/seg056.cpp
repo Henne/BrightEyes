@@ -31,10 +31,6 @@
 #include "seg104.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct c_str_5 g_buy_screen_str_money_h = { "H %d" }; // ds:0x6bc8
 static struct c_str_5 g_buy_screen_str_money_s = { "S %d" }; // ds:0x6bcd
 static struct c_str_5 g_buy_screen_str_money_d = { "D %d" }; // ds:0x6bd2
@@ -652,7 +648,3 @@ void add_item_to_sell_selector(const struct merchant_descr *merchant, const stru
 
 	g_item_selector_sell[item_selector_pos].inv_slot = inv_slot;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

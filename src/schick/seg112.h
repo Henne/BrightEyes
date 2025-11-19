@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 /* should be static */
 void TRV_swimm(const signed int, const signed int);
@@ -29,7 +25,3 @@ void tevent_069(void);
 void tevent_070(void);
 /* 0x5c */
 void tevent_unused01(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

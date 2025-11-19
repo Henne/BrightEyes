@@ -30,10 +30,6 @@
 #include "seg094.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_land_route g_land_routes[59] = {
 	{ TOWN_ID_THORWAL            , TOWN_ID_VAERMHAG           ,  34,  1, 10,  25,  0, 10, 100 }, //  1
 	{ TOWN_ID_VAERMHAG           , TOWN_ID_VARNHEIM           ,  40,  1, 10,  20,  0, 10, 100 }, //  2
@@ -898,7 +894,3 @@ signed int do_travel_mode(void)
 
 	return 0;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

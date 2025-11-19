@@ -19,10 +19,6 @@
 #include "seg061.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 void PHX_drogentempel(void)
 {
 	signed int answer;
@@ -495,7 +491,3 @@ void PHX_alrik_derondan(void)
 
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

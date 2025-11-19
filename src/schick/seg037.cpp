@@ -18,10 +18,6 @@
 #include "seg032.h"
 #include "seg038.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct viewdir_offsets g_fig_viewdir_offsets5 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fd8
 static struct viewdir_offsets g_fig_viewdir_offsets6 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fe8
 
@@ -831,7 +827,3 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -25,10 +25,6 @@
 #include "seg099.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const char g_str_bank_deposit_to_big[57] = "TUT MIR LEID, ICH AKZEPTIERE MAXIMAL 30000 SILBERM\x9aNZEN!"; // ds:0x7c44
 static const char g_str_obviously_closed[28] = "OFFENSICHTLICH GESCHLOSSEN!"; // ds:0x7c7d
 
@@ -739,7 +735,3 @@ signed int academy_get_equal_item(const signed int price)
 
 	return retval;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -21,10 +21,6 @@
 #include "seg073.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct tlk_option {
 	signed int txt, goto_state;
 };
@@ -431,7 +427,3 @@ void eat_while_drinking(const signed int amount)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

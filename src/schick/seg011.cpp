@@ -6,10 +6,6 @@
 
 #define AIL_SEGMENT (0x1042)
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 void AIL_startup(void)
 {
 }
@@ -111,7 +107,3 @@ uint16_t AIL_sequence_status(uint16_t driver, uint16_t sequence)
 void AIL_set_relative_volume(uint16_t driver, uint16_t sequence, uint16_t percent, uint16_t ms)
 {
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

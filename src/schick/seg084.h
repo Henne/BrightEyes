@@ -1,6 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
 
 extern struct struct_chest g_dng09_specialchests[8];
 
@@ -24,7 +21,3 @@ void DNG09_chest04_trap(void);
 signed int DNG09_handler(void);
 /* 0x4d */
 void DNG09_fight_intro(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

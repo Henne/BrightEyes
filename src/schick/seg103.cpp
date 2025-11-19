@@ -23,10 +23,6 @@
 #include "seg103.h"
 #include "seg104.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct dummy {
 	char a[6];
 };
@@ -714,7 +710,3 @@ signed int bargain(const struct struct_hero *hero, const signed int items, const
 
 	return test_skill(hero, TA_FEILSCHEN, mod);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

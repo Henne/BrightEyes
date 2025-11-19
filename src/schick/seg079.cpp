@@ -25,10 +25,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_chest g_dng03_specialchests[14] = {
 	{ DNG_POS(0,5,3),	0, NULL,			NULL,			DNG03_chest00_loot, 15, 0, 0 },
 	{ DNG_POS(0,9,1),	0, NULL,			NULL,			DNG03_chest01_loot, 0, 0, 0 },
@@ -617,7 +613,3 @@ void DNG03_chest12_trap(void)
 		chest_poisoned2();
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

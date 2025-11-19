@@ -159,8 +159,8 @@ static inline void D1_INFO_VERBOSE(...) { }
  */
 static inline void update_informer_cond(const int informer)
 {
-	if ((0 <= informer) && (informer < 15) && (M302de::gs_informer_flags[informer] == 0)) {
-		M302de::gs_informer_flags[informer] = 1;
+	if ((0 <= informer) && (informer < 15) && (gs_informer_flags[informer] == 0)) {
+		gs_informer_flags[informer] = 1;
 	}
 }
 
@@ -176,8 +176,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 }
 
 #if !defined(__BORLANDC__)
-namespace M302de {
-
 static inline struct struct_hero *get_hero(signed short index) {
 	if (index < 0 || index > 6) {
 		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
@@ -192,25 +190,23 @@ static inline struct struct_hero *get_spelltarget(void) {
 static inline struct struct_hero *get_spelluser(void) {
 	return (struct struct_hero*)g_spelluser;
 }
-
-}
 #endif
 
 
 static inline char *get_tx2(unsigned short no) {
-	return (char*)M302de::g_tx2_index[no];
+	return (char*)g_tx2_index[no];
 }
 
 static inline char *get_ttx(unsigned short no) {
-	return (char*)M302de::g_text_ltx_index[no];
+	return (char*)g_text_ltx_index[no];
 }
 
 static inline char *get_tx(unsigned short no) {
-	return (char*)M302de::g_tx_index[no];
+	return (char*)g_tx_index[no];
 }
 
 static inline signed char get_cb_val(const signed short x, const signed short y) {
-	return *(M302de::g_chessboard + 25 * y + x);
+	return *(g_chessboard + 25 * y + x);
 }
 
 static inline void dump_cb(void)

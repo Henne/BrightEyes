@@ -21,10 +21,6 @@
 #include "seg096.h"
 #include "seg102.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static signed int g_monster_spell_ae_cost = -1; // ds:0xaccc
 
 signed int g_spelltest_result;			// ds:0xe5b2
@@ -793,7 +789,3 @@ void mspell_paralue(void)
 		sprintf(g_dtp2, get_tx(103), get_spelltarget()->alias);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

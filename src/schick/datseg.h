@@ -1,10 +1,6 @@
 #if !defined V302DE_DATSEG_H
 #define V302DE_DATSEG_H
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 #include <time.h>
 
 #include "hero.h"
@@ -1916,10 +1912,6 @@ extern const char* names_attrib[14];
 extern const char* names_skill[52];
 extern const char* names_spell[86];
 extern const char* names_mspell[14];
-#endif
-
-#if !defined(__BORLANDC__)
-}
 #endif
 
 #endif

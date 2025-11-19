@@ -14,10 +14,6 @@
 #include "seg038.h"
 #include "seg039.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const signed int g_gfxtab_shotbolt_ox[6][4] = {
 	{ -17, -3, -3, 3 },
 	{ -17, -3, -3, 3 },
@@ -335,7 +331,3 @@ void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_
 
 	FANI_add_spell(x, y, spell_ani_id);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

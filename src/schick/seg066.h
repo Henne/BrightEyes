@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int enter_location(const signed int);
 /* 0x25 */
@@ -38,7 +34,3 @@ void town_set_vis_field_tex(void);
 void town_set_vis_field_vals(void);
 /* 0x70 */
 signed int town_step(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 //0x20
 signed int do_fight(const signed int);
 //0x25
@@ -26,7 +22,3 @@ signed int FIG_fight_continues(void);
 void FIG_do_round(void);
 //0x57
 void FIG_load_ship_sprites(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

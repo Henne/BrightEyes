@@ -19,10 +19,6 @@
 #include "seg096.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static char g_grammar_article_der[4] = "DER"; // ds:0xa8d4
 static char g_grammar_article_die[4] = "DIE"; // ds:0xa8d8
 static char g_grammar_article_das[4] = "DAS"; // ds:0xa8dc
@@ -806,7 +802,3 @@ void GUI_draw_popup_line(const signed int line, const signed int type)
 
 	do_pic_copy(0);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

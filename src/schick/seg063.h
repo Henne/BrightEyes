@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void do_harbor(void);
 /* 0x25 */
@@ -12,7 +8,3 @@ void sea_travel(const signed int, const signed int);
 void mod_clock_pos(const signed int);
 /* 0x34 */
 signed int get_srout_len(struct struct_point*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

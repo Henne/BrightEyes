@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void move_item(signed int, signed int, struct struct_hero*);
 /* 0x25 */
@@ -18,7 +14,3 @@ signed int get_max_light_time(void);
 void equip_belt_ani(void);
 /* 0x43 */
 signed int get_full_waterskin_pos(const struct struct_hero*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

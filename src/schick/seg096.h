@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 //20
 void GUI_write_char_to_screen(uint8_t*, const signed int, const signed int);
 //25
@@ -48,7 +44,3 @@ signed int GUI_print_header(char*);
 signed int GUI_get_space_for_string(char*, const signed int);
 //8e
 void GUI_draw_popup_line(const signed int, const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

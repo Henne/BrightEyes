@@ -19,10 +19,6 @@
 #include "seg097.h"
 #include "seg103.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 const uint8_t g_palette_fight2[20][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x3f, 0x00, 0x00 },
@@ -728,7 +724,3 @@ signed int get_maploc(const signed int x, const signed int y)
 
 	return TOWN_TILE_STREET;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

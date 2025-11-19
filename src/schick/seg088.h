@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 extern struct struct_chest g_dng14_specialchests[9];
 
 /* 0x20 */
@@ -28,7 +24,3 @@ void DNG14_chest07_loot(struct struct_chest*);
 void DNG14_chest07_trap(void);
 /* 0x57 */
 void DNG15_riddle(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

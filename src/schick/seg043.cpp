@@ -25,10 +25,6 @@
 #include "seg105.h"
 #include "seg107.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int g_mspell_awake_flag = 0; // ds:0x618e
 static struct viewdir_offsets8s g_fig_viewdir_inverse_offsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
 
@@ -943,7 +939,3 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 		GUI_output(g_dtp2);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

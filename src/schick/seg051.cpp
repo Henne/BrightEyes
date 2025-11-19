@@ -29,10 +29,6 @@
 #include "seg104.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const signed int g_campfights[4] = {
 	FIGHTS_CAMPFIGHT1,
 	FIGHTS_CAMPFIGHT2,
@@ -612,7 +608,3 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 
 	return retval;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

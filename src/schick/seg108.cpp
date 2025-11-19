@@ -20,10 +20,6 @@
 #include "seg097.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /**
  * \brief   owner gives consumer an item from his inventory
  *
@@ -543,7 +539,3 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 		GUI_output(get_ttx(206));
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

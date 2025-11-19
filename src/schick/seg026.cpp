@@ -33,10 +33,6 @@
 #include "seg097.h"
 #include "seg106.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 extern char g_str_temp_xx2[8];
 char *g_str_temp_xx_ptr2 = (char*)&g_str_temp_xx2[0]; // ds:0x4c88, to STR_TEMP_XX2; char*
 
@@ -1283,7 +1279,3 @@ void load_tempicon(signed int icon_id)
 
 	process_nvf_extraction(&nvf);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

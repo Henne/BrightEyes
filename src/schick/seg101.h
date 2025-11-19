@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void spell_adler(void);
 /* 0x25 */
@@ -56,7 +52,3 @@ void spell_schmelze(void);
 void spell_silentium(void);
 /* 0x9d */
 void spell_sturmgebr(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

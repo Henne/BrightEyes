@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_fighter* FIG_get_fighter(const signed char);
 
 void FIG_draw_figures(void);
@@ -31,7 +27,3 @@ signed char FIG_add_to_list(const signed char);
 void FIG_draw_char_pic(const signed int, const signed int);
 
 void FIG_draw_enemy_pic(const signed int, const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -31,10 +31,6 @@
 #include "seg109.h"
 #include "seg116.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const struct climb_damage_range g_tevent135_climb_damage[5] = { { 1, 5 }, { 4, 13 }, { 7, 21 }, { 10, 32 }, { 15, 40 } }; // ds:0xb174
 
 void tevent_130(void)
@@ -715,7 +711,3 @@ void tevent_136(void)
 		gs_unicorn_get_map = 0;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -1,9 +1,5 @@
 #include "v302de.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 void AIL_startup(void);
 
 void AIL_shutdown(uint8_t* signoff_msg);
@@ -49,7 +45,3 @@ void AIL_stop_sequence(int16_t driver, int16_t sequence);
 uint16_t AIL_sequence_status(uint16_t driver, uint16_t sequence);
 
 void AIL_set_relative_volume(uint16_t, uint16_t, uint16_t, uint16_t);
-
-#if !defined(__BORLANDC__)
-}
-#endif

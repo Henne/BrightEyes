@@ -23,10 +23,6 @@
 #include "seg041.h"
 #include "seg106.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const signed char g_af_spell_list[11] = {
 	SP_FULMINICTUS_DONNERKEIL,
 	SP_HORRIPHOBUS,
@@ -1013,7 +1009,3 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void INF_jurge_hjore(const signed int, const signed int);
 /* 0x25 */
@@ -22,7 +18,3 @@ void INF_olvir_asgrimm(const signed int, const signed int);
 void INF_treborn_unicorn(const signed int, const signed int);
 /* 0x48 */
 void INF_swafnild_unicorn(const signed int, const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

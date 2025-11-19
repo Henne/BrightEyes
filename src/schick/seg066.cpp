@@ -38,10 +38,6 @@
 #include "seg097.h"
 #include "seg098.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct market g_market_descr_table[34] = {
 	{  4,  40, -1, 0 },
 	{ 10,   0, -1, 0 },
@@ -1586,8 +1582,3 @@ void town_update_house_count(void)
 	 * not loaded and replaced by another texture in prepare_town_area */
 	g_town_house_count[i] = 0;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif
-

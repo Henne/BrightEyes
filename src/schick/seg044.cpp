@@ -17,10 +17,6 @@
 #include "seg036.h"
 #include "seg038.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /**
  * \brief   copies an animation sequence
  *
@@ -791,7 +787,3 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

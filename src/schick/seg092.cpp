@@ -37,10 +37,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct struct_chest *g_dng_specialchest_index[15] = {
 	g_dng01_specialchests,
 	g_dng02_specialchests,
@@ -662,7 +658,3 @@ void loot_multi_chest(uint8_t *content, char *msg)
 
 	g_textbox_width = tw_bak;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

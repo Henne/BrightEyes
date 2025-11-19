@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void show_automap(void);
 /* 0x25 */
@@ -33,7 +29,3 @@ signed int is_group_in_prison(const signed int);
 /* 0x52 */
 /* should be static */
 signed int get_maploc(const signed int, const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

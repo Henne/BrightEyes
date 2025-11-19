@@ -23,10 +23,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_chest g_dng13_specialchests[3] = {
 	{ DNG_POS(0,11,5),	1, DNG13_chest00_open, NULL, DNG13_chest00_loot, 0, 0, 0 },
 	{ DNG_POS(0,4,1),	1, DNG13_chest01_open, NULL, DNG13_chest01_loot, 0, 0, 0 },
@@ -360,7 +356,3 @@ void DNG13_collapsing_ceiling_easy(void)
 #endif
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

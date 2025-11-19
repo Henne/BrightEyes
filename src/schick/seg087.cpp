@@ -27,10 +27,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int DNG14_handler(void)
 {
 	signed int pos;
@@ -671,7 +667,3 @@ signed int DNG14_handler(void)
 
 	return 0;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

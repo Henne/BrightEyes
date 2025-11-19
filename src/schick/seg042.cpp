@@ -26,10 +26,6 @@
 #include "seg096.h"
 #include "seg098.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct viewdir_offsets8s g_fig_viewdir_inverse_offsets2 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6178
 static const char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
 
@@ -978,7 +974,3 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 		hero->target_object_id += 20;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

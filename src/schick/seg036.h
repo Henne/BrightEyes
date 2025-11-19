@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void FIG_prepare_hero_ani(struct struct_hero*, const signed int);
 
@@ -35,7 +31,3 @@ signed int AFIG_count_heroes(const signed int);
 
 /* 0x48 */
 void AFIG_hero_turn(struct struct_hero*, const signed int, signed int, signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

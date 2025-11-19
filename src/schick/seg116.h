@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void tevent_135(void);
 /* 0x25 */
@@ -36,7 +32,3 @@ void tevent_134(void);
 void tevent_144_unused(void);
 /* 0x70 */
 void TLK_old_woman(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

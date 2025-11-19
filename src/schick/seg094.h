@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void TM_func8(const signed int);
 /* 0x2a */
@@ -29,8 +25,4 @@ void TM_draw_track(const signed int, const signed int, const signed int, const s
 /* 0x52 */
 #if defined(__BORLANDC__)
 void TM_unused2(void);
-#endif
-
-#if !defined(__BORLANDC__)
-}
 #endif

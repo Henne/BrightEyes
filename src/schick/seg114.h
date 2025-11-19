@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void tevent_114(void);
 /* 0x25 */
@@ -24,7 +20,3 @@ void tevent_111(void);
 void tevent_112(void);
 /* 0x52 */
 void tevent_113(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

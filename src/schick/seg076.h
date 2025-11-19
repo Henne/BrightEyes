@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void do_dungeon(void);
 /* 0x25 */
@@ -24,7 +20,3 @@ void print_msg_with_first_hero(char*);
 signed int DNG_step(void);
 /* 0x52 */
 void DNG_waterbarrel(uint8_t*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void unequip(struct struct_hero*, const signed int, const signed int);
 /* 0x25 */
@@ -31,7 +27,3 @@ signed int hero_count_item(struct struct_hero*, const signed int);
 signed int group_count_item(const signed int);
 /* 0x61 */
 void loose_random_item(struct struct_hero*, const signed int, char*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

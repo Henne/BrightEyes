@@ -21,9 +21,6 @@
 #include "seg097.h"
 #include "seg103.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
 signed char g_town_city_event_active = 0; // ds:0x7c42, 0 = default, 1 = city event active
 
 /**
@@ -457,8 +454,3 @@ char* waffinfo_general(void)
 
 	return ptr[randval];
 }
-
-
-#if !defined(__BORLANDC__)
-}
-#endif

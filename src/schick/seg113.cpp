@@ -29,10 +29,6 @@
 #include "seg109.h"
 #include "seg113.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* The Tatzelwurm */
 void tevent_080(void)
 {
@@ -856,7 +852,3 @@ void tevent_109(void)
 		TRV_found_camp_place(0);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

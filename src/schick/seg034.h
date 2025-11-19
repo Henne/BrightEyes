@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 void FIG_move_hero(struct struct_hero*, const signed int, signed int*, signed int*);
 /* 0x25 */
@@ -18,7 +14,3 @@ void FIG_latecomers(void);
 /* should be static */
 /* 0x39 */
 signed int FIG_move_pathlen(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

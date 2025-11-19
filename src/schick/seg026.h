@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 //0x20
 void init_text(void);
 //0x25
@@ -32,7 +28,3 @@ void prepare_chr_name(char*, char*);
 void prepare_sg_name(char*, char*);
 //0x66
 void load_tempicon(signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

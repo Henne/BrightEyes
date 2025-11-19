@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 /* should be static */
 void prepare_enemy_ani(struct enemy_sheet*, const signed int);
@@ -28,7 +24,3 @@ signed int FIG_enemy_range_attack(struct enemy_sheet*, const signed int, const s
 
 /* 0x3e */
 void FIG_enemy_turn(struct enemy_sheet*, const signed int, signed int, signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

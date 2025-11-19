@@ -18,10 +18,6 @@
 #include "seg027.h"
 #include "seg032.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const struct struct_point g_gfxtab_double_size_extra_cb[4] = {
 	{ -1,  0 }, {  0,  1 }, {  1,  0 }, {  0, -1 } }; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
 const signed char g_gfxtab_double_size_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
@@ -534,7 +530,3 @@ void FIG_init_heroes(void)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

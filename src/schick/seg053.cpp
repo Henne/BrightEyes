@@ -22,10 +22,6 @@
 #include "seg096.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const struct healer_descr g_healer_descr_table[41] = {
 	{  30,  2 },
 	{  50, 10 },
@@ -360,7 +356,3 @@ void do_healer(void)
 	leave_location();
 
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

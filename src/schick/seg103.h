@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int test_skill(const struct struct_hero*, const signed int, signed char);
 
@@ -28,7 +24,3 @@ signed int use_skill(const signed int, signed char, const signed int);
 
 /* 0x43 */
 signed int GUI_use_skill2(const signed int, char*);
-
-#if !defined(__BORLANDC__)
-}
-#endif

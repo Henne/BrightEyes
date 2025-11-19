@@ -35,11 +35,6 @@
 #include "seg032.h"
 #include "seg096.h"
 
-
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 signed int g_delay_factor = 4; // ds:0x4b66
 extern char g_str_temp_xx[8];
 static char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; uint8_t*
@@ -1046,7 +1041,3 @@ static void fight_delay(void)
 		wait_for_vsync();
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -27,10 +27,6 @@
 #include "seg109.h"
 #include "seg115.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* the raft */
 void tevent_016(void)
 {
@@ -722,7 +718,3 @@ void tevent_100(void)
 	disable_ani();
 	g_event_ani_busy = 0;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

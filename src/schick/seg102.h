@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int MON_cast_spell(struct enemy_sheet*, signed char);
 
@@ -74,8 +70,3 @@ signed int MON_test_skill(const struct enemy_sheet*, const signed int, signed ch
 /* 0x89 */
 /* should be static */
 void MON_sub_ae(struct enemy_sheet*, signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif
-

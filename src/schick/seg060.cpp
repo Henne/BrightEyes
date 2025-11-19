@@ -27,10 +27,6 @@
 #include "seg097.h"
 #include "seg103.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 const struct inn_descr g_tavern_descr_table[89] = {
 	{ 0x000c, -0x000a },
 	{ 0x000b, 0x0000 },
@@ -751,7 +747,3 @@ void TLK_tavern(const signed int answer)
 
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -26,10 +26,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const signed int g_dcampfights[4] = {
 	FIGHTS_DCAMPFIGHT1,
 	FIGHTS_DCAMPFIGHT2,
@@ -312,7 +308,3 @@ void do_area_camp(void)
 #endif
 
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

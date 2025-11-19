@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 char* load_current_town_gossip(void);
 /* 0x25 */
@@ -22,7 +18,3 @@ char* get_random_tavern_message(void);
 void drink_while_drinking(const signed int);
 /* 0x4d */
 void eat_while_drinking(const signed int);
-
-#if !defined(__BORLANDC__)
-}
-#endif

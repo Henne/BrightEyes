@@ -18,10 +18,6 @@
 #include "seg007.h"
 #include "seg038.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct viewdir_offsets g_fig_viewdir_inverse_offsets1 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } };	// ds:0x5ff8
 static struct viewdir_offsets g_fig_viewdir_offsets7 = { {	{ 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } };	// ds:0x6008
 
@@ -719,7 +715,3 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 		return -1;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

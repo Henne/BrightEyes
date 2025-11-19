@@ -13,10 +13,6 @@
 
 #include "seg007.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 uint16_t g_random_schick_seed = 0x327b; // ds:0x4ba0
 
 /* REMARK: belong to seg010.cpp */
@@ -185,7 +181,3 @@ void damage_range_template(const uint16_t val, signed int *min, signed int *max)
 	*min += x;
 	*max += x;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

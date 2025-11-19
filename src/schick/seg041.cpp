@@ -23,10 +23,6 @@
 #include "seg105.h"
 #include "seg106.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const signed int g_force_weapons[9] = {
 	ITEM_KNUEPPEL,
 	ITEM_MORGENSTERN,
@@ -613,7 +609,3 @@ signed int weapon_check(const struct struct_hero *hero)
 
 	return retval;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

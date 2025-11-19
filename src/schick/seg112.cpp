@@ -24,10 +24,6 @@
 #include "seg109.h"
 #include "seg112.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static uint8_t g_tevent067_chest[10] = {
 	ITEM_BASTARDSCHWERT, 1,
 	ITEM_SCHNAPSFLASCHE, 1,
@@ -749,7 +745,3 @@ void tevent_077(void)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

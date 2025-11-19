@@ -22,10 +22,6 @@
 #include "seg097.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /**
  * \brief   compress monsters
  */
@@ -321,7 +317,3 @@ signed int check_hero_range_attack(const struct struct_hero *hero, const signed 
 
 	return retval;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

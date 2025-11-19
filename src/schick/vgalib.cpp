@@ -22,13 +22,7 @@
 
 #if !defined(__BORLANDC__)
 
-namespace M302de {
-
 extern unsigned char *g_vga_memstart;
-
-}
-
-using namespace M302de;
 
 enum { DEF_RATIO = 3 };
 static int RATIO = DEF_RATIO;
@@ -373,8 +367,6 @@ static inline Uint32 get_ABGR_grey(const unsigned char *p)
 	return (avg) | (avg << 8) | (avg << 16);
 }
 
-namespace M302de {
-
 void set_palette(const unsigned char *pointer, const unsigned char first_color, const unsigned short colors)
 {
 	signed int i;
@@ -386,8 +378,6 @@ void set_palette(const unsigned char *pointer, const unsigned char first_color, 
 		pal_updated = 1;
 		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 	}
-}
-
 }
 #endif
 

@@ -16,10 +16,6 @@
 #include "seg028.h"
 #include "seg064.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static const char g_sea_travel_str_heller[10] = "%d^HELLER"; // ds:0x7096
 static const char g_sea_travel_str_nothing[7] = "NICHTS"; // ds:0x70a0
 
@@ -337,7 +333,3 @@ signed int passage_arrival(void)
 
 	return 0;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

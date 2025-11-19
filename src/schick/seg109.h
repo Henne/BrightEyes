@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /* 0x20 */
 signed int TRV_found_camp_place(const signed int);
 /* 0x25 */
@@ -65,7 +61,3 @@ signed int TRV_fight_event(const signed int, const signed int);
 void TRV_found_inn(const signed int, const signed int);
 /* 0xb1 */
 signed int TRV_enter_hut_question(void);
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -23,10 +23,6 @@
 #include "seg103.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 /**
  * \brief   carriage station
  */
@@ -522,7 +518,3 @@ void PHX_healer(void)
 
 	disable_ani();
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

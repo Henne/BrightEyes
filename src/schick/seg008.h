@@ -1,6 +1,4 @@
-#if !defined(__BORLANDC__)
-namespace M302de {
-#else
+#if defined(__BORLANDC__)
 extern "C" {
 #endif
 
@@ -45,8 +43,6 @@ void copy_solid(uint8_t *dst, uint8_t *src, const signed int width_to_copy,
 
 void decomp_rle(const signed int, signed int, uint8_t*, uint8_t*, uint8_t*, const signed int);
 
-#if !defined(__BORLANDC__)
-}
-#else
+#if defined(__BORLANDC__)
 }
 #endif

@@ -37,10 +37,6 @@
 #include "seg104.h"
 #include "seg105.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 static struct smith_descr g_smith_descr_table[42] = { /* 'quality' is apparently unused. */
 	{  50,  1 },
 	{  20,  4 },
@@ -646,7 +642,3 @@ void TLK_schmied(const signed int state)
 		gs_direction = 2;
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

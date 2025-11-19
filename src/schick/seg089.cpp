@@ -34,10 +34,6 @@
 #include "seg105.h"
 #include "seg113.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
 struct struct_chest g_dng15_specialchests[33] = {
 	{ DNG_POS(0,4,11),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
 	{ DNG_POS(0,8,14),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
@@ -764,7 +760,3 @@ void DNG15_wounds_and_ladders(char* text, const signed int wounds, const signed 
 
 	DNG15_debris(ladder);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif
