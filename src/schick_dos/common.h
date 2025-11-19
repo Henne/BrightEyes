@@ -116,6 +116,7 @@ enum {
 };
 
 enum {
+	FIG_ACTION_NONE			= 0,
 	FIG_ACTION_MOVE			= 1,
 	FIG_ACTION_MELEE_ATTACK		= 2,
 	FIG_ACTION_GUARD		= 3,
