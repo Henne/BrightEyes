@@ -1730,7 +1730,7 @@ extern unsigned char *g_buffer_weapanidat;	// ds:0xe374; seg036, seg037, seg040,
 extern int32_t g_fightobj_buf_freespace;		// ds:0xe370; seg032-seg100
 extern signed char g_fig_double_size_count;	// ds:0xe356; seg039, seg040
 extern signed char g_fig_double_size_fighter_id_table[21];	// ds:0xe35a; seg005-seg099
-//extern int8_t *g_chessboard_cpy;		// ds:0xe356; seg038
+//extern signed char *g_chessboard_cpy;		// ds:0xe356; seg038
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
 extern signed int g_current_fight_no;	// ds:0xe316; seg002-seg042
