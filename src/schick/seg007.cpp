@@ -20,10 +20,12 @@ char g_emm_sig[8] = { 'E', 'M', 'M', 'X', 'X', 'X', 'X', '0'}; // ds:0x4ba2
 uint8_t *g_ems_frame_ptr = NULL; // ds:0x4baa; uint8_t*
 
 #if !defined(__BORLANDC__)
-static inline uint16_t _rotl(const uint16_t op, const uint8_t count)
+#undef _rotl
+static inline uint16_t _rotate_left(const uint16_t op, const uint8_t count)
 {
 	return (op << count) | (op >> (16 - count));
 }
+#define _rotl(op, count) _rotate_left(op, count)
 #endif
 
 /**
