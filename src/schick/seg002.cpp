@@ -4005,6 +4005,7 @@ void unused_spinlock(void)
  */
 int32_t swap_u32(uint32_t v)
 {
+#if defined(__BORLANDC__)
 	register signed int tmp;
 	int16_t a[2];
 	int32_t *ptr = (int32_t*)(&a[0]);
@@ -4016,6 +4017,25 @@ int32_t swap_u32(uint32_t v)
 	a[1] = swap_u16(tmp);
 
 	return readds((uint8_t*)ptr);
+#else
+	unsigned char tmp[4] = { 0 };
+	uint32_t retval = 0L;
+
+	tmp[0] = (v >> 0) & 0xff;
+	tmp[1] = (v >> 8) & 0xff;
+	tmp[2] = (v >> 16) & 0xff;
+	tmp[3] = (v >> 24) & 0xff;
+
+	retval |= tmp[0];
+	retval <<= 8L;
+	retval |= tmp[1];
+	retval <<= 8L;
+	retval |= tmp[2];
+	retval <<= 8L;
+	retval |= tmp[3];
+
+	return retval;
+#endif
 }
 
 #if defined(__BORLANDC__)
