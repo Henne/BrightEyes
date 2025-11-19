@@ -344,6 +344,3 @@ seg122.o: seg122.cpp seg122.h
 datseg.o: datseg.cpp datseg.h
 	$(CC) $(CFLAGS) -c datseg.cpp
 
-t_map.o: t_map.cpp t_map.h
-	$(CC) $(CFLAGS) -c t_map.cpp
-
