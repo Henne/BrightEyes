@@ -4602,7 +4602,7 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 
 			gs_unconscious_message[get_hero_index(hero)] = 0;
 
-			/* unknown */
+			/* this is strange... */
 			hero->action_id = FIG_ACTION_PARRY;
 
 			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
