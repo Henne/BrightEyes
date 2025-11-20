@@ -1756,6 +1756,158 @@ static void mouse_motion(void)
 	}
 }
 
+#if !defined(__BORLANDC__)
+
+/** Keyboard Constants */
+
+#define KEY_ESC     (0x01)
+#define KEY_1       (0x02)
+#define KEY_2       (0x03)
+#define KEY_3       (0x04)
+#define KEY_4       (0x05)
+#define KEY_5       (0x06)
+#define KEY_6       (0x07)
+#define KEY_7       (0x08)
+#define KEY_DC1     (0x11)
+#define KEY_RET     (0x1c)
+#define KEY_J       (0x24)
+#define KEY_Y       (0x2c)
+#define KEY_N       (0x31)
+#define KEY_UP      (0x48)
+#define KEY_LEFT    (0x4b)
+#define KEY_RIGHT   (0x4d)
+#define KEY_DOWN    (0x50)
+#define KEY_PGUP    (0x49)
+#define KEY_PGDOWN  (0x51)
+#define KEY_CTRL_F3 (0x60)
+#define KEY_CTRL_F4 (0x61)
+
+static SDL_TimerID g_sdl_timer_id = 0;
+static SDL_mutex *g_sdl_timer_mutex = NULL;
+
+static int g_sdl_quit_event = 0;
+
+static int sdl_event_loop(const int cmd)
+{
+	SDL_Event event;
+
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT) {
+
+			if (!g_pregame_state) {
+				g_sdl_quit_event = 1;
+			}
+
+			if (cmd == 0) {
+				/* return CTRL+Q as a keyboard event into the game */
+				return (0x10 << 8) | KEY_DC1;
+			}
+
+		} else if (event.type == SDL_WINDOWEVENT) {
+			if (event.window.event == SDL_WINDOWEVENT_EXPOSED) {
+				sdl_forced_update();
+			}
+		} else if (event.type == SDL_MOUSEMOTION) {
+			int ratio = sdl_get_ratio();
+
+			g_mouse_moved = 1;
+			/* Assume 320x200 */
+			g_mouse_posx = event.motion.x / ratio;
+			g_mouse_posy = event.motion.y / ratio;
+
+
+		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
+			if (event.button.button == 1) {
+				g_mouse_leftclick_event = 1;
+			}
+			if (event.button.button == 3) {
+				g_mouse_rightclick_event = 1;
+			}
+
+		} else if (event.type == SDL_KEYDOWN) {
+			if (cmd == 1) {
+				// check if a key was pressed
+				int pressed = (event.type == SDL_KEYDOWN) ? 1 : 0;
+				SDL_Delay(10);
+				//fprintf(stdout, "%s(%d) = %d %d\n", __func__, cmd, pressed, key_cnt);
+				SDL_PushEvent(&event);
+				return pressed;
+			} else {
+
+				SDL_Keymod m = SDL_GetModState();
+
+				if (m & KMOD_CTRL) {
+					switch (event.key.keysym.sym) {
+						case SDLK_q: {
+							if (!g_pregame_state) {
+								g_sdl_quit_event = 1;
+							}
+							return (0x10 << 8) | KEY_DC1;
+							break;
+						}
+						case SDLK_F3: return (KEY_CTRL_F3 << 8); break;
+						case SDLK_F4: return (KEY_CTRL_F4 << 8); break;
+					}
+				}
+
+				switch (event.key.keysym.sym) {
+					case SDLK_TAB: {
+								sdl_change_window_size(g_sdl_timer_mutex);
+								//sdl_mouse_cursor_scaled(); /* TODO: enable later */
+								break;
+					}
+					case SDLK_ESCAPE:   return (KEY_ESC << 8) | 0x1b; break; //OK
+					case SDLK_1:        return (KEY_1 << 8) | 0x31; break; //OK
+					case SDLK_2:        return (KEY_2 << 8) | 0x32; break; //OK
+					case SDLK_3:        return (KEY_3 << 8) | 0x33; break; //OK
+					case SDLK_4:        return (KEY_4 << 8) | 0x34; break; //OK
+					case SDLK_5:        return (KEY_5 << 8) | 0x35; break; //OK
+					case SDLK_6:   	    return (KEY_6 << 8) | 0x36; break; //OK
+					case SDLK_7:   	    return (KEY_7 << 8) | 0x37; break; //OK
+					case SDLK_KP_ENTER:
+					case SDLK_RETURN:   return (KEY_RET << 8) | 0x0d; break; //OK
+					case SDLK_j:        return (KEY_J << 8) | 0x6a; break; //OK
+					case SDLK_y:        return (0x15 << 8) | 0x79; break; //DE
+					case SDLK_z:        return (KEY_Y << 8) | 0x7a; break; //DE
+					case SDLK_n:        return (KEY_N << 8) | 0x6e; break; //OK
+					case SDLK_KP_8:
+					case SDLK_UP:       return (KEY_UP << 8); break; //OK
+					case SDLK_KP_4:
+					case SDLK_LEFT:     return (KEY_LEFT << 8); break; //OK
+					case SDLK_KP_6:
+					case SDLK_RIGHT:    return (KEY_RIGHT << 8); break; //OK
+					case SDLK_KP_2:
+					case SDLK_DOWN:     return (KEY_DOWN << 8); break; //OK
+					case SDLK_KP_9:
+					case SDLK_PAGEUP:   return (KEY_PGUP << 8); break; //OK
+					case SDLK_KP_3:
+					case SDLK_PAGEDOWN: return (KEY_PGDOWN << 8); break; //OK
+					case 0xe4:          return (0x28 << 8) | 0x84; break; //AE
+					case 0xf6:          return (0x27 << 8) | 0x94; break; //OE
+					case 0xfc:          return (0x1a << 8) | 0x81; break; //UE
+					default:	    return event.key.keysym.sym & 0xff;
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+
+signed int bioskey(const signed int cmd)
+{
+	if (cmd == 0) {
+		// return the pressed key imediately
+		int keycode = sdl_event_loop(0);
+		return keycode;
+	} if (cmd == 1) {
+		// check if a key was pressed
+		int pressed = sdl_event_loop(1);
+		return pressed;
+	} else return 0;
+}
+#endif
+
 void handle_gui_input(void)
 {
 	signed int l_in_key_ext;
@@ -5686,6 +5838,7 @@ int main(int argc, char** argv)
 		/* Playground 1 / 2 */
 		sdl_forced_update();
 
+		g_game_mode = 2;
 		g_textbox_width = 3;
 
 		game_loop();
