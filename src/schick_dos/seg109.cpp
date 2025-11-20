@@ -562,7 +562,7 @@ void tevent_003(void)
 
 void tevent_004(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !gs_tevent004_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !gs_tevent004_flag) ||
 		gs_tevent004_flag)
 	{
 		gs_tevent004_flag = 1;
@@ -596,7 +596,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 	for (i = failed_sneaks_num = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-			!hero->flags.dead && (test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
+			!hero->flags.dead && (test_talent(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
 		{
 			failed_sneaks_num++;
 		}
@@ -615,7 +615,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 
 		hero = get_hero(i);
 
-		if (test_skill(hero, TA_SCHLEICHEN, (signed char)mod2) <= 0) {
+		if (test_talent(hero, TA_SCHLEICHEN, (signed char)mod2) <= 0) {
 
 			do {
 				answer = GUI_radio(get_tx2(city_index + 1), 2, get_tx2(city_index + 7), get_tx2(city_index + 8));
@@ -627,11 +627,11 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 			sprintf(g_dtp2,	get_tx2(city_index + 3), hero->alias);
 			GUI_input(g_dtp2, failed_sneaks_num = 0);
 
-			if ((i = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
+			if ((i = test_talent(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
 				failed_sneaks_num++;
 			}
 
-			if ((l4 = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
+			if ((l4 = test_talent(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
 				failed_sneaks_num++;
 			}
 
@@ -684,7 +684,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 
 void tevent_005(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent005_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent005_flag) ||
 		gs_tevent005_flag)
 	{
 		TRV_found_camp_place(1);
@@ -774,7 +774,7 @@ void TRV_barrier(const signed int text_start)
 
 					for (i = tools_num = 0; i <= 6; i++, hero++)
 					{
-						if (test_skill(hero, TA_WILDNISLEBEN, 0) > 0) {
+						if (test_talent(hero, TA_WILDNISLEBEN, 0) > 0) {
 							tools_num++;
 						}
 					}
@@ -823,7 +823,7 @@ void TRV_barrier(const signed int text_start)
 /* Tjeula <-> Breida: kleiner Bachlauf */
 void tevent_008(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent008_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent008_flag) ||
 		gs_tevent008_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -833,7 +833,7 @@ void tevent_008(void)
 
 void tevent_009(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||	gs_tevent009_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||	gs_tevent009_flag)
 	{
 		g_gather_herbs_special = ITEM_EINBEERE;
 

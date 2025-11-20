@@ -328,7 +328,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			}
 
 			/* Original-Bug: For ITEM_SPEER and ITEM_SPEER__MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
-			damage_mod = (test_skill(hero,
+			damage_mod = (test_talent(hero,
 						(item_p_rh->subtype == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * ranged_distance_type - 2 * target_size) > 0) ?
 					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[ranged_distance_type] : -damage;
@@ -336,7 +336,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			if (damage_mod != 0) { /* test is redundant */
 				damage += damage_mod;
 			}
-			/* If the skill test was not successful, damage == 0 by now. */
+			/* If the talent test was not successful, damage == 0 by now. */
 
 		} else {
 			/* weapon does melee damage */

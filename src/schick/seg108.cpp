@@ -235,9 +235,9 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case ITEM_ATMONBLUETE: {
 					/* Atmon */
 					for (tmp2 = 9; tmp2 < 19; tmp2++) {
-						/* All body skills + 2 for 5h */
+						/* All body talents + 2 for 5h */
 						tmp = get_free_mod_slot();
-						set_mod_slot(tmp, HOURS(5), (uint8_t*)(&consumer->skills[tmp2]), 2, (signed char)consumer_idx);
+						set_mod_slot(tmp, HOURS(5), (uint8_t*)(&consumer->talents[tmp2]), 2, (signed char)consumer_idx);
 					}
 
 					/* prepare output */

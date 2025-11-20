@@ -504,7 +504,7 @@ signed int select_hero_ok(char *title)
 		g_basepos_x = bak_2;
 		g_basepos_y = bak_3;
 		g_textbox_width = tw_bak;
-		g_skilled_hero_pos = -1;
+		g_talented_hero_pos = -1;
 
 		if (answer != -2)
 			return dst.a[answer];
@@ -513,7 +513,7 @@ signed int select_hero_ok(char *title)
 	}
 
 	g_textbox_width = tw_bak;
-	g_skilled_hero_pos = -1;
+	g_talented_hero_pos = -1;
 
 	return -1;
 }
@@ -576,13 +576,13 @@ signed int select_hero_ok_forced(char *title)
 
 		} while (answer == -2);
 
-		g_skilled_hero_pos = -1;
+		g_talented_hero_pos = -1;
 		g_textbox_width = tw_bak;
 
 		return dst.a[answer];
 	} else {
 
-		g_skilled_hero_pos = -1;
+		g_talented_hero_pos = -1;
 		return 0;
 	}
 }

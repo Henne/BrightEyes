@@ -65,7 +65,7 @@ signed int MON_test_attrib3(const struct enemy_sheet*, const signed int, const s
 
 /* 0x84 */
 /* should be static */
-signed int MON_test_skill(const struct enemy_sheet*, const signed int, signed char);
+signed int MON_test_talent(const struct enemy_sheet*, const signed int, signed char);
 
 /* 0x89 */
 /* should be static */

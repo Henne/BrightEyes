@@ -38,7 +38,7 @@ void tevent_011(void)
 	signed int answer;
 	struct struct_hero *hero;
 
-	if ((test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent011_flag) ||
+	if ((test_talent((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent011_flag) ||
 		gs_tevent011_flag)
 	{
 		gs_tevent011_flag = 1;
@@ -94,14 +94,14 @@ void TRV_swim2(const signed int mod, const signed int percent)
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 			/* a swim test */
-			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
+			if (test_talent(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
 			{
-				/* skill test succeeded */
+				/* talent test succeeded */
 				sprintf(g_dtp2, get_tx2(31), hero->alias);
 				GUI_output(g_dtp2);
 
 			} else {
-				/* skill test failed */
+				/* talent test failed */
 				sprintf(g_dtp2, get_tx2(32), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
@@ -164,7 +164,7 @@ void TRV_a_path(void)
 
 void tevent_013(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent013_flag) || gs_tevent013_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent013_flag) || gs_tevent013_flag)
 	{
 		g_gather_herbs_special = ITEM_BELMART_BLATT;
 
@@ -211,7 +211,7 @@ void tevent_015(void)
 
 void tevent_017(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent017_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent017_flag) ||
 		gs_tevent017_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -225,7 +225,7 @@ void tevent_020(void)
 	signed int answer;
 	struct struct_hero *hero;
 
-	if ((test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 7) > 0 && !gs_tevent020_flag) ||
+	if ((test_talent((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 7) > 0 && !gs_tevent020_flag) ||
 		gs_tevent020_flag)
 	{
 		gs_tevent020_flag = 1;
@@ -262,7 +262,7 @@ void tevent_020(void)
 
 void tevent_021(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) ||	gs_tevent021_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) ||	gs_tevent021_flag)
 	{
 		g_gather_herbs_special = ITEM_ALRAUNE;
 
@@ -279,13 +279,13 @@ void tevent_022(void)
 {
 	signed int answer;
 
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent022_flag) || gs_tevent022_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent022_flag) || gs_tevent022_flag)
 	{
 		gs_tevent022_flag = 1;
 
 		if (TRV_found_camp_place(0))
 		{
-			if ((test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 5) > 0 && !gs_tevent022_track_flag) || gs_tevent022_track_flag)
+			if ((test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 5) > 0 && !gs_tevent022_track_flag) || gs_tevent022_track_flag)
 			{
 				do {
 					answer = GUI_radio(get_tx2(59), 2, get_tx2(60), get_tx2(61));
@@ -305,7 +305,7 @@ void tevent_022(void)
 void tevent_024(void)
 	/* Auplog <-> Vilnheim: windgeschuetzte Stelle. Idealer Rastplatz */
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent024_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent024_flag) ||
 		gs_tevent024_flag)
 	{
 		TRV_found_camp_place(0);
@@ -316,7 +316,7 @@ void tevent_024(void)
 void tevent_025(void)
 	/* Auplog <-> Vilnheim: umgestuerzte, moosbewachsene Baumstaemme. idealer Rastplatz. */
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent025_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent025_flag) ||
 		gs_tevent025_flag)
 	{
 		TRV_found_camp_place(0);
@@ -336,7 +336,7 @@ void tevent_027(void)
 
 void tevent_028(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent028_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent028_flag) ||
 		gs_tevent028_flag)
 	{
 		TRV_found_camp_place(1);
@@ -361,14 +361,14 @@ void tevent_029(void)
 		hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 	}
 
-	if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0)
+	if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0)
 	{
-		/* skill test succeeded */
+		/* talent test succeeded */
 		timewarp(HOURS(3));
 
 		GUI_dialog_na(0, get_tx2(76));
 	} else {
-		/* skill test failed */
+		/* talent test failed */
 		hero = get_hero(0);
 		for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++)
 		{
@@ -404,7 +404,7 @@ void tevent_029(void)
 
 void tevent_030(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent030_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent030_flag) ||
 		gs_tevent030_flag)
 	{
 		TRV_found_camp_place(0);
@@ -431,9 +431,9 @@ void tevent_031(void)
 
 		if (answer == 2)
 		{
-			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 7) <= 0)
+			if (test_talent(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 7) <= 0)
 			{
-				/* skill test failed */
+				/* talent test failed */
 				g_fig_initiative = 1;
 				do_fight(FIGHTS_F031);
 			}
@@ -447,11 +447,11 @@ void tevent_031(void)
 
 void tevent_032(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent032_flag) || gs_tevent032_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent032_flag) || gs_tevent032_flag)
 	{
 		gs_tevent032_flag = 1;
 
-		if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent032_herb_flag) || gs_tevent032_herb_flag)
+		if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent032_herb_flag) || gs_tevent032_herb_flag)
 		{
 			gs_tevent032_herb_flag = 1;
 
@@ -488,7 +488,7 @@ void tevent_033(void)
 
 void tevent_034(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent034_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent034_flag) ||
 		gs_tevent034_flag)
 	{
 		TRV_found_camp_place(0);
@@ -509,9 +509,9 @@ void tevent_035(void)
 
 		if (answer == 2)
 		{
-			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 8) <= 0)
+			if (test_talent(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 8) <= 0)
 			{
-				/* skill test failed */
+				/* talent test failed */
 				g_fig_initiative = 1;
 				do_fight(FIGHTS_F035);
 			}
@@ -525,11 +525,11 @@ void tevent_035(void)
 
 void tevent_036(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent036_flag) || gs_tevent036_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent036_flag) || gs_tevent036_flag)
 	{
 		gs_tevent036_flag = 1;
 
-		if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent036_herb_flag) || gs_tevent036_herb_flag)
+		if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent036_herb_flag) || gs_tevent036_herb_flag)
 		{
 			gs_tevent036_herb_flag = 1;
 
@@ -546,7 +546,7 @@ void tevent_036(void)
 
 void tevent_039(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent039_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent039_flag) ||
 		gs_tevent039_flag)
 	{
 		TRV_found_camp_place(0);
@@ -557,7 +557,7 @@ void tevent_039(void)
 void tevent_040(void)
 /* Auplog <-> Varnheim: alte Feuerstelle. idealer Rastplatz */
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent040_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent040_flag) ||
 		gs_tevent040_flag)
 	{
 		TRV_found_camp_place(0);
@@ -572,7 +572,7 @@ void tevent_041(void)
 
 	TRV_barrier(12);
 
-	if (test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0 && !gs_tevent041_flag)
+	if (test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0 && !gs_tevent041_flag)
 	{
 		do {
 			/* Spuren von Karenen */
@@ -592,7 +592,7 @@ void tevent_041(void)
 void tevent_042(void)
 	/* Auplog <-> Varnheim: (weiter von Auplog weg als tevent_043) kleiner Bachlauf. Nahrung. */
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent042_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent042_flag) ||
 		gs_tevent042_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -603,7 +603,7 @@ void tevent_042(void)
 void tevent_043(void)
 	/* Auplog <-> Varnheim: (nahe an Auplog) kleiner Bachlauf. Nahrung. */
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent043_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent043_flag) ||
 		gs_tevent043_flag)
 	{
 		TRV_found_camp_place(0);
@@ -701,7 +701,7 @@ void tevent_046(void)
 		hero = (struct struct_hero*)(gs_camp_incident != -1 ? (uint8_t*)get_hero(gs_camp_incident) : (uint8_t*)get_first_hero_available_in_group());
 		gs_camp_incident = -1;
 
-		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)
+		if (test_talent(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
 			sprintf(g_dtp2,	get_tx2(45), hero->alias, GUI_get_ptr(hero->sex, 0));
 
@@ -749,14 +749,14 @@ void tevent_048(void)
 {
 	signed int answer;
 
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent048_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent048_flag) ||
 		gs_tevent048_flag)
 	{
 		gs_tevent048_flag = 1;
 
 		if (TRV_found_camp_place(0))
 		{
-			if ((test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 && !gs_tevent048_track_flag) ||
+			if ((test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 && !gs_tevent048_track_flag) ||
 				gs_tevent048_track_flag)
 			{
 				/* Spuren einer kleinen Karenherde */
@@ -778,7 +778,7 @@ void tevent_048(void)
 /* Ottarje <-> Skjal */
 void tevent_049(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent049_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent049_flag) ||
 		gs_tevent049_flag)
 	{
 		TRV_found_camp_place(0);
@@ -789,12 +789,12 @@ void tevent_049(void)
 /* Ottarje <-> Skjal */
 void tevent_050(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent050_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent050_flag) ||
 		gs_tevent050_flag)
 	{
 		gs_tevent050_flag = 1;
 
-		if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent050_herb_flag) ||
+		if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent050_herb_flag) ||
 			gs_tevent050_herb_flag)
 		{
 			TRV_found_replenish_place(gs_tevent050_herb_flag = 1);

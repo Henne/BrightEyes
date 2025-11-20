@@ -100,7 +100,7 @@ const struct statuspage_line g_statuspage_spellclasses_2_xy[4] = { /* x_name, x_
 	{ 112, 209,  62 },
 	{ 217, 315,  62 }
 }; // ds:0x645e
-const struct statuspage_line g_statuspage_skillclasses_xy[7] = { /* x_name, x_val, y */
+const struct statuspage_line g_statuspage_talentclasses_xy[7] = { /* x_name, x_val, y */
 	{   5, 104,  62 },
 	{ 217, 315,  62 },
 	{ 217, 315, 139 },
@@ -142,46 +142,46 @@ void status_show_spell(const struct struct_hero *hero, const signed int spell_id
 }
 
 /**
- * \brief   prints skill name and value
+ * \brief   prints talent name and value
  *
- * \param   hero              the hero the skill is from
- * \param   skill_id          skill ID
- * \param   first_skill_id    ID of the the first skill in the same skillclass
+ * \param   hero              the hero the talent is from
+ * \param   talent_id          talent ID
+ * \param   first_talent_id    ID of the the first talent in the same talentclass
  * \param   x1                the leftmost x coordinate
  * \param   x2                the rightmost x coordinate
- * \param   gy                the upper y coordinate of this skillclass
+ * \param   gy                the upper y coordinate of this talentclass
  */
 /* Borlandified and identical */
-void status_show_skill(const struct struct_hero *hero, const signed int skill_id, const signed int first_skill_id,
+void status_show_talent(const struct struct_hero *hero, const signed int talent_id, const signed int first_talent_id,
 			const signed int x1, const signed int x2, const signed int gy)
 {
-	const signed int pos_in_skillclass = skill_id - first_skill_id;
+	const signed int pos_in_talentclass = talent_id - first_talent_id;
 	char str[10];
 
-	/* print skillname */
-	GUI_print_string(get_ttx(skill_id + 0x30), x1, gy + pos_in_skillclass * 7);
+	/* print talentname */
+	GUI_print_string(get_ttx(talent_id + 0x30), x1, gy + pos_in_talentclass * 7);
 
 	/* convert value to string */
-	my_itoa(hero->skills[skill_id] , str, 10);
+	my_itoa(hero->talents[talent_id] , str, 10);
 
 	/* print value */
-	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + pos_in_skillclass * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + pos_in_talentclass * 7);
 }
 
 /**
- * \brief   shows all skills and their values
+ * \brief   shows all talents and their values
  *
- * \param   hero        the hero whose skills should be shown
+ * \param   hero        the hero whose talents should be shown
  */
 /* Borlandified and identical */
-void status_show_skills(const struct struct_hero *hero)
+void status_show_talents(const struct struct_hero *hero)
 {
-	signed int skillclass_id;
-	signed int skill_id;
+	signed int talentclass_id;
+	signed int talent_id;
 
 	set_textcolor(0xff, 2);
 
-	/* print skillclass names */
+	/* print talentclass names */
 	GUI_print_string(get_ttx(100), GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
 
 	GUI_print_string(get_ttx(104), GUI_get_first_pos_centered(get_ttx(104), 110, 100, 0), 55);
@@ -198,18 +198,18 @@ void status_show_skills(const struct struct_hero *hero)
 
 	set_textcolor(0, 2);
 
-	for (skillclass_id = 0; skillclass_id < 7; skillclass_id++) {
+	for (talentclass_id = 0; talentclass_id < 7; talentclass_id++) {
 
-		skill_id = g_skillclasses[skillclass_id].first;
+		talent_id = g_talentclasses[talentclass_id].first;
 
-		while (g_skillclasses[skillclass_id].first + g_skillclasses[skillclass_id].length > skill_id) {
+		while (g_talentclasses[talentclass_id].first + g_talentclasses[talentclass_id].length > talent_id) {
 
-			status_show_skill(hero, skill_id, g_skillclasses[skillclass_id].first,
-					g_statuspage_skillclasses_xy[skillclass_id].x_name,
-					g_statuspage_skillclasses_xy[skillclass_id].x_val,
-					g_statuspage_skillclasses_xy[skillclass_id].y);
+			status_show_talent(hero, talent_id, g_talentclasses[talentclass_id].first,
+					g_statuspage_talentclasses_xy[talentclass_id].x_name,
+					g_statuspage_talentclasses_xy[talentclass_id].x_val,
+					g_statuspage_talentclasses_xy[talentclass_id].y);
 
-			skill_id++;
+			talent_id++;
 		}
 	}
 }
@@ -681,17 +681,17 @@ void status_show(const signed int index)
 				pa,
 
 				get_ttx(55),
-				hero->skills[TA_SCHUSSWAFFEN] + j,
+				hero->talents[TA_SCHUSSWAFFEN] + j,
 
 				get_ttx(56),
-				hero->skills[TA_WURFWAFFEN] + j);
+				hero->talents[TA_WURFWAFFEN] + j);
 
 			GUI_print_string(g_dtp2, 200, 60);
 			break;
 		}
-		/* skills */
+		/* talents */
 		case 3: {
-			status_show_skills(hero);
+			status_show_talents(hero);
 			break;
 		}
 		/* spells */

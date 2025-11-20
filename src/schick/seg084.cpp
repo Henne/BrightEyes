@@ -177,7 +177,7 @@ signed int DNG09_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && test_skill(hero, TA_GEFAHRENSINN, 2) > 0)
+				!hero->flags.dead && test_talent(hero, TA_GEFAHRENSINN, 2) > 0)
 			{
 				l3 = 1;
 			}
@@ -369,14 +369,14 @@ signed int DNG09_handler(void)
 	} else if (target_pos == DNG_POS(1,4,2) && (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == WEST && gs_dng09_secretdoor1 != 2)
 	{
-		if (gs_dng09_secretdoor1 || test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
+		if (gs_dng09_secretdoor1 || test_talent((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
 		{
 			gs_dng09_secretdoor1 = 1;
 
 			sprintf(g_dtp2,	get_tx(51), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
+				(char*)(((l3 = test_talent(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
 				GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2), GUI_get_ptr(hero->sex, 2));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -400,14 +400,14 @@ signed int DNG09_handler(void)
 	} else if (target_pos == DNG_POS(1,5,11) && (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == EAST && gs_dng09_secretdoor2 != 2)
 	{
-		if (gs_dng09_secretdoor2 || test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
+		if (gs_dng09_secretdoor2 || test_talent((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
 		{
 			gs_dng09_secretdoor2 = 1;
 
 			sprintf(g_dtp2,	get_tx(51), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
+				(char*)(((l3 = test_talent(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
 				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);

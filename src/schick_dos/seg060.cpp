@@ -624,7 +624,7 @@ void TLK_tavern(const signed int answer)
 
 		if ((get_hero(gs_tlk_tav_testdrunk)->typus) && !get_hero(gs_tlk_tav_testdrunk)->flags.dead && gs_tlk_tav_drinkcount)
 		{
-			g_dialog_next_state = (test_skill(get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
+			g_dialog_next_state = (test_talent(get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
 		}
 
 		/* TODO: this variable is unsigned */

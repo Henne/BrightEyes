@@ -107,7 +107,7 @@ signed int DNG04_handler(void)
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead &&
-				(test_skill(hero, TA_SCHLEICHEN, 2) <= 0))
+				(test_talent(hero, TA_SCHLEICHEN, 2) <= 0))
 			{
 				sprintf(g_dtp2,	get_tx(10), hero->alias);
 				GUI_output(g_dtp2);
@@ -151,7 +151,7 @@ signed int DNG04_handler(void)
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead &&
-				(test_skill(hero, TA_SCHLEICHEN, 4) <= 0))
+				(test_talent(hero, TA_SCHLEICHEN, 4) <= 0))
 			{
 				sprintf(g_dtp2, get_tx(10), hero->alias);
 				GUI_output(g_dtp2);

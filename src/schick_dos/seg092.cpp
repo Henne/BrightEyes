@@ -487,7 +487,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 
 		if (inv_slot != -2) {
 
-			test_val = test_skill(hero, TA_SCHLOESSER, chest_ptr->mod);
+			test_val = test_talent(hero, TA_SCHLOESSER, chest_ptr->mod);
 
 			if (test_val == -99) {
 

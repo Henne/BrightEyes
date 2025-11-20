@@ -286,7 +286,7 @@ void tevent_078(void)
 
 			do {
 				/* ORIENTATION + 8 */
-				if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 8) > 0)
+				if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 8) > 0)
 				{
 					/* success, you found a way */
 					timewarp(HOURS(5));
@@ -351,7 +351,7 @@ void tevent_078(void)
 
 void tevent_079(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent079_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent079_flag) ||
 		gs_tevent079_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -364,7 +364,7 @@ void tevent_051(void)
 {
 	signed int answer;
 
-	if (test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent051_flag)
+	if (test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent051_flag)
 	{
 		gs_tevent051_flag = 1;
 
@@ -454,7 +454,7 @@ void tevent_052(void)
 
 void tevent_120(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent120_flag) || gs_tevent120_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent120_flag) || gs_tevent120_flag)
 	{
 		gs_tevent120_flag = 1;
 		TRV_found_camp_place(1);
@@ -472,7 +472,7 @@ void tevent_124(void)
 	signed int counter;
 	signed int answer;
 	signed int have_climb_tools;
-	signed int skill_ret;
+	signed int talent_ret;
 	struct struct_hero *hero;
 
 	have_climb_tools = 0;
@@ -503,16 +503,16 @@ void tevent_124(void)
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead &&
-				(skill_ret = test_skill(hero, TA_KLETTERN, -2)) <= 0)
+				(talent_ret = test_talent(hero, TA_KLETTERN, -2)) <= 0)
 			{
 				/* the climb test failed */
 				counter++;
 
-				/* Original-Bug: a skill test with a fatal result returns -99, not -1 */
+				/* Original-Bug: a talent test with a fatal result returns -99, not -1 */
 #ifdef M302de_ORIGINAL_BUGFIX
-				if (skill_ret == -99 && have_climb_tools == 0)
+				if (talent_ret == -99 && have_climb_tools == 0)
 #else
-				if (skill_ret == -1 && have_climb_tools == 0)
+				if (talent_ret == -1 && have_climb_tools == 0)
 #endif
 				{
 					/* fatal */

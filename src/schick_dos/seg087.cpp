@@ -30,7 +30,7 @@
 signed int DNG14_handler(void)
 {
 	signed int pos;
-	signed int tmp; /* multiple use: mod_slot, item_count, result of skill test */
+	signed int tmp; /* multiple use: mod_slot, item_count, result of talent test */
 	signed int hero_pos;
 	signed int tw_bak;
 	int32_t p_money;
@@ -80,7 +80,7 @@ signed int DNG14_handler(void)
 
 	} else if (pos == DNG_POS(0,5,3) && pos != gs_dng_handled_pos && !gs_dng14_alarm_flag) {
 
-		if (test_skill(hero, TA_SINNESSCHAERFE, 6) <= 0) {
+		if (test_talent(hero, TA_SINNESSCHAERFE, 6) <= 0) {
 
 			GUI_output(get_tx(3));
 
@@ -146,13 +146,13 @@ signed int DNG14_handler(void)
 	} else if (pos == DNG_POS(0,4,11) && (pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == EAST && gs_dng14_secretdoor1 != 2) {
 
-		if (gs_dng14_secretdoor1 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0) {
+		if (gs_dng14_secretdoor1 != 0 || test_talent(hero, TA_SINNESSCHAERFE, 4) > 0) {
 			gs_dng14_secretdoor1 = 1;
 
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
+				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -173,13 +173,13 @@ signed int DNG14_handler(void)
 			gs_direction == EAST &&
 			gs_dng14_secretdoor2 != 2) {
 
-		if (gs_dng14_secretdoor2 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0) {
+		if (gs_dng14_secretdoor2 != 0 || test_talent(hero, TA_SINNESSCHAERFE, 4) > 0) {
 			gs_dng14_secretdoor2 = 1;
 
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
+				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -292,7 +292,7 @@ signed int DNG14_handler(void)
 		(pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 		gs_direction == SOUTH && gs_dng14_secretdoor3 != 2) {
 
-		if (gs_dng14_secretdoor3 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0) {
+		if (gs_dng14_secretdoor3 != 0 || test_talent(hero, TA_SINNESSCHAERFE, 4) > 0) {
 
 			/* acticate trap */
 			gs_dng14_secretdoor3 = 1;
@@ -300,7 +300,7 @@ signed int DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -322,7 +322,7 @@ signed int DNG14_handler(void)
 		(pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 		gs_direction == WEST && gs_dng14_secretdoor4 != 2) {
 
-		if (gs_dng14_secretdoor4 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 8) > 0) {
+		if (gs_dng14_secretdoor4 != 0 || test_talent(hero, TA_SINNESSCHAERFE, 8) > 0) {
 
 			/* acticate trap */
 			gs_dng14_secretdoor4 = 1;
@@ -330,7 +330,7 @@ signed int DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -385,7 +385,7 @@ signed int DNG14_handler(void)
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-						!hero->flags.dead && (test_skill(hero, TA_KLETTERN, 0) <= 0))
+						!hero->flags.dead && (test_talent(hero, TA_KLETTERN, 0) <= 0))
 					{
 						sprintf(g_dtp2, get_tx(26), hero->alias, GUI_get_ptr(hero->sex, 2));
 						GUI_output(g_dtp2);
@@ -405,7 +405,7 @@ signed int DNG14_handler(void)
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-						!hero->flags.dead && (test_skill(hero, TA_KLETTERN, 4) <= 0))
+						!hero->flags.dead && (test_talent(hero, TA_KLETTERN, 4) <= 0))
 					{
 						sprintf(g_dtp2, get_tx(27), hero->alias);
 						GUI_output(g_dtp2);
@@ -492,14 +492,14 @@ signed int DNG14_handler(void)
 			(pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == NORTH &&
 			gs_dng14_secretdoor5 != 2 &&
-			(gs_dng14_secretdoor5 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0))
+			(gs_dng14_secretdoor5 != 0 || test_talent(hero, TA_SINNESSCHAERFE, 6) > 0))
 	{
 			gs_dng14_secretdoor5 = 1;
 
 			sprintf(g_dtp2,	get_tx(7), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -534,7 +534,7 @@ signed int DNG14_handler(void)
 
 					hero = get_hero(hero_pos);
 
-					if (test_skill(hero, TA_SCHWIMMEN, 8) <= 0) {
+					if (test_talent(hero, TA_SCHWIMMEN, 8) <= 0) {
 
 						sprintf(g_dtp2, get_tx(40), hero->alias, GUI_get_ptr(hero->sex, 0));
 						GUI_output(g_dtp2);

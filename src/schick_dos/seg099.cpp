@@ -1021,7 +1021,7 @@ void spell_adleraug(void)
 	mod_slot = get_free_mod_slot();
 
 	/* Perception / Sinnesschaerfe + 7 */
-	set_mod_slot(mod_slot, MINUTES(6), (uint8_t*)&get_spelluser()->skills[TA_SINNESSCHAERFE], 7, (signed char)hero_pos);
+	set_mod_slot(mod_slot, MINUTES(6), (uint8_t*)&get_spelluser()->talents[TA_SINNESSCHAERFE], 7, (signed char)hero_pos);
 
 	/* prepare message */
 	sprintf(g_dtp2,	get_tx(24), get_spelluser()->alias);

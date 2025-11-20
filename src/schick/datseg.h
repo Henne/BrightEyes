@@ -211,8 +211,8 @@ struct ranged_weapon_descr {
 	 * gross        Pferd, Elch, Oger, Troll                         4
 	 * sehr gross   Scheunentor, Drache, Elefant, Riese              5
 	 *
-	 * The skill test handicap for the ranged attack depends on the distance and the size of the target.
-	 * In Schicksalsklinge, RANGED_WEAPON_STATS_BASE_HANDICAP is the skill test handicap vs. a target which is extrem nah and winzig (0,0).
+	 * The talent test handicap for the ranged attack depends on the distance and the size of the target.
+	 * In Schicksalsklinge, RANGED_WEAPON_STATS_BASE_HANDICAP is the talent test handicap vs. a target which is extrem nah and winzig (0,0).
 	 * The general formula for the handicap is base_handicap + 2 * distance_type - 2 * target_size.
 	 *
 	 * The damage is calculated as the base damage of the weapon (like D6 + 3 for the shortbow) + a distance modifier.
@@ -264,7 +264,7 @@ struct spell_descr {
 	int8_t fight;
 };
 
-struct skill_descr {
+struct talent_descr {
 	int8_t attrib1;
 	int8_t attrib2;
 	int8_t attrib3;
@@ -612,7 +612,7 @@ struct struct_recipe {
 	signed short ingredients[10];	/* list of ingredients (item_ids), terminated by -1 */
 	signed short outcome;		/* item id of the outcome of the recipe */
 	signed short ae_cost;		/* AE needed */
-	signed char  handicap;		/* handicap for the alchemy skill test */
+	signed char  handicap;		/* handicap for the alchemy talent test */
 	signed char  duration;		/* time needed to brew the recipe in hours */
 };
 
@@ -621,7 +621,7 @@ struct spell_range {
 	int8_t length;
 };
 
-struct skill_range {
+struct talent_range {
 	int8_t first;
 	int8_t length;
 };
@@ -809,8 +809,8 @@ extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
 extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
 extern int8_t g_mon_spellbooks[11][5];				// ds:0x0f8b; seg037
 extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
-extern const struct skill_descr g_skill_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
-extern const struct skill_range g_skillclasses[7];			//ds:0x10ce; seg046, seg103
+extern const struct talent_descr g_talent_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
+extern const struct talent_range g_talentclasses[7];			//ds:0x10ce; seg046, seg103
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];		//ds:0x10dc; seg002, seg033, seg039
 extern signed short g_nvftab_figures_unconscious[22];			//ds:0x11e4; seg002, seg005, seg039
 extern const struct point8s g_gfxtab_offsets_unconscious[22][4];	//ds:0x1210; seg002, seg005, seg039
@@ -900,7 +900,7 @@ extern signed int g_fig_figure1;			//ds:0x2cd1; seg025, seg027, seg032
 extern signed int g_fig_figure2;			//ds:0x2cd3; seg025, seg027, seg032
 extern signed int g_in_fight;				//ds:0x2cd5; seg002-seg107
 extern signed int g_fight_round;			//ds:0x2cd7; seg032, seg036, seg037
-extern signed int g_skilled_hero_pos;			//ds:0x2cdb; seg047, seg051, seg056, seg057, seg097, seg103
+extern signed int g_talented_hero_pos;			//ds:0x2cdb; seg047, seg051, seg056, seg057, seg097, seg103
 extern const struct struct_point g_gui_buttons_pos[9];	//ds:0x2cdd; seg029
 extern const signed int g_hero_pic_posx[7];		//ds:0x2d01; seg002-seg098
 extern signed char g_levelup_ta_rise[12];		//ds:0x2d0f; seg050
@@ -1909,7 +1909,7 @@ extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
 extern const char* names_attrib[14];
-extern const char* names_skill[52];
+extern const char* names_talent[52];
 extern const char* names_spell[86];
 extern const char* names_mspell[14];
 #endif

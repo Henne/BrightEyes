@@ -847,13 +847,13 @@ signed int GUI_radio(char *header, signed char options, ...)
 	for (i = 0; i < options; l4 += 8, i++) {
 
 		/* highlight special option */
-		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
+		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_talented_hero_pos == i))
 			set_textcolor(0xc9, 0xdf);
 
 		GUI_print_string((char*)va_arg(arguments, char*), l3, l4);
 
 		/* reset highlight special option */
-		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
+		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_talented_hero_pos == i))
 			set_textcolor(0xff, 0xdf);
 	}
 

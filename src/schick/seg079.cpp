@@ -141,7 +141,7 @@ signed int DNG03_handler(void)
 			if ((hero->typus != HERO_TYPE_NONE) &&
 				(hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead &&
-				(test_skill(hero, TA_KLETTERN, 2) <= 0))
+				(test_talent(hero, TA_KLETTERN, 2) <= 0))
 			{
 				sprintf(g_dtp2,	get_tx(6), hero->alias,	GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
@@ -203,7 +203,7 @@ signed int DNG03_handler(void)
 	{
 		j = 0;
 
-		if (test_skill(get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
+		if (test_talent(get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
 		{
 			j++;
 		}
@@ -212,7 +212,7 @@ signed int DNG03_handler(void)
 			(hero->typus != HERO_TYPE_NONE) &&
 			(hero->group_id == gs_active_group_id) &&
 			!hero->flags.dead &&
-			(test_skill(hero, TA_GEFAHRENSINN, 4) <= 0))
+			(test_talent(hero, TA_GEFAHRENSINN, 4) <= 0))
 		{
 			j++;
 		}

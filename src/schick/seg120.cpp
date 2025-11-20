@@ -225,7 +225,7 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 
 				if (answer != -1) {
 
-					skill_cure_disease(get_hero(answer), hero, 10, 1);
+					talent_cure_disease(get_hero(answer), hero, 10, 1);
 				}
 
 				done = 1;
@@ -250,7 +250,7 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 						answer = select_hero_ok(get_ttx(395));
 
 						if (answer != -1) {
-							skill_cure_disease(get_hero(answer), hero, 10, 1);
+							talent_cure_disease(get_hero(answer), hero, 10, 1);
 						}
 						break;
 					}
@@ -288,7 +288,7 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 								answer = select_hero_ok(get_ttx(395));
 
 								if ((answer != -1) && (answer != hero_pos)) {
-									skill_cure_disease(get_hero(answer), hero, 10, 1);
+									talent_cure_disease(get_hero(answer), hero, 10, 1);
 								}
 							}
 						} else {

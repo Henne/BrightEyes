@@ -62,7 +62,7 @@ void show_automap(void)
 	signed int tw_bak;
 
 	if (!gs_dungeon_light ||
-		((gs_dungeon_light == 1) && (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
+		((gs_dungeon_light == 1) && (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
 	{
 
 		g_special_screen = 1;

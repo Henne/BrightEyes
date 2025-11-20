@@ -47,9 +47,9 @@ void tevent_110(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 0) <= 0)
+				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 0) <= 0)
 			{
-				/* skill test failed */
+				/* talent test failed */
 
 				if (get_first_hero_with_item(ITEM_SEIL) != -1)
 				{
@@ -76,7 +76,7 @@ void tevent_110(void)
 
 		/* try to walk arround */
 
-		if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 0) > 0)
+		if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 0) > 0)
 		{
 			/* success */
 			timewarp(HOURS(4));
@@ -95,12 +95,12 @@ void tevent_111(void)
 	signed int counter;
 	signed int answer;
 	signed int i;
-	signed int ret_skill_test2;
-	signed int ret_skill_test3;
+	signed int ret_talent_test2;
+	signed int ret_talent_test3;
 	signed int unlucky_tests;
 	struct struct_hero *hero;
 
-	if ((test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 1) > 0 && !gs_tevent111_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 1) > 0 && !gs_tevent111_flag) ||
 		gs_tevent111_flag == 1)
 	{
 		gs_tevent111_flag = 1;
@@ -116,7 +116,7 @@ void tevent_111(void)
 		for (i = counter = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -5) <= 0)
+				!hero->flags.dead && test_talent(hero, TA_SCHLEICHEN, -5) <= 0)
 			{
 				counter++;
 			}
@@ -144,9 +144,9 @@ void tevent_111(void)
 
 			hero = get_hero(select_hero_ok_forced(get_tx2(2)));
 
-			if (test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
+			if (test_talent(hero, TA_SCHLEICHEN, 0) <= 0)
 			{
-				/* skill test failed */
+				/* talent test failed */
 				do {
 					answer = GUI_radio(get_tx2(1), 2, get_tx2(7), get_tx2(8));
 
@@ -164,19 +164,19 @@ void tevent_111(void)
 				}
 
 			} else {
-				/* skill test succeeded */
+				/* talent test succeeded */
 
 				sprintf(g_dtp2,	get_tx2(3), hero->alias);
 
 				GUI_input(g_dtp2, counter = unlucky_tests = 0);
 
-				if ((i = test_skill(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
-				if ((ret_skill_test2 = test_skill(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
-				if ((ret_skill_test3 = test_skill(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
+				if ((i = test_talent(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
+				if ((ret_talent_test2 = test_talent(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
+				if ((ret_talent_test3 = test_talent(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
 
 				if (i == 99) unlucky_tests++;
-				if (ret_skill_test2 == 99) unlucky_tests++;
-				if (ret_skill_test3 == 99) unlucky_tests++;
+				if (ret_talent_test2 == 99) unlucky_tests++;
+				if (ret_talent_test3 == 99) unlucky_tests++;
 
 				if (counter == 3 || unlucky_tests >= 2)
 				{
@@ -266,11 +266,11 @@ void tevent_111(void)
 /* a camp place */
 void tevent_112(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent112_flag) || gs_tevent112_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent112_flag) || gs_tevent112_flag)
 	{
 		gs_tevent112_flag = 1;
 
-		if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 2) > 0 && !gs_tevent112_herb_flag) || gs_tevent112_herb_flag)
+		if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 2) > 0 && !gs_tevent112_herb_flag) || gs_tevent112_herb_flag)
 		{
 			gs_tevent112_herb_flag = 1;
 
@@ -449,7 +449,7 @@ void tevent_114(void)
 /* a camp place */
 void tevent_116(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent116_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent116_flag) ||
 		gs_tevent116_flag)
 	{
 		gs_tevent116_flag = 1;
@@ -486,7 +486,7 @@ void tevent_117(void)
 /* a herb place */
 void tevent_118(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent118_flag) ||	gs_tevent118_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent118_flag) ||	gs_tevent118_flag)
 	{
 		g_gather_herbs_special = ITEM_EINBEERE;
 
@@ -501,7 +501,7 @@ void tevent_118(void)
 /* a camp place */
 void tevent_119(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent119_flag) || gs_tevent119_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent119_flag) || gs_tevent119_flag)
 	{
 		gs_tevent119_flag = 1;
 
@@ -550,7 +550,7 @@ void tevent_123(void)
 	signed int answer;
 	signed int done;
 	signed int attrib_result;
-	signed int skill_result;
+	signed int talent_result;
 	struct struct_hero *hero;
 
 	load_in_head(54);
@@ -608,9 +608,9 @@ void tevent_123(void)
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 					{
 						attrib_result = test_attrib(hero, ATTRIB_HA, 4);
-						skill_result = test_skill(hero, TA_KLETTERN, 0);
+						talent_result = test_talent(hero, TA_KLETTERN, 0);
 
-						if (attrib_result == 99 && skill_result == -1)
+						if (attrib_result == 99 && talent_result == -1)
 						{
 							sprintf(g_dtp2 + 0x400, get_tx2(48), hero->alias);
 
@@ -620,7 +620,7 @@ void tevent_123(void)
 
 							counter++;
 
-						} else if (attrib_result > 0 || skill_result <= 0)
+						} else if (attrib_result > 0 || talent_result <= 0)
 						{
 							sprintf(g_dtp2 + 0x400,	get_tx2(42), hero->alias);
 

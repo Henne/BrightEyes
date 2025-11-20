@@ -313,7 +313,7 @@ signed int DNG08_handler(void)
 		for (i = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 2) <= 0)
+				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 2) <= 0)
 			{
 				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
@@ -328,14 +328,14 @@ signed int DNG08_handler(void)
 			gs_dng08_secret_door != 2)
 	{
 		if (gs_dng08_secret_door ||
-			test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 1) > 0)
+			test_talent((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 1) > 0)
 		{
 			gs_dng08_secret_door = 1;
 
 			sprintf(g_dtp2, get_tx(29), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
+				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -356,14 +356,14 @@ signed int DNG08_handler(void)
 	} else if (target_pos == DNG_POS(0,5,7) && target_pos != gs_dng_handled_pos)
 	{
 		sprintf(g_dtp2, get_tx(22),
-			(char*)(test_skill(hero, TA_GOETTER_KULTE, 4) <= 0 ? get_tx(23) : get_tx(24)));
+			(char*)(test_talent(hero, TA_GOETTER_KULTE, 4) <= 0 ? get_tx(23) : get_tx(24)));
 
 		GUI_output(g_dtp2);
 
 	} else if (target_pos == DNG_POS(0,5,9) && target_pos != gs_dng_handled_pos)
 	{
 		sprintf(g_dtp2,	get_tx(22),
-			(char*)(test_skill(hero, TA_GOETTER_KULTE, 6) <= 0 ? get_tx(23) : get_tx(25)));
+			(char*)(test_talent(hero, TA_GOETTER_KULTE, 6) <= 0 ? get_tx(23) : get_tx(25)));
 
 		GUI_output(g_dtp2);
 
@@ -499,7 +499,7 @@ void DNG08_chest02_open(struct struct_chest* chest)
 {
 	if (!gs_dng08_chest2_looted)
 	{
-		if (test_skill(get_first_hero_available_in_group(), TA_SPRACHEN, 2) > 0)
+		if (test_talent(get_first_hero_available_in_group(), TA_SPRACHEN, 2) > 0)
 		{
 			GUI_input(get_tx(27), 10);
 
@@ -524,7 +524,7 @@ void DNG08_chest03_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0)
+	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0)
 	{
 		if (!(gs_dng08_chest35_looted & 1)) {
 
@@ -545,7 +545,7 @@ void DNG08_chest04_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot(chest);
 
@@ -559,7 +559,7 @@ void DNG08_chest05_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot(chest);
 

@@ -147,7 +147,7 @@ signed int g_ems_unused_handle;		// ds:0xbd92
 #endif
 unsigned char g_map_size_x;		// ds:0xbd94
 unsigned char g_dng_map[512];		// ds:0xbd95
-char *g_radio_name_list[25];		// ds:0xbf95, used for items, heroes, spells, skills, recipes
+char *g_radio_name_list[25];		// ds:0xbf95, used for items, heroes, spells, talents, recipes
 unsigned char *g_gui_buffer_unkn;	// ds:0xbff9
 signed int g_textbox_width;		// ds:0xbffd
 signed int g_textbox_pos_x;		// ds:0xbfff, coordinate of upper left corner
@@ -4916,7 +4916,7 @@ signed int test_attrib(const struct struct_hero* hero, const signed int attrib_i
 signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
 {
 #ifndef M302de_FEATURE_MOD
-	/* Feature mod 6: The implementation of the skill test logic differs from the original DSA2/3 rules.
+	/* Feature mod 6: The implementation of the talent test logic differs from the original DSA2/3 rules.
 	 * It is sometimes called the 'pool' variant, where '3W20 + handicap' is compared to the sum of the attributes.
 	 * It is significantly easier than the original rule, where each individuall roll must be at most the corresponding attribute,
 	 * where positive handicap must be used up during the process, and negative handicap may be used for compensation. */
@@ -4970,8 +4970,8 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 	return tmp - rolls_sum + 1; // in a nutshell: sum of the 3 attributes - 3*D20 - handicap + 1
 
 #else
-	/* Here, the original DSA2/3 skill test logic is implemented.
-	 * WARNING: This makes skill tests, and thus the game, significantly harder!
+	/* Here, the original DSA2/3 talent test logic is implemented.
+	 * WARNING: This makes talent tests, and thus the game, significantly harder!
 	 * Note that we are not implementing the DSA4 rules, where tests with a positive handicap are yet harder. */
 	signed int i;
 	signed int tmp;

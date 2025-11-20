@@ -77,7 +77,7 @@ signed int DNG10_handler(void)
 	} else if (target_pos == DNG_POS(0,8,1) && target_pos != gs_dng_handled_pos)
 	{
 		/* another hole in a wall with a lever for a trap */
-		if (gs_dng10_lever_found || test_skill(hero, TA_SINNESSCHAERFE, 7) > 0)
+		if (gs_dng10_lever_found || test_talent(hero, TA_SINNESSCHAERFE, 7) > 0)
 		{
 			gs_dng10_lever_found |= 1;
 
@@ -119,7 +119,7 @@ signed int DNG10_handler(void)
 			gs_direction == WEST)
 	{
 		/* TRAP: a loose stone in a wall */
-		if (gs_dng10_hole_state || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
+		if (gs_dng10_hole_state || test_talent(hero, TA_SINNESSCHAERFE, 5) > 0)
 		{
 			/* set hole found */
 			gs_dng10_hole_state = 1;
@@ -159,14 +159,14 @@ signed int DNG10_handler(void)
 	} else if (target_pos == DNG_POS(0,1,8) && target_pos != gs_dng_handled_pos)
 	{
 		/* TRAP: a floorplate */
-		if (gs_dng10_floorplate_found || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
+		if (gs_dng10_floorplate_found || test_talent(hero, TA_SINNESSCHAERFE, 5) > 0)
 		{
 			gs_dng10_floorplate_found = 1;
 
 			/* Original-Bug: ???*/
 			/* Damage only happens here when the leader of the group tries to disable this trap.
 			   If the trap is not found or left alone nobody gets damaged. Weird! */
-			if (GUI_bool(get_tx(13)) && test_skill(hero, TA_SCHLOESSER, 7) <= 0)
+			if (GUI_bool(get_tx(13)) && test_talent(hero, TA_SCHLOESSER, 7) <= 0)
 			{
 				if (gs_dng10_floorplate_loads)
 				{
@@ -321,7 +321,7 @@ signed int DNG10_handler(void)
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead &&
-						(test_skill(hero, TA_SCHLEICHEN, hero->rs_bonus + 3) <= 0))
+						(test_talent(hero, TA_SCHLEICHEN, hero->rs_bonus + 3) <= 0))
 					{
 						result++;
 					}

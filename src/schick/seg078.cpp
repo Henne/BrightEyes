@@ -81,7 +81,7 @@ signed int DNG02_handler(void)
 
 	} else if ((target_pos == DNG_POS(0,7,13) || target_pos == DNG_POS(1,6,5) || target_pos == DNG_POS(1,4,14)) && target_pos != gs_dng_handled_pos)
 	{
-		if (test_skill((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
+		if (test_talent((hero = get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
 		{
 			GUI_output(get_tx(8));
 
@@ -412,14 +412,14 @@ signed int DNG02_handler(void)
 		/* Original-Bug: this should be the leader, not hero no 0 */
 		hero = get_hero(0);
 
-		if (gs_dng02_secret_door1 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0)
+		if (gs_dng02_secret_door1 || test_talent(hero, TA_SINNESSCHAERFE, 6) > 0)
 		{
 			gs_dng02_secret_door1 = 1;
 
 			sprintf(g_dtp2, get_tx(37), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
+				(char*)((i = test_talent(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -445,14 +445,14 @@ signed int DNG02_handler(void)
 		/* Original-Bug: this should be the leader, not hero no 0 */
 		hero = get_hero(0);
 
-		if (gs_dng02_secret_door2 || test_skill(hero, TA_SINNESSCHAERFE, 2) > 0)
+		if (gs_dng02_secret_door2 || test_talent(hero, TA_SINNESSCHAERFE, 2) > 0)
 		{
 			gs_dng02_secret_door2 = 1;
 
 			sprintf(g_dtp2,	get_tx(37), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
+				(char*)((i = test_talent(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
 				(GUI_get_ptr(hero->sex, 0)));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -476,14 +476,14 @@ signed int DNG02_handler(void)
 	{
 		hero = get_first_hero_available_in_group();
 
-		if (gs_dng02_secret_door3 || (test_skill(hero, TA_SINNESSCHAERFE, 5) > 0))
+		if (gs_dng02_secret_door3 || (test_talent(hero, TA_SINNESSCHAERFE, 5) > 0))
 		{
 			gs_dng02_secret_door3 = 1;
 
 			sprintf(g_dtp2,	get_tx(37), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
+				(char*)((i = test_talent(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
