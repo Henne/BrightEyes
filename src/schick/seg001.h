@@ -1,5 +1,7 @@
 void CD_enable_repeat(void);
+#if defined(__BORLANDC__)
 signed int CD_bioskey(const signed int);
+#endif
 void CD_audio_stop(void);
 void CD_audio_pause(void);
 void CD_audio_play(void);

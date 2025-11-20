@@ -245,18 +245,14 @@ void CD_enable_repeat(void)
 #endif
 }
 
+#if defined(__BORLANDC__)
 /* Borlandified and identical */
 signed int CD_bioskey(const signed int cmd)
 {
-#if defined(__BORLANDC__)
 	CD_enable_repeat();
 	return bioskey(cmd);
-#else
-	return 0;
-#endif
 }
 
-#if defined(__BORLANDC__)
 /* CD_audio_stop_hsg() - stop audio playback in HSG format */
 /* Borlandified and identical */
 static void CD_audio_stop_hsg(void)
