@@ -96,7 +96,7 @@ signed int hero_is_diseased(const struct struct_hero *hero)
 
 	for (i = 1; i <= 7; i++) {
 
-		if (hero->sick[i][0] == -1) {
+		if (hero->sick[i][0] == DISEASE_STATUS_SICK) {
 
 			return i;
 		}
@@ -119,7 +119,7 @@ signed int hero_is_poisoned(const struct struct_hero *hero)
 
 	for (i = 1; i <= 9; i++) {
 
-		if (hero->poison[i][0] == -1) {
+		if (hero->poison[i][0] == POISON_STATUS_POISONED) {
 
 			return i;
 		}
@@ -138,7 +138,7 @@ void hero_gets_poisoned(struct struct_hero *hero, const signed int poison_id)
 {
 	if (!hero->flags.dead) {
 
-		hero->poison[poison_id][0] = -1;
+		hero->poison[poison_id][0] = POISON_STATUS_POISONED;
 		hero->poison[poison_id][1] = 0;
 		hero->poison[poison_id][2] = 0;
 		hero->poison[poison_id][3] = 0;
@@ -166,7 +166,7 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease)
 		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease + 0x193));
 #endif
 
-		hero->sick[disease][0] = -1;
+		hero->sick[disease][0] = DISEASE_STATUS_SICK;
 		hero->sick[disease][1] = 0;
 		hero->sick[disease][2] = 0;
 		hero->sick[disease][3] = 0;
@@ -192,7 +192,7 @@ void hero_disease_test(struct struct_hero *hero, const signed int disease, const
 #endif
 
 	/* check the probability and if hero is diseased*/
-	if ((random_schick(100) <= probability) && (hero->sick[disease][0] != -1)) {
+	if ((random_schick(100) <= probability) && (hero->sick[disease][0] != DISEASE_STATUS_SICK)) {
 
 		hero_gets_diseased(hero, disease);
 	}

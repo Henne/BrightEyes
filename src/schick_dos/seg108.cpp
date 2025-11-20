@@ -204,7 +204,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 						/* cure the first poison */
 						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = 1;
+						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
 					}
 
 					/* TODO: unknown for 24h */
@@ -222,7 +222,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					if (poison != 0 && poison <= 10) {
 						/* cure the first poison */
 						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = 1;
+						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
 					}
 
 					tmp = get_free_mod_slot();
@@ -385,7 +385,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					disease = hero_is_diseased(consumer);
 
 					if (disease == 2 || disease == 3) {
-						consumer->sick[disease][0] = 1;
+						consumer->sick[disease][0] = DISEASE_STATUS_RECOVER;
 						consumer->sick[disease][1] = 0;
 					}
 
@@ -394,7 +394,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					if (poison != 0 && poison < 7) {
 						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = 1;
+						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glasbottle */
@@ -499,7 +499,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					if (poison != 0 && poison < 5) {
 						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = 1;
+						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glassbottle */
@@ -513,7 +513,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					disease = hero_is_diseased(consumer);
 
-					consumer->sick[disease][0] = 1;
+					consumer->sick[disease][0] = DISEASE_STATUS_RECOVER;
 					consumer->sick[disease][1] = 0;
 
 					/* give owner a glassbottle */

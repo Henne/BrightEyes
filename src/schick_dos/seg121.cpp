@@ -35,7 +35,7 @@ void poison_effect(void)
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_SHURINKNOLLENGIFT];
 
 			/* SHURINKNOLLENGIFT: hero is poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (poison_ptr[1] >= 6) {
 
@@ -71,12 +71,12 @@ void poison_effect(void)
 			}
 
 			/* SHURINKNOLLENGIFT: hero regenerates */
-			if (poison_ptr[0] == 1) {
+			if (poison_ptr[0] == POISON_STATUS_RECOVER) {
 
 				if (!poison_ptr[2] && !poison_ptr[3]) {
 
 					poison_ptr[1] = 0;
-					poison_ptr[0] = 0;
+					poison_ptr[0] = POISON_STATUS_HEALTHY;
 				}
 
 				if ((poison_ptr[2] != 0) && (!poison_ptr[1] % 12 )) {
@@ -104,7 +104,7 @@ void poison_effect(void)
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_ARAX];
 
 			/* ARAXGIFT: hero is poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if ((poison_ptr[1] >= 2) && !poison_ptr[4]) {
 
@@ -130,14 +130,14 @@ void poison_effect(void)
 
 				/* enable self-regeneration */
 				if (poison_ptr[1] >= 120) {
-					poison_ptr[0] = 1;
+					poison_ptr[0] = POISON_STATUS_RECOVER;
 				}
 			}
 
 			/* ARAXGIFT: regeneration */
-			if ((poison_ptr[0] == 1) && poison_ptr[4]) {
+			if ((poison_ptr[0] == POISON_STATUS_RECOVER) && poison_ptr[4]) {
 
-				poison_ptr[0] = 0;
+				poison_ptr[0] = POISON_STATUS_HEALTHY;
 				poison_ptr[1] = 0;
 				poison_ptr[4] = 0;
 
@@ -162,7 +162,7 @@ void poison_effect(void)
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_ANGSTGIFT];
 
 			/* ANGSTGIFT: hero is poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (!poison_ptr[4]) {
 
@@ -188,14 +188,14 @@ void poison_effect(void)
 
 				/* self regeneration */
 				if (poison_ptr[1] >= 7) {
-					poison_ptr[0] = 1;
+					poison_ptr[0] = POISON_STATUS_RECOVER;
 				}
 			}
 
 			/* ANGSTGIFT: regeneration */
-			if ((poison_ptr[0] == 1) && poison_ptr[4]) {
+			if ((poison_ptr[0] == POISON_STATUS_RECOVER) && poison_ptr[4]) {
 
-					poison_ptr[0] = 0;
+					poison_ptr[0] = POISON_STATUS_HEALTHY;
 					poison_ptr[1] = 0;
 					poison_ptr[4] = 0;
 
@@ -222,7 +222,7 @@ void poison_effect(void)
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_SCHLAFGIFT];
 
 			/* SCHLAFGIFT: hero is poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (!poison_ptr[4]) {
 
@@ -237,14 +237,14 @@ void poison_effect(void)
 
 				/* self regeneration */
 				if (poison_ptr[1] >= 20) {
-					poison_ptr[0] = 1;
+					poison_ptr[0] = POISON_STATUS_RECOVER;
 				}
 			}
 
 			/* SCHLAFGIFT: regeneration */
-			if ((poison_ptr[0] == 1) && poison_ptr[4]) {
+			if ((poison_ptr[0] == POISON_STATUS_RECOVER) && poison_ptr[4]) {
 
-				poison_ptr[0] = 0;
+				poison_ptr[0] = POISON_STATUS_HEALTHY;
 				poison_ptr[1] = 0;
 				poison_ptr[4] = 0;
 
@@ -259,10 +259,10 @@ void poison_effect(void)
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_GOLDLEIM];
 
 			/* GOLDLEIM: hero gets poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (poison_ptr[1] >= dice_roll(2, 6, 0) * 12) {
-					poison_ptr[0] = 0;
+					poison_ptr[0] = POISON_STATUS_HEALTHY;
 				}
 
 				if (!(poison_ptr[1] % 12)) {
@@ -271,18 +271,18 @@ void poison_effect(void)
 			}
 
 			/* GOLDLEIM: regeneration */
-			if (poison_ptr[0] == 1) {
-				poison_ptr[0] = 0;
+			if (poison_ptr[0] == POISON_STATUS_RECOVER) {
+				poison_ptr[0] = POISON_STATUS_HEALTHY;
 			}
 
 
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_KROETENSCHEMEL];
 
 			/* KROETENSCHEMEL: hero gets poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (poison_ptr[1] >= 48) {
-					poison_ptr[0] = 0;
+					poison_ptr[0] = POISON_STATUS_HEALTHY;
 				}
 
 				if (!(poison_ptr[1] % 12)) {
@@ -291,54 +291,54 @@ void poison_effect(void)
 			}
 
 			/* KROETENSCHEMEL: regeneration */
-			if (poison_ptr[0] == 1) {
-				poison_ptr[0] = 0;
+			if (poison_ptr[0] == POISON_STATUS_RECOVER) {
+				poison_ptr[0] = POISON_STATUS_HEALTHY;
 			}
 
 
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_LOTUSGIFT];
 
 			/* LOTUSGIFT: hero gets poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (poison_ptr[1] >= 24) {
-					poison_ptr[0] = 0;
+					poison_ptr[0] = POISON_STATUS_HEALTHY;
 				}
 
 				sub_hero_le(hero, dice_roll(2, 6, 0));
 			}
 
 			/* LOTUSGIFT: regeneration */
-			if (poison_ptr[0] == 1) {
-				poison_ptr[0] = 0;
+			if (poison_ptr[0] == POISON_STATUS_RECOVER) {
+				poison_ptr[0] = POISON_STATUS_HEALTHY;
 			}
 
 
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_KUKRIS];
 
 			/* KUKRIS: hero gets poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (poison_ptr[1] >= 3) {
-					poison_ptr[0] = 0;
+					poison_ptr[0] = POISON_STATUS_HEALTHY;
 				}
 
 				sub_hero_le(hero, dice_roll(50, 6, 0));
 			}
 
 			/* KUKRIS: regeneration */
-			if (poison_ptr[0] == 1) {
-				poison_ptr[0] = 0;
+			if (poison_ptr[0] == POISON_STATUS_RECOVER) {
+				poison_ptr[0] = POISON_STATUS_HEALTHY;
 			}
 
 
 			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_BANNSTAUB];
 
 			/* BANNSTAUB: hero gets poisoned */
-			if (poison_ptr[0] == -1) {
+			if (poison_ptr[0] == POISON_STATUS_POISONED) {
 
 				if (poison_ptr[1] >= dice_roll(3, 6, 0)) {
-					poison_ptr[0] = 1;
+					poison_ptr[0] = POISON_STATUS_RECOVER;
 				}
 
 				j = dice_roll(1, 6, 2);
@@ -357,10 +357,10 @@ void poison_effect(void)
 			}
 
 			/* BANNSTAUB: regeneration */
-			if (poison_ptr[0] == 1) {
+			if (poison_ptr[0] == POISON_STATUS_RECOVER) {
 
 				if (!poison_ptr[2]) {
-					poison_ptr[0] = 0;
+					poison_ptr[0] = POISON_STATUS_HEALTHY;
 				} else {
 
 					if (!poison_ptr[1] % 12) {

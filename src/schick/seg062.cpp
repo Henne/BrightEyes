@@ -383,7 +383,7 @@ void ask_miracle(void)
 
 							if (disease != 0 && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 							{
-								hero->sick[disease][0] = 1;
+								hero->sick[disease][0] = DISEASE_STATUS_RECOVER;
 								hero->sick[disease][1] = 0;
 
 								sprintf(g_dtp2,	get_tx2(28), hero->alias);

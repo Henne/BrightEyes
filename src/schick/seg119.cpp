@@ -52,13 +52,13 @@ void disease_effect(void)
 			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_WUNDFIEBER];
 
 			/* TETANUS / WUNDFIEBER: get worse */
-			if (disease_ptr[0] == -1) {
+			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
 
 				if (disease_ptr[1] > 13) {
 					/* Hero feels better after 13 days */
 
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 1;
+					disease_ptr[0] = DISEASE_STATUS_RECOVER;
 
 					sprintf(g_dtp2, get_ttx(561), hero->alias);
 					GUI_output(g_dtp2);
@@ -79,12 +79,12 @@ void disease_effect(void)
 			}
 
 			/* TETANUS / WUNDFIEBER: get better */
-			if (disease_ptr[0] == 1) {
+			if (disease_ptr[0] == DISEASE_STATUS_RECOVER) {
 
 				if (!disease_ptr[2]) {
 					/* regeneration complete */
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 0;
+					disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 				} else {
 					/* hero regains the lost strength */
 					sprintf(g_dtp2, get_ttx(573), hero->alias);
@@ -99,7 +99,7 @@ void disease_effect(void)
 			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_DUMPFSCHAEDEL];
 
 			/* NUMBSKULL / DUMPFSCHAEDEL: get worse */
-			if (disease_ptr[0] == -1) {
+			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
 
 				if (!disease_ptr[4]) {
 
@@ -139,7 +139,7 @@ void disease_effect(void)
 
 					/* 5% chance of selfhealing */
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 0;
+					disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 
 					if (disease_ptr[4] != 0) {
 
@@ -157,18 +157,18 @@ void disease_effect(void)
 					hero_gets_diseased(hero, 3);
 				}
 
-				if (disease_ptr[1] > dice_roll(1, 3, 4)) {
-					disease_ptr[0] = 1;
+				if (disease_ptr[1] > dice_roll(1, 3, 4)) { /* number of days infected > D3 + 4 */
+					disease_ptr[0] = DISEASE_STATUS_RECOVER;
 				} else {
 					sub_hero_le(hero, dice_roll(1, 6, -1));
 				}
 			}
 
 			/* NUMBSKULL / DUMPFSCHAEDEL: get better */
-			if (disease_ptr[0] == 1) {
+			if (disease_ptr[0] == DISEASE_STATUS_RECOVER) {
 
 				disease_ptr[1] = 0;
-				disease_ptr[0] = 0;
+				disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 
 				if (disease_ptr[4] != 0) {
 
@@ -191,7 +191,7 @@ void disease_effect(void)
 			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_BLAUE_KEUCHE];
 
 			/* BLUE COUGH / BLAUE KEUCHE: get worse */
-			if (disease_ptr[0] == -1) {
+			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
 
 				if (!disease_ptr[4]) {
 
@@ -220,7 +220,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current--;
 					hero->le_max -= disease_ptr[1] / 3;
 					sub_hero_le(hero, disease_ptr[1] / 3);
-					disease_ptr[0] = 1;
+					disease_ptr[0] = DISEASE_STATUS_RECOVER;
 
 				} else {
 
@@ -239,14 +239,14 @@ void disease_effect(void)
 			}
 
 			/* BLUE COUGH / BLAUE KEUCHE: get better */
-			if (disease_ptr[0] == 1) {
+			if (disease_ptr[0] == DISEASE_STATUS_RECOVER) {
 
 				/* regeneration complete */
 				sprintf(g_dtp2, get_ttx(576), hero->alias);
 				GUI_output(g_dtp2);
 
 				disease_ptr[1] = 0;
-				disease_ptr[0] = 0;
+				disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 
 				if (disease_ptr[4] != 0) {
 
@@ -267,11 +267,11 @@ void disease_effect(void)
 			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_PARALYSE];
 
 			/* PARALYSIS / PARALYSE: get worse */
-			if (disease_ptr[0] == -1) {
+			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
 
 				if (disease_ptr[1] > dice_roll(1, 3, 4)) {
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 1;
+					disease_ptr[0] = DISEASE_STATUS_RECOVER;
 				} else {
 					j = random_schick(6);
 					disease_ptr[3] += j;
@@ -287,12 +287,12 @@ void disease_effect(void)
 			}
 
 			/* PARALYSIS / PARALYSE: get better */
-			if (disease_ptr[0] == 1) {
+			if (disease_ptr[0] == DISEASE_STATUS_RECOVER) {
 
 				if (!disease_ptr[2] && !disease_ptr[3]) {
 
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 0;
+					disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 
 				} else {
 
@@ -320,7 +320,7 @@ void disease_effect(void)
 			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_SCHLACHTENFIEBER];
 
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get worse */
-			if (disease_ptr[0] == -1) {
+			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
 
 				if (disease_ptr[1] > 7) {
 
@@ -335,7 +335,7 @@ void disease_effect(void)
 					} else {
 
 						if (disease_ptr[4]) {
-							disease_ptr[0] = 1;
+							disease_ptr[0] = DISEASE_STATUS_RECOVER;
 						}
 					}
 				} else {
@@ -368,7 +368,7 @@ void disease_effect(void)
 			}
 
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get better */
-			if (disease_ptr[0] == 1) {
+			if (disease_ptr[0] == DISEASE_STATUS_RECOVER) {
 
 				if (disease_ptr[4]) {
 
@@ -384,7 +384,7 @@ void disease_effect(void)
 			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_FROSTSCHAEDEN];
 
 			/* FROSTBITE / FROSTSCHAEDEN: get worse */
-			if (disease_ptr[0] == -1) {
+			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
 
 				j = 0;
 
@@ -421,11 +421,11 @@ void disease_effect(void)
 			}
 
 			/* FROSTBITE / FROSTSCHAEDEN: get better */
-			if (disease_ptr[0] == 1) {
+			if (disease_ptr[0] == DISEASE_STATUS_RECOVER) {
 
 				if (!disease_ptr[2] && !disease_ptr[3]) {
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 0;
+					disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 				} else {
 					if (!disease_ptr[2]) {
 
@@ -450,12 +450,12 @@ void disease_effect(void)
 			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_TOLLWUT];
 
 			/* RABIES / TOLLWUT: get worse */
-			if (disease_ptr[0] == -1) {
+			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
 
 				if (disease_ptr[1] > dice_roll(1, 6, 6)) {
 
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 1;
+					disease_ptr[0] = DISEASE_STATUS_RECOVER;
 
 				} else {
 
@@ -492,12 +492,12 @@ void disease_effect(void)
 			}
 
 			/* RABIES / TOLLWUT: get better */
-			if (disease_ptr[0] == 1) {
+			if (disease_ptr[0] == DISEASE_STATUS_RECOVER) {
 
 				if (!disease_ptr[2]) {
 
 					disease_ptr[1] = 0;
-					disease_ptr[0] = 0;
+					disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 
 				} else {
 					sprintf(g_dtp2, get_ttx(573), hero->alias);

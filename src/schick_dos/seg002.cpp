@@ -4607,13 +4607,13 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 
 			/* reset sickness */
 			for (i = 1; i <= 7; i++) {
-				hero->sick[i][0] = 0;
+				hero->sick[i][0] = DISEASE_STATUS_HEALTHY;
 				hero->sick[i][1] = 0;
 			}
 
 			/* reset poison */
 			for (i = 1; i <= 9; i++) {
-				hero->poison[i][0] = 0;
+				hero->poison[i][0] = POISON_STATUS_HEALTHY;
 				hero->poison[i][1] = 0;
 			}
 

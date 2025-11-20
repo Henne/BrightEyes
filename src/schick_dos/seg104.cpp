@@ -502,7 +502,7 @@ signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *p
 					GUI_output(g_dtp2);
 
 					/* cure the disease */
-					patient->sick[disease_id][0] = 1;
+					patient->sick[disease_id][0] = DISEASE_STATUS_RECOVER;
 					patient->sick[disease_id][1] = 0;
 
 					if (herb == 999) {
