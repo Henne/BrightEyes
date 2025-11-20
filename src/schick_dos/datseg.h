@@ -523,25 +523,49 @@ struct sea_route {
 };
 
 /* structure of the entries of ITEMS.DAT */
+#if defined(__BORLANDC__)
 struct item_flags {
 	/* item + 0x02 */
-	unsigned short armor		:1;	/* bit 0: armor */
-	unsigned short weapon		:1;	/* bit 1: weapon */
-	unsigned short usable	 	:1;	/* bit 2: usable item */
+	uint16_t armor		:1;	/* bit 0: armor */
+	uint16_t weapon		:1;	/* bit 1: weapon */
+	uint16_t usable	 	:1;	/* bit 2: usable item */
 						/* strange: ITEM_BASTARDSCHWERT__MAGIC is marked as usable. Original-Bug? */
 
-	unsigned short nutrition	:1;	/* bit 3: nutrition */
+	uint16_t nutrition	:1;	/* bit 3: nutrition */
 
-	unsigned short stackable	:1;	/* bit 4: stackable */
-	unsigned short herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
-	unsigned short undropable	:1;	/* bit 6: personal item (cannot be dropped) */
-	unsigned short dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
+	uint16_t stackable	:1;	/* bit 4: stackable */
+	uint16_t herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
+	uint16_t undropable	:1;	/* bit 6: personal item (cannot be dropped) */
+	uint16_t dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
 						 * which are special anyway, don't have any flag set. */
 };
+#else
+struct item_flags {
+	/* item + 0x02 */
+	uint8_t armor		:1;	/* bit 0: armor */
+	uint8_t weapon		:1;	/* bit 1: weapon */
+	uint8_t usable	 	:1;	/* bit 2: usable item */
+						/* strange: ITEM_BASTARDSCHWERT__MAGIC is marked as usable. Original-Bug? */
 
-struct item_stats {
+	uint8_t nutrition	:1;	/* bit 3: nutrition */
+
+	uint8_t stackable	:1;	/* bit 4: stackable */
+	uint8_t herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
+	uint8_t undropable	:1;	/* bit 6: personal item (cannot be dropped) */
+	uint8_t dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
+						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
+						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
+						 * which are special anyway, don't have any flag set. */
+};
+#endif
+
+struct
+#if !defined(__BORLANDC__)
+__attribute__ ((packed))
+#endif
+item_stats {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
 	/* structure of the entries of ITEMS.DAT */
 	int16_t gfx;
@@ -566,6 +590,8 @@ struct item_stats {
 	int8_t commonness;	/* which merchants do offer this item? */
 	int8_t magic;		/* 0: not magic / 1: magic */
 };
+
+STATIC_ASSERT(sizeof(struct item_stats) == 12, struct_item_stats_needs_to_be_12_bytes);
 
 /* TODO: This structure makes an inconsistent game state */
 struct harbor_option_obsolete {
@@ -616,7 +642,7 @@ struct struct_recipe {
 	signed char  duration;		/* time needed to brew the recipe in hours */
 };
 
-struct spell_range { /* spells by spell group */
+struct spell_range {
 	int8_t first;
 	int8_t length;
 };
