@@ -481,6 +481,7 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 						} else {
 
 							if (random_schick(20) <= 7) {
+								/* TODO Original-Bug? What if already sick or recovering? */
 
 								/* 35% chance: infected with Wundfieber illness */
 								sprintf(g_dtp2, get_ttx(699), hero->alias, patient->alias);

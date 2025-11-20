@@ -137,6 +137,7 @@ signed int hero_is_poisoned(const struct struct_hero *hero)
 void hero_gets_poisoned(struct struct_hero *hero, const signed int poison_id)
 {
 	if (!hero->flags.dead) {
+		/* TODO: Original-Bug?: What if the hero is already poisoned? */
 
 		hero->poison[poison_id][0] = POISON_STATUS_POISONED;
 		hero->poison[poison_id][1] = 0;
@@ -161,6 +162,9 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease)
 #endif
 
 	if (!hero->flags.dead) {
+		/* TODO: Original-Bug: If the hero is already diseased, the status bytes are erased,
+		 * containing the log about the suffered negative effects.
+                 * Hence, these cannot be cured later. */
 
 #if !defined(__BORLANDC__)
 		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease + 0x193));

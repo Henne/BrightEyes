@@ -64,9 +64,11 @@ void disease_effect(void)
 					GUI_output(g_dtp2);
 
 				} else {
-					/* Strength is fading, but only to 1 */
+					/* LE loss of 2D6 + 1 - (number of days the hero is deseased) */
+					/* so the effect is worst at the beginning and gets better over time */
 					sub_hero_le(hero, dice_roll(2, 6, -(disease_ptr[1] - 1)));
 
+					/* Strength is fading, but only to 1 */
 					if (hero->attrib[ATTRIB_KK].current != 0) {
 
 						sprintf(g_dtp2, get_ttx(572), hero->alias);
@@ -136,8 +138,9 @@ void disease_effect(void)
 				}
 
 				if (random_schick(100) < 5) {
+					/* 5% chance of worsening to Blaue Keuche */
 
-					/* 5% chance of selfhealing */
+					/* remove the effect of Dumpfschaedel */
 					disease_ptr[1] = 0;
 					disease_ptr[0] = DISEASE_STATUS_HEALTHY;
 
@@ -161,7 +164,7 @@ void disease_effect(void)
 				if (disease_ptr[1] > dice_roll(1, 3, 4)) { /* number of days infected > D3 + 4 */
 					disease_ptr[0] = DISEASE_STATUS_RECOVER;
 				} else {
-					sub_hero_le(hero, dice_roll(1, 6, -1));
+					sub_hero_le(hero, dice_roll(1, 6, -1)); /* LE loss of D6 - 1 */
 				}
 			}
 
@@ -229,7 +232,7 @@ void disease_effect(void)
 
 					for (j = 0; j <= 6; j++, hero2++) {
 						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_id == gs_active_group_id) &&
-							!hero2->flags.dead && (hero2 != hero) &&	(random_schick(100) <= 20))
+							!hero2->flags.dead && (hero2 != hero) && (random_schick(100) <= 20))
 						{
 							hero_gets_diseased(hero2, ILLNESS_TYPE_BLAUE_KEUCHE);
 						}
