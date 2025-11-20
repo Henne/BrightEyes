@@ -406,7 +406,7 @@ void FIG_do_round(void)
 	nr_hero_act_phases_left_in_round = 0;
 
 	/* initialize heroes' #action phases and BP */
-	for (i = 0; i <= 6; (g_fig_hero_has_parried[i] = 0), i++) {
+	for (i = 0; i <= 6; (g_fig_hero_parry_action_used[i] = 0), i++) {
 
 		hero = get_hero(i);
 
@@ -471,7 +471,7 @@ void FIG_do_round(void)
 		/* set BP */
 		g_enemy_sheets[i].bp = g_enemy_sheets[i].bp_orig;
 
-		g_fig_enemy_has_parried[i + 10] = 0;
+		g_fig_enemy_parry_action_used[i + 10] = 0;
 	}
 
 	nr_action_phases_left_in_turn = 0;

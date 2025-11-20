@@ -197,7 +197,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			if (target_is_hero) {
 
 				/* target hero has already parried another atack => AT+2 */
-				if (g_fig_hero_has_parried[p_enemy->target_object_id - 1] == 1) {
+				if (g_fig_hero_parry_action_used[p_enemy->target_object_id - 1] == 1) {
 					attacker_at += 2;
 				}
 
@@ -212,7 +212,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				}
 			} else {
 				/* target enemy has already parried another atack => AT+2 */
-				if (g_fig_enemy_has_parried[p_enemy->target_object_id] == 1) {
+				if (g_fig_enemy_parry_action_used[p_enemy->target_object_id] == 1) {
 					attacker_at += 2;
 				}
 			}
@@ -301,8 +301,8 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				if (randval <= attacker_at) {
 
 					/* check if parry is allowed */
-					if ((target_is_hero && !g_fig_hero_has_parried[p_enemy->target_object_id - 1] && check_hero(hero)) ||
-						(!target_is_hero && !g_fig_enemy_has_parried[p_enemy->target_object_id]))
+					if ((target_is_hero && !g_fig_hero_parry_action_used[p_enemy->target_object_id - 1] && check_hero(hero)) ||
+						(!target_is_hero && !g_fig_enemy_parry_action_used[p_enemy->target_object_id]))
 					{
 
 						randval2 = random_schick(20);
