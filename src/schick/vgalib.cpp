@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && HAVE_OPENMP
 #include <omp.h>
 #endif
 
@@ -224,7 +224,7 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 	calls++;
 	if (pixels == NULL) return;
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && HAVE_OPENMP
 	double start, time_ms;
 #endif
 
@@ -233,11 +233,11 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 		if (SDL_LockMutex(PixelsMutex) == 0) {
 
 			updates++;
-#if defined(__GNUC__)
+#if defined(__GNUC__) && HAVE_OPENMP
 			start = omp_get_wtime();
 #endif
 			sdl_update_rect_pixels(x_in, y_in, width_in, height_in);
-#if defined(__GNUC__)
+#if defined(__GNUC__) && HAVE_OPENMP
 			time_ms = (omp_get_wtime() - start) * 1000;
 			fprintf(stderr, "%s() scaling   = %f ms\n", __func__, time_ms);
 #endif
@@ -246,11 +246,11 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 				SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(Uint32));
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, texture, NULL, NULL);
-#if defined(__GNUC__)
+#if defined(__GNUC__) && HAVE_OPENMP
 				start = omp_get_wtime();
 #endif
 				SDL_RenderPresent(renderer);
-#if defined(__GNUC__)
+#if defined(__GNUC__) && HAVE_OPENMP
 				time_ms = (omp_get_wtime() - start) * 1000;
 				fprintf(stderr, "%s() rendering = %f ms\n", __func__, time_ms);
 #endif
