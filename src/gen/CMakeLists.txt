@@ -5,11 +5,7 @@ project(NGen VERSION 1.0.0
     LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
-if (MSVC)
-# so far no special setting beside default for Debug/Release
-else()
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g -fno-asm")
-endif()
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
@@ -28,19 +24,31 @@ add_executable(ngen
     vgalib.h
     vgalib.c
     ail_stub.c
-    hero.h
-)
+    hero.h)
 
-get_filename_component(COMPILER_NAME ${CMAKE_C_COMPILER} NAME)
+# Rename output to include compiler
+get_filename_component(COMPILER_NAME ${CMAKE_C_COMPILER_ID} NAME)
 set_target_properties(ngen PROPERTIES OUTPUT_NAME "ngen_${COMPILER_NAME}")
 
 find_package(OpenMP)
 if(OpenMP_C_FOUND)
-	target_link_libraries(ngen PUBLIC OpenMP::OpenMP_C)
+  target_link_libraries(ngen PUBLIC OpenMP::OpenMP_C)
+endif()
+
+# On Windows copy SDL2 DLLs next to the executable
+if(WIN32)
+  add_custom_command(TARGET ngen POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "$<TARGET_FILE:SDL2::SDL2>" "$<TARGET_FILE_DIR:ngen>"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "$<TARGET_FILE:SDL2_mixer::SDL2_mixer>" "$<TARGET_FILE_DIR:ngen>")
 endif()
 
 target_include_directories(ngen PRIVATE ${SDL2_INCLUDE_DIR})
-target_link_libraries(ngen PUBLIC SDL2::SDL2main)
-target_link_libraries(ngen PUBLIC SDL2::SDL2)
-target_link_libraries(ngen PUBLIC SDL2_mixer::SDL2_mixer)
+
+if(WIN32)
+  set_target_properties(ngen PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+target_link_libraries(ngen PRIVATE SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+
 install(TARGETS ngen RUNTIME DESTINATION bin)
