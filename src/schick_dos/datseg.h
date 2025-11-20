@@ -1606,7 +1606,7 @@ extern int8_t g_statuspage_sel_inv_slot_4;		//ds:0x6371; seg048
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
-extern signed int g_cheatskill_usable;		//ds:0x6532; seg048, seg103
+extern signed int g_forbid_ta_falschspiel;		//ds:0x6532; seg048, seg103
 
 extern int8_t g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg112, seg113, seg114, seg115, seg116
 
