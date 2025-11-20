@@ -16,7 +16,11 @@
 #include <IO.H>
 #include <PROCESS.H>
 #else
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -336,16 +340,25 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 /* Borlandified and identical */
 void init_global_buffer(void)
 {
+#if defined(__BORLANDC__)
 	g_global_buffer_ptr = (HugePt)schick_alloc(g_buffersize);
+#else
+	g_global_buffer_ptr = (HugePt)schick_alloc(g_buffersize + 1190 * sizeof(char*) / 2);
+#endif
 	g_renderbuf_ptr = (unsigned char*)(g_global_buffer_ptr + 8L);
 
+	/* REMARK: the game saves space for 1190 strings,
+	 * 		 840 are permanent from TEXT.LTX (837),
+	 * 		 150 are variable dialog or tx (???),
+	 * 		 200 are variable informer or tx2 (???).
+	 * 		 The last two depend on the situation.
+	 **/
 	g_text_ltx_buffer = (char*)(((HugePt)g_renderbuf_ptr) + 65000L);
-
 	g_text_ltx_index = (char**)(((HugePt)g_text_ltx_buffer) + 30500L);
 	g_tx_index = &g_text_ltx_index[840];
 	g_tx2_index = &g_text_ltx_index[990];
 
-	g_objects_nvf_buf = (unsigned char*)(((HugePt)g_text_ltx_index) + 4760L);
+	g_objects_nvf_buf = (unsigned char*)(((HugePt)g_text_ltx_index) + 1190L * sizeof(char*));
 	g_dtp2 = (char*)(((HugePt)g_objects_nvf_buf) + 3400L);
 	g_text_input_buf = (char*)(g_dtp2 + 1500);
 	g_text_output_buf = (char*)(((HugePt)g_dtp2) + 1524L);
