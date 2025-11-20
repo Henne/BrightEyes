@@ -258,7 +258,7 @@ signed int select_skill(void)
 		a.a[nr_skills] = TA_AKROBATIK;
 		nr_skills++;
 
-		if (!g_cheatskill_usable) {
+		if (!g_forbid_ta_falschspiel) {
 			a.a[nr_skills] = TA_FALSCHSPIEL;
 			nr_skills++;
 		}

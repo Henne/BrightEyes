@@ -52,7 +52,7 @@ static const struct struct_point g_invslot_borderxy_table[25] = {
 	{ 0x0080, 0x0037 },
 	{ 0x0091, 0x0037 }
 }; // ds:0x64ce
-signed int g_cheatskill_usable = 0; // ds:0x6532
+signed int g_forbid_ta_falschspiel = 0; // ds:0x6532
 static char g_extraspace_separated_strings[7] = "%s %s "; // ds:0x6534
 static char g_empty_string8[1] = ""; // ds:0x653b
 static char g_extraspace_separated_strings2[7] = "%s %s "; // ds:0x653c
@@ -560,9 +560,9 @@ void status_menu(signed int hero_pos)
 					}
 					case 4: {
 						/* use skill */
-						g_cheatskill_usable = 1;
+						g_forbid_ta_falschspiel = 1;
 						GUI_use_skill(hero_pos, 0);
-						g_cheatskill_usable = 0;
+						g_forbid_ta_falschspiel = 0;
 
 						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
@@ -667,9 +667,9 @@ void status_menu(signed int hero_pos)
 					}
 					case 3: {
 						/* use skill */
-						g_cheatskill_usable = 1;
+						g_forbid_ta_falschspiel = 1;
 						GUI_use_skill(hero_pos, 0);
-						g_cheatskill_usable = 0;
+						g_forbid_ta_falschspiel = 0;
 
 						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
@@ -742,9 +742,9 @@ lab1:
 					switch (l_di) {
 					case 1: {
 						/* use skill */
-						g_cheatskill_usable = 1;
+						g_forbid_ta_falschspiel = 1;
 						GUI_use_skill(hero_pos, 0);
-						g_cheatskill_usable = 0;
+						g_forbid_ta_falschspiel = 0;
 
 						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
