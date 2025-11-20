@@ -137,7 +137,7 @@ signed int DNG06_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && (test_skill(hero, TA_GEFAHRENSINN, 5) > 0))
+				!hero->flags.dead && (test_talent(hero, TA_GEFAHRENSINN, 5) > 0))
 			{
 				l3 = 1;
 				break;
@@ -156,7 +156,7 @@ signed int DNG06_handler(void)
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead &&
-						(test_skill(hero, TA_GEFAHRENSINN, 5) > 0))
+						(test_talent(hero, TA_GEFAHRENSINN, 5) > 0))
 					{
 						l3 = 1;
 						break;
@@ -193,7 +193,7 @@ signed int DNG06_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && (test_skill(hero, TA_SINNESSCHAERFE, 10) > 0))
+				!hero->flags.dead && (test_talent(hero, TA_SINNESSCHAERFE, 10) > 0))
 			{
 				l3++;
 			}
@@ -269,7 +269,7 @@ signed int DNG06_handler(void)
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead &&
-					(test_skill(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus) <= 0))
+					(test_talent(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus) <= 0))
 				{
 					sprintf(g_dtp2,	get_tx(20), hero->alias,
 						GUI_get_ptr(hero->sex, 0),
@@ -370,7 +370,7 @@ signed int DNG06_handler(void)
 		sprintf(g_dtp2,	get_tx(25), hero->alias);
 		GUI_output(g_dtp2);
 
-		if (test_skill(hero, TA_KOERPERBEHERRSCHUNG, 0) > 0 && test_skill(hero, TA_GEFAHRENSINN, 0) > 0)
+		if (test_talent(hero, TA_KOERPERBEHERRSCHUNG, 0) > 0 && test_talent(hero, TA_GEFAHRENSINN, 0) > 0)
 		{
 			/* evasion succeeds */
 			sprintf(g_dtp2, get_tx(26), GUI_get_ptr(hero->sex, 0));
@@ -489,7 +489,7 @@ void DNG06_chest01_loot(struct struct_chest* chest)
 	for (i = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-			!hero->flags.dead && (test_skill(hero, TA_LESEN, 0) > 0))
+			!hero->flags.dead && (test_talent(hero, TA_LESEN, 0) > 0))
 		{
 			strcat(g_dtp2, get_tx(34));
 			break;
@@ -522,7 +522,7 @@ void DNG09_pitfall(void)
 		for (i = l3 = 0; i <= 6; i++, hero++)
 		{
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && test_skill(hero, TA_GEFAHRENSINN, 4) > 0)
+				!hero->flags.dead && test_talent(hero, TA_GEFAHRENSINN, 4) > 0)
 				/* TODO: potential Original-Bug: Why should 'petrified' or 'uncouscious' (or maybe other properties ) be o.k. here?? */
 			{
 				l3 = 1;

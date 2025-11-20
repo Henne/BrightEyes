@@ -176,7 +176,7 @@ void do_house(void)
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && /* Original-Bug: What if petrified, sleeping etc. */
-				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
+				(test_talent(hero, TA_VERSTECKEN, -2) <= 0))
 			{
 				/* every hero must pass a sneak -2 test */
 

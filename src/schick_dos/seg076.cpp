@@ -234,7 +234,7 @@ void DNG_door(const signed int action)
 				{
 					if (lockpick_inv_slot != -2)
 					{ // !=-1 and !=-2 means: leader has at least one non-broken set of lockpicks
-						lockpick_result = test_skill(hero, TA_SCHLOESSER, ptr_doors->lockpick_handicap);
+						lockpick_result = test_talent(hero, TA_SCHLOESSER, ptr_doors->lockpick_handicap);
 
 						play_voc(ARCHIVE_FILE_FX11_VOC);
 

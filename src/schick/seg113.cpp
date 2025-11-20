@@ -37,7 +37,7 @@ void tevent_080(void)
 
 	hero = get_first_hero_available_in_group();
 
-	if ((!gs_tevent080_flag && (test_skill(hero, TA_WILDNISLEBEN, 4) > 0)) || gs_tevent080_flag != 0)
+	if ((!gs_tevent080_flag && (test_talent(hero, TA_WILDNISLEBEN, 4) > 0)) || gs_tevent080_flag != 0)
 	{
 		gs_tevent080_flag = 1;
 		gs_main_acting_hero = NULL;
@@ -46,7 +46,7 @@ void tevent_080(void)
 
 		hero = (struct struct_hero*)gs_main_acting_hero;
 
-		if ((hero && !gs_tevent080_tatzelwurm && test_skill(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||	gs_tevent080_tatzelwurm == 1)
+		if ((hero && !gs_tevent080_tatzelwurm && test_talent(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||	gs_tevent080_tatzelwurm == 1)
 		{
 			gs_tevent080_tatzelwurm = 1;
 
@@ -91,7 +91,7 @@ void tevent_080(void)
 
 void tevent_081(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent081_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent081_flag) ||
 		 gs_tevent081_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -106,7 +106,7 @@ void tevent_082(void)
 
 void tevent_083(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) || gs_tevent083_flag != 0)
+	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) || gs_tevent083_flag != 0)
 	{
 		g_gather_herbs_special = ITEM_WIRSELKRAUT;
 
@@ -138,7 +138,7 @@ void tevent_084(void)
 			}
 		} else {
 
-			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
+			if (test_talent(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
 			{
 				g_fig_initiative = 1;
 
@@ -154,11 +154,11 @@ void tevent_085(void)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if ((test_skill(hero, TA_WILDNISLEBEN, 4) > 0 && !gs_tevent085_flag) || gs_tevent085_flag) {
+	if ((test_talent(hero, TA_WILDNISLEBEN, 4) > 0 && !gs_tevent085_flag) || gs_tevent085_flag) {
 
 		gs_tevent085_flag = 1;
 
-		if ((test_skill(hero, TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent085_herb_flag) || gs_tevent085_herb_flag)
+		if ((test_talent(hero, TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent085_herb_flag) || gs_tevent085_herb_flag)
 		{
 			gs_tevent085_herb_flag = 1;
 
@@ -220,7 +220,7 @@ void tevent_086(void)
 
 void tevent_088(void)
 {
-	if (((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!gs_tevent088_flag)) ||
+	if (((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!gs_tevent088_flag)) ||
 		 gs_tevent088_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -277,7 +277,7 @@ void tevent_098(void)
 					!hero->flags.dead)
 				{
 
-					if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
+					if (test_talent(hero, TA_AKROBATIK, 0) > 0) {
 
 						sprintf(g_dtp2,	get_tx2(31), hero->alias);
 						GUI_output(g_dtp2);
@@ -314,7 +314,7 @@ void tevent_098(void)
 
 			hero = get_hero(hero_pos = select_hero_ok_forced(get_tx2(34)));
 
-			if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
+			if (test_talent(hero, TA_AKROBATIK, 0) > 0) {
 
 				sprintf(g_dtp2,	get_tx2(35), hero->alias);
 				GUI_output(g_dtp2);
@@ -423,7 +423,7 @@ void tevent_099(void)
 
 		/* Original-Bug: The 2nd option "try to flee (or avoid the fight)" is not a try.
 		 *		 To trigger the code you have to flee from the fight mode,
-		 *		 then the skill test is done, and if this one fails you reenter this fight.
+		 *		 then the talent test is done, and if this one fails you reenter this fight.
 		*/
 
 
@@ -436,7 +436,7 @@ void tevent_099(void)
 #endif
 		} else {
 
-			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
+			if (test_talent(get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
 
 				g_fig_initiative = 1;
 
@@ -480,7 +480,7 @@ void tevent_101(void)
 #endif
 		} else {
 
-			if (test_skill(get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
+			if (test_talent(get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
 
 				g_fig_initiative = 1;
 
@@ -524,7 +524,7 @@ void tevent_103(void)
 
 	if (answer == 1) {
 
-		if (test_skill(hero, TA_ORIENTIERUNG, 2) > 0) {
+		if (test_talent(hero, TA_ORIENTIERUNG, 2) > 0) {
 
 			timewarp(HOURS(4));
 
@@ -539,7 +539,7 @@ void tevent_103(void)
 		}
 	} else {
 
-		if (test_skill(hero, TA_ORIENTIERUNG, 3) > 0) {
+		if (test_talent(hero, TA_ORIENTIERUNG, 3) > 0) {
 
 			timewarp(HOURS(6));
 
@@ -556,7 +556,7 @@ void tevent_103(void)
 
 	if (answer == -1) {
 
-		if (test_skill(hero, TA_ORIENTIERUNG, 4) > 0) {
+		if (test_talent(hero, TA_ORIENTIERUNG, 4) > 0) {
 
 			timewarp(HOURS(4));
 
@@ -735,7 +735,7 @@ void tevent_105(void)
 
 void tevent_106(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent106_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent106_flag) ||
 		 gs_tevent106_flag)
 	{
 		gs_tevent106_flag = 1;
@@ -764,7 +764,7 @@ void tevent_107(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero++) {
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 1) <= 0)
+				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 1) <= 0)
 			{
 
 				if (get_first_hero_with_item(ITEM_SEIL) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
@@ -788,7 +788,7 @@ void tevent_107(void)
 
 	} else {
 
-		if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 1) > 0) {
+		if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 1) > 0) {
 
 			timewarp(HOURS(3));
 
@@ -812,7 +812,7 @@ void tevent_108(void)
 {
 	signed int answer;
 
-	if ((test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
 	{
 		gs_tevent108_flag = 1;
 
@@ -845,7 +845,7 @@ void tevent_108(void)
 
 void tevent_109(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent109_flag) || gs_tevent109_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent109_flag) || gs_tevent109_flag)
 	{
 		gs_tevent109_flag = 1;
 

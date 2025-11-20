@@ -559,9 +559,9 @@ void status_menu(signed int hero_pos)
 						break;
 					}
 					case 4: {
-						/* use skill */
+						/* use talent */
 						g_forbid_ta_falschspiel = 1;
-						GUI_use_skill(hero_pos, 0);
+						GUI_use_talent(hero_pos, 0);
 						g_forbid_ta_falschspiel = 0;
 
 						if (g_tx_file_index == 19) {
@@ -593,7 +593,7 @@ void status_menu(signed int hero_pos)
 						break;
 					}
 					case 7: {
-						/* show skills */
+						/* show talents */
 						if (l1 == 7) {
 							flag1 = 1;
 							reset_item_selector();
@@ -666,9 +666,9 @@ void status_menu(signed int hero_pos)
 						break;
 					}
 					case 3: {
-						/* use skill */
+						/* use talent */
 						g_forbid_ta_falschspiel = 1;
-						GUI_use_skill(hero_pos, 0);
+						GUI_use_talent(hero_pos, 0);
 						g_forbid_ta_falschspiel = 0;
 
 						if (g_tx_file_index == 19) {
@@ -735,15 +735,15 @@ lab1:
 				break;
 			}
 			case 3: {
-				/* from skills-page */
+				/* from talents-page */
 				l_di = GUI_radio((char*)NULL, 6, get_ttx(212), get_tx2(24), get_tx2(19), get_tx2(21), get_ttx(213), get_tx2(15));
 
 				if (l_di != -1) {
 					switch (l_di) {
 					case 1: {
-						/* use skill */
+						/* use talent */
 						g_forbid_ta_falschspiel = 1;
-						GUI_use_skill(hero_pos, 0);
+						GUI_use_talent(hero_pos, 0);
 						g_forbid_ta_falschspiel = 0;
 
 						if (g_tx_file_index == 19) {

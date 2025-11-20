@@ -1036,7 +1036,7 @@ signed char g_monster_name_genders[78] = {
 	GENDER_MASCULINE
 }; // ds:0x0925
 struct staffspell_descr g_staffspell_descriptions[7] = {
-	/* The following are the older skill test attributes from DSA2 / early DSA3. */
+	/* The following are the older talent test attributes from DSA2 / early DSA3. */
 	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_CH,  1, 21, 1 },
 	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_CH,  0, 23, 0 }, /* maybe handicap 0 should be handicap 2 instead. has to be checked with the official DSA2/early DSA3 rules. */
 	{ ATTRIB_KL, ATTRIB_CH, ATTRIB_CH,  3, 19, 0 },
@@ -1461,7 +1461,7 @@ void (*g_mon_spellhandlers[15])(void) = {
 	mspell_paralue,			/* 14 */
 }; // ds:0x0fc2, function pointer[15]
 
-const struct skill_descr g_skill_descriptions[TA__TAIL + 1] = {
+const struct talent_descr g_talent_descriptions[TA__TAIL + 1] = {
 	{ 0        , 0        , 0        , 1 }, // TA_WAFFENLOS
 	{ 0        , 0        , 0        , 1 }, // TA_HIEBWAFFEN
 	{ 0        , 0        , 0        , 1 }, // TA_STICHWAFFEN
@@ -1515,7 +1515,7 @@ const struct skill_descr g_skill_descriptions[TA__TAIL + 1] = {
 	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_IN, 1 }, // TA_GEFAHRENSINN
 	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_IN, 1 }  // TA_SINNESSCHAERFE
 }; // ds:0x0ffe
-const struct skill_range g_skillclasses[7] = {
+const struct talent_range g_talentclasses[7] = {
 	{ TA_WAFFENLOS     ,  9 }, /* Kampf */
 	{ TA_AKROBATIK     , 10 }, /* Körper */
 	{ TA_BEKEHREN      ,  7 }, /* Gesellschaft */
@@ -2220,7 +2220,7 @@ signed int g_fig_figure2 = -1; // ds:0x2cd3
 signed int g_in_fight = 0; // ds:0x2cd5
 signed int g_fight_round = 0; // ds:0x2cd7
 unsigned char g_unkn_011[2] = { 0, 0 }; // ds:0x2cd9
-signed int g_skilled_hero_pos = -1; // ds:0x2cdb, {-1, 0..6}
+signed int g_talented_hero_pos = -1; // ds:0x2cdb, {-1, 0..6}
 const struct struct_point g_gui_buttons_pos[9] = {
 	{ 0x00f1, 0x0039 },
 	{ 0x010c, 0x0039 },
@@ -3867,7 +3867,7 @@ uint8_t *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
 const char* names_attrib[14] = {"MU", "KL", "CH", "FF", "GE", "IN", "KK",
 				"AG", "HA", "RA", "GG", "TA", "NG", "JZ"};
 
-const char* names_skill[52] = {
+const char* names_talent[52] = {
     "Waffenlos", "Hiebwaffen", "Stichwaffen", "Schwerter", "Äxte", "Speere", "Zweihänder", "Schusswaffen", "Wurfwaffen",
     "Akrobatik", "Klettern", "Körperbeh.", "Reiten", "Schleichen", "Schwimmen", "Selbstbeh.", "Tanzen", "Verstecken", "Zechen",
     "Bekehren", "Betören", "Feilschen", "Gassenwissen", "Lügen", "Menschenkenntnis", "Schätzen",

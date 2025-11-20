@@ -706,8 +706,8 @@ void spell_silentium(void)
 			/* get a free mod_slot */
 			mod_slot = get_free_mod_slot();
 
-			/* skill stealth + 10 for 5 minutes */
-			set_mod_slot(mod_slot, MINUTES(5), (uint8_t*)&hero->skills[TA_SCHLEICHEN], 10, (signed char)i);
+			/* talent stealth + 10 for 5 minutes */
+			set_mod_slot(mod_slot, MINUTES(5), (uint8_t*)&hero->talents[TA_SCHLEICHEN], 10, (signed char)i);
 		}
 	}
 

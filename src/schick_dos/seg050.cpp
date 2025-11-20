@@ -102,8 +102,8 @@ struct inc_states {
 };
 
 static struct inc_states *g_inc_spells_counter;	// ds:0xe3b2
-static struct inc_states *g_inc_skills_counter;	// ds:0xe3b6
-static unsigned char *g_skills_buffer;		// ds:0xe3ba
+static struct inc_states *g_inc_talents_counter;	// ds:0xe3b6
+static unsigned char *g_talents_buffer;		// ds:0xe3ba
 
 
 /**
@@ -185,7 +185,7 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 		}
 #else
 		/* Feature mod 2:
-		 * use the exact skill/spell increase mechanism as in DSA 2/3 */
+		 * use the exact talent/spell increase mechanism as in DSA 2/3 */
 		if (hero->spells[spell_id] >= 10) {
 			randval = dice_roll(3,6,0);
 		} else {
@@ -217,24 +217,24 @@ void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 }
 
 /**
- * \brief   tries to increase a skill in advanced mode
+ * \brief   tries to increase a talent in advanced mode
  *
  * \param   hero        pointer to the hero
- * \param   skill       number of the skill
+ * \param   talent       number of the talent
  */
-void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
+void inc_talent_advanced(struct struct_hero *hero, const signed int talent_id)
 {
 	signed int randval;
 	signed int max_incs;
 
-	max_incs = g_skill_descriptions[skill_id].max_incs;
+	max_incs = g_talent_descriptions[talent_id].max_incs;
 
-	if (g_inc_skills_counter[skill_id].incs >= max_incs) {
+	if (g_inc_talents_counter[talent_id].incs >= max_incs) {
 
 		/* no increase is possible */
 		GUI_output(get_tx2(43));
 
-	} else if (g_inc_skills_counter[skill_id].tries == 3) {
+	} else if (g_inc_talents_counter[talent_id].tries == 3) {
 
 		/* used up legal increase */
 		GUI_output(get_tx2(44));
@@ -242,49 +242,49 @@ void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 	} else {
 
 		/* try to increase */
-		hero->saved_skill_increases--;
+		hero->saved_talent_increases--;
 
 #ifndef M302de_FEATURE_MOD
-		if (hero->skills[skill_id] >= 11) {
+		if (hero->talents[talent_id] >= 11) {
 			randval = random_interval(3, 18);
 		} else {
 			randval = random_interval(2, 12);
 		}
 #else
 		/* Feature mod 2:
-		 * use the exact spell/skill increase mechanism as in DSA 2/3 */
-		if (hero->skills[skill_id] >= 10) {
+		 * use the exact spell/talent increase mechanism as in DSA 2/3 */
+		if (hero->talents[talent_id] >= 10) {
 			randval = dice_roll(3,6,0);
 		} else {
 			randval = dice_roll(2,6,0);
 		}
 #endif
 
-		if (hero->skills[skill_id] < randval) {
+		if (hero->talents[talent_id] < randval) {
 
 			/* success */
 			GUI_output(get_tx2(37));
 
-			/* increment skill value */
-			hero->skills[skill_id]++;
+			/* increment talent value */
+			hero->talents[talent_id]++;
 
 			/* set the try counter to 0 */
-			g_inc_skills_counter[skill_id].tries = 0;
+			g_inc_talents_counter[talent_id].tries = 0;
 			/* increment the increase counter */
-			g_inc_skills_counter[skill_id].incs++;
+			g_inc_talents_counter[talent_id].incs++;
 
-			if (skill_id <= TA_ZWEIHAENDER) {
-				/* increment a melee weapon skill */
+			if (talent_id <= TA_ZWEIHAENDER) {
+				/* increment a melee weapon talent */
 
-				sprintf(g_dtp2,	get_ttx(426), get_ttx(48 + skill_id));
+				sprintf(g_dtp2,	get_ttx(426), get_ttx(48 + talent_id));
 
 				randval = -1;
 
 				/* AT - value */
-				sprintf(g_text_output_buf, get_ttx(427), hero->at_talent_bonus[skill_id]);
+				sprintf(g_text_output_buf, get_ttx(427), hero->at_talent_bonus[talent_id]);
 
 				/* PA - value */
-				sprintf(g_text_output_buf + 50,	get_ttx(428), hero->pa_talent_bonus[skill_id]);
+				sprintf(g_text_output_buf + 50,	get_ttx(428), hero->pa_talent_bonus[talent_id]);
 
 				do {
 					randval = GUI_radio(g_dtp2, 2, g_text_output_buf, g_text_output_buf + 50);
@@ -292,9 +292,9 @@ void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 				} while (randval == -1);
 
 				if (randval == 1) {
-					hero->at_talent_bonus[skill_id]++;
+					hero->at_talent_bonus[talent_id]++;
 				} else {
-					hero->pa_talent_bonus[skill_id]++;
+					hero->pa_talent_bonus[talent_id]++;
 				}
 			}
 
@@ -303,30 +303,30 @@ void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 			GUI_output(get_ttx(338));
 
 			/* increment the try counter */
-			g_inc_skills_counter[skill_id].tries++;
+			g_inc_talents_counter[talent_id].tries++;
 		}
 	}
 }
 
 /**
- * \brief   tries to increase a skill in novice mode
+ * \brief   tries to increase a talent in novice mode
  *
  *          This function is quiet and does not check how many times
- *          a skill can be increased. So the correct rules come
- *          from the array which contain the skills.
+ *          a talent can be increased. So the correct rules come
+ *          from the array which contain the talents.
  *
  * \param   hero        pointer to the hero
- * \param   skill       number of the skill
+ * \param   talent       number of the talent
  */
-void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
+void inc_talent_novice(struct struct_hero *hero, const signed int talent_id)
 {
 	signed int done = 0;
 	signed int randval;
 
 	while (!done) {
 
-		/* leave the loop if 3 incs failes or the skill value is 18 */
-		if ((g_inc_skills_counter[skill_id].tries == 3) || (hero->skills[skill_id] == 18)) {
+		/* leave the loop if 3 incs failes or the talent value is 18 */
+		if ((g_inc_talents_counter[talent_id].tries == 3) || (hero->talents[talent_id] == 18)) {
 
 			done = 1;
 #if !defined(__BORLANDC__)
@@ -334,25 +334,25 @@ void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
 #endif
 		} else {
 
-			/* dec available skill incs */
-			hero->saved_skill_increases--;
+			/* dec available talent incs */
+			hero->saved_talent_increases--;
 
-			/* check if available skill incs are 0 */
-			if (!hero->saved_skill_increases) {
+			/* check if available talent incs are 0 */
+			if (!hero->saved_talent_increases) {
 				done = 1;
 			}
 
 #ifndef M302de_FEATURE_MOD
-			/* on a  skill value < 11 use 2W6 else 3W6 */
-			if (hero->skills[skill_id] >= 11) {
+			/* on a  talent value < 11 use 2W6 else 3W6 */
+			if (hero->talents[talent_id] >= 11) {
 				randval = random_interval(3, 18);
 			} else {
 				randval = random_interval(2, 12);
 			}
 #else
 		/* Feature mod 2:
-		 * use the exact skill/spell increase mechanism as in DSA 2/3 */
-			if (hero->skills[skill_id] >= 10) {
+		 * use the exact talent/spell increase mechanism as in DSA 2/3 */
+			if (hero->talents[talent_id] >= 10) {
 				randval = dice_roll(3,6,0);
 			} else {
 				randval = dice_roll(2,6,0);
@@ -360,28 +360,28 @@ void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
 #endif
 
 			/* check if increase success */
-			if (hero->skills[skill_id] < randval) {
+			if (hero->talents[talent_id] < randval) {
 
-				/* inc skill value */
-				hero->skills[skill_id]++;
+				/* inc talent value */
+				hero->talents[talent_id]++;
 
 				/* reset failed counter */
-				g_inc_skills_counter[skill_id].tries = 0;
+				g_inc_talents_counter[talent_id].tries = 0;
 
 				done = 1;
 
 				/* adjust AT PA values */
-				if (skill_id <= TA_ZWEIHAENDER) {
-					if (hero->at_talent_bonus[skill_id] > hero->pa_talent_bonus[skill_id]) {
-						hero->pa_talent_bonus[skill_id]++;
+				if (talent_id <= TA_ZWEIHAENDER) {
+					if (hero->at_talent_bonus[talent_id] > hero->pa_talent_bonus[talent_id]) {
+						hero->pa_talent_bonus[talent_id]++;
 					} else {
-						hero->at_talent_bonus[skill_id]++;
+						hero->at_talent_bonus[talent_id]++;
 					}
 				}
 
 			} else {
 				/* inc failed counter */
-				g_inc_skills_counter[skill_id].tries++;
+				g_inc_talents_counter[talent_id].tries++;
 			}
 		}
 	}
@@ -429,7 +429,7 @@ void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
 			}
 #else
 		/* Feature mod 2:
-		 * use the exact skill/spell increase mechanism as in DSA 2/3 */
+		 * use the exact talent/spell increase mechanism as in DSA 2/3 */
 			if (hero->spells[spell_id] >= 10) {
 				randval = dice_roll(3,6,0);
 			} else {
@@ -483,13 +483,13 @@ void level_up(const signed int hero_pos)
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 
-	g_inc_skills_counter = (struct inc_states*)(g_buffer8_ptr + 4500);
-	g_inc_spells_counter = (struct inc_states*)((uint8_t*)g_inc_skills_counter + 208);
-	g_skills_buffer = (unsigned char*)g_buffer9_ptr;
+	g_inc_talents_counter = (struct inc_states*)(g_buffer8_ptr + 4500);
+	g_inc_spells_counter = (struct inc_states*)((uint8_t*)g_inc_talents_counter + 208);
+	g_talents_buffer = (unsigned char*)g_buffer9_ptr;
 
 	l_si = load_archive_file(ARCHIVE_FILE_BSKILLS_DAT);
 
-	read_archive_file(l_si, g_skills_buffer, 1300);
+	read_archive_file(l_si, g_talents_buffer, 1300);
 
 	close(l_si);
 
@@ -505,7 +505,7 @@ void level_up(const signed int hero_pos)
 	}
 
 	for (i = 0; i < (TA__TAIL + 1); i++) {
-		g_inc_skills_counter[i].tries = g_inc_skills_counter[i].incs = 0;
+		g_inc_talents_counter[i].tries = g_inc_talents_counter[i].incs = 0;
 	}
 
 	load_ggsts_nvf();
@@ -656,8 +656,8 @@ void level_up(const signed int hero_pos)
 	}
 
 
-	/* add skill increasements */
-	hero->saved_skill_increases += g_levelup_ta_rise[hero->typus - 1];
+	/* add talent increasements */
+	hero->saved_talent_increases += g_levelup_ta_rise[hero->typus - 1];
 
 	/* roll how many LE points the hero may get */
 	i = random_schick(6);
@@ -690,11 +690,11 @@ void level_up(const signed int hero_pos)
 		hero->ae_max += i - l_si;
 		add_hero_ae(hero, i - l_si);
 
-		/* change skill increasements into AE */
+		/* change talent increasements into AE */
 		if ((hero->typus == HERO_TYPE_MAGIER) && (g_game_mode == GAME_MODE_ADVANCED)) {
 
 			if (GUI_bool(get_tx2(40))) {
-				/* trade 10 skill increasements into 1W6+2 AE */
+				/* trade 10 talent increasements into 1W6+2 AE */
 				hero->saved_spell_increases += -10;
 				i = random_interval(3, 8);
 				hero->ae_max += i;
@@ -727,13 +727,13 @@ void level_up(const signed int hero_pos)
 
 		i = v2 = 0;
 
-		while (hero->saved_skill_increases > 0) {
+		while (hero->saved_talent_increases > 0) {
 
-			l_si = *(int16_t*)(g_skills_buffer + 100 * hero->typus + 4 * i);
+			l_si = *(int16_t*)(g_talents_buffer + 100 * hero->typus + 4 * i);
 
-			if (hero->skills[l_si] < *(int16_t*)(g_skills_buffer + 100 * hero->typus + 4 * i + 2))
+			if (hero->talents[l_si] < *(int16_t*)(g_talents_buffer + 100 * hero->typus + 4 * i + 2))
 			{
-				inc_skill_novice(hero, l_si);
+				inc_talent_novice(hero, l_si);
 			}
 
 			i++;
@@ -745,7 +745,7 @@ void level_up(const signed int hero_pos)
 				v2++;
 
 				if (v2 > 5) {
-					hero->saved_skill_increases = 0;
+					hero->saved_talent_increases = 0;
 				}
 
 			}
@@ -766,7 +766,7 @@ void level_up(const signed int hero_pos)
 					case HERO_TYPE_HEXE: {
 
 						/* first try to increase all which-specific spells by 1,
-						 * up to skill value at most 11. */
+						 * up to talent value at most 11. */
 						while (hero->saved_spell_increases != 0 && i < 86) {
 
 							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_HEXE && hero->spells[i] < 11) {
@@ -948,7 +948,7 @@ void level_up(const signed int hero_pos)
 				spta_convs -= i;
 
 				hero->saved_spell_increases -= i;
-				hero->saved_skill_increases += i;
+				hero->saved_talent_increases += i;
 
 			} else {
 
@@ -963,18 +963,18 @@ void level_up(const signed int hero_pos)
 					}
 
 					hero->saved_spell_increases += i;
-					hero->saved_skill_increases -= i;
+					hero->saved_talent_increases -= i;
 				}
 			}
 		}
 
-		while (hero->saved_skill_increases != 0) {
+		while (hero->saved_talent_increases != 0) {
 
-			l_si = LVL_select_skill(hero, 1);
+			l_si = LVL_select_talent(hero, 1);
 
 			if (l_si >= 0) {
 
-				inc_skill_advanced(hero, l_si);
+				inc_talent_advanced(hero, l_si);
 
 			} else if (l_si == -2) {
 

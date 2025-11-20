@@ -153,7 +153,7 @@ void ask_miracle(void)
 					if (miracle_dice_roll <= 5) {
 						if (!gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS]) {
 
-							miracle_modify((uint8_t*)&get_hero(0)->skills[TA_SCHWERTER] - (uint8_t*)get_hero(0), DAYS(3), 1); /* for 3 days: skill 'Schwerter' + 1 */
+							miracle_modify((uint8_t*)&get_hero(0)->talents[TA_SCHWERTER] - (uint8_t*)get_hero(0), DAYS(3), 1); /* for 3 days: talent 'Schwerter' + 1 */
 							miracle_modify((uint8_t*)&get_hero(0)->at_talent_bonus[WEAPON_TYPE_SCHWERT] - (uint8_t*)get_hero(0), DAYS(3), 1); /* for 3 days: AT + 1 */
 							gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS] = DAYS(3);
 
@@ -191,7 +191,7 @@ void ask_miracle(void)
 						if (!gs_ingame_timers[INGAME_TIMER_EFFERD_SWIM]) {
 
 							/* Schwimmen +2 for 4 days */
-							miracle_modify((uint8_t*)&get_hero(0)->skills[TA_SCHWIMMEN] - (uint8_t*)get_hero(0), DAYS(4), 2);
+							miracle_modify((uint8_t*)&get_hero(0)->talents[TA_SCHWIMMEN] - (uint8_t*)get_hero(0), DAYS(4), 2);
 							strcpy(g_dtp2, get_tx2(9));
 
 							gs_ingame_timers[INGAME_TIMER_EFFERD_SWIM] = DAYS(4);
@@ -346,16 +346,16 @@ void ask_miracle(void)
 						if (miracle_dice_roll <= 5) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_THIEF]) {
 								/* Taschendiebstahl +1 for 3 days */
-								miracle_modify((uint8_t*)&get_hero(0)->skills[TA_TASCHENDIEBSTAHL] - (uint8_t*)get_hero(0), DAYS(3), 1);
+								miracle_modify((uint8_t*)&get_hero(0)->talents[TA_TASCHENDIEBSTAHL] - (uint8_t*)get_hero(0), DAYS(3), 1);
 								/* Schloesser knacken +1 for 3 days */
-								miracle_modify((uint8_t*)&get_hero(0)->skills[TA_SCHLOESSER] - (uint8_t*)get_hero(0), DAYS(3), 1);
+								miracle_modify((uint8_t*)&get_hero(0)->talents[TA_SCHLOESSER] - (uint8_t*)get_hero(0), DAYS(3), 1);
 								strcpy(g_dtp2, get_tx2(24));
 								gs_ingame_timers[INGAME_TIMER_PHEX_THIEF] = DAYS(3);
 							}
 						} else if (miracle_dice_roll <= 8) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_FEILSCHEN]) {
 								/* Feilschen +1 for 3 days */
-								miracle_modify((uint8_t*)&get_hero(0)->skills[TA_FEILSCHEN] - (uint8_t*)get_hero(0), DAYS(3), 1);
+								miracle_modify((uint8_t*)&get_hero(0)->talents[TA_FEILSCHEN] - (uint8_t*)get_hero(0), DAYS(3), 1);
 								strcpy(g_dtp2, get_tx2(25));
 								gs_ingame_timers[INGAME_TIMER_PHEX_FEILSCHEN] = DAYS(3);
 							}
@@ -437,9 +437,9 @@ void ask_miracle(void)
 					if (miracle_dice_roll <= 8) {
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS]) {
 							/* Betören +2 for 7 days */
-							miracle_modify((uint8_t*)&get_hero(0)->skills[TA_BETOEREN] - (uint8_t*)get_hero(0), DAYS(7), 2);
+							miracle_modify((uint8_t*)&get_hero(0)->talents[TA_BETOEREN] - (uint8_t*)get_hero(0), DAYS(7), 2);
 							/* Tanzen +2 for 7 days */
-							miracle_modify((uint8_t*)&get_hero(0)->skills[TA_TANZEN] - (uint8_t*)get_hero(0), DAYS(7), 2);
+							miracle_modify((uint8_t*)&get_hero(0)->talents[TA_TANZEN] - (uint8_t*)get_hero(0), DAYS(7), 2);
 							strcpy(g_dtp2, get_tx2(32));
 							gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS] = DAYS(7);
 						}
@@ -461,9 +461,9 @@ void ask_miracle(void)
 									!hero->flags.dead && !hero->flags.gods_pissed)
 								{
 									/* permanent Betören +1 */
-									hero->skills[TA_BETOEREN]++;
+									hero->talents[TA_BETOEREN]++;
 									/* permanent Tanzen +1 */
-									hero->skills[TA_TANZEN]++;
+									hero->talents[TA_TANZEN]++;
 								}
 							}
 

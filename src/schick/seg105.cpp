@@ -92,7 +92,7 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 		/* unequip Kristallkugel Gefahrensinn - 2 */
 		if (item_id == ITEM_KRISTALLKUGEL) {
 
-			hero->skills[TA_GEFAHRENSINN] = hero->skills[TA_GEFAHRENSINN] - 2;
+			hero->talents[TA_GEFAHRENSINN] = hero->talents[TA_GEFAHRENSINN] - 2;
 		}
 	}
 }
@@ -180,7 +180,7 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		/* Crystal ball / Kristalkugel */
 		if (item_id == ITEM_KRISTALLKUGEL) {
 
-			equipper->skills[TA_GEFAHRENSINN] = equipper->skills[TA_GEFAHRENSINN] + 2;
+			equipper->talents[TA_GEFAHRENSINN] = equipper->talents[TA_GEFAHRENSINN] + 2;
 		}
 	}
 }
@@ -451,7 +451,7 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 							/* Apply effects for items which have an effect as soon as they are in the inventory. */
 							if (item_id == ITEM_SICHEL__MAGIC) {
-								hero->skills[TA_PFLANZENKUNDE] = hero->skills[TA_PFLANZENKUNDE] + 3;
+								hero->talents[TA_PFLANZENKUNDE] = hero->talents[TA_PFLANZENKUNDE] + 3;
 							}
 
 							if (item_id == ITEM_AMULETT__BLUE) {
@@ -585,7 +585,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 					/* item: SICHEL Pflanzenkunde -3 */
 					if (item_id == ITEM_SICHEL__MAGIC) {
 
-						hero->skills[TA_PFLANZENKUNDE] = hero->skills[TA_PFLANZENKUNDE] - 3;
+						hero->talents[TA_PFLANZENKUNDE] = hero->talents[TA_PFLANZENKUNDE] - 3;
 					}
 
 					/* item:  AMULETT MR -5 */

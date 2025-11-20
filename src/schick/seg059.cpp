@@ -60,7 +60,7 @@ void do_tavern(void)
 			return;
 	}
 
-	draw_loc_icons(g_combo_mode == 0 ? 4 : 5, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_APPLY_SKILL, MENU_ICON_LEAVE, MENU_ICON_INN);
+	draw_loc_icons(g_combo_mode == 0 ? 4 : 5, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_APPLY_TALENT, MENU_ICON_LEAVE, MENU_ICON_INN);
 
 	while (!done) {
 
@@ -189,15 +189,15 @@ void do_tavern(void)
 			}
 
 		} else if (g_action == ACTION_ID_ICON_3) {
-			/* USE SKILL */
+			/* USE TALENT */
 
 			time(&timeval);
 
-			/* skill test will be +50 if the game was saved up to 2 minutes ago.
+			/* talent test will be +50 if the game was saved up to 2 minutes ago.
 			 * probably to prevent excessive save & reload */
 			bonus = (timeval - g_last_save_time) > 120 ? 0 : 50;
 
-			if (GUI_use_skill2(bonus, get_ttx(395)) == -1) {
+			if (GUI_use_talent2(bonus, get_ttx(395)) == -1) {
 				done = 1;
 				g_combo_mode = 0;
 			}

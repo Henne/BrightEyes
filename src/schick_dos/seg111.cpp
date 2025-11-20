@@ -32,7 +32,7 @@ struct struct_chest g_tevent064_chest_descr = {0, 12, use_lockpicks_on_chest, ch
 /* Ottarje <-> Skjal: alte Feuerstelle. idealer Rastplatz */
 void tevent_053(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent053_flag) ||
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent053_flag) ||
 		gs_tevent053_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -81,7 +81,7 @@ void tevent_057(void)
 
 	if (answer == 2) {
 
-		if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
+		if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
 
 			timewarp(HOURS(2));
 
@@ -110,7 +110,7 @@ void tevent_057(void)
 		for (i = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && test_skill(hero, TA_KLETTERN, 3) <= 0)
+				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 3) <= 0)
 			{
 
 				/* TODO: Original-Bug: that condition does not make sense */
@@ -137,7 +137,7 @@ void tevent_057(void)
 
 void tevent_058(void)
 {
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent058_flag) || gs_tevent058_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent058_flag) || gs_tevent058_flag)
 	{
 		TRV_found_replenish_place(0);
 		gs_tevent058_flag = 1;
@@ -217,7 +217,7 @@ void tevent_060(void)
 
 		if (answer == 1) {
 
-			if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4) > 0) {
+			if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4) > 0) {
 
 				sub_group_le(1);
 
@@ -246,7 +246,7 @@ void tevent_060(void)
 					for (i = 0; i <= 6; i++, hero++) {
 
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-							!hero->flags.dead && test_skill(hero, TA_KLETTERN, 0) <= 0)
+							!hero->flags.dead && test_talent(hero, TA_KLETTERN, 0) <= 0)
 						{
 							sub_hero_le(hero, random_schick(10));
 						}
@@ -263,7 +263,7 @@ void tevent_060(void)
 		} else {
 
 
-			if (test_skill(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
+			if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
 
 				timewarp(HOURS(3));
 
@@ -353,8 +353,8 @@ void tevent_061(void)
 	/* TODO: not needed here */
 	answer = 0;
 
-	if (test_skill(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 &&
-		test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 &&
+	if (test_talent(get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 &&
+		test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 &&
 		!gs_tevent061_flag)
 	{
 		gs_tevent061_flag = 1;
@@ -510,7 +510,7 @@ void tevent_064(void)
 				for (i = result = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-						!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
+						!hero->flags.dead && test_talent(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
 						result++;
 					}
@@ -662,12 +662,12 @@ void tevent_066(void)
 	signed int count;
 	struct struct_hero *hero;
 
-	if ((test_skill(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent066_flag) || gs_tevent066_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent066_flag) || gs_tevent066_flag)
 	{
 		TRV_found_replenish_place(0);
 		gs_tevent066_flag = 1;
 
-		if ((test_skill(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent066_track_flag))
+		if ((test_talent(get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent066_track_flag))
 		{
 
 			do {
@@ -683,7 +683,7 @@ void tevent_066(void)
 				for (i = count = 0; i <= 6; i++, hero++)
 				{
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-						!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -2) <= 0)
+						!hero->flags.dead && test_talent(hero, TA_SCHLEICHEN, -2) <= 0)
 					{
 						count++;
 					}

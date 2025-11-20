@@ -95,7 +95,7 @@ void do_wildcamp(void)
 	}
 
 	i = !g_good_camp_place ? 6 : 7;
-	draw_loc_icons(i, MENU_ICON_GUARDS, MENU_ICON_REPLENISH_SUPPLIES, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_GATHER_HERBS, MENU_ICON_SLEEP, MENU_ICON_QUIT_CAMP);
+	draw_loc_icons(i, MENU_ICON_GUARDS, MENU_ICON_REPLENISH_SUPPLIES, MENU_ICON_APPLY_TALENT, MENU_ICON_MAGIC, MENU_ICON_GATHER_HERBS, MENU_ICON_SLEEP, MENU_ICON_QUIT_CAMP);
 
 	while (done == 0) {
 
@@ -194,7 +194,7 @@ void do_wildcamp(void)
 
 		} else if (g_action == ACTION_ID_ICON_3) {
 
-			GUI_use_skill2(0, get_ttx(395));
+			GUI_use_talent2(0, get_ttx(395));
 
 		} else if (g_action == ACTION_ID_ICON_4) {
 
@@ -238,7 +238,7 @@ void do_wildcamp(void)
 		} else if (g_action == ACTION_ID_ICON_5) {
 			/* COLLECT HERBS */
 
-			g_skilled_hero_pos = get_skilled_hero_pos(TA_PFLANZENKUNDE);
+			g_talented_hero_pos = get_talented_hero_pos(TA_PFLANZENKUNDE);
 
 			answer = select_hero_ok(get_ttx(326));
 
@@ -425,7 +425,7 @@ signed int gather_herbs(struct struct_hero *hero, const signed int hours, const 
 		}
 
 		if ((random_schick(100) <= ptr->chance_max) &&
-			test_skill(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
+			test_talent(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
 
 			herb_count[herb_index] = give_new_item_to_hero(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
 
@@ -487,7 +487,7 @@ signed int gather_herbs(struct struct_hero *hero, const signed int hours, const 
 /**
  * \brief   replenish the stocks (water and food)
  *
- * \param   mod         modificator for the skill test
+ * \param   mod         modificator for the talent test
  * \param   tries       how often was tried to replenish stocks
  * \return              0 if replenish was not possible or 1 if replenish was possible
  */
@@ -502,7 +502,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 
 	mod += 5;
 
-	g_skilled_hero_pos = get_skilled_hero_pos(TA_WILDNISLEBEN);
+	g_talented_hero_pos = get_talented_hero_pos(TA_WILDNISLEBEN);
 	hero_pos = select_hero_ok(get_ttx(322));
 
 	if (hero_pos != -1 && get_hero(hero_pos)->flags.brewing) {
@@ -536,7 +536,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 					retval = 1;
 
 					/* search for water */
-					if ((test_skill(hero, TA_WILDNISLEBEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
+					if ((test_talent(hero, TA_WILDNISLEBEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
 
 						/* found water */
 						sprintf(g_dtp2, get_ttx(324), hero->alias);
@@ -570,7 +570,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 					vsync_or_key(200);
 
 					/* search for food */
-					if ((test_skill(hero, TA_FAEHRTENSUCHEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
+					if ((test_talent(hero, TA_FAEHRTENSUCHEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
 
 						/* remove hunger of all living heroes in the current group */
 						hero2 = get_hero(0);

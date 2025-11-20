@@ -200,14 +200,14 @@ signed int DNG11_handler(void)
 			gs_direction == NORTH &&
 			gs_dng11_secretdoor1_flag != 2)
 	{
-		if (gs_dng11_secretdoor1_flag || test_skill(hero, TA_SINNESSCHAERFE, 8) > 0)
+		if (gs_dng11_secretdoor1_flag || test_talent(hero, TA_SINNESSCHAERFE, 8) > 0)
 		{
 			gs_dng11_secretdoor1_flag = 1;
 
 			sprintf(g_dtp2,	get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((gs_dng11_lever_flag == 2 || gs_dng11_lever_flag == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
+				(char*)((gs_dng11_lever_flag == 2 || gs_dng11_lever_flag == 3) && (test_result = test_talent(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
 				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -230,14 +230,14 @@ signed int DNG11_handler(void)
 			gs_direction == EAST &&
 			gs_dng11_secretdoor2_flag != 2)
 	{
-		if (gs_dng11_secretdoor2_flag != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0)
+		if (gs_dng11_secretdoor2_flag != 0 || test_talent(hero, TA_SINNESSCHAERFE, 4) > 0)
 		{
 			gs_dng11_secretdoor2_flag = 1;
 
 			sprintf(g_dtp2, get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((gs_dng11_lever_flag == 1 || gs_dng11_lever_flag == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
+				(char*)((gs_dng11_lever_flag == 1 || gs_dng11_lever_flag == 3) && (test_result = test_talent(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
 				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -261,14 +261,14 @@ signed int DNG11_handler(void)
 			gs_direction == EAST &&
 			gs_dng11_secretdoor3_flag != 2)
 	{
-		if (gs_dng11_secretdoor3_flag != 0 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0)
+		if (gs_dng11_secretdoor3_flag != 0 || test_talent(hero, TA_SINNESSCHAERFE, 6) > 0)
 		{
 			gs_dng11_secretdoor3_flag = 1;
 
 			sprintf(g_dtp2,	get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((gs_dng11_lever_flag == 5 || gs_dng11_lever_flag == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
+				(char*)((gs_dng11_lever_flag == 5 || gs_dng11_lever_flag == 3) && (test_result = test_talent(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
 				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);

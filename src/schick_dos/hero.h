@@ -203,9 +203,9 @@ struct struct_hero {
 	signed char poison[10][5]; /* 50 = 10 * 5 bytes */ /* 5 bytes for each of the following poisonings: 0-none (these 5 bytes appear to be unused!) 1-Shurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemel, 7-Lotusgift, 8-Kukris, 9-Bannstaubvergiftung */
 
 	/* Offset 0x108 */
-	signed char skills[52]; /* see enum TA_* */ /* TODO: better name 'talents' (for DSA conformity)? */
+	signed char talents[52]; /* see enum TA_* */ /* TODO: better name 'talents' (for DSA conformity)? */
 	/* The first entry does not belong to an actual spell talent and is apparently unused. */
-	signed char saved_skill_increases;
+	signed char saved_talent_increases;
 	/* Offset 0x13d */
 	signed char spells[86]; /* see enum SP_* */
 	signed char saved_spell_increases;

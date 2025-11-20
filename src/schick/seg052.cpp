@@ -66,7 +66,7 @@ void do_area_camp(void)
 		g_area_camp_guards[l_si] = -1;
 	}
 
-	draw_loc_icons(5, MENU_ICON_GUARDS, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE);
+	draw_loc_icons(5, MENU_ICON_GUARDS, MENU_ICON_APPLY_TALENT, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE);
 
 	while (done == 0) {
 
@@ -144,7 +144,7 @@ void do_area_camp(void)
 
 		} else if (g_action == ACTION_ID_ICON_2) {
 
-			GUI_use_skill2(0, get_ttx(395));
+			GUI_use_talent2(0, get_ttx(395));
 
 		} else if (g_action == ACTION_ID_ICON_3) {
 

@@ -495,7 +495,7 @@ void buy_screen(void)
 					break;
 
 				} else {
-					g_skilled_hero_pos = get_skilled_hero_pos(TA_FEILSCHEN);
+					g_talented_hero_pos = get_talented_hero_pos(TA_FEILSCHEN);
 
 					l3 = select_hero_ok(get_ttx(442));
 

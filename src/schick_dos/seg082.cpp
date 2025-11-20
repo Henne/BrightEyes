@@ -39,7 +39,7 @@ signed int DNG07_handler(void)
 	uint8_t *amap_ptr;
 	signed int spell_result;
 	signed int lockpick_inv_slot;
-	signed int skill_result;
+	signed int talent_result;
 
 	amap_ptr = g_dng_map;
 	tw_bak = g_textbox_width;
@@ -69,9 +69,9 @@ signed int DNG07_handler(void)
 				{
 					if (lockpick_inv_slot != -2) // !=-1 and !=-2 means: hero has at least one non-broken set of lockpicks
 					{
-						skill_result = test_skill(hero, TA_SCHLOESSER, 7);
+						talent_result = test_talent(hero, TA_SCHLOESSER, 7);
 
-						if (skill_result == -99) {
+						if (talent_result == -99) {
 
 							print_msg_with_first_hero(get_ttx(533));
 
@@ -81,7 +81,7 @@ signed int DNG07_handler(void)
 
 							do_fight(FIGHTS_F100_03);
 
-						} else if (skill_result <= 0) {
+						} else if (talent_result <= 0) {
 
 							print_msg_with_first_hero(get_ttx(532));
 

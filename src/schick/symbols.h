@@ -71,8 +71,8 @@
 //#define MON_SPELL_DESCRIPTIONS          (0x0f13)    /* struct(8)[15]; */
 //#define MON_SPELL_REPERTOIRE            (0x0f8b)    /* struct(5)[11]; struct{char spells[5];} */
 //#define MON_SPELL_HANDLERS              (0x0fc2)    /* long[15]; function pointer[15] */
-//#define SKILL_DESCRIPTIONS              (0x0ffe)    /* struct(4)[52]; struct{signed char attrib1, attrib2, attrib3, max_inc;} */
-//#define SKILLS_INDEX                    (0x10ce)    /* struct(2)[7]; struct{signed char first, length;}; { {0,9}, {9,10}, {19,7}, {26,6}, {32,9}, {41,9}, {50,2} } */
+//#define TALENT_DESCRIPTIONS              (0x0ffe)    /* struct(4)[52]; struct{signed char attrib1, attrib2, attrib3, max_inc;} */
+//#define TALENTS_INDEX                    (0x10ce)    /* struct(2)[7]; struct{signed char first, length;}; { {0,9}, {9,10}, {19,7}, {26,6}, {32,9}, {41,9}, {50,2} } */
 //#define NVFTAB_FIGURES_RANGEWEAPON      (0x10dc)    /* char[264]; by rwt/viewdir */
 //#define NVFTAB_FIGURES_UNCONSCIOUS      (0x11e4)    /* short[22] */
 //#define GFXTAB_OFFSETS_UNCONSCIOUS      (0x1210)    /* struct(2)[88]; struct{char x,y;}; by viewdir */
@@ -196,7 +196,7 @@
 //#define IN_FIGHT                        (0x2cd5)    /* short */
 //#define FIGHT_ROUND                     (0x2cd7)    /* short */
 // ?2
-//#define SKILLED_HERO_POS                (0x2cdb)    /* signed short; {-1, 0..6} */
+//#define TALENTED_HERO_POS                (0x2cdb)    /* signed short; {-1, 0..6} */
 //#define GUI_BUTTONS_POS                 (0x2cdd)    /* struct(4)[9]; struct{unsigned short x,y;} */
 //#define HERO_PIC_POSX                   (0x2d01)    /* unsigned short[7]; { 3, 46, 89, 132, 175, 218, 275 } */
 //#define LEVELUP_TA_RISE                 (0x2d0f)    /* signed char[12] */
@@ -991,7 +991,7 @@
 //#define INVSLOT_ICONXY_TABLE            (0x63d2)    /* struct(4)[23]; struct{unsigned short x,y;} */
 //#define STATUSPAGE_SPELLS_XY            (0x642e)    /* struct(6)[8]; struct{unsigned short x_name,x_val,y;} */
 //#define STATUSPAGE_SPELLS2_XY           (0x645e)    /* struct(6)[4]; struct{unsigned short x_name,x_val,y;} */
-//#define STATUSPAGE_SKILLS_XY            (0x6476)    /* struct(6)[7]; struct{unsigned short x_name,x_val,y;} */
+//#define STATUSPAGE_TALENTS_XY            (0x6476)    /* struct(6)[7]; struct{unsigned short x_name,x_val,y;} */
 //#define EMPTY_STRING6                   (0x64a0)    /* char; "" */
 //#define EMPTY_STRING7                   (0x64a1)    /* char; "" */
 //#define HERO_SEL_EXCLUDE                (0x64a2)    /* signed char */
@@ -1000,7 +1000,7 @@
 //#define SEG047_INIT3                    (0x64bf)    /* signed short[7]; filled with zeroes */
 // ?1
 //#define INVSLOT_BORDERXY_TABLE          (0x64ce)    /* struct(4)[25]; struct{signed short x,y;} */
-//#define CHEATSKILL_USABLE               (0x6532)    /* signed short; {0,1} */
+//#define CHEATTALENT_USABLE               (0x6532)    /* signed short; {0,1} */
 //#define EXTRASPACE_SEPARATED_STRINGS    (0x6534)    /* char[7]; "%s %s " */
 //#define EMPTY_STRING8                   (0x653b)    /* char; "" */
 //#define EXTRASPACE_SEPARATED_STRINGS2   (0x653c)    /* char[7]; "%s %s " */
@@ -1243,8 +1243,8 @@
 //#define ANALUES_ITEMS                   (0xac3c)    /* struct(5)[28]; struct{signed short item_id, barrier; signed char dtp;} */
 //#define HEXENKNOTEN_GFX_BUF             (0xacc8)    /* uint8_t* */
 //#define MONSTER_SPELL_AE_COST           (0xaccc)    /* signed short */
-//#define SELECT_SKILL_LVLUP              (0xacce)    /* char[6]; "%s~%d" */
-//#define SELECT_SKILL_DEFAULTS           (0xacd4)    /* signed char[6]; {44, 45, 46, -1, -1, -1} */
+//#define SELECT_TALENT_LVLUP              (0xacce)    /* char[6]; "%s~%d" */
+//#define SELECT_TALENT_DEFAULTS           (0xacd4)    /* signed char[6]; {44, 45, 46, -1, -1, -1} */
 //#define ALCHEMY_RECIPES                 (0xacda)    /* struct(28)[13] */
 //#define PREVENT_DROP_EQUIPPED_ITEMS     (0xae46)    /* unsigned char; {0,1} */
 // ?1
@@ -1356,7 +1356,7 @@
 //#define EMS_UNUSED_HANDLE               (0xbd92)    /* unsigned short */
 //#define DNG_MAP_SIZE                    (0xbd94)    /* unsigned char; {16, 32} */
 //#define DNG_MAP                         (0xbd95)    /* unsigned char[512]; 1 byte for each square of the current dungeon level. higher nybble: ID of the tile on the square. lower nybble: 4 flags */
-//#define RADIO_NAME_LIST                 (0xbf95)    /* uint8_t*[15]; used for items, heroes, spells, skills, recipes */
+//#define RADIO_NAME_LIST                 (0xbf95)    /* uint8_t*[15]; used for items, heroes, spells, talents, recipes */
 // ?40
 //#define GUI_BUFFER_UNKN                 (0xbff9)    /* uint8_t* */
 //#define TEXTBOX_WIDTH                   (0xbffd)    /* signed short */
@@ -1565,8 +1565,8 @@
 //#define ATTACKER_ATTACKS_AGAIN          (0xe3ac)    /* unsigned short; {0,1} */
 //#define CURRENT_CURSOR_BAK              (0xe3ae)    /* uint8_t* */
 //#define INC_SPELLS_COUNTER              (0xe3b2)    /* uint8_t* */
-//#define INC_SKILLS_COUNTER              (0xe3b6)    /* uint8_t* */
-//#define SKILLS_BUFFER                   (0xe3ba)    /* uint8_t* */
+//#define INC_TALENTS_COUNTER              (0xe3b6)    /* uint8_t* */
+//#define TALENTS_BUFFER                   (0xe3ba)    /* uint8_t* */
 //#define WILDCAMP_GUARDS                 (0xe3be)    /* signed char[3] */
 //#define WILDCAMP_HERBSTATUS             (0xe3c1)    /* signed char[7] */
 //#define WILDCAMP_REPLSTATUS             (0xe3c8)    /* signed char[7] */

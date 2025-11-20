@@ -716,15 +716,15 @@ void spell_scharfes_auge(void)
 	/* set a pointer to the target */
 	g_spelltarget = get_hero(target);
 
-	/* all range skills are boosted + 3 */
+	/* all range talents are boosted + 3 */
 
 	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(mod_slot, FIGHT_ROUNDS(3), (uint8_t*)&get_spelltarget()->skills[TA_WURFWAFFEN], 3, (signed char)target); /* TA_WURFWAFFEN */
+	set_mod_slot(mod_slot, FIGHT_ROUNDS(3), (uint8_t*)&get_spelltarget()->talents[TA_WURFWAFFEN], 3, (signed char)target); /* TA_WURFWAFFEN */
 
 	mod_slot = get_free_mod_slot();
 
-	set_mod_slot(mod_slot, FIGHT_ROUNDS(3), (uint8_t*)&get_spelltarget()->skills[TA_SCHUSSWAFFEN], 3, (signed char)target); /* TA_SCHUSSWAFFEN */
+	set_mod_slot(mod_slot, FIGHT_ROUNDS(3), (uint8_t*)&get_spelltarget()->talents[TA_SCHUSSWAFFEN], 3, (signed char)target); /* TA_SCHUSSWAFFEN */
 
 	sprintf(g_dtp2, get_tx(97), get_spelltarget()->alias);
 }

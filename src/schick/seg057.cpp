@@ -430,7 +430,7 @@ void sell_screen(struct merchant_descr *merchant_descr)
 				} else if (percent < 0) {
 					break;
 				} else {
-					g_skilled_hero_pos = get_skilled_hero_pos(TA_FEILSCHEN);
+					g_talented_hero_pos = get_talented_hero_pos(TA_FEILSCHEN);
 
 					answer = select_hero_ok_forced(get_ttx(442));
 

@@ -106,19 +106,19 @@ void npc_farewell(void)
 						{
 							/* Original-Bug 42:
 							 * When NPC Harika leaves the party, all non-dead heroes in the same group get up to
-							 * three attempts for a skill increase in Schleichen. The idea is probably that the
+							 * three attempts for a talent increase in Schleichen. The idea is probably that the
 							 * group members had a chance to learn something from the experienced stray Harika.
 							 * However, these "free" attempts are missing at the next level-up.
 							 * This does not make sense. */
 
 #ifdef M302de_ORIGINAL_BUGFIX
-							char ta_rise_bak = hero_i->saved_skill_increases;
+							char ta_rise_bak = hero_i->saved_talent_increases;
 #endif
 							/* All non-dead heroes in the same group get a chance to increase TA_SCHLEICHEN */
-							inc_skill_novice(hero_i, TA_SCHLEICHEN);
+							inc_talent_novice(hero_i, TA_SCHLEICHEN);
 #ifdef M302de_ORIGINAL_BUGFIX
-							/* The unwanted reduction is done within the function inc_skill_novice(). We revert it. */
-							hero_i->saved_skill_increases = ta_rise_bak;
+							/* The unwanted reduction is done within the function inc_talent_novice(). We revert it. */
+							hero_i->saved_talent_increases = ta_rise_bak;
 #endif
 						}
 					}

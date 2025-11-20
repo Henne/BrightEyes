@@ -464,7 +464,7 @@ void TLK_whandel(const signed int state)
 
 	} else if (state == 25) {
 
-		if (test_skill(get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
+		if (test_talent(get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
 
 			g_dialog_next_state = 23;
 			g_price_modificator = 3;

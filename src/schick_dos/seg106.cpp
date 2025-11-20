@@ -554,16 +554,16 @@ lab04:
 
 				/* special items */
 				if (item_id2 == ITEM_SICHEL__MAGIC) {
-					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] + 3;
-					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] - 3;
+					hero1->talents[TA_PFLANZENKUNDE] = hero1->talents[TA_PFLANZENKUNDE] + 3;
+					hero2->talents[TA_PFLANZENKUNDE] = hero2->talents[TA_PFLANZENKUNDE] - 3;
 				}
 				if (item_id2 == ITEM_AMULETT__BLUE) {
 					hero1->mr = hero1->mr + 5;
 					hero2->mr = hero2->mr - 5;
 				}
 				if (item_id1 == ITEM_SICHEL__MAGIC) {
-					hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
-					hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
+					hero1->talents[TA_PFLANZENKUNDE] = hero1->talents[TA_PFLANZENKUNDE] - 3;
+					hero2->talents[TA_PFLANZENKUNDE] = hero2->talents[TA_PFLANZENKUNDE] + 3;
 				}
 				if (item_id1 == ITEM_AMULETT__BLUE) {
 					hero1->mr = hero1->mr - 5;
@@ -638,8 +638,8 @@ lab04:
 
 		/* special items */
 		if (item_id1 == ITEM_SICHEL__MAGIC) {
-			hero1->skills[TA_PFLANZENKUNDE] = hero1->skills[TA_PFLANZENKUNDE] - 3;
-			hero2->skills[TA_PFLANZENKUNDE] = hero2->skills[TA_PFLANZENKUNDE] + 3;
+			hero1->talents[TA_PFLANZENKUNDE] = hero1->talents[TA_PFLANZENKUNDE] - 3;
+			hero2->talents[TA_PFLANZENKUNDE] = hero2->talents[TA_PFLANZENKUNDE] + 3;
 		}
 		if (item_id1 == ITEM_AMULETT__BLUE) {
 			hero1->mr = hero1->mr - 5;

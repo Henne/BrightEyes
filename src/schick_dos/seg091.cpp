@@ -269,7 +269,7 @@ void DNG13_collapsing_ceiling(void)
 	for (i = fails = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-			!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -4) <= 0)
+			!hero->flags.dead && test_talent(hero, TA_SCHLEICHEN, -4) <= 0)
 		{
 			fails++;
 		}
@@ -277,7 +277,7 @@ void DNG13_collapsing_ceiling(void)
 
 	if (fails > 1)
 	{
-		/* at least two heroes failed in the skill test */
+		/* at least two heroes failed in the talent test */
 		GUI_output(get_tx(19));
 
 		sub_group_le(dice_roll(1, 6, 4)); /* 1D6 + 4 */
@@ -316,7 +316,7 @@ void DNG13_collapsing_ceiling_easy(void)
 	for (i = fails = 0; i <= 6; i++, hero++)
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-			!hero->flags.dead && test_skill(hero, TA_SCHLEICHEN, -1) <= 0)
+			!hero->flags.dead && test_talent(hero, TA_SCHLEICHEN, -1) <= 0)
 		{
 			fails++;
 		}
@@ -324,7 +324,7 @@ void DNG13_collapsing_ceiling_easy(void)
 
 	if (fails > 1)
 	{
-		/* at least two heroes failed in the skill test */
+		/* at least two heroes failed in the talent test */
 		GUI_output(get_tx(19));
 
 		sub_group_le(dice_roll(1, 6, 5)); /* 1D6 + 5 */

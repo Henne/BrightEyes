@@ -16,7 +16,7 @@ signed int plan_alchemy(struct struct_hero*);
 signed int has_herb_for_disease(const struct struct_hero*, const signed int);
 
 /* 0x39 */
-signed int skill_cure_disease(struct struct_hero*, struct struct_hero*, const signed int, const signed int);
+signed int talent_cure_disease(struct struct_hero*, struct struct_hero*, const signed int, const signed int);
 
 /* 0x3e */
 struct struct_hero* get_heaviest_hero(void);
@@ -25,4 +25,4 @@ struct struct_hero* get_heaviest_hero(void);
 signed int get_hero_weight(const struct struct_hero*);
 
 /* 0x48 */
-signed int get_skilled_hero_pos(const signed int);
+signed int get_talented_hero_pos(const signed int);

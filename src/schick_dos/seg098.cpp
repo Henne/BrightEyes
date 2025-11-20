@@ -586,7 +586,7 @@ signed int test_spell(struct struct_hero *hero, const signed int spell_id, signe
 		return 0;
 	}
 
-	/* check if spell skill >= -5 */
+	/* check if spell talent >= -5 */
 	if (hero->spells[spell_id] < -5)
 		return 0;
 

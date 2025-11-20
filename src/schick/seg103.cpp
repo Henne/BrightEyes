@@ -1,5 +1,5 @@
 /*
- *      Rewrite of DSA1 v3.02_de functions of seg103 (skills)
+ *      Rewrite of DSA1 v3.02_de functions of seg103 (talents)
  *      Functions rewritten: 8/8 (complete)
  *
  *	Borlandified and identical
@@ -27,57 +27,57 @@ struct dummy {
 	char a[6];
 };
 
-static char g_select_skill_lvlup[6] = "%s~%d"; // ds:0xacce
-static signed char g_select_skill_defaults[6] = { TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1 }; // ds:0xacd4
+static char g_select_talent_lvlup[6] = "%s~%d"; // ds:0xacce
+static signed char g_select_talent_defaults[6] = { TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1 }; // ds:0xacd4
 
-signed int LVL_select_skill(const struct struct_hero *hero, const signed int show_values)
+signed int LVL_select_talent(const struct struct_hero *hero, const signed int show_values)
 {
 	signed int i;
 	signed int answer;
-	signed int first_skill;
+	signed int first_talent;
 	signed int retval = -1;
 	/* string on stack "%s~%d" */
-	struct dummy format_str = *(struct dummy*)g_select_skill_lvlup;
+	struct dummy format_str = *(struct dummy*)g_select_talent_lvlup;
 
 	if (show_values != 0) {
 
 		strcpy(g_text_output_buf, get_ttx(205));
 
-		if (hero->saved_skill_increases > 1) {
+		if (hero->saved_talent_increases > 1) {
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
 		sprintf(g_dtp2, get_ttx(204),
-			(hero->saved_skill_increases > 1) ? get_ttx(305) : get_ttx(304),	/* sind / ist */
-			hero->saved_skill_increases, g_text_output_buf);
+			(hero->saved_talent_increases > 1) ? get_ttx(305) : get_ttx(304),	/* sind / ist */
+			hero->saved_talent_increases, g_text_output_buf);
 	} else {
 
 		strcpy(g_dtp2, get_ttx(216));
 	}
 
-	/* ask for the skillclass */
+	/* ask for the talentclass */
 	answer = GUI_radio(g_dtp2, 7, get_ttx(100), get_ttx(101), get_ttx(102), get_ttx(105), get_ttx(103), get_ttx(104), get_ttx(106)) - 1;
 
 	if (answer != -2) {
 
-		first_skill = g_skillclasses[answer].first;
+		first_talent = g_talentclasses[answer].first;
 
 		if (show_values != 0) {
 
-			for (i = 0; g_skillclasses[answer].length > i; i++) {
+			for (i = 0; g_talentclasses[answer].length > i; i++) {
 
-				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(first_skill + i + 48), hero->skills[first_skill + i]);
+				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(first_talent + i + 48), hero->talents[first_talent + i]);
 
 				g_radio_name_list[i] = g_dtp2 + 50 * i;
 			}
 		} else {
 
-			for (i = 0; g_skillclasses[answer].length > i; i++) {
-				g_radio_name_list[i] = get_ttx(first_skill + i + 48);
+			for (i = 0; g_talentclasses[answer].length > i; i++) {
+				g_radio_name_list[i] = get_ttx(first_talent + i + 48);
 			}
 		}
 
-		retval = GUI_radio(get_ttx(218), g_skillclasses[answer].length,
+		retval = GUI_radio(get_ttx(218), g_talentclasses[answer].length,
 				g_radio_name_list[0], g_radio_name_list[1],
 				g_radio_name_list[2], g_radio_name_list[3],
 				g_radio_name_list[4], g_radio_name_list[5],
@@ -88,7 +88,7 @@ signed int LVL_select_skill(const struct struct_hero *hero, const signed int sho
 				g_radio_name_list[14], g_radio_name_list[15]);
 
 		if (retval != -1) {
-			retval += first_skill - 1;
+			retval += first_talent - 1;
 		}
 
 	} else {
@@ -99,12 +99,12 @@ signed int LVL_select_skill(const struct struct_hero *hero, const signed int sho
 }
 
 /**
- * \brief   returns hero which seems best for a skill
+ * \brief   returns hero which seems best for a talent
  *
- * \param   skill_id       skill
+ * \param   talent_id       talent
  */
-struct struct_hero* get_proper_hero(const signed int skill_id)
-/* called from only a single position, namely test_skill((struct struct_hero*)..), and only if game is in 'easy' mode and the tested skill is TA_SINNESSCHAERFE */
+struct struct_hero* get_proper_hero(const signed int talent_id)
+/* called from only a single position, namely test_talent((struct struct_hero*)..), and only if game is in 'easy' mode and the tested talent is TA_SINNESSCHAERFE */
 {
 	signed int i;
 	signed int cur;
@@ -127,13 +127,13 @@ struct struct_hero* get_proper_hero(const signed int skill_id)
 			!hero_i->flags.dead) {
 
 			/* add current and maximum attibute values */
-			cur =	hero_i->attrib[g_skill_descriptions[skill_id].attrib1].current +
-				hero_i->attrib[g_skill_descriptions[skill_id].attrib1].mod +
-				hero_i->attrib[g_skill_descriptions[skill_id].attrib2].current +
-				hero_i->attrib[g_skill_descriptions[skill_id].attrib2].mod +
-				hero_i->attrib[g_skill_descriptions[skill_id].attrib3].current +
-				hero_i->attrib[g_skill_descriptions[skill_id].attrib3].mod +
-				hero_i->skills[skill_id];
+			cur =	hero_i->attrib[g_talent_descriptions[talent_id].attrib1].current +
+				hero_i->attrib[g_talent_descriptions[talent_id].attrib1].mod +
+				hero_i->attrib[g_talent_descriptions[talent_id].attrib2].current +
+				hero_i->attrib[g_talent_descriptions[talent_id].attrib2].mod +
+				hero_i->attrib[g_talent_descriptions[talent_id].attrib3].current +
+				hero_i->attrib[g_talent_descriptions[talent_id].attrib3].mod +
+				hero_i->talents[talent_id];
 
 			if (cur > max) {
 
@@ -154,39 +154,39 @@ struct struct_hero* get_proper_hero(const signed int skill_id)
 }
 
 /**
- * \brief   performs a skill test
+ * \brief   performs a talent test
  *
  * \param   hero        hero which should be tested
- * \param   skill       the skill to test
+ * \param   talent       the talent to test
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
-signed int test_skill(const struct struct_hero* hero, const signed int skill_id, signed char handicap)
+signed int test_talent(const struct struct_hero* hero, const signed int talent_id, signed char handicap)
 {
 	signed int randval;
-	signed int e_skillval;
+	signed int e_talentval;
 
-	/* dont test for melee weapon skills */
-	if ((skill_id >= TA_SCHUSSWAFFEN) && (skill_id <= TA_SINNESSCHAERFE)) {
+	/* dont test for melee weapon talents */
+	if ((talent_id >= TA_SCHUSSWAFFEN) && (talent_id <= TA_SINNESSCHAERFE)) {
 
 #if !defined(__BORLANDC__)
-		D1_INFO("%s Talentprobe %s %+d (TaW %d)", hero->alias, names_skill[skill_id], handicap, hero->skills[skill_id]);
+		D1_INFO("%s Talentprobe %s %+d (TaW %d)", hero->alias, names_talent[talent_id], handicap, hero->talents[talent_id]);
 #endif
 
-		/* special test if skill is a range weapon skill */
-		if ((skill_id == TA_SCHUSSWAFFEN) || (skill_id == TA_WURFWAFFEN)) {
+		/* special test if talent is a range weapon talent */
+		if ((talent_id == TA_SCHUSSWAFFEN) || (talent_id == TA_WURFWAFFEN)) {
 
 			/* calculate range weapon base value */
-			e_skillval = (	hero->attrib[ATTRIB_KL].current +
+			e_talentval = (	hero->attrib[ATTRIB_KL].current +
 					hero->attrib[ATTRIB_KL].mod +
 					hero->attrib[ATTRIB_GE].current +
 					hero->attrib[ATTRIB_GE].mod +
 					hero->attrib[ATTRIB_KK].current +
 					hero->attrib[ATTRIB_KK].mod) / 4;
 
-			/* add skill value */
-			e_skillval += hero->skills[skill_id];
+			/* add talent value */
+			e_talentval += hero->talents[talent_id];
 			/* sub handycap */
-			e_skillval -= handicap;
+			e_talentval -= handicap;
 
 			randval = random_schick(20);
 
@@ -204,12 +204,12 @@ signed int test_skill(const struct struct_hero* hero, const signed int skill_id,
 #endif
 				return 99;
 			}
-			if (randval <= e_skillval) {
+			if (randval <= e_talentval) {
 				/* test successful */
 #if !defined(__BORLANDC__)
 				D1_INFO(" (%d) -> bestanden\n", randval);
 #endif
-				return e_skillval - randval + 1;
+				return e_talentval - randval + 1;
 			}
 
 			/* test unsuccessful */
@@ -220,7 +220,7 @@ signed int test_skill(const struct struct_hero* hero, const signed int skill_id,
 		}
 
 		/* automatically get hero with best senses in beginner mode */
-		if ((skill_id == TA_SINNESSCHAERFE) && (g_game_mode == GAME_MODE_BEGINNER)) {
+		if ((talent_id == TA_SINNESSCHAERFE) && (g_game_mode == GAME_MODE_BEGINNER)) {
 
 			hero = get_proper_hero(TA_SINNESSCHAERFE);
 
@@ -231,11 +231,11 @@ signed int test_skill(const struct struct_hero* hero, const signed int skill_id,
 		}
 
 		/* do the test */
-		handicap -= hero->skills[skill_id];
+		handicap -= hero->talents[talent_id];
 
-		return test_attrib3(hero, g_skill_descriptions[skill_id].attrib1,
-						g_skill_descriptions[skill_id].attrib2,
-						g_skill_descriptions[skill_id].attrib3, handicap);
+		return test_attrib3(hero, g_talent_descriptions[talent_id].attrib1,
+						g_talent_descriptions[talent_id].attrib2,
+						g_talent_descriptions[talent_id].attrib3, handicap);
 	}
 
 	return 0;
@@ -245,40 +245,40 @@ struct dummy2 {
 	signed char a[6];
 };
 
-signed int select_skill(void)
+signed int select_talent(void)
 {
 	signed int retval = -1;
-	signed int nr_skills = 3;
+	signed int nr_talents = 3;
 
-	/* available skills {TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1} */
-	struct dummy2 a = *(struct dummy2*)g_select_skill_defaults;
+	/* available talents {TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1} */
+	struct dummy2 a = *(struct dummy2*)g_select_talent_defaults;
 
-	/* add skills for special location */
+	/* add talents for special location */
 	if (gs_town_loc_type == LOCTYPE_TAVERN) {
-		a.a[nr_skills] = TA_AKROBATIK;
-		nr_skills++;
+		a.a[nr_talents] = TA_AKROBATIK;
+		nr_talents++;
 
 		if (!g_forbid_ta_falschspiel) {
-			a.a[nr_skills] = TA_FALSCHSPIEL;
-			nr_skills++;
+			a.a[nr_talents] = TA_FALSCHSPIEL;
+			nr_talents++;
 		}
 
-		a.a[nr_skills] = TA_MUSIZIEREN;
-		nr_skills++;
+		a.a[nr_talents] = TA_MUSIZIEREN;
+		nr_talents++;
 	} else if ((gs_town_loc_type == LOCTYPE_WILDCAMP) || (gs_town_loc_type == LOCTYPE_INN)) {
-		a.a[nr_skills] = TA_ALCHIMIE;
-		nr_skills++;
+		a.a[nr_talents] = TA_ALCHIMIE;
+		nr_talents++;
 	} else if (gs_town_loc_type == LOCTYPE_MARKET) {
-		a.a[nr_skills] = TA_AKROBATIK;
-		nr_skills++;
-		a.a[nr_skills] = TA_TASCHENDIEBSTAHL;
-		nr_skills++;
+		a.a[nr_talents] = TA_AKROBATIK;
+		nr_talents++;
+		a.a[nr_talents] = TA_TASCHENDIEBSTAHL;
+		nr_talents++;
 	} else if (gs_town_loc_type == LOCTYPE_MERCHANT) {
-		a.a[nr_skills] = TA_TASCHENDIEBSTAHL;
-		nr_skills++;
+		a.a[nr_talents] = TA_TASCHENDIEBSTAHL;
+		nr_talents++;
 	}
 
-	retval = GUI_radio(get_ttx(218), (signed char)nr_skills,
+	retval = GUI_radio(get_ttx(218), (signed char)nr_talents,
 				get_ttx(a.a[0] + 48),
 				get_ttx(a.a[1] + 48),
 				get_ttx(a.a[2] + 48),
@@ -294,7 +294,7 @@ signed int select_skill(void)
 	return retval;
 }
 
-signed int use_skill(const signed int hero_pos, signed char handicap, const signed int skill_id)
+signed int use_talent(const signed int hero_pos, signed char handicap, const signed int talent_id)
 {
 	signed int retval = 1;
 	signed int le_damage;
@@ -307,13 +307,13 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 	signed int poison_id;
 	signed int tx_file_bak;
 
-	if (skill_id != -1) {
+	if (talent_id != -1) {
 
 		tx_file_bak = g_tx_file_index;
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-		switch (skill_id) {
+		switch (talent_id) {
 
 		case TA_HEILEN_GIFT: {
 
@@ -345,11 +345,11 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 						/* set patient timer */
 						patient->heal_timer = HOURS(4); /* 4 hours */
 
-						if (test_skill(hero, TA_HEILEN_GIFT, handicap) > 0) {
+						if (test_talent(hero, TA_HEILEN_GIFT, handicap) > 0) {
 
 							timewarp(MINUTES(20));
 
-							if (test_skill(hero, TA_HEILEN_GIFT, g_poison_prices[poison_id] + handicap) > 0) {
+							if (test_talent(hero, TA_HEILEN_GIFT, g_poison_prices[poison_id] + handicap) > 0) {
 								/* success */
 								sprintf(g_dtp2, get_ttx(690), hero->alias, patient->alias);
 								GUI_output(g_dtp2);
@@ -366,7 +366,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 
 									} while (le <= 0);
 
-									if ((retval = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
+									if ((retval = test_talent(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
 										sprintf(g_dtp2,	get_ttx(691), hero->alias, patient->alias, le);
 
@@ -374,7 +374,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 
 										GUI_output(g_dtp2);
 									} else {
-										/* skill test failed */
+										/* talent test failed */
 										le_damage = 3;
 
 										if (patient->le <= le_damage) {
@@ -416,7 +416,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 
 				patient = get_hero(patient_pos);
 
-				skill_cure_disease(hero, patient, handicap, 0);
+				talent_cure_disease(hero, patient, handicap, 0);
 			}
 			break;
 		}
@@ -447,11 +447,11 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 					} else {
 						patient->heal_timer = DAYS(1);
 
-						if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+						if (test_talent(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
-							if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+							if (test_talent(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
-								retval = hero->skills[TA_HEILEN_WUNDEN] > 1 ? hero->skills[TA_HEILEN_WUNDEN] : 1;
+								retval = hero->talents[TA_HEILEN_WUNDEN] > 1 ? hero->talents[TA_HEILEN_WUNDEN] : 1;
 
 								add_hero_le(patient, retval);
 
@@ -459,7 +459,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 								GUI_output(g_dtp2);
 
 							} else {
-								/* skill test failed */
+								/* talent test failed */
 								le_damage = 3;
 
 								if (patient->le <= le_damage) {
@@ -508,7 +508,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 
 			} else {
 
-				if (test_skill(hero, TA_AKROBATIK, handicap) > 0) {
+				if (test_talent(hero, TA_AKROBATIK, handicap) > 0) {
 
 					money = random_interval(10, 200);
 
@@ -541,7 +541,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 
 			} else {
 
-				if (test_skill(hero, TA_MUSIZIEREN, handicap) > 0) {
+				if (test_talent(hero, TA_MUSIZIEREN, handicap) > 0) {
 
 					money = random_interval(100, 300);
 
@@ -568,7 +568,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 		}
 		case TA_FALSCHSPIEL : {
 
-			if (test_skill(hero, TA_FALSCHSPIEL, handicap) > 0) {
+			if (test_talent(hero, TA_FALSCHSPIEL, handicap) > 0) {
 
 				money = random_interval(500, 1000);
 
@@ -593,7 +593,7 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 		}
 		case TA_TASCHENDIEBSTAHL : {
 
-			if (test_skill(hero, TA_TASCHENDIEBSTAHL, handicap) > 0) {
+			if (test_talent(hero, TA_TASCHENDIEBSTAHL, handicap) > 0) {
 
 				money = random_interval(500, 1000);
 
@@ -634,27 +634,27 @@ signed int use_skill(const signed int hero_pos, signed char handicap, const sign
 	return retval;
 }
 
-signed int GUI_use_skill(const signed int hero_pos, const signed char handicap)
+signed int GUI_use_talent(const signed int hero_pos, const signed char handicap)
 {
-	signed int skill_id;
+	signed int talent_id;
 	const struct struct_hero *hero = get_hero(hero_pos);
 
 	if (!check_hero(hero)) {
 		return -1;
 	}
 
-	skill_id = select_skill();
-	return use_skill(hero_pos, handicap, skill_id);
+	talent_id = select_talent();
+	return use_talent(hero_pos, handicap, talent_id);
 }
 
-signed int GUI_use_skill2(const signed int handicap, char *msg)
+signed int GUI_use_talent2(const signed int handicap, char *msg)
 {
 	signed int hero_pos;
-	const signed int skill_id = select_skill();
+	const signed int talent_id = select_talent();
 
-	if (skill_id != -1) {
+	if (talent_id != -1) {
 
-		g_skilled_hero_pos = get_skilled_hero_pos(skill_id);
+		g_talented_hero_pos = get_talented_hero_pos(talent_id);
 
 		hero_pos = select_hero_ok(msg);
 
@@ -664,7 +664,7 @@ signed int GUI_use_skill2(const signed int handicap, char *msg)
 			hero_pos = -1;
 		}
 		if (hero_pos != -1) {
-			return use_skill(hero_pos, (signed char)handicap, skill_id);
+			return use_talent(hero_pos, (signed char)handicap, talent_id);
 		}
 	}
 
@@ -708,5 +708,5 @@ signed int bargain(const struct struct_hero *hero, const signed int items, const
 	/* the lower the percent, the easier the bargain */
 	mod += percent / 5 + 1;
 
-	return test_skill(hero, TA_FEILSCHEN, mod);
+	return test_talent(hero, TA_FEILSCHEN, mod);
 }

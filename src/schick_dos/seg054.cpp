@@ -385,7 +385,7 @@ void do_inn(void)
 
 		refresh = g_request_refresh = 1;
 
-		draw_loc_icons(g_combo_mode == 0 ? 7 : 8, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_BOOK_BED, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE, MENU_ICON_TAVERN);
+		draw_loc_icons(g_combo_mode == 0 ? 7 : 8, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_BOOK_BED, MENU_ICON_APPLY_TALENT, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE, MENU_ICON_TAVERN);
 
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 7: NPC Curian cannot do magic actions in an inn. */
@@ -561,7 +561,7 @@ void do_inn(void)
 		} else if (g_action == ACTION_ID_ICON_4) {
 
 			if (g_sleep_quality != -1) {
-				GUI_use_skill2(0, get_ttx(395));
+				GUI_use_talent2(0, get_ttx(395));
 				refresh = 1;
 			} else {
 				GUI_output(get_ttx(346));

@@ -173,7 +173,7 @@ signed int DNG01_handler(void)
 			if (get_first_hero_with_item(ITEM_SEIL) != -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1)
 			{
 				/* Original-Bug: better get_first_hero_available_in_group() */
-				if (test_skill(get_hero(0), TA_KLETTERN, 0) > 0)
+				if (test_talent(get_hero(0), TA_KLETTERN, 0) > 0)
 				{
 					/* Original-Bug: '32 * ' should probably be '16 *'. */
 					g_dng_map[32 * gs_y_target + gs_x_target] = DNG_TILE_PIT_IN_CEILING << 4;

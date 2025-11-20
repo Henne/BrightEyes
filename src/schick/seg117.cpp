@@ -132,7 +132,7 @@ void hunt_karen(void)
 				if ((hero->typus != HERO_TYPE_NONE) &&
 					(hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead &&
-					(test_skill(hero, TA_SCHLEICHEN, 2) > 0))
+					(test_talent(hero, TA_SCHLEICHEN, 2) > 0))
 				{
 					passed++;
 				}
@@ -148,7 +148,7 @@ void hunt_karen(void)
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-						!hero->flags.dead && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
+						!hero->flags.dead && (test_talent(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -211,7 +211,7 @@ void hunt_wildboar(void)
 			for (i = passed = 0; i <= 6; i++, hero++) {
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-					!hero->flags.dead && (test_skill(hero, TA_SCHLEICHEN, 0) > 0))
+					!hero->flags.dead && (test_talent(hero, TA_SCHLEICHEN, 0) > 0))
 				{
 					passed++;
 				}
@@ -227,7 +227,7 @@ void hunt_wildboar(void)
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-						!hero->flags.dead && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
+						!hero->flags.dead && (test_talent(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -444,7 +444,7 @@ void octopus_attack(void)
 					sprintf(g_dtp2, get_tx2(31), hero->alias);
 					GUI_output(g_dtp2);
 
-					if (test_skill(hero, TA_SCHWIMMEN, 0) <= 0) {
+					if (test_talent(hero, TA_SCHWIMMEN, 0) <= 0) {
 						sub_hero_le(hero, random_schick(6));
 						overboard[i] = 1;
 					}
@@ -753,7 +753,7 @@ void TLK_way_to_ruin(const signed int state)
 		timewarp(HOURS(1));
 	} else if (state == 6) {
 		hero = get_hero(get_random_hero());
-		g_dialog_next_state = (test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
+		g_dialog_next_state = (test_talent(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
 	} else if (state == 8) {
 		timewarp(HOURS(1));
 		TRV_ford_test(0, 30);
@@ -777,7 +777,7 @@ void TLK_way_to_ruin(const signed int state)
 
 	} else if (state == 10) {
 
-		g_dialog_next_state = (test_skill(gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+		g_dialog_next_state = (test_talent(gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
 
 	} else if (state == 12) {
 
@@ -795,7 +795,7 @@ void TLK_way_to_ruin(const signed int state)
 	} else if (state == 15 || state == 16) {
 		timewarp(MINUTES(20));
 	} else if (state == 17) {
-		g_dialog_next_state = (test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
+		g_dialog_next_state = (test_talent(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
 		gs_ruin_hero = get_hero(get_random_hero());
@@ -821,7 +821,7 @@ void TLK_way_to_ruin(const signed int state)
 		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
+				!hero->flags.dead && (test_talent(hero, TA_ORIENTIERUNG, 0) > 0))
 		       	{
 				g_tlk_ruin_hero_counter++;
 			}
@@ -848,7 +848,7 @@ void TLK_way_to_ruin(const signed int state)
 		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-				!hero->flags.dead && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
+				!hero->flags.dead && (test_talent(hero, TA_ORIENTIERUNG, 0) > 0))
 			{
 				g_tlk_ruin_hero_counter++;
 			}

@@ -130,7 +130,7 @@ signed int MON_get_spell_cost(const signed int mspell_id, const signed int flag)
 
 
 /**
- * \brief   skill test for monsters
+ * \brief   talent test for monsters
  *
  * \param   monster     pointer to monster
  * \param   attrib1     no of 1st attribute
@@ -139,11 +139,11 @@ signed int MON_get_spell_cost(const signed int mspell_id, const signed int flag)
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
 signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
-/* called only from a single position, in MON_test_skill((struct struct_hero*)..) */
+/* called only from a single position, in MON_test_talent((struct struct_hero*)..) */
 {
 
 #ifndef M302de_FEATURE_MOD
-	/* Feature mod 6: The implementation of the skill test logic differs from the original DSA2/3 rules.
+	/* Feature mod 6: The implementation of the talent test logic differs from the original DSA2/3 rules.
 	 * It is sometimes called the 'pool' variant, where '3W20 + handicap' is compared to the sum of the attributes.
 	 * It is significantly easier than the original rule, where each individuall roll must be at most the corresponding attribute,
 	 * where positive handicap must be used up during the process, and negative handicap may be used for compensation. */
@@ -157,8 +157,8 @@ signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int 
 
 	return attr_sum - randval + 1;
 #else
-	/* Here, the original DSA2/3 skill test logic is implemented.
-	 * WARNING: This makes skill tests and spell casting (on both sides), and thus the game, significantly harder!
+	/* Here, the original DSA2/3 talent test logic is implemented.
+	 * WARNING: This makes talent tests and spell casting (on both sides), and thus the game, significantly harder!
 	 * Note that we are not implementing the DSA4 rules, where tests with a positive handicap are yet harder. */
 	signed int randval;
 	signed int i;
@@ -249,7 +249,7 @@ signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int 
 
 
 /* called only from a single position, in MON_cast_spell(..) */
-signed int MON_test_skill(const struct enemy_sheet *monster, const signed int mspell_id, signed char handicap)
+signed int MON_test_talent(const struct enemy_sheet *monster, const signed int mspell_id, signed char handicap)
 {
 	struct mon_spell_description *desc = &g_mon_spell_descriptions[mspell_id];
 
@@ -267,7 +267,7 @@ signed int MON_test_skill(const struct enemy_sheet *monster, const signed int ms
 		D1_INFO("Gegnerischer Zauber %s Probe %+d", names_mspell[mspell_id], handicap);
 #endif
 
-		/* TODO: balancing problem: enemy spells are always cast with skill value 0 */
+		/* TODO: balancing problem: enemy spells are always cast with talent value 0 */
 		return MON_test_attrib3(monster, desc->attrib1, desc->attrib2, desc->attrib3, handicap);
 	}
 
@@ -305,7 +305,7 @@ signed int MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 			return -1;
 		}
 
-		g_spelltest_result = MON_test_skill(monster, mspell_id, handicap);
+		g_spelltest_result = MON_test_talent(monster, mspell_id, handicap);
 
 		if ((g_spelltest_result <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
 

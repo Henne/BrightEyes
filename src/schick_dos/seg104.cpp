@@ -196,7 +196,7 @@ signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, cons
 	hero->recipe_id = 0;
 	hero->alchemy_inn_id = 0;
 
-	if ((test_skill(hero, TA_ALCHIMIE, r_ptr->handicap) > 0) && (flag_abort == 0))
+	if ((test_talent(hero, TA_ALCHIMIE, r_ptr->handicap) > 0) && (flag_abort == 0))
 	{
 		/* success */
 
@@ -446,7 +446,7 @@ signed int has_herb_for_disease(const struct struct_hero *hero, const signed int
 	return retval;
 }
 
-signed int skill_cure_disease(struct struct_hero *healer, struct struct_hero *patient, const signed int handycap, const signed int flag)
+signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *patient, const signed int handycap, const signed int flag)
 {
 	signed int disease_id;
 	signed int retval;
@@ -474,7 +474,7 @@ signed int skill_cure_disease(struct struct_hero *healer, struct struct_hero *pa
 
 		} else if (patient->heal_timer > 0) {
 
-			/* recently tried to cure with skill */
+			/* recently tried to cure with talent */
 			sprintf(g_dtp2,	get_ttx(697), patient->alias);
 			GUI_output(g_dtp2);
 
@@ -490,9 +490,9 @@ signed int skill_cure_disease(struct struct_hero *healer, struct struct_hero *pa
 			/* set timer */
 			patient->heal_timer = HOURS(4);
 
-			if ((flag != 0) || (test_skill(healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
+			if ((flag != 0) || (test_talent(healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
 
-				if (((retval = test_skill(healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
+				if (((retval = test_talent(healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
 					(disease_id != ILLNESS_TYPE_WUNDFIEBER) && (disease_id != ILLNESS_TYPE_BLAUE_KEUCHE))
 				{
 
@@ -516,7 +516,7 @@ signed int skill_cure_disease(struct struct_hero *healer, struct struct_hero *pa
 
 					retval = 1;
 				} else {
-					/* skill test failed */
+					/* talent test failed */
 					damage = 3;
 
 					if (patient->le <= damage) {
@@ -578,7 +578,7 @@ signed int get_hero_weight(const struct struct_hero *hero)
 	return hero->weight + hero->load;
 }
 
-signed int get_skilled_hero_pos(const signed int skill_id)
+signed int get_talented_hero_pos(const signed int talent_id)
 {
 	signed int i;
 	signed int cur;
@@ -596,13 +596,13 @@ signed int get_skilled_hero_pos(const signed int skill_id)
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 		{
 
-			cur =	hero->attrib[g_skill_descriptions[skill_id].attrib1].current +
-				hero->attrib[g_skill_descriptions[skill_id].attrib1].mod +
-				hero->attrib[g_skill_descriptions[skill_id].attrib2].current +
-				hero->attrib[g_skill_descriptions[skill_id].attrib2].mod +
-				hero->attrib[g_skill_descriptions[skill_id].attrib3].current +
-				hero->attrib[g_skill_descriptions[skill_id].attrib3].mod +
-				hero->skills[skill_id];
+			cur =	hero->attrib[g_talent_descriptions[talent_id].attrib1].current +
+				hero->attrib[g_talent_descriptions[talent_id].attrib1].mod +
+				hero->attrib[g_talent_descriptions[talent_id].attrib2].current +
+				hero->attrib[g_talent_descriptions[talent_id].attrib2].mod +
+				hero->attrib[g_talent_descriptions[talent_id].attrib3].current +
+				hero->attrib[g_talent_descriptions[talent_id].attrib3].mod +
+				hero->talents[talent_id];
 
 			if (cur > max) {
 				max = cur;
