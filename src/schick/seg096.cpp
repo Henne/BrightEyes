@@ -559,6 +559,10 @@ void GUI_print_string(char *str, signed int x, signed int y)
 	}
 
 	call_mouse();
+
+#if !defined(__BORLANDC__)
+	sdl_forced_update();
+#endif
 }
 
 //7f0
