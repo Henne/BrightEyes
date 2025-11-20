@@ -1134,21 +1134,21 @@ struct spell_descr g_spell_descriptions[87] = {
 	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Sturmgebruell besaenftge dich */
 	{                   -1 ,         0,         0,         0,  0,  0, 0, 0, 0, 0 }  /* ... terminator entry */
 }; // ds:0x099d
-const struct spells_index g_spells_index[8] = {
-	{ 0x01, 0x05 },
-	{ 0x06, 0x0c },
-	{ 0x12, 0x06 },
-	{ 0x18, 0x03 },
-	{ 0x1b, 0x06 },
-	{ 0x21, 0x05 },
-	{ 0x26, 0x07 },
-	{ 0x2d, 0x04 }
+const struct spell_range g_spellclasses_1[8] = {
+        { SP_BEHERRSCHUNG_BRECHEN       ,  5 }, /* Antimagie */
+        { SP_BAND_UND_FESSEL            , 12 }, /* Beherrschung */
+        { SP_FUROR_BLUT_UND_SULPHURDAMPF,  6 }, /* Dämonologie */
+        { SP_ELEMENTARE_BESCHWOEREN     ,  3 }, /* Elemente */
+        { SP_AXXELERATUS_BLITZGESCHWIND ,  6 }, /* Bewegung */
+        { SP_BALSAM_SALABUNDE           ,  5 }, /* Heilung */
+        { SP_ADLERAUG_UND_LUCHSENOHR    ,  7 }, /* Wahrnehung */
+        { SP_CHAMAELIONI_MIMIKRY        ,  4 }  /* Visionen */
 }; // ds:0x0d03
-const struct spells_index g_spells_index2[4] = {
-	{ 0x31, 0x09 },
-	{ 0x3a, 0x02 },
-	{ 0x3c, 0x10 },
-	{ 0x4c, 0x0a }
+const struct spell_range g_spellclasses_2[4] = {
+        { SP_BLITZ_DICH_FIND            ,  9 }, /* Kampf */
+        { SP_HEXENBLICK                 ,  2 }, /* Verständigung */
+        { SP_ADLER_WOLF_UND_HAMMERHAI   , 16 }, /* Verwandlung */
+        { SP_ABVENENUM_PEST_UND_GALLE   , 10 }  /* Veränderung */
 }; // ds:0x0d13
 
 const signed int g_magic_school_antimagie_spell_ids[7] = {
@@ -1345,7 +1345,6 @@ void (*g_spell_handlers[86])(void) = {
 	spell_sturmgebr
 }; // ds:0x0dbb, function pointer[86]
 
-
 struct mon_spell_description g_mon_spell_descriptions[15] = {
 	{  0, 0, 0, 0, 0, 0, 0, 0 },	/* DUMMY */
 	{ 20, 1, 0, 0, 1, 2, 0, 1 },	/* Verwandlung Beenden */
@@ -1444,7 +1443,6 @@ int8_t g_mon_spellbooks[11][5] = {
 	}
 }; // ds:0x0f8b
 
-
 void (*g_mon_spellhandlers[15])(void) = {
 	NULL,
 	mspell_verwandlung,		/*  1 */
@@ -1464,67 +1462,67 @@ void (*g_mon_spellhandlers[15])(void) = {
 }; // ds:0x0fc2, function pointer[15]
 
 const struct skill_descr g_skill_descriptions[TA__TAIL + 1] = {
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x00, 0x00, 0x01 },
-	{ 0x00, 0x04, 0x06, 0x02 },
-	{ 0x00, 0x04, 0x06, 0x02 },
-	{ 0x00, 0x05, 0x04, 0x02 },
-	{ 0x02, 0x04, 0x06, 0x02 },
-	{ 0x00, 0x05, 0x04, 0x02 },
-	{ 0x00, 0x04, 0x06, 0x02 },
-	{ 0x00, 0x06, 0x06, 0x02 },
-	{ 0x00, 0x05, 0x04, 0x02 },
-	{ 0x02, 0x04, 0x04, 0x02 },
-	{ 0x01, 0x05, 0x06, 0x02 },
-	{ 0x01, 0x05, 0x02, 0x02 },
-	{ 0x05, 0x02, 0x02, 0x02 },
-	{ 0x00, 0x01, 0x02, 0x02 },
-	{ 0x01, 0x05, 0x02, 0x02 },
-	{ 0x00, 0x05, 0x02, 0x02 },
-	{ 0x01, 0x05, 0x02, 0x02 },
-	{ 0x01, 0x05, 0x05, 0x02 },
-	{ 0x01, 0x05, 0x04, 0x02 },
-	{ 0x03, 0x04, 0x06, 0x02 },
-	{ 0x01, 0x05, 0x03, 0x02 },
-	{ 0x01, 0x05, 0x05, 0x02 },
-	{ 0x00, 0x01, 0x05, 0x02 },
-	{ 0x05, 0x03, 0x04, 0x02 },
-	{ 0x00, 0x01, 0x03, 0x03 },
-	{ 0x01, 0x01, 0x05, 0x03 },
-	{ 0x01, 0x01, 0x05, 0x03 },
-	{ 0x01, 0x01, 0x05, 0x03 },
-	{ 0x01, 0x05, 0x02, 0x03 },
-	{ 0x00, 0x01, 0x02, 0x03 },
-	{ 0x01, 0x01, 0x03, 0x03 },
-	{ 0x01, 0x01, 0x03, 0x03 },
-	{ 0x01, 0x05, 0x02, 0x03 },
-	{ 0x00, 0x05, 0x02, 0x02 },
-	{ 0x05, 0x02, 0x03, 0x02 },
-	{ 0x00, 0x02, 0x03, 0x02 },
-	{ 0x00, 0x01, 0x05, 0x02 },
-	{ 0x00, 0x01, 0x02, 0x02 },
-	{ 0x01, 0x02, 0x03, 0x02 },
-	{ 0x01, 0x05, 0x03, 0x02 },
-	{ 0x05, 0x03, 0x03, 0x02 },
-	{ 0x00, 0x05, 0x03, 0x02 },
-	{ 0x01, 0x05, 0x05, 0x01 },
-	{ 0x01, 0x05, 0x05, 0x01 }
+	{ 0        , 0        , 0        , 1 }, // TA_WAFFENLOS
+	{ 0        , 0        , 0        , 1 }, // TA_HIEBWAFFEN
+	{ 0        , 0        , 0        , 1 }, // TA_STICHWAFFEN
+	{ 0        , 0        , 0        , 1 }, // TA_SCHWERTER
+	{ 0        , 0        , 0        , 1 }, // TA_AEXTE
+	{ 0        , 0        , 0        , 1 }, // TA_SPEERE
+	{ 0        , 0        , 0        , 1 }, // TA_ZWEIHAENDER
+	{ 0        , 0        , 0        , 1 }, // TA_SCHUSSWAFFEN
+	{ 0        , 0        , 0        , 1 }, // TA_WURFWAFFEN
+	{ ATTRIB_MU, ATTRIB_GE, ATTRIB_KK, 2 }, // TA_AKROBATIK
+	{ ATTRIB_MU, ATTRIB_GE, ATTRIB_KK, 2 }, // TA_KLETTERN
+	{ ATTRIB_MU, ATTRIB_IN, ATTRIB_GE, 2 }, // TA_KOERPERBEHERRSCHUNG
+	{ ATTRIB_CH, ATTRIB_GE, ATTRIB_KK, 2 }, // TA_REITEN
+	{ ATTRIB_MU, ATTRIB_IN, ATTRIB_GE, 2 }, // TA_SCHLEICHEN
+	{ ATTRIB_MU, ATTRIB_GE, ATTRIB_KK, 2 }, // TA_SCHWIMMEN
+	{ ATTRIB_MU, ATTRIB_KK, ATTRIB_KK, 2 }, // TA_SELBSTBEHERRSCHUNG
+	{ ATTRIB_MU, ATTRIB_IN, ATTRIB_GE, 2 }, // TA_TANZEN
+	{ ATTRIB_CH, ATTRIB_GE, ATTRIB_GE, 2 }, // TA_VERSTECKEN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_KK, 2 }, // TA_ZECHEN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 2 }, // TA_BEKEHREN
+	{ ATTRIB_IN, ATTRIB_CH, ATTRIB_CH, 2 }, // TA_BETOEREN
+	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 2 }, // TA_FEILSCHEN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 2 }, // TA_GASSENWISSEN
+	{ ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, 2 }, // TA_LUEGEN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 2 }, // TA_MENSCHENKENNTNIS
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_IN, 2 }, // TA_SCHAETZEN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_GE, 2 }, // TA_FAEHRTENSUCHEN
+	{ ATTRIB_FF, ATTRIB_GE, ATTRIB_KK, 2 }, // TA_FESSELN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_FF, 2 }, // TA_ORIENTIERUNG
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_IN, 2 }, // TA_PFLANZENKUNDE
+	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_IN, 2 }, // TA_TIERKUNDE
+	{ ATTRIB_IN, ATTRIB_FF, ATTRIB_GE, 2 }, // TA_WILDNISLEBEN
+	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_FF, 3 }, // TA_ALCHIMIE
+	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_IN, 3 }, // TA_ALTE_SPRACHEN
+	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_IN, 3 }, // TA_GEOGRAPHIE
+	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_IN, 3 }, // TA_GESCHICHTE
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 3 }, // TA_GOETTER_KULTE
+	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 3 }, // TA_KRIEGSKUNST
+	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_FF, 3 }, // TA_LESEN
+	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_FF, 3 }, // TA_MAGIEKUNDE
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 3 }, // TA_SPRACHEN
+	{ ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, 2 }, // TA_ABRICHTEN
+	{ ATTRIB_IN, ATTRIB_CH, ATTRIB_FF, 2 }, // TA_FAHRZEUGE
+	{ ATTRIB_MU, ATTRIB_CH, ATTRIB_FF, 2 }, // TA_FALSCHSPIEL
+	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_IN, 2 }, // TA_HEILEN_GIFT
+	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 2 }, // TA_HEILEN_KRANKHEITEN
+	{ ATTRIB_KL, ATTRIB_CH, ATTRIB_FF, 2 }, // TA_HEILEN_WUNDEN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_FF, 2 }, // TA_MUSIZIEREN
+	{ ATTRIB_IN, ATTRIB_FF, ATTRIB_FF, 2 }, // TA_SCHLOESSER
+	{ ATTRIB_MU, ATTRIB_IN, ATTRIB_FF, 2 }, // TA_TASCHENDIEBSTAHL
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_IN, 1 }, // TA_GEFAHRENSINN
+	{ ATTRIB_KL, ATTRIB_IN, ATTRIB_IN, 1 }  // TA_SINNESSCHAERFE
 }; // ds:0x0ffe
-const struct skills_index g_skills_index[7] = {
-	{  0,  9 },
-	{  9, 10 },
-	{ 19,  7 },
-	{ 26,  6 },
-	{ 32,  9 },
-	{ 41,  9 },
-	{ 50,  2 }
+const struct skill_range g_skillclasses[7] = {
+	{ TA_WAFFENLOS     ,  9 }, /* Kampf */
+	{ TA_AKROBATIK     , 10 }, /* Körper */
+	{ TA_BEKEHREN      ,  7 }, /* Gesellschaft */
+	{ TA_FAEHRTENSUCHEN,  6 }, /* Natur */
+	{ TA_ALCHIMIE      ,  9 }, /* Wissen */
+	{ TA_ABRICHTEN     ,  9 }, /* Handwerk */
+	{ TA_GEFAHRENSINN  ,  2 }  /* Intuition */
 }; // ds:0x10ce
 signed char g_nvftab_figures_rangeweapon[22][3][4] = {
 	{{0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x00}},

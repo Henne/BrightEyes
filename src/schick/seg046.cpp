@@ -84,30 +84,30 @@ const struct struct_point g_invslot_iconxy_table[23] = {
 	{ 0x0010, 0x00af },
 	{ 0x0021, 0x00af }
 }; // ds:0x63d2
-const struct statuspage_line g_statuspage_spells_xy[8] = {
-	{ 0x0005, 0x0068, 0x003e },
-	{ 0x0005, 0x0068, 0x0068 },
-	{ 0x0070, 0x00d1, 0x003e },
-	{ 0x0070, 0x00d1, 0x006f },
-	{ 0x0070, 0x00d1, 0x008b },
-	{ 0x00d9, 0x013b, 0x003e },
-	{ 0x00d9, 0x013b, 0x0068 },
-	{ 0x00d9, 0x013b, 0x00a0 }
+const struct statuspage_line g_statuspage_spellclasses_1_xy[8] = { /* x_name, x_val, y */
+	{   5, 104,  62 },
+	{   5, 104, 104 },
+	{ 112, 209,  62 },
+	{ 112, 209, 111 },
+	{ 112, 209, 139 },
+	{ 217, 315,  62 },
+	{ 217, 315, 104 },
+	{ 217, 315, 160 }
 }; // ds:0x642e
-const struct statuspage_line g_statuspage_spells2_xy[4] = {
-	{ 0x0005, 0x0068, 0x003e },
-	{ 0x0005, 0x0068, 0x008b },
-	{ 0x0070, 0x00d1, 0x003e },
-	{ 0x00d9, 0x013b, 0x003e }
+const struct statuspage_line g_statuspage_spellclasses_2_xy[4] = { /* x_name, x_val, y */
+	{   5, 104,  62 },
+	{   5, 104, 139 },
+	{ 112, 209,  62 },
+	{ 217, 315,  62 }
 }; // ds:0x645e
-const struct statuspage_line g_statuspage_skills_xy[7] = {
-	{ 0x0005, 0x0068, 0x003e },
-	{ 0x00d9, 0x013b, 0x003e },
-	{ 0x00d9, 0x013b, 0x008b },
-	{ 0x0005, 0x0068, 0x0084 },
-	{ 0x0070, 0x00d1, 0x0084 },
-	{ 0x0070, 0x00d1, 0x003e },
-	{ 0x0005, 0x0068, 0x00b5 }
+const struct statuspage_line g_statuspage_skillclasses_xy[7] = { /* x_name, x_val, y */
+	{   5, 104,  62 },
+	{ 217, 315,  62 },
+	{ 217, 315, 139 },
+	{   5, 104, 132 },
+	{ 112, 209, 132 },
+	{ 112, 209,  62 },
+	{   5, 104, 181 }
 }; // ds:0x6476
 static char g_empty_string6[1] = ""; // ds:0x64a0
 static char g_empty_string7[1] = ""; // ds:0x64a1
@@ -118,10 +118,10 @@ static char g_empty_string7[1] = ""; // ds:0x64a1
  *
  * \param   hero        the hero the spell is from
  * \param   spell       spellnumber
- * \param   fsig        the first spell in the spellgroup
+ * \param   fsig        the first spell in the spellclass
  * \param   x1          the leftmost x coordinate
  * \param   x2          the rightmost x coordinate
- * \param   gy          the upper y coordinate of this spellgroup
+ * \param   gy          the upper y coordinate of this spellclass
  */
 /* Borlandified and identical */
 void status_show_spell(const struct struct_hero *hero, const signed int spell_id, const signed int fsig,
@@ -146,10 +146,10 @@ void status_show_spell(const struct struct_hero *hero, const signed int spell_id
  *
  * \param   hero        the hero the skill is from
  * \param   talen       skillnumber
- * \param   ftig        the first skill in the skillgroup
+ * \param   ftig        the first skill in the skillclass
  * \param   x1          the leftmost x coordinate
  * \param   x2          the rightmost x coordinate
- * \param   gy          the upper y coordinate of this skillgroup
+ * \param   gy          the upper y coordinate of this skillclass
  */
 /* Borlandified and identical */
 void status_show_skill(const struct struct_hero *hero, const signed int skill_id, const signed int ftig,
@@ -176,12 +176,12 @@ void status_show_skill(const struct struct_hero *hero, const signed int skill_id
 /* Borlandified and identical */
 void status_show_skills(const struct struct_hero *hero)
 {
-	signed int skill_category;
+	signed int skillclass_id;
 	signed int skill_id;
 
 	set_textcolor(0xff, 2);
 
-	/* print skill category names */
+	/* print skillclass names */
 	GUI_print_string(get_ttx(100), GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
 
 	GUI_print_string(get_ttx(104), GUI_get_first_pos_centered(get_ttx(104), 110, 100, 0), 55);
@@ -198,16 +198,16 @@ void status_show_skills(const struct struct_hero *hero)
 
 	set_textcolor(0, 2);
 
-	for (skill_category = 0; skill_category < 7; skill_category++) {
+	for (skillclass_id = 0; skillclass_id < 7; skillclass_id++) {
 
-		skill_id = g_skills_index[skill_category].first;
+		skill_id = g_skillclasses[skillclass_id].first;
 
-		while (g_skills_index[skill_category].first + g_skills_index[skill_category].length > skill_id) {
+		while (g_skillclasses[skillclass_id].first + g_skillclasses[skillclass_id].length > skill_id) {
 
-			status_show_skill(hero, skill_id, g_skills_index[skill_category].first,
-					g_statuspage_skills_xy[skill_category].x_name,
-					g_statuspage_skills_xy[skill_category].x_val,
-					g_statuspage_skills_xy[skill_category].y);
+			status_show_skill(hero, skill_id, g_skillclasses[skillclass_id].first,
+					g_statuspage_skillclasses_xy[skillclass_id].x_name,
+					g_statuspage_skillclasses_xy[skillclass_id].x_val,
+					g_statuspage_skillclasses_xy[skillclass_id].y);
 
 			skill_id++;
 		}
@@ -720,15 +720,15 @@ void status_show(const signed int index)
 
 			for (j = 0; j < 8; j++) {
 
-				i = g_spells_index[j].first;
+				i = g_spellclasses_1[j].first;
 
-				while (g_spells_index[j].first + g_spells_index[j].length > i) {
+				while (g_spellclasses_1[j].first + g_spellclasses_1[j].length > i) {
 
 					status_show_spell(hero, i,
-						g_spells_index[j].first,
-						g_statuspage_spells_xy[j].x_name,
-						g_statuspage_spells_xy[j].x_val,
-						g_statuspage_spells_xy[j].y);
+						g_spellclasses_1[j].first,
+						g_statuspage_spellclasses_1_xy[j].x_name,
+						g_statuspage_spellclasses_1_xy[j].x_val,
+						g_statuspage_spellclasses_1_xy[j].y);
 
 					i++;
 				}
@@ -753,16 +753,16 @@ void status_show(const signed int index)
 
 			for (j = 0; j < 4; j++) {
 
-				i = g_spells_index2[j].first;
+				i = g_spellclasses_2[j].first;
 
-				while (g_spells_index2[j].first + g_spells_index2[j].length > i) {
+				while (g_spellclasses_2[j].first + g_spellclasses_2[j].length > i) {
 
 					status_show_spell(hero,
 						i,
-						g_spells_index2[j].first,
-						g_statuspage_spells2_xy[j].x_name,
-						g_statuspage_spells2_xy[j].x_val,
-						g_statuspage_spells2_xy[j].y);
+						g_spellclasses_2[j].first,
+						g_statuspage_spellclasses_2_xy[j].x_name,
+						g_statuspage_spellclasses_2_xy[j].x_val,
+						g_statuspage_spellclasses_2_xy[j].y);
 					i++;
 				}
 			}
