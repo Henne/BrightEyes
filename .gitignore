@@ -4,3 +4,5 @@
 a.out
 oldstuff/
 bin/[a-z]*
+build/
+.idea/

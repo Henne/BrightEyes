@@ -1,0 +1,726 @@
+/**
+ *	Rewrite of DSA1 v3.02_de functions of seg074 (automap)
+ *	Functions rewritten: 11/11 (complete)
+ *
+ *	Borlandified and identical
+ *	Compiler:	Borland C++ 3.1
+ *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg074.cpp
+ */
+#include <string.h>
+
+#include "v302de.h"
+#include "common.h"
+
+#include "misc.h"
+#include "graphics.h"
+#include "playmask.h"
+#include "town_main.h"
+#include "automap.h"
+#include "gui.h"
+#include "talents.h"
+
+const uint8_t g_palette_fight2[20][3] = {
+	{ 0x00, 0x00, 0x00 },
+	{ 0x3f, 0x00, 0x00 },
+	{ 0x00, 0x3f, 0x00 },
+	{ 0x00, 0x00, 0x3f },
+	{ 0x3f, 0x3f, 0x00 },
+	{ 0x3f, 0x00, 0x3f },
+	{ 0x00, 0x3f, 0x3f },
+	{ 0x3f, 0x1f, 0x1f },
+	{ 0x1f, 0x1f, 0x3f },
+	{ 0x0f, 0x1f, 0x0f },
+	{ 0x0f, 0x0f, 0x1f },
+	{ 0x20, 0x05, 0x00 },
+	{ 0x3f, 0x1f, 0x00 },
+	{ 0x3f, 0x00, 0x1f },
+	{ 0x28, 0x22, 0x00 },
+	{ 0x1f, 0x1f, 0x1f },
+	{ 0x20, 0x00, 0x33 },
+	{ 0x27, 0x13, 0x00 },
+	{ 0x00, 0x30, 0x00 },
+	{ 0x0a, 0x0a, 0x0a }
+}; // ds:0x7d0e
+const unsigned char g_automap_bitmask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 }; // ds:0x7d4a
+static const unsigned char g_automap_tile_arrowup[49] = { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 }; // ds:0x7d52
+static const unsigned char g_automap_tile_arrowright[49] = { 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }; // ds:0x7d83
+static const unsigned char g_automap_tile_cross[49] = { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }; // ds:0x7db4
+signed int g_automap_selx = -1; // ds:0x7de5
+signed int g_automap_sely = -1; // ds:0x7de7
+unsigned char g_unkn_055[1] = { 0x00 }; // ds:0x7de9
+
+unsigned char g_automap_buf[64]; // ds:0xe442
+
+void show_automap(void)
+{
+	signed int l_si;
+	signed int l_di;
+	signed int loc_bak;
+	signed int done;
+	signed int dungeon;
+	signed int town_id;
+	signed int tw_bak;
+
+	if (!gs_dungeon_light ||
+		((gs_dungeon_light == 1) && (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
+	{
+
+		g_special_screen = 1;
+
+		dungeon = gs_dungeon_id;
+		town_id = gs_town_id;
+
+		gs_town_id = gs_dungeon_id = 0;
+
+		tw_bak = g_textbox_width;
+		g_textbox_width = 3;
+
+		l_si = (g_map_size_x == 16) ? 0 :
+				((gs_x_target - 8 < 0) ? 0 :
+				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
+
+		gs_town_id = town_id;
+		gs_dungeon_id = dungeon;
+
+		g_request_refresh = 1;
+
+		do {
+
+			if (g_request_refresh != 0) {
+
+				loc_bak = gs_town_loc_type;
+				gs_town_loc_type = LOCTYPE_UNKN1;
+
+				draw_main_screen();
+
+				gs_town_loc_type = loc_bak;
+
+				if (g_map_size_x == 16) {
+					draw_loc_icons(1, MENU_ICON_LEAVE);
+				} else {
+					draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_LEAVE);
+				}
+
+				render_automap(l_si);
+				clear_ani_pal();
+				draw_automap_to_screen();
+				set_ani_pal((uint8_t*)g_palette_fight2);
+				g_request_refresh = 0;
+			}
+
+			done = 0;
+
+			handle_gui_input();
+
+			if ((g_mouse_rightclick_event) || (g_action == ACTION_ID_PAGE_UP)) {
+
+				if (g_map_size_x == 16) {
+
+					l_di = GUI_radio(get_ttx(612), 1, get_ttx(613)) - 1;
+
+				} else {
+					g_menu_default_select = 2;
+
+					l_di = GUI_radio(get_ttx(612), 3, get_ttx(614), get_ttx(615), get_ttx(613)) - 1;
+				}
+
+				if (l_di != -2) {
+					g_action = l_di + ACTION_ID_ICON_1;
+				}
+			}
+
+			if (g_map_size_x != 16) {
+
+				if ((g_action == ACTION_ID_ICON_1) || (g_action == ACTION_ID_LEFT)) {
+
+					if (l_si > 0) {
+						render_automap(--l_si);
+						draw_automap_to_screen();
+					}
+				}
+
+				if ((g_action == ACTION_ID_ICON_2) || (g_action == ACTION_ID_RIGHT)) {
+
+					if (l_si < 16) {
+						render_automap(++l_si);
+						draw_automap_to_screen();
+					}
+				}
+			}
+
+			if (((g_action == ACTION_ID_ICON_1) && (g_map_size_x == 16)) ||
+				((g_action == ACTION_ID_ICON_3) && (g_map_size_x != 16)))
+			{
+				done = 1;
+			}
+		} while (done == 0);
+
+		g_textbox_width = tw_bak;
+		g_request_refresh = 1;
+
+		clear_ani_pal();
+
+	} else {
+		GUI_output(get_ttx(772));
+	}
+}
+
+signed int is_discovered(const signed int x, const signed int y)
+{
+	return g_automap_buf[(4 * y) + (x >> 3)] & g_automap_bitmask[(x & 7)];
+}
+
+/**
+ * \brief   get value of automap field from small (16x16) maps
+ *
+ * \param   x           x-coordinate
+ * \param   y           y-coordinate
+ * \return              value of the field at (x,y)
+ */
+uint16_t get_mapval_small(const signed int x, const signed int y)
+{
+	uint8_t *map = g_dng_map;
+
+	return *(map + 16 * y + x);
+}
+
+/**
+ * \brief   get value of automap field from small (32x16) maps
+ *
+ * \param   x           x-coordinate
+ * \param   y           y-coordinate
+ * \return              value of the field at (x,y)
+ */
+uint16_t get_mapval_large(const signed int x, const signed int y)
+{
+	uint8_t *map = g_dng_map;
+
+	return *(map + 32 * y + x);
+}
+
+/**
+ * \brief   checks if the group is in prison
+ *
+ * \param   group_id    number of the group
+ * \return              the value of the "in_prison" flag
+ */
+signed int is_group_in_prison(const signed int group_id)
+{
+	struct struct_hero *hero = get_hero(0);
+	signed int i;
+
+	for (i = 0; i < 6; i++, hero++) {
+
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == group_id))
+		{
+			return hero->jail;
+		}
+	}
+
+	return 0;
+}
+
+/**
+ * \brief   render the automap in g_renderbuf
+ *
+ * \param   x_off           x offset for vertical scroll
+ */
+void render_automap(const signed int x_off)
+{
+	signed int tile_type;
+	signed int group_i;
+	signed int x;
+	signed int y;
+	signed int entrance_dir;
+
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 6;
+	g_pic_copy.y2 = 6;
+
+	/* set buffer to 0 */
+	memset(g_renderbuf_ptr, 0, 64000);
+
+	for (y = 0; y < 16; y++) {
+		for (x = 0; x < 16; x++) {
+			if (is_discovered(x + x_off, y)) {
+
+				if (gs_dungeon_id != DUNGEON_ID_NONE) {
+					/* in dungeon */
+
+					tile_type = div16(get_mapval_small(x, y));
+
+					draw_automap_square(x, y,
+						(tile_type <= DNG_TILE_CORRIDOR)? MAP_TILE_DARK_GREY :
+							(((tile_type == DNG_TILE_CLOSED_DOOR) || (tile_type == DNG_TILE_SMASHED_DOOR) || tile_type == DNG_TILE_OPEN_DOOR) ? MAP_TILE_DARK_RED :
+							((tile_type == DNG_TILE_STAIR_UP) ? MAP_TILE_LIGHT_BLUE :
+							((tile_type == DNG_TILE_STAIR_DOWN) ? MAP_TILE_BLUE :
+							((tile_type == DNG_TILE_PIT_IN_CEILING) ? MAP_TILE_BRIGHT_GREEN :
+							((tile_type == DNG_TILE_CHEST) ? MAP_TILE_BROWN :
+							((tile_type == DNG_TILE_PIT) ? MAP_TILE_DARK_GREEN : MAP_TILE_RED)))))), -1);
+
+				} else {
+					/* in a town */
+
+					if (!(tile_type = get_maploc(x + x_off, y))) {
+						tile_type = get_border_index((g_map_size_x == 16 ? get_mapval_small(x, y) : get_mapval_large(x + x_off, y)));
+					}
+
+					draw_automap_square(x, y,
+						(tile_type <= TOWN_TILE_STREET)? MAP_TILE_DARK_GREY :
+							((tile_type == TOWN_TILE_WATER) ? MAP_TILE_BLUE :
+							((tile_type == TOWN_TILE_GRASS) ? MAP_TILE_GREEN :
+							((tile_type == TOWN_TILE_SIGNPOST) ? MAP_TILE_RED :
+							((tile_type == TOWN_TILE_TEMPLE) ? MAP_TILE_ORANGE :
+							((tile_type == TOWN_TILE_INN_OR_TAVERN) ? MAP_TILE_LIGHT_BLUE :
+							((tile_type == TOWN_TILE_MERCHANT) ? MAP_TILE_GREY : /* The lightouse on Runin is also displayed in Gray */
+							((tile_type == TOWN_TILE_SMITH) ? MAP_TILE_DARK_GREEN :
+							((tile_type == TOWN_TILE_HEALER) ? MAP_TILE_PINK :
+							((tile_type == TOWN_TILE_BLACK_FINGER) ? MAP_TILE_DARK_PURPLE :
+							(((tile_type >= TOWN_TILE_HOUSE_1) && (tile_type <= TOWN_TILE_HOUSE_4)) ? MAP_TILE_DARK_RED : MAP_TILE_BLACK)))))))))), -1);
+
+					if ((tile_type != TOWN_TILE_STREET) && (tile_type != TOWN_TILE_GRASS) && (tile_type != TOWN_TILE_WATER) && (tile_type != TOWN_TILE_SIGNPOST)) {
+
+						entrance_dir = (g_map_size_x == 16) ?
+										get_mapval_small(x, y) :
+										get_mapval_large(x + x_off, y);
+
+						entrance_dir &= 3;
+						draw_automap_entrance(x, y, entrance_dir);
+					}
+				}
+			}
+		}
+	}
+
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* draw yellow arrow at the position of the active group */
+
+	/* Original-Bug 31: If there is another group on the same map square as the active group, the automap will mark that square by a purple arrow (for the other group) instead of a yellow one (for the active group).
+	 * The reason is that the yellow arrow will be overdrawn by the purple ones, which are drawn later. */
+	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
+
+		draw_automap_square(gs_x_target - x_off, gs_y_target, MAP_TILE_YELLOW_ARROW, gs_direction);
+	}
+#endif
+
+	/* draw purple arrows at the positions of other groups */
+	for (group_i = 0; group_i < 6; group_i++) {
+
+		if ((gs_active_group_id != group_i) &&
+			(gs_group_member_counts[group_i] > 0) &&
+			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
+			(gs_groups_town_id[group_i] == gs_town_id) &&
+			(gs_groups_dungeon_id[group_i] == gs_dungeon_id) &&
+			!is_group_in_prison(group_i) &&
+			(gs_groups_x_target[group_i] - x_off >= 0) &&
+			(gs_groups_x_target[group_i] - x_off <= 16))
+		{
+			draw_automap_square(gs_groups_x_target[group_i] - x_off,
+					gs_groups_y_target[group_i],
+					MAP_TILE_PURPLE_ARROW,
+					gs_groups_direction[group_i]);
+		}
+	}
+
+#ifdef M302de_ORIGINAL_BUGFIX
+	/* draw yellow arrow at the position of the active group */
+
+	/* Original-Bug 31: see above.
+	 * Fix: Move the code block drawing the yellow arrow after the one drawing the purple arrows. */
+	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
+
+		draw_automap_square(gs_x_target - x_off, gs_y_target, MAP_TILE_YELLOW_ARROW, gs_direction);
+	}
+#endif
+
+	/* In the target selector screen of the Transversalis spell, mark the target with a cross */
+	if (((g_automap_selx - x_off) >= 0) && ((g_automap_selx - x_off) <= 16)) {
+
+		draw_automap_square(g_automap_selx - x_off, g_automap_sely, MAP_TILE_CROSS, -1);
+	}
+}
+
+/**
+ * \brief   draws a building on the automap
+ *
+ * \param   x           x-coordinate on the automap
+ * \param   y           y-coordiante on the automap
+ * \param   color       the color
+ * \param   dir         direction of the entrance, -1 for none
+ */
+void draw_automap_square(const signed int x, const signed int y, const signed int color, const signed int dir)
+{
+	signed int i;
+	signed int offset_y;
+	uint8_t* p_img_tile;
+	signed char tile[50];
+
+	offset_y = y;
+	offset_y <<= 3;
+	offset_y *= 320;
+
+	p_img_tile = (uint8_t*)g_renderbuf_ptr + offset_y + 8 * x + 0xca8;
+
+	for (i = 0; i < 49; i++) {
+		tile[i] = color;
+	}
+
+	if ((color == 4) || (color == 16)) {
+
+		if (dir == 0) {
+
+			memcpy(g_text_output_buf, g_automap_tile_arrowup, 49);
+
+		} else if (dir == 2) {
+
+			for (i = 0; i < 49; i++) {
+				g_text_output_buf[i] = g_automap_tile_arrowup[48 - i];
+			}
+
+		} else if (dir == 1) {
+
+			memcpy(g_text_output_buf, g_automap_tile_arrowright, 49);
+
+		} else {
+
+			for (i = 0; i < 49; i++) {
+				g_text_output_buf[i] = g_automap_tile_arrowright[48 - i];
+			}
+		}
+
+		for (i = 0; i < 49; i++) {
+			if (!g_text_output_buf[i]) {
+				tile[i] = 0;
+			}
+		}
+	}
+
+	if (color == 7) {
+
+		for (i = 0; i < 49; i++) {
+			if (!g_automap_tile_cross[i]) {
+				tile[i] = 0;
+			} else {
+				tile[i] = color;
+			}
+		}
+	}
+
+	g_pic_copy.dst = p_img_tile;
+	g_pic_copy.src = (uint8_t*)tile;
+
+	do_pic_copy(0);
+}
+
+/**
+ * \brief   draws the entrance of a automap building
+ *
+ * \param   x           x-coordinate of the building
+ * \param   y           y-coordinate of the building
+ * \param   dir         direction of the entrance, 0 = NORTH, 1 = EAST,...
+ */
+void draw_automap_entrance(const signed int x, const signed int y, const signed int dir)
+{
+	signed int offset_y = y;
+	signed int d = dir;
+	signed int skipsize;
+	uint8_t *p_img_tile;
+
+	offset_y <<= 3;
+	offset_y *= 320;
+
+	p_img_tile = ((uint8_t*)g_renderbuf_ptr) + offset_y + 8 * x + 0xca8;
+
+	if (!d) {
+		p_img_tile += 2;
+		skipsize = 1;
+	} else if (d == 1) {
+		p_img_tile += 646;
+		skipsize = 320;
+	} else if (d == 2) {
+		p_img_tile += 1922;
+		skipsize = 1;
+	} else {
+		p_img_tile += 640;
+		skipsize = 320;
+	}
+
+	/* set 3 pixel to black */
+	*p_img_tile = 0;
+	*(p_img_tile + skipsize) = 0;
+	*(p_img_tile + skipsize + skipsize) = 0;
+}
+
+void draw_automap_to_screen(void)
+{
+	/* save screen coordinates */
+	struct struct_rect rect_bak = g_pic_copy_rect;
+
+	/* set the screen coordinates */
+	g_pic_copy_rect.x1 = g_pic_copy_rect.y1 = 0;
+	g_pic_copy_rect.x2 = g_ani_posx + 208;
+	g_pic_copy_rect.y2 = g_ani_posy + 135;
+
+	g_pic_copy.src = g_renderbuf_ptr;
+
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 320 - 1;
+	g_pic_copy.y2 = 135 - 1;
+
+	g_pic_copy.dst = g_vga_memstart + g_ani_posx + 320 * g_ani_posy;
+
+	call_mouse_bg();
+
+	g_pic_copy_flag = 1;
+	do_pic_copy(1);
+	g_pic_copy_flag = 0;
+
+	call_mouse();
+
+	g_pic_copy.dst = g_vga_memstart;
+
+	/* restore screen coordinates */
+	g_pic_copy_rect = rect_bak;
+}
+
+/**
+ * \brief   select a teleport destination
+ *
+ * \return              costs for teleport in AE
+ */
+signed int select_teleport_dest(void)
+{
+	signed int l_si;
+#if !defined(__BORLANDC__)
+	signed int l_di;
+#endif
+
+	signed int answer;
+	signed int done;
+	signed int dungeon;
+	signed int town;
+	signed int ae_costs;
+	signed int tw_bak;
+
+	draw_main_screen();
+
+	dungeon = gs_dungeon_id;
+	town = gs_town_id;
+	gs_town_id = gs_dungeon_id = 0;
+
+	l_si = ((g_map_size_x == 16) ? 0 :
+			((gs_x_target - 8 < 0) ? 0 :
+			((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8)));
+
+	g_automap_selx = gs_x_target;
+	g_automap_sely = gs_y_target;
+	gs_dungeon_id = dungeon;
+	gs_town_id = town;
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
+
+	render_automap(l_si);
+
+	clear_ani_pal();
+
+	draw_automap_to_screen();
+
+	set_ani_pal((uint8_t*)g_palette_fight2);
+
+	if (g_map_size_x == 16) {
+		draw_loc_icons(1, MENU_ICON_MAGIC);
+	} else {
+		draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_MAGIC);
+	}
+
+	done = 0;
+
+	do {
+		handle_input();
+
+		if ((g_mouse_rightclick_event) || (g_action == ACTION_ID_PAGE_UP)) {
+
+			if (g_map_size_x == 16) {
+				answer = GUI_radio(get_ttx(616), 1, get_ttx(617)) - 1;
+			} else {
+				answer = GUI_radio(get_ttx(616), 3, get_ttx(614), get_ttx(615), get_ttx(617)) - 1;
+			}
+
+			if (answer != -2) {
+				g_action = (answer + ACTION_ID_ICON_1);
+			}
+		}
+
+		if ((g_action == ACTION_ID_LEFT) &&
+			(g_automap_selx > 0) &&
+			is_discovered(g_automap_selx - 1, g_automap_sely))
+		{
+			g_automap_selx--;
+			render_automap(l_si);
+			draw_automap_to_screen();
+
+		} else if ((g_action == ACTION_ID_UP) &&
+			(g_automap_sely > 0) &&
+			is_discovered(g_automap_selx, g_automap_sely - 1))
+		{
+			g_automap_sely--;
+			render_automap(l_si);
+			draw_automap_to_screen();
+
+		} else if ((g_action == ACTION_ID_RIGHT) &&
+			(g_map_size_x - 1 > g_automap_selx) &&
+			is_discovered(g_automap_selx + 1, g_automap_sely))
+		{
+			g_automap_selx++;
+			render_automap(l_si);
+			draw_automap_to_screen();
+
+		} else if ((g_action == ACTION_ID_DOWN) &&
+			(g_automap_sely < 16) &&
+			is_discovered(g_automap_selx, g_automap_sely + 1))
+		{
+			g_automap_sely++;
+			render_automap(l_si);
+			draw_automap_to_screen();
+		}
+
+		if (g_map_size_x != 16) {
+
+			if ((g_action == ACTION_ID_ICON_1) && (l_si > 0)) {
+				render_automap(--l_si);
+				draw_automap_to_screen();
+			}
+
+			if ((g_action == ACTION_ID_ICON_2) && (l_si < 16)) {
+				render_automap(++l_si);
+				draw_automap_to_screen();
+			}
+		}
+
+		if (((g_action == ACTION_ID_ICON_1) && (g_map_size_x == 16)) ||
+			((g_action == ACTION_ID_ICON_3) && (g_map_size_x != 16)))
+		{
+			done = 1;
+		}
+
+
+	} while (done == 0);
+
+#if !defined(__BORLANDC__)
+	l_di = (g_map_size_x == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
+
+	if (gs_town_id != TOWN_ID_NONE) {
+		l_di = get_border_index(l_di);
+	} else {
+		l_di = div16(l_di);
+	}
+#else
+	/* REMARK: enforce the use of register DI */
+	_DI = (g_map_size_x == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
+
+	if (gs_town_id != TOWN_ID_NONE) {
+		_DI = get_border_index(_DI);
+	} else {
+		_DI = div16(_DI);
+	}
+#endif
+
+	ae_costs = 0;
+
+	if ((g_automap_selx == gs_x_target) && (g_automap_sely == gs_y_target))
+	{
+		ae_costs = 0;
+		*g_dtp2 = '\0';
+
+	} else
+#if !defined(__BORLANDC__)
+		if ((gs_dungeon_id && (l_di == 15)) || ((gs_town_id != TOWN_ID_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
+#else
+		/* REMARK: enforce the use of register DI */
+		if ((gs_dungeon_id && (_DI == 15)) || ((gs_town_id != TOWN_ID_NONE) && ((((int16_t)_DI >= 2) && ((int16_t)_DI <= 5)) || (_DI == 6))))
+#endif
+	{
+		strcpy(g_dtp2, get_ttx(611));
+		ae_costs = -2;
+	} else {
+		*g_dtp2 = '\0';
+		ae_costs = 15;
+	}
+
+	g_textbox_width = tw_bak;
+	g_request_refresh = 1;
+
+	return ae_costs;
+}
+
+/**
+ * \brief   get location type at given position on map
+ *
+ * \param   x           x-coordinate of the building
+ * \param   y           y-coordinate of the building
+ * \return              type of location
+ */
+signed int get_maploc(const signed int x, const signed int y)
+{
+	struct location *locations_tab_ptr;
+	const signed int pos_xy = TOWN_POS(x,y);
+
+	// Wow. Original game has these hard-coded manipulation of the data.
+	if (gs_town_id == TOWN_ID_THORWAL) {
+
+		if (pos_xy == TOWN_POS(4,13)) {
+			// schwarzer Finger
+			return TOWN_TILE_BLACK_FINGER;
+		} else if (pos_xy == TOWN_POS(5,2)) {
+			// town exit to Vaermhag, which is located in a building (not a signpost).
+			return TOWN_TILE_SIGNPOST;
+		} else if ((pos_xy == TOWN_POS(5,1))
+		        || (pos_xy == TOWN_POS(5,4) || (pos_xy == TOWN_POS(3,6)))
+		        || (pos_xy == TOWN_POS(13,8) || (pos_xy == TOWN_POS(20,11)))
+		        || (pos_xy == TOWN_POS(5,5) || (pos_xy == TOWN_POS(3,10))))
+		{
+			return TOWN_TILE_INN_OR_TAVERN;
+		}
+	} else if (gs_town_id == TOWN_ID_PREM) {
+		if (pos_xy == TOWN_POS(28,9)) {
+			// Inn "Zur Trutz". Why is this a special case here?
+			return TOWN_TILE_INN_OR_TAVERN;
+		}
+	} else if (gs_town_id == TOWN_ID_GUDDASUNDEN) {
+		if (pos_xy == TOWN_POS(1,14)) {
+			// Harbor, which is located in a building (not a signpost).
+			return TOWN_TILE_SIGNPOST;
+		}
+	}
+
+	locations_tab_ptr = &g_locations_tab[0];
+
+	do {
+
+		if (locations_tab_ptr->pos == pos_xy) {
+
+			if (locations_tab_ptr->loctype == LOCTYPE_TEMPLE) {
+				return TOWN_TILE_TEMPLE;
+			}
+			if (locations_tab_ptr->loctype == LOCTYPE_MERCHANT) {
+				return TOWN_TILE_MERCHANT;
+			}
+			if (locations_tab_ptr->loctype == LOCTYPE_SMITH) {
+				return TOWN_TILE_SMITH;
+			}
+			if ((locations_tab_ptr->loctype == LOCTYPE_TAVERN) || (locations_tab_ptr->loctype == LOCTYPE_INN)) {
+				return TOWN_TILE_INN_OR_TAVERN;
+			}
+			if (locations_tab_ptr->loctype == LOCTYPE_HEALER) {
+				return TOWN_TILE_HEALER;
+			}
+		}
+
+		locations_tab_ptr++;
+
+	} while (locations_tab_ptr->pos != -1);
+
+	return TOWN_TILE_STREET;
+}

@@ -15,117 +15,130 @@ find_package(OpenMP)
 
 # Define source files
 set(SCHICK_SOURCES
+    # Core systems
     datseg.cpp
-    seg001.cpp
-    seg002.cpp
-    seg003.cpp
-    seg004.cpp
-    seg005.cpp
-    seg006.cpp
-    seg007.cpp
-    seg008.cpp
-    seg009.cpp
-    seg010.cpp
-    seg011.cpp
-    seg024.cpp
-    seg025.cpp
-    seg026.cpp
-    seg027.cpp
-    seg028.cpp
-    seg029.cpp
-    seg030.cpp
-    seg031.cpp
-    seg032.cpp
-    seg033.cpp
-    seg034.cpp
-    seg035.cpp
-    seg036.cpp
-    seg037.cpp
-    seg038.cpp
-    seg039.cpp
-    seg040.cpp
-    seg041.cpp
-    seg042.cpp
-    seg043.cpp
-    seg044.cpp
-    seg045.cpp
-    seg046.cpp
-    seg047.cpp
-    seg048.cpp
-    seg049.cpp
-    seg050.cpp
-    seg051.cpp
-    seg052.cpp
-    seg053.cpp
-    seg054.cpp
-    seg055.cpp
-    seg056.cpp
-    seg057.cpp
-    seg058.cpp
-    seg059.cpp
-    seg060.cpp
-    seg061.cpp
-    seg062.cpp
-    seg063.cpp
-    seg064.cpp
-    seg065.cpp
-    seg066.cpp
-    seg067.cpp
-    seg068.cpp
-    seg069.cpp
-    seg070.cpp
-    seg071.cpp
-    seg072.cpp
-    seg073.cpp
-    seg074.cpp
-    seg075.cpp
-    seg076.cpp
-    seg077.cpp
-    seg078.cpp
-    seg079.cpp
-    seg080.cpp
-    seg081.cpp
-    seg082.cpp
-    seg083.cpp
-    seg084.cpp
-    seg085.cpp
-    seg086.cpp
-    seg087.cpp
-    seg088.cpp
-    seg089.cpp
-    seg090.cpp
-    seg091.cpp
-    seg092.cpp
-    seg093.cpp
-    seg094.cpp
-    seg095.cpp
-    seg096.cpp
-    seg097.cpp
-    seg098.cpp
-    seg099.cpp
-    seg100.cpp
-    seg101.cpp
-    seg102.cpp
-    seg103.cpp
-    seg104.cpp
-    seg105.cpp
-    seg106.cpp
-    seg107.cpp
-    seg108.cpp
-    seg109.cpp
-    seg110.cpp
-    seg111.cpp
-    seg112.cpp
-    seg113.cpp
-    seg114.cpp
-    seg115.cpp
-    seg116.cpp
-    seg117.cpp
-    seg118.cpp
-    seg119.cpp
-    seg120.cpp
-    seg121.cpp
-    seg122.cpp
+    cdrom.cpp
+    misc.cpp
+    movement.cpp
+    graphics.cpp
+    fight_core.cpp
+    fight_base.cpp
+    random_dice.cpp
+    rasterlib.cpp
+    pp20_decompress.cpp
+    ems.cpp
+    sound_ail.cpp
+
+    # Game data & core mechanics
+    diary.cpp
+    locations.cpp
+    save_text.cpp
+    file_loader.cpp
+    resource_loader.cpp
+    playmask.cpp
+    talk_date.cpp
+    tavern_helpers.cpp
+    fight_helpers.cpp
+
+    # Fight system
+    fight_menu.cpp
+    fight_system.cpp
+    fight_logic.cpp
+    fight_auto_hero.cpp
+    fight_enemy_attack.cpp
+    fight_actions.cpp
+    fight_mechanics.cpp
+    fight_scenarios.cpp
+    fight_control.cpp
+    fight_hero_action.cpp
+    fight_enemy_action.cpp
+    fight_anim_figures.cpp
+    fight_anim_effects.cpp
+    status_display.cpp
+    heroes_group.cpp
+    status_menu.cpp
+    group_mgmt.cpp
+    level_up.cpp
+
+    # Locations & environments
+    wilderness_camp.cpp
+    area_camp.cpp
+    location_healer.cpp
+    location_inn.cpp
+    merchant_main.cpp
+    merchant_buy.cpp
+    merchant_sell.cpp
+    location_smith.cpp
+    tavern_main.cpp
+    tavern_talk.cpp
+    temple_main.cpp
+    temple_miracle.cpp
+    harbor_main.cpp
+    harbor_helper.cpp
+    special_anims.cpp
+    town_main.cpp
+    city_events.cpp
+    thorwal_buildings1.cpp
+    thorwal_buildings2.cpp
+    phexcaer_buildings1.cpp
+    phexcaer_buildings2.cpp
+    informer_script.cpp
+    tavern_gossip.cpp
+    automap.cpp
+
+    # Dungeon systems
+    dungeon_common1.cpp
+    dungeon_common2.cpp
+    dungeon_ship_death.cpp
+    dungeon_inn.cpp
+    dungeon_spider_cave.cpp
+    dungeon_wolf_cave.cpp
+    dungeon_cave2.cpp
+    dungeon_mageruin.cpp
+    dungeon_orc_lair.cpp
+    dungeon_main.cpp
+    dungeon_cave4.cpp
+    dungeon_pirate_cave.cpp
+    dungeon_thorwal1.cpp
+    dungeon_thorwal2.cpp
+    dungeon_ruined_castle.cpp
+    dungeon_oberorken_mine.cpp
+    dungeon_prem_mine.cpp
+    treasures.cpp
+
+    # Game mechanics & magic
+    travel_mode1.cpp
+    travel_mode2.cpp
+    npcs.cpp
+    text_output.cpp
+    gui.cpp
+    magic_main.cpp
+    spells1.cpp
+    spells2.cpp
+    spells3.cpp
+    spells_monster.cpp
+    talents.cpp
+    alchemy_cure.cpp
+    inventory_main.cpp
+    inventory_misc.cpp
+    item_use.cpp
+    consume.cpp
+    travel_event1.cpp
+    travel_event2.cpp
+    travel_event3.cpp
+    travel_event4.cpp
+    travel_event5.cpp
+    travel_event6.cpp
+    travel_event7.cpp
+    travel_event8.cpp
+    travel_event9.cpp
+    travel_event10.cpp
+    disease_effect.cpp
+    game_init.cpp
+    poison_effect.cpp
+    dummy_location.cpp
+
+    # Graphics library
     vgalib.cpp
 )
 
@@ -149,8 +162,8 @@ target_compile_options(schick PRIVATE
     -fno-omit-frame-pointer       # Keep frame pointers for better debugging
 )
 
-# Special flags for seg011.cpp
-set_source_files_properties(seg011.cpp PROPERTIES
+# Special flags for sound_ail.cpp
+set_source_files_properties(sound_ail.cpp PROPERTIES
     COMPILE_FLAGS "-Wno-unused-parameters"
 )
 
