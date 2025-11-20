@@ -616,12 +616,12 @@ struct struct_recipe {
 	signed char  duration;		/* time needed to brew the recipe in hours */
 };
 
-struct spells_index {
+struct spell_range { /* spells by spell group */
 	int8_t first;
 	int8_t length;
 };
 
-struct skills_index {
+struct skill_range {
 	int8_t first;
 	int8_t length;
 };
@@ -802,15 +802,15 @@ extern const signed int g_attack_items[3];				// ds:0x091f; seg033
 extern signed char g_monster_name_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
 extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
-extern const struct spells_index g_spells_index[8];			// ds:0x0d03; seg046, seg098
-extern const struct spells_index g_spells_index2[4];			// ds:0x0d13; seg046
+extern const struct spell_range g_spellclasses_1[8];			// ds:0x0d03; seg046, seg098
+extern const struct spell_range g_spellclasses_2[4];			// ds:0x0d13; seg046
 extern const signed int* g_magic_schools_table[9];
 extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
 extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
 extern int8_t g_mon_spellbooks[11][5];				// ds:0x0f8b; seg037
 extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
 extern const struct skill_descr g_skill_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
-extern const struct skills_index g_skills_index[7];			//ds:0x10ce; seg046, seg103
+extern const struct skill_range g_skillclasses[7];			//ds:0x10ce; seg046, seg103
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];		//ds:0x10dc; seg002, seg033, seg039
 extern signed short g_nvftab_figures_unconscious[22];			//ds:0x11e4; seg002, seg005, seg039
 extern const struct point8s g_gfxtab_offsets_unconscious[22][4];	//ds:0x1210; seg002, seg005, seg039

@@ -55,16 +55,16 @@ signed int LVL_select_skill(const struct struct_hero *hero, const signed int sho
 		strcpy(g_dtp2, get_ttx(216));
 	}
 
-	/* ask for the skill category */
+	/* ask for the skillclass */
 	answer = GUI_radio(g_dtp2, 7, get_ttx(100), get_ttx(101), get_ttx(102), get_ttx(105), get_ttx(103), get_ttx(104), get_ttx(106)) - 1;
 
 	if (answer != -2) {
 
-		first_skill = g_skills_index[answer].first;
+		first_skill = g_skillclasses[answer].first;
 
 		if (show_values != 0) {
 
-			for (i = 0; g_skills_index[answer].length > i; i++) {
+			for (i = 0; g_skillclasses[answer].length > i; i++) {
 
 				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(first_skill + i + 48), hero->skills[first_skill + i]);
 
@@ -72,12 +72,12 @@ signed int LVL_select_skill(const struct struct_hero *hero, const signed int sho
 			}
 		} else {
 
-			for (i = 0; g_skills_index[answer].length > i; i++) {
+			for (i = 0; g_skillclasses[answer].length > i; i++) {
 				g_radio_name_list[i] = get_ttx(first_skill + i + 48);
 			}
 		}
 
-		retval = GUI_radio(get_ttx(218), g_skills_index[answer].length,
+		retval = GUI_radio(get_ttx(218), g_skillclasses[answer].length,
 				g_radio_name_list[0], g_radio_name_list[1],
 				g_radio_name_list[2], g_radio_name_list[3],
 				g_radio_name_list[4], g_radio_name_list[5],
