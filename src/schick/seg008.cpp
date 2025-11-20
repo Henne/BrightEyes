@@ -15,46 +15,42 @@
 
 #include "v302de.h"
 
-
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
-
-unsigned short swap_u16(unsigned short val)
+uint16_t swap_u16(const uint16_t val)
 {
 	return (val << 8) | (val >> 8);
 }
 
-void set_video_mode(signed short mode)
+void set_video_mode(const int16_t mode)
 {
 }
 
-void set_video_page(signed short page)
+void set_video_page(const int16_t page)
 {
 }
 
-void save_display_stat(Bit8u* p)
+void save_display_stat(int16_t* p)
 {
 }
 
-void set_color(Bit8u *ptr, unsigned char color)
+void set_color(uint8_t *ptr, uint8_t color)
 {
 }
 
-void set_palette(Bit8u *ptr, unsigned short first_color, unsigned short colors)
+void set_palette(uint8_t *ptr, const signed int first_color, const signed int colors)
 {
 }
 
-void draw_h_line(Bit8u *ptr, unsigned short count, signed short color) {
-	unsigned short i;
+void draw_h_line(uint8_t *ptr, signed int count, const signed int color)
+{
+	signed int i;
 
 	for (i = 0; i < count; i++)
 		*(ptr + i) = color;
 }
 
-void draw_h_spaced_dots(Bit8u *ptr, signed short count, signed short color, signed short space)
+void draw_h_spaced_dots(uint8_t *ptr, const signed int count, const signed int color, const signed int space)
 {
-	unsigned short i;
+	signed int i;
 
 	for (i = 0; i < count; i++) {
 		*ptr = color;
@@ -62,12 +58,10 @@ void draw_h_spaced_dots(Bit8u *ptr, signed short count, signed short color, sign
 	}
 }
 
-void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
-	unsigned short val1, unsigned short val2,
-	unsigned short val3, unsigned short val4,
-	unsigned short src_width, unsigned short src_height,
-	Bit8u *src, unsigned short mode) {
-
+void pic_copy(uint8_t *dst, const signed int x1, const signed int y1, const signed int x2, const signed int y2,
+	const signed int val1, const signed int val2, const signed int val3, const signed int val4,
+	const signed int src_width, const signed int src_height, uint8_t *src, const signed int mode)
+{
 	signed int r_y2, r_y1, r_x1, r_x2;
 	signed int cur_height;
 	signed int cur_width;
@@ -128,7 +122,7 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 
 	switch (mode) {
 	case 1: {
-		short bx, cols, lines;
+		signed int bx, cols, lines;
 
 		lines = cur_height;
 		bx = 320 - cur_width;
@@ -158,7 +152,7 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 		break;
 	}
 	case 2: {
-		short bx, lines, cols;
+		signed int bx, lines, cols;
 
 		lines = cur_height;
 		bx = 320 - cur_width;
@@ -178,7 +172,7 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 		break;
 	}
 	case 3: {
-		short bx, lines, cols;
+		signed int bx, lines, cols;
 
 		src += val2 * 320 + val1;
 
@@ -193,7 +187,7 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 		break;
 	}
 	default: {
-		short bx, lines, cols;
+		signed int bx, lines, cols;
 		lines = cur_height;
 		bx = 320 - cur_width;
 		do {
@@ -206,75 +200,103 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 	}
 }
 
-void save_rect(Bit16u seg, Bit16u off, Bit8u *dst, unsigned short width, unsigned short height)
+#if defined(__BORLANDC__)
+void save_rect(uint16_t seg, uint16_t off, uint8_t *dst, const signed int width, signed int height)
+#else
+void save_rect(uint8_t* src, uint8_t *dst, const signed int width, signed int height)
+#endif
 {
 	for (; height; height--) {
 #if defined(__BORLANDC__)
 		memcpy((void*)dst, MK_FP(seg, off), width);
-#endif
 		off += 320;
+#else
+		memcpy((void*)dst, (void*)src, width);
+		src += 320;
+#endif
 		dst += width;
 	}
 }
 
-void fill_rect(Bit16u seg, Bit16u off, signed short color, signed short width, signed short height)
+#if defined(__BORLANDC__)
+void fill_rect(uint16_t seg, uint16_t off, const signed int color, const signed int width, signed int height)
+#else
+void fill_rect(uint8_t *dst, const signed int color, const signed int width, signed int height)
+#endif
 {
-	unsigned short x;
-
 	for (; height; height--) {
+
+		signed int x;
+
 		for (x = 0; x < width; x++) {
 #if defined(__BORLANDC__)
 			*MK_FP(seg, off++) = color;
+#else
+			*dst++ = color;
 #endif
 		}
 
+#if defined(__BORLANDC__)
 		off += 320 - width;
+#else
+		dst += 320 - width;
+#endif
 	}
 }
 
-void copy_solid_permuted(Bit8u *dst, Bit8u *src, unsigned short width_to_copy,
-	unsigned short height, unsigned short dst_width,
-	unsigned short src_width, unsigned short solid) {
+void copy_solid_permuted(uint8_t *dst, uint8_t *src, const signed int width_to_copy,
+	const signed int height, const signed int dst_width,
+	const signed int src_width, const signed int solid)
+{
+	uint8_t *s = src;
+	uint8_t *d = dst;
+	signed int y;
 
-	Bit8u *s, *d;
-	unsigned short y,x;
+	for (y = 0; y < height; y++, s = src += src_width, d = dst += dst_width) {
 
-	s = src;
-	d = dst;
-	for (y = 0; y < height; y++, s = src += src_width, d = dst += dst_width)
+		signed int x;
+
 		for (x = width_to_copy; x ; x--) {
-			if (*s != solid)
+
+			if (*s != solid) {
 				*d = *s;
+			}
+
 			d++;
 			s--;
 		}
+	}
 }
 
-void copy_solid(Bit8u *dst, Bit8u *src, unsigned short width_to_copy,
-	unsigned short height, unsigned short dst_width,
-	unsigned short src_width, unsigned short solid) {
+void copy_solid(uint8_t *dst, uint8_t *src, const signed int width_to_copy,
+	const signed int height, const signed int dst_width,
+	const signed int src_width, const signed int solid)
+{
+	uint8_t *s = src;
+	uint8_t *d = dst;
+	signed int y;
 
-	Bit8u *s, *d;
-	unsigned short y,x;
+	for (y = 0; y < height; y++, s = src += src_width, d = dst += dst_width) {
 
-	s = src;
-	d = dst;
-	for (y = 0; y < height; y++, s = src += src_width, d = dst += dst_width)
+		signed int x;
+
 		for (x = width_to_copy; x ; x--) {
 			if (*s != solid)
 				*d = *s;
 			s++;
 			d++;
 		}
+	}
 }
 
-void decomp_rle(unsigned short width, unsigned short height, Bit8u *dst,
-	Bit8u *src, Bit8u *tmp_buffer, unsigned short mode) {
-
-	Bit8u *my_dst;
-	unsigned short i,x;
-	unsigned char tmp;
-	unsigned char cnt;
+void decomp_rle(const signed int width, signed int height, uint8_t *dst,
+	uint8_t *src, uint8_t *tmp_buffer, const signed int mode)
+{
+	uint8_t *my_dst;
+	signed int i;
+	signed int x;
+	uint8_t tmp;
+	uint8_t cnt;
 
 	/* select destination buffer */
 	if (mode == 5 || mode == 4)
@@ -319,7 +341,3 @@ void decomp_rle(unsigned short width, unsigned short height, Bit8u *dst,
 
 	} while (--height);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

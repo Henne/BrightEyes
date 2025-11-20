@@ -8,7 +8,11 @@
  */
 
 #if !defined(__BORLANDC__)
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -22,13 +26,12 @@
 #include "seg029.h"
 #include "seg096.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
+static signed char g_loaded_menu_icons[9] = { -2, -2, -2, -2, -2, -2, -2, -2, -2 }; // ds:0x5ecc
 
 #if 0
 struct coord {
-	unsigned short x,y;
+	signed int x;
+	signed int y;
 };
 
 /* GUI_BUTTONS_POS */
@@ -67,7 +70,7 @@ void draw_playmask(void)
 
 	set_palette(g_palette_allblack2, 0xe0, 0x20);
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
@@ -79,9 +82,9 @@ void draw_playmask(void)
 
 	wait_for_vsync();
 
-	set_color((Bit8u*)g_color_black, 0);
+	set_color((uint8_t*)g_color_black, 0);
 
-	set_palette((Bit8u*)g_palette_special, 0xe0, 0x20);
+	set_palette((uint8_t*)g_palette_special, 0xe0, 0x20);
 
 	g_ani_posx = 16;
 	g_ani_posy = 2;
@@ -100,7 +103,7 @@ void draw_playmask(void)
 
 	g_update_statusline = 1;
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 /**
@@ -113,10 +116,10 @@ void draw_playmask(void)
  */
 void copy_forename(char *dst, char *name)
 {
-
 	int i;
 
 	for (i = 0; i < 7; i++) {
+
 		if (name[i] == 0x20) {
 			dst[i] = 0;
 			break;
@@ -133,10 +136,13 @@ void copy_forename(char *dst, char *name)
  */
 void draw_status_line(void)
 {
-	signed short fg_bak, bg_bak;
-	Bit8u *src, *dst;
-	Bit16s head_bak;
-	signed short i, j;
+	signed int fg_bak;
+	signed int bg_bak;
+	uint8_t *src;
+	uint8_t *dst;
+	signed int head_bak;
+	signed int i;
+	signed int j;
 
 	g_update_statusline = 0;
 
@@ -147,14 +153,14 @@ void draw_status_line(void)
 		/* Clear name field */
 		do_fill_rect(g_vga_memstart, g_hero_pic_posx[i], 190, g_hero_pic_posx[i] + 41, 197, 0);
 
-		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
+		if (get_hero(i)->typus != HERO_TYPE_NONE) {
 
-			copy_forename(g_dtp2, (char*)(get_hero(i) + HERO_NAME2));
+			copy_forename(g_dtp2, get_hero(i)->alias);
 
 			set_textcolor(0xff, 0);
 
 			/* Gray the names of heroes in another group */
-			if (host_readb(get_hero(i) + HERO_GROUP_NO) != gs_current_group) {
+			if (get_hero(i)->group_id != gs_active_group_id) {
 
 				set_textcolor(0x6f, 0);
 			}
@@ -164,14 +170,15 @@ void draw_status_line(void)
 		}
 
 		wait_for_vsync();
-		update_mouse_cursor();
 
-		if (!host_readbs(get_hero(i) + HERO_TYPE)) {
+		call_mouse_bg();
+
+		if (!get_hero(i)->typus) {
 
 			clear_hero_icon(i);
 
 		} else {
-			if (host_readb(get_hero(i) + HERO_GROUP_NO) == gs_current_group) {
+			if (get_hero(i)->group_id == gs_active_group_id) {
 
 				g_pic_copy.x1 = g_hero_pic_posx[i];
 				g_pic_copy.y1 = 157;
@@ -181,13 +188,13 @@ void draw_status_line(void)
 				head_bak = -1;
 
 				/* load skull if hero is dead */
-				if (hero_dead(get_hero(i))) {
-					head_bak = ds_readw(LOADED_HEAD_ID);
+				if (get_hero(i)->flags.dead) {
+					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
 
 				/* set the src pointer of the head */
-				g_pic_copy.src = ((hero_dead(get_hero(i)) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT)));
+				g_pic_copy.src = (get_hero(i)->flags.dead ? (uint8_t*)g_dtp2 : (uint8_t*)get_hero(i)->pic);
 
 				do_pic_copy(0);
 
@@ -201,14 +208,14 @@ void draw_status_line(void)
 				head_bak = -1;
 
 				/* load skull if hero is dead */
-				if (hero_dead(get_hero(i))) {
-					head_bak = ds_readw(LOADED_HEAD_ID);
+				if (get_hero(i)->flags.dead) {
+					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
 
 				/* set the src pointer of the head */
 				/* TODO: expression to complicated ? */
-				src = (hero_dead(get_hero(i))) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT);
+				src = (get_hero(i)->flags.dead ? (uint8_t*)g_dtp2 : (uint8_t*)get_hero(i)->pic);
 
 				/* Gray out picture */
 				for (j = 0; j < 1024; src++, dst++, j++)
@@ -228,11 +235,13 @@ void draw_status_line(void)
 				}
 			}
 
-			for (j = 0; j < 6; j++)
-				ds_writew(CHAR_STATUS_BARS + i * 8 + j * 2, 0xffff);
+			/* TODO: j < 4, otherwise g_disease_prices gets invalidated */
+			for (j = 0; j < 6; j++) {
+				g_char_status_bars[i][j] = -1;
+			}
 		}
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	set_textcolor(fg_bak, bg_bak);
@@ -245,16 +254,16 @@ void draw_status_line(void)
  *
  * \param   pos         position of the hero
  */
-void clear_hero_icon(unsigned short pos)
+void clear_hero_icon(const signed int hero_pos)
 {
 
 	/* fill icon area black */
-	do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos], 157, g_hero_pic_posx[pos] + 31, 188, 0);
+	do_fill_rect(g_vga_memstart, g_hero_pic_posx[hero_pos], 157, g_hero_pic_posx[hero_pos] + 31, 188, 0);
 
-	if (!host_readbs(get_hero(pos) + HERO_TYPE)) {
+	if (!get_hero(hero_pos)->typus) {
 
 		/* fill bars area black */
-		do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos] + 33, 157, g_hero_pic_posx[pos] + 39, 188, 0);
+		do_fill_rect(g_vga_memstart, g_hero_pic_posx[hero_pos] + 33, 157, g_hero_pic_posx[hero_pos] + 39, 188, 0);
 	}
 }
 
@@ -266,20 +275,18 @@ void clear_hero_icon(unsigned short pos)
  * \param   pos         position of the icon (0-8)
  */
 //static
-void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
+void load_icon(const signed int fileindex, const signed int icon_id, const signed int pos)
 {
-	Bit16u fd;
+	signed int handle = load_archive_file(fileindex);
 
-	fd = load_archive_file(fileindex);
+	seek_archive_file(handle, icon_id * 576L, 0);
 
-	seek_archive_file(fd, icon * 576L, 0);
+	read_archive_file(handle, g_buf_icon + pos * 576, 576);
 
-	read_archive_file(fd, g_buf_icon + pos * 576, 576);
-
-	close(fd);
+	close(handle);
 
 	/* set a real or blank icon */
-	g_loaded_menu_icons[pos] = (fileindex == ARCHIVE_FILE_ICONS ? icon : -1);
+	g_loaded_menu_icons[pos] = (fileindex == ARCHIVE_FILE_ICONS ? icon_id : -1);
 }
 
 /**
@@ -287,12 +294,12 @@ void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
  */
 void draw_icons(void)
 {
-	signed short i;
+	signed int i;
 
 	if (g_pp20_index != ARCHIVE_FILE_PLAYM_UK)
 		return;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < 9; i++) {
 
@@ -302,9 +309,9 @@ void draw_icons(void)
 		g_pic_copy.y2 = g_gui_buttons_pos[i].y + 23;
 		g_pic_copy.src = g_buf_icon + i * 576;
 
-		if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
-			if (g_loaded_menu_icons[i] != ds_readbs(NEW_MENU_ICONS + i))
-				load_icon(ARCHIVE_FILE_ICONS, ds_readbs(NEW_MENU_ICONS + i), i);
+		if (g_new_menu_icons[i] != MENU_ICON_NONE) {
+			if (g_loaded_menu_icons[i] != g_new_menu_icons[i])
+				load_icon(ARCHIVE_FILE_ICONS, g_new_menu_icons[i], i);
 		} else {
 			if (g_loaded_menu_icons[i] != -1)
 				load_icon(ARCHIVE_FILE_BICONS, i, i);
@@ -313,7 +320,7 @@ void draw_icons(void)
 		do_pic_copy(0);
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
 /**
@@ -325,7 +332,7 @@ void draw_main_screen(void)
 	g_wallclock_y = 31;
 	g_wallclock_update = 0;
 
-	set_var_to_zero();
+	disable_ani();
 
 	if (g_pp20_index)
 		draw_playmask();
@@ -345,9 +352,11 @@ void draw_main_screen(void)
 
 void clear_loc_line(void)
 {
-	update_mouse_cursor();
+	call_mouse_bg();
+
 	do_fill_rect(g_vga_memstart, 3, 140, 316, 153, 0);
-	refresh_screen_size();
+
+	call_mouse();
 }
 
 /**
@@ -357,9 +366,10 @@ void clear_loc_line(void)
  *
  * \param   pos         position of the hero
  */
-void select_hero_icon(unsigned short pos) {
-
-	signed short fg_bak, bg_bak;
+void select_hero_icon(const signed int pos)
+{
+	signed int fg_bak;
+	signed int bg_bak;
 
 	/* paint a blue border for the pic and bars */
 	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 156, g_hero_pic_posx[pos] + 42, 189, (signed char)0xfc);
@@ -371,7 +381,7 @@ void select_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, get_hero(pos)->alias);
 
 	/* set the textcolors */
 	set_textcolor(0xfc, 0);
@@ -391,9 +401,10 @@ void select_hero_icon(unsigned short pos) {
  * \param   pos         position of the hero
  */
 /* TODO: this function an select_hero_icon() can be merged into one. */
-void deselect_hero_icon(unsigned short pos) {
-
-	signed short fg_bak, bg_bak;
+void deselect_hero_icon(const signed int pos)
+{
+	signed int fg_bak;
+	signed int bg_bak;
 
 	/* paint a gray border for the pic and bars */
 	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 156, g_hero_pic_posx[pos] + 42, 189, (signed char)0xe6);
@@ -405,7 +416,7 @@ void deselect_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, get_hero(pos)->alias);
 
 	/* set the textcolors */
 	set_textcolor(0xff, 0);
@@ -416,7 +427,3 @@ void deselect_hero_icon(unsigned short pos) {
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

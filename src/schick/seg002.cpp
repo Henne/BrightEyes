@@ -23,15 +23,21 @@
 #include <IO.H>
 #include "AIL/AIL.H"
 #else
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include "seg011.h"
 #endif
 
 #include "v302de.h"
 #include "common.h"
 
+#if defined(__BORLANDC__)
 /* all global variables are included here, since BCC.EXE would create another module */
 #include "datseg.cpp"
+#endif
 
 #include "seg001.h"
 #include "seg002.h"
@@ -67,16 +73,280 @@
 #include "seg121.h"
 
 #if !defined(__BORLANDC__)
-namespace M302de {
+#include <SDL2/SDL.h>
+#include "vgalib.h"
 #endif
+
+/* BSS Variables */
+static unsigned char dummy;
+static uint16_t g_sample_ad_length;		// ds:0xbc5a
+struct sample_idx g_sample_ad_idx_entry;	// ds:0xbc5c
+unsigned char g_playmask_us;			// ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
+unsigned char g_gfxbuf_wait_keypress[100];	// ds:0xbc63
+unsigned char *g_splash_ae;			// ds:0xbcc7
+unsigned char *g_splash_le;			// ds:0xbccb
+uint8_t g_hero_splash_timer[7];			// ds:0xbccf
+static signed int g_spinlock_flag;		// ds:0xbcd6
+static signed int g_map_townmark_state;		// ds:0xbcd8
+signed char g_freeze_timers;			// ds:0xbcda
 
 #if defined(__BORLANDC__)
-void sub_light_timers(Bit32s);
+void interrupt far (*g_mouse_handler_bak)(...); // ds:0xbcdb; seg002
 #endif
 
+static int32_t g_archive_file_offset;	// ds:0xbcdf, start offset in SCHICK.DAT
+static int32_t g_archive_file_remaining; // ds:0xbce3, flen - off
+static int32_t g_archive_file_length;	// ds:0xbce7
 
-/* static */
-void play_music_file(signed short index)
+#if defined(__BORLANDC__)
+static uint8_t *g_ail_digi_driver_buf2;		// ds:0xbceb, to buffer of size 5016
+static uint8_t *g_ail_voc_buffer;		// ds:0xbcef
+static uint8_t *g_ail_digi_driver_buf;		// ds:0xbcf3
+static int16_t *g_ail_digi_driver_descr;	// ds:0xbcf7
+static signed int g_ail_digi_driver_id;		// ds:0xbcfb
+#endif
+
+signed int g_use_cdaudio_flag; // ds:0xbcfd
+
+#if defined(__BORLANDC__)
+static signed int g_load_sound_driver;		// ds:0xbcff
+static signed int g_sample_ad_handle;		// ds:0xbd01
+static uint16_t g_ail_timbre_cache_size;	// ds:0xbd03
+static int32_t g_ail_state_table_size;		// ds:0xbd05
+static uint8_t *g_ail_music_driver_buf2;	// ds:0xbd09
+static uint8_t *g_ail_midi_buffer;		// ds:0xbd0d
+static uint8_t *g_ail_timbre_cache;		// ds:0xbd11
+static uint8_t *g_ail_state_table;		// ds:0xbd15
+static uint8_t *g_ail_music_driver_buf;		// ds:0xbd19
+static int16_t *g_ail_music_driver_descr;	// ds:0xbd1d
+static signed int g_ail_sequence;		// ds:0xbd21
+static signed int g_ail_music_driver_id;	// ds:0xbd23
+#endif
+
+signed int g_pregame_state;			// ds:0xbd25
+signed char g_area_camp_area_type;		// ds:0xbd27, {0 = camp takes place in a dungeon, 1 = camp takes place in a town}
+struct fight *g_current_fight;		// ds:0xbd28
+signed char *g_scenario_buf;		// ds:0xbd2c
+unsigned char *g_fightobj_buf;		// ds:0xbd30
+struct struct_hero *g_heroes;		// ds:0xbd34
+signed char g_new_menu_icons[9];	// ds:0xbd38
+unsigned char g_unkn_073[12];		// ds:0xbd41
+unsigned char g_steptarget_front;	// ds:0xbd4d
+unsigned char g_steptarget_back;	// ds:0xbd4e
+signed char g_direction_unkn;		// ds:0xbd4f, writeonly (1)
+signed char g_visual_fields_tex[29];	// ds:0xbd50
+unsigned char g_unkn_074[1];		// ds:0xbd6d
+unsigned char g_visual_field_vals[29];	// ds:0xbd6e
+unsigned char g_unkn_075[1];		// ds:0xbd8b
+#if defined(__BORLANDC__)
+struct ems_tab *g_ems_unused_tab;	// ds:0xbd8c
+#endif
+signed int g_ems_travelmap_handle;	// ds:0xbd90
+#if defined(__BORLANDC__)
+signed int g_ems_unused_handle;		// ds:0xbd92
+#endif
+unsigned char g_map_size_x;		// ds:0xbd94
+unsigned char g_dng_map[512];		// ds:0xbd95
+char *g_radio_name_list[25];		// ds:0xbf95, used for items, heroes, spells, skills, recipes
+unsigned char *g_gui_buffer_unkn;	// ds:0xbff9
+signed int g_textbox_width;		// ds:0xbffd
+signed int g_textbox_pos_x;		// ds:0xbfff, coordinate of upper left corner
+signed int g_textbox_pos_y;		// ds:0xc001, coordinate of upper left corner
+signed int g_game_mode;			// ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }
+
+struct item_selector_item *g_item_selector_sell; // ds:0xc005, also used for repair items
+struct item_selector_item *g_item_selector_buy; // ds:0xc009, merchant's assortment
+struct struct_pic_copy g_pic_copy;	// ds:0xc00d
+struct location g_locations_tab[150]; // ds:0xc025
+unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
+char **g_tx2_index; // ds:0xc3ad, to index table of secondary text file
+char **g_tx_index; // ds:0xc3b1, to index table of primary text file
+char **g_text_ltx_index; // ds:0xc3b5, to index table of TEXT.LTX
+unsigned char g_unkn_077[6]; // ds:0xc3b9
+int16_t g_random_schick_seed2; // ds:0xc3bf
+signed int g_game_state; // ds:0xc3c1, see enum GAME_STATE_*
+unsigned char g_unkn_078[2]; // ds:0xc3c3
+signed int g_bioskey_event10; // ds:0xc3c5
+signed int g_have_mouse; // ds:0xc3c7
+signed int g_unused_spinlock_flag; // ds:0xc3c9
+signed int g_update_statusline; // ds:0xc3cb
+unsigned char g_unkn_079[2]; // ds:0xc3cd
+signed int g_mouse1_doubleclick; // ds:0xc3cf
+signed int g_mouse_leftclick_event; // ds:0xc3d1
+signed int g_mouse_rightclick_event; // ds:0xc3d3
+signed int g_mouse1_event2; // ds:0xc3d5
+signed int g_bioskey_event; // ds:0xc3d7
+signed int g_action; // ds:0xc3d9
+HugePt g_buffer9_ptr; // ds:0xc3db, to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF
+unsigned char g_unkn_080[8]; // ds:0xc3df
+signed int g_ani_width; // ds:0xc3e7
+signed int g_ani_unknown1; // ds:0xc3e9
+signed int g_ani_unknown2; // ds:0xc3eb
+unsigned char g_ani_height; // ds:0xc3ed
+signed char g_ani_areacount; // ds:0xc3ee
+struct ani_area g_ani_area_table[10]; // ds:0xc3ef
+unsigned char *g_ani_main_ptr; // ds:0xce35
+unsigned char g_ani_compr_flag; // ds:0xce39, {0,1 = compressed}
+unsigned char g_ani_palette_size; // ds:0xce3a
+HugePt g_ani_palette; // ds:0xce3b
+signed int g_ani_posy; // ds:0xce3f
+signed int g_ani_posx; // ds:0xce41
+int32_t g_ani_unknown4; // ds:0xce43, writeonly (0)
+unsigned char g_unkn_081[64]; // ds:0xce47
+unsigned char g_gui_text_buffer[64]; // ds:0xce87
+static struct mouse_cursor *g_last_cursor; // ds:0xcec7
+struct mouse_cursor *g_current_cursor; // ds:0xcecb
+struct mouse_cursor g_ggst_cursor; // ds:0xcecf
+unsigned char g_mouse_bg_bak[256]; // ds:0xcf0f
+
+signed int g_dng_init_flag;		// ds:0xd00f
+signed int g_dng_extra_action;		// ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
+signed int g_redraw_menuicons;		// ds:0xd013
+unsigned char *g_buffer9_ptr2;		// ds:0xd015, copy of BUFFER9_PTR
+HugePt g_buffer9_ptr3;			// ds:0xd019, copy of BUFFER9_PTR
+uint32_t g_buffer_monster_tab[36];	// ds:0xd01d
+uint32_t g_buffer_wfigs_tab[43];		// ds:0xd0ad
+uint32_t g_buffer_mfigs_tab[43];		// ds:0xd159
+int32_t g_buffer_anis_tab[37];		// ds:0xd205
+
+unsigned char *g_trv_track_pixel_bak; // ds:0xd299, to buffer of size 500
+unsigned char *g_fig_star_gfx; // ds:0xd29d
+char *g_monnames_buffer; // ds:0xd2a1
+char *g_buffer5_ptr; // ds:0xd2a5, to buffer of size 3880
+unsigned char *g_buffer10_ptr; // ds:0xd2a9, to buffer of size 16771, used for NVF and text
+unsigned char *g_popup; // ds:0xd2ad
+unsigned char *g_buffer6_ptr; // ds:0xd2b1, to buffer of size 2200, used for NVF
+char *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text
+char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
+unsigned char *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
+unsigned char *g_buf_font6; // ds:0xd2c1
+signed int g_textcolor_index; // ds:0xd2c5
+signed int g_textcolor_bg; // ds:0xd2c7
+signed int g_textcolor_fg[4]; // ds:0xd2c9
+signed int g_gui_text_centered; // ds:0xd2d1
+signed int g_textline_unknown; // ds:0xd2d3, writeonly (103)
+signed int g_textline_maxlen; // ds:0xd2d5
+signed int g_textline_posy; // ds:0xd2d7
+signed int g_textline_posx; // ds:0xd2d9
+unsigned char *g_fig_figure2_buf; // ds:0xd2db, to buffer of size 20000
+unsigned char *g_fig_figure1_buf; // ds:0xd2df
+unsigned char *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
+unsigned char *g_buf_icon; // ds:0xd2e7
+char *g_text_output_buf; // ds:0xd2eb, to buffer of size 300
+char *g_text_input_buf; // ds:0xd2ef, to buffer of size 24
+char *g_dtp2; // ds:0xd2f3
+unsigned char *g_icon; // ds:0xd2f7
+unsigned char *g_vga_backbuffer; // ds:0xd2fb
+unsigned char *g_vga_memstart; // ds:0xd2ff
+unsigned char *g_renderbuf_ptr; // ds:0xd303, to buffer of size 65000
+
+
+#if defined(__BORLANDC__)
+static unsigned char g_unkn_082[2]; // ds:0xd307
+static signed int g_gameinit_flag; // ds:0xd309, writeonly (1)
+int16_t g_video_page_bak; // ds:0xd30b
+int16_t g_video_mode_bak; // ds:0xd30d
+static unsigned char g_unkn_083[4]; // ds:0xd30f
+#endif
+
+signed int g_txt_tabpos[7]; // ds:0xd313
+unsigned char *g_townpal_buf; // ds:0xd321
+signed int g_fig_escape_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
+signed int g_wildcamp_sleep_quality; // ds:0xd32d
+signed int g_gather_herbs_mod; // ds:0xd32f
+signed int g_replenish_stocks_mod; // ds:0xd331
+struct fight_msg g_fig_msg_data[6]; // ds:0xd333
+struct enemy_sheet g_enemy_sheets[20]; // ds:0xd34b
+signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
+signed char g_fig_enemy_has_parried[30]; // ds:0xd82d, see FIG_ACTION_PARRY
+signed char g_fig_hero_has_parried[7]; // ds:0xd84b
+signed char *g_chessboard;// ds:0xd852
+uint8_t *g_fig_spellgfx_buf; // ds:0xd856
+uint8_t *g_fig_shot_bolt_buf; // ds:0xd85a
+uint8_t *g_fig_cb_selector_buf; // ds:0xd85e
+uint8_t *g_fig_cb_marker_buf; // ds:0xd862
+uint8_t *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f
+uint8_t *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
+unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer
+signed int g_nr_of_enemies; // ds:0xd872, ?
+signed char g_fightobj_list[90]; // ds:0xd874
+int8_t g_fig_anisheets[8][243]; // ds:0xd8ce
+
+struct struct_fighter g_fig_list_elem; // ds:0xe066
+signed char g_fig_list_array[127]; // ds:0xe089
+struct struct_fighter *g_fig_list_head; // ds:0xe108, to a list
+signed char g_location_market_flag; // ds:0xe10c
+signed int g_wallclock_redraw; // ds:0xe10d
+signed int g_wallclock_y; // ds:0xe10f
+signed int g_wallclock_x; // ds:0xe111
+signed int g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
+struct struct_memslot_fig *g_memslots_mon; // ds:0xe115
+struct struct_memslot_fig *g_memslots_wfig; // ds:0xe119
+struct struct_memslot_fig *g_memslots_mfig; // ds:0xe11d
+struct struct_memslot_ani *g_memslots_anis; // ds:0xe121, to ()[36]
+struct struct_monster *g_monster_dat_buf; // ds:0xe125
+char **g_monnames_index; // ds:0xe129
+signed char g_market_itemsaldo_table[254]; // ds:0xe12d
+struct item_stats *g_itemsdat; // ds:0xe22b
+char **g_itemsname; // ds:0xe22f
+
+
+#if !defined(__BORLANDC__)
+static inline uint8_t readb(uint8_t *p)
+{
+	return ((uint8_t)*p);
+}
+
+static inline int16_t readws(uint8_t *p)
+{
+	return ((int16_t)(readb(p + 1) << 8) | (readb(p)));
+}
+
+static inline int32_t readds(uint8_t *p)
+{
+	return ((int32_t)(readws(p + 2) << 16) | readws(p));
+}
+
+#else
+
+#define readb(p) (*(uint8_t*)(p))
+#define readws(p) (*(uint16_t*)(p))
+#define readds(p) (*(uint32_t*)(p))
+
+#endif
+
+/* static prototypes */
+static signed int prepare_midi_playback(const signed int);
+static uint8_t* prepare_timbre(const signed int, const signed int);
+static signed int do_load_midi_file(const signed int);
+static signed int load_music_driver(const char*, const signed int, int16_t);
+static void do_play_music_file(const signed int);
+static void stop_midi_playback(void);
+static void free_voc_buffer(void);
+static signed int read_voc_file(const signed int);
+static void SND_play_voc(const signed int);
+static void SND_stop_digi(void);
+static void SND_set_volume(const uint16_t);
+static signed int load_digi_driver(const char*, const signed int, int16_t, int16_t);
+static uint8_t* read_digi_driver(const char*);
+
+static signed int open_temp_file(const signed int);
+static void copy_from_archive_to_temp(const signed int, const char*);
+
+static void mouse_bg(void);
+static void mouse_cursor(void);
+static void game_loop(void);
+static void magical_chainmail_damage(void);
+static void check_level_up(void);
+static void passages_recalc(void);
+static void passages_reset(void);
+static void ul_save(void);
+static void ul_blit(void);
+static signed int check_hero_no3(const struct struct_hero *hero);
+static void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type);
+static signed int copy_protection(void);
+
+static void play_music_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_music_enabled != 0) {
@@ -85,7 +355,7 @@ void play_music_file(signed short index)
 #endif
 }
 
-void set_audio_track(Bit16u index)
+void set_audio_track(const signed int index)
 {
 #if defined(__BORLANDC__)
 	CD_check();
@@ -96,7 +366,7 @@ void set_audio_track(Bit16u index)
 
 		g_music_current_track = index;
 
-		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
+		if (g_use_cdaudio_flag) {
 			/* we use CD */
 			CD_set_track(index);
 		} else {
@@ -108,9 +378,7 @@ void set_audio_track(Bit16u index)
 
 void sound_menu(void)
 {
-	signed short answer;
-
-	answer = GUI_radio(g_snd_menu_title, 4,
+	const signed int answer = GUI_radio(g_snd_menu_title, 4,
 				g_snd_menu_radio1, g_snd_menu_radio2,
 				g_snd_menu_radio3, g_snd_menu_radio4);
 
@@ -139,7 +407,7 @@ void sound_menu(void)
 
 	if (g_music_enabled == 0) {
 		/* music disabled */
-		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
+		if (g_use_cdaudio_flag) {
 			CD_audio_pause();
 		} else {
 			stop_midi_playback();
@@ -147,7 +415,7 @@ void sound_menu(void)
 	} else {
 		if (g_music_current_track != -1) {
 			/* music enabled */
-			if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
+			if (g_use_cdaudio_flag) {
 				CD_audio_play();
 			} else {
 				play_music_file(g_music_current_track);
@@ -159,36 +427,28 @@ void sound_menu(void)
 void read_sound_cfg(void)
 {
 #if defined(__BORLANDC__)
-	signed short midi_port;
-	signed short dummy;
-	signed short digi_port;
-	signed short digi_irq;
-	signed short handle;
+	int16_t midi_port;
+	int16_t dummy;
+	int16_t digi_port;
+	int16_t digi_irq;
+	signed int handle;
 
 	/* try to open SOUND.CFG */
 	if ( (handle = open(g_fname_sound_cfg, O_BINARY | O_RDONLY)) != -1) {
 
-		_read(handle, (Bit8u*)&midi_port, 2);
-		_read(handle, (Bit8u*)&dummy, 2);
-		_read(handle, (Bit8u*)&digi_port, 2);
-		_read(handle, (Bit8u*)&digi_irq, 2);
-		close(handle);
-
-#if !defined(__BORLANDC__)
-		/* be byte-ordering independent */
-		midi_port = host_readws((Bit8u*)&midi_port);
-		dummy = host_readws((Bit8u*)&dummy);
-		digi_port = host_readws((Bit8u*)&digi_port);
-		digi_irq = host_readws((Bit8u*)&digi_irq);
-#endif
+		_read(handle, (uint8_t*)&midi_port, 2);
+		_read(handle, (uint8_t*)&dummy, 2);
+		_read(handle, (uint8_t*)&digi_port, 2);
+		_read(handle, (uint8_t*)&digi_irq, 2);
+		_close(handle);
 
 #if !defined(__BORLANDC__)
 		/* menu to select the music source */
-		const Bit16s tw_bak = g_textbox_width;
+		const int16_t tw_bak = g_textbox_width;
 		char question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
 		char opt1[] = "AUDIO-CD";
 		char opt2[] = "MIDI";
-		signed short answer;
+		signed int answer;
 
 		g_textbox_width = 3;
 		do {
@@ -200,41 +460,41 @@ void read_sound_cfg(void)
 		if (answer == 1)
 		{
 			/* AUDIO-CD selected */
-			ds_writew(USE_CDAUDIO_FLAG, 1);
-			ds_writew(LOAD_SOUND_DRIVER, 1);
+			g_use_cdaudio_flag = 1;
+			g_load_sound_driver = 1;
 
 		} else if (answer == 2)
 		{
 			/* MIDI selected */
-			ds_writew(USE_CDAUDIO_FLAG, 0);
-			ds_writew(LOAD_SOUND_DRIVER, 0);
+			g_use_cdaudio_flag = 0;
+			g_load_sound_driver = 0;
 		}
 
-		if (ds_readw(USE_CDAUDIO_FLAG) == 0)
+		if (g_use_cdaudio_flag == 0)
 #else
-		/* enable useage of audio-CD */
-		ds_writew(USE_CDAUDIO_FLAG, ds_writew(LOAD_SOUND_DRIVER, 1));
+		/* enable usage of audio-CD */
+		g_use_cdaudio_flag = g_load_sound_driver = 1;
 
 		/* disable loading of the music driver */
 		if (0)
 #endif
 		{
-			if (midi_port != 0) {
+			if (midi_port) {
 				load_music_driver(g_fname_sound_adv2, 3, midi_port);
 			} else {
 
 				/* music was disabled in SOUND.CFG */
-				if (((Bit8u*)ds_readd(AIL_MIDI_BUFFER))) {
-					free((void*)ds_readd(AIL_MIDI_BUFFER));
+				if (g_ail_midi_buffer) {
+					free((void*)g_ail_midi_buffer);
 				}
 
-				ds_writed(AIL_MIDI_BUFFER, 0);
+				g_ail_midi_buffer = NULL;
 			}
 		}
 
-		if (digi_port != 0) {
+		if (digi_port) {
 
-			if (g_snd_voc_enabled != 0) {
+			if (g_snd_voc_enabled) {
 
 				if (!load_digi_driver(g_fname_digi_adv, 2, digi_port, digi_irq))
 				{
@@ -253,12 +513,12 @@ void read_sound_cfg(void)
 #endif
 }
 
-void init_AIL(Bit32u size)
+void init_AIL(const uint32_t size)
 {
 #if defined(__BORLANDC__)
-	if (((Bit8u*)ds_writed(AIL_MIDI_BUFFER, (Bit32u)schick_alloc(size)))) {
+	if ((g_ail_midi_buffer = (uint8_t*)schick_alloc(size))) {
 		AIL_startup();
-		ds_writew(LOAD_SOUND_DRIVER, 1);
+		g_load_sound_driver = 1;
 	}
 #endif
 }
@@ -266,100 +526,97 @@ void init_AIL(Bit32u size)
 void exit_AIL(void)
 {
 #if defined(__BORLANDC__)
-	AIL_shutdown((Bit8u*)NULL);
+	AIL_shutdown((uint8_t*)NULL);
 
-	if (ds_readd(AIL_TIMBRE_CACHE) != 0) {
-		free((void*)ds_readd(AIL_TIMBRE_CACHE));
+	if (g_ail_timbre_cache) {
+		free((void*)g_ail_timbre_cache);
 	}
 
-	if (ds_readd(AIL_STATE_TABLE) != 0) {
-		free((void*)ds_readd(AIL_STATE_TABLE));
+	if (g_ail_state_table) {
+		free((void*)g_ail_state_table);
 	}
 
-	if (ds_readd(AIL_MIDI_BUFFER) != 0) {
-		free((void*)ds_readd(AIL_MIDI_BUFFER));
+	if (g_ail_midi_buffer) {
+		free((void*)g_ail_midi_buffer);
 	}
 
-	if (ds_readd(AIL_MUSIC_DRIVER_BUF2) != 0) {
-		free((void*)ds_readd(AIL_MUSIC_DRIVER_BUF2));
+	if (g_ail_music_driver_buf2) {
+		free((void*)g_ail_music_driver_buf2);
 	}
 
 	/* set all pointers to NULL */
-	ds_writed(AIL_TIMBRE_CACHE, ds_writed(AIL_STATE_TABLE, ds_writed(AIL_MIDI_BUFFER, ds_writed(AIL_MUSIC_DRIVER_BUF2, 0))));
+	g_ail_timbre_cache = g_ail_state_table = g_ail_midi_buffer = g_ail_music_driver_buf2 = NULL;
 
-	if (g_snd_voc_enabled != 0) {
+	if (g_snd_voc_enabled) {
 		free_voc_buffer();
 	}
 #endif
 }
 
-Bit8u* read_music_driver(Bit8u* fname)
+static uint8_t* read_music_driver(const char* fname)
 {
 #if defined(__BORLANDC__)
-	Bit32u len;
-	Bit8u* buf;
-	Bit32u ptr;
+	uint32_t len;
+	uint8_t* buf;
+	uint32_t ptr;
 
-	signed short handle;
+	signed int handle;
 
 	if ( (handle = open((char*)fname, O_BINARY | O_RDONLY)) != -1) {
 
 		len = 16500L;
 
-		ds_writed(AIL_MUSIC_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
+		g_ail_music_driver_buf2 = (uint8_t*)schick_alloc(len + 16L);
 		/* insane pointer casting */
-		ptr = (ds_readd(AIL_MUSIC_DRIVER_BUF2) + 15L);
+		ptr = (uint32_t)g_ail_music_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((Bit8u*)ptr);
-		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
-		_read(handle, (Bit8u*)buf, (unsigned short)len);
-		close(handle);
+		buf = EMS_norm_ptr((uint8_t*)ptr);
+		_read(handle, buf, len);
+		_close(handle);
 		return buf;
 	}
 #endif
 	return NULL;
 }
 
-/* static */
-signed short prepare_midi_playback(signed short sequence)
+static signed int prepare_midi_playback(const signed int sequence)
 {
 #if defined(__BORLANDC__)
-	unsigned short l_si;
-	signed short l_di;
-	signed short patch;
-	Bit8u* ptr;
+	uint16_t answer;
+	signed int bank;
+	signed int patch;
+	uint8_t* ptr;
 
-	if ((ds_writews(SAMPLE_AD_HANDLE, load_archive_file(ARCHIVE_FILE_SAMPLE_AD))) != -1) {
+	if ((g_sample_ad_handle = load_archive_file(ARCHIVE_FILE_SAMPLE_AD)) != -1) {
 
-		if ((ds_writews(AIL_SEQUENCE, AIL_register_sequence(ds_readw(AIL_MUSIC_DRIVER_ID), (Bit8u*)ds_readd(AIL_MIDI_BUFFER), sequence, (Bit8u*)ds_readd(AIL_STATE_TABLE), 0))) != -1) {
+		if ((g_ail_sequence = AIL_register_sequence(g_ail_music_driver_id, g_ail_midi_buffer, sequence, g_ail_state_table, 0)) != -1) {
 
-			while ( (l_si = AIL_timbre_request(ds_readw(AIL_MUSIC_DRIVER_ID), ds_readw(AIL_SEQUENCE))) != (unsigned short)-1)
+			while ((answer = AIL_timbre_request(g_ail_music_driver_id, g_ail_sequence)) != (uint16_t)-1)
 			{
-				l_di = l_si >> 8;
-				patch = l_si & 0xff;
+				bank = answer >> 8;
+				patch = answer & 0xff;
 
-				if ( (ptr = prepare_timbre(l_di, patch))) {
-					AIL_install_timbre(ds_readw(AIL_MUSIC_DRIVER_ID), l_di, patch, ptr);
+				if ( (ptr = prepare_timbre(bank, patch))) {
+					AIL_install_timbre(g_ail_music_driver_id, bank, patch, ptr);
 					free(ptr);
 				}
 			}
 
-			close(ds_readw(SAMPLE_AD_HANDLE));
+			close(g_sample_ad_handle);
 			return 1;
 		}
 
-		close(ds_readw(SAMPLE_AD_HANDLE));
+		close(g_sample_ad_handle);
 	}
 #endif
 	return 0;
 }
 
-/* static */
-signed short start_midi_playback(signed short seq)
+static signed int start_midi_playback(const signed int seq)
 {
 #if defined(__BORLANDC__)
 	if (prepare_midi_playback(seq)) {
-		AIL_start_sequence(ds_readw(AIL_MUSIC_DRIVER_ID), seq);
+		AIL_start_sequence(g_ail_music_driver_id, seq);
 		return 1;
 	}
 #endif
@@ -367,32 +624,31 @@ signed short start_midi_playback(signed short seq)
 }
 
 
-/* static */
-Bit8u* prepare_timbre(signed short a1, signed short patch)
+static uint8_t* prepare_timbre(const signed int bank, const signed int patch)
 {
 #if defined(__BORLANDC__)
 	char *buf;
 
-	seek_archive_file(ds_readws(SAMPLE_AD_HANDLE), 0, 0);
+	seek_archive_file(g_sample_ad_handle, 0, 0);
 
 	do {
-		read_archive_file(ds_readws(SAMPLE_AD_HANDLE), p_datseg + SAMPLE_AD_IDX_ENTRY, 6);
+		read_archive_file(g_sample_ad_handle, (uint8_t*)&g_sample_ad_idx_entry, 6);
 
-		if (ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) == -1) {
+		if (g_sample_ad_idx_entry.bank == -1) {
 			return NULL;
 		}
 
-	} while ((ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) != a1) || (ds_readbs(SAMPLE_AD_IDX_ENTRY) != patch));
+	} while ((g_sample_ad_idx_entry.bank != bank) || (g_sample_ad_idx_entry.patch != patch));
 
-	seek_archive_file(ds_readws(SAMPLE_AD_HANDLE), ds_readd((SAMPLE_AD_IDX_ENTRY+2)), 0);
+	seek_archive_file(g_sample_ad_handle, g_sample_ad_idx_entry.offset, 0);
 
-	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), p_datseg + SAMPLE_AD_LENGTH, 2);
+	read_archive_file(g_sample_ad_handle, (uint8_t*)&g_sample_ad_length, 2);
 
-	buf = schick_alloc(ds_readw(SAMPLE_AD_LENGTH));
+	buf = schick_alloc(g_sample_ad_length);
 
-	host_writew(buf, ds_readw(SAMPLE_AD_LENGTH));
+	*((uint16_t*)buf) = g_sample_ad_length;
 
-	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), buf + 2, ds_readw(SAMPLE_AD_LENGTH) - 2);
+	read_archive_file(g_sample_ad_handle, buf + 2, g_sample_ad_length - 2);
 
 	return buf;
 #else
@@ -400,20 +656,18 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 #endif
 }
 
-/* static */
-signed short load_midi_file(signed short index)
+static signed int load_midi_file(const signed int index)
 {
 	return do_load_midi_file(index);
 }
 
-/* static */
-signed short do_load_midi_file(signed short index)
+static signed int do_load_midi_file(const signed int index)
 {
 #if defined(__BORLANDC__)
-	signed short handle;
+	signed int handle;
 
 	if ((handle = load_archive_file(index)) != -1) {
-		read_archive_file(handle, (Bit8u*)ds_readd(AIL_MIDI_BUFFER), 0x7fff);
+		read_archive_file(handle, g_ail_midi_buffer, 0x7fff);
 		close(handle);
 		return 1;
 	}
@@ -421,47 +675,45 @@ signed short do_load_midi_file(signed short index)
 	return 0;
 }
 
-/* static */
-signed short load_music_driver(Bit8u* fname, signed short type, signed short port)
+static signed int load_music_driver(const char* fname, const signed int type, int16_t port)
 {
 #if defined(__BORLANDC__)
-	if (port &&
-		(((Bit8u*)ds_writed(AIL_MUSIC_DRIVER_BUF, (Bit32u)read_music_driver(fname)))) &&
-		((ds_writew(AIL_MUSIC_DRIVER_ID, AIL_register_driver((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_BUF)))) != 0xffff))
+	if (port && (g_ail_music_driver_buf = (uint8_t*)read_music_driver(fname)) &&
+		((g_ail_music_driver_id = AIL_register_driver(g_ail_music_driver_buf)) != -1))
 	{
+		g_ail_music_driver_descr = (int16_t*)AIL_describe_driver(g_ail_music_driver_id);
 
-		ds_writed(AIL_MUSIC_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_MUSIC_DRIVER_ID)));
-
-		if (host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == type)
+		if (g_ail_music_driver_descr[1] == type)
 		{
 			if (port == -1) {
-				port = host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0xc);
+				port = g_ail_music_driver_descr[6];
 			}
 
-			if (AIL_detect_device(ds_readw(AIL_MUSIC_DRIVER_ID), port,
-				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x0e),
-				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x10),
-				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x12)))
+			if (AIL_detect_device(g_ail_music_driver_id, port,
+				g_ail_music_driver_descr[7],
+				g_ail_music_driver_descr[8],
+				g_ail_music_driver_descr[9]))
 			{
-				AIL_init_driver(ds_readw(AIL_MUSIC_DRIVER_ID), port,
-					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x0e),
-					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x10),
-					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x12));
+				AIL_init_driver(g_ail_music_driver_id, port,
+					g_ail_music_driver_descr[7],
+					g_ail_music_driver_descr[8],
+					g_ail_music_driver_descr[9]);
 
 				if (type == 3) {
-					ds_writed(AIL_STATE_TABLE_SIZE, AIL_state_table_size(ds_readw(AIL_MUSIC_DRIVER_ID)));
-					ds_writed(AIL_STATE_TABLE, (Bit32u)schick_alloc(ds_readd(AIL_STATE_TABLE_SIZE)));
-					ds_writew(AIL_TIMBRE_CACHE_SIZE, AIL_default_timbre_cache_size(ds_readw(AIL_MUSIC_DRIVER_ID)));
+					g_ail_state_table_size = AIL_state_table_size(g_ail_music_driver_id);
+					g_ail_state_table = (uint8_t*)schick_alloc(g_ail_state_table_size);
+					g_ail_timbre_cache_size = AIL_default_timbre_cache_size(g_ail_music_driver_id);
 
-					if (ds_readw(AIL_TIMBRE_CACHE_SIZE) != 0) {
-						ds_writed(AIL_TIMBRE_CACHE, (Bit32u)schick_alloc(ds_readw(AIL_TIMBRE_CACHE_SIZE)));
-						AIL_define_timbre_cache(ds_readw(AIL_MUSIC_DRIVER_ID),
-								(Bit8u*)ds_readd(AIL_TIMBRE_CACHE),
-								ds_readw(AIL_TIMBRE_CACHE_SIZE));
+					if (g_ail_timbre_cache_size) {
+
+						g_ail_timbre_cache = (uint8_t*)schick_alloc(g_ail_timbre_cache_size);
+
+						AIL_define_timbre_cache(g_ail_music_driver_id, g_ail_timbre_cache, g_ail_timbre_cache_size);
 					}
 				}
 
-				ds_writew(LOAD_SOUND_DRIVER, 0);
+				g_load_sound_driver = 0;
+
 				return 1;
 			} else {
 
@@ -472,16 +724,15 @@ signed short load_music_driver(Bit8u* fname, signed short type, signed short por
 		}
 	}
 
-	ds_writew(LOAD_SOUND_DRIVER, 1);
+	g_load_sound_driver = 1;
 #endif
 	return 0;
 }
 
-/* static */
-void do_play_music_file(signed short index)
+static void do_play_music_file(const signed int index)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3)) {
+	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3)) {
 
 		stop_midi_playback();
 		load_midi_file(index);
@@ -490,14 +741,13 @@ void do_play_music_file(signed short index)
 #endif
 }
 
-/* static */
-void stop_midi_playback(void)
+static void stop_midi_playback(void)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
+	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3))
 	{
-		AIL_stop_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
-		AIL_release_sequence_handle(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
+		AIL_stop_sequence(g_ail_music_driver_id, g_ail_sequence);
+		AIL_release_sequence_handle(g_ail_music_driver_id, g_ail_sequence);
 	}
 #endif
 }
@@ -505,34 +755,32 @@ void stop_midi_playback(void)
 void start_midi_playback_IRQ(void)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
-		(g_music_enabled != 0) &&
-		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
+	if (!g_load_sound_driver && g_music_enabled && (g_ail_music_driver_descr[1] == 3))
 	{
-		if (AIL_sequence_status(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE)) == 2) {
-			AIL_start_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
+		if (AIL_sequence_status(g_ail_music_driver_id, g_ail_sequence) == 2) {
+			AIL_start_sequence(g_ail_music_driver_id, g_ail_sequence);
 		}
 	}
 #endif
 }
 
-void cruft_1(void)
+#if defined(__BORLANDC__)
+static void cruft_1(void)
 /* This function is never called */
 {
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
-		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
+	if (!g_load_sound_driver && (g_ail_music_driver_descr[1] == 3))
 	{
-		AIL_start_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
+		AIL_stop_sequence(g_ail_music_driver_id, g_ail_sequence);
 	}
 }
 
-void cruft_2(signed short volume)
+static void cruft_2(const signed int volume)
 /* This function is never called */
 {
-	if (ds_readw(LOAD_SOUND_DRIVER) == 0) {
+	if (!g_load_sound_driver) {
 
-		if (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3) {
-			AIL_set_relative_volume(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE), volume, 0);
+		if (g_ail_music_driver_descr[1] == 3) {
+			AIL_set_relative_volume(g_ail_music_driver_id, g_ail_sequence, volume, 0);
 		}
 
 		if (!volume) {
@@ -540,24 +788,25 @@ void cruft_2(signed short volume)
 		}
 	}
 }
+#endif
 
-
-signed short have_mem_for_sound(void)
+signed int have_mem_for_sound(void)
 {
 #if defined(__BORLANDC__)
-	Bit32s size;
-	signed short retval;
+	int32_t size;
+	signed int retval;
 	struct ffblk blk;
 
 	if (!findfirst(g_fname_sound_adv, &blk, 0)) {
+
 		/* SOUND.ADV was found */
-		size = host_readd((Bit8u*)(&blk) + 26);
+		size = blk.ff_fsize;
 		size += 4000L;
 
-		if ((Bit32u)size < farcoreleft()) {
+		if ((uint32_t)size < farcoreleft()) {
 			retval = 1;
 
-			if ((Bit32u)(size + 25000L) < farcoreleft()) {
+			if ((uint32_t)(size + 25000L) < farcoreleft()) {
 
 				g_snd_voc_enabled = 1;
 			}
@@ -579,7 +828,7 @@ signed short have_mem_for_sound(void)
 #endif
 }
 
-void play_voc(signed short index)
+void play_voc(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled && g_snd_effects_enabled) {
@@ -589,72 +838,71 @@ void play_voc(signed short index)
 #endif
 }
 
-void play_voc_delay(signed short index)
+void play_voc_delay(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled && g_snd_effects_enabled) {
 		SND_set_volume(90);
 		SND_play_voc(index);
 
-		while (AIL_VOC_playback_status(ds_readw(AIL_DIGI_DRIVER_ID)) == 2) {
+		while (AIL_VOC_playback_status(g_ail_digi_driver_id) == 2) {
 			wait_for_vsync();
 		}
 	}
 #endif
 }
 
-void alloc_voc_buffer(Bit32u size)
+void alloc_voc_buffer(uint32_t size)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
-		if ((((Bit8u*)ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc(size))))) ;
+		if ((g_ail_voc_buffer = (uint8_t*)schick_alloc(size))) ;
 	}
 #endif
 }
 
-/* static */
-void free_voc_buffer(void)
+static void free_voc_buffer(void)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled != 0) {
 
-		if (ds_readd(AIL_VOC_BUFFER) != 0) {
-			free((void*)ds_readd(AIL_VOC_BUFFER));
+		if (g_ail_voc_buffer) {
+			free((void*)g_ail_voc_buffer);
 		}
 
-		if (ds_readd(AIL_DIGI_DRIVER_BUF2) != 0) {
-			free((void*)ds_readd(AIL_DIGI_DRIVER_BUF2));
+		if (g_ail_digi_driver_buf2) {
+			free((void*)g_ail_digi_driver_buf2);
 		}
 
-		ds_writed(AIL_VOC_BUFFER, ds_writed(AIL_DIGI_DRIVER_BUF2, 0));
+		g_ail_voc_buffer = g_ail_digi_driver_buf2 = NULL;
 
 	}
 #endif
 }
 
-signed short read_new_voc_file(signed short index)
+static signed int read_new_voc_file(const signed int index)
 {
 #if defined(__BORLANDC__)
-	if (AIL_VOC_playback_status(ds_readw(AIL_DIGI_DRIVER_ID)) == 2) {
+	if (AIL_VOC_playback_status(g_ail_digi_driver_id) == 2) {
 		SND_stop_digi();
 	}
 
 	if (read_voc_file(index)) {
 
-		AIL_format_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (Bit8u*)ds_readd(AIL_VOC_BUFFER), -1);
+		AIL_format_VOC_file(g_ail_digi_driver_id, g_ail_voc_buffer, -1);
 		return 1;
 	}
 #endif
 	return 0;
 }
 
-signed short read_voc_file(signed short index)
+static signed int read_voc_file(const signed int index)
 {
 #if defined(__BORLANDC__)
-	signed short handle;
+	signed int handle;
 
 	if ( (handle = load_archive_file(index)) != -1) {
-		read_archive_file(handle, (Bit8u*)ds_readd(AIL_VOC_BUFFER), 0x7fff);
+		read_archive_file(handle, g_ail_voc_buffer, 0x7fff);
 		close(handle);
 		return 1;
 	}
@@ -662,34 +910,34 @@ signed short read_voc_file(signed short index)
 	return 0;
 }
 
-void SND_play_voc(signed short index)
+static void SND_play_voc(const signed int index)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
 
-		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
+		AIL_stop_digital_playback(g_ail_digi_driver_id);
 		read_new_voc_file(index);
-		AIL_play_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (Bit8u*)ds_readd(AIL_VOC_BUFFER), -1);
-		AIL_start_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
+		AIL_play_VOC_file(g_ail_digi_driver_id, g_ail_voc_buffer, -1);
+		AIL_start_digital_playback(g_ail_digi_driver_id);
 	}
 #endif
 }
 
-void SND_stop_digi(void)
+static void SND_stop_digi(void)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
-		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
+		AIL_stop_digital_playback(g_ail_digi_driver_id);
 	}
 #endif
 }
 
-void SND_set_volume(unsigned short volume)
+static void SND_set_volume(const uint16_t volume)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
 
-		AIL_set_digital_playback_volume(ds_readw(AIL_DIGI_DRIVER_ID), volume);
+		AIL_set_digital_playback_volume(g_ail_digi_driver_id, volume);
 
 		if (!volume) {
 			SND_stop_digi();
@@ -698,31 +946,28 @@ void SND_set_volume(unsigned short volume)
 #endif
 }
 
-/* static */
-signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, signed short irq)
+static signed int load_digi_driver(const char* fname, const signed int type, int16_t io, int16_t irq)
 {
 #if defined(__BORLANDC__)
-	if (io &&
-		((Bit8u*)ds_writed(AIL_DIGI_DRIVER_BUF, (Bit32u)read_digi_driver(fname))) &&
-		((ds_writew(AIL_DIGI_DRIVER_ID, AIL_register_driver((Bit8u*)ds_readd(AIL_DIGI_DRIVER_BUF)))) != 0xffff))
+	if (io && (g_ail_digi_driver_buf = read_digi_driver(fname)) &&
+		((g_ail_digi_driver_id = AIL_register_driver(g_ail_digi_driver_buf)) != -1))
 	{
 
-		ds_writed(AIL_DIGI_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_DIGI_DRIVER_ID)));
+		g_ail_digi_driver_descr = (int16_t*)AIL_describe_driver(g_ail_digi_driver_id);
 
-		if (host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 2) == type) {
+		if (g_ail_digi_driver_descr[1] == type) {
 
 			if (io == -1) {
-				io = host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0xc);
-				irq = host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0xe);
+				io = g_ail_digi_driver_descr[6];
+				irq = g_ail_digi_driver_descr[7];
 			}
 
-			if (AIL_detect_device(ds_readw(AIL_DIGI_DRIVER_ID), io, irq,
-				host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
-				host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12)))
+			if (AIL_detect_device(g_ail_digi_driver_id, io, irq,
+				g_ail_digi_driver_descr[8], g_ail_digi_driver_descr[9]))
 			{
-				AIL_init_driver(ds_readw(AIL_DIGI_DRIVER_ID), io, irq,
-					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
-					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12));
+				AIL_init_driver(g_ail_digi_driver_id, io, irq,
+					g_ail_digi_driver_descr[8],
+					g_ail_digi_driver_descr[9]);
 
 				g_snd_effects_enabled = 1;
 				return 1;
@@ -738,25 +983,25 @@ signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, 
 	return 0;
 }
 
-unsigned char* read_digi_driver(char *fname)
+static uint8_t* read_digi_driver(const char *fname)
 {
 #if defined(__BORLANDC__)
-	Bit32u len;
-	Bit8u *buf;
-	Bit32u ptr;
+	uint32_t len;
+	uint8_t *buf;
+	uint32_t ptr;
 
-	signed short handle;
+	signed int handle;
 
 	if ( (handle = open(fname, O_BINARY | O_RDONLY)) != -1) {
 
 		len = 5000L;
 
-		ds_writed(AIL_DIGI_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
-		ptr = ds_readd(AIL_DIGI_DRIVER_BUF2) + 15L;
+		g_ail_digi_driver_buf2 = (uint8_t*)schick_alloc(len + 16L);
+		ptr = (uint32_t)g_ail_digi_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((Bit8u*)ptr);
-		_read(handle, (Bit8u*)buf, (unsigned short)len);
-		close(handle);
+		buf = EMS_norm_ptr((uint8_t*)ptr);
+		_read(handle, buf, len);
+		_close(handle);
 		return buf;
 	}
 #endif
@@ -769,45 +1014,45 @@ unsigned char* read_digi_driver(char *fname)
  * \param   fileindex   the index of the file in SCHICK.DAT
  * \return              the filehandle or 0xffff.
  */
-/* static */
-signed short open_and_seek_dat(unsigned short fileindex)
+static signed int open_and_seek_dat(const uint16_t fileindex)
 {
-	Bit32u start, end;
-	signed short fd;
+	uint32_t start;
+	uint32_t end;
+	signed int handle;
 
 	/* open SCHICK.DAT */
-	if ( (fd = open(g_fname_schick_dat, O_BINARY | O_RDONLY)) != -1) {
-
-		/* seek to the fileindex position in the offset table */
-		lseek(fd, fileindex * 4, SEEK_SET);
-
-		/* read the start offset of the desired file */
-		_read(fd, (Bit8u*)&start, 4);
-
-		/* read the start offset of the next file */
-		_read(fd, (Bit8u*)&end, 4);
-#if !defined(__BORLANDC__)
-		/* BE-Fix */
-		start = host_readd((Bit8u*)&start);
-		end = host_readd((Bit8u*)&end);
+#if defined(__BORLANDC__) || defined(_WIN32)
+	if ( (handle = open(g_fname_schick_dat, O_BINARY | O_RDONLY)) != -1) {
+#else
+	if ( (handle = open(g_fname_schick_dat, O_RDONLY)) != -1) {
 #endif
 
+		/* seek to the fileindex position in the offset table */
+		lseek(handle, fileindex * 4, SEEK_SET);
+
+		/* read the start offset of the desired file */
+		_read(handle, (uint8_t*)&start, 4);
+
+		/* REMARK: could fail on the last file */
+		/* read the start offset of the next file */
+		_read(handle, (uint8_t*)&end, 4);
+
 		/* seek to the desired file */
-		lseek(fd, start, SEEK_SET);
+		lseek(handle, start, SEEK_SET);
 
 		/* save the offset of the desired file */
-		ds_writed(ARCHIVE_FILE_OFFSET, start);
+		g_archive_file_offset = start;
 
 		/* save the length of the desired file in 2 variables */
-		ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = end - start));
+		g_archive_file_length = g_archive_file_remaining = end - start;
 	}
 
-	return fd;
+	return handle;
 }
 
-Bit32u get_readlength2(signed short index)
+uint32_t get_readlength2(const signed int index)
 {
-	return index != -1 ? ds_readd(ARCHIVE_FILE_LENGTH) : 0;
+	return index != -1 ? g_archive_file_length : 0;
 }
 
 /**
@@ -818,15 +1063,14 @@ Bit32u get_readlength2(signed short index)
  * \param   len         number of bytes to read
  * \return              number of bytes read
  */
-unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
+uint16_t read_archive_file(const signed int handle, uint8_t *buffer, uint16_t len)
 {
-
 	/* no need to read */
 	if (g_archive_file_remaining != 0) {
 
 		/* adjust number of bytes to read */
 		if (len > g_archive_file_remaining)
-			len = (Bit16u)g_archive_file_remaining;
+			len = (uint16_t)g_archive_file_remaining;
 
 		g_archive_file_remaining -= len;
 
@@ -842,27 +1086,30 @@ unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
  * \param   handle      handle returned by load_archive_file
  * \param   off         position to seek for
  */
-void seek_archive_file(Bit16u handle, Bit32s off, ...)
+void seek_archive_file(const signed int handle, int32_t off, ...)
 {
+	uint32_t file_off;
 
-	Bit32u file_off;
+	g_archive_file_remaining = g_archive_file_length - off;
 
-	g_archive_file_remaining = (Bit32s)(ds_readd(ARCHIVE_FILE_LENGTH) - off);
-
-	file_off = ds_readd(ARCHIVE_FILE_OFFSET) + off;
+	file_off = g_archive_file_offset + off;
 
 	lseek(handle, file_off, SEEK_SET);
 
 	return;
 }
 
-signed short load_regular_file(Bit16u index)
+signed int load_regular_file(const signed int index)
 {
-	signed short handle;
+	signed int handle;
 
-	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
+#if defined(__BORLANDC__) || defined(_WIN32)
+	if ( (handle = open(g_fnames_v302de[index], O_BINARY | O_RDWR)) == -1) {
+#else
+	if ( (handle = open(g_fnames_v302de[index], O_RDWR)) == -1) {
+#endif
 
-		sprintf(g_dtp2, g_str_file_missing_ptr, (char*)ds_readd(FNAMES + index * 4));
+		sprintf(g_dtp2, g_str_file_missing_ptr, g_fnames_v302de[index]);
 
 		g_missing_file_guilock = 1;
 		GUI_output(g_dtp2);
@@ -878,7 +1125,7 @@ signed short load_regular_file(Bit16u index)
  * \param   index       index of the file in SCHICK.DAT or in temp (bitwise or 0x8000)
  * \return              a file handle that can be used with read_archive_file etc.
  */
-signed short load_archive_file(Bit16u index)
+signed int load_archive_file(const signed int index)
 {
 #if defined(__BORLANDC__)
 	flushall();
@@ -887,33 +1134,37 @@ signed short load_archive_file(Bit16u index)
 	return (index & 0x8000) ? open_temp_file(index & 0x7fff) : open_and_seek_dat(index);
 }
 
-signed short open_temp_file(unsigned short index)
+static signed int open_temp_file(const signed int index)
 {
 	char tmppath[40];
-	signed short handle;
+	signed int handle;
 
-	sprintf((char*)tmppath, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)ds_readd(FNAMES + index * 4));
+	sprintf((char*)tmppath, g_str_temp_xx_ptr2, g_fnames_v302de[index]);
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
+#else
+	while ( (handle = open(tmppath, O_RDWR)) == -1) {
+#endif
 
 		copy_from_archive_to_temp(index, tmppath);
 	}
 
 	/* get the length of the file */
-	ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = lseek(handle, 0, 2)));
+	g_archive_file_length = g_archive_file_remaining = lseek(handle, 0, 2);
 	/* seek to start */
 	lseek(handle, 0, 0);
 
-	ds_writed(ARCHIVE_FILE_OFFSET, 0);
+	g_archive_file_offset = 0;
 
 	return handle;
 }
 
-void copy_from_archive_to_temp(unsigned short index, char* fname)
+static void copy_from_archive_to_temp(const signed int index, const char* fname)
 {
-	signed short handle1;
-	signed short handle2;
-	signed short len;
+	signed int handle1;
+	signed int handle2;
+	signed int len;
 
 	if ( (handle1 = load_archive_file(index)) != -1) {
 
@@ -932,13 +1183,17 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 	}
 }
 
-void copy_file_to_temp(char* src_file, char* fname)
+void copy_file_to_temp(const char* src_file, const char* fname)
 {
-	signed short handle1;
-	signed short handle2;
-	signed short len;
+	signed int handle1;
+	signed int handle2;
+	signed int len;
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 	if ( (handle1 = open(src_file, O_BINARY | O_RDONLY)) != -1) {
+#else
+	if ( (handle1 = open(src_file, O_RDONLY)) != -1) {
+#endif
 
 		/* create new file in TEMP */
 		/* TODO: should be O_BINARY | O_WRONLY */
@@ -955,98 +1210,98 @@ void copy_file_to_temp(char* src_file, char* fname)
 	}
 }
 
-Bit32s process_nvf(struct nvf_desc *nvf)
+int32_t process_nvf_extraction(struct nvf_extract_desc *nvf)
 {
-	signed short i;
-	Bit32u offs;
-	signed short pics;
-	signed short width;
-	signed short height;
-	signed short va;
-	Bit32u p_size;
-	Bit32u retval;
+	signed int i;
+	uint32_t offs;
+	signed int pics;
+	signed int width;
+	signed int height;
+	signed int va;
+	uint32_t p_size;
+	uint32_t retval;
 	signed char nvf_type;
 #if !defined(__BORLANDC__)
-	Bit8u *nvf_no;
-	Bit8u *src;
+	uint8_t *nvf_no;
+	uint8_t *src;
 #else
-	Bit8u huge *nvf_no;
-	Bit8u huge *src;
+	uint8_t huge *nvf_no;
+	uint8_t huge *src;
 #endif
-	Bit8u *dst;
+	uint8_t *dst;
 
-	nvf_type = host_readb(nvf->src);
+	nvf_type = *(signed char*)(nvf->src);
 	va = nvf_type & 0x80;
 	nvf_type &= 0x7f;
 
-	pics = host_readws(nvf->src + 1L);
+	pics = readws(nvf->src + 1L);
 
-	if (nvf->no < 0)
-		nvf->no = 0;
+	if (nvf->image_num < 0)
+		nvf->image_num = 0;
 
-	if (nvf->no > pics - 1)
-		nvf->no = pics - 1;
+	if (nvf->image_num > pics - 1)
+		nvf->image_num = pics - 1;
 
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(nvf->src + 3L);
-		height = host_readws(nvf->src + 5L);
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
 		p_size = width * height;
-		src =  nvf->src + nvf->no * p_size + 7L;
+		src =  nvf->src + nvf->image_num * p_size + 7L;
 		break;
 
 	case 0x01:
 		offs = pics * 4 + 3L;
-		for (i = 0; i < nvf->no; i++) {
+		for (i = 0; i < nvf->image_num; i++) {
 #if !defined(__BORLANDC__)
-			width = host_readw(nvf->src + i * 4 + 3L);
-			height = host_readw(nvf->src + i * 4 + 5L);
+			width = readws(nvf->src + i * 4 + 3L);
+			height = readws(nvf->src + i * 4 + 5L);
 #endif
 			offs += width * height;
 		}
 
-		width = host_readw(nvf->src + nvf->no * 4 + 3L);
-		height = host_readw(nvf->src + nvf->no * 4 + 5L);
+		width = readws(nvf->src + nvf->image_num * 4 + 3L);
+		height = readws(nvf->src + nvf->image_num * 4 + 5L);
 		p_size = width * height;
 		src = nvf->src + offs;
 		break;
 
 	case 0x02: case 0x04:
-		width = host_readw(nvf->src + 3L);
-		height = host_readw(nvf->src + 5L);
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
 		offs = pics * 4 + 7L;
-		for (i = 0; i < nvf->no; i++) {
-			offs += host_readd(nvf->src + (i * 4) + 7L);
+		for (i = 0; i < nvf->image_num; i++) {
+			offs += readds(nvf->src + (i * 4) + 7L);
 		}
 
-		p_size = host_readd(nvf->src + nvf->no * 4 + 7L);
+		p_size = readds(nvf->src + nvf->image_num * 4 + 7L);
 		src = nvf->src + offs;
 		break;
 
 	case 0x03: case 0x05:
 		offs = pics * 8 + 3L;
-		for (i = 0; i < nvf->no; i++)
-			offs += host_readd(nvf->src + (i * 8) + 7L);
+		for (i = 0; i < nvf->image_num; i++)
+			offs += readds(nvf->src + (i * 8) + 7L);
 
-		width = host_readw(nvf->src + nvf->no * 8 + 3L);
-		height = host_readw(nvf->src +  nvf->no * 8 + 5L);
-		p_size = host_readd(nvf->src + i * 8 + 7L);
+		width = readws(nvf->src + nvf->image_num * 8 + 3L);
+		height = readws(nvf->src +  nvf->image_num * 8 + 5L);
+		p_size = readds(nvf->src + i * 8 + 7L);
 		src = nvf->src + offs;
 		break;
 	}
 
-	if (!nvf->type) {
+	if (!nvf->compression_type) {
 
 		/* PP20 decompression */
 
 		if (va != 0) {
 
 			/* get size from unpacked picture */
-			retval = host_readd(src);
+			retval = readds(src);
 			nvf_no = src;
 			nvf_no += (retval + (-4L));
-			retval = host_readd(nvf_no);
+			retval = readds(nvf_no);
 			retval = swap_u32(retval) >> 8;
 
 		} else {
@@ -1056,19 +1311,15 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 #if !defined(__BORLANDC__)
 		decomp_pp20(src, nvf->dst, src + (signed char)4, p_size);
 #else
-		decomp_pp20(src,
-			nvf->dst,
-			FP_OFF(src) + 4,
-			FP_SEG(src),
-			p_size);
+		decomp_pp20(src, nvf->dst, FP_OFF(src) + 4, FP_SEG(src), p_size);
 #endif
 
-	} else if (nvf->type >= 2 && nvf->type <= 5) {
+	} else if (nvf->compression_type >= 2 && nvf->compression_type <= 5) {
 
 		dst = nvf->dst;
 
 		/* RLE decompression */
-		decomp_rle(width, height, dst, src, (Bit8u*)g_text_output_buf, nvf->type);
+		decomp_rle(width, height, dst, src, (uint8_t*)g_text_output_buf, nvf->compression_type);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* retval was originally neither set nor used here.
 			VC++2008 complains about an uninitialized variable
@@ -1082,8 +1333,8 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		retval = p_size;
 	}
 
-	host_writew(nvf->width, width);
-	host_writew(nvf->height, height);
+	*nvf->width = width;
+	*nvf->height = height;
 
 	return retval;
 }
@@ -1101,52 +1352,52 @@ Bit32s process_nvf(struct nvf_desc *nvf)
  * to call interrupts. We use the one of DOSBox, which means, that we
  * put the values in the emulated registers, instead in a structure.
  */
-void mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
+static void mouse_action(int16_t *p1, int16_t *p2, int16_t *p3, int16_t *p4, int16_t *p5)
 {
 #if defined(__BORLANDC__)
 	struct SREGS sregs;
 	union REGS wregs;
 
-	if (host_readws(p1) >= 0) {
+	if (*p1 >= 0) {
 
-		wregs.x.ax = host_readw(p1);
-		wregs.x.bx = host_readw(p2);
-		wregs.x.cx = host_readw(p3);
+		wregs.x.ax = *p1;
+		wregs.x.bx = *p2;
+		wregs.x.cx = *p3;
 
-		switch (host_readw(p1)) {
+		switch (*p1) {
 		case 0x9:	/* define Cursor in graphic mode */
 		case 0xc:	/* install event handler */
 		case 0x14:	/* swap event handler */
 		case 0x16:	/* save mouse state */
 		case 0x17:	/* load mouse state */
 		{
-			wregs.x.dx = host_readw(p4);
-			sregs.es = host_readw(p5);
+			wregs.x.dx = *p4;
+			sregs.es = *p5;
 			break;
 		}
 		case 0x10: {
-			wregs.x.cx = host_readw(p2);
-			wregs.x.dx = host_readw(p3);
-			wregs.x.si = host_readw(p4);
-			wregs.x.di = host_readw(p5);
+			wregs.x.cx = *p2;
+			wregs.x.dx = *p3;
+			wregs.x.si = *p4;
+			wregs.x.di = *p5;
 			break;
 		}
 		default : {
-			wregs.x.dx = host_readw(p4);
+			wregs.x.dx = *p4;
 		}
 		}
 
 		int86x(0x33, &wregs, &wregs, &sregs);
 
-		if (host_readw(p1) == 0x14) {
-			host_writew(p2, sregs.es);
+		if (*p1 == 0x14) {
+			*p2 = sregs.es;
 		} else {
-			host_writew(p2, wregs.x.bx);
+			*p2 = wregs.x.bx;
 		}
 
-		host_writew(p1, wregs.x.ax);
-		host_writew(p3, wregs.x.cx);
-		host_writew(p4, wregs.x.dx);
+		*p1 = wregs.x.ax;
+		*p3 = wregs.x.cx;
+		*p4 = wregs.x.dx;
 	}
 #endif
 }
@@ -1154,38 +1405,35 @@ void mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 #if defined(__BORLANDC__)
 void interrupt mouse_isr(void)
 {
-	signed short l_si = _AX;
-	signed short l1;
-	signed short l3;
-	signed short l4;
-	signed short l5;
-	signed short l6;
+	int16_t l_si = _AX;
+	int16_t l1;
+	int16_t l3;
+	int16_t l4;
+	int16_t l5;
+	int16_t l6;
 
 	if (!g_mouse_locked) {
 
 		if (l_si & 0x2) {
 			g_mouse1_event2 = 1;
-			g_mouse1_event1 = 1;
+			g_mouse_leftclick_event = 1;
 		}
 
 		if (l_si & 0x8) {
-			g_mouse2_event = 1;
+			g_mouse_rightclick_event = 1;
 		}
 
-		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
-				!gs_current_loctype &&
-				!g_dialogbox_lock &&
-				(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+		if (((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_town_id != TOWN_ID_NONE)) &&
+				!gs_town_loc_type && !g_dialogbox_lock && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
-			g_current_cursor = (unsigned short*) (is_mouse_in_rect(68, 4, 171, 51) ? (p_datseg + CURSOR_ARROW_UP):
-							(is_mouse_in_rect(68, 89, 171, 136) ? (p_datseg + CURSOR_ARROW_DOWN) :
-							(is_mouse_in_rect(16, 36, 67, 96) ? (p_datseg + CURSOR_ARROW_LEFT) :
-							(is_mouse_in_rect(172, 36, 223, 96) ? (p_datseg + CURSOR_ARROW_RIGHT) :
-							(!is_mouse_in_rect(16, 4, 223, 138) ? (p_datseg + DEFAULT_MOUSE_CURSOR) :
-								(void*)g_current_cursor)))));
+			g_current_cursor =	(is_mouse_in_rect( 68,  4, 171,  51) ?	&g_cursor_arrow_up :
+						(is_mouse_in_rect( 68, 89, 171, 136) ?	&g_cursor_arrow_down :
+						(is_mouse_in_rect( 16, 36,  67,  96) ?	&g_cursor_arrow_left :
+						(is_mouse_in_rect(172, 36, 223,  96) ?	&g_cursor_arrow_right :
+						(!is_mouse_in_rect(16,  4, 223, 138) ?	&g_default_mouse_cursor : g_current_cursor)))));
 		} else {
 			if (g_dialogbox_lock) {
-				g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
+				g_current_cursor = &g_default_mouse_cursor;
 			}
 		}
 
@@ -1194,7 +1442,7 @@ void interrupt mouse_isr(void)
 			l4 = g_mouse_posx;
 			l5 = g_mouse_posy;
 
-			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+			mouse_action(&l1, &l3, &l4, &l5, &l6);
 
 			g_mouse_posx = l4;
 			g_mouse_posy = l5;
@@ -1216,7 +1464,7 @@ void interrupt mouse_isr(void)
 			l4 = g_mouse_posx;
 			l5 = g_mouse_posy;
 
-			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+			mouse_action(&l1, &l3, &l4, &l5, &l6);
 
 			g_mouse_moved = 1;
 		}
@@ -1233,14 +1481,10 @@ void interrupt mouse_isr(void)
  * \param   y2          bottom right y coordinate
  * \return              1 if the pointer is in this rectangle, otherwise 0
  */
-signed short is_mouse_in_rect(signed short x1, signed short y1,
-				signed short x2, signed short y2)
+signed int is_mouse_in_rect(const signed int x1, const signed int y1, const signed int x2, const signed int y2)
 {
-	signed short m_x;
-	signed short m_y;
-
-	m_x = g_mouse_posx;
-	m_y = g_mouse_posy;
+	const signed int m_x = g_mouse_posx;
+	const signed int m_y = g_mouse_posy;
 
 	return ((m_x >= x1) && (m_x <= x2) && (m_y >= y1) && (m_y <= y2)) ? 1 : 0;
 }
@@ -1250,26 +1494,28 @@ void mouse_init(void)
 	if (g_have_mouse == 2) {
 
 #if defined(__BORLANDC__)
-		unsigned short p1, p2, p3, p4, p5;
+		int16_t l1, l2, l3, l4, l5;
 
-		p1 = 0;
+		l1 = 0;
 
-		mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+		mouse_action(&l1, &l2, &l3, &l4, &l5);
 
-		if (p1 == 0) {
+		if (l1 == 0) {
 			g_have_mouse = 0;
 		}
+#endif
 
-		g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
-		g_last_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
+		g_current_cursor = &g_default_mouse_cursor;
+		g_last_cursor = &g_default_mouse_cursor;
 
+#if defined(__BORLANDC__)
 		if (g_have_mouse == 2) {
 
-			p1 = 4;
-			p3 = g_mouse_posx;
-			p4 = g_mouse_posy;
+			l1 = 4;
+			l3 = g_mouse_posx;
+			l4 = g_mouse_posy;
 
-			mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+			mouse_action(&l1, &l2, &l3, &l4, &l5);
 
 			mouse_irq_init(0x1f, (unsigned char*)&mouse_isr);
 		}
@@ -1284,42 +1530,39 @@ void disable_mouse(void)
 	}
 }
 
-void seg002_170e(Bit8u *a1, Bit8u *a2, Bit8u *a3, Bit8u *a4)
+#if defined(__BORLANDC__)
+void mouse_get_button_press_info(int16_t *a1, int16_t *a2, int16_t *a3, int16_t *a4)
 {
-	signed short tmp;
+	int16_t tmp;
 
-	host_writew(a1, 5);
+	*a1 = 5;
 
-	mouse_action(a1, a2, a3, a4, (Bit8u*)&tmp);
+	mouse_action(a1, a2, a3, a4, &tmp);
 }
 
-#if defined(__BORLANDC__)
 void call_mouse_isr(void)
 {
 	mouse_isr();
 }
 
-void mouse_irq_init(signed short irq_no, void interrupt *(isr))
+void mouse_irq_init(const int16_t irq_no, void interrupt *(isr))
 {
-	signed short l1;
-	signed short l3;
-	signed short l4;
-	signed short l5;
-	signed short l6;
+	int16_t l1;
+	int16_t l3;
+	int16_t l4;
+	int16_t l5;
+	int16_t l6;
 
 	l1 = 12;
 	l4 = irq_no;
 
-	/* TODO : keep the numbers here until we can build the binary */
-/*	l5 = FP_OFF(call_mouse_isr);
-	l6 = FP_SEG(call_mouse_isr); */
-	l5 = 0x1742;
-	l6 = 0x51e;
+	l5 = FP_OFF(call_mouse_isr);
+	l6 = FP_SEG(call_mouse_isr);
 
-	ds_writed(MOUSE_HANDLER_BAK, (Bit32u)getvect(0x78));
+	g_mouse_handler_bak = getvect(0x78);
 	setvect(0x78, (void interrupt far (*)(...))isr);
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
 
 	g_mouse_irq_init = 1;
 }
@@ -1329,22 +1572,22 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 void mouse_reset_ehandler(void)
 {
 #if defined(__BORLANDC__)
-	signed short l1;
-	signed short l2;
-	signed short l3;
-	signed short l4;
-	signed short l5;
+	int16_t l1;
+	int16_t l2;
+	int16_t l3;
+	int16_t l4;
+	int16_t l5;
 
-	setvect(0x78, (void interrupt far (*)(...))ds_readd(MOUSE_HANDLER_BAK));
+	setvect(0x78, g_mouse_handler_bak);
 
 	l1 = 12;
 	l3 = 0;
 	l4 = 0;
 	l5 = 0;
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l2, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5);
+	mouse_action(&l1, &l2, &l3, &l4, &l5);
 
-	g_mouse_irq_init = 1;
+	g_mouse_irq_init = 0;
 #endif
 }
 
@@ -1354,55 +1597,59 @@ void mouse_reset_ehandler(void)
  * \param   x           X - coordinate
  * \param   y           Y - coordinate
  */
-void mouse_move_cursor(signed short x, signed short y)
+void mouse_move_cursor(const signed int x, const signed int y)
 {
-	signed short l1 = 4;
-	signed short l3;
-	signed short l4 = x;
-	signed short l5 = y;
-	signed short l6;
+#if defined(__BORLANDC__)
+	int16_t l1 = 4;
+	int16_t l3;
+	int16_t l4 = x;
+	int16_t l5 = y;
+	int16_t l6;
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
+#endif
+}
+
+#if defined(__BORLANDC__)
+/* unused */
+static void mouse_setGMask(const uint16_t h_spot, const uint16_t v_spot, uint16_t a3, uint16_t a4)
+{
+	int16_t l1 = 9;
+	int16_t l3 = h_spot;
+	int16_t l4 = v_spot;
+	int16_t l5 = a3;
+	int16_t l6 = a4;
+
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
 }
 
 /* unused */
-void seg002_1838(signed short a1, signed short a2, signed short a3, signed short a4)
+static void mouse_setCRTpage(const uint16_t page)
 {
-	signed short l1 = 9;
-	signed short l3 = a1;
-	signed short l4 = a2;
-	signed short l5 = a3;
-	signed short l6 = a4;
+	int16_t l1 = 29;
+	int16_t l3 = page;
+	int16_t l4;
+	int16_t l5;
+	int16_t l6;
 
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+	mouse_action(&l1, &l3, &l4, &l5, &l6);
 }
-
-/* unused */
-void seg002_1880(signed short a1)
-{
-	signed short l1 = 29;
-	signed short l3 = a1;
-	signed short l4;
-	signed short l5;
-	signed short l6;
-
-	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
-}
+#endif
 
 
 /**
  * \brief   makes a mouse cursor from a selected item
  *
- * \param   p           pointer to the icon of the item
+ * \param icon	pointer to the icon of the item 16x16
  */
-void make_ggst_cursor(Bit8u *icon)
+void make_ggst_cursor(uint8_t *icon)
 {
-	signed short y;
-	signed short x;
+	signed int y;
+	signed int x;
 
 	/* clear the bitmask */
 	for (y = 0; y < 16; y++) {
-		g_ggst_mask[y] = 0;
+		g_ggst_cursor.mask[y] = 0;
 	}
 
 	/* make a bitmask from the icon */
@@ -1410,32 +1657,33 @@ void make_ggst_cursor(Bit8u *icon)
 		for (x = 0; x < 16; x++) {
 			/* if pixelcolor of the icon is not black */
 			if (*icon++ != 0x40) {
-				g_ggst_mask[y] |= (0x8000 >> x);
+				g_ggst_cursor.mask[y] |= (0x8000 >> x);
 			}
 		}
 	}
 
 	/* copy and negate the bitmask */
 	for (y = 0; y < 16; y++) {
-		g_ggst_cursor[y] = ~g_ggst_mask[y];
+		g_ggst_cursor.data[y] = ~g_ggst_cursor.mask[y];
 	}
 }
 
-void update_mouse_cursor(void)
+void call_mouse_bg(void)
 {
-	update_mouse_cursor1();
+	mouse_bg();
 }
 
-void refresh_screen_size(void)
+void call_mouse(void)
 {
-	refresh_screen_size1();
+	mouse_cursor();
 }
 
-void update_mouse_cursor1(void)
+static void mouse_bg(void)
 {
 	if (!g_mouse_locked) {
 
-		if  (!g_mouse_refresh_flag) {
+		if (!g_mouse_refresh_flag) {
+
 			g_mouse_locked = 1;
 			restore_mouse_bg();
 			g_mouse_locked = 0;
@@ -1445,7 +1693,7 @@ void update_mouse_cursor1(void)
 	}
 }
 
-void refresh_screen_size1(void)
+static void mouse_cursor(void)
 {
 	/* check lock */
 	if (!g_mouse_locked) {
@@ -1469,12 +1717,14 @@ void refresh_screen_size1(void)
 			if (g_mouse_posy > 195)
 				g_mouse_posy = 195;
 
-			save_mouse_bg();
+			mouse_save_bg();
+
 			g_mouse_posx_bak = g_mouse_posx;
 			g_mouse_posy_bak = g_mouse_posy;
 			g_mouse_pointer_offsetx_bak = g_mouse_pointer_offsetx;
 			g_mouse_pointer_offsety_bak = g_mouse_pointer_offsety;
-			draw_mouse_cursor();
+
+			mouse_cursor_draw();
 
 			/* put lock */
 			g_mouse_locked = 0;
@@ -1482,7 +1732,7 @@ void refresh_screen_size1(void)
 	}
 }
 
-void mouse_19dc(void)
+static void mouse_motion(void)
 {
 	/* return if mouse was not moved and the cursor remains */
 	if (g_mouse_moved || (g_last_cursor != g_current_cursor)) {
@@ -1491,7 +1741,7 @@ void mouse_19dc(void)
 		g_last_cursor = g_current_cursor;
 
 		/* check if the new cursor is the default cursor */
-		if ((Bit8u*)g_current_cursor == p_datseg + DEFAULT_MOUSE_CURSOR) {
+		if (g_current_cursor == &g_default_mouse_cursor) {
 			/* set cursor size 0x0 */
 			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
 		} else {
@@ -1501,32 +1751,31 @@ void mouse_19dc(void)
 
 		/* reset mouse was moved */
 		g_mouse_moved = 0;
-		update_mouse_cursor1();
-		refresh_screen_size1();
+		mouse_bg();
+		mouse_cursor();
 	}
 }
 
 void handle_gui_input(void)
 {
-	signed short l_si;
-	signed short tw_bak;
-	signed short l1;
+	signed int l_in_key_ext;
+	signed int tw_bak;
 
-	g_bioskey_event = g_action = l_si = 0;
+	g_bioskey_event = g_action = l_in_key_ext = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		l_in_key_ext = (g_bioskey_event = bioskey(0)) >> 8;
 		g_bioskey_event &= 0xff;
 
-		if (l_si == 0x24) {
-			l_si = 0x2c;
+		if (l_in_key_ext == 0x24) {
+			l_in_key_ext = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && !g_pregame_state) {
 			cleanup_game();
 
 			exit(0);
@@ -1543,13 +1792,13 @@ void handle_gui_input(void)
 		/* Ctrl + E */
 		if (g_bioskey_event == 5) {
 			status_select_hero();
-			l_si = 0;
+			l_in_key_ext = 0;
 		}
 
 		/* Ctrl + O -> swap heroes */
 		if (g_bioskey_event == 15) {
 			GRP_swap_heroes();
-			l_si = 0;
+			l_in_key_ext = 0;
 		}
 
 		/* Ctrl + S -> sound menu */
@@ -1558,10 +1807,7 @@ void handle_gui_input(void)
 		}
 
 		/* Ctrl + P -> pause game */
-		if ((g_bioskey_event == 0x10) &&
-			(g_bioskey_event10 == 0) &&
-			!g_dialogbox_lock &&
-			(ds_readws(PREGAME_STATE) == 0))
+		if ((g_bioskey_event == 0x10) && (g_bioskey_event10 == 0) && !g_dialogbox_lock && !g_pregame_state)
 		{
 			g_bioskey_event10 = 1;
 			g_timers_disabled++;
@@ -1571,25 +1817,27 @@ void handle_gui_input(void)
 			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = tw_bak;
 			g_gui_text_centered = 0;
-			g_bioskey_event10 = l_si = g_bioskey_event = 0;
+			g_bioskey_event10 = l_in_key_ext = g_bioskey_event = 0;
 			g_timers_disabled--;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
 		g_mouse1_event2 = 0;
-		l_si = 0;
+		l_in_key_ext = 0;
 
 		if (g_action_table_secondary) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && (g_action_table_primary)) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
+		if (!l_in_key_ext && g_action_table_primary) {
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
 		if (g_have_mouse == 2) {
 
-			for (l1 = 0; l1 < 15; l1++) {
+			signed int i;
+
+			for (i = 0; i < 15; i++) {
 				wait_for_vsync();
 			}
 
@@ -1599,36 +1847,36 @@ void handle_gui_input(void)
 			}
 		}
 
-		if ((l_si >= 0xf1) && (l_si <= 0xf8)) {
+		if ((l_in_key_ext >= 0xf1) && (l_in_key_ext <= 0xf8)) {
 
 			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
-				if ((host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
+				if ((get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_id == gs_active_group_id))
 				{
-					status_menu(l_si - 241);
-					l_si = 0;
+					status_menu(l_in_key_ext - 241);
+					l_in_key_ext = 0;
 					g_mouse1_doubleclick = 0;
 					g_mouse1_event2 = 0;
 				}
+
 			} else {
 				/* swap heroes by click - move mouse - click */
 				if (g_heroswap_allowed &&
-					(host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
+					(get_hero(l_in_key_ext - 241)->typus != HERO_TYPE_NONE) && (get_hero(l_in_key_ext - 241)->group_id == gs_active_group_id))
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
-					GRP_move_hero(l_si - 241);
-					l_si = 0;
+					GRP_move_hero(l_in_key_ext - 241);
+					l_in_key_ext = 0;
 					g_mouse1_doubleclick = 0;
 					g_mouse1_event2 = 0;
 				}
 			}
-		} else if (l_si == 0xfd) {
+
+		} else if (l_in_key_ext == 0xfd) {
 			/* Credits */
 
-			l_si = 0;
+			l_in_key_ext = 0;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
 			g_gui_text_centered = 1;
@@ -1636,9 +1884,9 @@ void handle_gui_input(void)
 			g_gui_text_centered = 0;
 			g_textbox_width = tw_bak;
 
-		} else if (l_si == 0xfc) {
+		} else if (l_in_key_ext == 0xfc) {
 			/* Clock */
-			l_si = 0;
+			l_in_key_ext = 0;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
 			g_gui_text_centered = 1;
@@ -1650,8 +1898,8 @@ void handle_gui_input(void)
 		}
 	}
 
-	mouse_19dc();
-	g_action = (l_si);
+	mouse_motion();
+	g_action = l_in_key_ext;
 }
 
 /**
@@ -1665,9 +1913,9 @@ void handle_gui_input(void)
  * \return  if (x,y) is in one of the rectangles, return the return value of the first fitting rectangle.
  *          otherwise, return 0.
  */
-signed short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
+signed int get_mouse_action(const signed int x, const signed int y, const struct mouse_action *act)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; act[i].x1 != -1; i++) {
 
@@ -1675,7 +1923,6 @@ signed short get_mouse_action(signed short x, signed short y, struct mouse_actio
 		{
 			return act[i].action;
 		}
-
 	}
 
 	return 0;
@@ -1683,24 +1930,23 @@ signed short get_mouse_action(signed short x, signed short y, struct mouse_actio
 
 void handle_input(void)
 {
-	signed short l_si;
-	signed short l_di;
+	signed int l_in_key_ext;
 
-	g_bioskey_event = g_action = l_si = 0;
+	g_bioskey_event = g_action = l_in_key_ext = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		l_in_key_ext = (g_bioskey_event = bioskey(0)) >> 8;
 		g_bioskey_event &= 0xff;
 
-		if (l_si == 0x24) {
-			l_si = 0x2c;
+		if (l_in_key_ext == 0x24) {
+			l_in_key_ext = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && !g_pregame_state) {
 			cleanup_game();
 
 			exit(0);
@@ -1720,7 +1966,7 @@ void handle_input(void)
 		/* Ctrl + P -> pause game */
 		/* TODO: use tw_bak here */
 		if ((g_bioskey_event == 0x10) && (g_bioskey_event10 == 0) &&
-			!g_dialogbox_lock && (ds_readws(PREGAME_STATE) == 0))
+			!g_dialogbox_lock && !g_pregame_state)
 		{
 			g_timers_disabled++;
 			g_bioskey_event10 = 1;
@@ -1731,24 +1977,26 @@ void handle_input(void)
 			g_gui_text_centered = 0;
 			g_timers_disabled--;
 
-			g_bioskey_event10 = l_si = g_bioskey_event = 0;
+			g_bioskey_event10 = l_in_key_ext = g_bioskey_event = 0;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
 		g_mouse1_event2 = 0;
-		l_si = 0;
+		l_in_key_ext = 0;
 
 		if (g_action_table_secondary) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && g_action_table_primary) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
+		if (!l_in_key_ext && g_action_table_primary) {
+			l_in_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
 		if (g_have_mouse == 2) {
 
-			for (l_di = 0; l_di < 25; l_di++) {
+			signed int i;
+
+			for (i = 0; i < 25; i++) {
 
 				wait_for_vsync();
 
@@ -1761,29 +2009,30 @@ void handle_input(void)
 		}
 	}
 
-	mouse_19dc();
-	g_action = (l_si);
+	mouse_motion();
+	g_action = l_in_key_ext;
 }
 
-void wait_for_keyboard1(void)
+void flush_keyboard_queue_alt(void)
 {
+#if defined(__BORLANDC__)
 	while (CD_bioskey(1)) {
-
 		bioskey(0);
 	}
+#endif
 }
 
-void game_loop(void)
+static void game_loop(void)
 {
-	signed short answer;
+	signed int answer;
 
 	while (g_game_state == GAME_STATE_MAIN) {
 
-		if (gs_current_loctype != LOCTYPE_NONE) {
+		if (gs_town_loc_type != LOCTYPE_NONE) {
 			do_location();
-		} else if (gs_current_town != TOWNS_NONE) {
+		} else if (gs_town_id != TOWN_ID_NONE) {
 			do_town();
-		} else if (gs_dungeon_index != DUNGEONS_NONE) {
+		} else if (gs_dungeon_id != DUNGEON_ID_NONE) {
 			do_dungeon();
 		} else if (gs_show_travel_map != 0) {
 			do_travel_mode();
@@ -1810,7 +2059,7 @@ void game_loop(void)
 			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero(get_hero(6)))) // count_heroes_available_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC can act => GAME OVER */
-				g_game_state = (GAME_STATE_DEAD);
+				g_game_state = GAME_STATE_DEAD;
 
 			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
 			{
@@ -1820,8 +2069,8 @@ void game_loop(void)
 
 		}
 
-		if ((host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			((gs_current_town != TOWNS_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
+		if ((get_hero(6)->typus != HERO_TYPE_NONE) &&
+			((gs_town_id != TOWN_ID_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
 			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
 			npc_farewell();
@@ -1830,7 +2079,7 @@ void game_loop(void)
 
 		if (!g_in_fight &&
 			((g_game_state == GAME_STATE_MAIN) || (g_game_state == GAME_STATE_VICTORY)) &&
-			!gs_current_loctype)
+			!gs_town_loc_type)
 		{
 			check_level_up();
 		}
@@ -1862,7 +2111,7 @@ void game_loop(void)
 			g_game_state == GAME_STATE_OUTRO ||
 			g_game_state == GAME_STATE_FIGQUIT)
 		{
-			gs_current_loctype = LOCTYPE_NONE;
+			gs_town_loc_type = LOCTYPE_NONE;
 
 			do {
 				answer = load_game_state();
@@ -1884,15 +2133,14 @@ void game_loop(void)
 	}
 }
 
-//static
 /*
  *	This function does daily accounting stuff.
- *	The g_check_disease flag is set here, indicating that the disease status should be updated. */
-
-void timers_daily(void)
+ *	The g_check_disease flag is set here, indicating that the disease status should be updated.
+ **/
+static void timers_daily(void)
 {
-	Bit8u *hero_i;
-	signed short i = 0;
+	struct struct_hero *hero_i;
+	signed int i = 0;
 
 	/* Smith / items to repair */
 	for (i = 0; i < 50; i++) {
@@ -1909,12 +2157,11 @@ void timers_daily(void)
 	}
 
 	hero_i = get_hero(0);
-	for (i = 0; i <=6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero_i + HERO_RECIPE_TIMER) > 0))
+		if ((get_hero(i)->typus != HERO_TYPE_NONE) && (hero_i->recipe_timer > 0))
 		{
-			dec_ptr_bs(hero_i + HERO_RECIPE_TIMER);
+			hero_i->recipe_timer--;
 		}
 	}
 
@@ -1948,92 +2195,81 @@ void timers_daily(void)
 	}
 }
 
-/* static */
-void seg002_2177(void)
+static void set_market_size(void)
 {
-	signed short i;
+	signed int i;
 
-	for (i = 0; ds_readws(MARKET_DESCR_TABLE + i * 8) != -1; i++) {
+	for (i = 0; g_market_descr_table[i].min_size != -1; i++) {
 
-		ds_writew((MARKET_DESCR_TABLE + 6) + i * 8,
-			random_interval(ds_readws(MARKET_DESCR_TABLE + i * 8), 20));
+		g_market_descr_table[i].size = random_interval(g_market_descr_table[i].min_size, 20);
 	}
 }
 
-void pal_fade(Bit8u *dst, Bit8u *p2)
+void pal_fade(int8_t *dst, int8_t *p2)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 32; i++) {
 
-		if ((host_readbs(p2 + 3 * i) < host_readbs(dst + 3 * i)) &&
-			(host_readbs(dst + 3 * i) > 0))
+		if ((p2[3 * i] < dst[3 * i]) && (dst[3 * i] > 0))
 		{
-
-			dec_ptr_bs(dst + i * 3);
+			dst[i * 3]--;
 
 		} else {
-			if ((host_readbs(p2 + 3 * i) > host_readbs(dst + 3 * i)) &&
-				(host_readbs(dst + 3 * i) < 0x3f))
+			if ((*(p2 + 3 * i) > *(dst + 3 * i)) && (*(dst + 3 * i) < 0x3f))
 			{
-				inc_ptr_bs(dst + i * 3);
+				(*(dst + i * 3))++;
 			}
 		}
 
-		if ((host_readbs((p2 + 1) + 3 * i) < host_readbs((dst + 1) + 3 * i)) &&
-			(host_readbs((dst + 1) + 3 * i) > 0))
+		if ((*((p2 + 1) + 3 * i) < *((dst + 1) + 3 * i)) && (*((dst + 1) + 3 * i) > 0))
 		{
 
-			dec_ptr_bs((dst + 1) + i * 3);
+			(*((dst + 1) + i * 3))--;
 
 		} else {
-			if ((host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)) &&
-				(host_readbs((dst + 1) + 3 * i) < 0x3f))
+			if ((*((p2 + 1) + 3 * i) > *((dst + 1) + 3 * i)) &&	(*((dst + 1) + 3 * i) < 0x3f))
 			{
-				inc_ptr_bs((dst + 1) + i * 3);
+				(*((dst + 1) + i * 3))++;
 			}
 		}
 
-		if ((host_readbs((p2 + 2) + 3 * i) < host_readbs((dst + 2) + 3 * i)) &&
-			(host_readbs((dst + 2) + 3 * i) > 0))
+		if ((*((p2 + 2) + 3 * i) < *((dst + 2) + 3 * i)) && (*((dst + 2) + 3 * i) > 0))
 		{
 
-			dec_ptr_bs((dst + 2) + i * 3);
+			(*((dst + 2) + i * 3))--;
 
 		} else {
-			if ((host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)) &&
-				(host_readbs((dst + 2) + 3 * i) < 0x3f))
+			if ((*((p2 + 2) + 3 * i) > *((dst + 2) + 3 * i)) &&	(*((dst + 2) + 3 * i) < 0x3f))
 			{
-				inc_ptr_bs((dst + 2) + i * 3);
+				(*((dst + 2) + i * 3))++;
 			}
 		}
 	}
 }
 
-void pal_fade_in(Bit8u *dst, Bit8u *p2, signed short v3, signed short colors)
+void pal_fade_in(int8_t *dst, int8_t *p2, const signed int v3, const signed int colors)
 {
-	signed short i, si;
+	signed int i;
+	signed int si;
 
 	si = 0x40 - v3;
 
 	for (i = 0; i < colors; i++) {
 
-		if ((host_readbs((p2 + 0) + 3 * i) >= si) &&
-			(host_readbs((p2 + 0) + 3 * i) > host_readbs((dst + 0) + 3 * i)))
+		if ((*((p2 + 0) + 3 * i) >= si) && (*((p2 + 0) + 3 * i) > *((dst + 0) + 3 * i)))
 		{
-			inc_ptr_bs((dst + 0) + i * 3);
+			(*((dst + 0) + i * 3))++;
 		}
 
-		if ((host_readbs((p2 + 1) + 3 * i) >= si) &&
-			(host_readbs((p2 + 1) + 3 * i) > host_readbs((dst + 1) + 3 * i)))
+		if ((*((p2 + 1) + 3 * i) >= si) && (*((p2 + 1) + 3 * i) > *((dst + 1) + 3 * i)))
 		{
-			inc_ptr_bs((dst + 1) + i * 3);
+			(*((dst + 1) + i * 3))++;
 		}
 
-		if ((host_readbs((p2 + 2) + 3 * i) >= si) &&
-			(host_readbs((p2 + 2) + 3 * i) > host_readbs((dst + 2) + 3 * i)))
+		if ((*((p2 + 2) + 3 * i) >= si) && (*((p2 + 2) + 3 * i) > *((dst + 2) + 3 * i)))
 		{
-			inc_ptr_bs((dst + 2) + i * 3);
+			(*((dst + 2) + i * 3))++;
 		}
 	}
 }
@@ -2041,35 +2277,23 @@ void pal_fade_in(Bit8u *dst, Bit8u *p2, signed short v3, signed short colors)
 /**
  * \brief   adjusts palettes in the morning
  */
-void dawning(void)
+static void dawning(void)
 {
 	/* Between 6 and 7, in 64 steps (i.e. each 56 seconds) */
-	if ((gs_day_timer >= HOURS(6)) &&
-		(gs_day_timer <= HOURS(7)) &&
-		!((gs_day_timer - HOURS(6)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(6)) && (gs_day_timer <= HOURS(7)) && !((gs_day_timer - HOURS(6)) % SECONDS(56)))
 	{
-
 		/* floor */
-		pal_fade(gs_palette_floor, g_townpal_buf);
+		pal_fade((int8_t*)gs_palette_floor, (int8_t*)g_townpal_buf);
+
 		/* buildings */
-		pal_fade(gs_palette_buildings, g_townpal_buf + 0x60);
+		pal_fade((int8_t*)gs_palette_buildings, (int8_t*)g_townpal_buf + 0x60);
+
 		/* sky */
-		pal_fade(gs_palette_sky, g_townpal_buf + 0xc0);
+		pal_fade((int8_t*)gs_palette_sky, (int8_t*)g_townpal_buf + 0xc0);
 
 		/* in a town */
-		if (gs_current_town &&
-			/* not in a dungeon */
-			!gs_dungeon_index &&
-			/* not in a location */
-			!gs_current_loctype &&
-			/* not in a travel mode */
-			!gs_show_travel_map &&
-			/* no event animation */
-			!g_event_ani_busy &&
-			/* unknown */
-			!g_special_screen &&
-			/* unknown */
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+		if (gs_town_id && !gs_dungeon_id && !gs_town_loc_type && !gs_show_travel_map &&
+			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
@@ -2082,35 +2306,23 @@ void dawning(void)
 /**
  * \brief   adjusts palettes in the evening
  */
-void nightfall(void)
+static void nightfall(void)
 {
 	/* Between 20 and 21, in 64 steps (i.e. each 56 seconds) */
-	if ((gs_day_timer >= HOURS(20)) &&
-		(gs_day_timer <= HOURS(21)) &&
-		!((gs_day_timer - HOURS(20)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(20)) && (gs_day_timer <= HOURS(21)) && !((gs_day_timer - HOURS(20)) % SECONDS(56)))
 	{
-
 		/* floor */
-		pal_fade(gs_palette_floor, (Bit8u*)g_floor_fade_palette);
+		pal_fade((int8_t*)gs_palette_floor, (int8_t*)&g_floor_fade_palette[0][0]);
+
 		/* buildings */
-		pal_fade(gs_palette_buildings, (Bit8u*)g_building_fade_palette);
+		pal_fade((int8_t*)gs_palette_buildings, (int8_t*)&g_building_fade_palette[0][0]);
+
 		/* sky */
-		pal_fade(gs_palette_sky, (Bit8u*)g_sky_fade_palette);
+		pal_fade((int8_t*)gs_palette_sky, (int8_t*)&g_sky_fade_palette[0][0]);
 
 		/* in a town */
-		if (gs_current_town &&
-			/* not in a dungeon */
-			!gs_dungeon_index &&
-			/* not in a location */
-			!gs_current_loctype &&
-			/* not in a travel mode */
-			!gs_show_travel_map &&
-			/* no event animation */
-			!g_event_ani_busy &&
-			/* unknown */
-			!g_special_screen &&
-			/* unknown */
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+		if (gs_town_id && !gs_dungeon_id && !gs_town_loc_type && !gs_show_travel_map &&
+			!g_event_ani_busy && !g_special_screen && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
@@ -2125,13 +2337,13 @@ void nightfall(void)
  *
  * \return              number of the season {0 = WINTER, 1,2,3}
  */
-signed short get_current_season(void)
+signed int get_current_season(void)
 {
-	if (is_in_byte_array(gs_month, (Bit8u*)g_months_winter)) {
+	if (is_in_byte_array(gs_month, g_months_winter)) {
 		return SEASON_WINTER;
-	} else if (is_in_byte_array(gs_month, (Bit8u*)g_months_summer)) {
+	} else if (is_in_byte_array(gs_month, g_months_summer)) {
 		return SEASON_SUMMER;
-	} else if (is_in_byte_array(gs_month, (Bit8u*)g_months_spring)) {
+	} else if (is_in_byte_array(gs_month, g_months_spring)) {
 		return SEASON_SPRING;
 	} else {
 		return SEASON_AUTUMN;
@@ -2142,24 +2354,22 @@ signed short get_current_season(void)
 /**
  * \brief   calc census for the bank depot
  *
- *          If you put money on the bank, you get 5%.
- *          If you borrowed money you pay 15%.
+ *  If you put money on the bank, you get 5%.
+ *  If you borrowed money you pay 15%.
  */
-/* static */
-void do_census(void)
+static void do_census(void)
 {
-
-	signed short si = 0;
-	Bit32s val;
+	signed int sign = 0;	/* {-1, 0, 1} */
+	int32_t val;
 
 	if (gs_bank_deposit > 0) {
-		si = 1;
+		sign = 1;
 	} else if (gs_bank_deposit < 0) {
-			si = -1;
+		sign = -1;
 	}
 
 	/* bank transactions, no census */
-	if (si == 0)
+	if (sign == 0)
 		return;
 
 	/* convert to heller */
@@ -2185,22 +2395,22 @@ void do_census(void)
 	gs_bank_deposit = val / 10;
 
 	/* fixup over- and underflows */
-	if ((gs_bank_deposit < 0) && (si == 1)) {
+	if ((gs_bank_deposit < 0) && (sign == 1)) {
 		gs_bank_deposit = 32760;
-	} else if ((gs_bank_deposit > 0) && (si == -1)) {
+	} else if ((gs_bank_deposit > 0) && (sign == -1)) {
 		gs_bank_deposit = -32760;
 	}
-
 }
 
 /* called from timewarp(..), timewarp_until_time_of_day(..),
  * timewarp_until_midnight(..) and interrupt timer_isr() */
 void do_timers(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed char afternoon;
-	Bit8u *ptr;
-	signed short i, di;
+	struct struct_hero *ptr;
+	signed int i;
+	signed int group_id;
 
 	afternoon = 0;
 
@@ -2216,14 +2426,14 @@ void do_timers(void)
 	/* inc day timer */
 	gs_day_timer += 1L;
 
-	if (!ds_readbs(FREEZE_TIMERS)) {
-		/* FREEZE_TIMERS is set in timewarp(..) and timewarp_until_time_of_day(..) for efficiency reasons,
+	if (!g_freeze_timers) {
+		/* g_freeze_timers is set in timewarp(..) and timewarp_until_time_of_day(..) for efficiency reasons,
 		 *  where certain timers are updated separately in a single step (instead of many 1-tick update calls). */
 		sub_ingame_timers(1);
 		sub_mod_timers(1);
 	}
 
-	if (!ds_readbs(FREEZE_TIMERS)) {
+	if (!g_freeze_timers) {
 
 		/* set day timer to pm */
 		/* TODO: afternoon is useless */
@@ -2241,6 +2451,7 @@ void do_timers(void)
 		if (!(gs_day_timer % MINUTES(15))) {
 			sub_light_timers(1L);
 		}
+
 		/* every hour ingame */
 		if (!(gs_day_timer % HOURS(1))) {
 
@@ -2282,21 +2493,20 @@ void do_timers(void)
 
 		hero_i = get_hero(0);
 
-		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+		for (i = 0; i <= 6; i++, hero_i++) {
 
-			if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readb(hero_i + HERO_JAIL) != 0))
+			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->jail != 0))
 			{
-				host_writeb(hero_i + HERO_JAIL, 0);
+				hero_i->jail = 0;
 
-				gs_groups_current_loctype[host_readbs(hero_i + HERO_GROUP_NO)] =
-					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)];
+				gs_town_groups_loctype[hero_i->group_id] =
+					gs_town_groups_loctype_bak[hero_i->group_id];
 
-				gs_groups_x_target[host_readbs(hero_i + HERO_GROUP_NO)] =
-					gs_groups_x_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
+				gs_groups_x_target[hero_i->group_id] =
+					gs_groups_x_target_bak[hero_i->group_id];
 
-				gs_groups_y_target[host_readbs(hero_i + HERO_GROUP_NO)] =
-					gs_groups_y_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
+				gs_groups_y_target[hero_i->group_id] =
+					gs_groups_y_target_bak[hero_i->group_id];
 			}
 		}
 	}
@@ -2306,9 +2516,9 @@ void do_timers(void)
 
 		hero_i = get_hero(0);
 
-		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-			if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readb(hero_i + HERO_DRUNK) != 0))
+		for (i = 0; i <= 6; i++, hero_i++) {
+
+			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->drunk != 0))
 			{
 				hero_get_sober(hero_i);
 			}
@@ -2326,13 +2536,14 @@ void do_timers(void)
 
 			ptr = get_hero(0);
 
-			for (i = 0; i <= 6; i++, ptr += SIZEOF_HERO) {
+			for (i = 0; i <= 6; i++, ptr++) {
 
-				if (host_readb(ptr + HERO_TYPE) != HERO_TYPE_NONE) {
-					di = host_readbs(ptr + HERO_GROUP_NO);
+				if (ptr->typus != HERO_TYPE_NONE) {
+
+					group_id = ptr->group_id;
 
 					/* hero is in group and in mage dungeon */
-					if ((gs_current_group == di) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
+					if ((gs_active_group_id == group_id) && (gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS))
 					{
 
 						if (gs_dungeon_level == 1) {
@@ -2346,13 +2557,13 @@ void do_timers(void)
 						}
 
 					} else {
-						if (gs_groups_dng_index[di] == 7) {
+						if (gs_groups_dungeon_id[group_id] == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) {
 
-							if (gs_groups_dng_level[di] == 1) {
+							if (gs_groups_dng_level[group_id] == 1) {
 								/* 1W6-1 */
 								sub_hero_le(ptr, dice_roll(1, 6, -1));
 
-							} else if (gs_groups_dng_level[di] == 2) {
+							} else if (gs_groups_dng_level[group_id] == 2) {
 								/* 1W6+1 */
 								sub_hero_le(ptr, dice_roll(1, 6, 1));
 							}
@@ -2372,7 +2583,7 @@ void do_timers(void)
 
 		timers_daily();
 
-		seg002_2177();
+		set_market_size();
 
 		/* reset day timer */
 		gs_day_timer = 0L;
@@ -2417,7 +2628,7 @@ void do_timers(void)
 			}
 
 			/* increment the months the NPC is in the group */
-			if (host_readb(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) {
+			if (get_hero(6)->typus != HERO_TYPE_NONE) {
 				gs_npc_months++;
 			}
 
@@ -2478,9 +2689,9 @@ void do_timers(void)
  * \param   val         vaule to subtract from the ingame timers
  * \note improvable
  */
-void sub_ingame_timers(Bit32s val)
+void sub_ingame_timers(const int32_t val)
 {
-	signed short i = 0;
+	signed int i = 0;
 
 	if (g_timers_disabled) return;
 
@@ -2505,11 +2716,11 @@ void sub_ingame_timers(Bit32s val)
  *
  * \param   val         vaule to subtract from the modification timers
  */
-void sub_mod_timers(Bit32s val)
+void sub_mod_timers(const int32_t val)
 {
-	signed short i;
-	signed short j;
-	signed short h_index;
+	signed int i;
+	signed int j;
+	signed int h_index;
 	HugePt mp;
 	signed char target;
 	unsigned char reset_target;
@@ -2550,7 +2761,7 @@ void sub_mod_timers(Bit32s val)
 				/* get the hero index from the target */
 				target = sp->target;
 				for (j = 0; j <= 6; j++) {
-					if (host_readbs(get_hero(j) + HERO_TIMER_ID) == target) {
+					if (get_hero(j)->timer_id == target) {
 						h_index = j;
 						break;
 					}
@@ -2559,9 +2770,9 @@ void sub_mod_timers(Bit32s val)
 				if (h_index != -1) {
 					/* if a hero/npc is determined */
 
-					mp = get_hero(h_index);
+					mp = (uint8_t*)get_hero(h_index);
 					/* make a pointer to the hero's attribute mod */
-					mp += (Bit32u)sp->offset;
+					mp += (uint32_t)sp->offset;
 					/* subtract the mod */
 					*mp -= sp->modifier;
 
@@ -2582,7 +2793,7 @@ void sub_mod_timers(Bit32s val)
 					}
 
 					if (reset_target) {
-						host_writeb(get_hero(h_index) + HERO_TIMER_ID, 0);
+						get_hero(h_index)->timer_id = 0;
 					}
 				} else {
 #if !defined(__BORLANDC__)
@@ -2600,7 +2811,7 @@ void sub_mod_timers(Bit32s val)
 
 			} else {
 				/* target affects the savegame */
-				mp = (Bit8u*)&gs_datseg_status_start;
+				mp = (uint8_t*)&gs_datseg_status_start;
 				mp += sp->offset;
 				*mp -= sp->modifier;
 			}
@@ -2617,13 +2828,13 @@ void sub_mod_timers(Bit32s val)
  *
  * \return              number of the modification slot
  */
-signed short get_free_mod_slot(void)
+signed int get_free_mod_slot(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 100; i++) {
 
-		if (gs_modification_timers[i].target == 0) {
+		if (gs_modification_timers[i].offset == 0) {
 			break;
 		}
 	}
@@ -2643,30 +2854,30 @@ signed short get_free_mod_slot(void)
 	return i;
 }
 
-void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed char mod, signed char who)
+void set_mod_slot(const signed int slot_no, const int32_t timer_value, const uint8_t *ptr, const signed char mod, const signed char who)
 {
-	signed short j;
+	signed int j;
 
 #if !defined (__BORLANDC__)
-	Bit8u *mod_ptr;
+	uint8_t *mod_ptr;
 #else
-	Bit8u huge *mod_ptr;
+	uint8_t huge *mod_ptr;
 #endif
 	signed char target;
-	signed short i;
-	signed short new_target;
+	signed int i;
+	signed int new_target;
 
 
 	if (who == -1) {
 		/* mod slot is on savegame */
-		mod_ptr = (Bit8u*)&gs_datseg_status_start;
+		mod_ptr = (uint8_t*)&gs_datseg_status_start;
 	} else {
 		/* mod slot is on a hero/npc */
-		mod_ptr = get_hero(who);
+		mod_ptr = (uint8_t*)get_hero(who);
 
-		if (host_readb(get_hero(who) + HERO_TIMER_ID) != 0) {
+		if (get_hero(who)->timer_id != 0) {
 			/* hero/npc has a target number */
-			target = host_readbs(get_hero(who) + HERO_TIMER_ID);
+			target = get_hero(who)->timer_id;
 		} else {
 			/* hero/npc has no target number */
 
@@ -2674,7 +2885,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 
 				new_target = 1;
 				for (j = 0; j <= 6; j++) {
-					if (host_readbs(get_hero(j) + HERO_TIMER_ID) == i) {
+					if (get_hero(j)->timer_id == i) {
 						new_target = 0;
 						break;
 					}
@@ -2686,16 +2897,16 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 				}
 			}
 
-			host_writeb(get_hero(who) + HERO_TIMER_ID, target);
+			get_hero(who)->timer_id = target;
 		}
 
 		gs_modification_timers[slot_no].target = target;
 	}
 
 	gs_modification_timers[slot_no].modifier = mod;
-	gs_modification_timers[slot_no].target = (HugePt)ptr - mod_ptr;
+	gs_modification_timers[slot_no].offset = (HugePt)ptr - mod_ptr;
 	gs_modification_timers[slot_no].time_left = timer_value;
-	add_ptr_bs(ptr, mod);
+	*((int8_t*)ptr) += mod;
 }
 
 /**
@@ -2704,48 +2915,47 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
  *	This function decrements the timers for the healing and staffspell timeouts.
  *	Furthermore, the g_check_poison flag is set.
  */
-void sub_heal_staffspell_timers(Bit32s fmin)
+void sub_heal_staffspell_timers(const int32_t fmin)
 {
-	signed short i;
-	Bit8u *hero_i;
+	signed int i;
+	struct struct_hero *hero_i;
 
 	if (g_timers_disabled)
 		return;
 
 	hero_i = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) {
+	for (i = 0; i <= 6; i++, hero_i++) {
+
+		if (hero_i->typus != HERO_TYPE_NONE) {
 
 			/* Timer to the next healing attempt */
-			if (host_readds(hero_i + HERO_HEAL_TIMER) > 0) {
+			if (hero_i->heal_timer > 0) {
 
-				sub_ptr_ds(hero_i + HERO_HEAL_TIMER, fmin * MINUTES(5));
+				hero_i->heal_timer -= fmin * MINUTES(5);
 #if !defined(__BORLANDC__)
-				if (host_readds(hero_i + HERO_HEAL_TIMER) <= 0) {
-					D1_INFO("%s kann wieder geheilt werden\n",
-						(char*)hero_i + HERO_NAME2);
+				if (hero_i->heal_timer <= 0) {
+					D1_INFO("%s kann wieder geheilt werden\n", hero_i->alias);
 				}
 #endif
 
-				if (host_readds(hero_i + HERO_HEAL_TIMER) < 0) {
-					host_writed(hero_i + HERO_HEAL_TIMER, 0);
+				if (hero_i->heal_timer < 0) {
+					hero_i->heal_timer = 0;
 				}
 			}
 
 			/* Timer set after Staffspell */
-			if (host_readds(hero_i + HERO_STAFFSPELL_TIMER) > 0) {
-				sub_ptr_ds(hero_i + HERO_STAFFSPELL_TIMER, fmin * MINUTES(5));
+			if (hero_i->staffspell_timer > 0) {
+
+				hero_i->staffspell_timer -= fmin * MINUTES(5);
 #if !defined(__BORLANDC__)
-				if (host_readds(hero_i + HERO_STAFFSPELL_TIMER) <= 0) {
-					D1_INFO("%s kann wieder einen Stabzauber versuchen\n",
-						(char*)(hero_i + HERO_NAME2));
+				if (hero_i->staffspell_timer <= 0) {
+					D1_INFO("%s kann wieder einen Stabzauber versuchen\n", hero_i->alias);
 				}
 
 #endif
-				if (host_readds(hero_i + HERO_STAFFSPELL_TIMER) < 0) {
-
-					host_writed(hero_i + HERO_STAFFSPELL_TIMER, 0);
+				if (hero_i->staffspell_timer < 0) {
+					hero_i->staffspell_timer = 0;
 				}
 			}
 
@@ -2768,12 +2978,12 @@ void sub_heal_staffspell_timers(Bit32s fmin)
  *	If the time of the lightsource is up the torch is removed from the
  *	inventory and the lantern is turned off.
  */
-void sub_light_timers(Bit32s quarter)
+void sub_light_timers(const int32_t quarter)
 {
-	signed short j;
-	signed short i;
+	signed int j;
+	signed int i;
 
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed char tmp;
 
 	if (g_timers_disabled)
@@ -2781,46 +2991,45 @@ void sub_light_timers(Bit32s quarter)
 
 	hero_i = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) {
+	for (i = 0; i <= 6; i++, hero_i++) {
+		if (hero_i->typus != HERO_TYPE_NONE) {
 
 			if (quarter > 120) {
 				tmp = 120;
 			} else {
-				tmp = (signed char)quarter;
+				tmp = quarter;
 			}
 
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-				if (host_readw(hero_i + (HERO_INVENTORY + INVENTORY_ITEM_ID) + SIZEOF_INVENTORY * j) == ITEM_TORCH_ON) {
+				if (hero_i->inventory[j].item_id == ITEM_FACKEL__LIT) {
 
 					/* Torch, burning */
+					hero_i->inventory[j].lighting_timer -= tmp;
 
-					sub_ptr_bs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j, tmp);
-
-					if (host_readbs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j) <= 0)
+					if (hero_i->inventory[j].lighting_timer <= 0)
 					{
 						/* decrement item counter */
-						dec_ptr_bs(hero_i + HERO_NR_INVENTORY_SLOTS_FILLED);
+						hero_i->num_filled_inv_slots--;
 
 						/* subtract weight of a torch */
-						sub_ptr_ws(hero_i + HERO_LOAD,
-							host_readws(get_itemsdat(ITEM_TORCH_ON) + ITEM_STATS_WEIGHT));
+						hero_i->load -= g_itemsdat[ITEM_FACKEL__LIT].weight;
 
 						/* Remove Torch from inventory */
-						memset(hero_i + HERO_INVENTORY + SIZEOF_INVENTORY * j, 0, SIZEOF_INVENTORY);
+						memset(&hero_i->inventory[j], 0, sizeof(inventory));
 					}
 
-				} else if (host_readw(hero_i + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * j) == ITEM_LANTERN_ON) {
+				} else if (hero_i->inventory[j].item_id == ITEM_LATERNE__LIT) {
 
 					/* Lantern, burning */
-					sub_ptr_bs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j, tmp);
+					hero_i->inventory[j].lighting_timer -= tmp;
 
-					if (host_readbs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j) <= 0) {
+					if (hero_i->inventory[j].lighting_timer <= 0) {
+
 						/* Set timer to 0 */
-						host_writeb(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j, 0);
+						hero_i->inventory[j].lighting_timer = 0;
 						/* Set burning lantern to a not burning lantern */
-						host_writew(hero_i + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * j, ITEM_LANTERN_OFF);
+						hero_i->inventory[j].item_id = ITEM_LATERNE__UNLIT;
 					}
 				}
 			}
@@ -2831,10 +3040,10 @@ void sub_light_timers(Bit32s quarter)
 /**
  * \brief   damage if a cursed chainmail is worn
  */
-void magical_chainmail_damage(void)
+static void magical_chainmail_damage(void)
 {
-	signed short i;
-	Bit8u *hero_i;
+	signed int i;
+	struct struct_hero *hero_i;
 
 	if (g_timers_disabled) {
 		return;
@@ -2844,15 +3053,15 @@ void magical_chainmail_damage(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
+		if (get_hero(i)->typus != HERO_TYPE_NONE) {
 
 			hero_i = get_hero(i);
 
-			if (!hero_dead(hero_i) &&
+			if (!hero_i->flags.dead &&
 				/* check if not in jail (the argument might be: heroes are forced to take off armor in jail) */
-				!host_readbs(hero_i + HERO_JAIL) &&
+				!hero_i->jail &&
 				/* check if cursed chainmail is equipped */
-				(host_readw(hero_i + HERO_INVENTORY + INVENTORY_ITEM_ID + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY) == ITEM_CHAIN_MAIL_CURSED))
+				(hero_i->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_KETTENHEMD__CURSED))
 			{
 				sub_hero_le(hero_i, 1);
 			}
@@ -2865,9 +3074,9 @@ void magical_chainmail_damage(void)
  */
 void herokeeping(void)
 {
-	signed short i;
-	signed short pos;
-	Bit8u *hero;
+	signed int i;
+	signed int pos;
+	struct struct_hero *hero;
 	char buffer[100];
 
 	if (g_game_state != GAME_STATE_MAIN)
@@ -2879,70 +3088,70 @@ void herokeeping(void)
 
 	/* for each hero ..*/
 	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
 		/* consume food and set messages */
-		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			g_herokeeping_flag &&
-			check_hero_no3(hero) &&			/* must be vital */
-			!host_readbs(hero + HERO_JAIL) &&
-			!g_travel_herokeeping)
+		/* must be vital */
+		if ((hero->typus != HERO_TYPE_NONE) && g_herokeeping_flag &&
+				check_hero_no3(hero) &&	!hero->jail && !g_travel_herokeeping)
 		{
 			/* Do the eating */
 
 			/* check for magic bread bag in the group */
-			if (get_first_hero_with_item_in_group(ITEM_MAGIC_BREADBAG, host_readbs(hero + HERO_GROUP_NO)) == -1) {
+			if (get_first_hero_with_item_in_group(ITEM_MAGISCHER_BROTBEUTEL, hero->group_id) == -1) {
+
 				/* if not, check if the hero has the food amulet */
-				if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
+				if (inv_slot_of_item(hero, ITEM_TRAVIA_AMULETT) == -1) {
 					/* if not... */
 
 					/* eat if hunger > 90 % */
-					if (host_readbs(hero + HERO_HUNGER) > 90) {
+					if (hero->hunger > 90) {
 
 						/* search for Lunchpack */
-						pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
+						pos = inv_slot_of_item(hero, ITEM_PROVIANTPAKET);
 
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
 							g_consume_quiet = 1;
 							consume(hero, hero, pos);
 #if !defined(__BORLANDC__)
-							D1_INFO("%s isst etwas\n", (char*)hero + HERO_NAME2);
+							D1_INFO("%s isst etwas\n", hero->alias);
 #endif
 							g_consume_quiet = 0;
 
 							/* search for another Lunchpack */
 							/* print last ration message */
-							if (get_item_pos(hero, ITEM_FOOD_PACKAGE) == -1) {
+							if (inv_slot_of_item(hero, ITEM_PROVIANTPAKET) == -1) {
 								gs_food_message[i] = 6;
 							}
 						} else {
 							/* print ration warning */
-							if (host_readbs(hero + HERO_HUNGER) < 100) {
+							if (hero->hunger < 100) {
 								gs_food_message[i] = 4;
 							}
 						}
 
 					}
 
-					if (host_readbs(hero + HERO_HUNGER) < 100) {
+					if (hero->hunger < 100) {
+
 						/* increase hunger value. FOOD_MOD is always 0 or 1 */
-						if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
+						if (hero->hunger_timer <= 0) {
 							/* increase more (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 2 / (g_food_mod * 2 + 1));
+							hero->hunger += 2 / (g_food_mod * 2 + 1);
 						} else {
 							/* increase less (FOOD_MOD == 0 -> increase by 1. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 1 / (g_food_mod * 2 + 1));
+							hero->hunger += 1 / (g_food_mod * 2 + 1);
 						}
 
 						/* adjust hunger */
-						if (host_readbs(hero + HERO_HUNGER) > 100) {
-							host_writeb(hero + HERO_HUNGER, 100);
+						if (hero->hunger > 100) {
+							hero->hunger = 100;
 						}
 					} else {
 
 						/* */
-						if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
+						if (hero->hunger_timer <= 0) {
 							do_starve_damage(hero, i, 0);
 						}
 					}
@@ -2950,8 +3159,8 @@ void herokeeping(void)
 			} else {
 
 				/* set hunger to 20 % */
-				if (host_readbs(hero + HERO_HUNGER) > 20) {
-					host_writeb(hero + HERO_HUNGER, 20);
+				if (hero->hunger > 20) {
+					hero->hunger = 20;
 				}
 			}
 
@@ -2959,22 +3168,21 @@ void herokeeping(void)
 
 			/* check if someone in the group of the hero has the magic bread bag */
 			/* check for magic waterskin in group */
-			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, host_readbs(hero + HERO_GROUP_NO)) == -1) &&
-				((host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
-				(host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
-				!gs_groups_town[host_readbs(hero + HERO_GROUP_NO)]))) {
-
+			if ((get_first_hero_with_item_in_group(ITEM_MAGISCHER_WASSERSCHLAUCH, hero->group_id) == -1) &&
+				(((hero->group_id == gs_active_group_id) &&
+					(!gs_town_id || (gs_town_id != TOWN_ID_NONE && gs_show_travel_map != 0))) ||
+				((hero->group_id != gs_active_group_id) && !gs_groups_town_id[hero->group_id])))
+			{
 					/* check for food amulett */
-					if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
+					if (inv_slot_of_item(hero, ITEM_TRAVIA_AMULETT) == -1) {
 
 						/* hero should drink something */
-						if (host_readbs(hero + HERO_THIRST) > 90) {
+						if (hero->thirst > 90) {
 
 							g_consume_quiet = 1;
 
 							/* first check for beer :) */
-							pos = get_item_pos(hero, ITEM_BEER);
+							pos = inv_slot_of_item(hero, ITEM_BIER);
 
 							/* and then for water */
 							if (pos == -1) {
@@ -2985,17 +3193,17 @@ void herokeeping(void)
 								/* drink it */
 								consume(hero, hero, pos);
 #if !defined(__BORLANDC__)
-								D1_INFO("%s trinkt etwas\n", (char*)hero + HERO_NAME2);
+								D1_INFO("%s trinkt etwas\n", hero->alias);
 #endif
 								/* nothing to drink message */
-								if ((get_item_pos(hero, ITEM_BEER) == -1)
+								if ((inv_slot_of_item(hero, ITEM_BIER) == -1)
 									&& (get_full_waterskin_pos(hero) == -1)) {
 									gs_food_message[i] = 5;
 								}
 
 							} else {
 								/* hero has nothing to drink */
-								if (host_readbs(hero + HERO_THIRST) < 100) {
+								if (hero->thirst < 100) {
 									gs_food_message[i] = 3;
 								}
 							}
@@ -3003,46 +3211,43 @@ void herokeeping(void)
 							g_consume_quiet = 0;
 						}
 
-						if (host_readbs(hero + HERO_THIRST) < 100) {
+						if (hero->thirst < 100) {
+
 							/* increase thirst counter food_mod is always 0 or 1 */
-							if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
+							if (hero->hunger_timer <= 0) {
 
 								/* increase more (FOOD_MOD == 0 -> increase by 4. FOOD_MOD == 1 -> increase by 1.) */
-								add_ptr_bs(hero + HERO_THIRST, 4 / (g_food_mod * 2 + 1));
+								hero->thirst += 4 / (g_food_mod * 2 + 1);
 							} else {
 
 								/* increase less (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-								add_ptr_bs(hero + HERO_THIRST, 2 / (g_food_mod * 2 + 1));
+								hero->thirst += 2 / (g_food_mod * 2 + 1);
 							}
 
 							/* adjust thirst */
-							if (host_readbs(hero + HERO_THIRST) > 100) {
-								host_writeb(hero + HERO_THIRST, 100);
+							if (hero->thirst > 100) {
+								hero->thirst = 100;
 							}
 
 						} else {
-							if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
+							if (hero->hunger_timer <= 0) {
 								do_starve_damage(hero, i, 1);
 							}
 						}
-
 					}
 			} else {
 
 				/* set thirst to 20 % */
-				if (host_readbs(hero + HERO_THIRST) > 20) {
-					host_writeb(hero + HERO_THIRST, 20);
+				if (hero->thirst > 20) {
+					hero->thirst = 20;
 				}
 			}
 		}
 
 		/* print hero message */
-		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !ds_readbs(FREEZE_TIMERS))
+		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !g_freeze_timers)
 		{
-
-			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead &&
 				(!gs_show_travel_map || (g_food_message_shown[i] != gs_food_message[i]))) {
 
 					sprintf(buffer,	 (gs_food_message[i] == 1) ? get_ttx(224):
@@ -3051,7 +3256,7 @@ void herokeeping(void)
 							((gs_food_message[i] == 4) ? get_ttx(798) :
 							((gs_food_message[i] == 5) ? get_ttx(799) :
 							get_ttx(800))))),
-							(char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
+							hero->alias, GUI_get_ptr(hero->sex, 1));
 
 					g_food_message_shown[i] = gs_food_message[i];
 
@@ -3069,14 +3274,9 @@ void herokeeping(void)
 		/* print unconscious message */
 		if (gs_unconscious_message[i] && !g_dialogbox_lock) {
 
-			if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero)) {
-
-					/* prepare output */
-					sprintf(buffer, get_ttx(789), (char*)hero + HERO_NAME2);
-
-					/* print output */
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
+			{
+					sprintf(buffer, get_ttx(789), hero->alias);
 					GUI_output(buffer);
 
 					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
@@ -3092,11 +3292,11 @@ void herokeeping(void)
 	g_herokeeping_flag = 0;
 }
 
-void check_level_up(void)
+static void check_level_up(void)
 {
-	signed short i;
-	signed short not_done;
-	Bit8u *hero;
+	signed int i;
+	signed int not_done;
+	struct struct_hero *hero;
 
 	if (g_timers_disabled) {
 		return;
@@ -3105,22 +3305,19 @@ void check_level_up(void)
 	do {
 		not_done = 0;
 		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if (
-				(host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				!hero_dead(hero) &&
-				(host_readbs(hero + HERO_LEVEL) < 20) &&
+			if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead && (hero->level < 20) &&
 
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 8:
 				 * Adjust AP requirement for level up to match the original DSA 2/3 rules.
 				 * Without this mod, it is "off by one".
 				 * For example, for level 2, 100 AP should be enough, but the game requires 101 AP. */
-				(g_level_ap_tab[host_readbs(hero + HERO_LEVEL)] < host_readds(hero + HERO_AP))
+				(g_level_ap_tab[hero->level] < hero->ap)
 				/* could be easily done without accessing the data segment by the formula level_ap_tab[i] = 50 * i * (i+1) */
 #else
-				(50 * host_readbs(hero + HERO_LEVEL) * (host_readbs(hero + HERO_LEVEL) + 1) <= host_readds(hero + HERO_AP))
+				(50 * hero->level * (hero->level + 1) <= hero->ap)
 				/* while we're at it, avoid accessing the data segment... */
 #endif
 			) {
@@ -3132,13 +3329,13 @@ void check_level_up(void)
 	} while (not_done);
 }
 
-void seg002_37c4(void)
+void update_travelmap(void)
 {
-	signed short l_si = 0;
-	Bit8u* p1;
-	Bit8u* p2;
-	Bit8u* p3;
-	struct struct_pic_copy pic_copy_bak = g_pic_copy;
+	signed int in_rect = 0;
+	uint8_t* p1;
+	uint8_t* p2;
+	uint8_t* p3;
+	struct struct_pic_copy pic_copy_bak = g_pic_copy; /* struct copy */
 
 	p1 = g_buffer6_ptr + 2000;
 	p2 = g_buffer6_ptr + 2100;
@@ -3146,8 +3343,8 @@ void seg002_37c4(void)
 
 	if (g_trv_menu_selection && gs_show_travel_map) {
 
-		g_selected_town_anix = ds_readws((TOWN_POSITIONS-4) + 4 * gs_trv_menu_towns[g_trv_menu_selection - 1]);
-		g_selected_town_aniy = ds_readws((TOWN_POSITIONS-4) + 2 + 4 * gs_trv_menu_towns[g_trv_menu_selection - 1]);
+		g_selected_town_anix = g_town_positions[gs_trv_menu_towns[g_trv_menu_selection - 1] - 1].x;
+		g_selected_town_aniy = g_town_positions[gs_trv_menu_towns[g_trv_menu_selection - 1] - 1].y;
 
 		g_pic_copy.x1 = g_selected_town_anix - 4;
 		g_pic_copy.y1 = g_selected_town_aniy - 4;
@@ -3157,17 +3354,17 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
-			l_si = 1;
+			call_mouse_bg();
+			in_rect = 1;
 		}
 
 		do_pic_copy(0);
 
-		if (l_si) {
-			refresh_screen_size();
+		if (in_rect) {
+			call_mouse();
 		}
 
-		g_trv_menu_selection = l_si = 0;
+		g_trv_menu_selection = in_rect = 0;
 	}
 
 	if (g_current_town_over) {
@@ -3180,19 +3377,19 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
-			l_si = 1;
+			call_mouse_bg();
+			in_rect = 1;
 		}
 
 		if (g_current_town_over) {
 			do_pic_copy(0);
 		}
 
-		if (l_si) {
-			refresh_screen_size();
+		if (in_rect) {
+			call_mouse();
 		}
 
-		l_si = g_current_town_over = 0;
+		in_rect = g_current_town_over = 0;
 	}
 
 	if (g_current_town_anix) {
@@ -3205,25 +3402,25 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
-			l_si = 1;
+			call_mouse_bg();
+			in_rect = 1;
 		}
 
 		do_save_rect();
 
-		if (l_si) {
-			refresh_screen_size();
+		if (in_rect) {
+			call_mouse();
 		}
 
 		g_current_town_over = 1;
 		g_current_town_overx = g_current_town_anix;
 		g_current_town_overy = g_current_town_aniy;
-		l_si = 0;
+		in_rect = 0;
 
 		if (g_menu_input_busy && gs_show_travel_map) {
 
-			g_selected_town_anix = ds_readws((TOWN_POSITIONS-4) + 4 * gs_trv_menu_towns[g_menu_selected - 1]);
-			g_selected_town_aniy = ds_readws((TOWN_POSITIONS-4) + 2 + 4 * gs_trv_menu_towns[g_menu_selected - 1]);
+			g_selected_town_anix = g_town_positions[gs_trv_menu_towns[g_menu_selected - 1] - 1].x;
+			g_selected_town_aniy = g_town_positions[gs_trv_menu_towns[g_menu_selected - 1] - 1].y;
 
 			g_pic_copy.x1 = g_selected_town_anix - 4;
 			g_pic_copy.y1 = g_selected_town_aniy - 4;
@@ -3233,21 +3430,21 @@ void seg002_37c4(void)
 
 			if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 			{
-				update_mouse_cursor();
-				l_si = 1;
+				call_mouse_bg();
+				in_rect = 1;
 			}
 
 			do_save_rect();
 			g_pic_copy.src = p3 + 100 * g_map_townmark_state;
 			do_pic_copy(2);
 
-			if (l_si) {
-				refresh_screen_size();
+			if (in_rect) {
+				call_mouse();
 			}
 
 			g_trv_menu_selection = g_menu_selected;
 
-			l_si = 0;
+			in_rect = 0;
 		}
 
 		g_pic_copy.x1 = g_current_town_anix - 4;
@@ -3258,20 +3455,21 @@ void seg002_37c4(void)
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
-			update_mouse_cursor();
-			l_si = 1;
+			call_mouse_bg();
+			in_rect = 1;
 		}
 
 		do_pic_copy(2);
 
-		if (l_si) {
-			refresh_screen_size();
+		if (in_rect) {
+			call_mouse();
 		}
 
 		g_current_town_over = 1;
 	}
 
-	ds_writew(SPINLOCK_FLAG, 0);
+	g_spinlock_flag = 0;
+
 	g_map_townmark_state++;
 	g_map_townmark_state %= 5;
 
@@ -3280,9 +3478,9 @@ void seg002_37c4(void)
 
 void set_and_spin_lock(void)
 {
-	ds_writew(SPINLOCK_FLAG, 1);
+	g_spinlock_flag = 1;
 
-	while (ds_readw(SPINLOCK_FLAG)) {
+	while (g_spinlock_flag) {
 #if !defined(__BORLANDC__)
 		/* deadlock avoidance */
 		static int cnt = 0;
@@ -3301,14 +3499,12 @@ void set_and_spin_lock(void)
 /**
  * \brief   called once every day at midnight
  */
-void passages_recalc(void)
+static void passages_recalc(void)
 {
-	signed short i;
-	signed short di;
-	signed short frequency_modifier; /* passages are rarer in summer and still rarer in winter */
-	Bit8u *p;
-
-	p = p_datseg + SEA_ROUTES;
+	signed int i;
+	signed int di;
+	signed int frequency_modifier; /* passages are rarer in summer and still rarer in winter */
+	struct sea_route *route = &g_sea_routes[0];
 
 	i = get_current_season();
 
@@ -3317,35 +3513,32 @@ void passages_recalc(void)
 		 * summer -> 2
 		 * spring, autumn -> 0 */
 
-	for (i = 0; i < NR_SEA_ROUTES; p += SIZEOF_SEA_ROUTE, i++) {
+	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
 
-		if (dec_ptr_bs(p + SEA_ROUTE_PASSAGE_TIMER) == -1) { /* note that dec_ptr_bs returns the old (still un-decremented) value */
+		if (route->passage_timer-- == -1) { /* note that dec_ptr_bs returns the old (still un-decremented) value */
 			/* ship of a sea passage has left yesterday -> set up a new ship of this passage */
 
-			host_writeb(p + SEA_ROUTE_PASSAGE_PRICE_MOD, (unsigned char)random_interval(70, 130));
+			route->price_mod = random_interval(70, 130);
 			/* random price modifier in the range 70% -- 130% */
 
-			host_writeb(p + SEA_ROUTE_PASSAGE_TIMER, random_interval(0, host_readbs(p + SEA_ROUTE_FREQUENCY) * 10 + host_readbs(p + SEA_ROUTE_FREQUENCY) * frequency_modifier) / 10);
+			route->passage_timer = random_interval(0, route->frequency * 10 + route->frequency * frequency_modifier) / 10;
 			/* setup timer: In how many days will a ship of this passage be available? */
-			/* This results in a random number in the interval [ 0..(SEA_ROUTE_FREQUENCY + frequency_modifier) ], where
-			 * all numbers have the same probabilty, except the upper end SEA_ROUTE_FREQUENCY + frequency_modifier
+			/* This results in a random number in the interval [ 0..(route->frequency + frequency_modifier) ], where
+			 * all numbers have the same probabilty, except the upper end route->frequency + frequency_modifier
 			 * of the interval which has only 1/10 of the probabilty of each other number. */
 
 			di = random_schick(100);
 
-			host_writeb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE,
-				(!host_readbs(p + SEA_ROUTE_COSTAL_ROUTE)) ?
+			route->ship_type =
+				(!route->coastal_route ?
 					((di <= 50) ? SHIP_TYPE_LANGSCHIFF_HIGH_SEAS : ((di <= 80) ? SHIP_TYPE_KARRACKE : (di <= 95) ? SHIP_TYPE_SCHNELLSEGLER : SHIP_TYPE_SCHNELLSEGLER_LUXURY)) :
 					((di <= 10) ? SHIP_TYPE_LANGSCHIFF_COSTAL : ((di <= 40) ? SHIP_TYPE_KUESTENSEGLER : (di <= 80) ? SHIP_TYPE_KUTTER : SHIP_TYPE_FISCHERBOOT)));
-#ifndef __BORLANDC__
+
+#if !defined(__BORLANDC__)
+			// TODO: Ausgabe fuer Schiffstyp verbessern (momentan nur Zahl)
 			D1_INFO_VERBOSE("Neue Passage auf Seeroute ID %d (%s -- %s): Abfahrt in %d Tagen, Schiffstyp: %d, Preisanpassung: %d%%.\n",
-					i,
-					get_ttx(host_readb(p + SEA_ROUTE_TOWN_1) + 235),
-					get_ttx(host_readb(p + SEA_ROUTE_TOWN_2) + 235),
-					host_readb(p + SEA_ROUTE_PASSAGE_TIMER),
-					host_readb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE), // TODO: Ausgabe fuer Schiffstyp verbessern (momentan nur Zahl)
-					host_readb(p + SEA_ROUTE_PASSAGE_PRICE_MOD)
-			);
+					i, get_ttx(route->town_id_1 + 235), get_ttx(route->town_id_2 + 235),
+					route->passage_timer, route->ship_type,	route->price_mod);
 #endif
 		}
 	}
@@ -3359,20 +3552,20 @@ void passages_recalc(void)
 /**
  * \brief   called once every day at 9 o'clock when the ships leave the harbors
  */
-void passages_reset(void)
+static void passages_reset(void)
 {
-	signed short i;
-	Bit8u *p = p_datseg + SEA_ROUTES;
+	signed int i;
+	struct sea_route *route = &g_sea_routes[0];
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 36: the loop operates only on the first sea route (which is Thorwal-Prem) */
 	for (i = 0; i < NR_SEA_ROUTES; i++)
 #else
-	for (i = 0; i < NR_SEA_ROUTES; p += SIZEOF_SEA_ROUTE, i++)
+	for (i = 0; i < NR_SEA_ROUTES; route++, i++)
 #endif
 	{
-		if (!host_readbs(p + SEA_ROUTE_PASSAGE_TIMER)) {
-			host_writeb(p + SEA_ROUTE_PASSAGE_TIMER, -1);
+		if (!route->passage_timer) {
+			route->passage_timer = -1;
 		}
 	}
 
@@ -3388,30 +3581,31 @@ void passages_reset(void)
  *
  * \param   time        ticks to forward
  */
-void timewarp(Bit32s time)
+void timewarp(const int32_t time)
 {
-	signed short hour_old;
-	signed short hour_new;
-	Bit32s i;
-	signed short td_bak;
-	signed short hour_diff;
-	Bit32s timer_bak;
+	signed int hour_old;
+	signed int hour_new;
+	int32_t i;
+	signed int td_bak;
+	signed int hour_diff;
+	int32_t timer_bak;
 
 	timer_bak = gs_day_timer;
 	td_bak = g_timers_disabled;
 	g_timers_disabled = 0;
 
-	ds_writeb(FREEZE_TIMERS, 1);
+	g_freeze_timers = 1;
 	/* this deactivates the function calls sub_ingame_timers(1); and sub_mod_timers(1); in do_timers(); within the following loop.
 	 * these timers will be dealt with in a single call sub_ingame_timers(time); and sub_mod_timers(time); for efficiency reasons.
 	 */
 
 	for (i = 0; i < time; i++) {
+
 		do_timers();
-#ifdef M302de_SPEEDFIX
-		if (i % 768 == 0)
-			wait_for_vsync();
-#endif
+
+		/* REMARK: SPEEDFIX
+		 if (i % 768 == 0) wait_for_vsync();
+		 */
 	}
 
 	sub_ingame_timers(time);
@@ -3421,7 +3615,7 @@ void timewarp(Bit32s time)
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 37:
 	 * Healing time-offs, staffspell time-offs and timers for the consumption of burning lanterns and torches
-	 * do not get updated in certain situations, like a step forward in a city or dungeon.
+	 * do not get updated in certain situations, like a step forward in a town or dungeon.
 	 * Reason: Because of rounding down, time / MINUTES(5) and time / MINUTES(15) will be 0 in many situations.
 	 *
 	 * Not exactly a masterpiece in modular arithmetics...
@@ -3445,8 +3639,8 @@ void timewarp(Bit32s time)
 	 * For example, hour_new - hour_old == 1 could mean that 0 or 1 full hours have been passed.
 	 *
 	 * Again, sloppy treatment of modular arithmetics. */
-	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(gs_day_timer / HOURS(1));
+	hour_old = timer_bak / HOURS(1);
+	hour_new = gs_day_timer / HOURS(1);
 
 	if (hour_old != hour_new) {
 		if (hour_new > hour_old) {
@@ -3496,7 +3690,7 @@ void timewarp(Bit32s time)
 #endif
 
 	/* restore variables */
-	ds_writeb(FREEZE_TIMERS, 0);
+	g_freeze_timers = 0;
 	g_timers_disabled = td_bak;
 }
 
@@ -3505,7 +3699,7 @@ void timewarp(Bit32s time)
  *
  * \param   time        ticks to forward to, e.g to 6 AM. If the passed time agrees with the current time of the day, 24 hours will be forwarded.
  */
-void timewarp_until_time_of_day(Bit32s time)
+void timewarp_until_time_of_day(const int32_t time)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* The code of the function replicates the one of timewarp(..)
@@ -3517,28 +3711,27 @@ void timewarp_until_time_of_day(Bit32s time)
 		timewarp(DAYS(1) + time - gs_day_timer);
 	}
 #else
-	signed short hour_old;
-	signed short hour_new;
-	Bit32s i;
-	signed short td_bak;
-	signed short j;
-	signed short hour_diff;
-	Bit32s timer_bak;
+	signed int hour_old;
+	signed int hour_new;
+	int32_t i = 0;
+	signed int td_bak;
+	signed int j;
+	signed int hour_diff;
+	int32_t timer_bak = gs_day_timer;
 
-	i = 0;
-	timer_bak = gs_day_timer;
 	td_bak = g_timers_disabled;
 	g_timers_disabled = 0;
 
-	ds_writeb(FREEZE_TIMERS, 1);
+	g_freeze_timers = 1;
 
 	do {
 		do_timers();
 		i++;
-#ifdef M302de_SPEEDFIX
-		if (i % 768 == 0)
-			wait_for_vsync();
-#endif
+
+		/* REMARK: SPEEDFIX
+		 if (i % 768 == 0) wait_for_vsync();
+		 */
+
 	} while (gs_day_timer != time);
 
 	sub_ingame_timers(i);
@@ -3549,8 +3742,8 @@ void timewarp_until_time_of_day(Bit32s time)
 	sub_heal_staffspell_timers(i / MINUTES(5));
 	sub_light_timers(i / MINUTES(15));
 
-	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(gs_day_timer / HOURS(1));
+	hour_old = timer_bak / HOURS(1);
+	hour_new = gs_day_timer / HOURS(1);
 
 	/* Original-Bug 38: see above */
 	if (hour_old != hour_new) {
@@ -3573,7 +3766,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	 * */
 
 	/* restore variables */
-	ds_writeb(FREEZE_TIMERS, 0);
+	g_freeze_timers = 0;
 	g_timers_disabled = td_bak;
 #endif
 }
@@ -3587,10 +3780,10 @@ void dec_splash(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if (!g_dialogbox_lock && (g_hero_splash_timer[i]) && !(--g_hero_splash_timer[i]) &&
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !hero_dead(get_hero(i))) {
+		if (!g_dialogbox_lock && g_hero_splash_timer[i] && !(--g_hero_splash_timer[i]) &&
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !get_hero(i)->flags.dead) {
 
-			restore_rect(g_vga_memstart, get_hero(i) + HERO_PORTRAIT, g_hero_pic_posx[i], 157, 32, 32);
+			restore_rect(g_vga_memstart, get_hero(i)->pic, g_hero_pic_posx[i], 157, 32, 32);
 		}
 	}
 }
@@ -3601,11 +3794,11 @@ void dec_splash(void)
  * \param   hero_pos    on which slot the splash is drawn
  * \param   type        kind of damage (0 = red,LE / !0 = yellow,AE)
  */
-static void draw_splash(signed short hero_pos, signed short type)
+static void draw_splash(const signed int hero_pos, const signed int type)
 {
 	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
-		Bit8u *splash = (type == 0 ? g_splash_le : g_splash_ae);
+		uint8_t *splash = (type == 0 ? g_splash_le : g_splash_ae);
 
 		restore_rect_rle(g_vga_memstart, splash, g_hero_pic_posx[hero_pos], 157, 32, 32, 2);
 
@@ -3622,8 +3815,8 @@ void timewarp_until_midnight(void)
 	/* only called at a single place, at the Swafnild encounter in seg072.cpp */
 {
 	/* TODO: This doesn't look all correct to me... Have all timers been considered? Why not call timewarp_until_time_of_day(..)? */
-	Bit32s ticks_left;
-	signed short td_bak;
+	int32_t ticks_left;
+	signed int td_bak;
 
 	/* save the timers status */
 	td_bak = g_timers_disabled;
@@ -3652,28 +3845,27 @@ void timewarp_until_midnight(void)
 	g_timers_disabled = td_bak;
 }
 
-void wait_for_keyboard2(void)
+void flush_keyboard_queue(void)
 {
+#if defined(__BORLANDC__)
 	while (CD_bioskey(1)) {
-#if !defined(__BORLANDC__)
-		D1_LOG("loop in %s\n", __func__);
-#endif
 		bioskey(0);
 	}
+#endif
 }
 
 
 /* unused */
 #if defined(__BORLANDC__)
-static void seg002_4031(char *ptr)
+static void error_msg(char *msg)
 {
-	delay_or_keypress(150 * GUI_print_header(ptr));
+	vsync_or_key(150 * GUI_print_header(msg));
 }
 #endif
 
 void wait_for_keypress(void)
 {
-	signed short si;
+	signed int l_key;
 
 #if defined(__BORLANDC__)
 	flushall();
@@ -3684,16 +3876,16 @@ void wait_for_keypress(void)
 	do {
 		if (CD_bioskey(1)) {
 
-			si = bioskey(0);
+			l_key = bioskey(0);
 
-			if (((si & 0xff) == 0x20) && (g_bioskey_event10 == 0))
+			if (((l_key & 0xff) == 0x20) && (g_bioskey_event10 == 0))
 			{
 
-				seg002_47e2();
+				ul_save();
 
 				while (!CD_bioskey(1)) {;}
 
-				seg002_484f();
+				ul_blit();
 				break;
 			}
 		}
@@ -3701,7 +3893,7 @@ void wait_for_keypress(void)
 	} while (!CD_bioskey(1) && g_mouse1_event2 == 0);
 
 	if (CD_bioskey(1))
-		si = bioskey(0);
+		l_key = bioskey(0);
 
 	g_mouse1_event2 = 0;
 }
@@ -3711,10 +3903,10 @@ void wait_for_keypress(void)
  *
  * \param   duration    the maximal time to wait (1 = 15ms, 66 = 1s)
  */
-void delay_or_keypress(signed short duration)
+void vsync_or_key(const signed int duration)
 {
-	signed short done = 0;
-	signed short counter = 0;
+	signed int done = 0;
+	signed int counter = 0;
 
 	while (counter < duration) {
 
@@ -3722,15 +3914,15 @@ void delay_or_keypress(signed short duration)
 		handle_input();
 		g_delay_or_keypress_flag = 0;
 
-		if (g_c_event_active) {
+		if (g_town_city_event_active) {
 
 			if (g_action != 0) {
 
 				if (g_action == ACTION_ID_SPACE) {
 
-					seg002_47e2();
+					ul_save();
 					while (!CD_bioskey(1)) { ; }
-					seg002_484f();
+					ul_blit();
 					done = 1;
 
 				} else {
@@ -3745,7 +3937,7 @@ void delay_or_keypress(signed short duration)
 				}
 			} else {
 
-				if (g_mouse2_event) {
+				if (g_mouse_rightclick_event) {
 					done = 1;
 				}
 			}
@@ -3755,16 +3947,16 @@ void delay_or_keypress(signed short duration)
 
 				if (g_action == ACTION_ID_SPACE) {
 
-					seg002_47e2();
+					ul_save();
 					while (!CD_bioskey(1)) { ; }
-					seg002_484f();
+					ul_blit();
 				}
 
 				done = 1;
 
 			} else {
 
-				if (g_mouse2_event) {
+				if (g_mouse_rightclick_event) {
 					done = 1;
 				}
 			}
@@ -3772,8 +3964,8 @@ void delay_or_keypress(signed short duration)
 
 
 		if (done) {
-			g_mouse2_event = 0;
-			g_action = (ACTION_ID_RETURN);
+			g_mouse_rightclick_event = 0;
+			g_action = ACTION_ID_RETURN;
 			break;
 		}
 
@@ -3783,10 +3975,11 @@ void delay_or_keypress(signed short duration)
 	}
 }
 
+#if defined(__BORLANDC__)
 /* unused */
-void unused_delay(signed short no)
+void unused_delay(const signed int no)
 {
-	signed short i = 0;
+	signed int i = 0;
 
 	while (i < no) {
 		wait_for_vsync();
@@ -3802,6 +3995,7 @@ void unused_spinlock(void)
 	while (g_unused_spinlock_flag) {
 	}
 }
+#endif
 
 /**
  * \brief   calculates a 32bit BigEndian value into LittleEndian
@@ -3809,48 +4003,69 @@ void unused_spinlock(void)
  * \param   v           32bit BE value
  * \return              32bit LE value
  */
-Bit32s swap_u32(Bit32u v)
+int32_t swap_u32(uint32_t v)
 {
-	register signed short tmp;
-	signed short a[2];
-	Bit32s *ptr = (Bit32s*)(&a[0]);
+#if defined(__BORLANDC__)
+	register signed int tmp;
+	int16_t a[2];
+	int32_t *ptr = (int32_t*)(&a[0]);
 
-	*ptr = host_readd((Bit8u*)&v);
+	*ptr = readds((uint8_t*)&v);
 
 	tmp = a[0];
 	a[0] = swap_u16(a[1]);
 	a[1] = swap_u16(tmp);
 
-	return host_readd((Bit8u*)ptr);
+	return readds((uint8_t*)ptr);
+#else
+	unsigned char tmp[4] = { 0 };
+	uint32_t retval = 0L;
+
+	tmp[0] = (v >> 0) & 0xff;
+	tmp[1] = (v >> 8) & 0xff;
+	tmp[2] = (v >> 16) & 0xff;
+	tmp[3] = (v >> 24) & 0xff;
+
+	retval |= tmp[0];
+	retval <<= 8L;
+	retval |= tmp[1];
+	retval <<= 8L;
+	retval |= tmp[2];
+	retval <<= 8L;
+	retval |= tmp[3];
+
+	return retval;
+#endif
 }
 
+#if defined(__BORLANDC__)
 /* unused */
-Bit32u swap_u32_unused(Bit32u v)
+uint32_t swap_u32_unused(uint32_t v)
 {
-	signed short a[2];
-	signed short tmp;
-	Bit32s *ptr = (Bit32s*)(&a[0]);
+	int16_t a[2];
+	signed int tmp;
+	int32_t *ptr = (int32_t*)(&a[0]);
 
-	tmp = (signed short)(*ptr = host_readd((Bit8u*)&v));
+	tmp = (int16_t)(*ptr = readds((uint8_t*)&v));
 
 	a[0] = a[1];
 	a[1] = tmp;
 
-	return host_readd((Bit8u*)ptr);
+	return readds((uint8_t*)ptr);
 }
+#endif
 
+#if defined(__BORLANDC__)
 /**
  * \brief   allocates EMS memory
  *
  * \param   bytes       bytes to allocate
  * \return              an EMS handle, to access the memory.
  */
-signed short alloc_EMS(Bit32s bytes)
+signed int alloc_EMS(const int32_t bytes)
 {
-	signed short handle;
-
-	/* calculate the number of needes EMS pages */
-	handle = (signed short)((bytes / 0x4000) + 1);
+	/* calculate the number of needed EMS pages */
+	signed int handle = bytes / 0x4000 + 1;
 
 	/* check if enought EMS is free */
 	if (EMS_get_num_pages_unalloced() >= handle) {
@@ -3864,66 +4079,63 @@ signed short alloc_EMS(Bit32s bytes)
 	return 0;
 }
 
-void from_EMS(Bit8u* dst, signed short handle, Bit32s bytes)
+void from_EMS(const uint8_t* dst, const signed int handle, int32_t bytes)
 {
-#if defined(__BORLANDC__)
-	signed short si;
-	signed short di;
-	signed short v1;
-	signed short len;
-	Bit8u* ptr;
+	signed int pages_copied;
+	signed int pages_left;
+	signed int pages_copied2;
+	signed int len;
+	uint8_t* ptr;
 
-	di = (signed short)(bytes / 0x4000 + 1);
-	v1 = si = 0;
+	pages_left = bytes / 0x4000 + 1;
+	pages_copied2 = pages_copied = 0;
 
 	do {
-		EMS_map_memory(handle, v1++, 0);
-		ptr = (Bit8u*)((HugePt)dst + (((Bit32s)si) << 0x0e));
-		si++;
+		EMS_map_memory(handle, pages_copied2++, 0);
+		ptr = (uint8_t*)((HugePt)dst + (((int32_t)pages_copied) << 0x0e));
+		pages_copied++;
 
-		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
+		len = (bytes - 0x4000 > 0) ? 0x4000 : bytes;
 
 		bytes -= 0x4000;
 
 		memmove((void*)EMS_norm_ptr(ptr), (void*)g_ems_frame_ptr, len);
 
-	} while (--di != 0);
-#endif
+	} while (--pages_left != 0);
 }
 
-void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
+void to_EMS(const signed int handle, const uint8_t* src, int32_t bytes)
 {
-#if defined(__BORLANDC__)
-	signed short si;
-	signed short di;
-	signed short v1;
-	signed short len;
-	Bit8u* ptr;
+	signed int pages_copied;
+	signed int pages_left;
+	signed int pages_copied2;
+	signed int len;
+	uint8_t* ptr;
 
-	di = (signed short)(bytes / 0x4000 + 1);
-	v1 = si = 0;
+	pages_left = bytes / 0x4000 + 1;
+	pages_copied2 = pages_copied = 0;
 
 	do {
-		EMS_map_memory(handle, v1++, 0);
-		ptr = (Bit8u*)((HugePt)src + (((Bit32s)si) << 0x0e));
-		si++;
+		EMS_map_memory(handle, pages_copied2++, 0);
+		ptr = (uint8_t*)((HugePt)src + (((int32_t)pages_copied) << 0x0e));
+		pages_copied++;
 
-		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
+		len = (bytes - 0x4000 > 0) ? 0x4000 : bytes;
 
 		bytes -= 0x4000;
 
 		memmove((void*)g_ems_frame_ptr, (void*)EMS_norm_ptr(ptr), len);
 
-	} while (--di != 0);
-#endif
+	} while (--pages_left != 0);
 }
+#endif
 
-void set_to_ff(void)
+void clear_menu_icons(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 9; i++) {
-		ds_writeb(NEW_MENU_ICONS + i, MENU_ICON_NONE);
+		g_new_menu_icons[i] = MENU_ICON_NONE;
 	}
 }
 
@@ -3933,75 +4145,80 @@ void set_to_ff(void)
  * \param   icons       number of icons
  * \param   ...         icon ids
  */
-void draw_loc_icons(signed short icons, ...)
+void draw_loc_icons(const signed int icons, ...)
 {
-	signed short icons_bak[9];
+	signed int icons_bak[9];
 	va_list arguments;
-	signed short i, changed;
-
-	changed = 0;
+	signed int i;
+	signed int changed = 0;
 
 	/* save icon ids in local variable */
 	for (i = 0; i < 9; i++) {
-		icons_bak[i] = ds_readbs(NEW_MENU_ICONS + i);
-		ds_writeb(NEW_MENU_ICONS + i, MENU_ICON_NONE);
+		icons_bak[i] = g_new_menu_icons[i];
+		g_new_menu_icons[i] = MENU_ICON_NONE;
 	}
 
 	va_start(arguments, icons);
 
 	for (i = 0; i < icons; i++) {
-		ds_writeb(NEW_MENU_ICONS + i, va_arg(arguments, int));
+		g_new_menu_icons[i] = va_arg(arguments, int);
 
-		if (ds_readbs(NEW_MENU_ICONS + i) != icons_bak[i]) {
+		if (g_new_menu_icons[i] != icons_bak[i]) {
 			changed = 1;
 		}
 	}
 
 	va_end(arguments);
 
+#if defined(__BORLANDC__)
 	if (icons_bak[i] != -1)
 		changed = 1;
+#else
+	if ((i < 9) && (icons_bak[i] != -1)) {
+		changed = 1;
+	}
+#endif
 
 	if (changed && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_icons();
 	}
 }
 
-signed short mod_day_timer(signed short val)
+signed int mod_day_timer(const signed int val)
 {
 	return ((gs_day_timer % val) == 0) ? 1 : 0;
 }
 
 void draw_compass(void)
 {
-	signed short width;
-	signed short height;
-	struct nvf_desc n;
+	signed int width;
+	signed int height;
+	struct nvf_extract_desc nvf;
 
 	/* No compass in a location */
-	if (!gs_current_loctype &&
+	if (!gs_town_loc_type &&
 		/* Has something to do with traveling */
-		!ds_readbs(TRAVEL_EVENT_ACTIVE) &&
+		!g_travel_event_active &&
 		/* Not in town or dungeon */
-		((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
+		((gs_dungeon_id != DUNGEON_ID_NONE) || (gs_town_id != TOWN_ID_NONE)) &&
 		/* I have no clue */
 		(g_fading_state != 2))
 	{
 
 		/* set src */
-		n.dst = g_icon;
+		nvf.dst = g_icon;
 		/* set dst */
-		n.src = g_buffer6_ptr;
+		nvf.src = g_buffer6_ptr;
 		/* set no */
-		n.no = gs_direction;
+		nvf.image_num = gs_direction;
 		/* set type*/
-		n.type = 0;
+		nvf.compression_type = 0;
 
-		n.width = (Bit8u*)&width;
-		n.height = (Bit8u*)&height;
+		nvf.width = &width;
+		nvf.height = &height;
 
 		/* process the nvf */
-		process_nvf(&n);
+		process_nvf_extraction(&nvf);
 
 		/* set x and y values */
 		g_pic_copy.x1 = 94;
@@ -4012,18 +4229,18 @@ void draw_compass(void)
 		/* set source */
 		g_pic_copy.src = g_icon;
 
-		update_mouse_cursor();
+		call_mouse_bg();
 		do_pic_copy(2);
-		refresh_screen_size();
+		call_mouse();
 	}
 }
 
-signed short can_merge_group(void)
+signed int can_merge_group(void)
 {
-	signed short i;
-	signed short retval = -1;
+	signed int i;
+	signed int retval = -1;
 
-	if (gs_group_member_counts[gs_current_group] == gs_total_hero_counter) {
+	if (gs_group_member_counts[gs_active_group_id] == gs_total_hero_counter) {
 
 		retval = -1;
 
@@ -4031,19 +4248,13 @@ signed short can_merge_group(void)
 
 		for (i = 0; i < 6; i++)	{
 
-			if ((i != gs_current_group) &&
+			if ((i != gs_active_group_id) &&
 				(0 != gs_group_member_counts[i]) &&
-				/* check XTarget */
 				(gs_groups_x_target[i] == gs_x_target) &&
-				/* check YTarget */
 				(gs_groups_y_target[i] == gs_y_target) &&
-				/* check Location */
-				(gs_groups_current_loctype[i] == gs_current_loctype) &&
-				/* check currentTown */
-				(gs_groups_town[i] == gs_current_town) &&
-				/* check DungeonIndex */
-				(gs_groups_dng_index[i] == gs_dungeon_index) &&
-				/* check DungeonLevel */
+				(gs_town_groups_loctype[i] == gs_town_loc_type) &&
+				(gs_groups_town_id[i] == gs_town_id) &&
+				(gs_groups_dungeon_id[i] == gs_dungeon_id) &&
 				(gs_groups_dng_level[i] == gs_dungeon_level))
 			{
 				retval = i;
@@ -4054,79 +4265,87 @@ signed short can_merge_group(void)
 	return retval;
 }
 
-unsigned short div16(unsigned short val)
+uint16_t div16(const unsigned char val)
 {
-	return ((unsigned char)val) >> 4;
+	return val >> 4;
 }
 
-void select_with_mouse(Bit8u *p1, Bit8u *p2)
-/* This function is called in shops at sell/buy screens */
+void item_selector_mouse_select(signed int *result_ptr, const struct item_selector_item *item_selector)
+/* This function is called in shops at sell/buy screens and at smiths */
 {
-	signed short i;
+	signed int item_selector_pos;
 
 	if (g_have_mouse != 2) {
 		return;
 	}
 
-	for (i = 0; i < 15; i++) {
-		if ((g_merchant_items_posx[i] <= g_mouse_posx) &&
-			(g_merchant_items_posx[i] + 50 >= g_mouse_posx) &&
-			(g_merchant_items_posy[i] <= g_mouse_posy) &&
-			(g_merchant_items_posy[i] + 17 >= g_mouse_posy) &&
-			(host_readws(p2 + i * 7) != 0))
+	for (item_selector_pos = 0; item_selector_pos < 15; item_selector_pos++) {
+		if ((g_merchant_items_posx[item_selector_pos] <= g_mouse_posx) &&
+			(g_merchant_items_posx[item_selector_pos] + 50 >= g_mouse_posx) &&
+			(g_merchant_items_posy[item_selector_pos] <= g_mouse_posy) &&
+			(g_merchant_items_posy[item_selector_pos] + 17 >= g_mouse_posy) &&
+			(item_selector[item_selector_pos].item_id != 0))
 		{
-			host_writew(p1, i);
+			*result_ptr = item_selector_pos;
 			return;
 		}
 	}
 }
 
-void select_with_keyboard(Bit8u *p1, Bit8u *p2)
+void item_selector_keyboard_select(signed int *result_ptr, const struct item_selector_item *item_selector)
+/* This function is called in shops at sell/buy screens and at smiths */
 {
-	signed short pos = host_readws(p1);
+	signed int item_selector_pos = *result_ptr;
 
 	if (g_action == ACTION_ID_UP) {
+
 		/* Key UP */
-		if (pos) {
-			pos--;
+		if (item_selector_pos) {
+			item_selector_pos--;
 		} else {
-			pos = 14;
-			while (host_readw(p2 + pos * 7) == 0) {
-				pos--;
+			item_selector_pos = 14;
+			while (item_selector[item_selector_pos].item_id == 0) {
+				item_selector_pos--;
 			}
 		}
+
 	} else if (g_action == ACTION_ID_DOWN) {
+
 		/* Key DOWN */
-		if (pos < 14) {
-			if (host_readw(p2 + (pos + 1) * 7) != 0) {
-				pos++;
+		if (item_selector_pos < 14) {
+			if (item_selector[item_selector_pos + 1].item_id != 0) {
+				item_selector_pos++;
 			} else {
-				pos = 0;
+				item_selector_pos = 0;
 			}
 		} else {
-			pos = 0;
+			item_selector_pos = 0;
 		}
+
 	} else if (g_action == ACTION_ID_RIGHT) {
+
 		/* Key RIGHT */
-		if (pos < 10) {
-			if (host_readw(p2 + (pos + 5) * 7) != 0) {
-				pos += 5;
+		if (item_selector_pos < 10) {
+			if (item_selector[item_selector_pos + 5].item_id != 0) {
+				item_selector_pos += 5;
 			}
 		} else {
-			pos -= 10;
+			item_selector_pos -= 10;
 		}
+
 	} else if (g_action == ACTION_ID_LEFT) {
+
 		/* Key LEFT */
-		if (pos > 4) {
-			pos -= 5;
+		if (item_selector_pos > 4) {
+			item_selector_pos -= 5;
 		} else {
-			if (host_readw(p2 + (pos + 10) * 7) != 0) {
-				pos += 10;
+			if (item_selector[item_selector_pos + 10].item_id != 0) {
+				item_selector_pos += 10;
 			}
 		}
 	}
 
-	host_writew(p1, pos);
+	*result_ptr = item_selector_pos;
 }
 
 /**
@@ -4135,7 +4354,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
  * \param   x           X coordinate
  * \param   y           Y coordinate
  */
-void set_automap_tile(signed short x, signed short y)
+void set_automap_tile(const signed int x, const signed int y)
 {
 	g_automap_buf[4 * y + (x >> 3)] |= g_automap_bitmask[x & 0x07];
 }
@@ -4146,7 +4365,7 @@ void set_automap_tile(signed short x, signed short y)
  * \param   x           X xoordinate
  * \param   y           Y xoordinate
  */
-void set_automap_tiles(signed short x, signed short y)
+void set_automap_tiles(const signed int x, const signed int y)
 {
 	/* set upper line */
 	if (y > 0) {
@@ -4157,7 +4376,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 		set_automap_tile(x, y - 1);
 
-		if (g_dng_map_size - 1 > x) {
+		if (g_map_size_x - 1 > x) {
 			set_automap_tile(x + 1, y - 1);
 		}
 	}
@@ -4169,7 +4388,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 	set_automap_tile(x, y);
 
-	if (g_dng_map_size - 1 > x) {
+	if (g_map_size_x - 1 > x) {
 		set_automap_tile(x + 1, y);
 	}
 
@@ -4181,7 +4400,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 		set_automap_tile(x, y + 1);
 
-		if (g_dng_map_size - 1 > x) {
+		if (g_map_size_x - 1 > x) {
 			set_automap_tile(x + 1, y + 1);
 		}
 	}
@@ -4189,7 +4408,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 /**
  * \brief   */
-void seg002_47e2(void)
+static void ul_save(void)
 {
 	/* save gfx settings to stack */
 	struct struct_pic_copy pic_copy_bak = g_pic_copy;
@@ -4215,7 +4434,7 @@ void seg002_47e2(void)
 
 /**
  */
-void seg002_484f(void)
+static void ul_blit(void)
 {
 	/* save gfx settings to stack */
 	struct struct_pic_copy pic_copy_bak = g_pic_copy;
@@ -4243,18 +4462,11 @@ void seg002_484f(void)
  * \param   hero        pointer to the hero
  * \return              {0, 1}
  */
-/* should be static */
-signed short check_hero(Bit8u *hero)
+signed int check_hero(const struct struct_hero *hero)
 {
-	if (
-		!host_readbs(hero + HERO_TYPE) ||
-		hero_asleep(hero) ||
-		hero_dead(hero) ||
-		hero_petrified(hero) ||
-		hero_unconscious(hero) ||
-		hero_renegade(hero) ||
-		(host_readb(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE)
-	) {
+	if (!hero->typus || hero->flags.asleep || hero->flags.dead || hero->flags.petrified ||
+		hero->flags.unconscious || hero->flags.renegade || (hero->action_id == FIG_ACTION_FLEE))
+	{
 		return 0;
 	}
 
@@ -4264,17 +4476,11 @@ signed short check_hero(Bit8u *hero)
 /**
  * \brief   returns true if the hero is not dead, petrified, unconscious or renegade
  */
-/* should be static */
-signed short check_hero_no2(Bit8u *hero)
+static signed int check_hero_no2(const struct struct_hero *hero)
 {
 
-	if (
-		!host_readbs(hero + HERO_TYPE) ||
-		hero_dead(hero) ||
-		hero_petrified(hero) ||
-		hero_unconscious(hero) ||
-		hero_renegade(hero)
-	) {
+	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious || hero->flags.renegade)
+	{
 		return 0;
 	}
 
@@ -4287,28 +4493,20 @@ signed short check_hero_no2(Bit8u *hero)
  * \param   hero        pointer to the hero
  * \return              {0, 1}
  */
-/* should be static */
-signed short check_hero_no3(Bit8u *hero)
+static signed int check_hero_no3(const struct struct_hero *hero)
 {
-	if (
-		!host_readbs(hero + HERO_TYPE) ||
-		hero_dead(hero) ||
-		hero_petrified(hero) ||
-		hero_unconscious(hero)
-	) {
+	if (!hero->typus || hero->flags.dead || hero->flags.petrified || hero->flags.unconscious)
+	{
 		return 0;
 	}
 
 	return 1;
 }
 
-signed short is_hero_available_in_group(Bit8u *hero)
+signed int is_hero_available_in_group(const struct struct_hero *hero)
 {
+	if (check_hero(hero) &&	(hero->group_id == gs_active_group_id)) {
 
-	if (
-		check_hero(hero) &&
-		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
-	) {
 		return 1;
 	}
 
@@ -4319,32 +4517,31 @@ signed short is_hero_available_in_group(Bit8u *hero)
  * \brief   subtract current ae with a splash
  *
  * \param   hero        the magicuser
- * \param   ae          astralenergy to subtract
+ * \param   ae_cost     astralenergy to subtract
  */
-void sub_ae_splash(Bit8u *hero, signed short ae)
+void sub_ae_splash(struct struct_hero *hero, signed int ae_cost)
 {
-	if (!hero_dead(hero) && (ae > 0)) {
+	if (!hero->flags.dead && (ae_cost > 0)) {
 
-		signed short tmp = g_update_statusline;
+		signed int tmp = g_update_statusline;
 		g_update_statusline = 0;
 
-		if ((host_readb(hero + HERO_TYPE) == HERO_TYPE_MAGE) &&
-		    (host_readbs(hero + HERO_STAFFSPELL_LVL) >= 4)) {
+		if ((hero->typus == HERO_TYPE_MAGIER) && (hero->staff_level >= 4)) {
 			/* 4th staff spell reduces AE cost by 2 */
-			ae -= 2;
-			if (ae < 0)
-				ae = 0;
+			ae_cost -= 2;
+			if (ae_cost < 0)
+				ae_cost = 0;
 		}
 
 		/* Calc new AE */
-		sub_ptr_ws(hero + HERO_AE, ae);
+		hero->ae -= ae_cost;
 
 		/* Draw the splash */
 		draw_splash(get_hero_index(hero), 1);
 
 		/* set AE to 0 if they have gotten lower than 0 */
-		if (host_readws(hero + HERO_AE) < 0) {
-			host_writew(hero + HERO_AE, 0);
+		if (hero->ae < 0) {
+			hero->ae = 0;
 		}
 
 		g_update_statusline = tmp;
@@ -4353,32 +4550,31 @@ void sub_ae_splash(Bit8u *hero, signed short ae)
 		/* AE bar was not updated in pseudo 3D mode */
 		if (!g_in_fight && g_mouse1_doubleclick) {
 			/* redraw AE bar */
-			draw_bar(1, get_hero_index(hero), host_readw(hero + HERO_AE),
-				host_readw(hero + HERO_AE_ORIG), 0);
+			draw_bar(1, get_hero_index(hero), hero->ae, hero->ae_max, 0);
 		}
 #endif
 	}
-
 }
 
 /**
  * \brief   add AE points to the current AE of a hero.
  */
-void add_hero_ae(Bit8u* hero, signed short ae)
+void add_hero_ae(struct struct_hero* hero, const signed int ae)
 {
 	/* dont add AE if hero is dead or ae = 0 */
-	if (!hero_dead(hero) && (ae > 0)) {
+	if (!hero->flags.dead && (ae > 0)) {
 
-		signed short tmp = g_update_statusline;
+		signed int tmp = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* add AE to hero's current AE */
-		add_ptr_ws(hero + HERO_AE, ae);
+		hero->ae += ae;
 
-		/* if current AE is greater than AE maximum
-			set current AE to AE maximum */
-		if (host_readws(hero + HERO_AE) > host_readws(hero + HERO_AE_ORIG))
-			host_writew(hero + HERO_AE, host_readws(hero + HERO_AE_ORIG));
+		/* if current AE is greater than AE maximum set current AE to AE maximum */
+		if (hero->ae > hero->ae_max) {
+
+			hero->ae = hero->ae_max;
+		}
 
 		g_update_statusline = tmp;
 	}
@@ -4390,35 +4586,35 @@ void add_hero_ae(Bit8u* hero, signed short ae)
  * \param   hero        pointer to the hero
  * \param   le          LE the hero looses
  */
-void sub_hero_le(Bit8u *hero, signed short le)
+void sub_hero_le(struct struct_hero *hero, const signed int le)
 {
-	signed short i;
-	signed short bak;
-	signed short old_le;
+	signed int i;
+	signed int bak;
+	signed int old_le;
 	struct struct_fighter *fighter;
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 
-	if (!hero_dead(hero) && (le > 0)) {
+	if (!hero->flags.dead && (le > 0)) {
 
 		bak = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* do the damage */
-		old_le = host_readw(hero + HERO_LE);
-		sub_ptr_ws(hero + HERO_LE, le);
+		old_le = hero->le;
+		hero->le -= le;
 
-		if (hero_asleep(hero)) {
+		if (hero->flags.asleep) {
 
 			/* awake him/her */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+			hero->flags.asleep = 0;
 
 			/* in fight mode */
 			if (g_in_fight) {
 
-				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+				fighter = FIG_get_fighter(hero->fighter_id);
 
 				/* update looking dir and other  */
-				fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
+				fighter->nvf_no = hero->viewdir;
 				fighter->reload = -1;
 				fighter->offsetx = 0;
 				fighter->offsety = 0;
@@ -4427,18 +4623,18 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 		draw_splash(get_hero_index(hero), 0);
 
-		if (host_readws(hero + HERO_LE) <= 0) {
+		if (hero->le <= 0) {
 
 			/* set LE to 0 */
-			host_writew(hero + HERO_LE, 0);
+			hero->le = 0;
 
 			/* mark hero as dead */
-			or_ptr_bs(hero + HERO_FLAGS1, 1); /* set 'dead' flag */
+			hero->flags.dead = 1;
 
 			gs_unconscious_message[get_hero_index(hero)] = 0;
 
-			/* unknown */
-			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
+			/* this is strange... */
+			hero->action_id = FIG_ACTION_PARRY;
 
 			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 				g_refresh_status_line = 1;
@@ -4446,36 +4642,35 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 			/* reset sickness */
 			for (i = 1; i <= 7; i++) {
-				host_writeb(hero + HERO_ILLNESS + i * SIZEOF_HERO_ILLNESS, 0);
-				host_writeb(hero + (HERO_ILLNESS + 1) + i * SIZEOF_HERO_ILLNESS, 0);
+				hero->sick[i][0] = 0;
+				hero->sick[i][1] = 0;
 			}
 
 			/* reset poison */
 			for (i = 1; i <= 9; i++) {
-				host_writeb(hero + HERO_POISON + i * SIZEOF_HERO_POISON, 0);
-				host_writeb(hero + (HERO_POISON + 1) + i * SIZEOF_HERO_POISON, 0);
+				hero->poison[i][0] = 0;
+				hero->poison[i][1] = 0;
 			}
 
 			/* FINAL FIGHT */
 			if (g_current_fight_no == FIGHTS_F144) {
-				if (hero == (Bit8u*)gs_main_acting_hero) {
-					g_game_state = (GAME_STATE_DEAD);
+				if (hero == gs_main_acting_hero) {
+					g_game_state = GAME_STATE_DEAD;
 					g_in_fight = 0;
 				}
 			}
 
-			if ((ds_readb(TRAVELING) != 0)
-				&& !g_in_fight &&
+			if (g_traveling	&& !g_in_fight &&
 				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
 
-				gs_travel_detour = (99);
+				gs_travel_detour = 99;
 
 				hero_i = get_hero(0);
-				for (i = 0; i <=6; i++, hero_i += SIZEOF_HERO) {
-					if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
+				for (i = 0; i <= 6; i++, hero_i++) {
+
+					if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_id == gs_active_group_id))
 					{
 						hero_disappear(hero_i, i, -1);
 					}
@@ -4483,13 +4678,13 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			}
 
 		} else {
-			if ((old_le >= 5) && (host_readws(hero + HERO_LE) < 5)) {
+			if ((old_le >= 5) && (hero->le < 5)) {
 
 				/* make hero unsonscious */
-				or_ptr_bs(hero + HERO_FLAGS1, 0x40); /* set 'unconscious' flag */
+				hero->flags.unconscious = 1;
 
 				/* unknown yet */
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
+				hero->action_id = FIG_ACTION_WAIT;
 
 				/* unknown yet */
 				gs_unconscious_message[get_hero_index(hero)] = 1;
@@ -4497,23 +4692,25 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				/* in fight mode */
 				if (g_in_fight) {
 
-					fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+					fighter = FIG_get_fighter(hero->fighter_id);
 
-					fighter->nvf_no = g_nvftab_figures_unconscious[host_readbs(hero + HERO_SPRITE_NO)] + host_readbs(hero + HERO_VIEWDIR);
+					fighter->nvf_no = g_nvftab_figures_unconscious[hero->sprite_id] + hero->viewdir;
 
 					fighter->reload = -1;
 
-					fighter->offsetx = ds_readb(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
-
-					fighter->offsety = ds_readb((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
+					fighter->offsetx = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].x;
+					fighter->offsety = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].y;
 
 
 					FIG_add_msg(7, 0);
 
 					/* FINAL FIGHT */
 					if (g_current_fight_no == FIGHTS_F144) {
-						if (hero == (Bit8u*)gs_main_acting_hero) {
-							g_game_state = (GAME_STATE_DEAD);
+
+						if (hero == gs_main_acting_hero) {
+
+							g_game_state = GAME_STATE_DEAD;
+
 							g_in_fight = 0;
 						}
 					}
@@ -4537,43 +4734,45 @@ void sub_hero_le(Bit8u *hero, signed short le)
  * \param   hero        pointer to the hero
  * \param   le          LE to be regenerated
  */
-void add_hero_le(Bit8u *hero, signed short le)
+void add_hero_le(struct struct_hero *hero, const signed int le)
 {
-	signed short val_bak;
+	signed int val_bak;
 	struct struct_fighter *fighter;
-	signed short ret;
+	signed int ret;
 
 	/* dead heroes never get LE */
-	if (!hero_dead(hero) && (le > 0)) {
+	if (!hero->flags.dead && (le > 0)) {
 
 		val_bak = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* add LE */
-		add_ptr_ws(hero + HERO_LE, le);
+		hero->le += le;
 
 		/* set LE to maximum if greater than maximum */
-		if (host_readws(hero + HERO_LE) > host_readws(hero + HERO_LE_ORIG))
-			host_writew(hero + HERO_LE, host_readws(hero + HERO_LE_ORIG));
+		if (hero->le > hero->le_max) {
+
+			hero->le = hero->le_max;
+		}
 
 		/* if current LE is >= 5 and the hero is unconscious */
-		if ((host_readws(hero + HERO_LE) >= 5) && hero_unconscious(hero)) {
+		if ((hero->le >= 5) && hero->flags.unconscious) {
 
 			/* awake */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xbf); /* set 'conscious' flag */
+			hero->flags.unconscious = 0;
 
 			/* maybe if we are in a fight */
 			if (g_in_fight) {
 
-				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+				fighter = FIG_get_fighter(hero->fighter_id);
 
 				ret = FIG_get_range_weapon_type(hero);
 
 				if (ret != -1) {
-					//fighter->nvf_no = ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) + host_readbs(hero + HERO_SPRITE_NO) * 12 + 4 * ret + host_readbs(hero + HERO_VIEWDIR));
-					fighter->nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][ret][host_readbs(hero + HERO_VIEWDIR)];
+
+					fighter->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][ret][hero->viewdir];
 				} else {
-					fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
+					fighter->nvf_no = hero->viewdir;
 				}
 
 				fighter->reload = -1;
@@ -4591,17 +4790,15 @@ void add_hero_le(Bit8u *hero, signed short le)
  *
  * \param   le          LE to be regenerated
  */
-void add_group_le(signed short le)
+void add_group_le(const signed int le)
 {
-
-	Bit8u *hero;
-	signed short i;
+	struct struct_hero *hero;
+	signed int i;
 
 	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 		{
 			add_hero_le(hero, le);
 		}
@@ -4615,30 +4812,30 @@ void add_group_le(signed short le)
  * \param   index       the index number of the hero
  * \param   type        the type of message which should be printed (0 = hunger / 1 = thirst)
  */
-void do_starve_damage(Bit8u *hero, signed short index, signed short type)
+static void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type)
 {
 	/* check if the hero is dead */
-	if (!hero_dead(hero)) {
+	if (!hero->flags.dead) {
 
 		/* save this value locally */
 		const int sl_bak = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* decrement LE of the hero */
-		dec_ptr_ws(hero + HERO_LE);
+		hero->le--;
 
 		/* set the critical message type for the hero */
 		gs_food_message[index] = (type != 0 ? 1 : 2);
 
-		if (host_readws(hero + HERO_LE) <= 0) {
+		if (hero->le <= 0) {
 
 			/* don't let the hero die */
-			host_writew(hero + HERO_LE, 1);
+			hero->le = 1;
 
 			/* decrement the max LE and save them at 0x7a */
-			if (host_readws(hero + HERO_LE_ORIG) >= 2) {
-				dec_ptr_ws(hero + HERO_LE_ORIG);
-				inc_ptr_bs(hero + HERO_LE_MOD);
+			if (hero->le_max >= 2) {
+				hero->le_max--;
+				hero->le_max_malus++;
 			}
 		}
 
@@ -4647,20 +4844,22 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 	}
 }
 
+#if defined(__BORLANDC__)
 /* unused */
-signed short compare_name(Bit8u *name)
+static signed int compare_name(const char *name)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < 6; i++) {
 
-		if (!strcmp((char*)(get_hero(i) + HERO_NAME2), (char*)name)) {
+		if (!strcmp(get_hero(i)->alias, name)) {
 			return 1;
 		}
 	}
 
 	return 0;
 }
+#endif
 
 /**
  * \brief   make an attribute test
@@ -4670,34 +4869,32 @@ signed short compare_name(Bit8u *name)
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  * \return              the result of the test. > 0: success; <= 0: failure; -99: critical failure
  */
-signed short test_attrib(Bit8u* hero, signed short attrib, signed short handicap)
+signed int test_attrib(const struct struct_hero* hero, const signed int attrib_id, const signed int handicap)
 {
-	signed short si = random_schick(20);
-	signed short tmp;
+	signed int randval = random_schick(20);
+	signed int att_val;
 
 #if !defined(__BORLANDC__)
-	D1_INFO("Eigenschaftsprobe %s auf %s %+d: W20 = %d",
-		(char*)(hero + HERO_NAME2), names_attrib[attrib], handicap, si);
+	D1_INFO("Eigenschaftsprobe %s auf %s %+d: W20 = %d", hero->alias, names_attrib[attrib_id], handicap, randval);
 #endif
 
-	if (si == 20) {
+	if (randval == 20) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Ungluecklich\n");
 #endif
 		return -99;
 	} else {
 
-		si += handicap;
+		randval += handicap;
 	}
 
-	tmp = host_readbs(hero + 3 * attrib + HERO_ATTRIB) + host_readbs(hero + 3 * attrib + HERO_ATTRIB_MOD);
+	att_val = hero->attrib[attrib_id].current + hero->attrib[attrib_id].mod;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" -> %s mit %d\n",
-		(tmp - si + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - si + 1));
+	D1_INFO(" -> %s mit %d\n", (att_val - randval + 1) > 0 ? "bestanden" : "nicht bestanden", (att_val - randval + 1));
 #endif
 
-	return tmp - si + 1;
+	return att_val - randval + 1;
 }
 
 /**
@@ -4716,7 +4913,7 @@ signed short test_attrib(Bit8u* hero, signed short attrib, signed short handicap
  *                      ordinary success: any value between 1 and 98.
  */
 
-signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib2, signed short attrib3, signed char handicap)
+signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
 {
 #ifndef M302de_FEATURE_MOD
 	/* Feature mod 6: The implementation of the skill test logic differs from the original DSA2/3 rules.
@@ -4730,17 +4927,15 @@ signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib
 	 * Ordinary success leads to return value 1, or, in the case of a negative handicap (in other words, a positive bonus),
 	 * the number of remaining bonus points, increased by 1.  */
 
-	signed short i;
-	signed short rolls_sum;
-	signed short tmp;
-	signed short nr_rolls_20;
+	signed int i;
+	signed int rolls_sum;
+	signed int tmp;
+	signed int nr_rolls_20 = 0;
 
-	nr_rolls_20 = 0;
 	rolls_sum = 0;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" (%s/%s/%s) %+d -> ",
-		names_attrib[attrib1], names_attrib[attrib2], names_attrib[attrib3], handicap);
+	D1_INFO(" (%s/%s/%s) %+d -> ", names_attrib[attrib1], names_attrib[attrib2], names_attrib[attrib3], handicap);
 #endif
 
 	for (i = 0; i < 3; i++) {
@@ -4765,16 +4960,12 @@ signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib
 
 	rolls_sum += handicap;
 
-	tmp = host_readbs(hero + 3 * attrib1 + HERO_ATTRIB) +
-		host_readbs(hero + 3 * attrib1 + HERO_ATTRIB_MOD) +
-		host_readbs(hero + 3 * attrib2 + HERO_ATTRIB) +
-		host_readbs(hero + 3 * attrib2 + HERO_ATTRIB_MOD) +
-		host_readbs(hero + 3 * attrib3 + HERO_ATTRIB) +
-		host_readbs(hero + 3 * attrib3 + HERO_ATTRIB_MOD);
+	tmp = hero->attrib[attrib1].current + hero->attrib[attrib1].mod +
+		hero->attrib[attrib2].current + hero->attrib[attrib2].mod +
+		hero->attrib[attrib3].current + hero->attrib[attrib3].mod;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" -> %s mit %d\n",
-		(tmp - rolls_sum + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - rolls_sum + 1));
+	D1_INFO(" -> %s mit %d\n", (tmp - rolls_sum + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - rolls_sum + 1));
 #endif
 	return tmp - rolls_sum + 1; // in a nutshell: sum of the 3 attributes - 3*D20 - handicap + 1
 
@@ -4782,25 +4973,22 @@ signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib
 	/* Here, the original DSA2/3 skill test logic is implemented.
 	 * WARNING: This makes skill tests, and thus the game, significantly harder!
 	 * Note that we are not implementing the DSA4 rules, where tests with a positive handicap are yet harder. */
-	signed short i;
-	signed short tmp;
-	signed short nr_rolls_1 = 0;
-	signed short nr_rolls_20 = 0;
-	signed short fail = 0;
+	signed int i;
+	signed int tmp;
+	signed int nr_rolls_1 = 0;
+	signed int nr_rolls_20 = 0;
+	signed int fail = 0;
 	signed char attrib [3];
 
-	attrib[0] = host_readbs(hero + 3 * attrib1 + HERO_ATTRIB) + host_readbs(hero + 3 * attrib1 + HERO_ATTRIB_MOD);
-	attrib[1] = host_readbs(hero + 3 * attrib2 + HERO_ATTRIB) + host_readbs(hero + 3 * attrib2 + HERO_ATTRIB_MOD);
-	attrib[2] = host_readbs(hero + 3 * attrib3 + HERO_ATTRIB) + host_readbs(hero + 3 * attrib3 + HERO_ATTRIB_MOD);
+	attrib[0] = hero->attrib[attrib1].current + hero->attrib[attrib1].mod;
+	attrib[1] = hero->attrib[attrib2].current + hero->attrib[attrib2].mod;
+	attrib[2] = hero->attrib[attrib3].current + hero->attrib[attrib3].mod;
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
-		names_attrib[attrib1],
-		attrib[0],
-		names_attrib[attrib2],
-		attrib[1],
-		names_attrib[attrib3],
-		attrib[2]
+			names_attrib[attrib1], attrib[0],
+			names_attrib[attrib2], attrib[1],
+			names_attrib[attrib3], attrib[2]
 	);
 #endif
 
@@ -4873,22 +5061,23 @@ signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib
 #endif
 }
 
-signed short unused_cruft(void)
+#if defined(__BORLANDC__)
+signed int unused_cruft(void)
 {
-
-	signed short l_si;
+	signed int hero_pos;
 
 	if (!gs_total_hero_counter) {
 		return -1;
 	}
 
 	do {
-		l_si = random_schick(6) - 1;
+		hero_pos = random_schick(6) - 1;
 
-	} while (!(host_readbs(get_hero(l_si) + HERO_TYPE)) || (host_readbs(get_hero(l_si) + HERO_GROUP_NO) != gs_current_group));
+	} while (!get_hero(hero_pos)->typus || (get_hero(hero_pos)->group_id != gs_active_group_id));
 
-	return l_si;
+	return hero_pos;
 }
+#endif
 
 /**
  * \brief   selects a hero randomly
@@ -4897,24 +5086,24 @@ signed short unused_cruft(void)
  */
 /* Original-Bug: can loop forever if the position is greater than the
 	number of heroes in the group */
-signed short get_random_hero(void)
+signed int get_random_hero(void)
 {
-	signed short cur_hero;
+	signed int cur_hero;
 
 	do {
 		/* get number of current group */
-		cur_hero = random_schick(gs_group_member_counts[gs_current_group]) - 1;
+		cur_hero = random_schick(gs_group_member_counts[gs_active_group_id]) - 1;
 
 #ifdef M302de_ORIGINAL_BUGFIX
-		signed short pos = 0;
+		signed int pos = 0;
 
-		Bit8u *hero = get_hero(0);
-		for (int i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		struct struct_hero *hero = get_hero(0);
+		for (int i = 0; i <= 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_NONE)
+			if (hero->typus == HERO_TYPE_NONE)
 				continue;
 			/* Check if in current group */
-			if (host_readbs(hero + HERO_GROUP_NO) != gs_current_group)
+			if (hero->group_id != gs_active_group_id)
 				continue;
 
 			if (pos == cur_hero) {
@@ -4927,11 +5116,7 @@ signed short get_random_hero(void)
 		cur_hero = pos;
 #endif
 
-	} while (
-		!host_readbs(get_hero(cur_hero) + HERO_TYPE) ||
-		(host_readbs(get_hero(cur_hero) + HERO_GROUP_NO) != gs_current_group) ||
-		hero_dead(get_hero(cur_hero))
-	);
+	} while (!get_hero(cur_hero)->typus || (get_hero(cur_hero)->group_id != gs_active_group_id) || get_hero(cur_hero)->flags.dead);
 
 	return cur_hero;
 }
@@ -4941,19 +5126,17 @@ signed short get_random_hero(void)
  *
  * \return              the sum of the money of all heroes in the current group
  */
-Bit32s get_party_money(void)
+int32_t get_party_money(void)
 {
-	signed short i;
-	Bit32s sum = 0;
-	Bit8u* hero;
+	signed int i;
+	int32_t sum = 0;
+	struct struct_hero *hero = get_hero(0);
 
-	hero = get_hero(0);
+	for (i = 0; i < 6; i++, hero++) {
 
-	for (i=0; i < 6; i++, hero += SIZEOF_HERO) {
-		if (host_readbs(hero + HERO_TYPE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
+		if (hero->typus && (hero->group_id == gs_active_group_id))
 		{
-			sum += host_readds(hero + HERO_MONEY);
+			sum += hero->money;
 		}
 	}
 
@@ -4968,12 +5151,12 @@ Bit32s get_party_money(void)
  *	If only a NPC is in that party, he gets all the money.
  *	If a hero is dead and in the current party, his money is set to 0.
  */
-void set_party_money(Bit32s money)
+void set_party_money(int32_t money)
 {
-	signed short heroes = 0;
-	signed short i;
-	Bit32s hero_money;
-	Bit8u *hero;
+	signed int heroes = 0;
+	signed int i;
+	int32_t hero_money;
+	struct struct_hero *hero;
 
 	if (money < 0)
 		money = 0;
@@ -4984,17 +5167,13 @@ void set_party_money(Bit32s money)
 	hero = get_hero(6);
 
 	/* if we have an NPC in current group and alive */
-	if (
-		host_readbs(hero + HERO_TYPE) &&
-		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-		!hero_dead(hero)
-	) {
+	if (hero->typus && (hero->group_id == gs_active_group_id) && !hero->flags.dead) {
 
 		/* If only the NPC is in that group give him all the money */
 		if (heroes > 1) {
 			heroes--;
 		} else {
-			add_ptr_ds(hero + HERO_MONEY, money);
+			hero->money += money;
 			heroes = 0;
 		}
 	}
@@ -5005,18 +5184,15 @@ void set_party_money(Bit32s money)
 
 		hero = get_hero(0);
 
-		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+		for (i = 0; i < 6; i++, hero++) {
 
-			if (
-				host_readbs(hero + HERO_TYPE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero)
-			) {
+			if (hero->typus && (hero->group_id == gs_active_group_id) && !hero->flags.dead) {
+
 				/* account the money to hero */
-				host_writed(hero + HERO_MONEY, hero_money);
+				hero->money = hero_money;
 			} else {
-				if (host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
-					host_writed(hero + HERO_MONEY, 0);
+				if (hero->group_id == gs_active_group_id) {
+					hero->money = 0;
 				}
 			}
 		}
@@ -5028,7 +5204,7 @@ void set_party_money(Bit32s money)
  *
  * \param   money       money to add
  */
-void add_party_money(Bit32s money)
+void add_party_money(const int32_t money)
 {
 	set_party_money(get_party_money() + money);
 }
@@ -5039,9 +5215,9 @@ void add_party_money(Bit32s money)
  * \param   hero        pointer to the hero
  * \param   ap          AP the hero should get
  */
-void add_hero_ap(Bit8u *hero, Bit32s ap)
+void add_hero_ap(struct struct_hero *hero, const int32_t ap)
 {
-	add_ptr_ds(hero + HERO_AP, ap);
+	hero->ap += ap;
 }
 
 /**
@@ -5049,10 +5225,10 @@ void add_hero_ap(Bit8u *hero, Bit32s ap)
  *
  * \param   ap          AP to share
  */
-void add_group_ap(Bit32s ap)
+void add_group_ap(int32_t ap)
 {
-	signed short i;
-	Bit8u *hero_i;
+	signed int i;
+	struct struct_hero *hero;
 
 	if (ap < 0) {
 		return;
@@ -5060,15 +5236,13 @@ void add_group_ap(Bit32s ap)
 
 	ap = ap / count_heroes_in_group();
 
-	hero_i = get_hero(0);
+	hero = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i))
+		if (hero->typus && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
-			add_hero_ap(hero_i, ap);
+			add_hero_ap(hero, ap);
 		}
 	}
 }
@@ -5078,26 +5252,24 @@ void add_group_ap(Bit32s ap)
  *
  * \param   ap          AP to add
  */
-void add_hero_ap_all(signed short ap)
+void add_hero_ap_all(const signed int ap)
 {
-	Bit8u *hero_i;
-	signed short i;
+	struct struct_hero *hero;
+	signed int i;
 
 	if (ap < 0)
 		return;
 
-	hero_i = get_hero(0);
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	hero = get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i))
+		if (hero->typus && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 #if !defined(__BORLANDC__)
-			D1_INFO("%s erhaelt %d AP\n",(char*)(hero_i + HERO_NAME2), ap);
+			D1_INFO("%s erhaelt %d AP\n", hero->alias, ap);
 #endif
 
-			add_hero_ap(hero_i, ap);
+			add_hero_ap(hero, ap);
 		}
 	}
 }
@@ -5107,31 +5279,29 @@ void add_hero_ap_all(signed short ap)
  *
  * \param   ap          AP to subtract
  */
-void sub_hero_ap_all(signed short ap)
+void sub_hero_ap_all(const signed int ap)
 {
-	signed short i;
-	Bit8u *hero_i;
+	signed int i;
+	struct struct_hero *hero;
 
 	if (ap < 0)
 		return;
 
-	hero_i = get_hero(0);
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	hero = get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i))
+		if (hero->typus && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
-			if ((Bit32u)ap <= host_readd(hero_i + HERO_AP)) {
+			if ((uint32_t)ap <= hero->ap) {
 #if !defined(__BORLANDC__)
-				D1_INFO("%s erhaelt %+d AP\n",(char*)(hero_i + HERO_NAME2), -ap);
+				D1_INFO("%s erhaelt %+d AP\n", hero->alias, -ap);
 #endif
-				add_hero_ap(hero_i, -((Bit32s)ap));
+				add_hero_ap(hero, -((int32_t)ap));
 			} else {
 #if !defined(__BORLANDC__)
-				D1_INFO("%s wird auf 0 AP gesetzt\n",(char*)(hero_i + HERO_NAME2));
+				D1_INFO("%s wird auf 0 AP gesetzt\n", hero->alias);
 #endif
-				host_writed(hero_i + HERO_AP, 0);
+				hero->ap = 0;
 			}
 		}
 	}
@@ -5143,10 +5313,10 @@ void sub_hero_ap_all(signed short ap)
  * \param   hero        pointer to the hero
  * \return              position of the hero
  */
-signed short get_hero_index(Bit8u *hero)
+signed int get_hero_index(const struct struct_hero *hero)
 {
-	signed short i = 0;
-	Bit8u *p;
+	signed int i = 0;
+	struct struct_hero *p;
 
 	p = get_hero(i);
 	while (hero != p) {
@@ -5158,19 +5328,19 @@ signed short get_hero_index(Bit8u *hero)
 }
 
 /**
- * \brief   gets item position
+ * \brief   checks if hero has the item and returns its inventory slot
  *
  * \param   hero        pointer to the hero
  * \param   item        item ID to look for
- * \return              position of the item or -1 if the item is not in the inventory.
+ * \return              -1 if the item is not in the inventory
+ *			otherwise: first inventory slot holding item
  */
-signed short get_item_pos(Bit8u *hero, signed short item)
+signed int inv_slot_of_item(const struct struct_hero *hero, const signed int item_id)
 {
-
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
-		if (item == host_readws(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)) {
+		if (item_id == hero->inventory[i].item_id) {
 			return i;
 		}
 	}
@@ -5181,23 +5351,22 @@ signed short get_item_pos(Bit8u *hero, signed short item)
 /**
  * \brief   gets the position of the first hero with an item
  *
- * \param   item        item ID to look for
+ * \param   item_id     item ID to look for
  * \return              position of the hero or -1 if nobody of the group has this item
  */
-signed short get_first_hero_with_item(signed short item)
+signed int get_first_hero_with_item(const signed int item_id)
 {
-	signed short j;
-	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	signed int j;
+	signed int i;
+	struct struct_hero *hero_i = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
+		if ((hero_i->typus) && (hero_i->group_id == gs_active_group_id))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-				if (host_readw(hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item) {
+				if (hero_i->inventory[j].item_id == item_id) {
 					return i;
 				}
 			}
@@ -5210,24 +5379,23 @@ signed short get_first_hero_with_item(signed short item)
 /**
  * \brief   gets the position of the first hero with an item in a specified group
  *
- * \param   item        item ID to look for
+ * \param   item_id     item ID to look for
  * \param   group       group number
  * \return              position of the hero or -1 if nobody in the specified group has this item
  */
-signed short get_first_hero_with_item_in_group(signed short item, signed short group)
+signed int get_first_hero_with_item_in_group(const signed int item_id, const signed int group_id)
 {
-	signed short j;
-	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	signed int j;
+	signed int i;
+	struct struct_hero *hero_i = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == (signed char)group))
+		if (hero_i->typus && (hero_i->group_id == (signed char)group_id))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-				if (host_readws(hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item) {
+				if (hero_i->inventory[j].item_id == item_id) {
 					return i;
 				}
 			}
@@ -5243,17 +5411,15 @@ signed short get_first_hero_with_item_in_group(signed short item, signed short g
  *
  * \param   le          LE to subtract
  */
-void sub_group_le(signed short le)
+void sub_group_le(const signed int le)
 {
-	signed short i;
-	Bit8u *hero_i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++) {
 
-		hero_i = get_hero(i);
+		struct struct_hero *hero_i = get_hero(i);
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
+		if (hero_i->typus && (hero_i->group_id == gs_active_group_id))
 		{
 			sub_hero_le(hero_i, le);
 		}
@@ -5263,26 +5429,24 @@ void sub_group_le(signed short le)
 /**
  * \brief   return a pointer to the first available hero
  *
- * \return              a pointer to the first available hero. If none in available it returns a pointer to the first hero.
+ * \return a pointer to the first available hero. If none in available it returns a pointer to the first hero.
  */
-Bit8u* get_first_hero_available_in_group(void)
+struct struct_hero* get_first_hero_available_in_group(void)
 {
-	signed short i;
-	unsigned char *hero_i = get_hero(0);
+	signed int i;
+	struct struct_hero *hero_i = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group, deadness and check_hero() */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i) &&
-			check_hero(hero_i))
+		if (hero_i->typus && (hero_i->group_id == gs_active_group_id) &&
+			!hero_i->flags.dead && check_hero(hero_i))
 		{
 			return hero_i;
 		}
 	}
 
-	return (Bit8u*)get_hero(0);
+	return get_hero(0);
 }
 
 /**
@@ -5290,19 +5454,16 @@ Bit8u* get_first_hero_available_in_group(void)
  *
  * \return              a pointer to the second available hero in the group or NULL.
  */
-Bit8u* get_second_hero_available_in_group(void)
+struct struct_hero* get_second_hero_available_in_group(void)
 {
-	signed short i;
-	signed short tmp;
-	unsigned char *hero_i;
+	signed int i;
+	signed int tmp;
+	struct struct_hero *hero_i = get_hero(0);
 
-	hero_i = get_hero(0);
+	for (i = tmp = 0; i <= 6; i++, hero_i++) {
 
-	for (i = tmp = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and check_hero() */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			check_hero(hero_i))
+		if ((hero_i->typus) && (hero_i->group_id == gs_active_group_id) && check_hero(hero_i))
 		{
 			if (tmp) {
 				return hero_i;
@@ -5320,19 +5481,16 @@ Bit8u* get_second_hero_available_in_group(void)
  *
  * \return              number of available heroes in all groups, including NPC
  */
-signed short count_heroes_available(void)
+signed int count_heroes_available(void)
 {
-	signed short i;
-	signed short retval;
-	Bit8u *hero_i;
+	signed int i;
+	signed int retval = 0;
+	struct struct_hero *hero = get_hero(0);
 
-	retval = 0;
-	hero_i = get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check if hero is available */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(check_hero(hero_i) || check_hero_no2(hero_i)))
+		if (hero->typus && (check_hero(hero) || check_hero_no2(hero)))
 		{
 			retval++;
 		}
@@ -5343,19 +5501,15 @@ signed short count_heroes_available(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows a cleaner fix for Original-Bug 15 */
-signed short count_heroes_available_ignore_npc(void)
+signed int count_heroes_available_ignore_npc(void)
 {
-	signed short i;
-	signed short retval;
-	Bit8u *hero_i;
+	signed int i;
+	signed int retval = 0;
+	struct struct_hero *hero = get_hero(0);
 
-	retval = 0;
-	hero_i = get_hero(0);
-
-	for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i < 6; i++, hero++) {
 		/* Check if hero is available */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(check_hero(hero_i) || check_hero_no2(hero_i)))
+		if (hero->typus && (check_hero(hero) || check_hero_no2(hero)))
 		{
 			retval++;
 		}
@@ -5370,17 +5524,16 @@ signed short count_heroes_available_ignore_npc(void)
  *
  * \return   number of available (= not dead, petrified, unconscious, renegade) heroes in current group, including NPC
  */
-signed short count_heroes_available_in_group(void)
+signed int count_heroes_available_in_group(void)
 {
-	signed short heroes = 0;
-	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	signed int heroes = 0;
+	signed int i;
+	struct struct_hero *hero = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
-			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
+	for (i = 0; i <= 6; i++, hero++) {
+		if (hero->typus && (hero->group_id == gs_active_group_id) && check_hero_no2(hero))
 		{
+			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;
 		}
 	}
@@ -5390,17 +5543,17 @@ signed short count_heroes_available_in_group(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows cleaner fixes for Original-Bug 12, 13, 14 and 15 */
-signed short count_heroes_available_in_group_ignore_npc(void)
+signed int count_heroes_available_in_group_ignore_npc(void)
 {
-	signed short heroes = 0;
-	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	signed int heroes = 0;
+	signed int i;
+	struct struct_hero *hero = get_hero(0);
 
-	for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
-			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
+	for (i = 0; i < 6; i++, hero++) {
+
+		if (hero->typus && (hero->group_id == gs_active_group_id) && check_hero_no2(hero))
 		{
+			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;
 		}
 	}
@@ -5426,7 +5579,7 @@ void check_group(void)
 #endif
 	{
 		/* game over */
-		g_game_state = (GAME_STATE_DEAD);
+		g_game_state = GAME_STATE_DEAD;
 
 	} else if
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -5435,21 +5588,20 @@ void check_group(void)
 		(!count_heroes_available_in_group_ignore_npc())
 #endif
 	{
-
 		GRP_switch_to_next(2);
-
 	}
 }
 
-int schick_main(int argc, char** argv)
+int main(int argc, char** argv)
 {
-	signed short l_si;
-	signed short l_di;
-	Bit32s l3;
-	signed short savegame;
-	signed short len;
+	signed int argv1_len;
+	signed int answer;
+	int32_t l3;
+	signed int savegame;
+	signed int len;
 
-	ds_writew(PREGAME_STATE, 1);
+	g_pregame_state = 1;
+
 	g_playmask_us = 1;
 
 	init_AIL(16000);
@@ -5457,7 +5609,7 @@ int schick_main(int argc, char** argv)
 #if defined(__BORLANDC__)
 	randomize();
 
-	save_display_stat((Bit8u*)&g_video_page_bak);
+	save_display_stat(&g_video_page_bak);
 #endif
 
 	if (!init_memory()) {
@@ -5484,24 +5636,26 @@ int schick_main(int argc, char** argv)
 
 		g_textbox_width = 3;
 
-		refresh_screen_size();
+		call_mouse();
 
 		if (argc == 2) {
 
+#if defined(__BORLANDC__)
 			/* some trick to disable the cd check */
 
 			len = strlen(argv[1]);
 
-			l_si = 0;
-			g_cd_skipmagic = 1;
+			argv1_len = 0;
 
-			while (l_si < len) {
+			g_cd_skipmagic = 1;
+			while (argv1_len < len) {
 
 
 				g_cd_skipmagic = argv[1][0] * g_cd_skipmagic;
 				argv[1]++;
-				l_si++;
+				argv1_len++;
 			}
+#endif
 		}
 
 		prepare_dirs();
@@ -5519,13 +5673,27 @@ int schick_main(int argc, char** argv)
 
 		CD_init();
 
+#if defined(__BORLANDC__)
 		if (!g_cd_init_successful) {
 
 			/* CD init failed */
 			cleanup_game();
 			exit(0);
 		}
+#endif
 
+#if !defined(__BORLANDC__)
+		/* Playground 1 / 2 */
+		sdl_forced_update();
+
+		g_textbox_width = 3;
+
+		game_loop();
+
+		cleanup_game();
+
+		return 0;
+#endif
 
 		/* select game mode */
 		g_game_mode = GAME_MODE_UNSPECIFIED;
@@ -5550,23 +5718,24 @@ int schick_main(int argc, char** argv)
 
 				/* ask for generation or game */
 				do {
-					l_di = GUI_radio(get_ttx(820), 2, get_ttx(821), get_ttx(822)) - 1;
+					answer = GUI_radio(get_ttx(820), 2, get_ttx(821), get_ttx(822)) - 1;
 
-				} while (l_di == -1);
+				} while (answer == -1);
 
-				if (l_di == 1) {
+				if (answer == 1) {
 					call_gen();
 				}
 
-				wait_for_keyboard2();
+				flush_keyboard_queue();
 
 
 				/* load a savegame */
 				do {
 					savegame = load_game_state();
+
 				} while (savegame == -1);
 
-				ds_writew(PREGAME_STATE, 0);
+				g_pregame_state = 0;
 
 				/* start the game */
 				game_loop();
@@ -5591,21 +5760,21 @@ int schick_main(int argc, char** argv)
 #endif
 }
 
-Bit8u* schick_alloc(Bit32u size)
+uint8_t* schick_alloc(uint32_t size)
 {
 #if defined(__BORLANDC__)
-	return (Bit8u*)farcalloc(size, 1);
+	return (uint8_t*)farcalloc(size, 1);
 #else
-	return (Bit8u*)calloc(size, 1);
+	return (uint8_t*)calloc(size, 1);
 #endif
 }
 
-signed short copy_protection(void)
+static signed int copy_protection(void)
 {
-	signed short i;
-	signed short randval;
-	signed short tries;
-	signed short len;
+	signed int i;
+	signed int randval;
+	signed int tries;
+	signed int len;
 
 #ifndef M302de_FEATURE_MOD
 	load_tx(ARCHIVE_FILE_FIGHTTXT_LTX);
@@ -5685,7 +5854,3 @@ signed short copy_protection(void)
 	return 1;
 #endif
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

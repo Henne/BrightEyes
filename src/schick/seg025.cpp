@@ -10,7 +10,11 @@
 #include <stdio.h>
 
 #if !defined(__BORLANDC__)
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 
@@ -46,22 +50,55 @@
 #include "seg066.h"
 #include "seg122.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
+static struct mouse_action g_action_table_options[10] = {
+	{ 0x05, 0x1e, 0x001c, 0x35, 0x81 },
+	{ 0x05, 0x3c, 0x001c, 0x53, 0x82 },
+	{ 0x05, 0x5a, 0x001c, 0x71, 0x83 },
+	{ 0x46, 0xaa, 0x005d, 0xc1, 0x84 },
+	{ 0x6e, 0xaa, 0x0085, 0xc1, 0x85 },
+	{ 0x96, 0xaa, 0x00ad, 0xc1, 0x86 },
+	{ 0xbe, 0xaa, 0x00d5, 0xc1, 0x87 },
+	{ 0xec, 0xaa, 0x0103, 0xc1, 0x88 },
+	{ 0x00, 0x00, 0x013f, 0xc7, 0x89 },
+	{ -0x0001, -0x0001, -0x0001, -0x0001, 0xffff }
+}; // ds:0x4bae
+static signed int g_tmap_x[10] = { 0x02, 0x76, 0xc1, 0x03, 0x76, 0xc1, 0x00, 0x76, 0xc1, 0x00 }; // ds:0x4c12
+static signed int g_tmap_y[10] = { 0x04, 0x04, 0x04, 0x46, 0x46, 0x46, 0x88, 0x88, 0x88, 0x88 }; // ds:0x4c26
+unsigned char g_renderbuf_in_use_flag = 0; // ds:0x4c3a
 
+static void (*g_location_handlers[19])(void) = {
+	NULL,
+	do_location1, /* empty function */
+	do_temple,
+	do_tavern,
+	do_healer,
+	do_merchant,
+	do_wildcamp,
+	do_inn,
+	do_smith,
+	do_market,
+	show_citizen,
+	do_harbor,
+	enter_map,
+	do_informer,
+	show_entrance,
+	NULL,
+	do_house,
+	do_special_buildings,
+	do_area_camp,
+};  // ds:0x4c3b, (void (*)(void))[19];
 
 void show_entrance(void)
 {
 	draw_main_screen();
-	set_var_to_zero();
+	disable_ani();
 	load_ani(34);
 	init_ani(1);
 
 	if (GUI_bool(get_ttx(760))) {
 
 		init_ani_busy_loop(2);
-		DNG_enter_dungeon(gs_current_typeindex);
+		DNG_enter_dungeon(gs_town_typeindex);
 	} else {
 
 		leave_location();
@@ -69,7 +106,7 @@ void show_entrance(void)
 }
 
 /**
- * \brief   the screen when entering a house in the city
+ * \brief   the screen when entering a house in a town
  */
 void show_citizen(void)
 {
@@ -81,31 +118,31 @@ void show_citizen(void)
 		if (g_request_refresh != 0) {
 
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(20);
 			init_ani(g_request_refresh = 0);
 
-			strcpy(g_text_output_buf, get_tx(gs_current_locdata));
+			strcpy(g_text_output_buf, get_tx(gs_town_locdata));
 
 			if ((gs_year == 15) && (gs_month == 1) && (random_schick(100) <= 20)) {
 
 				if (!show_storytext()) {
 					GUI_print_loc_line(g_text_output_buf);
 				} else {
-					g_action = (ACTION_ID_ESC);
+					g_action = ACTION_ID_ESC;
 				}
 			} else {
 				GUI_print_loc_line(g_text_output_buf);
-#ifdef M302de_SPEEDFIX
-				delay_or_keypress(200);
-#endif
+				/* REMARK: SPEEDFIX
+				vsync_or_key(200);
+				*/
 			}
 		}
 
 	} while ((g_action == 0) && (g_mouse1_event2 == 0));
 
 	g_mouse1_event2 = 0;
-	set_var_to_zero();
+	disable_ani();
 	copy_palette();
 	leave_location();
 }
@@ -115,12 +152,12 @@ void show_citizen(void)
  */
 void do_house(void)
 {
-	signed short i;
-	signed short l_di;
-	Bit8u *hero;
+	signed int i; /* dual use as a town_id and a hero_pos */
+	signed int unarrested;
+	struct struct_hero *hero;
 
 	/* prepare the question */
-	strcpy(g_dtp2, get_tx(gs_current_locdata));
+	strcpy(g_dtp2, get_tx(gs_town_locdata));
 
 	strcat(g_dtp2, get_ttx(623));
 
@@ -130,7 +167,7 @@ void do_house(void)
 
 		/* break into the house */
 
-		set_var_to_zero();
+		disable_ani();
 		load_ani(10);
 		init_ani(0);
 
@@ -139,42 +176,41 @@ void do_house(void)
 
 		hero = get_hero(0);
 
-		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+		for (i = 0; i < 6; i++, hero++) {
 
-			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero) && /* Original-Bug: What if petrified, sleeping etc. */
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
+				!hero->flags.dead && /* Original-Bug: What if petrified, sleeping etc. */
 				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
 			{
 				/* every hero must pass a sneak -2 test */
 
-				i = gs_current_town;
+				i = gs_town_id;
 
-				if ((i == TOWNS_THORWAL) || (i == TOWNS_PREM) || (i == TOWNS_PHEXCAER) || (i == TOWNS_OBERORKEN)) {
+				if ((i == TOWN_ID_THORWAL) || (i == TOWN_ID_PREM) || (i == TOWN_ID_PHEXCAER) || (i == TOWN_ID_OBERORKEN)) {
 
 					/* sneak test failed in a town with guards */
 
 					GUI_output(get_ttx(632));
 
-					l_di = 0;
+					unarrested = 0;
 
 					for (i = 0; i < 6; i++) {
 
 						hero = get_hero(i);
 
-						if (check_hero(hero) && !host_readbs(hero + HERO_JAIL)) {
-							l_di = 1;
+						if (check_hero(hero) && !hero->jail) {
+							unarrested = 1;
 						}
 					}
 
-					if ((gs_group_member_counts[gs_current_group] < gs_total_hero_counter) && l_di)
+					if ((gs_group_member_counts[gs_active_group_id] < gs_total_hero_counter) && unarrested)
 					{
 						i = 0;
 
-						while (host_readbs(get_hero(i) + HERO_GROUP_NO) == gs_current_group)
+						while (get_hero(i)->group_id == gs_active_group_id)
 						{
 							/* imprison hero */
-							host_writeb(get_hero(i) + HERO_JAIL, 1);
+							get_hero(i)->jail = 1;
 							i++;
 						}
 
@@ -196,66 +232,65 @@ void do_house(void)
 			}
 		}
 
-		set_var_to_zero();
+		disable_ani();
 
 		leave_location();
 
 	} else {
-		gs_current_loctype = gs_current_loctype_bak;
-		gs_x_target = (gs_x_target_bak);
-		gs_y_target = (gs_y_target_bak);
+		gs_town_loc_type = gs_town_loc_type_bak;
+		gs_x_target = gs_x_target_bak;
+		gs_y_target = gs_y_target_bak;
 	}
-
 }
 
 void do_informer(void)
 {
-	signed short no = gs_current_typeindex - 1;
+	const signed int informer_id = gs_town_typeindex - 1;
 
-	if (no == INFORMER_JURGE)	do_talk(6, 0); else
-	if (no == INFORMER_HJORE)	do_talk(6, 1); else
-	if (no == INFORMER_YASMA)	do_talk(7, 0); else
-	if (no == INFORMER_UMBRIK)	do_talk(7, 1); else
-	if (no == INFORMER_ISLEIF)	do_talk(7, 2); else
-	if (no == INFORMER_RAGNA)	do_talk(8, 0); else
-	if (no == INFORMER_BEORN)	do_talk(8, 1); else
-	if (no == INFORMER_ASGRIMM)	do_talk(10, 1); else
-	if (no == INFORMER_ELIANE)	do_talk(9, 0); else
-	if (no == INFORMER_OLVIR)	do_talk(10, 0); else
-	if (no == INFORMER_SWAFNILD)	do_talk(12, 0); else
-	if (no == INFORMER_TREBORN)	do_talk(11, 0); else
-	if (no == INFORMER_UNICORN)	do_talk(11, 2); else
-	if (no == INFORMER_ALGRID)	do_talk(8, 2); else
-	if (no == INFORMER_TIOMAR)	do_talk(9, 1);
+	if (informer_id == INFORMER_JURGE)	do_talk(6, 0); else
+	if (informer_id == INFORMER_HJORE)	do_talk(6, 1); else
+	if (informer_id == INFORMER_YASMA)	do_talk(7, 0); else
+	if (informer_id == INFORMER_UMBRIK)	do_talk(7, 1); else
+	if (informer_id == INFORMER_ISLEIF)	do_talk(7, 2); else
+	if (informer_id == INFORMER_RAGNA)	do_talk(8, 0); else
+	if (informer_id == INFORMER_BEORN)	do_talk(8, 1); else
+	if (informer_id == INFORMER_ASGRIMM)	do_talk(10, 1); else
+	if (informer_id == INFORMER_ELIANE)	do_talk(9, 0); else
+	if (informer_id == INFORMER_OLVIR)	do_talk(10, 0); else
+	if (informer_id == INFORMER_SWAFNILD)	do_talk(12, 0); else
+	if (informer_id == INFORMER_TREBORN)	do_talk(11, 0); else
+	if (informer_id == INFORMER_UNICORN)	do_talk(11, 2); else
+	if (informer_id == INFORMER_ALGRID)	do_talk(8, 2); else
+	if (informer_id == INFORMER_TIOMAR)	do_talk(9, 1);
 
 	leave_location();
 }
 
 void enter_map(void)
 {
-	gs_current_signpost = gs_current_typeindex;
+	gs_current_signpost_typeindex = gs_town_typeindex;
 
-	gs_current_typeindex = gs_current_town;
+	gs_town_typeindex = gs_town_id;
 
-	gs_current_loctype = gs_current_town = TOWNS_NONE;
+	gs_town_loc_type = gs_town_id = TOWN_ID_NONE;
 
 	gs_show_travel_map = 1;
 }
 
 void show_treasure_map(void)
 {
-	signed short l_si;
-	signed short tw_bak;
-	signed short count;	/* #collected treasure map parts */
-	signed short width;
-	signed short height;
-	signed short pp20_index_bak;
-	Bit32s length;
-	struct nvf_desc nvf;
+	signed int image_num;	/* REMARK: also reused as handle */
+	signed int tw_bak;
+	signed int count;	/* #collected treasure map parts */
+	signed int width;
+	signed int height;
+	signed int pp20_index_bak;
+	int32_t length;
+	struct nvf_extract_desc nvf;
 
 	/* count the collected treasure map parts */
-	for (l_si = count = 0; l_si < 9; l_si++) {
-		if (gs_treasure_maps[l_si]) {
+	for (image_num = count = 0; image_num < 9; image_num++) {
+		if (gs_treasure_maps[image_num]) {
 			count++;
 		}
 	}
@@ -267,16 +302,16 @@ void show_treasure_map(void)
 		g_special_screen = 1;
 		pp20_index_bak = g_pp20_index;
 		g_pp20_index = -1;
-		set_var_to_zero();
+		disable_ani();
 
 		/* load SKARTE.NVF */
-		l_si = load_archive_file(ARCHIVE_FILE_SKARTE_NVF);
+		image_num = load_archive_file(ARCHIVE_FILE_SKARTE_NVF);
 
-		read_archive_file(l_si, (Bit8u*)g_buffer9_ptr, 30000);
+		read_archive_file(image_num, (uint8_t*)g_buffer9_ptr, 30000);
 
-		length = get_readlength2(l_si);
+		length = get_readlength2(image_num);
 
-		close(l_si);
+		close(image_num);
 
 		/* clear the screen */
 		wait_for_vsync();
@@ -285,33 +320,27 @@ void show_treasure_map(void)
 
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
-		for (l_si = 0; l_si < 10; l_si++) {
+		for (image_num = 0; image_num < 10; image_num++) {
 
-			if (gs_treasure_maps[l_si] && (l_si != 9 || (l_si == 9 && !gs_treasure_maps[6])))
+			if (gs_treasure_maps[image_num] && (image_num != 9 || (image_num == 9 && !gs_treasure_maps[6])))
 			{
 				/* decompress picture */
-				nvf.dst = (Bit8u*)(((HugePt)g_buffer9_ptr) + 30000L);
-				nvf.src = (Bit8u*)g_buffer9_ptr;
-				nvf.no = l_si;
-				nvf.type = 0;
-				nvf.width = (Bit8u*)&width;
-				nvf.height = (Bit8u*)&height;
+				nvf.dst = (uint8_t*)(((HugePt)g_buffer9_ptr) + 30000L);
+				nvf.src = (uint8_t*)g_buffer9_ptr;
+				nvf.image_num = image_num;
+				nvf.compression_type = 0;
+				nvf.width = &width;
+				nvf.height = &height;
 
-				process_nvf(&nvf);
-
-				#if !defined(__BORLANDC__)
-				/* BE-fix */
-				width = host_readws((Bit8u*)&width);
-				height = host_readws((Bit8u*)&height);
-				#endif
+				process_nvf_extraction(&nvf);
 
 				/* copy to screen */
-				g_pic_copy.x1 = g_tmap_x[l_si];
-				g_pic_copy.y1 = g_tmap_y[l_si];
-				g_pic_copy.x2 = g_tmap_x[l_si] + width - 1;
-				g_pic_copy.y2 = g_tmap_y[l_si] + height - 1;
+				g_pic_copy.x1 = g_tmap_x[image_num];
+				g_pic_copy.y1 = g_tmap_y[image_num];
+				g_pic_copy.x2 = g_tmap_x[image_num] + width - 1;
+				g_pic_copy.y2 = g_tmap_y[image_num] + height - 1;
 				g_pic_copy.src = g_buffer9_ptr + 30000L;
 				g_pic_copy.dst = g_vga_memstart;
 				do_pic_copy(0);
@@ -320,9 +349,9 @@ void show_treasure_map(void)
 
 		wait_for_vsync();
 
-		set_palette((Bit8u*)((g_buffer9_ptr + length) -0x60L), 0, 0x20);
+		set_palette((uint8_t*)((g_buffer9_ptr + length) -0x60L), 0, 0x20);
 
-		refresh_screen_size();
+		call_mouse();
 
 		if (g_tmap_double1) {
 
@@ -347,22 +376,22 @@ void show_treasure_map(void)
 			g_tmap_double2 = 0;
 		}
 
-		if (count >= 7 && !ds_readb(FIND_HYGGELIK)) {
+		if (count >= 7 && !gs_find_hyggelik) {
+
 			/* the way can now be found */
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
 
-			/* */
-			sprintf(g_text_output_buf, get_ttx(727), (char*)get_hero(get_random_hero()) + HERO_NAME2);
+			sprintf(g_text_output_buf, get_ttx(727), get_hero(get_random_hero())->alias);
 			GUI_output(g_text_output_buf);
 
 			g_textbox_width = tw_bak;
 
-			ds_writeb(FIND_HYGGELIK, 1);
+			gs_find_hyggelik = 1;
 		}
 
-		delay_or_keypress(1000);
+		vsync_or_key(1000);
 
 		if (g_renderbuf_in_use_flag) {
 
@@ -374,14 +403,14 @@ void show_treasure_map(void)
 			g_pic_copy.src = g_renderbuf_ptr;
 			g_pic_copy.dst = g_vga_memstart;
 
-			update_mouse_cursor();
+			call_mouse_bg();
 			wait_for_vsync();
 
 			set_palette(g_renderbuf_ptr + 64000 + 2, 0, 0x20);
 
 			do_pic_copy(0);
 
-			refresh_screen_size();
+			call_mouse();
 
 			g_renderbuf_in_use_flag = 0;
 
@@ -390,49 +419,47 @@ void show_treasure_map(void)
 		} else {
 			g_current_ani = -1;
 			g_request_refresh = 1;
-			g_area_prepared = -1;
+			g_area_prepared = AREA_TYPE_NONE;
 			g_special_screen = 0;
 			draw_main_screen();
 		}
 	}
 }
 
-signed short game_options(void)
+signed int game_options(void)
 {
-	signed short done;
-	signed short answer;
-	signed short fg_bak;
-	signed short bg_bak;
-	signed short bak1;
-	signed short bak2;
-	signed short tw_bak;
-	signed short game_state;
-	signed short new_delay;
-
-	done = 0;
+	signed int done = 0;
+	signed int answer;
+	signed int fg_bak;
+	signed int bg_bak;
+	signed int bak1;
+	signed int bak2;
+	signed int tw_bak;
+	signed int game_state;
+	signed int new_delay;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 	g_special_screen = 1;
 	g_wallclock_update = 0;
-	g_area_prepared = -1;
-	g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
+	g_area_prepared = AREA_TYPE_NONE;
+	g_current_cursor = &g_default_mouse_cursor;
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
 	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
+	g_vga_backbuffer = (uint8_t*)g_buffer9_ptr;
 
 	bak1 = g_textline_maxlen;
 	bak2 = g_textline_posx;
-	g_textline_maxlen = (200);
-	g_textline_posx = (70);
+	g_textline_maxlen = 200;
+	g_textline_posx = 70;
 
 	set_textcolor(4, 0);
 
-	memset((Bit8u*)g_buffer9_ptr, 0, 20000);
+	memset((uint8_t*)g_buffer9_ptr, 0, 20000);
 
 	prepare_date_str();
 
@@ -446,15 +473,16 @@ signed short game_options(void)
 	g_pic_copy.dst = g_renderbuf_ptr + 9600;
 	do_pic_copy(2);
 
-	memset((Bit8u*)g_buffer9_ptr, 0, 28000);
+	memset((uint8_t*)g_buffer9_ptr, 0, 28000);
 
-	if (gs_current_town != TOWNS_NONE) {
+	if (gs_town_id != TOWN_ID_NONE) {
+
 		/* if the party is in a town */
 		load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
-		GUI_print_header(get_tx(gs_current_town - 1));
+		GUI_print_header(get_tx(gs_town_id - 1));
 
-		load_tx(gs_current_town + (ARCHIVE_FILE_CITY_DAT-1));
+		load_tx(gs_town_id + (ARCHIVE_FILE_CITY_DAT-1));
 
 		g_pic_copy.x1 = 0;
 		g_pic_copy.y1 = 0;
@@ -483,20 +511,20 @@ signed short game_options(void)
 	g_pic_copy.src = g_renderbuf_ptr;
 	g_pic_copy.dst = g_vga_memstart;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 	wait_for_vsync();
 
 	set_palette(g_renderbuf_ptr + 64002, 0, 32);
 
 	do_pic_copy(0);
-	refresh_screen_size();
+	call_mouse();
 
 	set_textcolor(fg_bak, bg_bak);
 
 	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
-	g_textline_posx = (bak2);
-	g_textline_maxlen = (bak1);
+	g_textline_posx = bak2;
+	g_textline_maxlen = bak1;
 	g_gui_buffer_unkn = (unsigned char*)g_buffer9_ptr;
 
 	do {
@@ -504,22 +532,16 @@ signed short game_options(void)
 		handle_input();
 		g_action_table_secondary = NULL;
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
 			/* use the radio menu */
 			answer = GUI_radio(get_ttx(590), 9,
-						get_ttx(228),
-						get_ttx(229),
-						get_ttx(293),
-						get_ttx(608),
-						get_ttx(830),
-						get_ttx(828),
-						get_ttx(831),
-						get_ttx(588),
-						get_ttx(589)) - 1;
+						get_ttx(228), get_ttx(229), get_ttx(293),
+						get_ttx(608), get_ttx(830), get_ttx(828),
+						get_ttx(831), get_ttx(588), get_ttx(589)) - 1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -527,6 +549,7 @@ signed short game_options(void)
 
 			do {
 				game_state = load_game_state();
+
 			} while (game_state == -1);
 
 			if (game_state != 0) {
@@ -555,6 +578,7 @@ signed short game_options(void)
 
 			diary_show();
 			done = 1;
+
 		} else if (g_action == ACTION_ID_ICON_6) {
 
 			sprintf(g_dtp2, get_ttx(827), g_delay_factor);
@@ -574,10 +598,11 @@ signed short game_options(void)
 			if (GUI_bool(get_ttx(299))) {
 
 				done = -1;
-				g_game_state = (GAME_STATE_QUIT);
+				g_game_state = GAME_STATE_QUIT;
 			}
 
 		} else if (g_action == ACTION_ID_ICON_9) {
+
 			done = 1;
 		}
 
@@ -589,7 +614,7 @@ signed short game_options(void)
 	g_request_refresh = 1;
 	g_special_screen = 0;
 
-	if (gs_current_town != TOWNS_NONE) {
+	if (gs_town_id != TOWN_ID_NONE) {
 		g_fading_state = 3;
 	}
 
@@ -598,14 +623,14 @@ signed short game_options(void)
 	return done == -1 ? 1 : 0;
 }
 
-void draw_icon(signed short id, signed short x, signed short y)
+void draw_icon(const signed int icon_id, const signed int x, const signed int y)
 {
-	signed short handle;
-	Bit8u* dst_bak;
+	signed int handle;
+	uint8_t* dst_bak;
 
 	handle = load_archive_file(ARCHIVE_FILE_ICONS);
 
-	seek_archive_file(handle, id * 576L, 0);
+	seek_archive_file(handle, icon_id * 576L, 0);
 
 	read_archive_file(handle, g_icon, 576);
 
@@ -632,11 +657,11 @@ void draw_icon(signed short id, signed short x, signed short y)
  * These were introduced in V3.00 (de and en) to find a better way into the story.
  */
 /* static */
-signed short show_storytext(void)
+signed int show_storytext(void)
 {
 	char *ptr;
-	signed short person;
-	signed short icon;
+	signed int person;
+	signed int icon;
 
 	load_tx(ARCHIVE_FILE_STORY_LTX);
 
@@ -680,10 +705,10 @@ signed short show_storytext(void)
 
 void do_location(void)
 {
-	signed short bak1;
-	signed short bak2;
-	signed short tw_bak;
-	signed short tm_bak;
+	signed int bak1;
+	signed int bak2;
+	signed int tw_bak;
+	signed int tm_bak;
 	void (*func)(void);
 
 	tm_bak = gs_show_travel_map;
@@ -696,9 +721,9 @@ void do_location(void)
 	gs_show_travel_map = 0;
 	g_textbox_width = 3;
 
-	func = g_location_handlers[gs_current_loctype];
+	func = g_location_handlers[gs_town_loc_type];
 
-	g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
+	g_current_cursor = &g_default_mouse_cursor;
 
 	if (func) {
 		func();
@@ -720,46 +745,46 @@ void do_location(void)
  */
 void leave_location(void)
 {
-	set_var_to_zero();
+	disable_ani();
 
 	/* reset location */
-	gs_current_loctype = gs_current_loctype_bak;
+	gs_town_loc_type = gs_town_loc_type_bak;
 
 	/* set target  coordinates*/
-	gs_x_target = (gs_x_target_bak);
-	gs_y_target = (gs_y_target_bak);
+	gs_x_target = gs_x_target_bak;
+	gs_y_target = gs_y_target_bak;
 
 	/* rotate party by 180 degrees */
-	gs_direction = ((gs_direction + 2) % 4);
+	gs_direction = (gs_direction + 2) % 4;
 
-	set_to_ff();
+	clear_menu_icons();
 
 	g_request_refresh = g_special_screen = 1;
 }
 
 void leave_dungeon(void)
 {
-	signed short i;
-	Bit8u *ptr;
+	signed int i;
+	uint8_t *ptr;
 
 	DNG_lights();
-	ptr = (Bit8u*)g_text_output_buf;
+	ptr = (uint8_t*)g_text_output_buf;
 
 	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
 
-		pal_fade(ptr, g_renderbuf_ptr);
-		pal_fade(ptr + 0x60, g_renderbuf_ptr + 0x60);
+		pal_fade((int8_t*)ptr, (int8_t*)g_renderbuf_ptr);
+		pal_fade((int8_t*)ptr + 0x60, (int8_t*)g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(ptr, 0x80, 0x40);
 	}
 
-	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
-	gs_current_town = gs_current_town_bak;
-	gs_dungeon_index_bak = gs_dungeon_index;
-	gs_dungeon_index = gs_dungeon_level = gs_dungeon_light = 0;
-	g_city_area_loaded = -1;
+	gs_town_loc_type = gs_town_loc_type_bak = LOCTYPE_NONE;
+	gs_town_id = gs_town_id_bak;
+	gs_dungeon_id_bak = gs_dungeon_id;
+	gs_dungeon_id = gs_dungeon_level = gs_dungeon_light = 0;
+	g_town_loaded_town_id = -1;
 	g_fading_state = g_request_refresh = 1;
 
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
@@ -770,10 +795,10 @@ void leave_dungeon(void)
 	g_pic_copy.y2 = 136;
 	g_pic_copy.src = g_renderbuf_ptr;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	do_pic_copy(1);
-	refresh_screen_size();
+	call_mouse();
 	wait_for_vsync();
 	set_palette(g_renderbuf_ptr, 0 , 0x20);
 
@@ -786,7 +811,7 @@ void leave_dungeon(void)
  */
 void tumult(void)
 {
-	signed short tw_bak;
+	signed int tw_bak;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -799,10 +824,8 @@ void tumult(void)
 
 	/* the guards or a mob */
 	sprintf(g_dtp2, get_ttx(765),
-		((gs_current_town == TOWNS_PREM ||
-			gs_current_town == TOWNS_PHEXCAER ||
-			gs_current_town == TOWNS_THORWAL ||
-			gs_current_town == TOWNS_OBERORKEN)
+		((gs_town_id == TOWN_ID_PREM || gs_town_id == TOWN_ID_PHEXCAER ||
+	  		gs_town_id == TOWN_ID_THORWAL || gs_town_id == TOWN_ID_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
 	GUI_output(g_dtp2);
@@ -815,10 +838,10 @@ void tumult(void)
  */
 void fade_into(void)
 {
-	Bit8u *ptr;
-	signed short i;
+	uint8_t *ptr;
+	signed int i;
 
-	ptr = g_renderbuf_ptr + 0xfa00;
+	ptr = g_renderbuf_ptr + 320 * 200;
 
 	memset(g_renderbuf_ptr, 0, 0xc0);
 
@@ -828,9 +851,9 @@ void fade_into(void)
 
 	for (i = 0; i < 0x20; i++) {
 
-		pal_fade(ptr, g_renderbuf_ptr);
+		pal_fade((int8_t*)ptr, (int8_t*)g_renderbuf_ptr);
 
-		pal_fade(ptr, g_renderbuf_ptr);
+		pal_fade((int8_t*)ptr, (int8_t*)g_renderbuf_ptr);
 
 		wait_for_vsync();
 
@@ -840,10 +863,6 @@ void fade_into(void)
 
 void copy_palette(void)
 {
-	memcpy(g_renderbuf_ptr + 0xfa00, (Bit8u*)g_ani_palette, 0x60);
+	memcpy(g_renderbuf_ptr + 320 * 200, (uint8_t*)g_ani_palette, 0x60);
 	g_fading_state = 2;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

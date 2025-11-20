@@ -16,7 +16,11 @@
 #include <DOS.H>
 #include <IO.H>
 #else
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -31,10 +35,31 @@
 #include "seg032.h"
 #include "seg096.h"
 
+signed int g_delay_factor = 4; // ds:0x4b66
+extern char g_str_temp_xx[8];
+static char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; uint8_t*
+static const signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
+static signed char g_fig_star_counter = 0; // ds:0x4b78
+signed int g_fig_star_timer = 0; // ds:0x4b79
+static signed char g_fig_star_last_count = -1; // ds:0x4b7b
+static const signed int g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
+signed char g_fig_star_printed = 0; // ds:0x4b94
+char g_str_temp_xx[8] = "TEMP\\XX"; // ds:0x4b95
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
+static unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
+static signed int g_fig_figlist_readd[8];	// ds:0xe298
+static signed int g_fig_ani_state[8];		// ds:0xe2a8
+struct_msg g_fig_actor_grammar;			// ds:0xe2ba
+struct_msg g_fig_target_grammar;		// ds:0xe2be
+static signed int g_figobj_unkn_y1;		// ds:0xe2c0
+static signed int g_figobj_unkn_y1_bak;		// ds:0xe2c2
+static signed int g_figobj_unkn_x1;		// ds:0xe2c4
+static signed int g_figobj_unkn_x1_bak;		// ds:0xe2c6
+static signed int g_figobj_unkn_y2;		// ds:0xe2c8
+static signed int g_figobj_unkn_y2_bak;		// ds:0xe2ca
+static signed int g_figobj_unkn_x2;		// ds:0xe2cc
+static signed int g_figobj_unkn_x2_bak;		// ds:0xe2ce
+signed int g_delay_timer;			// ds:0xe2d0
 
 /* static prototypes */
 static void set_delay_timer(void);
@@ -42,17 +67,17 @@ static void fight_delay(void);
 
 
 /**
- * \param     fighter pointer to a FIGHTER object
+ * \param     fighter pointer to a fighter object
  * \param[in] x       x coordinate on the screen
  * \param[in] y       y coordinate on the screen
  */
-static signed short FIG_obj_needs_refresh(struct struct_fighter *fighter, const signed short x, const signed short y)
+static signed int FIG_obj_needs_refresh(struct struct_fighter *fighter, const signed int x, const signed int y)
 {
-	struct struct_fighter *list_i;
-	signed short ox;
-	signed short oy;
-
 	if (fighter->visible) {
+
+		struct struct_fighter *list_i;
+		signed int ox;
+		signed int oy;
 
 		/* animated objects always need a refresh */
 		if ((fighter->sheet != -1) || (fighter->visible == 3))
@@ -98,12 +123,13 @@ damn_label:
  * \param   color       1=red/2=green/3=blue/4=yellow/11=darkbrown/12=lightbrown/13=pink
  *
  */
-void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
+static void FIG_set_star_color(uint8_t *ptr, signed int count, signed char color)
 {
-	Bit8u *p;
+	uint8_t *p;
 
 	color += 0x80;
 
+	/* REMARK: memset(ptr, color + 0x80, count); */
 	for (p = ptr; count--; p++) {
 		if (*p) *p = color;
 	}
@@ -116,10 +142,10 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
  * \param   pos         position
  * \return              "einem Magier" if the enemy is a "Magier".
  */
-static char* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
+static char* FIG_name_3rd_case(const signed int type, volatile const signed int pos)
 {
 	if (type == 2) {
-		return (char*)get_hero(pos) + HERO_NAME2;
+		return get_hero(pos)->alias;
 	} else {
 		return (char*)GUI_names_grammar(3, pos, 1);
 	}
@@ -132,13 +158,13 @@ static char* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
  * \param   pos         position
  * \return              "einen Magier" if the enemy is a "Magier".
  */
-static char* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
+static char* FIG_name_4th_case(const signed int type, volatile const signed int pos)
 {
-
-	if (type == 2)
-		return (char*)get_hero(pos) + HERO_NAME2;
-	else
+	if (type == 2) {
+		return get_hero(pos)->alias;
+	} else {
 		return (char*)GUI_names_grammar(2, pos, 1);
+	}
 }
 
 /**
@@ -148,30 +174,22 @@ static char* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
  * \param   pos         position
  * \return              "ein Magier" if the enemy is a "Magier".
  */
-static char *FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
+static char *FIG_name_1st_case(const signed int type, volatile const signed int pos)
 {
-
-	if (type == 2)
-		return (char*)get_hero(pos) + HERO_NAME2;
-	else
+	if (type == 2) {
+		return get_hero(pos)->alias;
+	} else {
 		return (char*)GUI_names_grammar(0, pos, 1);
+	}
 }
 
-#define idx (g_fig_msg_dtps[ds_readws(FIG_MSG_DATA + 4 * g_fig_star_counter) - 1])
+#define idx (g_fig_msg_dtps[g_fig_msg_data[g_fig_star_counter].f_action - 1])
 
-unsigned short fight_printer(void)
+static signed int fight_printer(void)
 {
-	signed short fg_bak;
-	signed short bg_bak;
-	Bit8u* gfx_pos_bak;
-	Bit16u x;
-	char str[6];
-	Bit8u* gfx_dst_bak;
-
-	Bit16s f_action;
-
-	if (ds_readw(FIG_MSG_DATA) == 0)
+	if (!g_fig_msg_data[0].f_action) {
 		g_fig_continue_print = 0;
+	}
 
 	if (!g_fig_star_timer && g_fig_star_printed) {
 
@@ -181,99 +199,107 @@ unsigned short fight_printer(void)
 
 		g_fig_star_timer = g_autofight ? 10 : g_delay_factor * 6;
 
-		if (!ds_readw(FIG_MSG_DATA + g_fig_star_counter * 4))
+		if (!g_fig_msg_data[g_fig_star_counter].f_action) {
 			g_fig_continue_print = 0;
+		}
 	}
 
 	if (g_fig_continue_print) {
 
 		if (g_fig_star_counter != g_fig_star_last_count) {
 
+			signed int fg_bak;
+			signed int bg_bak;
+			uint8_t* gfx_pos_bak;
+			uint16_t x;
+			char str[6];
+			uint8_t* gfx_dst_bak;
+			int16_t f_action;
+
 			g_fig_star_printed = 1;
 
-			f_action = ds_readw(FIG_MSG_DATA + g_fig_star_counter * 4);
+			f_action = g_fig_msg_data[g_fig_star_counter].f_action;
 
-		if (f_action) {
+			if (f_action) {
 
-			gfx_pos_bak = g_vga_backbuffer;
+				gfx_pos_bak = g_vga_backbuffer;
 
-			g_vga_backbuffer = g_renderbuf_ptr;
+				g_vga_backbuffer = g_renderbuf_ptr;
 
-			get_textcolor(&fg_bak, &bg_bak);
+				get_textcolor(&fg_bak, &bg_bak);
 
-			FIG_set_star_color(g_fig_star_gfx, 3724, g_fig_star_colors[f_action - 1]);
+				FIG_set_star_color(g_fig_star_gfx, 3724, g_fig_star_colors[f_action - 1]);
 
-			g_pic_copy.x1 = 0;
-			g_pic_copy.y1 = 150;
-			g_pic_copy.x2 = 75;
-			g_pic_copy.y2 = 198;
-			g_pic_copy.src = g_fig_star_gfx;
-			g_pic_copy.dst = g_renderbuf_ptr;
-			gfx_dst_bak = g_pic_copy.dst;
-			do_pic_copy(2);
+				g_pic_copy.x1 = 0;
+				g_pic_copy.y1 = 150;
+				g_pic_copy.x2 = 75;
+				g_pic_copy.y2 = 198;
+				g_pic_copy.src = g_fig_star_gfx;
+				g_pic_copy.dst = g_renderbuf_ptr;
+				gfx_dst_bak = g_pic_copy.dst;
+				do_pic_copy(2);
 
-			g_pic_copy.dst = gfx_dst_bak;
+				g_pic_copy.dst = gfx_dst_bak;
 
-			/* print number into the star */
-			if (ds_readw((FIG_MSG_DATA + 2) + g_fig_star_counter * 4)) {
+				/* print number into the star */
+				if (g_fig_msg_data[g_fig_star_counter].damage) {
 
-				set_textcolor(0xff, g_fig_star_colors[f_action - 1] + 0x80);
+					set_textcolor(0xff, g_fig_star_colors[f_action - 1] + 0x80);
 
-				my_itoa(ds_readws((FIG_MSG_DATA + 2) + g_fig_star_counter * 4), str, 10);
+					my_itoa(g_fig_msg_data[g_fig_star_counter].damage, str, 10);
 
-				x = GUI_get_first_pos_centered(str, 30, 20, 0);
-				GUI_print_string(str, x, 170);
-			}
-
-			/* Generate textmessage */
-			if (g_fig_msg_dtps[f_action - 1]) {
-
-				g_pic_copy.x1 = g_pic_copy.v1 = 0;
-				g_pic_copy.y1 = g_pic_copy.v2 = 194;
-				g_pic_copy.x2 = 318;
-				g_pic_copy.y2 = 199;
-				g_pic_copy.src = g_buffer8_ptr;
-				do_pic_copy(3);
-
-				set_textcolor(0xff, 0);
-
-				if (f_action == 1 || f_action == 3) {
-//					case 1:	/* heroes attack fails */
-//					case 3: /* enemy attack fails */
-
-					sprintf(g_text_output_buf, get_tx(idx),
-						FIG_name_3rd_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id));
-
-				} else if (f_action == 2 || f_action == 4 || f_action == 7) {
-//					case 2: /* hero parade fails */
-//					case 4: /* enemy parade fails */
-//					case 7:	/* hero get unconscious */
-
-					sprintf(g_text_output_buf, get_tx(idx),
-						FIG_name_3rd_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
-
-
-
-				} else if (f_action == 8 || f_action == 11) {
-//					case 8:		/* enemy hits hero */
-//					case 11:	/* hero hits enemy */
-
-					sprintf(g_text_output_buf, get_tx(idx),
-						FIG_name_1st_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id),
-						FIG_name_4th_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id));
-				} else {
-					/* case 5: hero successful parade */
-					/* case 6: weapon broke */
-					strcpy(g_text_output_buf, get_tx(idx));
+					x = GUI_get_first_pos_centered(str, 30, 20, 0);
+					GUI_print_string(str, x, 170);
 				}
 
-				GUI_print_string(g_text_output_buf, 1, 194);
+				/* Generate textmessage */
+				if (g_fig_msg_dtps[f_action - 1]) {
+
+					g_pic_copy.x1 = g_pic_copy.v1 = 0;
+					g_pic_copy.y1 = g_pic_copy.v2 = 194;
+					g_pic_copy.x2 = 318;
+					g_pic_copy.y2 = 199;
+					g_pic_copy.src = g_buffer8_ptr;
+					do_pic_copy(3);
+
+					set_textcolor(0xff, 0);
+
+					if (f_action == 1 || f_action == 3) {
+//						case 1:	/* heroes attack fails */
+//						case 3: /* enemy attack fails */
+
+						sprintf(g_text_output_buf, get_tx(idx),
+							FIG_name_3rd_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id));
+
+					} else if (f_action == 2 || f_action == 4 || f_action == 7) {
+//						case 2: /* hero parade fails */
+//						case 4: /* enemy parade fails */
+//						case 7:	/* hero get unconscious */
+
+						sprintf(g_text_output_buf, get_tx(idx),
+							FIG_name_3rd_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
+
+
+
+					} else if (f_action == 8 || f_action == 11) {
+//						case 8:		/* enemy hits hero */
+//						case 11:	/* hero hits enemy */
+
+						sprintf(g_text_output_buf, get_tx(idx),
+							FIG_name_1st_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id),
+							FIG_name_4th_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
+					} else {
+						/* case 5: hero successful parade */
+						/* case 6: weapon broke */
+						strcpy(g_text_output_buf, get_tx(idx));
+					}
+
+					GUI_print_string(g_text_output_buf, 1, 194);
+				}
+
+				g_vga_backbuffer = gfx_pos_bak;
+				set_textcolor(fg_bak, bg_bak);
 			}
-
-			g_vga_backbuffer = gfx_pos_bak;
-			set_textcolor(fg_bak, bg_bak);
-		}
-
 
 			g_fig_star_last_count = g_fig_star_counter;
 
@@ -294,59 +320,59 @@ unsigned short fight_printer(void)
 }
 #undef idx
 
-void draw_fight_screen(Bit16u val)
+void draw_fight_screen(const signed int val)
 {
-	signed short i;
-	signed short obj_id;
-	signed short width;
-	signed short flag;
-	signed short current_x1;
-	signed short current_y1;
-	signed short obj_x;
-	signed short obj_y;
+	signed int i;
+	signed int object_id_bak;
+	signed int width;
+	signed int flag;
+	signed int current_x1;
+	signed int current_y1;
+	signed int obj_x;
+	signed int obj_y;
 
-	Bit8u* p_figure_gfx;
-	Bit8u* p_weapon_gfx;
-	struct struct_fighter *list_ii;
+	uint8_t* p_figure_gfx;
+	uint8_t* p_weapon_gfx;
+	struct struct_fighter *p_fighter;
 
 	struct struct_rect rect_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	struct enemy_sheet *p_enemy_sheet;
 
-	signed short viewdir_before;
-	signed short viewdir_after;
-	signed short target_id;
-	signed char twofielded_move_tail_first;
+	signed int viewdir_before;
+	signed int viewdir_after;
+	signed int object_id;
+	signed char double_size_move_tail_first;
 	struct struct_fighter *p_fighter_tmp;
-	signed short viewdir_unconsc;
-	Bit8u *sheet;
-	Bit8u *p_weapon_anisheet;
-	signed short handle;
-	struct nvf_desc nvf;
-	signed short figlist_remove[8];
+	signed int viewdir_unconsc;
+	int8_t *sheet;
+	int8_t *p_weapon_anisheet;
+	signed int handle;
+	struct nvf_extract_desc nvf;
+	signed int figlist_remove[8];
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
-	list_ii = (struct struct_fighter*)g_fig_list_head;
+	p_fighter = (struct struct_fighter*)g_fig_list_head;
 
 	do {
 		/* Check for each list entry if a sprite is needed */
 
-		if (list_ii->reload == -1) {
+		if (p_fighter->reload == -1) {
 
-			nvf.src = (Bit8u*)load_fight_figs(list_ii->figure);
-			nvf.dst = list_ii->gfxbuf;
-			nvf.no = list_ii->nvf_no;
-			nvf.type = 0;
-			nvf.width = (Bit8u*)&width;
-			nvf.height = (Bit8u*)&obj_id;
+			nvf.src = (uint8_t*)load_fight_figs(p_fighter->figure);
+			nvf.dst = p_fighter->gfxbuf;
+			nvf.image_num = p_fighter->nvf_no;
+			nvf.compression_type = 0;
+			nvf.width = &width;
+			nvf.height = &object_id_bak;
 
-			process_nvf(&nvf);
+			process_nvf_extraction(&nvf);
 
-			list_ii->reload = 0;
+			p_fighter->reload = 0;
 		}
 
-	} while (list_ii = list_ii->next);
+	} while ((p_fighter = p_fighter->next));
 
 	/* set elements array[0] of array[9] */
 	g_fig_gfxbuffers[0] = g_fightobj_buf_seek_ptr;
@@ -358,43 +384,43 @@ void draw_fight_screen(Bit16u val)
 		g_fig_ani_state[i] = -1;
 	}
 
-	list_ii = (struct struct_fighter*)g_fig_list_head;
+	p_fighter = (struct struct_fighter*)g_fig_list_head;
 	flag = 0;
 
 	do {
+
 #if !defined(__BORLANDC__)
 		D1_LOG(" loop Figure = %3d Sheet_ID : %d 0xf : %d 0x12: %d object: %d\n",
-				list_ii->figure,
-				list_ii->sheet, list_ii->wsheet,
-				list_ii->visible, list_ii->obj_id);
+				p_fighter->figure, p_fighter->sheet, p_fighter->wsheet,
+				p_fighter->visible, p_fighter->object_id);
 #endif
 
-		if (list_ii->sheet != -1) {
+		if (p_fighter->sheet != -1) {
 			/* Has a sheet id */
 
-			if (list_ii->visible) {
-				list_ii->visible = (3);
+			if (p_fighter->visible) {
+				p_fighter->visible = 3;
 			}
 
 			flag = 1;
 
-			g_fig_ani_state[list_ii->sheet] = 0;
+			g_fig_ani_state[p_fighter->sheet] = 0;
 
-			memcpy((Bit8u*)g_fig_gfxbuffers[list_ii->sheet],
-				list_ii->gfxbuf,
-				list_ii->width * list_ii->height);
+			memcpy((uint8_t*)g_fig_gfxbuffers[p_fighter->sheet],
+				p_fighter->gfxbuf,
+				p_fighter->width * p_fighter->height);
 		}
 
-		if (list_ii->wsheet != -1) {
-			memset((Bit8u*)g_fig_gfxbuffers[list_ii->wsheet], 0, 0x508);
+		if (p_fighter->wsheet != -1) {
+			memset((uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet], 0, 0x508);
 		}
 
 
-	} while (list_ii = list_ii->next);
+	} while ((p_fighter = p_fighter->next));
 
 	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
-	handle = _creat((char*)ds_readd(STR_TEMP_XX_PTR), 0);
+	handle = _creat(g_str_temp_xx_ptr, 0);
 	write(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
@@ -415,9 +441,9 @@ void draw_fight_screen(Bit16u val)
 
 		g_pic_copy.dst = g_vga_backbuffer = g_renderbuf_ptr;
 
-		for (list_ii = (struct struct_fighter*)g_fig_list_head; list_ii; list_ii = list_ii->next) {
-			if (list_ii->visible == 2)
-				list_ii->visible = 1;
+		for (p_fighter = (struct struct_fighter*)g_fig_list_head; p_fighter; p_fighter = p_fighter->next) {
+			if (p_fighter->visible == 2)
+				p_fighter->visible = 1;
 		}
 
 		for (i = 0; i < 8; i++) {
@@ -440,410 +466,409 @@ void draw_fight_screen(Bit16u val)
 		g_pic_copy.src = g_buffer8_ptr;
 		do_pic_copy(3);
 
-		list_ii = (struct struct_fighter*)g_fig_list_head;
+		p_fighter = (struct struct_fighter*)g_fig_list_head;
 
 		do {
 			p_weapon_gfx = 0;	/* NULL */
 
-			obj_x = 10 - (list_ii->width / 2) +
-				(10 * (list_ii->cbx + list_ii->cby));
+			obj_x = 10 - (p_fighter->width / 2) +
+				(10 * (p_fighter->cbx + p_fighter->cby));
 
-			obj_y = 118 - list_ii->height + (list_ii->cbx - list_ii->cby) * 5;
+			obj_y = 118 - p_fighter->height + (p_fighter->cbx - p_fighter->cby) * 5;
 
-			obj_x += list_ii->offsetx;
-			obj_y += list_ii->offsety;
+			obj_x += p_fighter->offsetx;
+			obj_y += p_fighter->offsety;
 
-			p_figure_gfx = list_ii->gfxbuf;
+			p_figure_gfx = p_fighter->gfxbuf;
 
-			if ((list_ii->sheet != -1) &&
-				(g_fig_ani_state[list_ii->sheet] != -1)) {
+			if ((p_fighter->sheet != -1) && (g_fig_ani_state[p_fighter->sheet] != -1)) {
 
-				sheet = p_datseg + FIG_ANISHEETS + list_ii->sheet * 0xf3;
+				sheet = g_fig_anisheets[p_fighter->sheet];
 
-				if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -1) {
+				if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -1) {
 
-					p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
-					g_fig_ani_state[list_ii->sheet] = -1;
-					list_ii->sheet = (list_ii->wsheet = (-1));
+					p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
+					g_fig_ani_state[p_fighter->sheet] = -1;
+					p_fighter->sheet = p_fighter->wsheet = -1;
 
 				} else {
 
-					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -7)
+					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -7)
 					{
-						list_ii->z = (host_readbs(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3));
+						p_fighter->z = (*(sheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3));
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-						g_fig_figlist_readd[list_ii->sheet] = list_ii->id;
+						g_fig_figlist_readd[p_fighter->sheet] = p_fighter->id;
 					}
 
-					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
+					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
 					{
-						play_voc(0xc8 + host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
-						g_fig_ani_state[list_ii->sheet]++;
+						play_voc(0xc8 + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
+						g_fig_ani_state[p_fighter->sheet]++;
 					}
 
 
-					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -5) {
+					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -5) {
 
-						if (list_ii->wsheet != -1) {
+						if (p_fighter->wsheet != -1) {
 
-							p_weapon_anisheet = p_datseg + FIG_ANISHEETS + list_ii->wsheet * 0xf3;
+							p_weapon_anisheet = &g_fig_anisheets[p_fighter->wsheet][0];
 
-							if (host_readbs(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
+							if (*(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
 							{
-								play_voc(0xc8 + host_readbs(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+								play_voc(0xc8 + *(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
 							}
 						}
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-					} else if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -4) {
+					} else if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -4) {
 
-						host_writeb(sheet, host_readb(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+						*sheet = *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]);
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-					} else if ((host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) ||
-							(host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -6)) {
+					} else if ((*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -3) ||
+							(*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -6)) {
 
 						/* get nvf no */
-						viewdir_before = list_ii->nvf_no;
+						viewdir_before = p_fighter->nvf_no;
 
-						if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -3) {
+						if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -3) {
 
-							list_ii->nvf_no += host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
+							p_fighter->nvf_no += *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						} else {
 
-							list_ii->figure = (ds_readbs(GFXTAB_FIGURES_MAIN + list_ii->sprite_no * 5 + host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet])));
-							list_ii->nvf_no = host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
+							p_fighter->figure = g_gfxtab_figures_main[p_fighter->sprite_id][*(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet])];
+							p_fighter->nvf_no = *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						}
 
-						if (list_ii->figure >= 88) {
+						if (p_fighter->figure >= 88) {
 							/* fighter uses figure from MONSTER file */
 
-							if (list_ii->nvf_no > 3) {
+							if (p_fighter->nvf_no > 3) {
 
 								/* not standing still */
-								list_ii->offsetx = (ds_readbs((GFXTAB_OFFSETS_MAIN + 8) + list_ii->sprite_no * 10));
-								list_ii->offsety = (ds_readbs((GFXTAB_OFFSETS_MAIN + 9) + list_ii->sprite_no * 10));
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][4].y;
 
-								if (list_ii->twofielded != -1) {
-									list_ii->x1 = ds_readb((GFXTAB_TWOFIELDED_X1 + 1));
-									list_ii->x2 = ds_readb((GFXTAB_TWOFIELDED_X2 + 1));
+								if (p_fighter->double_size != -1) {
+									p_fighter->x1 = g_gfxtab_double_size_x1[1];
+									p_fighter->x2 = g_gfxtab_double_size_x2[1];
 								}
 
 							} else {
-								list_ii->offsetx = ds_readbs(GFXTAB_OFFSETS_MAIN + list_ii->sprite_no * 10 + list_ii->nvf_no * 2);
-								list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + list_ii->sprite_no * 10 + list_ii->nvf_no * 2);
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][p_fighter->nvf_no].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][p_fighter->nvf_no].y;
 
-								if (list_ii->twofielded != -1) {
-									list_ii->x1 = ds_readb(GFXTAB_TWOFIELDED_X1 + list_ii->nvf_no);
-									list_ii->x2 = ds_readb(GFXTAB_TWOFIELDED_X2 + list_ii->nvf_no);
+								if (p_fighter->double_size != -1) {
+									p_fighter->x1 = g_gfxtab_double_size_x1[p_fighter->nvf_no];
+									p_fighter->x2 = g_gfxtab_double_size_x2[p_fighter->nvf_no];
 								}
 							}
 
 						} else {
-							if (list_ii->nvf_no == g_nvftab_figures_dead[list_ii->sprite_no]) {
+							if (p_fighter->nvf_no == g_nvftab_figures_dead[p_fighter->sprite_id]) {
 
-								list_ii->offsetx = ds_readbs((GFXTAB_OFFSETS_MAIN + 8) + list_ii->sprite_no * 10);
-								list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 9) + list_ii->sprite_no * 10);
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][4].y;
 
 							} else {
-								viewdir_unconsc = list_ii->nvf_no - g_nvftab_figures_unconscious[list_ii->sprite_no];
+								viewdir_unconsc = p_fighter->nvf_no - g_nvftab_figures_unconscious[p_fighter->sprite_id];
 
 								if (viewdir_unconsc >= 0) {
-									list_ii->offsetx = ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + list_ii->sprite_no * 8 + viewdir_unconsc * 2);
-									list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + list_ii->sprite_no * 8 + viewdir_unconsc * 2);
+
+									p_fighter->offsetx = g_gfxtab_offsets_unconscious[p_fighter->sprite_id][viewdir_unconsc].x;
+									p_fighter->offsety = g_gfxtab_offsets_unconscious[p_fighter->sprite_id][viewdir_unconsc].y;
 								}
 							}
 						}
 
-						obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
+						obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
 
-						obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
+						obj_y = 118 - p_fighter->height + ((p_fighter->cbx - p_fighter->cby) * 5);
 
-						obj_x += list_ii->offsetx;
-						obj_y += list_ii->offsety;
+						obj_x += p_fighter->offsetx;
+						obj_y += p_fighter->offsety;
 
-						if ((list_ii->sheet < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
-							nvf.src = (Bit8u*)load_fight_figs(list_ii->figure);
+						if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
+							nvf.src = (uint8_t*)load_fight_figs(p_fighter->figure);
 						} else {
 							nvf.src = g_spellobj_nvf_buf;
 						}
 
-						nvf.dst = list_ii->gfxbuf;
-						nvf.no = list_ii->nvf_no;
-						nvf.type = 0;
-						nvf.width = (Bit8u*)&width;
-						nvf.height = (Bit8u*)&obj_id;
+						nvf.dst = p_fighter->gfxbuf;
+						nvf.image_num = p_fighter->nvf_no;
+						nvf.compression_type = 0;
+						nvf.width = &width;
+						nvf.height = &object_id_bak;
 
-						process_nvf(&nvf);
+						process_nvf_extraction(&nvf);
 
-						g_fig_ani_state[list_ii->sheet]++;
+						g_fig_ani_state[p_fighter->sheet]++;
 
-						p_figure_gfx = list_ii->gfxbuf;
+						p_figure_gfx = p_fighter->gfxbuf;
 
-						if (list_ii->twofielded > 20) {
-							/* list_i is the fighter entry of the tail of a twofielded enemy */
+						if (p_fighter->double_size > 20) {
+							/* p_fighter point to the fighter entry of the tail of a double-size enemy */
 
-							viewdir_after = (list_ii->nvf_no > 3) ? 1 : list_ii->nvf_no;
+							viewdir_after = (p_fighter->nvf_no > 3) ? 1 : p_fighter->nvf_no;
 
-							list_ii->offsetx += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OX + viewdir_after);
-							list_ii->offsety += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OY + viewdir_after);
-							list_ii->x1 = ds_readbs(GFXTAB_TWOFIELDED_EXTRA_X1 + viewdir_after);
-							list_ii->x2 = ds_readbs(GFXTAB_TWOFIELDED_EXTRA_X2 + viewdir_after);
+							p_fighter->offsetx += g_gfxtab_double_size_extra_ox[viewdir_after];
+							p_fighter->offsety += g_gfxtab_double_size_extra_oy[viewdir_after];
+							p_fighter->x1 = g_gfxtab_double_size_extra_x1[viewdir_after];
+							p_fighter->x2 = g_gfxtab_double_size_extra_x2[viewdir_after];
 
-							obj_id = get_cb_val(list_ii->cbx, list_ii->cby); /* enemy_id + 30 of the enemy the tail belongs to */
+							object_id_bak = get_cb_val(p_fighter->cbx, p_fighter->cby); /* enemy_id + 30 of the enemy the tail belongs to */
 
-							FIG_set_cb_field(list_ii->cby, list_ii->cbx, list_ii->obj_id);
+							FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, p_fighter->object_id);
 
 							/* update CBX depending on the view direction */
 							if ( ((viewdir_after == 2) && ((viewdir_before == 1) || (viewdir_before == 3))) ||
 								(((viewdir_after == 3) || (viewdir_after == 1)) && (viewdir_before == 0)))
 							{
-								list_ii->cbx++;
+								p_fighter->cbx++;
 
 							} else if ( ((viewdir_after == 0) && ((viewdir_before == 1) || (viewdir_before == 3))) ||
 									(((viewdir_after == 3) || (viewdir_after == 1)) && (viewdir_before == 2)))
 							{
-								list_ii->cbx--;
+								p_fighter->cbx--;
 							}
 
 							/* update CBY depending on the view direction */
 							if ( ((viewdir_after == 3) && ((viewdir_before == 0) || (viewdir_before == 2))) ||
 								(((viewdir_after == 0) || (viewdir_after == 2)) && (viewdir_before == 1)))
 							{
-								list_ii->cby--;
+								p_fighter->cby--;
 
 							} else	if ( ((viewdir_after == 1) && ((viewdir_before == 0) || (viewdir_before == 2))) ||
 									(((viewdir_after == 0) || (viewdir_after == 2)) && (viewdir_before == 3)))
 							{
-								list_ii->cby++;
+								p_fighter->cby++;
 
 							} else if ((viewdir_after == 1) && (viewdir_before == 3))
 							{
-								list_ii->cby = (list_ii->cby + 2);
+								p_fighter->cby = (p_fighter->cby + 2);
 							}
 
-							target_id = get_cb_val(list_ii->cbx, list_ii->cby); /* object id of the square the tail moves to */
-							list_ii->obj_id = (signed char)target_id; /* move it to FIGHTER_OBJ_ID */
-							FIG_set_cb_field(list_ii->cby, list_ii->cbx, obj_id); /* set object id of the target square to enemy_id + 30 */
+							object_id = get_cb_val(p_fighter->cbx, p_fighter->cby); /* object id of the square the tail moves to */
+							p_fighter->object_id = object_id; /* move it to fighter.object_id */
+							FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, object_id_bak); /* set object id of the target square to enemy_id + 30 */
 
-							obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
+							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
 
-							obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
+							obj_y = 118 - p_fighter->height + ((p_fighter->cbx - p_fighter->cby) * 5);
 
-							obj_x += list_ii->offsetx;
+							obj_x += p_fighter->offsetx;
 
-							obj_y += list_ii->offsety;
+							obj_y += p_fighter->offsety;
 
 						}
 					} else {
 
 						/* move a hero/enemy */
-						if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -2) {
+						if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -2) {
 
-							if (list_ii->sheet < 6) {
+							if (p_fighter->sheet < 6) {
 
-								obj_id = get_cb_val(list_ii->cbx, list_ii->cby);
+								object_id_bak = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
-								/* copy FIGHTER_OBJ_ID back to the chessboard */
-								FIG_set_cb_field(list_ii->cby, list_ii->cbx, list_ii->obj_id);
+								/* copy fighter.object_id back to the chessboard */
+								FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, p_fighter->object_id);
 
-								list_ii->cbx = (list_ii->cbx + host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet]));
+								p_fighter->cbx = (p_fighter->cbx + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
 
-								list_ii->cby = (list_ii->cby + host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]));
+								p_fighter->cby = (p_fighter->cby + *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]));
 
-								twofielded_move_tail_first = 0;
+								double_size_move_tail_first = 0;
 
 								/* get the value from the cb where the actor wants to move to */
-								target_id = get_cb_val(list_ii->cbx, list_ii->cby);
+								object_id = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
-								if ((list_ii->twofielded > 20) && (obj_id - 20 == target_id)) {
-									/* for a two-fielded enemy, either the head part or the tail part is moved first.
+								if ((p_fighter->double_size > 20) && (object_id_bak - 20 == object_id)) {
+									/* for a double-size enemy, either the head part or the tail part is moved first.
 									 * This is the case that the tail part is moved first (the target square is the head part). */
 
 #ifndef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
 									/* the removal of the following line is not strictly necessary, but it is not needed as a replacement is added further below. */
-									list_ii->obj_id = 0;
+									p_fighter->object_id = 0;
 #endif
-									twofielded_move_tail_first = 1;
+									double_size_move_tail_first = 1;
 
 									/* create pointer to the head part of the enemy */
-									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[target_id - 10].mon_id);
+									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[object_id - 10].fighter_id);
 
 #ifdef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
-									/* The FIGHTER_OBJ_ID entry of the head part will be overwritten by the next line in the original code.
-									 * In this way, sometimes dead bodies are lost from the chessboard after a two-fielded enemy walks over it.
-									 * The right thing is to copy it to the FIGHTER_OBJ_ID of tail part. */
-									list_ii->obj_id = ((signed char)(p_fighter_tmp->obj_id));
+									/* The fighter.object_id entry of the head part will be overwritten by the next line in the original code.
+									 * In this way, sometimes dead bodies are lost from the chessboard after a double-size enemy walks over it.
+									 * The right thing is to copy it to the fighter.object_id of tail part. */
+									p_fighter->object_id = p_fighter_tmp->object_id;
 #endif
-									p_fighter_tmp->obj_id = (signed char)obj_id;
-									/* write cb_id of the tail part at FIGHTER_OBJ_ID of the head part.
+									p_fighter_tmp->object_id = object_id_bak;
+									/* write cb_id of the tail part at fighter.object_id of the head part.
 									 * when the head part moves lated, it will be written to the cb.
-									 * possible bug: the overwritten FIGHTER_OBJ_ID is lost! */
+									 * possible bug: the overwritten fighter.object_id is lost! */
 								} else {
-									list_ii->obj_id = ((signed char)target_id);
+									p_fighter->object_id = object_id;
 								}
 
 								/* check chessboard bounds */
-								if ( (list_ii->cbx >= 24) || (list_ii->cby >= 24)
-									|| (list_ii->cbx < 0) || (list_ii->cby < 0)
-									|| (list_ii->obj_id < 0))
+								if ( (p_fighter->cbx >= 24) || (p_fighter->cby >= 24)
+									|| (p_fighter->cbx < 0) || (p_fighter->cby < 0)
+									|| (p_fighter->object_id < 0))
 								{
 									/* hero/enemy escapes */
 
-										if (list_ii->is_enemy == 1) {
+										if (p_fighter->is_enemy == 1) {
 											/* enemy escapes */
-											p_enemy_sheet = FIG_get_enemy_sheet(list_ii->id);
+											p_enemy_sheet = FIG_get_enemy_sheet(p_fighter->id);
 											if (p_enemy_sheet) {
-												p_enemy_sheet->flags1.dead = 1;
+												p_enemy_sheet->flags.dead = 1;
 												p_enemy_sheet->bp = 0;
-												figlist_remove[list_ii->sheet] = p_enemy_sheet->fighter_id;
+												figlist_remove[p_fighter->sheet] = p_enemy_sheet->fighter_id;
 
-												if (list_ii->twofielded != -1) {
+												if (p_fighter->double_size != -1) {
 #ifdef M302de_ORIGINAL_BUGFIX
 													/* Original-Bug 4:
-													 * remove tail of the escaped two-fielded enemy from the chessboard
+													 * remove tail of the escaped double-size enemy from the chessboard
 													 * For more on this bug, see Original-Bug 3 at seg032.cpp */
-													p_fighter_tmp = FIG_get_fighter(g_fig_twofielded_table[list_ii->twofielded]);
-													FIG_set_cb_field(p_fighter_tmp->cby, p_fighter_tmp->cbx, p_fighter_tmp->obj_id);
+													p_fighter_tmp = FIG_get_fighter(g_fig_double_size_fighter_id_table[p_fighter->double_size]);
+													FIG_set_cb_object(p_fighter_tmp->cby, p_fighter_tmp->cbx, p_fighter_tmp->object_id);
 #endif
-													figlist_remove[2 + list_ii->sheet] = g_fig_twofielded_table[list_ii->twofielded];
+													figlist_remove[2 + p_fighter->sheet] = g_fig_double_size_fighter_id_table[p_fighter->double_size];
 												}
 											}
 										} else {
 											/* hero escapes */
-											hero = (Bit8u*)FIG_get_hero_ptr(list_ii->id);
+											/* REMARK: hero is always != NULL */
+											hero = FIG_get_hero_ptr(p_fighter->id);
 											if (hero) {
-												host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
-												or_ptr_bs(hero + HERO_FLAGS2, 1); /* set 'scared' flag */
+												hero->action_id = FIG_ACTION_FLEE;
+												hero->flags.scared = 1;
 
 												/* set the dungeon position the hero escapes to.
 												 * This depends on the direction the escape square on the battlefield has been entered.
 												 * Note: Apparently, this is done in any fight, including seafights and wilderness fights where it doesn't make sense.
 												 * The distinction is done only later. */
-												host_writew(hero + HERO_ESCAPE_POSITION,
-													g_fig_flee_position[(host_readbs(hero + HERO_VIEWDIR) == 3) ? NORTH : (host_readbs(hero + HERO_VIEWDIR) + 1)]);
-												figlist_remove[list_ii->sheet] = host_readbs(hero + HERO_FIGHTER_ID);
+												hero->escape_position =
+													g_fig_escape_position[hero->viewdir == 3 ? NORTH : (hero->viewdir + 1)];
+												figlist_remove[p_fighter->sheet] = hero->fighter_id;
 
 											}
 										}
 
-										list_ii->obj_id = 0;
-										host_writebs(sheet + 1 + 3 * (1 + g_fig_ani_state[list_ii->sheet]), -1);
+										p_fighter->object_id = 0;
+										*((int8_t*)(sheet + 1 + 3 * (1 + g_fig_ani_state[p_fighter->sheet]))) = -1;
 
-										if (list_ii->twofielded != -1) {
-											ds_writeb((FIG_ANISHEETS + 4 + 2*0xf3) +
-													(list_ii->sheet * 0xf3 +
-													3 * g_fig_ani_state[2 + list_ii->sheet]), -1);
+										if (p_fighter->double_size != -1) {
 
-											g_fig_ani_state[2 + list_ii->sheet] = -1;
+											g_fig_anisheets[p_fighter->sheet + 2][4 + 3 * g_fig_ani_state[2 + p_fighter->sheet]] = -1;
+
+											g_fig_ani_state[2 + p_fighter->sheet] = -1;
 										}
 
 								} else {
-									if (!twofielded_move_tail_first) {
-										FIG_set_cb_field(list_ii->cby, list_ii->cbx, obj_id);
+									if (!double_size_move_tail_first) {
+										FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, object_id_bak);
 									}
 								}
 							} else {
-								list_ii->cbx = (list_ii->cbx +
-									host_readbs(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 2));
+								p_fighter->cbx = (p_fighter->cbx +
+									*(sheet + g_fig_ani_state[p_fighter->sheet] * 3 + 2));
 
-								list_ii->cby = (list_ii->cby +
-									host_readbs(sheet + g_fig_ani_state[list_ii->sheet] * 3 + 3));
+								p_fighter->cby = (p_fighter->cby +
+									*(sheet + g_fig_ani_state[p_fighter->sheet] * 3 + 3));
 							}
 
-							g_fig_figlist_readd[list_ii->sheet] = list_ii->id;
+							g_fig_figlist_readd[p_fighter->sheet] = p_fighter->id;
 
-							g_fig_ani_state[list_ii->sheet]++;
+							g_fig_ani_state[p_fighter->sheet]++;
 						}
 
-						if (host_readbs(sheet + 1 + (g_fig_ani_state[list_ii->sheet] * 3)) == -1) {
+						if (*(sheet + 1 + (g_fig_ani_state[p_fighter->sheet] * 3)) == -1) {
 
-							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
-							g_fig_ani_state[list_ii->sheet] = -1;
-							list_ii->sheet = list_ii->wsheet = -1;
+							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
+							g_fig_ani_state[p_fighter->sheet] = -1;
+							p_fighter->sheet = p_fighter->wsheet = -1;
 
 						} else {
-							obj_x = 10 - (list_ii->width / 2) +
-								(10 * (list_ii->cbx + list_ii->cby));
+							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
 
-							obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
+							obj_y = 118 - p_fighter->height + ((p_fighter->cbx - p_fighter->cby) * 5);
 
-							obj_x += list_ii->offsetx;
+							obj_x += p_fighter->offsetx;
 
-							obj_y += list_ii->offsety;
+							obj_y += p_fighter->offsety;
 
-							obj_x += host_readbs(sheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
+							obj_x += *(sheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3);
 
-							obj_y -= host_readbs(sheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
+							obj_y -= *(sheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
 
-							i = ds_readbs(GFXTAB_FIGURES_MAIN + (list_ii->sprite_no * 5) + host_readbs(sheet));
+							i = g_gfxtab_figures_main[p_fighter->sprite_id][*(sheet)];
 
-							if ((list_ii->sheet < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
-								nvf.src = (Bit8u*)load_fight_figs(i);
+							if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
+								nvf.src = (uint8_t*)load_fight_figs(i);
 							} else {
 								nvf.src = g_spellobj_nvf_buf;
 							}
 
-							nvf.dst = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
-							nvf.no = host_readbs(sheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
-							nvf.type = 0;
-							nvf.width = (Bit8u*)&width;
-							nvf.height = (Bit8u*)&obj_id;
+							nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
+							nvf.image_num = *(sheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
+							nvf.compression_type = 0;
+							nvf.width = &width;
+							nvf.height = &object_id_bak;
 
-							process_nvf(&nvf);
+							process_nvf_extraction(&nvf);
 
-							if (list_ii->wsheet != -1) {
+							if (p_fighter->wsheet != -1) {
 
-								p_weapon_anisheet = p_datseg + FIG_ANISHEETS + list_ii->wsheet * 0xf3;
+								p_weapon_anisheet = &g_fig_anisheets[p_fighter->wsheet][0];
 
-								if (host_readbs(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3) == -1)
+								if (*(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3) == -1)
 								{
-									list_ii->wsheet = -1;
+									p_fighter->wsheet = -1;
 								} else {
 									current_x1 = obj_x;
 									current_y1 = obj_y;
 
-									p_weapon_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->wsheet];
+									p_weapon_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet];
 
-									if (host_readbs(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[list_ii->sheet])) != -5) {
-										nvf.dst = (Bit8u*)g_fig_gfxbuffers[list_ii->wsheet];
+									if (*(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[p_fighter->sheet])) != -5) {
+										nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet];
 										nvf.src = g_weapons_nvf_buf;
-										nvf.no = host_readb(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3);
-										nvf.type = 0;
-										nvf.width = (Bit8u*)&width;
-										nvf.height = (Bit8u*)&obj_id;
+										nvf.image_num = *(uint8_t*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
+										nvf.compression_type = 0;
+										nvf.width = &width;
+										nvf.height = &object_id_bak;
 
-										process_nvf(&nvf);
+										process_nvf_extraction(&nvf);
 
-										current_x1 += list_ii->width - 14;
-										current_x1 += host_readbs(p_weapon_anisheet + 2 + g_fig_ani_state[list_ii->sheet] * 3);
-										current_y1 -= host_readbs(p_weapon_anisheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
+										current_x1 += p_fighter->width - 14;
+										current_x1 += *(p_weapon_anisheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3);
+										current_y1 -= *(p_weapon_anisheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
 									}
 								}
 							}
 
-							g_fig_ani_state[list_ii->sheet]++;
+							g_fig_ani_state[p_fighter->sheet]++;
 						}
 
-						if (list_ii->sheet != -1) {
-							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[list_ii->sheet];
+						if (p_fighter->sheet != -1) {
+							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
 						}
 					}
 				}
 			}
 /* 0x17e5 */
 
-			if (FIG_obj_needs_refresh(list_ii, obj_x, obj_y)) {
+			if (FIG_obj_needs_refresh(p_fighter, obj_x, obj_y)) {
 
-				if ((list_ii->sheet == -1) || (figlist_remove[list_ii->sheet] == -1)) {
+				if ((p_fighter->sheet == -1) || (figlist_remove[p_fighter->sheet] == -1)) {
 
-					if (list_ii->sheet != -1) {
+					if (p_fighter->sheet != -1) {
 
 						g_figobj_unkn_x1 = g_figobj_unkn_x2;
 						g_figobj_unkn_y1 = g_figobj_unkn_y2;
@@ -853,32 +878,32 @@ void draw_fight_screen(Bit16u val)
 					}
 
 					/* set Y1 */
-					g_pic_copy_rect.y1 = obj_y + list_ii->y1;
+					g_pic_copy_rect.y1 = obj_y + p_fighter->y1;
 					if (g_pic_copy_rect.y1 < 0) g_pic_copy_rect.y1 = 0;
 
 					/* set X1 */
-					g_pic_copy_rect.x1 = obj_x + list_ii->x1;
+					g_pic_copy_rect.x1 = obj_x + p_fighter->x1;
 					if (g_pic_copy_rect.x1 < 0) g_pic_copy_rect.x1 = 0;
 
 					/* set Y2 */
-					g_pic_copy_rect.y2 = obj_y + list_ii->y2;
+					g_pic_copy_rect.y2 = obj_y + p_fighter->y2;
 					if (g_pic_copy_rect.y2 > (200 - 1)) g_pic_copy_rect.y2 = (200 - 1);
 
 					/* set X2 */
-					g_pic_copy_rect.x2 = obj_x + list_ii->x2;
+					g_pic_copy_rect.x2 = obj_x + p_fighter->x2;
 					if (g_pic_copy_rect.x2 > (320 - 2)) g_pic_copy_rect.x2 = (320 - 2);
 
 					g_pic_copy.x1 = obj_x;
 					g_pic_copy.y1 = obj_y;
-					g_pic_copy.x2 = obj_x + list_ii->width - 1;
-					g_pic_copy.y2 = obj_y + list_ii->height - 1;
+					g_pic_copy.x2 = obj_x + p_fighter->width - 1;
+					g_pic_copy.y2 = obj_y + p_fighter->height - 1;
 					g_pic_copy.src = p_figure_gfx;
 
 					do_pic_copy(2);	/* Critical */
 				}
 
 
-				/* NULL check on Bit8u* */
+				/* NULL check on uint8_t* */
 				if (p_weapon_gfx != 0)  {
 
 					g_pic_copy.x1 = current_x1;
@@ -892,7 +917,7 @@ void draw_fight_screen(Bit16u val)
 				}
 			}
 
-		} while (list_ii = list_ii->next);
+		} while ((p_fighter = p_fighter->next));
 
 		g_pic_copy_rect = rect_bak;
 		g_figobj_unkn_x2_bak = g_figobj_unkn_x2;
@@ -943,12 +968,12 @@ void draw_fight_screen(Bit16u val)
 		g_pic_copy.dst = g_renderbuf_ptr;
 	}
 
-	for (list_ii = (struct struct_fighter*)g_fig_list_head; list_ii; list_ii = list_ii->next) {
-		if (list_ii->visible != 0)
-			list_ii->visible = 1;
+	for (p_fighter = (struct struct_fighter*)g_fig_list_head; p_fighter; p_fighter = p_fighter->next) {
+		if (p_fighter->visible != 0)
+			p_fighter->visible = 1;
 	}
 
-	refresh_screen_size();
+	call_mouse();
 
 	if (!val) {
 
@@ -972,9 +997,9 @@ when the Timer IRQ cannot set g_fig_continue_print to 0.
 So this call to wait_for_vsync() passes control
 to the DOSBox-CPU and may run the timer.
  */
-#ifdef M302de_SPEEDFIX
+			/* REMARK: SPEEDFIX
 			wait_for_vsync();
-#endif
+			*/
 			if (fight_printer()) {
 				g_pic_copy.x1 = 0;
 				g_pic_copy.y1 = 0;
@@ -994,7 +1019,7 @@ to the DOSBox-CPU and may run the timer.
 
 	/* read TEMP/XX */
 	/* TODO: should be O_BINARY | O_RDONLY */
-	handle = open((char*)ds_readd(STR_TEMP_XX_PTR), 0);
+	handle = _open(g_str_temp_xx_ptr, 0);
 	_read(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
@@ -1009,15 +1034,10 @@ static void set_delay_timer(void)
 
 static void fight_delay(void)
 {
-	seg001_02c4();
+	CD_enable_repeat();
 
 	while (g_delay_timer > 0) {
 		g_delay_timer--;
 		wait_for_vsync();
 	}
-
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

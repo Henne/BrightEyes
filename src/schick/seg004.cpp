@@ -12,7 +12,11 @@
 #if defined(__BORLANDC__)
 #include <DOS.H>
 #else
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -23,8 +27,34 @@
 #include "seg008.h"
 
 #if !defined(__BORLANDC__)
-namespace M302de {
+#include <SDL2/SDL.h>
+#include "vgalib.h"
 #endif
+
+static int16_t g_ani_busy = 0; // ds:0x4a90
+int16_t g_pic_copy_flag = 0; // ds:0x4a92
+static uint16_t  g_status_bar_colors[2] = { 0xf0, 0xf9 }; // ds:0x4a94, {le_color, 0, ae_color, 0}
+static unsigned char g_unkn_035[2] = { 0, 0 }; // ds:0x4a98
+static int8_t  g_status_page_hunger_max_counter = 0; // ds:0x4a9a
+static int8_t  g_status_page_hunger_max_color = 0; // ds:0x4a9b
+static int8_t  g_status_page_thirst_max_counter = 0; // ds:0x4a9c
+static int8_t  g_status_page_thirst_max_color = 0; // ds:0x4a9d
+static signed int g_wallclock_pos = 0; // ds:0x4a9e, position of sun/moon
+static int8_t g_wallclock_pos_y[81] = { 0x14, 0x12, 0x11, 0x10, 0x0f, 0x0e, 0x0d, 0x0c, 0x0b, 0x0b, 0x0a, 0x09, 0x09, 0x08, 0x07, 0x07, 0x06, 0x06, 0x05, 0x05, 0x05, 0x04, 0x04, 0x03, 0x03, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x14 }; // ds:0x4aa0
+static uint8_t g_wallclock_palette_day[3][3] = { { 0x10, 0x14, 0x3c }, { 0x00, 0x08, 0x38 }, { 0x00, 0x08, 0x34 } }; // ds:0x4af1
+static uint8_t g_wallclock_palette_night[3][3] = { { 0x00, 0x00, 0x1a }, { 0x00, 0x00, 0x18 }, { 0x00, 0x00, 0x1c } }; // ds:0x4afa
+static struct uint8_t_3 g_color_pal_white = { 0x3f, 0x3f, 0x3f }; // ds:0x4b03, {0x3f,0x3f,0x3f}
+static struct uint8_t_32_3 g_palette_allblack = { { 0 } }; // ds:0x4b06
+
+
+static int32_t g_gfx_spinlock;			// ds:0xe234
+static signed int g_ani_change_dir[10];	// ds:0xe238
+static signed int g_ani_area_status[10];	// ds:0xe24c
+static signed int g_ani_area_timeout[10]; 	// ds:0xe260
+#if defined(__BORLANDC__)
+static void interrupt far (*g_bc_timer)(...);	// ds:0xe274
+#endif
+
 
 #if defined(__BORLANDC__)
 /* static prototype */
@@ -54,9 +84,9 @@ void reset_timer(void)
 #endif
 }
 
-void init_ani(Bit16u v1)
+void init_ani(uint16_t v1)
 {
-	signed short i;
+	signed int i;
 
 	if (g_current_ani == -1)
 		return;
@@ -73,7 +103,7 @@ void init_ani(Bit16u v1)
 		else
 			g_ani_unknown_flag = 1;
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		clear_ani_pal();
 
@@ -94,12 +124,12 @@ void init_ani(Bit16u v1)
 		/* copy the main ani picture */
 		do_pic_copy(1);
 
-		set_ani_pal((Bit8u*)g_ani_palette);
+		set_ani_pal((uint8_t*)g_ani_palette);
 
 		/* reset flag for pic_copy() */
 		g_pic_copy_flag = 0;
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	if ((v1 & 0x7f) != 1) {
@@ -110,12 +140,12 @@ void init_ani(Bit16u v1)
 	wait_for_vsync();
 }
 
-void set_var_to_zero(void)
+void disable_ani(void)
 {
 	g_ani_enabled = 0;
 }
 
-void init_ani_busy_loop(unsigned short v1)
+void init_ani_busy_loop(const signed int v1)
 {
 	/* set lock */
 	g_ani_busy = 1;
@@ -123,17 +153,17 @@ void init_ani_busy_loop(unsigned short v1)
 	init_ani(v1);
 
 	 while (g_ani_busy) {
-#ifdef M302de_SPEEDFIX
-		/*	enter emulation mode frequently,
-			that the timer can reset this variable */
+		/* REMARK: SPEEDFIX
+		 * enter emulation mode frequently, that the timer can reset this variable
 		wait_for_vsync();
-#endif
+		 * */
 	 }
 }
 
 void clear_ani(void)
 {
-	signed short i, j;
+	signed int i;
+	signed int j;
 
 	g_ani_width = 0;
 	g_ani_height = 0;
@@ -142,21 +172,23 @@ void clear_ani(void)
 	g_ani_palette = NULL;
 
 	for (i = 0; i < 10; i++) {
-		ds_writew((ANI_AREA_TABLE + ANI_AREA_X) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_Y) + i * SIZEOF_ANI_AREA, 0);
-		ds_writew((ANI_AREA_TABLE + ANI_AREA_WIDTH) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_HEIGHT) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_CYCLIC) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_PICS) + i * SIZEOF_ANI_AREA, 0);
-		ds_writew((ANI_AREA_TABLE + ANI_AREA_CHANGES) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + (ANI_AREA_NAME+4)) + i * SIZEOF_ANI_AREA, 0);
 
-		for (j = 0; j < 20; j++)
-			ds_writed((ANI_AREA_TABLE + ANI_AREA_PICS_TAB) + i * SIZEOF_ANI_AREA + (j << 2), 0);
+		g_ani_area_table[i].x = 0;
+		g_ani_area_table[i].y = 0;
+		g_ani_area_table[i].width = 0;
+		g_ani_area_table[i].height = 0;
+		g_ani_area_table[i].cyclic = 0;
+		g_ani_area_table[i].pics = 0;
+		g_ani_area_table[i].changes = 0;
+		g_ani_area_table[i].name[4] = '\0';
+
+		for (j = 0; j < 20; j++) {
+			g_ani_area_table[i].pics_tab[j] = NULL;
+		}
 
 		for (j = 0; j < 42; j++) {
-			ds_writew((ANI_AREA_TABLE + ANI_AREA_CHANGES_TB) + i * SIZEOF_ANI_AREA + (j << 2), 0);
-			ds_writew((ANI_AREA_TABLE + (ANI_AREA_CHANGES_TB+2)) + i * SIZEOF_ANI_AREA + (j << 2), 0);
+			g_ani_area_table[i].changes_tb[j].pic = 0;
+			g_ani_area_table[i].changes_tb[j].duration = 0;
 		}
 	 }
 }
@@ -164,10 +196,10 @@ void clear_ani(void)
 #if defined(__BORLANDC__)
 void interrupt timer_isr(void)
 {
-	signed short i;
-	signed short l_di;
+	signed int i;
+	signed int areacount;
 	signed char flag;
-	Bit8u *ptr;
+	struct ani_area *ptr;
 	struct struct_pic_copy pic_copy_bak;
 
 	/* TODO: unused feature */
@@ -197,12 +229,12 @@ void interrupt timer_isr(void)
 		--g_fig_star_timer;
 	}
 
-	if (!ds_readbs(FREEZE_TIMERS)) {
+	if (!g_freeze_timers) {
 		do_timers();
 	}
 
 	update_status_bars();
-	seg002_37c4();
+	update_travelmap();
 	update_wallclock();
 	dec_splash();
 
@@ -217,19 +249,19 @@ void interrupt timer_isr(void)
 		g_pic_copy_rect.x2 = g_ani_posx + 208;
 		pic_copy_bak = g_pic_copy;
 
-		l_di = g_ani_areacount;
+		areacount = g_ani_areacount;
 
-		if (!l_di && g_ani_busy) {
+		if (!areacount && g_ani_busy) {
 
 			g_ani_enabled = 0;
 			g_ani_busy = 0;
 		}
 
-		for (i = 0; i < l_di; i++) {
+		for (i = 0; i < areacount; i++) {
 
-			ptr = p_datseg + ANI_AREA_TABLE + SIZEOF_ANI_AREA * i;
+			ptr = &g_ani_area_table[i];
 
-			if (host_readws(ptr + ANI_AREA_CHANGES)) {
+			if (ptr->changes) {
 
 				g_ani_area_timeout[i] -= 5;
 
@@ -237,9 +269,9 @@ void interrupt timer_isr(void)
 
 					g_ani_area_status[i] += g_ani_change_dir[i];
 
-					if (g_ani_area_status[i] == host_readws(ptr + ANI_AREA_CHANGES)) {
+					if (g_ani_area_status[i] == ptr->changes) {
 
-						if (host_readbs(ptr + ANI_AREA_CYCLIC) != 0) {
+						if (ptr->cyclic) {
 							g_ani_change_dir[i] = -1;
 							g_ani_area_status[i]--;
 						} else {
@@ -253,12 +285,12 @@ void interrupt timer_isr(void)
 						}
 					}
 
-					if (!g_ani_area_status[i] && *(ptr + ANI_AREA_CYCLIC))
+					if (!g_ani_area_status[i] && ptr->cyclic)
 					{
 						g_ani_change_dir[i] = 1;
 					}
 
-					g_ani_area_timeout[i] = 2 * host_readws(ptr + (ANI_AREA_CHANGES_TB+2) + 4 * g_ani_area_status[i]);
+					g_ani_area_timeout[i] = 2 * ptr->changes_tb[g_ani_area_status[i]].duration;
 
 					flag = 0;
 
@@ -268,20 +300,20 @@ void interrupt timer_isr(void)
 						(g_ani_posy + g_ani_height >= g_mouse_posy))
 					{
 						flag = 1;
-						update_mouse_cursor();
+						call_mouse_bg();
 					}
 
 					/* set screen coordinates */
-					g_pic_copy.x1 = g_ani_posx + host_readw(ptr + ANI_AREA_X);
-					g_pic_copy.y1 =	g_ani_posy + host_readb(ptr + ANI_AREA_Y);
-					g_pic_copy.x2 = g_ani_posx + host_readw(ptr + ANI_AREA_X) + host_readw(ptr + ANI_AREA_WIDTH) - 1;
-					g_pic_copy.y2 = g_ani_posy + host_readb(ptr + ANI_AREA_Y) + host_readb(ptr + ANI_AREA_HEIGHT) - 1;
-					g_pic_copy.src = (Bit8u*)host_readd(ptr + ANI_AREA_PICS_TAB + 4 * (host_readws(ptr + ANI_AREA_CHANGES_TB + 4 * g_ani_area_status[i]) - 1));
+					g_pic_copy.x1 = g_ani_posx + ptr->x;
+					g_pic_copy.y1 =	g_ani_posy + ptr->y;
+					g_pic_copy.x2 = g_ani_posx + ptr->x + ptr->width - 1;
+					g_pic_copy.y2 = g_ani_posy + ptr->y + ptr->height - 1;
+					g_pic_copy.src = ptr->pics_tab[ptr->changes_tb[g_ani_area_status[i]].pic - 1];
 
 					do_pic_copy(1);
 
 					if (flag != 0) {
-						refresh_screen_size();
+						call_mouse();
 						flag = 0;
 					}
 				}
@@ -291,11 +323,11 @@ void interrupt timer_isr(void)
 		g_pic_copy = pic_copy_bak;
 		g_pic_copy_rect.y1 = 0;
 		g_pic_copy_rect.x1 = 0;
-		g_pic_copy_rect.y2 = (199 - 1);
-		g_pic_copy_rect.x2 = (320 - 1);
+		g_pic_copy_rect.y2 = 200 - 1;
+		g_pic_copy_rect.x2 = 320 - 1;
 
 		/* enable interrupts */
-		asm {sti; }
+		asm { sti; }
 	}
 
 	/* call the old timer ISR */
@@ -304,7 +336,7 @@ void interrupt timer_isr(void)
 
 static void unused_gfx_spinlock(void)
 {
-	Bit32s v = g_gfx_spinlock;
+	int32_t v = g_gfx_spinlock;
 
 	while (v == g_gfx_spinlock) { ; }
 }
@@ -312,8 +344,8 @@ static void unused_gfx_spinlock(void)
 
 void update_status_bars(void)
 {
-	signed short i;
-	Bit8u *hero;
+	signed int i;
+	struct struct_hero *hero;
 
 	g_unused_spinlock_flag = 0;
 
@@ -325,13 +357,13 @@ void update_status_bars(void)
 			hero = get_hero(g_status_page_hero);
 
 			/* adjust hunger to 100% */
-			if (host_readbs(hero + HERO_HUNGER) >= 100) {
-				host_writebs(hero + HERO_HUNGER, g_status_page_hunger = 100);
+			if (hero->hunger >= 100) {
+				hero->hunger = g_status_page_hunger = 100;
 			}
 
 			/* adjust thirst to 100% */
-			if (host_readbs(hero + HERO_THIRST) >= 100) {
-				host_writeb(hero + HERO_THIRST, g_status_page_thirst = 100);
+			if (hero->thirst >= 100) {
+				hero->thirst = g_status_page_thirst = 100;
 			}
 
 			/* hunger and thirst are at 100% */
@@ -352,29 +384,29 @@ void update_status_bars(void)
 
 					g_status_page_hunger_max_color ^= 1;
 
-					update_mouse_cursor();
+					call_mouse_bg();
 
 					for (i = 0; i < 6; i++) {
 						do_h_line(g_vga_memstart, 260, 310, i + 36, g_status_page_hunger_max_color ? 9 : 10);
 					}
 
-					refresh_screen_size();
+					call_mouse();
 
 					g_status_page_hunger_max_counter = 0;
 				}
 
-			} else if (host_readbs(hero + HERO_HUNGER) != g_status_page_hunger) {
+			} else if (hero->hunger != g_status_page_hunger) {
 
-				g_status_page_hunger = host_readbs(hero + HERO_HUNGER);
+				g_status_page_hunger = hero->hunger;
 
-				update_mouse_cursor();
+				call_mouse_bg();
 
 				for (i = 0; i < 6; i++) {
 						do_h_line(g_vga_memstart, 260, g_status_page_hunger / 2 + 260, i + 36, 9);
 						do_h_line(g_vga_memstart, g_status_page_hunger / 2 + 260, 310, i + 36, 10);
 				}
 
-				refresh_screen_size();
+				call_mouse();
 			}
 
 			if (g_status_page_thirst == 100) {
@@ -383,29 +415,29 @@ void update_status_bars(void)
 
 					g_status_page_thirst_max_color ^= 1;
 
-					update_mouse_cursor();
+					call_mouse_bg();
 
 					for (i = 0; i < 6; i++) {
 						do_h_line(g_vga_memstart, 260, 310, i + 43, g_status_page_thirst_max_color ? 11 : 12);
 					}
 
-					refresh_screen_size();
+					call_mouse();
 
 					g_status_page_thirst_max_counter = 0;
 				}
 
-			} else if (host_readbs(hero + HERO_THIRST) != g_status_page_thirst) {
+			} else if (hero->thirst != g_status_page_thirst) {
 
-				g_status_page_thirst = host_readbs(hero + HERO_THIRST);
+				g_status_page_thirst = hero->thirst;
 
-				update_mouse_cursor();
+				call_mouse_bg();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line(g_vga_memstart, 260, g_status_page_thirst / 2 + 260, i + 43, 11);
-						do_h_line(g_vga_memstart, g_status_page_thirst / 2 + 260, 310, i + 43, 12);
+					do_h_line(g_vga_memstart, 260, g_status_page_thirst / 2 + 260, i + 43, 11);
+					do_h_line(g_vga_memstart, g_status_page_thirst / 2 + 260, 310, i + 43, 12);
 				}
 
-				refresh_screen_size();
+				call_mouse();
 			}
 
 #if !defined(__BORLANDC__)
@@ -414,40 +446,41 @@ void update_status_bars(void)
 			asm { sti };
 #endif
 		} else if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
+
 			/* in the screen with the playmask */
 
 			for (i = 0; i <= 6; i++) {
 
-				if (host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
+				if (get_hero(i)->typus != HERO_TYPE_NONE) {
 
 					hero = get_hero(i);
 
 					/* draw LE bars */
-					if ((ds_readws((CHAR_STATUS_BARS+2) + 8 * i) != host_readws(hero + HERO_LE)) ||
-						(ds_readws(CHAR_STATUS_BARS + 8 * i) != host_readws(hero + HERO_LE_ORIG)))
+					if ((g_char_status_bars[i][1] != hero->le) ||
+						(g_char_status_bars[i][0] != hero->le_max))
 					{
-						draw_bar(0, i, host_readws(hero + HERO_LE), host_readws(hero + HERO_LE_ORIG), 0);
-						ds_writew(CHAR_STATUS_BARS + 8 * i, host_readws(hero + HERO_LE_ORIG));
-						ds_writew((CHAR_STATUS_BARS+2) + 8 * i, host_readws(hero + HERO_LE));
+						draw_bar(0, i, hero->le, hero->le_max, 0);
+						g_char_status_bars[i][0] = hero->le_max;
+						g_char_status_bars[i][1] = hero->le;
 					}
 
 					/* draw AE bars */
-					if ((ds_readws((CHAR_STATUS_BARS+6) + 8 * i) != host_readws(hero + HERO_AE)) ||
-						(ds_readws((CHAR_STATUS_BARS+4) + 8 * i) != host_readws(hero + HERO_AE_ORIG)))
+					if ((g_char_status_bars[i][3] != hero->ae) ||
+						(g_char_status_bars[i][2] != hero->ae_max))
 					{
-						draw_bar(1, i, host_readws(hero + HERO_AE), host_readws(hero + HERO_AE_ORIG), 0);
-						ds_writew((CHAR_STATUS_BARS+4) + 8 * i, host_readws(hero + HERO_AE_ORIG));
-						ds_writew((CHAR_STATUS_BARS+6) + 8 * i, host_readws(hero + HERO_AE));
+						draw_bar(1, i, hero->ae, hero->ae_max, 0);
+						g_char_status_bars[i][2] = hero->ae_max;
+						g_char_status_bars[i][3] = hero->ae;
 					}
 				} else {
-					if (ds_readws(CHAR_STATUS_BARS + 8 * i) != 0) {
+					if (g_char_status_bars[i][0]) {
 						draw_bar(0, i, 0, 0, 0);
-						ds_writew(CHAR_STATUS_BARS + 8 * i, ds_writew((CHAR_STATUS_BARS+2) + 8 * i, 0));
+						g_char_status_bars[i][0] = g_char_status_bars[i][1] = 0;
 					}
 
-					if (ds_readws((CHAR_STATUS_BARS+4) + 8 * i) != 0) {
+					if (g_char_status_bars[i][2]) {
 						draw_bar(1, i, 0, 0, 0);
-						ds_writew((CHAR_STATUS_BARS+4) + 8 * i, ds_writew((CHAR_STATUS_BARS+6) + 8 * i, 0));
+						g_char_status_bars[i][2] = g_char_status_bars[i][3] = 0;
 					}
 				}
 			}
@@ -468,16 +501,16 @@ void update_status_bars(void)
 	It should be used, either hero or mode is zero,
 	since in fight mode only the active hero is shown.
  */
-void draw_bar(unsigned short type, signed short hero, signed short pts_cur, signed short pts_max, signed short mode)
+void draw_bar(const signed int type, const signed int hero, const signed int pts_cur, const signed int pts_max, const signed int mode)
 {
-	signed short i;
-	signed short y_min;
-	signed short x;
-	signed short lost;
-	Bit8u* dst;
+	signed int i;
+	signed int y_min;
+	signed int x;
+	signed int lost;
+	uint8_t* dst;
 
 	if (mode == 0)
-		update_mouse_cursor();
+		call_mouse_bg();
 
 	if (mode == 0) {
 		x = g_hero_pic_posx[hero] + type * 4 + 34;
@@ -486,7 +519,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	} else {
 		x = type * 4 + 36;
 		y_min = 42;
-		dst = (Bit8u*)g_renderbuf_ptr;
+		dst = (uint8_t*)g_renderbuf_ptr;
 	}
 
 	if (pts_cur == 0) {
@@ -522,18 +555,18 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	}
 
 	if (mode == 0) {
-		refresh_screen_size();
+		call_mouse();
 	}
 }
 
-void restore_rect(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, signed char n, signed char m)
+void restore_rect(uint8_t *dst, uint8_t *src, const signed int x, const signed int y, const signed char n, const signed char m)
 {
-	signed short i;
-	signed short j;
+	signed int i;
+	signed int j;
 	signed char c;
-	Bit8u* p;
+	uint8_t* p;
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	p = dst;
 	p += y * 320 + x;
@@ -546,21 +579,21 @@ void restore_rect(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, si
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
-void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, signed char width, signed char height, unsigned short v1)
+void restore_rect_rle(uint8_t *dst, uint8_t *src, const signed int x, const signed int y, const signed char width, const signed char height, const signed int v1)
 {
-	signed short si;
-	signed short di;
-	signed short i;
+	signed int si;
+	signed int di;
+	signed int i;
 	signed char c;
 	unsigned char cnt;
 	signed char tmp;
-	Bit8u *p = dst;
+	uint8_t *p = dst;
 
 	p += y * 320 + x;
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < height; p += 320, i++) {
 
@@ -581,23 +614,23 @@ void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y
 		}
 	}
 
-	refresh_screen_size();
+	call_mouse();
 }
 
-void draw_mouse_cursor(void)
+void mouse_cursor_draw(void)
 {
-	register signed short mask;
-	signed short x;
+	register signed int mask;
+	signed int x;
 	signed char i;
 	signed char j;
-	Bit8u *dst;
-	unsigned short *mouse_cursor;
-	signed short y;
-	signed short width;
-	signed short height;
+	uint8_t *dst;
+	uint16_t *mouse_cursor;
+	signed int y;
+	signed int width;
+	signed int height;
 
 	dst = g_vga_memstart;
-	mouse_cursor = g_current_cursor + 16;
+	mouse_cursor = &g_current_cursor->mask[0];
 
 	x = g_mouse_posx - g_mouse_pointer_offsetx;
 	y = g_mouse_posy - g_mouse_pointer_offsety;
@@ -614,7 +647,7 @@ void draw_mouse_cursor(void)
 
 	for (i = 0; i < height; dst += 320, i++) {
 
-		mask = host_readw((Bit8u*)mouse_cursor++);
+		mask = *(mouse_cursor++);
 
 		for (j = 0; j < width; j++)
 			if ((0x8000 >> j) & mask)
@@ -622,15 +655,15 @@ void draw_mouse_cursor(void)
 	}
 }
 
-void save_mouse_bg(void)
+void mouse_save_bg(void)
 {
-	Bit8u *src;
-	signed short realpos_x;
-	signed short realpos_y;
-	signed short realwidth;
-	signed short realheight;
-	signed short delta_y;
-	signed short delta_x;
+	uint8_t *src;
+	signed int realpos_x;
+	signed int realpos_y;
+	signed int realwidth;
+	signed int realheight;
+	signed int delta_y;
+	signed int delta_x;
 
 	src = g_vga_memstart;
 
@@ -658,14 +691,14 @@ void save_mouse_bg(void)
 
 void restore_mouse_bg(void)
 {
-	signed short delta_y;
-	signed short realpos_x;
-	signed short delta_x;
+	signed int delta_y;
+	signed int realpos_x;
+	signed int delta_x;
 
-	Bit8u *dst;
-	signed short realpos_y;
-	signed short realwidth;
-	signed short realheight;
+	uint8_t *dst;
+	signed int realpos_y;
+	signed int realwidth;
+	signed int realheight;
 
 
 	/* gfx memory */
@@ -689,37 +722,37 @@ void restore_mouse_bg(void)
 
 void load_wallclock_nvf(void)
 {
-	struct nvf_desc nvf;
-	unsigned short fd;
+	struct nvf_extract_desc nvf;
+	signed int handle; /* REMARK: reused differently */
 
-	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, g_renderbuf_ptr, 2000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
+	read_archive_file(handle, g_renderbuf_ptr, 2000);
+	close(handle);
 
 	nvf.src = g_renderbuf_ptr;
-	nvf.type = 0;
-	nvf.width = (Bit8u*)&fd;
-	nvf.height = (Bit8u*)&fd;
+	nvf.compression_type = 0;
+	nvf.width = &handle;
+	nvf.height = &handle;
 
 	/* sky background */
 	nvf.dst = g_objects_nvf_buf;
-	nvf.no = 12;
-	process_nvf(&nvf);
+	nvf.image_num = 12;
+	process_nvf_extraction(&nvf);
 
 	/* mountains */
 	nvf.dst = g_objects_nvf_buf + 0x683;
-	nvf.no = 13;
-	process_nvf(&nvf);
+	nvf.image_num = 13;
+	process_nvf_extraction(&nvf);
 
 	/* sun */
 	nvf.dst = g_objects_nvf_buf + 0xcaf;
-	nvf.no = 14;
-	process_nvf(&nvf);
+	nvf.image_num = 14;
+	process_nvf_extraction(&nvf);
 
 	/* moon */
 	nvf.dst = g_objects_nvf_buf + 0xcef;
-	nvf.no = 15;
-	process_nvf(&nvf);
+	nvf.image_num = 15;
+	process_nvf_extraction(&nvf);
 
 	/* shift palette by 0xe0 */
 	array_add(g_objects_nvf_buf, 0xd3f, 0xe0, 2);
@@ -727,8 +760,8 @@ void load_wallclock_nvf(void)
 
 void update_wallclock(void)
 {
-	signed short night;
-	Bit32s d;
+	signed int night;
+	int32_t d;
 
 	if ((g_wallclock_update) && ((g_pp20_index == ARCHIVE_FILE_PLAYM_UK) || (g_pp20_index == ARCHIVE_FILE_KARTE_DAT)) && !g_dialogbox_lock) {
 
@@ -745,11 +778,11 @@ void update_wallclock(void)
 			}
 		}
 
-		if (((d % 771) != g_wallclock_pos) || g_wallclock_redraw) {
+		if (((d / 771L) != g_wallclock_pos) || g_wallclock_redraw) {
 
 			g_wallclock_redraw = 0;
 			night = ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) ? 0 : 1;
-			draw_wallclock((signed short)(d / 771), night);
+			draw_wallclock((signed int)(d / 771), night);
 			g_wallclock_pos = d / 771;
 		}
 	}
@@ -762,10 +795,10 @@ void update_wallclock(void)
  * \param   night       0 = day / 1 = night
  *
  */
-void draw_wallclock(signed short pos, signed short night)
+void draw_wallclock(signed int pos, const signed int night)
 {
-	signed short y;
-	signed short mouse_updated;
+	signed int y;
+	signed int mouse_updated;
 	struct struct_rect rect_bak;
 	struct struct_pic_copy pic_copy_bak;
 
@@ -792,15 +825,16 @@ void draw_wallclock(signed short pos, signed short night)
 	g_pic_copy_rect.x2 = g_wallclock_x + 78;
 
 	/* set palette (night/day) */
-	set_palette((!night ? (p_datseg + WALLCLOCK_PALETTE_DAY) : &g_wallclock_palette_night[0][0]), 0xfa, 3);
+#if !defined(__BORLANDC__)
+	set_palette((uint8_t*)(!night ? &g_wallclock_palette_day : &g_wallclock_palette_night), 0xfa, 3);
+#else
+	set_palette((uint8_t*)MK_FP(_DS, (!night ? FP_OFF(g_wallclock_palette_day) : FP_OFF(g_wallclock_palette_night))), 0xfa, 3);
+#endif
 
 	/* check if mouse is in that window */
-	if (is_mouse_in_rect(g_wallclock_x - 6,
-				g_wallclock_y - 6,
-				g_wallclock_x + 85,
-				g_wallclock_y + 28)) {
-
-			update_mouse_cursor();
+	if (is_mouse_in_rect(g_wallclock_x - 6,	g_wallclock_y - 6, g_wallclock_x + 85, g_wallclock_y + 28))
+	{
+			call_mouse_bg();
 			mouse_updated = 1;
 	}
 
@@ -853,7 +887,7 @@ void draw_wallclock(signed short pos, signed short night)
 	}
 
 	if (mouse_updated != 0) {
-		refresh_screen_size();
+		call_mouse();
 	}
 
 	/* restore gfx */
@@ -868,32 +902,32 @@ void draw_wallclock(signed short pos, signed short night)
  * \param   op          operator
  * \param   flag        if 2, op will not be added if array element is 0
  */
-void array_add(Bit8u *dst, signed short len, signed short op, signed short flag)
+void array_add(uint8_t *dst, const signed int len, const signed int op, const signed int flag)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i < len; i++) {
 
 		if (flag == 2) {
-			if (host_readb(dst + i) != 0) {
-				add_ptr_bs(dst + i, op);
+			if (dst[i] != 0) {
+				dst[i] += op;
 			}
 		} else {
-			add_ptr_bs(dst + i, op);
+			dst[i] += op;
 		}
 	}
 }
 
-struct dummy3 {
-	char a[3];
-};
-
 void schick_set_video(void)
 {
-	struct dummy3 pal_black = *(struct dummy3*)(p_datseg + COLOR_PAL_BLACK);;
+	struct uint8_t_3 pal_white = g_color_pal_white;;
 
+#if defined(__BORLANDC__)
 	set_video_mode(0x13);
-	set_color((Bit8u*)&pal_black, 0xff);
+	set_color((uint8_t*)&pal_white, 0xff);
+#else
+	sdl_init_video();
+#endif
 }
 
 void schick_reset_video(void)
@@ -901,23 +935,22 @@ void schick_reset_video(void)
 #if defined(__BORLANDC__)
 	set_video_mode(g_video_mode_bak);
 	set_video_page(g_video_page_bak);
+#else
+	sdl_exit_video();
 #endif
 }
 
-struct dummy4 {
-	char a[0x60];
-};
-
 void clear_ani_pal(void)
 {
-	struct dummy4 pal = *(struct dummy4*)(p_datseg + PALETTE_ALLBLACK);
+	struct uint8_t_32_3 pal = g_palette_allblack;
 
 	wait_for_vsync();
 
-	set_palette((Bit8u*)&pal, 0, 0x20);
+	/* REMARK: memset would be better */
+	set_palette((uint8_t*)&pal, 0, 0x20);
 }
 
-void set_ani_pal(Bit8u *pal)
+void set_ani_pal(uint8_t *pal)
 {
 	wait_for_vsync();
 	set_palette(pal, 0, 0x20);
@@ -964,11 +997,11 @@ void unused_ega6(unsigned char a)
 
 #endif
 
-void do_h_line(Bit8u* ptr, signed short x1, signed short x2, signed short y, signed char color)
+void do_h_line(uint8_t* ptr, signed int x1, signed int x2, const signed int y, const signed char color)
 {
-	signed short tmp;
-	signed short count;
-	Bit8u* dst;
+	signed int tmp;
+	signed int count;
+	uint8_t* dst;
 
 	if (x1 == x2)
 		return;
@@ -985,11 +1018,11 @@ void do_h_line(Bit8u* ptr, signed short x1, signed short x2, signed short y, sig
 	draw_h_line(dst, count, color);
 }
 
-void do_v_line(Bit8u* ptr, signed short y, signed short x1, signed short x2, signed char color)
+void do_v_line(uint8_t* ptr, const signed int y, signed int x1, signed int x2, const signed char color)
 {
-	signed short tmp;
-	signed short count;
-	Bit8u* dst;
+	signed int tmp;
+	signed int count;
+	uint8_t* dst;
 
 	if (x1 == x2)
 		return;
@@ -1006,24 +1039,30 @@ void do_v_line(Bit8u* ptr, signed short y, signed short x1, signed short x2, sig
 	draw_h_spaced_dots(dst, count, color, 320);
 }
 
-void do_border(Bit8u* dst, signed short x1, signed short y1, signed short x2, signed short y2, signed char color)
+void do_border(uint8_t* dst, const signed int x1, const signed int y1, const signed int x2, const signed int y2, const signed char color)
 {
-	update_mouse_cursor();
+	call_mouse_bg();
 	do_h_line(dst, x1, x2, y1, color);
 	do_h_line(dst, x1, x2, y2, color);
 	do_v_line(dst, x1, y1, y2, color);
 	do_v_line(dst, x2, y1, y2, color);
-	refresh_screen_size();
+	call_mouse();
 }
 
-void do_pic_copy(unsigned short mode)
+void do_pic_copy(const signed int mode)
 {
-	short x1, y1;
-	short x2, y2;
-	short v1, v2, v3, v4;
-	short width, height;
-	Bit8u *src;
-	Bit8u* dst;
+	signed int x1;
+	signed int y1;
+	signed int x2;
+	signed int y2;
+	signed int v1;
+	signed int v2;
+	signed int v3;
+	signed int v4;
+	signed int width;
+	signed int height;
+	uint8_t *src;
+	uint8_t* dst;
 
 	x1 = g_pic_copy.x1;
 	y1 = g_pic_copy.y1;
@@ -1042,15 +1081,21 @@ void do_pic_copy(unsigned short mode)
 	dst = g_pic_copy.dst;
 
 	pic_copy(dst, x1, y1, x2, y2, v1, v2, v3, v4, width, height, src, mode);
+
+#if !defined(__BORLANDC__)
+	/* Playground 2 / 2 */
+	sdl_forced_update();
+#endif
+
 }
 
 void do_save_rect(void)
 {
-	signed short x1,y1;
-	signed short width,height;
-	signed short x2,y2;
-	Bit8u* src;
-	Bit8u* dst;
+	signed int x1,y1;
+	signed int width,height;
+	signed int x2,y2;
+	uint8_t* src;
+	uint8_t* dst;
 
 	x1 = g_pic_copy.x1;
 	y1 = g_pic_copy.y1;
@@ -1065,27 +1110,33 @@ void do_save_rect(void)
 	width = x2 - x1 + 1;
 	height = y2 - y1 + 1;
 
-	save_rect(RealSeg(dst), RealOff(dst), src, width, height);
+#if defined(__BORLANDC__)
+	save_rect(FP_SEG(dst), FP_OFF(dst), src, width, height);
+#else
+	save_rect(dst, src, width, height);
+#endif
 }
 
-void do_fill_rect(Bit8u* dst, signed short x, signed short y, signed short w, signed short h, signed short color)
+void do_fill_rect(uint8_t* dst, const signed int x, const signed int y, const signed int w, const signed int h, const signed int color)
 {
-	signed short width, height;
-
-	width = w - x + 1;
-	height = h - y + 1;
+	signed int width = w - x + 1;
+	signed int height = h - y + 1;
 
 	dst += y * 320 + x;
 
-	update_mouse_cursor();
-	fill_rect(RealSeg(dst), RealOff(dst), color, width, height);
-	refresh_screen_size();
+	call_mouse_bg();
+#if defined(__BORLANDC__)
+	fill_rect(FP_SEG(dst), FP_OFF(dst), color, width, height);
+#else
+	fill_rect(dst, color, width, height);
+#endif
+	call_mouse();
 }
 
 void wait_for_vsync(void)
 {
 #if defined(__BORLANDC__)
-	signed short tmp;
+	signed int tmp;
 
 	outportb(0x3d4, 0x11);
 
@@ -1114,12 +1165,12 @@ void wait_for_vsync(void)
  *
  * \param   src         pointer to a picture
  */
-void map_effect(Bit8u *src)
+void map_effect(uint8_t *src)
 {
-	unsigned short si;
-	unsigned short i;
-	signed short seed;
-	signed short wallclock_update_bak;
+	unsigned int si;
+	unsigned int i;
+	signed int seed;
+	signed int wallclock_update_bak;
 
 	seed = 0;
 
@@ -1128,7 +1179,7 @@ void map_effect(Bit8u *src)
 
 	wait_for_vsync();
 
-	update_mouse_cursor();
+	call_mouse_bg();
 
 	for (i = 0; i < 64000; i++) {
 
@@ -1142,18 +1193,14 @@ void map_effect(Bit8u *src)
 
 		*(g_vga_memstart + si) = *(src + si);
 
-#ifdef M302de_SPEEDFIX
-		/* this too fast,  we slow it down a bit */
+		/* REMARK: SPEEDFIX
+		 * enter emulation mode frequently, that the timer can reset this variable
 		if ((i & 0x1ff) == 0x1ff)
 			wait_for_vsync();
-#endif
+		 **/
 	}
 
-	refresh_screen_size();
+	call_mouse();
 
 	g_wallclock_update = wallclock_update_bak;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

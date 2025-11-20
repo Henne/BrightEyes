@@ -11,7 +11,11 @@
 #include <string.h>
 
 #if !defined(__BORLANDC__)
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -35,72 +39,147 @@
 #include "seg097.h"
 #include "seg119.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
+static const signed int g_passage_type_to_name[7] = {
+	/* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
+	0x001d, /* HEUER */
+	0x001e, /* BEGLEITSCHUTZFAHRT */
+	0x001f, /* LUXUSPASSAGE */
+	0x0020, /* KOMFORTABLE PASSAGE */
+	0x0021, /* KABINENPASSAGE */
+	0x0022, /* DECKPASSAGE */
+	0x0023  /* MITFAHRGELEGENHEIT */
+}; // ds:0x6ec2/*
+static const struct ship g_ship_table[8] = {
+	{ 0, 1,  0, 120 },
+	{ 3, 1, 35, 100 },
+	{ 1, 1,  0, (signed char)150 }, //BUG
+	{ 2, 1, 45, (signed char)150 }, //BUG
+	{ 0, 1,  0,  90 },
+	{ 4, 1, 20,  80 },
+	{ 5, 0, 10,  60 },
+	{ 6, 0,  0,  40 }
+}; // ds:0x6ed0
+static const signed int g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
+struct sea_route g_sea_routes[46] = {
+	{ TOWN_ID_THORWAL    , TOWN_ID_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
+	{ TOWN_ID_PREM       , TOWN_ID_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
+#ifndef M302de_ORIGINAL_BUGFIX
+	 /* Original-Bug 25: According to the map, the route Prem <-> Manrin should be the longest ship route by far. Distance 54 is way too short. Maybe the original intention was a value of 310, which after a byte overflow results in 54. */
+	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          ,  54,  7, 0, 0, 0, 0 }, //  3
+#else
+	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          , 255,  7, 0, 0, 0, 0 }, //  3
+	/* set the distance to maximum possible value 255. Still too short, but much better than 54 */
 #endif
+	{ TOWN_ID_PREM       , TOWN_ID_KORD            , 135,  7, 0, 0, 0, 0 }, //  4
+	{ TOWN_ID_KORD       , TOWN_ID_HJALSINGOR      ,  80,  6, 0, 0, 0, 0 }, //  5
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_OVERTHORN       , 115,  4, 0, 0, 0, 0 }, //  6
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_MANRIN          , 110,  5, 0, 0, 0, 0 }, //  7
+	{ TOWN_ID_THORWAL    , TOWN_ID_VAERMHAG        ,  30,  7, 0, 1, 0, 0 }, //  8
+	{ TOWN_ID_VAERMHAG   , TOWN_ID_VARNHEIM        ,  37,  5, 0, 1, 0, 0 }, //  9
+	{ TOWN_ID_VARNHEIM   , TOWN_ID_LJASDAHL        ,  25,  3, 0, 1, 0, 0 }, // 10
+	{ TOWN_ID_VARNHEIM   , TOWN_ID_OTTARJE         ,  25,  8, 0, 1, 0, 0 }, // 11
+	{ TOWN_ID_LJASDAHL   , TOWN_ID_OTTARJE         ,  10,  1, 0, 1, 0, 0 }, // 12
+	{ TOWN_ID_SKJAL      , TOWN_ID_OTTARJE         ,  52,  3, 0, 1, 0, 0 }, // 13
+	{ TOWN_ID_SKJAL      , TOWN_ID_PREM            ,  28,  4, 0, 1, 0, 0 }, // 14
+	{ TOWN_ID_PREM       , TOWN_ID_ARYN            ,  28,  6, 0, 1, 0, 0 }, // 15
+	{ TOWN_ID_PREM       , TOWN_ID_RUNINSHAVEN     ,  35,  7, 0, 1, 0, 0 }, // 16
+	{ TOWN_ID_ARYN       , TOWN_ID_RUNINSHAVEN     ,  25,  4, 0, 1, 0, 0 }, // 17
+	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_TREBAN          ,  50,  7, 0, 1, 0, 0 }, // 18
+	{ TOWN_ID_TREBAN     , TOWN_ID_KORD            ,  40,  2, 0, 1, 0, 0 }, // 19
+	{ TOWN_ID_KORD       , TOWN_ID_GUDDASUNDEN     ,  65,  2, 0, 1, 0, 0 }, // 20
+	{ TOWN_ID_GUDDASUNDEN, TOWN_ID_HJALSINGOR      ,  20,  1, 0, 1, 0, 0 }, // 21
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_ROVIK           ,  46,  2, 0, 1, 0, 0 }, // 22
+	{ TOWN_ID_ROVIK      , TOWN_ID_OVERTHORN       ,  67,  2, 0, 1, 0, 0 }, // 23
+	{ TOWN_ID_ROVIK      , TOWN_ID_ORVIL           ,  18,  1, 0, 1, 0, 0 }, // 24
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_TJANSET         ,  40,  3, 0, 1, 0, 0 }, // 25
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_VIDSAND         ,  48,  1, 0, 1, 0, 0 }, // 26
+	{ TOWN_ID_TJANSET    , TOWN_ID_LISKOR          ,  22,  6, 0, 1, 0, 0 }, // 27
+	{ TOWN_ID_LISKOR     , TOWN_ID_VIDSAND         ,  22,  1, 0, 1, 0, 0 }, // 28
+	{ TOWN_ID_TJANSET    , TOWN_ID_VIDSAND         ,  36,  2, 0, 1, 0, 0 }, // 29
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_BRENDHIL        ,  32,  3, 0, 1, 0, 0 }, // 30
+	{ TOWN_ID_BRENDHIL   , TOWN_ID_MANRIN          ,  57,  5, 0, 1, 0, 0 }, // 31
+	{ TOWN_ID_ROVIK      , TOWN_ID_MANRIN          ,  83,  7, 0, 1, 0, 0 }, // 32
+	{ TOWN_ID_THORWAL    , TOWN_ID_MERSKE          ,  30,  7, 0, 1, 0, 0 }, // 33
+	{ TOWN_ID_MERSKE     , TOWN_ID_EFFERDUN        ,  18,  8, 0, 1, 0, 0 }, // 34
+	{ TOWN_ID_THORWAL    , TOWN_ID_EFFERDUN        ,  47,  3, 0, 1, 0, 0 }, // 35
+	{ TOWN_ID_SERSKE     , TOWN_ID_MERSKE          ,  24,  7, 0, 1, 0, 0 }, // 36
+	{ TOWN_ID_SERSKE     , TOWN_ID_EFFERDUN        ,  41,  5, 0, 1, 0, 0 }, // 37
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_LISKOR          ,  51,  3, 0, 1, 0, 0 }, // 38
+	{ TOWN_ID_THORWAL    , TOWN_ID_VARNHEIM        ,  67,  4, 0, 1, 0, 0 }, // 39
+	{ TOWN_ID_OTTARJE    , TOWN_ID_PREM            ,  62,  4, 0, 1, 0, 0 }, // 40
+	{ TOWN_ID_OTTARJE    , TOWN_ID_RUNINSHAVEN     ,  73,  7, 0, 1, 0, 0 }, // 41
+	{ TOWN_ID_SKJAL      , TOWN_ID_RUNINSHAVEN     ,  55,  6, 0, 1, 0, 0 }, // 42
+	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
+	{ TOWN_ID_TREBAN     , TOWN_ID_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
+	{ TOWN_ID_MANRIN     , TOWN_ID_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
+	{ (unsigned char)-1             , 0x00                  ,   0,  0, 0, 0, 0, 0 } //TODO: towns should be signed
+}; // ds:0x6f00
+signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
+static struct int16_t_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
+static struct int16_t_7 g_sea_travel_sleepbonus_table2 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
+static char g_sea_travel_str_t[2] = "T"; // ds:0x708d
+static char g_sea_travel_str_en[3] = "EN"; // ds:0x708f
+static char g_sea_travel_str_comma[3] = ", "; // ds:0x7092
+
+
+static signed char g_sea_travel_sleep_quality; // ds:0xe3fa
 
 void passages_init(void)
 {
-	signed short si;
-	signed short i;
-	Bit8u *p = p_datseg + SEA_ROUTES;
+	signed int si;
+	signed int i;
+	struct sea_route *route = &g_sea_routes[0];
 
 
-	for (i = 0; i < NR_SEA_ROUTES; p += SIZEOF_SEA_ROUTE, i++) {
+	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
 
-		host_writeb(p + SEA_ROUTE_PASSAGE_TIMER, (unsigned char)random_interval(0, host_readbs(p + SEA_ROUTE_FREQUENCY)));
-		host_writeb(p + SEA_ROUTE_PASSAGE_PRICE_MOD, (unsigned char)random_interval(70, 130));
+		route->passage_timer = (unsigned char)random_interval(0, route->frequency);
+		route->price_mod = (unsigned char)random_interval(70, 130);
 
 		si = random_schick(100);
 
-		if (!host_readbs(p + SEA_ROUTE_COSTAL_ROUTE)) {
+		if (!route->coastal_route) {
 			/* high seas route */
-			host_writeb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE, si <= 50 ? SHIP_TYPE_LANGSCHIFF_HIGH_SEAS : (si <= 80 ? SHIP_TYPE_KARRACKE : (si <= 95 ? SHIP_TYPE_SCHNELLSEGLER : SHIP_TYPE_SCHNELLSEGLER_LUXURY)));
+			route->ship_type = si <= 50 ? SHIP_TYPE_LANGSCHIFF_HIGH_SEAS : (si <= 80 ? SHIP_TYPE_KARRACKE : (si <= 95 ? SHIP_TYPE_SCHNELLSEGLER : SHIP_TYPE_SCHNELLSEGLER_LUXURY));
 
 		} else {
 
 			/* costal route */
-			host_writeb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE, si <= 10 ? SHIP_TYPE_LANGSCHIFF_COSTAL : (si <= 40 ? SHIP_TYPE_KUESTENSEGLER : (si <= 80 ? SHIP_TYPE_KUTTER : SHIP_TYPE_FISCHERBOOT)));
+			route->ship_type = si <= 10 ? SHIP_TYPE_LANGSCHIFF_COSTAL : (si <= 40 ? SHIP_TYPE_KUESTENSEGLER : (si <= 80 ? SHIP_TYPE_KUTTER : SHIP_TYPE_FISCHERBOOT));
 		}
 
 #if !defined(__BORLANDC__)
 	D1_LOG("%16s - %16s: %d %d %d %d %d %d\n",
-		get_ttx(host_readb(p + SEA_ROUTE_TOWN_1) + 0xeb),
-		get_ttx(host_readb(p + SEA_ROUTE_TOWN_2) + 0xeb),
-		host_readb(p + SEA_ROUTE_DISTANCE),
-		host_readb(p + SEA_ROUTE_FREQUENCY),
-		host_readb(p + SEA_ROUTE_PASSAGE_TIMER),
-		host_readb(p + SEA_ROUTE_COSTAL_ROUTE),
-		host_readb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE),
-		host_readb(p + SEA_ROUTE_PASSAGE_PRICE_MOD));
+		get_ttx(route->town_id_1 + 0xeb),
+		get_ttx(route->town_id_2 + 0xeb),
+		route->distance,
+		route->frequency,
+		route->passage_timer,
+		route->coastal_route,
+		route->ship_type,
+		route->price_mod);
 #endif
 	}
 }
 
-struct dummy7 {
-	signed short a[7];
-};
-
 void do_harbor(void)
 {
-	signed short i; /* diverse usage */
-	signed short done;
-	signed short answer;
-	Bit8u *psg_ptr;
-	Bit32s p_money;
-	Bit8u *hero;
+	signed int i; /* diverse usage */
+	signed int done;
+	signed int answer;
+	struct harbor_option_obsolete *psg_ptr;
+	int32_t p_money;
+	struct struct_hero *hero;
 	signed char flag;
-	Bit32s money;
+	int32_t money;
 
 	done = 0;
-#if !defined(__BORLANDC__)
-	struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
-#else
-	struct dummy7 a = *(struct dummy7*)(p_datseg + SEA_TRAVEL_SLEEPBONUS_TABLE1);
-#endif
+	struct int16_t_7 a = g_sea_travel_sleepbonus_table1;
+	//struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
+
 	flag = 1;
 
-	gs_current_signpost = gs_current_typeindex;
+	gs_current_signpost_typeindex = gs_town_typeindex;
 
 	draw_loc_icons(4, MENU_ICON_BOOK_SHIP_PASSAGE, MENU_ICON_HARBOR_MASTER, MENU_ICON_BOARD_SHIP, MENU_ICON_LEAVE);
 	g_request_refresh = 1;
@@ -110,7 +189,7 @@ void do_harbor(void)
 		if (g_request_refresh) {
 
 			draw_main_screen();
-			set_var_to_zero();
+			disable_ani();
 			load_ani(6);
 			init_ani(0);
 			g_request_refresh = 0;
@@ -141,14 +220,12 @@ void do_harbor(void)
 
 		handle_gui_input();
 
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(get_tx(9), 4,
-						get_tx(10), get_tx(11),
-						get_tx(12), get_tx(13)) - 1;
+			answer = GUI_radio(get_tx(9), 4,get_tx(10), get_tx(11), get_tx(12), get_tx(13)) - 1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -163,49 +240,51 @@ void do_harbor(void)
 
 				/* select a destination */
 				answer = GUI_radio(get_tx(14), (signed char)answer,
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 0 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 1 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 2 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 3 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 4 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 5 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 6 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 7 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 8 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 9 + HARBOR_OPTION_DESTINATION)) + 235)) - 1;
+						get_ttx(gs_harbor_options[0].destination + 235),
+						get_ttx(gs_harbor_options[1].destination + 235),
+						get_ttx(gs_harbor_options[2].destination + 235),
+						get_ttx(gs_harbor_options[3].destination + 235),
+						get_ttx(gs_harbor_options[4].destination + 235),
+						get_ttx(gs_harbor_options[5].destination + 235),
+						get_ttx(gs_harbor_options[6].destination + 235),
+						get_ttx(gs_harbor_options[7].destination + 235),
+						get_ttx(gs_harbor_options[8].destination + 235),
+						get_ttx(gs_harbor_options[9].destination + 235)) - 1;
 
 				if (answer != -2) {
 
-					psg_ptr = p_datseg + SIZEOF_HARBOR_OPTION * answer + HARBOR_OPTIONS;
+					psg_ptr = &gs_harbor_options[answer];
 
-					sprintf(g_dtp2,
-						get_tx(16),
+					sprintf(g_dtp2,	get_tx(16),
 
-						get_tx(ds_readws(SEA_TRAVEL_TX_SHIP + 2 * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))), /* Fischerboot, Schnellsegler etc. */
-						(char*)(host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR)),
+						get_tx(g_sea_travel_tx_ship[psg_ptr->ship_type]), /* Fischerboot, Schnellsegler etc. */
+						psg_ptr->ship_name_ptr,
+						(!psg_ptr->ship_timer ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
-						(char*)(!host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TIMER) ? get_tx(5) : get_tx(6)), /* today or tomorrow */
-
-						get_tx(ds_readws(PASSAGE_TYPE_TO_NAME + 2 * ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)))), /* Kabinenpassage etc. */
-						get_ttx(host_readb(psg_ptr + HARBOR_OPTION_DESTINATION) + 235),
+						get_tx(g_passage_type_to_name[g_ship_table[psg_ptr->ship_type].passage_type]), /* Kabinenpassage etc. */
+						get_ttx(psg_ptr->destination + 235),
 #ifdef __BORLANDC__
-						get_passage_travel_hours(host_readb((Bit8u*)(host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR)) + SEA_ROUTE_DISTANCE), ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
+						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, g_ship_table[psg_ptr->ship_type].base_speed),
 #else
 						/* when compiled with gcc, occasionally passage times of 0 hours do show up. (which does not happen in the original game!!)
 						 * I observed that within the function get_passage_travel_hours(..), computations with negative numbers might happen and lead to this bug.
 						 * The following line fixes this. However, it will lead to incompatible binaries when compiled with the original 1992 BCC compiler
 						 * This incompatibility of the behavior gcc vs. BCC is a bit scary.
 						 * A better understanding is urgently needed... */
-						get_passage_travel_hours(host_readb((Bit8u*)(host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR)) + SEA_ROUTE_DISTANCE), (unsigned char)ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
+						/* REMARK: The base speed should be an unsigned char,
+						 * since a speed of 150 would result in a negative speed, which ssomehow happened.
+						 * Changing just this type to unsigned would hurt the binary aequivalency.
+						 * */
+						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, g_ship_table[psg_ptr->ship_type].base_speed),
 #endif
-						(Bit8u*)(print_passage_price(ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_PRICE_PER_DISTANCE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)), (Bit8u*)(host_readds(psg_ptr + HARBOR_OPTION_ROUTE_PTR)))));
+						print_passage_price(g_ship_table[psg_ptr->ship_type].base_price, psg_ptr->sea_route_ptr));
 
 					i = g_textbox_width;
 					g_textbox_width = 5;
 
 					answer = GUI_bool(g_dtp2);
 
-					g_textbox_width_bak = i;
+					g_textbox_width = i;
 
 					if (answer != 0) {
 
@@ -218,11 +297,11 @@ void do_harbor(void)
 
 						} else {
 
-							g_sea_travel_sleep_quality = ds_readb(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE));
+							g_sea_travel_sleep_quality = g_ship_table[psg_ptr->ship_type].passage_type;
 							money -= gs_sea_travel_passage_price;
 							set_party_money(money);
 
-							gs_sea_travel_psgbooked_timer = host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER);
+							gs_sea_travel_psgbooked_timer = psg_ptr->ship_timer;
 							gs_sea_travel_psgbooked_flag = 0xaa;
 
 							gs_sea_travel_passage_speed1 = gs_sea_travel_passage_speed2; /* speed in [100m per hour] */
@@ -230,9 +309,9 @@ void do_harbor(void)
 							/* not clear why two variables ..._SPEED1 and ..._SPEED2 are used. */
 							/* In my opinion, a single variable would be enough (and then there would not be the need to copy the value around) */
 
-							gs_current_sea_route_id = host_readb(psg_ptr + HARBOR_OPTION_ROUTE_ID);
+							gs_current_sea_route_id = psg_ptr->route_id;
 
-							GUI_output(host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER) != 0 ? get_tx(18) : get_tx(17));
+							GUI_output(psg_ptr->ship_timer ? get_tx(18) : get_tx(17));
 							/* ship leaving tomorrow or today */
 						}
 					}
@@ -272,30 +351,28 @@ void do_harbor(void)
 					p_money -= 10L;
 					set_party_money(p_money);
 
-					i  = answer;
+					i = answer;
 					answer = get_next_passages(answer);
 					/* answer now: number of passages reported by Hafenmeister */
 
 					if (answer != 0) {
 
-						sprintf(g_dtp2,
-							(char*)(i == 1 ? get_tx(28) : get_tx(22)),
-							(char*)(answer == 1 ? p_datseg + SEA_TRAVEL_STR_T : p_datseg + SEA_TRAVEL_STR_EN),
-							(char*)(answer == 1 ? get_tx(23) : get_tx(24)));
+						sprintf(g_dtp2,	(i == 1 ? get_tx(28) : get_tx(22)),
+							(answer == 1 ? g_sea_travel_str_t : g_sea_travel_str_en),
+							(answer == 1 ? get_tx(23) : get_tx(24)));
 
 						i = 0;
 
 						do {
 
-							strcat(g_dtp2,
-								get_ttx(ds_readb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + SIZEOF_HARBOR_OPTION * i++) + 235));
+							strcat(g_dtp2, get_ttx(gs_harbor_options[i++].destination + 235));
+
 							if (--answer) {
 
-								strcat(g_dtp2,
-									(answer >= 2 ? (char*)(p_datseg + SEA_TRAVEL_STR_COMMA) : get_tx(7)));
+								strcat(g_dtp2, (answer >= 2 ? g_sea_travel_str_comma : get_tx(7)));
 							}
 
-						} while (answer != 0);
+						} while (answer);
 
 						strcat(g_dtp2, get_tx(25));
 
@@ -319,7 +396,7 @@ void do_harbor(void)
 
 			} else if (gs_sea_travel_psgbooked_timer) {
 
-				/* REMARK: cast is important, since var is Bit8u */
+				/* REMARK: cast is important, since var is uint8_t */
 				GUI_output((signed char)gs_sea_travel_psgbooked_timer == -1 ?
 					get_tx(27) : /* SEA_TRAVEL_PSGBOOKED_TIMER == -1 -> "Zu spaet! Das Schiff, fuer das ihr gebucht wart ist leider ohne euch losgefahren!" */
 					get_tx(20)   /* SEA_TRAVEL_PSGBOOKED_TIMER == +1 -> "Die Matrosen lassen euch das Schiff noch nicht besteigen. Kommt morgen wieder..." */
@@ -327,7 +404,7 @@ void do_harbor(void)
 
 			} else {
 
-				set_var_to_zero();
+				disable_ani();
 
 				GUI_output(get_tx(21));
 				/* "Ihr begebt euch an Bord. <Macht's euch gemuetlich!> brummelt der Kapitaen. <Wir legen bald ab!>" */
@@ -344,14 +421,13 @@ void do_harbor(void)
 					/* in this call, g_check_disease is reset to 0 */
 
 					hero = get_hero(0);
-					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+					for (i = 0; i <= 6; i++, hero++) {
 
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 						{
 							GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
 
-							host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+							hero->hunger = hero->thirst = 0;
 							/* on the ship, food and drinks are served. */
 						}
 					}
@@ -375,7 +451,7 @@ void do_harbor(void)
 
 				set_palette(gs_travel_map_ptr + 64002, 0, 0x20);
 
-				mod_clock_pos(gs_current_town);
+				mod_clock_pos(gs_town_id);
 
 				set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
@@ -383,24 +459,24 @@ void do_harbor(void)
 				g_wallclock_y = g_basepos_y + 87;
 				g_wallclock_update = 1;
 
-				sea_travel(gs_current_sea_route_id, ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * gs_current_sea_route_id + SEA_ROUTE_TOWN_1) == gs_current_town ? 0 : 1);
+				sea_travel(gs_current_sea_route_id, (g_sea_routes[gs_current_sea_route_id].town_id_1 == gs_town_id ? 0 : 1));
 				passage_arrival();
 
 				g_wallclock_update = g_basepos_x = g_basepos_y = gs_sea_travel_psgbooked_flag = 0;
-				g_current_ani = g_city_area_loaded = g_pp20_index = -1;
+				g_current_ani = g_town_loaded_town_id = g_pp20_index = -1;
 				g_request_refresh = 1;
 				gs_show_travel_map = 0;
 
 				if (!gs_travel_detour) {
 
-					gs_current_town = (signed char)gs_travel_destination_town_id;
+					gs_town_id = (signed char)gs_travel_destination_town_id;
 					gs_x_target_bak = gs_travel_destination_x;
 					gs_y_target_bak = gs_travel_destination_y;
 					gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
 				} else {
 					done = 1;
-					DNG_enter_dungeon(DUNGEONS_TOTENSCHIFF);
+					DNG_enter_dungeon(DUNGEON_ID_TOTENSCHIFF);
 				}
 			}
 
@@ -414,7 +490,7 @@ void do_harbor(void)
 	read_archive_file(i, g_buffer6_ptr, 5000);
 	close(i);
 
-	set_var_to_zero();
+	disable_ani();
 
 	if (!gs_travel_detour) {
 
@@ -423,21 +499,22 @@ void do_harbor(void)
 
 	} else {
 
-		gs_current_town = TOWNS_NONE;
+		gs_town_id = TOWN_ID_NONE;
 	}
 }
 
 /**
- * \brief   * \param town_id	ID of the town
+ * \brief
+ * \param town_id	ID of the town
  */
-void mod_clock_pos(signed short town_id)
+void mod_clock_pos(const signed int town_id)
 {
-	signed short val;
-	signed short map_x;
-	signed short map_y;
+	signed int val;
+	signed int map_x;
+	signed int map_y;
 
-	map_x = ds_readws((TOWN_POSITIONS-4) + 4 * town_id);
-	map_y = ds_readws((TOWN_POSITIONS-4) + 4 * town_id + 2);
+	map_x = g_town_positions[town_id - 1].x;
+	map_y = g_town_positions[town_id - 1].y;
 
 	val = map_x >= 0 && map_x <= 159 ?
 		(map_y >= 0 && map_y <= 99 ? 3 : 1) :
@@ -447,44 +524,41 @@ void mod_clock_pos(signed short town_id)
 	g_basepos_y = ((!val || val == 1) ? -40 : 40);
 }
 
-void sea_travel(signed short passage, signed short dir)
+void sea_travel(const signed int passage_id, const signed int reverse)
 {
-	signed short i;
-	Bit8u *hero;
-	Bit8u *ptr;
-	Bit32s off;
+	signed int i;
+	struct struct_hero *hero;
+	uint8_t *ptr;
+	int32_t off;
 
-#if !defined(__BORLANDC__)
-	struct dummy7 a =  { { -2, 0, 5, 4, 3, 1, 0 } };
-#else
-	struct dummy7 a = *(struct dummy7*)(p_datseg + SEA_TRAVEL_SLEEPBONUS_TABLE2);
-#endif
+	struct int16_t_7 a = g_sea_travel_sleepbonus_table2;
+	//struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
 
-	ds_writeb(TRAVELING, 1);
+	g_traveling = 1;
 
-	gs_sea_travel_courses = (Bit8u*)(passage < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
+	gs_sea_travel_courses = (uint8_t*)(passage_id < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
 
 	/* high seas routes have id 0..6, costal routes id 7..44 */
 
 	/* if high seas route, write 7 (total number of high seas routes)
 	 * if costal route, write 38 (total number of costal routes) */
-	gs_route_mousehover = (passage < 7 ? 7 : 38);
+	gs_route_mousehover = (passage_id < 7 ? 7 : 38);
 
 	/* convert costal route ids to range 0..37 */
-	gs_sea_travel_passage_no = passage < 7 ? passage : passage - 7;
+	gs_sea_travel_passage_id = passage_id < 7 ? passage_id : passage_id - 7;
 
-	off = host_readd(gs_sea_travel_courses + 4 * gs_sea_travel_passage_no);
-	gs_route_course_ptr = gs_sea_travel_courses + off + 4 * gs_route_mousehover;
+	off = ((int32_t*)gs_sea_travel_courses)[gs_sea_travel_passage_id];
+	gs_route_course_ptr = (int16_t*)(gs_sea_travel_courses + off + 4 * gs_route_mousehover);
 	ptr = g_vga_memstart;
 
-	gs_route_course_ptr += 4;
+	gs_route_course_ptr += 2;
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	gs_travel_speed = 10 * gs_sea_travel_passage_speed1; /* speed [unit: 10m per hour] */
-	gs_route_total_steps = (get_srout_len(gs_route_course_ptr)); /* a step for each pixel on the map. */
-	gs_route_length = (100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
-	gs_route_duration = (gs_route_length / gs_travel_speed * 60); /* duration [unit: minutes] */
-	gs_route_timedelta = (gs_route_duration / gs_route_total_steps); /* duration of each step [unit: minutes] */
+	gs_route_total_steps = get_srout_len((struct struct_point*)gs_route_course_ptr); /* a step for each pixel on the map. */
+	gs_route_length = 100 * g_sea_routes[passage_id].distance; /* length of sea route [unit: 10m] */
+	gs_route_duration = gs_route_length / gs_travel_speed * 60; /* duration [unit: minutes] */
+	gs_route_timedelta = gs_route_duration / gs_route_total_steps; /* duration of each step [unit: minutes] */
 	gs_route_stepsize = gs_route_length / gs_route_total_steps; /* length of a single step [unit: 10m] */
 
 	if (gs_route_stepsize == 0) {
@@ -495,14 +569,14 @@ void sea_travel(signed short passage, signed short dir)
 	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", gs_route_total_steps, gs_route_stepsize, gs_route_timedelta);
 #endif
 
-	if (dir) {
+	if (reverse) {
 		/* for reverse direction, point gs_route_course_ptr to end of route */
 
-		while (host_readws(gs_route_course_ptr) != -1) {
-			gs_route_course_ptr += 4;
+		while (gs_route_course_ptr[0] != -1) {
+			gs_route_course_ptr += 2;
 		}
 
-		gs_route_course_ptr -= 4;
+		gs_route_course_ptr -= 2;
 	}
 
 	gs_route_course_start = gs_route_course_ptr;
@@ -511,7 +585,7 @@ void sea_travel(signed short passage, signed short dir)
 	/* this is 19.8h * gs_travel_speed, which is the distance [unit: 10m] the ship travels in 19.8 h.
 	 * It is used as upper bound for the position of the random encounters. */
 
-	if (passage <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
+	if (passage_id <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
 		/* only on high seas routes */
 
 		if ((gs_passage_deadship_flag = random_schick(100) <= 20 ? 1 : 0)) {
@@ -543,27 +617,25 @@ void sea_travel(signed short passage, signed short dir)
 	gs_route_stepcount = gs_route_progress = gs_route_dayprogress = gs_travel_detour = 0;
 	g_travel_herokeeping = 1;
 
-	while (host_readws(gs_route_course_ptr + 2 * (gs_route_mousehover = 0)) != -1 && !gs_travel_detour)
+	while (gs_route_course_ptr[(gs_route_mousehover = 0)] != -1 && !gs_travel_detour)
 	{
 
-		if (is_mouse_in_rect(host_readws(gs_route_course_ptr) - 16,
-					host_readws(gs_route_course_ptr + 2) - 16,
-					host_readws(gs_route_course_ptr) + 16,
-					host_readws(gs_route_course_ptr + 2) + 16))
+		if (is_mouse_in_rect(gs_route_course_ptr[0] - 16, gs_route_course_ptr[1] - 16,
+					gs_route_course_ptr[0] + 16, gs_route_course_ptr[1] + 16))
 		{
-			update_mouse_cursor();
+			call_mouse_bg();
 			gs_route_mousehover = 1;
 		}
 
 		g_trv_track_pixel_bak[gs_route_stepcount] =
-			*(ptr + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr));
+			*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]);
 
 		gs_route_stepcount++;
 
-		*(ptr + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr)) = 0x1f;
+		*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) = 0x1f;
 
 		if (gs_route_mousehover) {
-			refresh_screen_size();
+			call_mouse();
 		}
 
 		/* the following loop will be executed Floor(gs_route_timedelta / 2) times.
@@ -587,7 +659,7 @@ void sea_travel(signed short passage, signed short dir)
 		if (gs_passage_deadship_flag != 0 && gs_route_dayprogress >= gs_passage_deadship_position && !gs_quest_deadship_done) {
 
 			/* within the call prolog_ghostship(), the party can decide if they enter the Totenschiff.
-			 * In that case, gs_travel_detour is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
+			 * In that case, gs_travel_detour is set to DUNGEON_ID_TOTENSCHIFF (instead of 0) */
 			prolog_ghostship();
 			gs_passage_deadship_flag = 0;
 
@@ -619,25 +691,24 @@ void sea_travel(signed short passage, signed short dir)
 
 			disease_effect();
 
-			ds_writeb(TRAVEL_BY_SHIP, 1);
+			g_travel_by_ship = 1;
 
 			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			for (i = 0; i <= 6; i++, hero++) {
 
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 				{
 					GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
-					host_writeb(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+					hero->hunger = hero->thirst = 0;
 				}
 			}
 
-			ds_writeb(TRAVEL_BY_SHIP, 0);
+			g_travel_by_ship = 0;
 		}
 
-		if (g_request_refresh != 0 && !gs_travel_detour) {
+		if (g_request_refresh && !gs_travel_detour) {
 
-			update_mouse_cursor();
+			call_mouse_bg();
 
 			load_map();
 
@@ -654,12 +725,12 @@ void sea_travel(signed short passage, signed short dir)
 
 			for (gs_route_course_ptr2 = gs_route_course_start;
 					g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
-					gs_route_course_ptr += 2 * (!dir ? 2 : -2))
+					gs_route_course_ptr2 += (!reverse ? 2 : -2))
 			{
-				*(ptr + host_readws(gs_route_course_ptr2 + 2) * 320 + host_readws(gs_route_course_ptr2)) = 0x1f;
+				*(ptr + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) = 0x1f;
 			}
 
-			refresh_screen_size();
+			call_mouse();
 
 			g_wallclock_x = g_basepos_x + 120;
 			g_wallclock_y = g_basepos_y + 87;
@@ -667,46 +738,42 @@ void sea_travel(signed short passage, signed short dir)
 			g_request_refresh = 0;
 		}
 
-		gs_route_course_ptr += 2 * (!dir ? 2 : -2);
+		gs_route_course_ptr += (!reverse ? 2 : -2);
 	}
 
 	g_travel_herokeeping = 0;
 
 	if (!gs_travel_detour) {
 
-		update_mouse_cursor();
+		call_mouse_bg();
 
 		do {
-			if (!dir) {
-				gs_route_course_ptr -= 4;
+			if (!reverse) {
+				gs_route_course_ptr -= 2;
 			} else {
-				gs_route_course_ptr += 4;
+				gs_route_course_ptr += 2;
 			}
 			gs_route_stepcount--;
 
-			*(ptr + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr)) =
+			*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
 				g_trv_track_pixel_bak[gs_route_stepcount];
 
-		} while (host_readws(gs_route_course_ptr) != -1);
+		} while (gs_route_course_ptr[0] != -1);
 
-		refresh_screen_size();
+		call_mouse();
 	}
 
-	ds_writeb(TRAVELING, 0);
+	g_traveling = 0;
 }
 
-signed short get_srout_len(Bit8u *ptr)
+signed int get_srout_len(struct struct_point *ptr)
 {
-	signed short i = 0;
+	signed int i = 0;
 
-	while (host_readws(ptr) != -1) {
-		ptr += 4;
+	while (ptr->x != -1) {
+		ptr++;
 		i++;
 	}
 
 	return i;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

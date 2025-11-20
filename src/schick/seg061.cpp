@@ -12,7 +12,11 @@
 #if defined(__BORLANDC__)
 #include <DOS.H>
 #else
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -32,19 +36,56 @@
 #include "seg096.h"
 #include "seg097.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
+static int8_t g_god_temples_table_01[2] = { 0x3d, -1 }; // ds:0x6de8, array terminated by -1
+static int8_t g_god_temples_table_02[6] = { 0x0b, 0x1c, 0x25, 0x2d, 0x33, -1 }; // ds:0x6dea, array terminated by -1
+static int8_t g_god_temples_table_03[11] = { 0x03, 0x0d, 0x0e, 0x21, 0x22, 0x26, 0x29, 0x2c, 0x35, 0x39, -1 }; // ds:0x6df0, array terminated by -1
+static int8_t g_god_temples_table_04[16] = { 0x01, 0x08, 0x0a, 0x10, 0x11, 0x14, 0x18, 0x1e, 0x23, 0x2a, 0x2b, 0x2f, 0x30, 0x32, 0x34, -1 }; // ds:0x6dfb, array terminated by -1
+static int8_t g_god_temples_table_05[2] = { 0x3e, -1 }; // ds:0x6e0b, array terminated by -1
+static int8_t g_god_temples_table_06[2] = { 0x3f, -1 }; // ds:0x6e0d, array terminated by -1
+static int8_t g_god_temples_table_07[4] = { 0x12, 0x1a, 0x3a, -1 }; // ds:0x6e0f, array terminated by -1
+static int8_t g_god_temples_table_08[2] = { 6, -1 }; // ds:0x6e13, array terminated by -1
+static int8_t g_god_temples_table_09[6] = { 0x05, 0x09, 0x13, 0x27, 0x3b, -1 }; // ds:0x6e15, array terminated by -1
+static int8_t g_god_temples_table_10[5] = { 0x04, 0x0c, 0x19, 0x3c, -1 }; // ds:0x6e1b, array terminated by -1
+static int8_t g_god_temples_table_11[3] = { 0x16, 0x1b, -1 }; // ds:0x6e20, array terminated by -1
+static int8_t g_god_temples_table_12[2] = { 0x40, -1 }; // ds:0x6e23, array terminated by -1
+static int8_t g_god_temples_table_13[13] = { 0x02, 0x07, 0x0f, 0x15, 0x1d, 0x20, 0x24, 0x28, 0x2e, 0x31, 0x36, 0x38, -1 }; // ds:0x6e25, array terminated by -1
+static int8_t g_god_temples_table_14[4] = { 0x17, 0x1f, 0x37, -1 }; // ds:0x6e32, array terminated by -1
+static int8_t* g_god_temples_index[15] = {
+	NULL,
+	g_god_temples_table_01,
+	g_god_temples_table_02,
+	g_god_temples_table_03,
+
+	g_god_temples_table_04,
+	g_god_temples_table_05,
+	g_god_temples_table_06,
+	g_god_temples_table_07,
+
+	g_god_temples_table_08,
+	g_god_temples_table_09,
+	g_god_temples_table_10,
+	g_god_temples_table_11,
+
+	g_god_temples_table_12,
+	g_god_temples_table_13,
+	g_god_temples_table_14,
+}; // ds:0x6e36; int8_t*
+static char g_str_temp_file_wildcard[8] = "TEMP\\%s"; // ds:0x6e72
+static char g_str_no_save_in_temple[41] = "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!"; // ds:0x6e7a
+
+
+/* REMARK: should be passed as a parameter to asm_miracles() */
+signed int g_temple_god; // ds:0xe3f8, id of current temple's god
 
 void do_temple(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short input;
+	signed int i;
+	signed int answer;
+	signed int input;
 	signed char done = 0;
-	Bit32s money;
-	Bit32s donation;
-	signed short game_state;
+	int32_t money;
+	int32_t donation;
+	signed int game_state;
 
 	g_intemple = g_intemple2 = 0;
 	g_request_refresh = 1;
@@ -57,10 +98,10 @@ void do_temple(void)
 
 			/* search which god owns this temple */
 			g_temple_god = 1;
-			for (l_si = 1; l_si < 15; l_si++) {
-				if (is_in_byte_array((signed char)gs_current_typeindex, (Bit8u*)ds_readd(GOD_TEMPLES_INDEX + 4 * l_si)))
+			for (i = 1; i < 15; i++) {
+				if (is_in_byte_array(gs_town_typeindex, g_god_temples_index[i]))
 				{
-					g_temple_god = l_si;
+					g_temple_god = i;
 					break;
 				}
 			}
@@ -75,18 +116,18 @@ void do_temple(void)
 			g_pic_copy.x1 = g_pic_copy.y1 = 0;
 			g_pic_copy.x2 = 40;
 			g_pic_copy.y2 = 22;
-			g_pic_copy.dst = g_vga_memstart + 28259;
+			g_pic_copy.dst = g_vga_memstart + 88 * 320 + 99;
 			g_pic_copy.src = g_buffer8_ptr + 7000;
 
-			update_mouse_cursor();
+			call_mouse_bg();
 			do_pic_copy(0);
-			refresh_screen_size();
+			call_mouse();
 			g_pic_copy.dst = g_vga_memstart;
 
 			/* location string */
 			sprintf(g_dtp2, get_ttx(235),
 				get_ttx(g_temple_god + 21),	/* name of the god */
-				(char*)(gs_current_typeindex != 58 ? get_ttx(gs_current_town + 235): get_ttx(622)));
+				(char*)(gs_town_typeindex != 58 ? get_ttx(gs_town_id + 235): get_ttx(622)));
 
 			GUI_print_loc_line(g_dtp2);
 
@@ -96,90 +137,85 @@ void do_temple(void)
 		handle_gui_input();
 
 		/* input window */
-		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
+		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP) {
 
-			l_di = GUI_radio(get_ttx(225), 9,
-						get_ttx(226),
-						get_ttx(227),
-						get_ttx(293),
-						get_ttx(228),
-						get_ttx(229),
-						get_ttx(230),
-						get_ttx(620),
-						get_ttx(296),
-						get_ttx(231)) - 1;
+			answer = GUI_radio(get_ttx(225), 9,
+						get_ttx(226), get_ttx(227), get_ttx(293),
+						get_ttx(228), get_ttx(229), get_ttx(230),
+						get_ttx(620), get_ttx(296), get_ttx(231)) - 1;
 
-			if (l_di != -2) {
-				g_action = (l_di + ACTION_ID_ICON_1);
+			if (answer != -2) {
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
 		if (g_action == ACTION_ID_ICON_9) {
 			/* leave temple */
-			if (!gs_group_member_counts[gs_current_group]) {
+			if (!gs_group_member_counts[gs_active_group_id]) {
 				GUI_output(get_ttx(232));
 			} else {
 				done = 1;
 			}
 		} else if (g_action == ACTION_ID_ICON_1) {
 			/* add character */
-			char_add(gs_current_typeindex);
+			char_add(gs_town_typeindex);
 			draw_status_line();
 		} else if (g_action == ACTION_ID_ICON_2) {
 			/* let go character */
-			char_letgo(gs_current_typeindex);
+			char_letgo(gs_town_typeindex);
 			draw_status_line();
 		} else if (g_action == ACTION_ID_ICON_3) {
 			/* erase character */
 			char_erase();
 		} else if (g_action == ACTION_ID_ICON_4) {
 			/* load game */
-			if (gs_current_typeindex != 58) {
+			if (gs_town_typeindex != 58) {
 
 				do {
 					game_state = load_game_state();
 				} while (game_state == -1);
 
 				/* location string */
-				sprintf(g_dtp2,
-					get_ttx(235),
-					get_ttx(g_temple_god + 21),	/* name of the god */
-					get_ttx(gs_current_town + 235));
+				sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_town_id + 235));
 				GUI_print_loc_line(g_dtp2);
 
 				draw_status_line();
 
-				if (gs_current_loctype != LOCTYPE_TEMPLE) {
+				if (gs_town_loc_type != LOCTYPE_TEMPLE) {
 					done = 1;
 				}
 			} else {
 				GUI_output(get_ttx(817));
 			}
 		} else if (g_action == ACTION_ID_ICON_5) {
+
 			/* save game */
-			if (gs_current_typeindex != 58) {
-				if (!gs_group_member_counts[gs_current_group]) {
+			if (gs_town_typeindex != 58) {
+
+				if (!gs_group_member_counts[gs_active_group_id]) {
 					GUI_output(get_ttx(232));
 				} else {
 					save_game_state();
 				}
 			} else {
-				GUI_output((char*)(p_datseg + STR_NO_SAVE_IN_TEMPLE));
+				GUI_output(g_str_no_save_in_temple);
 			}
 		}
 
 		if (g_action == ACTION_ID_ICON_6) {
+
 			/* quit game */
 			if (GUI_bool(get_ttx(299))) {
 
 				done = 1;
-				g_game_state = (GAME_STATE_QUIT);
+				g_game_state = GAME_STATE_QUIT;
 			}
 		}
 
 		if (g_action == ACTION_ID_ICON_7) {
+
 			/* ask for a miracle */
-			if (!gs_group_member_counts[gs_current_group]) {
+			if (!gs_group_member_counts[gs_active_group_id]) {
 				GUI_output(get_ttx(232));
 			} else {
 				ask_miracle();
@@ -187,8 +223,9 @@ void do_temple(void)
 		}
 
 		if (g_action == ACTION_ID_ICON_8) {
+
 			/* make a donation */
-			if (!gs_group_member_counts[gs_current_group]) {
+			if (!gs_group_member_counts[gs_active_group_id]) {
 				GUI_output(get_ttx(232));
 			} else {
 
@@ -231,18 +268,17 @@ void do_temple(void)
 	g_intemple = g_intemple2 = 1;
 }
 
-void char_add(signed short temple_id)
+void char_add(const signed int temple_id)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short i;
-	Bit8u *ptr;
-	Bit8u *hero;
+	signed int position;
+	signed int entries;
+	signed int i;
+	uint8_t *ptr;
 
 	ptr = g_renderbuf_ptr + 50000;
-	l_di = copy_chr_names(ptr, temple_id);
+	entries = copy_chr_names(ptr, temple_id);
 
-	if (gs_total_hero_counter == 7 || (gs_total_hero_counter == 6 && !host_readbs(get_hero(6) + HERO_TYPE)))
+	if (gs_total_hero_counter == 7 || (gs_total_hero_counter == 6 && !get_hero(6)->typus))
 	{
 		GUI_output(get_ttx(288));
 
@@ -250,27 +286,27 @@ void char_add(signed short temple_id)
 
 		do {
 
-			if (!l_di) {
+			if (!entries) {
 				GUI_output(get_ttx(290));
-				l_si = -1;
+				position = -1;
 			} else {
 
-				l_si = menu_enter_delete(ptr, l_di, 1);
+				position = menu_enter_delete(ptr, entries, 1);
 
-				if (l_si != -1) {
+				if (position != -1) {
 
-					hero = get_hero(0);
+					struct struct_hero *hero = get_hero(0);
 
-					for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+					for (i = 0; i < 6; i++, hero++) {
 
-						if (!host_readbs(hero + HERO_TYPE)) {
+						if (!hero->typus) {
 
-							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * l_si));
+							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * position));
 
-							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
+							if (read_chr_temp(g_dtp2, i, gs_active_group_id)) {
 								gs_total_hero_counter++;
-								gs_group_member_counts[gs_current_group]++;
-								host_writebs(hero + HERO_GROUP_POS, i + 1);
+								gs_group_member_counts[gs_active_group_id]++;
+								hero->slot_pos = i + 1;
 								write_chr_temp(i);
 							}
 							break;
@@ -281,73 +317,72 @@ void char_add(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf(g_dtp2, get_ttx(235),
-						get_ttx(g_temple_god + 21),
-						get_ttx(gs_current_town + 235));
+					sprintf(g_dtp2, get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_town_id + 235));
 
 					GUI_print_loc_line(g_dtp2);
 				}
 
-				l_di = copy_chr_names(ptr, temple_id);
+				entries = copy_chr_names(ptr, temple_id);
 			}
-		} while ((l_si != -1) && (gs_total_hero_counter < (host_readbs(get_hero(6) + HERO_TYPE) ? 7 : 6)));
+
+		} while ((position != -1) && (gs_total_hero_counter < (get_hero(6)->typus ? 7 : 6)));
 	}
 }
 
-void char_letgo(signed short temple_id)
+void char_letgo(const signed int temple_id)
 {
-	signed short hero_pos;
-	Bit8u *hero;
+	if (!gs_total_hero_counter || !gs_group_member_counts[gs_active_group_id]) {
 
-	if (!gs_total_hero_counter || !gs_group_member_counts[gs_current_group]) {
 		GUI_output(get_ttx(232));
+
 	} else {
 
-		do {
+		signed int hero_pos;
 
+		do {
 			hero_pos = select_hero_from_group(get_ttx(618));
 
 			if (hero_pos != -1) {
 
 				if (hero_pos == 6) {
+
 					/* let go an NPC */
 					gs_npc_months = 99;
 					npc_farewell();
-				} else {
-					/* let go a hero */
-					hero = get_hero(hero_pos);
-					gs_total_hero_counter--;
-					gs_group_member_counts[gs_current_group]--;
 
-					host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
-					host_writeb(hero + HERO_GROUP_POS, 0);
+				} else {
+
+					/* let go a hero */
+					struct struct_hero *hero = get_hero(hero_pos);
+					gs_total_hero_counter--;
+					gs_group_member_counts[gs_active_group_id]--;
+
+					hero->temple_id = temple_id;
+					hero->slot_pos = 0;
 
 					write_chr_temp(hero_pos);
 
-					memset(hero, 0, SIZEOF_HERO);
+					memset(hero, 0, sizeof(struct struct_hero));
 
 					draw_main_screen();
 					init_ani(2);
 
 					/* location string */
-					sprintf(g_dtp2,
-						get_ttx(235),
-						get_ttx(g_temple_god + 21),	/* name of the god */
-						get_ttx(gs_current_town + 235));
+					sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_town_id + 235));
 					GUI_print_loc_line(g_dtp2);
 				}
 			}
 
-		} while ((hero_pos != -1) && (gs_group_member_counts[gs_current_group] > (host_readbs(get_hero(6) + HERO_TYPE) ? 1 : 0)));
+		} while ((hero_pos != -1) && (gs_group_member_counts[gs_active_group_id] > (get_hero(6)->typus ? 1 : 0)));
 	}
 }
 
-signed short char_erase(void)
+signed int char_erase(void)
 {
-	signed short l_si;
-	signed short l_di;
-	signed short unlink_ret;
-	Bit8u *ptr;
+	signed int position;
+	signed int entries;
+	signed int unlink_ret;
+	uint8_t *ptr;
 
 	if (g_renderbuf_in_use_flag) {
 		ptr = g_buffer9_ptr + 30000L;
@@ -355,19 +390,19 @@ signed short char_erase(void)
 		ptr = g_renderbuf_ptr + 50000;
 	}
 
-	l_di = copy_chr_names(ptr, -1);
+	entries = copy_chr_names(ptr, -1);
 
 	do {
-		if (!l_di) {
-			l_si = -1;
+		if (!entries) {
+			position = -1;
 		} else {
-			l_si = menu_enter_delete(ptr, l_di, -1);
+			position = menu_enter_delete(ptr, entries, -1);
 
-			if (l_si != -1) {
+			if (position != -1) {
 
-				strcpy(g_dtp2, (char*)ptr + 32 * l_si);
+				strcpy(g_dtp2, (char*)ptr + 32 * position);
 
-				sprintf(g_text_output_buf, get_ttx(295),	g_dtp2);
+				sprintf(g_text_output_buf, get_ttx(295), g_dtp2);
 
 				if (GUI_bool(g_text_output_buf)) {
 
@@ -375,23 +410,25 @@ signed short char_erase(void)
 
 					unlink_ret = unlink(g_text_output_buf);
 
-					if (unlink_ret != 0) {
+					if (unlink_ret) {
+
 						GUI_output(get_ttx(294));
+
 						return 0;
 					}
 
-					sprintf(g_dtp2, (char*)p_datseg + STR_TEMP_FILE_WILDCARD, g_text_output_buf);
+					sprintf(g_dtp2, g_str_temp_file_wildcard, g_text_output_buf);
 					unlink(g_dtp2);
 				}
 
-				l_di = copy_chr_names(ptr, -1);
+				entries = copy_chr_names(ptr, -1);
 
 			} else {
 				return 0;
 			}
 		}
 
-	} while (l_si != -1);
+	} while (position != -1);
 
 	return 1;
 }
@@ -402,27 +439,22 @@ signed short char_erase(void)
  * \param   le_in       healable LE maximum
  * \param   str         a format-string for the output
  */
-void miracle_heal_hero(signed short le_in, char *str)
+void miracle_heal_hero(signed int le_in, const char *str)
 {
-	signed short i;
-	signed short le;
-	signed short hero_pos;
-	signed short le_diff;
-	Bit8u *hero;
-
-	le = 0;
-	hero_pos = -1;
+	signed int i;
+	signed int le = 0;
+	signed int hero_pos = -1;
 
 	/* search for the hero with the largest LE-difference */
 	for (i = 0; i <= 6; i++) {
-		hero = get_hero(i);
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			!hero_gods_pissed(hero) &&
-			!hero_dead(hero) &&
-			((le_diff = host_readws(hero + HERO_LE_ORIG) - host_readws(hero + HERO_LE)) > le))
+		signed int le_diff;
+		const struct struct_hero *hero = get_hero(i);
+
+		/* REMARK: remove one check for dead, do difference calculation before the if */
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
+			!hero->flags.dead && !hero->flags.gods_pissed && !hero->flags.dead &&
+			((le_diff = hero->le_max - hero->le) > le))
 		{
 			le = le_diff;
 			hero_pos = i;
@@ -445,22 +477,22 @@ void miracle_heal_hero(signed short le_in, char *str)
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
-		sprintf(g_dtp2, (char*)str, (char*)get_hero(hero_pos) + HERO_NAME2, le_in, g_text_output_buf);
+		sprintf(g_dtp2, str, get_hero(hero_pos)->alias, le_in, g_text_output_buf);
 	}
 }
 
-void miracle_resurrect(char *str)
+void miracle_resurrect(const char *str)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++) {
 
-		Bit8u *hero = get_hero(i);
+		struct struct_hero *hero = get_hero(i);
 
-		if (hero_dead(hero) && host_readbs(hero + HERO_GROUP_NO) == gs_current_group && !hero_gods_pissed(hero))
+		if (hero->flags.dead && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 		{
 			/* resurrect from the dead */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xfe); /* unset 'dead' flag */
+			hero->flags.dead = 0;
 
 			/* add 7 LE */
 			add_hero_le(hero, 7);
@@ -469,7 +501,7 @@ void miracle_resurrect(char *str)
 			draw_status_line();
 
 			/* prepare a message */
-			sprintf(g_dtp2, (char*)str, (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, str, hero->alias);
 
 			break;
 		}
@@ -483,25 +515,23 @@ void miracle_resurrect(char *str)
  * \param   timer_value how long should the modification last
  * \param   mod         modification value
  */
-void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
+void miracle_modify(const unsigned int offset, const int32_t timer_value, const signed int mod)
 {
-	int i;
-	int slot;
+	signed int i;
+	signed int mod_slot;
 	HugePt ptr;
-	unsigned char *hero = get_hero(0);
+	struct struct_hero *hero = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			!hero_gods_pissed(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
+			!hero->flags.dead && !hero->flags.gods_pissed)
 		{
-			slot = get_free_mod_slot();
-			ptr = hero;
+			mod_slot = get_free_mod_slot();
+			ptr = (uint8_t*)hero;
 			ptr += offset;
 
-			set_mod_slot(slot, timer_value, (Bit8u*)ptr, (signed char)mod, (signed char)i);
+			set_mod_slot(mod_slot, timer_value, (uint8_t*)ptr, (signed char)mod, (signed char)i);
 		}
 	}
 }
@@ -512,54 +542,47 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
  * \param   str         format string for output
  * \param   mode        0 = magic, != 0 repair
  */
-void miracle_weapon(char *str, signed short mode)
+void miracle_weapon(const char *str, const signed int mode)
 {
-	int i;
-	int j;
-	int done;
-	int item_id;
+	signed int i;
+	signed int j;
+	signed int done;
+	signed int item_id;
 
 	for (j = done = 0; (j <= 6) && (!done); j++) {
 
-		Bit8u *hero = get_hero(j);
+		struct struct_hero *hero = get_hero(j);
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			!hero_gods_pissed(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead && !hero->flags.gods_pissed)
 		{
 			for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++)
 			{
 
-				if ((item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * i)) &&
-					item_weapon(get_itemsdat(item_id)))
+				if ((item_id = hero->inventory[i].item_id) && g_itemsdat[item_id].flags.weapon)
 				{
 
 					if (mode == 0) {
+
 						/* if weapon is neither broken nor magic magic, make it magic and magic_revealed */
 
-						if (!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * i) &&
-							!inventory_magic(hero + HERO_INVENTORY + SIZEOF_INVENTORY * i))
+						if (!hero->inventory[i].flags.broken &&	!hero->inventory[i].flags.magic)
 						{
-							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x08); /* set 'magic' flag */
-							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x80); /* set 'magic_revealed' flag */
+							hero->inventory[i].flags.magic = 1;
+							hero->inventory[i].flags.magic_revealed = 1;
 
-							sprintf(g_dtp2, (char*)str,
-								GUI_names_grammar((signed short)0x8000, item_id, 0),
-								(char*)hero + HERO_NAME2);
+							sprintf(g_dtp2, str, GUI_names_grammar(0x8000, item_id, 0), hero->alias);
 
 							done = 1;
 							break;
 						}
 					} else {
-						/* repair a broken weapon */
-						if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * i))
-						{
-							and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0xfe); /* unset 'broken' flag */
 
-							sprintf(g_dtp2, (char*)str,
-								GUI_names_grammar((signed short)0x8000, item_id, 0),
-								(char*)hero + HERO_NAME2);
+						/* repair a broken weapon */
+						if (hero->inventory[i].flags.broken)
+						{
+							hero->inventory[i].flags.broken = 0;
+
+							sprintf(g_dtp2, str, GUI_names_grammar(0x8000, item_id, 0), hero->alias);
 
 							done = 1;
 							break;
@@ -570,7 +593,3 @@ void miracle_weapon(char *str, signed short mode)
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

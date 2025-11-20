@@ -8,7 +8,11 @@
  */
 #include <stdio.h>
 #if !defined(__BORLANDC__)
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -20,22 +24,91 @@
 #include "seg026.h"
 #include "seg046.h"
 #include "seg047.h"
+#include "seg050.h"
 #include "seg097.h"
 #include "seg098.h"
 #include "seg103.h"
 #include "seg120.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
-#endif
+const signed int g_autoinc_spells_witch[3] = { SP_ODEM_ARCANUM, SP_BLITZ_DICH_FIND, -1 }; // ds:25924
+const signed int g_autoinc_spells_druid[4] = { SP_ODEM_ARCANUM, SP_VERWANDLUNG_BEENDEN, SP_EXPOSAMI_CREATUR, -1 }; // ds:25930
 
-struct dummy_in {
-	signed char first, last;
+static const signed int g_autoinc_spells_mage00[] = {
+	SP_GEISTER_AUSTREIBEN, SP_BALSAM_SALABUNDE, SP_ARCANO_PSYCHOSTABILIS,
+	SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_KLARUM_PURUM_KRAEUTERSUD, SP_ANALUES_ARCANSTRUKTUR,
+	SP_FLIM_FLAM_FUNKEL, SP_ARMATRUTZ, SP_HEPTAGON_UND_KROETENEI, SP_ABVENENUM_PEST_UND_GALLE, -1};
+static const signed int g_autoinc_spells_mage01[] = {
+	SP_ODEM_ARCANUM, SP_SENSIBAR_WAHR_UND_KLAR, SP_IGNIFAXIUS_FLAMMENSTRAHL,
+	SP_BAND_UND_FESSEL, SP_DUPLICATUS_DOPPELPEIN, SP_GROSSE_VERWIRRUNG, SP_BALSAM_SALABUNDE,
+	SP_HARMLOSE_GESTALT, SP_FLIM_FLAM_FUNKEL, SP_HERR_UEBER_DAS_TIERREICH, SP_EIGENSCHAFTEN_SEID_GELESEN, -1};
+static const signed int g_autoinc_spells_mage02[] = {
+	SP_NIHILATIO_GRAVITAS, SP_ODEM_ARCANUM, SP_SOLIDIRID_FARBENSPIEL,
+	SP_FLIM_FLAM_FUNKEL, SP_BALSAM_SALABUNDE, SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_DUNKELHEIT,
+	SP_GARDIANUM_PARADEI, SP_ECLIPTIFACTUS, SP_GEISTER_BESCHWOEREN, SP_ANALUES_ARCANSTRUKTUR, -1};
+static const signed int g_autoinc_spells_mage03[] = {
+	SP_BALSAM_SALABUNDE, SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_FLIM_FLAM_FUNKEL, SP_PENETRIZZEL_HOLZ_UND_STEIN,
+	SP_CLAUDIBUS_CLAVISTIBOR, SP_SOLIDIRID_FARBENSPIEL, SP_ODEM_ARCANUM, SP_PLUMBUMBARUM_UND_NARRETEI,
+	SP_IN_SEE_UND_FLUSS, SP_VISIBILI_VANITAR, SP_UEBER_EIS_UND_UEBER_SCHNEE, -1};
+static const signed int g_autoinc_spells_mage04[] = {
+	SP_ABVENENUM_PEST_UND_GALLE, SP_ODEM_ARCANUM, SP_EIGENSCHAFTEN_SEID_GELESEN, SP_ARMATRUTZ,
+	SP_GARDIANUM_PARADEI, SP_BLITZ_DICH_FIND, SP_TIERE_BESPRECHEN, SP_KK_STEIGERN, SP_FLIM_FLAM_FUNKEL, SP_EISENROST_UND_GRUENER_SPAN, -1};
+static const signed int g_autoinc_spells_mage05[] = {
+	SP_BALSAM_SALABUNDE, SP_FLIM_FLAM_FUNKEL, SP_RESPONDAMI_VERITAR,
+	SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_BANNBALADIN, SP_ARMATRUTZ,
+	SP_ARCANO_PSYCHOSTABILIS, SP_GARDIANUM_PARADEI, SP_HORRIPHOBUS, -1};
+static const signed int g_autoinc_spells_mage06[] = {
+	SP_GARDIANUM_PARADEI, SP_BALSAM_SALABUNDE, SP_PARALUE_PARALEIN,
+	SP_FLIM_FLAM_FUNKEL, SP_ECLIPTIFACTUS, SP_HORRIPHOBUS, SP_DUNKELHEIT,
+	SP_SAFT_KRAFT_MONSTERMACHT, SP_ODEM_ARCANUM, SP_FUROR_BLUT_UND_SULPHURDAMPF,
+	SP_ARCANO_PSYCHOSTABILIS, SP_KK_STEIGERN, SP_GE_STEIGERN, SP_MU_STEIGERN, -1};
+static const signed int g_autoinc_spells_mage07[] = {
+	SP_BALSAM_SALABUNDE, SP_KLARUM_PURUM_KRAEUTERSUD, SP_IGNIFAXIUS_FLAMMENSTRAHL,
+	SP_FLIM_FLAM_FUNKEL, SP_KK_STEIGERN, SP_ARCANO_PSYCHOSTABILIS, SP_GE_STEIGERN,
+	SP_ECLIPTIFACTUS, SP_IN_SEE_UND_FLUSS, SP_ODEM_ARCANUM, SP_EIGENSCHAFTEN_SEID_GELESEN, -1};
+static const signed int g_autoinc_spells_mage08[] = {
+	SP_PARALUE_PARALEIN, SP_ARMATRUTZ, SP_GARDIANUM_PARADEI,
+	SP_BALSAM_SALABUNDE, SP_IGNIFAXIUS_FLAMMENSTRAHL, SP_PENETRIZZEL_HOLZ_UND_STEIN,
+	SP_FORAMEN_FORAMINOR, SP_WEICHES_ERSTARRE, SP_AEOLITUS_WINDGEBRAUS,
+	SP_STURMGEBRUELL_BESAENFTGE_DICH, SP_PLUMBUMBARUM_UND_NARRETEI, SP_DESTRUCTIBO_ARCANITAS, -1};
+
+const signed int* g_autoinc_spells_mage_index[9] = {
+	g_autoinc_spells_mage00,
+	g_autoinc_spells_mage01,
+	g_autoinc_spells_mage02,
+	g_autoinc_spells_mage03,
+	g_autoinc_spells_mage04,
+	g_autoinc_spells_mage05,
+	g_autoinc_spells_mage06,
+	g_autoinc_spells_mage07,
+	g_autoinc_spells_mage08
+}; // ds:0x662a, by magic school; uint8_t*
+const signed int g_autoinc_spells_gelf[7] = { SP_FLIM_FLAM_FUNKEL, SP_BLITZ_DICH_FIND, SP_AXXELERATUS_BLITZGESCHWIND, SP_KLARUM_PURUM_KRAEUTERSUD, SP_TIERE_BESPRECHEN, SP_DUNKELHEIT, -1 }; // ds:26190
+const signed int g_autoinc_spells_self[7] = { SP_SILENTIUM_SILENTILLE, SP_ARMATRUTZ, SP_FULMINICTUS_DONNERKEIL, SP_ADLERAUG_UND_LUCHSENOHR, SP_ODEM_ARCANUM, SP_FLIM_FLAM_FUNKEL, -1 }; // ds:26204
+const signed int g_autoinc_spells_ielf[12] = { SP_BALSAM_SALABUNDE, SP_CHAMAELIONI_MIMIKRY, SP_BLITZ_DICH_FIND, SP_ADLERAUG_UND_LUCHSENOHR, SP_FULMINICTUS_DONNERKEIL, SP_ARMATRUTZ, SP_SILENTIUM_SILENTILLE, SP_ODEM_ARCANUM, SP_BAND_UND_FESSEL, SP_AXXELERATUS_BLITZGESCHWIND, SP_EXPOSAMI_CREATUR, -1 }; // ds:26218
+const struct mssr g_magic_school_spellranges = { {
+	{ SP_BEHERRSCHUNG_BRECHEN, SP_VERWANDLUNG_BEENDEN },			/* Antimagie */
+	{ SP_BAND_UND_FESSEL, SP_ZWINGTANZ },					/* Beherrschung */
+	{ SP_FUROR_BLUT_UND_SULPHURDAMPF, SP_SOLIDIRID_FARBENSPIEL },		/* Daemonologie + Elemente */
+	{ SP_AXXELERATUS_BLITZGESCHWIND, SP_UEBER_EIS_UND_UEBER_SCHNEE },	/* Bewegung */
+	{ SP_BALSAM_SALABUNDE, SP_TIERE_BESPRECHEN },				/* Heilung */
+	{ SP_ADLERAUG_UND_LUCHSENOHR, SP_SENSIBAR_WAHR_UND_KLAR },		/* Wahrnehmung */
+	{ SP_BLITZ_DICH_FIND, SP_SCHARFES_AUGE_UND_SICHRE_HAND },		/* Kampf */
+	{ SP_ADLER_WOLF_UND_HAMMERHAI, SP_VISIBILI_VANITAR },			/* Verwandlung */
+	{ SP_ABVENENUM_PEST_UND_GALLE, SP_STURMGEBRUELL_BESAENFTGE_DICH }	/* Veraenderung */
+	/* Note: There are no schools for the spell groups "Visionen" and "Verstaendigung". */
+} }; // ds:0x6682
+
+
+
+struct inc_states {
+	signed char tries;
+	signed char incs;
 };
 
-struct dummy {
-	struct dummy_in a[9];
-};
+static struct inc_states *g_inc_spells_counter;	// ds:0xe3b2
+static struct inc_states *g_inc_skills_counter;	// ds:0xe3b6
+static unsigned char *g_skills_buffer;		// ds:0xe3ba
+
 
 /**
  * \brief   tries to increase a spell in advanced mode
@@ -43,63 +116,62 @@ struct dummy {
  * \param   hero        pointer to the hero
  * \param   spell       number of the spell
  */
-void inc_spell_advanced(Bit8u *hero, signed short spell)
+void inc_spell_advanced(struct struct_hero *hero, const signed int spell_id)
 {
-	signed short max_incs = 1;
-	signed short randval;
-	struct dummy a = *(struct dummy*)(p_datseg + MAGIC_SCHOOL_SPELLRANGES);
+	signed int max_incs = 1;
+	signed int randval;
+	struct mssr a = g_magic_school_spellranges;
 
-	if ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_WITCH) &&
-		(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_WITCH))
+	if ((hero->typus == HERO_TYPE_HEXE) && (g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_HEXE))
 	{
 		/* witch spell */
 		max_incs = 2;
 	}
 
-	if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_GREEN_ELF) && /* hero is one of the three elven types */
-		((ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_GELF) ||
-			(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_SELF) ||
-			(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_IELF)))
+	if ((hero->typus >= HERO_TYPE_AUELF) && /* hero is one of the three elven types */
+		((g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_AUELF) ||
+			(g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_WALDELF) ||
+			(g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_FIRNELF)))
 	{
 		/* elven spell */
 		max_incs = 2;
 	}
 
-	if ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_DRUID) &&
-		(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_DRUID))
+	if ((hero->typus == HERO_TYPE_DRUIDE) &&
+		(g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_DRUIDE))
 	{
 		/* druid spell */
 		max_incs = 2;
 	}
 
-	if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE) {
+	if (hero->typus == HERO_TYPE_MAGIER) {
 
 		/* mages */
-		if (ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_MAGE) {
+		if (g_spell_descriptions[spell_id].origin == SPELL_ORIGIN_MAGIER) {
 			/* spell is a mage spell */
 			max_incs = 2;
 		}
 
 		/* check if spell is of the specialized group of the mage (according to his HERO_MAGIC_SCHOOL) */
-		if ((a.a[host_readbs(hero + HERO_MAGIC_SCHOOL)].first <= spell) &&
-			(a.a[host_readbs(hero + HERO_MAGIC_SCHOOL)].last >= spell)) {
+		if ((a.a[hero->spell_school].first <= spell_id) &&
+			(a.a[hero->spell_school].last >= spell_id)) {
 			max_incs = 2;
 		}
 
 		/* depending on the HERO_MAGIC_SCHOOL, the mage will get 3 possible increases on certain spells */
-		if (is_in_word_array(spell, (signed short*)g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)]))
+		if (is_in_int_array(spell_id, g_magic_schools_table[hero->spell_school]))
 		{
 			max_incs = 3;
 		}
 	}
 
-	if (host_readbs(g_inc_spells_counter + 2 * spell + 1) >= max_incs) {
+	if (g_inc_spells_counter[spell_id].incs >= max_incs) {
 
 		/* no increase is possible */
 
 		GUI_output(get_tx2(43));
 
-	} else if (host_readbs(g_inc_spells_counter + 2 * spell) == 3) {
+	} else if (g_inc_spells_counter[spell_id].tries == 3) {
 
 		/* 3 increase failures -> no further increase try allowed */
 
@@ -107,10 +179,10 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 	} else {
 		/* try to increase */
 
-		dec_ptr_bs(hero + HERO_SP_RISE);
+		hero->saved_spell_increases--;
 
 #ifndef M302de_FEATURE_MOD
-		if (host_readbs(hero + HERO_SPELLS + spell) >= 11) {
+		if (hero->spells[spell_id] >= 11) {
 			randval = random_interval(3, 18);
 		} else {
 			randval = random_interval(2, 12);
@@ -118,32 +190,32 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 #else
 		/* Feature mod 2:
 		 * use the exact skill/spell increase mechanism as in DSA 2/3 */
-		if (host_readbs(hero + HERO_SPELLS + spell) >= 10) {
+		if (hero->spells[spell_id] >= 10) {
 			randval = dice_roll(3,6,0);
 		} else {
 			randval = dice_roll(2,6,0);
 		}
 #endif
 
-		if (host_readbs(hero + HERO_SPELLS + spell) < randval) {
+		if (hero->spells[spell_id] < randval) {
 
 			/* success */
-
 			GUI_output(get_tx2(37));
 
 			/* increment spell value */
-			inc_ptr_bs(hero + spell + HERO_SPELLS);
+			hero->spells[spell_id]++;
 
 			/* set the try counter to 0 */
-			host_writebs(g_inc_spells_counter + 2 * spell, 0);
+			g_inc_spells_counter[spell_id].tries = 0;
 			/* increment the increase counter */
-			inc_ptr_bs(g_inc_spells_counter + 2 * spell + 1);
+			g_inc_spells_counter[spell_id].incs++;
+
 		} else {
 			/* fail */
 			GUI_output(get_ttx(338));
 
 			/* increment the try counter */
-			inc_ptr_bs(g_inc_spells_counter + 2 * spell);
+			g_inc_spells_counter[spell_id].tries++;
 		}
 	}
 }
@@ -154,19 +226,19 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
  * \param   hero        pointer to the hero
  * \param   skill       number of the skill
  */
-void inc_skill_advanced(Bit8u *hero, signed short skill)
+void inc_skill_advanced(struct struct_hero *hero, const signed int skill_id)
 {
-	signed short randval;
-	signed short max_incs;
+	signed int randval;
+	signed int max_incs;
 
-	max_incs = ds_readbs(SKILL_DESCRIPTIONS + 4 * skill + 3);
+	max_incs = g_skill_descriptions[skill_id].max_incs;
 
-	if (host_readbs(g_inc_skills_counter + 2 * skill + 1) >= max_incs) {
+	if (g_inc_skills_counter[skill_id].incs >= max_incs) {
 
 		/* no increase is possible */
 		GUI_output(get_tx2(43));
 
-	} else if (host_readbs(g_inc_skills_counter + 2 * skill) == 3) {
+	} else if (g_inc_skills_counter[skill_id].tries == 3) {
 
 		/* used up legal increase */
 		GUI_output(get_tx2(44));
@@ -174,10 +246,10 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 	} else {
 
 		/* try to increase */
-		dec_ptr_bs(hero + HERO_TA_RISE);
+		hero->saved_skill_increases--;
 
 #ifndef M302de_FEATURE_MOD
-		if (host_readbs(hero + HERO_TALENTS + skill) >= 11) {
+		if (hero->skills[skill_id] >= 11) {
 			randval = random_interval(3, 18);
 		} else {
 			randval = random_interval(2, 12);
@@ -185,53 +257,48 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 #else
 		/* Feature mod 2:
 		 * use the exact spell/skill increase mechanism as in DSA 2/3 */
-		if (host_readbs(hero + HERO_TALENTS + skill) >= 10) {
+		if (hero->skills[skill_id] >= 10) {
 			randval = dice_roll(3,6,0);
 		} else {
 			randval = dice_roll(2,6,0);
 		}
 #endif
 
-		if (host_readbs(hero + HERO_TALENTS + skill) < randval) {
+		if (hero->skills[skill_id] < randval) {
 
 			/* success */
-
 			GUI_output(get_tx2(37));
 
-			/* increment spell value */
-			inc_ptr_bs(hero + skill + HERO_TALENTS);
+			/* increment skill value */
+			hero->skills[skill_id]++;
 
 			/* set the try counter to 0 */
-			host_writebs(g_inc_skills_counter + 2 * skill, 0);
+			g_inc_skills_counter[skill_id].tries = 0;
 			/* increment the increase counter */
-			inc_ptr_bs(g_inc_skills_counter + 2 * skill + 1);
+			g_inc_skills_counter[skill_id].incs++;
 
-			if (skill <= 6) {
+			if (skill_id <= TA_ZWEIHAENDER) {
 				/* increment a melee weapon skill */
 
-				sprintf(g_dtp2,
-					get_ttx(426), get_ttx(48 + skill));
+				sprintf(g_dtp2,	get_ttx(426), get_ttx(48 + skill_id));
 
 				randval = -1;
 
 				/* AT - value */
-				sprintf(g_text_output_buf,
-					get_ttx(427), host_readbs(hero + skill + 0x68));
+				sprintf(g_text_output_buf, get_ttx(427), hero->at_talent_bonus[skill_id]);
 
 				/* PA - value */
-				sprintf(g_text_output_buf + 50,
-					get_ttx(428), host_readbs(hero + skill + 0x6f));
+				sprintf(g_text_output_buf + 50,	get_ttx(428), hero->pa_talent_bonus[skill_id]);
 
 				do {
-					randval = GUI_radio(g_dtp2, 2,
-								g_text_output_buf,
-								g_text_output_buf + 50);
+					randval = GUI_radio(g_dtp2, 2, g_text_output_buf, g_text_output_buf + 50);
+
 				} while (randval == -1);
 
 				if (randval == 1) {
-					inc_ptr_bs(hero + HERO_AT + skill);
+					hero->at_talent_bonus[skill_id]++;
 				} else {
-					inc_ptr_bs(hero + HERO_PA + skill);
+					hero->pa_talent_bonus[skill_id]++;
 				}
 			}
 
@@ -240,7 +307,7 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 			GUI_output(get_ttx(338));
 
 			/* increment the try counter */
-			inc_ptr_bs(g_inc_skills_counter + 2 * skill);
+			g_inc_skills_counter[skill_id].tries++;
 		}
 	}
 }
@@ -255,35 +322,33 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
  * \param   hero        pointer to the hero
  * \param   skill       number of the skill
  */
-void inc_skill_novice(Bit8u *hero, signed short skill)
+void inc_skill_novice(struct struct_hero *hero, const signed int skill_id)
 {
-	signed short done;
-	signed short randval;
-
-	done = 0;
+	signed int done = 0;
+	signed int randval;
 
 	while (!done) {
 
 		/* leave the loop if 3 incs failes or the skill value is 18 */
-		if ((host_readbs(g_inc_skills_counter + skill * 2) == 3) ||
-			(host_readbs(hero + HERO_TALENTS + skill) == 18)) {
+		if ((g_inc_skills_counter[skill_id].tries == 3) || (hero->skills[skill_id] == 18)) {
+
 			done = 1;
 #if !defined(__BORLANDC__)
-			D1_INFO("%s kann Talent nicht weiter steigern (3 Fehlversuche oder Talentwert 18)\n", hero + HERO_NAME2);
+			D1_INFO("%s kann Talent nicht weiter steigern (3 Fehlversuche oder Talentwert 18)\n", hero->alias);
 #endif
 		} else {
 
 			/* dec available skill incs */
-			dec_ptr_bs(hero + HERO_TA_RISE);
+			hero->saved_skill_increases--;
 
 			/* check if available skill incs are 0 */
-			if (!host_readbs(hero + HERO_TA_RISE)) {
+			if (!hero->saved_skill_increases) {
 				done = 1;
 			}
 
 #ifndef M302de_FEATURE_MOD
 			/* on a  skill value < 11 use 2W6 else 3W6 */
-			if (host_readbs(hero + HERO_TALENTS + skill) >= 11) {
+			if (hero->skills[skill_id] >= 11) {
 				randval = random_interval(3, 18);
 			} else {
 				randval = random_interval(2, 12);
@@ -291,7 +356,7 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 #else
 		/* Feature mod 2:
 		 * use the exact skill/spell increase mechanism as in DSA 2/3 */
-			if (host_readbs(hero + HERO_TALENTS + skill) >= 10) {
+			if (hero->skills[skill_id] >= 10) {
 				randval = dice_roll(3,6,0);
 			} else {
 				randval = dice_roll(2,6,0);
@@ -299,28 +364,28 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 #endif
 
 			/* check if increase success */
-			if (host_readbs(hero + HERO_TALENTS + skill) < randval) {
+			if (hero->skills[skill_id] < randval) {
 
 				/* inc skill value */
-				inc_ptr_bs(hero + HERO_TALENTS + skill);
+				hero->skills[skill_id]++;
 
 				/* reset failed counter */
-				host_writeb(g_inc_skills_counter + 2 * skill, 0);
+				g_inc_skills_counter[skill_id].tries = 0;
 
 				done = 1;
 
 				/* adjust AT PA values */
-				if (skill <= TA_ZWEIHAENDER) {
-					if (host_readbs(hero + HERO_AT + skill) > host_readbs(hero + HERO_PA + skill)) {
-						inc_ptr_bs(hero + HERO_PA + skill);
+				if (skill_id <= TA_ZWEIHAENDER) {
+					if (hero->at_talent_bonus[skill_id] > hero->pa_talent_bonus[skill_id]) {
+						hero->pa_talent_bonus[skill_id]++;
 					} else {
-						inc_ptr_bs(hero + HERO_AT + skill);
+						hero->at_talent_bonus[skill_id]++;
 					}
 				}
 
 			} else {
 				/* inc failed counter */
-				inc_ptr_bs(g_inc_skills_counter + 2 * skill);
+				g_inc_skills_counter[skill_id].tries++;
 			}
 		}
 	}
@@ -336,34 +401,32 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
  * \param   hero        pointer to the hero
  * \param   spell       number of the spell
  */
-void inc_spell_novice(Bit8u *hero, signed short spell)
+void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
 {
-	signed short done;
-	signed short randval;
-
-	done = 0;
+	signed int done = 0;
+	signed int randval;
 
 	while (!done) {
 		/* leave the loop if 3 tries to increase have failed or if the spell is already at the max value 18 */
-		if ((host_readb(g_inc_spells_counter + 2 * spell) == 3) ||
-			(host_readbs(hero + HERO_SPELLS + spell) == 18)) {
+		if ((g_inc_spells_counter[spell_id].tries == 3) ||
+			(hero->spells[spell_id] == 18)) {
 			done = 1;
 #if !defined(__BORLANDC__)
-			D1_INFO("%s kann Zauber nicht weiter steigern (3 Fehlversuche oder Talentwert 18)\n", hero + HERO_NAME2);
+			D1_INFO("%s kann Zauber nicht weiter steigern (3 Fehlversuche oder Talentwert 18)\n", hero->alias);
 #endif
 		} else {
 
 			/* dec available spell incs */
-			dec_ptr_bs(hero + HERO_SP_RISE);
+			hero->saved_spell_increases--;
 
 			/* check if available spell incs are 0 */
-			if (!host_readbs(hero + HERO_SP_RISE)) {
+			if (!hero->saved_spell_increases) {
 				done = 1;
 			}
 
 #ifndef M302de_FEATURE_MOD
 			/* on a  spell value < 11 use 2W6 else 3W6 */
-			if (host_readbs(hero + HERO_SPELLS + spell) >= 11) {
+			if (hero->spells[spell_id] >= 11) {
 				randval = random_interval(3, 18);
 			} else {
 				randval = random_interval(2, 12);
@@ -371,7 +434,7 @@ void inc_spell_novice(Bit8u *hero, signed short spell)
 #else
 		/* Feature mod 2:
 		 * use the exact skill/spell increase mechanism as in DSA 2/3 */
-			if (host_readbs(hero + HERO_SPELLS + spell) >= 10) {
+			if (hero->spells[spell_id] >= 10) {
 				randval = dice_roll(3,6,0);
 			} else {
 				randval = dice_roll(2,6,0);
@@ -379,19 +442,19 @@ void inc_spell_novice(Bit8u *hero, signed short spell)
 #endif
 
 			/* check if increase success */
-			if (host_readbs(hero + HERO_SPELLS + spell) < randval) {
+			if (hero->spells[spell_id] < randval) {
 
 				/* inc spell value */
-				inc_ptr_bs(hero + HERO_SPELLS + spell);
+				hero->spells[spell_id]++;
 
 				/* reset failed counter */
-				host_writeb(g_inc_spells_counter + 2 * spell, 0);
+				g_inc_spells_counter[spell_id].tries = 0;
 
 				done = 1;
 
 			} else {
 				/* inc failed counter */
-				inc_ptr_bs(g_inc_spells_counter + 2 * spell);
+				g_inc_spells_counter[spell_id].tries++;
 			}
 		}
 	}
@@ -402,16 +465,15 @@ void inc_spell_novice(Bit8u *hero, signed short spell)
  *
  * \param   hero_pos    the position of the hero
  */
-void level_up(signed short hero_pos)
+void level_up(const signed int hero_pos)
 {
-	signed short l_si;
-	signed short l_di;
+	signed int l_si;
 	signed char mr;
 	signed char v2;
 	signed char v3;
-	signed short i;
-	Bit8u *hero;
-	signed short city_bak;
+	signed int i;
+	struct struct_hero *hero;
+	signed int text_file_index_bak;
 
 	hero = get_hero(hero_pos);
 
@@ -421,12 +483,12 @@ void level_up(signed short hero_pos)
 
 	g_timers_disabled = 1;
 
-	city_bak = g_text_file_index;
+	text_file_index_bak = g_text_file_index;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 
-	g_inc_skills_counter = (unsigned char*)(g_buffer8_ptr + 4500);
-	g_inc_spells_counter = (unsigned char*)(g_inc_skills_counter + 208);
+	g_inc_skills_counter = (struct inc_states*)(g_buffer8_ptr + 4500);
+	g_inc_spells_counter = (struct inc_states*)((uint8_t*)g_inc_skills_counter + 208);
 	g_skills_buffer = (unsigned char*)g_buffer9_ptr;
 
 	l_si = load_archive_file(ARCHIVE_FILE_BSKILLS_DAT);
@@ -436,24 +498,24 @@ void level_up(signed short hero_pos)
 	close(l_si);
 
 
-	sprintf(g_dtp2, get_ttx(411), (char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_ttx(411), hero->alias);
 	GUI_output(g_dtp2);
 
 	g_action = 0;
 	g_status_page_mode = 1;
 
-	for (i = 0; i < 86; i++) {
-		host_writeb(g_inc_spells_counter + 2 * i, host_writebs(g_inc_spells_counter + 2 * i + 1, 0));
+	for (i = 0; i < (SP__TAIL + 1); i++) {
+		g_inc_spells_counter[i].tries = g_inc_spells_counter[i].incs = 0;
 	}
 
-	for (i = 0; i < 52; i++) {
-		host_writeb(g_inc_skills_counter + 2 * i, host_writebs(g_inc_skills_counter + 2 * i + 1, 0));
+	for (i = 0; i < (TA__TAIL + 1); i++) {
+		g_inc_skills_counter[i].tries = g_inc_skills_counter[i].incs = 0;
 	}
 
 	load_ggsts_nvf();
 
 	/* increment level */
-	inc_ptr_bs(hero + HERO_LEVEL);
+	hero->level++;
 
 	g_status_page_hero = hero_pos;
 
@@ -466,7 +528,7 @@ void level_up(signed short hero_pos)
 	l_si = -1;
 
 	for (i = 0; i <= 6; i++) {
-		if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * i) < 20) {
+		if (hero->attrib[i].normal < 20) {
 			l_si = 0;
 		}
 	}
@@ -481,23 +543,21 @@ void level_up(signed short hero_pos)
 			g_basepos_x = -30;
 
 			l_si = GUI_radio(get_tx2(35), 7,
-						get_ttx(412),
-						get_ttx(413),
-						get_ttx(414),
-						get_ttx(415),
-						get_ttx(416),
-						get_ttx(417),
-						get_ttx(418)) - 1;
+					get_ttx(412), get_ttx(413),
+					get_ttx(414), get_ttx(415),
+					get_ttx(416), get_ttx(417),
+					get_ttx(418)) - 1;
 
-			if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * l_si) >= 20) {
+			if (hero->attrib[l_si].normal >= 20) {
+
 				l_si = -2;
 				GUI_output(get_tx2(43));
 			}
 
 		} while (l_si == -2);
 
-		inc_ptr_bs(hero + HERO_ATTRIB_ORIG + 3 * l_si);
-		inc_ptr_bs(hero + HERO_ATTRIB + 3 * l_si);
+		hero->attrib[l_si].normal++;
+		hero->attrib[l_si].current++;
 
 		status_show(hero_pos);
 
@@ -509,7 +569,8 @@ void level_up(signed short hero_pos)
 	l_si = -1;
 
 	for (i = 7; i <= 13; i++) {
-		if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * i) > 2) {
+
+		if (hero->attrib[i].normal > 2) {
 			l_si = 0;
 		}
 	}
@@ -521,15 +582,13 @@ void level_up(signed short hero_pos)
 		do {
 
 			l_si = GUI_radio(get_tx2(36), 7,
-						get_ttx(419),
-						get_ttx(420),
-						get_ttx(421),
-						get_ttx(422),
-						get_ttx(423),
-						get_ttx(424),
-						get_ttx(425)) - 1;
+					get_ttx(419), get_ttx(420),
+					get_ttx(421), get_ttx(422),
+					get_ttx(423), get_ttx(424),
+					get_ttx(425)) - 1;
 
-			if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * (l_si + 7)) <= 2) {
+			if (hero->attrib[l_si + 7].normal <= 2) {
+
 				l_si = -2;
 				GUI_output(get_tx2(48));
 			}
@@ -540,15 +599,16 @@ void level_up(signed short hero_pos)
 
 		for (i = 0; i < 3; i++) {
 
-			if (random_schick(20) <= host_readbs(hero + HERO_ATTRIB_ORIG + 3 * (l_si + 7))) {
+			if (random_schick(20) <= hero->attrib[l_si + 7].normal) {
+
 				v3 = 1;
 			}
 		}
 
 		if (v3 != 0) {
 
-			dec_ptr_bs(hero + HERO_ATTRIB_ORIG + 3 * (l_si + 7));
-			dec_ptr_bs(hero + HERO_ATTRIB + 3 * (l_si + 7));
+			hero->attrib[l_si + 7].normal--;
+			hero->attrib[l_si + 7].current--;
 
 			GUI_output(get_tx2(37));
 
@@ -565,28 +625,29 @@ void level_up(signed short hero_pos)
 
 	/* check changes in MR */
 
-	mr = (host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KL)) + host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_MU)) + host_readbs(hero + HERO_LEVEL)) / 3 - 2 * host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_AG));
-	mr += g_mr_modificators[host_readbs(hero + HERO_TYPE)];
+	mr = (hero->attrib[ATTRIB_KL].normal + hero->attrib[ATTRIB_MU].normal + hero->level) / 3 - 2 * hero->attrib[ATTRIB_AG].normal;
+	mr += g_mr_modificators[hero->typus];
 
-	if (host_readbs(hero + HERO_MR) != mr) {
+	if (hero->mr != mr) {
+
 		/* set new basic MR */
-		host_writebs(hero + HERO_MR, mr);
+		hero->mr = mr;
 
 		/* check for STIRNREIF [blau] / CORONET [blue] equipped => MR + 2 */
-		if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + HERO_INVENTORY_SLOT_HEAD * SIZEOF_INVENTORY) == ITEM_CORONET_BLUE) {
-			add_ptr_bs(hero + HERO_MR, 2);
+		if (hero->inventory[HERO_INVENTORY_SLOT_HEAD].item_id == ITEM_STIRNREIF__BLUE) {
+			hero->mr += 2;
 		}
 		/* check for RING / RING equipped => MR + 2 */
-		if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY) == ITEM_RING_RED) {
-			add_ptr_bs(hero + HERO_MR, 2);
+		if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_RING__RED) {
+			hero->mr += 2;
 		}
 		/* check for AMULETT / in inventory => MR + 5 */
-		if (get_item_pos(hero, ITEM_AMULET_BLUE) != -1) {
-			add_ptr_bs(hero + HERO_MR, 5);
+		if (inv_slot_of_item(hero, ITEM_AMULETT__BLUE) != -1) {
+			hero->mr += 5;
 		}
 
 		/* show the user the new MR value */
-		sprintf(g_dtp2, get_tx2(41), host_readbs(hero + HERO_MR));
+		sprintf(g_dtp2, get_tx2(41), hero->mr);
 		GUI_output(g_dtp2);
 
 		/* update status background */
@@ -600,16 +661,16 @@ void level_up(signed short hero_pos)
 
 
 	/* add skill increasements */
-	add_ptr_bs(hero + HERO_TA_RISE, g_levelup_ta_rise[host_readbs(hero + HERO_TYPE) - 1]);
+	hero->saved_skill_increases += g_levelup_ta_rise[hero->typus - 1];
 
 	/* roll how many LE points the hero may get */
 	i = random_schick(6);
 
-	if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+	if (hero->typus >= HERO_TYPE_HEXE) {
 		/* a magic user */
 
 		/* add spell increasements */
-		add_ptr_bs(hero + HERO_SP_RISE, g_levelup_sp_rise[host_readbs(hero + HERO_TYPE) - 7]);
+		hero->saved_spell_increases += g_levelup_sp_rise[hero->typus - 7];
 
 		i += 2;
 
@@ -627,21 +688,21 @@ void level_up(signed short hero_pos)
 
 
 		/* add LE and fill them up */
-		add_ptr_ws(hero + HERO_LE_ORIG, l_si);
+		hero->le_max += l_si;
 		add_hero_le(hero, l_si);
 		/* add AE and fill them up */
-		add_ptr_ws(hero + HERO_AE_ORIG, i - l_si);
+		hero->ae_max += i - l_si;
 		add_hero_ae(hero, i - l_si);
 
 		/* change skill increasements into AE */
-		if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE && g_game_mode == GAME_MODE_ADVANCED) {
+		if ((hero->typus == HERO_TYPE_MAGIER) && (g_game_mode == GAME_MODE_ADVANCED)) {
 
 			if (GUI_bool(get_tx2(40))) {
 				/* trade 10 skill increasements into 1W6+2 AE */
-				add_ptr_bs(hero + HERO_SP_RISE, -10);
+				hero->saved_spell_increases += -10;
 				i = random_interval(3, 8);
-				add_ptr_ws(hero + HERO_AE_ORIG, i);
-				add_ptr_ws(hero + HERO_AE, i);
+				hero->ae_max += i;
+				hero->ae += i;
 			}
 		}
 
@@ -653,7 +714,7 @@ void level_up(signed short hero_pos)
 		GUI_output(g_dtp2);
 
 		/* add LE and fill them up */
-		add_ptr_ws(hero + HERO_LE_ORIG, i);
+		hero->le_max += i;
 		add_hero_le(hero, i);
 	}
 
@@ -670,11 +731,11 @@ void level_up(signed short hero_pos)
 
 		i = v2 = 0;
 
-		while (host_readbs(hero + HERO_TA_RISE) > 0) {
+		while (hero->saved_skill_increases > 0) {
 
-			l_si = host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
+			l_si = *(int16_t*)(g_skills_buffer + 100 * hero->typus + 4 * i);
 
-			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
+			if (hero->skills[l_si] < *(int16_t*)(g_skills_buffer + 100 * hero->typus + 4 * i + 2))
 			{
 				inc_skill_novice(hero, l_si);
 			}
@@ -688,31 +749,31 @@ void level_up(signed short hero_pos)
 				v2++;
 
 				if (v2 > 5) {
-					host_writeb(hero + HERO_TA_RISE, 0);
+					hero->saved_skill_increases = 0;
 				}
 
 			}
 		}
 
-		if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+		if (hero->typus >= HERO_TYPE_HEXE) {
 			/* hero has magic type */
 
 			i = 1;
 			v2 = 0;
 
-			while (host_readbs(hero + HERO_SP_RISE) != 0 && v2 < 3) {
+			while (hero->saved_spell_increases != 0 && v2 < 3) {
 
 				v2++;
 
-				switch (host_readbs(hero + HERO_TYPE)) {
+				switch (hero->typus) {
 
-					case HERO_TYPE_WITCH: {
+					case HERO_TYPE_HEXE: {
 
 						/* first try to increase all which-specific spells by 1,
 						 * up to skill value at most 11. */
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_WITCH && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_HEXE && hero->spells[i] < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -722,18 +783,18 @@ void level_up(signed short hero_pos)
 						 * up to max value 18 */
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_WITCH + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_WITCH + 2 * i));
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_witch[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_witch[i]);
 							i++;
 						}
 
 						break;
 					}
-					case HERO_TYPE_DRUID: {
+					case HERO_TYPE_DRUIDE: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_DRUID && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_DRUIDE && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -741,59 +802,53 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_DRUID + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_DRUID + 2 * i));
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_druid[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_druid[i]);
 							i++;
 						}
 
 						break;
 					}
-					case HERO_TYPE_MAGE: {
+					case HERO_TYPE_MAGIER: {
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_magic_schools_table[hero->spell_school][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS + g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]) < 11)
+							if (hero->spells[g_magic_schools_table[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
+								inc_spell_novice(hero, g_magic_schools_table[hero->spell_school][i]);
 							}
 							i++;
 						}
 
 						i = 0;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_mage_index[hero->spell_school][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS +
-									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
+							if (hero->spells[g_autoinc_spells_mage_index[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero,
-									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
+								inc_spell_novice(hero, g_autoinc_spells_mage_index[hero->spell_school][i]);
 							}
 							i++;
 						}
 
 						i = 0;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
+						while ((hero->saved_spell_increases) != 0 && (g_magic_schools_table[hero->spell_school][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS +
-									(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i])) < 11)
+							if (hero->spells[g_magic_schools_table[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
+								inc_spell_novice(hero, g_magic_schools_table[hero->spell_school][i]);
 							}
 							i++;
 						}
 
 						break;
 					}
-					case HERO_TYPE_GREEN_ELF: {
+					case HERO_TYPE_AUELF: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_AUELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -801,15 +856,15 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUOTINC_SPELLS_GELF + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUOTINC_SPELLS_GELF + 2 * i));
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_gelf[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_gelf[i]);
 							i++;
 						}
 
 						i = 1;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_AUELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -817,11 +872,11 @@ void level_up(signed short hero_pos)
 
 						break;
 					}
-					case HERO_TYPE_ICE_ELF: {
+					case HERO_TYPE_FIRNELF: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_FIRNELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -829,26 +884,26 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_IELF + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_IELF + 2 * i));
+						while (hero->saved_spell_increases != 0 && (g_autoinc_spells_ielf[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_ielf[i]);
 							i++;
 						}
 
 						i = 1;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_FIRNELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
 						}
 						break;
 					}
-					case HERO_TYPE_SYLVAN_ELF: {
+					case HERO_TYPE_WALDELF: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_WALDELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -856,15 +911,15 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_SELF + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_SELF + 2 * i));
+						while ((hero->saved_spell_increases != 0) && (g_autoinc_spells_self[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_self[i]);
 							i++;
 						}
 
 						i = 1;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while ((hero->saved_spell_increases != 0) && (i < 86)) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_WALDELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -874,50 +929,50 @@ void level_up(signed short hero_pos)
 				}
 			}
 
-			while (host_readbs(hero + HERO_SP_RISE) != 0) {
+			while (hero->saved_spell_increases != 0) {
 				inc_spell_novice(hero, random_schick(86));
 			}
 		}
 
 	} else {
+		signed int spta_convs;
 
-		if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) &&
-			(l_di = g_levelup_spta_conv[host_readbs(hero + HERO_TYPE) - 7]) &&
-			GUI_bool(get_tx2(45)))
+		if ((hero->typus >= HERO_TYPE_HEXE) && (spta_convs = g_levelup_spta_conv[hero->typus - 7]) && GUI_bool(get_tx2(45)))
 		{
-			sprintf(g_dtp2, get_tx2(46), l_di);
+
+			sprintf(g_dtp2, get_tx2(46), spta_convs);
 
 			i = GUI_input(g_dtp2, 1);
 
 			if (i > 0) {
 
-				if (i > l_di) {
-					i = l_di;
+				if (i > spta_convs) {
+					i = spta_convs;
 				}
-				l_di -= i;
+				spta_convs -= i;
 
-				sub_ptr_bs(hero + HERO_SP_RISE, (unsigned char)i);
-				add_ptr_bs(hero + HERO_TA_RISE, (unsigned char)i);
+				hero->saved_spell_increases -= i;
+				hero->saved_skill_increases += i;
 
 			} else {
 
-				sprintf(g_dtp2, get_tx2(47), l_di);
+				sprintf(g_dtp2, get_tx2(47), spta_convs);
 
 				i = GUI_input(g_dtp2, 1);
 
 				if (i > 0) {
 
-					if (i > l_di) {
-						i = l_di;
+					if (i > spta_convs) {
+						i = spta_convs;
 					}
 
-					add_ptr_bs(hero + HERO_SP_RISE, (unsigned char)i);
-					sub_ptr_bs(hero + HERO_TA_RISE, (unsigned char)i);
+					hero->saved_spell_increases += i;
+					hero->saved_skill_increases -= i;
 				}
 			}
 		}
 
-		while (host_readbs(hero + HERO_TA_RISE) != 0) {
+		while (hero->saved_skill_increases != 0) {
 
 			l_si = LVL_select_skill(hero, 1);
 
@@ -933,7 +988,7 @@ void level_up(signed short hero_pos)
 			}
 		}
 
-		while (host_readbs(hero + HERO_SP_RISE) != 0) {
+		while (hero->saved_spell_increases != 0) {
 
 			l_si = select_spell(hero, 1);
 
@@ -957,13 +1012,9 @@ void level_up(signed short hero_pos)
 	g_current_ani = -1;
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
-	if (city_bak != -1 && city_bak != ARCHIVE_FILE_CHARTEXT_LTX
-	    && city_bak != ARCHIVE_FILE_TAVERN_TLK
-	    && (city_bak < 156 || city_bak > 176)) {
-		load_tx2(city_bak);
+	if (text_file_index_bak != -1 && text_file_index_bak != ARCHIVE_FILE_CHARTEXT_LTX
+	    && text_file_index_bak != ARCHIVE_FILE_TAVERN_TLK
+	    && (text_file_index_bak < 156 || text_file_index_bak > 176)) {
+		load_tx2(text_file_index_bak);
 	}
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

@@ -15,7 +15,11 @@
 #include <DOS.H>
 #include <IO.H>
 #else
+#if defined(_WIN32)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #endif
 
 #include "v302de.h"
@@ -30,144 +34,143 @@
 #include "seg028.h"
 #include "seg066.h"
 
-#if !defined(__BORLANDC__)
-namespace M302de {
+static signed int g_locations_tab_size = 0;	// ds:0x5eb8
+static signed int g_areadescr_dng_level = 0;	// ds:0x5eba
+static signed int g_areadescr_fileid = 0;	// ds:0x5ebc
+static signed int g_areadescr_dng_flag = 0;	// ds:0x5ebe
+#if defined(__BORLANDC__)
+static unsigned int g_ems_unused_lpage = 0;	// ds:0x5ec0
+static signed int g_ems_unused_offset = 0x0300; // ds:0x5ec2
 #endif
+static const unsigned char g_unkn_039[8] = { 0x0b, 0xc0, 0x75, 0x06, 0xb8, 0x01, 0x00, 0x00 }; // ds:0x5ec4
 
 void prepare_dungeon_area(void)
 {
-	signed short index;
-	Bit32u v1;
-	Bit32u v2;
+	signed int dtx_index;
+	uint32_t file_len;
+	uint32_t offset;
 	HugePt buf;
 
-	signed short l_si;
-	signed short handle;
+	signed int nvf_index;
+	signed int handle;
 
-	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DTX;
+	dtx_index = gs_dungeon_id + ARCHIVE_FILE_DNGS_DTX;
 
-	if (g_dng_area_loaded != gs_dungeon_index) {
+	if (g_dng_loaded_dungeon_id != gs_dungeon_id) {
 
 		load_area_description(1);
-		g_city_area_loaded = -1;
+		g_town_loaded_town_id = -1;
 		load_dungeon_ddt();
 	}
 
-	load_tx(index);
+	load_tx(dtx_index);
 
-	if ((g_area_prepared == -1) || (g_area_prepared == 1)) {
+	if ((g_area_prepared == AREA_TYPE_NONE) || (g_area_prepared == AREA_TYPE_TOWN)) { // idea: g_area_prepared != AREA_TYPE_DUNGEON
 
-		set_var_to_zero();
+		disable_ani();
 		g_current_ani = -1;
 
-		l_si = (gs_dungeon_index == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
-			(((gs_dungeon_index == DUNGEONS_VERFALLENE_HERBERGE) ||
-				(gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) ||
-				(gs_dungeon_index == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) ||
-				(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE) ||
-				(gs_dungeon_index == DUNGEONS_ZWERGENFESTE) ||
-				(gs_dungeon_index == DUNGEONS_VERLASSENE_MINE) ||
-				(gs_dungeon_index == DUNGEONS_ZWINGFESTE) ||
-				(gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
+		nvf_index = (gs_dungeon_id == DUNGEON_ID_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
+			(((gs_dungeon_id == DUNGEON_ID_VERFALLENE_HERBERGE) ||
+				(gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) ||
+				(gs_dungeon_id == DUNGEON_ID_KULTSTAETTE_DES_NAMENLOSEN) ||
+				(gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE) ||
+				(gs_dungeon_id == DUNGEON_ID_ZWERGENFESTE) ||
+				(gs_dungeon_id == DUNGEON_ID_VERLASSENE_MINE) ||
+				(gs_dungeon_id == DUNGEON_ID_ZWINGFESTE) ||
+				(gs_dungeon_id == DUNGEON_ID_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
 
-		gs_dungeon_gfx_style = (l_si == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((l_si == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2);
+		gs_dungeon_gfx_style = (nvf_index == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((nvf_index == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2);
 
-		handle = load_archive_file(l_si);
-		v1 = v2 = 0;
+		handle = load_archive_file(nvf_index);
+		file_len = offset = 0;
 
 		/* clear palette */
 		buf = g_buffer9_ptr3;
-		memset((Bit8u*)buf, 0, 0xc0);
+		memset((uint8_t*)buf, 0, 0xc0);
 		wait_for_vsync();
-		set_palette((Bit8u*)buf, 0x80, 0x40);
+		set_palette((uint8_t*)buf, 0x80, 0x40);
 
 		do {
-			v1 = read_archive_file(handle, (Bit8u*)buf, 65000);
-			buf += v1;
-			v2 += v1;
+			file_len = read_archive_file(handle, (uint8_t*)buf, 65000);
+			buf += file_len;
+			offset += file_len;
 
-		} while (v1);
+		} while (file_len);
 
 		close(handle);
 
-		g_buffer11_ptr = (g_buffer9_ptr + v2) - 0xc0L;
+		g_buffer11_ptr = (g_buffer9_ptr3 + offset) - 0xc0L;
 
-		g_area_prepared = !gs_dungeon_index;
+		g_area_prepared = !gs_dungeon_id;
 	}
 
-	g_dng_area_loaded = gs_dungeon_index;
-	g_city_area_loaded = -1;
+	g_dng_loaded_dungeon_id = gs_dungeon_id;
+	g_town_loaded_town_id = -1;
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
 
 void load_dungeon_ddt(void)
 {
-	signed short index;
-	signed short low;
-	signed short high;
-	signed short handle;
+	signed int index;
+	int16_t low;
+	int16_t high;
+	signed int handle;
 
-	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DDT;
+	index = gs_dungeon_id + ARCHIVE_FILE_DNGS_DDT;
 	handle = load_archive_file(index);
-	read_archive_file(handle, (Bit8u*)&low, 2);
-	read_archive_file(handle, (Bit8u*)&high, 2);
-
-#if !defined(__BORLANDC__)
-	/* BE-Fix: */
-	low = host_readws((Bit8u*)&low);
-	high = host_readws((Bit8u*)&high);
-#endif
+	read_archive_file(handle, (uint8_t*)&low, 2);
+	read_archive_file(handle, (uint8_t*)&high, 2);
 
 	read_archive_file(handle, g_dungeon_fights_buf, low);
-	read_archive_file(handle, g_dungeon_doors_buf, high - low);
-	read_archive_file(handle, g_dungeon_stairs_buf, 0x7d0);
+	read_archive_file(handle, (uint8_t*)g_dungeon_doors_buf, high - low);
+	read_archive_file(handle, g_dungeon_stairs_buf, 2000);
 
 	close(handle);
-
 }
 
-void seg028_0224(void)
+void prepare_town_area(void)
 {
-	signed short l_si;
-	signed short l1;
-	Bit8u* arr[4];
+	signed int i;
+	const signed int ltx_index = gs_town_id + ARCHIVE_FILE_CITY_LTX;
+	uint8_t* arr[4];
 
-	l1 = gs_current_town + 77;
 
-	if (g_city_area_loaded != gs_current_town) {
+	if (g_town_loaded_town_id != gs_town_id) {
 		load_area_description(1);
-		g_dng_area_loaded = -1;
+		g_dng_loaded_dungeon_id = -1;
 	}
 
-	load_tx(l1);
+	load_tx(ltx_index);
 
-	if ((g_area_prepared == -1) || (g_area_prepared == 0)) {
+	if ((g_area_prepared == AREA_TYPE_NONE) || (g_area_prepared == AREA_TYPE_DUNGEON)) { // idea: g_area_prepared != AREA_TYPE_TOWN
 
-		set_var_to_zero();
+		disable_ani();
 
 		g_current_ani = -1;
 
-		seg066_172b();
+		town_update_house_count();
 
 		g_buffer9_ptr4 = g_buffer9_ptr3;
 
-		for (l_si = 0; l_si < 4; l_si++) {
+		for (i = 0; i < 4; i++) {
 
-			if (g_city_house_count[l_si]) {
+			if (g_town_house_count[i]) {
 
-				arr[l_si] = seg028_0444(!l_si ? ARCHIVE_FILE_HOUSE1_NVF :
-				    (l_si == 1 ? ARCHIVE_FILE_HOUSE2_NVF :
-				        (l_si == 2 ? ARCHIVE_FILE_HOUSE3_NVF :
+				arr[i] = load_town_textures(!i ? ARCHIVE_FILE_HOUSE1_NVF :
+				    (i == 1 ? ARCHIVE_FILE_HOUSE2_NVF :
+				        (i == 2 ? ARCHIVE_FILE_HOUSE3_NVF :
 				            ARCHIVE_FILE_HOUSE4_NVF)), 0, 0, 0);
 
 
 			}
 		}
 
-		for (l_si = 0; l_si < 4; l_si++) {
-			if (!g_city_house_count[l_si]) {
+		for (i = 0; i < 4; i++) {
 
-				arr[l_si] = (!l_si ? arr[l_si + 1] : arr[l_si - 1]);
+			if (!g_town_house_count[i]) {
+
+				arr[i] = (!i ? arr[i + 1] : arr[i - 1]);
 			}
 		}
 
@@ -179,58 +182,56 @@ void seg028_0224(void)
 		/* load tex_sky */
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
-			g_tex_floor[1] = seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
+			g_tex_floor[1] = load_town_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 
 			memcpy(gs_palette_buildings, g_buffer11_ptr, 0xc0);
 		} else {
-			g_tex_floor[1] = seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
+			g_tex_floor[1] = load_town_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 		}
 
-		g_tex_floor[0] = seg028_0444(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0);
+		g_tex_floor[0] = load_town_textures(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0);
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
 			memcpy(gs_palette_floor, g_buffer11_ptr, 0x60);
 		}
 
-		g_area_prepared = 1;
+		g_area_prepared = AREA_TYPE_TOWN;
 	}
 
-	g_city_area_loaded = gs_current_town;
-	g_dng_area_loaded = -1;
+	g_town_loaded_town_id = gs_town_id;
+	g_dng_loaded_dungeon_id = -1;
 
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
 
-Bit8u* seg028_0444(signed short index, signed short firstcol, signed short colors, signed short ref)
+uint8_t* load_town_textures(const signed int index, const signed int firstcol, const signed int colors, const signed int ref)
 {
-	signed short fd;
-	Bit32s v1;
-	Bit32s v2;
-	Bit8u* ptr;
+	signed int handle;
+	int32_t file_len;
+	int32_t offset;
+	uint8_t* ptr = (uint8_t*)g_buffer9_ptr4;
 
-	ptr = (Bit8u*)g_buffer9_ptr4;
+	handle = load_archive_file(index);
 
-	fd = load_archive_file(index);
-
-	v1 = v2 = 0L;
+	file_len = offset = 0L;
 
 	do {
-		v1 = read_archive_file(fd, (Bit8u*)g_buffer9_ptr4, 65000);
+		file_len = read_archive_file(handle, (uint8_t*)g_buffer9_ptr4, 65000);
 
-		g_buffer9_ptr4 += v1;
+		g_buffer9_ptr4 += file_len;
 
-		v2 += v1;
+		offset += file_len;
 
-	} while (v1);
+	} while (file_len);
 
-	close(fd);
+	close(handle);
 
 	if (colors) {
 
-		g_buffer11_ptr = ptr + v2 - 3 * colors;
+		g_buffer11_ptr = ptr + offset - 3 * colors;
 
-		if ((ref != 0) && (!g_fading_state)) {
+		if ((ref != 0) && !g_fading_state) {
 
 			wait_for_vsync();
 
@@ -239,17 +240,15 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 	}
 
 	return ptr;
-
 }
 
-void load_special_textures(signed short arg)
+void load_special_textures(const signed int arg)
 {
-	signed short fd;
+	const signed int handle = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
 
-	fd = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
-	read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
-	close(fd);
+	read_archive_file(handle, (uint8_t*)g_buffer7_ptr, 64000);
 
+	close(handle);
 }
 
 void call_load_buffer(void)
@@ -257,10 +256,14 @@ void call_load_buffer(void)
 	load_tx(g_tx_file_index);
 }
 
-void seg028_0555(signed short town)
+/**
+ * \brief prepares a town- or a dungeon-area
+ * \param[in] town { 1 = town, otherwise dungeon }
+ */
+void prepare_area(const signed int town)
 {
 	if (town == 1) {
-		seg028_0224();
+		prepare_town_area();
 	} else {
 		prepare_dungeon_area();
 	}
@@ -275,112 +278,119 @@ void seg028_0555(signed short town)
  *	1 = do both
  *	2 = only read new area (loading a savegame)
  */
-void load_area_description(signed short type)
+void load_area_description(const signed int type)
 {
-	signed short f_index;
-	signed short fd;
+	signed int f_index;
 
-	if (g_areadescr_fileid) {
-		if (type != 2) {
-			fd = load_archive_file(g_areadescr_fileid + 0x8000);
+	if (g_areadescr_fileid && (type != 2)) {
 
-			if (!g_areadescr_dng_flag && (g_dng_map_size == 0x20)) {
-				write(fd, (void*)g_dng_map, 512);
-			} else {
-				lseek(fd, g_areadescr_dng_level * 0x140, 0);
-				write(fd, (void*)g_dng_map, 256);
-			}
-			/* write automap tiles */
-			write(fd, (void*)g_automap_buf, 64);
-			/* write location information */
-			write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), g_locations_tab_size);
+		signed int handle = load_archive_file(g_areadescr_fileid + 0x8000);
 
-			close(fd);
-
-			g_areadescr_fileid = g_areadescr_dng_level = g_locations_tab_size = g_areadescr_dng_flag = 0;
+		if (!g_areadescr_dng_flag && (g_map_size_x == 32)) {
+			write(handle, (void*)g_dng_map, 512);
+		} else {
+			// assert(g_map_size_x == 16)
+			lseek(handle, g_areadescr_dng_level * 0x140, 0);
+			write(handle, (void*)g_dng_map, 256);
 		}
+
+		/* write automap tiles */
+		write(handle, (void*)g_automap_buf, 64);
+
+		/* write location information */
+		write(handle, (void*)g_locations_tab, g_locations_tab_size);
+
+		close(handle);
+
+		g_areadescr_fileid = g_areadescr_dng_level = g_locations_tab_size = g_areadescr_dng_flag = 0;
 	}
 
 	if (type != 0) {
 
+		signed int handle;
+
 		/* calc archive file index */
-		if (gs_dungeon_index != 0) {
+		if (gs_dungeon_id != 0) {
 			/* dungeon */
-			g_areadescr_fileid = f_index = gs_dungeon_index + (ARCHIVE_FILE_DNGS-1);
+			g_areadescr_fileid = f_index = gs_dungeon_id + (ARCHIVE_FILE_DNGS-1);
 		} else {
-			/* city */
-			g_areadescr_fileid = f_index = gs_current_town + (ARCHIVE_FILE_CITY_DAT-1);
+			/* town */
+			g_areadescr_fileid = f_index = gs_town_id + (ARCHIVE_FILE_CITY_DAT-1);
 		}
 
 		/* save dungeon level */
 		g_areadescr_dng_level = gs_dungeon_level;
 
 		/* save if we are in a dungeon */
-		g_areadescr_dng_flag = (gs_dungeon_index != 0 ? 1 : 0);
+		g_areadescr_dng_flag = (gs_dungeon_id != 0 ? 1 : 0);
 
 		/* load DAT or DNG file */
-		fd = load_archive_file(f_index + 0x8000);
+		handle = load_archive_file(f_index + 0x8000);
 
-		if (!gs_dungeon_index && (gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER))
+		if (!gs_dungeon_id && (gs_town_id == TOWN_ID_THORWAL || gs_town_id == TOWN_ID_PREM || gs_town_id == TOWN_ID_PHEXCAER))
 		{
+			/* A large city, i.e. x coordinates up to 32 */
 			/* path taken in THORWAL PREM and PHEXCAER */
-			_read(fd, g_dng_map, 512);
+			_read(handle, g_dng_map, 512);
 			/* read automap tiles */
-			_read(fd, g_automap_buf, 64);
+			_read(handle, g_automap_buf, 64);
 
 			/* TODO: is that neccessary ? */
-			memset(p_datseg + LOCATIONS_LIST, -1, 900);
+			memset(g_locations_tab, -1, 150 * sizeof(struct location));
 
-			g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
+#if defined(__BORLANDC__)
+			g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location) + 100);
+#else
+			g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location));
+#endif
 
-			g_dng_map_size = 32;
+			g_map_size_x = 32;
 		} else {
 			/* Seek to Dungeon Level * 320 */
-			lseek(fd, gs_dungeon_level * 320, 0);
-			_read(fd, g_dng_map, 256);
+			lseek(handle, gs_dungeon_level * 320, 0);
+			_read(handle, g_dng_map, 256);
 
 			/* read automap tiles */
-			_read(fd, g_automap_buf, 64);
+			_read(handle, g_automap_buf, 64);
 			g_locations_tab_size = 0;
 
-			if (!gs_dungeon_index) {
+			if (!gs_dungeon_id) {
 				/* TODO: is that neccessary ? */
-				memset(p_datseg + LOCATIONS_LIST, -1, 900);
-				g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
+				memset(g_locations_tab, -1, 150 * sizeof(struct location));
+#if defined(__BORLANDC__)
+				g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location) + 100);
+#else
+				g_locations_tab_size = _read(handle, g_locations_tab, 150 * sizeof(struct location));
+#endif
 			}
 
-			g_dng_map_size = 16;
+			g_map_size_x = 16;
 		}
-		close(fd);
+		close(handle);
 	}
 }
 
-void call_load_area(signed short type)
+void call_load_area(const signed int type)
 {
 	load_area_description(type);
 }
 
-void unused_store(signed short no)
+#if defined(__BORLANDC__)
+void unused_store(const signed int image_num)
 {
-	signed short width;
-	signed short height;
-	Bit8u *ptr;
-	struct nvf_desc nvf;
-	signed short size;
+	signed int width;
+	signed int height;
+	struct ems_tab *ptr;
+	struct nvf_extract_desc nvf;
+	signed int size;
 
 	nvf.dst = g_renderbuf_ptr + 30000;
-	nvf.src = (Bit8u*)g_buffer9_ptr4;
-	nvf.no = no;
-	nvf.type = 0;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
-	process_nvf(&nvf);
-
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	width = host_readws((Bit8u*)&width);
-	height = host_readws((Bit8u*)&height);
-#endif
+	nvf.src = (uint8_t*)g_buffer9_ptr3;
+	nvf.image_num = image_num;
+	nvf.compression_type = 0;
+	nvf.width = &width;
+	nvf.height = &height;
+	process_nvf_extraction(&nvf);
 
 	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage, 0);
 	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage + 1, 1);
@@ -388,63 +398,64 @@ void unused_store(signed short no)
 	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
 	size = width * height;
-	memmove((Bit8u*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
+	memmove((uint8_t*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
 
-	ptr = no * 5 + g_ems_unused_tab;
+	ptr = &g_ems_unused_tab[image_num];
 
-	host_writebs(ptr, (signed char)g_ems_unused_lpage);
-	host_writeb(ptr + 1, g_ems_unused_offset >> 8);
-	host_writew(ptr + 2, width);
-	host_writeb(ptr + 4, (signed char)height);
+	ptr->lpage = g_ems_unused_lpage;
+	ptr->offset = g_ems_unused_offset >> 8;
+	ptr->width = width;
+	ptr->height = height;
 
-	g_ems_unused_lpage = (g_ems_unused_lpage + (g_ems_unused_offset + size) >> 14);
+	g_ems_unused_lpage = g_ems_unused_lpage + ((uint16_t)(g_ems_unused_offset + size) >> 14);
 	g_ems_unused_offset = ((((g_ems_unused_offset + size) & 0x3fff) + 0x100) & 0xff00);
 }
 
-Bit8u* unused_load(signed short no)
+uint8_t* unused_load(const signed int image_num)
 {
-	signed short l_si;
+	unsigned int lpage;
 
 	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
-	l_si = host_readb(g_ems_unused_tab + 5 * no);
+	lpage = g_ems_unused_tab[image_num].lpage;
 
-	EMS_map_memory(g_ems_unused_handle, l_si, 0);
-	EMS_map_memory(g_ems_unused_handle, l_si + 1, 1);
-	EMS_map_memory(g_ems_unused_handle, l_si + 2, 2);
+	EMS_map_memory(g_ems_unused_handle, lpage, 0);
+	EMS_map_memory(g_ems_unused_handle, lpage + 1, 1);
+	EMS_map_memory(g_ems_unused_handle, lpage + 2, 2);
 
-	return g_ems_frame_ptr + 256 * host_readb(g_ems_unused_tab + 5 * no + 1);
+	return g_ems_frame_ptr + 256 * g_ems_unused_tab[image_num].offset;
 }
+#endif
 
 void load_map(void)
 {
-	signed short fd;
-	signed short wallclock_update_bak;
-	struct nvf_desc nvf;
+	signed int handle;	/* REMARK: reused differently */
+	signed int wallclock_update_bak;
+	struct nvf_extract_desc nvf;
 
 	wallclock_update_bak = g_wallclock_update;
 	g_wallclock_update = 0;
 
-	g_area_prepared = -1;
+	g_area_prepared = AREA_TYPE_NONE;
 	/* set current_ani to -1 */
 	g_current_ani = -1;
 
 	/* open OBJECTS.NVF */
-	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, g_renderbuf_ptr, 2000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
+	read_archive_file(handle, g_renderbuf_ptr, 2000);
+	close(handle);
 
 	/* load the grey border for the wallclock overlay */
 	nvf.src = g_renderbuf_ptr;
-	nvf.type = 0;
-	nvf.width = (Bit8u*)&fd;
-	nvf.height = (Bit8u*)&fd;
-	nvf.dst = (Bit8u*)(g_buffer9_ptr + 18000L);
-	nvf.no = 16;
+	nvf.compression_type = 0;
+	nvf.width = &handle;
+	nvf.height = &handle;
+	nvf.dst = (uint8_t*)(g_buffer9_ptr + 18000L);
+	nvf.image_num = 16;
 
-	process_nvf(&nvf);
+	process_nvf_extraction(&nvf);
 
-	array_add((Bit8u*)(g_buffer9_ptr + 18000L), 3003, 0xe0, 2);
+	array_add((uint8_t*)(g_buffer9_ptr + 18000L), 3003, 0xe0, 2);
 
 	g_pp20_index = ARCHIVE_FILE_KARTE_DAT;
 
@@ -457,14 +468,14 @@ void load_map(void)
 		EMS_map_memory(g_ems_travelmap_handle, 2, 2);
 		EMS_map_memory(g_ems_travelmap_handle, 3, 3);
 		/* set map pointer to EMS */
-		gs_travel_map_ptr = (Bit8u*)g_ems_frame_ptr;
+		gs_travel_map_ptr = (uint8_t*)g_ems_frame_ptr;
 	} else {
 #endif
 		/* or read KARTE.DAT from file */
-		fd = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
+		handle = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
 
-		read_archive_file(fd, (gs_travel_map_ptr = g_renderbuf_ptr), 64098);
-		close(fd);
+		read_archive_file(handle, (gs_travel_map_ptr = g_renderbuf_ptr), 64098);
+		close(handle);
 
 #if defined(__BORLANDC__)
 		if (g_ems_enabled) {
@@ -485,207 +496,190 @@ void load_map(void)
 #endif
 
 	/* load LROUT.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_LROUT_DAT);
-	read_archive_file(fd, g_buffer9_ptr, 7600);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_LROUT_DAT);
+	read_archive_file(handle, g_buffer9_ptr, 7600);
+	close(handle);
 
 	/* load HSROUT.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
-	read_archive_file(fd, g_buffer9_ptr + 7600L, 3800);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
+	read_archive_file(handle, g_buffer9_ptr + 7600L, 3800);
+	close(handle);
 
 	/* load SROUT.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
-	read_archive_file(fd, g_buffer9_ptr + 11400L, 5900);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
+	read_archive_file(handle, g_buffer9_ptr + 11400L, 5900);
+	close(handle);
 
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
 	g_wallclock_update = wallclock_update_bak;
 }
 
-void load_npc(signed short index)
+void load_npc(const signed int index)
 {
-	Bit8u *npc_dst;
-	signed short fd;
+	struct struct_hero *npc;
+	signed int handle;
 
-	npc_dst = get_hero(6);
+	npc = get_hero(6);
 
 	/* load from temp directory */
-	fd = load_archive_file(index | 0x8000);
-	_read(fd, (void*)npc_dst, SIZEOF_HERO);
-	close(fd);
+	handle = load_archive_file(index | 0x8000);
+	_read(handle, (void*)npc, sizeof(struct struct_hero));
+	close(handle);
 
-	if (host_readb(npc_dst + HERO_SEX) == 1) {
+	if (npc->sex == 1) {
 		/* female */
-		host_writeb(npc_dst + HERO_SPRITE_NO, host_readb(npc_dst + HERO_TYPE) + 11);
-		if (host_readbs(npc_dst + HERO_SPRITE_NO) > 21)
-			host_writeb(npc_dst + HERO_SPRITE_NO, 21);
+		npc->sprite_id = npc->typus + 11;
+		if (npc->sprite_id > 21)
+			npc->sprite_id = 21;
 	} else {
 		/* male */
-		host_writeb(npc_dst + HERO_SPRITE_NO, host_readb(npc_dst + HERO_TYPE));
-		if (host_readbs(npc_dst + HERO_SPRITE_NO) > 10)
-			host_writeb(npc_dst + HERO_SPRITE_NO, 10);
+		npc->sprite_id = npc->typus;
+		if (npc->sprite_id > 10)
+			npc->sprite_id = 10;
 	}
 }
 
-void save_npc(signed short index)
+void save_npc(const signed int index)
 {
-	signed short fd;
+	signed int handle = load_archive_file(index | 0x8000);
 
-	fd = load_archive_file(index | 0x8000);
+	write(handle, get_hero(6), sizeof(struct struct_hero));
 
-	write(fd, get_hero(6), SIZEOF_HERO);
-
-	close(fd);
+	close(handle);
 }
 
 void load_splashes(void)
 {
-	signed short fd;
-	signed short width;
-	signed short height;
-	struct nvf_desc nvf;
+	signed int handle;
+	signed int width;
+	signed int height;
+	struct nvf_extract_desc nvf;
 
 	/* read SPLASHES.DAT */
-	fd = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
-	read_archive_file(fd, g_renderbuf_ptr, 3000);
-	close(fd);
+	handle = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
+	read_archive_file(handle, g_renderbuf_ptr, 3000);
+	close(handle);
 
-	/* nvf.dst = splash_le = ds_readd() */
 	nvf.dst = g_splash_le = g_splash_buffer;
 	nvf.src = g_renderbuf_ptr;
-	nvf.no = 0;
-	nvf.type = 1;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
-	fd = (signed short)process_nvf(&nvf);
+	nvf.image_num = 0;
+	nvf.compression_type = 1;
+	nvf.width = &width;
+	nvf.height = &height;
+	/* REMARK: use another variable instead of handle */
+	handle = (signed int)process_nvf_extraction(&nvf);
 
-	/* nvf.dst = splash_ae = ds_readd() */
-	nvf.dst = g_splash_ae = (g_splash_buffer + fd);
+	nvf.dst = g_splash_ae = g_splash_buffer + handle;
 	nvf.src = g_renderbuf_ptr;
-	nvf.no = 1;
-	nvf.type = 1;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
-	process_nvf(&nvf);
+	nvf.image_num = 1;
+	nvf.compression_type = 1;
+	nvf.width = &width;
+	nvf.height = &height;
+	process_nvf_extraction(&nvf);
 }
 
-void load_informer_tlk(signed short index)
+void load_informer_tlk(const signed int index)
 {
-	signed short i;
-	signed short fd;
+	signed int i;
+	signed int handle;
 
-	Bit32s text_len;
-	Bit32s off;
-	signed short partners;
+	int32_t text_len;
+	int32_t off;
+	signed int partners;
 	struct struct_dialog_partner *partner;
-
 
 	g_text_file_index = index;
 
-	fd = load_archive_file(index);
+	handle = load_archive_file(index);
 
 	/* read the header */
-	read_archive_file(fd, (Bit8u*)&off, 4);
-	read_archive_file(fd, (Bit8u*)&partners, 2);
-
-#if !defined(__BORLANDC__)
-	/* BE-Fix */
-	off = host_readd((Bit8u*)&off);
-	partners = host_readw((Bit8u*)&partners);
-#endif
+	read_archive_file(handle, (uint8_t*)&off, 4);
+	read_archive_file(handle, (uint8_t*)&partners, 2);
 
 	/* read the partner structures */
-	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (uint8_t*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(fd, (Bit8u*)&gs_dialog_states, (Bit16u)(off - partners * sizeof(struct struct_dialog_partner)));
+	read_archive_file(handle, (uint8_t*)&gs_dialog_states, (uint16_t)(off - partners * sizeof(struct struct_dialog_partner)));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, g_buffer8_ptr, 10000);
+	text_len = (signed int)read_archive_file(handle, g_buffer8_ptr, 10000);
 
-	close(fd);
+	close(handle);
 
 	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, text_len);
 
+#if defined(__BORLANDC__)
 	/* adjust the pointers to the layouts */
 	/* TODO: Not portable! */
 	for (i = 0; i < partners; i++, partner++) {
-		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + (Bit16u)partner->states_offset);
+		partner->states_offset = (uint32_t)((uint8_t*)&gs_dialog_states + (uint16_t)partner->states_offset);
 	}
+#endif
 }
 
-void load_tlk(signed short index)
+void load_tlk(const signed int index)
 {
-	signed short i;
-	signed short fd;
-	Bit32s text_len;
-	Bit32s off;
-	signed short partners;
+	signed int i;
+	signed int handle;
+	int32_t text_len;
+	int32_t off;
+	signed int partners;
 	struct struct_dialog_partner *partner;
 
 	g_text_file_index = index;
 
-	fd = load_archive_file(index);
+	handle = load_archive_file(index);
 
 	/* read the header */
-	read_archive_file(fd, (Bit8u*)&off, 4);
-	read_archive_file(fd, (Bit8u*)&partners, 2);
-
-#if !defined(__BORLANDC__)
-	/* BE-Fix */
-	off = host_readd((Bit8u*)&off);
-	partners = host_readw((Bit8u*)&partners);
-#endif
+	read_archive_file(handle, (uint8_t*)&off, 4);
+	read_archive_file(handle, (uint8_t*)&partners, 2);
 
 	/* read the partner structures */
-	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (uint8_t*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(fd, (Bit8u*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
+	read_archive_file(handle, (uint8_t*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
+	text_len = (signed int)read_archive_file(handle, (uint8_t*)g_buffer7_ptr, 64000);
 
-	close(fd);
+	close(handle);
 
 	split_textbuffer((char**)g_tx_index, g_buffer7_ptr, text_len);
 
+#if defined(__BORLANDC__)
 	/* adjust the pointers to the layouts */
 	/* TODO: Not portable! */
 	for (i = 0; i < partners; i++, partner++) {
-		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + partner->states_offset);
+		partner->states_offset = (uint32_t)((uint8_t*)&gs_dialog_states + partner->states_offset);
 	}
+#endif
 }
 
 #if defined(__BORLANDC__)
-void unused_load_archive_file(signed short index, signed short a2, Bit32u seg)
+void unused_load_archive_file(const signed int index, const uint16_t off, const uint32_t seg)
 {
-	signed short fd;
+	const signed int handle = load_archive_file(index);
 
-	fd = load_archive_file(index);
-	read_archive_file(fd, (Bit8u*)MK_FP(seg, a2), 64000);
-	close(fd);
+	read_archive_file(handle, (uint8_t*)MK_FP(seg, off), 64000);
+
+	close(handle);
 }
 #endif
 
-void load_fightbg(signed short index)
+void load_fightbg(const signed int index)
 {
-	signed short fd;
+	const signed int handle = load_archive_file(index);
 
-	fd = load_archive_file(index);
-	read_archive_file(fd, g_renderbuf_ptr, 30000);
-	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr,
+	read_archive_file(handle, g_renderbuf_ptr, 30000);
+
 #if !defined(__BORLANDC__)
-			g_renderbuf_ptr + 4,
+	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr, g_renderbuf_ptr + 4, get_readlength2(handle));
 #else
-			FP_OFF(g_renderbuf_ptr) + 4, FP_SEG(g_renderbuf_ptr),
+	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr, FP_OFF(g_renderbuf_ptr) + 4, FP_SEG(g_renderbuf_ptr), get_readlength2(handle));
 #endif
-			get_readlength2(fd));
-	close(fd);
-}
 
-#if !defined(__BORLANDC__)
+	close(handle);
 }
-#endif
