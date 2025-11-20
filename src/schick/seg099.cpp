@@ -966,7 +966,7 @@ void spell_klarum_purum(void)
 	} else {
 		/* reset poison */
 		get_spelltarget()->poison[poison_id][1] = 0;
-		get_spelltarget()->poison[poison_id][0] = 1;
+		get_spelltarget()->poison[poison_id][0] = POISON_STATUS_RECOVER;
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(22), get_spelltarget()->alias);

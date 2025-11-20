@@ -485,7 +485,7 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 								/* 35% chance: infected with Wundfieber illness */
 								sprintf(g_dtp2, get_ttx(699), hero->alias, patient->alias);
 
-								patient->sick[ILLNESS_TYPE_WUNDFIEBER][0] = -1;
+								patient->sick[ILLNESS_TYPE_WUNDFIEBER][0] = DISEASE_STATUS_SICK;
 								patient->sick[ILLNESS_TYPE_WUNDFIEBER][1] = 0;
 
 							} else {
