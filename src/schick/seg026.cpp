@@ -574,7 +574,7 @@ void prepare_chr_name(char *dst, char *src)
 			break;
 
 		if (!isalnum(tmp_str[i])) {
-			tmp_str[i] = 0x5f;
+			tmp_str[i] = '_';
 		}
 	}
 
@@ -597,14 +597,14 @@ void prepare_sg_name(char *dst, char *src)
 
 			while (i < 8) {
 				/* fill up with underscores */
-				tmp_str[i] = 0x5f;
+				tmp_str[i] = '_';
 				i++;
 			}
 			break;
 		}
 
 		if (!isalnum(tmp_str[i])) {
-			tmp_str[i] = 0x5f;
+			tmp_str[i] = '_';
 		}
 		i++;
 	}

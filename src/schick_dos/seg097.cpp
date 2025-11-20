@@ -284,8 +284,8 @@ dummy:
 				x_pos -= 6;
 				pos--;
 				dst--;
-				GUI_print_char(0x20, x_pos, y);
-				GUI_print_char(0x5f, x_pos, y);
+				GUI_print_char(' ', x_pos, y);
+				GUI_print_char('_', x_pos, y);
 			}
 		} else
 
