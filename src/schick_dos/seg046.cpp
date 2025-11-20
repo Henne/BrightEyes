@@ -114,58 +114,58 @@ static char g_empty_string7[1] = ""; // ds:0x64a1
 
 
 /**
- * \brief   prints spellname and value
+ * \brief   prints spell name and value
  *
- * \param   hero        the hero the spell is from
- * \param   spell       spellnumber
- * \param   fsig        the first spell in the spellclass
- * \param   x1          the leftmost x coordinate
- * \param   x2          the rightmost x coordinate
- * \param   gy          the upper y coordinate of this spellclass
+ * \param   hero              the hero the spell is from
+ * \param   spell_id          spell ID
+ * \param   first_spell_id    ID of the the first spell in the same spellclass
+ * \param   x1                the leftmost x coordinate
+ * \param   x2                the rightmost x coordinate
+ * \param   gy                the upper y coordinate of this spellclass
  */
 /* Borlandified and identical */
-void status_show_spell(const struct struct_hero *hero, const signed int spell_id, const signed int fsig,
+void status_show_spell(const struct struct_hero *hero, const signed int spell_id, const signed int first_spell_id,
 			const signed int x1, const signed int x2, const signed int gy)
 {
-	const signed int group = spell_id - fsig;
+	const signed int pos_in_spellclass = spell_id - first_spell_id;
 	char str[10];
 
 
 	/* print spellname */
-	GUI_print_string(get_ttx(spell_id + 0x6a), x1, gy + group * 7);
+	GUI_print_string(get_ttx(spell_id + 0x6a), x1, gy + pos_in_spellclass * 7);
 
 	/* convert value to string */
 	my_itoa(hero->spells[spell_id], str, 10);
 
 	/* print value */
-	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + pos_in_spellclass * 7);
 }
 
 /**
- * \brief   prints skillname and value
+ * \brief   prints skill name and value
  *
- * \param   hero        the hero the skill is from
- * \param   talen       skillnumber
- * \param   ftig        the first skill in the skillclass
- * \param   x1          the leftmost x coordinate
- * \param   x2          the rightmost x coordinate
- * \param   gy          the upper y coordinate of this skillclass
+ * \param   hero              the hero the skill is from
+ * \param   skill_id          skill ID
+ * \param   first_skill_id    ID of the the first skill in the same skillclass
+ * \param   x1                the leftmost x coordinate
+ * \param   x2                the rightmost x coordinate
+ * \param   gy                the upper y coordinate of this skillclass
  */
 /* Borlandified and identical */
-void status_show_skill(const struct struct_hero *hero, const signed int skill_id, const signed int ftig,
+void status_show_skill(const struct struct_hero *hero, const signed int skill_id, const signed int first_skill_id,
 			const signed int x1, const signed int x2, const signed int gy)
 {
-	const signed int group = skill_id - ftig;
+	const signed int pos_in_skillclass = skill_id - first_skill_id;
 	char str[10];
 
 	/* print skillname */
-	GUI_print_string(get_ttx(skill_id + 0x30), x1, gy + group * 7);
+	GUI_print_string(get_ttx(skill_id + 0x30), x1, gy + pos_in_skillclass * 7);
 
 	/* convert value to string */
 	my_itoa(hero->skills[skill_id] , str, 10);
 
 	/* print value */
-	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + pos_in_skillclass * 7);
 }
 
 /**
