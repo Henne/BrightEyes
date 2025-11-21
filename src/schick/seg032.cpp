@@ -1275,7 +1275,7 @@ signed int do_fight(const signed int fight_id)
 	g_autofight = 0;
 	g_check_party = 1;
 	g_textbox_width = tw_bak;
-	g_pp20_index = (ARCHIVE_FILE_DNGS + 12);
+	g_pp20_index = -2;
 
 	call_mouse_bg();
 

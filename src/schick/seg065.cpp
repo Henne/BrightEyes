@@ -108,7 +108,7 @@ void final_intro(void)
 	uint8_t *ptr2;
 	struct nvf_extract_desc nvf;
 
-	g_pp20_index = ARCHIVE_FILE_DNGS + 12;
+	g_pp20_index = -2;
 
 	call_mouse_bg();
 
