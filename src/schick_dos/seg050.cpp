@@ -463,7 +463,7 @@ void inc_spell_novice(struct struct_hero *hero, const signed int spell_id)
  */
 void level_up(const signed int hero_pos)
 {
-	signed int l_si;
+	signed int l_si; /* multi use */
 	signed char mr;
 	signed char v2;
 	signed char v3;
@@ -521,6 +521,10 @@ void level_up(const signed int hero_pos)
 
 	update_status_bars();
 
+	/* new context for l_si
+	 * -1: cannot increase because all attributes are already >= 20,
+	 * -2: no increase done yet,
+	 * 0: increase done */
 	l_si = -1;
 
 	for (i = 0; i <= 6; i++) {
