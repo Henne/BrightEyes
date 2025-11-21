@@ -1894,7 +1894,11 @@ extern uint8_t* g_fig_spellgfx_buf;	// ds:0xd856; seg040, seg045
 extern signed char *g_chessboard;	// ds:0xd852;
 extern signed char g_fig_hero_parry_action_used[7];	// ds:0xd84b; seg032, seg042, seg043, seg044
 extern signed char g_fig_enemy_parry_action_used[30];	// ds:0xd82d; seg032, seg042, seg043, seg044 /* indexed by object_id. Better index by enemy_id or combine with g_fig_hero_parry_action_used */
-extern signed char g_fig_move_pathdir[10];	// ds:0xd823; seg034, seg036, seg037, seg038
+#if defined(__BORLANDC__)
+extern int8_t g_fig_move_pathdir[10];		// ds:0xd823; seg034, seg036, seg037, seg038
+#else
+extern int8_t g_fig_move_pathdir[20];		// ds:0xd823; seg034, seg036, seg037, seg038
+#endif
 extern struct enemy_sheet g_enemy_sheets[20];	// ds:0xd34b; seg005, seg006, seg032-seg102
 extern struct fight_msg g_fig_msg_data[6];	// ds:0xd333; seg005, seg041
 extern signed int g_replenish_stocks_mod;	// ds:0xd331; seg051, seg109

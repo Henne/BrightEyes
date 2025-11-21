@@ -262,7 +262,10 @@ void FIG_find_path_to_target_backtrack(int8_t *dist_table_ptr, signed int target
 		}
 	}
 
-	/* TODO: g_fig_move_pathdir is only 10 bytes, but should be enlarged */
+	/* TODO: g_fig_move_pathdir was only 10 bytes in the original,
+	 * 		is enlarged on newer systems,
+	 * 		but should be checked and typechanged.
+	 **/
 	memcpy(g_fig_move_pathdir, path_table[best_dir], 20);
 
 	/* In the way the path has been created, it is terminated by at least one symbol -1.

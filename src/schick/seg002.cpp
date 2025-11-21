@@ -257,7 +257,11 @@ signed int g_gather_herbs_mod; // ds:0xd32f
 signed int g_replenish_stocks_mod; // ds:0xd331
 struct fight_msg g_fig_msg_data[6]; // ds:0xd333
 struct enemy_sheet g_enemy_sheets[20]; // ds:0xd34b
-signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
+#if defined(__BORLANDC__)
+int8_t g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
+#else
+int8_t g_fig_move_pathdir[20]; // ds:0xd823 /* TODO: check if 20 steps are enough, WC: 2 * bp_max + 2 */
+#endif
 signed char g_fig_enemy_parry_action_used[30]; // ds:0xd82d, see FIG_ACTION_PARRY
 signed char g_fig_hero_parry_action_used[7]; // ds:0xd84b
 signed char *g_chessboard;// ds:0xd852
