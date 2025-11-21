@@ -117,7 +117,7 @@ static signed int g_ail_music_driver_id;	// ds:0xbd23
 signed int g_pregame_state;			// ds:0xbd25
 signed char g_area_camp_area_type;		// ds:0xbd27, {0 = camp takes place in a dungeon, 1 = camp takes place in a town}
 struct fight *g_current_fight;		// ds:0xbd28
-signed char *g_scenario_buf;		// ds:0xbd2c
+struct scenario *g_scenario_buf;		// ds:0xbd2c
 unsigned char *g_fightobj_buf;		// ds:0xbd30
 struct struct_hero *g_heroes;		// ds:0xbd34
 signed char g_new_menu_icons[9];	// ds:0xbd38

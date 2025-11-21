@@ -654,8 +654,8 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 							}
 						} else {
 							if (((mode == 4) || (mode == 5)) && /* actor is fleeing */
-								((g_scenario_buf[0x14] > 3) ||
-									((g_scenario_buf[0x14] <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
+								((g_scenario_buf->bg_id > 3) ||
+									((g_scenario_buf->bg_id <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
 							{
 								/* it is not tested if there is space for the tail of a double-size monster! */
 								unused[nr_targets_reached] = 1;

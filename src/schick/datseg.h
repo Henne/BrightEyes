@@ -462,11 +462,18 @@ struct fight {
 	int16_t silver;
 	int16_t heller;
 };
+
+struct scenario {
+	char name[20];
+	int8_t bg_id;
+	int8_t board[600];
+};
 #if !defined(__BORLANDC__)
 #pragma pack()
 #endif
 
 STATIC_ASSERT(sizeof(struct fight) == 216, struct_fight_needs_to_be_216_bytes);
+STATIC_ASSERT(sizeof(struct scenario) == 621, struct_scenario_needs_to_be_621_bytes);
 
 struct mon_spell_description {
 	int8_t ae_cost;
@@ -2003,7 +2010,7 @@ extern unsigned char g_steptarget_front;	// ds:0xbd4d; seg003, seg066, seg076, s
 extern signed char g_new_menu_icons[9];		// ds:0xbd38; seg002, seg026, seg066, seg076, seg099
 extern struct struct_hero *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;		// ds:0xbd30; seg032, seg040
-extern signed char *g_scenario_buf;		// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
+extern struct scenario *g_scenario_buf;		// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
 extern struct fight *g_current_fight;		// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern signed char g_area_camp_area_type;	// ds:0xbd27; seg052, seg066, seg076
 extern signed int g_pregame_state;		// ds:0xbd25; seg002, seg097

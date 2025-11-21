@@ -813,22 +813,23 @@ void FIG_do_round(void)
 void FIG_load_ship_sprites(void)
 {
 	signed int object_id;
-	signed int l_di;	// REMARK: rename to x (chessboard)
-	signed int i;		// REMARK: rename to y (chessboard)
+	signed int cb_x;
+	signed int cb_y;
 	signed int width;
 	signed int height;
-	signed int const1 = 10;
-	signed int const2 = 118;
-	signed int l3;	// REMARK: rename to x (screen)
-	signed int l4;	// REMARK: rename to y (screen)
+	signed int const_x = 10;
+	signed int const_y = 118;
+	signed int x;	// REMARK: x,y are screen coordinates
+	signed int y;
 	uint8_t *ptr;
 	struct nvf_extract_desc nvf;
 
-	for (i = 0; i < 24; i++) {
 
-		for (l_di = 0; l_di < 24; l_di++) {
+	for (cb_y = 0; cb_y < 24; cb_y++) {
 
-			object_id =*(g_scenario_buf + 0x15 + 25 * i + l_di);
+		for (cb_x = 0; cb_x < 24; cb_x++) {
+
+			object_id = g_scenario_buf->board[25 * cb_y + cb_x];
 
 			if ((object_id >= 108) && (object_id <= 111)) {
 
@@ -874,17 +875,17 @@ void FIG_load_ship_sprites(void)
 
 
 				/* calculate screen coordinates */
-				l3 = const1 - g_figobj_gfxwidth_table[object_id] / 2 + 10 * (l_di + i);
-				l4 = const2 - g_figobj_gfxheight_table[object_id] + 5 * (l_di - i);
+				x = const_x - g_figobj_gfxwidth_table[object_id] / 2 + 10 * (cb_x + cb_y);
+				y = const_y - g_figobj_gfxheight_table[object_id] + 5 * (cb_x - cb_y);
 
-				l3 += g_gfxtab_obj_offset_x[object_id];
-				l4 += g_gfxtab_obj_offset_y[object_id];
+				x += g_gfxtab_obj_offset_x[object_id];
+				y += g_gfxtab_obj_offset_y[object_id];
 
 				/* set screen coordinates */
-				g_pic_copy.x1 = l3;
-				g_pic_copy.y1 = l4;
-				g_pic_copy.x2 = l3 + g_figobj_gfxwidth_table[object_id] - 1;
-				g_pic_copy.y2 = l4 + g_figobj_gfxheight_table[object_id] - 1;
+				g_pic_copy.x1 = x;
+				g_pic_copy.y1 = y;
+				g_pic_copy.x2 = x + g_figobj_gfxwidth_table[object_id] - 1;
+				g_pic_copy.y2 = y + g_figobj_gfxheight_table[object_id] - 1;
 				g_pic_copy.src = g_figobj_gfxbuf_table[object_id];
 				g_pic_copy.dst = g_buffer8_ptr;
 
@@ -945,8 +946,8 @@ signed int do_fight(const signed int fight_id)
 	g_textbox_width = 3;
 
 	/* set some pointers */
-	g_scenario_buf = (signed char*)(((HugePt)g_buffer8_ptr) + 64100L);
-	g_monster_dat_buf = (struct monster*)(((HugePt)g_scenario_buf) + 621L);
+	g_scenario_buf = (struct scenario*)(((HugePt)g_buffer8_ptr) + 64100L);
+	g_monster_dat_buf = (struct monster*)(((HugePt)g_scenario_buf) + sizeof(struct scenario));
 	g_current_fight = (struct fight*)(((HugePt)g_monster_dat_buf) + 79L * sizeof(struct monster));
 
 	read_fight_lst(fight_id);
@@ -1013,13 +1014,13 @@ signed int do_fight(const signed int fight_id)
 	disable_ani();
 	call_mouse_bg();
 
-	if (g_scenario_buf[0x14] > 3) {
+	if (g_scenario_buf->bg_id > 3) {
 
-		load_fightbg(g_scenario_buf[0x14] + 197);
+		load_fightbg(g_scenario_buf->bg_id + 197);
 
 	} else {
 
-		load_fightbg(g_scenario_buf[0x14] + 1);
+		load_fightbg(g_scenario_buf->bg_id + 1);
 
 	}
 
