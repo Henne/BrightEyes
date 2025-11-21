@@ -393,12 +393,22 @@ void disease_effect(void)
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get better */
 			if (disease_ptr->status == DISEASE_STATUS_RECOVER) {
 
+				/* Original-Bug 45: It is impossible to fully recover from Schlachtenfieber.
+				 * There is no to get the status back to DISEASE_STATUS_HEALTHY. */
 				if (disease_ptr->log_3) {
 
 					disease_ptr->log_3 = 0;
+#ifndef M302de_ORIGINAL_BUGFIX
 					disease_ptr->time_counter = 0;
+#endif
 					hero->attrib[ATTRIB_KK].current += 5;
 				}
+#ifdef M302de_ORIGINAL_BUGFIX
+				else {
+					disease_ptr->time_counter = 0;
+					disease_ptr->status = DISEASE_STATUS_HEALTHY;
+				}
+#endif
 
 				sprintf(g_dtp2, get_ttx(582), hero->alias);
 				GUI_output(g_dtp2);
