@@ -416,7 +416,11 @@ void spell_eisenrost(void)
 		/* check if target is an animal */
 		if (g_spelltarget_e->is_animal)
 		{
+#if defined(__BORLANDC__)
 			sprintf(g_dtp2, get_tx(89));
+#else
+			strcpy(g_dtp2, get_tx(89));
+#endif
 		} else {
 			/* check if weapon is already broken */
 			if (g_spelltarget_e->weapon_broken) {

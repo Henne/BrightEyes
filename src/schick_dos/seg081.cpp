@@ -483,7 +483,11 @@ void DNG06_chest01_loot(struct struct_chest* chest)
 	signed int i;
 	struct struct_hero *hero;
 
+#if defined(__BORLANDC__)
 	sprintf(g_dtp2, get_tx(33));
+#else
+	strcpy(g_dtp2, get_tx(33));
+#endif
 
 	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero++)
