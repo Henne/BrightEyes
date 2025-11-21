@@ -37,7 +37,7 @@ void poison_effect(void)
 			/* SHURINKNOLLENGIFT: hero is poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
-				if (poison_ptr->day_counter >= 6) {
+				if (poison_ptr->time_counter >= 6) {
 
 					/* KK */
 					if (hero->attrib[ATTRIB_KK].current) {
@@ -76,11 +76,11 @@ void poison_effect(void)
 
 				if (!poison_ptr->log_1 && !poison_ptr->log_2) {
 
-					poison_ptr->day_counter = 0;
+					poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
-				if ((poison_ptr->log_1 != 0) && (!poison_ptr->day_counter % 12 )) {
+				if ((poison_ptr->log_1 != 0) && (!poison_ptr->time_counter % 12 )) {
 
 					sprintf(g_dtp2, get_ttx(573), hero->alias);
 
@@ -90,7 +90,7 @@ void poison_effect(void)
 					hero->attrib[ATTRIB_KK].current++;
 				}
 
-				if ((poison_ptr->log_2 != 0) && (!poison_ptr->day_counter % 12 )) {
+				if ((poison_ptr->log_2 != 0) && (!poison_ptr->time_counter % 12 )) {
 
 					sprintf(g_dtp2, get_ttx(578), hero->alias);
 
@@ -107,7 +107,7 @@ void poison_effect(void)
 			/* ARAXGIFT: hero is poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
-				if ((poison_ptr->day_counter >= 2) && !poison_ptr->log_3) {
+				if ((poison_ptr->time_counter >= 2) && !poison_ptr->log_3) {
 
 					poison_ptr->log_3 = 1;
 
@@ -130,7 +130,7 @@ void poison_effect(void)
 				}
 
 				/* enable self-regeneration */
-				if (poison_ptr->day_counter >= 120) {
+				if (poison_ptr->time_counter >= 120) {
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 			}
@@ -139,7 +139,7 @@ void poison_effect(void)
 			if ((poison_ptr->status == POISON_STATUS_RECOVER) && poison_ptr->log_3) {
 
 				poison_ptr->status = POISON_STATUS_HEALTHY;
-				poison_ptr->day_counter = 0;
+				poison_ptr->time_counter = 0;
 				poison_ptr->log_3 = 0;
 
 				for (j = 0; j < 7; j++) {
@@ -188,7 +188,7 @@ void poison_effect(void)
 				}
 
 				/* self regeneration */
-				if (poison_ptr->day_counter >= 7) {
+				if (poison_ptr->time_counter >= 7) {
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 			}
@@ -197,7 +197,7 @@ void poison_effect(void)
 			if ((poison_ptr->status == POISON_STATUS_RECOVER) && poison_ptr->log_3) {
 
 					poison_ptr->status = POISON_STATUS_HEALTHY;
-					poison_ptr->day_counter = 0;
+					poison_ptr->time_counter = 0;
 					poison_ptr->log_3 = 0;
 
 					/* MU + 2 */
@@ -237,7 +237,7 @@ void poison_effect(void)
 				}
 
 				/* self regeneration */
-				if (poison_ptr->day_counter >= 20) {
+				if (poison_ptr->time_counter >= 20) {
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 			}
@@ -246,7 +246,7 @@ void poison_effect(void)
 			if ((poison_ptr->status == POISON_STATUS_RECOVER) && poison_ptr->log_3) {
 
 				poison_ptr->status = POISON_STATUS_HEALTHY;
-				poison_ptr->day_counter = 0;
+				poison_ptr->time_counter = 0;
 				poison_ptr->log_3 = 0;
 
 				hero->flags.asleep = 0;
@@ -262,13 +262,13 @@ void poison_effect(void)
 			/* GOLDLEIM: hero gets poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
-				if (poison_ptr->day_counter >= dice_roll(2, 6, 0) * 12) {
+				if (poison_ptr->time_counter >= dice_roll(2, 6, 0) * 12) {
 					/* for Goldleim, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
 				/* every 12 days, an LE loss of 2 D6 - 3 */
-				if (!(poison_ptr->day_counter % 12)) {
+				if (!(poison_ptr->time_counter % 12)) {
 					sub_hero_le(hero, dice_roll(2, 6, -3));
 				}
 			}
@@ -284,12 +284,12 @@ void poison_effect(void)
 			/* KROETENSCHEMEL: hero gets poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
-				if (poison_ptr->day_counter >= 48) {
+				if (poison_ptr->time_counter >= 48) {
 					/* for Krötenschemel, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
-				if (!(poison_ptr->day_counter % 12)) {
+				if (!(poison_ptr->time_counter % 12)) {
 					/* every 12 days, an LE loss of D6 + 2 */
 					sub_hero_le(hero, dice_roll(1, 6, 2));
 				}
@@ -306,7 +306,7 @@ void poison_effect(void)
 			/* LOTUSGIFT: hero gets poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
-				if (poison_ptr->day_counter >= 24) {
+				if (poison_ptr->time_counter >= 24) {
 					/* for Lotusgift, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
@@ -325,7 +325,7 @@ void poison_effect(void)
 			/* KUKRIS: hero gets poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
-				if (poison_ptr->day_counter >= 3) {
+				if (poison_ptr->time_counter >= 3) {
 					/* for Kukris, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
@@ -344,7 +344,7 @@ void poison_effect(void)
 			/* BANNSTAUB: hero gets poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
-				if (poison_ptr->day_counter >= dice_roll(3, 6, 0)) {
+				if (poison_ptr->time_counter >= dice_roll(3, 6, 0)) {
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 
@@ -370,7 +370,7 @@ void poison_effect(void)
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				} else {
 
-					if (!poison_ptr->day_counter % 12) {
+					if (!poison_ptr->time_counter % 12) {
 
 						/* regenerate one AE every 5 minutes */
 						poison_ptr->log_1--;
@@ -388,7 +388,7 @@ void poison_effect(void)
 
 				if (hero->poison[j].status != POISON_STATUS_HEALTHY) {
 					/* Original-Bug? For Goldleim, an overflow could theoretically happen. */
-					hero->poison[j].day_counter++;
+					hero->poison[j].time_counter++;
 				}
 			}
 

@@ -354,7 +354,7 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 								sprintf(g_dtp2, get_ttx(690), hero->alias, patient->alias);
 								GUI_output(g_dtp2);
 
-								patient->poison[poison_id].day_counter = 0;
+								patient->poison[poison_id].time_counter = 0;
 								patient->poison[poison_id].status = POISON_STATUS_RECOVER;
 
 								sprintf(g_dtp2,	get_ttx(692), hero->alias, patient->alias);
@@ -487,7 +487,7 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 								sprintf(g_dtp2, get_ttx(699), hero->alias, patient->alias);
 
 								patient->disease[DISEASE_ID_WUNDFIEBER].status = DISEASE_STATUS_DISEASED;
-								patient->disease[DISEASE_ID_WUNDFIEBER].day_counter = 0;
+								patient->disease[DISEASE_ID_WUNDFIEBER].time_counter = 0;
 
 							} else {
 								/* 65% chance: just failed, no infection */

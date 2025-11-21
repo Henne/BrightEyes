@@ -961,7 +961,7 @@ void spell_klarum_purum(void)
 		g_spell_special_aecost = -2;
 	} else {
 		/* reset poison */
-		get_spelltarget()->poison[poison_id].day_counter = 0;
+		get_spelltarget()->poison[poison_id].time_counter = 0;
 		get_spelltarget()->poison[poison_id].status = POISON_STATUS_RECOVER;
 
 		/* prepare message */

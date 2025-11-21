@@ -203,7 +203,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					if (poison_id != POISON_ID_NONE && poison_id <= 5) {
 
 						/* cure the first poison */
-						consumer->poison[poison_id].day_counter = 0;
+						consumer->poison[poison_id].time_counter = 0;
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
@@ -221,7 +221,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					if (poison_id != POISON_ID_NONE && poison_id <= 10) {
 						/* cure the first poison */
-						consumer->poison[poison_id].day_counter = 0;
+						consumer->poison[poison_id].time_counter = 0;
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
@@ -386,14 +386,14 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					if (disease_id == DISEASE_ID_DUMPFSCHAEDEL || disease_id == DISEASE_ID_BLAUE_KEUCHE) {
 						consumer->disease[disease_id].status = DISEASE_STATUS_RECOVER;
-						consumer->disease[disease_id].day_counter = 0;
+						consumer->disease[disease_id].time_counter = 0;
 					}
 
 					/* poison */
 					poison_id = hero_is_poisoned(consumer);
 
 					if (poison_id != POISON_ID_NONE && poison_id < 7) {
-						consumer->poison[poison_id].day_counter = 0;
+						consumer->poison[poison_id].time_counter = 0;
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
@@ -498,7 +498,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					poison_id = hero_is_poisoned(consumer);
 
 					if (poison_id != POISON_ID_NONE && poison_id < 5) {
-						consumer->poison[poison_id].day_counter = 0;
+						consumer->poison[poison_id].time_counter = 0;
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
@@ -514,7 +514,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					disease_id = hero_is_diseased(consumer);
 
 					consumer->disease[disease_id].status = DISEASE_STATUS_RECOVER;
-					consumer->disease[disease_id].day_counter = 0;
+					consumer->disease[disease_id].time_counter = 0;
 
 					/* give owner a glassbottle */
 					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
