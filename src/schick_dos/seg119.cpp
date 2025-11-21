@@ -49,7 +49,7 @@ void disease_effect(void)
 
 			hero = get_hero(i);
 
-			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_WUNDFIEBER];
+			disease_ptr = (int8_t*)&hero->disease[DISEASE_ID_WUNDFIEBER];
 
 			/* TETANUS / WUNDFIEBER: get worse */
 			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
@@ -98,7 +98,7 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_DUMPFSCHAEDEL];
+			disease_ptr = (int8_t*)&hero->disease[DISEASE_ID_DUMPFSCHAEDEL];
 
 			/* NUMBSKULL / DUMPFSCHAEDEL: get worse */
 			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
@@ -132,7 +132,7 @@ void disease_effect(void)
 							(hero2 != hero) &&
 							(random_schick(100) <= 20))
 						{
-							hero_gets_diseased(hero2, ILLNESS_TYPE_DUMPFSCHAEDEL);
+							hero_gets_diseased(hero2, DISEASE_ID_DUMPFSCHAEDEL);
 						}
 					}
 				}
@@ -158,7 +158,7 @@ void disease_effect(void)
 					}
 
 					/* infect with the worse Blaue Keuche */
-					hero_gets_diseased(hero, ILLNESS_TYPE_BLAUE_KEUCHE);
+					hero_gets_diseased(hero, DISEASE_ID_BLAUE_KEUCHE);
 				}
 
 				if (disease_ptr[1] > dice_roll(1, 3, 4)) { /* number of days infected > D3 + 4 */
@@ -192,7 +192,7 @@ void disease_effect(void)
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_BLAUE_KEUCHE];
+			disease_ptr = (int8_t*)&hero->disease[DISEASE_ID_BLAUE_KEUCHE];
 
 			/* BLUE COUGH / BLAUE KEUCHE: get worse */
 			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
@@ -234,7 +234,7 @@ void disease_effect(void)
 						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_id == gs_active_group_id) &&
 							!hero2->flags.dead && (hero2 != hero) && (random_schick(100) <= 20))
 						{
-							hero_gets_diseased(hero2, ILLNESS_TYPE_BLAUE_KEUCHE);
+							hero_gets_diseased(hero2, DISEASE_ID_BLAUE_KEUCHE);
 						}
 					}
 
@@ -268,7 +268,7 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_PARALYSE];
+			disease_ptr = (int8_t*)&hero->disease[DISEASE_ID_PARALYSE];
 
 			/* PARALYSIS / PARALYSE: get worse */
 			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
@@ -321,7 +321,7 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_SCHLACHTENFIEBER];
+			disease_ptr = (int8_t*)&hero->disease[DISEASE_ID_SCHLACHTENFIEBER];
 
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get worse */
 			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
@@ -362,7 +362,7 @@ void disease_effect(void)
 							if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_id == gs_active_group_id) &&
 								!hero2->flags.dead && (hero2 != hero) && (random_schick(100) <= 5))
 							{
-								hero_gets_diseased(hero2, ILLNESS_TYPE_SCHLACHTENFIEBER);
+								hero_gets_diseased(hero2, DISEASE_ID_SCHLACHTENFIEBER);
 							}
 						}
 
@@ -385,7 +385,7 @@ void disease_effect(void)
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_FROSTSCHAEDEN];
+			disease_ptr = (int8_t*)&hero->disease[DISEASE_ID_FROSTSCHAEDEN];
 
 			/* FROSTBITE / FROSTSCHAEDEN: get worse */
 			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
@@ -451,7 +451,7 @@ void disease_effect(void)
 				}
 			}
 
-			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_TOLLWUT];
+			disease_ptr = (int8_t*)&hero->disease[DISEASE_ID_TOLLWUT];
 
 			/* RABIES / TOLLWUT: get worse */
 			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
@@ -474,7 +474,7 @@ void disease_effect(void)
 							(hero2 != hero) &&
 							(random_schick(100) <= 10))
 						{
-							hero_gets_diseased(hero2, ILLNESS_TYPE_TOLLWUT);
+							hero_gets_diseased(hero2, DISEASE_ID_TOLLWUT);
 						}
 					}
 
