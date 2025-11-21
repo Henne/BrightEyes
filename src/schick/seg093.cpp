@@ -641,11 +641,11 @@ signed int do_travel_mode(void)
 	signed int tmp1; /* multiple use: route_id, screen coordinate, etc. */
 	signed int i;
 	signed int tmp2; /* multiple use: tmp2, screen coordinate, etc. */
-	signed int l4;
+	signed int town_id;
 	signed int route_id;
 	struct trv_start_point *signpost_ptr;
-	signed int l6;
-	signed int l7;
+	signed int x_bak;
+	signed int y_bak;
 	signed int wallclock_update_bak;
 	signed int tw_bak;
 	char *destinations_tab[6];
@@ -802,37 +802,44 @@ signed int do_travel_mode(void)
 				} else if (g_mouse_leftclick_event)
 				{
 
-					for (i = 0, l4 = -1; i < TOWN_ID__TAIL; i++)
+					for (i = 0, town_id = -1; i < TOWN_ID__TAIL; i++)
 					{
+#if defined(__BORLANDC__)
 						if (is_mouse_in_rect(tmp1 - 4, tmp2 - 4,
 								(tmp1 = g_town_positions[i].x) + 4,
 								(tmp2 = g_town_positions[i].y) + 4))
+#else
+						const signed int x = g_town_positions[i].x;
+						const signed int y = g_town_positions[i].y;
+
+						if (is_mouse_in_rect(x - 4, y - 4, x + 4, y + 4))
+#endif
 						{
-							l4 = i;
+							town_id = i;
 							break;
 						}
 					}
 
-					if (l4 == -1 && (tmp1 = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_travelmap)))
+					if (town_id == -1 && (tmp1 = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_travelmap)))
 					{
-						l4 = tmp1 + 51;
+						town_id = tmp1 + 51;
 					}
 
-					if (l4 != -1)
+					if (town_id != -1)
 					{
 						tmp2 = g_current_town_anix;
 						g_current_town_anix = 0;
-						l6 = g_basepos_x;
-						l7 = g_basepos_y;
+						x_bak = g_basepos_x;
+						y_bak = g_basepos_y;
 						g_basepos_y = 0;
 						g_basepos_x = (g_mouse_posx >= 0 && g_mouse_posx <= 159 ? 80 : -80);
 
 						set_and_spin_lock();
 
-						GUI_input(get_tx(l4), 0);
+						GUI_input(get_tx(town_id), 0);
 
-						g_basepos_x = l6;
-						g_basepos_y = l7;
+						g_basepos_x = x_bak;
+						g_basepos_y = y_bak;
 						g_current_town_anix = tmp2;
 					}
 
