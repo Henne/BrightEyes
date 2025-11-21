@@ -29,7 +29,7 @@ static int RATIO = DEF_RATIO;
 static int W_WIDTH = DEF_RATIO * O_WIDTH;
 static int W_HEIGHT = DEF_RATIO * O_HEIGHT;
 
-static Uint32 palette[256] = {0};
+static uint32_t palette[256] = {0};
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -66,7 +66,7 @@ static void sdl_renderer_info(void)
 			fprintf(stderr, "flags    = 0x%02x\n", info.flags);
 			fprintf(stderr, "#txt     = %02d\n", info.num_texture_formats);
 			fprintf(stderr, "textures = ");
-			for (Uint32 j = 0; j < info.num_texture_formats; j++) {
+			for (int j = 0; j < info.num_texture_formats; j++) {
 				switch (info.texture_formats[j]) {
 				case SDL_PIXELFORMAT_INDEX1LSB: fprintf(stderr, "INDEX1LSB "); break;
 				case SDL_PIXELFORMAT_INDEX1MSB: fprintf(stderr, "INDEX1MSB "); break;
@@ -139,12 +139,12 @@ void sdl_init_video(void)
 		exit(-1);
 	}
 
-	vga_bak = (uint8_t*)calloc(O_WIDTH * O_HEIGHT * sizeof(Uint8), 1);
+	vga_bak = (uint8_t*)calloc(O_WIDTH * O_HEIGHT * sizeof(uint8_t), 1);
 	if (vga_bak == NULL) {
 		fprintf(stderr, "ERROR: cannot allocate vga_bak\n");
 		exit(-1);
 	}
-	pixels = (uint32_t*)calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
+	pixels = (uint32_t*)calloc(W_WIDTH * W_HEIGHT * sizeof(uint32_t), 1);
 	if (pixels == NULL) {
 		fprintf(stderr, "ERROR: cannot allocate pixels\n");
 		exit(-1);
@@ -195,12 +195,12 @@ static void sdl_update_rect_pixels(const int x_in, const int y_in, const int wid
 		}
 	} else {
 		for (int y_o = y_in; y_o < y_in + height; y_o++) {
-			Uint32 *wp = pixels + RATIO * (RATIO * O_WIDTH * y_o + x_in);
+			uint32_t *wp = pixels + RATIO * (RATIO * O_WIDTH * y_o + x_in);
 			int o_pos = O_WIDTH * y_o + x_in;
 			for (int x_o = x_in; x_o < x_in + width; x_o++) {
 				/* fill the first line by hand */
 				//int w_pos = RATIO * (RATIO * O_WIDTH * y_o + x_o);
-				Uint32 col = palette[g_vga_memstart[o_pos]];
+				uint32_t col = palette[g_vga_memstart[o_pos]];
 				int i = RATIO;
 				while (i) {
 					*wp++ = col;
@@ -210,10 +210,10 @@ static void sdl_update_rect_pixels(const int x_in, const int y_in, const int wid
 			}
 
 			/* copy it RATIO - 1 times */
-			const Uint32 off_src = RATIO * (RATIO * O_WIDTH * y_o + x_in);
+			const uint32_t off_src = RATIO * (RATIO * O_WIDTH * y_o + x_in);
 			for (int i = 1; i < RATIO; i++) {
 				memcpy(pixels + off_src + RATIO * O_WIDTH * i,
-					pixels + off_src, RATIO * width * sizeof(Uint32));
+					pixels + off_src, RATIO * width * sizeof(uint32_t));
 			}
 		}
 	}
@@ -243,7 +243,7 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 #endif
 
 			if ((texture != NULL) && (renderer != NULL)) {
-				SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(Uint32));
+				SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(uint32_t));
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, texture, NULL, NULL);
 #if defined(__GNUC__) && HAVE_OPENMP
@@ -311,7 +311,7 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 
 			SDL_SetWindowSize(window, W_WIDTH, W_HEIGHT);
 
-			pixels = (uint32_t*)calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
+			pixels = (uint32_t*)calloc(W_WIDTH * W_HEIGHT * sizeof(uint32_t), 1);
 			if (pixels == NULL) {
 				fprintf(stderr, "ERROR: %s() failed to allocate pixels: %s\n",
 							__func__, SDL_GetError());
@@ -356,12 +356,12 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 }
 
-static inline Uint32 get_ABGR(const unsigned char *p)
+static inline uint32_t get_ABGR(const unsigned char *p)
 {
 	return (p[0] << 2) | (p[1] << 10) | (p[2] << 18);
 }
 
-static inline Uint32 get_ABGR_grey(const unsigned char *p)
+static inline uint32_t get_ABGR_grey(const unsigned char *p)
 {
 	const int avg = 4 * (p[0] + p[1] +  p[2]) / 3;
 	return (avg) | (avg << 8) | (avg << 16);
@@ -463,34 +463,34 @@ void save_display_stat(signed short *pointer)
 
 void set_palette(const unsigned char *pointer, const unsigned char first_color, const unsigned short colors)
 {
-		asm {
-			push ds
-			push es
-			push si
-			push di
+	asm {
+		push ds
+		push es
+		push si
+		push di
 
-			mov dx, 0x3c8
-			mov al, byte ptr first_color
-			out dx, al
-			lds si, pointer
-			mov dx, 0x3c9
-			mov cx, word ptr colors
-		}
+		mov dx, 0x3c8
+		mov al, byte ptr first_color
+		out dx, al
+		lds si, pointer
+		mov dx, 0x3c9
+		mov cx, word ptr colors
+	}
 set_palette_loop1:
-		asm {
-			lodsb
-			out dx, al
-			lodsb
-			out dx, al
-			lodsb
-			out dx, al
-			loop set_palette_loop1
+	asm {
+		lodsb
+		out dx, al
+		lodsb
+		out dx, al
+		lodsb
+		out dx, al
+		loop set_palette_loop1
 
-			pop di
-			pop si
-			pop es
-			pop ds
-		}
+		pop di
+		pop si
+		pop es
+		pop ds
+	}
 }
 #endif
 
