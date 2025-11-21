@@ -552,21 +552,21 @@ void show_outro(void)
 			/* reset every disease */
 			for (j = 0; j < 8; j++) {
 
-				hero->disease[j][0] = DISEASE_STATUS_HEALTHY;
-				hero->disease[j][1] = 0;
-				hero->disease[j][2] = 0;
-				hero->disease[j][3] = 0;
-				hero->disease[j][4] = 0;
+				hero->disease[j].status = DISEASE_STATUS_HEALTHY;
+				hero->disease[j].day_timer = 0;
+				hero->disease[j].log_1 = 0;
+				hero->disease[j].log_2 = 0;
+				hero->disease[j].log_3 = 0;
 			}
 
 			/* reset every poison */
 			for (j = 0; j < 10; j++) {
 
-				hero->poison[j][0] = POISON_STATUS_HEALTHY;
-				hero->poison[j][1] = 0;
-				hero->poison[j][2] = 0;
-				hero->poison[j][3] = 0;
-				hero->poison[j][4] = 0;
+				hero->poison[j].status = POISON_STATUS_HEALTHY;
+				hero->poison[j].day_timer = 0;
+				hero->poison[j].log_1 = 0;
+				hero->poison[j].log_2 = 0;
+				hero->poison[j].log_3 = 0;
 			}
 
 #ifdef M302de_ORIGINAL_BUGFIX

@@ -203,8 +203,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					if (poison_id != 0 && poison_id <= 5) {
 
 						/* cure the first poison */
-						consumer->poison[poison_id][1] = 0;
-						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id].day_timer = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					/* TODO: unknown for 24h */
@@ -221,8 +221,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					if (poison_id != 0 && poison_id <= 10) {
 						/* cure the first poison */
-						consumer->poison[poison_id][1] = 0;
-						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id].day_timer = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					tmp = get_free_mod_slot();
@@ -385,16 +385,16 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					disease_id = hero_is_diseased(consumer);
 
 					if (disease_id == 2 || disease_id == 3) {
-						consumer->disease[disease_id][0] = DISEASE_STATUS_RECOVER;
-						consumer->disease[disease_id][1] = 0;
+						consumer->disease[disease_id].status = DISEASE_STATUS_RECOVER;
+						consumer->disease[disease_id].day_timer = 0;
 					}
 
 					/* poison */
 					poison_id = hero_is_poisoned(consumer);
 
 					if (poison_id != 0 && poison_id < 7) {
-						consumer->poison[poison_id][1] = 0;
-						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id].day_timer = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glasbottle */
@@ -498,8 +498,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					poison_id = hero_is_poisoned(consumer);
 
 					if (poison_id != 0 && poison_id < 5) {
-						consumer->poison[poison_id][1] = 0;
-						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id].day_timer = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glassbottle */
@@ -513,8 +513,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					disease_id = hero_is_diseased(consumer);
 
-					consumer->disease[disease_id][0] = DISEASE_STATUS_RECOVER;
-					consumer->disease[disease_id][1] = 0;
+					consumer->disease[disease_id].status = DISEASE_STATUS_RECOVER;
+					consumer->disease[disease_id].day_timer = 0;
 
 					/* give owner a glassbottle */
 					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
