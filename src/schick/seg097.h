@@ -19,7 +19,11 @@ void GUI_output(char*);
 //0x3e
 signed int GUI_bool(char*);
 //0x43
-signed int GUI_radio(char*, signed char, ...);
+#if defined(__BORLANDC__)
+signed int GUI_radio(char*, const signed char, ...);
+#else
+signed int GUI_radio(char*, const signed int, ...);
+#endif
 //0x48
 #if defined(__BORLANDC__)
 signed int GUI_unused2(const int, const int, const int);

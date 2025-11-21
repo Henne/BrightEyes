@@ -786,7 +786,11 @@ signed int GUI_menu_input(const signed int positions, const signed int h_lines, 
 	return retval;
 }
 
-signed int GUI_radio(char *header, signed char options, ...)
+#if defined(__BORLANDC__)
+signed int GUI_radio(char *header, const signed char options, ...)
+#else
+signed int GUI_radio(char *header, const signed int options, ...)
+#endif
 {
 	signed int i;
 	signed int lines_header;
