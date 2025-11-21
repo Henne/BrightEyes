@@ -503,7 +503,7 @@ signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *p
 
 					/* cure the disease */
 					patient->disease[disease_id].status = DISEASE_STATUS_RECOVER;
-					patient->disease[disease_id].day_timer = 0;
+					patient->disease[disease_id].day_counter = 0;
 
 					if (herb == 999) {
 						/* drop JORUGA & GULMOND LEAF */

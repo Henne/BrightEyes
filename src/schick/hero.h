@@ -115,7 +115,7 @@ struct hero_flags {
 struct hero_affliction {
 	/* used for diseases and poisons */
 	signed char status; /* {-1,0,1}. see enum DISEASE_STATUS and POISON_STATUS */
-	signed char day_timer; /* starting at 0, number of days the disease/poison is in status -1 (diseased/poisoned) or 1 (recover). */
+	signed char day_counter; /* starting at 0, number of days the disease/poison is in status -1 (diseased/poisoned) or 1 (recover). */
 	/* the following three bytes log the negative effects which the disease/poinson has already caused.
 	 * Exact meaning depends on the concrete disease/poison (encoded by enums DISEASE_ID_... and POISON_ID_...) */
 	signed char log_1;
