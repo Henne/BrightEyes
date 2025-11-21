@@ -492,7 +492,7 @@ signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *p
 
 			if ((flag != 0) || (test_talent(healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
 
-				if (((retval = test_talent(healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
+				if (((retval = test_talent(healer, TA_HEILEN_KRANKHEITEN, g_diseases_healer_price[disease_id] + handycap)) > 0) &&
 					(disease_id != DISEASE_ID_WUNDFIEBER) && (disease_id != DISEASE_ID_BLAUE_KEUCHE))
 				{
 

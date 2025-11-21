@@ -231,7 +231,7 @@ void draw_status_line(void)
 				}
 			}
 
-			/* TODO: j < 4, otherwise g_disease_prices gets invalidated */
+			/* TODO: j < 4, otherwise g_diseases_healer_price gets invalidated */
 			for (j = 0; j < 6; j++) {
 				g_char_status_bars[i][j] = -1;
 			}

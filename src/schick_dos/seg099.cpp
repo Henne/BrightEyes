@@ -954,7 +954,7 @@ void spell_klarum_purum(void)
 	}
 
 	/* AE-cost = poison cost */
-	g_spell_special_aecost = g_poison_prices[poison_id];
+	g_spell_special_aecost = g_poisons_healer_price[poison_id];
 
 	if (get_spelluser()->ae < g_spell_special_aecost) {
 		/* not enough AE */

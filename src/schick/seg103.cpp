@@ -349,7 +349,7 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 
 							timewarp(MINUTES(20));
 
-							if (test_talent(hero, TA_HEILEN_GIFT, g_poison_prices[poison_id] + handicap) > 0) {
+							if (test_talent(hero, TA_HEILEN_GIFT, g_poisons_healer_price[poison_id] + handicap) > 0) {
 								/* success */
 								sprintf(g_dtp2, get_ttx(690), hero->alias, patient->alias);
 								GUI_output(g_dtp2);
