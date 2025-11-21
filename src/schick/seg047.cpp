@@ -106,22 +106,22 @@ signed int hero_is_diseased(const struct struct_hero *hero)
 }
 
 /**
- * \brief   returns the poison number the hero has
+ * \brief   returns the poison ID the hero has
  *
  *          Only the first poison is returned here.
  *
  * \param   hero        the hero which should be checked
- * \return              number of the first poisoning the hero has
+ * \return              ID of the first poisoning the hero has
  */
 signed int hero_is_poisoned(const struct struct_hero *hero)
 {
-	signed int i;
+	signed int poison_id;
 
-	for (i = 1; i <= 9; i++) {
+	for (poison_id = 1; poison_id <= 9; poison_id++) {
 
-		if (hero->poison[i][0] == POISON_STATUS_POISONED) {
+		if (hero->poison[poison_id][0] == POISON_STATUS_POISONED) {
 
-			return i;
+			return poison_id;
 		}
 	}
 

@@ -19,7 +19,7 @@
 void poison_effect(void)
 {
 	signed int i;
-	volatile signed int j;
+	volatile signed int j; /* multi use: weapon_type, hero_pos, poison_id */
 	struct struct_hero *hero;
 	int8_t *poison_ptr;
 
@@ -32,7 +32,7 @@ void poison_effect(void)
 		if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead) {
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_SHURINKNOLLENGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_SHURINKNOLLENGIFT];
 
 			/* SHURINKNOLLENGIFT: hero is poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -101,7 +101,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_ARAX];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_ARAX];
 
 			/* ARAXGIFT: hero is poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -159,7 +159,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_ANGSTGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_ANGSTGIFT];
 
 			/* ANGSTGIFT: hero is poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -219,7 +219,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_SCHLAFGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_SCHLAFGIFT];
 
 			/* SCHLAFGIFT: hero is poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -256,7 +256,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_GOLDLEIM];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_GOLDLEIM];
 
 			/* GOLDLEIM: hero gets poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -276,7 +276,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_KROETENSCHEMEL];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_KROETENSCHEMEL];
 
 			/* KROETENSCHEMEL: hero gets poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -296,7 +296,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_LOTUSGIFT];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_LOTUSGIFT];
 
 			/* LOTUSGIFT: hero gets poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -314,7 +314,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_KUKRIS];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_KUKRIS];
 
 			/* KUKRIS: hero gets poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -332,7 +332,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (int8_t*)&hero->poison[POISON_TYPE_BANNSTAUB];
+			poison_ptr = (int8_t*)&hero->poison[POISON_ID_BANNSTAUB];
 
 			/* BANNSTAUB: hero gets poisoned */
 			if (poison_ptr[0] == POISON_STATUS_POISONED) {
@@ -379,7 +379,7 @@ void poison_effect(void)
 
 			for (j = 1; j <= 9; j++) {
 
-				if (hero->poison[j][0] != 0) {
+				if (hero->poison[j][0] != POISON_STATUS_HEALTHY) {
 					hero->poison[j][1]++;
 				}
 			}

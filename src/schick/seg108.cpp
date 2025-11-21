@@ -36,7 +36,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	signed int le_diff;
 
 	signed int disease_id;
-	signed int poison;
+	signed int poison_id;
 	signed int tw_bak;
 	signed int consumer_idx;
 
@@ -198,13 +198,13 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 				case ITEM_BELMART_BLATT: {
 					/* Belmart */
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison <= 5) {
+					if (poison_id != 0 && poison_id <= 5) {
 
 						/* cure the first poison */
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id][1] = 0;
+						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
 					}
 
 					/* TODO: unknown for 24h */
@@ -217,12 +217,12 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 				case ITEM_MENCHALKAKTUS: {
 					/* Menchalkaktus */
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison <= 10) {
+					if (poison_id != 0 && poison_id <= 10) {
 						/* cure the first poison */
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id][1] = 0;
+						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
 					}
 
 					tmp = get_free_mod_slot();
@@ -390,11 +390,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* poison */
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison < 7) {
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+					if (poison_id != 0 && poison_id < 7) {
+						consumer->poison[poison_id][1] = 0;
+						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glasbottle */
@@ -495,11 +495,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case ITEM_GEGENGIFT: {
 					/* Gegengift */
 
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison < 5) {
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+					if (poison_id != 0 && poison_id < 5) {
+						consumer->poison[poison_id][1] = 0;
+						consumer->poison[poison_id][0] = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glassbottle */

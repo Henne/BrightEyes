@@ -1212,7 +1212,7 @@ void copy_file_to_temp(const char* src_file, const char* fname)
 
 int32_t process_nvf_extraction(struct nvf_extract_desc *nvf)
 {
-	signed int i;
+	signed int i; /* multi use: desease_id, poison_id, hero_pos */
 	uint32_t offs;
 	signed int pics;
 	signed int width;

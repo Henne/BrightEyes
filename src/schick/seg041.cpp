@@ -409,22 +409,22 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.poison_vomicum = 0;
 		}
 
-		if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type != POISON_TYPE_NONE) {
+		if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id != POISON_ID_NONE) {
 
-			if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type == POISON_TYPE_ANGSTGIFT) {
+			if (hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id == POISON_ID_ANGSTGIFT) {
 
 				enemy_p->flags.scared = 1;
 				enemy_p->flags.renegade = 0;
 
 			} else {
 				/* the following line is the source for the totally excessive and unbalanced poison damage */
-				damage += 10 * g_poison_prices[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type];
+				damage += 10 * g_poison_prices[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id];
 			}
 
 			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges--;
 
 			if (!hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges) {
-				hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_NONE;
+				hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_NONE;
 			}
 		}
 	}

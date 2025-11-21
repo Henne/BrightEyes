@@ -411,14 +411,14 @@ void show_times_up(void)
 
 void show_outro(void)
 {
-	signed int j;
+	signed int j; /* multi use: desease_id, poison_id, attribute index */
 	signed int handle;
 	signed int width;
 	signed int height;
 	uint16_t len;		/* REMARK: check if read/writes with BCC can read more than 32k bytes at once */
 	uint8_t *pal_ptr;
 	struct struct_hero *hero;
-	signed int i;
+	signed int hero_pos;
 	struct nvf_extract_desc nvf;
 
 	g_textbox_width = 7;
@@ -537,7 +537,7 @@ void show_outro(void)
 
 	/* give the heroes the reward and restore them */
 	hero = get_hero(0);
-	for (i = 0; i < 6; i++, hero++) {
+	for (hero_pos = 0; hero_pos < 6; hero_pos++, hero++) {
 
 		if (hero->typus) {
 
@@ -610,7 +610,7 @@ void show_outro(void)
 			hero->heal_timer = 0;
 			hero->staffspell_timer = 0;
 
-			hero->slot_pos = i + 1;
+			hero->slot_pos = hero_pos + 1;
 		}
 	}
 
