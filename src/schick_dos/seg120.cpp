@@ -430,12 +430,12 @@ signed int init_memory(void)
 	freemem = farcoreleft();
 #else
 	/* DUMMY value for newer systems */
-	freemem = 357000;
+	freemem = 357000L;
 #endif
 
-	if (freemem > 334000) {
+	if (freemem > 334000L) {
 
-		if (freemem >= 357000) {
+		if (freemem >= 357000L) {
 			g_buffersize = 357000L;
 			g_large_buf = 1;
 		} else {
@@ -447,7 +447,7 @@ signed int init_memory(void)
 
 	} else {
 
-		printf(g_str_not_enough_mem, 329000 - freemem);
+		printf(g_str_not_enough_mem, 329000L - freemem);
 
 		wait_for_keypress();
 		error = 1;
