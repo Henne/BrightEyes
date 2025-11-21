@@ -407,12 +407,12 @@ signed int has_herb_for_disease(const struct struct_hero *hero, const signed int
 
 	switch (disease_id) {
 
-		case ILLNESS_TYPE_WUNDFIEBER:
-		case ILLNESS_TYPE_BLAUE_KEUCHE:
+		case DISEASE_ID_WUNDFIEBER:
+		case DISEASE_ID_BLAUE_KEUCHE:
 			retval = 99;
 			break;
 
-		case ILLNESS_TYPE_DUMPFSCHAEDEL:
+		case DISEASE_ID_DUMPFSCHAEDEL:
 			/* any single one of the following herbs is sufficient */
 			if (inv_slot_of_item(hero, ITEM_BELMART_BLATT)          != -1) retval = ITEM_BELMART_BLATT;
 			else if (inv_slot_of_item(hero, ITEM_WIRSELKRAUT)   != -1) retval = ITEM_WIRSELKRAUT;
@@ -425,20 +425,20 @@ signed int has_herb_for_disease(const struct struct_hero *hero, const signed int
 			else if (inv_slot_of_item(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
 			break;
 
-		case ILLNESS_TYPE_PARALYSE:
+		case DISEASE_ID_PARALYSE:
 			if (inv_slot_of_item(hero, ITEM_DONFSTENGEL) != -1)
 				retval = ITEM_DONFSTENGEL;
 			break;
 
-		case ILLNESS_TYPE_SCHLACHTENFIEBER:
+		case DISEASE_ID_SCHLACHTENFIEBER:
 			if ( (inv_slot_of_item(hero, ITEM_JORUGAWURZEL) != -1) && (inv_slot_of_item(hero, ITEM_GULMOND_BLATT) != -1)) retval = 999;
 			break;
 
-		case ILLNESS_TYPE_FROSTSCHAEDEN:
+		case DISEASE_ID_FROSTSCHAEDEN:
 			if (inv_slot_of_item(hero, ITEM_WIRSELKRAUT) != -1) retval = ITEM_WIRSELKRAUT;
 			break;
 
-		case ILLNESS_TYPE_TOLLWUT:
+		case DISEASE_ID_TOLLWUT:
 			if (inv_slot_of_item(hero, ITEM_JORUGAWURZEL) != -1) retval = ITEM_JORUGAWURZEL;
 			break;
 	}
@@ -493,7 +493,7 @@ signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *p
 			if ((flag != 0) || (test_talent(healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
 
 				if (((retval = test_talent(healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
-					(disease_id != ILLNESS_TYPE_WUNDFIEBER) && (disease_id != ILLNESS_TYPE_BLAUE_KEUCHE))
+					(disease_id != DISEASE_ID_WUNDFIEBER) && (disease_id != DISEASE_ID_BLAUE_KEUCHE))
 				{
 
 					add_hero_le(patient, retval);
