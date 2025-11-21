@@ -214,7 +214,7 @@ struct struct_hero {
 	struct hero_affliction poison[10]; /* 50 = 10 * 5 bytes */ /* for the index, see enum POISON_ID. NOTE that no poison has poison_id == 0, so the first 5 bytes are unused. */
 
 	/* Offset 0x108 */
-	signed char talents[52]; /* see enum TA_* */ /* TODO: better name 'talents' (for DSA conformity)? */
+	signed char talents[52]; /* see enum TA_* */
 	/* The first entry does not belong to an actual spell talent and is apparently unused. */
 	signed char saved_talent_increases;
 	/* Offset 0x13d */
