@@ -561,11 +561,10 @@ struct item_flags {
 };
 #endif
 
-struct
 #if !defined(__BORLANDC__)
-__attribute__ ((packed))
+#pragma pack(1)
 #endif
-item_stats {
+struct item_stats {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
 	/* structure of the entries of ITEMS.DAT */
 	int16_t gfx;
@@ -590,6 +589,9 @@ item_stats {
 	int8_t commonness;	/* which merchants do offer this item? */
 	int8_t magic;		/* 0: not magic / 1: magic */
 };
+#if !defined(__BORLANDC__)
+#pragma pack ()
+#endif
 
 STATIC_ASSERT(sizeof(struct item_stats) == 12, struct_item_stats_needs_to_be_12_bytes);
 

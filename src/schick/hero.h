@@ -1,7 +1,7 @@
 #ifndef HERO_H
 #define HERO_H
 
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+#if __cpp_static_assert  
   #include <assert.h>
 #define STATIC_ASSERT(expr, msg) static_assert(expr, #msg)
 #else
