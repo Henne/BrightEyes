@@ -150,7 +150,7 @@ target_compile_options(schick PRIVATE
 
 # Special flags for seg011.cpp
 set_source_files_properties(seg011.cpp PROPERTIES
-    COMPILE_FLAGS "-Wno-unused-parameters"
+    COMPILE_FLAGS "-Wno-unused-parameter"
 )
 
 # Linker flags

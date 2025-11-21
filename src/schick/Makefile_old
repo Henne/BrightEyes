@@ -42,7 +42,7 @@ seg010.o: seg010.cpp seg010.h
 	$(CC) $(CFLAGS) -c seg010.cpp
 
 seg011.o: seg011.cpp seg011.h
-	$(CC) $(CFLAGS) -c -Wno-unused-parameters seg011.cpp
+	$(CC) $(CFLAGS) -c -Wno-unused-parameter seg011.cpp
 
 seg024.o: seg024.cpp seg024.h
 	$(CC) $(CFLAGS) -c seg024.cpp
