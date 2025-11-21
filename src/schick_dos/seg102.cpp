@@ -21,7 +21,7 @@
 #include "seg096.h"
 #include "seg102.h"
 
-static signed int g_monster_spell_ae_cost = -1; // ds:0xaccc
+static signed int g_mspell_ae_cost = -1; // ds:0xaccc
 
 signed int g_spelltest_result;			// ds:0xe5b2
 struct enemy_sheet *g_spelltarget_e;		// ds:0xe5b4, Pointer to enemy
@@ -51,7 +51,7 @@ void MON_do_spell_damage(const signed int damage)
 			}
 
 		} else {
-			/* target is a monster */
+			/* target is an enemy */
 
 			/* set the pointer to the target */
 			g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
@@ -83,7 +83,7 @@ signed int MON_get_target_PA(void)
 		return get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type] - get_spelltarget()->fight_atpa_mod;
 
 	} else {
-		/* target is a monster */
+		/* target is an enemy */
 
 		/* set the pointer to the target */
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
@@ -106,7 +106,7 @@ signed int MON_get_target_RS(void)
 		return get_spelltarget()->rs_bonus;
 
 	} else {
-		/* target is a monster */
+		/* target is an enemy */
 
 		/* set the pointer to the target */
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
@@ -130,15 +130,15 @@ signed int MON_get_spell_cost(const signed int mspell_id, const signed int flag)
 
 
 /**
- * \brief   talent test for monsters
+ * \brief   talent test for enemy
  *
- * \param   monster     pointer to monster
+ * \param   monster     pointer to an enemy sheet
  * \param   attrib1     no of 1st attribute
  * \param   attrib2     no of 2nd attribute
  * \param   attrib3     no of 3rd attribute
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
-signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
+signed int MON_test_attrib3(const struct enemy_sheet *enemy, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
 /* called only from a single position, in MON_test_talent((struct struct_hero*)..) */
 {
 
@@ -153,7 +153,7 @@ signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int 
 
 	randval = dice_roll(3, 20, handicap);
 
-	attr_sum = monster->attrib[2 * attrib1 + 1] + monster->attrib[2 * attrib2 + 1] + monster->attrib[2 * attrib3 + 1];
+	attr_sum = enemy->attrib[2 * attrib1 + 1] + enemy->attrib[2 * attrib2 + 1] + enemy->attrib[2 * attrib3 + 1];
 
 	return attr_sum - randval + 1;
 #else
@@ -167,9 +167,9 @@ signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int 
 	signed int fail = 0;
 	signed int attrib[3];
 
-	attrib[0] = monster->attrib[2 * attrib1 + 1];
-	attrib[1] = monster->attrib[2 * attrib2 + 1];
-	attrib[2] = monster->attrib[2 * attrib3 + 1];
+	attrib[0] = enemy->attrib[2 * attrib1 + 1];
+	attrib[1] = enemy->attrib[2 * attrib2 + 1];
+	attrib[2] = enemy->attrib[2 * attrib3 + 1];
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
@@ -249,7 +249,7 @@ signed int MON_test_attrib3(const struct enemy_sheet *monster, const signed int 
 
 
 /* called only from a single position, in MON_cast_spell(..) */
-signed int MON_test_talent(const struct enemy_sheet *monster, const signed int mspell_id, signed char handicap)
+signed int MON_test_talent(const struct enemy_sheet *enemy, const signed int mspell_id, signed char handicap)
 {
 	struct mon_spell_description *desc = &g_mon_spell_descriptions[mspell_id];
 
@@ -257,10 +257,10 @@ signed int MON_test_talent(const struct enemy_sheet *monster, const signed int m
 	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (monster->target_object_id >= 10 ?	g_enemy_sheets[monster->target_object_id - 10].mr : get_hero(monster->target_object_id - 1)->mr);
+		handicap += (enemy->target_object_id >= 10 ?	g_enemy_sheets[enemy->target_object_id - 10].mr : get_hero(enemy->target_object_id - 1)->mr);
 	}
 
-	/* check if the monster spell has a valid ID */
+	/* check if the spell has a valid ID */
 	if ((mspell_id >= 1) && (mspell_id <= 14)) {
 
 #if !defined(__BORLANDC__)
@@ -268,25 +268,25 @@ signed int MON_test_talent(const struct enemy_sheet *monster, const signed int m
 #endif
 
 		/* TODO: balancing problem: enemy spells are always cast with talent value 0 */
-		return MON_test_attrib3(monster, desc->attrib1, desc->attrib2, desc->attrib3, handicap);
+		return MON_test_attrib3(enemy, desc->attrib1, desc->attrib2, desc->attrib3, handicap);
 	}
 
 	return 0;
 }
 
-void MON_sub_ae(struct enemy_sheet *monster, signed int ae)
+void MON_sub_ae(struct enemy_sheet *enemy, signed int ae)
 {
-	if (!monster->flags.dead) {
+	if (!enemy->flags.dead) {
 
-		monster->ae -= ae;
+		enemy->ae -= ae;
 
-		if (monster->ae < 0) {
-			monster->ae = 0;
+		if (enemy->ae < 0) {
+			enemy->ae = 0;
 		}
 	}
 }
 
-signed int MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
+signed int MON_cast_spell(struct enemy_sheet* enemy, signed char handicap)
 {
 	signed int mspell_id;
 	signed int retval;
@@ -294,31 +294,31 @@ signed int MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 	void (*func)(void);
 	signed int tx_file_bak;
 
-	mspell_id = monster->mspell_id;
+	mspell_id = enemy->mspell_id;
 
 	if (mspell_id > 0) {
 
 		cost = MON_get_spell_cost(mspell_id, 0);
 
 		/* check AE */
-		if (monster->ae < cost) {
+		if (enemy->ae < cost) {
 			return -1;
 		}
 
-		g_spelltest_result = MON_test_talent(monster, mspell_id, handicap);
+		g_spelltest_result = MON_test_talent(enemy, mspell_id, handicap);
 
 		if ((g_spelltest_result <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
 
 			/* spell failed */
-			MON_sub_ae(monster, MON_get_spell_cost(mspell_id, 1));
+			MON_sub_ae(enemy, MON_get_spell_cost(mspell_id, 1));
 
 			return 0;
 
 		} else {
 
-			g_spelluser_e = monster;
+			g_spelluser_e = enemy;
 
-			g_monster_spell_ae_cost = -1;
+			g_mspell_ae_cost = -1;
 
 			/* terminate output string */
 			*g_dtp2 = '\0';
@@ -337,22 +337,22 @@ signed int MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 
 			retval = 1;
 
-			if (!g_monster_spell_ae_cost) {
+			if (!g_mspell_ae_cost) {
 
 				retval = -1;
 
-			} else if (g_monster_spell_ae_cost == -2) {
+			} else if (g_mspell_ae_cost == -2) {
 
-				MON_sub_ae(monster, MON_get_spell_cost(mspell_id, 1));
+				MON_sub_ae(enemy, MON_get_spell_cost(mspell_id, 1));
 
 				retval = 0;
 
-			} else if (g_monster_spell_ae_cost != -1) {
+			} else if (g_mspell_ae_cost != -1) {
 
-				MON_sub_ae(monster, g_monster_spell_ae_cost);
+				MON_sub_ae(enemy, g_mspell_ae_cost);
 
 			} else {
-				MON_sub_ae(monster, cost);
+				MON_sub_ae(enemy, cost);
 			}
 
 			return retval;
@@ -367,17 +367,17 @@ signed int MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
  */
 void mspell_verwandlung(void)
 {
-	/* set pointer to monster target */
+	/* set pointer to an enemy target */
 	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
 
 	if (g_spelltarget_e->flags.petrified) {
 
 		/* set the spellcosts */
-		g_monster_spell_ae_cost = 5 * random_schick(10);
+		g_mspell_ae_cost = 5 * random_schick(10);
 
-		if (g_spelluser_e->ae < g_monster_spell_ae_cost) {
+		if (g_spelluser_e->ae < g_mspell_ae_cost) {
 			/* if not enough AE, all AE will be consumed, without further effect */
-			g_monster_spell_ae_cost = g_spelluser_e->ae;
+			g_mspell_ae_cost = g_spelluser_e->ae;
 		} else {
 			/* unset 'petrified' flag */
 			g_spelltarget_e->flags.petrified = 0;
@@ -389,11 +389,11 @@ void mspell_verwandlung(void)
 	} else if (g_spelltarget_e->flags.mushroom) {
 
 		/* set the spellcosts */
-		g_monster_spell_ae_cost = 5 * random_schick(10);
+		g_mspell_ae_cost = 5 * random_schick(10);
 
-		if (g_spelluser_e->ae < g_monster_spell_ae_cost) {
+		if (g_spelluser_e->ae < g_mspell_ae_cost) {
 			/* if not enough AE, all AE will be consumed, without further effect */
-			g_monster_spell_ae_cost = g_spelluser_e->ae;
+			g_mspell_ae_cost = g_spelluser_e->ae;
 		} else {
 			/* unset 'mushroom' flag */
 			g_spelltarget_e->flags.mushroom = 0;
@@ -401,7 +401,7 @@ void mspell_verwandlung(void)
 			g_mspell_awake_flag = 1;
 		}
 	} else {
-		g_monster_spell_ae_cost = 2;
+		g_mspell_ae_cost = 2;
 	}
 }
 
@@ -444,7 +444,7 @@ void mspell_horriphobus(void)
 
 void mspell_axxeleratus(void)
 {
-	/* set pointer to monster target */
+	/* set pointer to an enemy target */
 	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
 
 	/* #Attacks + 1 */
@@ -465,7 +465,7 @@ void mspell_balsam(void)
 {
 	signed int le;
 
-	/* set pointer to monster target */
+	/* set pointer to an enemy target */
 	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
 
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -479,20 +479,20 @@ void mspell_balsam(void)
 	 *
 	 * Hard to guess what the intended behavior was. */
 
-	g_monster_spell_ae_cost = 0;
+	g_mspell_ae_cost = 0;
 
 	le = (g_spelltarget_e->le_orig - g_spelltarget_e->le) / 2; /* half of the missing LE */
 
 	if (le) {
 		if (le < 7) {
 			/* AE costs are at least 7 */
-			g_monster_spell_ae_cost = 7;
+			g_mspell_ae_cost = 7;
 		}
-		if (g_spelluser_e->ae < g_monster_spell_ae_cost) {
+		if (g_spelluser_e->ae < g_mspell_ae_cost) {
 			/* not enough AE: heal only that many LE as the spellcaster has AE available */
-			g_monster_spell_ae_cost = g_spelluser_e->ae;
+			g_mspell_ae_cost = g_spelluser_e->ae;
 		}
-		g_spelltarget_e->le += g_monster_spell_ae_cost;
+		g_spelltarget_e->le += g_mspell_ae_cost;
 	}
 #else
 	/* Fix:
@@ -509,7 +509,7 @@ void mspell_balsam(void)
 		le = g_spelluser_e->ae;
 	}
 
-	g_monster_spell_ae_cost = le;
+	g_mspell_ae_cost = le;
 	g_spelltarget_e->le += le;
 #endif
 }
@@ -528,7 +528,7 @@ void mspell_blitz(void)
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(86), get_spelltarget()->alias);
 	} else {
-		/* target is a monster */
+		/* target is an enemy */
 
 		/* set the pointer to the target */
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
@@ -556,7 +556,7 @@ void mspell_eisenrost(void)
 		if (!item_id) {
 
 			/* target hero has no weapon */
-			g_monster_spell_ae_cost = 2;
+			g_mspell_ae_cost = 2;
 
 		} else if (!get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken) {
 
@@ -568,12 +568,12 @@ void mspell_eisenrost(void)
 				sprintf(g_dtp2,	get_tx(92), (uint8_t*)GUI_names_grammar(0x8000, item_id, 0), get_spelltarget()->alias);
 
 			} else {
-				g_monster_spell_ae_cost = -2;
+				g_mspell_ae_cost = -2;
 			}
 		}
 
 	} else {
-		/* target is a monster */
+		/* target is an enemy */
 
 		/* set the pointer to the target */
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
@@ -609,7 +609,7 @@ void mspell_fulminictus(void)
 	MON_do_spell_damage(damage);
 
 	/* set the cost */
-	g_monster_spell_ae_cost = damage;
+	g_mspell_ae_cost = damage;
 }
 
 void mspell_ignifaxius(void)
@@ -672,7 +672,7 @@ void mspell_ignifaxius(void)
 		set_mod_slot(mod_slot, HOURS(1), (uint8_t*)&get_spelltarget()->pa_talent_bonus[get_spelltarget()->weapon_type], -level / 2, (signed char)hero_pos);
 
 	} else {
-		/* target is a monster */
+		/* target is an enemy */
 
 		/* set the pointer to the target */
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
@@ -689,7 +689,7 @@ void mspell_ignifaxius(void)
 
 	/* terminate output string */
 	*g_dtp2 = '\0';
-	g_monster_spell_ae_cost = damage;
+	g_mspell_ae_cost = damage;
 }
 
 void mspell_plumbumbarum(void)
@@ -713,7 +713,7 @@ void mspell_plumbumbarum(void)
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(94), get_spelltarget()->alias);
 	} else {
-		/* target is a monster */
+		/* target is an enemy */
 
 		/* set the pointer to the target */
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];
@@ -741,7 +741,7 @@ void mspell_saft_kraft(void)
 	g_spelltarget_e->saftkraft = g_spelltarget_e->saftkraft + 5;
 
 	/* set spellcost */
-	g_monster_spell_ae_cost = random_schick(20);
+	g_mspell_ae_cost = random_schick(20);
 }
 
 void mspell_armatrutz(void)
@@ -757,7 +757,7 @@ void mspell_armatrutz(void)
 	rs_bonus = random_interval(1, i);
 
 	/* set spellcost */
-	g_monster_spell_ae_cost = rs_bonus * rs_bonus;
+	g_mspell_ae_cost = rs_bonus * rs_bonus;
 
 	/* RS + rs_bonus */
 	g_spelluser_e->rs = g_spelluser_e->rs + rs_bonus;
@@ -766,7 +766,7 @@ void mspell_armatrutz(void)
 void mspell_paralue(void)
 {
 	if (g_spelluser_e->target_object_id >= 10) {
-		/* target is a monster */
+		/* target is an enemy */
 
 		/* set the pointer to the target */
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->target_object_id - 10];

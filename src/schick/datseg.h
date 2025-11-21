@@ -433,7 +433,10 @@ struct struct_fighter {
 	struct struct_fighter* prev;
 };
 
-struct fight_monster {
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
+struct fight_enemy {
 	int8_t id;
 	int8_t x;
 	int8_t y;
@@ -448,14 +451,11 @@ struct fight_hero {
 	int8_t round_appear;
 };
 
-#if !defined(__BORLANDC__)
-#pragma pack(1)
-#endif
 struct fight {
 	char name[19];
 	int8_t intro_seen;
 	int16_t scenario_id;
-	struct fight_monster monsters[20];
+	struct fight_enemy enemies[20];
 	struct fight_hero heroes[7];
 	int16_t loot[30];
 	int16_t ducats;

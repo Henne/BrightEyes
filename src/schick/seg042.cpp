@@ -117,7 +117,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 		if (hero->target_object_id >= 10) {
 
-			/* attack monster */
+			/* attack enemy */
 			if (hero->target_object_id >= 30) {
 				/* tail part of double-size enemy */
 				hero->target_object_id -= 20;
@@ -292,7 +292,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			} else {
 				/* target is enemy */
 				if ((g_fig_enemy_parry_action_used[hero->target_object_id] == 1) || (target_cannot_parry != 0)) {
-					/* target monster has already parried another atack or cannot parry => AT+2 */
+					/* target enemy has already parried another atack or cannot parry => AT+2 */
 					atpa += 2;
 				}
 			}

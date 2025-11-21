@@ -711,12 +711,12 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	if ((signed char)caster == (signed char)target)
 		dir = enemy->viewdir;
 
-	/* this is true if a monster attacks a hero */
+	/* this is true if an enemy attacks a hero */
 	l1 = (max_range == 4) ? 29 : 16;
 
 	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
-	/* this is true if a monster attacks a hero */
+	/* this is true if an enemy attacks a hero */
 	l1 += (max_range == 4) ? dir : enemy->viewdir;
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);

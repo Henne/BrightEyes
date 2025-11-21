@@ -482,12 +482,12 @@ void FIG_draw_char_pic(const signed int loc, const signed int hero_pos)
 }
 
 /**
- * \brief   draws a picture of the monster, when on turn
+ * \brief   draws a picture of the enemy, when on turn
  *
  * \param   loc         0 = left side, 1 = right side
- * \param   id          ID of the enemy
+ * \param   enemy_id    ID of the enemy
  */
-void FIG_draw_enemy_pic(const signed int loc, const signed int id)
+void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 {
 	signed int height_width;
 	struct enemy_sheet *p_enemy;
@@ -498,7 +498,7 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int id)
 
 	p1 = ((HugePt)g_buffer8_ptr) - 1288L;
 
-	p_enemy = &g_enemy_sheets[id - 10];
+	p_enemy = &g_enemy_sheets[enemy_id - 10];
 
 	if (g_gfxtab_figures_main[p_enemy->gfx_id][0] != g_fight_figs_index) {
 

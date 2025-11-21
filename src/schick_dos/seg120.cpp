@@ -701,7 +701,7 @@ void cleanup_game(void)
 			}
 		}
 
-		/* free male and female figures */
+		/* free male and female hero fight figures */
 		for (i = 0; i < 43; i++) {
 
 			if (g_memslots_mfig[i].figure && g_memslots_mfig[i].ems_handle)
@@ -715,7 +715,7 @@ void cleanup_game(void)
 			}
 		}
 
-		/* free monster figures */
+		/* free enemy fight figures */
 		for (i = 0; i < 36; i++) {
 
 			if (g_memslots_mon[i].figure && g_memslots_mon[i].ems_handle)

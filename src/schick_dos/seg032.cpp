@@ -960,7 +960,7 @@ signed int do_fight(const signed int fight_id)
 	if (g_max_enemies > 0) {
 
 		/* reduce number of enemies to MAX_ENEMIES */
-		memset(&g_current_fight->monsters[g_max_enemies], 0, sizeof(struct fight_monster) * (20 - g_max_enemies));
+		memset(&g_current_fight->enemies[g_max_enemies], 0, sizeof(struct fight_enemy) * (20 - g_max_enemies));
 		g_max_enemies = 0;
 	}
 
@@ -1149,7 +1149,7 @@ signed int do_fight(const signed int fight_id)
 				give_new_item_to_group(g_fig_dropped_weapons[i++], 0, 1);
 			}
 
-			FIG_loot_monsters();
+			FIG_loot_enemies();
 
 			FIG_split_ap();
 
@@ -1163,7 +1163,7 @@ signed int do_fight(const signed int fight_id)
 
 		if ((retval != 2) && !g_fig_discard) {
 
-			FIG_tidy_monsters();
+			FIG_tidy_enemies();
 
 			write_fight_lst();
 		}

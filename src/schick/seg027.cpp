@@ -603,7 +603,7 @@ signed int count_fight_enemies(signed int fight_id)
 	for (enemy_i = 0; enemy_i < 20; enemy_i++) {
 
 		/* no enemy and enemy does not appear in the first round */
-		if (fight_lst_buf->monsters[enemy_i].id	&& !fight_lst_buf->monsters[enemy_i].round_appear)
+		if (fight_lst_buf->enemies[enemy_i].id	&& !fight_lst_buf->enemies[enemy_i].round_appear)
 		{
 			/* increment counter */
 			enemy_count++;

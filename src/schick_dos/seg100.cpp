@@ -72,9 +72,9 @@ void spell_exposami(void)
 
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		if (g_current_fight->monsters[i].round_appear) {
+		if (g_current_fight->enemies[i].round_appear) {
 
-			id = g_current_fight->monsters[i].id;
+			id = g_current_fight->enemies[i].id;
 
 			changed = 0;
 

@@ -79,7 +79,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 		if (p_enemy->target_object_id < 10) {
 
-			/* monster attacks hero */
+			/* enemy attacks hero */
 			hero = get_hero(p_enemy->target_object_id - 1);
 
 			g_fig_target_grammar.type = 2;
@@ -91,7 +91,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 			target_is_hero = 1;
 		} else {
-			/* monster attacks monster */
+			/* enemy attacks enemy */
 
 			target_enemy = &g_enemy_sheets[p_enemy->target_object_id - 10];
 
@@ -784,12 +784,12 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
  * \brief   *
  *
  * \param   hero        pointer to the hero who uses the item
- * \param   target_monster pointer to the monster
+ * \param   target_enemy pointer to the enemy
  * \param   target_hero pointer to the hero
  * \param   flag        bool value, used when a hero attacks a hero
  * \param   hero_pos    position of the hero
  */
-void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, struct struct_hero *target_hero, const signed int flag, const signed int hero_pos)
+void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, struct struct_hero *target_hero, const signed int flag, const signed int hero_pos)
 {
 	signed int damage;
 
@@ -819,11 +819,11 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 
 			strcpy(g_dtp2, get_tx(37));
 
-			FIG_damage_enemy(target_monster, damage, 0);
+			FIG_damage_enemy(target_enemy, damage, 0);
 
 			FIG_add_msg(11, damage);
 
-			if (target_monster->flags.dead) {
+			if (target_enemy->flags.dead) {
 				g_defender_dead = 1;
 			}
 		} else {
@@ -851,13 +851,13 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 
 		if (hero->target_object_id >= 10) {
 
-			/* .. used on a monster */
+			/* .. used on an enemy */
 
-			FIG_damage_enemy(target_monster, 20, 0);
+			FIG_damage_enemy(target_enemy, 20, 0);
 
 			FIG_add_msg(11, 20);
 
-			if (target_monster->flags.dead) {
+			if (target_enemy->flags.dead) {
 				g_defender_dead = 1;
 			}
 		} else {
@@ -922,7 +922,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_monster, 
 			if (flag != 0) {
 				FANI_prepare_fight_hero_ani(1, target_hero, -1, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
 			} else {
-				FANI_prepare_fight_enemy_ani(1, target_monster, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
+				FANI_prepare_fight_enemy_ani(1, target_enemy, FIG_ACTION_NONE, hero->target_object_id, hero_pos + 1, 1);
 			}
 
 		}
