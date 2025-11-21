@@ -60,7 +60,7 @@ struct inventory {
 	signed char rs_lost; /* +7 */ /* so far only seen for body armour. (from 'Ignifaxius' spell or from traps in DNG03 (Spinnenhoehle)) */
 
 	signed char lighting_timer; /* +8 */ /* for burning torch/lantern: number of remaining time, unit: 15 minutes */
-	signed char poison_type; /* +9 */ /* for poisoned weapon: poison type according to enum POISON_TYPE (0-kein Gift, 1-Schurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemelgift, 7-Lotosgift, 8-Kukris, 9-Bannstaub, 10-Expurgicum, 11-Vomicum). */
+	signed char poison_id; /* +9 */ /* for poisoned weapon: poison ID according to enum POISON_ID_... (0-kein Gift, 1-Schurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemelgift, 7-Lotosgift, 8-Kukris, 9-Bannstaub, 10-Expurgicum, 11-Vomicum). */
 	signed char num_poison_charges; /* +10 */ /* for poisoned weapon: number of remaining poison charges (= successful attacks). */
 	signed char unused1; /* +11 */
 

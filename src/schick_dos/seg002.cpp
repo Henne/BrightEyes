@@ -4553,7 +4553,7 @@ void add_hero_ae(struct struct_hero* hero, const signed int ae)
  */
 void sub_hero_le(struct struct_hero *hero, const signed int le)
 {
-	signed int i;
+	signed int i; /* multi use: desease_id, poison_id, hero_pos */
 	signed int bak;
 	signed int old_le;
 	struct struct_fighter *fighter;

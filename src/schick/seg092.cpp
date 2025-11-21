@@ -89,7 +89,7 @@ void chest_poisoned1(void)
 	sub_hero_le((gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_SHURINKNOLLENGIFT);
+	hero_gets_poisoned(gs_main_acting_hero, POISON_ID_SHURINKNOLLENGIFT);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -105,7 +105,7 @@ void chest_poisoned2(void)
 	sub_hero_le((gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_ARAX);
+	hero_gets_poisoned(gs_main_acting_hero, POISON_ID_ARAX);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -121,7 +121,7 @@ void chest_poisoned3(void)
 	sub_hero_le((gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_KUKRIS);
+	hero_gets_poisoned(gs_main_acting_hero, POISON_ID_KUKRIS);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
