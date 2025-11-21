@@ -149,7 +149,7 @@ enum {
 };
 
 enum {
-	DISEASE_STATUS_SICK = -1,
+	DISEASE_STATUS_DISEASED = -1,
 	DISEASE_STATUS_HEALTHY = 0,
 	DISEASE_STATUS_RECOVER = 1
 };
@@ -1399,7 +1399,7 @@ enum {
 	ITEM_RING__GREEN			= 0xdc, /* ring [green, magic: protection from magic fire; found in Drachenhoehle] */
 	ITEM_BEUTEL				= 0xdd, /* bag [found and used in the first level of the ruin of the black wizard to open a passage] */
 	ITEM_BUCH__1				= 0xde, /* book [1] */
-	ITEM_ANTIKRANKHEITSELIXIER		= 0xdf, /* anti sickness elixir */
+	ITEM_ANTIKRANKHEITSELIXIER		= 0xdf, /* anti disease elixir */
 	ITEM_BUCH__2				= 0xe0, /* book [2; found in the dungeon of the Daspota treasure (Rybon-Thoss)] */
 	ITEM_KRISTALL				= 0xe1, /* crystal */
 	ITEM_MU_ELIXIER__BAD			= 0xe2, /* MU elixir [bad] */

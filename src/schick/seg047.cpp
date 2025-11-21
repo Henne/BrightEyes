@@ -83,22 +83,22 @@ signed int get_hero_KK_best(void)
 }
 
 /**
- * \brief   returns the disease number the hero has
+ * \brief   returns the disease ID the hero has
  *
  *          Only the first disease is returned here.
  *
  * \param   hero        the hero which should be checked
- * \return  number of the first disease the hero has
+ * \return  ID of the first disease the hero has
  */
 signed int hero_is_diseased(const struct struct_hero *hero)
 {
-	signed int i;
+	signed int disease_id;
 
-	for (i = 1; i <= 7; i++) {
+	for (disease_id = 1; disease_id <= 7; disease_id++) {
 
-		if (hero->sick[i][0] == DISEASE_STATUS_SICK) {
+		if (hero->disease[disease_id][0] == DISEASE_STATUS_DISEASED) {
 
-			return i;
+			return disease_id;
 		}
 	}
 
@@ -151,9 +151,9 @@ void hero_gets_poisoned(struct struct_hero *hero, const signed int poison_id)
  * \brief   diseases a hero
  *
  * \param   hero        the hero which gets diseased
- * \param   disease     the kind of disease
+ * \param   disease_id  ID of the disease
  */
-void hero_gets_diseased(struct struct_hero *hero, const signed int disease)
+void hero_gets_diseased(struct struct_hero *hero, const signed int disease_id)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* not a real BUG, but very useless */
@@ -167,14 +167,14 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease)
 		 * Hence, these cannot be cured later. */
 
 #if !defined(__BORLANDC__)
-		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease + 0x193));
+		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease_id + 0x193));
 #endif
 
-		hero->sick[disease][0] = DISEASE_STATUS_SICK;
-		hero->sick[disease][1] = 0;
-		hero->sick[disease][2] = 0;
-		hero->sick[disease][3] = 0;
-		hero->sick[disease][4] = 0;
+		hero->disease[disease_id][0] = DISEASE_STATUS_DISEASED;
+		hero->disease[disease_id][1] = 0;
+		hero->disease[disease_id][2] = 0;
+		hero->disease[disease_id][3] = 0;
+		hero->disease[disease_id][4] = 0;
 	}
 }
 
@@ -182,10 +182,10 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease)
  * \brief   the hero may get a disease
  *
  * \param   hero        the hero which may gets diseased
- * \param   disease     the kind of disease
+ * \param   disease_id  ID of the disease
  * \param   probability the probability to get diseased in percent
  */
-void hero_disease_test(struct struct_hero *hero, const signed int disease, const signed int probability)
+void hero_disease_test(struct struct_hero *hero, const signed int disease_id, const signed int probability)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* not a real BUG, but very useless */
@@ -196,9 +196,9 @@ void hero_disease_test(struct struct_hero *hero, const signed int disease, const
 #endif
 
 	/* check the probability and if hero is diseased*/
-	if ((random_schick(100) <= probability) && (hero->sick[disease][0] != DISEASE_STATUS_SICK)) {
+	if ((random_schick(100) <= probability) && (hero->disease[disease_id][0] != DISEASE_STATUS_DISEASED)) {
 
-		hero_gets_diseased(hero, disease);
+		hero_gets_diseased(hero, disease_id);
 	}
 }
 

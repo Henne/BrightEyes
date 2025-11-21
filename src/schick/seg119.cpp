@@ -49,10 +49,10 @@ void disease_effect(void)
 
 			hero = get_hero(i);
 
-			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_WUNDFIEBER];
+			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_WUNDFIEBER];
 
 			/* TETANUS / WUNDFIEBER: get worse */
-			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
+			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
 
 				if (disease_ptr[1] > 13) {
 					/* Hero feels better after 13 days */
@@ -98,10 +98,10 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_DUMPFSCHAEDEL];
+			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_DUMPFSCHAEDEL];
 
 			/* NUMBSKULL / DUMPFSCHAEDEL: get worse */
-			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
+			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
 
 				if (!disease_ptr[4]) {
 
@@ -192,10 +192,10 @@ void disease_effect(void)
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_BLAUE_KEUCHE];
+			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_BLAUE_KEUCHE];
 
 			/* BLUE COUGH / BLAUE KEUCHE: get worse */
-			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
+			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
 
 				if (!disease_ptr[4]) {
 
@@ -268,10 +268,10 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_PARALYSE];
+			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_PARALYSE];
 
 			/* PARALYSIS / PARALYSE: get worse */
-			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
+			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
 
 				if (disease_ptr[1] > dice_roll(1, 3, 4)) {
 					disease_ptr[1] = 0;
@@ -321,10 +321,10 @@ void disease_effect(void)
 			}
 
 
-			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_SCHLACHTENFIEBER];
+			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_SCHLACHTENFIEBER];
 
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get worse */
-			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
+			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
 
 				if (disease_ptr[1] > 7) {
 
@@ -385,10 +385,10 @@ void disease_effect(void)
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_FROSTSCHAEDEN];
+			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_FROSTSCHAEDEN];
 
 			/* FROSTBITE / FROSTSCHAEDEN: get worse */
-			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
+			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
 
 				j = 0;
 
@@ -451,10 +451,10 @@ void disease_effect(void)
 				}
 			}
 
-			disease_ptr = (int8_t*)&hero->sick[ILLNESS_TYPE_TOLLWUT];
+			disease_ptr = (int8_t*)&hero->disease[ILLNESS_TYPE_TOLLWUT];
 
 			/* RABIES / TOLLWUT: get worse */
-			if (disease_ptr[0] == DISEASE_STATUS_SICK) {
+			if (disease_ptr[0] == DISEASE_STATUS_DISEASED) {
 
 				if (disease_ptr[1] > dice_roll(1, 6, 6)) {
 
@@ -515,8 +515,8 @@ void disease_effect(void)
 			/* increment day timer for all diseases */
 			for (j = 1; j <= 7; j++) {
 
-				if (hero->sick[j][0] != 0) {
-					hero->sick[j][1]++;
+				if (hero->disease[j][0] != 0) {
+					hero->disease[j][1]++;
 				}
 			}
 

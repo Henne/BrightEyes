@@ -626,7 +626,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 
 		if (g_travel_by_ship && (random_schick(100) < 10)) {
 
-			/* chance of motion sickness is 9% */
+			/* 9% chance of becoming sea-sick */
 
 			sprintf(g_dtp2,	get_ttx(796), hero->alias);
 			GUI_output(g_dtp2);
