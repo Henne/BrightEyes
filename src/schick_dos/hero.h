@@ -19,9 +19,9 @@ STATIC_ASSERT(sizeof(int32_t) == 4, int32_needs_to_be_4_bytes);
 #pragma pack(1)
 
 struct struct_attribs {
-	signed char normal;
-	signed char current;
-	signed char mod;
+	signed char normal; /* the base attribute value without any modifications */
+	signed char current; /* the current attribute value, arising from base value + modifications */
+	signed char mod; /* dummy: seems to be constant 0 and read only, essentially */
 };
 
 STATIC_ASSERT(sizeof(struct struct_attribs) == 3, struct_attribs_needs_to_be_3_bytes);
