@@ -329,7 +329,7 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 
 					poison_id = hero_is_poisoned(patient);
 
-					if (poison_id == 0) {
+					if (poison_id == POISON_ID_NONE) {
 
 						/* patient is not poisoned */
 						sprintf(g_dtp2,	get_ttx(463), patient->alias);
