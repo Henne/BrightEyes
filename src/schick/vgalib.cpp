@@ -10,13 +10,13 @@
 #include <SDL2/SDL.h>
 #endif
 
+#if defined(__linux__)
+#include <time.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#if defined(__GNUC__) && HAVE_OPENMP
-#include <omp.h>
-#endif
 
 #include "vgalib.h"
 
@@ -66,7 +66,7 @@ static void sdl_renderer_info(void)
 			fprintf(stderr, "flags    = 0x%02x\n", info.flags);
 			fprintf(stderr, "#txt     = %02d\n", info.num_texture_formats);
 			fprintf(stderr, "textures = ");
-			for (int j = 0; j < info.num_texture_formats; j++) {
+			for (unsigned int j = 0; j < info.num_texture_formats; j++) {
 				switch (info.texture_formats[j]) {
 				case SDL_PIXELFORMAT_INDEX1LSB: fprintf(stderr, "INDEX1LSB "); break;
 				case SDL_PIXELFORMAT_INDEX1MSB: fprintf(stderr, "INDEX1MSB "); break;
@@ -224,37 +224,47 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 	calls++;
 	if (pixels == NULL) return;
 
-#if defined(__GNUC__) && HAVE_OPENMP
-	double start, time_ms;
-#endif
+
 
 	if (forced_update || memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
 
 		if (SDL_LockMutex(PixelsMutex) == 0) {
 
-			updates++;
-#if defined(__GNUC__) && HAVE_OPENMP
-			start = omp_get_wtime();
+#if defined(__linux__)
+			struct timespec begin, end;
+			clock_gettime(CLOCK_REALTIME, &begin);
 #endif
+
 			sdl_update_rect_pixels(x_in, y_in, width_in, height_in);
-#if defined(__GNUC__) && HAVE_OPENMP
-			time_ms = (omp_get_wtime() - start) * 1000;
-			fprintf(stderr, "%s() scaling   = %f ms\n", __func__, time_ms);
+
+#if defined(__linux__)
+			clock_gettime(CLOCK_REALTIME, &end);
+			long sec = end.tv_sec - begin.tv_sec;
+			long nsec = end.tv_nsec - begin.tv_nsec;
+			double elapsed = (sec + nsec * 1e-9);
+			fprintf(stderr, "%s() scaling   = %f ms\n", __func__, elapsed * 1000);
 #endif
 
 			if ((texture != NULL) && (renderer != NULL)) {
 				SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(uint32_t));
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, texture, NULL, NULL);
-#if defined(__GNUC__) && HAVE_OPENMP
-				start = omp_get_wtime();
+
+#if defined(__linux__)
+				clock_gettime(CLOCK_REALTIME, &begin);
 #endif
+
 				SDL_RenderPresent(renderer);
-#if defined(__GNUC__) && HAVE_OPENMP
-				time_ms = (omp_get_wtime() - start) * 1000;
-				fprintf(stderr, "%s() rendering = %f ms\n", __func__, time_ms);
+#if defined(__linux__)
+				clock_gettime(CLOCK_REALTIME, &end);
+				sec = end.tv_sec - begin.tv_sec;
+				nsec = end.tv_nsec - begin.tv_nsec;
+				elapsed = (sec + nsec * 1e-9);
+				fprintf(stderr, "%s() scaling   = %f ms\n", __func__, elapsed * 1000);
 #endif
 			}
+
+			updates++;
 
 			pal_updated = 0;
 			win_resized = 0;

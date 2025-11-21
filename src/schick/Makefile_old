@@ -3,7 +3,7 @@ CFLAGS=-Og -g -fno-asm -Wno-register -fsanitize=address -fno-omit-frame-pointer
 OBJFILES=datseg.o seg001.o seg002.o seg003.o seg004.o seg005.o seg006.o seg007.o seg008.o seg009.o seg010.o seg011.o seg024.o seg025.o seg026.o seg027.o seg028.o seg029.o seg030.o seg031.o seg032.o seg033.o seg034.o seg035.o seg036.o seg037.o seg038.o seg039.o seg040.o seg041.o seg042.o seg043.o seg044.o seg045.o seg046.o seg047.o seg048.o seg049.o seg050.o seg051.o seg052.o seg053.o seg054.o seg055.o seg056.o seg057.o seg058.o seg059.o seg060.o seg061.o seg062.o seg063.o seg064.o seg065.o seg066.o seg067.o seg068.o seg069.o seg070.o seg071.o seg072.o seg073.o seg074.o seg075.o seg076.o seg077.o seg078.o seg079.o seg080.o seg081.o seg082.o seg083.o seg084.o seg085.o seg086.o seg087.o seg088.o seg089.o seg090.o seg091.o seg092.o seg093.o seg094.o seg095.o seg096.o seg097.o seg098.o seg099.o seg100.o seg101.o seg102.o seg103.o seg104.o seg105.o seg106.o seg107.o seg108.o seg109.o seg110.o seg111.o seg112.o seg113.o seg114.o seg115.o seg116.o seg117.o seg118.o seg119.o seg120.o seg121.o seg122.o vgalib.o
 
 schick: $(OBJFILES)
-	$(CC) $(CFLAGS) -o schick_$(CC) $(OBJFILES) -lSDL2 -fopenmp
+	$(CC) $(CFLAGS) -o schick_$(CC) $(OBJFILES) -lSDL2
 
 clean:
 	rm -f schick_$(CC) *.o

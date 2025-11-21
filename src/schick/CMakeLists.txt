@@ -11,7 +11,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Find required packages
 find_package(SDL2 REQUIRED)
-find_package(OpenMP)
 
 # Define source files
 set(SCHICK_SOURCES
@@ -164,17 +163,6 @@ target_link_libraries(schick PRIVATE
     ${SDL2_LIBRARIES}
 )
 
-# Configure OpenMP
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(schick PRIVATE OpenMP::OpenMP_CXX)
-    target_compile_definitions(schick PRIVATE HAVE_OPENMP=1)
-    message(STATUS "OpenMP support enabled")
-else()
-    target_compile_definitions(schick PRIVATE HAVE_OPENMP=0)
-    message(STATUS "OpenMP not found - building without OpenMP support")
-    message(STATUS "To enable OpenMP on macOS: brew install libomp")
-endif()
-
 # Set output name based on compiler (matching original Makefile behavior)
 set_target_properties(schick PROPERTIES
     OUTPUT_NAME "schick_${CMAKE_CXX_COMPILER_ID}"
@@ -194,7 +182,6 @@ message(STATUS "  CMake version:    ${CMAKE_VERSION}")
 message(STATUS "  C++ Compiler:     ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "  Build type:       ${CMAKE_BUILD_TYPE}")
 message(STATUS "  SDL2 found:       ${SDL2_FOUND}")
-message(STATUS "  OpenMP found:     ${OpenMP_FOUND}")
 message(STATUS "  Output name:      schick_${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "═══════════════════════════════════════════")
 message(STATUS "")
