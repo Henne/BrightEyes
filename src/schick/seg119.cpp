@@ -162,6 +162,7 @@ void disease_effect(void)
 				}
 
 				if (disease_ptr->time_counter > dice_roll(1, 3, 4)) { /* number of days infected > D3 + 4 */
+					// Original-Bug? forgot? disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 				} else {
 					sub_hero_le(hero, dice_roll(1, 6, -1)); /* LE loss of D6 - 1 */
@@ -224,6 +225,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current--;
 					hero->le_max -= disease_ptr->time_counter / 3;
 					sub_hero_le(hero, disease_ptr->time_counter / 3);
+					// Original-Bug? forgot? disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 
 				} else {
@@ -355,6 +357,7 @@ void disease_effect(void)
 					} else {
 
 						if (disease_ptr->log_3) {
+							// Original-Bug? forgot? disease_ptr->time_counter = 0;
 							disease_ptr->status = DISEASE_STATUS_RECOVER;
 						}
 					}

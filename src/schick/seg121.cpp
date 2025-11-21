@@ -131,6 +131,7 @@ void poison_effect(void)
 
 				/* enable self-regeneration */
 				if (poison_ptr->time_counter >= 120) {
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 			}
@@ -189,6 +190,7 @@ void poison_effect(void)
 
 				/* self regeneration */
 				if (poison_ptr->time_counter >= 7) {
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 			}
@@ -238,6 +240,7 @@ void poison_effect(void)
 
 				/* self regeneration */
 				if (poison_ptr->time_counter >= 20) {
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 			}
@@ -264,6 +267,7 @@ void poison_effect(void)
 
 				if (poison_ptr->time_counter >= dice_roll(2, 6, 0) * 12) {
 					/* for Goldleim, no recovering phase is needed. */
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
@@ -275,6 +279,7 @@ void poison_effect(void)
 
 			/* GOLDLEIM: regeneration */
 			if (poison_ptr->status == POISON_STATUS_RECOVER) {
+				// Original-Bug? forgot? poison_ptr->time_counter = 0;
 				poison_ptr->status = POISON_STATUS_HEALTHY;
 			}
 
@@ -286,6 +291,7 @@ void poison_effect(void)
 
 				if (poison_ptr->time_counter >= 48) {
 					/* for Krötenschemel, no recovering phase is needed. */
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
@@ -297,6 +303,7 @@ void poison_effect(void)
 
 			/* KROETENSCHEMEL: regeneration */
 			if (poison_ptr->status == POISON_STATUS_RECOVER) {
+				// Original-Bug? forgot? poison_ptr->time_counter = 0;
 				poison_ptr->status = POISON_STATUS_HEALTHY;
 			}
 
@@ -308,6 +315,7 @@ void poison_effect(void)
 
 				if (poison_ptr->time_counter >= 24) {
 					/* for Lotusgift, no recovering phase is needed. */
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
@@ -316,6 +324,7 @@ void poison_effect(void)
 
 			/* LOTUSGIFT: regeneration */
 			if (poison_ptr->status == POISON_STATUS_RECOVER) {
+				// Original-Bug? forgot? poison_ptr->time_counter = 0;
 				poison_ptr->status = POISON_STATUS_HEALTHY;
 			}
 
@@ -327,6 +336,7 @@ void poison_effect(void)
 
 				if (poison_ptr->time_counter >= 3) {
 					/* for Kukris, no recovering phase is needed. */
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
@@ -335,6 +345,7 @@ void poison_effect(void)
 
 			/* KUKRIS: regeneration */
 			if (poison_ptr->status == POISON_STATUS_RECOVER) {
+				// Original-Bug? forgot? poison_ptr->time_counter = 0;
 				poison_ptr->status = POISON_STATUS_HEALTHY;
 			}
 
@@ -345,6 +356,7 @@ void poison_effect(void)
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
 				if (poison_ptr->time_counter >= dice_roll(3, 6, 0)) {
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_RECOVER;
 				}
 
@@ -367,6 +379,7 @@ void poison_effect(void)
 			if (poison_ptr->status == POISON_STATUS_RECOVER) {
 
 				if (!poison_ptr->log_1) {
+					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				} else {
 
