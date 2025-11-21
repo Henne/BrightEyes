@@ -269,7 +269,7 @@ void do_healer(void)
 								if (random_schick(100) <= (120 - 10 * healer->quality) + g_disease_delays[disease_id]) {
 									/* heal the disease */
 									hero->disease[disease_id].status = DISEASE_STATUS_RECOVER;
-									hero->disease[disease_id].day_timer = 0;
+									hero->disease[disease_id].day_counter = 0;
 
 									/* prepare output */
 									sprintf(g_dtp2,	get_ttx(467), hero->alias);
@@ -330,7 +330,7 @@ void do_healer(void)
 								if (random_schick(100) <= (120 - 5 * healer->quality) + g_poison_delays[poison_id]) {
 
 									/* cure the poison */
-									hero->poison[poison_id].day_timer = 0;
+									hero->poison[poison_id].day_counter = 0;
 									hero->poison[poison_id].status = POISON_STATUS_RECOVER;
 
 									/* prepare output */
