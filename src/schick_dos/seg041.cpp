@@ -418,7 +418,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 			} else {
 				/* the following line is the source for the totally excessive and unbalanced poison damage */
-				damage += 10 * g_poison_prices[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id];
+				damage += 10 * g_poisons_healer_price[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id];
 			}
 
 			hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges--;

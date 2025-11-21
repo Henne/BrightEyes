@@ -998,10 +998,10 @@ extern struct mouse_action g_action_table_status[30];	//ds:0x2ad8; seg046
 extern struct mouse_action g_action_table_merchant[2];	//ds:0x2c04; seg056, seg057, seg058
 extern int16_t g_char_status_bars[7][4];			//ds:0x2c18; seg004, seg029
 
-extern signed int g_disease_prices[8];		//ds:0x2c50; seg053, seg104
-extern signed int g_disease_delays[8];		//ds:0x2c60; seg053
-extern signed int g_poison_prices[10];		//ds:0x2c70; seg041, seg053, seg099, seg103
-extern signed int g_poison_delays[10];		//ds:0x2c84; seg053;
+extern signed int g_diseases_healer_price[8];		//ds:0x2c50; seg053, seg104
+extern signed int g_diseases_healer_bonus[8];		//ds:0x2c60; seg053
+extern signed int g_poisons_healer_price[10];		//ds:0x2c70; seg041, seg053, seg099, seg103
+extern signed int g_poisons_healer_bonus[10];		//ds:0x2c84; seg053;
 extern signed char  g_dialogbox_lock;			//ds:0x2c98; seg002, seg004, seg097, seg109
 extern signed int g_timers_disabled;			//ds:0x2c99; seg002-seg050
 extern signed int g_status_page_mode;			//ds:0x2c9b; seg046, seg048, seg050
