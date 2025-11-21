@@ -61,12 +61,13 @@ void poison_effect(void)
 						hero->attrib[ATTRIB_GE].current--;
 					}
 
+					/* The following is redundant, there is a check for <= 0 at the end of this function. */
 					if ((hero->attrib[ATTRIB_KK].current < 0) || (hero->attrib[ATTRIB_GE].current < 0)) {
 						sub_hero_le(hero, 1000);
 					}
 				}
 
-				/* Loose 1W6 LE */
+				/* Loose D6 LE */
 				sub_hero_le(hero, random_schick(6));
 			}
 
@@ -262,9 +263,11 @@ void poison_effect(void)
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
 				if (poison_ptr->day_counter >= dice_roll(2, 6, 0) * 12) {
+					/* for Goldleim, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
+				/* every 12 days, an LE loss of 2 D6 - 3 */
 				if (!(poison_ptr->day_counter % 12)) {
 					sub_hero_le(hero, dice_roll(2, 6, -3));
 				}
@@ -282,10 +285,12 @@ void poison_effect(void)
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
 				if (poison_ptr->day_counter >= 48) {
+					/* for Krötenschemel, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
 				if (!(poison_ptr->day_counter % 12)) {
+					/* every 12 days, an LE loss of D6 + 2 */
 					sub_hero_le(hero, dice_roll(1, 6, 2));
 				}
 			}
@@ -302,6 +307,7 @@ void poison_effect(void)
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
 				if (poison_ptr->day_counter >= 24) {
+					/* for Lotusgift, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
@@ -320,6 +326,7 @@ void poison_effect(void)
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
 				if (poison_ptr->day_counter >= 3) {
+					/* for Kukris, no recovering phase is needed. */
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
@@ -345,7 +352,7 @@ void poison_effect(void)
 
 				if (hero->ae >= j) {
 
-					/* loose 1W6+2 AEmax */
+					/* loose D6 + 2 AE */
 					poison_ptr->log_1 = poison_ptr->log_1 + j;
 
 					hero->ae -= j;
@@ -365,7 +372,7 @@ void poison_effect(void)
 
 					if (!poison_ptr->day_counter % 12) {
 
-						/* regenerate one point at a time */
+						/* regenerate one AE every 5 minutes */
 						poison_ptr->log_1--;
 						hero->ae++;
 
@@ -380,6 +387,7 @@ void poison_effect(void)
 			for (j = 1; j <= 9; j++) {
 
 				if (hero->poison[j].status != POISON_STATUS_HEALTHY) {
+					/* Original-Bug? For Goldleim, an overflow could theoretically happen. */
 					hero->poison[j].day_counter++;
 				}
 			}
