@@ -4799,13 +4799,13 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 			/* reset disease */
 			for (i = 1; i <= 7; i++) {
 				hero->disease[i].status = DISEASE_STATUS_HEALTHY;
-				hero->disease[i].day_counter = 0;
+				hero->disease[i].time_counter = 0;
 			}
 
 			/* reset poison */
 			for (i = 1; i <= 9; i++) {
 				hero->poison[i].status = POISON_STATUS_HEALTHY;
-				hero->poison[i].day_counter = 0;
+				hero->poison[i].time_counter = 0;
 			}
 
 			/* FINAL FIGHT */

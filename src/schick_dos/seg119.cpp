@@ -54,10 +54,10 @@ void disease_effect(void)
 			/* TETANUS / WUNDFIEBER: get worse */
 			if (disease_ptr->status == DISEASE_STATUS_DISEASED) {
 
-				if (disease_ptr->day_counter > 13) {
+				if (disease_ptr->time_counter > 13) {
 					/* Hero feels better after 13 days */
 
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 
 					sprintf(g_dtp2, get_ttx(561), hero->alias);
@@ -66,7 +66,7 @@ void disease_effect(void)
 				} else {
 					/* LE loss of 2D6 + 1 - (number of days the hero is diseased) */
 					/* so the effect is worst at the beginning and gets better over time */
-					sub_hero_le(hero, dice_roll(2, 6, -(disease_ptr->day_counter - 1)));
+					sub_hero_le(hero, dice_roll(2, 6, -(disease_ptr->time_counter - 1)));
 
 					/* Strength is fading, but only to 1 */
 					if (hero->attrib[ATTRIB_KK].current != 0) {
@@ -85,7 +85,7 @@ void disease_effect(void)
 
 				if (!disease_ptr->log_1) {
 					/* regeneration complete */
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 				} else {
 					/* hero regains the lost strength */
@@ -119,7 +119,7 @@ void disease_effect(void)
 					GUI_output(g_dtp2);
 				}
 
-				if (disease_ptr->day_counter > 2) {
+				if (disease_ptr->time_counter > 2) {
 					/* after two days, each other hero in the group
 					 * can be infectect by a chance of 20 % */
 
@@ -141,7 +141,7 @@ void disease_effect(void)
 					/* 5% chance of worsening to Blaue Keuche */
 
 					/* remove the effect of Dumpfschaedel */
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 
 					if (disease_ptr->log_3 != 0) {
@@ -161,7 +161,7 @@ void disease_effect(void)
 					hero_gets_diseased(hero, DISEASE_ID_BLAUE_KEUCHE);
 				}
 
-				if (disease_ptr->day_counter > dice_roll(1, 3, 4)) { /* number of days infected > D3 + 4 */
+				if (disease_ptr->time_counter > dice_roll(1, 3, 4)) { /* number of days infected > D3 + 4 */
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 				} else {
 					sub_hero_le(hero, dice_roll(1, 6, -1)); /* LE loss of D6 - 1 */
@@ -171,7 +171,7 @@ void disease_effect(void)
 			/* NUMBSKULL / DUMPFSCHAEDEL: get better */
 			if (disease_ptr->status == DISEASE_STATUS_RECOVER) {
 
-				disease_ptr->day_counter = 0;
+				disease_ptr->time_counter = 0;
 				disease_ptr->status = DISEASE_STATUS_HEALTHY;
 
 				if (disease_ptr->log_3 != 0) {
@@ -218,12 +218,12 @@ void disease_effect(void)
 
 				}
 
-				if ((disease_ptr->day_counter > 3) && (random_schick(100) <= 25)) {
+				if ((disease_ptr->time_counter > 3) && (random_schick(100) <= 25)) {
 
 					hero->attrib[ATTRIB_KK].normal--;
 					hero->attrib[ATTRIB_KK].current--;
-					hero->le_max -= disease_ptr->day_counter / 3;
-					sub_hero_le(hero, disease_ptr->day_counter / 3);
+					hero->le_max -= disease_ptr->time_counter / 3;
+					sub_hero_le(hero, disease_ptr->time_counter / 3);
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 
 				} else {
@@ -249,7 +249,7 @@ void disease_effect(void)
 				sprintf(g_dtp2, get_ttx(576), hero->alias);
 				GUI_output(g_dtp2);
 
-				disease_ptr->day_counter = 0;
+				disease_ptr->time_counter = 0;
 				disease_ptr->status = DISEASE_STATUS_HEALTHY;
 
 				if (disease_ptr->log_3 != 0) {
@@ -273,8 +273,8 @@ void disease_effect(void)
 			/* PARALYSIS / PARALYSE: get worse */
 			if (disease_ptr->status == DISEASE_STATUS_DISEASED) {
 
-				if (disease_ptr->day_counter > dice_roll(1, 3, 4)) {
-					disease_ptr->day_counter = 0;
+				if (disease_ptr->time_counter > dice_roll(1, 3, 4)) {
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 				} else {
 					j = random_schick(6);
@@ -295,7 +295,7 @@ void disease_effect(void)
 
 				if (!disease_ptr->log_1 && !disease_ptr->log_2) {
 
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 
 				} else {
@@ -342,7 +342,7 @@ void disease_effect(void)
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get worse */
 			if (disease_ptr->status == DISEASE_STATUS_DISEASED) {
 
-				if (disease_ptr->day_counter > 7) {
+				if (disease_ptr->time_counter > 7) {
 
 					/* 30 % for elfes, 20% for the all other types */
 					if (random_schick(100) <= (hero->typus >= HERO_TYPE_AUELF ? 30 : 20)) {
@@ -360,7 +360,7 @@ void disease_effect(void)
 					}
 				} else {
 
-					if (disease_ptr->day_counter > 3) {
+					if (disease_ptr->time_counter > 3) {
 
 						if (!disease_ptr->log_3) {
 
@@ -382,7 +382,7 @@ void disease_effect(void)
 							}
 						}
 
-						sub_hero_le(hero, dice_roll(hero->typus >= HERO_TYPE_AUELF ? 2 : 1, 6, disease_ptr->day_counter - 1));
+						sub_hero_le(hero, dice_roll(hero->typus >= HERO_TYPE_AUELF ? 2 : 1, 6, disease_ptr->time_counter - 1));
 					}
 				}
 			}
@@ -393,7 +393,7 @@ void disease_effect(void)
 				if (disease_ptr->log_3) {
 
 					disease_ptr->log_3 = 0;
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					hero->attrib[ATTRIB_KK].current += 5;
 				}
 
@@ -408,7 +408,7 @@ void disease_effect(void)
 
 				j = 0;
 
-				if (random_schick(100) <= disease_ptr->day_counter * 5) {
+				if (random_schick(100) <= disease_ptr->time_counter * 5) {
 
 					hero->attrib[ATTRIB_GE].current--;
 					hero->attrib[ATTRIB_GE].normal--;
@@ -444,7 +444,7 @@ void disease_effect(void)
 			if (disease_ptr->status == DISEASE_STATUS_RECOVER) {
 
 				if (!disease_ptr->log_1 && !disease_ptr->log_2) {
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 				} else {
 					if
@@ -488,9 +488,9 @@ void disease_effect(void)
 			/* RABIES / TOLLWUT: get worse */
 			if (disease_ptr->status == DISEASE_STATUS_DISEASED) {
 
-				if (disease_ptr->day_counter > dice_roll(1, 6, 6)) {
+				if (disease_ptr->time_counter > dice_roll(1, 6, 6)) {
 
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 
 				} else {
@@ -510,12 +510,12 @@ void disease_effect(void)
 						}
 					}
 
-					sub_hero_le(hero, dice_roll((disease_ptr->day_counter > 3 ? 3 : disease_ptr->day_counter), 6, 0));
+					sub_hero_le(hero, dice_roll((disease_ptr->time_counter > 3 ? 3 : disease_ptr->time_counter), 6, 0));
 
 					disease_ptr->log_1 += 2;
 					hero->attrib[ATTRIB_KK].current -= 2;
 
-					if (disease_ptr->day_counter > 2) {
+					if (disease_ptr->time_counter > 2) {
 
 						rabies(hero, i);
 
@@ -532,7 +532,7 @@ void disease_effect(void)
 
 				if (!disease_ptr->log_1) {
 
-					disease_ptr->day_counter = 0;
+					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 
 				} else {
@@ -549,7 +549,7 @@ void disease_effect(void)
 
 				if (hero->disease[j].status != DISEASE_STATUS_HEALTHY) {
 					/* Original-Bug? I think for some of the deseases, an overflow could theoretically happen. */
-					hero->disease[j].day_counter++;
+					hero->disease[j].time_counter++;
 				}
 			}
 
