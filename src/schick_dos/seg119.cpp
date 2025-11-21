@@ -64,7 +64,7 @@ void disease_effect(void)
 					GUI_output(g_dtp2);
 
 				} else {
-					/* LE loss of 2D6 + 1 - (number of days the hero is deseased) */
+					/* LE loss of 2D6 + 1 - (number of days the hero is diseased) */
 					/* so the effect is worst at the beginning and gets better over time */
 					sub_hero_le(hero, dice_roll(2, 6, -(disease_ptr->day_timer - 1)));
 

@@ -411,7 +411,7 @@ void show_times_up(void)
 
 void show_outro(void)
 {
-	signed int j; /* multi use: desease_id, poison_id, attribute index */
+	signed int j; /* multi use: disease_id, poison_id, attribute index */
 	signed int handle;
 	signed int width;
 	signed int height;
