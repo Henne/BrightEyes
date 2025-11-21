@@ -1,22 +1,9 @@
 #ifndef HERO_H
 #define HERO_H
 
-#if __cpp_static_assert  
-  #include <assert.h>
-#define STATIC_ASSERT(expr, msg) static_assert(expr, #msg)
-#else
-  #define STATIC_ASSERT(expr, msg) typedef char static_assert_##msg[(expr) ? 1 : -1]
-#endif
+#include "platform.h"
 
-#if defined(__BORLANDC__) || defined(__WATCOMC__)
-typedef signed long int32_t;
-#else
-typedef signed int int32_t;
-#endif
-
-STATIC_ASSERT(sizeof(int32_t) == 4, int32_needs_to_be_4_bytes);
-
-#pragma pack(1)
+PACK_BEGIN
 
 struct struct_attribs {
 	signed char normal;
@@ -222,5 +209,6 @@ struct struct_hero {
 
 STATIC_ASSERT(sizeof(struct struct_hero) == 1754, struct_hero_needs_to_be_1754_bytes);
 
-#pragma pack ()
+PACK_END
+
 #endif
