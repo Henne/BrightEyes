@@ -32,12 +32,20 @@ struct sample_idx {
 	uint32_t offset;
 };
 
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 struct struct_modification_timer {
 	int32_t time_left;
 	uint16_t offset;
 	int8_t target;
 	int8_t modifier;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(struct struct_modification_timer) == 8, struct_struct_modification_timer_needs_to_be_8_bytes);
 
 struct mouse_action {
 	int x1; // upper left corner
@@ -110,8 +118,8 @@ struct point8s {
 };
 
 struct struct_point {
-	signed short x;
-	signed short y;
+	int16_t x;
+	int16_t y;
 };
 
 struct dng_gfxtab {
@@ -128,10 +136,10 @@ struct viewdir_offsets8s {
 };
 
 struct struct_rect {
-	int y1;
-	int x1;
-	int y2;
-	int x2;
+	signed int y1;
+	signed int x1;
+	signed int y2;
+	signed int x2;
 };
 
 struct ani_tile {
@@ -139,6 +147,9 @@ struct ani_tile {
 	int16_t duration;
 };
 
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 /* input from file */
 struct ani_area_in {
 	char name[4];		//0x00
@@ -162,17 +173,33 @@ struct ani_area {
 	uint16_t width;
 	uint8_t cyclic;
 	int8_t pics;
-	uint8_t* pics_tab[20];
+	uint8_t* pics_tab[20]; /* TODO: This might cause issues */
 	int16_t changes;
 	struct ani_tile changes_tb[42];
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
 
+STATIC_ASSERT(sizeof(struct ani_area_in) == 262, struct_ani_area_in_needs_to_be_262_bytes);
+
+//STATIC_ASSERT(sizeof(struct ani_area) == 263, struct_ani_area_in_needs_to_be_263_bytes);
+
+/* REMARK: maybe not needed */
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 struct struct_diary_entry {
 	int16_t day;
 	int16_t month;
 	int16_t year;
 	int16_t town_id;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(struct struct_diary_entry) == 8, struct_struct_diary_entry_needs_to_be_8_bytes);
 
 struct special_day {
 	int8_t month;
@@ -188,8 +215,8 @@ struct fight_msg {
 /* seg041 */
 struct ranged_weapon_descr {
 	/* structure of the entries of RANGED_WEAPON_TABLE */
-	signed char damage_modifier[7]; /* table with damage modifiers depending on the distance */
-	signed char base_handicap;
+	int8_t damage_modifier[7]; /* table with damage modifiers depending on the distance */
+	int8_t base_handicap;
 	/* According to DSA3 rules (MSZ), there are the following distance types.
 	 *
 	 * name         distance          encoding in Schicksalsklinge
@@ -277,6 +304,9 @@ struct trv_start_point { /* a start_point is either a signpost or a harbor */
 	uint8_t *linked_travel_routes; /* Points to the first associated entry in g_sea_routes or g_land_routes */
 };
 
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 // A location is a point of interest in a town or a travel event. //
 struct location {
 	int16_t pos;		// coordinates of the location within its town
@@ -284,6 +314,11 @@ struct location {
 	uint8_t typeindex;	// Index among the locations of the same type.
 	int16_t locdata;	// Additional data, depending on the LOCTYPE.
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(struct location) == 6, struct_location_needs_to_be_6_bytes);
 
 struct struct_msg {
 	signed int type;
@@ -303,6 +338,9 @@ struct market {
 	int16_t size;		/* unused */
 };
 
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 /* REMARK1: DOS-Version: struct is inside the game state! */
 /* REMARK2: DOS-Version: states_offset is added with a 4-Byte pointer. Not portable! */
 struct struct_dialog_partner {
@@ -322,8 +360,17 @@ struct struct_dialog_state {
 	uint8_t state2;
 	uint8_t state3;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
 
-struct struct_monster {
+STATIC_ASSERT(sizeof(struct struct_dialog_partner) == 38, struct_struct_dialog_partner_needs_to_be_38_bytes);
+STATIC_ASSERT(sizeof(struct struct_dialog_state) == 8, struct_struct_dialog_stater_needs_to_be_8_bytes);
+
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
+struct monster {
 	int8_t mon_id;
 	int8_t gfx_id;
 	int8_t rs;
@@ -349,6 +396,11 @@ struct struct_monster {
 	int16_t throw_dam;
 	int8_t le_flee;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(struct monster) == 44, struct_monster_needs_to_be_44_bytes);
 
 struct struct_fighter {
 	signed short figure;
@@ -396,6 +448,9 @@ struct fight_hero {
 	int8_t round_appear;
 };
 
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 struct fight {
 	char name[19];
 	int8_t intro_seen;
@@ -407,6 +462,11 @@ struct fight {
 	int16_t silver;
 	int16_t heller;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(struct fight) == 216, struct_fight_needs_to_be_216_bytes);
 
 struct mon_spell_description {
 	int8_t ae_cost;
@@ -428,10 +488,18 @@ struct item_selector_item {
 	int8_t inv_slot;
 };
 
-struct struct_smith_repairitems {
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
+struct smith_repairitems {
 	int16_t item_id;
 	int32_t pickup_time;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(struct smith_repairitems) == 6, struct_smith_repairitems_needs_to_be_6_bytes);
 
 struct struct_informer_tab {
 	int16_t name_id;	/* index in TEXT.LTX */
@@ -561,6 +629,8 @@ struct item_flags {
 };
 #endif
 
+STATIC_ASSERT(sizeof(struct item_flags) == 1, struct_item_flags_needs_to_be_1_bytes);
+
 #if !defined(__BORLANDC__)
 #pragma pack(1)
 #endif
@@ -590,11 +660,14 @@ struct item_stats {
 	int8_t magic;		/* 0: not magic / 1: magic */
 };
 #if !defined(__BORLANDC__)
-#pragma pack ()
+#pragma pack()
 #endif
 
 STATIC_ASSERT(sizeof(struct item_stats) == 12, struct_item_stats_needs_to_be_12_bytes);
 
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 /* TODO: This structure makes an inconsistent game state */
 struct harbor_option_obsolete {
 	char *ship_name_ptr;
@@ -604,6 +677,12 @@ struct harbor_option_obsolete {
 	uint8_t destination;
 	int8_t route_id;		/* write only */
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+/* TODO: needs to be reworked */
+//STATIC_ASSERT(sizeof(struct harbor_option_obsolete) == 12, struct_harbor_option_obsolete_needs_to_be_12_bytes);
 
 struct struct_route_tevent {
 	int16_t place;
@@ -723,12 +802,20 @@ struct enemy_sheet {
 	int8_t 	le_flee;
 };
 
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
 struct dungeon_door {
 	int16_t pos;
 	int8_t smash_handicap;
 	int8_t lockpick_handicap;
 	int8_t foramen_handicap;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(struct dungeon_door) == 5, struct_dungeon_door_needs_to_be_5_bytes);
 
 extern char g_fn_v302de_XXX[], g_fn_v302de_000[], g_fn_v302de_001[], g_fn_v302de_002[];
 extern char g_fn_v302de_003[], g_fn_v302de_004[], g_fn_v302de_005[], g_fn_v302de_006[];
@@ -979,7 +1066,7 @@ extern int32_t gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern struct struct_modification_timer gs_modification_timers[100];	//ds:0x2e2c; seg002
 extern int32_t gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern int8_t  gs_tav_cheated_flags[88];		//ds:0x318a; seg059, seg103
-extern struct struct_smith_repairitems gs_smith_repairitems[50]; //ds:0x31e2; seg002, seg058
+extern struct smith_repairitems gs_smith_repairitems[50]; //ds:0x31e2; seg002, seg058
 extern int16_t gs_dng_handled_pos;		//ds:0x330e; seg077-seg091
 extern int16_t gs_deathtrap_steps;		//ds:0x3310; seg075, seg077, seg079
 extern int16_t gs_deathtrap;			//ds:0x3312; seg025, seg075, seg077, seg079
@@ -1774,7 +1861,7 @@ extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern struct item_stats *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
-extern struct struct_monster *g_monster_dat_buf;// ds:0xe125; seg032, seg039
+extern struct monster *g_monster_dat_buf;		// ds:0xe125; seg032, seg039
 extern struct struct_memslot_ani *g_memslots_anis;	// ds:0xe121; seg027, seg120
 extern struct struct_memslot_fig *g_memslots_mfig;	// ds:0xe11d; seg027, seg120
 extern struct struct_memslot_fig *g_memslots_wfig;	// ds:0xe119; seg027, seg120

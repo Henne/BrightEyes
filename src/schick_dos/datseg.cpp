@@ -1135,20 +1135,20 @@ struct spell_descr g_spell_descriptions[87] = {
 	{                   -1 ,         0,         0,         0,  0,  0, 0, 0, 0, 0 }  /* ... terminator entry */
 }; // ds:0x099d
 const struct spell_range g_spellclasses_1[8] = {
-        { SP_BEHERRSCHUNG_BRECHEN       ,  5 }, /* Antimagie */
-        { SP_BAND_UND_FESSEL            , 12 }, /* Beherrschung */
-        { SP_FUROR_BLUT_UND_SULPHURDAMPF,  6 }, /* Dämonologie */
-        { SP_ELEMENTARE_BESCHWOEREN     ,  3 }, /* Elemente */
-        { SP_AXXELERATUS_BLITZGESCHWIND ,  6 }, /* Bewegung */
-        { SP_BALSAM_SALABUNDE           ,  5 }, /* Heilung */
-        { SP_ADLERAUG_UND_LUCHSENOHR    ,  7 }, /* Wahrnehung */
-        { SP_CHAMAELIONI_MIMIKRY        ,  4 }  /* Visionen */
+	{ SP_BEHERRSCHUNG_BRECHEN       ,  5 }, /* Antimagie */
+	{ SP_BAND_UND_FESSEL            , 12 }, /* Beherrschung */
+	{ SP_FUROR_BLUT_UND_SULPHURDAMPF,  6 }, /* Dämonologie */
+	{ SP_ELEMENTARE_BESCHWOEREN     ,  3 }, /* Elemente */
+	{ SP_AXXELERATUS_BLITZGESCHWIND ,  6 }, /* Bewegung */
+	{ SP_BALSAM_SALABUNDE           ,  5 }, /* Heilung */
+	{ SP_ADLERAUG_UND_LUCHSENOHR    ,  7 }, /* Wahrnehung */
+	{ SP_CHAMAELIONI_MIMIKRY        ,  4 }  /* Visionen */
 }; // ds:0x0d03
 const struct spell_range g_spellclasses_2[4] = {
-        { SP_BLITZ_DICH_FIND            ,  9 }, /* Kampf */
-        { SP_HEXENBLICK                 ,  2 }, /* Verständigung */
-        { SP_ADLER_WOLF_UND_HAMMERHAI   , 16 }, /* Verwandlung */
-        { SP_ABVENENUM_PEST_UND_GALLE   , 10 }  /* Veränderung */
+	{ SP_BLITZ_DICH_FIND            ,  9 }, /* Kampf */
+	{ SP_HEXENBLICK                 ,  2 }, /* Verständigung */
+	{ SP_ADLER_WOLF_UND_HAMMERHAI   , 16 }, /* Verwandlung */
+	{ SP_ABVENENUM_PEST_UND_GALLE   , 10 }  /* Veränderung */
 }; // ds:0x0d13
 
 const signed int g_magic_school_antimagie_spell_ids[7] = {
@@ -2282,7 +2282,7 @@ struct struct_modification_timer gs_modification_timers[100] = { {0} }; // ds:0x
 unsigned char g_unkn_012[2] = { 0, 0 }; // ds:0x314c
 int32_t gs_gods_estimation[15] = {0};	// ds:0x314e
 int8_t  gs_tav_cheated_flags[88] = {0};	// ds:0x318a
-struct struct_smith_repairitems gs_smith_repairitems[50] = {0}; // ds:0x31e2
+struct smith_repairitems gs_smith_repairitems[50] = {0}; // ds:0x31e2
 int16_t gs_dng_handled_pos = 0; // ds:0x330e
 int16_t gs_deathtrap_steps = 0; // ds:0x3310 // for activated deathtrap: number of remaining steps in dungeon
 int16_t gs_deathtrap = 0; // ds:0x3312 // 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated

@@ -93,7 +93,7 @@ signed int FIG_get_range_weapon_type(const struct struct_hero *hero)
  */
 void fill_enemy_sheet(const signed int sheet_no, const signed char target_object_id, const signed char round)
 {
-	struct struct_monster *monster;
+	struct monster *monster;
 	struct enemy_sheet *sheet;
 	signed int i;
 

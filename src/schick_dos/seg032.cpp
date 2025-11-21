@@ -942,8 +942,8 @@ signed int do_fight(const signed int fight_id)
 
 	/* set some pointers */
 	g_scenario_buf = (signed char*)(((HugePt)g_buffer8_ptr) + 64100L);
-	g_monster_dat_buf = (struct struct_monster*)(((HugePt)g_scenario_buf) + 621L);
-	g_current_fight = (struct fight*)(((HugePt)g_monster_dat_buf) + 3476L);
+	g_monster_dat_buf = (struct monster*)(((HugePt)g_scenario_buf) + 621L);
+	g_current_fight = (struct fight*)(((HugePt)g_monster_dat_buf) + 79L * sizeof(struct monster));
 
 	read_fight_lst(fight_id);
 
@@ -981,7 +981,7 @@ signed int do_fight(const signed int fight_id)
 
 	/* open MONSTER.DAT */
 	handle = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);
-	read_archive_file(handle, (uint8_t*)g_monster_dat_buf, 3476);
+	read_archive_file(handle, (uint8_t*)g_monster_dat_buf, 79 * sizeof(struct monster));
 	close(handle);
 
 	/* clear all dropped weapons */
