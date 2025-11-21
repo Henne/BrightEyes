@@ -548,11 +548,11 @@ void show_outro(void)
 			/* reset every disease */
 			for (j = 0; j < 8; j++) {
 
-				hero->sick[j][0] = DISEASE_STATUS_HEALTHY;
-				hero->sick[j][1] = 0;
-				hero->sick[j][2] = 0;
-				hero->sick[j][3] = 0;
-				hero->sick[j][4] = 0;
+				hero->disease[j][0] = DISEASE_STATUS_HEALTHY;
+				hero->disease[j][1] = 0;
+				hero->disease[j][2] = 0;
+				hero->disease[j][3] = 0;
+				hero->disease[j][4] = 0;
 			}
 
 			/* reset every poison */

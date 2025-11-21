@@ -4792,10 +4792,10 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 				g_refresh_status_line = 1;
 			}
 
-			/* reset sickness */
+			/* reset disease */
 			for (i = 1; i <= 7; i++) {
-				hero->sick[i][0] = DISEASE_STATUS_HEALTHY;
-				hero->sick[i][1] = 0;
+				hero->disease[i][0] = DISEASE_STATUS_HEALTHY;
+				hero->disease[i][1] = 0;
 			}
 
 			/* reset poison */

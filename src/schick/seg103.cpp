@@ -481,13 +481,13 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 						} else {
 
 							if (random_schick(20) <= 7) {
-								/* TODO Original-Bug? What if already sick or recovering? */
+								/* TODO Original-Bug? What if already diseased or recovering? */
 
 								/* 35% chance: infected with Wundfieber illness */
 								sprintf(g_dtp2, get_ttx(699), hero->alias, patient->alias);
 
-								patient->sick[ILLNESS_TYPE_WUNDFIEBER][0] = DISEASE_STATUS_SICK;
-								patient->sick[ILLNESS_TYPE_WUNDFIEBER][1] = 0;
+								patient->disease[ILLNESS_TYPE_WUNDFIEBER][0] = DISEASE_STATUS_DISEASED;
+								patient->disease[ILLNESS_TYPE_WUNDFIEBER][1] = 0;
 
 							} else {
 								/* 65% chance: just failed, no infection */

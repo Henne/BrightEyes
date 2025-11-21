@@ -27,7 +27,7 @@ void ask_miracle(void)
 	signed int miracle_dice_roll;
 	signed int j;
 	struct struct_hero *hero;
-	signed int disease;
+	signed int disease_id;
 	signed int fi_bak;
 	signed int const_zero; // always zero
 	signed int bonus;
@@ -379,12 +379,12 @@ void ask_miracle(void)
 
 						for (i = 0; i <= 6; i++) {
 							hero = get_hero(i);
-							disease = hero_is_diseased(hero);
+							disease_id = hero_is_diseased(hero);
 
-							if (disease != 0 && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
+							if (disease_id != 0 && (hero->group_id == gs_active_group_id) && !hero->flags.gods_pissed)
 							{
-								hero->sick[disease][0] = DISEASE_STATUS_RECOVER;
-								hero->sick[disease][1] = 0;
+								hero->disease[disease_id][0] = DISEASE_STATUS_RECOVER;
+								hero->disease[disease_id][1] = 0;
 
 								sprintf(g_dtp2,	get_tx2(28), hero->alias);
 								break;

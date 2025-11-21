@@ -35,7 +35,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	signed int bad_elixir_item_id;
 	signed int le_diff;
 
-	signed int disease;
+	signed int disease_id;
 	signed int poison;
 	signed int tw_bak;
 	signed int consumer_idx;
@@ -382,11 +382,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* diseases, not all */
-					disease = hero_is_diseased(consumer);
+					disease_id = hero_is_diseased(consumer);
 
-					if (disease == 2 || disease == 3) {
-						consumer->sick[disease][0] = DISEASE_STATUS_RECOVER;
-						consumer->sick[disease][1] = 0;
+					if (disease_id == 2 || disease_id == 3) {
+						consumer->disease[disease_id][0] = DISEASE_STATUS_RECOVER;
+						consumer->disease[disease_id][1] = 0;
 					}
 
 					/* poison */
@@ -511,10 +511,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case ITEM_ANTIKRANKHEITSELIXIER: {
 					/* Antikrankheitselexier */
 
-					disease = hero_is_diseased(consumer);
+					disease_id = hero_is_diseased(consumer);
 
-					consumer->sick[disease][0] = DISEASE_STATUS_RECOVER;
-					consumer->sick[disease][1] = 0;
+					consumer->disease[disease_id][0] = DISEASE_STATUS_RECOVER;
+					consumer->disease[disease_id][1] = 0;
 
 					/* give owner a glassbottle */
 					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
