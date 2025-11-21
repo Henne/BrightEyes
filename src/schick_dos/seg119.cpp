@@ -346,7 +346,7 @@ void disease_effect(void)
 
 				if (disease_ptr->time_counter > 7) {
 
-					/* 30 % for elfes, 20% for the all other types */
+					/* 30 % for elves, 20% for the all other types */
 					if (random_schick(100) <= (hero->typus >= HERO_TYPE_AUELF ? 30 : 20)) {
 
 						sprintf(g_dtp2, get_ttx(580), hero->alias);
