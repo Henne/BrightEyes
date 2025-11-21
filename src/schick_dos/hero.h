@@ -112,6 +112,17 @@ struct hero_flags {
 	unsigned short encouraged	:1;
 };
 
+struct hero_affliction {
+	/* used for diseases and poisons */
+	signed char status; /* {-1,0,1}. see enum DISEASE_STATUS and POISON_STATUS */
+	signed char day_timer; /* starting at 0, number of days the disease/poison is in status -1 (diseased/poisoned) or 1 (recover). */
+	/* the following three bytes log the negative effects which the desease/poinson has already caused.
+	 * Exact meaning depends on the concrete disease/poison (encoded by enums DISEASE_ID_... and POISON_ID_...) */
+	signed char log_1;
+	signed char log_2;
+	signed char log_3;
+};
+
 struct struct_hero {
 	/* see https://github.com/shihan42/BrightEyesWiki/wiki/CHR-NPC */
 	/* Offset 0x00 */
@@ -199,8 +210,8 @@ struct struct_hero {
 	struct hero_flags flags;
 	signed short unkn11;
 	/* Not figured out yet, but reserve space */
-	signed char disease[8][5]; /* 40 = 8 * 5 bytes */ /* 5 bytes for each of the following disease: 0-none (these 5 bytes appear to be unused!) 1-Wundfieber, 2-Dumpfschädel, 3-Blaue Keuche, 4-Paralyse, 5-Schlachtenfieber, 6-Frostschäden, 7-Tollwut */
-	signed char poison[10][5]; /* 50 = 10 * 5 bytes */ /* 5 bytes for each of the following poisonings: 0-none (these 5 bytes appear to be unused!) 1-Shurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemel, 7-Lotusgift, 8-Kukris, 9-Bannstaubvergiftung */
+	struct hero_affliction disease[8]; /* 40 = 8 * 5 bytes */ /* for the index, see enum DISEASE_ID. Note that no disease has disease_id == 0, so the first 5 bytes are unused. */
+	struct hero_affliction poison[10]; /* 50 = 10 * 5 bytes */ /* for the index, see enum POISON_ID. NOTE that no poison has poison_id == 0, so the first 5 bytes are unused. */
 
 	/* Offset 0x108 */
 	signed char talents[52]; /* see enum TA_* */ /* TODO: better name 'talents' (for DSA conformity)? */

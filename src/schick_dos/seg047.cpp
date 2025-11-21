@@ -96,7 +96,7 @@ signed int hero_is_diseased(const struct struct_hero *hero)
 
 	for (disease_id = 1; disease_id <= 7; disease_id++) {
 
-		if (hero->disease[disease_id][0] == DISEASE_STATUS_DISEASED) {
+		if (hero->disease[disease_id].status == DISEASE_STATUS_DISEASED) {
 
 			return disease_id;
 		}
@@ -119,7 +119,7 @@ signed int hero_is_poisoned(const struct struct_hero *hero)
 
 	for (poison_id = 1; poison_id <= 9; poison_id++) {
 
-		if (hero->poison[poison_id][0] == POISON_STATUS_POISONED) {
+		if (hero->poison[poison_id].status == POISON_STATUS_POISONED) {
 
 			return poison_id;
 		}
@@ -139,11 +139,11 @@ void hero_gets_poisoned(struct struct_hero *hero, const signed int poison_id)
 	if (!hero->flags.dead) {
 		/* TODO: Original-Bug?: What if the hero is already poisoned? */
 
-		hero->poison[poison_id][0] = POISON_STATUS_POISONED;
-		hero->poison[poison_id][1] = 0;
-		hero->poison[poison_id][2] = 0;
-		hero->poison[poison_id][3] = 0;
-		hero->poison[poison_id][4] = 0;
+		hero->poison[poison_id].status = POISON_STATUS_POISONED;
+		hero->poison[poison_id].day_timer = 0;
+		hero->poison[poison_id].log_1 = 0;
+		hero->poison[poison_id].log_2 = 0;
+		hero->poison[poison_id].log_3 = 0;
 	}
 }
 
@@ -170,11 +170,11 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease_id)
 		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease_id + 0x193));
 #endif
 
-		hero->disease[disease_id][0] = DISEASE_STATUS_DISEASED;
-		hero->disease[disease_id][1] = 0;
-		hero->disease[disease_id][2] = 0;
-		hero->disease[disease_id][3] = 0;
-		hero->disease[disease_id][4] = 0;
+		hero->disease[disease_id].status = DISEASE_STATUS_DISEASED;
+		hero->disease[disease_id].day_timer = 0;
+		hero->disease[disease_id].log_1 = 0;
+		hero->disease[disease_id].log_2 = 0;
+		hero->disease[disease_id].log_3 = 0;
 	}
 }
 
@@ -196,7 +196,7 @@ void hero_disease_test(struct struct_hero *hero, const signed int disease_id, co
 #endif
 
 	/* check the probability and if hero is diseased*/
-	if ((random_schick(100) <= probability) && (hero->disease[disease_id][0] != DISEASE_STATUS_DISEASED)) {
+	if ((random_schick(100) <= probability) && (hero->disease[disease_id].status != DISEASE_STATUS_DISEASED)) {
 
 		hero_gets_diseased(hero, disease_id);
 	}
