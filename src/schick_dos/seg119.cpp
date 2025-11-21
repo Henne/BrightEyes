@@ -300,7 +300,16 @@ void disease_effect(void)
 
 				} else {
 
-					if (!disease_ptr->log_1) {
+					if
+#ifndef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 44:
+					 * Recover from Paralyse and Frostschaden does not work, GE and KK are not recovered.
+					 * In the two if statements below, the condition is reversed. */
+					(!disease_ptr->log_1)
+#else
+					(disease_ptr->log_1)
+#endif
+					{
 
 						sprintf(g_dtp2, get_ttx(573), hero->alias);
 						GUI_output(g_dtp2);
@@ -309,7 +318,14 @@ void disease_effect(void)
 						hero->attrib[ATTRIB_KK].current++;
 					}
 
-					if (!disease_ptr->log_2) {
+					if
+#ifndef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 44, see above. */
+					(!disease_ptr->log_2)
+#else
+					(disease_ptr->log_2)
+#endif
+					{
 
 						sprintf(g_dtp2, get_ttx(578), hero->alias);
 						GUI_output(g_dtp2);
@@ -431,7 +447,16 @@ void disease_effect(void)
 					disease_ptr->day_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 				} else {
-					if (!disease_ptr->log_1) {
+					if
+#ifndef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 44:
+					 * Recover from Paralyse and Frostschaden does not work, GE and KK are not recovered.
+					 * In the two if statements below, the condition is reversed. */
+					(!disease_ptr->log_1)
+#else
+					(disease_ptr->log_1)
+#endif
+					{
 
 						sprintf(g_dtp2, get_ttx(573), hero->alias);
 						GUI_output(g_dtp2);
@@ -440,7 +465,14 @@ void disease_effect(void)
 						hero->attrib[ATTRIB_KK].current++;
 					}
 
-					if (!disease_ptr->log_2) {
+					if
+#ifndef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 44, see above. */
+					(!disease_ptr->log_2)
+#else
+					(disease_ptr->log_2)
+#endif
+					{
 
 						sprintf(g_dtp2, get_ttx(578), hero->alias);
 						GUI_output(g_dtp2);
