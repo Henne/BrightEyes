@@ -200,7 +200,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					/* Belmart */
 					poison_id = hero_is_poisoned(consumer);
 
-					if (poison_id != 0 && poison_id <= 5) {
+					if (poison_id != POISON_ID_NONE && poison_id <= 5) {
 
 						/* cure the first poison */
 						consumer->poison[poison_id].day_timer = 0;
@@ -219,7 +219,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					/* Menchalkaktus */
 					poison_id = hero_is_poisoned(consumer);
 
-					if (poison_id != 0 && poison_id <= 10) {
+					if (poison_id != POISON_ID_NONE && poison_id <= 10) {
 						/* cure the first poison */
 						consumer->poison[poison_id].day_timer = 0;
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
@@ -384,7 +384,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					/* diseases, not all */
 					disease_id = hero_is_diseased(consumer);
 
-					if (disease_id == 2 || disease_id == 3) {
+					if (disease_id == DISEASE_ID_DUMPFSCHAEDEL || disease_id == DISEASE_ID_BLAUE_KEUCHE) {
 						consumer->disease[disease_id].status = DISEASE_STATUS_RECOVER;
 						consumer->disease[disease_id].day_timer = 0;
 					}
@@ -392,7 +392,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					/* poison */
 					poison_id = hero_is_poisoned(consumer);
 
-					if (poison_id != 0 && poison_id < 7) {
+					if (poison_id != POISON_ID_NONE && poison_id < 7) {
 						consumer->poison[poison_id].day_timer = 0;
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
@@ -497,7 +497,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					poison_id = hero_is_poisoned(consumer);
 
-					if (poison_id != 0 && poison_id < 5) {
+					if (poison_id != POISON_ID_NONE && poison_id < 5) {
 						consumer->poison[poison_id].day_timer = 0;
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
