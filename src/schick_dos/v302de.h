@@ -23,19 +23,7 @@
 #include <TIME.H>
 #endif
 
-typedef unsigned char uint8_t;
-typedef signed char int8_t;
-typedef unsigned short uint16_t;
-typedef signed short int16_t;
-#if defined(__BORLANDC__)
-typedef unsigned long uint32_t;
-typedef signed long int32_t;
-typedef uint8_t huge * HugePt;
-#else
-typedef unsigned int uint32_t;
-typedef signed int int32_t;
-typedef uint8_t* HugePt;
-#endif
+#include "platform.h"
 
 /**
 	struct nvf_extract_desc - descriptor for extracting an image from a nvf file
