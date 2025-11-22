@@ -8,7 +8,7 @@ GAMEDIR="../orig"
 # filename of the SCHICKM.EXE
 GAMEFILE="${GAMEDIR}/SCHICKM.EXE"
 # output directory
-OUTDIR=../TEMP/disasm_orig
+OUTDIR=../TEMP_RE/disasm_orig
 
 
 # create the directory for the output
