@@ -574,7 +574,6 @@ void prepare_dirs(void)
 	struct ffblk blk;
 	char gamepath[40];
 
-	/* BC-TODO: only the adress differs, should be the stub adress */
 	harderr((int(*)(int, int, int, int))err_handler);
 
 	drive_bak = drive = getdisk();
