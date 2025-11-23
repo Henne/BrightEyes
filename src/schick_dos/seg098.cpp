@@ -421,7 +421,7 @@ signed int can_use_spellclass(const struct struct_hero *hero, const signed int s
 
 signed int select_spell(struct struct_hero *hero, signed int show_vals)
 {
-	signed int l_di;
+	signed int i;
 	signed int answer1;
 	signed int first_spell;
 	signed int retval = -1;
@@ -464,13 +464,13 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 
 		strcpy(g_dtp2, get_ttx(216));
 
-		for (l_di = 0; l_di < 12; l_di++) {
+		for (i = 0; i < 12; i++) {
 
-			g_radio_name_list[l_di] = g_dtp2 + 50 * (l_di + 1);
+			g_radio_name_list[i] = g_dtp2 + 50 * (i + 1);
 
-			ones.a[l_di] = (signed char)can_use_spellclass(hero, l_di);
+			ones.a[i] = (signed char)can_use_spellclass(hero, i);
 
-			sprintf(g_radio_name_list[l_di], (ones.a[l_di] != 0) ? str.a : col_str.a, get_ttx(l_di + 192));
+			sprintf(g_radio_name_list[i], (ones.a[i] != 0) ? str.a : col_str.a, get_ttx(i + 192));
 		}
 
 		answer1 = GUI_radio(g_dtp2, 12,
@@ -496,35 +496,35 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 
 			first_spell = g_spellclasses_1[answer1].first;
 
-			for (l_di = 0; l_di < g_spellclasses_1[answer1].length; l_di++) {
+			for (i = 0; i < g_spellclasses_1[answer1].length; i++) {
 
-				g_radio_name_list[l_di] = g_dtp2 + 50 * l_di;
+				g_radio_name_list[i] = g_dtp2 + 50 * i;
 
 				if (show_vals == 1) {
 
-					sprintf(g_radio_name_list[l_di], (char*)str_val.a,
-						get_ttx(first_spell + l_di + 106),
-						hero->spells[first_spell + l_di]);
+					sprintf(g_radio_name_list[i], (char*)str_val.a,
+						get_ttx(first_spell + i + 106),
+						hero->spells[first_spell + i]);
 				} else if (
-					((g_in_fight && (g_spell_descriptions[first_spell + l_di].where_to_use == 1)) ||
-					(!g_in_fight && (g_spell_descriptions[first_spell + l_di].where_to_use != 1))) &&
-					(hero->spells[first_spell + l_di] >= -5))
+					((g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use == 1)) ||
+					(!g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use != 1))) &&
+					(hero->spells[first_spell + i] >= -5))
 				{
 
 					if (show_vals == 2) {
-						sprintf(g_radio_name_list[l_di], (char*)str_val.a,
-							get_ttx(first_spell + l_di + 106),
-							hero->spells[first_spell + l_di]);
+						sprintf(g_radio_name_list[i], (char*)str_val.a,
+							get_ttx(first_spell + i + 106),
+							hero->spells[first_spell + i]);
 					} else {
-						sprintf(g_radio_name_list[l_di], (char*)str.a, get_ttx(first_spell + l_di + 106));
+						sprintf(g_radio_name_list[i], (char*)str.a, get_ttx(first_spell + i + 106));
 					}
 				} else if (show_vals == 2) {
 
-					sprintf(g_radio_name_list[l_di], (char*)col_str_val.a,
-						get_ttx(first_spell + l_di + 106),
-						hero->spells[first_spell + l_di]);
+					sprintf(g_radio_name_list[i], (char*)col_str_val.a,
+						get_ttx(first_spell + i + 106),
+						hero->spells[first_spell + i]);
 				} else {
-					sprintf(g_radio_name_list[l_di], (char*)col_str.a, get_ttx(first_spell + l_di + 106));
+					sprintf(g_radio_name_list[i], (char*)col_str.a, get_ttx(first_spell + i + 106));
 				}
 			}
 
