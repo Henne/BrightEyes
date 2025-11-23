@@ -598,9 +598,9 @@ struct sea_route {
 };
 
 /* structure of the entries of ITEMS.DAT */
-#if defined(__BORLANDC__)
 struct item_flags {
 	/* item + 0x02 */
+#if defined(__BORLANDC__)
 	uint16_t armor		:1;	/* bit 0: armor */
 	uint16_t weapon		:1;	/* bit 1: weapon */
 	uint16_t usable	 	:1;	/* bit 2: usable item */
@@ -615,10 +615,7 @@ struct item_flags {
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
 						 * which are special anyway, don't have any flag set. */
-};
 #else
-struct item_flags {
-	/* item + 0x02 */
 	uint8_t armor		:1;	/* bit 0: armor */
 	uint8_t weapon		:1;	/* bit 1: weapon */
 	uint8_t usable	 	:1;	/* bit 2: usable item */
@@ -633,8 +630,8 @@ struct item_flags {
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
 						 * which are special anyway, don't have any flag set. */
-};
 #endif
+};
 
 STATIC_ASSERT(sizeof(struct item_flags) == 1, struct_item_flags_needs_to_be_1_bytes);
 
