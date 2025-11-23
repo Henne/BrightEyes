@@ -273,12 +273,12 @@ void char_add(const signed int temple_id)
 	signed int position;
 	signed int entries;
 	signed int i;
-	uint8_t *ptr;
+	char *ptr;
 
-	ptr = g_renderbuf_ptr + 50000;
+	ptr = (char*)(g_renderbuf_ptr + 50000);
 	entries = copy_chr_names(ptr, temple_id);
 
-	if (gs_total_hero_counter == 7 || (gs_total_hero_counter == 6 && !get_hero(6)->typus))
+	if ((gs_total_hero_counter == 7) || (gs_total_hero_counter == 6 && !get_hero(6)->typus))
 	{
 		GUI_output(get_ttx(288));
 
@@ -301,7 +301,7 @@ void char_add(const signed int temple_id)
 
 						if (!hero->typus) {
 
-							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * position));
+							prepare_chr_name(g_dtp2, ptr + 32 * position);
 
 							if (read_chr_temp(g_dtp2, i, gs_active_group_id)) {
 								gs_total_hero_counter++;
@@ -382,12 +382,12 @@ signed int char_erase(void)
 	signed int position;
 	signed int entries;
 	signed int unlink_ret;
-	uint8_t *ptr;
+	char *ptr;
 
 	if (g_renderbuf_in_use_flag) {
-		ptr = g_buffer9_ptr + 30000L;
+		ptr = (char*)(g_buffer9_ptr + 30000L);
 	} else {
-		ptr = g_renderbuf_ptr + 50000;
+		ptr = (char*)(g_renderbuf_ptr + 50000);
 	}
 
 	entries = copy_chr_names(ptr, -1);
@@ -400,7 +400,7 @@ signed int char_erase(void)
 
 			if (position != -1) {
 
-				strcpy(g_dtp2, (char*)ptr + 32 * position);
+				strcpy(g_dtp2, ptr + 32 * position);
 
 				sprintf(g_text_output_buf, get_ttx(295), g_dtp2);
 

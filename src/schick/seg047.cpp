@@ -151,7 +151,7 @@ void hero_gets_poisoned(struct struct_hero *hero, const signed int poison_id)
  * \brief   diseases a hero
  *
  * \param   hero        the hero which gets diseased
- * \param   disease_id  ID of the disease
+ * \param   disease_id  the ID of the disease
  */
 void hero_gets_diseased(struct struct_hero *hero, const signed int disease_id)
 {
@@ -182,7 +182,7 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease_id)
  * \brief   the hero may get a disease
  *
  * \param   hero        the hero which may gets diseased
- * \param   disease_id  ID of the disease
+ * \param   disease_id  the ID of the disease
  * \param   probability the probability to get diseased in percent
  */
 void hero_disease_test(struct struct_hero *hero, const signed int disease_id, const signed int probability)
@@ -335,7 +335,7 @@ void update_atpa(struct struct_hero *hero)
  * \return              the number of the selected hero.
  * Used only in temples.
  */
-signed int menu_enter_delete(uint8_t* ptr, const signed int entries, const signed int mode)
+signed int menu_enter_delete(char* ptr, const signed int entries, const signed int mode)
 {
 	signed int i;
 	signed int answer = 0;
@@ -348,7 +348,7 @@ signed int menu_enter_delete(uint8_t* ptr, const signed int entries, const signe
 
 		/* fill a pointer array with the pointer to the names */
 		for (i = 0; i < i_max; i++) {
-			g_radio_name_list[i] = (char*)((i + i_min) * 32 + ptr + 0x10);
+			g_radio_name_list[i] = ((i + i_min) * 32 + ptr + 16);
 		}
 
 		i = i_max;

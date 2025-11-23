@@ -164,7 +164,7 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease_id)
 	if (!hero->flags.dead) {
 		/* TODO: Original-Bug: If the hero is already diseased, the status bytes are erased,
 		 * containing the log about the suffered negative effects.
-                 * Hence, these cannot be cured later. */
+		 * Hence, these cannot be cured later. */
 
 #if !defined(__BORLANDC__)
 		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease_id + 0x193));
@@ -335,7 +335,7 @@ void update_atpa(struct struct_hero *hero)
  * \return              the number of the selected hero.
  * Used only in temples.
  */
-signed int menu_enter_delete(uint8_t* ptr, const signed int entries, const signed int mode)
+signed int menu_enter_delete(char* ptr, const signed int entries, const signed int mode)
 {
 	signed int i;
 	signed int answer = 0;
@@ -348,7 +348,7 @@ signed int menu_enter_delete(uint8_t* ptr, const signed int entries, const signe
 
 		/* fill a pointer array with the pointer to the names */
 		for (i = 0; i < i_max; i++) {
-			g_radio_name_list[i] = (char*)((i + i_min) * 32 + ptr + 0x10);
+			g_radio_name_list[i] = ((i + i_min) * 32 + ptr + 16);
 		}
 
 		i = i_max;

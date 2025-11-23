@@ -1097,10 +1097,10 @@ signed int read_chr_temp(char *fname, const signed int hero_pos, const signed in
 	signed int hero_size = sizeof(struct struct_hero);
 	struct struct_hero *hero;
 
-	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, (char*)fname);
+	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, fname);
 
 	if ((handle = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
-		copy_file_to_temp((char*)fname, g_text_output_buf);
+		copy_file_to_temp(fname, g_text_output_buf);
 		handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 	}
 
@@ -1177,7 +1177,7 @@ void write_chr_temp(const signed int hero_pos)
  * \param   temple_id   > 0 the id of the temple, -1 on delete mode
  * \return              # of CHR-files in TEMP-dir
  */
-signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
+signed int copy_chr_names(char *ptr, const signed int temple_id)
 {
 #if defined(__BORLANDC__)
 	signed int count = 0;
@@ -1206,8 +1206,8 @@ signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
 			if (((hero->temple_id == temple_id) && !hero->slot_pos) ||
 				(!hero->slot_pos && (temple_id == -1)))
 			{
-				strcpy((char*)ptr + 32 * count, hero->name);
-				strcpy((char*)ptr + 32 * count + 16, hero->alias);
+				strcpy(ptr + 32 * count, hero->name);
+				strcpy(ptr + 32 * count + 16, hero->alias);
 				count++;
 			}
 
