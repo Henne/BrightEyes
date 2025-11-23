@@ -1534,7 +1534,12 @@ void town_fade_and_colors(void)
 		wait_for_vsync();
 
 		set_palette(gs_palette_floor, 0x00, 0x20);
+#if defined(__BORLANDC__)
 		set_palette(gs_palette_buildings, 0x80, 0x40);
+#else
+		set_palette(gs_palette_buildings, 0x80, 0x20);
+		set_palette(gs_palette_sky, 0x80 + 0x20, 0x20);
+#endif
 	}
 }
 

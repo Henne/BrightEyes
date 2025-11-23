@@ -2454,7 +2454,12 @@ static void dawning(void)
 			wait_for_vsync();
 
 			set_palette(gs_palette_floor, 0, 0x20);
+#if defined(__BORLANDC__)
 			set_palette(gs_palette_buildings, 0x80, 0x40);
+#else
+			set_palette(gs_palette_buildings, 0x80, 0x20);
+			set_palette(gs_palette_sky, 0x80 + 0x20, 0x20);
+#endif
 		}
 	}
 }
@@ -2483,7 +2488,12 @@ static void nightfall(void)
 			wait_for_vsync();
 
 			set_palette(gs_palette_floor, 0, 0x20);
+#if defined(__BORLANDC__)
 			set_palette(gs_palette_buildings, 0x80, 0x40);
+#else
+			set_palette(gs_palette_buildings, 0x80, 0x20);
+			set_palette(gs_palette_sky, 0x80 + 0x20, 0x20);
+#endif
 		}
 	}
 }
