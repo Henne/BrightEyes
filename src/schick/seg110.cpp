@@ -105,7 +105,7 @@ void TRV_swim2(const signed int mod, const signed int percent)
 				sprintf(g_dtp2, get_tx2(32), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
-				hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
+				hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
 				if (percent) {
 					loose_random_item(hero, percent, get_ttx(506));
@@ -358,7 +358,7 @@ void tevent_029(void)
 	hero = get_hero(0);
 	for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++)
 	{
-		hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
+		hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 	}
 
 	if (test_talent(get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0)
