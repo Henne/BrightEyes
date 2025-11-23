@@ -1749,7 +1749,7 @@ extern signed char g_town_city_event_active;			//ds:0x7c42; seg002, seg067
 extern signed char g_tmap_double1;				//ds:0x7c9a; seg025, seg072
 extern signed char g_tmap_double2;				//ds:0x7c9b; seg025, seg072, seg082
 extern signed char g_swafnild_traveled;				//ds:0x7c9c; seg063, seg072
-extern const uint8_t g_palette_fight2[20][3];			//ds:0x7d0e; seg032, seg074
+extern const uint8_t g_palette_fight2[][3];			//ds:0x7d0e; seg032, seg074
 extern const unsigned char g_automap_bitmask[8];		//ds:0x7d4a; seg002, seg074
 extern signed int g_automap_selx;				//ds:0x7de5; seg074, seg099
 extern signed int g_automap_sely;				//ds:0x7de7; seg074, seg099
