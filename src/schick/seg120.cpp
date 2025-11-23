@@ -20,6 +20,8 @@
 #include <io.h>
 #else
 #include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #endif
 #endif
 
@@ -669,6 +671,110 @@ void prepare_dirs(void)
 	}
 
 	setdisk(drive_bak);
+#elif defined(_WIN32)
+	// TODO
+#else
+	signed int errorval = 0;
+	const char temp_dir[8] = "./TEMP/";
+	char path[20];
+
+	/* check if ./TEMP/ */
+	if (!chdir(temp_dir)) {
+
+		chdir("..");
+
+		errorval = 2;
+
+	} else {
+		if (mkdir(temp_dir, 0)) {
+			errorval = 1;
+		} else {
+			errorval = 2;
+		}
+	}
+
+	if (errorval == 1) {
+
+		/* ERROR, cant write => exit */
+		GUI_output(g_str_temp_dir_fail);
+		cleanup_game();
+		exit(0);
+	}
+
+
+	/* delete files without leading '.' in TEMP-dir */
+	DIR *dir = opendir(temp_dir);
+
+	if ((errorval == 2) && (dir != NULL)) {
+
+		const struct dirent *ent = readdir(dir);
+
+		while (ent != NULL) {
+
+			if ((ent->d_name[0] != '.') && (strlen(ent->d_name) <= 12)) {
+
+				strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+				strlcat(path, ent->d_name, 20);
+
+				unlink(path);
+			}
+
+			ent = readdir(dir);
+		}
+
+		closedir(dir);
+	}
+
+	/* copy CHR all files into TEMP */
+	dir = opendir(".");
+
+	if ((errorval == 2) && (dir != NULL)) {
+
+		const struct dirent *ent = readdir(dir);
+
+		while (ent != NULL) {
+
+			if (strstr(ent->d_name, ".CHR") && (strlen(ent->d_name) <= 12)) {
+
+				signed int handle = open(ent->d_name, O_RDONLY);
+
+				if (handle != -1) {
+
+					const off_t f_length = lseek(handle, 0, SEEK_END);
+					lseek(handle, 0, SEEK_SET);
+
+					if ((f_length == sizeof(struct_hero)) || (f_length == sizeof(struct_hero) - 16)) {
+
+						struct struct_hero hero;
+
+						if (f_length == sizeof(hero)) {
+							/* CD Hero */
+							read(handle, &hero, sizeof(struct_hero));
+						} else {
+							/* DISK Hero */
+							read(handle, (uint8_t*)&hero + 16, sizeof(struct_hero) - 16);
+							memcpy(&hero, (uint8_t*)&hero + 16, 16);
+						}
+						close(handle);
+
+						strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+						strlcat(path, ent->d_name, 20);
+
+						handle = open(path, (O_TRUNC | O_CREAT | O_WRONLY), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
+
+						if (handle != -1) {
+							write(handle, (void*)&hero, sizeof(struct_hero));
+							close(handle);
+						}
+					}
+				}
+			}
+
+			ent = readdir(dir);
+		}
+
+		closedir(dir);
+	}
 #endif
 }
 
