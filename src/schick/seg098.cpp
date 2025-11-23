@@ -407,9 +407,9 @@ signed int use_magic(struct struct_hero *hero)
 signed int can_use_spellclass(const struct struct_hero *hero, const signed int spellclass_id)
 {
 	signed int i;
-	const signed int first_spell = g_spellclasses_1[spellclass_id].first;
+	const signed int first_spell = g_spellclasses[spellclass_id].first;
 
-	for (i = 0; g_spellclasses_1[spellclass_id].length > i; i++) {
+	for (i = 0; g_spellclasses[spellclass_id].length > i; i++) {
 
 		if ((hero->spells[first_spell + i] >= -5) &&
 			((g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use == 1)) ||
@@ -498,9 +498,9 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 			retval = -2;
 		} else {
 
-			first_spell = g_spellclasses_1[answer1].first;
+			first_spell = g_spellclasses[answer1].first;
 
-			for (i = 0; i < g_spellclasses_1[answer1].length; i++) {
+			for (i = 0; i < g_spellclasses[answer1].length; i++) {
 
 				g_radio_name_list[i] = g_dtp2 + 50 * i;
 
@@ -532,7 +532,7 @@ signed int select_spell(struct struct_hero *hero, signed int show_vals)
 				}
 			}
 
-			retval = GUI_radio(get_ttx(217), g_spellclasses_1[answer1].length,
+			retval = GUI_radio(get_ttx(217), g_spellclasses[answer1].length,
 					g_radio_name_list[0], g_radio_name_list[1],
 					g_radio_name_list[2], g_radio_name_list[3],
 					g_radio_name_list[4], g_radio_name_list[5],

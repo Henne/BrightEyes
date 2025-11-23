@@ -1134,7 +1134,7 @@ struct spell_descr g_spell_descriptions[87] = {
 	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Sturmgebruell besaenftge dich */
 	{                   -1 ,         0,         0,         0,  0,  0, 0, 0, 0, 0 }  /* ... terminator entry */
 }; // ds:0x099d
-const struct spell_range g_spellclasses_1[8] = {
+const struct spell_range g_spellclasses[12] = {
 	{ SP_BEHERRSCHUNG_BRECHEN       ,  5 }, /* Antimagie */
 	{ SP_BAND_UND_FESSEL            , 12 }, /* Beherrschung */
 	{ SP_FUROR_BLUT_UND_SULPHURDAMPF,  6 }, /* Dämonologie */
@@ -1142,9 +1142,7 @@ const struct spell_range g_spellclasses_1[8] = {
 	{ SP_AXXELERATUS_BLITZGESCHWIND ,  6 }, /* Bewegung */
 	{ SP_BALSAM_SALABUNDE           ,  5 }, /* Heilung */
 	{ SP_ADLERAUG_UND_LUCHSENOHR    ,  7 }, /* Wahrnehung */
-	{ SP_CHAMAELIONI_MIMIKRY        ,  4 }  /* Visionen */
-}; // ds:0x0d03
-const struct spell_range g_spellclasses_2[4] = {
+	{ SP_CHAMAELIONI_MIMIKRY        ,  4 }, /* Visionen */
 	{ SP_BLITZ_DICH_FIND            ,  9 }, /* Kampf */
 	{ SP_HEXENBLICK                 ,  2 }, /* Verständigung */
 	{ SP_ADLER_WOLF_UND_HAMMERHAI   , 16 }, /* Verwandlung */
