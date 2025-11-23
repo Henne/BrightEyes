@@ -821,6 +821,7 @@ void game_over_screen(void)
 /* Borlandified and identical */
 void call_gen(void)
 {
+#if defined(__BORLANDC__)
 	uint32_t freemem;
 	signed int retval;
 
@@ -831,7 +832,6 @@ void call_gen(void)
 	/* free the global buffer */
 	free((HugePt)g_global_buffer_ptr);
 
-#if defined(__BORLANDC__)
 	freemem = farcoreleft();
 
 	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
@@ -839,7 +839,6 @@ void call_gen(void)
 			(g_game_mode == GAME_MODE_ADVANCED ? g_str_gen_a : g_str_gen_n),
 			g_str_gen_1, NULL);
 
-#endif
 	call_mouse();
 
 	if (retval == -1) {
@@ -894,4 +893,5 @@ void call_gen(void)
 		gs_month = 1;
 		gs_year = 15;
 	}
+#endif
 }
