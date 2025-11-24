@@ -1232,7 +1232,60 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 		return 0;
 	}
 #elif defined(_WIN32)
-	// TODO
+    const char temp_dir[] = "./TEMP/";
+    signed int count = 0;
+    _finddata_t dp;
+    char search[260];
+    sprintf(search, "%s*.chr", temp_dir);
+
+    intptr_t ff = _findfirst(search, &dp);
+
+    struct info_t
+    {
+        char name[16];
+        char alias[16];
+    };
+    STATIC_ASSERT(sizeof(info_t) == 32, needs_to_be_32_bytes);
+    info_t* infos = (info_t*)ptr;
+
+    if (ff != -1) {
+
+        int res = 0;
+
+        while (res != -1) {
+            char path[128];
+            sprintf(path, "%s%s", temp_dir, dp.name);
+
+            const signed int handle = open(path, O_BINARY | O_RDONLY);
+
+            if (handle != -1) {
+
+                struct struct_hero hero;
+
+                read(handle, &hero, sizeof(hero));
+                close(handle);
+
+                fprintf(stderr, "%s slot = %d temple_id = %d\n", hero.alias, hero.slot_pos, hero.temple_id);
+
+                if (((hero.temple_id == temple_id) && !hero.slot_pos) ||
+                    (!hero.slot_pos && (temple_id == -1)))
+                {
+                    strncpy(infos[count].name, hero.name, 16);
+                    strncpy(infos[count].alias, hero.alias, 16);
+                    count++;
+                }
+            }
+            else {
+                fprintf(stderr, "open failed on %s\n", dp.name);
+            }
+        }
+
+        res = _findnext(ff, &dp);
+    }
+
+    _findclose(ff);
+
+    return count;
 #else
 	const char temp_dir[8] = "./TEMP/";
 	DIR *dir = opendir(temp_dir);
