@@ -6,9 +6,9 @@
 #pragma pack(1)
 
 struct struct_attribs {
-	signed char normal;
-	signed char current;
-	signed char mod;
+	signed char normal; /* the base attribute value without any modifications */
+	signed char current; /* the current attribute value, arising from base value + modifications */
+	signed char mod; /* dummy: seems to be constant 0 and read only, essentially */
 };
 
 STATIC_ASSERT(sizeof(struct struct_attribs) == 3, struct_attribs_needs_to_be_3_bytes);
@@ -47,7 +47,7 @@ struct inventory {
 	signed char rs_lost; /* +7 */ /* so far only seen for body armour. (from 'Ignifaxius' spell or from traps in DNG03 (Spinnenhoehle)) */
 
 	signed char lighting_timer; /* +8 */ /* for burning torch/lantern: number of remaining time, unit: 15 minutes */
-	signed char poison_type; /* +9 */ /* for poisoned weapon: poison type according to enum POISON_TYPE (0-kein Gift, 1-Schurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemelgift, 7-Lotosgift, 8-Kukris, 9-Bannstaub, 10-Expurgicum, 11-Vomicum). */
+	signed char poison_id; /* +9 */ /* for poisoned weapon: poison ID according to enum POISON_ID_... (0-kein Gift, 1-Schurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemelgift, 7-Lotosgift, 8-Kukris, 9-Bannstaub, 10-Expurgicum, 11-Vomicum). */
 	signed char num_poison_charges; /* +10 */ /* for poisoned weapon: number of remaining poison charges (= successful attacks). */
 	signed char unused1; /* +11 */
 
@@ -97,6 +97,19 @@ struct hero_flags {
 	unsigned short gods_pissed	:1;
 	unsigned short transformed	:1;
 	unsigned short encouraged	:1;
+};
+
+struct hero_affliction {
+	/* used for diseases and poisons */
+	signed char status; /* {-1,0,1}. see enum DISEASE_STATUS and POISON_STATUS */
+	signed char time_counter; /* Number of days (for diseases) or of units of 5 minutes (for poisons)
+				   * since the status turned to -1 (diseased/poisoned) or to 1 (recover).
+				   * Most of the time, the counter is reset on a status change, but not always. */
+	/* the following three bytes log the negative effects which the disease/poison has already caused.
+	 * Exact meaning depends on the concrete disease/poison (encoded by enums DISEASE_ID_... and POISON_ID_...) */
+	signed char log_1;
+	signed char log_2;
+	signed char log_3;
 };
 
 struct struct_hero {
@@ -186,11 +199,11 @@ struct struct_hero {
 	struct hero_flags flags;
 	signed short unkn11;
 	/* Not figured out yet, but reserve space */
-	signed char sick[8][5]; /* 40 = 8 * 5 bytes */ /* 5 bytes for each of the following illnesses: 0-none (these 5 bytes appear to be unused!) 1-Wundfieber, 2-Dumpfschädel, 3-Blaue Keuche, 4-Paralyse, 5-Schlachtenfieber, 6-Frostschäden, 7-Tollwut */
-	signed char poison[10][5]; /* 50 = 10 * 5 bytes */ /* 5 bytes for each of the following poisonings: 0-none (these 5 bytes appear to be unused!) 1-Shurinknollengift, 2-Arax, 3-Angstgift, 4-Schlafgift, 5-Goldleim, 6-Krötenschemel, 7-Lotusgift, 8-Kukris, 9-Bannstaubvergiftung */
+	struct hero_affliction disease[8]; /* 40 = 8 * 5 bytes */ /* for the index, see enum DISEASE_ID. Note that no disease has disease_id == 0, so the first 5 bytes are unused. */
+	struct hero_affliction poison[10]; /* 50 = 10 * 5 bytes */ /* for the index, see enum POISON_ID. NOTE that no poison has poison_id == 0, so the first 5 bytes are unused. */
 
 	/* Offset 0x108 */
-	signed char talents[52]; /* see enum TA_* */ /* TODO: better name 'talents' (for DSA conformity)? */
+	signed char talents[52]; /* see enum TA_* */
 	/* The first entry does not belong to an actual spell talent and is apparently unused. */
 	signed char saved_talent_increases;
 	/* Offset 0x13d */

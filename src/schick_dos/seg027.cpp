@@ -529,23 +529,23 @@ void load_ani(const signed int ani_id)
 void load_scenario(signed int scenario_id)
 {
 	signed int handle;
-	signed int scenario_lst_buf;
+	signed int scenarios_num;
 
 	/* load SCENARIO.LST */
 	handle = load_archive_file(ARCHIVE_FILE_SCENARIO_LST);
 
 	/* read the first two bytes == scenario_id of scenarios */
-	read_archive_file(handle, (uint8_t*)&scenario_lst_buf, 2);
+	read_archive_file(handle, (uint8_t*)&scenarios_num, 2);
 
 	/* check if scenario_id is valid */
-	if ((scenario_id > scenario_lst_buf) || (scenario_id < 1))
+	if ((scenario_id > scenarios_num) || (scenario_id < 1))
 		scenario_id = 1;
 
 	/* seek to the scenario */
-	seek_archive_file(handle, 621L * (scenario_id - 1) + 2, 0);
+	seek_archive_file(handle, (int32_t)(scenario_id - 1) * sizeof(struct scenario) + 2, 0);
 
 	/* read scenario */
-	read_archive_file(handle, (uint8_t*)g_scenario_buf, 621);
+	read_archive_file(handle, (uint8_t*)g_scenario_buf, sizeof(struct scenario));
 
 	/* close archive */
 	close(handle);
@@ -594,7 +594,7 @@ signed int count_fight_enemies(signed int fight_id)
 	for (enemy_i = 0; enemy_i < 20; enemy_i++) {
 
 		/* no enemy and enemy does not appear in the first round */
-		if (fight_lst_buf->monsters[enemy_i].id	&& !fight_lst_buf->monsters[enemy_i].round_appear)
+		if (fight_lst_buf->enemies[enemy_i].id	&& !fight_lst_buf->enemies[enemy_i].round_appear)
 		{
 			/* increment counter */
 			enemy_count++;

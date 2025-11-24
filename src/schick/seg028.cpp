@@ -183,8 +183,12 @@ void prepare_town_area(void)
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
 			g_tex_floor[1] = load_town_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
-
+#if defined(__BORLANDC__)
 			memcpy(gs_palette_buildings, g_buffer11_ptr, 0xc0);
+#else
+			memcpy(gs_palette_buildings, g_buffer11_ptr, 3 * 0x20);
+			memcpy(gs_palette_sky, g_buffer11_ptr + 3 * 0x20, 3 * 0x20);
+#endif
 		} else {
 			g_tex_floor[1] = load_town_textures(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 		}

@@ -4,7 +4,7 @@
 
 # You need a Borland C++ compiler installed in $DRIVE_C
 
-DIR=${PWD}/TEMP
+DIR=${PWD}/TEMP_RE
 OBJDIR=${DIR}/OBJ
 BINDIR=${DIR}/BIN
 DISDIR=${DIR}/disasm

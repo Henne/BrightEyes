@@ -94,9 +94,9 @@ void do_healer(void)
 	signed long money;
 	signed long price;
 	const struct healer_descr *healer;
-	signed int poison;
+	signed int poison_id;
 	signed int answer;
-	signed int disease;
+	signed int disease_id;
 
 #if !defined(__BORLANDC__)
 	const uint8_t typi = gs_town_typeindex;
@@ -237,9 +237,9 @@ void do_healer(void)
 
 				if (is_hero_healable(hero)) {
 
-					disease = hero_is_diseased(hero);
+					disease_id = hero_is_diseased(hero);
 
-					if (!disease) {
+					if (!disease_id) {
 
 						/* Hero is not diseased */
 						sprintf(g_dtp2,	get_ttx(462), hero->alias);
@@ -247,7 +247,7 @@ void do_healer(void)
 
 					} else {
 						/* calculate price */
-						price = g_disease_prices[disease] * 10;
+						price = g_diseases_healer_price[disease_id] * 10;
 
 						price += healer->price_mod * price / 100;
 
@@ -255,7 +255,7 @@ void do_healer(void)
 							price *= 2;
 
 						/* prepare output */
-						sprintf(g_dtp2, get_ttx(465), hero->alias, get_ttx(disease + 0x193), price);
+						sprintf(g_dtp2, get_ttx(465), hero->alias, get_ttx(disease_id + 0x193), price);
 
 						if (GUI_bool(g_dtp2)) {
 
@@ -266,10 +266,10 @@ void do_healer(void)
 							} else {
 								timewarp(HOURS(1));
 
-								if (random_schick(100) <= (120 - 10 * healer->quality) + g_disease_delays[disease]) {
+								if (random_schick(100) <= (120 - 10 * healer->quality) + g_diseases_healer_bonus[disease_id]) {
 									/* heal the disease */
-									hero->sick[disease][0] = DISEASE_STATUS_RECOVER;
-									hero->sick[disease][1] = 0;
+									hero->disease[disease_id].status = DISEASE_STATUS_RECOVER;
+									hero->disease[disease_id].time_counter = 0;
 
 									/* prepare output */
 									sprintf(g_dtp2,	get_ttx(467), hero->alias);
@@ -299,16 +299,16 @@ void do_healer(void)
 
 				if (is_hero_healable(hero)) {
 
-					poison = hero_is_poisoned(hero);
+					poison_id = hero_is_poisoned(hero);
 
-					if (poison == 0) {
+					if (poison_id == POISON_ID_NONE) {
 
 						/* Hero is not poisoned */
 						sprintf(g_dtp2,	get_ttx(463), hero->alias);
 						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
-						price = g_poison_prices[poison] * 20;
+						price = g_poisons_healer_price[poison_id] * 20;
 						price += healer->price_mod * price / 100;
 						if (motivation == 2)
 							price *= 2;
@@ -327,11 +327,11 @@ void do_healer(void)
 							} else {
 								timewarp(HOURS(1));
 
-								if (random_schick(100) <= (120 - 5 * healer->quality) + g_poison_delays[poison]) {
+								if (random_schick(100) <= (120 - 5 * healer->quality) + g_poisons_healer_bonus[poison_id]) {
 
 									/* cure the poison */
-									hero->poison[poison][1] = 0;
-									hero->poison[poison][0] = POISON_STATUS_RECOVER;
+									hero->poison[poison_id].time_counter = 0;
+									hero->poison[poison_id].status = POISON_STATUS_RECOVER;
 
 									/* prepare output */
 									sprintf(g_dtp2,	get_ttx(467), hero->alias);

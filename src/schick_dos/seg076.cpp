@@ -805,32 +805,31 @@ void do_dungeon(void)
 	g_textbox_width = tw_bak;
 }
 
-struct fight_struct {
-	signed int pos;
-	signed int fight_id;
-	signed int flee_north;
-	signed int flee_east;
-	signed int flee_south;
-	signed int flee_west;
-	signed int ap;
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
+struct dungeon_fight {
+	int16_t pos;
+	int16_t fight_id;
+	int16_t flee_north;
+	int16_t flee_east;
+	int16_t flee_south;
+	int16_t flee_west;
+	int16_t ap;
 };
+#if !defined(__BORLANDC__)
+#pragma pack()
+#endif
+
+STATIC_ASSERT(sizeof(dungeon_fight) == 14, struct_dungeon_fight_needs_to_be_14_bytes);
 
 void DNG_fight(void)
 {
 	signed int target_pos;
-	struct fight_struct *fight_ptr;
-
-	fight_ptr = (struct fight_struct*)g_dungeon_fights_buf;
+	struct dungeon_fight *fight_ptr = (struct dungeon_fight*)g_dungeon_fights_buf;
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-#if !defined(__BORLANDC__)
-	if (sizeof(fight_struct) != 14)
-	{
-		D1_INFO("sizeof(fight_struct) = %d\n", sizeof(fight_struct));
-		exit(-1);
-	}
-#endif
 	do {
 		if (fight_ptr->pos == target_pos)
 		{

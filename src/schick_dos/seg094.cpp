@@ -420,7 +420,7 @@ void TM_func1(const signed int route_id, const signed int backwards)
 			wait_for_vsync();
 			set_palette(gs_travel_map_ptr + 64000 + 2, 0, 0x20);
 
-			g_pp20_index = 5;
+			g_pp20_index = ARCHIVE_FILE_KARTE_DAT;
 			gs_trv_i = 0;
 			gs_route_course_ptr2 = gs_route_course_start;
 

@@ -121,7 +121,12 @@ void diary_new_entry(void)
 	entry = &gs_diary_entries[gs_diary_entry_counter - 1];
 
 	/* avoid double entries for the same town */
-	if (gs_town_id != entry->town_id) {
+#if defined(__BORLANDC__)
+	if (gs_town_id != entry->town_id)
+#else
+	if ((gs_diary_entry_counter == 0) || (gs_town_id != entry->town_id))
+#endif
+	{
 
 		/* make a pointer to the current entry */
 		entry = &gs_diary_entries[gs_diary_entry_counter];

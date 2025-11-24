@@ -1508,8 +1508,13 @@ void town_fade_and_colors(void)
 		dst = ((uint8_t*)g_renderbuf_ptr) + 500;
 		pal_ptr = g_renderbuf_ptr;
 
+#if defined(__BORLANDC__)
 		memset(g_renderbuf_ptr, 0, 0x120);
 		memcpy(dst, gs_palette_floor, 0x120);
+#else
+		memset(g_renderbuf_ptr, 0, 3 * 0x20);
+		memcpy(dst, gs_palette_floor, 3 * 0x20);
+#endif
 
 		for (i = 0; i < 64; i += 2) {
 

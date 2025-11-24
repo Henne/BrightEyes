@@ -56,7 +56,11 @@ void THO_eisenhof(void)
 
 			GUI_input(get_tx2(52), 0);
 
+#if defined(__BORLANDC__)
 			sprintf(g_dtp2, get_tx(random_schick(26) + 55));
+#else
+			strcpy(g_dtp2, get_tx(random_schick(26) + 55));
+#endif
 			GUI_input(g_dtp2, 0);
 		} else {
 			GUI_input(get_tx2(53), 0);
@@ -465,7 +469,11 @@ void THO_ugdalf(void)
 
 		dramosch_says(get_tx2(37));
 
+#if defined(__BORLANDC__)
 		sprintf(g_dtp2 + 0x400, get_tx(random_schick(26) + 55));
+#else
+		strcpy(g_dtp2 + 0x400, get_tx(random_schick(26) + 55));
+#endif
 
 		dramosch_says((char*)(g_dtp2 + 0x400));
 

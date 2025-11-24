@@ -20,6 +20,8 @@
 #include <io.h>
 #else
 #include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #endif
 #endif
 
@@ -430,12 +432,12 @@ signed int init_memory(void)
 	freemem = farcoreleft();
 #else
 	/* DUMMY value for newer systems */
-	freemem = 357000;
+	freemem = 357000L;
 #endif
 
-	if (freemem > 334000) {
+	if (freemem > 334000L) {
 
-		if (freemem >= 357000) {
+		if (freemem >= 357000L) {
 			g_buffersize = 357000L;
 			g_large_buf = 1;
 		} else {
@@ -447,7 +449,7 @@ signed int init_memory(void)
 
 	} else {
 
-		printf(g_str_not_enough_mem, 329000 - freemem);
+		printf(g_str_not_enough_mem, 329000L - freemem);
 
 		wait_for_keypress();
 		error = 1;
@@ -574,7 +576,6 @@ void prepare_dirs(void)
 	struct ffblk blk;
 	char gamepath[40];
 
-	/* BC-TODO: only the adress differs, should be the stub adress */
 	harderr((int(*)(int, int, int, int))err_handler);
 
 	drive_bak = drive = getdisk();
@@ -670,6 +671,110 @@ void prepare_dirs(void)
 	}
 
 	setdisk(drive_bak);
+#elif defined(_WIN32)
+	// TODO
+#else
+	signed int errorval = 0;
+	const char temp_dir[8] = "./TEMP/";
+	char path[20];
+
+	/* check if ./TEMP/ */
+	if (!chdir(temp_dir)) {
+
+		chdir("..");
+
+		errorval = 2;
+
+	} else {
+		if (mkdir(temp_dir, 0)) {
+			errorval = 1;
+		} else {
+			errorval = 2;
+		}
+	}
+
+	if (errorval == 1) {
+
+		/* ERROR, cant write => exit */
+		GUI_output(g_str_temp_dir_fail);
+		cleanup_game();
+		exit(0);
+	}
+
+
+	/* delete files without leading '.' in TEMP-dir */
+	DIR *dir = opendir(temp_dir);
+
+	if ((errorval == 2) && (dir != NULL)) {
+
+		const struct dirent *ent = readdir(dir);
+
+		while (ent != NULL) {
+
+			if ((ent->d_name[0] != '.') && (strlen(ent->d_name) <= 12)) {
+
+				strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+				strlcat(path, ent->d_name, 20);
+
+				unlink(path);
+			}
+
+			ent = readdir(dir);
+		}
+
+		closedir(dir);
+	}
+
+	/* copy CHR all files into TEMP */
+	dir = opendir(".");
+
+	if ((errorval == 2) && (dir != NULL)) {
+
+		const struct dirent *ent = readdir(dir);
+
+		while (ent != NULL) {
+
+			if (strstr(ent->d_name, ".CHR") && (strlen(ent->d_name) <= 12)) {
+
+				signed int handle = open(ent->d_name, O_RDONLY);
+
+				if (handle != -1) {
+
+					const off_t f_length = lseek(handle, 0, SEEK_END);
+					lseek(handle, 0, SEEK_SET);
+
+					if ((f_length == sizeof(struct_hero)) || (f_length == sizeof(struct_hero) - 16)) {
+
+						struct struct_hero hero;
+
+						if (f_length == sizeof(hero)) {
+							/* CD Hero */
+							read(handle, &hero, sizeof(struct_hero));
+						} else {
+							/* DISK Hero */
+							read(handle, (uint8_t*)&hero + 16, sizeof(struct_hero) - 16);
+							memcpy(&hero, (uint8_t*)&hero + 16, 16);
+						}
+						close(handle);
+
+						strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+						strlcat(path, ent->d_name, 20);
+
+						handle = open(path, (O_TRUNC | O_CREAT | O_WRONLY), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
+
+						if (handle != -1) {
+							write(handle, (void*)&hero, sizeof(struct_hero));
+							close(handle);
+						}
+					}
+				}
+			}
+
+			ent = readdir(dir);
+		}
+
+		closedir(dir);
+	}
 #endif
 }
 
@@ -701,7 +806,7 @@ void cleanup_game(void)
 			}
 		}
 
-		/* free male and female figures */
+		/* free male and female hero fight figures */
 		for (i = 0; i < 43; i++) {
 
 			if (g_memslots_mfig[i].figure && g_memslots_mfig[i].ems_handle)
@@ -715,7 +820,7 @@ void cleanup_game(void)
 			}
 		}
 
-		/* free monster figures */
+		/* free enemy fight figures */
 		for (i = 0; i < 36; i++) {
 
 			if (g_memslots_mon[i].figure && g_memslots_mon[i].ems_handle)
@@ -822,6 +927,7 @@ void game_over_screen(void)
 /* Borlandified and identical */
 void call_gen(void)
 {
+#if defined(__BORLANDC__)
 	uint32_t freemem;
 	signed int retval;
 
@@ -832,7 +938,6 @@ void call_gen(void)
 	/* free the global buffer */
 	free((HugePt)g_global_buffer_ptr);
 
-#if defined(__BORLANDC__)
 	freemem = farcoreleft();
 
 	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
@@ -840,7 +945,6 @@ void call_gen(void)
 			(g_game_mode == GAME_MODE_ADVANCED ? g_str_gen_a : g_str_gen_n),
 			g_str_gen_1, NULL);
 
-#endif
 	call_mouse();
 
 	if (retval == -1) {
@@ -895,4 +999,5 @@ void call_gen(void)
 		gs_month = 1;
 		gs_year = 15;
 	}
+#endif
 }

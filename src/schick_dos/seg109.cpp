@@ -448,7 +448,7 @@ void TRV_ford_test(const signed int mod, const signed int time)
 
 				sprintf(g_dtp2, get_tx(37), hero->alias);
 
-				hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
+				hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
 				loose_random_item(hero, 1, get_ttx(506));
 			} else {
@@ -805,7 +805,7 @@ void TRV_barrier(const signed int text_start)
 								GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));
 						GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
-						hero_disease_test(hero, 2, 30);
+						hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 30);
 
 						loose_random_item(hero, 30, get_ttx(506));
 					}

@@ -626,7 +626,7 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 
 		if (g_travel_by_ship && (random_schick(100) < 10)) {
 
-			/* chance of motion sickness is 9% */
+			/* 9% chance of becoming sea-sick */
 
 			sprintf(g_dtp2,	get_ttx(796), hero->alias);
 			GUI_output(g_dtp2);
@@ -733,8 +733,8 @@ void GRP_hero_sleep(struct struct_hero *hero, const signed int quality)
 						}
 					}
 				} else {
-					/* hero brewing, HERO_STAFFSPELL_TIMER == 0, HERO_RECIPE_TIMER == 0, not dead, not deseased, not poisoned */
-					/* TODO: potential Original-Bug: why is 'not poisoned', 'not deseased' and 'HERO_STAFFSPELL_TIMER == 0' needed to complete the brewing process? */
+					/* hero brewing, HERO_STAFFSPELL_TIMER == 0, HERO_RECIPE_TIMER == 0, not dead, not diseased, not poisoned */
+					/* TODO: potential Original-Bug: why is 'not poisoned', 'not diseased' and 'HERO_STAFFSPELL_TIMER == 0' needed to complete the brewing process? */
 					do_alchemy(hero, hero->recipe_id, 0);
 				}
 			} else {

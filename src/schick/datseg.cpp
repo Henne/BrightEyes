@@ -1134,7 +1134,7 @@ struct spell_descr g_spell_descriptions[87] = {
 	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Sturmgebruell besaenftge dich */
 	{                   -1 ,         0,         0,         0,  0,  0, 0, 0, 0, 0 }  /* ... terminator entry */
 }; // ds:0x099d
-const struct spell_range g_spellclasses_1[8] = {
+const struct spell_range g_spellclasses[12] = {
 	{ SP_BEHERRSCHUNG_BRECHEN       ,  5 }, /* Antimagie */
 	{ SP_BAND_UND_FESSEL            , 12 }, /* Beherrschung */
 	{ SP_FUROR_BLUT_UND_SULPHURDAMPF,  6 }, /* Dämonologie */
@@ -1142,9 +1142,7 @@ const struct spell_range g_spellclasses_1[8] = {
 	{ SP_AXXELERATUS_BLITZGESCHWIND ,  6 }, /* Bewegung */
 	{ SP_BALSAM_SALABUNDE           ,  5 }, /* Heilung */
 	{ SP_ADLERAUG_UND_LUCHSENOHR    ,  7 }, /* Wahrnehung */
-	{ SP_CHAMAELIONI_MIMIKRY        ,  4 }  /* Visionen */
-}; // ds:0x0d03
-const struct spell_range g_spellclasses_2[4] = {
+	{ SP_CHAMAELIONI_MIMIKRY        ,  4 }, /* Visionen */
 	{ SP_BLITZ_DICH_FIND            ,  9 }, /* Kampf */
 	{ SP_HEXENBLICK                 ,  2 }, /* Verständigung */
 	{ SP_ADLER_WOLF_UND_HAMMERHAI   , 16 }, /* Verwandlung */
@@ -2193,10 +2191,50 @@ int16_t g_char_status_bars[7][4] = {
 	{ 0x0000, 0x0000, 0x0000, 0x0000 },
 	{ 0x0000, 0x0000, 0x0000, 0x0000 }
 }; // ds:0x2c18
-signed int g_disease_prices[8] = { 0x0000, 0x0006, 0x0004, 0x0009, 0x0008, 0x0008, 0x0007, 0x000a }; // ds:0x2c50
-signed int g_disease_delays[8] = { 0x0000, -0x000a, 0x0014, -0x0014, -0x001e, -0x0014, 0x0000, -0x001e }; // ds:0x2c60
-signed int g_poison_prices[10] = { 0x0000, 0x0006, 0x0005, 0x0004, 0x0005, 0x0005, 0x0004, 0x000a, 0x000c, 0x000f }; // ds:0x2c70
-signed int g_poison_delays[10] = { 0x0000, -0x001e, -0x0019, -0x0014, -0x0019, -0x0019, -0x0014, -0x0032, -0x003c, -0x004b }; // ds:0x2c84
+signed int g_diseases_healer_price[8] = {
+        0, // DISEASE_ID_NONE
+        6, // DISEASE_ID_WUNDFIEBER
+        4, // DISEASE_ID_DUMPFSCHAEDEL
+        9, // DISEASE_ID_BLAUE_KEUCHE
+        8, // DISEASE_ID_PARALYSE
+        8, // DISEASE_ID_SCHLACHTENFIEBER
+        7, // DISEASE_ID_FROSTSCHAEDEN
+       10  // DISEASE_ID_TOLLWUT
+}; // ds:0x2c50
+signed int g_diseases_healer_bonus[8] = {
+        0, // DISEASE_ID_NONE
+      -10, // DISEASE_ID_WUNDFIEBER
+       20, // DISEASE_ID_DUMPFSCHAEDEL
+      -20, // DISEASE_ID_BLAUE_KEUCHE
+      -30, // DISEASE_ID_PARALYSE
+      -20, // DISEASE_ID_SCHLACHTENFIEBER
+        0, // DISEASE_ID_FROSTSCHAEDEN
+      -30  // DISEASE_ID_TOLLWUT
+}; // ds:0x2c60
+signed int g_poisons_healer_price[10] = {
+        0, // POISON_ID_NONE
+        6, // POISON_ID_SHURINKNOLLENGIFT
+        5, // POISON_ID_ARAX
+        4, // POISON_ID_ANGSTGIFT
+        5, // POISON_ID_SCHLAFGIFT
+        5, // POISON_ID_GOLDLEIM
+        4, // POISON_ID_KROETENSCHEMEL
+       10, // POISON_ID_LOTUSGIFT
+       12, // POISON_ID_KUKRIS
+       15  // POISON_ID_BANNSTAUB
+}; // ds:0x2c70
+signed int g_poisons_healer_bonus[10] = {
+        0, // POISON_ID_NONE
+      -30, // POISON_ID_SHURINKNOLLENGIFT
+      -25, // POISON_ID_ARAX
+      -20, // POISON_ID_ANGSTGIFT
+      -25, // POISON_ID_SCHLAFGIFT
+      -25, // POISON_ID_GOLDLEIM
+      -20, // POISON_ID_KROETENSCHEMEL
+      -50, // POISON_ID_LOTUSGIFT
+      -60, // POISON_ID_KUKRIS
+      -75  // POISON_ID_BANNSTAUB
+}; // ds:0x2c84
 signed char  g_dialogbox_lock = 0; // ds:0x2c98
 signed int g_timers_disabled = 0; // ds:0x2c99
 signed int g_status_page_mode = 1; // ds:0x2c9b, one of 1,2,3,4,5

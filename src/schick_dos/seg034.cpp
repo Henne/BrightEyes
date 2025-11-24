@@ -410,7 +410,7 @@ void FIG_find_latecomer_position(const signed int x, const signed int y, signed 
 }
 
 /**
- * \brief   add monsters to the fight, which appear in later rounds
+ * \brief   add enemies to the fight, which appear in later rounds
  */
 void FIG_latecomers(void)
 {
@@ -418,7 +418,7 @@ void FIG_latecomers(void)
 	signed int x;
 	signed int y;
 	signed int l4;
-	struct enemy_sheet *p_enemy;		/* pointer to a monster sheet */
+	struct enemy_sheet *p_enemy;
 	struct struct_fighter *fighter;
 	struct struct_fighter *fighter_add;
 
@@ -429,7 +429,7 @@ void FIG_latecomers(void)
 
 		p_enemy = &g_enemy_sheets[i];
 
-		/* if monster has not appeared */
+		/* if enemy has not appeared yet */
 		if (p_enemy->round_appear > 0) {
 
 			/* decrement counter */
@@ -437,14 +437,14 @@ void FIG_latecomers(void)
 
 			if (!p_enemy->round_appear) {
 
-				/* let monster enter the fight */
+				/* let enemy enter the fight */
 
 				if (!p_enemy->flags.scared) {
 
 					if (is_in_byte_array(p_enemy->gfx_id, g_double_size_gfx_id_table)) {
 
-						FIG_find_latecomer_position(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
-								&x, &y,	g_current_fight->monsters[i].viewdir, 1);
+						FIG_find_latecomer_position(g_current_fight->enemies[i].x, g_current_fight->enemies[i].y,
+								&x, &y,	g_current_fight->enemies[i].viewdir, 1);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
@@ -455,8 +455,8 @@ void FIG_latecomers(void)
 
 						fighter_add = FIG_get_fighter((signed char)l4);
 
-						fighter_add->cbx = x - a.offset[g_current_fight->monsters[i].viewdir].x;
-						fighter_add->cby = y - a.offset[g_current_fight->monsters[i].viewdir].y;
+						fighter_add->cbx = x - a.offset[g_current_fight->enemies[i].viewdir].x;
+						fighter_add->cby = y - a.offset[g_current_fight->enemies[i].viewdir].y;
 
 						FIG_remove_from_list(p_enemy->fighter_id, 1);
 
@@ -466,8 +466,8 @@ void FIG_latecomers(void)
 
 						FIG_add_to_list((signed char)l4);
 					} else {
-						FIG_find_latecomer_position(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
-								&x, &y, g_current_fight->monsters[i].viewdir, 0);
+						FIG_find_latecomer_position(g_current_fight->enemies[i].x, g_current_fight->enemies[i].y,
+								&x, &y, g_current_fight->enemies[i].viewdir, 0);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
@@ -480,9 +480,9 @@ void FIG_latecomers(void)
 					}
 
 #if !defined(__BORLANDC__)
-					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, g_current_fight->monsters[i].viewdir);
+					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, g_current_fight->enemies[i].viewdir);
 #else
-					place_obj_on_cb(x, y, i + 10, (_AX = (int16_t)p_enemy->gfx_id), (_AX = (int16_t)g_current_fight->monsters[i].viewdir));
+					place_obj_on_cb(x, y, i + 10, (_AX = (int16_t)p_enemy->gfx_id), (_AX = (int16_t)g_current_fight->enemies[i].viewdir));
 #endif
 					FIG_make_visible(p_enemy->fighter_id);
 
@@ -802,17 +802,17 @@ void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed i
 #ifndef M302de_ORIGINAL_BUGFIX
 					} else if (object_id_bak >= 10) {
 
-						/* target square contains a monster (including the tail of a double-size monster) */
+						/* target square contains an enemy (including the tail of a double-size enemy) */
 						if (!g_enemy_sheets[(object_id_bak - 10 - (object_id_bak >= 30 ? 20 : 0))].flags.dead) /* check 'dead' flag */
 						{
-							/* monster is not dead */
+							/* enemy is not dead */
 							problem = 3;
 						}
 
 						/* Original-Bug:
-						 * If the target square contains a dead monster,
+						 * If the target square contains a dead enemy,
 						 * the checks for target_reachable and bp_cost below are not executed because of the "nested if" structure of the code.
-						 * This results in the incorrect message "ZIEL: 99 BP" if the target is pointing at a dead monster
+						 * This results in the incorrect message "ZIEL: 99 BP" if the target is pointing at a dead enemy
 						 * which is not reachable within the available BP or not reachable at all. */
 
 					} else if (object_id_bak > 0) {
@@ -836,7 +836,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed i
 						 * flatten the nested if branches. */
 
 					} else if ((object_id_bak >= 10) && !g_enemy_sheets[(object_id_bak - 10 - (object_id_bak >= 30 ? 20 : 0))].flags.dead) { /* check 'dead' flag */
-						/* target square contains a non-dead monster (including the tail of a double-size monster) */
+						/* target square contains a non-dead enemy (including the tail of a double-size enemy) */
 						problem = 3;
 
 					} else if ((object_id_bak > 0) && (object_id_bak < 10) && !get_hero(object_id_bak - 1)->flags.dead && !get_hero(object_id_bak - 1)->flags.unconscious && (object_id_bak != hero_pos + 1)) {
@@ -853,7 +853,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed i
 						problem = 2;
 
 					} else if ((sel_x > 23) || (sel_x < 0) || (sel_y > 23) || (sel_y < 0) || (get_cb_val(sel_x, sel_y) < 0)) {
-						if ((g_scenario_buf[0x14] > 3) || (sel_x >= 0))
+						if ((g_scenario_buf->bg_id > 3) || (sel_x >= 0))
 						{
 							problem = 1;
 						}

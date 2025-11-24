@@ -430,12 +430,12 @@ signed int init_memory(void)
 	freemem = farcoreleft();
 #else
 	/* DUMMY value for newer systems */
-	freemem = 357000;
+	freemem = 357000L;
 #endif
 
-	if (freemem > 334000) {
+	if (freemem > 334000L) {
 
-		if (freemem >= 357000) {
+		if (freemem >= 357000L) {
 			g_buffersize = 357000L;
 			g_large_buf = 1;
 		} else {
@@ -447,7 +447,7 @@ signed int init_memory(void)
 
 	} else {
 
-		printf(g_str_not_enough_mem, 329000 - freemem);
+		printf(g_str_not_enough_mem, 329000L - freemem);
 
 		wait_for_keypress();
 		error = 1;
@@ -574,7 +574,6 @@ void prepare_dirs(void)
 	struct ffblk blk;
 	char gamepath[40];
 
-	/* BC-TODO: only the adress differs, should be the stub adress */
 	harderr((int(*)(int, int, int, int))err_handler);
 
 	drive_bak = drive = getdisk();
@@ -701,7 +700,7 @@ void cleanup_game(void)
 			}
 		}
 
-		/* free male and female figures */
+		/* free male and female hero fight figures */
 		for (i = 0; i < 43; i++) {
 
 			if (g_memslots_mfig[i].figure && g_memslots_mfig[i].ems_handle)
@@ -715,7 +714,7 @@ void cleanup_game(void)
 			}
 		}
 
-		/* free monster figures */
+		/* free enemy fight figures */
 		for (i = 0; i < 36; i++) {
 
 			if (g_memslots_mon[i].figure && g_memslots_mon[i].ems_handle)
@@ -822,6 +821,7 @@ void game_over_screen(void)
 /* Borlandified and identical */
 void call_gen(void)
 {
+#if defined(__BORLANDC__)
 	uint32_t freemem;
 	signed int retval;
 
@@ -832,7 +832,6 @@ void call_gen(void)
 	/* free the global buffer */
 	free((HugePt)g_global_buffer_ptr);
 
-#if defined(__BORLANDC__)
 	freemem = farcoreleft();
 
 	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
@@ -840,7 +839,6 @@ void call_gen(void)
 			(g_game_mode == GAME_MODE_ADVANCED ? g_str_gen_a : g_str_gen_n),
 			g_str_gen_1, NULL);
 
-#endif
 	call_mouse();
 
 	if (retval == -1) {
@@ -895,4 +893,5 @@ void call_gen(void)
 		gs_month = 1;
 		gs_year = 15;
 	}
+#endif
 }

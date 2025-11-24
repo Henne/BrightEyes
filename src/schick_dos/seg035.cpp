@@ -23,33 +23,33 @@
 #include "seg105.h"
 
 /**
- * \brief   compress monsters
+ * \brief   compress enemies
  */
-void FIG_tidy_monsters(void)
+void FIG_tidy_enemies(void)
 {
 	signed int i;
 	signed int j;
-	signed int monsters = FIG_count_active_enemies();
+	signed int enemies_num = FIG_count_active_enemies();
 
 	i = 0;
 	while (i < 20) {
 
-		/* if the monster is not able to fight anymore ... */
+		/* if the enemy is not able to fight anymore ... */
 		if (g_enemy_sheets[i].mon_id &&
 			(g_enemy_sheets[i].flags.dead || g_enemy_sheets[i].flags.mushroom || g_enemy_sheets[i].flags.petrified ||
-			(g_current_fight->monsters[i].round_appear && (monsters == 0))))
+			(g_current_fight->enemies[i].round_appear && (enemies_num == 0))))
 		{
 			if (i == 19) {
 				/* just clear the last one */
-				memset(&g_current_fight->monsters[i], 0, sizeof(struct fight_monster));
+				memset(&g_current_fight->enemies[i], 0, sizeof(struct fight_enemy));
 				break;
 			} else {
-				/* move the next monsters one position to the front */
+				/* move the next enemies one position to the front */
 				for (j = i; j < 19; j++) {
 
-					g_current_fight->monsters[j] = g_current_fight->monsters[j + 1];
+					g_current_fight->enemies[j] = g_current_fight->enemies[j + 1];
 
-					memset(&g_current_fight->monsters[j + 1], 0, sizeof(struct fight_monster));
+					memset(&g_current_fight->enemies[j + 1], 0, sizeof(struct fight_enemy));
 
 					g_enemy_sheets[j] = g_enemy_sheets[j + 1];
 
@@ -65,7 +65,7 @@ void FIG_tidy_monsters(void)
 	}
 }
 
-void FIG_loot_monsters(void)
+void FIG_loot_enemies(void)
 {
 	signed int l_si = 0;
 	signed int loot_num;
@@ -193,14 +193,14 @@ void FIG_split_ap(void)
 
 	g_autofight = 0;
 
-	/* calculate ap from all monsters in that fight */
+	/* calculate ap for that fight */
 	for (i = 0; i < 20; i++) {
 
 		if (g_enemy_sheets[i].mon_id) {
 
 			if (gs_known_monsters[g_enemy_sheets[i].mon_id]) {
 
-				/* monster is already known */
+				/* monster type is already known */
 				known_ap = g_enemy_sheets[i].first_ap / 10;
 				ap += (known_ap == 0 ? 1 : known_ap);
 			} else {
@@ -210,7 +210,7 @@ void FIG_split_ap(void)
 		}
 	}
 
-	/* mark each type of monster from that fight in the game state */
+	/* mark each monster type from that fight in the game state */
 	for (i = 0; i < 20; i++) {
 
 		if (g_enemy_sheets[i].mon_id) {

@@ -13,7 +13,7 @@ signed int hero_is_diseased(const struct struct_hero*);
 /* 0x3e */
 signed int hero_is_poisoned(const struct struct_hero*);
 /* 0x43 */
-signed int menu_enter_delete(uint8_t*, const signed int, const signed int);
+signed int menu_enter_delete(char*, const signed int, const signed int);
 /* 0x48 */
 void update_atpa(struct struct_hero*);
 /* 0x4d */

@@ -275,7 +275,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 	/* poisoned */
 	if (inventory_p->item_id == ITEM_KUKRISDOLCH || inventory_p->item_id == ITEM_KUKRIS_MENGBILAR ||
 		inventory_p->flags.poison_expurgicum || inventory_p->flags.poison_vomicum ||
-		hero->inventory[pos].poison_type != POISON_TYPE_NONE) {
+		hero->inventory[pos].poison_id != POISON_ID_NONE) {
 
 		strcat(g_dtp2, get_ttx(548));
 	}

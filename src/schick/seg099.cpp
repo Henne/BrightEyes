@@ -631,7 +631,7 @@ void spell_skelettarius(void)
 		}
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:
-		 * If the dead target monster is lying on top of the body of another dead monster,
+		 * If the dead target enemy is lying on top of the body of another dead enemy,
 		 * after the 'Skelettarius' the other body is still displayed, but cannot be selected for 'Skelettarius'.
 		 *
 		 * Fix: store and restore the fighter.object_id value. */
@@ -958,15 +958,15 @@ void spell_klarum_purum(void)
 	}
 
 	/* AE-cost = poison cost */
-	g_spell_special_aecost = g_poison_prices[poison_id];
+	g_spell_special_aecost = g_poisons_healer_price[poison_id];
 
 	if (get_spelluser()->ae < g_spell_special_aecost) {
 		/* not enough AE */
 		g_spell_special_aecost = -2;
 	} else {
 		/* reset poison */
-		get_spelltarget()->poison[poison_id][1] = 0;
-		get_spelltarget()->poison[poison_id][0] = POISON_STATUS_RECOVER;
+		get_spelltarget()->poison[poison_id].time_counter = 0;
+		get_spelltarget()->poison[poison_id].status = POISON_STATUS_RECOVER;
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(22), get_spelltarget()->alias);

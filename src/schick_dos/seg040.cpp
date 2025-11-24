@@ -70,7 +70,7 @@ void FIG_chessboard_init(void)
 
 		for (cb_x = 0; cb_x < 24; cb_x++) {
 
-			signed int object_id = *(g_scenario_buf + cb_y * 25 + cb_x + 21);
+			signed int object_id = g_scenario_buf->board[cb_y * 25 + cb_x];
 
 			if (object_id < 0) {
 
@@ -103,7 +103,7 @@ void FIG_chessboard_init(void)
 
 	i = 0;
 
-	if (g_scenario_buf[20] <= 3) {
+	if (g_scenario_buf->bg_id <= 3) {
 
 		while (g_cb_rear_border[i].x != -1) {
 
@@ -235,15 +235,14 @@ void FIG_draw_scenario(void)
 
 		for (cb_y = 0; cb_y < 24; cb_y++) {
 
-			signed int object_id;
-			signed int width;
-			signed int height;
-			uint8_t *ptr;
-			struct nvf_extract_desc nvf;
+			signed int object_id = g_scenario_buf->board[cb_y * 25 + cb_x];
 
-			object_id = *(g_scenario_buf + cb_y * 25 + cb_x + 21);
 
 			if ((object_id >= 50) && (object_id < 108 || object_id > 111)) {
+
+				signed int width;
+				signed int height;
+				uint8_t *ptr;
 
 				object_id -= 50;
 
@@ -251,6 +250,8 @@ void FIG_draw_scenario(void)
 				if (g_figobj_gfxbuf_table[object_id]) {
 					ptr = g_figobj_gfxbuf_table[object_id];
 				} else {
+					struct nvf_extract_desc nvf;
+
 					ptr = g_fightobj_buf_seek_ptr;
 
 					nvf.dst = ptr;

@@ -172,7 +172,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	sheet->is_animal = monster->is_animal;
 	sheet->round_appear = round;
 
-	sheet->viewdir = g_current_fight->monsters[sheet_no].viewdir;
+	sheet->viewdir = g_current_fight->enemies[sheet_no].viewdir;
 
 	sheet->shots = monster->shots;
 	sheet->shot_dam = monster->shot_dam;
@@ -267,9 +267,9 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 }
 
 /**
- * \brief   load the sprites from monsters
+ * \brief   load the sprites from an enemy
  *
- * \param   enemy       pointer to a monster datasheet
+ * \param   enemy       pointer to an enemy datasheet
  * \param   x           x-coordinate on the chessboard
  * \param   y           y-coordinate on the chessboard
  */
@@ -377,9 +377,9 @@ void FIG_init_enemies(void)
 	/* Fill the tables with new values */
 	for (i = 0; i < 20; i++) {
 
-		if (g_current_fight->monsters[i].id) {
+		if (g_current_fight->enemies[i].id) {
 
-			fill_enemy_sheet(i, g_current_fight->monsters[i].id, g_current_fight->monsters[i].round_appear);
+			fill_enemy_sheet(i, g_current_fight->enemies[i].id, g_current_fight->enemies[i].round_appear);
 
 			g_nr_of_enemies++;
 		}
@@ -388,15 +388,15 @@ void FIG_init_enemies(void)
 	/* place the enemies on the chessboard */
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		const signed int x = g_current_fight->monsters[i].x;
-		const signed int y = g_current_fight->monsters[i].y;
+		const signed int x = g_current_fight->enemies[i].x;
+		const signed int y = g_current_fight->enemies[i].y;
 
 		/* place only the enemies from round 0 */
-		if (!g_current_fight->monsters[i].round_appear) {
+		if (!g_current_fight->enemies[i].round_appear) {
 #if !defined(__BORLANDC__)
-			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,	g_current_fight->monsters[i].viewdir);
+			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,	g_current_fight->enemies[i].viewdir);
 #else
-			place_obj_on_cb(x, y, i + 10, (_AL = g_enemy_sheets[i].gfx_id, _AX), g_current_fight->monsters[i].viewdir);
+			place_obj_on_cb(x, y, i + 10, (_AL = g_enemy_sheets[i].gfx_id, _AX), g_current_fight->enemies[i].viewdir);
 #endif
 		}
 

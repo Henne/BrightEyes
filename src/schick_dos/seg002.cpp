@@ -117,7 +117,7 @@ static signed int g_ail_music_driver_id;	// ds:0xbd23
 signed int g_pregame_state;			// ds:0xbd25
 signed char g_area_camp_area_type;		// ds:0xbd27, {0 = camp takes place in a dungeon, 1 = camp takes place in a town}
 struct fight *g_current_fight;		// ds:0xbd28
-signed char *g_scenario_buf;		// ds:0xbd2c
+struct scenario *g_scenario_buf;		// ds:0xbd2c
 unsigned char *g_fightobj_buf;		// ds:0xbd30
 struct struct_hero *g_heroes;		// ds:0xbd34
 signed char g_new_menu_icons[9];	// ds:0xbd38
@@ -4553,7 +4553,7 @@ void add_hero_ae(struct struct_hero* hero, const signed int ae)
  */
 void sub_hero_le(struct struct_hero *hero, const signed int le)
 {
-	signed int i;
+	signed int i; /* multi use: disease_id, poison_id, hero_pos */
 	signed int bak;
 	signed int old_le;
 	struct struct_fighter *fighter;
@@ -4605,16 +4605,16 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 				g_refresh_status_line = 1;
 			}
 
-			/* reset sickness */
+			/* reset disease */
 			for (i = 1; i <= 7; i++) {
-				hero->sick[i][0] = DISEASE_STATUS_HEALTHY;
-				hero->sick[i][1] = 0;
+				hero->disease[i].status = DISEASE_STATUS_HEALTHY;
+				hero->disease[i].time_counter = 0;
 			}
 
 			/* reset poison */
 			for (i = 1; i <= 9; i++) {
-				hero->poison[i][0] = POISON_STATUS_HEALTHY;
-				hero->poison[i][1] = 0;
+				hero->poison[i].status = POISON_STATUS_HEALTHY;
+				hero->poison[i].time_counter = 0;
 			}
 
 			/* FINAL FIGHT */

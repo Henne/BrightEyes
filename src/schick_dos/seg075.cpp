@@ -1335,9 +1335,15 @@ mark2:			   goto mark1;
 
 	if (dungeon_id == DUNGEON_ID_ZWINGFESTE) {
 
-		ptr = g_renderbuf_ptr + 0x1f4;
+		ptr = g_renderbuf_ptr + 500;
+
+#if defined(__BORLANDC__)
 		memset(g_renderbuf_ptr, 0, 0x120);
-		memcpy(g_renderbuf_ptr + 0x1f4, gs_palette_floor, 0x120);
+		memcpy(g_renderbuf_ptr + 500, gs_palette_floor, 0x120);
+#else
+		memset(g_renderbuf_ptr, 0, 3 * 0x20);
+		memcpy(g_renderbuf_ptr + 500, gs_palette_floor, 3 * 0x20);
+#endif
 
 		for (i = 0; i < 0x40; i++) {
 

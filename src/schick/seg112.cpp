@@ -297,7 +297,7 @@ void TRV_swimm(const signed int mod, const signed int percent)
 			if (test_talent(hero, TA_SCHWIMMEN, (signed char)mod) <= 0) {
 
 				/* test failed */
-				hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
+				hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
 				loose_random_item(hero, percent, get_ttx(506));
 

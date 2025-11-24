@@ -329,7 +329,7 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 
 					poison_id = hero_is_poisoned(patient);
 
-					if (poison_id == 0) {
+					if (poison_id == POISON_ID_NONE) {
 
 						/* patient is not poisoned */
 						sprintf(g_dtp2,	get_ttx(463), patient->alias);
@@ -349,13 +349,13 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 
 							timewarp(MINUTES(20));
 
-							if (test_talent(hero, TA_HEILEN_GIFT, g_poison_prices[poison_id] + handicap) > 0) {
+							if (test_talent(hero, TA_HEILEN_GIFT, g_poisons_healer_price[poison_id] + handicap) > 0) {
 								/* success */
 								sprintf(g_dtp2, get_ttx(690), hero->alias, patient->alias);
 								GUI_output(g_dtp2);
 
-								patient->poison[poison_id][1] = 0;
-								patient->poison[poison_id][0] = 1;
+								patient->poison[poison_id].time_counter = 0;
+								patient->poison[poison_id].status = POISON_STATUS_RECOVER;
 
 								sprintf(g_dtp2,	get_ttx(692), hero->alias, patient->alias);
 
@@ -481,13 +481,13 @@ signed int use_talent(const signed int hero_pos, signed char handicap, const sig
 						} else {
 
 							if (random_schick(20) <= 7) {
-								/* TODO Original-Bug? What if already sick or recovering? */
+								/* TODO Original-Bug? What if already diseased or recovering? */
 
-								/* 35% chance: infected with Wundfieber illness */
+								/* 35% chance: infected with Wundfieber disease */
 								sprintf(g_dtp2, get_ttx(699), hero->alias, patient->alias);
 
-								patient->sick[ILLNESS_TYPE_WUNDFIEBER][0] = DISEASE_STATUS_SICK;
-								patient->sick[ILLNESS_TYPE_WUNDFIEBER][1] = 0;
+								patient->disease[DISEASE_ID_WUNDFIEBER].status = DISEASE_STATUS_DISEASED;
+								patient->disease[DISEASE_ID_WUNDFIEBER].time_counter = 0;
 
 							} else {
 								/* 65% chance: just failed, no infection */

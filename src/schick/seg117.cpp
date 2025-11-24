@@ -784,7 +784,7 @@ void TLK_way_to_ruin(const signed int state)
 		sub_hero_le(gs_ruin_hero, random_schick(4) + 1);
 
 		/* Original-Bug: hero != RUIN_HERO */
-		hero_disease_test(gs_ruin_hero, 2, 25 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
+		hero_disease_test(gs_ruin_hero, DISEASE_ID_DUMPFSCHAEDEL, 25 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
 		loose_random_item(gs_ruin_hero, 10, get_ttx(506));
 

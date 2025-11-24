@@ -451,7 +451,7 @@ void spell_paralue(void)
  */
 void spell_salander(void)
 {
-	/* TODO: Original-Bug: Strange effect when cast on a two-squared monster */
+	/* TODO: Original-Bug: Strange effect when cast on a double-size enemy */
 	signed int ae_cost;
 
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];

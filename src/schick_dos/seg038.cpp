@@ -192,8 +192,8 @@ void FIG_find_path_to_target_backtrack(int8_t *dist_table_ptr, signed int target
 						((!double_size) ||
 						/* Original-Bug
 						 * A fight with double-size enemies may freeze in an infinite loop here.
-						 * The following check of the tail-condition (space for the tail part of a double-size monster) is executed for every single backtracking step.
-						 * However, in the function FIG_find_path_to_target this check is not applied for the last step to the target of a fleeing double-size monster.
+						 * The following check of the tail-condition (space for the tail part of a double-size enemy) is executed for every single backtracking step.
+						 * However, in the function FIG_find_path_to_target this check is not applied for the last step to the target of a fleeing double-size enemy.
 						 * Fix: don't apply the check in the last step, i.e. the first step of the backtracking.
 						 * (another, maybe better fix would be to add the missing tests of the tail-condition in FIG_find_path_to_target)
 						 * See discussion at https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=165957#pid165957
@@ -393,7 +393,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 					/* Original-Bug: The tail parts of dead double-size enemies have been forgotten,
 					 * meaning that they are not walkable.
 					 * The fact that they are invisible does not make things better.
-					 * However, in the target selection of the hero movement, tail parts of double-size monsters are allowed.
+					 * However, in the target selection of the hero movement, tail parts of double-size enemies are allowed.
 					 * The weird outcome is that dead tail-parts can be entered, but not crossed by heroes.
 					 * For enemies, squares with dead tail-parts are blocked completely. */
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -567,7 +567,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 									if (object_id < 0) { /* escape square */
 
 										if ((mode == 4) || (mode == 5)) { /* actor is fleeing */
-											/* it is not tested if there is space for the tail of a double-size monster! */
+											/* it is not tested if there is space for the tail of a double-size enemy! */
 											unused[nr_targets_reached] = 1;
 											target_reached_x[nr_targets_reached] = new_x;
 											target_reached_y[nr_targets_reached] = new_y;
@@ -616,7 +616,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 												if (nr_targets_reached == 10) {
 													break;
 												}
-											} /* if a double-size monster cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
+											} /* if a double-size enemy cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
 											     In this way, later the hero may be considered again as a target from a different direction. */
 										}
 									} else if (object_id < 50) {
@@ -645,7 +645,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 												if (nr_targets_reached == 10) {
 													break;
 												}
-											} /* if a double-size monster cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
+											} /* if a double-size enemy cannot attack, because there is no space for the tail, the entry in dist_table stays at -1.
 											     In this way, later the enemy may be considered again as a target from a different direction. */
 
 										}
@@ -654,10 +654,10 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 							}
 						} else {
 							if (((mode == 4) || (mode == 5)) && /* actor is fleeing */
-								((g_scenario_buf[0x14] > 3) ||
-									((g_scenario_buf[0x14] <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
+								((g_scenario_buf->bg_id > 3) ||
+									((g_scenario_buf->bg_id <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
 							{
-								/* it is not tested if there is space for the tail of a double-size monster! */
+								/* it is not tested if there is space for the tail of a double-size enemy! */
 								unused[nr_targets_reached] = 1;
 								target_reached_x[nr_targets_reached] = new_x;
 								target_reached_y[nr_targets_reached] = new_y;

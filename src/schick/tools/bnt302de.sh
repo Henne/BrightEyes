@@ -4,7 +4,7 @@
 # Returns	: <0 = error, otherwise the number off differences in code (0 = OK)
 
 FNAME="BLADEM.EXE"
-TMP=TEMP
+TMP=TEMP_RE
 
 mkdir -p ${TMP}
 

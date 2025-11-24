@@ -720,12 +720,12 @@ void status_show(const signed int index)
 
 			for (j = 0; j < 8; j++) {
 
-				i = g_spellclasses_1[j].first;
+				i = g_spellclasses[j].first;
 
-				while (g_spellclasses_1[j].first + g_spellclasses_1[j].length > i) {
+				while (g_spellclasses[j].first + g_spellclasses[j].length > i) {
 
 					status_show_spell(hero, i,
-						g_spellclasses_1[j].first,
+						g_spellclasses[j].first,
 						g_statuspage_spellclasses_1_xy[j].x_name,
 						g_statuspage_spellclasses_1_xy[j].x_val,
 						g_statuspage_spellclasses_1_xy[j].y);
@@ -753,13 +753,13 @@ void status_show(const signed int index)
 
 			for (j = 0; j < 4; j++) {
 
-				i = g_spellclasses_2[j].first;
+				i = g_spellclasses[j + 8].first;
 
-				while (g_spellclasses_2[j].first + g_spellclasses_2[j].length > i) {
+				while (g_spellclasses[j + 8].first + g_spellclasses[j + 8].length > i) {
 
 					status_show_spell(hero,
 						i,
-						g_spellclasses_2[j].first,
+						g_spellclasses[j + 8].first,
 						g_statuspage_spellclasses_2_xy[j].x_name,
 						g_statuspage_spellclasses_2_xy[j].x_val,
 						g_statuspage_spellclasses_2_xy[j].y);

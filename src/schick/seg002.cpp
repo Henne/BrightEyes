@@ -126,7 +126,7 @@ static signed int g_ail_music_driver_id;	// ds:0xbd23
 signed int g_pregame_state;			// ds:0xbd25
 signed char g_area_camp_area_type;		// ds:0xbd27, {0 = camp takes place in a dungeon, 1 = camp takes place in a town}
 struct fight *g_current_fight;		// ds:0xbd28
-signed char *g_scenario_buf;		// ds:0xbd2c
+struct scenario *g_scenario_buf;		// ds:0xbd2c
 unsigned char *g_fightobj_buf;		// ds:0xbd30
 struct struct_hero *g_heroes;		// ds:0xbd34
 signed char g_new_menu_icons[9];	// ds:0xbd38
@@ -257,7 +257,11 @@ signed int g_gather_herbs_mod; // ds:0xd32f
 signed int g_replenish_stocks_mod; // ds:0xd331
 struct fight_msg g_fig_msg_data[6]; // ds:0xd333
 struct enemy_sheet g_enemy_sheets[20]; // ds:0xd34b
-signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
+#if defined(__BORLANDC__)
+int8_t g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
+#else
+int8_t g_fig_move_pathdir[20]; // ds:0xd823 /* TODO: check if 20 steps are enough, WC: 2 * bp_max + 2 */
+#endif
 signed char g_fig_enemy_parry_action_used[30]; // ds:0xd82d, see FIG_ACTION_PARRY
 signed char g_fig_hero_parry_action_used[7]; // ds:0xd84b
 signed char *g_chessboard;// ds:0xd852
@@ -1212,7 +1216,7 @@ void copy_file_to_temp(const char* src_file, const char* fname)
 
 int32_t process_nvf_extraction(struct nvf_extract_desc *nvf)
 {
-	signed int i;
+	signed int i; /* multi use: disease_id, poison_id, hero_pos */
 	uint32_t offs;
 	signed int pics;
 	signed int width;
@@ -2450,7 +2454,12 @@ static void dawning(void)
 			wait_for_vsync();
 
 			set_palette(gs_palette_floor, 0, 0x20);
+#if defined(__BORLANDC__)
 			set_palette(gs_palette_buildings, 0x80, 0x40);
+#else
+			set_palette(gs_palette_buildings, 0x80, 0x20);
+			set_palette(gs_palette_sky, 0x80 + 0x20, 0x20);
+#endif
 		}
 	}
 }
@@ -2479,7 +2488,12 @@ static void nightfall(void)
 			wait_for_vsync();
 
 			set_palette(gs_palette_floor, 0, 0x20);
+#if defined(__BORLANDC__)
 			set_palette(gs_palette_buildings, 0x80, 0x40);
+#else
+			set_palette(gs_palette_buildings, 0x80, 0x20);
+			set_palette(gs_palette_sky, 0x80 + 0x20, 0x20);
+#endif
 		}
 	}
 }
@@ -4792,16 +4806,16 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 				g_refresh_status_line = 1;
 			}
 
-			/* reset sickness */
+			/* reset disease */
 			for (i = 1; i <= 7; i++) {
-				hero->sick[i][0] = DISEASE_STATUS_HEALTHY;
-				hero->sick[i][1] = 0;
+				hero->disease[i].status = DISEASE_STATUS_HEALTHY;
+				hero->disease[i].time_counter = 0;
 			}
 
 			/* reset poison */
 			for (i = 1; i <= 9; i++) {
-				hero->poison[i][0] = POISON_STATUS_HEALTHY;
-				hero->poison[i][1] = 0;
+				hero->poison[i].status = POISON_STATUS_HEALTHY;
+				hero->poison[i].time_counter = 0;
 			}
 
 			/* FINAL FIGHT */

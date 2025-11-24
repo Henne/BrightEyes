@@ -311,7 +311,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_SHURINKNOLLEKNOLLENGIFT: {
 			/* SHURIN-BULB POISON / SHURINKNOLLENGIFT */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SHURINKNOLLENGIFT;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_SHURINKNOLLENGIFT;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_SHURINKNOLLEKNOLLENGIFT), 1);
@@ -321,7 +321,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_ARAXGIFT: {
 			/* ARAX POISON / ARAXGIFT */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ARAX;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_ARAX;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_ARAXGIFT), 1);
@@ -331,7 +331,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_ANGSTGIFT: {
 			/* FEAR POISON / ANGSTGIFT */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_ANGSTGIFT;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_ANGSTGIFT;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_ANGSTGIFT), 1);
@@ -341,7 +341,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_SCHLAFGIFT: {
 			/* SLEPPING POISON / SCHALFGIFT */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_SCHLAFGIFT;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_SCHLAFGIFT;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_SCHLAFGIFT), 1);
@@ -351,7 +351,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_GOLDLEIM: {
 			/* GOLDEN GLUE / GOLDLEIM */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_GOLDLEIM;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_GOLDLEIM;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_GOLDLEIM), 1);
@@ -361,7 +361,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_LOTUSGIFT: {
 			/* LOTUS POISON / LOTUSGIFT */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_LOTUSGIFT;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_LOTUSGIFT;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_LOTUSGIFT), 1);
@@ -371,7 +371,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_KUKRIS: {
 			/* KUKRIS */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_KUKRIS;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_KUKRIS;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_KUKRIS), 1);
@@ -381,7 +381,7 @@ void item_apply_weapon_poison(void)
 		}
 		case ITEM_BANNSTAUB: {
 			/* BANE DUST / BANNSTAUB */
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_BANNSTAUB;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_BANNSTAUB;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_BANNSTAUB), 1);
@@ -390,7 +390,7 @@ void item_apply_weapon_poison(void)
 			break;
 		}
 		case ITEM_KROETENSCHEMELGIFT: {
-			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_type = POISON_TYPE_KROETENSCHEMEL;
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].poison_id = POISON_ID_KROETENSCHEMEL;
 			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].num_poison_charges = 5;
 
 			drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_KROETENSCHEMELGIFT), 1);

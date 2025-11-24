@@ -2,7 +2,7 @@
 
 # This script compiles all files maked as finalized and makes sure the have not changed
 
-DIR=${PWD}/TEMP
+DIR=${PWD}/TEMP_RE
 OBJDIR=${DIR}/OBJ
 BINDIR=${DIR}/BIN
 DISDIR=${DIR}/disasm

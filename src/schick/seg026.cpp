@@ -21,6 +21,7 @@
 #include <io.h>
 #else
 #include <unistd.h>
+#include <dirent.h>
 #endif
 #endif
 
@@ -1096,17 +1097,24 @@ signed int save_game_state(void)
  */
 signed int read_chr_temp(char *fname, const signed int hero_pos, const signed int group_id)
 {
-#if defined(__BORLANDC__)
 	signed int handle;
 	signed int hero_size = sizeof(struct struct_hero);
 	struct struct_hero *hero;
 
-	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, (char*)fname);
+#if defined(__BORLANDC__) || defined(_WIN32)
+	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, fname);
 
 	if ((handle = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
-		copy_file_to_temp((char*)fname, g_text_output_buf);
+		copy_file_to_temp(fname, g_text_output_buf);
 		handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 	}
+#else
+	if ((handle = open(g_text_output_buf, O_RDONLY)) == -1) {
+		copy_file_to_temp(fname, g_text_output_buf);
+		handle = open(g_text_output_buf, O_RDONLY);
+	}
+
+#endif
 
 	if (handle != -1) {
 
@@ -1148,7 +1156,7 @@ signed int read_chr_temp(char *fname, const signed int hero_pos, const signed in
 		GUI_output(get_ttx(4));
 		return 0;
 	}
-#endif
+
 	return 1;
 }
 
@@ -1181,7 +1189,7 @@ void write_chr_temp(const signed int hero_pos)
  * \param   temple_id   > 0 the id of the temple, -1 on delete mode
  * \return              # of CHR-files in TEMP-dir
  */
-signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
+signed int copy_chr_names(char *ptr, const signed int temple_id)
 {
 #if defined(__BORLANDC__)
 	signed int count = 0;
@@ -1210,8 +1218,8 @@ signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
 			if (((hero->temple_id == temple_id) && !hero->slot_pos) ||
 				(!hero->slot_pos && (temple_id == -1)))
 			{
-				strcpy((char*)ptr + 32 * count, hero->name);
-				strcpy((char*)ptr + 32 * count + 16, hero->alias);
+				strcpy(ptr + 32 * count, hero->name);
+				strcpy(ptr + 32 * count + 16, hero->alias);
 				count++;
 			}
 
@@ -1223,8 +1231,56 @@ signed int copy_chr_names(uint8_t *ptr, const signed int temple_id)
 	} else {
 		return 0;
 	}
+#elif defined(_WIN32)
+	// TODO
 #else
-	return 0;
+	const char temp_dir[8] = "./TEMP/";
+	DIR *dir = opendir(temp_dir);
+	signed int count = 0;
+
+	if (dir != NULL) {
+
+		const struct dirent *dp = readdir(dir);
+
+		while (dp != NULL) {
+
+			if ((strlen(dp->d_name) <= 12) && strstr(dp->d_name, ".CHR")) {
+
+				char path[20];
+
+				strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+				strlcat(path, dp->d_name, 20);
+
+				const signed int handle = open(path, O_RDONLY);
+
+				if (handle != -1) {
+
+					struct struct_hero hero;
+
+					read(handle, &hero, sizeof(struct struct_hero));
+					close(handle);
+
+					fprintf(stderr, "%s slot = %d temple_id = %d\n", hero.alias, hero.slot_pos, hero.temple_id);
+
+					if (((hero.temple_id == temple_id) && !hero.slot_pos) ||
+						(!hero.slot_pos && (temple_id == -1)))
+					{
+						strlcpy(ptr + 32 * count, hero.name, 16);
+						strlcpy(ptr + 32 * count + 16, hero.alias, 16);
+						count++;
+					}
+				} else {
+					fprintf(stderr, "open failed on %s\n", dp->d_name);
+				}
+			}
+
+			dp = readdir(dir);
+		}
+
+		closedir(dir);
+	}
+
+	return count;
 #endif
 }
 

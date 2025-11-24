@@ -301,7 +301,7 @@ void tevent_098(void)
 			/* Original-Bugfix: take the leader of the group */
 			hero = get_first_hero_available_in_group();
 #endif
-			hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
+			hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
 			loose_random_item(hero, 1, get_ttx(506));
 

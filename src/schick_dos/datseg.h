@@ -433,7 +433,10 @@ struct struct_fighter {
 	struct struct_fighter* prev;
 };
 
-struct fight_monster {
+#if !defined(__BORLANDC__)
+#pragma pack(1)
+#endif
+struct fight_enemy {
 	int8_t id;
 	int8_t x;
 	int8_t y;
@@ -448,25 +451,29 @@ struct fight_hero {
 	int8_t round_appear;
 };
 
-#if !defined(__BORLANDC__)
-#pragma pack(1)
-#endif
 struct fight {
 	char name[19];
 	int8_t intro_seen;
 	int16_t scenario_id;
-	struct fight_monster monsters[20];
+	struct fight_enemy enemies[20];
 	struct fight_hero heroes[7];
 	int16_t loot[30];
 	int16_t ducats;
 	int16_t silver;
 	int16_t heller;
 };
+
+struct scenario {
+	char name[20];
+	int8_t bg_id;
+	int8_t board[600];
+};
 #if !defined(__BORLANDC__)
 #pragma pack()
 #endif
 
 STATIC_ASSERT(sizeof(struct fight) == 216, struct_fight_needs_to_be_216_bytes);
+STATIC_ASSERT(sizeof(struct scenario) == 621, struct_scenario_needs_to_be_621_bytes);
 
 struct mon_spell_description {
 	int8_t ae_cost;
@@ -591,9 +598,9 @@ struct sea_route {
 };
 
 /* structure of the entries of ITEMS.DAT */
-#if defined(__BORLANDC__)
 struct item_flags {
 	/* item + 0x02 */
+#if defined(__BORLANDC__)
 	uint16_t armor		:1;	/* bit 0: armor */
 	uint16_t weapon		:1;	/* bit 1: weapon */
 	uint16_t usable	 	:1;	/* bit 2: usable item */
@@ -608,10 +615,7 @@ struct item_flags {
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
 						 * which are special anyway, don't have any flag set. */
-};
 #else
-struct item_flags {
-	/* item + 0x02 */
 	uint8_t armor		:1;	/* bit 0: armor */
 	uint8_t weapon		:1;	/* bit 1: weapon */
 	uint8_t usable	 	:1;	/* bit 2: usable item */
@@ -626,8 +630,8 @@ struct item_flags {
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
 						 * which are special anyway, don't have any flag set. */
-};
 #endif
+};
 
 STATIC_ASSERT(sizeof(struct item_flags) == 1, struct_item_flags_needs_to_be_1_bytes);
 
@@ -917,8 +921,8 @@ extern const signed int g_attack_items[3];				// ds:0x091f; seg033
 extern signed char g_monster_name_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
 extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
-extern const struct spell_range g_spellclasses_1[8];			// ds:0x0d03; seg046, seg098
-extern const struct spell_range g_spellclasses_2[4];			// ds:0x0d13; seg046
+extern const struct spell_range g_spellclasses[12];			// ds:0x0d03; seg046, seg098
+//extern const struct spell_range g_spellclasses_2[4];			// ds:0x0d13; seg046
 extern const signed int* g_magic_schools_table[9];
 extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
 extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
@@ -991,10 +995,10 @@ extern struct mouse_action g_action_table_status[30];	//ds:0x2ad8; seg046
 extern struct mouse_action g_action_table_merchant[2];	//ds:0x2c04; seg056, seg057, seg058
 extern int16_t g_char_status_bars[7][4];			//ds:0x2c18; seg004, seg029
 
-extern signed int g_disease_prices[8];		//ds:0x2c50; seg053, seg104
-extern signed int g_disease_delays[8];		//ds:0x2c60; seg053
-extern signed int g_poison_prices[10];		//ds:0x2c70; seg041, seg053, seg099, seg103
-extern signed int g_poison_delays[10];		//ds:0x2c84; seg053;
+extern signed int g_diseases_healer_price[8];		//ds:0x2c50; seg053, seg104
+extern signed int g_diseases_healer_bonus[8];		//ds:0x2c60; seg053
+extern signed int g_poisons_healer_price[10];		//ds:0x2c70; seg041, seg053, seg099, seg103
+extern signed int g_poisons_healer_bonus[10];		//ds:0x2c84; seg053;
 extern signed char  g_dialogbox_lock;			//ds:0x2c98; seg002, seg004, seg097, seg109
 extern signed int g_timers_disabled;			//ds:0x2c99; seg002-seg050
 extern signed int g_status_page_mode;			//ds:0x2c9b; seg046, seg048, seg050
@@ -2003,7 +2007,7 @@ extern unsigned char g_steptarget_front;	// ds:0xbd4d; seg003, seg066, seg076, s
 extern signed char g_new_menu_icons[9];		// ds:0xbd38; seg002, seg026, seg066, seg076, seg099
 extern struct struct_hero *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;		// ds:0xbd30; seg032, seg040
-extern signed char *g_scenario_buf;		// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
+extern struct scenario *g_scenario_buf;		// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
 extern struct fight *g_current_fight;		// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern signed char g_area_camp_area_type;	// ds:0xbd27; seg052, seg066, seg076
 extern signed int g_pregame_state;		// ds:0xbd25; seg002, seg097

@@ -72,9 +72,9 @@ void spell_exposami(void)
 
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		if (g_current_fight->monsters[i].round_appear) {
+		if (g_current_fight->enemies[i].round_appear) {
 
-			id = g_current_fight->monsters[i].id;
+			id = g_current_fight->enemies[i].id;
 
 			changed = 0;
 
@@ -416,7 +416,11 @@ void spell_eisenrost(void)
 		/* check if target is an animal */
 		if (g_spelltarget_e->is_animal)
 		{
+#if defined(__BORLANDC__)
 			sprintf(g_dtp2, get_tx(89));
+#else
+			strcpy(g_dtp2, get_tx(89));
+#endif
 		} else {
 			/* check if weapon is already broken */
 			if (g_spelltarget_e->weapon_broken) {

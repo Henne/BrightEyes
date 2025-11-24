@@ -35,8 +35,8 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	signed int bad_elixir_item_id;
 	signed int le_diff;
 
-	signed int disease;
-	signed int poison;
+	signed int disease_id;
+	signed int poison_id;
 	signed int tw_bak;
 	signed int consumer_idx;
 
@@ -198,13 +198,13 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 				case ITEM_BELMART_BLATT: {
 					/* Belmart */
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison <= 5) {
+					if (poison_id != POISON_ID_NONE && poison_id <= 5) {
 
 						/* cure the first poison */
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id].time_counter = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					/* TODO: unknown for 24h */
@@ -217,12 +217,12 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 				case ITEM_MENCHALKAKTUS: {
 					/* Menchalkaktus */
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison <= 10) {
+					if (poison_id != POISON_ID_NONE && poison_id <= 10) {
 						/* cure the first poison */
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+						consumer->poison[poison_id].time_counter = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					tmp = get_free_mod_slot();
@@ -382,19 +382,19 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* diseases, not all */
-					disease = hero_is_diseased(consumer);
+					disease_id = hero_is_diseased(consumer);
 
-					if (disease == 2 || disease == 3) {
-						consumer->sick[disease][0] = DISEASE_STATUS_RECOVER;
-						consumer->sick[disease][1] = 0;
+					if (disease_id == DISEASE_ID_DUMPFSCHAEDEL || disease_id == DISEASE_ID_BLAUE_KEUCHE) {
+						consumer->disease[disease_id].status = DISEASE_STATUS_RECOVER;
+						consumer->disease[disease_id].time_counter = 0;
 					}
 
 					/* poison */
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison < 7) {
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+					if (poison_id != POISON_ID_NONE && poison_id < 7) {
+						consumer->poison[poison_id].time_counter = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glasbottle */
@@ -495,11 +495,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case ITEM_GEGENGIFT: {
 					/* Gegengift */
 
-					poison = hero_is_poisoned(consumer);
+					poison_id = hero_is_poisoned(consumer);
 
-					if (poison != 0 && poison < 5) {
-						consumer->poison[poison][1] = 0;
-						consumer->poison[poison][0] = POISON_STATUS_RECOVER;
+					if (poison_id != POISON_ID_NONE && poison_id < 5) {
+						consumer->poison[poison_id].time_counter = 0;
+						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
 					/* give owner a glassbottle */
@@ -511,10 +511,10 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				case ITEM_ANTIKRANKHEITSELIXIER: {
 					/* Antikrankheitselexier */
 
-					disease = hero_is_diseased(consumer);
+					disease_id = hero_is_diseased(consumer);
 
-					consumer->sick[disease][0] = DISEASE_STATUS_RECOVER;
-					consumer->sick[disease][1] = 0;
+					consumer->disease[disease_id].status = DISEASE_STATUS_RECOVER;
+					consumer->disease[disease_id].time_counter = 0;
 
 					/* give owner a glassbottle */
 					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);

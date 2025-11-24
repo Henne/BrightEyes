@@ -129,7 +129,7 @@ void tevent_016(void)
 
 							loose_random_item(hero, 10, get_ttx(506));
 
-							hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
+							hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 						}
 					}
 				}

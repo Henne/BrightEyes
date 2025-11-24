@@ -13,7 +13,7 @@ signed int read_chr_temp(char*, const signed int, const signed int);
 //0x3e
 void write_chr_temp(const signed int);
 /* 0x43 */
-signed int copy_chr_names(uint8_t*, const signed int);
+signed int copy_chr_names(char*, const signed int);
 //0x48
 void load_in_head(const signed int);
 //0x4d

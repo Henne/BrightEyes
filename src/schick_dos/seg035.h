@@ -1,8 +1,8 @@
 /* 0x20 */
-void FIG_tidy_monsters(void);
+void FIG_tidy_enemies(void);
 
 /* 0x25 */
-void FIG_loot_monsters(void);
+void FIG_loot_enemies(void);
 
 /* 0x2a */
 void FIG_split_ap(void);
