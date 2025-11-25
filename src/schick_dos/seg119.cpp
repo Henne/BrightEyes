@@ -394,24 +394,30 @@ void disease_effect(void)
 			if (disease_ptr->status == DISEASE_STATUS_RECOVER) {
 
 				/* Original-Bug 45: It is impossible to fully recover from Schlachtenfieber.
-				 * There is no to get the status back to DISEASE_STATUS_HEALTHY. */
+				 * There is no way to get the status back to DISEASE_STATUS_HEALTHY. */
+#ifndef M302de_ORIGINAL_BUGFIX
 				if (disease_ptr->log_3) {
 
 					disease_ptr->log_3 = 0;
-#ifndef M302de_ORIGINAL_BUGFIX
 					disease_ptr->time_counter = 0;
-#endif
 					hero->attrib[ATTRIB_KK].current += 5;
 				}
-#ifdef M302de_ORIGINAL_BUGFIX
-				else {
-					disease_ptr->time_counter = 0;
-					disease_ptr->status = DISEASE_STATUS_HEALTHY;
-				}
-#endif
 
 				sprintf(g_dtp2, get_ttx(582), hero->alias);
+				// DIE GELBLICHE FÄRBUNG VON %sS LIPPEN GEHT ZURÜCK.
 				GUI_output(g_dtp2);
+#else
+				if (disease_ptr->log_3) {
+					disease_ptr->log_3 = 0;
+					hero->attrib[ATTRIB_KK].current += 5;
+				} else {
+					disease_ptr->time_counter = 0;
+					disease_ptr->status = DISEASE_STATUS_HEALTHY;
+					sprintf(g_dtp2, get_ttx(582), hero->alias);
+					// DIE GELBLICHE FÄRBUNG VON %sS LIPPEN GEHT ZURÜCK.
+					GUI_output(g_dtp2);
+				}
+#endif
 			}
 
 			disease_ptr = &hero->disease[DISEASE_ID_FROSTSCHAEDEN];
