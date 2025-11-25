@@ -161,10 +161,30 @@ void hero_gets_diseased(struct struct_hero *hero, const signed int disease_id)
 		return;
 #endif
 
+	/* Original-Bug 46: If the hero is already has the disease,
+	 * the log bytes containing the info about the suffered negative effects are erased.
+	 * Hence, these negative effects will be permanent. */
+#ifdef M302de_ORIGINAL_BUGFIX
+	if ((hero->disease[disease_id].status != DISEASE_STATUS_HEALTHY)
+		/* A hero cannot get the same disease twice. In the recovering phase, the hero is immune. */
+		|| (disease_id == DISEASE_ID_DUMPFSCHAEDEL && (hero->disease[DISEASE_ID_BLAUE_KEUCHE].status != DISEASE_STATUS_HEALTHY)))
+		/* Blaue Keuche is a worsening of Dumpfschädel.
+		 * So if a hero already suffers from Blaue Keuche (or is recovering from it),
+		 * he is immune to the (weaker) disease Dumpfschädel, too. */
+	{
+		return;
+	}
+#endif
+
 	if (!hero->flags.dead) {
-		/* TODO: Original-Bug: If the hero is already diseased, the status bytes are erased,
-		 * containing the log about the suffered negative effects.
-		 * Hence, these cannot be cured later. */
+#ifdef M302de_ORIGINAL_BUGFIX
+		if (disease_id == DISEASE_ID_BLAUE_KEUCHE) {
+		/* Blaue Keuche is a worsening of Dumpfschädel.
+		 * Hence, the effect of Dumpfschädel is removed. (But blaue Keuche will be worse...) */
+			hero->disease[DISEASE_ID_DUMPFSCHAEDEL].time_counter = 0;
+			hero->disease[DISEASE_ID_DUMPFSCHAEDEL].status = DISEASE_STATUS_RECOVER;
+		}
+#endif
 
 #if !defined(__BORLANDC__)
 		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease_id + 0x193));
