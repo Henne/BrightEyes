@@ -804,7 +804,7 @@ struct armor_descr g_armors_table[25] = {
 	{ 0, 0 }, /*  7 <- ITEM_SCHNEESCHUHE */
 	{ 3, 3 }, /*  8 <- ITEM_LEDERHARNISCH */
 	{ 5, 4 }, /*  9 <- ITEM_SCHUPPENRUESTUNG */
-	{ 0, 0 }, /* 10 <- ITEM_ROBE__GREEN_1, ITEM_ROBE__GREEN_1_2 */
+	{ 0, 0 }, /* 10 <- ITEM_ROBE__GREEN_1, ITEM_ROBE__GREEN_2 */
 	{ 0, 0 }, /* 11 <- ITEM_ROBE__RED */
 	{ 2, 1 }, /* 12 <- ITEM_TOPFHELM */
 	{ 1, 0 }, /* 13 <- ITEM_LEDERHELM */
