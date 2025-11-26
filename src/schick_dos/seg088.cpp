@@ -33,7 +33,7 @@ struct struct_chest g_dng14_specialchests[9] = {
 }; // ds:0x9990
 
 
-void DNG14_dive(const signed int diver_pos, const signed char mod, const signed int dest_x)
+void DNG14_dive(const signed int diver_pos, const signed char handicap, const signed int dest_x)
 {
 	signed int i;
 	struct struct_hero *hero;
@@ -44,7 +44,7 @@ void DNG14_dive(const signed int diver_pos, const signed char mod, const signed 
 		if ((i != diver_pos) && (hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 
-			if (test_talent(hero, TA_SCHWIMMEN, mod) <= 0) {
+			if (test_talent(hero, TA_SCHWIMMEN, handicap) <= 0) {
 
 				/* swimming failed */
 				sprintf(g_dtp2,	get_tx(42), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 0));

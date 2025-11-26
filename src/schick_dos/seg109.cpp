@@ -386,7 +386,7 @@ signed int TRV_follow_trail_question(void)
 	return answer - 1;
 }
 
-signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int mod)
+signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int handicap)
 {
 	signed int answer;
 	signed int done = 0;
@@ -408,7 +408,7 @@ signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int m
 		if (answer == 1) {
 
 			done = 1;
-			TRV_ford_test(mod, time);
+			TRV_ford_test(handicap, time);
 
 		} else {
 			answer = GUI_bool(get_tx(39));
@@ -578,7 +578,7 @@ void tevent_004(void)
 }
 
 void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
-		const signed int mod1, const signed int mod2, const signed int mod3,
+		const signed int handicap_sneak_1, const signed int handicap_sneak_2, const signed int handicap_ranged_weapon,
 		const signed int ap_all1, const signed int ap_hero, const signed int ap_all2,
 		const signed int ap_all3, const signed int foods1, const signed int foods2)
 {
@@ -600,7 +600,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 	for (i = failed_sneaks_num = 0; i <= 6; i++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-			!hero->flags.dead && (test_talent(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
+			!hero->flags.dead && (test_talent(hero, TA_SCHLEICHEN, (signed char)handicap_sneak_1) <= 0))
 		{
 			failed_sneaks_num++;
 		}
@@ -619,7 +619,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 
 		hero = get_hero(i);
 
-		if (test_talent(hero, TA_SCHLEICHEN, (signed char)mod2) <= 0) {
+		if (test_talent(hero, TA_SCHLEICHEN, (signed char)handicap_sneak_2) <= 0) {
 
 			do {
 				answer = GUI_radio(get_tx2(city_index + 1), 2, get_tx2(city_index + 7), get_tx2(city_index + 8));
@@ -631,11 +631,11 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 			sprintf(g_dtp2,	get_tx2(city_index + 3), hero->alias);
 			GUI_input(g_dtp2, failed_sneaks_num = 0);
 
-			if ((i = test_talent(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
+			if ((i = test_talent(hero, TA_SCHUSSWAFFEN, (signed char)handicap_ranged_weapon)) > 0) {
 				failed_sneaks_num++;
 			}
 
-			if ((l4 = test_talent(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
+			if ((l4 = test_talent(hero, TA_SCHUSSWAFFEN, (signed char)handicap_ranged_weapon)) > 0) {
 				failed_sneaks_num++;
 			}
 
