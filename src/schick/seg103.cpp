@@ -675,39 +675,39 @@ signed int GUI_use_talent2(const signed int handicap, char *msg)
 /**
  * \brief   does a bargain throw
  *
- * \param   hero        the hero who bargain
- * \param   items       the number of different goods
- * \param   price       the total price
- * \param   percent     how many percent the player wants to get
- * \param   mod_init    initial value for the modificator
- * \return              the result of the throw. A value greater than zero
- *	means success, below or zero means failed.
+ * \param   hero             the hero who bargain
+ * \param   items            the number of different goods
+ * \param   price            the total price
+ * \param   percent          how many percent the player wants to get
+ * \param   handicap_init    initial value for the modificator
+ * \return                   the result of the throw. A value greater than zero
+ *                           means success, less or equal zero means failed.
  */
 signed int bargain(const struct struct_hero *hero, const signed int items, const int32_t price,
-	const signed int percent, const signed char mod_init)
+	const signed int percent, const signed char handicap_init)
 {
 
-	signed char mod = mod_init;
+	signed char handicap = handicap_init;
 
 	/* NPC Harika gets a bonus on bargain */
 	if (get_hero(6)->npc_id == NPC_HARIKA) {
-		mod -= 2;
+		handicap -= 2;
 	}
 
 	/* the more different items you buy, the easier the bargain */
-	mod += (items == 1) ? 2 :
+	handicap += (items == 1) ? 2 :
 			((items == 2) ?  1 :
 			((items < 5)  ?  0 :
 			((items < 9)  ? -1 : -2)));
 
 	/* the higher the price, the easier the bargain */
-	mod += (price < 100) ? 2 :
+	handicap += (price < 100) ? 2 :
 			((price < 500)  ?  1 :
 			((price < 1000) ?  0 :
 			((price < 2000) ? -1 : -2 )));
 
 	/* the lower the percent, the easier the bargain */
-	mod += percent / 5 + 1;
+	handicap += percent / 5 + 1;
 
-	return test_talent(hero, TA_FEILSCHEN, mod);
+	return test_talent(hero, TA_FEILSCHEN, handicap);
 }

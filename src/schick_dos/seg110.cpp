@@ -79,11 +79,11 @@ void tevent_011(void)
  *
  *          In seg112.cpp exists a similiar function called TRV_swim() for that purpose.
  *
- * \param   mod         modificator for the swim test
+ * \param   handicap    handicap for the swim test
  * \param   percent     probability to loose an item
  */
 /* should be static */
-void TRV_swim2(const signed int mod, const signed int percent)
+void TRV_swim2(const signed int handicap, const signed int percent)
 {
 	signed int i;
 	struct struct_hero *hero;
@@ -94,7 +94,7 @@ void TRV_swim2(const signed int mod, const signed int percent)
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 			/* a swim test */
-			if (test_talent(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
+			if (test_talent(hero, TA_SCHWIMMEN, (signed char)handicap) > 0)
 			{
 				/* talent test succeeded */
 				sprintf(g_dtp2, get_tx2(31), hero->alias);
