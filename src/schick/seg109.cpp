@@ -386,7 +386,7 @@ signed int TRV_follow_trail_question(void)
 	return answer - 1;
 }
 
-signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int mod)
+signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int handicap)
 {
 	signed int answer;
 	signed int done = 0;
@@ -408,7 +408,7 @@ signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int m
 		if (answer == 1) {
 
 			done = 1;
-			TRV_ford_test(mod, time);
+			TRV_ford_test(handicap, time);
 
 		} else {
 			answer = GUI_bool(get_tx(39));
@@ -427,7 +427,7 @@ signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int m
 	return 1;
 }
 
-void TRV_ford_test(const signed int mod, const signed int time)
+void TRV_ford_test(const signed int handicap, const signed int time)
 {
 	signed int i;
 	struct struct_hero *hero = get_hero(0);
@@ -436,11 +436,14 @@ void TRV_ford_test(const signed int mod, const signed int time)
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
-			/* Original-Bugfix: tests fail if their result is lower or equal than zero */
-#ifdef M302de_ORIGINAL_BUGFIX
-			if (test_attrib(hero, ATTRIB_GE, mod) < 0)
+			/* Original-Bug 47: When crossing a ford, the result of the GE test is mis-evaluated, resulting in these success rates:
+			 * For (GE - handicap) <= 19: 95% success.
+			 * For (GE - handicap) >= 20: 100% success.
+			 * The intended behaviour probably was a usual GE-test with the given handicap. */
+#ifndef M302de_ORIGINAL_BUGFIX
+			if (test_attrib(hero, ATTRIB_GE, handicap) == 0)
 #else
-			if (test_attrib(hero, ATTRIB_GE, mod) == 0)
+			if (test_attrib(hero, ATTRIB_GE, handicap) < 0)
 #endif
 			{
 				/* test failed */

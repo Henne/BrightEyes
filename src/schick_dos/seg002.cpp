@@ -4830,7 +4830,7 @@ static signed int compare_name(const char *name)
  * \brief   make an attribute test
  *
  * \param   hero        pointer to the hero
- * \param   attrib      number of the attribute
+ * \param   attrib_ID   ID of the attribute
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  * \return              the result of the test. > 0: success; <= 0: failure; -99: critical failure
  */
@@ -4865,20 +4865,20 @@ signed int test_attrib(const struct struct_hero* hero, const signed int attrib_i
 /**
  * \brief   make three attribute tests
  *
- * \param   hero        pointer to the hero
- * \param   attrib1     attribute 1
- * \param   attrib2     attribute 2
- * \param   attrib3     attribute 3
- * \param   handicap    may be positive or negative. The higher the value, the harder the test.
- * \return              a test is successful if the return value is greater than zero
- *                      in detail:
- *                      unlucky fail: -99
- *                      lucky success: +99 (only if M302de_FEATURE_MOD is activated)
- *                      ordinary fail: any value between -98 and 0.
- *                      ordinary success: any value between 1 and 98.
+ * \param   hero          pointer to the hero
+ * \param   attrib_id_1   ID of attribute 1
+ * \param   attrib_id_2   ID of attribute 2
+ * \param   attrib_id_3   ID of attribute 3
+ * \param   handicap      may be positive or negative. The higher the value, the harder the test.
+ * \return                a test is successful if the return value is greater than zero
+ *                        in detail:
+ *                        unlucky fail: -99
+ *                        lucky success: +99 (only if M302de_FEATURE_MOD is activated)
+ *                        ordinary fail: any value between -98 and 0.
+ *                        ordinary success: any value between 1 and 98.
  */
 
-signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
+signed int test_attrib3(const struct struct_hero* hero, const signed int attrib_id_1, const signed int attrib_id_2, const signed int attrib_id_3, signed char handicap)
 {
 #ifndef M302de_FEATURE_MOD
 	/* Feature mod 6: The implementation of the talent test logic differs from the original DSA2/3 rules.
@@ -4900,7 +4900,7 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 	rolls_sum = 0;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" (%s/%s/%s) %+d -> ", names_attrib[attrib1], names_attrib[attrib2], names_attrib[attrib3], handicap);
+	D1_INFO(" (%s/%s/%s) %+d -> ", names_attrib[attrib_id_1], names_attrib[attrib_id_2], names_attrib[attrib_id_3], handicap);
 #endif
 
 	for (i = 0; i < 3; i++) {
@@ -4925,9 +4925,9 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 
 	rolls_sum += handicap;
 
-	tmp = hero->attrib[attrib1].current + hero->attrib[attrib1].mod +
-		hero->attrib[attrib2].current + hero->attrib[attrib2].mod +
-		hero->attrib[attrib3].current + hero->attrib[attrib3].mod;
+	tmp = hero->attrib[attrib_id_1].current + hero->attrib[attrib_id_1].mod +
+		hero->attrib[attrib_id_2].current + hero->attrib[attrib_id_2].mod +
+		hero->attrib[attrib_id_3].current + hero->attrib[attrib_id_3].mod;
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" -> %s mit %d\n", (tmp - rolls_sum + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - rolls_sum + 1));
@@ -4945,15 +4945,15 @@ signed int test_attrib3(const struct struct_hero* hero, const signed int attrib1
 	signed int fail = 0;
 	signed char attrib [3];
 
-	attrib[0] = hero->attrib[attrib1].current + hero->attrib[attrib1].mod;
-	attrib[1] = hero->attrib[attrib2].current + hero->attrib[attrib2].mod;
-	attrib[2] = hero->attrib[attrib3].current + hero->attrib[attrib3].mod;
+	attrib[0] = hero->attrib[attrib_id_1].current + hero->attrib[attrib_id_1].mod;
+	attrib[1] = hero->attrib[attrib_id_2].current + hero->attrib[attrib_id_2].mod;
+	attrib[2] = hero->attrib[attrib_id_3].current + hero->attrib[attrib_id_3].mod;
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
-			names_attrib[attrib1], attrib[0],
-			names_attrib[attrib2], attrib[1],
-			names_attrib[attrib3], attrib[2]
+			names_attrib[attrib_id_1], attrib[0],
+			names_attrib[attrib_id_2], attrib[1],
+			names_attrib[attrib_id_3], attrib[2]
 	);
 #endif
 
