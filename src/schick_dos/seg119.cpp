@@ -247,14 +247,24 @@ void disease_effect(void)
 			/* BLUE COUGH / BLAUE KEUCHE: get better */
 			if (disease_ptr->status == DISEASE_STATUS_RECOVER) {
 
+				/* Original-Bug 48:
+				 * When recovering from blaue Keuche, the message
+				 * "Das Leben wird wohl nie wieder sein, wie es war!"
+				 * ("Life will probably never be the same!")
+				 * is shown whether or not a permanent attribute loss actually occurred.
+				 */
+#ifndef M302de_ORIGINAL_BUGFIX
 				/* regeneration complete */
 				sprintf(g_dtp2, get_ttx(576), hero->alias);
+				// %s HAT DIE KRANKHEIT ÜBERWUNDEN, DOCH DAS LEBEN WIRD WOHL NIE WIEDER SEIN, WIE ES WAR!
 				GUI_output(g_dtp2);
+#endif
 
 				disease_ptr->time_counter = 0;
 				disease_ptr->status = DISEASE_STATUS_HEALTHY;
 
 				if (disease_ptr->log_3 != 0) {
+					/* permanent attribute loss happened. */
 
 					disease_ptr->log_3 = 0;
 
@@ -266,7 +276,21 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_GE].current += disease_ptr->log_2;
 					hero->attrib[ATTRIB_KK].current += disease_ptr->log_1;
 					disease_ptr->log_1 = disease_ptr->log_2 = 0;
+#ifdef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 48, see above */
+					sprintf(g_dtp2, get_ttx(576), hero->alias);
+					// %s HAT DIE KRANKHEIT ÜBERWUNDEN, DOCH DAS LEBEN WIRD WOHL NIE WIEDER SEIN, WIE ES WAR!
+				} else {
+					/* permanent attribute loss did not happen. */
+
+					sprintf(g_dtp2, "%s HAT DIE KRANKHEIT ""\x9a""BERWUNDEN.", hero->alias);
+#endif
+
 				}
+
+#ifdef M302de_ORIGINAL_BUGFIX
+				GUI_output(g_dtp2);
+#endif
 			}
 
 
