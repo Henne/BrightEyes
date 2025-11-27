@@ -207,12 +207,12 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
-					/* TODO: unknown for 24h */
+					/* dummy: consumer->herbs is write-only */
 					tmp = get_free_mod_slot();
 					set_mod_slot(tmp, DAYS(1), (uint8_t*)(&consumer->herbs), 1, (signed char)consumer_idx);
 
-					/* prepare output */
 					sprintf(g_dtp2, get_ttx(503), consumer->alias);
+					// %s IST JETZT DEUTLICH WIDERSTANDSFÄHIGER GEGENÜBER KRANKHEITEN UND GIFTEN.
 					break;
 				}
 				case ITEM_MENCHALKAKTUS: {
@@ -225,11 +225,12 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						consumer->poison[poison_id].status = POISON_STATUS_RECOVER;
 					}
 
+					/* dummy: consumer->herbs is write-only */
 					tmp = get_free_mod_slot();
 					set_mod_slot(tmp, DAYS(1), (uint8_t*)(&consumer->herbs), 2, (signed char)consumer_idx);
 
-					/* prepare output */
 					sprintf(g_dtp2, get_ttx(503), consumer->alias);
+					// %s IST JETZT DEUTLICH WIDERSTANDSFÄHIGER GEGENÜBER KRANKHEITEN UND GIFTEN.
 					break;
 				}
 				case ITEM_ATMONBLUETE: {
