@@ -7,7 +7,7 @@ void prepare_dirs(void);
 /* 0x2f */
 void cleanup_game(void);
 /* 0x34 */
-void rabies(struct struct_hero*, signed int);
+void rabies_frenzy(struct struct_hero*, signed int);
 /* 0x39 */
 /* should be static */
 void init_global_buffer(void);
