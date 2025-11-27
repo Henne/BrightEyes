@@ -561,7 +561,7 @@ void disease_effect(void)
 
 					if (disease_ptr->time_counter > 2) {
 
-						rabies(hero, i);
+						rabies_frenzy(hero, i);
 
 					} else {
 

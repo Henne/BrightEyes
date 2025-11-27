@@ -159,36 +159,53 @@ static HugePt g_global_buffer_ptr;	// ds:0xe5e0, points to the start of the glob
 signed char g_large_buf; 		// ds:0xe5e4
 
 /* Borlandified and identical */
-void rabies(struct struct_hero* hero, signed int hero_pos)
+void rabies_frenzy(struct struct_hero* hero_rabies, signed int hero_pos_rabies)
 {
 	signed int answer;
-	signed int i;
+	signed int hero_pos;
 	signed int done = 0;
 	signed int tw_bak;
-	struct struct_hero *hero2;
+	struct struct_hero *hero_2;
 	signed int group_bak;
 	signed int group_id;
+
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* useless, see blow. */
 	signed char sex_bak;
+#endif
 
 	group_bak = gs_active_group_id;
-	sex_bak = hero->sex;
-	group_id = hero->group_id;
 
-	/* TODO : Sex = 50, what means 50 ? */
-	hero->sex = 50;
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* useless, see below. */
+
+	sex_bak = hero_rabies->sex;
+#endif
+
+	group_id = hero_rabies->group_id;
+
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Not a bug, but useless. hero_pos_rabies and hero_rabies are recomputed. */
+
+	/* Apparently, sex value 50 is used as a marker. */
+	hero_rabies->sex = 50;
+#endif
 
 	/* switch to the group of the hero */
 	while (gs_active_group_id != group_id) {
 		GRP_switch_to_next(1);
 	}
 
-	hero_pos = 0;
-	while (get_hero(hero_pos)->sex != 50) {
-		hero_pos++;
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* see above. */
+	hero_pos_rabies = 0;
+	while (get_hero(hero_pos_rabies)->sex != 50) {
+		hero_pos_rabies++;
 	}
 
-	hero = get_hero(hero_pos);
-	hero->sex = sex_bak;
+	hero_rabies = get_hero(hero_pos_rabies);
+	hero_rabies->sex = sex_bak;
+#endif
 
 	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_status_line();
@@ -198,84 +215,91 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf(g_dtp2, get_ttx(741), hero->alias, GUI_get_ptr(hero->sex, 2), GUI_get_ptr(hero->sex, 2));
+			sprintf(g_dtp2, get_ttx(741), hero_rabies->alias, GUI_get_ptr(hero_rabies->sex, 2), GUI_get_ptr(hero_rabies->sex, 2));
+			// "hero_rabies is affected by a rabies frenzy. What to do? ..."
 
-			sprintf(g_dtp2 + 500, get_ttx(742), hero->alias);
+			sprintf(g_dtp2 + 500, get_ttx(742), hero_rabies->alias);
+			// "knock him out"
 
-			sprintf(g_dtp2 + 600, get_ttx(743), hero->alias);
+			sprintf(g_dtp2 + 600, get_ttx(743), hero_rabies->alias);
+			// "calm him down"
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 6;
 
-			answer = GUI_dialogbox(hero->pic, hero->alias,
+			answer = GUI_dialogbox(hero_rabies->pic, hero_rabies->alias,
 						g_dtp2, 3, g_dtp2 + 500, g_dtp2 + 600, get_ttx(744));
+			// "cast spell Sanftmut"
 
 			g_textbox_width = tw_bak;
 
 			if (answer == 1) {
-				/* knock the infected hero out */
+				/* knock the rabies hero out */
 
-				sub_hero_le(hero, hero->le / 2);
+				sub_hero_le(hero_rabies, hero_rabies->le / 2);
 
-				sprintf(g_dtp2, get_ttx(745), hero->alias);
+				sprintf(g_dtp2, get_ttx(745), hero_rabies->alias);
+				// "you did it"
 
 				GUI_output(g_dtp2);
 
-				g_hero_sel_exclude = hero_pos;
+				g_hero_sel_exclude = hero_pos_rabies;
 
+				// now heal him
 				answer = select_hero_ok(get_ttx(395));
 
 				if (answer != -1) {
 
-					talent_cure_disease(get_hero(answer), hero, 10, 1);
+					talent_cure_disease(get_hero(answer), hero_rabies, 10, 1);
 				}
 
 				done = 1;
 
 			} else if (answer == 2) {
-				/* calm the hero */
+				/* calm the rabies hero down */
 
-				for (i = 0; i <= 6; i++) {
+				for (hero_pos = 0; hero_pos <= 6; hero_pos++) {
 
 					/* one of the other heroes must pass CH+0 */
 					/* Original-Bug: other hero should be in same group, not dead, etc. */
-					if ((i != hero_pos) && (test_attrib(get_hero(i), ATTRIB_CH, 0) != 0))
+					if ((hero_pos != hero_pos_rabies) && (test_attrib(get_hero(hero_pos), ATTRIB_CH, 0) != 0))
 						/* Original-Bug: should be 'test_attrib(get_hero(i), ATTRIB_CH, 0) > 0'
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
-						sprintf(g_dtp2, get_ttx(746), hero->alias);
+						sprintf(g_dtp2, get_ttx(746), hero_rabies->alias);
 
 						GUI_output(g_dtp2);
+						// "success. rabies hero is calmed down!"
 
-						g_hero_sel_exclude = hero_pos;
+						g_hero_sel_exclude = hero_pos_rabies;
 
 						answer = select_hero_ok(get_ttx(395));
 
 						if (answer != -1) {
-							talent_cure_disease(get_hero(answer), hero, 10, 1);
+							talent_cure_disease(get_hero(answer), hero_rabies, 10, 1);
 						}
 						break;
 					}
 				}
 			} else if (answer == 3) {
-				/* cast a spell */
+				/* cast Sanftmut spell */
 
-				g_hero_sel_exclude = hero_pos;
+				g_hero_sel_exclude = hero_pos_rabies;
 
 				answer = select_hero_ok(get_ttx(213));
 
 				if (answer != -1) {
 
-					hero2 = get_hero(answer);
+					hero_2 = get_hero(answer);
 
-					/* check that hero2 can cast the spell Sanftmut */
+					/* check that hero_2 can cast the spell Sanftmut */
 					if
 #ifndef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 49: Missing check if the hero is sufficiently skilled in the Sanftmut spell. */
-						(hero2->typus >= HERO_TYPE_HEXE)
+						(hero_2->typus >= HERO_TYPE_HEXE)
 #else
-						(hero2->typus >= HERO_TYPE_HEXE && hero2->spells[SP_SANFTMUT] >= -5)
+						(hero_2->typus >= HERO_TYPE_HEXE && hero_2->spells[SP_SANFTMUT] >= -5)
 #endif
 					{
 
@@ -283,40 +307,42 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 						if
 #ifndef M302de_ORIGINAL_BUGFIX
 							/* Original-Bug 49: For a Magier with 4th staffspell, 13 AE are enough. */
-							(hero2->ae >= 15)
+							(hero_2->ae >= 15)
 #else
-							(hero2->ae >= 15 || (hero2->staff_level >= 4 && hero2->ae >= 13))
+							(hero_2->ae >= 15 || (hero_2->staff_level >= 4 && hero_2->ae >= 13))
 #endif
 						{
 
 							/* spell must succeed */
-							if (test_spell(hero2, SP_SANFTMUT, 0)) {
+							if (test_spell(hero_2, SP_SANFTMUT, 0)) {
 
 								done = 1;
 
-								sub_ae_splash(hero2, 15);
+								sub_ae_splash(hero_2, 15);
 
-								sprintf(g_dtp2, get_ttx(746), hero->alias);
+								sprintf(g_dtp2, get_ttx(746), hero_rabies->alias);
+								// "success!"
 
 								GUI_output(g_dtp2);
 
-								g_hero_sel_exclude = hero_pos;
+								g_hero_sel_exclude = hero_pos_rabies;
 
 								answer = select_hero_ok(get_ttx(395));
 
-								if ((answer != -1) && (answer != hero_pos)) {
-									talent_cure_disease(get_hero(answer), hero, 10, 1);
+								if ((answer != -1) && (answer != hero_pos_rabies)) {
+									talent_cure_disease(get_hero(answer), hero_rabies, 10, 1);
 								}
 							}
 						} else {
-							sprintf(g_dtp2, get_ttx(607), hero2->alias);
+							sprintf(g_dtp2, get_ttx(607), hero_2->alias);
+							// "doesn't have enough AE"
 							GUI_output(g_dtp2);
 						}
 					}
 #ifdef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 49: Missing message if the selected hero cannot cast the spell. */
 					else {
-						sprintf(g_dtp2, "%s BEHERRSCHT DIESEN ZAUBER GAR NICHT.", hero2->alias);
+						sprintf(g_dtp2, "%s BEHERRSCHT DIESEN ZAUBER GAR NICHT.", hero_2->alias);
 						GUI_output(g_dtp2);
 					}
 #endif
@@ -324,8 +350,9 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 			}
 		} else {
 
-			/* Hero has rabies / Tollwut */
-			sprintf(g_dtp2, get_ttx(747), hero->alias);
+			sprintf(g_dtp2, get_ttx(747), hero_rabies->alias);
+			// "rabies hero about to go berserk..."
+
 			GUI_output(g_dtp2);
 
 			done = 1;
@@ -333,18 +360,19 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 
 		if (done == 0) {
 			/* every other hero in the group looses 1W6+2 LE */
-			hero2 = get_hero(0);
-			for (i = 0; i <= 6; i++, hero2++) {
+			hero_2 = get_hero(0);
+			for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero_2++) {
 
-				if ((i != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&
-					(hero2->group_id == gs_active_group_id) && !hero2->flags.dead)
+				if ((hero_pos != hero_pos_rabies) && (hero_2->typus != HERO_TYPE_NONE) &&
+					(hero_2->group_id == gs_active_group_id) && !hero_2->flags.dead)
 				{
-					sub_hero_le(hero2, dice_roll(1, 6, 2));
+					sub_hero_le(hero_2, dice_roll(1, 6, 2));
 				}
 			}
 
-			/* hero has berserker fury / Berserkerwut */
-			sprintf(g_dtp2, get_ttx(791), hero->alias);
+			sprintf(g_dtp2, get_ttx(791), hero_rabies->alias);
+			// "goes berserk on the group!"
+
 			GUI_output(g_dtp2);
 
 			done = 1;
