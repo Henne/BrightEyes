@@ -35,7 +35,7 @@
  */
 void disease_effect(void)
 {
-	signed int i;
+	signed int hero_pos;
 	signed int j; /* multi use: hero_pos, disease_id */
 	struct struct_hero *hero;
 	struct struct_hero *hero2;
@@ -43,11 +43,11 @@ void disease_effect(void)
 
 	g_check_disease = 0;
 
-	for (i = 0; i <= 6; i++) {
+	for (hero_pos = 0; hero_pos <= 6; hero_pos++) {
 
-		if ((get_hero(i)->typus != HERO_TYPE_NONE) && !get_hero(i)->flags.dead) {
+		if ((get_hero(hero_pos)->typus != HERO_TYPE_NONE) && !get_hero(hero_pos)->flags.dead) {
 
-			hero = get_hero(i);
+			hero = get_hero(hero_pos);
 
 			disease_ptr = &hero->disease[DISEASE_ID_WUNDFIEBER];
 
@@ -451,6 +451,7 @@ void disease_effect(void)
 
 				j = 0;
 
+				/* ((number of days * 5) + 1)% chance for *permanent* GE-1 */
 				if (random_schick(100) <= disease_ptr->time_counter * 5) {
 
 					hero->attrib[ATTRIB_GE].current--;
@@ -493,7 +494,7 @@ void disease_effect(void)
 					if
 #ifndef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 44:
-					 * Recover from Paralyse does not work, GE and KK are not recovered.
+					 * Recover from Paralyse and Frostschaeden does not work, GE and KK are not recovered.
 					 * In the two if statements below, the condition is reversed. */
 					(!disease_ptr->log_1)
 #else
@@ -559,7 +560,7 @@ void disease_effect(void)
 
 					if (disease_ptr->time_counter > 2) {
 
-						rabies(hero, i);
+						rabies_frenzy(hero, hero_pos);
 
 					} else {
 
