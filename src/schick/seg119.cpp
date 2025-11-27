@@ -35,7 +35,7 @@
  */
 void disease_effect(void)
 {
-	signed int i;
+	signed int hero_pos;
 	signed int j; /* multi use: hero_pos, disease_id */
 	struct struct_hero *hero;
 	struct struct_hero *hero2;
@@ -43,11 +43,11 @@ void disease_effect(void)
 
 	g_check_disease = 0;
 
-	for (i = 0; i <= 6; i++) {
+	for (hero_pos = 0; hero_pos <= 6; hero_pos++) {
 
-		if ((get_hero(i)->typus != HERO_TYPE_NONE) && !get_hero(i)->flags.dead) {
+		if ((get_hero(hero_pos)->typus != HERO_TYPE_NONE) && !get_hero(hero_pos)->flags.dead) {
 
-			hero = get_hero(i);
+			hero = get_hero(hero_pos);
 
 			disease_ptr = &hero->disease[DISEASE_ID_WUNDFIEBER];
 
@@ -560,7 +560,7 @@ void disease_effect(void)
 
 					if (disease_ptr->time_counter > 2) {
 
-						rabies_frenzy(hero, i);
+						rabies_frenzy(hero, hero_pos);
 
 					} else {
 
