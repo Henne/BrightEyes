@@ -18,7 +18,7 @@
 
 void poison_effect(void)
 {
-	signed int i;
+	signed int hero_pos;
 	volatile signed int j; /* multi use: weapon_type, hero_pos, poison_id */
 	struct struct_hero *hero;
 	struct hero_affliction *poison_ptr;
@@ -27,7 +27,7 @@ void poison_effect(void)
 
 	hero = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero++) {
+	for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead) {
 
