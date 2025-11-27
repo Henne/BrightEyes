@@ -236,6 +236,7 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 				for (i = 0; i <= 6; i++) {
 
 					/* one of the other heroes must pass CH+0 */
+					/* Original-Bug: other hero should be in same group, not dead, etc. */
 					if ((i != hero_pos) && (test_attrib(get_hero(i), ATTRIB_CH, 0) != 0))
 						/* Original-Bug: should be 'test_attrib(get_hero(i), ATTRIB_CH, 0) > 0'
 						 * (found by siebenstreich 2021-08-15) */
@@ -270,6 +271,7 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 					if (hero2->typus >= HERO_TYPE_HEXE) {
 
 						/* need 15 AE */
+						// Original-Bug: For Magier with 4th staffspell, 13 are enough.
 						if (hero2->ae >= 15) {
 
 							/* spell must succeed */
