@@ -171,7 +171,15 @@ struct struct_hero {
 	   * This is strange as the 'start gear' functionality is done on byte level (affecting all bits together).
 	   * Note that this is not a bug because it it should never happen in the game that bit 0 is unset and bit 1 is set.
 	   * Maybe the bit 1 functionality was actually meant to be applied to the second byte of hero_flags, whose bit 1 is unused. Who knows. */
-	signed char herbs; /* none = 0, Belmart = 1, Menchalkaktus = 2 */
+	signed char herbs;
+	  /* Apparently, write-only (hence, no impact on the game)
+	   * default value: 0
+	   * consuming ITEM_BELMART_BLATT: value 1 for 1 day.
+	   * consuming ITEM_MENCHALKAKTUS: value 2 for 1 day.
+	   * According to DSA lore, these two herbs protect you from poisons and/or diseases.
+	   * Probably, it was intended (but never implemented) to realize this effect.
+	   * Might be added in a Feature mod? What about Sternenschweif, is it implemented there?
+	   * Comment: This should better be a bitfield, to allow activation of both Belmart and Menchalkaktus */
 	signed char hunger_timer; /* timer for no-hunger-miracle */
 	signed char hunger; /* percentage */
 	/* Offset 0x80 */
