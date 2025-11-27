@@ -487,11 +487,11 @@ signed int gather_herbs(struct struct_hero *hero, const signed int hours, const 
 /**
  * \brief   replenish the stocks (water and food)
  *
- * \param   mod         modificator for the talent test
+ * \param   handicap    handicap for the talent test
  * \param   tries       how often was tried to replenish stocks
  * \return              0 if replenish was not possible or 1 if replenish was possible
  */
-signed int replenish_stocks(signed int mod, const signed int tries)
+signed int replenish_stocks(signed int handicap, const signed int tries)
 {
 	signed int hero_pos;
 	signed int i;
@@ -500,7 +500,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 	struct struct_hero* hero;
 	struct struct_hero* hero2;
 
-	mod += 5;
+	handicap += 5;
 
 	g_talented_hero_pos = get_talented_hero_pos(TA_WILDNISLEBEN);
 	hero_pos = select_hero_ok(get_ttx(322));
@@ -536,7 +536,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 					retval = 1;
 
 					/* search for water */
-					if ((test_talent(hero, TA_WILDNISLEBEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
+					if ((test_talent(hero, TA_WILDNISLEBEN, handicap) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
 
 						/* found water */
 						sprintf(g_dtp2, get_ttx(324), hero->alias);
@@ -570,7 +570,7 @@ signed int replenish_stocks(signed int mod, const signed int tries)
 					vsync_or_key(200);
 
 					/* search for food */
-					if ((test_talent(hero, TA_FAEHRTENSUCHEN, mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
+					if ((test_talent(hero, TA_FAEHRTENSUCHEN, handicap) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
 
 						/* remove hunger of all living heroes in the current group */
 						hero2 = get_hero(0);
