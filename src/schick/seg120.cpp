@@ -238,6 +238,7 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 				for (i = 0; i <= 6; i++) {
 
 					/* one of the other heroes must pass CH+0 */
+					/* Original-Bug: other hero should be in same group, not dead, etc. */
 					if ((i != hero_pos) && (test_attrib(get_hero(i), ATTRIB_CH, 0) != 0))
 						/* Original-Bug: should be 'test_attrib(get_hero(i), ATTRIB_CH, 0) > 0'
 						 * (found by siebenstreich 2021-08-15) */

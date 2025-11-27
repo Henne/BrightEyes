@@ -451,6 +451,7 @@ void disease_effect(void)
 
 				j = 0;
 
+				/* ((number of days * 5) + 1)% chance for *permanent* GE-1 */
 				if (random_schick(100) <= disease_ptr->time_counter * 5) {
 
 					hero->attrib[ATTRIB_GE].current--;
@@ -493,7 +494,7 @@ void disease_effect(void)
 					if
 #ifndef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 44:
-					 * Recover from Paralyse and Frostschaden does not work, GE and KK are not recovered.
+					 * Recover from Paralyse and Frostschaeden does not work, GE and KK are not recovered.
 					 * In the two if statements below, the condition is reversed. */
 					(!disease_ptr->log_1)
 #else
