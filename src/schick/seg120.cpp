@@ -269,11 +269,25 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 
 					hero2 = get_hero(answer);
 
-					/* check that hero2 is a magic user */
-					if (hero2->typus >= HERO_TYPE_HEXE) {
+					/* check that hero2 can cast the spell Sanftmut */
+					if
+#ifndef M302de_ORIGINAL_BUGFIX
+						/* Original-Bug 49: Missing check if the hero is sufficiently skilled in the Sanftmut spell. */
+						(hero2->typus >= HERO_TYPE_HEXE)
+#else
+						(hero2->typus >= HERO_TYPE_HEXE && hero2->spells[SP_SANFTMUT] >= -5)
+#endif
+					{
 
-						/* need 15 AE */
-						if (hero2->ae >= 15) {
+						/* need 15 AE for Sanftmut spell. */
+						if
+#ifndef M302de_ORIGINAL_BUGFIX
+							/* Original-Bug 49: For a Magier with 4th staffspell, 13 AE are enough. */
+							(hero2->ae >= 15)
+#else
+							(hero2->ae >= 15 || (hero2->staff_level >= 4 && hero2->ae >= 13))
+#endif
+						{
 
 							/* spell must succeed */
 							if (test_spell(hero2, SP_SANFTMUT, 0)) {
@@ -299,6 +313,13 @@ void rabies(struct struct_hero* hero, signed int hero_pos)
 							GUI_output(g_dtp2);
 						}
 					}
+#ifdef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 49: Missing message if the selected hero cannot cast the spell. */
+					else {
+						sprintf(g_dtp2, "%s BEHERRSCHT DIESEN ZAUBER GAR NICHT.", hero2->alias);
+						GUI_output(g_dtp2);
+					}
+#endif
 				}
 			}
 		} else {
