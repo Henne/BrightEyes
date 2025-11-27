@@ -1236,7 +1236,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
     signed int count = 0;
     _finddata_t dp;
     char search[260];
-    sprintf(search, "%s*.chr", temp_dir);
+    snprintf(search, sizeof(search), "%s*.chr", temp_dir);
 
     intptr_t ff = _findfirst(search, &dp);
 
@@ -1254,7 +1254,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 
         while (res != -1) {
             char path[128];
-            sprintf(path, "%s%s", temp_dir, dp.name);
+            snprintf(path, sizeof(path), "%s%s", temp_dir, dp.name);
 
             const signed int handle = open(path, O_BINARY | O_RDONLY);
 
