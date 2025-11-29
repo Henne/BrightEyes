@@ -61,6 +61,7 @@ void disease_effect(void)
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 
 					sprintf(g_dtp2, get_ttx(561), hero->alias);
+					// "hero finally feels better"
 					GUI_output(g_dtp2);
 
 				} else {
@@ -72,6 +73,7 @@ void disease_effect(void)
 					if (hero->attrib[ATTRIB_KK].current != 0) {
 
 						sprintf(g_dtp2, get_ttx(572), hero->alias);
+						// "hero is losing some KK"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_1++;
@@ -88,8 +90,8 @@ void disease_effect(void)
 					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 				} else {
-					/* hero regains the lost strength */
 					sprintf(g_dtp2, get_ttx(573), hero->alias);
+					// "hero regains some KK"
 					GUI_output(g_dtp2);
 
 					disease_ptr->log_1--;
@@ -116,6 +118,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current -= 5;
 
 					sprintf(g_dtp2, get_ttx(574), hero->alias);
+					// "hero has slight fever"
 					GUI_output(g_dtp2);
 				}
 
@@ -190,6 +193,7 @@ void disease_effect(void)
 
 				/* regeneration complete */
 				sprintf(g_dtp2, get_ttx(575), hero->alias);
+				// "hero's head feals clearer"
 				GUI_output(g_dtp2);
 			}
 
@@ -215,6 +219,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current -= disease_ptr->log_1;
 
 					sprintf(g_dtp2, get_ttx(577), hero->alias);
+					// "hero's fever gets worse"
 					GUI_output(g_dtp2);
 
 				}
@@ -256,7 +261,7 @@ void disease_effect(void)
 #ifndef M302de_ORIGINAL_BUGFIX
 				/* regeneration complete */
 				sprintf(g_dtp2, get_ttx(576), hero->alias);
-				// %s HAT DIE KRANKHEIT ÜBERWUNDEN, DOCH DAS LEBEN WIRD WOHL NIE WIEDER SEIN, WIE ES WAR!
+				// "hero has overcome the illness, but life will probably never be the same"
 				GUI_output(g_dtp2);
 #endif
 
@@ -312,6 +317,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current -= j;
 
 					sprintf(g_dtp2, get_ttx(579), hero->alias);
+					// "hero's paralysis is worsening"
 					GUI_output(g_dtp2);
 				}
 			}
@@ -338,6 +344,7 @@ void disease_effect(void)
 					{
 
 						sprintf(g_dtp2, get_ttx(573), hero->alias);
+						// "hero regains some KK"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_1--;
@@ -354,6 +361,7 @@ void disease_effect(void)
 					{
 
 						sprintf(g_dtp2, get_ttx(578), hero->alias);
+						// "hero regains some GE"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_2--;
@@ -374,6 +382,7 @@ void disease_effect(void)
 					if (random_schick(100) <= (hero->typus >= HERO_TYPE_AUELF ? 30 : 20)) {
 
 						sprintf(g_dtp2, get_ttx(580), hero->alias);
+						// "hero dies"
 						GUI_output(g_dtp2);
 
 						sub_hero_le(hero, 1000);
@@ -395,6 +404,7 @@ void disease_effect(void)
 							hero->attrib[ATTRIB_KK].current -= 5;
 
 							sprintf(g_dtp2, get_ttx(581), hero->alias, GUI_get_ptr(hero->sex, 0));
+							// "hero's lips turn yellow and he feels intense pain"
 							GUI_output(g_dtp2);
 						}
 
@@ -428,7 +438,7 @@ void disease_effect(void)
 				}
 
 				sprintf(g_dtp2, get_ttx(582), hero->alias);
-				// DIE GELBLICHE FÄRBUNG VON %sS LIPPEN GEHT ZURÜCK.
+				// "hero's lips do not look yellow any more"
 				GUI_output(g_dtp2);
 #else
 				if (disease_ptr->log_3) {
@@ -438,7 +448,7 @@ void disease_effect(void)
 					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 					sprintf(g_dtp2, get_ttx(582), hero->alias);
-					// DIE GELBLICHE FÄRBUNG VON %sS LIPPEN GEHT ZURÜCK.
+					// "hero's lips do not look yellow any more"
 					GUI_output(g_dtp2);
 				}
 #endif
@@ -460,6 +470,7 @@ void disease_effect(void)
 					j = 1;
 
 					sprintf(g_dtp2, get_ttx(583), hero->alias);
+					// "hero takes permanent damage"
 					GUI_output(g_dtp2);
 				}
 
@@ -480,6 +491,7 @@ void disease_effect(void)
 				if (j == 0) {
 
 					sprintf(g_dtp2, get_ttx(740), hero->alias);
+					// "hero shakes"
 					GUI_output(g_dtp2);
 				}
 			}
@@ -503,6 +515,7 @@ void disease_effect(void)
 					{
 
 						sprintf(g_dtp2, get_ttx(573), hero->alias);
+						// "hero regains some KK"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_1--;
@@ -519,6 +532,7 @@ void disease_effect(void)
 					{
 
 						sprintf(g_dtp2, get_ttx(578), hero->alias);
+						// "hero regains some GE"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_2--;
@@ -566,6 +580,7 @@ void disease_effect(void)
 					} else {
 
 						sprintf(g_dtp2, get_ttx(572), hero->alias);
+						// "hero is losing some KK"
 						GUI_output(g_dtp2);
 					}
 				}
@@ -581,6 +596,7 @@ void disease_effect(void)
 
 				} else {
 					sprintf(g_dtp2, get_ttx(573), hero->alias);
+					// "hero regains some KK"
 					GUI_output(g_dtp2);
 
 					disease_ptr->log_1--;
