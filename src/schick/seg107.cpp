@@ -249,7 +249,7 @@ void item_read_schuldbuch(void)
 		add_hero_ap_all(15);
 
 		/* mark informer Hjore as known */
-		update_informer_cond(INFORMER_HJORE);
+		update_informer_cond(INFORMER_ID_HJORE);
 	}
 
 	GUI_output(get_ttx(642));

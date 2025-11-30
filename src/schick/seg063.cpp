@@ -201,7 +201,7 @@ void do_harbor(void)
 				flag = 0;
 
 				if ((gs_quested_months > 2) && !gs_treasure_maps[6] &&
-					gs_informer_flags[INFORMER_SWAFNILD] && (random_schick(100) <= gs_quested_months + 4))
+					gs_informer_flags[INFORMER_ID_SWAFNILD] && (random_schick(100) <= gs_quested_months + 4))
 				{
 					/* meet SWAFNILD */
 					do_talk(12, 0);

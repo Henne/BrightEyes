@@ -247,21 +247,21 @@ void do_informer(void)
 {
 	const signed int informer_id = gs_town_typeindex - 1;
 
-	if (informer_id == INFORMER_JURGE)	do_talk(6, 0); else
-	if (informer_id == INFORMER_HJORE)	do_talk(6, 1); else
-	if (informer_id == INFORMER_YASMA)	do_talk(7, 0); else
-	if (informer_id == INFORMER_UMBRIK)	do_talk(7, 1); else
-	if (informer_id == INFORMER_ISLEIF)	do_talk(7, 2); else
-	if (informer_id == INFORMER_RAGNA)	do_talk(8, 0); else
-	if (informer_id == INFORMER_BEORN)	do_talk(8, 1); else
-	if (informer_id == INFORMER_ASGRIMM)	do_talk(10, 1); else
-	if (informer_id == INFORMER_ELIANE)	do_talk(9, 0); else
-	if (informer_id == INFORMER_OLVIR)	do_talk(10, 0); else
-	if (informer_id == INFORMER_SWAFNILD)	do_talk(12, 0); else
-	if (informer_id == INFORMER_TREBORN)	do_talk(11, 0); else
-	if (informer_id == INFORMER_UNICORN)	do_talk(11, 2); else
-	if (informer_id == INFORMER_ALGRID)	do_talk(8, 2); else
-	if (informer_id == INFORMER_TIOMAR)	do_talk(9, 1);
+	if (informer_id == INFORMER_ID_JURGE)		do_talk(6, 0); else
+	if (informer_id == INFORMER_ID_HJORE)		do_talk(6, 1); else
+	if (informer_id == INFORMER_ID_YASMA)		do_talk(7, 0); else
+	if (informer_id == INFORMER_ID_UMBRIK)		do_talk(7, 1); else
+	if (informer_id == INFORMER_ID_ISLEIF)		do_talk(7, 2); else
+	if (informer_id == INFORMER_ID_RAGNA)		do_talk(8, 0); else
+	if (informer_id == INFORMER_ID_BEORN)		do_talk(8, 1); else
+	if (informer_id == INFORMER_ID_ASGRIMM)		do_talk(10, 1); else
+	if (informer_id == INFORMER_ID_ELIANE)		do_talk(9, 0); else
+	if (informer_id == INFORMER_ID_OLVIR)		do_talk(10, 0); else
+	if (informer_id == INFORMER_ID_SWAFNILD)	do_talk(12, 0); else
+	if (informer_id == INFORMER_ID_TREBORN)		do_talk(11, 0); else
+	if (informer_id == INFORMER_ID_UNICORN)		do_talk(11, 2); else
+	if (informer_id == INFORMER_ID_ALGRID)		do_talk(8, 2); else
+	if (informer_id == INFORMER_ID_TIOMAR)		do_talk(9, 1);
 
 	leave_location();
 }

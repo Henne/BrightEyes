@@ -650,7 +650,7 @@ void tevent_065(void)
 			/* Make Umbrik Siebenstein known */
 
 			/* Original-Bug: if Umbrik is done the value 2 is overwritten with 1 */
-			update_informer_cond(INFORMER_UMBRIK);
+			update_informer_cond(INFORMER_ID_UMBRIK);
 		}
 	}
 }
