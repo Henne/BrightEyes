@@ -707,7 +707,7 @@ struct struct_land_route {
 };
 
 struct struct_tevent {
-	int8_t route_id;
+	int8_t land_route_id;
 	uint8_t place;
 	uint8_t tevent_id;
 };
@@ -1802,7 +1802,9 @@ extern signed int g_current_town_overx;		// ds:0xe4a9; seg002
 extern signed int g_current_town_overy;		// ds:0xe4a7; seg002
 extern signed int g_current_town_over;		// ds:0xe4a5; seg002, seg093, seg094
 extern signed int g_trv_menu_selection;		// ds:0xe4a3; seg002, seg093, seg094
-extern unsigned char g_route59_flag;		// ds:0xe4a2; seg093, seg094, seg110
+extern unsigned char g_trv_crosslink_route_status;		// ds:0xe4a2; seg093, seg094, seg110
+// {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
+
 extern signed int g_get_extra_loot;		// ds:0xe4a0; seg076, seg077, seg092
 extern struct dungeon_door *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120

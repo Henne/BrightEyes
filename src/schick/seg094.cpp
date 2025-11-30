@@ -36,7 +36,7 @@ signed char g_traveling = 0; // ds:0xa842
 static const signed char g_tevents_repeatable[145] = { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }; // ds:0xa843
 
 
-unsigned char g_route59_flag;			// ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
+unsigned char g_trv_crosslink_route_status;			// ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
 signed int g_trv_menu_selection;		// ds:0xe4a3
 signed int g_current_town_over;			// ds:0xe4a5
 signed int g_current_town_overy;		// ds:0xe4a7
@@ -100,10 +100,10 @@ void set_textbox_positions(const signed int town_id)
 /**
  * \brief   ???
  *
- * \param   route_id    number of the route
+ * \param   land_route_id    number of the route
  * \param   backwards   0 = travel the route forwards, 1 = travel backwards
  */
-void TM_func1(const signed int route_id, const signed int backwards)
+void TM_func1(const signed int land_route_id, const signed int backwards)
 {
 	uint8_t* fb_start;
 	struct struct_hero *hero;
@@ -116,14 +116,14 @@ void TM_func1(const signed int route_id, const signed int backwards)
 	g_traveling = 1;
 
 	last_tevent_no = -1;
-	gs_route_course_ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (route_id - 1))) + 0xecL);
+	gs_route_course_ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (land_route_id - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
 	gs_route_course_ptr += 2;
 
 	memset((void*)g_trv_track_pixel_bak, 0xaa, 500);
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
 	 * 		Can be replaced by a locvar! */
-	gs_travel_route_ptr = &g_land_routes[route_id - 1];
+	gs_travel_route_ptr = &g_land_routes[land_route_id - 1];
 	gs_travel_speed = 166;
 	gs_route_total_steps = TM_get_track_length((struct struct_point*)gs_route_course_ptr);
 	gs_route_length = (gs_travel_route_ptr->distance * 100);
@@ -152,7 +152,7 @@ void TM_func1(const signed int route_id, const signed int backwards)
 	 * 		Can be replaced by a locvar! */
 	gs_tevents_tab_ptr = &g_tevents_tab[0];
 	/* Forward pointer to entries associated with current route. */
-	while (((unsigned char)gs_tevents_tab_ptr->route_id != route_id) && (gs_tevents_tab_ptr->route_id != -1))
+	while (((unsigned char)gs_tevents_tab_ptr->land_route_id != land_route_id) && (gs_tevents_tab_ptr->land_route_id != -1))
 	{
 		gs_tevents_tab_ptr++;
 	}
@@ -185,7 +185,7 @@ void TM_func1(const signed int route_id, const signed int backwards)
 	gs_route_dayprogress = 0;
 	/* random section ends */
 
-	while ((gs_tevents_tab_ptr->route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->route_id == route_id))
+	while ((gs_tevents_tab_ptr->land_route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->land_route_id == land_route_id))
 	{
 		tevent_ptr = &gs_route_tevents[gs_route_stepcount];
 		tevent_ptr->place = gs_tevents_tab_ptr->place;
@@ -305,7 +305,7 @@ void TM_func1(const signed int route_id, const signed int backwards)
 
 		if (gs_route_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && g_game_state == GAME_STATE_MAIN)
 		{
-			random_encounter(route_id);
+			random_encounter(land_route_id);
 			gs_route_encounter_flag = 0;
 
 		} else if (gs_route_fight_flag && gs_route_dayprogress >= gs_route_fight_time && g_game_state == GAME_STATE_MAIN)
@@ -428,7 +428,7 @@ void TM_func1(const signed int route_id, const signed int backwards)
 			gs_trv_i = 0;
 			gs_route_course_ptr2 = gs_route_course_start;
 
-			if (route_id == 59)
+			if (land_route_id == LROUTE_ID__CROSSLINK)
 			{
 				TM_func8(0);
 			}
@@ -442,7 +442,7 @@ void TM_func1(const signed int route_id, const signed int backwards)
 
 			call_mouse();
 
-			if (g_request_refresh == 2 && route_id != 59)
+			if (g_request_refresh == 2 && land_route_id != LROUTE_ID__CROSSLINK)
 			{
 				/* Return or continue? */
 				if (GUI_radio(get_tx(71), 2, get_tx(72), get_tx(73)) == 2)
@@ -483,7 +483,7 @@ void TM_func1(const signed int route_id, const signed int backwards)
 
 		} while (gs_route_course_ptr[0] != -1);
 
-		if (route_id == 59)
+		if (land_route_id == LROUTE_ID__CROSSLINK)
 		{
 			TM_func8(1);
 		}
@@ -712,27 +712,27 @@ void TM_unused2(void)
 
 void TM_func8(const signed int restore)
 {
-	if (!(g_route59_flag & 1))
+	if (!(g_trv_crosslink_route_status & 1))
 	{
 		if (gs_town_id == TOWN_ID_PEILINEN)
 		{
-			TM_draw_track(11, 9, 0, restore);
+			TM_draw_track(LROUTE_ID_PEILINEN_ROVAMUND, 9, 0, restore);
 		} else {
-			TM_draw_track(11, 17, 1, restore);
+			TM_draw_track(LROUTE_ID_PEILINEN_ROVAMUND, 17, 1, restore);
 		}
 	} else {
 		if (gs_town_id == TOWN_ID_KRAVIK)
 		{
-			TM_draw_track(14, 8, 0, restore);
+			TM_draw_track(LROUTE_ID_KRAVIK_SKELELLE, 8, 0, restore);
 		} else {
-			TM_draw_track(14, 17, 1, restore);
+			TM_draw_track(LROUTE_ID_KRAVIK_SKELELLE, 17, 1, restore);
 		}
 	}
 }
 
 void TM_func9(void)
 {
-	TM_func1(59, g_route59_flag & 1);
+	TM_func1(LROUTE_ID__CROSSLINK, g_trv_crosslink_route_status & 1);
 
 	TRV_event(145);
 }
