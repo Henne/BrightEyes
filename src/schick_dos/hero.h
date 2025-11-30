@@ -210,7 +210,7 @@ struct struct_hero {
 	signed char sprite_id; /* fight gfx of hero, depending on typus and sex.
                                 * 1: Gaukler, male. 2: Jaeger, male, ..., 10: any Elf, male,
 				* 11: Gaukler, female, 12: Jaeger, female, ..., 20: any Elf, female. */
-	signed char alchemy_inn_id; /* the id of the inn where the hero is doing alchemy */
+	signed char alchemy_inn_typeindex; /* the id of the inn where the hero is doing alchemy */
 	signed short escape_position; /* the dungeon square the hero escaped to in a fight. read from fig_escape_position */
 	signed char jail; /* 1 = true, i.e. hero is in prison (from breaking into a house), 0 = false */
 	/* Offset 0xa0 */
