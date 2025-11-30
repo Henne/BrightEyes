@@ -563,7 +563,7 @@ void tevent_145(void)
 
 	load_area_description(0);
 
-	if (!(g_route59_flag & 1))
+	if (!(g_trv_crosslink_route_status & 1))
 	{
 		/* g_route_flag in {0, 2} */
 		do {
