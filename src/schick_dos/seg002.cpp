@@ -3504,7 +3504,7 @@ static void passages_recalc(void)
 		 * summer -> 2
 		 * spring, autumn -> 0 */
 
-	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); route++, i++) {
 
 		if (route->passage_timer-- == -1) { /* note that dec_ptr_bs returns the old (still un-decremented) value */
 			/* ship of a sea passage has left yesterday -> set up a new ship of this passage */
@@ -3550,9 +3550,9 @@ static void passages_reset(void)
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 36: the loop operates only on the first sea route (which is Thorwal-Prem) */
-	for (i = 0; i < NR_SEA_ROUTES; i++)
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); i++)
 #else
-	for (i = 0; i < NR_SEA_ROUTES; route++, i++)
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); route++, i++)
 #endif
 	{
 		if (!route->passage_timer) {

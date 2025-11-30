@@ -56,7 +56,7 @@ static const struct ship g_ship_table[8] = {
 	{ 6, 0,  0,  40 }
 }; // ds:0x6ed0
 static const signed int g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
-struct sea_route g_sea_routes[46] = {
+struct sea_route g_sea_routes[SEA_ROUTE_ID__END] = {
 	{ TOWN_ID_THORWAL    , TOWN_ID_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
 	{ TOWN_ID_PREM       , TOWN_ID_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -108,7 +108,7 @@ struct sea_route g_sea_routes[46] = {
 	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
 	{ TOWN_ID_TREBAN     , TOWN_ID_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
 	{ TOWN_ID_MANRIN     , TOWN_ID_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
-	{ (unsigned char)-1             , 0x00                  ,   0,  0, 0, 0, 0, 0 } //TODO: towns should be signed
+	{ (unsigned char)-1  , 0x00                    ,   0,  0, 0, 0, 0, 0 }  //TODO: towns should be signed
 }; // ds:0x6f00
 signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
 static struct int16_t_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
@@ -127,7 +127,7 @@ void passages_init(void)
 	struct sea_route *route = &g_sea_routes[0];
 
 
-	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); route++, i++) {
 
 		route->passage_timer = (unsigned char)random_interval(0, route->frequency);
 		route->price_mod = (unsigned char)random_interval(70, 130);
