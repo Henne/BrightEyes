@@ -194,7 +194,7 @@ signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, cons
 	hero->recipe_timer = 0;
 	/* set heroes receipe to 0 */
 	hero->recipe_id = 0;
-	hero->alchemy_inn_id = 0;
+	hero->alchemy_inn_typeindex = 0;
 
 	if ((test_talent(hero, TA_ALCHIMIE, r_ptr->handicap) > 0) && (flag_abort == 0))
 	{
@@ -374,7 +374,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 								hero->recipe_timer = g_alchemy_recipes[recipe_index].duration / 24;
 
 								hero->recipe_id = recipe_index;
-								hero->alchemy_inn_id = gs_town_typeindex;
+								hero->alchemy_inn_typeindex = gs_town_typeindex;
 
 								hero->flags.brewing = 1;
 
