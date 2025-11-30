@@ -698,7 +698,7 @@ void TLK_old_woman(const signed int state)
 	} else if (state == 38) {
 		timewarp(HOURS(1));
 	} else if (state == 41) {
-		gs_tevent093_flag = gs_tevent091_flag = gs_informer_flags[INFORMER_ISLEIF] = gs_isleif_jandas_regards = 1;
+		gs_tevent093_flag = gs_tevent091_flag = gs_informer_flags[INFORMER_ID_ISLEIF] = gs_isleif_jandas_regards = 1;
 	}
 }
 

@@ -285,7 +285,7 @@ void talk_tavern(void)
 			} else if (txt_id == 39) {
 
 				sprintf(answer2_buffer, format,
-					!gs_informer_flags[get_town_lookup_entry()] ? get_drinkmate() :	get_informer_name2());
+					!gs_informer_flags[informer_id_from_current_town()] ? get_drinkmate() :	get_informer_name2());
 
 			} else {
 				strcpy(answer2_buffer, format);
@@ -378,7 +378,7 @@ void TLK_tavern(const signed int answer)
 
 	} else if (old_state == 9) {
 
-		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 10 : 11);
+		g_dialog_next_state = (gs_informer_flags[informer_id_from_current_town()] != 0 ? 10 : 11);
 
 	} else if (old_state == 12 || old_state == 19 || old_state == 21) {
 
@@ -504,7 +504,7 @@ void TLK_tavern(const signed int answer)
 
 	} else if (old_state == 46) {
 
-		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 47 : 48);
+		g_dialog_next_state = (gs_informer_flags[informer_id_from_current_town()] != 0 ? 47 : 48);
 
 	} else if (old_state == 49) {
 
@@ -528,7 +528,7 @@ void TLK_tavern(const signed int answer)
 
 		add_party_money(10);
 
-		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 59 : 60);
+		g_dialog_next_state = (gs_informer_flags[informer_id_from_current_town()] != 0 ? 59 : 60);
 
 	} else if (old_state == 61) {
 
@@ -557,7 +557,7 @@ void TLK_tavern(const signed int answer)
 
 	} else if (old_state == 79) {
 
-		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 153 : 154);
+		g_dialog_next_state = (gs_informer_flags[informer_id_from_current_town()] != 0 ? 153 : 154);
 
 	} else if (old_state == 80) {
 
@@ -587,7 +587,7 @@ void TLK_tavern(const signed int answer)
 
 	} else if (old_state == 93) {
 
-		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 94 : 95);
+		g_dialog_next_state = (gs_informer_flags[informer_id_from_current_town()] != 0 ? 94 : 95);
 
 	} else if (old_state == 98) {
 
@@ -595,7 +595,7 @@ void TLK_tavern(const signed int answer)
 
 	} else if (old_state == 99) {
 
-		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 100 : 101);
+		g_dialog_next_state = (gs_informer_flags[informer_id_from_current_town()] != 0 ? 100 : 101);
 
 	} else if (old_state == 103) {
 
