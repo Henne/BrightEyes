@@ -107,7 +107,7 @@ signed int DNG01_handler(void)
 		if (GUI_bool(get_tx(7)) && give_new_item_to_group(ITEM_AMULETT__GREEN, 1, 1))
 		{
 			gs_dng01_amulet_taken = 1;
-			gs_gods_estimation[GOD_BORON] -= 100L;
+			gs_gods_estimation[GOD_ID_BORON] -= 100L;
 		}
 
 	} else if ((target_pos == DNG_POS(4,13,6)) && (target_pos != gs_dng_handled_pos))

@@ -303,7 +303,7 @@ void tevent_113(void)
 
 		/* enter the temple */
 		gs_town_typeindex = 58;
-		est_old = gs_gods_estimation[GOD_FIRUN];
+		est_old = gs_gods_estimation[GOD_ID_FIRUN];
 		gs_town_loc_type = LOCTYPE_TEMPLE;
 		do_location();
 		TRV_load_textfile(-1);
@@ -311,7 +311,7 @@ void tevent_113(void)
 		GUI_output(get_tx2(18));
 
 		/* calculate the difference of the estimation */
-		est_diff = gs_gods_estimation[GOD_FIRUN] - est_old;
+		est_diff = gs_gods_estimation[GOD_ID_FIRUN] - est_old;
 
 		g_textbox_width = 3;
 

@@ -36,40 +36,42 @@
 #include "seg096.h"
 #include "seg097.h"
 
-static int8_t g_god_temples_table_01[2] = { 0x3d, -1 }; // ds:0x6de8, array terminated by -1
-static int8_t g_god_temples_table_02[6] = { 0x0b, 0x1c, 0x25, 0x2d, 0x33, -1 }; // ds:0x6dea, array terminated by -1
-static int8_t g_god_temples_table_03[11] = { 0x03, 0x0d, 0x0e, 0x21, 0x22, 0x26, 0x29, 0x2c, 0x35, 0x39, -1 }; // ds:0x6df0, array terminated by -1
-static int8_t g_god_temples_table_04[16] = { 0x01, 0x08, 0x0a, 0x10, 0x11, 0x14, 0x18, 0x1e, 0x23, 0x2a, 0x2b, 0x2f, 0x30, 0x32, 0x34, -1 }; // ds:0x6dfb, array terminated by -1
-static int8_t g_god_temples_table_05[2] = { 0x3e, -1 }; // ds:0x6e0b, array terminated by -1
-static int8_t g_god_temples_table_06[2] = { 0x3f, -1 }; // ds:0x6e0d, array terminated by -1
-static int8_t g_god_temples_table_07[4] = { 0x12, 0x1a, 0x3a, -1 }; // ds:0x6e0f, array terminated by -1
-static int8_t g_god_temples_table_08[2] = { 6, -1 }; // ds:0x6e13, array terminated by -1
-static int8_t g_god_temples_table_09[6] = { 0x05, 0x09, 0x13, 0x27, 0x3b, -1 }; // ds:0x6e15, array terminated by -1
-static int8_t g_god_temples_table_10[5] = { 0x04, 0x0c, 0x19, 0x3c, -1 }; // ds:0x6e1b, array terminated by -1
-static int8_t g_god_temples_table_11[3] = { 0x16, 0x1b, -1 }; // ds:0x6e20, array terminated by -1
-static int8_t g_god_temples_table_12[2] = { 0x40, -1 }; // ds:0x6e23, array terminated by -1
-static int8_t g_god_temples_table_13[13] = { 0x02, 0x07, 0x0f, 0x15, 0x1d, 0x20, 0x24, 0x28, 0x2e, 0x31, 0x36, 0x38, -1 }; // ds:0x6e25, array terminated by -1
-static int8_t g_god_temples_table_14[4] = { 0x17, 0x1f, 0x37, -1 }; // ds:0x6e32, array terminated by -1
-static int8_t* g_god_temples_index[15] = {
+static int8_t g_praios_temples_typeindex[2] = { 0x3d, -1 }; // ds:0x6de8, array terminated by -1
+static int8_t g_rondra_temples_typeindex[6] = { 0x0b, 0x1c, 0x25, 0x2d, 0x33, -1 }; // ds:0x6dea, array terminated by -1
+static int8_t g_efferd_temples_typeindex[11] = { 0x03, 0x0d, 0x0e, 0x21, 0x22, 0x26, 0x29, 0x2c, 0x35, 0x39, -1 }; // ds:0x6df0, array terminated by -1
+static int8_t g_travia_temples_typeindex[16] = { 0x01, 0x08, 0x0a, 0x10, 0x11, 0x14, 0x18, 0x1e, 0x23, 0x2a, 0x2b, 0x2f, 0x30, 0x32, 0x34, -1 }; // ds:0x6dfb, array terminated by -1
+static int8_t g_boron_temples_typeindex[2] = { 0x3e, -1 }; // ds:0x6e0b, array terminated by -1
+static int8_t g_hesinde_temples_typeindex[2] = { 0x3f, -1 }; // ds:0x6e0d, array terminated by -1
+static int8_t g_firun_temples_typeindex[4] = { 0x12, 0x1a, 0x3a, -1 }; // ds:0x6e0f, array terminated by -1
+static int8_t g_tsa_temples_typeindex[2] = { 6, -1 }; // ds:0x6e13, array terminated by -1
+static int8_t g_phex_temples_typeindex[6] = { 0x05, 0x09, 0x13, 0x27, 0x3b, -1 }; // ds:0x6e15, array terminated by -1
+static int8_t g_peraine_temples_typeindex[5] = { 0x04, 0x0c, 0x19, 0x3c, -1 }; // ds:0x6e1b, array terminated by -1
+static int8_t g_ingerimm_temples_typeindex[3] = { 0x16, 0x1b, -1 }; // ds:0x6e20, array terminated by -1
+static int8_t g_rahja_temples_typeindex[2] = { 0x40, -1 }; // ds:0x6e23, array terminated by -1
+static int8_t g_swafnir_temples_typeindex[13] = { 0x02, 0x07, 0x0f, 0x15, 0x1d, 0x20, 0x24, 0x28, 0x2e, 0x31, 0x36, 0x38, -1 }; // ds:0x6e25, array terminated by -1
+static int8_t g_ifirn_temples_typeindex[4] = { 0x17, 0x1f, 0x37, -1 }; // ds:0x6e32, array terminated by -1
+
+static int8_t* g_god_temples_typeindex[15] = {
 	NULL,
-	g_god_temples_table_01,
-	g_god_temples_table_02,
-	g_god_temples_table_03,
+	g_praios_temples_typeindex,
+	g_rondra_temples_typeindex,
+	g_efferd_temples_typeindex,
 
-	g_god_temples_table_04,
-	g_god_temples_table_05,
-	g_god_temples_table_06,
-	g_god_temples_table_07,
+	g_travia_temples_typeindex,
+	g_boron_temples_typeindex,
+	g_hesinde_temples_typeindex,
+	g_firun_temples_typeindex,
 
-	g_god_temples_table_08,
-	g_god_temples_table_09,
-	g_god_temples_table_10,
-	g_god_temples_table_11,
+	g_tsa_temples_typeindex,
+	g_phex_temples_typeindex,
+	g_peraine_temples_typeindex,
+	g_ingerimm_temples_typeindex,
 
-	g_god_temples_table_12,
-	g_god_temples_table_13,
-	g_god_temples_table_14,
+	g_rahja_temples_typeindex,
+	g_swafnir_temples_typeindex,
+	g_ifirn_temples_typeindex,
 }; // ds:0x6e36; int8_t*
+
 static char g_str_temp_file_wildcard[8] = "TEMP\\%s"; // ds:0x6e72
 static char g_str_no_save_in_temple[41] = "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!"; // ds:0x6e7a
 
@@ -79,7 +81,7 @@ signed int g_temple_god; // ds:0xe3f8, id of current temple's god
 
 void do_temple(void)
 {
-	signed int i;
+	signed int god_id;
 	signed int answer;
 	signed int input;
 	signed char done = 0;
@@ -98,17 +100,17 @@ void do_temple(void)
 
 			/* search which god owns this temple */
 			g_temple_god = 1;
-			for (i = 1; i < 15; i++) {
-				if (is_in_byte_array(gs_town_typeindex, g_god_temples_index[i]))
+			for (god_id = 1; god_id < GOD_ID__END; god_id++) {
+				if (is_in_byte_array(gs_town_typeindex, g_god_temples_typeindex[god_id]))
 				{
-					g_temple_god = i;
+					g_temple_god = god_id;
 					break;
 				}
 			}
 
 			draw_main_screen();
 			load_ani(3);
-			load_tempicon(g_temple_god - 1);
+			load_temple_logo(g_temple_god - 1);
 			init_ani(0);
 			set_audio_track(ARCHIVE_FILE_TEMPLE_XMI);
 

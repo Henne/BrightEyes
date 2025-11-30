@@ -387,7 +387,7 @@ signed int DNG05_handler(void)
 
 		} while (tmp == -1);
 
-		gs_gods_estimation[GOD_TRAVIA] += (tmp == 1 ? -15 : 15);
+		gs_gods_estimation[GOD_ID_TRAVIA] += (tmp == 1 ? -15 : 15);
 
 		GUI_output(get_tx(9));
 
