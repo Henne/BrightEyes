@@ -635,7 +635,7 @@ void tevent_044(void)
 		if (answer == 2) {
 
 			/* bury her */
-			gs_gods_estimation[GOD_BORON] += 50L;
+			gs_gods_estimation[GOD_ID_BORON] += 50L;
 
 			timewarp(HOURS(1));
 

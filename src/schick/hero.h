@@ -137,7 +137,7 @@ struct struct_hero {
 	signed char sex;
 	unsigned char height; /* unit: cm */
 	signed short weight; /* unit: ounces */
-	signed char god; /* see enum GOD_* */
+	signed char god_id; /* see enum GOD_ID_* */
 	signed char level;
 	int32_t ap; /* Abenteuerpunkte = experience points */
 	int32_t money; /* unit: heller */
