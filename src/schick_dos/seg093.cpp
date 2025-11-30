@@ -309,47 +309,184 @@ struct trv_start_point g_signposts[106] = {
 	{ TOWN_ID_FAEHRE_ANGBODIRTAL , 3, (uint8_t*)g_signposts_linked_lroute_103 }, // 103
 	{ TOWN_ID_HJALLANDER_HOF     , 1, (uint8_t*)g_signposts_linked_lroute_104 }, // 104
 	{ TOWN_ID_LEUCHTTURM_RUNIN   , 2, (uint8_t*)g_signposts_linked_lroute_105 }, // 105
-	{ -1                    , 0,    NULL }
+	{ -1                         , 0,  NULL                                   }
 }; // ds:0xa0b4; uint8_t*
 
-/* Numbers here are entries in g_sea_route */
-int8_t g_harbors_linked_sea_routes_01[] = {1, 8, 33, 35, 39, -1};		//ds:0xa330
-int8_t g_harbors_linked_sea_routes_02[] = {36, 37, -1};				//ds:0xa336
-int8_t g_harbors_linked_sea_routes_03[] = {33, 34, 36, -1};			//ds:0xa339
-int8_t g_harbors_linked_sea_routes_04[] = {34, 35, 37, -1};			//ds:0xa33d
-int8_t g_harbors_linked_sea_routes_05[] = {28, 27, 38, -1};			//ds:0xa341
-int8_t g_harbors_linked_sea_routes_06[] = {27, 29, 25, -1};			//ds:0xa345
-int8_t g_harbors_linked_sea_routes_07[] = {24, -1};				//ds:0xa349
-int8_t g_harbors_linked_sea_routes_08[] = {6, 25, 26, 30, 38, 23, 45, -1};	//ds:0xa34b
-int8_t g_harbors_linked_sea_routes_09[] = {22, 23, 24, 32, -1};			//ds:0xa353
+/* For each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes */
+int8_t g_harbors_linked_sea_routes_01[] = {
+	SEA_ROUTE_ID_THORWAL_PREM,
+	SEA_ROUTE_ID_THORWAL_VAERMHAG,
+	SEA_ROUTE_ID_THORWAL_MERSKE,
+	SEA_ROUTE_ID_THORWAL_EFFERDUN,
+	SEA_ROUTE_ID_THORWAL_VARNHEIM,
+	-1
+}; //ds:0xa330
+int8_t g_harbors_linked_sea_routes_02[] = {
+	SEA_ROUTE_ID_SERSKE_MERSKE,
+	SEA_ROUTE_ID_SERSKE_EFFERDUN,
+	-1
+}; //ds:0xa336
+int8_t g_harbors_linked_sea_routes_03[] = {
+	SEA_ROUTE_ID_THORWAL_MERSKE,
+	SEA_ROUTE_ID_MERSKE_EFFERDUN,
+	SEA_ROUTE_ID_SERSKE_MERSKE,
+	-1
+}; //ds:0xa339
+int8_t g_harbors_linked_sea_routes_04[] = {
+	SEA_ROUTE_ID_MERSKE_EFFERDUN,
+	SEA_ROUTE_ID_THORWAL_EFFERDUN,
+	SEA_ROUTE_ID_SERSKE_EFFERDUN,
+	-1
+}; //ds:0xa33d
+int8_t g_harbors_linked_sea_routes_05[] = {
+	SEA_ROUTE_ID_LISKOR_VIDSAND,
+	SEA_ROUTE_ID_TJANSET_LISKOR,
+	SEA_ROUTE_ID_OVERTHOR_LISKOR,
+	-1
+}; //ds:0xa341
+int8_t g_harbors_linked_sea_routes_06[] = {
+	SEA_ROUTE_ID_TJANSET_LISKOR,
+	SEA_ROUTE_ID_TJANSET_VIDSAND,
+	SEA_ROUTE_ID_OVERTHOR_TJANSET,
+	-1
+}; //ds:0xa345
+int8_t g_harbors_linked_sea_routes_07[] = {
+	SEA_ROUTE_ID_ROVIK_ORVIL,
+	-1
+}; //ds:0xa349
+int8_t g_harbors_linked_sea_routes_08[] = {
+	SEA_ROUTE_ID_HJALSING_OVERTHOR,
+	SEA_ROUTE_ID_OVERTHOR_TJANSET,
+	SEA_ROUTE_ID_OVERTHOR_VIDSAND,
+	SEA_ROUTE_ID_OVERTHOR_BRENDHIL,
+	SEA_ROUTE_ID_OVERTHOR_LISKOR,
+	SEA_ROUTE_ID_ROVIK_OVERTHOR,
+	SEA_ROUTE_ID_MANRIN_OVERTHOR,
+	-1
+}; //ds:0xa34b
+int8_t g_harbors_linked_sea_routes_09[] = {
+	SEA_ROUTE_ID_HJALSING_ROVIK,
+	SEA_ROUTE_ID_ROVIK_OVERTHOR,
+	SEA_ROUTE_ID_ROVIK_ORVIL,
+	SEA_ROUTE_ID_ROVIK_MANRIN,
+	-1
+}; //ds:0xa353
 int8_t g_harbors_linked_sea_routes_10[] = {
-#ifndef M302de_ORIGINAL_BUGFIX
+	SEA_ROUTE_ID_PREM_HJALSING,
+	SEA_ROUTE_ID_KORD_HJALSING,
+#ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 40: After doing a ship passage from Overthorn to Hjalsingor and leaving the harbor,
 	 * the party is positioned in a wrong square behind the buildings. */
-	/* Reason: In the hard-coded list of the sea routes linked to the Hjalsingor harbor, the route Overthorn-Hjalsignor (ID 6) is missing.
-	 * Instead, the route Varnheim-Ljasdahl (ID 10) is wrongly linked. */
-	2, 5,	7, /* diff */ 10,	21, 22, -1,
-#else
-	2, 5,	/* diff */ 6, 7,	21, 22, -1,
+	/* Reason: In the hard-coded list of the sea routes linked to the Hjalsingor harbor,the route Hjalsignor-Overthorn (ID 6) is missing.
+	 * Instead,the route Varnheim-Ljasdahl (ID 10) is wrongly linked. */
+	SEA_ROUTE_ID_HJALSING_OVERTHOR,
 #endif
-};										//ds:0xa358
-int8_t g_harbors_linked_sea_routes_11[] = {20, 21, -1};				//ds:0xa35f
-int8_t g_harbors_linked_sea_routes_12[] = {4, 5, 19, 20, -1};			//ds:0xa362
-int8_t g_harbors_linked_sea_routes_13[] = {18, 19, 44, -1};			//ds:0xa367
-int8_t g_harbors_linked_sea_routes_14[] = {15, 17, -1};				//ds:0xa36b
-int8_t g_harbors_linked_sea_routes_15[] = {16, 17, 18, 41, 42, 43, -1};		//ds:0xa36e
-int8_t g_harbors_linked_sea_routes_16[] = {13, 12, 11, 40, 41, -1};		//ds:0xa375
-int8_t g_harbors_linked_sea_routes_17[] = {13, 42, 14, -1};			//ds:0xa37b
-int8_t g_harbors_linked_sea_routes_18[] = {1, 2, 3, 4, 14, 15, 16, 40, -1};      //ds:0xa37f
-int8_t g_harbors_linked_sea_routes_19[] = {10, 12, -1};				//ds:0xa388
-int8_t g_harbors_linked_sea_routes_20[] = {9, 10, 11, 39, -1};			//ds:0xa38b
-int8_t g_harbors_linked_sea_routes_21[] = {8, 9, -1};				//ds:0xa390
-int8_t g_harbors_linked_sea_routes_22[] = {26, 28, 29, -1};			//ds:0xa393
-int8_t g_harbors_linked_sea_routes_23[] = {30, 31, -1};				//ds:0xa397
-int8_t g_harbors_linked_sea_routes_24[] = {3, 7, 31, 32, 45, -1};		//ds:0xa39a
-int8_t g_harbors_linked_sea_routes_25[] = {43, 44, -1};					  //ds:0xa3a0
-
-// for each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes
+	SEA_ROUTE_ID_HJALSING_MANRIN,
+#ifndef M302de_ORIGINAL_BUGFIX
+	SEA_ROUTE_ID_VARNHEIM_LJASDAHL,
+#endif
+	SEA_ROUTE_ID_GUDDASUN_HJALSING,
+	SEA_ROUTE_ID_HJALSING_ROVIK,
+	-1
+}; //ds:0xa358
+int8_t g_harbors_linked_sea_routes_11[] = {
+	SEA_ROUTE_ID_KORD_GUDDASUN,
+	SEA_ROUTE_ID_GUDDASUN_HJALSING,
+	-1
+}; //ds:0xa35f
+int8_t g_harbors_linked_sea_routes_12[] = {
+	SEA_ROUTE_ID_PREM_KORD,
+	SEA_ROUTE_ID_KORD_HJALSING,
+	SEA_ROUTE_ID_TREBAN_KORD,
+	SEA_ROUTE_ID_KORD_GUDDASUN,
+	-1
+}; //ds:0xa362
+int8_t g_harbors_linked_sea_routes_13[] = {
+	SEA_ROUTE_ID_RUNINSHA_TREBAN,
+	SEA_ROUTE_ID_TREBAN_KORD,
+	SEA_ROUTE_ID_TREBAN_L_RUNIN,
+	-1
+}; //ds:0xa367
+int8_t g_harbors_linked_sea_routes_14[] = {
+	SEA_ROUTE_ID_PREM_ARYN,
+	SEA_ROUTE_ID_ARYN_RUNINSHA,
+	-1
+}; //ds:0xa36b
+int8_t g_harbors_linked_sea_routes_15[] = {
+	SEA_ROUTE_ID_PREM_RUNINSHA,
+	SEA_ROUTE_ID_ARYN_RUNINSHA,
+	SEA_ROUTE_ID_RUNINSHA_TREBAN,
+	SEA_ROUTE_ID_OTTARJE_RUNINSHA,
+	SEA_ROUTE_ID_SKJAL_RUNINSHA,
+	SEA_ROUTE_ID_RUNINSHA_L_RUNIN,
+	-1
+}; //ds:0xa36e
+int8_t g_harbors_linked_sea_routes_16[] = {
+	SEA_ROUTE_ID_SKJAL_OTTARJE,
+	SEA_ROUTE_ID_LJASDAHL_OTTARJE,
+	SEA_ROUTE_ID_VARNHEIM_OTTARJE,
+	SEA_ROUTE_ID_OTTARJE_PREM,
+	SEA_ROUTE_ID_OTTARJE_RUNINSHA,
+	-1
+}; //ds:0xa375
+int8_t g_harbors_linked_sea_routes_17[] = {
+	SEA_ROUTE_ID_SKJAL_OTTARJE,
+	SEA_ROUTE_ID_SKJAL_RUNINSHA,
+	SEA_ROUTE_ID_SKJAL_PREM,
+	-1
+}; //ds:0xa37b
+int8_t g_harbors_linked_sea_routes_18[] = {
+	SEA_ROUTE_ID_THORWAL_PREM,
+	SEA_ROUTE_ID_PREM_HJALSING,
+	SEA_ROUTE_ID_PREM_MANRIN,
+	SEA_ROUTE_ID_PREM_KORD,
+	SEA_ROUTE_ID_SKJAL_PREM,
+	SEA_ROUTE_ID_PREM_ARYN,
+	SEA_ROUTE_ID_PREM_RUNINSHA,
+	SEA_ROUTE_ID_OTTARJE_PREM,
+	-1
+};       //ds:0xa37f
+int8_t g_harbors_linked_sea_routes_19[] = {
+	SEA_ROUTE_ID_VARNHEIM_LJASDAHL,
+	SEA_ROUTE_ID_LJASDAHL_OTTARJE,
+	-1
+}; //ds:0xa388
+int8_t g_harbors_linked_sea_routes_20[] = {
+	SEA_ROUTE_ID_VAERMHAG_VARNHEIM,
+	SEA_ROUTE_ID_VARNHEIM_LJASDAHL,
+	SEA_ROUTE_ID_VARNHEIM_OTTARJE,
+	SEA_ROUTE_ID_THORWAL_VARNHEIM,
+	-1
+}; //ds:0xa38b
+int8_t g_harbors_linked_sea_routes_21[] = {
+	SEA_ROUTE_ID_THORWAL_VAERMHAG,
+	SEA_ROUTE_ID_VAERMHAG_VARNHEIM,
+	-1
+}; //ds:0xa390
+int8_t g_harbors_linked_sea_routes_22[] = {
+	SEA_ROUTE_ID_OVERTHOR_VIDSAND,
+	SEA_ROUTE_ID_LISKOR_VIDSAND,
+	SEA_ROUTE_ID_TJANSET_VIDSAND,
+	-1
+}; //ds:0xa393
+int8_t g_harbors_linked_sea_routes_23[] = {
+	SEA_ROUTE_ID_OVERTHOR_BRENDHIL,
+	SEA_ROUTE_ID_BRENDHIL_MANRIN,
+	-1
+}; //ds:0xa397
+int8_t g_harbors_linked_sea_routes_24[] = {
+	SEA_ROUTE_ID_PREM_MANRIN,
+	SEA_ROUTE_ID_HJALSING_MANRIN,
+	SEA_ROUTE_ID_BRENDHIL_MANRIN,
+	SEA_ROUTE_ID_ROVIK_MANRIN,
+	SEA_ROUTE_ID_MANRIN_OVERTHOR,
+	-1
+}; //ds:0xa39a
+int8_t g_harbors_linked_sea_routes_25[] = {
+	SEA_ROUTE_ID_RUNINSHA_L_RUNIN,
+	SEA_ROUTE_ID_TREBAN_L_RUNIN,
+	-1
+}; //ds:0xa3a0
 
 struct trv_start_point g_harbors[26] = { // a list of the available sea routes for each of the 25 harbors in the game.
 	{ TOWN_ID_THORWAL         , 3, (uint8_t*)g_harbors_linked_sea_routes_01 }, //  1
