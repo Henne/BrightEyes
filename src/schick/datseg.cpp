@@ -1242,7 +1242,7 @@ const signed int* g_magic_schools_table[9] = {
 	g_magic_school_veraenderung_spell_ids
 };
 
-void (*g_spell_handlers[86])(void) = {
+void (*g_spell_handlers[SP__END])(void) = {
 	NULL,
 	/* Dispel / Antimagie */
 	spell_beherrschung,
@@ -1459,7 +1459,7 @@ void (*g_mon_spellhandlers[15])(void) = {
 	mspell_paralue,			/* 14 */
 }; // ds:0x0fc2, function pointer[15]
 
-const struct talent_descr g_talent_descriptions[TA__TAIL + 1] = {
+const struct talent_descr g_talent_descriptions[TA__END] = {
 	{ 0        , 0        , 0        , 1 }, // TA_WAFFENLOS
 	{ 0        , 0        , 0        , 1 }, // TA_HIEBWAFFEN
 	{ 0        , 0        , 0        , 1 }, // TA_STICHWAFFEN
@@ -2358,7 +2358,7 @@ int16_t gs_debt_days = 0;	 // ds:0x3360
 int16_t gs_in_academy = 0;	 // ds:0x3362
 uint8_t  gs_informer_flags[16] = {0}; // ds:0x3364
 uint8_t  gs_tav_kicked_flags[88] = {0}; // ds:0x3374
-uint8_t  gs_town_outlawed_flags[52] = {0}; // ds:0x33cc WRITEONLY
+uint8_t  gs_town_outlawed_flags[TOWN_ID__END - 1] = {0}; // ds:0x33cc WRITEONLY
 uint8_t  gs_inn_kicked_flags[74] = {0}; // ds:0x3400
 uint8_t  gs_got_letter_het = 0; // ds:0x344a
 unsigned char g_unkn_015[1] = { 0x00 }; // ds:0x344b
@@ -3902,10 +3902,10 @@ uint8_t *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
-const char* names_attrib[14] = {"MU", "KL", "CH", "FF", "GE", "IN", "KK",
+const char* names_attrib[ATTRIB__END] = {"MU", "KL", "CH", "FF", "GE", "IN", "KK",
 				"AG", "HA", "RA", "GG", "TA", "NG", "JZ"};
 
-const char* names_talent[52] = {
+const char* names_talent[TA__END] = {
     "Waffenlos", "Hiebwaffen", "Stichwaffen", "Schwerter", "Äxte", "Speere", "Zweihänder", "Schusswaffen", "Wurfwaffen",
     "Akrobatik", "Klettern", "Körperbeh.", "Reiten", "Schleichen", "Schwimmen", "Selbstbeh.", "Tanzen", "Verstecken", "Zechen",
     "Bekehren", "Betören", "Feilschen", "Gassenwissen", "Lügen", "Menschenkenntnis", "Schätzen",
@@ -3915,7 +3915,7 @@ const char* names_talent[52] = {
     "Gefahrensinn", "Sinnenschärfe"
 };
 
-const char* names_spell[86] = {
+const char* names_spell[SP__END] = {
     "DUMMY",
     "Beherrschung brechen", "Destructibo", "Gardianum", "Illusionen zerstören", "Verwandlung beenden", // Antimagie
     "Band & Fessel", "Bannbaladin", "Böser Blick", "Große Gier", "Große Verwirrung", "Herr der Tiere", "Horriphobus", "Mag. Raub", "Respondami", "Sanftmut", "Somnigravis", "Zwingtanz", // Beherrschung

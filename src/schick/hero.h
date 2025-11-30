@@ -1,6 +1,8 @@
 #ifndef HERO_H
 #define HERO_H
 
+#include "common.h"
+
 #if __cpp_static_assert  
   #include <assert.h>
 #define STATIC_ASSERT(expr, msg) static_assert(expr, #msg)
@@ -146,7 +148,7 @@ struct struct_hero {
 	signed char rs_bonus_dummy; /* read-only? */
 	signed char rs_be; /* Ruestungsschutzbehinderung */
 	signed char fight_bp_left; /* bp = Bewegungspunkte */
-	struct struct_attribs attrib[14]; /* see enum ATTRIB_* */
+	struct struct_attribs attrib[ATTRIB__END]; /* see enum ATTRIB_* */
 	/* Offset 0x5e */
 	signed short le_max;
 	signed short le;
@@ -224,11 +226,11 @@ struct struct_hero {
 	struct hero_affliction poison[10]; /* 50 = 10 * 5 bytes */ /* for the index, see enum POISON_ID. NOTE that no poison has poison_id == 0, so the first 5 bytes are unused. */
 
 	/* Offset 0x108 */
-	signed char talents[52]; /* see enum TA_* */
+	signed char talents[TA__END]; /* see enum TA_* */
 	/* The first entry does not belong to an actual spell talent and is apparently unused. */
 	signed char saved_talent_increases;
 	/* Offset 0x13d */
-	signed char spells[86]; /* see enum SP_* */
+	signed char spells[SP__END]; /* see enum SP_* */
 	signed char saved_spell_increases;
 	signed char spell_school; /* only for mages */
 	signed char staff_level; /* only for mages */

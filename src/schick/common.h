@@ -187,7 +187,8 @@ enum {
 	ATTRIB_GG = 10,
 	ATTRIB_TA = 11,
 	ATTRIB_NG = 12,
-	ATTRIB_JZ = 13
+	ATTRIB_JZ = 13,
+	ATTRIB__END = 14
 };
 
 enum {
@@ -250,7 +251,7 @@ enum {
 	/* Intuition */
 	TA_GEFAHRENSINN		= 50, // 0x32
 	TA_SINNESSCHAERFE	= 51, // 0x33
-	TA__TAIL		= 51
+	TA__END			= 52
 };
 
 enum {
@@ -352,7 +353,7 @@ enum {
 	SP_HARTES_SCHMELZE			= 83, // 0x53
 	SP_SILENTIUM_SILENTILLE			= 84, // 0x54
 	SP_STURMGEBRUELL_BESAENFTGE_DICH	= 85, // 0x55
-	SP__TAIL				= 85
+	SP__END					= 86
 };
 
 enum {
@@ -899,7 +900,7 @@ enum {
 	TOWN_ID_FAEHRE_ANGBODIRTAL	= 50, // %0x32
 	TOWN_ID_HJALLANDER_HOF		= 51, // %0x33
 	TOWN_ID_LEUCHTTURM_RUNIN	= 52,  // %0x34
-	TOWN_ID__TAIL			= 52
+	TOWN_ID__END			= 53
 };
 
 enum {

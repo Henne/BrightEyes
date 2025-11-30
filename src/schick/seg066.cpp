@@ -88,7 +88,8 @@ const uint8_t g_hyg_ani_x9[3] = { 0x30, 0x26, 0x26 }; // ds:0x71c7
  * In this case, this info would also be available from the preceding loop, see the line
  * assert(g_town_num_locations_table[town_id - 1] == (locations_tab_ptr - g_locations_tab)
  * below */
-static const uint8_t g_town_num_locations_table[TOWN_ID__TAIL] = {
+static const uint8_t g_town_num_locations_table[TOWN_ID__END - 1] = {
+/* note that the index is "off by 1" compared to TOWN_ID_... */
 	54, // TOWN_ID_THORWAL
 	 4, // TOWN_ID_SERSKE
 	 8, // TOWN_ID_BREIDA

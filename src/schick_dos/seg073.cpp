@@ -17,7 +17,7 @@
 #include "seg071.h"
 #include "seg097.h"
 
-static const uint8_t g_town_gossip_max[TOWN_ID__TAIL] = {
+static const uint8_t g_town_gossip_max[TOWN_ID__END - 1] = {
 /* note that the index is "off by 1" compared to TOWN_ID_... */
 	26, // TOWN_ID_THORWAL
 	14, // TOWN_ID_SERSKE
@@ -73,7 +73,7 @@ static const uint8_t g_town_gossip_max[TOWN_ID__TAIL] = {
 	 0  // TOWN_ID_LEUCHTTURM_RUNIN
 }; // ds:0x7c9d
 
-static const uint8_t g_town_gossip_off[TOWN_ID__TAIL] = {
+static const uint8_t g_town_gossip_off[TOWN_ID__END - 1] = {
 /* note that the index is "off by 1" compared to TOWN_ID_... */
 	56, // TOWN_ID_THORWAL
 	 6, // TOWN_ID_SERSKE
