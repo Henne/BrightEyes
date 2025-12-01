@@ -309,7 +309,7 @@ struct trv_start_point g_signposts[106] = {
 	{ TOWN_ID_FAEHRE_ANGBODIRTAL , 3, (uint8_t*)g_signposts_linked_lroute_103 }, // 103
 	{ TOWN_ID_HJALLANDER_HOF     , 1, (uint8_t*)g_signposts_linked_lroute_104 }, // 104
 	{ TOWN_ID_LEUCHTTURM_RUNIN   , 2, (uint8_t*)g_signposts_linked_lroute_105 }, // 105
-	{ -1                         , 0,  NULL                                   }
+	{ -1                         , 0, NULL                                    }
 }; // ds:0xa0b4; uint8_t*
 
 /* For each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes */

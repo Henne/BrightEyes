@@ -106,12 +106,12 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 	struct struct_route_tevent *tevent_ptr;
 	signed int bak1;
 	signed int bak2;
-	signed int last_tevent_no;
+	signed int last_tevent_id;
 	signed int answer;
 
 	g_traveling = 1;
 
-	last_tevent_no = -1;
+	last_tevent_id = -1;
 	gs_route_course_ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (land_route_id - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
 	gs_route_course_ptr += 2;
@@ -120,12 +120,12 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
 	 * 		Can be replaced by a locvar! */
 	gs_travel_route_ptr = &g_land_routes[land_route_id - 1];
-	gs_travel_speed = 166;
+	gs_travel_speed = 166; // unit: [10m per hour]. So standard speed is 1.66 km/h, pretty slow...
 	gs_route_total_steps = TM_get_track_length((struct struct_point*)gs_route_course_ptr);
-	gs_route_length = (gs_travel_route_ptr->distance * 100);
-	gs_route_duration = (gs_route_length / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60);
-	gs_route_timedelta = (gs_route_duration / gs_route_total_steps);
-	gs_route_stepsize = gs_route_length / gs_route_total_steps;
+	gs_route_length = (gs_travel_route_ptr->distance * 100); // unit: [10m]
+	gs_route_duration = (gs_route_length / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60); // unit: [minutes]
+	gs_route_timedelta = (gs_route_duration / gs_route_total_steps); /* duration of each step. unit: [minutes] */
+	gs_route_stepsize = gs_route_length / gs_route_total_steps; /* length of a single step. unit: [10m] */
 
 	if (gs_route_stepsize == 0)
 	{
@@ -134,6 +134,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 
 	if (backwards)
 	{
+		/* move gs_route_course_ptr to the end of the route */
 		while (gs_route_course_ptr[0] != -1)
 		{
 			gs_route_course_ptr += 2;
@@ -155,7 +156,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 
 	gs_trv_return = 0;
 	gs_route_course_start = gs_route_course_ptr;
-	gs_route_dayprogress = (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 18;
+	gs_route_dayprogress = (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 18; /* distance after 18 hours of traveling. unit: [10m] */
 
 	/* random section starts */
 	if (gs_quested_months > 3)
@@ -333,7 +334,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 				{
 					if (gs_route_tevents[gs_trv_i].tevent_id)
 					{
-						TRV_event(gs_route_tevents[(last_tevent_no = gs_trv_i)].tevent_id);
+						TRV_event(gs_route_tevents[(last_tevent_id = gs_trv_i)].tevent_id);
 
 						if (!g_tevents_repeatable[gs_route_tevents[gs_trv_i].tevent_id - 1])
 						{
@@ -445,9 +446,9 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 				{
 					gs_trv_return = (gs_trv_return == 0 ? 1 : -1);
 
-					if (last_tevent_no != -1)
+					if (last_tevent_id != -1)
 					{
-						g_route_tevent_flags[last_tevent_no] = (gs_trv_return == 1 ? 0 : 2);
+						g_route_tevent_flags[last_tevent_id] = (gs_trv_return == 1 ? 0 : 2);
 					}
 				}
 			}

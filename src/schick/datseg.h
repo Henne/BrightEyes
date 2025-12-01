@@ -606,8 +606,8 @@ struct struct_chest {
 struct ship {
 	int8_t passage_type;
 	int8_t unkn;		/* UNUSED */
-	int8_t base_price;	/* Unit: [Heller per 10 km] */
-	int8_t base_speed;	/* Unit: [km per day] */	/* TODO: This value should be unsigned instead. */
+	int8_t base_price;	/* unit: [Heller per 10 km] */
+	int8_t base_speed;	/* unit: [km per day] */	/* TODO: This value should be unsigned instead. */
 };
 
 /* TODO: SHOULD BE IN GAME STATE */
@@ -621,6 +621,7 @@ struct sea_route {
 	unsigned char town_id_2;	/* one byte readonly */
 					/* ID of the second town of the connection */
 	unsigned char distance;		/* one byte readonly */
+					/* unit: [km] */
 					/* TODO: But should be 2 Byte for Prem <-> Manrin to avoid an integer overflow */
 	signed char frequency;		/* one byte readonly */
 					/* the higher this value, the rarer a passage on the route is offered */
@@ -735,8 +736,8 @@ struct struct_land_route {
 	/* Note: routes are undirected */
 	uint8_t town_id_1;
 	uint8_t town_id_2;
-	uint8_t distance;
-	int8_t speed_mod;		/* {-4, ..., 7} */
+	uint8_t distance;               /* unit: [km] */
+	int8_t speed_mod;		/* {-4, ..., 7}. Adjustment of the base speed in tenths. For example: -3 means -30% */
 	uint8_t encounters;
 	unsigned char unkn1;		/* unused */
 	unsigned char unkn2;		/* unused */
@@ -1586,13 +1587,13 @@ extern int16_t gs_trv_i;				//ds:0x4228; seg063, seg094
 extern int16_t gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern int16_t gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 extern int16_t gs_route_total_steps;			//ds:0x422e; seg063, seg094
-extern int16_t gs_route_length;				//ds:0x4230; seg063, seg094
-extern int16_t gs_route_duration;			//ds:0x4232; seg063, seg094
-extern int16_t gs_route_timedelta;			//ds:0x4234; seg063, seg094
+extern int16_t gs_route_length;				//ds:0x4230; seg063, seg094 // unit: [10m]
+extern int16_t gs_route_duration;			//ds:0x4232; seg063, seg094 // unit: [minutes]
+extern int16_t gs_route_timedelta;			//ds:0x4234; seg063, seg094 // duration of each step. unit: [minutes]
 extern int16_t gs_route_mousehover;			//ds:0x4236; seg063, seg094
 extern int16_t gs_route_progress;			//ds:0x4238; seg063, seg094
-extern int16_t gs_route_stepsize;			//ds:0x423a; seg063, seg094
-extern int16_t gs_route_dayprogress;			//ds:0x423c; seg094
+extern int16_t gs_route_stepsize;			//ds:0x423a; seg063, seg094 // length of a single step. unit: [10m]
+extern int16_t gs_route_dayprogress;			//ds:0x423c; seg094 // unit: [10m]
 extern int16_t gs_sea_travel_passage_id;		//ds:0x423e; seg063
 extern int16_t gs_route_encounter_flag;			//ds:0x4240; seg094
 extern int16_t gs_route_encounter_time;			//ds:0x4242; seg094
@@ -1600,7 +1601,7 @@ extern int16_t gs_route_informer_flag;			//ds:0x4244; seg094
 extern int16_t gs_route_informer_time;			//ds:0x4246; seg094
 extern int16_t gs_route_fight_flag;			//ds:0x4248; seg094, seg117
 extern int16_t gs_route_fight_time;			//ds:0x424a; seg094
-extern int16_t gs_travel_speed;				//ds:0x424c; seg063, seg094
+extern int16_t gs_travel_speed;				//ds:0x424c; seg063, seg094 // unit: [10m per hour]
 extern int16_t gs_passage_deadship_flag;		//ds:0x424e; seg063
 extern int16_t gs_passage_deadship_position;		//ds:0x4250; seg063
 extern int16_t gs_passage_octopus_flag;			//ds:0x4252; seg063
