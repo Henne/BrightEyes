@@ -583,7 +583,8 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 
 	gs_route_dayprogress = (18 * (gs_travel_speed + gs_travel_speed / 10));
 	/* this is 19.8h * gs_travel_speed, which is the distance [unit: 10m] the ship travels in 19.8 h.
-	 * It is used as upper bound for the position of the random encounters. */
+	 * I (siebenstreich) think that the original idea was 18h * gs_travel_speed, copying the
+	 * corresponding part from trv_do_journey, and then messing up the removal of speed_mod */
 
 	if (passage_id <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
 		/* only on high seas routes */
