@@ -3418,7 +3418,7 @@ int16_t gs_sea_travel_passage_id = 0; // ds:0x423e
 int16_t gs_route_encounter_flag = 0; // ds:0x4240
 int16_t gs_route_encounter_time = 0; // ds:0x4242
 int16_t gs_route_informer_flag = 0; // ds:0x4244
-int16_t gs_route_informer_time = 0; // ds:0x4246
+int16_t gs_route_informer_position = 0; // ds:0x4246
 int16_t gs_route_fight_flag = 0; // ds:0x4248
 int16_t gs_route_fight_time = 0; // ds:0x424a
 int16_t gs_travel_speed = 0; // ds:0x424c
@@ -3433,7 +3433,7 @@ int16_t *gs_route_course_ptr = NULL;			// ds:0x425a;
 int16_t *gs_route_course_start = NULL;			// ds:0x425e;
 int16_t *gs_route_course_ptr2 = NULL;			// ds:0x4262;
 uint8_t  *gs_sea_travel_courses = NULL;			// ds:0x4266
-struct struct_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
+struct struct_land_route_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr = NULL;	// ds:0x426e
 #else
 uint32_t gs_route_course_ptr_obsolete = 0;	// ds:0x425a; This is a dummy now!
@@ -3443,7 +3443,7 @@ uint32_t gs_sea_travel_courses_obsolete = 0;	// ds:0x4266; This is a dummy now!
 uint32_t gs_tevents_tab_ptr_obsolete = 0;		// ds:0x426a; This is a dummy now!
 uint32_t gs_travel_route_ptr_obsolete = 0;	// ds:0x426e; This is a dummy now!
 #endif
-struct struct_route_tevent gs_route_tevents[15] = {
+struct struct_journey_tevent gs_journey_tevents[15] = {
 	{ 0x0000, 0x0000 },
 	{ 0x0000, 0x0000 },
 	{ 0x0000, 0x0000 },
@@ -3894,7 +3894,7 @@ int16_t *gs_route_course_ptr;				// ds:0x425a;
 int16_t *gs_route_course_start;				// ds:0x425e;
 int16_t *gs_route_course_ptr2;				// ds:0x4262;
 uint8_t *gs_sea_travel_courses;				// ds:0x4266
-struct struct_tevent *gs_tevents_tab_ptr;		// ds:0x426a
+struct struct_land_route_tevent *gs_tevents_tab_ptr;		// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e
 uint8_t *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
 #endif

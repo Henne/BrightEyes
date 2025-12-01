@@ -617,7 +617,7 @@ static struct mouse_action g_action_table_travelmap[35] = {
 	{ -1, 0x00, 0x00, 0x00, 0x00 }
 }; // ds:0xa50f
 
-struct struct_tevent g_tevents_tab[156] = {
+struct struct_land_route_tevent g_tevents_tab[156] = {
 	{ LROUTE_ID_VAERMHAG_VARNHEIM, 26, 1 },
 	{ LROUTE_ID_VARNHEIM_DASPOTA, 7, 2 },
 	{ LROUTE_ID_THORWAL_SERSKE, 0, 3 },
