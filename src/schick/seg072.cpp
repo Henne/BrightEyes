@@ -583,8 +583,10 @@ void INF_olvir_asgrimm(const signed int informer, const signed int state)
 /**
  * \brief   dialog logic for the informers Treborn Kolberg and unicorn (1st meeting)
  *
- * \param   informer    0 = treborn, 1 = treborn, 2 = unicorn
+ * \param   informer    0 = treborn (first meeting), 1 = treborn (second meeting), 2 = unicorn (first meeting)
  * \param   state       state of the dialog
+ *
+ * for the second unicorn meeting, see INF_swafnild_unicorn
  */
 void INF_treborn_unicorn(const signed int informer, const signed int state)
 {
@@ -727,10 +729,12 @@ void INF_treborn_unicorn(const signed int informer, const signed int state)
 }
 
 /**
- * \brief   dialog logic for the informers swafnild and unicorn (2nd meeting)
+ * \brief   dialog logic for the informers swafnild and unicorn (second meeting)
  *
- * \param   informer    0 = Swafnild, 1 = unicorn
+ * \param   informer    0 = Swafnild, 1 = unicorn (second meeting)
  * \param   state       state of the dialog
+ *
+ * for the first unicorn meeting, see INF_treborn_unicorn
  */
 void INF_swafnild_unicorn(const signed int informer, const signed int state)
 {

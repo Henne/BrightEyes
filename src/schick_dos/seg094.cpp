@@ -311,14 +311,13 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 
 		} else if (gs_route_informer_flag && gs_route_dayprogress >= gs_route_informer_time && g_game_state == GAME_STATE_MAIN)
 		{
-			gs_town_typeindex = (random_schick(100) <= 50 ? 10 : 12);
+			gs_town_typeindex = (random_schick(100) <= 50 ? INFORMER_ID_OLVIR + 1 : INFORMER_ID_TREBORN + 1);
 			bak1 = g_basepos_x;
 			bak2 = g_basepos_y;
 			g_basepos_x = g_basepos_y = 0;
 			do_informer();
 			g_basepos_x = bak1;
 			g_basepos_y = bak2;
-
 		}
 
 		if (g_game_state == GAME_STATE_MAIN)
