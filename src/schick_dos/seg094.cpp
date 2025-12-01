@@ -97,13 +97,14 @@ void set_textbox_positions(const signed int town_id)
  * \brief   ???
  *
  * \param   land_route_id    number of the route
- * \param   backwards   0 = travel the route forwards, 1 = travel backwards
+ * \param   reverse   0 = travel in normal direction, i.e. from land_route_id.town_id_1 to land_route_id.town_id_2
+ *                    1 = travel in reverse direction, i.e. from land_route_id.town_id_2 to land_route_id.town_id_1
  */
-void TM_func1(const signed int land_route_id, const signed int backwards)
+void TM_func1(const signed int land_route_id, const signed int reverse)
 {
 	uint8_t* fb_start;
 	struct struct_hero *hero;
-	struct struct_route_tevent *tevent_ptr;
+	struct struct_journey_tevent *tevent_ptr;
 	signed int bak1;
 	signed int bak2;
 	signed int last_tevent_id;
@@ -132,7 +133,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 		gs_route_stepsize = 1;
 	}
 
-	if (backwards)
+	if (reverse)
 	{
 		/* move gs_route_course_ptr to the end of the route */
 		while (gs_route_course_ptr[0] != -1)
@@ -142,7 +143,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 		gs_route_course_ptr -= 2;
 	}
 
-	memset((void*)gs_route_tevents, (gs_route_stepcount = 0), 15 * sizeof(struct_route_tevent));
+	memset((void*)gs_journey_tevents, (gs_route_stepcount = 0), 15 * sizeof(struct_journey_tevent));
 	memset(g_route_tevent_flags, 0, 15);
 
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
@@ -163,7 +164,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 	{
 		if ((gs_route_informer_flag = (random_schick(100) <= 2) ? 1 : 0))
 		{
-			gs_route_informer_time = random_schick(gs_route_dayprogress);
+			gs_route_informer_position = random_schick(gs_route_dayprogress);
 		}
 	} else {
 		gs_route_informer_flag = 0;
@@ -182,18 +183,18 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 	gs_route_dayprogress = 0;
 	/* random section ends */
 
-	while ((gs_tevents_tab_ptr->land_route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->land_route_id == land_route_id))
+	while ((gs_tevents_tab_ptr->land_route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->land_route_id == land_route_id)) // first condition can be dropped
 	{
-		tevent_ptr = &gs_route_tevents[gs_route_stepcount];
-		tevent_ptr->place = gs_tevents_tab_ptr->place;
+		tevent_ptr = &gs_journey_tevents[gs_route_stepcount];
+		tevent_ptr->position = gs_tevents_tab_ptr->position;
 		tevent_ptr->tevent_id = gs_tevents_tab_ptr->tevent_id;
 
-		if (backwards)
+		if (reverse)
 		{
-			tevent_ptr->place = gs_travel_route_ptr->distance - tevent_ptr->place;
+			tevent_ptr->position = gs_travel_route_ptr->distance - tevent_ptr->position;
 		}
 
-		tevent_ptr->place *= 100;
+		tevent_ptr->position *= 100; // unit is now [10m]
 		gs_tevents_tab_ptr++;
 		gs_route_stepcount++;
 	}
@@ -309,7 +310,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 		{
 			do_wild8_fight();
 
-		} else if (gs_route_informer_flag && gs_route_dayprogress >= gs_route_informer_time && g_game_state == GAME_STATE_MAIN)
+		} else if (gs_route_informer_flag && gs_route_dayprogress >= gs_route_informer_position && g_game_state == GAME_STATE_MAIN)
 		{
 			gs_town_typeindex = (random_schick(100) <= 50 ? INFORMER_ID_OLVIR + 1 : INFORMER_ID_TREBORN + 1);
 			bak1 = g_basepos_x;
@@ -324,18 +325,18 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 		{
 			for (gs_trv_i = 0; gs_trv_i < 15; gs_trv_i++)
 			{
-				if (((gs_route_tevents[gs_trv_i].place <= gs_route_progress) &&
+				if (((gs_journey_tevents[gs_trv_i].position <= gs_route_progress) &&
 					(gs_trv_return == 0) &&
 					!g_route_tevent_flags[gs_trv_i]) ||
-					((gs_route_tevents[gs_trv_i].place >= gs_route_progress) &&
+					((gs_journey_tevents[gs_trv_i].position >= gs_route_progress) &&
 					(gs_trv_return == 2) &&
 					(g_route_tevent_flags[gs_trv_i] == 2)))
 				{
-					if (gs_route_tevents[gs_trv_i].tevent_id)
+					if (gs_journey_tevents[gs_trv_i].tevent_id)
 					{
-						TRV_event(gs_route_tevents[(last_tevent_id = gs_trv_i)].tevent_id);
+						TRV_event(gs_journey_tevents[(last_tevent_id = gs_trv_i)].tevent_id);
 
-						if (!g_tevents_repeatable[gs_route_tevents[gs_trv_i].tevent_id - 1])
+						if (!g_tevents_repeatable[gs_journey_tevents[gs_trv_i].tevent_id - 1])
 						{
 							g_route_tevent_flags[gs_trv_i] = 1;
 
@@ -395,7 +396,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 				{
 					if ((gs_route_informer_flag = random_schick(100) <= 2 ? 1 : 0) != 0)
 					{
-						gs_route_informer_time = random_schick(gs_route_dayprogress);
+						gs_route_informer_position = random_schick(gs_route_dayprogress);
 					}
 				} else {
 					gs_route_informer_flag = 0;
@@ -433,7 +434,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 			while (g_trv_track_pixel_bak[gs_trv_i++] != 0xaa)
 			{
 				*(fb_start + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) =  0x1c;
-				gs_route_course_ptr2 += (!backwards ? 2 : -2);
+				gs_route_course_ptr2 += (!reverse ? 2 : -2);
 			}
 
 			call_mouse();
@@ -461,10 +462,10 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 		{
 			gs_trv_return = (gs_trv_return == 1 ? 2: 0);
 
-			gs_route_course_ptr += ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? -2 : 2);
+			gs_route_course_ptr += ((!reverse && gs_trv_return == 0) || (reverse && gs_trv_return != 0) ? -2 : 2);
 		}
 
-		gs_route_course_ptr += ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? 2 : -2);
+		gs_route_course_ptr += ((!reverse && gs_trv_return == 0) || (reverse && gs_trv_return != 0) ? 2 : -2);
 	}
 
 	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_trv_return != 2)
@@ -472,7 +473,7 @@ void TM_func1(const signed int land_route_id, const signed int backwards)
 		call_mouse_bg();
 
 		do {
-			gs_route_course_ptr += (!backwards ? -2 : 2);
+			gs_route_course_ptr += (!reverse ? -2 : 2);
 			gs_route_stepcount--;
 			*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
 				g_trv_track_pixel_bak[gs_route_stepcount];

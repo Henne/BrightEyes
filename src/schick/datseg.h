@@ -727,8 +727,11 @@ struct harbor_option_obsolete {
 /* TODO: needs to be reworked */
 //STATIC_ASSERT(sizeof(struct harbor_option_obsolete) == 12, struct_harbor_option_obsolete_needs_to_be_12_bytes);
 
-struct struct_route_tevent {
-	int16_t place;
+struct struct_journey_tevent {
+	int16_t position;
+	/* position of the travel event on the current journey along a land route,
+	 * given as distance from the starting point. unit [10m] */
+
 	int16_t tevent_id;
 };
 
@@ -745,9 +748,9 @@ struct struct_land_route {
 	unsigned char unkn3;		/* unused */
 };
 
-struct struct_tevent {
+struct struct_land_route_tevent {
 	int8_t land_route_id;
-	uint8_t place;
+	uint8_t position; /* position of the travel event on the land route, given as distance from land_route_id.town_id_1. unit: [km] */
 	uint8_t tevent_id;
 };
 
@@ -1598,7 +1601,7 @@ extern int16_t gs_sea_travel_passage_id;		//ds:0x423e; seg063
 extern int16_t gs_route_encounter_flag;			//ds:0x4240; seg094
 extern int16_t gs_route_encounter_time;			//ds:0x4242; seg094
 extern int16_t gs_route_informer_flag;			//ds:0x4244; seg094
-extern int16_t gs_route_informer_time;			//ds:0x4246; seg094
+extern int16_t gs_route_informer_position;			//ds:0x4246; seg094
 extern int16_t gs_route_fight_flag;			//ds:0x4248; seg094, seg117
 extern int16_t gs_route_fight_time;			//ds:0x424a; seg094
 extern int16_t gs_travel_speed;				//ds:0x424c; seg063, seg094 // unit: [10m per hour]
@@ -1612,9 +1615,9 @@ extern int16_t *gs_route_course_ptr;			//ds:0x425a; seg063, seg094
 extern int16_t *gs_route_course_start;			//ds:0x425e; seg063, seg094
 extern int16_t *gs_route_course_ptr2;			//ds:0x4262; seg063, seg094
 extern uint8_t *gs_sea_travel_courses;			//ds:0x4266; seg063
-extern struct struct_tevent *gs_tevents_tab_ptr;	//ds:0x426a; seg094
+extern struct struct_land_route_tevent *gs_tevents_tab_ptr;	//ds:0x426a; seg094
 extern struct struct_land_route *gs_travel_route_ptr;	//ds:0x426e; seg094
-extern struct struct_route_tevent gs_route_tevents[15]; //ds:0x4272; seg094
+extern struct struct_journey_tevent gs_journey_tevents[15]; //ds:0x4272; seg094
 extern uint8_t  gs_sea_travel_psgbooked_flag;	//ds:0x42ae; seg002, seg063
 extern uint8_t  gs_sea_travel_psgbooked_timer;	//ds:0x42af; seg002, seg063
 extern int8_t  gs_sea_travel_passage_speed1;	//ds:0x42b0; seg063
@@ -1802,7 +1805,7 @@ extern struct trv_start_point g_signposts[106];			//ds:0xa0b4; seg093, seg094
 extern struct trv_start_point g_harbors[26];			//ds:0xa3a3; seg064
 extern struct struct_point g_town_positions[52];		//ds:0xa43f; seg002, seg063, seg094, seg094
 
-extern struct struct_tevent g_tevents_tab[156];		//ds:0xa66d; seg094
+extern struct struct_land_route_tevent g_tevents_tab[156];		//ds:0xa66d; seg094
 extern signed char g_traveling;				//ds:0xa842; seg002, seg032, seg063, seg094
 
 extern signed int g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
