@@ -307,12 +307,50 @@ struct trv_start_point { /* a start_point is either a signpost or a harbor */
 #if !defined(__BORLANDC__)
 #pragma pack(1)
 #endif
-// A location is a point of interest in a town or a travel event. //
 struct location {
-	int16_t pos;		// coordinates of the location within its town
-	int8_t loctype;		// the type of the location
-	uint8_t typeindex;	// Index among the locations of the same type.
+	/* A location is a point of interest in a town or a travel event. */
+	/* See https://github.com/shihan42/BrightEyesWiki/wiki/DAT-(Stadt)#feldinhaltliste */
+	int16_t pos;
+	/* coordinates of the location within its town
+	 * byte 1: y-coordinate
+	 * byte 2: x-coordinate
+	 */
+
+	int8_t loctype;
+	/* the type of the location according to enum LOCTYPE_... */
+
+	uint8_t typeindex;
+	/* Index among locations of the same type; the exact implementation depends on the loctype:
+	 * LOCTYPE_TEMPLE, LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT, LOCTYPE_INN,
+	 * 	LOCTYPE_SMITH, LOCTYPE_MARKET, LOCTYPE_INFORMER, LOCTYPE_SPECIAL:
+	 * 	Unique index among all locations of the same type in the game; coveres all towns + travel events.
+	 * 	However, there are a few collisions due to bugs.
+	 * 	For informers, the typeindex is informer_id + 1 according to enum INFORMER_ID...
+	 * 	Also, these locations in Daspota are indexed independently, and the index is probably irrelevant.
+	 * 	In Daspota, only LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT actually occur.)
+	 * LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
+	 * 	A unique index among all harbors and signposts together, but only among the ones of the same town.
+	 * LOCTYPE_DUNGEON_ENTRY:
+	 * 	The ID of the associated dungeon
+	 * otherwise:
+	 *     probably unused.
+	 */
+
 	int16_t locdata;	// Additional data, depending on the LOCTYPE.
+	/* Additional data, depending on the loctype:
+	 * LOCTYPE_TAVERN, LOCTYPE_INN, LOCTYPE_SMITH, LOCTYPE_SPECIAL, LOCTYPE_MERCHANT, LOCTYPE_HEALER:
+	 *     index to retrieve the location name via get_tx from <TOWN.LTX>
+	 *     If the location is in Daspota: Also an index for assigned fights and loot, see do_location_daspota().
+	 * LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
+	 *     arrival position. bit 0-3: y-coordinate. bit 4-7: viewdir. bit 8-15: x-coordinate.
+	 *     Note that 'viewdir' is used only for LOCTYPE_HARBOR, actually.
+	 *     For LOCTYPE_SIGNPOST, the viewdir entering a town is determined by TM_enter_target_town_viewdir),
+	 *     which does not make use of the 'viewdir' entry.
+	 * LOCTYPE_MARKET, LOCTYPE_TEMPLE, LOCTYPE_INFORMER, LOCTYPE_DUNGEON_ENTRY:
+	 *     unused.
+	 * otherwise:
+	 *     probably unused.
+	 */
 };
 #if !defined(__BORLANDC__)
 #pragma pack()
