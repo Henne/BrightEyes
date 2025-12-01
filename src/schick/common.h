@@ -465,37 +465,6 @@ enum {
 	HERB_POTION_TYPE_POTION = 1
 };
 
-// A location is a point of interest in a town or a travel event. //
-enum {
-	// https://github.com/shihan42/BrightEyesWiki/wiki/DAT-(Stadt)#feldinhaltliste
-	LOCATION_TYPEINDEX = 3, // 1 byte  // Index among the locations of the same type.
-				// For LOCTYPE_TEMPLE, LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT, LOCTYPE_INN,
-				//     LOCTYPE_SMITH, LOCTYPE_MARKET, LOCTYPE_INFORMER, LOCTYPE_SPECIAL:
-				//     unique index among all locations of the same type; coveres all towns + travel events.
-				//     However, there are a few collisions due to bugs.
-				//     Also, these locations in Daspota are indexed independently, and the index is probably irrelevant.
-				//     (In Daspota, only LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT actually occur.)
-				// For LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
-				//     A unique index among all harbors and signposts together, but only among the ones of the same town.
-				// For LOCTYPE_DUNGEON_ENTRY:
-				// 	The id of the associated dungeon
-				// All LOCTYPEs not mentioned above:
-				//     probably unused.
-	LOCATION_LOCDATA   = 4, // 2 bytes // Additional data, depending on the LOCTYPE.
-			        // For LOCTYPE_TAVERN, LOCTYPE_INN, LOCTYPE_SMITH, LOCTYPE_SPECIAL, LOCTYPE_MERCHANT, LOCTYPE_HEALER:
-			        //     index to retrieve the location name via get_tx from <TOWN.LTX>
-				//     If the location is in Daspota: Also an index for assigned fights and loot, see do_location_daspota().
-			        // For LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
-			        //     arrival position. bit 0-3: y-coordinate. bit 4-7: viewdir. bit 8-15: x-coordinate.
-				//     Note that 'viewdir' is used only for LOCTYPE_HARBOR, actually.
-				//     For LOCTYPE_SIGNPOST, the viewdir entering a town is determined by TM_enter_target_town_viewdir),
-				//     which does not make use of the 'viewdir' entry.
-			        // For LOCTYPE_MARKET, LOCTYPE_TEMPLE, LOCTYPE_INFORMER, LOCTYPE_DUNGEON_ENTRY:
-			        //     unused.
-				// All LOCTYPEs not mentioned above:
-				//     probably unused.
-};
-
 enum {
 	LOCTYPE_NONE		= 0,
 	LOCTYPE_UNKN1		= 1,
