@@ -170,7 +170,7 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 		gs_route_informer_flag = 0;
 	}
 
-	if ((gs_route_encounter_flag = random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))
+	if ((gs_trv_random_encounter_flag = random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))
 	{
 		gs_route_encounter_time = random_schick(gs_route_dayprogress);
 	}
@@ -301,10 +301,10 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			}
 		}
 
-		if (gs_route_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && g_game_state == GAME_STATE_MAIN)
+		if (gs_trv_random_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && g_game_state == GAME_STATE_MAIN)
 		{
-			random_encounter(land_route_id);
-			gs_route_encounter_flag = 0;
+			journey_random_encounter(land_route_id);
+			gs_trv_random_encounter_flag = 0;
 
 		} else if (gs_route_fight_flag && gs_route_dayprogress >= gs_route_fight_time && g_game_state == GAME_STATE_MAIN)
 		{
@@ -382,7 +382,7 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 				/* figure out encounters etc. for next day */
 				gs_route_dayprogress = ((gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed / 10)) * 18);
 
-				if ((gs_route_encounter_flag = (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
+				if ((gs_trv_random_encounter_flag = (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
 				{
 					gs_route_encounter_time = random_schick(gs_route_dayprogress);
 				}

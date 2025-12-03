@@ -1598,7 +1598,7 @@ extern int16_t gs_route_progress;			//ds:0x4238; seg063, seg094
 extern int16_t gs_route_stepsize;			//ds:0x423a; seg063, seg094 // length of a single step. unit: [10m]
 extern int16_t gs_route_dayprogress;			//ds:0x423c; seg094 // unit: [10m]
 extern int16_t gs_sea_travel_passage_id;		//ds:0x423e; seg063
-extern int16_t gs_route_encounter_flag;			//ds:0x4240; seg094
+extern int16_t gs_trv_random_encounter_flag;			//ds:0x4240; seg094
 extern int16_t gs_route_encounter_time;			//ds:0x4242; seg094
 extern int16_t gs_route_informer_flag;			//ds:0x4244; seg094
 extern int16_t gs_route_informer_position;			//ds:0x4246; seg094
