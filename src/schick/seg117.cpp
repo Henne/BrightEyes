@@ -660,7 +660,7 @@ void do_wild8_fight(void)
 
 	do_fight(FIGHTS_WILD8);
 
-	gs_route_fight_flag = 0;
+	gs_journey_fight_flag = 0;
 	gs_show_travel_map = 1;
 	g_basepos_x = x_bak;
 	g_basepos_y = y_bak;
