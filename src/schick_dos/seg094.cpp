@@ -162,22 +162,22 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 	/* random section starts */
 	if (gs_quested_months > 3)
 	{
-		if ((gs_route_informer_flag = (random_schick(100) <= 2) ? 1 : 0))
+		if ((gs_journey_olvir_treborn_flag = (random_schick(100) <= 2) ? 1 : 0))
 		{
-			gs_route_informer_position = random_schick(gs_route_dayprogress);
+			gs_journey_olvir_treborn_position = random_schick(gs_route_dayprogress);
 		}
 	} else {
-		gs_route_informer_flag = 0;
+		gs_journey_olvir_treborn_flag = 0;
 	}
 
-	if ((gs_trv_random_encounter_flag = random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))
+	if ((gs_journey_random_encounter_flag = random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))
 	{
-		gs_route_encounter_time = random_schick(gs_route_dayprogress);
+		gs_journey_random_encounter_position = random_schick(gs_route_dayprogress);
 	}
 
-	if ((gs_route_fight_flag = (random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)))
+	if ((gs_journey_fight_flag = (random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)))
 	{
-		gs_route_fight_time = random_schick(gs_route_dayprogress);
+		gs_journey_fight_position = random_schick(gs_route_dayprogress);
 	}
 
 	gs_route_dayprogress = 0;
@@ -301,16 +301,16 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			}
 		}
 
-		if (gs_trv_random_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && g_game_state == GAME_STATE_MAIN)
+		if (gs_journey_random_encounter_flag && gs_route_dayprogress >= gs_journey_random_encounter_position && g_game_state == GAME_STATE_MAIN)
 		{
 			journey_random_encounter(land_route_id);
-			gs_trv_random_encounter_flag = 0;
+			gs_journey_random_encounter_flag = 0;
 
-		} else if (gs_route_fight_flag && gs_route_dayprogress >= gs_route_fight_time && g_game_state == GAME_STATE_MAIN)
+		} else if (gs_journey_fight_flag && gs_route_dayprogress >= gs_journey_fight_position && g_game_state == GAME_STATE_MAIN)
 		{
 			do_wild8_fight();
 
-		} else if (gs_route_informer_flag && gs_route_dayprogress >= gs_route_informer_position && g_game_state == GAME_STATE_MAIN)
+		} else if (gs_journey_olvir_treborn_flag && gs_route_dayprogress >= gs_journey_olvir_treborn_position && g_game_state == GAME_STATE_MAIN)
 		{
 			gs_town_typeindex = (random_schick(100) <= 50 ? INFORMER_ID_OLVIR + 1 : INFORMER_ID_TREBORN + 1);
 			bak1 = g_basepos_x;
@@ -382,24 +382,24 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 				/* figure out encounters etc. for next day */
 				gs_route_dayprogress = ((gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed / 10)) * 18);
 
-				if ((gs_trv_random_encounter_flag = (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
+				if ((gs_journey_random_encounter_flag = (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
 				{
-					gs_route_encounter_time = random_schick(gs_route_dayprogress);
+					gs_journey_random_encounter_position = random_schick(gs_route_dayprogress);
 				}
 
-				if ((gs_route_fight_flag = random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0) != 0)
+				if ((gs_journey_fight_flag = random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0) != 0)
 				{
-					gs_route_fight_time = random_schick(gs_route_dayprogress);
+					gs_journey_fight_position = random_schick(gs_route_dayprogress);
 				}
 
 				if (gs_quested_months > 3)
 				{
-					if ((gs_route_informer_flag = random_schick(100) <= 2 ? 1 : 0) != 0)
+					if ((gs_journey_olvir_treborn_flag = random_schick(100) <= 2 ? 1 : 0) != 0)
 					{
-						gs_route_informer_position = random_schick(gs_route_dayprogress);
+						gs_journey_olvir_treborn_position = random_schick(gs_route_dayprogress);
 					}
 				} else {
-					gs_route_informer_flag = 0;
+					gs_journey_olvir_treborn_flag = 0;
 				}
 
 				gs_route_dayprogress = 0;
