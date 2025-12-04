@@ -147,7 +147,8 @@ void tevent_133(void)
 
 	if (answer == 1) {
 
-		gs_journey_direction = 1;
+		/* Original-Bug? What if the place was entered in backward direction? Is this possible? */
+		gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD;
 
 	} else {
 

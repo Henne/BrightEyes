@@ -649,7 +649,8 @@ void tevent_104(void)
 			} else {
 				/* turn around */
 
-				gs_journey_direction = done = 1;
+				/* Original-Bug? What if the place was entered in backward direction? Is this possible? */
+				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
 			}
 
 		} else {

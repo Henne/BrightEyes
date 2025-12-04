@@ -159,7 +159,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 		gs_tevents_tab_ptr++;
 	}
 
-	gs_journey_direction = 0;
+	gs_journey_direction = JOURNEY_DIRECTION_FORWARD;
 	gs_travel_course_start = gs_travel_course_ptr;
 	gs_travel_distance_per_18_hours = (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 18; /* distance after 18 hours of traveling. unit: [10m] */
 
@@ -216,7 +216,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 			gs_travel_mousehover = 1;
 		}
 
-		if (gs_journey_direction == 2)
+		if (gs_journey_direction == JOURNEY_DIRECTION_BACKWARD)
 		{
 			gs_travel_step_counter--;
 
@@ -255,7 +255,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 			gs_trv_i++;
 		}
 
-		gs_travel_distance_made += (gs_journey_direction == 2 ? -gs_travel_distance_per_step : gs_travel_distance_per_step);
+		gs_travel_distance_made += (gs_journey_direction == JOURNEY_DIRECTION_BACKWARD ? -gs_travel_distance_per_step : gs_travel_distance_per_step);
 		gs_travel_distance_per_18_hours += gs_travel_distance_per_step;
 
 		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP)
@@ -331,11 +331,11 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 			for (gs_trv_i = 0; gs_trv_i < 15; gs_trv_i++)
 			{
 				if (((gs_journey_tevents[gs_trv_i].position <= gs_travel_distance_made) &&
-					(gs_journey_direction == 0) &&
+					(gs_journey_direction == JOURNEY_DIRECTION_FORWARD) &&
 					!g_route_tevent_flags[gs_trv_i])
 						||
 					((gs_journey_tevents[gs_trv_i].position >= gs_travel_distance_made) &&
-					(gs_journey_direction == 2) &&
+					(gs_journey_direction == JOURNEY_DIRECTION_BACKWARD) &&
 					(g_route_tevent_flags[gs_trv_i] == 2)))
 				{
 					if (gs_journey_tevents[gs_trv_i].tevent_id)
@@ -347,7 +347,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 							/* tevent is "used up" for this journey. */
 							g_route_tevent_flags[gs_trv_i] = 1;
 
-						} else if (gs_journey_direction == 0)
+						} else if (gs_journey_direction == JOURNEY_DIRECTION_FORWARD)
 						{
 							/* travelling forward => now the event can take place reaching it in backward direction. */
 							g_route_tevent_flags[gs_trv_i] = 2;
@@ -453,11 +453,13 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 				/* Return or continue? */
 				if (GUI_radio(get_tx(71), 2, get_tx(72), get_tx(73)) == 2)
 				{
-					gs_journey_direction = (gs_journey_direction == 0 ? 1 : -1);
+					gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
 
 					if (last_tevent_id != -1)
 					{
-						g_route_tevent_flags[last_tevent_id] = (gs_journey_direction == 1 ? 0 : 2);
+						/* For the last travel event, the access direction is reversed,
+						 * such that it won't take place after the current direction change. */
+						g_route_tevent_flags[last_tevent_id] = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? 0 : 2);
 					}
 				}
 			}
@@ -467,17 +469,17 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 			g_request_refresh = 0;
 		}
 
-		if (gs_journey_direction == 1 || gs_journey_direction == -1)
+		if (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD || gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_FORWARD)
 		{
-			gs_journey_direction = (gs_journey_direction == 1 ? 2: 0);
+			gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? JOURNEY_DIRECTION_BACKWARD : JOURNEY_DIRECTION_FORWARD);
 
-			gs_travel_course_ptr += ((!reverse && gs_journey_direction == 0) || (reverse && gs_journey_direction != 0) ? -2 : 2);
+			gs_travel_course_ptr += ((!reverse && gs_journey_direction == JOURNEY_DIRECTION_FORWARD) || (reverse && gs_journey_direction != JOURNEY_DIRECTION_FORWARD) ? -2 : 2);
 		}
 
-		gs_travel_course_ptr += ((!reverse && gs_journey_direction == 0) || (reverse && gs_journey_direction != 0) ? 2 : -2);
+		gs_travel_course_ptr += ((!reverse && gs_journey_direction == JOURNEY_DIRECTION_FORWARD) || (reverse && gs_journey_direction != JOURNEY_DIRECTION_FORWARD) ? 2 : -2);
 	}
 
-	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_journey_direction != 2)
+	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_journey_direction != JOURNEY_DIRECTION_BACKWARD)
 	{
 		call_mouse_bg();
 

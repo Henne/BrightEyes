@@ -414,7 +414,8 @@ signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int h
 			answer = GUI_bool(get_tx(39));
 
 			if (answer == 1) {
-				done = gs_journey_direction = 1;
+				/* Original-Bug? What if the ford was entered in backward direction? Is this possible? */
+				done = gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD;
 			}
 		}
 
@@ -440,7 +441,6 @@ void TRV_ford_test(const signed int handicap, const signed int time)
 			 * For (GE - handicap) <= 19: 95% success.
 			 * For (GE - handicap) >= 20: 100% success.
 			 * The intended behaviour probably was a usual GE-test with the given handicap. */
-
 #ifndef M302de_ORIGINAL_BUGFIX
 			if (test_attrib(hero, ATTRIB_GE, handicap) == 0)
 #else
@@ -520,7 +520,8 @@ signed int TRV_ferry(char *msg, signed int price)
 		} else {
 
 			if (GUI_bool(get_tx(33))) {
-				gs_journey_direction = done = 1;
+				/* Original-Bug? What if the ferry was entered in backward direction, is this possible? */
+				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
 			}
 		}
 

@@ -354,8 +354,10 @@ void tevent_114(void)
 
 			if (answer == 1)
 			{
-				/* turn around */
-				gs_journey_direction = done = 1;
+				/* turn arround */
+
+				/* Original-Bug? What if the place was entered in backward direction? Is this possible? */
+				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
 			}
 
 			if (answer == 2)
@@ -590,7 +592,9 @@ void tevent_123(void)
 		} else if (answer == 2)
 		{
 			/* turn arround */
-			gs_journey_direction = done = 1;
+
+			/* Original-Bug? What if the place was entered in backward direction? Is this possible? */
+			gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
 
 		} else {
 			/* fight acrophobia */
