@@ -147,7 +147,7 @@ void tevent_133(void)
 
 	if (answer == 1) {
 
-		gs_trv_return = 1;
+		gs_journey_direction = 1;
 
 	} else {
 

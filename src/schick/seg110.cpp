@@ -131,7 +131,7 @@ void TRV_a_path(void)
 	if (answer == 1)
 	{
 		/* follow the path */
-		g_trv_crosslink_route_status = (gs_town_id == TOWN_ID_PEILINEN ? 2 : 4);
+		g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? 2 : 4);
 
 		/* Original-Glitch:
 		 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
@@ -247,7 +247,7 @@ void tevent_020(void)
 			if (answer == 1)
 			{
 			    /* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen. */
-				g_trv_crosslink_route_status = (gs_town_id == TOWN_ID_PEILINEN ? 1 : 3);
+				g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? 1 : 3);
 
 				/* Original-Glitch:
 				 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).
@@ -262,7 +262,7 @@ void tevent_020(void)
 
 void tevent_021(void)
 {
-	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) ||	gs_tevent021_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) || gs_tevent021_flag)
 	{
 		g_gather_herbs_special = ITEM_ALRAUNE;
 
@@ -649,7 +649,7 @@ void tevent_045(void)
 {
 	signed int answer;
 
-	if (gs_trv_destination == TOWN_ID_DASPOTA)
+	if (gs_journey_destination_town_id == TOWN_ID_DASPOTA)
 	{
 		load_in_head(11);
 

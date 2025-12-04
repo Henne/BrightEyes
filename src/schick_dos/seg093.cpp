@@ -791,7 +791,7 @@ signed int do_travel_mode(void)
 	char *destinations_tab[6];
 
 	wallclock_update_bak = g_wallclock_update;
-	g_trv_crosslink_route_status = g_wallclock_update = gs_travel_detour = 0;
+	g_journey_crosslink_status = g_wallclock_update = gs_travel_detour = 0;
 	gs_town_id = gs_town_typeindex;
 
 	call_mouse_bg();
@@ -856,14 +856,14 @@ signed int do_travel_mode(void)
 					i = 0;
 					while ((tmp1 = signpost_ptr->linked_travel_routes[i]) != 0xff)
 					{
-						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
+						destinations_tab[i] = get_ttx(235 + (gs_trv_signpost_menu_town_ids[i] = (
 							(tmp2 = g_land_routes[tmp1 - 1].town_id_1) != gs_town_id ?
 							(signed char) tmp2 : g_land_routes[tmp1 - 1].town_id_2)));
 
 						i++;
 					}
 
-					gs_trv_menu_towns[i] = gs_town_id;
+					gs_trv_signpost_menu_town_ids[i] = gs_town_id;
 					destinations_tab[i] = get_ttx(613);
 					i++;
 
@@ -890,7 +890,7 @@ signed int do_travel_mode(void)
 					}
 
 					route_id = signpost_ptr->linked_travel_routes[tmp2];
-					gs_trv_destination = gs_trv_menu_towns[tmp2];
+					gs_journey_destination_town_id = gs_trv_signpost_menu_town_ids[tmp2];
 
 					if (!get_current_season() &&
 						(route_id == 31 || route_id == 41 || route_id == 47 || route_id == 48 || route_id == 49))
@@ -905,16 +905,16 @@ signed int do_travel_mode(void)
 
 					g_wallclock_update = 1;
 
-					TM_func1(signpost_ptr->linked_travel_routes[tmp2],
+					trv_do_journey(signpost_ptr->linked_travel_routes[tmp2],
 						(g_land_routes[signpost_ptr->linked_travel_routes[tmp2] - 1].town_id_1 == gs_town_id ? 0 : 1));
 					g_wallclock_update = 0;
 
-					if (g_trv_crosslink_route_status)
+					if (g_journey_crosslink_status)
 					{
-						TM_func9();
+						TM_do_journey_crosslink();
 					}
 
-					if (gs_trv_return == 2)
+					if (gs_journey_direction == 2)
 					{
 						if (gs_travel_detour && gs_travel_detour != 99)
 						{
@@ -923,7 +923,7 @@ signed int do_travel_mode(void)
 						break;
 					}
 
-					TM_enter_target_town();
+					trv_journey_enter_destination_town();
 
 					if (!gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 					{

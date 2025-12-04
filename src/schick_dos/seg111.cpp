@@ -587,7 +587,7 @@ void tevent_064(void)
 
 			GUI_output(get_tx2(70));
 
-			gs_trv_return = (gs_trv_return == 0 ? 1 : -1);
+			gs_journey_direction = (gs_journey_direction == 0 ? 1 : -1);
 		}
 
 	} else if (gs_tevent064_flag != 0) {
