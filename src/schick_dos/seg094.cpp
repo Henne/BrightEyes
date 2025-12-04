@@ -32,7 +32,9 @@ signed char g_traveling = 0; // ds:0xa842
 static const signed char g_tevents_repeatable[145] = { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }; // ds:0xa843
 
 
-unsigned char g_journey_crosslink_status;			// ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
+unsigned char g_journey_crosslink_status;	// ds:0xe4a2
+/* according to enum CROSSLINK_STATUS_...: 0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund */
+
 signed int g_trv_menu_selection;		// ds:0xe4a3
 signed int g_current_town_over;			// ds:0xe4a5
 signed int g_current_town_overy;		// ds:0xe4a7
