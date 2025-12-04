@@ -355,7 +355,7 @@ void tevent_114(void)
 			if (answer == 1)
 			{
 				/* turn around */
-				gs_trv_return = done = 1;
+				gs_journey_direction = done = 1;
 			}
 
 			if (answer == 2)
@@ -590,7 +590,7 @@ void tevent_123(void)
 		} else if (answer == 2)
 		{
 			/* turn arround */
-			gs_trv_return = done = 1;
+			gs_journey_direction = done = 1;
 
 		} else {
 			/* fight acrophobia */

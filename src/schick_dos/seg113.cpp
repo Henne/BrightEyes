@@ -649,7 +649,7 @@ void tevent_104(void)
 			} else {
 				/* turn around */
 
-				gs_trv_return = done = 1;
+				gs_journey_direction = done = 1;
 			}
 
 		} else {

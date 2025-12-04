@@ -3334,8 +3334,8 @@ void update_travelmap(void)
 
 	if (g_trv_menu_selection && gs_show_travel_map) {
 
-		g_selected_town_anix = g_town_positions[gs_trv_menu_towns[g_trv_menu_selection - 1] - 1].x;
-		g_selected_town_aniy = g_town_positions[gs_trv_menu_towns[g_trv_menu_selection - 1] - 1].y;
+		g_selected_town_anix = g_town_positions[gs_trv_signpost_menu_town_ids[g_trv_menu_selection - 1] - 1].x;
+		g_selected_town_aniy = g_town_positions[gs_trv_signpost_menu_town_ids[g_trv_menu_selection - 1] - 1].y;
 
 		g_pic_copy.x1 = g_selected_town_anix - 4;
 		g_pic_copy.y1 = g_selected_town_aniy - 4;
@@ -3410,8 +3410,8 @@ void update_travelmap(void)
 
 		if (g_menu_input_busy && gs_show_travel_map) {
 
-			g_selected_town_anix = g_town_positions[gs_trv_menu_towns[g_menu_selected - 1] - 1].x;
-			g_selected_town_aniy = g_town_positions[gs_trv_menu_towns[g_menu_selected - 1] - 1].y;
+			g_selected_town_anix = g_town_positions[gs_trv_signpost_menu_town_ids[g_menu_selected - 1] - 1].x;
+			g_selected_town_aniy = g_town_positions[gs_trv_signpost_menu_town_ids[g_menu_selected - 1] - 1].y;
 
 			g_pic_copy.x1 = g_selected_town_anix - 4;
 			g_pic_copy.y1 = g_selected_town_aniy - 4;

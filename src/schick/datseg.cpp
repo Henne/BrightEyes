@@ -3404,16 +3404,16 @@ int16_t gs_town_typeindex = 0; // ds:0x4224
 uint8_t  gs_dng03_highpriest_killed = 0; // ds:0x4226, {0, 14 = in fight 224, 16 = in fight 222}
 int8_t  gs_dng03_chest12_loads = 6; // ds:0x4227, {0,1,...,6}
 int16_t gs_trv_i = 0; // ds:0x4228
-int16_t gs_route_stepcount = 0; // ds:0x422a
-int16_t gs_forcedmarch_le_cost = 0; // ds:0x422c
-int16_t gs_route_total_steps = 0; // ds:0x422e
-int16_t gs_route_length = 0; // ds:0x4230 // length of current land or sea route [unit: 10m]
-int16_t gs_route_duration = 0; // ds:0x4232
-int16_t gs_route_timedelta = 0; // ds:0x4234
-int16_t gs_route_mousehover = 0; // ds:0x4236
-int16_t gs_route_progress = 0; // ds:0x4238
-int16_t gs_route_stepsize = 0; // ds:0x423a
-int16_t gs_route_dayprogress = 0; // ds:0x423c
+int16_t gs_travel_step_counter = 0; // ds:0x422a
+int16_t gs_journey_forced_march_le_cost = 0; // ds:0x422c
+int16_t gs_travel_total_steps = 0; // ds:0x422e
+int16_t gs_travel_total_distance = 0; // ds:0x4230 // length of current land or sea route [unit: 10m]
+int16_t gs_travel_total_duration = 0; // ds:0x4232
+int16_t gs_travel_duration_per_step = 0; // ds:0x4234
+int16_t gs_travel_mousehover = 0; // ds:0x4236
+int16_t gs_travel_distance_made = 0; // ds:0x4238
+int16_t gs_travel_distance_per_step = 0; // ds:0x423a
+int16_t gs_travel_distance_per_18_hours = 0; // ds:0x423c
 int16_t gs_sea_travel_passage_id = 0; // ds:0x423e
 int16_t gs_journey_random_encounter_flag = 0; // ds:0x4240
 int16_t gs_journey_random_encounter_position = 0; // ds:0x4242
@@ -3429,16 +3429,16 @@ int16_t gs_passage_octopus_position = 0; // ds:0x4254
 int16_t gs_passage_pirates_flag = 0; // ds:0x4256
 int16_t gs_passage_pirates_position = 0; // ds:0x4258
 #if defined (__BORLANDC__)
-int16_t *gs_route_course_ptr = NULL;			// ds:0x425a;
-int16_t *gs_route_course_start = NULL;			// ds:0x425e;
-int16_t *gs_route_course_ptr2 = NULL;			// ds:0x4262;
+int16_t *gs_travel_course_ptr = NULL;			// ds:0x425a;
+int16_t *gs_travel_course_start = NULL;			// ds:0x425e;
+int16_t *gs_travel_course_ptr2 = NULL;			// ds:0x4262;
 uint8_t  *gs_sea_travel_courses = NULL;			// ds:0x4266
 struct struct_land_route_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr = NULL;	// ds:0x426e
 #else
-uint32_t gs_route_course_ptr_obsolete = 0;	// ds:0x425a; This is a dummy now!
-uint32_t gs_route_course_start_obsolete = 0;	// ds:0x425e; This is a dummy now!
-uint32_t gs_route_course_ptr2_obsolete = 0;	// ds:0x4262; This is a dummy now!
+uint32_t gs_travel_course_ptr_obsolete = 0;	// ds:0x425a; This is a dummy now!
+uint32_t gs_travel_course_start_obsolete = 0;	// ds:0x425e; This is a dummy now!
+uint32_t gs_travel_course_ptr2_obsolete = 0;	// ds:0x4262; This is a dummy now!
 uint32_t gs_sea_travel_courses_obsolete = 0;	// ds:0x4266; This is a dummy now!
 uint32_t gs_tevents_tab_ptr_obsolete = 0;		// ds:0x426a; This is a dummy now!
 uint32_t gs_travel_route_ptr_obsolete = 0;	// ds:0x426e; This is a dummy now!
@@ -3480,7 +3480,7 @@ uint32_t gs_travel_map_ptr_obsolete = 0;	// ds:0x432e; This is a dummy now!
 uint8_t  gs_forcedmarch_timer = 0; // ds:0x4332
 uint8_t  gs_travel_detour = 0; // ds:0x4333
 int16_t gs_current_signpost_typeindex = 0; // ds:0x4334
-int16_t gs_trv_return = 0; // ds:0x4336, {-1, 0, 1, 2} + ?
+int16_t gs_journey_direction = 0; // ds:0x4336, {-1, 0, 1, 2} + ?
 int16_t gs_travel_destination_town_id = 0; // ds:0x4338
 int16_t gs_travel_destination_x = 0; // ds:0x433a
 int16_t gs_travel_destination_y = 0; // ds:0x433c
@@ -3492,8 +3492,8 @@ struct trv_start_point *gs_tm_unused1_ptr = NULL;	// ds:0x4340;
 uint32_t gs_tm_unused1_ptr_obsolete = 0;			// ds:0x4340;
 #endif
 
-int8_t  gs_trv_menu_towns[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
-int16_t gs_trv_destination = 0; // ds:0x434a
+int8_t  gs_trv_signpost_menu_town_ids[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
+int16_t gs_journey_destination_town_id = 0; // ds:0x434a
 uint8_t  gs_dng08_waterbarrel = 0; // ds:0x434c
 uint8_t  gs_dng13_collapsecount = 0; // ds:0x434d
 uint8_t  gs_dng13_herocount = 0; // ds:0x434e
@@ -3890,9 +3890,9 @@ char g_noway_string[40] = "IN DIESE RICHTUNG GEHT ES NICHT WEITER."; // ds:0x4a6
 #if !defined(__BORLANDC__)
 struct struct_hero *gs_ruin_hero;			// ds:0x3e1c;
 struct struct_hero *gs_main_acting_hero;		// ds:0x3e20;
-int16_t *gs_route_course_ptr;				// ds:0x425a;
-int16_t *gs_route_course_start;				// ds:0x425e;
-int16_t *gs_route_course_ptr2;				// ds:0x4262;
+int16_t *gs_travel_course_ptr;				// ds:0x425a;
+int16_t *gs_travel_course_start;				// ds:0x425e;
+int16_t *gs_travel_course_ptr2;				// ds:0x4262;
 uint8_t *gs_sea_travel_courses;				// ds:0x4266
 struct struct_land_route_tevent *gs_tevents_tab_ptr;		// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e

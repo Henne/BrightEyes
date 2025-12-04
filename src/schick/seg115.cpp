@@ -274,7 +274,7 @@ void tevent_095(void)
 
 				TRV_load_textfile(-1);
 			} else {
-				gs_trv_return = done = 1;
+				gs_journey_direction = done = 1;
 			}
 		} else {
 			/* at least one hero failed HA-test */
@@ -711,7 +711,7 @@ void tevent_100(void)
 
 		} else if (tmp == 3) {
 
-			gs_trv_return = 1;
+			gs_journey_direction = 1;
 		}
 	}
 

@@ -435,7 +435,7 @@ signed int DNG06_handler(void)
 		gs_town_loc_type = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
-		sprintf(g_dtp2,	get_tx(38), get_ttx(gs_trv_destination + 0xeb));
+		sprintf(g_dtp2,	get_tx(38), get_ttx(gs_journey_destination_town_id + 0xeb));
 		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));

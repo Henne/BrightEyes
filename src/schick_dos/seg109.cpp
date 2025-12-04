@@ -414,7 +414,7 @@ signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int h
 			answer = GUI_bool(get_tx(39));
 
 			if (answer == 1) {
-				done = gs_trv_return = 1;
+				done = gs_journey_direction = 1;
 			}
 		}
 
@@ -520,7 +520,7 @@ signed int TRV_ferry(char *msg, signed int price)
 		} else {
 
 			if (GUI_bool(get_tx(33))) {
-				gs_trv_return = done = 1;
+				gs_journey_direction = done = 1;
 			}
 		}
 

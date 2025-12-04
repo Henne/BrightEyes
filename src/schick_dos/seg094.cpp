@@ -32,7 +32,7 @@ signed char g_traveling = 0; // ds:0xa842
 static const signed char g_tevents_repeatable[145] = { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }; // ds:0xa843
 
 
-unsigned char g_trv_crosslink_route_status;			// ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
+unsigned char g_journey_crosslink_status;			// ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
 signed int g_trv_menu_selection;		// ds:0xe4a3
 signed int g_current_town_over;			// ds:0xe4a5
 signed int g_current_town_overy;		// ds:0xe4a7
@@ -45,6 +45,10 @@ unsigned char g_unkn_091[1];			// ds:0xe4b3
 static unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
 unsigned char g_good_camp_place;		// ds:0xe4c8
 static unsigned char g_route_tevent_flags[15];	// ds:0xe4c9
+/* value 0: tevent can take place reaching it in forward direction.
+ * value 1: tevent is not repeatable and already took place in this journey.
+ * value 2: tevent can take place reaching it in backward direction.
+ */
 
 void prepare_map_marker(void)
 {
@@ -94,13 +98,13 @@ void set_textbox_positions(const signed int town_id)
 }
 
 /**
- * \brief   ???
+ * \brief   Travel along a land route
  *
  * \param   land_route_id    number of the route
- * \param   reverse   0 = travel in normal direction, i.e. from land_route_id.town_id_1 to land_route_id.town_id_2
- *                    1 = travel in reverse direction, i.e. from land_route_id.town_id_2 to land_route_id.town_id_1
+ * \param   reverse          0 = route is traveled in normal direction, i.e. from land_route_id.town_id_1 to land_route_id.town_id_2
+ *                           1 = route is traveled in reverse direction, i.e. from land_route_id.town_id_2 to land_route_id.town_id_1
  */
-void TM_func1(const signed int land_route_id, const signed int reverse)
+void trv_do_journey(const signed int land_route_id, const signed int reverse)
 {
 	uint8_t* fb_start;
 	struct struct_hero *hero;
@@ -113,37 +117,37 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 	g_traveling = 1;
 
 	last_tevent_id = -1;
-	gs_route_course_ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (land_route_id - 1))) + 0xecL);
+	gs_travel_course_ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (land_route_id - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
-	gs_route_course_ptr += 2;
+	gs_travel_course_ptr += 2;
 
 	memset((void*)g_trv_track_pixel_bak, 0xaa, 500);
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
 	 * 		Can be replaced by a locvar! */
 	gs_travel_route_ptr = &g_land_routes[land_route_id - 1];
 	gs_travel_speed = 166; // unit: [10m per hour]. So standard speed is 1.66 km/h, pretty slow...
-	gs_route_total_steps = TM_get_track_length((struct struct_point*)gs_route_course_ptr);
-	gs_route_length = (gs_travel_route_ptr->distance * 100); // unit: [10m]
-	gs_route_duration = (gs_route_length / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60); // unit: [minutes]
-	gs_route_timedelta = (gs_route_duration / gs_route_total_steps); /* duration of each step. unit: [minutes] */
-	gs_route_stepsize = gs_route_length / gs_route_total_steps; /* length of a single step. unit: [10m] */
+	gs_travel_total_steps = TM_get_track_length((struct struct_point*)gs_travel_course_ptr);
+	gs_travel_total_distance = (gs_travel_route_ptr->distance * 100); // unit: [10m]
+	gs_travel_total_duration = (gs_travel_total_distance / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60); // unit: [minutes]
+	gs_travel_duration_per_step = (gs_travel_total_duration / gs_travel_total_steps); /* duration of each step. unit: [minutes] */
+	gs_travel_distance_per_step = gs_travel_total_distance / gs_travel_total_steps; /* length of a single step. unit: [10m] */
 
-	if (gs_route_stepsize == 0)
+	if (gs_travel_distance_per_step == 0)
 	{
-		gs_route_stepsize = 1;
+		gs_travel_distance_per_step = 1;
 	}
 
 	if (reverse)
 	{
-		/* move gs_route_course_ptr to the end of the route */
-		while (gs_route_course_ptr[0] != -1)
+		/* move gs_travel_course_ptr to the end of the route */
+		while (gs_travel_course_ptr[0] != -1)
 		{
-			gs_route_course_ptr += 2;
+			gs_travel_course_ptr += 2;
 		}
-		gs_route_course_ptr -= 2;
+		gs_travel_course_ptr -= 2;
 	}
 
-	memset((void*)gs_journey_tevents, (gs_route_stepcount = 0), 15 * sizeof(struct_journey_tevent));
+	memset((void*)gs_journey_tevents, (gs_travel_step_counter = 0), 15 * sizeof(struct_journey_tevent)); // gs_travel_step_counter is used in a different meaning
 	memset(g_route_tevent_flags, 0, 15);
 
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
@@ -155,16 +159,16 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 		gs_tevents_tab_ptr++;
 	}
 
-	gs_trv_return = 0;
-	gs_route_course_start = gs_route_course_ptr;
-	gs_route_dayprogress = (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 18; /* distance after 18 hours of traveling. unit: [10m] */
+	gs_journey_direction = 0;
+	gs_travel_course_start = gs_travel_course_ptr;
+	gs_travel_distance_per_18_hours = (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 18; /* distance after 18 hours of traveling. unit: [10m] */
 
 	/* random section starts */
 	if (gs_quested_months > 3)
 	{
 		if ((gs_journey_olvir_treborn_flag = (random_schick(100) <= 2) ? 1 : 0))
 		{
-			gs_journey_olvir_treborn_position = random_schick(gs_route_dayprogress);
+			gs_journey_olvir_treborn_position = random_schick(gs_travel_distance_per_18_hours); /* unit: [10m] */
 		}
 	} else {
 		gs_journey_olvir_treborn_flag = 0;
@@ -172,20 +176,20 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 
 	if ((gs_journey_random_encounter_flag = random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))
 	{
-		gs_journey_random_encounter_position = random_schick(gs_route_dayprogress);
+		gs_journey_random_encounter_position = random_schick(gs_travel_distance_per_18_hours); /* unit: [10m] */
 	}
 
 	if ((gs_journey_fight_flag = (random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)))
 	{
-		gs_journey_fight_position = random_schick(gs_route_dayprogress);
+		gs_journey_fight_position = random_schick(gs_travel_distance_per_18_hours); /* unit: [10m] */
 	}
 
-	gs_route_dayprogress = 0;
+	gs_travel_distance_per_18_hours = 0;
 	/* random section ends */
 
 	while ((gs_tevents_tab_ptr->land_route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->land_route_id == land_route_id)) // first condition can be dropped
 	{
-		tevent_ptr = &gs_journey_tevents[gs_route_stepcount];
+		tevent_ptr = &gs_journey_tevents[gs_travel_step_counter];
 		tevent_ptr->position = gs_tevents_tab_ptr->position;
 		tevent_ptr->tevent_id = gs_tevents_tab_ptr->tevent_id;
 
@@ -196,48 +200,48 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 
 		tevent_ptr->position *= 100; // unit is now [10m]
 		gs_tevents_tab_ptr++;
-		gs_route_stepcount++;
+		gs_travel_step_counter++;
 	}
 
-	gs_route_stepcount = gs_route_progress = gs_travel_detour = 0;
+	gs_travel_step_counter = gs_travel_distance_made = gs_travel_detour = 0; // now gs_travel_step_counter has its normal meaning
 
-	while (gs_route_course_ptr[(gs_route_mousehover = 0)] != -1 &&
+	while (gs_travel_course_ptr[(gs_travel_mousehover = 0)] != -1 &&
 		!gs_travel_detour &&
 		g_game_state == GAME_STATE_MAIN)
 	{
-		if (is_mouse_in_rect(gs_route_course_ptr[0] - 16, gs_route_course_ptr[1] - 16,
-					gs_route_course_ptr[0] + 16, gs_route_course_ptr[1] + 16))
+		if (is_mouse_in_rect(gs_travel_course_ptr[0] - 16, gs_travel_course_ptr[1] - 16,
+					gs_travel_course_ptr[0] + 16, gs_travel_course_ptr[1] + 16))
 		{
 			call_mouse_bg();
-			gs_route_mousehover = 1;
+			gs_travel_mousehover = 1;
 		}
 
-		if (gs_trv_return == 2)
+		if (gs_journey_direction == 2)
 		{
-			gs_route_stepcount--;
+			gs_travel_step_counter--;
 
 			/* restore the pixel from the map */
-			*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
-				g_trv_track_pixel_bak[gs_route_stepcount];
+			*(fb_start + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]) =
+				g_trv_track_pixel_bak[gs_travel_step_counter];
 
-			g_trv_track_pixel_bak[gs_route_stepcount] = 0xaa;
+			g_trv_track_pixel_bak[gs_travel_step_counter] = 0xaa;
 		} else {
 			/* save the old pixel from the map */
-			g_trv_track_pixel_bak[gs_route_stepcount] =
-				*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]);
+			g_trv_track_pixel_bak[gs_travel_step_counter] =
+				*(fb_start + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]);
 
-			gs_route_stepcount++;
+			gs_travel_step_counter++;
 
 			/* write a new pixel */
-			*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) = 0x1c;
+			*(fb_start + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]) = 0x1c;
 		}
 
-		if (gs_route_mousehover) {
+		if (gs_travel_mousehover) {
 			call_mouse();
 		}
 
 		gs_trv_i = 0;
-		while (gs_route_timedelta / 2 > gs_trv_i)
+		while (gs_travel_duration_per_step / 2 > gs_trv_i)
 		{
 			handle_input();
 
@@ -251,8 +255,8 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			gs_trv_i++;
 		}
 
-		gs_route_progress += (gs_trv_return == 2 ? -gs_route_stepsize : gs_route_stepsize);
-		gs_route_dayprogress += gs_route_stepsize;
+		gs_travel_distance_made += (gs_journey_direction == 2 ? -gs_travel_distance_per_step : gs_travel_distance_per_step);
+		gs_travel_distance_per_18_hours += gs_travel_distance_per_step;
 
 		if (g_mouse_rightclick_event || g_action == ACTION_ID_PAGE_UP)
 		{
@@ -266,13 +270,13 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			if (answer == 1 && !gs_forcedmarch_timer) /* Gewaltmarsch */
 			{
 				/* do forced march for 2 days */
-				gs_forcedmarch_le_cost = random_schick(10);
-				gs_travel_speed = gs_route_stepcount + 197;
+				gs_journey_forced_march_le_cost = random_schick(10);
+				gs_travel_speed = gs_travel_step_counter + 197;
 				gs_forcedmarch_timer = 2;
-				gs_route_duration = (gs_route_length / (gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed) / 10) * 60);
-				gs_route_timedelta = (gs_route_duration / gs_route_total_steps);
-				/* Remark: gs_forcedmarch_le_cost = gs_forcedmarch_le_cost / 2; */
-				gs_forcedmarch_le_cost >>= 1;
+				gs_travel_total_duration = (gs_travel_total_distance / (gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed) / 10) * 60);
+				gs_travel_duration_per_step = (gs_travel_total_duration / gs_travel_total_steps);
+				/* Remark: gs_journey_forced_march_le_cost = gs_journey_forced_march_le_cost / 2; */
+				gs_journey_forced_march_le_cost >>= 1;
 
 				hero = get_hero(0);
 				for (gs_trv_i = 0; gs_trv_i <= 6; gs_trv_i++, hero++)
@@ -280,7 +284,7 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead)
 					{
-						sub_hero_le(hero, gs_forcedmarch_le_cost);
+						sub_hero_le(hero, gs_journey_forced_march_le_cost);
 					}
 				}
 
@@ -301,16 +305,16 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			}
 		}
 
-		if (gs_journey_random_encounter_flag && gs_route_dayprogress >= gs_journey_random_encounter_position && g_game_state == GAME_STATE_MAIN)
+		if (gs_journey_random_encounter_flag && gs_travel_distance_per_18_hours >= gs_journey_random_encounter_position && g_game_state == GAME_STATE_MAIN)
 		{
 			journey_random_encounter(land_route_id);
 			gs_journey_random_encounter_flag = 0;
 
-		} else if (gs_journey_fight_flag && gs_route_dayprogress >= gs_journey_fight_position && g_game_state == GAME_STATE_MAIN)
+		} else if (gs_journey_fight_flag && gs_travel_distance_per_18_hours >= gs_journey_fight_position && g_game_state == GAME_STATE_MAIN)
 		{
 			do_wild8_fight();
 
-		} else if (gs_journey_olvir_treborn_flag && gs_route_dayprogress >= gs_journey_olvir_treborn_position && g_game_state == GAME_STATE_MAIN)
+		} else if (gs_journey_olvir_treborn_flag && gs_travel_distance_per_18_hours >= gs_journey_olvir_treborn_position && g_game_state == GAME_STATE_MAIN)
 		{
 			gs_town_typeindex = (random_schick(100) <= 50 ? INFORMER_ID_OLVIR + 1 : INFORMER_ID_TREBORN + 1);
 			bak1 = g_basepos_x;
@@ -319,17 +323,19 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			do_informer();
 			g_basepos_x = bak1;
 			g_basepos_y = bak2;
+
 		}
 
 		if (g_game_state == GAME_STATE_MAIN)
 		{
 			for (gs_trv_i = 0; gs_trv_i < 15; gs_trv_i++)
 			{
-				if (((gs_journey_tevents[gs_trv_i].position <= gs_route_progress) &&
-					(gs_trv_return == 0) &&
-					!g_route_tevent_flags[gs_trv_i]) ||
-					((gs_journey_tevents[gs_trv_i].position >= gs_route_progress) &&
-					(gs_trv_return == 2) &&
+				if (((gs_journey_tevents[gs_trv_i].position <= gs_travel_distance_made) &&
+					(gs_journey_direction == 0) &&
+					!g_route_tevent_flags[gs_trv_i])
+						||
+					((gs_journey_tevents[gs_trv_i].position >= gs_travel_distance_made) &&
+					(gs_journey_direction == 2) &&
 					(g_route_tevent_flags[gs_trv_i] == 2)))
 				{
 					if (gs_journey_tevents[gs_trv_i].tevent_id)
@@ -338,12 +344,15 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 
 						if (!g_tevents_repeatable[gs_journey_tevents[gs_trv_i].tevent_id - 1])
 						{
+							/* tevent is "used up" for this journey. */
 							g_route_tevent_flags[gs_trv_i] = 1;
 
-						} else if (gs_trv_return == 0)
+						} else if (gs_journey_direction == 0)
 						{
+							/* travelling forward => now the event can take place reaching it in backward direction. */
 							g_route_tevent_flags[gs_trv_i] = 2;
 						} else {
+							/* travelling backward => now the event can take place reaching it in forward direction. */
 							g_route_tevent_flags[gs_trv_i] = 0;
 						}
 
@@ -358,8 +367,8 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 
 	        /* night camp */
 		if (gs_day_timer >= HOURS(20) && !gs_travel_detour && g_game_state == GAME_STATE_MAIN &&
-			2 * gs_route_stepsize < gs_route_progress &&
-			gs_route_length - 2 * gs_route_stepsize > gs_route_progress)
+			2 * gs_travel_distance_per_step < gs_travel_distance_made &&
+			gs_travel_total_distance - 2 * gs_travel_distance_per_step > gs_travel_distance_made)
 		{
 			g_wallclock_update = 0;
 
@@ -380,29 +389,29 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			if (g_game_state == GAME_STATE_MAIN)
 			{
 				/* figure out encounters etc. for next day */
-				gs_route_dayprogress = ((gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed / 10)) * 18);
+				gs_travel_distance_per_18_hours = ((gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed / 10)) * 18);
 
 				if ((gs_journey_random_encounter_flag = (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
 				{
-					gs_journey_random_encounter_position = random_schick(gs_route_dayprogress);
+					gs_journey_random_encounter_position = random_schick(gs_travel_distance_per_18_hours);
 				}
 
 				if ((gs_journey_fight_flag = random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0) != 0)
 				{
-					gs_journey_fight_position = random_schick(gs_route_dayprogress);
+					gs_journey_fight_position = random_schick(gs_travel_distance_per_18_hours);
 				}
 
 				if (gs_quested_months > 3)
 				{
 					if ((gs_journey_olvir_treborn_flag = random_schick(100) <= 2 ? 1 : 0) != 0)
 					{
-						gs_journey_olvir_treborn_position = random_schick(gs_route_dayprogress);
+						gs_journey_olvir_treborn_position = random_schick(gs_travel_distance_per_18_hours);
 					}
 				} else {
 					gs_journey_olvir_treborn_flag = 0;
 				}
 
-				gs_route_dayprogress = 0;
+				gs_travel_distance_per_18_hours = 0;
 			}
 		}
 
@@ -423,7 +432,7 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 
 			g_pp20_index = ARCHIVE_FILE_KARTE_DAT;
 			gs_trv_i = 0;
-			gs_route_course_ptr2 = gs_route_course_start;
+			gs_travel_course_ptr2 = gs_travel_course_start;
 
 			if (land_route_id == LROUTE_ID__CROSSLINK)
 			{
@@ -433,8 +442,8 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			/* Redraw the track on the map */
 			while (g_trv_track_pixel_bak[gs_trv_i++] != 0xaa)
 			{
-				*(fb_start + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) =  0x1c;
-				gs_route_course_ptr2 += (!reverse ? 2 : -2);
+				*(fb_start + gs_travel_course_ptr2[1] * 320 + gs_travel_course_ptr2[0]) =  0x1c;
+				gs_travel_course_ptr2 += (!reverse ? 2 : -2);
 			}
 
 			call_mouse();
@@ -444,11 +453,11 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 				/* Return or continue? */
 				if (GUI_radio(get_tx(71), 2, get_tx(72), get_tx(73)) == 2)
 				{
-					gs_trv_return = (gs_trv_return == 0 ? 1 : -1);
+					gs_journey_direction = (gs_journey_direction == 0 ? 1 : -1);
 
 					if (last_tevent_id != -1)
 					{
-						g_route_tevent_flags[last_tevent_id] = (gs_trv_return == 1 ? 0 : 2);
+						g_route_tevent_flags[last_tevent_id] = (gs_journey_direction == 1 ? 0 : 2);
 					}
 				}
 			}
@@ -458,27 +467,27 @@ void TM_func1(const signed int land_route_id, const signed int reverse)
 			g_request_refresh = 0;
 		}
 
-		if (gs_trv_return == 1 || gs_trv_return == -1)
+		if (gs_journey_direction == 1 || gs_journey_direction == -1)
 		{
-			gs_trv_return = (gs_trv_return == 1 ? 2: 0);
+			gs_journey_direction = (gs_journey_direction == 1 ? 2: 0);
 
-			gs_route_course_ptr += ((!reverse && gs_trv_return == 0) || (reverse && gs_trv_return != 0) ? -2 : 2);
+			gs_travel_course_ptr += ((!reverse && gs_journey_direction == 0) || (reverse && gs_journey_direction != 0) ? -2 : 2);
 		}
 
-		gs_route_course_ptr += ((!reverse && gs_trv_return == 0) || (reverse && gs_trv_return != 0) ? 2 : -2);
+		gs_travel_course_ptr += ((!reverse && gs_journey_direction == 0) || (reverse && gs_journey_direction != 0) ? 2 : -2);
 	}
 
-	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_trv_return != 2)
+	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_journey_direction != 2)
 	{
 		call_mouse_bg();
 
 		do {
-			gs_route_course_ptr += (!reverse ? -2 : 2);
-			gs_route_stepcount--;
-			*(fb_start + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
-				g_trv_track_pixel_bak[gs_route_stepcount];
+			gs_travel_course_ptr += (!reverse ? -2 : 2);
+			gs_travel_step_counter--;
+			*(fb_start + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]) =
+				g_trv_track_pixel_bak[gs_travel_step_counter];
 
-		} while (gs_route_course_ptr[0] != -1);
+		} while (gs_travel_course_ptr[0] != -1);
 
 		if (land_route_id == LROUTE_ID__CROSSLINK)
 		{
@@ -505,7 +514,7 @@ signed int TM_unused1(struct trv_start_point *signpost_ptr, const signed int old
 	char *destinations_tab[7];
 
 	old_route_id2 = signpost_ptr->linked_travel_routes[old_route_id] - 1;
-	gs_town_id = town_id = gs_trv_destination;
+	gs_town_id = town_id = gs_journey_destination_town_id;
 	signpost_ptr = &g_signposts[0];
 
 	do {
@@ -523,14 +532,14 @@ signed int TM_unused1(struct trv_start_point *signpost_ptr, const signed int old
 					{
 						if (route_id2 != route_id1)
 						{
-							destinations_tab[town_i++] = get_ttx(235 + (gs_trv_menu_towns[town_i] =
+							destinations_tab[town_i++] = get_ttx(235 + (gs_trv_signpost_menu_town_ids[town_i] =
 								((answer = g_land_routes[route_id - 1].town_id_1) != gs_town_id ?
 									(signed char)answer : g_land_routes[route_id - 1].town_id_2)));
 						}
 						route_id2++;
 					}
 
-					gs_trv_menu_towns[town_i] = town_id;
+					gs_trv_signpost_menu_town_ids[town_i] = town_id;
 					destinations_tab[town_i] = get_ttx(547);
 					town_i++;
 
@@ -548,7 +557,7 @@ signed int TM_unused1(struct trv_start_point *signpost_ptr, const signed int old
 						answer = town_i;
 					}
 
-					gs_trv_destination = gs_trv_menu_towns[answer - 1];
+					gs_journey_destination_town_id = gs_trv_signpost_menu_town_ids[answer - 1];
 					return answer;
 				}
 
@@ -577,22 +586,27 @@ signed int TM_get_track_length(struct struct_point *track)
 	return length;
 }
 
-signed int TM_enter_target_town(void)
+signed int trv_journey_enter_destination_town(void)
 {
 	signed int tmp;
-	signed int signpost_id;
+	signed int signpost_typeindex;
 	signed int tmp2;
 	struct trv_start_point *signpost_ptr;
 	struct location *locations_tab_ptr;
 
-	signpost_id = 0;
-	gs_travel_destination_town_id = gs_trv_destination;
-	signpost_id = 1;
+	signpost_typeindex = 0;
+	gs_travel_destination_town_id = gs_journey_destination_town_id;
+#ifndef M302de_ORIGINAL_BUGFIX
+	// not a bug, but useless
+	signpost_typeindex = 1;
 
-	if (signpost_id)
+	if (signpost_typeindex)
 	{
+#endif
 		signpost_ptr = &g_signposts[0];
-		signpost_id = 0;
+#ifndef M302de_ORIGINAL_BUGFIX
+		signpost_typeindex = 0;
+#endif
 		do {
 			if ((unsigned char)signpost_ptr->town_id == gs_travel_destination_town_id)
 			{
@@ -603,7 +617,7 @@ signed int TM_enter_target_town(void)
 
 					if ((g_land_routes[tmp2].town_id_1 == gs_town_id) || (g_land_routes[tmp2].town_id_2 == gs_town_id))
 					{
-						signpost_id = signpost_ptr->typeindex;
+						signpost_typeindex = signpost_ptr->typeindex;
 						break;
 					}
 
@@ -614,9 +628,9 @@ signed int TM_enter_target_town(void)
 
 			signpost_ptr++;
 
-		} while (!signpost_id && signpost_ptr->town_id != -1);
+		} while (!signpost_typeindex && signpost_ptr->town_id != -1);
 
-		if (signpost_id)
+		if (signpost_typeindex)
 		{
 			/* set the target town as current town */
 			tmp2 = gs_town_id;
@@ -626,7 +640,7 @@ signed int TM_enter_target_town(void)
 			call_load_area(1);
 
 			locations_tab_ptr = &g_locations_tab[0];
-			while (locations_tab_ptr->loctype != LOCTYPE_SIGNPOST || locations_tab_ptr->typeindex != signpost_id)
+			while (locations_tab_ptr->loctype != LOCTYPE_SIGNPOST || locations_tab_ptr->typeindex != signpost_typeindex)
 			{
 				locations_tab_ptr++;
 			}
@@ -634,19 +648,21 @@ signed int TM_enter_target_town(void)
 			tmp = locations_tab_ptr->locdata;
 			gs_travel_destination_x = (tmp >> 8) & 0xff;
 			gs_travel_destination_y = tmp & 0x0f;
-			gs_travel_destination_viewdir = TM_enter_target_town_viewdir(locations_tab_ptr->pos);
+			gs_travel_destination_viewdir = trv_journey_enter_destination_town_viewdir(locations_tab_ptr->pos);
 
 			gs_town_id = tmp2;
 
 			/* load the map */
 			call_load_area(1);
 		}
+#ifndef M302de_ORIGINAL_BUGFIX
 	}
+#endif
 
 	return 0;
 }
 
-signed int TM_enter_target_town_viewdir(const signed int coordinates)
+signed int trv_journey_enter_destination_town_viewdir(const signed int coordinates)
 {
 	const signed int x = (coordinates >> 8) & 0xff;
 	const signed int y = coordinates & 0xf;
@@ -709,7 +725,7 @@ void TM_unused2(void)
 
 void TM_func8(const signed int restore)
 {
-	if (!(g_trv_crosslink_route_status & 1))
+	if (!(g_journey_crosslink_status & 1))
 	{
 		if (gs_town_id == TOWN_ID_PEILINEN)
 		{
@@ -727,9 +743,13 @@ void TM_func8(const signed int restore)
 	}
 }
 
-void TM_func9(void)
+void TM_do_journey_crosslink(void)
 {
-	TM_func1(LROUTE_ID__CROSSLINK, g_trv_crosslink_route_status & 1);
+	trv_do_journey(LROUTE_ID__CROSSLINK, g_journey_crosslink_status & 1);
+	/* result of (g_journey_crosslink_status & 1) :
+	 * g_journey_crosslink_status 2 (from Peilinen) or 4 (from Rovamund) --> 0 (normal direction)
+	 * g_journey_crosslink_status 1 (from Kravik) or 3 (from Skelellen) --> 0 (reverse direction)
+	 */
 
 	TRV_event(145);
 }
