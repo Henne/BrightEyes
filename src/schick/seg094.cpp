@@ -33,6 +33,10 @@
 #include "seg119.h"
 
 signed char g_traveling = 0; // ds:0xa842
+
+/* A list of flags, indicating if a tevent is repeatable *within the same journey* or not.
+ * Note that tevents marked as non-repeatable can be triggered again in the following journeys (i.e., after reaching a town).
+ */
 static const signed char g_tevents_repeatable[145] = { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }; // ds:0xa843
 
 
@@ -362,10 +366,10 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 
 						} else if (gs_journey_direction == JOURNEY_DIRECTION_FORWARD)
 						{
-							/* travelling forward => now the event can take place reaching it in backward direction. */
+							/* traveling forward => now the event can only be triggered moving in backward direction. */
 							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_BACKWARD;
 						} else {
-							/* travelling backward => now the event can take place reaching it in forward direction. */
+							/* traveling backward => now the event can only be triggered moving in forward direction. */
 							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_FORWARD;
 						}
 
@@ -468,10 +472,31 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 				{
 					gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
 
-					if (last_tevent_id != -1)
-					{
-						/* For the last travel event, the access direction is reversed,
-						 * such that it won't take place after the current direction change. */
+					/* For the last travel event, the access direction is reversed,
+					 * such that it won't take place after the current direction change.
+					 * Probably, the idea was that the same tevent should not be triggered twice in a row. */
+					if ( last_tevent_id != -1
+#ifdef M302de_ORIGINAL_BUGFIX
+						&& g_journey_tevent_accessibility[last_tevent_id] != TEVENT_ACCESS_BLOCKED
+#endif
+						/* Original-Bug 50:
+						 * Travel events marked as non-repeatable within the same journey can be
+						 * reactivated by changing direction at suitable positions.
+						 *
+						 * Example: Consider a route with two tevents T1, T2, the first repeatable, the second not.
+						 * Starting the journey, the party is heading forward, and accessibility for T1 and T2 is set forward, like this:
+						 * [party: -->] [T1: -->] [T2: -->]
+						 * Passing and thereby triggering both tevents results in:
+						 *              [T1: <--] [T2: blocked] [party: -->]
+						 * T2 is the last triggered tevent. Now the party changes the direction, reviving T2:
+						 *              [T1: <--] [T2: -->]     [party: <--]
+						 * Traveling back, we pass T2 (does not trigger) and T1 (does trigger) and have:
+						 * [party: <--] [T1: -->] [T2: -->]
+						 * The last triggered tevent is T1. Changing the direction again:
+						 * [party: -->] [T1: <--] [T2: -->]
+						 * Now traveling forward we pass T1 (does not trigger). Then T2 is triggered a second time.
+						 */
+					) {
 						g_journey_tevent_accessibility[last_tevent_id] = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? TEVENT_ACCESS_FORWARD : TEVENT_ACCESS_BACKWARD);
 					}
 				}
