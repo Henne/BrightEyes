@@ -46,7 +46,7 @@ signed int g_current_town_anix;			// ds:0xe4b1
 unsigned char g_unkn_091[1];			// ds:0xe4b3
 static unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
 unsigned char g_good_camp_place;		// ds:0xe4c8
-						//
+
 static unsigned char g_journey_tevent_accessibility[15];	// ds:0xe4c9
 /* value 0: tevent can take place accessing it in forward direction.
  * value 1: tevent is not accessible any more in this journey.
@@ -445,7 +445,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 
 			if (land_route_id == LROUTE_ID__CROSSLINK)
 			{
-				TM_func8(0);
+				TM_draw_track_before_crosslink(0);
 			}
 
 			/* Redraw the track on the map */
@@ -502,7 +502,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 
 		if (land_route_id == LROUTE_ID__CROSSLINK)
 		{
-			TM_func8(1);
+			TM_draw_track_before_crosslink(1);
 		}
 
 		call_mouse();
@@ -734,22 +734,32 @@ void TM_unused2(void)
 }
 #endif
 
-void TM_func8(const signed int restore)
+/**
+ * \brief   Draw the track from the last town to the start of the crosslink on the travel map.
+ *          Used when traveling the crosslink, to display the complete track all the way back from the last town.
+ *
+ * \param   restore
+ */
+void TM_draw_track_before_crosslink(const signed int restore)
 {
 	if (!(g_journey_crosslink_status & 1))
 	{
 		if (gs_town_id == TOWN_ID_PEILINEN)
 		{
+			// draw from Peilinen to start of crosslink
 			TM_draw_track(LROUTE_ID_PEILINEN_ROVAMUND, 9, 0, restore);
 		} else {
+			// draw from Rovamund to start of crosslink
 			TM_draw_track(LROUTE_ID_PEILINEN_ROVAMUND, 17, 1, restore);
 		}
 	} else {
 		if (gs_town_id == TOWN_ID_KRAVIK)
 		{
 			TM_draw_track(LROUTE_ID_KRAVIK_SKELELLE, 8, 0, restore);
+			// draw from Kravik to start of crosslink
 		} else {
 			TM_draw_track(LROUTE_ID_KRAVIK_SKELELLE, 17, 1, restore);
+			// draw from Skelellen to start of crosslink
 		}
 	}
 }
