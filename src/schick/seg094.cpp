@@ -51,11 +51,17 @@ unsigned char g_unkn_091[1];			// ds:0xe4b3
 static unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
 unsigned char g_good_camp_place;		// ds:0xe4c8
 
-static unsigned char g_route_tevent_flags[15];	// ds:0xe4c9
-/* value 0: tevent can take place reaching it in forward direction.
- * value 1: tevent is not repeatable and already took place in this journey.
- * value 2: tevent can take place reaching it in backward direction.
+static unsigned char g_journey_tevent_accessibility[15];	// ds:0xe4c9
+/* value 0: tevent can take place accessing it in forward direction.
+ * value 1: tevent is not accessible any more in this journey.
+ * value 2: tevent can take place accessing it in backward direction.
  */
+
+enum{
+	TEVENT_ACCESS_FORWARD = 0,
+	TEVENT_ACCESS_BLOCKED = 1,
+	TEVENT_ACCESS_BACKWARD = 2
+};
 
 void prepare_map_marker(void)
 {
@@ -155,7 +161,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 	}
 
 	memset((void*)gs_journey_tevents, (gs_travel_step_counter = 0), 15 * sizeof(struct_journey_tevent)); // gs_travel_step_counter is used in a different meaning
-	memset(g_route_tevent_flags, 0, 15);
+	memset(g_journey_tevent_accessibility, TEVENT_ACCESS_FORWARD, 15);
 
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
 	 * 		Can be replaced by a locvar! */
@@ -339,11 +345,11 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 			{
 				if (((gs_journey_tevents[gs_trv_i].position <= gs_travel_distance_made) &&
 					(gs_journey_direction == JOURNEY_DIRECTION_FORWARD) &&
-					!g_route_tevent_flags[gs_trv_i])
+					!g_journey_tevent_accessibility[gs_trv_i])
 						||
 					((gs_journey_tevents[gs_trv_i].position >= gs_travel_distance_made) &&
 					(gs_journey_direction == JOURNEY_DIRECTION_BACKWARD) &&
-					(g_route_tevent_flags[gs_trv_i] == 2)))
+					(g_journey_tevent_accessibility[gs_trv_i] == TEVENT_ACCESS_BACKWARD)))
 				{
 					if (gs_journey_tevents[gs_trv_i].tevent_id)
 					{
@@ -352,15 +358,15 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 						if (!g_tevents_repeatable[gs_journey_tevents[gs_trv_i].tevent_id - 1])
 						{
 							/* tevent is "used up" for this journey. */
-							g_route_tevent_flags[gs_trv_i] = 1;
+							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_BLOCKED;
 
 						} else if (gs_journey_direction == JOURNEY_DIRECTION_FORWARD)
 						{
 							/* travelling forward => now the event can take place reaching it in backward direction. */
-							g_route_tevent_flags[gs_trv_i] = 2;
+							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_BACKWARD;
 						} else {
 							/* travelling backward => now the event can take place reaching it in forward direction. */
-							g_route_tevent_flags[gs_trv_i] = 0;
+							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_FORWARD;
 						}
 
 						if (g_request_refresh != 0 && !gs_travel_detour)
@@ -466,7 +472,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 					{
 						/* For the last travel event, the access direction is reversed,
 						 * such that it won't take place after the current direction change. */
-						g_route_tevent_flags[last_tevent_id] = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? 0 : 2);
+						g_journey_tevent_accessibility[last_tevent_id] = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? TEVENT_ACCESS_FORWARD : TEVENT_ACCESS_BACKWARD);
 					}
 				}
 			}
