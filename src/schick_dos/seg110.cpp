@@ -131,7 +131,7 @@ void TRV_a_path(void)
 	if (answer == 1)
 	{
 		/* follow the path */
-		g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? 2 : 4);
+		g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? CROSSLINK_STATUS_FROM_PEILINEN : CROSSLINK_STATUS_FROM_ROVAMUND);
 
 		/* Original-Glitch:
 		 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
@@ -246,8 +246,11 @@ void tevent_020(void)
 
 			if (answer == 1)
 			{
-			    /* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen. */
-				g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? 1 : 3);
+				/* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen.
+				 * So the following line should prabably be
+				 * g_journey_crosslink_status = (gs_town_id == TOWN_ID_KRAVIK ? CROSSLINK_STATUS_FROM_KRAVIK : CROSSLINK_STATUS_FROM_SKELELLEN);
+				 */
+				g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? CROSSLINK_STATUS_FROM_KRAVIK : CROSSLINK_STATUS_FROM_SKELELLEN);
 
 				/* Original-Glitch:
 				 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).
