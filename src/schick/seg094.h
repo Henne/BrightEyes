@@ -1,5 +1,5 @@
 /* 0x20 */
-void TM_func8(const signed int);
+void TM_draw_track_before_crosslink(const signed int);
 /* 0x2a */
 void TM_do_journey_crosslink(void);
 /* 0x2a */
