@@ -288,10 +288,16 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 			{
 				/* do forced march for 2 days */
 				gs_journey_forced_march_le_cost = random_schick(10);
+
 				gs_travel_speed = gs_travel_step_counter + 197;
+				/* 197 is 1.97 km/h, still pretty slow.
+				 * But WHY "+ gs_travel_step_counter"?? Original-Bug? */
+
 				gs_forcedmarch_timer = 2;
-				gs_travel_total_duration = (gs_travel_total_distance / (gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed) / 10) * 60);
-				gs_travel_duration_per_step = (gs_travel_total_duration / gs_travel_total_steps);
+				gs_travel_total_duration = (gs_travel_total_distance / (gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed) / 10) * 60); // unit: [minutes]
+				gs_travel_duration_per_step = (gs_travel_total_duration / gs_travel_total_steps); /* duration of each step. unit: [minutes] */
+
+				/* The following looks like an a posteriori balancing adjustment */
 				/* Remark: gs_journey_forced_march_le_cost = gs_journey_forced_march_le_cost / 2; */
 				gs_journey_forced_march_le_cost >>= 1;
 
@@ -301,6 +307,9 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead)
 					{
+						/* This is kind of brutal and close to a bug:
+						 * Switch to forced march, and a weak hero could be dead immediately.
+						 * A much cleaner solution would be to gradually reduce the LE one-by-one, and stop the forced march if a hero is low on LE. */
 						sub_hero_le(hero, gs_journey_forced_march_le_cost);
 					}
 				}
