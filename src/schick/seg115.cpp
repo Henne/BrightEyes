@@ -274,7 +274,8 @@ void tevent_095(void)
 
 				TRV_load_textfile(-1);
 			} else {
-				gs_journey_direction = done = 1;
+				/* Original-Bug? What if the place was entered in backward direction? Is this possible? */
+				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
 			}
 		} else {
 			/* at least one hero failed HA-test */
@@ -711,7 +712,8 @@ void tevent_100(void)
 
 		} else if (tmp == 3) {
 
-			gs_journey_direction = 1;
+			/* Original-Bug? What if the place was entered in backward direction? Is this possible? */
+			gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD;
 		}
 	}
 

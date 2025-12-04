@@ -914,7 +914,7 @@ signed int do_travel_mode(void)
 						TM_do_journey_crosslink();
 					}
 
-					if (gs_journey_direction == 2)
+					if (gs_journey_direction == JOURNEY_DIRECTION_BACKWARD)
 					{
 						if (gs_travel_detour && gs_travel_detour != 99)
 						{
