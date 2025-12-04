@@ -196,16 +196,14 @@ unsigned char g_unkn_091[1];			// ds:0xe4b3
 static unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
 unsigned char g_good_camp_place;		// ds:0xe4c8
 
-static unsigned char g_journey_tevent_accessibility[15];	// ds:0xe4c9
-/* value 0: tevent can take place accessing it in forward direction.
- * value 1: tevent is not accessible any more in this journey.
- * value 2: tevent can take place accessing it in backward direction.
- */
+static unsigned char g_journey_tevent_relative_position[15];	// ds:0xe4c9
+/* The position of the tevents relative to the party,
+ * which is considered to look into "forward" direction (in the sense of gs_journey_direction). */
 
-enum{
-	TEVENT_ACCESS_FORWARD = 0,
-	TEVENT_ACCESS_BLOCKED = 1,
-	TEVENT_ACCESS_BACKWARD = 2
+enum {
+	TEVENT_POSITION_AHEAD = 0,
+	TEVENT_POSITION_REMOVED = 1,
+	TEVENT_POSITION_BEHIND = 2
 };
 
 void prepare_map_marker(void)
@@ -306,7 +304,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 	}
 
 	memset((void*)gs_journey_tevents, (gs_travel_step_counter = 0), 15 * sizeof(struct_journey_tevent)); // gs_travel_step_counter is used in a different meaning
-	memset(g_journey_tevent_accessibility, TEVENT_ACCESS_FORWARD, 15);
+	memset(g_journey_tevent_relative_position, TEVENT_POSITION_AHEAD, 15);
 
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
 	 * 		Can be replaced by a locvar! */
@@ -499,11 +497,11 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 			{
 				if (((gs_journey_tevents[gs_trv_i].position <= gs_travel_distance_made) &&
 					(gs_journey_direction == JOURNEY_DIRECTION_FORWARD) &&
-					!g_journey_tevent_accessibility[gs_trv_i])
+					!g_journey_tevent_relative_position[gs_trv_i])
 						||
 					((gs_journey_tevents[gs_trv_i].position >= gs_travel_distance_made) &&
 					(gs_journey_direction == JOURNEY_DIRECTION_BACKWARD) &&
-					(g_journey_tevent_accessibility[gs_trv_i] == TEVENT_ACCESS_BACKWARD)))
+					(g_journey_tevent_relative_position[gs_trv_i] == TEVENT_POSITION_BEHIND)))
 				{
 					if (gs_journey_tevents[gs_trv_i].tevent_id)
 					{
@@ -512,15 +510,15 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 						if (!g_tevents_repeatable[gs_journey_tevents[gs_trv_i].tevent_id - 1])
 						{
 							/* tevent is "used up" for this journey. */
-							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_BLOCKED;
+							g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_REMOVED;
 
 						} else if (gs_journey_direction == JOURNEY_DIRECTION_FORWARD)
 						{
 							/* traveling forward => now the event can only be triggered moving in backward direction. */
-							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_BACKWARD;
+							g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_BEHIND;
 						} else {
 							/* traveling backward => now the event can only be triggered moving in forward direction. */
-							g_journey_tevent_accessibility[gs_trv_i] = TEVENT_ACCESS_FORWARD;
+							g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_AHEAD;
 						}
 
 						if (g_request_refresh != 0 && !gs_travel_detour)
@@ -627,7 +625,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 					 * Probably, the idea was that the same tevent should not be triggered twice in a row. */
 					if ( last_tevent_id != -1
 #ifdef M302de_ORIGINAL_BUGFIX
-						&& g_journey_tevent_accessibility[last_tevent_id] != TEVENT_ACCESS_BLOCKED
+						&& g_journey_tevent_relative_position[last_tevent_id] != TEVENT_POSITION_REMOVED
 #endif
 						/* Original-Bug 50:
 						 * Travel events marked as non-repeatable within the same journey can be
@@ -647,7 +645,7 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 						 * Now traveling forward we pass T1 (does not trigger). Then T2 is triggered a second time.
 						 */
 					) {
-						g_journey_tevent_accessibility[last_tevent_id] = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? TEVENT_ACCESS_FORWARD : TEVENT_ACCESS_BACKWARD);
+						g_journey_tevent_relative_position[last_tevent_id] = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? TEVENT_POSITION_AHEAD : TEVENT_POSITION_BEHIND);
 					}
 				}
 			}
