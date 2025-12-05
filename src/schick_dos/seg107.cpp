@@ -238,7 +238,7 @@ void item_invoke_flim_flam(void)
 /* Borlandified and identical */
 void item_read_schuldbuch(void)
 {
-	/* DEBTBOOK, ID 176 */
+	/* ITEM_SCHULDBUCH, ID 176 */
 
 	if (gs_debtbook_read_flag) {
 
@@ -258,7 +258,7 @@ void item_read_schuldbuch(void)
 /* Borlandified and identical */
 void item_read_orkdokument(void)
 {
-	/* ORCDOCUMENT, ID 179 */
+	/* ITEM_ORKDOKUMENT, ID 179 */
 
 	/* Languages + 4, or already read successful */
 	if ((test_talent(g_itemuser, TA_SPRACHEN, 4) > 0) || gs_orcdocument_read_flag) {
@@ -414,7 +414,7 @@ void item_apply_weapon_poison(void)
 
 void item_use_miasthmaticum(void)
 {
-	/* MYASTMATIC, ID 238 */
+	/* ITEM_MIASTHMATICUM, ID 238 */
 
 	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
@@ -424,7 +424,7 @@ void item_use_miasthmaticum(void)
 
 void item_use_hylailer_feuer(void)
 {
-	/* HYLAILIC FIRE, ID 239 */
+	/* ITEM_HYLAILER_FEUER, ID 239 */
 
 	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
@@ -434,7 +434,7 @@ void item_use_hylailer_feuer(void)
 
 void item_read_spellbook_heptagon(void)
 {
-	/* BOOK, ID 246 */
+	/* ITEM_BUCH__HEPTAGON, ID 246 */
 
 	/* print message */
 	GUI_output(get_ttx(749));
@@ -449,8 +449,7 @@ void item_read_spellbook_heptagon(void)
 /* Borlandified and identical */
 void item_ignite(void)
 {
-	/*	LANTERN, TORCH, TINDERBOX, LANTERN
-		ID 25, 65, 85, 249 */
+	/* ITEM_LATERNE__UNLIT, ITEM_FACKEL__UNLIT, ITEM_ZUNDERKAESTCHEN, ITEM_LATERNE__LIT; ID 25, 65, 85, 249 */
 	signed int tx_index_bak = g_tx_file_index;
 	signed int pos;
 	signed int refill_pos;
@@ -527,7 +526,7 @@ void item_ignite(void)
 /* Borlandified and identical */
 void item_use_beutel(void)
 {
-	/* MAGIC BREADBAG, BAG: ID 184, 221 */
+	/* ITEM_MAGISCHER_BROTBEUTEL, ITEM_BEUTEL; ID 184, 221 */
 
 	if ((gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
 
