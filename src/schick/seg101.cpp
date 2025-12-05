@@ -566,11 +566,12 @@ void spell_brenne(void)
 
 	g_spell_special_aecost = 0;
 
-	if (g_light_type == LIGHTING_TORCH) {
+	if (g_ignite_mode == IGNITE_MODE_USE_TORCH) {
 		torch_pos = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
 	} else {
-		if (g_light_type == LIGHTING_LANTERN) {
+		if (g_ignite_mode == IGNITE_MODE_USE_LANTERN) {
 		} else {
+			// assert(g_ignite_mode == IGNITE_MODE_SPELL_OR_USE_TINDER);
 			torch_pos = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
 		}
 

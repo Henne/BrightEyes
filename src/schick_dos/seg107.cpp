@@ -41,7 +41,7 @@ static void (*g_use_item_handlers[14])(void) = {
 	item_use_beutel
 }; // ds:0xaeb0
 
-int g_light_type = 0; // ds:0xaee8, 0 = none, 1 = torch, 2 = lantern
+int g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER; // ds:0xaee8, 0 = spell or use tinder, 1 = use torch, 2 = use lantern
 
 static struct item_stats *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
 static signed int g_used_item_id;	// ds:0xe5ca, used_item ID
@@ -451,8 +451,8 @@ void item_ignite(void)
 {
 	/* ITEM_LATERNE__UNLIT, ITEM_FACKEL__UNLIT, ITEM_ZUNDERKAESTCHEN, ITEM_LATERNE__LIT; ID 25, 65, 85, 249 */
 	signed int tx_index_bak = g_tx_file_index;
-	signed int pos;
-	signed int refill_pos;
+	signed int inv_slot;
+	signed int refill_inv_slot;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -468,45 +468,46 @@ void item_ignite(void)
 #endif
 
 		/* look for oil at the spelluser() */
-		pos = inv_slot_of_item(get_spelluser(), ITEM_OEL);
+		inv_slot = inv_slot_of_item(get_spelluser(), ITEM_OEL);
 
-		if (pos != -1) {
+		if (inv_slot != -1) {
 			/* look for the burning lantern at the spelluser() ??? */
-			refill_pos = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__LIT);
+			refill_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__LIT);
 
 			/* reset the burning time of the lantern */
-			g_itemuser->inventory[refill_pos].lighting_timer = 100;
+			g_itemuser->inventory[refill_inv_slot].lighting_timer = 100;
 
 			/* drop the oil */
-			drop_item(g_itemuser, pos, 1);
+			drop_item(g_itemuser, inv_slot, 1);
 
 			/* give a bronze flask */
 			give_new_item_to_hero(g_itemuser, ITEM_BRONZEFLASCHE, 0, 1);
 
-			/* prepare message */
 			sprintf(g_dtp2, get_tx(119), g_itemuser->alias);
+			/* "hero ignites the lantern" */
 		} else {
-			/* prepare message */
 			sprintf(g_dtp2, get_tx(120), g_itemuser->alias);
+			/* "hero does not have oil" */
 		}
 	} else {
+		/* In all other cases, ITEM_ZUNDERKAESTCHEN is needed */
 
 		if (inv_slot_of_item(g_itemuser, ITEM_ZUNDERKAESTCHEN) == -1) {
-			/* No tinderbox */
 			sprintf(g_dtp2, get_tx(122), g_itemuser->alias);
+			/* "hero does not have tinder" */
 		} else {
 
 			if (g_used_item_id == ITEM_FACKEL__UNLIT) {
 
-				g_light_type = LIGHTING_TORCH;
+				g_ignite_mode = IGNITE_MODE_USE_TORCH;
 
 			} else if (g_used_item_id == ITEM_LATERNE__UNLIT) {
 
-				g_light_type = LIGHTING_LANTERN;
+				g_ignite_mode = IGNITE_MODE_USE_LANTERN;
 
 			} else {
-
-				g_light_type = LIGHTING_DARK;
+				// assert(g_used_item_id == ITEM_ZUNDERKAESTCHEN)
+				g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER;
 			}
 
 			g_spelluser = g_itemuser;
@@ -544,7 +545,7 @@ void item_use_beutel(void)
 #endif
 	/* TODO: avoid dropping the bag when not in the first level of the mage ruin. (via: 'nothing happens') */
 
-	/* print message */
+	/* bag releases a dust cloud, which forms a frame ... */
 	GUI_output(get_ttx(775));
 
 	/* drop the BAG */

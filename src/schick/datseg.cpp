@@ -890,8 +890,8 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	{ 0, 1, 12 }, /* 12 <- item_ignite */
 	/* ITEM_LATERNE__UNLIT,
 	 * ITEM_FACKEL__UNLIT,
-	 * ITEM_ZUNDERKAESTCHEN, Why?
-	 * ITEM_LATERNE__LIT  Why?? Original-Bug? (note that ITEM_FACKEL__LIT is not in this list)
+	 * ITEM_ZUNDERKAESTCHEN, -> ignite either lantern or torch
+	 * ITEM_LATERNE__LIT     -> refill lit lantern with oil
 	 */
 
 	{ 0, 1, 13 }  /* 13 <- item_use_beutel */

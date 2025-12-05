@@ -1823,7 +1823,7 @@ extern signed char g_traveling;				//ds:0xa842; seg002, seg032, seg063, seg094
 
 extern signed int g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
 
-extern int g_light_type;			// ds:0xaee8; seg101, seg107
+extern int g_ignite_mode;			// ds:0xaee8; seg101, seg107
 
 extern signed char g_travel_event_active;		// ds:0xb132; seg002, seg109, seg117
 
