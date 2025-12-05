@@ -606,7 +606,7 @@ void disease_effect(void)
 			for (j = 1; j <= 7; j++) {
 
 				if (hero->disease[j].status != DISEASE_STATUS_HEALTHY) {
-					/* Original-Bug? I think for some of the deseases, an overflow could theoretically happen. */
+					/* Original-Bug? I think for some of the diseases, an overflow could theoretically happen. */
 					hero->disease[j].time_counter++;
 				}
 			}
