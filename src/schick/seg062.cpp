@@ -67,7 +67,7 @@ void ask_miracle(void)
 				miracle_resurrect(get_tx2(35));
 			} else {
 				switch (g_temple_god) {
-				case GOD_PRAIOS: {
+				case GOD_ID_PRAIOS: {
 					no_spellcaster_in_group = 1;
 
 					for (i = 0; gs_group_member_counts[gs_active_group_id] > i; i++) {
@@ -149,7 +149,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_RONDRA: {
+				case GOD_ID_RONDRA: {
 					if (miracle_dice_roll <= 5) {
 						if (!gs_ingame_timers[INGAME_TIMER_RONDRA_SWORDS]) {
 
@@ -177,7 +177,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_EFFERD: {
+				case GOD_ID_EFFERD: {
 					if (miracle_dice_roll <= 5) {
 						/* "Efferd verleiht euch die Gabe, Wasser zu finden." */
 						/* searching for water in a wildcamp will always be successful */
@@ -199,7 +199,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_TRAVIA: {
+				case GOD_ID_TRAVIA: {
 					if (miracle_dice_roll <= 10) {
 						/* "Die ganze Gruppe wird von Travia goettlich gesaettigt." */
 						for (i = 0; i <= 6; i++) {
@@ -223,7 +223,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_BORON: {
+				case GOD_ID_BORON: {
 					if (miracle_dice_roll <= 3) {
 						/* "Boron gewaehrt euch Schutz vor Untoten" */
 						/* apparently, does not have an impact anywhere */
@@ -241,7 +241,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_HESINDE: {
+				case GOD_ID_HESINDE: {
 					if (miracle_dice_roll <= 3) {
 						if (!gs_ingame_timers[INGAME_TIMER_HESINDE_ANALUES]) {
 
@@ -284,7 +284,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_FIRUN: case GOD_IFIRN: {
+				case GOD_ID_FIRUN: case GOD_ID_IFIRN: {
 					if (miracle_dice_roll <= 5) {
 						/* hunting in a wildcamp will always be successful */
 						gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT] = DAYS(3);
@@ -313,7 +313,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_TSA: {
+				case GOD_ID_TSA: {
 					if (miracle_dice_roll <= 10) {
 						/* heal 2D6 LE of a hero */
 						miracle_heal_hero(dice_roll(2, 6, 0), get_tx2(21));
@@ -339,7 +339,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_PHEX: {
+				case GOD_ID_PHEX: {
 					/* PHEX wants a bit more estimation */
 					if (gs_gods_estimation[g_temple_god] > 500L) {
 
@@ -370,7 +370,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_PERAINE: {
+				case GOD_ID_PERAINE: {
 					if (miracle_dice_roll <= 10) {
 						miracle_heal_hero(dice_roll(1, 6, 0), get_tx2(27));
 					} else if (miracle_dice_roll <= 16) {
@@ -393,7 +393,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_INGERIMM: {
+				case GOD_ID_INGERIMM: {
 					if (miracle_dice_roll <= 5) {
 						/* "Ingerimm segnet alle eure Waffen." */
 						/* decrease BF of all weapons of all heroes by 2, but not below 0 */
@@ -433,7 +433,7 @@ void ask_miracle(void)
 					}
 					break;
 				}
-				case GOD_RAHJA: {
+				case GOD_ID_RAHJA: {
 					if (miracle_dice_roll <= 8) {
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS]) {
 							/* Betören +2 for 7 days */

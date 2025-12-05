@@ -43,63 +43,63 @@ struct struct_hero *gs_random_tlk_hero;	/* REMARK: scope has changed drastically
 
 /**
  * \brief  get random known informer
- * \param informer_math number of the informer starting from 1 => (INFORMER_JURGE == 1, ...)
+ * \param informer_id_plus_1 number of the informer starting from 1 => (INFORMER_ID_JURGE == 1, ...)
  * \return pointer to the name of an unknown informer
  * */
-char* get_random_known_informer_name(const int informer_math)
+char* get_random_known_informer_name(const int informer_id_plus_1)
 {
 	signed int i;
 	signed int counter;
 
-	for (i = counter = 0; i < 15; i++) {
+	for (i = counter = 0; i < INFORMER_ID__END; i++) {
 
-		if ((gs_informer_flags[i] != 0) && (informer_math - 1 != i)
-			&& (i != INFORMER_OLVIR) && (i != INFORMER_TREBORN) && (i != INFORMER_UNICORN)) {
+		if ((gs_informer_flags[i] != 0) && (informer_id_plus_1 - 1 != i)
+			&& (i != INFORMER_ID_OLVIR) && (i != INFORMER_ID_TREBORN) && (i != INFORMER_ID_UNICORN)) {
 
 			counter++;
 		}
 	}
 
 	if (counter == 0) {
-		return get_random_unknown_informer_name(informer_math);
+		return get_random_unknown_informer_name(informer_id_plus_1);
 	} else {
 
 		do {
-			i = random_schick(15);
+			i = random_schick(INFORMER_ID__END);
 			/* TODO: i is in {1, 15} but {0, 14} would be more readable */
 
-		} while ((i == (INFORMER_OLVIR+1)) || (i == (INFORMER_TREBORN+1)) || (i == (INFORMER_UNICORN+1))
-				|| !gs_informer_flags[i - 1] || (i == informer_math));
+		} while ((i == (INFORMER_ID_OLVIR+1)) || (i == (INFORMER_ID_TREBORN+1)) || (i == (INFORMER_ID_UNICORN+1))
+				|| !gs_informer_flags[i - 1] || (i == informer_id_plus_1));
 
 		return get_ttx(656 + 1 + i);
 	}
 }
 
 /* get random unknown informer */
-char* get_random_unknown_informer_name(const int informer_math)
+char* get_random_unknown_informer_name(const int informer_id_plus_1)
 {
 	signed int i;
 	signed int counter;
 
-	for (i = counter = 0; i < 15; i++) {
+	for (i = counter = 0; i < INFORMER_ID__END; i++) {
 
-		if (!gs_informer_flags[i] && (informer_math - 1 != i)
-			&& (i != INFORMER_OLVIR) && (i != INFORMER_TREBORN) && (i != INFORMER_UNICORN)) {
+		if (!gs_informer_flags[i] && (informer_id_plus_1 - 1 != i)
+			&& (i != INFORMER_ID_OLVIR) && (i != INFORMER_ID_TREBORN) && (i != INFORMER_ID_UNICORN)) {
 
 			counter++;
 		}
 	}
 
 	if (counter == 0) {
-		return get_random_known_informer_name(informer_math);
+		return get_random_known_informer_name(informer_id_plus_1);
 	} else {
 
 		do {
-			i = random_schick(15);
+			i = random_schick(INFORMER_ID__END);
 			/* TODO: i is in {1, 15} but {0, 14} would be more readable */
 
-		} while ((i == (INFORMER_OLVIR+1)) || (i == (INFORMER_TREBORN+1)) || (i == (INFORMER_UNICORN+1))
-			       || gs_informer_flags[i - 1] || i == informer_math);
+		} while ((i == (INFORMER_ID_OLVIR+1)) || (i == (INFORMER_ID_TREBORN+1)) || (i == (INFORMER_ID_UNICORN+1))
+			       || gs_informer_flags[i - 1] || i == informer_id_plus_1);
 
 		gs_informer_flags[i - 1] = 1;
 
@@ -288,11 +288,11 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 
 					if (txt_id == 19) {
 
-						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_ISLEIF+1));
+						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_ID_ISLEIF+1));
 
 					} else if (txt_id == 20) {
 
-						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_ISLEIF+1));
+						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_ID_ISLEIF+1));
 
 					} else {
 
@@ -304,11 +304,11 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 
 					if (txt_id == 35 || txt_id == 36) {
 
-						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_JURGE+1));
+						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_ID_JURGE+1));
 
 					} else if (txt_id == 34) {
 
-						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_JURGE+1));
+						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_ID_JURGE+1));
 
 					} else {
 
@@ -403,11 +403,11 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 
 					if (txt_id == 18) {
 
-						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_OLVIR+1));
+						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_ID_OLVIR+1));
 
 					} else if (txt_id == 29) {
 
-						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_OLVIR+1));
+						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_ID_OLVIR+1));
 
 					} else {
 

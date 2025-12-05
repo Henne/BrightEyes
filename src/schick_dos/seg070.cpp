@@ -266,7 +266,7 @@ void PHX_bordell(void)
 	} else if (answer == 2) {
 
 		/* increase RAHJA's estimation */
-		gs_gods_estimation[GOD_RAHJA] += 30L;
+		gs_gods_estimation[GOD_ID_RAHJA] += 30L;
 
 		timewarp_until_time_of_day(HOURS(7));
 

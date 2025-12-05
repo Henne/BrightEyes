@@ -504,11 +504,11 @@ void level_up(const signed int hero_pos)
 	g_action = 0;
 	g_status_page_mode = 1;
 
-	for (i = 0; i < (SP__TAIL + 1); i++) {
+	for (i = 0; i < SP__END; i++) {
 		g_inc_spells_counter[i].tries = g_inc_spells_counter[i].incs = 0;
 	}
 
-	for (i = 0; i < (TA__TAIL + 1); i++) {
+	for (i = 0; i < TA__END; i++) {
 		g_inc_talents_counter[i].tries = g_inc_talents_counter[i].incs = 0;
 	}
 
@@ -775,7 +775,7 @@ void level_up(const signed int hero_pos)
 
 						/* first try to increase all which-specific spells by 1,
 						 * up to talent value at most 11. */
-						while (hero->saved_spell_increases != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < SP__END) {
 
 							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_HEXE && hero->spells[i] < 11) {
 								inc_spell_novice(hero, i);
@@ -796,7 +796,7 @@ void level_up(const signed int hero_pos)
 					}
 					case HERO_TYPE_DRUIDE: {
 
-						while (hero->saved_spell_increases != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < SP__END) {
 
 							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_DRUIDE && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -850,7 +850,7 @@ void level_up(const signed int hero_pos)
 					}
 					case HERO_TYPE_AUELF: {
 
-						while (hero->saved_spell_increases != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < SP__END) {
 
 							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_AUELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -866,7 +866,7 @@ void level_up(const signed int hero_pos)
 						}
 
 						i = 1;
-						while (hero->saved_spell_increases != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < SP__END) {
 
 							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_AUELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -878,7 +878,7 @@ void level_up(const signed int hero_pos)
 					}
 					case HERO_TYPE_FIRNELF: {
 
-						while (hero->saved_spell_increases != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < SP__END) {
 
 							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_FIRNELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -894,7 +894,7 @@ void level_up(const signed int hero_pos)
 						}
 
 						i = 1;
-						while (hero->saved_spell_increases != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < SP__END) {
 
 							if (g_spell_descriptions[i].origin == SPELL_ORIGIN_FIRNELF && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -905,7 +905,7 @@ void level_up(const signed int hero_pos)
 					}
 					case HERO_TYPE_WALDELF: {
 
-						while (hero->saved_spell_increases != 0 && i < 86) {
+						while (hero->saved_spell_increases != 0 && i < SP__END) {
 
 							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_WALDELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -921,7 +921,7 @@ void level_up(const signed int hero_pos)
 						}
 
 						i = 1;
-						while ((hero->saved_spell_increases != 0) && (i < 86)) {
+						while ((hero->saved_spell_increases != 0) && (i < SP__END)) {
 
 							if ((g_spell_descriptions[i].origin == SPELL_ORIGIN_WALDELF) && (hero->spells[i] < 11)) {
 								inc_spell_novice(hero, i);
@@ -934,7 +934,7 @@ void level_up(const signed int hero_pos)
 			}
 
 			while (hero->saved_spell_increases != 0) {
-				inc_spell_novice(hero, random_schick(86));
+				inc_spell_novice(hero, random_schick(SP__END));
 			}
 		}
 

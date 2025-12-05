@@ -196,7 +196,7 @@ void loot_corpse(struct struct_chest* chest_ptr, const char *text, int8_t *flag)
 				/* mark this corpse as done */
 				*flag = 1;
 				/* Boron - 20 */
-				gs_gods_estimation[GOD_BORON] -= 20L;
+				gs_gods_estimation[GOD_ID_BORON] -= 20L;
 
 			}
 
@@ -207,7 +207,7 @@ void loot_corpse(struct struct_chest* chest_ptr, const char *text, int8_t *flag)
 				/* mark this corpse as done */
 				*flag = 1;
 				/* Boron + 20 */
-				gs_gods_estimation[GOD_BORON] += 20L;
+				gs_gods_estimation[GOD_ID_BORON] += 20L;
 			}
 		}
 	} else {

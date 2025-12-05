@@ -3509,8 +3509,8 @@ void update_travelmap(void)
 
 	if (g_trv_menu_selection && gs_show_travel_map) {
 
-		g_selected_town_anix = g_town_positions[gs_trv_menu_towns[g_trv_menu_selection - 1] - 1].x;
-		g_selected_town_aniy = g_town_positions[gs_trv_menu_towns[g_trv_menu_selection - 1] - 1].y;
+		g_selected_town_anix = g_town_positions[gs_trv_signpost_menu_town_ids[g_trv_menu_selection - 1] - 1].x;
+		g_selected_town_aniy = g_town_positions[gs_trv_signpost_menu_town_ids[g_trv_menu_selection - 1] - 1].y;
 
 		g_pic_copy.x1 = g_selected_town_anix - 4;
 		g_pic_copy.y1 = g_selected_town_aniy - 4;
@@ -3585,8 +3585,8 @@ void update_travelmap(void)
 
 		if (g_menu_input_busy && gs_show_travel_map) {
 
-			g_selected_town_anix = g_town_positions[gs_trv_menu_towns[g_menu_selected - 1] - 1].x;
-			g_selected_town_aniy = g_town_positions[gs_trv_menu_towns[g_menu_selected - 1] - 1].y;
+			g_selected_town_anix = g_town_positions[gs_trv_signpost_menu_town_ids[g_menu_selected - 1] - 1].x;
+			g_selected_town_aniy = g_town_positions[gs_trv_signpost_menu_town_ids[g_menu_selected - 1] - 1].y;
 
 			g_pic_copy.x1 = g_selected_town_anix - 4;
 			g_pic_copy.y1 = g_selected_town_aniy - 4;
@@ -3679,7 +3679,7 @@ static void passages_recalc(void)
 		 * summer -> 2
 		 * spring, autumn -> 0 */
 
-	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); route++, i++) {
 
 		if (route->passage_timer-- == -1) { /* note that dec_ptr_bs returns the old (still un-decremented) value */
 			/* ship of a sea passage has left yesterday -> set up a new ship of this passage */
@@ -3725,9 +3725,9 @@ static void passages_reset(void)
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 36: the loop operates only on the first sea route (which is Thorwal-Prem) */
-	for (i = 0; i < NR_SEA_ROUTES; i++)
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); i++)
 #else
-	for (i = 0; i < NR_SEA_ROUTES; route++, i++)
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); route++, i++)
 #endif
 	{
 		if (!route->passage_timer) {

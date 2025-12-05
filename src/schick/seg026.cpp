@@ -1308,17 +1308,18 @@ void load_in_head(const signed int head)
 }
 
 /**
- * \brief   load a temple icon
+ * \brief   load temple logo
  *
- * \param   icon_id          the number of the icon
+ * \param   god_id          ID of the god
  */
-void load_tempicon(signed int icon_id)
+void load_temple_logo(signed int god_id)
 {
 	struct nvf_extract_desc nvf;
 	signed int handle; /* REMARK: reused differently */
 
-	if (icon_id == 14) {
-		icon_id = 7;
+	// there is no dedicated logo for Ifirn, use the one of Firun.
+	if (god_id == GOD_ID_IFIRN) {
+		god_id = GOD_ID_FIRUN;
 	}
 
 	/* load TEMPICON */
@@ -1328,7 +1329,7 @@ void load_tempicon(signed int icon_id)
 
 	nvf.dst = g_buffer8_ptr + 7000;
 	nvf.src = g_buffer8_ptr;
-	nvf.image_num = icon_id;
+	nvf.image_num = god_id;
 	nvf.compression_type = 0;
 	nvf.width = &handle;
 	nvf.height = &handle;

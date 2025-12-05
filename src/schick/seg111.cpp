@@ -587,7 +587,7 @@ void tevent_064(void)
 
 			GUI_output(get_tx2(70));
 
-			gs_trv_return = (gs_trv_return == 0 ? 1 : -1);
+			gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
 		}
 
 	} else if (gs_tevent064_flag != 0) {
@@ -650,7 +650,7 @@ void tevent_065(void)
 			/* Make Umbrik Siebenstein known */
 
 			/* Original-Bug: if Umbrik is done the value 2 is overwritten with 1 */
-			update_informer_cond(INFORMER_UMBRIK);
+			update_informer_cond(INFORMER_ID_UMBRIK);
 		}
 	}
 }

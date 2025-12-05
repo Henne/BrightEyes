@@ -134,7 +134,7 @@ struct struct_hero* get_first_brewing_hero(void)
 # endif
 	{
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_active_group_id) &&
-			hero->flags.brewing && (hero->alchemy_inn_id == gs_town_typeindex))
+			hero->flags.brewing && (hero->alchemy_inn_typeindex == gs_town_typeindex))
 		{
 			return hero;
 		}
@@ -312,7 +312,7 @@ void do_inn(void)
 		hero = get_hero(0);
 		for (i = 0; i < 7; i++, hero++) {
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id != gs_active_group_id) &&
-				hero->flags.brewing && (hero->alchemy_inn_id == gs_town_typeindex))
+				hero->flags.brewing && (hero->alchemy_inn_typeindex == gs_town_typeindex))
 			{
 				draw_status_line();
 

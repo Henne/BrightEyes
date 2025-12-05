@@ -27,7 +27,7 @@ void pirates_attack(void);
 void do_wild8_fight(void);
 
 /* 0x4d */
-void random_encounter(signed int);
+void journey_random_encounter(signed int);
 
 /* 0x52 */
 void search_ruin1(void);

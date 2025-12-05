@@ -274,7 +274,15 @@ void tevent_095(void)
 
 				TRV_load_textfile(-1);
 			} else {
-				gs_trv_return = done = 1;
+
+#ifndef M302de_ORIGINAL_BUGFIX
+				/* Original-Bug 53:
+				 * If the party was already traveling backward, the new direction should be forward. */
+				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
+#else
+				gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+				done = 1;
+#endif
 			}
 		} else {
 			/* at least one hero failed HA-test */
@@ -711,7 +719,13 @@ void tevent_100(void)
 
 		} else if (tmp == 3) {
 
-			gs_trv_return = 1;
+#ifndef M302de_ORIGINAL_BUGFIX
+			/* Original-Bug 53:
+			 * If the party was already traveling backward, the new direction should be forward. */
+			gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD;
+#else
+			gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+#endif
 		}
 	}
 

@@ -589,7 +589,7 @@ void show_outro(void)
 			hero->temple_id = 0;
 			hero->recipe_id = 0;
 			hero->recipe_timer = 0;
-			hero->alchemy_inn_id = 0;
+			hero->alchemy_inn_typeindex = 0;
 			hero->jail = 0;
 
 			/* Remark: better check use get_sober() */

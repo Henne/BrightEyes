@@ -33,9 +33,83 @@
 #include "seg113.h"
 #endif
 
-/* REMARK: valid values for this array are in {0, ..., 6} */
-static unsigned char g_random_encounter_index[59] = { 1, 1, 1, 1, 1, 1, 3, 0, 2, 3, 3, 4, 4, 4, 1, 1, 1, 3, 0, 3, 0, 5, 5, 5, 4, 4, 1, 1, 1, 3, 7, 4, 4, 1, 1, 4, 3, 4, 4, 4, 6, 4, 3, 1, 5, 5, 6, 7, 7, 7, 1, 1, 1, 1, 1, 7, 5, 7, 7 }; // ds:0xb17e
-static const uint8_t g_random_encounter_descr[14][7] = {
+/* REMARK: valid values for this array are in {0, ..., 7} */
+static unsigned char g_trv_route_landscape_type_table[59] = {
+	1, // LROUTE_ID_THORWAL_VAERMHAG
+	1, // LROUTE_ID_VAERMHAG_VARNHEIM
+	1, // LROUTE_ID_VARNHEIM_DASPOTA
+	1, // LROUTE_ID_THORWAL_SERSKE
+	1, // LROUTE_ID_SERSKE_MERSKE
+	1, // LROUTE_ID_MERSKE_EFFERDUN
+	3, // LROUTE_ID_SERSKE_BREIDA
+	0, // LROUTE_ID_F_TJOILA_TJOILA
+	2, // LROUTE_ID_TJOILA_BREIDA
+	3, // LROUTE_ID_BREIDA_PEILINEN
+	3, // LROUTE_ID_PEILINEN_ROVAMUND
+	4, // LROUTE_ID_ROVAMUND_NORDVEST
+	4, // LROUTE_ID_NORDVEST_KRAVIK
+	4, // LROUTE_ID_KRAVIK_SKELELLE
+	1, // LROUTE_ID_THORWAL_F_TJOILA
+	1, // LROUTE_ID_F_TJOILA_RUKIAN
+	1, // LROUTE_ID_RUKIAN_F_ANGBOD
+	3, // LROUTE_ID_F_ANGBOD_AUPLOG
+	0, // LROUTE_ID_F_ANGBOD_ANGBODIR
+	3, // LROUTE_ID_AUPLOG_VILNHEIM
+	0, // LROUTE_ID_VILNHEIM_BODON
+	5, // LROUTE_ID_VILNHEIM_PHEXCAER
+	5, // LROUTE_ID_PHEXCAER_GROENVEL
+	5, // LROUTE_ID_PHEXCAER_EINSIEDL
+	4, // LROUTE_ID_VARNHEIM_AUPLOG
+	4, // LROUTE_ID_DASPOTA_RYBON
+	1, // LROUTE_ID_DASPOTA_OTTARJE
+	1, // LROUTE_ID_OTTARJE_SKJAL
+	1, // LROUTE_ID_SKJAL_PREM
+	3, // LROUTE_ID_PREM_KORD
+	7, // LROUTE_ID_OTTARJE_ORVIL
+	4, // LROUTE_ID_ORVIL_ALA
+	4, // LROUTE_ID_ALA_TJANSET
+	1, // LROUTE_ID_TJANSET_LISKOR
+	1, // LROUTE_ID_LISKOR_CLANEGH
+	4, // LROUTE_ID_ALA_THOSS
+	3, // LROUTE_ID_THOSS_LISKOR
+	4, // LROUTE_ID_TJANSET_THOSS
+	4, // LROUTE_ID_VILNHEIM_OBERORKE
+	4, // LROUTE_ID_OBERORKE_FELSTEYN
+	6, // LROUTE_ID_FELSTEYN_ORKANGER
+	4, // LROUTE_ID_ORKANGER_CLANEGH
+	3, // LROUTE_ID_CLANEGH_TYLDON
+	1, // LROUTE_ID_TYLDON_VIDSAND
+	5, // LROUTE_ID_OBERORKE_EINSIEDL
+	5, // LROUTE_ID_FELSTEYN_EINSIEDL
+	6, // LROUTE_ID_RYBON_THOSS
+	7, // LROUTE_ID_SKJAL_ORVIL
+	7, // LROUTE_ID_SKELELLE_PHEXCAER
+	7, // LROUTE_ID_MERSKE_ROVAMUND
+	1, // LROUTE_ID_ORVIL_ROVIK
+	1, // LROUTE_ID_LJASDAHL__CIRCULAR
+	1, // LROUTE_ID_LJASDAHL_HJALLA_H
+	1, // LROUTE_ID_RUNINSHA_L_RUNIN__1
+	1, // LROUTE_ID_RUNINSHA_L_RUNIN__MIDDLE
+	7, // LROUTE_ID_BRENDHIL_MANRIN
+	5, // LROUTE_ID_EINSIEDL__CIRCULAR
+	7, // LROUTE_ID_L_RUNIN_RUNINSHA__2
+	7  // LROUTE_ID__CROSSLINK
+}; // ds:0xb17e
+
+/* In the following table, the columns correspond to the type of landscape (as stored in g_trv_route_landscape_type_table),
+ * and the rows correspond to the random encounter events.
+ * An entry 0 means that this encounter cannot happen in the given landscape.
+ * Within each column, the nonzero entries are monotonically increasing.
+ * They describe the chance that the specific random encounter happens in this landscape type.
+ *
+ * For example, look at the first column [40, 0, 0, 45, 60, 70, 85, 0, 0, 95, 0, 100, 0, 0].
+ * From the zero entries: The random event IDs 1, 2, 7, 8, 10, 12, 13 cannot happen in the given landscape type.
+ * Random event ID 0 happens if D100 <= 40, i.e., there is a chance of 40%.
+ * Random event ID 3 happens if D100 <= 45, and additionally, no event with a smaller ID happens, i.e., there is a chance of 5%.
+ * In this way, we get the following chances for the remaining random events:
+ * ID 4: 15%; ID 5: 10%, ID 6: 15%, ID 9: 10%, ID 11: 5%
+ */
+static const uint8_t g_trv_journey_random_encounter_stats[14][7] = {
 	{  40,  40,  30,  25,  30,  25,  20 },
 	{   0,  45,   0,   0,  40,  30,   0 },
 	{   0,  50,   0,   0,  45,   0,   0 },
@@ -51,6 +125,7 @@ static const uint8_t g_random_encounter_descr[14][7] = {
 	{   0,   0,   0,   0, 100,  95,   0 },
 	{   0,   0,   0,   0,   0, 100, 100 }
 }; // ds:0xb1b9
+
 static signed int g_tlk_ruin_hero_counter = 0; // ds:0xb21b
 static unsigned char g_unkn_068[1] = { 0x00 }; // ds:0xb21d
 
@@ -585,21 +660,28 @@ void do_wild8_fight(void)
 
 	do_fight(FIGHTS_WILD8);
 
-	gs_route_fight_flag = 0;
+	gs_journey_fight_flag = 0;
 	gs_show_travel_map = 1;
 	g_basepos_x = x_bak;
 	g_basepos_y = y_bak;
 }
 
-void random_encounter(signed int arg)
+/**
+ * \brief   random encounter traveling a land route
+ *
+ * \param   tmp   ID of the traveled land route
+ */
+void journey_random_encounter(signed int tmp)
+	/* tmp is dual use for land_route_id and as index for g_trv_journey_random_encounter_stats entries */
 {
 	signed int skip_fight = 0;
-	signed int i;
-	signed int randval;
+	signed int random_encounter_id;
+	signed int roll_d100;
 	signed int x_bak;
 	signed int y_bak;
 	signed int wallclock_update_bak;
 
+	/* fights happen only with a chance of 33% */
 	if (random_schick(100) > 33) {
 		skip_fight = 1;
 	}
@@ -610,19 +692,20 @@ void random_encounter(signed int arg)
 	g_basepos_x = 0;
 	g_basepos_y = 0;
 
-	arg = g_random_encounter_index[arg - 1];
+	tmp = g_trv_route_landscape_type_table[tmp - 1];
+	/* now tmp is the entry in g_trv_route_landscape_type_table belonging to the traveled land_route_id */
 
-	randval = random_schick(100);
+	roll_d100 = random_schick(100);
 
-	for (i = 0; i < 14; i++) {
+	for (random_encounter_id = 0; random_encounter_id < 14; random_encounter_id++) {
 
-		if ((g_random_encounter_descr[i][arg] <= randval) && g_random_encounter_descr[i][arg]) {
+		if ((g_trv_journey_random_encounter_stats[random_encounter_id][tmp] <= roll_d100) && g_trv_journey_random_encounter_stats[random_encounter_id][tmp]) {
 
 			gs_show_travel_map = g_wallclock_update = 0;
 			g_travel_event_active = 1;
 			g_fig_discard = 1;
 
-			switch (i) {
+			switch (random_encounter_id) {
 				case 0: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(6) + 1;

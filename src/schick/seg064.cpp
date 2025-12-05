@@ -64,7 +64,7 @@ signed int prepare_passages(void)
 	signed int i;
 	struct sea_route *ent = &g_sea_routes[0];
 
-	for (i = prepared = 0; i < NR_SEA_ROUTES; ent++, i++) {
+	for (i = prepared = 0; i < (SEA_ROUTE_ID__END - 1); ent++, i++) {
 
 		if (!ent->passage_timer && (ent->town_id_1 == gs_town_id || ent->town_id_2 == gs_town_id)) {
 
@@ -229,7 +229,7 @@ signed int get_next_passages(const signed int type)
 	signed int option;
 	signed int i;
 
-	for (i = option = 0; i < NR_SEA_ROUTES; entry++, i++) {
+	for (i = option = 0; i < (SEA_ROUTE_ID__END - 1); entry++, i++) {
 
 		if (type == 1) {
 
