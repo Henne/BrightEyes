@@ -414,8 +414,14 @@ signed int TRV_cross_a_ford(char *msg, const signed int time, const signed int h
 			answer = GUI_bool(get_tx(39));
 
 			if (answer == 1) {
-				/* Original-Bug? What if the ford was entered in backward direction? Is this possible? */
-				done = gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD;
+#ifndef M302de_ORIGINAL_BUGFIX
+				/* Original-Bug 53:
+				 * If the party was already traveling backward, the new direction should be forward. */
+				done = gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
+#else
+				gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+				done = 1;
+#endif
 			}
 		}
 

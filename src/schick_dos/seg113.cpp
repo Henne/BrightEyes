@@ -649,8 +649,14 @@ void tevent_104(void)
 			} else {
 				/* turn around */
 
-				/* Original-Bug? What if the place was entered in backward direction? Is this possible? */
+#ifndef M302de_ORIGINAL_BUGFIX
+				/* Original-Bug 53:
+				 * If the party was already traveling backward, the new direction should be forward. */
 				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
+#else
+				gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+				done = 1;
+#endif
 			}
 
 		} else {
