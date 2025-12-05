@@ -197,8 +197,7 @@ static unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
 unsigned char g_good_camp_place;		// ds:0xe4c8
 
 static unsigned char g_journey_tevent_relative_position[15];	// ds:0xe4c9
-/* The position of the tevents relative to the party,
- * which is considered to look into "forward" direction (in the sense of gs_journey_direction). */
+/* The position of the tevents relative to the party, viewed from the starting point of the journey. */
 
 enum {
 	TEVENT_POSITION_AHEAD = 0,
@@ -267,12 +266,19 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 	struct struct_journey_tevent *tevent_ptr;
 	signed int bak1;
 	signed int bak2;
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* After fixing Original-Bug 50, 51, and 52, this is not needed any more. */
 	signed int last_tevent_id;
+#endif
 	signed int answer;
 
 	g_traveling = 1;
 
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* After fixing Original-Bug 50, 51, and 52, this is not needed any more. */
 	last_tevent_id = -1;
+#endif
+
 	gs_travel_course_ptr = (int16_t*)((g_buffer9_ptr + *(int16_t*)((uint8_t*)g_buffer9_ptr + 4 * (land_route_id - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
 	gs_travel_course_ptr += 2;
@@ -505,21 +511,38 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 				{
 					if (gs_journey_tevents[gs_trv_i].tevent_id)
 					{
+#ifndef M302de_ORIGINAL_BUGFIX
 						TRV_event(gs_journey_tevents[(last_tevent_id = gs_trv_i)].tevent_id);
+#else
 
-						if (!g_tevents_repeatable[gs_journey_tevents[gs_trv_i].tevent_id - 1])
-						{
-							/* tevent is "used up" for this journey. */
-							g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_REMOVED;
+						/* Fix Original-Bug 50, 51, 52.
+						 * Set the correct relative position of the last tevent. */
+						TRV_event(gs_journey_tevents[gs_trv_i].tevent_id);
 
-						} else if (gs_journey_direction == JOURNEY_DIRECTION_FORWARD)
-						{
-							/* traveling forward => now the event can only be triggered moving in backward direction. */
-							g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_BEHIND;
-						} else {
-							/* traveling backward => now the event can only be triggered moving in forward direction. */
-							g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_AHEAD;
+						if (gs_journey_direction != JOURNEY_DIRECTION_CHANGE_TO_FORWARD && gs_journey_direction != JOURNEY_DIRECTION_CHANGE_TO_BACKWARD) {
+							/* travel event handler did not change the traveling direction.
+							 * Hence, the event was settled and the group passed its position. */
+#endif
+							if (!g_tevents_repeatable[gs_journey_tevents[gs_trv_i].tevent_id - 1])
+							{
+								/* tevent is "used up" for this journey. */
+								g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_REMOVED;
+
+							} else if (gs_journey_direction == JOURNEY_DIRECTION_FORWARD)
+							{
+								/* traveling forward => now the event can only be triggered moving in backward direction. */
+								g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_BEHIND;
+							} else {
+								/* traveling backward => now the event can only be triggered moving in forward direction. */
+								g_journey_tevent_relative_position[gs_trv_i] = TEVENT_POSITION_AHEAD;
+							}
+#ifdef M302de_ORIGINAL_BUGFIX
 						}
+							/* Otherwise, the travel event handler wants to reverse the traveling direction.
+							 * This means that the event was not really settled
+							 * (so we don't remove it even when it is non-repeatable)
+							 * and, moreover, the group has not passed the event position. */
+#endif
 
 						if (g_request_refresh != 0 && !gs_travel_detour)
 						{
@@ -620,33 +643,67 @@ void trv_do_journey(const signed int land_route_id, const signed int reverse)
 				{
 					gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
 
-					/* For the last travel event, the access direction is reversed,
-					 * such that it won't take place after the current direction change.
-					 * Probably, the idea was that the same tevent should not be triggered twice in a row. */
-					if ( last_tevent_id != -1
-#ifdef M302de_ORIGINAL_BUGFIX
-						&& g_journey_tevent_relative_position[last_tevent_id] != TEVENT_POSITION_REMOVED
-#endif
-						/* Original-Bug 50:
-						 * Travel events marked as non-repeatable within the same journey can be
-						 * reactivated by changing direction at suitable positions.
-						 *
-						 * Example: Consider a route with two tevents T1, T2, the first repeatable, the second not.
-						 * Starting the journey, the party is heading forward, and accessibility for T1 and T2 is set forward, like this:
-						 * [party: -->] [T1: -->] [T2: -->]
-						 * Passing and thereby triggering both tevents results in:
-						 *              [T1: <--] [T2: blocked] [party: -->]
-						 * T2 is the last triggered tevent. Now the party changes the direction, reviving T2:
-						 *              [T1: <--] [T2: -->]     [party: <--]
-						 * Traveling back, we pass T2 (does not trigger) and T1 (does trigger) and have:
-						 * [party: <--] [T1: -->] [T2: -->]
-						 * The last triggered tevent is T1. Changing the direction again:
-						 * [party: -->] [T1: <--] [T2: -->]
-						 * Now traveling forward we pass T1 (does not trigger). Then T2 is triggered a second time.
-						 */
-					) {
+					/* The next code block adjusts the relative position of the last triggered travel event,
+					 * which effectively means that the party did not pass it.
+					 * However, this in only true in case that the direction change is done right at the last travel event.
+					 *
+					 * ---
+					 *
+					 * In all other cases, the effect is that the last travel event will not be triggered again when the
+					 * party passes its position a second time. This leads to:
+					 *
+					 * Original-Bug 52:
+					 * Repeatable travel events will not be triggered again if the party
+					 * changes the traveling direction right after passing the event (this
+					 * means, before the next travel event is triggered).
+					 *
+					 * ---
+					 *
+					 * Even if the direction change took place right at the last tevent, things can go wrong.
+					 * If the party changes direction once again before another travel event is triggered,
+					 * the relative position of the last travel event (which is still the same) is adjusted as if the
+					 * direction change happens right at this travel event.
+					 * Hence, the party can now pass the position of that travel event without triggering it.
+					 * This leads to:
+					 *
+					 * Original-Bug 51:
+					 * Travel events which give you the option to return can be circumvented by returning once again.
+					 * This can be exploited to circumvent, for example, dangerous swamps.
+					 *
+					 * ---
+					 *
+					 * Moreover, the adjustment is also done for non-repeatable travel events,
+					 * This can be utilized to reactivate such a travel event, like in this example:
+					 *
+					 * Consider a route with two tevents T1, T2, the first repeatable, the second not.
+					 * Starting the journey, the party is heading forward, and accessibility for T1 and T2 is set forward, like this:
+					 * [party: -->] [T1: ahead] [T2: ahead]
+					 * Passing and thereby triggering both tevents results in:
+					 *              [T1: behind] [T2: removed] [party: -->]
+					 * T2 is the last triggered tevent. Now the party changes the direction, reviving T2:
+					 *              [T1: behind] [T2: ahead]     [party: <--]
+					 * Traveling back, we pass T2 (does not trigger) and T1 (does trigger) and have:
+					 * [party: <--] [T1: ahead] [T2: ahead]
+					 * The last triggered tevent is T1. Changing the direction again:
+					 * [party: -->] [T1: ahead] [T2: ahead]
+					 * This is the same state as the beginning. Traveling forward, T2 is triggered a second time.
+					 * Hence we have:
+					 *
+					 * Original-Bug 50:
+					 * Travel events marked as non-repeatable within the same journey can be reactivated by changing the direction at suitable positions.
+					 *
+					 * ---
+					 *
+					 * For the fix of Original-Bug 50, 51, and 52,
+					 * we deactivate this a-posteriori adjustement of the relative position.
+					 * Instead, the relative position is set to the correct state right after handling the travel event.
+					 */
+#ifndef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 50, 51, and 52 */
+					if ( last_tevent_id != -1) {
 						g_journey_tevent_relative_position[last_tevent_id] = (gs_journey_direction == JOURNEY_DIRECTION_CHANGE_TO_BACKWARD ? TEVENT_POSITION_AHEAD : TEVENT_POSITION_BEHIND);
 					}
+#endif
 				}
 			}
 			g_wallclock_x = g_basepos_x + 120;
