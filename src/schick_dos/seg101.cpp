@@ -561,6 +561,13 @@ void spell_brenne(void)
 
 	g_spell_special_aecost = 0;
 
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 55:
+	 * Using the second (third, firth...) un-lit torch in the inventory to ignite it,
+	 * actually the first torch will be ignited. (provided the hero also has a tinder box)
+	 * The same for lanterns instead of torches, provided the hero also has a tinder
+	 * box and a bottle of oil.
+	 */
 	if (g_ignite_mode == IGNITE_MODE_USE_TORCH) {
 		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
 	} else {
@@ -572,6 +579,18 @@ void spell_brenne(void)
 
 		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
 	}
+#else
+	/* For the fix, we rely on the stored inventory slot of the used item in g_used_item_inv_slot */
+	if (g_ignite_mode == IGNITE_MODE_USE_TORCH) {
+		torch_inv_slot = g_used_item_inv_slot;
+	} else if (g_ignite_mode == IGNITE_MODE_USE_LANTERN) {
+		lantern_inv_slot = g_used_item_inv_slot;
+	} else {
+		// assert(g_ignite_mode == IGNITE_MODE_SPELL_OR_USE_TINDER);
+		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
+		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
+	}
+#endif
 
 	if (torch_inv_slot != -1 && lantern_inv_slot != -1) {
 

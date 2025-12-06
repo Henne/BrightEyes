@@ -45,7 +45,13 @@ int g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER; // ds:0xaee8, 0 = spell or 
 
 static struct item_stats *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
 static signed int g_used_item_id;	// ds:0xe5ca, used_item ID
+
+#ifndef M302de_ORIGINAL_BUGFIX
 static signed int g_used_item_inv_slot;	// ds:0xe5cc, used_item position
+#else
+// required for fix of Original-Bug 55
+signed int g_used_item_inv_slot;	// ds:0xe5cc, used_item position
+#endif
 
 static struct struct_hero *g_itemuser;	// ds:0xe5ce, pointer to hero
 
