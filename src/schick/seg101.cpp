@@ -573,30 +573,27 @@ void spell_brenne(void)
 		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
 	}
 
-	if (torch_inv_slot != -1) {
+	if (torch_inv_slot != -1 && lantern_inv_slot != -1) {
 
-		if (lantern_inv_slot != -1) {
+		/* lantern and torch are available, must decide */
+		sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
 
-			/* lantern and torch are available, must decide */
-			sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
+		answer = GUI_radio(g_dtp2, 2,
+				(char*)GUI_names_grammar(0x4000, ITEM_FACKEL__UNLIT, 0),
+				(char*)GUI_names_grammar(0x4000, ITEM_LATERNE__UNLIT, 0));
 
-			answer = GUI_radio(g_dtp2, 2,
-					(char*)GUI_names_grammar(0x4000, ITEM_FACKEL__UNLIT, 0),
-					(char*)GUI_names_grammar(0x4000, ITEM_LATERNE__UNLIT, 0));
+		if (answer == -1) {
 
-			if (answer == -1) {
+			/* abort */
+			torch_inv_slot = lantern_inv_slot = -1;
 
-				/* abort */
-				torch_inv_slot = lantern_inv_slot = -1;
+		} else if (answer == 1) {
 
-			} else if (answer == 1) {
+			lantern_inv_slot = -1;
 
-				lantern_inv_slot = -1;
+		} else {
 
-			} else {
-
-				torch_inv_slot = -1;
-			}
+			torch_inv_slot = -1;
 		}
 	}
 
