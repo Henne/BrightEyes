@@ -516,6 +516,25 @@ void item_ignite(void)
 		}
 	}
 
+#ifdef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 54:
+	 * Use a torch to ignite it. After that, it is not possible to ignite a
+	 * lantern with the spell "Brenne toter Stoff".
+         * (For exampe, if the hero casting that spell has a a torch, but not a
+         * lantern, there will be the message "<hero> hat weder eine Fackel noch
+         * eine Laterne dabei".)
+         * The bug exists also the other way round: Use a lantern to ignite it.
+         * After that, it is not possible to ignite a torch with the spell "Brenne
+         * toter Stoff".
+
+	 * Use a torch to ignite it. After that, it is not possible to ignite a lantern with the spell "Brenne toter Stoff".
+	 * Or the other way round: Use a lantern to ignite it. After that, it is not possible to ignite a torch with the spell "Brenne toter Stoff".
+	 */
+
+	// Fix: reset g_ignite_mode.
+	 g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER;
+#endif
+
 	if ((tx_index_bak != -1) && (tx_index_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
 		/* need to reload buffer1 */
 		load_tx(tx_index_bak);
