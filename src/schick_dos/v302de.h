@@ -23,6 +23,39 @@
 #include <TIME.H>
 #endif
 
+#if !defined(__BORLANDC__)
+/* comment this out to have the original, but buggy behaviour */
+#define M302de_ORIGINAL_BUGFIX
+
+/* BrightEyes implements a few (moderate) feature extensions/mods.
+ * comment this out to avoid the new features */
+#define M302de_FEATURE_MOD
+
+#define SCHICK_INFO
+#define SCHICK_INFO_VERBOSE
+//#define SCHICK_LOG
+
+#define D1_ERR(...) fprintf(stderr, __VA_ARGS__)
+
+#ifdef SCHICK_LOG
+#define D1_LOG(...) fprintf(stderr, __VA_ARGS__)
+#else
+static inline void D1_LOG(...) { }
+#endif
+
+#ifdef SCHICK_INFO
+#define D1_INFO(...) fprintf(stderr, __VA_ARGS__)
+#else
+static inline void D1_INFO(...) { }
+#endif
+
+#ifdef SCHICK_INFO_VERBOSE
+#define D1_INFO_VERBOSE(...) fprintf(stderr, __VA_ARGS__)
+#else
+static inline void D1_INFO_VERBOSE(...) { }
+#endif
+#endif
+
 typedef unsigned char uint8_t;
 typedef signed char int8_t;
 typedef unsigned short uint16_t;
@@ -113,37 +146,6 @@ static inline unsigned short cast_u16(unsigned char v)
 #define _read read
 
 static inline int bioskey(const int cmd) { return 0; }
-
-/* comment this out to have the original, but buggy behaviour */
-#define M302de_ORIGINAL_BUGFIX
-
-/* BrightEyes implements a few (moderate) feature extensions/mods.
- * comment this out to avoid the new features */
-#define M302de_FEATURE_MOD
-
-#define SCHICK_INFO
-#define SCHICK_INFO_VERBOSE
-//#define SCHICK_LOG
-
-#define D1_ERR(...) fprintf(stderr, __VA_ARGS__)
-
-#ifdef SCHICK_LOG
-#define D1_LOG(...) fprintf(stderr, __VA_ARGS__)
-#else
-static inline void D1_LOG(...) { }
-#endif
-
-#ifdef SCHICK_INFO
-#define D1_INFO(...) fprintf(stderr, __VA_ARGS__)
-#else
-static inline void D1_INFO(...) { }
-#endif
-
-#ifdef SCHICK_INFO_VERBOSE
-#define D1_INFO_VERBOSE(...) fprintf(stderr, __VA_ARGS__)
-#else
-static inline void D1_INFO_VERBOSE(...) { }
-#endif
 
 /* help Visual C++ to know __func__ */
 #if _MSC_VER >= 1300
