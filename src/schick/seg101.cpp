@@ -54,12 +54,10 @@ void spell_arcano(void)
 
 void spell_armatrutz(void)
 {
-	signed int max_bonus;
+	signed int max_bonus = 0;
 	signed int pos;
 	signed int bonus;
 	signed int mod_slot;
-
-	max_bonus = 0;
 
 	/* calc the maximal RS bonus */
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -558,11 +556,8 @@ void spell_brenne(void)
 	signed int oil_pos;
 	signed int answer;
 
-	signed int torch_pos;
-	signed int lantern_pos;
-
-	torch_pos = -1;
-	lantern_pos = -1;
+	signed int torch_pos = -1;
+	signed int lantern_pos = -1;
 
 	g_spell_special_aecost = 0;
 
