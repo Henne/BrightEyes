@@ -549,7 +549,8 @@ void spell_aeolitus(void)
 /**
  * \brief   hero spell 'Brenne, toter Stoff!'
  *
- * Ignites a lantern (1 oil is consumed) or a torch in the inventory.
+ * Ignites a lantern (uses up 1 oil) or a torch in the inventory.
+ * Used for hero spell, but also for manual igniting based on a tinderbox.
  */
 void spell_brenne(void)
 {
@@ -594,7 +595,7 @@ void spell_brenne(void)
 
 	if (torch_inv_slot != -1 && lantern_inv_slot != -1) {
 
-		/* lantern and torch are available, must decide */
+		/* both torch and lantern are available, must decide */
 		sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
 
 		answer = GUI_radio(g_dtp2, 2,
@@ -627,8 +628,8 @@ void spell_brenne(void)
 		/* set AP cost */
 		g_spell_special_aecost = random_schick(20);
 
-		/* prepare message */
 		sprintf(g_dtp2,	get_tx(108), get_spelluser()->alias);
+		/* "torch is lit *" */
 
 	} else if (lantern_inv_slot != -1) {
 
@@ -652,17 +653,16 @@ void spell_brenne(void)
 			/* set AP cost */
 			g_spell_special_aecost = random_schick(20);
 
-			/* prepare message */
 			sprintf(g_dtp2,	get_tx(119), get_spelluser()->alias);
+			/* "lantern is lit" */
 		} else {
 			/* prepare message */
 			sprintf(g_dtp2, get_tx(120), get_spelluser()->alias);
+			/* "hero does not have oil" */
 		}
 	} else {
-		/* neither torch nor lantern */
-
-		/* prepare message */
 		sprintf(g_dtp2, get_tx(121), get_spelluser()->alias);
+		/* "hero has neither torch nor lantern" */
 	}
 }
 
