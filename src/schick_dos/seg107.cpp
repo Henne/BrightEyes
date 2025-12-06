@@ -169,13 +169,13 @@ void item_read_document(void)
 
 	switch (g_used_item_id) {
 
-		case ITEM_DOKUMENT__1: str = get_ttx(641); break;
+		case ITEM_DOKUMENT__UNICORN: str = get_ttx(641); break;
 		case ITEM_SCHREIBEN_VON_JADRA: str = get_ttx(645); break;
 		case ITEM_LOBPREISUNGEN: str = get_ttx(646); break;
 		case ITEM_MITGLIEDERLISTE: str = get_ttx(647); break;
 		case ITEM_SEEKARTE: str = get_ttx(648); break;
-		case ITEM_BUCH__1: str = get_ttx(654); break;
-		case ITEM_BUCH__2: str = get_ttx(655); break;
+		case ITEM_BUCH__PIRATE_ACCOUNTING: str = get_ttx(654); break;
+		case ITEM_BUCH__KAISERSPRUECHE_HALS: str = get_ttx(655); break;
 		case ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN: str = get_ttx(657); break;
 		case ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN: str = get_ttx(759); break;
 	}

@@ -843,13 +843,13 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 */
 
 	{ 0, 1,  3 }, /*  3 <- item_read_document */
-	/* ITEM_DOKUMENT__1,
+	/* ITEM_DOKUMENT__UNICORN,
 	 * ITEM_SCHREIBEN_VON_JADRA,
 	 * ITEM_LOBPREISUNGEN,
 	 * ITEM_MITGLIEDERLISTE,
 	 * ITEM_SEEKARTE,
-	 * ITEM_BUCH__1,
-	 * ITEM_BUCH__2,
+	 * ITEM_BUCH__PIRATE_ACCOUNTING,
+	 * ITEM_BUCH__KAISERSPRUECHE_HALS,
 	 * ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN,
 	 * ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN
 	 */
@@ -2631,7 +2631,7 @@ uint32_t gs_main_acting_hero_obsolete = 0;// ds:0x3e20; This is a dummy now!
 #endif
 
 uint8_t gs_tevent073_corpse[3] = {
-	ITEM_DOKUMENT__1, 1,
+	ITEM_DOKUMENT__UNICORN, 1,
 	0xff
 }; // ds:0x3e24
 uint8_t gs_tevent014_chest[4] = {

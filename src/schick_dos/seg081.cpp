@@ -58,7 +58,7 @@ signed int DNG06_handler(void)
 
 	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !gs_dng06_book_flag)
 	{
-		if (GUI_bool(get_tx(1)) && give_new_item_to_group(ITEM_BUCH__2, 1, 1))
+		if (GUI_bool(get_tx(1)) && give_new_item_to_group(ITEM_BUCH__KAISERSPRUECHE_HALS, 1, 1))
 		{
 			gs_dng06_book_flag = 1;
 		}
