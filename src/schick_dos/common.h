@@ -1447,7 +1447,7 @@ enum {
 	ITEM_REZEPT_FUER_EXPURGICUM		= 0xa7, /* recipe for Expurgicum */
 	ITEM_VOMICUM				= 0xa8, /* Vomicum */
 	ITEM_REZEPT_FUER_VOMICUM		= 0xa9, /* recipe for Vomicum */
-	ITEM_DOKUMENT__1			= 0xaa, /* unicorn letter [found in tevent073] */
+	ITEM_DOKUMENT__UNICORN			= 0xaa, /* unicorn letter [found in tevent073] */
 	ITEM_SILBERNER_STIRNREIF		= 0xab, /* silver coronet [magic, 3 charges, use -> Armatrutz +5, i.e. RS + 5] */
 	ITEM_SAEBEL__MAGIC			= 0xac, /* sabre [magic, damage+1 to skeletons and zombies] */
 	ITEM_AMULETT__RED			= 0xad, /* amulet [red, magic, protection from fire; found at corpse between Rovamund and Nordvest ] */
@@ -1466,7 +1466,7 @@ enum {
 	ITEM_REZEPT_FUER_HEILTRANK		= 0xba, /* recipe for heal potion */
 	ITEM_SCHREIBEN_VON_JADRA		= 0xbb, /* writing of Jarda */
 	ITEM_AMULETT__UNKNOWN_2			= 0xbc, /* amulet [TODO: which one?? has the shape of a golden cross. it might be yellow, magic: protects from fire; found at Totenschiff] */
-	ITEM_LOBPREISUNGEN			= 0xbd, /* praises [found in Tempel des Namenlosen and in Piratenhoehle] */
+	ITEM_LOBPREISUNGEN			= 0xbd, /* praises of the nameless god [found in Tempel des Namenlosen and in Piratenhoehle] */
 	ITEM_MITGLIEDERLISTE			= 0xbe, /* member list [found in Tempel des Namenlosen] */
 	ITEM_DOKUMENT__2			= 0xbf, /* document [2, not readable. Depotschein?] */
 	ITEM_SEEKARTE				= 0xc0, /* sea chart [found in Piratenhoehle] */
@@ -1499,9 +1499,9 @@ enum {
 	ITEM_GOLDSCHLUESSEL			= 0xdb, /* gold key. note that there is also ITEM_GOLDENER_SCHLUESSEL (golden key) */
 	ITEM_RING__GREEN			= 0xdc, /* ring [green, magic: protection from magic fire; found in Drachenhoehle] */
 	ITEM_BEUTEL				= 0xdd, /* bag [found and used in the first level of the ruin of the black wizard to open a passage] */
-	ITEM_BUCH__1				= 0xde, /* book [1] */
+	ITEM_BUCH__PIRATE_ACCOUNTING		= 0xde, /* book [dacades old accounting book about loot income of Daspota pirates] */
 	ITEM_ANTIKRANKHEITSELIXIER		= 0xdf, /* anti disease elixir */
-	ITEM_BUCH__2				= 0xe0, /* book [2; found in the dungeon of the Daspota treasure (Rybon-Thoss)] */
+	ITEM_BUCH__KAISERSPRUECHE_HALS		= 0xe0, /* book ["Kaisersprüche Hals"; found in the dungeon of the Daspota treasure (Rybon-Thoss)] */
 	ITEM_KRISTALL				= 0xe1, /* crystal */
 	ITEM_MU_ELIXIER__BAD			= 0xe2, /* MU elixir [bad] */
 	ITEM_KL_ELIXIER__BAD			= 0xe3, /* KL elixir [bad] */
