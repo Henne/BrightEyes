@@ -1836,6 +1836,11 @@ extern uint8_t g_color_black[3];			// ds:0xb22d; seg029, seg120
 extern signed char g_large_buf;			// ds:0xe5e4; seg120, seg028
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 
+#ifdef M302de_ORIGINAL_BUGFIX
+// required for fix of Original-Bug 55
+extern signed int g_used_item_inv_slot;	// ds:0xe5cc, used_item position
+#endif
+
 //extern struct struct_hero *g_itemuser;		// ds:0xe5ce; seg049, seg107
 extern struct struct_hero *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern struct struct_hero *g_spelltarget;	// ds:0xe5b8; seg098-seg102
