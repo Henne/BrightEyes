@@ -554,6 +554,7 @@ void item_use_beutel(void)
 {
 	/* ITEM_MAGISCHER_BROTBEUTEL, ITEM_BEUTEL; ID 184, 221 */
 
+#ifndef M302de_FEATURE_MOD
 	if ((gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
 
 		/* set ptr to the map */
@@ -562,17 +563,35 @@ void item_use_beutel(void)
 		/* remove the wall there */
 		ptr[MAP_POS(10,3)] = DNG_TILE_CORRIDOR + 0x01; /* set flag 0, is there a reason? */
 	}
-#if !defined(__BORLANDC__)
-	else {
-		D1_INFO("WARNUNG:\tDer BEUTEL wurde nicht im ersten Level der Magierruine geoeffnet!\n");
-		D1_INFO("\t\tEventuell kann das Spiel nicht mehr erfolgreich beendet werden.\n");
-	}
-#endif
-	/* TODO: avoid dropping the bag when not in the first level of the mage ruin. (via: 'nothing happens') */
 
-	/* bag releases a dust cloud, which forms a frame ... */
 	GUI_output(get_ttx(775));
+	/* bag releases a dust cloud, which forms a frame ... */
 
 	/* drop the BAG */
 	drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_BEUTEL), 1);
+	/* Beware: The bag is dropped wether or not the wall was removed!
+	 * Hence, using it at the wrong place will leave the dungeon "Ruine des Schwarzmagiers"
+	 * in a state which cannot be accessed deeper by regular means. */
+#else
+	/* Feature mod 9:
+	 * Avoid the loss of the magic bag if there was no effect,
+	 * i.e. when it was used outside the first level of Ruine des Schwarzmagiers.
+	 * Moreover, give a better message in this case. */
+	if ((gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
+
+		/* set ptr to the map */
+		uint8_t *ptr = g_dng_map;
+
+		/* remove the wall there */
+		ptr[MAP_POS(10,3)] = DNG_TILE_CORRIDOR + 0x01; /* set flag 0, is there a reason? */
+
+		GUI_output(get_ttx(775));
+		/* bag releases a dust cloud, which forms a frame ... */
+
+		drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_BEUTEL), 1);
+	} else {
+		sprintf(g_dtp2, "DER BEUTEL ENTH\x8e""LT ETWAS STAUB.\x40""%s WARTET EIN WENIG, DOCH NICHTS PASSIERT.",g_itemuser->alias);
+		GUI_output(g_dtp2);
+	}
+#endif
 }
