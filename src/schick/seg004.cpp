@@ -1036,7 +1036,18 @@ void do_v_line(uint8_t* ptr, const signed int y, signed int x1, signed int x2, c
 	count = x2 - x1 + 1;
 	dst = x1 * 320 + y + ptr;
 
+#if defined(__BORLANDC__)
 	draw_h_spaced_dots(dst, count, color, 320);
+#else
+	/* Sloppy local fix to avoid crashes */
+	const int off = x1 * 320 + y;
+	if ((off < 0) || (off >= 320 * 200)) return;
+
+	draw_h_spaced_dots(dst, count, color, 320);
+
+	sdl_forced_update();
+#endif
+
 }
 
 void do_border(uint8_t* dst, const signed int x1, const signed int y1, const signed int x2, const signed int y2, const signed char color)
@@ -1128,7 +1139,8 @@ void do_fill_rect(uint8_t* dst, const signed int x, const signed int y, const si
 #if defined(__BORLANDC__)
 	fill_rect(FP_SEG(dst), FP_OFF(dst), color, width, height);
 #else
-	fill_rect(dst, color, width, height);
+	vgalib_fill_rect(dst, color, width, height);
+	sdl_forced_update();
 #endif
 	call_mouse();
 }
