@@ -56,7 +56,7 @@ static const struct ship g_ship_table[8] = {
 	{ 6, 0,  0,  40 }
 }; // ds:0x6ed0
 static const signed int g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
-struct sea_route g_sea_routes[46] = {
+struct sea_route g_sea_routes[SEA_ROUTE_ID__END] = {
 	{ TOWN_ID_THORWAL    , TOWN_ID_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
 	{ TOWN_ID_PREM       , TOWN_ID_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -108,7 +108,7 @@ struct sea_route g_sea_routes[46] = {
 	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
 	{ TOWN_ID_TREBAN     , TOWN_ID_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
 	{ TOWN_ID_MANRIN     , TOWN_ID_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
-	{ (unsigned char)-1             , 0x00                  ,   0,  0, 0, 0, 0, 0 } //TODO: towns should be signed
+	{ (unsigned char)-1  , 0x00                    ,   0,  0, 0, 0, 0, 0 }  //TODO: towns should be signed
 }; // ds:0x6f00
 signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
 static struct int16_t_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
@@ -127,7 +127,7 @@ void passages_init(void)
 	struct sea_route *route = &g_sea_routes[0];
 
 
-	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
+	for (i = 0; i < (SEA_ROUTE_ID__END - 1); route++, i++) {
 
 		route->passage_timer = (unsigned char)random_interval(0, route->frequency);
 		route->price_mod = (unsigned char)random_interval(70, 130);
@@ -197,7 +197,7 @@ void do_harbor(void)
 				flag = 0;
 
 				if ((gs_quested_months > 2) && !gs_treasure_maps[6] &&
-					gs_informer_flags[INFORMER_SWAFNILD] && (random_schick(100) <= gs_quested_months + 4))
+					gs_informer_flags[INFORMER_ID_SWAFNILD] && (random_schick(100) <= gs_quested_months + 4))
 				{
 					/* meet SWAFNILD */
 					do_talk(12, 0);
@@ -538,54 +538,55 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 
 	/* if high seas route, write 7 (total number of high seas routes)
 	 * if costal route, write 38 (total number of costal routes) */
-	gs_route_mousehover = (passage_id < 7 ? 7 : 38);
+	gs_travel_mousehover = (passage_id < 7 ? 7 : 38);
 
 	/* convert costal route ids to range 0..37 */
 	gs_sea_travel_passage_id = passage_id < 7 ? passage_id : passage_id - 7;
 
 	off = ((int32_t*)gs_sea_travel_courses)[gs_sea_travel_passage_id];
-	gs_route_course_ptr = (int16_t*)(gs_sea_travel_courses + off + 4 * gs_route_mousehover);
+	gs_travel_course_ptr = (int16_t*)(gs_sea_travel_courses + off + 4 * gs_travel_mousehover);
 	ptr = g_vga_memstart;
 
-	gs_route_course_ptr += 2;
+	gs_travel_course_ptr += 2;
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	gs_travel_speed = 10 * gs_sea_travel_passage_speed1; /* speed [unit: 10m per hour] */
-	gs_route_total_steps = get_srout_len((struct struct_point*)gs_route_course_ptr); /* a step for each pixel on the map. */
-	gs_route_length = 100 * g_sea_routes[passage_id].distance; /* length of sea route [unit: 10m] */
-	gs_route_duration = gs_route_length / gs_travel_speed * 60; /* duration [unit: minutes] */
-	gs_route_timedelta = gs_route_duration / gs_route_total_steps; /* duration of each step [unit: minutes] */
-	gs_route_stepsize = gs_route_length / gs_route_total_steps; /* length of a single step [unit: 10m] */
+	gs_travel_total_steps = get_srout_len((struct struct_point*)gs_travel_course_ptr); /* a step for each pixel on the map. */
+	gs_travel_total_distance = 100 * g_sea_routes[passage_id].distance; /* length of sea route [unit: 10m] */
+	gs_travel_total_duration = gs_travel_total_distance / gs_travel_speed * 60; /* duration [unit: minutes] */
+	gs_travel_duration_per_step = gs_travel_total_duration / gs_travel_total_steps; /* duration of each step [unit: minutes] */
+	gs_travel_distance_per_step = gs_travel_total_distance / gs_travel_total_steps; /* length of a single step [unit: 10m] */
 
-	if (gs_route_stepsize == 0) {
-		gs_route_stepsize = 1;
+	if (gs_travel_distance_per_step == 0) {
+		gs_travel_distance_per_step = 1;
 	}
 #if !defined(__BORLANDC__)
-	D1_INFO("Schiffspassage gestartet. Entfernung: %d0 Schritt. Geschwindigkeit: %d0 Schritt/h. Dauer (lt. Hafen): %d min. Dauer (real): %d min.\n", gs_route_length, gs_travel_speed, gs_route_duration,gs_route_total_steps*2*(gs_route_timedelta/2));
-	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", gs_route_total_steps, gs_route_stepsize, gs_route_timedelta);
+	D1_INFO("Schiffspassage gestartet. Entfernung: %d0 Schritt. Geschwindigkeit: %d0 Schritt/h. Dauer (lt. Hafen): %d min. Dauer (real): %d min.\n", gs_travel_total_distance, gs_travel_speed, gs_travel_total_duration,gs_travel_total_steps*2*(gs_travel_duration_per_step/2));
+	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", gs_travel_total_steps, gs_travel_distance_per_step, gs_travel_duration_per_step);
 #endif
 
 	if (reverse) {
-		/* for reverse direction, point gs_route_course_ptr to end of route */
+		/* for reverse direction, point gs_travel_course_ptr to end of route */
 
-		while (gs_route_course_ptr[0] != -1) {
-			gs_route_course_ptr += 2;
+		while (gs_travel_course_ptr[0] != -1) {
+			gs_travel_course_ptr += 2;
 		}
 
-		gs_route_course_ptr -= 2;
+		gs_travel_course_ptr -= 2;
 	}
 
-	gs_route_course_start = gs_route_course_ptr;
+	gs_travel_course_start = gs_travel_course_ptr;
 
-	gs_route_dayprogress = (18 * (gs_travel_speed + gs_travel_speed / 10));
+	gs_travel_distance_per_18_hours = (18 * (gs_travel_speed + gs_travel_speed / 10));
 	/* this is 19.8h * gs_travel_speed, which is the distance [unit: 10m] the ship travels in 19.8 h.
-	 * It is used as upper bound for the position of the random encounters. */
+	 * I (siebenstreich) think that the original idea was 18h * gs_travel_speed, copying the
+	 * corresponding part from trv_do_journey, and then messing up the removal of speed_mod */
 
 	if (passage_id <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
 		/* only on high seas routes */
 
 		if ((gs_passage_deadship_flag = random_schick(100) <= 20 ? 1 : 0)) {
-			gs_passage_deadship_position = random_schick(gs_route_dayprogress);
+			gs_passage_deadship_position = random_schick(gs_travel_distance_per_18_hours);
 #if !defined(__BORLANDC__)
 			D1_INFO("Totenschiff wurde bei %o0 Schritt aktiviert!\n", gs_passage_deadship_position);
 #endif
@@ -596,7 +597,7 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 
 	if ((gs_passage_octopus_flag = random_schick(100) <= 5 ? 1 : 0)) {
 
-		gs_passage_octopus_position = random_schick(gs_route_dayprogress);
+		gs_passage_octopus_position = random_schick(gs_travel_distance_per_18_hours);
 #if !defined(__BORLANDC__)
 		D1_INFO("Krakenmolch wurde bei %o0 Schritt aktiviert!\n", gs_passage_octopus_position);
 #endif
@@ -604,39 +605,39 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 
 	if ((gs_passage_pirates_flag = random_schick(100) <= 10 ? 1 : 0)) {
 
-		gs_passage_pirates_position = random_schick(gs_route_dayprogress);
+		gs_passage_pirates_position = random_schick(gs_travel_distance_per_18_hours);
 #if !defined(__BORLANDC__)
 		D1_INFO("Piratenangriff wurde bei %o0 Schritt aktiviert!\n", gs_passage_pirates_position);
 #endif
 	}
 
-	gs_route_stepcount = gs_route_progress = gs_route_dayprogress = gs_travel_detour = 0;
+	gs_travel_step_counter = gs_travel_distance_made = gs_travel_distance_per_18_hours = gs_travel_detour = 0;
 	g_travel_herokeeping = 1;
 
-	while (gs_route_course_ptr[(gs_route_mousehover = 0)] != -1 && !gs_travel_detour)
+	while (gs_travel_course_ptr[(gs_travel_mousehover = 0)] != -1 && !gs_travel_detour)
 	{
 
-		if (is_mouse_in_rect(gs_route_course_ptr[0] - 16, gs_route_course_ptr[1] - 16,
-					gs_route_course_ptr[0] + 16, gs_route_course_ptr[1] + 16))
+		if (is_mouse_in_rect(gs_travel_course_ptr[0] - 16, gs_travel_course_ptr[1] - 16,
+					gs_travel_course_ptr[0] + 16, gs_travel_course_ptr[1] + 16))
 		{
 			call_mouse_bg();
-			gs_route_mousehover = 1;
+			gs_travel_mousehover = 1;
 		}
 
-		g_trv_track_pixel_bak[gs_route_stepcount] =
-			*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]);
+		g_trv_track_pixel_bak[gs_travel_step_counter] =
+			*(ptr + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]);
 
-		gs_route_stepcount++;
+		gs_travel_step_counter++;
 
-		*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) = 0x1f;
+		*(ptr + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]) = 0x1f;
 
-		if (gs_route_mousehover) {
+		if (gs_travel_mousehover) {
 			call_mouse();
 		}
 
-		/* the following loop will be executed Floor(gs_route_timedelta / 2) times.
-		 * therefore, 2 * Floor(gs_route_timedelta / 2) minutes ingame times will pass. */
-		for (gs_trv_i = 0; gs_route_timedelta / 2 > gs_trv_i; gs_trv_i++) {
+		/* the following loop will be executed Floor(gs_travel_duration_per_step / 2) times.
+		 * therefore, 2 * Floor(gs_travel_duration_per_step / 2) minutes ingame times will pass. */
+		for (gs_trv_i = 0; gs_travel_duration_per_step / 2 > gs_trv_i; gs_trv_i++) {
 
 			handle_input();
 
@@ -645,21 +646,21 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 			timewarp(MINUTES(2));
 		}
 
-		gs_route_progress += gs_route_stepsize;
-		gs_route_dayprogress += gs_route_stepsize;
+		gs_travel_distance_made += gs_travel_distance_per_step;
+		gs_travel_distance_per_18_hours += gs_travel_distance_per_step;
 
 #if !defined(__BORLANDC__)
-		D1_LOG("%d0 Schritt zurueckgelegt.\n",gs_route_dayprogress);
+		D1_LOG("%d0 Schritt zurueckgelegt.\n",gs_travel_distance_per_18_hours);
 #endif
 
-		if (gs_passage_deadship_flag != 0 && gs_route_dayprogress >= gs_passage_deadship_position && !gs_quest_deadship_done) {
+		if (gs_passage_deadship_flag != 0 && gs_travel_distance_per_18_hours >= gs_passage_deadship_position && !gs_quest_deadship_done) {
 
 			/* within the call prolog_ghostship(), the party can decide if they enter the Totenschiff.
 			 * In that case, gs_travel_detour is set to DUNGEON_ID_TOTENSCHIFF (instead of 0) */
 			prolog_ghostship();
 			gs_passage_deadship_flag = 0;
 
-		} else if (gs_passage_octopus_flag != 0 && gs_route_dayprogress >= gs_passage_octopus_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
+		} else if (gs_passage_octopus_flag != 0 && gs_travel_distance_per_18_hours >= gs_passage_octopus_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
 
 			octopus_attack_wrapper();
 			gs_passage_octopus_flag = 0;
@@ -669,9 +670,9 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 			/* Original-Bug 34:
 			 * There is an Efferd miracle with the text "Efferd gewaehrt euch seinen Schutz auf Wasser.".
 			 * For sea traveling, it prevents octopus encounters. However, pirate encounters are still possible, which feels wrong. */
-			(gs_passage_pirates_flag != 0 && gs_route_dayprogress >= gs_passage_pirates_position)
+			(gs_passage_pirates_flag != 0 && gs_travel_distance_per_18_hours >= gs_passage_pirates_position)
 #else
-			(gs_passage_pirates_flag != 0 && gs_route_dayprogress >= gs_passage_pirates_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE])
+			(gs_passage_pirates_flag != 0 && gs_travel_distance_per_18_hours >= gs_passage_pirates_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE])
 #endif
 		{
 			pirates_attack_wrapper();
@@ -719,11 +720,11 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 
 			gs_trv_i = 0;
 
-			for (gs_route_course_ptr2 = gs_route_course_start;
+			for (gs_travel_course_ptr2 = gs_travel_course_start;
 					g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
-					gs_route_course_ptr2 += (!reverse ? 2 : -2))
+					gs_travel_course_ptr2 += (!reverse ? 2 : -2))
 			{
-				*(ptr + gs_route_course_ptr2[1] * 320 + gs_route_course_ptr2[0]) = 0x1f;
+				*(ptr + gs_travel_course_ptr2[1] * 320 + gs_travel_course_ptr2[0]) = 0x1f;
 			}
 
 			call_mouse();
@@ -734,7 +735,7 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 			g_request_refresh = 0;
 		}
 
-		gs_route_course_ptr += (!reverse ? 2 : -2);
+		gs_travel_course_ptr += (!reverse ? 2 : -2);
 	}
 
 	g_travel_herokeeping = 0;
@@ -745,16 +746,16 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 
 		do {
 			if (!reverse) {
-				gs_route_course_ptr -= 2;
+				gs_travel_course_ptr -= 2;
 			} else {
-				gs_route_course_ptr += 2;
+				gs_travel_course_ptr += 2;
 			}
-			gs_route_stepcount--;
+			gs_travel_step_counter--;
 
-			*(ptr + gs_route_course_ptr[1] * 320 + gs_route_course_ptr[0]) =
-				g_trv_track_pixel_bak[gs_route_stepcount];
+			*(ptr + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]) =
+				g_trv_track_pixel_bak[gs_travel_step_counter];
 
-		} while (gs_route_course_ptr[0] != -1);
+		} while (gs_travel_course_ptr[0] != -1);
 
 		call_mouse();
 	}

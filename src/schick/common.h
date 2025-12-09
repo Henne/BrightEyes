@@ -187,7 +187,8 @@ enum {
 	ATTRIB_GG = 10,
 	ATTRIB_TA = 11,
 	ATTRIB_NG = 12,
-	ATTRIB_JZ = 13
+	ATTRIB_JZ = 13,
+	ATTRIB__END = 14
 };
 
 enum {
@@ -250,7 +251,7 @@ enum {
 	/* Intuition */
 	TA_GEFAHRENSINN		= 50, // 0x32
 	TA_SINNESSCHAERFE	= 51, // 0x33
-	TA__TAIL		= 51
+	TA__END			= 52
 };
 
 enum {
@@ -352,7 +353,7 @@ enum {
 	SP_HARTES_SCHMELZE			= 83, // 0x53
 	SP_SILENTIUM_SILENTILLE			= 84, // 0x54
 	SP_STURMGEBRUELL_BESAENFTGE_DICH	= 85, // 0x55
-	SP__TAIL				= 85
+	SP__END					= 86
 };
 
 enum {
@@ -464,37 +465,6 @@ enum {
 	HERB_POTION_TYPE_POTION = 1
 };
 
-// A location is a point of interest in a town or a travel event. //
-enum {
-	// https://github.com/shihan42/BrightEyesWiki/wiki/DAT-(Stadt)#feldinhaltliste
-	LOCATION_TYPEINDEX = 3, // 1 byte  // Index among the locations of the same type.
-				// For LOCTYPE_TEMPLE, LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT, LOCTYPE_INN,
-				//     LOCTYPE_SMITH, LOCTYPE_MARKET, LOCTYPE_INFORMER, LOCTYPE_SPECIAL:
-				//     unique index among all locations of the same type; coveres all towns + travel events.
-				//     However, there are a few collisions due to bugs.
-				//     Also, these locations in Daspota are indexed independently, and the index is probably irrelevant.
-				//     (In Daspota, only LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT actually occur.)
-				// For LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
-				//     A unique index among all harbors and signposts together, but only among the ones of the same town.
-				// For LOCTYPE_DUNGEON_ENTRY:
-				// 	The id of the associated dungeon
-				// All LOCTYPEs not mentioned above:
-				//     probably unused.
-	LOCATION_LOCDATA   = 4, // 2 bytes // Additional data, depending on the LOCTYPE.
-			        // For LOCTYPE_TAVERN, LOCTYPE_INN, LOCTYPE_SMITH, LOCTYPE_SPECIAL, LOCTYPE_MERCHANT, LOCTYPE_HEALER:
-			        //     index to retrieve the location name via get_tx from <TOWN.LTX>
-				//     If the location is in Daspota: Also an index for assigned fights and loot, see do_location_daspota().
-			        // For LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
-			        //     arrival position. bit 0-3: y-coordinate. bit 4-7: viewdir. bit 8-15: x-coordinate.
-				//     Note that 'viewdir' is used only for LOCTYPE_HARBOR, actually.
-				//     For LOCTYPE_SIGNPOST, the viewdir entering a town is determined by TM_enter_target_town_viewdir),
-				//     which does not make use of the 'viewdir' entry.
-			        // For LOCTYPE_MARKET, LOCTYPE_TEMPLE, LOCTYPE_INFORMER, LOCTYPE_DUNGEON_ENTRY:
-			        //     unused.
-				// All LOCTYPEs not mentioned above:
-				//     probably unused.
-};
-
 enum {
 	LOCTYPE_NONE		= 0,
 	LOCTYPE_UNKN1		= 1,
@@ -542,38 +512,40 @@ enum {
 };
 
 enum {
-	GOD_PRAIOS		= 1,
-	GOD_RONDRA		= 2,
-	GOD_EFFERD		= 3,
-	GOD_TRAVIA		= 4,
-	GOD_BORON		= 5,
-	GOD_HESINDE		= 6,
-	GOD_FIRUN		= 7,
-	GOD_TSA			= 8,
-	GOD_PHEX		= 9,
-	GOD_PERAINE		= 10,
-	GOD_INGERIMM		= 11,
-	GOD_RAHJA		= 12,
-	GOD_SWAFNIR		= 13,
-	GOD_IFIRN		= 14
+	GOD_ID_PRAIOS		= 1,
+	GOD_ID_RONDRA		= 2,
+	GOD_ID_EFFERD		= 3,
+	GOD_ID_TRAVIA		= 4,
+	GOD_ID_BORON		= 5,
+	GOD_ID_HESINDE		= 6,
+	GOD_ID_FIRUN		= 7,
+	GOD_ID_TSA		= 8,
+	GOD_ID_PHEX		= 9,
+	GOD_ID_PERAINE		= 10,
+	GOD_ID_INGERIMM		= 11,
+	GOD_ID_RAHJA		= 12,
+	GOD_ID_SWAFNIR		= 13,
+	GOD_ID_IFIRN		= 14,
+	GOD_ID__END		= 15
 };
 
 enum {
-	INFORMER_JURGE		= 0,
-	INFORMER_HJORE		= 1,
-	INFORMER_YASMA		= 2,
-	INFORMER_UMBRIK		= 3,
-	INFORMER_ISLEIF		= 4,
-	INFORMER_RAGNA		= 5,
-	INFORMER_BEORN		= 6,
-	INFORMER_ASGRIMM	= 7,
-	INFORMER_ELIANE		= 8,
-	INFORMER_OLVIR		= 9,
-	INFORMER_SWAFNILD	= 10,
-	INFORMER_TREBORN	= 11,
-	INFORMER_UNICORN	= 12,
-	INFORMER_ALGRID		= 13,
-	INFORMER_TIOMAR		= 14
+	INFORMER_ID_JURGE	= 0,
+	INFORMER_ID_HJORE	= 1,
+	INFORMER_ID_YASMA	= 2,
+	INFORMER_ID_UMBRIK	= 3,
+	INFORMER_ID_ISLEIF	= 4,
+	INFORMER_ID_RAGNA	= 5,
+	INFORMER_ID_BEORN	= 6,
+	INFORMER_ID_ASGRIMM	= 7,
+	INFORMER_ID_ELIANE	= 8,
+	INFORMER_ID_OLVIR	= 9,
+	INFORMER_ID_SWAFNILD	= 10,
+	INFORMER_ID_TREBORN	= 11,
+	INFORMER_ID_UNICORN	= 12,
+	INFORMER_ID_ALGRID	= 13,
+	INFORMER_ID_TIOMAR	= 14,
+	INFORMER_ID__END	= 15
 };
 
 enum {
@@ -897,7 +869,7 @@ enum {
 	TOWN_ID_FAEHRE_ANGBODIRTAL	= 50, // %0x32
 	TOWN_ID_HJALLANDER_HOF		= 51, // %0x33
 	TOWN_ID_LEUCHTTURM_RUNIN	= 52,  // %0x34
-	TOWN_ID__TAIL			= 52
+	TOWN_ID__END			= 53
 };
 
 enum {
@@ -987,6 +959,135 @@ enum {
 	MAP_TILE_DARK_GREY = 19,
 	MAP_TILE_DARK_BLUE = 20, /* unused? */
 	MAP_TILE_DARK_BROWN = 21 /* unused? */
+};
+
+enum {
+	LROUTE_ID_THORWAL_VAERMHAG         =  1,
+	LROUTE_ID_VAERMHAG_VARNHEIM        =  2,
+	LROUTE_ID_VARNHEIM_DASPOTA         =  3,
+	LROUTE_ID_THORWAL_SERSKE           =  4,
+	LROUTE_ID_SERSKE_MERSKE            =  5,
+	LROUTE_ID_MERSKE_EFFERDUN          =  6,
+	LROUTE_ID_SERSKE_BREIDA            =  7,
+	LROUTE_ID_F_TJOILA_TJOILA          =  8,
+	LROUTE_ID_TJOILA_BREIDA            =  9,
+	LROUTE_ID_BREIDA_PEILINEN          = 10,
+	LROUTE_ID_PEILINEN_ROVAMUND        = 11,
+	LROUTE_ID_ROVAMUND_NORDVEST        = 12,
+	LROUTE_ID_NORDVEST_KRAVIK          = 13,
+	LROUTE_ID_KRAVIK_SKELELLE          = 14,
+	LROUTE_ID_THORWAL_F_TJOILA         = 15,
+	LROUTE_ID_F_TJOILA_RUKIAN          = 16,
+	LROUTE_ID_RUKIAN_F_ANGBOD          = 17,
+	LROUTE_ID_F_ANGBOD_AUPLOG          = 18,
+	LROUTE_ID_F_ANGBOD_ANGBODIR        = 19,
+	LROUTE_ID_AUPLOG_VILNHEIM          = 20,
+	LROUTE_ID_VILNHEIM_BODON           = 21,
+	LROUTE_ID_VILNHEIM_PHEXCAER        = 22,
+	LROUTE_ID_PHEXCAER_GROENVEL        = 23,
+	LROUTE_ID_PHEXCAER_EINSIEDL        = 24,
+	LROUTE_ID_VARNHEIM_AUPLOG          = 25,
+	LROUTE_ID_DASPOTA_RYBON            = 26,
+	LROUTE_ID_DASPOTA_OTTARJE          = 27,
+	LROUTE_ID_OTTARJE_SKJAL            = 28,
+	LROUTE_ID_SKJAL_PREM               = 29,
+	LROUTE_ID_PREM_KORD                = 30,
+	LROUTE_ID_OTTARJE_ORVIL            = 31,
+	LROUTE_ID_ORVIL_ALA                = 32,
+	LROUTE_ID_ALA_TJANSET              = 33,
+	LROUTE_ID_TJANSET_LISKOR           = 34,
+	LROUTE_ID_LISKOR_CLANEGH           = 35,
+	LROUTE_ID_ALA_THOSS                = 36,
+	LROUTE_ID_THOSS_LISKOR             = 37,
+	LROUTE_ID_TJANSET_THOSS            = 38,
+	LROUTE_ID_VILNHEIM_OBERORKE        = 39,
+	LROUTE_ID_OBERORKE_FELSTEYN        = 40,
+	LROUTE_ID_FELSTEYN_ORKANGER        = 41,
+	LROUTE_ID_ORKANGER_CLANEGH         = 42,
+	LROUTE_ID_CLANEGH_TYLDON           = 43,
+	LROUTE_ID_TYLDON_VIDSAND           = 44,
+	LROUTE_ID_OBERORKE_EINSIEDL        = 45,
+	LROUTE_ID_FELSTEYN_EINSIEDL        = 46,
+	LROUTE_ID_RYBON_THOSS              = 47,
+	LROUTE_ID_SKJAL_ORVIL              = 48,
+	LROUTE_ID_SKELELLE_PHEXCAER        = 49,
+	LROUTE_ID_MERSKE_ROVAMUND          = 50,
+	LROUTE_ID_ORVIL_ROVIK              = 51,
+	LROUTE_ID_LJASDAHL__CIRCULAR       = 52, // circular route
+	LROUTE_ID_LJASDAHL_HJALLA_H        = 53,
+	LROUTE_ID_RUNINSHA_L_RUNIN__1      = 54, // not linked at LEUCHTTURM_RUNIN // TODO: rename to __WEST or __EAST
+	LROUTE_ID_RUNINSHA_L_RUNIN__MIDDLE = 55, // middle route; the only route linked at LEUCHTTURM_RUNIN
+	LROUTE_ID_BRENDHIL_MANRIN          = 56,
+	LROUTE_ID_EINSIEDL__CIRCULAR       = 57, // circular route
+	LROUTE_ID_L_RUNIN_RUNINSHA__2      = 58, // not linked at LEUCHTTURM_RUNIN // TODO: rename to __WEST or __EAST
+	LROUTE_ID__CROSSLINK               = 59, // A crosslink between LROUTE_ID_KRAVIK_SKELELLE and LROUTE_ID_PEILINEN_ROVAMUND
+	LROUTE_ID__END                     = 60
+};
+
+enum {
+	/* High seas routes */
+	SEA_ROUTE_ID_THORWAL_PREM      =  1,
+	SEA_ROUTE_ID_PREM_HJALSING     =  2,
+	SEA_ROUTE_ID_PREM_MANRIN       =  3,
+	SEA_ROUTE_ID_PREM_KORD         =  4,
+	SEA_ROUTE_ID_KORD_HJALSING     =  5,
+	SEA_ROUTE_ID_HJALSING_OVERTHOR =  6,
+	SEA_ROUTE_ID_HJALSING_MANRIN   =  7,
+	/* Costal routes */
+	SEA_ROUTE_ID_THORWAL_VAERMHAG  =  8,
+	SEA_ROUTE_ID_VAERMHAG_VARNHEIM =  9,
+	SEA_ROUTE_ID_VARNHEIM_LJASDAHL = 10,
+	SEA_ROUTE_ID_VARNHEIM_OTTARJE  = 11,
+	SEA_ROUTE_ID_LJASDAHL_OTTARJE  = 12,
+	SEA_ROUTE_ID_SKJAL_OTTARJE     = 13,
+	SEA_ROUTE_ID_SKJAL_PREM        = 14,
+	SEA_ROUTE_ID_PREM_ARYN         = 15,
+	SEA_ROUTE_ID_PREM_RUNINSHA     = 16,
+	SEA_ROUTE_ID_ARYN_RUNINSHA     = 17,
+	SEA_ROUTE_ID_RUNINSHA_TREBAN   = 18,
+	SEA_ROUTE_ID_TREBAN_KORD       = 19,
+	SEA_ROUTE_ID_KORD_GUDDASUN     = 20,
+	SEA_ROUTE_ID_GUDDASUN_HJALSING = 21,
+	SEA_ROUTE_ID_HJALSING_ROVIK    = 22,
+	SEA_ROUTE_ID_ROVIK_OVERTHOR    = 23,
+	SEA_ROUTE_ID_ROVIK_ORVIL       = 24,
+	SEA_ROUTE_ID_OVERTHOR_TJANSET  = 25,
+	SEA_ROUTE_ID_OVERTHOR_VIDSAND  = 26,
+	SEA_ROUTE_ID_TJANSET_LISKOR    = 27,
+	SEA_ROUTE_ID_LISKOR_VIDSAND    = 28,
+	SEA_ROUTE_ID_TJANSET_VIDSAND   = 29,
+	SEA_ROUTE_ID_OVERTHOR_BRENDHIL = 30,
+	SEA_ROUTE_ID_BRENDHIL_MANRIN   = 31,
+	SEA_ROUTE_ID_ROVIK_MANRIN      = 32,
+	SEA_ROUTE_ID_THORWAL_MERSKE    = 33,
+	SEA_ROUTE_ID_MERSKE_EFFERDUN   = 34,
+	SEA_ROUTE_ID_THORWAL_EFFERDUN  = 35,
+	SEA_ROUTE_ID_SERSKE_MERSKE     = 36,
+	SEA_ROUTE_ID_SERSKE_EFFERDUN   = 37,
+	SEA_ROUTE_ID_OVERTHOR_LISKOR   = 38,
+	SEA_ROUTE_ID_THORWAL_VARNHEIM  = 39,
+	SEA_ROUTE_ID_OTTARJE_PREM      = 40,
+	SEA_ROUTE_ID_OTTARJE_RUNINSHA  = 41,
+	SEA_ROUTE_ID_SKJAL_RUNINSHA    = 42,
+	SEA_ROUTE_ID_RUNINSHA_L_RUNIN  = 43,
+	SEA_ROUTE_ID_TREBAN_L_RUNIN    = 44,
+	SEA_ROUTE_ID_MANRIN_OVERTHOR   = 45,
+	SEA_ROUTE_ID__END              = 46
+};
+
+enum {
+	JOURNEY_DIRECTION_CHANGE_TO_FORWARD = -1,
+	JOURNEY_DIRECTION_FORWARD = 0,
+	JOURNEY_DIRECTION_CHANGE_TO_BACKWARD = 1,
+	JOURNEY_DIRECTION_BACKWARD = 2
+};
+
+enum {
+	CROSSLINK_STATUS_NONE = 0,
+	CROSSLINK_STATUS_FROM_KRAVIK = 1,
+	CROSSLINK_STATUS_FROM_PEILINEN = 2,
+	CROSSLINK_STATUS_FROM_SKELELLEN = 3,
+	CROSSLINK_STATUS_FROM_ROVAMUND = 4
 };
 
 enum {
@@ -1346,7 +1447,7 @@ enum {
 	ITEM_REZEPT_FUER_EXPURGICUM		= 0xa7, /* recipe for Expurgicum */
 	ITEM_VOMICUM				= 0xa8, /* Vomicum */
 	ITEM_REZEPT_FUER_VOMICUM		= 0xa9, /* recipe for Vomicum */
-	ITEM_DOKUMENT__1			= 0xaa, /* unicorn letter [found in tevent073] */
+	ITEM_DOKUMENT__UNICORN			= 0xaa, /* unicorn letter [found in tevent073] */
 	ITEM_SILBERNER_STIRNREIF		= 0xab, /* silver coronet [magic, 3 charges, use -> Armatrutz +5, i.e. RS + 5] */
 	ITEM_SAEBEL__MAGIC			= 0xac, /* sabre [magic, damage+1 to skeletons and zombies] */
 	ITEM_AMULETT__RED			= 0xad, /* amulet [red, magic, protection from fire; found at corpse between Rovamund and Nordvest ] */
@@ -1365,7 +1466,7 @@ enum {
 	ITEM_REZEPT_FUER_HEILTRANK		= 0xba, /* recipe for heal potion */
 	ITEM_SCHREIBEN_VON_JADRA		= 0xbb, /* writing of Jarda */
 	ITEM_AMULETT__UNKNOWN_2			= 0xbc, /* amulet [TODO: which one?? has the shape of a golden cross. it might be yellow, magic: protects from fire; found at Totenschiff] */
-	ITEM_LOBPREISUNGEN			= 0xbd, /* praises [found in Tempel des Namenlosen and in Piratenhoehle] */
+	ITEM_LOBPREISUNGEN			= 0xbd, /* praises of the nameless god [found in Tempel des Namenlosen and in Piratenhoehle] */
 	ITEM_MITGLIEDERLISTE			= 0xbe, /* member list [found in Tempel des Namenlosen] */
 	ITEM_DOKUMENT__2			= 0xbf, /* document [2, not readable. Depotschein?] */
 	ITEM_SEEKARTE				= 0xc0, /* sea chart [found in Piratenhoehle] */
@@ -1398,9 +1499,9 @@ enum {
 	ITEM_GOLDSCHLUESSEL			= 0xdb, /* gold key. note that there is also ITEM_GOLDENER_SCHLUESSEL (golden key) */
 	ITEM_RING__GREEN			= 0xdc, /* ring [green, magic: protection from magic fire; found in Drachenhoehle] */
 	ITEM_BEUTEL				= 0xdd, /* bag [found and used in the first level of the ruin of the black wizard to open a passage] */
-	ITEM_BUCH__1				= 0xde, /* book [1] */
+	ITEM_BUCH__PIRATE_ACCOUNTING		= 0xde, /* book [dacades old accounting book about loot income of Daspota pirates] */
 	ITEM_ANTIKRANKHEITSELIXIER		= 0xdf, /* anti disease elixir */
-	ITEM_BUCH__2				= 0xe0, /* book [2; found in the dungeon of the Daspota treasure (Rybon-Thoss)] */
+	ITEM_BUCH__KAISERSPRUECHE_HALS		= 0xe0, /* book ["Kaisersprüche Hals"; found in the dungeon of the Daspota treasure (Rybon-Thoss)] */
 	ITEM_KRISTALL				= 0xe1, /* crystal */
 	ITEM_MU_ELIXIER__BAD			= 0xe2, /* MU elixir [bad] */
 	ITEM_KL_ELIXIER__BAD			= 0xe3, /* KL elixir [bad] */
@@ -1433,9 +1534,9 @@ enum {
 };
 
 enum {
-	LIGHTING_DARK		= 0,
-	LIGHTING_TORCH		= 1,
-	LIGHTING_LANTERN	= 2
+	IGNITE_MODE_SPELL_OR_USE_TINDER	= 0,
+	IGNITE_MODE_USE_TORCH	= 1,
+	IGNITE_MODE_USE_LANTERN	= 2
 };
 
 enum {
@@ -1443,8 +1544,6 @@ enum {
 	GENDER_FEMININE		= 1,
 	GENDER_NEUTER		= 2
 };
-
-#define NR_SEA_ROUTES (45)
 
 enum {
 	/* strictly speaking, these values encode not only the ship type, but the combined information

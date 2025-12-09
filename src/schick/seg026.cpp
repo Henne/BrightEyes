@@ -1232,7 +1232,60 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 		return 0;
 	}
 #elif defined(_WIN32)
-	// TODO
+    const char temp_dir[] = "./TEMP/";
+    signed int count = 0;
+    _finddata_t dp;
+    char search[260];
+    snprintf(search, sizeof(search), "%s*.chr", temp_dir);
+
+    intptr_t ff = _findfirst(search, &dp);
+
+    struct info_t
+    {
+        char name[16];
+        char alias[16];
+    };
+    STATIC_ASSERT(sizeof(info_t) == 32, needs_to_be_32_bytes);
+    info_t* infos = (info_t*)ptr;
+
+    if (ff != -1) {
+
+        int res = 0;
+
+        while (res != -1) {
+            char path[128];
+            snprintf(path, sizeof(path), "%s%s", temp_dir, dp.name);
+
+            const signed int handle = open(path, O_BINARY | O_RDONLY);
+
+            if (handle != -1) {
+
+                struct struct_hero hero;
+
+                read(handle, &hero, sizeof(hero));
+                close(handle);
+
+                fprintf(stderr, "%s slot = %d temple_id = %d\n", hero.alias, hero.slot_pos, hero.temple_id);
+
+                if (((hero.temple_id == temple_id) && !hero.slot_pos) ||
+                    (!hero.slot_pos && (temple_id == -1)))
+                {
+                    strncpy(infos[count].name, hero.name, 16);
+                    strncpy(infos[count].alias, hero.alias, 16);
+                    count++;
+                }
+            }
+            else {
+                fprintf(stderr, "open failed on %s\n", dp.name);
+            }
+        }
+
+        res = _findnext(ff, &dp);
+    }
+
+    _findclose(ff);
+
+    return count;
 #else
 	const char temp_dir[8] = "./TEMP/";
 	DIR *dir = opendir(temp_dir);
@@ -1308,17 +1361,18 @@ void load_in_head(const signed int head)
 }
 
 /**
- * \brief   load a temple icon
+ * \brief   load temple logo
  *
- * \param   icon_id          the number of the icon
+ * \param   god_id          ID of the god
  */
-void load_tempicon(signed int icon_id)
+void load_temple_logo(signed int god_id)
 {
 	struct nvf_extract_desc nvf;
 	signed int handle; /* REMARK: reused differently */
 
-	if (icon_id == 14) {
-		icon_id = 7;
+	// there is no dedicated logo for Ifirn, use the one of Firun.
+	if (god_id == GOD_ID_IFIRN) {
+		god_id = GOD_ID_FIRUN;
 	}
 
 	/* load TEMPICON */
@@ -1328,7 +1382,7 @@ void load_tempicon(signed int icon_id)
 
 	nvf.dst = g_buffer8_ptr + 7000;
 	nvf.src = g_buffer8_ptr;
-	nvf.image_num = icon_id;
+	nvf.image_num = god_id;
 	nvf.compression_type = 0;
 	nvf.width = &handle;
 	nvf.height = &handle;

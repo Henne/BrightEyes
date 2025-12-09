@@ -493,7 +493,14 @@ void tevent_124(void)
 
 	if (answer == 2)
 	{
-		gs_trv_return = 1;
+
+#ifndef M302de_ORIGINAL_BUGFIX
+		/* Original-Bug 53:
+		 * If the party was already traveling backward, the new direction should be forward. */
+		gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD;
+#else
+		gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+#endif
 
 	} else {
 
@@ -556,16 +563,20 @@ void tevent_125(void)
 	}
 }
 
-/* Reach street (either Kravik-Skelellen or Peilinen-Rovamund). */
+/* How to proceed after travelling the crosslink land route?
+ * The reached endpoint of the crosslink is either the land route Kravik-Skelellen or theland  route Peilinen-Rovamund. */
 void tevent_145(void)
 {
 	signed int answer;
 
 	load_area_description(0);
 
-	if (!(g_route59_flag & 1))
+	if (!(g_journey_crosslink_status & 1))
 	{
-		/* g_route_flag in {0, 2} */
+		/* The crosslink was either travelled from Peilinen (g_journey_crosslink_status == 2)
+		 * or from Rovamund (g_journey_crosslink_status == 4).
+		 * Hence, the reached land route is Kravik-Skelellen.
+		 */
 		do {
 			answer = GUI_radio(get_tx2(42), 2, get_tx2(43), get_tx2(44));
 
@@ -573,16 +584,19 @@ void tevent_145(void)
 
 		if (answer == 1)
 		{
-			gs_trv_destination = TOWN_ID_KRAVIK;
+			gs_journey_destination_town_id = TOWN_ID_KRAVIK;
 			gs_town_id = TOWN_ID_SKELELLEN;
 
 		} else {
-			gs_trv_destination = TOWN_ID_SKELELLEN;
+			gs_journey_destination_town_id = TOWN_ID_SKELELLEN;
 			gs_town_id = TOWN_ID_KRAVIK;
 		}
 
 	} else {
-		/* g_route_flag in {1, 3} */
+		/* The crosslink was either travelled from Kravik (g_journey_crosslink_status == 1)
+		 * or from Skelellen (g_journey_crosslink_status == 3).
+		 * Hence, the reached land route is Peilinen-Rovamund.
+		 */
 		do {
 			answer = GUI_radio(get_tx2(39), 2, get_tx2(40),	get_tx2(41));
 
@@ -590,15 +604,15 @@ void tevent_145(void)
 
 		if (answer == 1) {
 
-			gs_trv_destination = TOWN_ID_PEILINEN;
+			gs_journey_destination_town_id = TOWN_ID_PEILINEN;
 			gs_town_id = TOWN_ID_ROVAMUND;
 
 		} else {
-			gs_trv_destination = TOWN_ID_ROVAMUND;
+			gs_journey_destination_town_id = TOWN_ID_ROVAMUND;
 			gs_town_id = TOWN_ID_PEILINEN;
 		}
 	}
 
-	sprintf(g_dtp2, get_tx2(45), get_ttx(gs_trv_destination + 0xeb));
+	sprintf(g_dtp2, get_tx2(45), get_ttx(gs_journey_destination_town_id + 0xeb));
 	GUI_output(g_dtp2);
 }

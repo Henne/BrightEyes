@@ -5,7 +5,7 @@ void do_random_talk(const signed int, const signed int);
 /* 0x2a */
 char* get_informer_forename(void);
 /* 0x2f */
-signed int get_town_lookup_entry(void);
+signed int informer_id_from_current_town(void);
 /* 0x34 */
 char* get_informer_hint(void);
 /* 0x39 */

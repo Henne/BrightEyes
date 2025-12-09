@@ -278,10 +278,10 @@ void tevent_071(void)
 /**
  * \brief   all members of the current group try to swim
  *
- * \param   mod         modificator for the swim test
+ * \param   handicap    handicap for the swim test
  * \param   percent     probability to loose an item
  */
-void TRV_swimm(const signed int mod, const signed int percent)
+void TRV_swimm(const signed int handicap, const signed int percent)
 {
 	signed int i;
 	struct struct_hero *hero;
@@ -294,7 +294,7 @@ void TRV_swimm(const signed int mod, const signed int percent)
 			!hero->flags.dead)
 		{
 
-			if (test_talent(hero, TA_SCHWIMMEN, (signed char)mod) <= 0) {
+			if (test_talent(hero, TA_SCHWIMMEN, (signed char)handicap) <= 0) {
 
 				/* test failed */
 				hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));

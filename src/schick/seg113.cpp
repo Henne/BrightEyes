@@ -455,11 +455,11 @@ void tevent_099(void)
 void tevent_101(void)
 {
 	signed int answer;
-	signed int mod;
+	signed int handicap;
 
 	if (!gs_tevent101_flag) {
 
-		sprintf(g_dtp2,	get_tx2(41), (mod = random_schick(4) + 2));
+		sprintf(g_dtp2,	get_tx2(41), (handicap = random_schick(4) + 2));
 
 
 		do {
@@ -467,7 +467,7 @@ void tevent_101(void)
 
 		} while (answer == -1);
 
-		g_max_enemies = mod;
+		g_max_enemies = handicap;
 
 		/* Original-Bugfix: see description in tevent_099() */
 		if (answer == 1) {
@@ -480,7 +480,7 @@ void tevent_101(void)
 #endif
 		} else {
 
-			if (test_talent(get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
+			if (test_talent(get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)handicap) <= 0) {
 
 				g_fig_initiative = 1;
 
@@ -649,7 +649,14 @@ void tevent_104(void)
 			} else {
 				/* turn around */
 
-				gs_trv_return = done = 1;
+#ifndef M302de_ORIGINAL_BUGFIX
+				/* Original-Bug 53:
+				 * If the party was already traveling backward, the new direction should be forward. */
+				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
+#else
+				gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+				done = 1;
+#endif
 			}
 
 		} else {

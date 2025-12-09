@@ -41,11 +41,17 @@ static void (*g_use_item_handlers[14])(void) = {
 	item_use_beutel
 }; // ds:0xaeb0
 
-int g_light_type = 0; // ds:0xaee8, 0 = none, 1 = torch, 2 = lantern
+int g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER; // ds:0xaee8, 0 = spell or use tinder, 1 = use torch, 2 = use lantern
 
 static struct item_stats *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
 static signed int g_used_item_id;	// ds:0xe5ca, used_item ID
+
+#ifndef M302de_ORIGINAL_BUGFIX
 static signed int g_used_item_inv_slot;	// ds:0xe5cc, used_item position
+#else
+// required for fix of Original-Bug 55
+signed int g_used_item_inv_slot;	// ds:0xe5cc, used_item position
+#endif
 
 static struct struct_hero *g_itemuser;	// ds:0xe5ce, pointer to hero
 
@@ -163,13 +169,13 @@ void item_read_document(void)
 
 	switch (g_used_item_id) {
 
-		case ITEM_DOKUMENT__1: str = get_ttx(641); break;
+		case ITEM_DOKUMENT__UNICORN: str = get_ttx(641); break;
 		case ITEM_SCHREIBEN_VON_JADRA: str = get_ttx(645); break;
 		case ITEM_LOBPREISUNGEN: str = get_ttx(646); break;
 		case ITEM_MITGLIEDERLISTE: str = get_ttx(647); break;
 		case ITEM_SEEKARTE: str = get_ttx(648); break;
-		case ITEM_BUCH__1: str = get_ttx(654); break;
-		case ITEM_BUCH__2: str = get_ttx(655); break;
+		case ITEM_BUCH__PIRATE_ACCOUNTING: str = get_ttx(654); break;
+		case ITEM_BUCH__KAISERSPRUECHE_HALS: str = get_ttx(655); break;
 		case ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN: str = get_ttx(657); break;
 		case ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN: str = get_ttx(759); break;
 	}
@@ -238,7 +244,7 @@ void item_invoke_flim_flam(void)
 /* Borlandified and identical */
 void item_read_schuldbuch(void)
 {
-	/* DEBTBOOK, ID 176 */
+	/* ITEM_SCHULDBUCH, ID 176 */
 
 	if (gs_debtbook_read_flag) {
 
@@ -249,7 +255,7 @@ void item_read_schuldbuch(void)
 		add_hero_ap_all(15);
 
 		/* mark informer Hjore as known */
-		update_informer_cond(INFORMER_HJORE);
+		update_informer_cond(INFORMER_ID_HJORE);
 	}
 
 	GUI_output(get_ttx(642));
@@ -258,7 +264,7 @@ void item_read_schuldbuch(void)
 /* Borlandified and identical */
 void item_read_orkdokument(void)
 {
-	/* ORCDOCUMENT, ID 179 */
+	/* ITEM_ORKDOKUMENT, ID 179 */
 
 	/* Languages + 4, or already read successful */
 	if ((test_talent(g_itemuser, TA_SPRACHEN, 4) > 0) || gs_orcdocument_read_flag) {
@@ -414,7 +420,7 @@ void item_apply_weapon_poison(void)
 
 void item_use_miasthmaticum(void)
 {
-	/* MYASTMATIC, ID 238 */
+	/* ITEM_MIASTHMATICUM, ID 238 */
 
 	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
@@ -424,7 +430,7 @@ void item_use_miasthmaticum(void)
 
 void item_use_hylailer_feuer(void)
 {
-	/* HYLAILIC FIRE, ID 239 */
+	/* ITEM_HYLAILER_FEUER, ID 239 */
 
 	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
@@ -434,7 +440,7 @@ void item_use_hylailer_feuer(void)
 
 void item_read_spellbook_heptagon(void)
 {
-	/* BOOK, ID 246 */
+	/* ITEM_BUCH__HEPTAGON, ID 246 */
 
 	/* print message */
 	GUI_output(get_ttx(749));
@@ -449,11 +455,10 @@ void item_read_spellbook_heptagon(void)
 /* Borlandified and identical */
 void item_ignite(void)
 {
-	/*	LANTERN, TORCH, TINDERBOX, LANTERN
-		ID 25, 65, 85, 249 */
+	/* ITEM_LATERNE__UNLIT, ITEM_FACKEL__UNLIT, ITEM_ZUNDERKAESTCHEN, ITEM_LATERNE__LIT; ID 25, 65, 85, 249 */
 	signed int tx_index_bak = g_tx_file_index;
-	signed int pos;
-	signed int refill_pos;
+	signed int inv_slot;
+	signed int refill_inv_slot;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -469,45 +474,46 @@ void item_ignite(void)
 #endif
 
 		/* look for oil at the spelluser() */
-		pos = inv_slot_of_item(get_spelluser(), ITEM_OEL);
+		inv_slot = inv_slot_of_item(get_spelluser(), ITEM_OEL);
 
-		if (pos != -1) {
+		if (inv_slot != -1) {
 			/* look for the burning lantern at the spelluser() ??? */
-			refill_pos = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__LIT);
+			refill_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__LIT);
 
 			/* reset the burning time of the lantern */
-			g_itemuser->inventory[refill_pos].lighting_timer = 100;
+			g_itemuser->inventory[refill_inv_slot].lighting_timer = 100;
 
 			/* drop the oil */
-			drop_item(g_itemuser, pos, 1);
+			drop_item(g_itemuser, inv_slot, 1);
 
 			/* give a bronze flask */
 			give_new_item_to_hero(g_itemuser, ITEM_BRONZEFLASCHE, 0, 1);
 
-			/* prepare message */
 			sprintf(g_dtp2, get_tx(119), g_itemuser->alias);
+			/* "hero ignites the lantern" */
 		} else {
-			/* prepare message */
 			sprintf(g_dtp2, get_tx(120), g_itemuser->alias);
+			/* "hero does not have oil" */
 		}
 	} else {
+		/* In all other cases, ITEM_ZUNDERKAESTCHEN is needed */
 
 		if (inv_slot_of_item(g_itemuser, ITEM_ZUNDERKAESTCHEN) == -1) {
-			/* No tinderbox */
 			sprintf(g_dtp2, get_tx(122), g_itemuser->alias);
+			/* "hero does not have tinder" */
 		} else {
 
 			if (g_used_item_id == ITEM_FACKEL__UNLIT) {
 
-				g_light_type = LIGHTING_TORCH;
+				g_ignite_mode = IGNITE_MODE_USE_TORCH;
 
 			} else if (g_used_item_id == ITEM_LATERNE__UNLIT) {
 
-				g_light_type = LIGHTING_LANTERN;
+				g_ignite_mode = IGNITE_MODE_USE_LANTERN;
 
 			} else {
-
-				g_light_type = LIGHTING_DARK;
+				// assert(g_used_item_id == ITEM_ZUNDERKAESTCHEN)
+				g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER;
 			}
 
 			g_spelluser = g_itemuser;
@@ -515,6 +521,25 @@ void item_ignite(void)
 			spell_brenne();
 		}
 	}
+
+#ifdef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 54:
+	 * Use a torch to ignite it. After that, it is not possible to ignite a
+	 * lantern with the spell "Brenne toter Stoff".
+         * (For exampe, if the hero casting that spell has a a torch, but not a
+         * lantern, there will be the message "<hero> hat weder eine Fackel noch
+         * eine Laterne dabei".)
+         * The bug exists also the other way round: Use a lantern to ignite it.
+         * After that, it is not possible to ignite a torch with the spell "Brenne
+         * toter Stoff".
+
+	 * Use a torch to ignite it. After that, it is not possible to ignite a lantern with the spell "Brenne toter Stoff".
+	 * Or the other way round: Use a lantern to ignite it. After that, it is not possible to ignite a torch with the spell "Brenne toter Stoff".
+	 */
+
+	// Fix: reset g_ignite_mode.
+	 g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER;
+#endif
 
 	if ((tx_index_bak != -1) && (tx_index_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
 		/* need to reload buffer1 */
@@ -527,8 +552,9 @@ void item_ignite(void)
 /* Borlandified and identical */
 void item_use_beutel(void)
 {
-	/* MAGIC BREADBAG, BAG: ID 184, 221 */
+	/* ITEM_MAGISCHER_BROTBEUTEL, ITEM_BEUTEL; ID 184, 221 */
 
+#ifndef M302de_FEATURE_MOD
 	if ((gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
 
 		/* set ptr to the map */
@@ -537,17 +563,35 @@ void item_use_beutel(void)
 		/* remove the wall there */
 		ptr[MAP_POS(10,3)] = DNG_TILE_CORRIDOR + 0x01; /* set flag 0, is there a reason? */
 	}
-#if !defined(__BORLANDC__)
-	else {
-		D1_INFO("WARNUNG:\tDer BEUTEL wurde nicht im ersten Level der Magierruine geoeffnet!\n");
-		D1_INFO("\t\tEventuell kann das Spiel nicht mehr erfolgreich beendet werden.\n");
-	}
-#endif
-	/* TODO: avoid dropping the bag when not in the first level of the mage ruin. (via: 'nothing happens') */
 
-	/* print message */
 	GUI_output(get_ttx(775));
+	/* bag releases a dust cloud, which forms a frame ... */
 
 	/* drop the BAG */
 	drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_BEUTEL), 1);
+	/* Beware: The bag is dropped wether or not the wall was removed!
+	 * Hence, using it at the wrong place will leave the dungeon "Ruine des Schwarzmagiers"
+	 * in a state which cannot be accessed deeper by regular means. */
+#else
+	/* Feature mod 9:
+	 * Avoid the loss of the magic bag if there was no effect,
+	 * i.e. when it was used outside the first level of Ruine des Schwarzmagiers.
+	 * Moreover, give a better message in this case. */
+	if ((gs_dungeon_id == DUNGEON_ID_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
+
+		/* set ptr to the map */
+		uint8_t *ptr = g_dng_map;
+
+		/* remove the wall there */
+		ptr[MAP_POS(10,3)] = DNG_TILE_CORRIDOR + 0x01; /* set flag 0, is there a reason? */
+
+		GUI_output(get_ttx(775));
+		/* bag releases a dust cloud, which forms a frame ... */
+
+		drop_item(g_itemuser, inv_slot_of_item(g_itemuser, ITEM_BEUTEL), 1);
+	} else {
+		sprintf(g_dtp2, "DER BEUTEL ENTH\x8e""LT ETWAS STAUB.\x40""%s WARTET EIN WENIG, DOCH NICHTS PASSIERT.",g_itemuser->alias);
+		GUI_output(g_dtp2);
+	}
+#endif
 }

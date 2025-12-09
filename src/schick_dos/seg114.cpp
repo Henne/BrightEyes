@@ -303,7 +303,7 @@ void tevent_113(void)
 
 		/* enter the temple */
 		gs_town_typeindex = 58;
-		est_old = gs_gods_estimation[GOD_FIRUN];
+		est_old = gs_gods_estimation[GOD_ID_FIRUN];
 		gs_town_loc_type = LOCTYPE_TEMPLE;
 		do_location();
 		TRV_load_textfile(-1);
@@ -311,7 +311,7 @@ void tevent_113(void)
 		GUI_output(get_tx2(18));
 
 		/* calculate the difference of the estimation */
-		est_diff = gs_gods_estimation[GOD_FIRUN] - est_old;
+		est_diff = gs_gods_estimation[GOD_ID_FIRUN] - est_old;
 
 		g_textbox_width = 3;
 
@@ -354,8 +354,16 @@ void tevent_114(void)
 
 			if (answer == 1)
 			{
-				/* turn around */
-				gs_trv_return = done = 1;
+				/* turn arround */
+
+#ifndef M302de_ORIGINAL_BUGFIX
+				/* Original-Bug 53:
+				 * If the party was already traveling backward, the new direction should be forward. */
+				gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
+#else
+				gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+				done = 1;
+#endif
 			}
 
 			if (answer == 2)
@@ -590,7 +598,15 @@ void tevent_123(void)
 		} else if (answer == 2)
 		{
 			/* turn arround */
-			gs_trv_return = done = 1;
+
+#ifndef M302de_ORIGINAL_BUGFIX
+			/* Original-Bug 53:
+			 * If the party was already traveling backward, the new direction should be forward. */
+			gs_journey_direction = done = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD; // this is value 1
+#else
+			gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+			done = 1;
+#endif
 
 		} else {
 			/* fight acrophobia */

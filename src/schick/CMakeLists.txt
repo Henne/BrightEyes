@@ -128,16 +128,138 @@ set(SCHICK_SOURCES
     vgalib.cpp
 )
 
-# Create executable
-add_executable(schick ${SCHICK_SOURCES})
-
-# Include directories
-target_include_directories(schick PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/AIL
-    ${SDL2_INCLUDE_DIRS}
+# Define header files
+set(SCHICK_HEADERS
+    common.h
+    datseg.h
+    hero.h
+    seg001.h
+    seg002.h
+    seg003.h
+    seg004.h
+    seg005.h
+    seg006.h
+    seg007.h
+    seg008.h
+    seg009.h
+    seg010.h
+    seg011.h
+    seg013.h
+    seg024.h
+    seg025.h
+    seg026.h
+    seg027.h
+    seg028.h
+    seg029.h
+    seg030.h
+    seg031.h
+    seg032.h
+    seg033.h
+    seg034.h
+    seg035.h
+    seg036.h
+    seg037.h
+    seg038.h
+    seg039.h
+    seg040.h
+    seg041.h
+    seg042.h
+    seg043.h
+    seg044.h
+    seg045.h
+    seg046.h
+    seg047.h
+    seg048.h
+    seg049.h
+    seg050.h
+    seg051.h
+    seg052.h
+    seg053.h
+    seg054.h
+    seg055.h
+    seg056.h
+    seg057.h
+    seg058.h
+    seg059.h
+    seg060.h
+    seg061.h
+    seg062.h
+    seg063.h
+    seg064.h
+    seg065.h
+    seg066.h
+    seg067.h
+    seg068.h
+    seg069.h
+    seg070.h
+    seg071.h
+    seg072.h
+    seg073.h
+    seg074.h
+    seg075.h
+    seg076.h
+    seg077.h
+    seg078.h
+    seg079.h
+    seg080.h
+    seg081.h
+    seg082.h
+    seg083.h
+    seg084.h
+    seg085.h
+    seg086.h
+    seg087.h
+    seg088.h
+    seg089.h
+    seg090.h
+    seg091.h
+    seg092.h
+    seg093.h
+    seg094.h
+    seg095.h
+    seg096.h
+    seg097.h
+    seg098.h
+    seg099.h
+    seg100.h
+    seg101.h
+    seg102.h
+    seg103.h
+    seg104.h
+    seg105.h
+    seg106.h
+    seg107.h
+    seg108.h
+    seg109.h
+    seg110.h
+    seg111.h
+    seg112.h
+    seg113.h
+    seg114.h
+    seg115.h
+    seg116.h
+    seg117.h
+    seg118.h
+    seg119.h
+    seg120.h
+    seg121.h
+    seg122.h
+    symbols.h
+    v302de.h
+    vgalib.h
+    ./AIL/AIL.H
 )
 
+# Create executable
+add_executable(schick ${SCHICK_SOURCES} ${SCHICK_HEADERS})
+
+if (MSVC)
+# so far no special setting beside default for Debug/Release
+target_compile_definitions(schick PUBLIC _CRT_SECURE_NO_WARNINGS)
+target_compile_options(schick PRIVATE 
+   # /fsanitize=address
+)
+else()
 # Compiler flags matching the original Makefile
 target_compile_options(schick PRIVATE
     -Og                           # Optimize for debugging
@@ -152,16 +274,14 @@ target_compile_options(schick PRIVATE
 set_source_files_properties(seg011.cpp PROPERTIES
     COMPILE_FLAGS "-Wno-unused-parameter"
 )
-
 # Linker flags
 # target_link_options(schick PRIVATE
 #     -fsanitize=address            # Link with AddressSanitizer
 # )
+endif()
 
-# Link libraries
-target_link_libraries(schick PRIVATE
-    ${SDL2_LIBRARIES}
-)
+target_link_libraries(schick PRIVATE SDL2::SDL2main)
+target_link_libraries(schick PRIVATE SDL2::SDL2)
 
 # Set output name based on compiler (matching original Makefile behavior)
 set_target_properties(schick PROPERTIES

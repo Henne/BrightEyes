@@ -17,9 +17,117 @@
 #include "seg071.h"
 #include "seg097.h"
 
-static const uint8_t g_town_gossip_max[TOWN_ID__TAIL] = { 0x1a, 0x0e, 0x0d, 0x05, 0x09, 0x06, 0x06, 0x07, 0x10, 0x07, 0x0b, 0x08, 0x0a, 0x0c, 0x11, 0x12, 0x0e, 0x10, 0x02, 0x0e, 0x00, 0x09, 0x0c, 0x0d, 0x0c, 0x0b, 0x07, 0x0a, 0x0c, 0x0a, 0x0c, 0x06, 0x0a, 0x09, 0x09, 0x08, 0x11, 0x0e, 0x0c, 0x00, 0x02, 0x07, 0x0f, 0x0b, 0x06, 0x0a, 0x08, 0x09, 0x0b, 0x0a, 0x00 }; // ds:0x7c9d
+static const uint8_t g_town_gossip_max[TOWN_ID__END - 1] = {
+/* note that the index is "off by 1" compared to TOWN_ID_... */
+	26, // TOWN_ID_THORWAL
+	14, // TOWN_ID_SERSKE
+	13, // TOWN_ID_BREIDA
+	 5, // TOWN_ID_PEILINEN
+	 9, // TOWN_ID_ROVAMUND
+	 6, // TOWN_ID_NORDVEST
+	 6, // TOWN_ID_KRAVIK
+	 7, // TOWN_ID_SKELELLEN
+	16, // TOWN_ID_MERSKE
+	 7, // TOWN_ID_EFFERDUN
+	11, // TOWN_ID_TJOILA
+	 8, // TOWN_ID_RUKIAN
+	10, // TOWN_ID_ANGBODIRTAL
+	12, // TOWN_ID_AUPLOG
+	17, // TOWN_ID_VILNHEIM
+	18, // TOWN_ID_BODON
+	14, // TOWN_ID_OBERORKEN
+	16, // TOWN_ID_PHEXCAER
+	 2, // TOWN_ID_GROENVELDEN
+	14, // TOWN_ID_FELSTEYN
+	 0, // TOWN_ID_EINSIEDLERSEE
+	 9, // TOWN_ID_ORKANGER
+	12, // TOWN_ID_CLANEGH
+	13, // TOWN_ID_LISKOR
+	12, // TOWN_ID_THOSS
+	11, // TOWN_ID_TJANSET
+	 7, // TOWN_ID_ALA
+	10, // TOWN_ID_ORVIL
+	12, // TOWN_ID_OVERTHORN
+	10, // TOWN_ID_ROVIK
+	12, // TOWN_ID_HJALSINGOR
+	 6, // TOWN_ID_GUDDASUNDEN
+	10, // TOWN_ID_KORD
+	 9, // TOWN_ID_TREBAN
+	 9, // TOWN_ID_ARYN
+	 8, // TOWN_ID_RUNINSHAVEN
+	17, // TOWN_ID_OTTARJE
+	14, // TOWN_ID_SKJAL
+	12, // TOWN_ID_PREM
+	 0, // TOWN_ID_DASPOTA
+	 2, // TOWN_ID_RYBON
+	 7, // TOWN_ID_LJASDAHL
+	15, // TOWN_ID_VARNHEIM
+	11, // TOWN_ID_VAERMHAG
+	 6, // TOWN_ID_TYLDON
+	10, // TOWN_ID_VIDSAND
+	 8, // TOWN_ID_BRENDHIL
+	 9, // TOWN_ID_MANRIN
+	11, // TOWN_ID_FAEHRSTATION_TJOILA
+	10, // TOWN_ID_FAEHRE_ANGBODIRTAL
+	 0, // TOWN_ID_HJALLANDER_HOF
+	 0  // TOWN_ID_LEUCHTTURM_RUNIN
+}; // ds:0x7c9d
 
-static const uint8_t g_town_gossip_off[TOWN_ID__TAIL] = { 0x38, 0x06, 0x0a, 0x09, 0x0c, 0x06, 0x04, 0x06, 0x06, 0x0e, 0x05, 0x06, 0x08, 0x05, 0x0e, 0x04, 0x14, 0x1a, 0x05, 0x08, 0x00, 0x09, 0x0c, 0x09, 0x08, 0x0a, 0x05, 0x0d, 0x0c, 0x05, 0x0a, 0x06, 0x0e, 0x05, 0x07, 0x06, 0x0a, 0x0b, 0x18, 0x00, 0x05, 0x0c, 0x0c, 0x09, 0x08, 0x0c, 0x05, 0x0e, 0x04, 0x03, 0x00 }; // ds:0x7cd1
+static const uint8_t g_town_gossip_off[TOWN_ID__END - 1] = {
+/* note that the index is "off by 1" compared to TOWN_ID_... */
+	56, // TOWN_ID_THORWAL
+	 6, // TOWN_ID_SERSKE
+	10, // TOWN_ID_BREIDA
+	 9, // TOWN_ID_PEILINEN
+	12, // TOWN_ID_ROVAMUND
+	 6, // TOWN_ID_NORDVEST
+	 4, // TOWN_ID_KRAVIK
+	 6, // TOWN_ID_SKELELLEN
+	 6, // TOWN_ID_MERSKE
+	14, // TOWN_ID_EFFERDUN
+	 5, // TOWN_ID_TJOILA
+	 6, // TOWN_ID_RUKIAN
+	 8, // TOWN_ID_ANGBODIRTAL
+	 5, // TOWN_ID_AUPLOG
+	14, // TOWN_ID_VILNHEIM
+	 4, // TOWN_ID_BODON
+	20, // TOWN_ID_OBERORKEN
+	26, // TOWN_ID_PHEXCAER
+	 5, // TOWN_ID_GROENVELDEN
+	 8, // TOWN_ID_FELSTEYN
+	 0, // TOWN_ID_EINSIEDLERSEE
+	 9, // TOWN_ID_ORKANGER
+	12, // TOWN_ID_CLANEGH
+	 9, // TOWN_ID_LISKOR
+	 8, // TOWN_ID_THOSS
+	10, // TOWN_ID_TJANSET
+	 5, // TOWN_ID_ALA
+	13, // TOWN_ID_ORVIL
+	12, // TOWN_ID_OVERTHORN
+	 5, // TOWN_ID_ROVIK
+	10, // TOWN_ID_HJALSINGOR
+	 6, // TOWN_ID_GUDDASUNDEN
+	14, // TOWN_ID_KORD
+	 5, // TOWN_ID_TREBAN
+	 7, // TOWN_ID_ARYN
+	 6, // TOWN_ID_RUNINSHAVEN
+	10, // TOWN_ID_OTTARJE
+	11, // TOWN_ID_SKJAL
+	24, // TOWN_ID_PREM
+	 0, // TOWN_ID_DASPOTA
+	 5, // TOWN_ID_RYBON
+	12, // TOWN_ID_LJASDAHL
+	12, // TOWN_ID_VARNHEIM
+	 9, // TOWN_ID_VAERMHAG
+	 8, // TOWN_ID_TYLDON
+	12, // TOWN_ID_VIDSAND
+	 5, // TOWN_ID_BRENDHIL
+	14, // TOWN_ID_MANRIN
+	 4, // TOWN_ID_FAEHRSTATION_TJOILA
+	 3, // TOWN_ID_FAEHRE_ANGBODIRTAL
+	 0, // TOWN_ID_HJALLANDER_HOF
+	 0  // TOWN_ID_LEUCHTTURM_RUNIN
+}; // ds:0x7cd1
 
 static const char g_gossip_str_triple_wildcard[8] = "%s %s%s"; // ds:0x7d06
 
@@ -44,9 +152,9 @@ signed int get_tavern_gossip(void)
 	/* Thorwal */
 	case (TOWN_ID_THORWAL - 1): {
 		if (randval == 6)
-			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ID_ELIANE);	/* Eliane Windenbeck */
 		else if (randval == 7)
-			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ID_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -57,9 +165,9 @@ signed int get_tavern_gossip(void)
 		else if (randval == 2)
 			gs_tevent004_flag = 1;
 		else if (randval == 9)
-			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ID_ELIANE);	/* Eliane Windenbeck */
 		else if (randval == 10)
-			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ID_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -141,9 +249,9 @@ signed int get_tavern_gossip(void)
 		else if (randval == 3)
 			gs_tevent120_flag = 1;
 		else if (randval == 11)
-			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ID_ELIANE);	/* Eliane Windenbeck */
 		else if (randval == 12)
-			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ID_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -152,9 +260,9 @@ signed int get_tavern_gossip(void)
 		if (randval == 2)
 			gs_tevent008_flag = 1;
 		else if (randval == 7)
-			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ID_ELIANE);	/* Eliane Windenbeck */
 		else if (randval == 8)
-			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ID_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -400,18 +508,18 @@ signed int get_tavern_gossip(void)
 			gs_teventu02_flag = gs_tevent040_flag = 1;
 		}
 		else if (randval == 9)
-			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ID_ELIANE);	/* Eliane Windenbeck */
 		else if (randval == 10)
-			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ID_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
 	/* Vaermhag */
 	case (TOWN_ID_VAERMHAG - 1): {
 		if (randval == 7)
-			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ID_ELIANE);	/* Eliane Windenbeck */
 		else if (randval == 8)
-			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ID_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -503,7 +611,7 @@ signed int tavern_quest_infos(void)
 		gs_quest_deadship = relevant_info = 1;
 
 	} else if ((gs_town_id == TOWN_ID_SKJAL) &&	(gs_town_typeindex == 69) &&
-			(gs_informer_flags[INFORMER_JURGE] != 2) && (gs_informer_flags[INFORMER_JURGE] != 0) &&
+			(gs_informer_flags[INFORMER_ID_JURGE] != 2) && (gs_informer_flags[INFORMER_ID_JURGE] != 0) &&
 			!gs_jurge_awaits_letter)
 	{
 		/* meet Informer Jurge */
@@ -513,7 +621,7 @@ signed int tavern_quest_infos(void)
 		}
 
 	} else if ((gs_town_id == TOWN_ID_VIDSAND) && (gs_town_typeindex == 84) &&
-			(gs_informer_flags[INFORMER_RAGNA] != 2) && (gs_informer_flags[INFORMER_RAGNA] != 0))
+			(gs_informer_flags[INFORMER_ID_RAGNA] != 2) && (gs_informer_flags[INFORMER_ID_RAGNA] != 0))
 	{
 		/* meet Informer Ragna */
 
@@ -522,7 +630,7 @@ signed int tavern_quest_infos(void)
 		}
 
 	} else if ((gs_town_id == TOWN_ID_ANGBODIRTAL) && ((gs_town_typeindex == 27) || (gs_town_typeindex == 28)) &&
-			(gs_informer_flags[INFORMER_BEORN] != 2) && (gs_informer_flags[INFORMER_BEORN] != 0))
+			(gs_informer_flags[INFORMER_ID_BEORN] != 2) && (gs_informer_flags[INFORMER_ID_BEORN] != 0))
 	{
 		/* meet Informer Beorn */
 
@@ -534,8 +642,8 @@ signed int tavern_quest_infos(void)
 
 
 	} else if ((gs_town_id == TOWN_ID_BREIDA) && ((gs_town_typeindex == 14) || (gs_town_typeindex == 15)) &&
-			(gs_informer_flags[INFORMER_ASGRIMM] != 2) &&
-			(gs_informer_flags[INFORMER_ASGRIMM] != 0) &&
+			(gs_informer_flags[INFORMER_ID_ASGRIMM] != 2) &&
+			(gs_informer_flags[INFORMER_ID_ASGRIMM] != 0) &&
 			(gs_got_main_quest != 0))
 	{
 		/* meet Informer Asgrimm */
@@ -546,8 +654,8 @@ signed int tavern_quest_infos(void)
 
 	} else if ((gs_town_id == TOWN_ID_HJALSINGOR) &&
 			((gs_town_typeindex == 61) || (gs_town_typeindex == 62)) &&
-			(gs_informer_flags[INFORMER_ALGRID] != 2) &&
-			(gs_informer_flags[INFORMER_ALGRID] != 0))
+			(gs_informer_flags[INFORMER_ID_ALGRID] != 2) &&
+			(gs_informer_flags[INFORMER_ID_ALGRID] != 0))
 	{
 		/* meet Informer Algrid */
 
@@ -569,12 +677,12 @@ signed int tavern_quest_infos(void)
 }
 
 /**
- * \brief   follow a informer from the tavern to his/her home
+ * \brief   follow an informer from the tavern to his/her home
  */
 void tavern_follow_informer(void)
 {
 
-	switch (get_town_lookup_entry() + 1) {
+	switch (informer_id_from_current_town() + 1) {
 	case 1: {
 		do_talk(6, 0);
 		gs_x_target_bak = 8;

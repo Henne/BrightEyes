@@ -18,7 +18,7 @@
 
 void poison_effect(void)
 {
-	signed int i;
+	signed int hero_pos;
 	volatile signed int j; /* multi use: weapon_type, hero_pos, poison_id */
 	struct struct_hero *hero;
 	struct hero_affliction *poison_ptr;
@@ -27,7 +27,7 @@ void poison_effect(void)
 
 	hero = get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero++) {
+	for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && !hero->flags.dead) {
 
@@ -35,6 +35,7 @@ void poison_effect(void)
 			poison_ptr = &hero->poison[POISON_ID_SHURINKNOLLENGIFT];
 
 			/* SHURINKNOLLENGIFT: hero is poisoned */
+			/* After half an hour, every 5 minutes KK-1, GE-1, LE - 1D6. */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
 				if (poison_ptr->time_counter >= 6) {
@@ -80,6 +81,7 @@ void poison_effect(void)
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
+				/* every hour, regenerate 1 KK */
 				if ((poison_ptr->log_1 != 0) && (!poison_ptr->time_counter % 12 )) {
 
 					sprintf(g_dtp2, get_ttx(573), hero->alias);
@@ -90,6 +92,7 @@ void poison_effect(void)
 					hero->attrib[ATTRIB_KK].current++;
 				}
 
+				/* every hour, regenerate 1 GE */
 				if ((poison_ptr->log_2 != 0) && (!poison_ptr->time_counter % 12 )) {
 
 					sprintf(g_dtp2, get_ttx(578), hero->alias);
@@ -107,6 +110,7 @@ void poison_effect(void)
 			/* ARAXGIFT: hero is poisoned */
 			if (poison_ptr->status == POISON_STATUS_POISONED) {
 
+				/* once after 10 minutes: AT-2 and PA-2 for all weapon talents, moreover GE-2 and KK-2 */
 				if ((poison_ptr->time_counter >= 2) && !poison_ptr->log_3) {
 
 					poison_ptr->log_3 = 1;
@@ -129,7 +133,7 @@ void poison_effect(void)
 
 				}
 
-				/* enable self-regeneration */
+				/* after 10 hours: regenerate */
 				if (poison_ptr->time_counter >= 120) {
 					// Original-Bug? forgot? poison_ptr->time_counter = 0;
 					poison_ptr->status = POISON_STATUS_RECOVER;
@@ -295,8 +299,8 @@ void poison_effect(void)
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				}
 
+				/* every hour, an LE loss of D6 + 2 */
 				if (!(poison_ptr->time_counter % 12)) {
-					/* every hour, an LE loss of D6 + 2 */
 					sub_hero_le(hero, dice_roll(1, 6, 2));
 				}
 			}
@@ -383,9 +387,9 @@ void poison_effect(void)
 					poison_ptr->status = POISON_STATUS_HEALTHY;
 				} else {
 
+					/* every hour, regenerate one AE */
 					if (!poison_ptr->time_counter % 12) {
 
-						/* regenerate one AE every 5 minutes */
 						poison_ptr->log_1--;
 						hero->ae++;
 

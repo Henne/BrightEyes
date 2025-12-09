@@ -79,11 +79,11 @@ void tevent_011(void)
  *
  *          In seg112.cpp exists a similiar function called TRV_swim() for that purpose.
  *
- * \param   mod         modificator for the swim test
+ * \param   handicap    handicap for the swim test
  * \param   percent     probability to loose an item
  */
 /* should be static */
-void TRV_swim2(const signed int mod, const signed int percent)
+void TRV_swim2(const signed int handicap, const signed int percent)
 {
 	signed int i;
 	struct struct_hero *hero;
@@ -94,7 +94,7 @@ void TRV_swim2(const signed int mod, const signed int percent)
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 		{
 			/* a swim test */
-			if (test_talent(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
+			if (test_talent(hero, TA_SCHWIMMEN, (signed char)handicap) > 0)
 			{
 				/* talent test succeeded */
 				sprintf(g_dtp2, get_tx2(31), hero->alias);
@@ -131,7 +131,7 @@ void TRV_a_path(void)
 	if (answer == 1)
 	{
 		/* follow the path */
-		g_route59_flag = (gs_town_id == TOWN_ID_PEILINEN ? 2 : 4);
+		g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? CROSSLINK_STATUS_FROM_PEILINEN : CROSSLINK_STATUS_FROM_ROVAMUND);
 
 		/* Original-Glitch:
 		 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
@@ -246,8 +246,11 @@ void tevent_020(void)
 
 			if (answer == 1)
 			{
-			    /* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen. */
-				g_route59_flag = (gs_town_id == TOWN_ID_PEILINEN ? 1 : 3);
+				/* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen.
+				 * So the following line should prabably be
+				 * g_journey_crosslink_status = (gs_town_id == TOWN_ID_KRAVIK ? CROSSLINK_STATUS_FROM_KRAVIK : CROSSLINK_STATUS_FROM_SKELELLEN);
+				 */
+				g_journey_crosslink_status = (gs_town_id == TOWN_ID_PEILINEN ? CROSSLINK_STATUS_FROM_KRAVIK : CROSSLINK_STATUS_FROM_SKELELLEN);
 
 				/* Original-Glitch:
 				 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).
@@ -262,7 +265,7 @@ void tevent_020(void)
 
 void tevent_021(void)
 {
-	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) ||	gs_tevent021_flag)
+	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) || gs_tevent021_flag)
 	{
 		g_gather_herbs_special = ITEM_ALRAUNE;
 
@@ -635,7 +638,7 @@ void tevent_044(void)
 		if (answer == 2) {
 
 			/* bury her */
-			gs_gods_estimation[GOD_BORON] += 50L;
+			gs_gods_estimation[GOD_ID_BORON] += 50L;
 
 			timewarp(HOURS(1));
 
@@ -649,7 +652,7 @@ void tevent_045(void)
 {
 	signed int answer;
 
-	if (gs_trv_destination == TOWN_ID_DASPOTA)
+	if (gs_journey_destination_town_id == TOWN_ID_DASPOTA)
 	{
 		load_in_head(11);
 

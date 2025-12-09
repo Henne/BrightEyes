@@ -29,8 +29,8 @@
 #include "cda_code.h"
 #include "AIL.H"
 #else
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 // lseek(), close(), read(), write()
 #if defined(_MSC_VER)
 #include <io.h>

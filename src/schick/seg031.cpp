@@ -27,21 +27,21 @@ struct tlk_option {
 
 static const struct struct_informer_tab g_informer_tab[15] = {
 /* { name_id, town_id, unkn} */
-	{ 700, 38, 0 },
-	{ 701, 37, 0 },
-	{ 702, 25, 1 },
-	{ 703, 28, 0 },
-	{ 704, 20, 0 },
-	{ 705, 46, 1 },
-	{ 706, 13, 0 },
-	{ 707,  3, 0 },
-	{ 708, 43, 1 },
-	{ 709, -1, 0 },
-	{ 710, -1, 1 },
-	{ 711, -1, 0 },
-	{ 712, -1, 0 },
-	{ 713, 31, 1 },
-	{ 714, 48, 0 }
+	{ 700, TOWN_ID_SKJAL      , 0 }, // INFORMER_ID_JURGE
+	{ 701, TOWN_ID_OTTARJE    , 0 }, // INFORMER_ID_HJORE
+	{ 702, TOWN_ID_THOSS      , 1 }, // INFORMER_ID_YASMA
+	{ 703, TOWN_ID_ORVIL      , 0 }, // INFORMER_ID_UMBRIK
+	{ 704, TOWN_ID_FELSTEYN   , 0 }, // INFORMER_ID_ISLEIF
+	{ 705, TOWN_ID_VIDSAND    , 1 }, // INFORMER_ID_RAGNA
+	{ 706, TOWN_ID_ANGBODIRTAL, 0 }, // INFORMER_ID_BEORN
+	{ 707, TOWN_ID_BREIDA     , 0 }, // INFORMER_ID_ASGRIMM
+	{ 708, TOWN_ID_VARNHEIM   , 1 }, // INFORMER_ID_ELIANE
+	{ 709, -1                 , 0 }, // INFORMER_ID_OLVIR
+	{ 710, -1                 , 1 }, // INFORMER_ID_SWAFNILD
+	{ 711, -1                 , 0 }, // INFORMER_ID_TREBORN
+	{ 712, -1                 , 0 }, // INFORMER_ID_UNICORN
+	{ 713, TOWN_ID_HJALSINGOR , 1 }, // INFORMER_ID_ALGRID
+	{ 714, TOWN_ID_MANRIN     , 0 }  // INFORMER_ID_TIOMAR
 }; // ds:0x5ed6
 
 void do_random_talk(const signed int talk_id, const signed int informer_id)
@@ -261,7 +261,7 @@ char* get_informer_forename(void)
  *
  * \return              a value between 0 and 15
  */
-signed int get_town_lookup_entry(void)
+signed int informer_id_from_current_town(void)
 {
 	const struct struct_informer_tab *p_info = &g_informer_tab[0];
 	signed int i;
@@ -316,7 +316,7 @@ char* get_informer_name(void)
  */
 char* get_informer_name2(void)
 {
-	return get_ttx(g_informer_tab[get_town_lookup_entry()].name_id);
+	return get_ttx(g_informer_tab[informer_id_from_current_town()].name_id);
 }
 
 /**

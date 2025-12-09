@@ -54,12 +54,10 @@ void spell_arcano(void)
 
 void spell_armatrutz(void)
 {
-	signed int max_bonus;
+	signed int max_bonus = 0;
 	signed int pos;
 	signed int bonus;
 	signed int mod_slot;
-
-	max_bonus = 0;
 
 	/* calc the maximal RS bonus */
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -551,88 +549,103 @@ void spell_aeolitus(void)
 /**
  * \brief   hero spell 'Brenne, toter Stoff!'
  *
- * Ignites a lantern (1 oil is consumed) or a torch in the inventory.
+ * Ignites a lantern (uses up 1 oil) or a torch in the inventory.
+ * Used for hero spell, but also for manual igniting based on a tinderbox.
  */
 void spell_brenne(void)
 {
-	signed int oil_pos;
+	signed int oil_inv_slot;
 	signed int answer;
 
-	signed int torch_pos;
-	signed int lantern_pos;
-
-	torch_pos = -1;
-	lantern_pos = -1;
+	signed int torch_inv_slot = -1;
+	signed int lantern_inv_slot = -1;
 
 	g_spell_special_aecost = 0;
 
-	if (g_light_type == LIGHTING_TORCH) {
-		torch_pos = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 55:
+	 * Using the second (third, firth...) un-lit torch in the inventory to ignite it,
+	 * actually the first torch will be ignited. (provided the hero also has a tinder box)
+	 * The same for lanterns instead of torches, provided the hero also has a tinder
+	 * box and a bottle of oil.
+	 */
+	if (g_ignite_mode == IGNITE_MODE_USE_TORCH) {
+		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
 	} else {
-		if (g_light_type == LIGHTING_LANTERN) {
+		if (g_ignite_mode == IGNITE_MODE_USE_LANTERN) {
 		} else {
-			torch_pos = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
+			// assert(g_ignite_mode == IGNITE_MODE_SPELL_OR_USE_TINDER);
+			torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
 		}
 
-		lantern_pos = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
+		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
 	}
+#else
+	/* For the fix, we rely on the stored inventory slot of the used item in g_used_item_inv_slot */
+	if (g_ignite_mode == IGNITE_MODE_USE_TORCH) {
+		torch_inv_slot = g_used_item_inv_slot;
+	} else if (g_ignite_mode == IGNITE_MODE_USE_LANTERN) {
+		lantern_inv_slot = g_used_item_inv_slot;
+	} else {
+		// assert(g_ignite_mode == IGNITE_MODE_SPELL_OR_USE_TINDER);
+		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
+		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
+	}
+#endif
 
-	if (torch_pos != -1) {
+	if (torch_inv_slot != -1 && lantern_inv_slot != -1) {
 
-		if (lantern_pos != -1) {
+		/* both torch and lantern are available, must decide */
+		sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
 
-			/* lantern and torch are available, must decide */
-			sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
+		answer = GUI_radio(g_dtp2, 2,
+				(char*)GUI_names_grammar(0x4000, ITEM_FACKEL__UNLIT, 0),
+				(char*)GUI_names_grammar(0x4000, ITEM_LATERNE__UNLIT, 0));
 
-			answer = GUI_radio(g_dtp2, 2,
-					(char*)GUI_names_grammar(0x4000, ITEM_FACKEL__UNLIT, 0),
-					(char*)GUI_names_grammar(0x4000, ITEM_LATERNE__UNLIT, 0));
+		if (answer == -1) {
 
-			if (answer == -1) {
+			/* abort */
+			torch_inv_slot = lantern_inv_slot = -1;
 
-				/* abort */
-				torch_pos = lantern_pos = -1;
+		} else if (answer == 1) {
 
-			} else if (answer == 1) {
+			lantern_inv_slot = -1;
 
-				lantern_pos = -1;
+		} else {
 
-			} else {
-
-				torch_pos = -1;
-			}
+			torch_inv_slot = -1;
 		}
 	}
 
-	if (torch_pos != -1) {
+	if (torch_inv_slot != -1) {
 
 		/* change torch to burning torch */
-		get_spelluser()->inventory[torch_pos].item_id = ITEM_FACKEL__LIT;
+		get_spelluser()->inventory[torch_inv_slot].item_id = ITEM_FACKEL__LIT;
 
 		/* set timer to 10 */
-		get_spelluser()->inventory[torch_pos].lighting_timer = 10;
+		get_spelluser()->inventory[torch_inv_slot].lighting_timer = 10;
 
 		/* set AP cost */
 		g_spell_special_aecost = random_schick(20);
 
-		/* prepare message */
 		sprintf(g_dtp2,	get_tx(108), get_spelluser()->alias);
+		/* "torch is lit *" */
 
-	} else if (lantern_pos != -1) {
+	} else if (lantern_inv_slot != -1) {
 
 		/* get position of oil */
-		oil_pos = inv_slot_of_item(get_spelluser(), ITEM_OEL);
+		oil_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_OEL);
 
-		if (oil_pos != -1) {
+		if (oil_inv_slot != -1) {
 
 			/* change lantern to burning lantern */
-			get_spelluser()->inventory[lantern_pos].item_id = ITEM_LATERNE__LIT;
+			get_spelluser()->inventory[lantern_inv_slot].item_id = ITEM_LATERNE__LIT;
 
 			/* set counter to 100 */
-			get_spelluser()->inventory[lantern_pos].lighting_timer = 100;
+			get_spelluser()->inventory[lantern_inv_slot].lighting_timer = 100;
 
 			/* drop one oil flask */
-			drop_item(get_spelluser(), oil_pos, 1);
+			drop_item(get_spelluser(), oil_inv_slot, 1);
 
 			/* give bronze flask */
 			give_new_item_to_hero(get_spelluser(), ITEM_BRONZEFLASCHE, 0, 1);
@@ -640,17 +653,16 @@ void spell_brenne(void)
 			/* set AP cost */
 			g_spell_special_aecost = random_schick(20);
 
-			/* prepare message */
 			sprintf(g_dtp2,	get_tx(119), get_spelluser()->alias);
+			/* "lantern is lit" */
 		} else {
 			/* prepare message */
 			sprintf(g_dtp2, get_tx(120), get_spelluser()->alias);
+			/* "hero does not have oil" */
 		}
 	} else {
-		/* neither torch nor lantern */
-
-		/* prepare message */
 		sprintf(g_dtp2, get_tx(121), get_spelluser()->alias);
+		/* "hero has neither torch nor lantern" */
 	}
 }
 

@@ -804,7 +804,7 @@ struct armor_descr g_armors_table[25] = {
 	{ 0, 0 }, /*  7 <- ITEM_SCHNEESCHUHE */
 	{ 3, 3 }, /*  8 <- ITEM_LEDERHARNISCH */
 	{ 5, 4 }, /*  9 <- ITEM_SCHUPPENRUESTUNG */
-	{ 0, 0 }, /* 10 <- ITEM_ROBE__GREEN_1, ITEM_ROBE__GREEN_1_2 */
+	{ 0, 0 }, /* 10 <- ITEM_ROBE__GREEN_1, ITEM_ROBE__GREEN_2 */
 	{ 0, 0 }, /* 11 <- ITEM_ROBE__RED */
 	{ 2, 1 }, /* 12 <- ITEM_TOPFHELM */
 	{ 1, 0 }, /* 13 <- ITEM_LEDERHELM */
@@ -843,13 +843,13 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 */
 
 	{ 0, 1,  3 }, /*  3 <- item_read_document */
-	/* ITEM_DOKUMENT__1,
+	/* ITEM_DOKUMENT__UNICORN,
 	 * ITEM_SCHREIBEN_VON_JADRA,
 	 * ITEM_LOBPREISUNGEN,
 	 * ITEM_MITGLIEDERLISTE,
 	 * ITEM_SEEKARTE,
-	 * ITEM_BUCH__1,
-	 * ITEM_BUCH__2,
+	 * ITEM_BUCH__PIRATE_ACCOUNTING,
+	 * ITEM_BUCH__KAISERSPRUECHE_HALS,
 	 * ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN,
 	 * ITEM_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN
 	 */
@@ -890,8 +890,8 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	{ 0, 1, 12 }, /* 12 <- item_ignite */
 	/* ITEM_LATERNE__UNLIT,
 	 * ITEM_FACKEL__UNLIT,
-	 * ITEM_ZUNDERKAESTCHEN, Why?
-	 * ITEM_LATERNE__LIT  Why?? Original-Bug? (note that ITEM_FACKEL__LIT is not in this list)
+	 * ITEM_ZUNDERKAESTCHEN, -> ignite either lantern or torch
+	 * ITEM_LATERNE__LIT     -> refill lit lantern with oil
 	 */
 
 	{ 0, 1, 13 }  /* 13 <- item_use_beutel */
@@ -1242,7 +1242,7 @@ const signed int* g_magic_schools_table[9] = {
 	g_magic_school_veraenderung_spell_ids
 };
 
-void (*g_spell_handlers[86])(void) = {
+void (*g_spell_handlers[SP__END])(void) = {
 	NULL,
 	/* Dispel / Antimagie */
 	spell_beherrschung,
@@ -1459,7 +1459,7 @@ void (*g_mon_spellhandlers[15])(void) = {
 	mspell_paralue,			/* 14 */
 }; // ds:0x0fc2, function pointer[15]
 
-const struct talent_descr g_talent_descriptions[TA__TAIL + 1] = {
+const struct talent_descr g_talent_descriptions[TA__END] = {
 	{ 0        , 0        , 0        , 1 }, // TA_WAFFENLOS
 	{ 0        , 0        , 0        , 1 }, // TA_HIEBWAFFEN
 	{ 0        , 0        , 0        , 1 }, // TA_STICHWAFFEN
@@ -2358,7 +2358,7 @@ int16_t gs_debt_days = 0;	 // ds:0x3360
 int16_t gs_in_academy = 0;	 // ds:0x3362
 uint8_t  gs_informer_flags[16] = {0}; // ds:0x3364
 uint8_t  gs_tav_kicked_flags[88] = {0}; // ds:0x3374
-uint8_t  gs_town_outlawed_flags[52] = {0}; // ds:0x33cc WRITEONLY
+uint8_t  gs_town_outlawed_flags[TOWN_ID__END - 1] = {0}; // ds:0x33cc WRITEONLY
 uint8_t  gs_inn_kicked_flags[74] = {0}; // ds:0x3400
 uint8_t  gs_got_letter_het = 0; // ds:0x344a
 unsigned char g_unkn_015[1] = { 0x00 }; // ds:0x344b
@@ -2631,7 +2631,7 @@ uint32_t gs_main_acting_hero_obsolete = 0;// ds:0x3e20; This is a dummy now!
 #endif
 
 uint8_t gs_tevent073_corpse[3] = {
-	ITEM_DOKUMENT__1, 1,
+	ITEM_DOKUMENT__UNICORN, 1,
 	0xff
 }; // ds:0x3e24
 uint8_t gs_tevent014_chest[4] = {
@@ -3404,23 +3404,23 @@ int16_t gs_town_typeindex = 0; // ds:0x4224
 uint8_t  gs_dng03_highpriest_killed = 0; // ds:0x4226, {0, 14 = in fight 224, 16 = in fight 222}
 int8_t  gs_dng03_chest12_loads = 6; // ds:0x4227, {0,1,...,6}
 int16_t gs_trv_i = 0; // ds:0x4228
-int16_t gs_route_stepcount = 0; // ds:0x422a
-int16_t gs_forcedmarch_le_cost = 0; // ds:0x422c
-int16_t gs_route_total_steps = 0; // ds:0x422e
-int16_t gs_route_length = 0; // ds:0x4230
-int16_t gs_route_duration = 0; // ds:0x4232
-int16_t gs_route_timedelta = 0; // ds:0x4234
-int16_t gs_route_mousehover = 0; // ds:0x4236
-int16_t gs_route_progress = 0; // ds:0x4238
-int16_t gs_route_stepsize = 0; // ds:0x423a
-int16_t gs_route_dayprogress = 0; // ds:0x423c
+int16_t gs_travel_step_counter = 0; // ds:0x422a
+int16_t gs_journey_forced_march_le_cost = 0; // ds:0x422c
+int16_t gs_travel_total_steps = 0; // ds:0x422e
+int16_t gs_travel_total_distance = 0; // ds:0x4230 // length of current land or sea route [unit: 10m]
+int16_t gs_travel_total_duration = 0; // ds:0x4232
+int16_t gs_travel_duration_per_step = 0; // ds:0x4234
+int16_t gs_travel_mousehover = 0; // ds:0x4236
+int16_t gs_travel_distance_made = 0; // ds:0x4238
+int16_t gs_travel_distance_per_step = 0; // ds:0x423a
+int16_t gs_travel_distance_per_18_hours = 0; // ds:0x423c
 int16_t gs_sea_travel_passage_id = 0; // ds:0x423e
-int16_t gs_route_encounter_flag = 0; // ds:0x4240
-int16_t gs_route_encounter_time = 0; // ds:0x4242
-int16_t gs_route_informer_flag = 0; // ds:0x4244
-int16_t gs_route_informer_time = 0; // ds:0x4246
-int16_t gs_route_fight_flag = 0; // ds:0x4248
-int16_t gs_route_fight_time = 0; // ds:0x424a
+int16_t gs_journey_random_encounter_flag = 0; // ds:0x4240
+int16_t gs_journey_random_encounter_position = 0; // ds:0x4242
+int16_t gs_journey_olvir_treborn_flag = 0; // ds:0x4244
+int16_t gs_journey_olvir_treborn_position = 0; // ds:0x4246
+int16_t gs_journey_fight_flag = 0; // ds:0x4248
+int16_t gs_journey_fight_position = 0; // ds:0x424a
 int16_t gs_travel_speed = 0; // ds:0x424c
 int16_t gs_passage_deadship_flag = 0; // ds:0x424e
 int16_t gs_passage_deadship_position = 0; // ds:0x4250
@@ -3429,21 +3429,21 @@ int16_t gs_passage_octopus_position = 0; // ds:0x4254
 int16_t gs_passage_pirates_flag = 0; // ds:0x4256
 int16_t gs_passage_pirates_position = 0; // ds:0x4258
 #if defined (__BORLANDC__)
-int16_t *gs_route_course_ptr = NULL;			// ds:0x425a;
-int16_t *gs_route_course_start = NULL;			// ds:0x425e;
-int16_t *gs_route_course_ptr2 = NULL;			// ds:0x4262;
+int16_t *gs_travel_course_ptr = NULL;			// ds:0x425a;
+int16_t *gs_travel_course_start = NULL;			// ds:0x425e;
+int16_t *gs_travel_course_ptr2 = NULL;			// ds:0x4262;
 uint8_t  *gs_sea_travel_courses = NULL;			// ds:0x4266
-struct struct_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
+struct struct_land_route_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr = NULL;	// ds:0x426e
 #else
-uint32_t gs_route_course_ptr_obsolete = 0;	// ds:0x425a; This is a dummy now!
-uint32_t gs_route_course_start_obsolete = 0;	// ds:0x425e; This is a dummy now!
-uint32_t gs_route_course_ptr2_obsolete = 0;	// ds:0x4262; This is a dummy now!
+uint32_t gs_travel_course_ptr_obsolete = 0;	// ds:0x425a; This is a dummy now!
+uint32_t gs_travel_course_start_obsolete = 0;	// ds:0x425e; This is a dummy now!
+uint32_t gs_travel_course_ptr2_obsolete = 0;	// ds:0x4262; This is a dummy now!
 uint32_t gs_sea_travel_courses_obsolete = 0;	// ds:0x4266; This is a dummy now!
 uint32_t gs_tevents_tab_ptr_obsolete = 0;		// ds:0x426a; This is a dummy now!
 uint32_t gs_travel_route_ptr_obsolete = 0;	// ds:0x426e; This is a dummy now!
 #endif
-struct struct_route_tevent gs_route_tevents[15] = {
+struct struct_journey_tevent gs_journey_tevents[15] = {
 	{ 0x0000, 0x0000 },
 	{ 0x0000, 0x0000 },
 	{ 0x0000, 0x0000 },
@@ -3480,7 +3480,7 @@ uint32_t gs_travel_map_ptr_obsolete = 0;	// ds:0x432e; This is a dummy now!
 uint8_t  gs_forcedmarch_timer = 0; // ds:0x4332
 uint8_t  gs_travel_detour = 0; // ds:0x4333
 int16_t gs_current_signpost_typeindex = 0; // ds:0x4334
-int16_t gs_trv_return = 0; // ds:0x4336, {-1, 0, 1, 2} + ?
+int16_t gs_journey_direction = JOURNEY_DIRECTION_FORWARD; // ds:0x4336 /* see enum JOURNEY_DIRECTION_... */
 int16_t gs_travel_destination_town_id = 0; // ds:0x4338
 int16_t gs_travel_destination_x = 0; // ds:0x433a
 int16_t gs_travel_destination_y = 0; // ds:0x433c
@@ -3492,8 +3492,8 @@ struct trv_start_point *gs_tm_unused1_ptr = NULL;	// ds:0x4340;
 uint32_t gs_tm_unused1_ptr_obsolete = 0;			// ds:0x4340;
 #endif
 
-int8_t  gs_trv_menu_towns[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
-int16_t gs_trv_destination = 0; // ds:0x434a
+int8_t  gs_trv_signpost_menu_town_ids[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
+int16_t gs_journey_destination_town_id = 0; // ds:0x434a
 uint8_t  gs_dng08_waterbarrel = 0; // ds:0x434c
 uint8_t  gs_dng13_collapsecount = 0; // ds:0x434d
 uint8_t  gs_dng13_herocount = 0; // ds:0x434e
@@ -3890,11 +3890,11 @@ char g_noway_string[40] = "IN DIESE RICHTUNG GEHT ES NICHT WEITER."; // ds:0x4a6
 #if !defined(__BORLANDC__)
 struct struct_hero *gs_ruin_hero;			// ds:0x3e1c;
 struct struct_hero *gs_main_acting_hero;		// ds:0x3e20;
-int16_t *gs_route_course_ptr;				// ds:0x425a;
-int16_t *gs_route_course_start;				// ds:0x425e;
-int16_t *gs_route_course_ptr2;				// ds:0x4262;
+int16_t *gs_travel_course_ptr;				// ds:0x425a;
+int16_t *gs_travel_course_start;				// ds:0x425e;
+int16_t *gs_travel_course_ptr2;				// ds:0x4262;
 uint8_t *gs_sea_travel_courses;				// ds:0x4266
-struct struct_tevent *gs_tevents_tab_ptr;		// ds:0x426a
+struct struct_land_route_tevent *gs_tevents_tab_ptr;		// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e
 uint8_t *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
 #endif
@@ -3902,10 +3902,10 @@ uint8_t *gs_travel_map_ptr; 				// ds:0x432e; uint8_t*
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
-const char* names_attrib[14] = {"MU", "KL", "CH", "FF", "GE", "IN", "KK",
+const char* names_attrib[ATTRIB__END] = {"MU", "KL", "CH", "FF", "GE", "IN", "KK",
 				"AG", "HA", "RA", "GG", "TA", "NG", "JZ"};
 
-const char* names_talent[52] = {
+const char* names_talent[TA__END] = {
     "Waffenlos", "Hiebwaffen", "Stichwaffen", "Schwerter", "Äxte", "Speere", "Zweihänder", "Schusswaffen", "Wurfwaffen",
     "Akrobatik", "Klettern", "Körperbeh.", "Reiten", "Schleichen", "Schwimmen", "Selbstbeh.", "Tanzen", "Verstecken", "Zechen",
     "Bekehren", "Betören", "Feilschen", "Gassenwissen", "Lügen", "Menschenkenntnis", "Schätzen",
@@ -3915,7 +3915,7 @@ const char* names_talent[52] = {
     "Gefahrensinn", "Sinnenschärfe"
 };
 
-const char* names_spell[86] = {
+const char* names_spell[SP__END] = {
     "DUMMY",
     "Beherrschung brechen", "Destructibo", "Gardianum", "Illusionen zerstören", "Verwandlung beenden", // Antimagie
     "Band & Fessel", "Bannbaladin", "Böser Blick", "Große Gier", "Große Verwirrung", "Herr der Tiere", "Horriphobus", "Mag. Raub", "Respondami", "Sanftmut", "Somnigravis", "Zwingtanz", // Beherrschung

@@ -30,7 +30,7 @@
 #include "seg094.h"
 #include "seg097.h"
 
-struct struct_land_route g_land_routes[59] = {
+struct struct_land_route g_land_routes[LROUTE_ID__END - 1] = {
 	{ TOWN_ID_THORWAL            , TOWN_ID_VAERMHAG           ,  34,  1, 10,  25,  0, 10, 100 }, //  1
 	{ TOWN_ID_VAERMHAG           , TOWN_ID_VARNHEIM           ,  40,  1, 10,  20,  0, 10, 100 }, //  2
 	{ TOWN_ID_VARNHEIM           , TOWN_ID_DASPOTA            ,  21,  1, 10,   5,  0, 10, 100 }, //  3
@@ -89,117 +89,123 @@ struct struct_land_route g_land_routes[59] = {
 	{ TOWN_ID_BRENDHIL           , TOWN_ID_MANRIN             ,  30, -3, 35,   0,  0,  0,   0 }, // 56
 	{ TOWN_ID_EINSIEDLERSEE      , TOWN_ID_EINSIEDLERSEE      ,  47, -3, 35,   0,  0, 50, 100 }, // 57 // circular route
 	{ TOWN_ID_LEUCHTTURM_RUNIN   , TOWN_ID_RUNINSHAVEN        ,  27, -3, 25,   0,  0,  0,   0 }, // 58 // not linked at LEUCHTTURM_RUNIN
-	{ 0                          , 0                          ,  50, -4, 50,   0,  0,  5,   9 }
+	{ TOWN_ID_NONE               , TOWN_ID_NONE               ,  50, -4, 50,   0,  0,  5,   9 }  // 59
 }; // ds:0x9dc6
 // towns not connected to any land route: TOWN_ID_OVERTHORN, TOWN_ID_HJALSINGOR, TOWN_ID_GUDDASUNDEN, TOWN_ID_TREBAN, TOWN_ID_ARYN
 
 // ds:0x9fd9, 105 arrays, each terminated by -1
-/* Numbers here are entries in g_land_routes */
-int8_t g_signposts_linked_lroute_001[] = {15, -1};		//ds:0x9fd9;
-int8_t g_signposts_linked_lroute_002[] = {4, -1};		//ds:0x9fdb;
-int8_t g_signposts_linked_lroute_003[] = {1, -1};		//ds:0x9fdd;
-int8_t g_signposts_linked_lroute_004[] = {4, -1};		//ds:0x9fdf;
-int8_t g_signposts_linked_lroute_005[] = {5, 7, -1};		//ds:0x9fe1;
-int8_t g_signposts_linked_lroute_006[] = {10, -1};		//ds:0x9fe4;
-int8_t g_signposts_linked_lroute_007[] = {7, -1};		//ds:0x9fe6;
-int8_t g_signposts_linked_lroute_008[] = {9, -1};		//ds:0x9fe8;
-int8_t g_signposts_linked_lroute_009[] = {11, -1};		//ds:0x9fea;
-int8_t g_signposts_linked_lroute_010[] = {10, -1};		//ds:0x9fec;
-int8_t g_signposts_linked_lroute_011[] = {50, -1};		//ds:0x9fee;
-int8_t g_signposts_linked_lroute_012[] = {12, -1};		//ds:0x9ff0;
-int8_t g_signposts_linked_lroute_013[] = {11, -1};		//ds:0x9ff2;
-int8_t g_signposts_linked_lroute_014[] = {12, -1};		//ds:0x9ff4;
-int8_t g_signposts_linked_lroute_015[] = {13, -1};		//ds:0x9ff6;
-int8_t g_signposts_linked_lroute_016[] = {13, -1};		//ds:0x9ff8;
-int8_t g_signposts_linked_lroute_017[] = {14, -1};		//ds:0x9ffa;
-int8_t g_signposts_linked_lroute_018[] = {14, -1};		//ds:0x9ffc;
-int8_t g_signposts_linked_lroute_019[] = {49, -1};		//ds:0x9ffe;
-int8_t g_signposts_linked_lroute_020[] = {50, -1};		//ds:0xa000;
-int8_t g_signposts_linked_lroute_021[] = {5, -1};		//ds:0xa002;
-int8_t g_signposts_linked_lroute_022[] = {6, -1};		//ds:0xa004;
-int8_t g_signposts_linked_lroute_023[] = {6, -1};		//ds:0xa006;
-int8_t g_signposts_linked_lroute_024[] = {8, -1};		//ds:0xa008;
-int8_t g_signposts_linked_lroute_025[] = {9, -1};		//ds:0xa00a;
-int8_t g_signposts_linked_lroute_026[] = {16, -1};		//ds:0xa00c;
-int8_t g_signposts_linked_lroute_027[] = {17, -1};		//ds:0xa00e;
-int8_t g_signposts_linked_lroute_028[] = {19, -1};		//ds:0xa010;
-int8_t g_signposts_linked_lroute_029[] = {18, -1};		//ds:0xa012;
-int8_t g_signposts_linked_lroute_030[] = {20, -1};		//ds:0xa014;
-int8_t g_signposts_linked_lroute_031[] = {25, -1};		//ds:0xa016;
-int8_t g_signposts_linked_lroute_032[] = {21, -1};		//ds:0xa018;
-int8_t g_signposts_linked_lroute_033[] = {22, -1};		//ds:0xa01a;
-int8_t g_signposts_linked_lroute_034[] = {20, -1};		//ds:0xa01c;
-int8_t g_signposts_linked_lroute_035[] = {39, -1};		//ds:0xa01e;
-int8_t g_signposts_linked_lroute_036[] = {21, -1};		//ds:0xa020;
-int8_t g_signposts_linked_lroute_037[] = {39, -1};		//ds:0xa022;
-int8_t g_signposts_linked_lroute_038[] = {40, -1};		//ds:0xa024;
-int8_t g_signposts_linked_lroute_039[] = {45, -1};		//ds:0xa026;
-int8_t g_signposts_linked_lroute_040[] = {23, -1};		//ds:0xa028;
-int8_t g_signposts_linked_lroute_041[] = {49, -1};		//ds:0xa02a;
-int8_t g_signposts_linked_lroute_042[] = {22, -1};		//ds:0xa02c;
-int8_t g_signposts_linked_lroute_043[] = {24, -1};		//ds:0xa02e;
-int8_t g_signposts_linked_lroute_044[] = {23, -1};		//ds:0xa030;
-int8_t g_signposts_linked_lroute_045[] = {40, -1};		//ds:0xa032;
-int8_t g_signposts_linked_lroute_046[] = {41, -1};		//ds:0xa034;
-int8_t g_signposts_linked_lroute_047[] = {46, -1};		//ds:0xa036;
-int8_t g_signposts_linked_lroute_048[] = {24, 46, 45, 57, 57, -1};	//ds:0xa038;
-int8_t g_signposts_linked_lroute_049[] = {41, -1};		//ds:0xa03e;
-int8_t g_signposts_linked_lroute_050[] = {42, -1};		//ds:0xa040;
-int8_t g_signposts_linked_lroute_051[] = {42, -1};		//ds:0xa042;
-int8_t g_signposts_linked_lroute_052[] = {35, -1};		//ds:0xa044;
-int8_t g_signposts_linked_lroute_053[] = {43, -1};		//ds:0xa046;
-int8_t g_signposts_linked_lroute_054[] = {35, -1};		//ds:0xa048;
-int8_t g_signposts_linked_lroute_055[] = {37, -1};		//ds:0xa04a;
-int8_t g_signposts_linked_lroute_056[] = {34, -1};		//ds:0xa04c;
-int8_t g_signposts_linked_lroute_057[] = {37, -1};		//ds:0xa04e;
-int8_t g_signposts_linked_lroute_058[] = {36, 38, -1};		//ds:0xa050;
-int8_t g_signposts_linked_lroute_059[] = {47, -1};		//ds:0xa052;
-int8_t g_signposts_linked_lroute_060[] = {34, -1};		//ds:0xa054;
-int8_t g_signposts_linked_lroute_061[] = {33, 38, -1};		//ds:0xa056;
-int8_t g_signposts_linked_lroute_062[] = {36, 33, -1};		//ds:0xa059;
-int8_t g_signposts_linked_lroute_063[] = {32, -1};		//ds:0xa05c;
-int8_t g_signposts_linked_lroute_064[] = {48, 31, -1};		//ds:0xa05e;
-int8_t g_signposts_linked_lroute_065[] = {32, -1};		//ds:0xa062;
-int8_t g_signposts_linked_lroute_066[] = {51, -1};		//ds:0xa064;
-int8_t g_signposts_linked_lroute_067[] = {51, -1};		//ds:0xa066;
-int8_t g_signposts_linked_lroute_068[] = {30, -1};		//ds:0xa068;
-int8_t g_signposts_linked_lroute_069[] = {54, -1};		//ds:0xa06a;
-int8_t g_signposts_linked_lroute_070[] = {58, -1};		//ds:0xa06c;
-int8_t g_signposts_linked_lroute_071[] = {55, -1};		//ds:0xa06e;
-int8_t g_signposts_linked_lroute_072[] = {27, -1};		//ds:0xa070;
-int8_t g_signposts_linked_lroute_073[] = {28, -1};		//ds:0xa072;
-int8_t g_signposts_linked_lroute_074[] = {31, -1};		//ds:0xa074;
-int8_t g_signposts_linked_lroute_075[] = {28, -1};		//ds:0xa076;
-int8_t g_signposts_linked_lroute_076[] = {29, -1};		//ds:0xa078;
-int8_t g_signposts_linked_lroute_077[] = {48, -1};		//ds:0xa07a;
-int8_t g_signposts_linked_lroute_078[] = {29, -1};		//ds:0xa07c;
-int8_t g_signposts_linked_lroute_079[] = {30, -1};		//ds:0xa07e;
-int8_t g_signposts_linked_lroute_080[] = {27, -1};		//ds:0xa080;
-int8_t g_signposts_linked_lroute_081[] = {3, -1};		//ds:0xa082;
-int8_t g_signposts_linked_lroute_082[] = {26, -1};		//ds:0xa084;
-int8_t g_signposts_linked_lroute_083[] = {47, -1};		//ds:0xa086;
-int8_t g_signposts_linked_lroute_084[] = {26, -1};		//ds:0xa088;
-int8_t g_signposts_linked_lroute_085[] = {53, -1};		//ds:0xa08a;
-int8_t g_signposts_linked_lroute_086[] = {52, -1};		//ds:0xa08c;
-int8_t g_signposts_linked_lroute_087[] = {52, -1};		//ds:0xa08e;
-int8_t g_signposts_linked_lroute_088[] = {2, -1};		//ds:0xa090;
-int8_t g_signposts_linked_lroute_089[] = {25, -1};		//ds:0xa092;
-int8_t g_signposts_linked_lroute_090[] = {3, -1};		//ds:0xa094;
-int8_t g_signposts_linked_lroute_091[] = {1, -1};		//ds:0xa096;
-int8_t g_signposts_linked_lroute_092[] = {2, -1};		//ds:0xa098;
-int8_t g_signposts_linked_lroute_093[] = {43, -1};		//ds:0xa09a;
-int8_t g_signposts_linked_lroute_094[] = {44, -1};		//ds:0xa09c;
-int8_t g_signposts_linked_lroute_095[] = {44, -1};		//ds:0xa09e;
-int8_t g_signposts_linked_lroute_096[] = {56, -1};		//ds:0xa0a0;
-int8_t g_signposts_linked_lroute_097[] = {56, -1};		//ds:0xa0a2;
-int8_t g_signposts_linked_lroute_098[] = {16, -1};		//ds:0xa0a4;
-int8_t g_signposts_linked_lroute_099[] = {15, -1};		//ds:0xa0a6;
-int8_t g_signposts_linked_lroute_100[] = {8, -1};		//ds:0xa0a8;
-int8_t g_signposts_linked_lroute_101[] = {17, -1};		//ds:0xa0aa;
-int8_t g_signposts_linked_lroute_102[] = {18, -1};		//ds:0xa0ac;
-int8_t g_signposts_linked_lroute_103[] = {19, -1};		//ds:0xa0ae;
-int8_t g_signposts_linked_lroute_104[] = {53, -1};		//ds:0xa0b0;
-int8_t g_signposts_linked_lroute_105[] = {55, -1};		//ds:0xa0b2;
+int8_t g_signposts_linked_lroute_001[] = { LROUTE_ID_THORWAL_F_TJOILA                                 , -1}; //ds:0x9fd9;
+int8_t g_signposts_linked_lroute_002[] = { LROUTE_ID_THORWAL_SERSKE                                   , -1}; //ds:0x9fdb;
+int8_t g_signposts_linked_lroute_003[] = { LROUTE_ID_THORWAL_VAERMHAG                                 , -1}; //ds:0x9fdd;
+int8_t g_signposts_linked_lroute_004[] = { LROUTE_ID_THORWAL_SERSKE                                   , -1}; //ds:0x9fdf;
+int8_t g_signposts_linked_lroute_005[] = { LROUTE_ID_SERSKE_MERSKE           , LROUTE_ID_SERSKE_BREIDA, -1}; //ds:0x9fe1;
+int8_t g_signposts_linked_lroute_006[] = { LROUTE_ID_BREIDA_PEILINEN                                  , -1}; //ds:0x9fe4;
+int8_t g_signposts_linked_lroute_007[] = { LROUTE_ID_SERSKE_BREIDA                                    , -1}; //ds:0x9fe6;
+int8_t g_signposts_linked_lroute_008[] = { LROUTE_ID_TJOILA_BREIDA                                    , -1}; //ds:0x9fe8;
+int8_t g_signposts_linked_lroute_009[] = { LROUTE_ID_PEILINEN_ROVAMUND                                , -1}; //ds:0x9fea;
+int8_t g_signposts_linked_lroute_010[] = { LROUTE_ID_BREIDA_PEILINEN                                  , -1}; //ds:0x9fec;
+int8_t g_signposts_linked_lroute_011[] = { LROUTE_ID_MERSKE_ROVAMUND                                  , -1}; //ds:0x9fee;
+int8_t g_signposts_linked_lroute_012[] = { LROUTE_ID_ROVAMUND_NORDVEST                                , -1}; //ds:0x9ff0;
+int8_t g_signposts_linked_lroute_013[] = { LROUTE_ID_PEILINEN_ROVAMUND                                , -1}; //ds:0x9ff2;
+int8_t g_signposts_linked_lroute_014[] = { LROUTE_ID_ROVAMUND_NORDVEST                                , -1}; //ds:0x9ff4;
+int8_t g_signposts_linked_lroute_015[] = { LROUTE_ID_NORDVEST_KRAVIK                                  , -1}; //ds:0x9ff6;
+int8_t g_signposts_linked_lroute_016[] = { LROUTE_ID_NORDVEST_KRAVIK                                  , -1}; //ds:0x9ff8;
+int8_t g_signposts_linked_lroute_017[] = { LROUTE_ID_KRAVIK_SKELELLE                                  , -1}; //ds:0x9ffa;
+int8_t g_signposts_linked_lroute_018[] = { LROUTE_ID_KRAVIK_SKELELLE                                  , -1}; //ds:0x9ffc;
+int8_t g_signposts_linked_lroute_019[] = { LROUTE_ID_SKELELLE_PHEXCAER                                , -1}; //ds:0x9ffe;
+int8_t g_signposts_linked_lroute_020[] = { LROUTE_ID_MERSKE_ROVAMUND                                  , -1}; //ds:0xa000;
+int8_t g_signposts_linked_lroute_021[] = { LROUTE_ID_SERSKE_MERSKE                                    , -1}; //ds:0xa002;
+int8_t g_signposts_linked_lroute_022[] = { LROUTE_ID_MERSKE_EFFERDUN                                  , -1}; //ds:0xa004;
+int8_t g_signposts_linked_lroute_023[] = { LROUTE_ID_MERSKE_EFFERDUN                                  , -1}; //ds:0xa006;
+int8_t g_signposts_linked_lroute_024[] = { LROUTE_ID_F_TJOILA_TJOILA                                  , -1}; //ds:0xa008;
+int8_t g_signposts_linked_lroute_025[] = { LROUTE_ID_TJOILA_BREIDA                                    , -1}; //ds:0xa00a;
+int8_t g_signposts_linked_lroute_026[] = { LROUTE_ID_F_TJOILA_RUKIAN                                  , -1}; //ds:0xa00c;
+int8_t g_signposts_linked_lroute_027[] = { LROUTE_ID_RUKIAN_F_ANGBOD                                  , -1}; //ds:0xa00e;
+int8_t g_signposts_linked_lroute_028[] = { LROUTE_ID_F_ANGBOD_ANGBODIR                                , -1}; //ds:0xa010;
+int8_t g_signposts_linked_lroute_029[] = { LROUTE_ID_F_ANGBOD_AUPLOG                                  , -1}; //ds:0xa012;
+int8_t g_signposts_linked_lroute_030[] = { LROUTE_ID_AUPLOG_VILNHEIM                                  , -1}; //ds:0xa014;
+int8_t g_signposts_linked_lroute_031[] = { LROUTE_ID_VARNHEIM_AUPLOG                                  , -1}; //ds:0xa016;
+int8_t g_signposts_linked_lroute_032[] = { LROUTE_ID_VILNHEIM_BODON                                   , -1}; //ds:0xa018;
+int8_t g_signposts_linked_lroute_033[] = { LROUTE_ID_VILNHEIM_PHEXCAER                                , -1}; //ds:0xa01a;
+int8_t g_signposts_linked_lroute_034[] = { LROUTE_ID_AUPLOG_VILNHEIM                                  , -1}; //ds:0xa01c;
+int8_t g_signposts_linked_lroute_035[] = { LROUTE_ID_VILNHEIM_OBERORKE                                , -1}; //ds:0xa01e;
+int8_t g_signposts_linked_lroute_036[] = { LROUTE_ID_VILNHEIM_BODON                                   , -1}; //ds:0xa020;
+int8_t g_signposts_linked_lroute_037[] = { LROUTE_ID_VILNHEIM_OBERORKE                                , -1}; //ds:0xa022;
+int8_t g_signposts_linked_lroute_038[] = { LROUTE_ID_OBERORKE_FELSTEYN                                , -1}; //ds:0xa024;
+int8_t g_signposts_linked_lroute_039[] = { LROUTE_ID_OBERORKE_EINSIEDL                                , -1}; //ds:0xa026;
+int8_t g_signposts_linked_lroute_040[] = { LROUTE_ID_PHEXCAER_GROENVEL                                , -1}; //ds:0xa028;
+int8_t g_signposts_linked_lroute_041[] = { LROUTE_ID_SKELELLE_PHEXCAER                                , -1}; //ds:0xa02a;
+int8_t g_signposts_linked_lroute_042[] = { LROUTE_ID_VILNHEIM_PHEXCAER                                , -1}; //ds:0xa02c;
+int8_t g_signposts_linked_lroute_043[] = { LROUTE_ID_PHEXCAER_EINSIEDL                                , -1}; //ds:0xa02e;
+int8_t g_signposts_linked_lroute_044[] = { LROUTE_ID_PHEXCAER_GROENVEL                                , -1}; //ds:0xa030;
+int8_t g_signposts_linked_lroute_045[] = { LROUTE_ID_OBERORKE_FELSTEYN                                , -1}; //ds:0xa032;
+int8_t g_signposts_linked_lroute_046[] = { LROUTE_ID_FELSTEYN_ORKANGER                                , -1}; //ds:0xa034;
+int8_t g_signposts_linked_lroute_047[] = { LROUTE_ID_FELSTEYN_EINSIEDL                                , -1}; //ds:0xa036;
+int8_t g_signposts_linked_lroute_048[] = {
+ LROUTE_ID_PHEXCAER_EINSIEDL ,
+ LROUTE_ID_FELSTEYN_EINSIEDL ,
+ LROUTE_ID_OBERORKE_EINSIEDL ,
+ LROUTE_ID_EINSIEDL__CIRCULAR,
+ LROUTE_ID_EINSIEDL__CIRCULAR,
+ -1
+};                                                                                                           //ds:0xa038;
+int8_t g_signposts_linked_lroute_049[] = { LROUTE_ID_FELSTEYN_ORKANGER                                , -1}; //ds:0xa03e;
+int8_t g_signposts_linked_lroute_050[] = { LROUTE_ID_ORKANGER_CLANEGH                                 , -1}; //ds:0xa040;
+int8_t g_signposts_linked_lroute_051[] = { LROUTE_ID_ORKANGER_CLANEGH                                 , -1}; //ds:0xa042;
+int8_t g_signposts_linked_lroute_052[] = { LROUTE_ID_LISKOR_CLANEGH                                   , -1}; //ds:0xa044;
+int8_t g_signposts_linked_lroute_053[] = { LROUTE_ID_CLANEGH_TYLDON                                   , -1}; //ds:0xa046;
+int8_t g_signposts_linked_lroute_054[] = { LROUTE_ID_LISKOR_CLANEGH                                   , -1}; //ds:0xa048;
+int8_t g_signposts_linked_lroute_055[] = { LROUTE_ID_THOSS_LISKOR                                     , -1}; //ds:0xa04a;
+int8_t g_signposts_linked_lroute_056[] = { LROUTE_ID_TJANSET_LISKOR                                   , -1}; //ds:0xa04c;
+int8_t g_signposts_linked_lroute_057[] = { LROUTE_ID_THOSS_LISKOR                                     , -1}; //ds:0xa04e;
+int8_t g_signposts_linked_lroute_058[] = { LROUTE_ID_ALA_THOSS               , LROUTE_ID_TJANSET_THOSS, -1}; //ds:0xa050;
+int8_t g_signposts_linked_lroute_059[] = { LROUTE_ID_RYBON_THOSS                                      , -1}; //ds:0xa052;
+int8_t g_signposts_linked_lroute_060[] = { LROUTE_ID_TJANSET_LISKOR                                   , -1}; //ds:0xa054;
+int8_t g_signposts_linked_lroute_061[] = { LROUTE_ID_ALA_TJANSET             , LROUTE_ID_TJANSET_THOSS, -1}; //ds:0xa056;
+int8_t g_signposts_linked_lroute_062[] = { LROUTE_ID_ALA_THOSS               , LROUTE_ID_ALA_TJANSET  , -1}; //ds:0xa059;
+int8_t g_signposts_linked_lroute_063[] = { LROUTE_ID_ORVIL_ALA                                        , -1}; //ds:0xa05c;
+int8_t g_signposts_linked_lroute_064[] = { LROUTE_ID_SKJAL_ORVIL             , LROUTE_ID_OTTARJE_ORVIL, -1}; //ds:0xa05e;
+int8_t g_signposts_linked_lroute_065[] = { LROUTE_ID_ORVIL_ALA                                        , -1}; //ds:0xa062;
+int8_t g_signposts_linked_lroute_066[] = { LROUTE_ID_ORVIL_ROVIK                                      , -1}; //ds:0xa064;
+int8_t g_signposts_linked_lroute_067[] = { LROUTE_ID_ORVIL_ROVIK                                      , -1}; //ds:0xa066;
+int8_t g_signposts_linked_lroute_068[] = { LROUTE_ID_PREM_KORD                                        , -1}; //ds:0xa068;
+int8_t g_signposts_linked_lroute_069[] = { LROUTE_ID_RUNINSHA_L_RUNIN__1                              , -1}; //ds:0xa06a;
+int8_t g_signposts_linked_lroute_070[] = { LROUTE_ID_L_RUNIN_RUNINSHA__2                              , -1}; //ds:0xa06c;
+int8_t g_signposts_linked_lroute_071[] = { LROUTE_ID_RUNINSHA_L_RUNIN__MIDDLE                         , -1}; //ds:0xa06e;
+int8_t g_signposts_linked_lroute_072[] = { LROUTE_ID_DASPOTA_OTTARJE                                  , -1}; //ds:0xa070;
+int8_t g_signposts_linked_lroute_073[] = { LROUTE_ID_OTTARJE_SKJAL                                    , -1}; //ds:0xa072;
+int8_t g_signposts_linked_lroute_074[] = { LROUTE_ID_OTTARJE_ORVIL                                    , -1}; //ds:0xa074;
+int8_t g_signposts_linked_lroute_075[] = { LROUTE_ID_OTTARJE_SKJAL                                    , -1}; //ds:0xa076;
+int8_t g_signposts_linked_lroute_076[] = { LROUTE_ID_SKJAL_PREM                                       , -1}; //ds:0xa078;
+int8_t g_signposts_linked_lroute_077[] = { LROUTE_ID_SKJAL_ORVIL                                      , -1}; //ds:0xa07a;
+int8_t g_signposts_linked_lroute_078[] = { LROUTE_ID_SKJAL_PREM                                       , -1}; //ds:0xa07c;
+int8_t g_signposts_linked_lroute_079[] = { LROUTE_ID_PREM_KORD                                        , -1}; //ds:0xa07e;
+int8_t g_signposts_linked_lroute_080[] = { LROUTE_ID_DASPOTA_OTTARJE                                  , -1}; //ds:0xa080;
+int8_t g_signposts_linked_lroute_081[] = { LROUTE_ID_VARNHEIM_DASPOTA                                 , -1}; //ds:0xa082;
+int8_t g_signposts_linked_lroute_082[] = { LROUTE_ID_DASPOTA_RYBON                                    , -1}; //ds:0xa084;
+int8_t g_signposts_linked_lroute_083[] = { LROUTE_ID_RYBON_THOSS                                      , -1}; //ds:0xa086;
+int8_t g_signposts_linked_lroute_084[] = { LROUTE_ID_DASPOTA_RYBON                                    , -1}; //ds:0xa088;
+int8_t g_signposts_linked_lroute_085[] = { LROUTE_ID_LJASDAHL_HJALLA_H                                , -1}; //ds:0xa08a;
+int8_t g_signposts_linked_lroute_086[] = { LROUTE_ID_LJASDAHL__CIRCULAR                               , -1}; //ds:0xa08c;
+int8_t g_signposts_linked_lroute_087[] = { LROUTE_ID_LJASDAHL__CIRCULAR                               , -1}; //ds:0xa08e;
+int8_t g_signposts_linked_lroute_088[] = { LROUTE_ID_VAERMHAG_VARNHEIM                                , -1}; //ds:0xa090;
+int8_t g_signposts_linked_lroute_089[] = { LROUTE_ID_VARNHEIM_AUPLOG                                  , -1}; //ds:0xa092;
+int8_t g_signposts_linked_lroute_090[] = { LROUTE_ID_VARNHEIM_DASPOTA                                 , -1}; //ds:0xa094;
+int8_t g_signposts_linked_lroute_091[] = { LROUTE_ID_THORWAL_VAERMHAG                                 , -1}; //ds:0xa096;
+int8_t g_signposts_linked_lroute_092[] = { LROUTE_ID_VAERMHAG_VARNHEIM                                , -1}; //ds:0xa098;
+int8_t g_signposts_linked_lroute_093[] = { LROUTE_ID_CLANEGH_TYLDON                                   , -1}; //ds:0xa09a;
+int8_t g_signposts_linked_lroute_094[] = { LROUTE_ID_TYLDON_VIDSAND                                   , -1}; //ds:0xa09c;
+int8_t g_signposts_linked_lroute_095[] = { LROUTE_ID_TYLDON_VIDSAND                                   , -1}; //ds:0xa09e;
+int8_t g_signposts_linked_lroute_096[] = { LROUTE_ID_BRENDHIL_MANRIN                                  , -1}; //ds:0xa0a0;
+int8_t g_signposts_linked_lroute_097[] = { LROUTE_ID_BRENDHIL_MANRIN                                  , -1}; //ds:0xa0a2;
+int8_t g_signposts_linked_lroute_098[] = { LROUTE_ID_F_TJOILA_RUKIAN                                  , -1}; //ds:0xa0a4;
+int8_t g_signposts_linked_lroute_099[] = { LROUTE_ID_THORWAL_F_TJOILA                                 , -1}; //ds:0xa0a6;
+int8_t g_signposts_linked_lroute_100[] = { LROUTE_ID_F_TJOILA_TJOILA                                  , -1}; //ds:0xa0a8;
+int8_t g_signposts_linked_lroute_101[] = { LROUTE_ID_RUKIAN_F_ANGBOD                                  , -1}; //ds:0xa0aa;
+int8_t g_signposts_linked_lroute_102[] = { LROUTE_ID_F_ANGBOD_AUPLOG                                  , -1}; //ds:0xa0ac;
+int8_t g_signposts_linked_lroute_103[] = { LROUTE_ID_F_ANGBOD_ANGBODIR                                , -1}; //ds:0xa0ae;
+int8_t g_signposts_linked_lroute_104[] = { LROUTE_ID_LJASDAHL_HJALLA_H                                , -1}; //ds:0xa0b0;
+int8_t g_signposts_linked_lroute_105[] = { LROUTE_ID_RUNINSHA_L_RUNIN__MIDDLE                         , -1}; //ds:0xa0b2;
 
 struct trv_start_point g_signposts[106] = {
 	{ TOWN_ID_THORWAL            , 1, (uint8_t*)g_signposts_linked_lroute_001 }, //  1
@@ -307,47 +313,184 @@ struct trv_start_point g_signposts[106] = {
 	{ TOWN_ID_FAEHRE_ANGBODIRTAL , 3, (uint8_t*)g_signposts_linked_lroute_103 }, // 103
 	{ TOWN_ID_HJALLANDER_HOF     , 1, (uint8_t*)g_signposts_linked_lroute_104 }, // 104
 	{ TOWN_ID_LEUCHTTURM_RUNIN   , 2, (uint8_t*)g_signposts_linked_lroute_105 }, // 105
-	{ -1                    , 0,    NULL }
+	{ -1                         , 0, NULL                                    }
 }; // ds:0xa0b4; uint8_t*
 
-/* Numbers here are entries in g_sea_route */
-int8_t g_harbors_linked_sea_routes_01[] = {1, 8, 33, 35, 39, -1};		//ds:0xa330
-int8_t g_harbors_linked_sea_routes_02[] = {36, 37, -1};				//ds:0xa336
-int8_t g_harbors_linked_sea_routes_03[] = {33, 34, 36, -1};			//ds:0xa339
-int8_t g_harbors_linked_sea_routes_04[] = {34, 35, 37, -1};			//ds:0xa33d
-int8_t g_harbors_linked_sea_routes_05[] = {28, 27, 38, -1};			//ds:0xa341
-int8_t g_harbors_linked_sea_routes_06[] = {27, 29, 25, -1};			//ds:0xa345
-int8_t g_harbors_linked_sea_routes_07[] = {24, -1};				//ds:0xa349
-int8_t g_harbors_linked_sea_routes_08[] = {6, 25, 26, 30, 38, 23, 45, -1};	//ds:0xa34b
-int8_t g_harbors_linked_sea_routes_09[] = {22, 23, 24, 32, -1};			//ds:0xa353
+/* For each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes */
+int8_t g_harbors_linked_sea_routes_01[] = {
+	SEA_ROUTE_ID_THORWAL_PREM,
+	SEA_ROUTE_ID_THORWAL_VAERMHAG,
+	SEA_ROUTE_ID_THORWAL_MERSKE,
+	SEA_ROUTE_ID_THORWAL_EFFERDUN,
+	SEA_ROUTE_ID_THORWAL_VARNHEIM,
+	-1
+}; //ds:0xa330
+int8_t g_harbors_linked_sea_routes_02[] = {
+	SEA_ROUTE_ID_SERSKE_MERSKE,
+	SEA_ROUTE_ID_SERSKE_EFFERDUN,
+	-1
+}; //ds:0xa336
+int8_t g_harbors_linked_sea_routes_03[] = {
+	SEA_ROUTE_ID_THORWAL_MERSKE,
+	SEA_ROUTE_ID_MERSKE_EFFERDUN,
+	SEA_ROUTE_ID_SERSKE_MERSKE,
+	-1
+}; //ds:0xa339
+int8_t g_harbors_linked_sea_routes_04[] = {
+	SEA_ROUTE_ID_MERSKE_EFFERDUN,
+	SEA_ROUTE_ID_THORWAL_EFFERDUN,
+	SEA_ROUTE_ID_SERSKE_EFFERDUN,
+	-1
+}; //ds:0xa33d
+int8_t g_harbors_linked_sea_routes_05[] = {
+	SEA_ROUTE_ID_LISKOR_VIDSAND,
+	SEA_ROUTE_ID_TJANSET_LISKOR,
+	SEA_ROUTE_ID_OVERTHOR_LISKOR,
+	-1
+}; //ds:0xa341
+int8_t g_harbors_linked_sea_routes_06[] = {
+	SEA_ROUTE_ID_TJANSET_LISKOR,
+	SEA_ROUTE_ID_TJANSET_VIDSAND,
+	SEA_ROUTE_ID_OVERTHOR_TJANSET,
+	-1
+}; //ds:0xa345
+int8_t g_harbors_linked_sea_routes_07[] = {
+	SEA_ROUTE_ID_ROVIK_ORVIL,
+	-1
+}; //ds:0xa349
+int8_t g_harbors_linked_sea_routes_08[] = {
+	SEA_ROUTE_ID_HJALSING_OVERTHOR,
+	SEA_ROUTE_ID_OVERTHOR_TJANSET,
+	SEA_ROUTE_ID_OVERTHOR_VIDSAND,
+	SEA_ROUTE_ID_OVERTHOR_BRENDHIL,
+	SEA_ROUTE_ID_OVERTHOR_LISKOR,
+	SEA_ROUTE_ID_ROVIK_OVERTHOR,
+	SEA_ROUTE_ID_MANRIN_OVERTHOR,
+	-1
+}; //ds:0xa34b
+int8_t g_harbors_linked_sea_routes_09[] = {
+	SEA_ROUTE_ID_HJALSING_ROVIK,
+	SEA_ROUTE_ID_ROVIK_OVERTHOR,
+	SEA_ROUTE_ID_ROVIK_ORVIL,
+	SEA_ROUTE_ID_ROVIK_MANRIN,
+	-1
+}; //ds:0xa353
 int8_t g_harbors_linked_sea_routes_10[] = {
-#ifndef M302de_ORIGINAL_BUGFIX
+	SEA_ROUTE_ID_PREM_HJALSING,
+	SEA_ROUTE_ID_KORD_HJALSING,
+#ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 40: After doing a ship passage from Overthorn to Hjalsingor and leaving the harbor,
 	 * the party is positioned in a wrong square behind the buildings. */
-	/* Reason: In the hard-coded list of the sea routes linked to the Hjalsingor harbor, the route Overthorn-Hjalsignor (ID 6) is missing.
-	 * Instead, the route Varnheim-Ljasdahl (ID 10) is wrongly linked. */
-	2, 5,	7, /* diff */ 10,	21, 22, -1,
-#else
-	2, 5,	/* diff */ 6, 7,	21, 22, -1,
+	/* Reason: In the hard-coded list of the sea routes linked to the Hjalsingor harbor,the route Hjalsignor-Overthorn (ID 6) is missing.
+	 * Instead,the route Varnheim-Ljasdahl (ID 10) is wrongly linked. */
+	SEA_ROUTE_ID_HJALSING_OVERTHOR,
 #endif
-};										//ds:0xa358
-int8_t g_harbors_linked_sea_routes_11[] = {20, 21, -1};				//ds:0xa35f
-int8_t g_harbors_linked_sea_routes_12[] = {4, 5, 19, 20, -1};			//ds:0xa362
-int8_t g_harbors_linked_sea_routes_13[] = {18, 19, 44, -1};			//ds:0xa367
-int8_t g_harbors_linked_sea_routes_14[] = {15, 17, -1};				//ds:0xa36b
-int8_t g_harbors_linked_sea_routes_15[] = {16, 17, 18, 41, 42, 43, -1};		//ds:0xa36e
-int8_t g_harbors_linked_sea_routes_16[] = {13, 12, 11, 40, 41, -1};		//ds:0xa375
-int8_t g_harbors_linked_sea_routes_17[] = {13, 42, 14, -1};			//ds:0xa37b
-int8_t g_harbors_linked_sea_routes_18[] = {1, 2, 3, 4, 14, 15, 16, 40, -1};      //ds:0xa37f
-int8_t g_harbors_linked_sea_routes_19[] = {10, 12, -1};				//ds:0xa388
-int8_t g_harbors_linked_sea_routes_20[] = {9, 10, 11, 39, -1};			//ds:0xa38b
-int8_t g_harbors_linked_sea_routes_21[] = {8, 9, -1};				//ds:0xa390
-int8_t g_harbors_linked_sea_routes_22[] = {26, 28, 29, -1};			//ds:0xa393
-int8_t g_harbors_linked_sea_routes_23[] = {30, 31, -1};				//ds:0xa397
-int8_t g_harbors_linked_sea_routes_24[] = {3, 7, 31, 32, 45, -1};		//ds:0xa39a
-int8_t g_harbors_linked_sea_routes_25[] = {43, 44, -1};					  //ds:0xa3a0
-
-// for each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes
+	SEA_ROUTE_ID_HJALSING_MANRIN,
+#ifndef M302de_ORIGINAL_BUGFIX
+	SEA_ROUTE_ID_VARNHEIM_LJASDAHL,
+#endif
+	SEA_ROUTE_ID_GUDDASUN_HJALSING,
+	SEA_ROUTE_ID_HJALSING_ROVIK,
+	-1
+}; //ds:0xa358
+int8_t g_harbors_linked_sea_routes_11[] = {
+	SEA_ROUTE_ID_KORD_GUDDASUN,
+	SEA_ROUTE_ID_GUDDASUN_HJALSING,
+	-1
+}; //ds:0xa35f
+int8_t g_harbors_linked_sea_routes_12[] = {
+	SEA_ROUTE_ID_PREM_KORD,
+	SEA_ROUTE_ID_KORD_HJALSING,
+	SEA_ROUTE_ID_TREBAN_KORD,
+	SEA_ROUTE_ID_KORD_GUDDASUN,
+	-1
+}; //ds:0xa362
+int8_t g_harbors_linked_sea_routes_13[] = {
+	SEA_ROUTE_ID_RUNINSHA_TREBAN,
+	SEA_ROUTE_ID_TREBAN_KORD,
+	SEA_ROUTE_ID_TREBAN_L_RUNIN,
+	-1
+}; //ds:0xa367
+int8_t g_harbors_linked_sea_routes_14[] = {
+	SEA_ROUTE_ID_PREM_ARYN,
+	SEA_ROUTE_ID_ARYN_RUNINSHA,
+	-1
+}; //ds:0xa36b
+int8_t g_harbors_linked_sea_routes_15[] = {
+	SEA_ROUTE_ID_PREM_RUNINSHA,
+	SEA_ROUTE_ID_ARYN_RUNINSHA,
+	SEA_ROUTE_ID_RUNINSHA_TREBAN,
+	SEA_ROUTE_ID_OTTARJE_RUNINSHA,
+	SEA_ROUTE_ID_SKJAL_RUNINSHA,
+	SEA_ROUTE_ID_RUNINSHA_L_RUNIN,
+	-1
+}; //ds:0xa36e
+int8_t g_harbors_linked_sea_routes_16[] = {
+	SEA_ROUTE_ID_SKJAL_OTTARJE,
+	SEA_ROUTE_ID_LJASDAHL_OTTARJE,
+	SEA_ROUTE_ID_VARNHEIM_OTTARJE,
+	SEA_ROUTE_ID_OTTARJE_PREM,
+	SEA_ROUTE_ID_OTTARJE_RUNINSHA,
+	-1
+}; //ds:0xa375
+int8_t g_harbors_linked_sea_routes_17[] = {
+	SEA_ROUTE_ID_SKJAL_OTTARJE,
+	SEA_ROUTE_ID_SKJAL_RUNINSHA,
+	SEA_ROUTE_ID_SKJAL_PREM,
+	-1
+}; //ds:0xa37b
+int8_t g_harbors_linked_sea_routes_18[] = {
+	SEA_ROUTE_ID_THORWAL_PREM,
+	SEA_ROUTE_ID_PREM_HJALSING,
+	SEA_ROUTE_ID_PREM_MANRIN,
+	SEA_ROUTE_ID_PREM_KORD,
+	SEA_ROUTE_ID_SKJAL_PREM,
+	SEA_ROUTE_ID_PREM_ARYN,
+	SEA_ROUTE_ID_PREM_RUNINSHA,
+	SEA_ROUTE_ID_OTTARJE_PREM,
+	-1
+};       //ds:0xa37f
+int8_t g_harbors_linked_sea_routes_19[] = {
+	SEA_ROUTE_ID_VARNHEIM_LJASDAHL,
+	SEA_ROUTE_ID_LJASDAHL_OTTARJE,
+	-1
+}; //ds:0xa388
+int8_t g_harbors_linked_sea_routes_20[] = {
+	SEA_ROUTE_ID_VAERMHAG_VARNHEIM,
+	SEA_ROUTE_ID_VARNHEIM_LJASDAHL,
+	SEA_ROUTE_ID_VARNHEIM_OTTARJE,
+	SEA_ROUTE_ID_THORWAL_VARNHEIM,
+	-1
+}; //ds:0xa38b
+int8_t g_harbors_linked_sea_routes_21[] = {
+	SEA_ROUTE_ID_THORWAL_VAERMHAG,
+	SEA_ROUTE_ID_VAERMHAG_VARNHEIM,
+	-1
+}; //ds:0xa390
+int8_t g_harbors_linked_sea_routes_22[] = {
+	SEA_ROUTE_ID_OVERTHOR_VIDSAND,
+	SEA_ROUTE_ID_LISKOR_VIDSAND,
+	SEA_ROUTE_ID_TJANSET_VIDSAND,
+	-1
+}; //ds:0xa393
+int8_t g_harbors_linked_sea_routes_23[] = {
+	SEA_ROUTE_ID_OVERTHOR_BRENDHIL,
+	SEA_ROUTE_ID_BRENDHIL_MANRIN,
+	-1
+}; //ds:0xa397
+int8_t g_harbors_linked_sea_routes_24[] = {
+	SEA_ROUTE_ID_PREM_MANRIN,
+	SEA_ROUTE_ID_HJALSING_MANRIN,
+	SEA_ROUTE_ID_BRENDHIL_MANRIN,
+	SEA_ROUTE_ID_ROVIK_MANRIN,
+	SEA_ROUTE_ID_MANRIN_OVERTHOR,
+	-1
+}; //ds:0xa39a
+int8_t g_harbors_linked_sea_routes_25[] = {
+	SEA_ROUTE_ID_RUNINSHA_L_RUNIN,
+	SEA_ROUTE_ID_TREBAN_L_RUNIN,
+	-1
+}; //ds:0xa3a0
 
 struct trv_start_point g_harbors[26] = { // a list of the available sea routes for each of the 25 harbors in the game.
 	{ TOWN_ID_THORWAL         , 3, (uint8_t*)g_harbors_linked_sea_routes_01 }, //  1
@@ -385,59 +528,60 @@ struct trv_start_point g_harbors[26] = { // a list of the available sea routes f
 #endif
 	{ -1                 , 0, NULL }
 }; // ds:0xa3a3; uint8_t*
-struct struct_point g_town_positions[TOWN_ID__TAIL] = {
-	{ 0x00bd, 0x0098 },
-	{ 0x00be, 0x00a1 },
-	{ 0x00e2, 0x009e },
-	{ 0x0100, 0x00a7 },
-	{ 0x00fc, 0x00c0 },
-	{ 0x0123, 0x00c4 },
-	{ 0x0131, 0x00b4 },
-	{ 0x0134, 0x009d },
-	{ 0x00b7, 0x00b4 },
-	{ 0x00b2, 0x00c2 },
-	{ 0x00cf, 0x008d },
-	{ 0x00ce, 0x0083 },
-	{ 0x00cc, 0x006e },
-	{ 0x00c5, 0x0063 },
-	{ 0x00cc, 0x0051 },
-	{ 0x00cf, 0x0052 },
-	{ 0x00c4, 0x0049 },
-	{ 0x012b, 0x0029 },
-	{ 0x0135, 0x001c },
-	{ 0x00c6, 0x0038 },
-	{ 0x00f0, 0x0012 },
-	{ 0x00a1, 0x0020 },
-	{ 0x008c, 0x0013 },
-	{ 0x0077, 0x0012 },
-	{ 0x007e, 0x0020 },
-	{ 0x0065, 0x001e },
-	{ 0x0058, 0x002f },
-	{ 0x0049, 0x0046 },
-	{ 0x0045, 0x000b },
-	{ 0x0039, 0x0043 },
-	{ 0x0020, 0x0061 },
-	{ 0x001e, 0x0072 },
-	{ 0x0025, 0x00a0 },
-	{ 0x0039, 0x00b3 },
-	{ 0x0042, 0x00a7 },
-	{ 0x005b, 0x00a7 },
-	{ 0x006e, 0x0069 },
-	{ 0x0047, 0x007b },
-	{ 0x0040, 0x0090 },
-	{ 0x0086, 0x005b },
-	{ 0x008a, 0x004e },
-	{ 0x0077, 0x0070 },
-	{ 0x0091, 0x0069 },
-	{ 0x00af, 0x007f },
-	{ 0x008f, 0x0000 },
-	{ 0x0074, 0x0000 },
-	{ 0x0027, 0x0002 },
-	{ 0x000d, 0x0005 },
-	{ 0x00cd, 0x008d },
-	{ 0x00cb, 0x0070 },
-	{ 0x007c, 0x0076 },
-	{ 0x0062, 0x00b4 }
+struct struct_point g_town_positions[TOWN_ID__END - 1] = {
+/* note that the index is "off by 1" compared to TOWN_ID_... */
+	{ 0x00bd, 0x0098 }, // TOWN_ID_THORWAL
+	{ 0x00be, 0x00a1 }, // TOWN_ID_SERSKE
+	{ 0x00e2, 0x009e }, // TOWN_ID_BREIDA
+	{ 0x0100, 0x00a7 }, // TOWN_ID_PEILINEN
+	{ 0x00fc, 0x00c0 }, // TOWN_ID_ROVAMUND
+	{ 0x0123, 0x00c4 }, // TOWN_ID_NORDVEST
+	{ 0x0131, 0x00b4 }, // TOWN_ID_KRAVIK
+	{ 0x0134, 0x009d }, // TOWN_ID_SKELELLEN
+	{ 0x00b7, 0x00b4 }, // TOWN_ID_MERSKE
+	{ 0x00b2, 0x00c2 }, // TOWN_ID_EFFERDUN
+	{ 0x00cf, 0x008d }, // TOWN_ID_TJOILA
+	{ 0x00ce, 0x0083 }, // TOWN_ID_RUKIAN
+	{ 0x00cc, 0x006e }, // TOWN_ID_ANGBODIRTAL
+	{ 0x00c5, 0x0063 }, // TOWN_ID_AUPLOG
+	{ 0x00cc, 0x0051 }, // TOWN_ID_VILNHEIM
+	{ 0x00cf, 0x0052 }, // TOWN_ID_BODON
+	{ 0x00c4, 0x0049 }, // TOWN_ID_OBERORKEN
+	{ 0x012b, 0x0029 }, // TOWN_ID_PHEXCAER
+	{ 0x0135, 0x001c }, // TOWN_ID_GROENVELDEN
+	{ 0x00c6, 0x0038 }, // TOWN_ID_FELSTEYN
+	{ 0x00f0, 0x0012 }, // TOWN_ID_EINSIEDLERSEE
+	{ 0x00a1, 0x0020 }, // TOWN_ID_ORKANGER
+	{ 0x008c, 0x0013 }, // TOWN_ID_CLANEGH
+	{ 0x0077, 0x0012 }, // TOWN_ID_LISKOR
+	{ 0x007e, 0x0020 }, // TOWN_ID_THOSS
+	{ 0x0065, 0x001e }, // TOWN_ID_TJANSET
+	{ 0x0058, 0x002f }, // TOWN_ID_ALA
+	{ 0x0049, 0x0046 }, // TOWN_ID_ORVIL
+	{ 0x0045, 0x000b }, // TOWN_ID_OVERTHORN
+	{ 0x0039, 0x0043 }, // TOWN_ID_ROVIK
+	{ 0x0020, 0x0061 }, // TOWN_ID_HJALSINGOR
+	{ 0x001e, 0x0072 }, // TOWN_ID_GUDDASUNDEN
+	{ 0x0025, 0x00a0 }, // TOWN_ID_KORD
+	{ 0x0039, 0x00b3 }, // TOWN_ID_TREBAN
+	{ 0x0042, 0x00a7 }, // TOWN_ID_ARYN
+	{ 0x005b, 0x00a7 }, // TOWN_ID_RUNINSHAVEN
+	{ 0x006e, 0x0069 }, // TOWN_ID_OTTARJE
+	{ 0x0047, 0x007b }, // TOWN_ID_SKJAL
+	{ 0x0040, 0x0090 }, // TOWN_ID_PREM
+	{ 0x0086, 0x005b }, // TOWN_ID_DASPOTA
+	{ 0x008a, 0x004e }, // TOWN_ID_RYBON
+	{ 0x0077, 0x0070 }, // TOWN_ID_LJASDAHL
+	{ 0x0091, 0x0069 }, // TOWN_ID_VARNHEIM
+	{ 0x00af, 0x007f }, // TOWN_ID_VAERMHAG
+	{ 0x008f, 0x0000 }, // TOWN_ID_TYLDON
+	{ 0x0074, 0x0000 }, // TOWN_ID_VIDSAND
+	{ 0x0027, 0x0002 }, // TOWN_ID_BRENDHIL
+	{ 0x000d, 0x0005 }, // TOWN_ID_MANRIN
+	{ 0x00cd, 0x008d }, // TOWN_ID_FAEHRSTATION_TJOILA
+	{ 0x00cb, 0x0070 }, // TOWN_ID_FAEHRE_ANGBODIRTAL
+	{ 0x007c, 0x0076 }, // TOWN_ID_HJALLANDER_HOF
+	{ 0x0062, 0x00b4 }  // TOWN_ID_LEUCHTTURM_RUNIN
 }; // ds:0xa43f
 static struct mouse_action g_action_table_travelmap[35] = {
 	{ 0x55,  0xa4, 0x65, 0xb6, 0x01},
@@ -477,162 +621,162 @@ static struct mouse_action g_action_table_travelmap[35] = {
 	{ -1, 0x00, 0x00, 0x00, 0x00 }
 }; // ds:0xa50f
 
-struct struct_tevent g_tevents_tab[156] = {
-	{ 2, 26, 1 },
-	{ 3, 7, 2 },
-	{ 4, 0, 3 },
-	{ 7, 13, 4 },
-	{ 7, 19, 5 },
-	{ 8, 0, 6 },
-	{ 9, 10, 7 },
-	{ 9, 12, 8 },
-	{ 10, 17, 9 },
-	{ 10, 25, 10 },
-	{ 11, 10, 11 },
-	{ 12, 0, 12 },
-	{ 12, 8, 13 },
-	{ 12, 16, 14 },
-	{ 12, 22, 15 },
-	{ 13, 8, 16 },
-	{ 13, 19, 17 },
-	{ 13, 24, 18 },
-	{ 14, 0, 19 },
-	{ 14, 8, 20 },
-	{ 14, 22, 21 },
-	{ 17, 15, 22 },
-	{ 19, 0, 23 },
-	{ 20, 10, 24 },
-	{ 20, 18, 25 },
-	{ 21, 0, 26 },
-	{ 22, 0, 27 },
-	{ 22, 20, 28 },
-	{ 22, 26, 29 },
-	{ 22, 48, 30 },
-	{ 22, 65, 31 },
-	{ 22, 80, 32 },
-	{ 22, 86, 33 },
-	{ 22, 95, 34 },
-	{ 24, 13, 35 },
-	{ 24, 22, 36 },
-	{ 24, 27, 37 },
-	{ 24, 39, 38 },
-	{ 24, 40, 39 },
-	{ 24, 18, 144 },
-	{ 25, 18, 40 },
-	{ 25, 25, 41 },
-	{ 25, 38, 42 },
-	{ 25, 42, 43 },
-	{ 26, 11, 44 },
-	{ 27, 12, 45 },
-	{ 27, 15, 46 },
-	{ 27, 22, 47 },
-	{ 27, 26, 48 },
-	{ 28, 19, 49 },
-	{ 28, 23, 50 },
-	{ 28, 27, 51 },
-	{ 28, 35, 52 },
-	{ 28, 38, 53 },
-	{ 29, 18, 54 },
-	{ 30, 14, 55 },
-	{ 30, 23, 56 },
-	{ 31, 18, 57 },
-	{ 31, 20, 58 },
-	{ 31, 22, 59 },
-	{ 31, 33, 60 },
-	{ 31, 41, 61 },
-	{ 31, 47, 62 },
-	{ 31, 53, 63 },
-	{ 31, 58, 64 },
-	{ 32, 4, 65 },
-	{ 32, 19, 66 },
-	{ 33, 7, 67 },
-	{ 33, 10, 68 },
-	{ 36, 7, 67 },
-	{ 36, 10, 68 },
-	{ 36, 17, 69 },
-	{ 36, 29, 70 },
-	{ 37, 11, 71 },
-	{ 38, 15, 68 },
-	{ 38, 22, 69 },
-	{ 38, 34, 70 },
-	{ 40, 7, 71 },
-	{ 40, 12, 72 },
-	{ 41, 7, 73 },
-	{ 41, 12, 74 },
-	{ 41, 25, 75 },
-	{ 41, 35, 76 },
-	{ 41, 39, 77 },
-	{ 42, 15, 78 },
-	{ 42, 18, 79 },
-	{ 42, 21, 80 },
-	{ 43, 18, 81 },
-	{ 45, 0, 82 },
-	{ 45, 9, 83 },
-	{ 45, 32, 84 },
-	{ 45, 35, 85 },
-	{ 45, 53, 86 },
-	{ 45, 59, 87 },
-	{ 45, 64, 88 },
-	{ 46, 0, 89 },
-	{ 46, 19, 90 },
-	{ 46, 25, 91 },
-	{ 46, 28, 92 },
-	{ 46, 34, 93 },
-	{ 46, 45, 87 },
-	{ 46, 50, 88 },
-	{ 47, 15, 94 },
-	{ 47, 18, 95 },
-	{ 47, 21, 96 },
-	{ 47, 29, 97 },
-	{ 47, 35, 98 },
-	{ 47, 44, 99 },
-	{ 47, 48, 100 },
-	{ 47, 52, 101 },
-	{ 48, 25, 102 },
-	{ 48, 29, 103 },
-	{ 48, 34, 104 },
-	{ 48, 38, 105 },
-	{ 48, 50, 62 },
-	{ 48, 56, 63 },
-	{ 48, 61, 64 },
-	{ 49, 20, 106 },
-	{ 49, 36, 107 },
-	{ 49, 40, 108 },
-	{ 49, 48, 109 },
-	{ 49, 57, 110 },
-	{ 49, 63, 111 },
-	{ 49, 68, 112 },
-	{ 49, 87, 113 },
-	{ 49, 100, 114 },
-	{ 49, 112, 115 },
-	{ 49, 122, 116 },
-	{ 49, 125, 117 },
-	{ 50, 18, 118 },
-	{ 50, 38, 119 },
-	{ 50, 55, 120 },
-	{ 51, 0, 121 },
-	{ 51, 3, 122 },
-	{ 51, 14, 123 },
-	{ 51, 17, 124 },
-	{ 52, 13, 125 },
-	{ 52, 42, 126 },
-	{ 52, 59, 127 },
-	{ 54, 15, 128 },
-	{ 55, 10, 129 },
-	{ 56, 14, 130 },
-	{ 56, 17, 131 },
-	{ 56, 19, 132 },
-	{ 57, 12, 133 },
-	{ 57, 17, 134 },
-	{ 57, 20, 135 },
-	{ 57, 24, 136 },
-	{ 57, 28, 137 },
-	{ 58, 18, 138 },
-	{ 59, 10, 139 },
-	{ 59, 23, 140 },
-	{ 59, 28, 141 },
-	{ 59, 39, 142 },
-	{ 59, 43, 143 },
+struct struct_land_route_tevent g_tevents_tab[156] = {
+	{ LROUTE_ID_VAERMHAG_VARNHEIM, 26, 1 },
+	{ LROUTE_ID_VARNHEIM_DASPOTA, 7, 2 },
+	{ LROUTE_ID_THORWAL_SERSKE, 0, 3 },
+	{ LROUTE_ID_SERSKE_BREIDA, 13, 4 },
+	{ LROUTE_ID_SERSKE_BREIDA, 19, 5 },
+	{ LROUTE_ID_F_TJOILA_TJOILA, 0, 6 },
+	{ LROUTE_ID_TJOILA_BREIDA, 10, 7 },
+	{ LROUTE_ID_TJOILA_BREIDA, 12, 8 },
+	{ LROUTE_ID_BREIDA_PEILINEN, 17, 9 },
+	{ LROUTE_ID_BREIDA_PEILINEN, 25, 10 },
+	{ LROUTE_ID_PEILINEN_ROVAMUND, 10, 11 },
+	{ LROUTE_ID_ROVAMUND_NORDVEST, 0, 12 },
+	{ LROUTE_ID_ROVAMUND_NORDVEST, 8, 13 },
+	{ LROUTE_ID_ROVAMUND_NORDVEST, 16, 14 },
+	{ LROUTE_ID_ROVAMUND_NORDVEST, 22, 15 },
+	{ LROUTE_ID_NORDVEST_KRAVIK, 8, 16 },
+	{ LROUTE_ID_NORDVEST_KRAVIK, 19, 17 },
+	{ LROUTE_ID_NORDVEST_KRAVIK, 24, 18 },
+	{ LROUTE_ID_KRAVIK_SKELELLE, 0, 19 },
+	{ LROUTE_ID_KRAVIK_SKELELLE, 8, 20 },
+	{ LROUTE_ID_KRAVIK_SKELELLE, 22, 21 },
+	{ LROUTE_ID_RUKIAN_F_ANGBOD, 15, 22 },
+	{ LROUTE_ID_F_ANGBOD_ANGBODIR, 0, 23 },
+	{ LROUTE_ID_AUPLOG_VILNHEIM, 10, 24 },
+	{ LROUTE_ID_AUPLOG_VILNHEIM, 18, 25 },
+	{ LROUTE_ID_VILNHEIM_BODON, 0, 26 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 0, 27 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 20, 28 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 26, 29 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 48, 30 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 65, 31 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 80, 32 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 86, 33 },
+	{ LROUTE_ID_VILNHEIM_PHEXCAER, 95, 34 },
+	{ LROUTE_ID_PHEXCAER_EINSIEDL, 13, 35 },
+	{ LROUTE_ID_PHEXCAER_EINSIEDL, 22, 36 },
+	{ LROUTE_ID_PHEXCAER_EINSIEDL, 27, 37 },
+	{ LROUTE_ID_PHEXCAER_EINSIEDL, 39, 38 },
+	{ LROUTE_ID_PHEXCAER_EINSIEDL, 40, 39 },
+	{ LROUTE_ID_PHEXCAER_EINSIEDL, 18, 144 },
+	{ LROUTE_ID_VARNHEIM_AUPLOG, 18, 40 },
+	{ LROUTE_ID_VARNHEIM_AUPLOG, 25, 41 },
+	{ LROUTE_ID_VARNHEIM_AUPLOG, 38, 42 },
+	{ LROUTE_ID_VARNHEIM_AUPLOG, 42, 43 },
+	{ LROUTE_ID_DASPOTA_RYBON, 11, 44 },
+	{ LROUTE_ID_DASPOTA_OTTARJE, 12, 45 },
+	{ LROUTE_ID_DASPOTA_OTTARJE, 15, 46 },
+	{ LROUTE_ID_DASPOTA_OTTARJE, 22, 47 },
+	{ LROUTE_ID_DASPOTA_OTTARJE, 26, 48 },
+	{ LROUTE_ID_OTTARJE_SKJAL, 19, 49 },
+	{ LROUTE_ID_OTTARJE_SKJAL, 23, 50 },
+	{ LROUTE_ID_OTTARJE_SKJAL, 27, 51 },
+	{ LROUTE_ID_OTTARJE_SKJAL, 35, 52 },
+	{ LROUTE_ID_OTTARJE_SKJAL, 38, 53 },
+	{ LROUTE_ID_SKJAL_PREM, 18, 54 },
+	{ LROUTE_ID_PREM_KORD, 14, 55 },
+	{ LROUTE_ID_PREM_KORD, 23, 56 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 18, 57 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 20, 58 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 22, 59 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 33, 60 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 41, 61 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 47, 62 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 53, 63 },
+	{ LROUTE_ID_OTTARJE_ORVIL, 58, 64 },
+	{ LROUTE_ID_ORVIL_ALA, 4, 65 },
+	{ LROUTE_ID_ORVIL_ALA, 19, 66 },
+	{ LROUTE_ID_ALA_TJANSET, 7, 67 },
+	{ LROUTE_ID_ALA_TJANSET, 10, 68 },
+	{ LROUTE_ID_ALA_THOSS, 7, 67 },
+	{ LROUTE_ID_ALA_THOSS, 10, 68 },
+	{ LROUTE_ID_ALA_THOSS, 17, 69 },
+	{ LROUTE_ID_ALA_THOSS, 29, 70 },
+	{ LROUTE_ID_THOSS_LISKOR, 11, 71 },
+	{ LROUTE_ID_TJANSET_THOSS, 15, 68 },
+	{ LROUTE_ID_TJANSET_THOSS, 22, 69 },
+	{ LROUTE_ID_TJANSET_THOSS, 34, 70 },
+	{ LROUTE_ID_OBERORKE_FELSTEYN, 7, 71 },
+	{ LROUTE_ID_OBERORKE_FELSTEYN, 12, 72 },
+	{ LROUTE_ID_FELSTEYN_ORKANGER, 7, 73 },
+	{ LROUTE_ID_FELSTEYN_ORKANGER, 12, 74 },
+	{ LROUTE_ID_FELSTEYN_ORKANGER, 25, 75 },
+	{ LROUTE_ID_FELSTEYN_ORKANGER, 35, 76 },
+	{ LROUTE_ID_FELSTEYN_ORKANGER, 39, 77 },
+	{ LROUTE_ID_ORKANGER_CLANEGH, 15, 78 },
+	{ LROUTE_ID_ORKANGER_CLANEGH, 18, 79 },
+	{ LROUTE_ID_ORKANGER_CLANEGH, 21, 80 },
+	{ LROUTE_ID_CLANEGH_TYLDON, 18, 81 },
+	{ LROUTE_ID_OBERORKE_EINSIEDL, 0, 82 },
+	{ LROUTE_ID_OBERORKE_EINSIEDL, 9, 83 },
+	{ LROUTE_ID_OBERORKE_EINSIEDL, 32, 84 },
+	{ LROUTE_ID_OBERORKE_EINSIEDL, 35, 85 },
+	{ LROUTE_ID_OBERORKE_EINSIEDL, 53, 86 },
+	{ LROUTE_ID_OBERORKE_EINSIEDL, 59, 87 },
+	{ LROUTE_ID_OBERORKE_EINSIEDL, 64, 88 },
+	{ LROUTE_ID_FELSTEYN_EINSIEDL, 0, 89 },
+	{ LROUTE_ID_FELSTEYN_EINSIEDL, 19, 90 },
+	{ LROUTE_ID_FELSTEYN_EINSIEDL, 25, 91 },
+	{ LROUTE_ID_FELSTEYN_EINSIEDL, 28, 92 },
+	{ LROUTE_ID_FELSTEYN_EINSIEDL, 34, 93 },
+	{ LROUTE_ID_FELSTEYN_EINSIEDL, 45, 87 },
+	{ LROUTE_ID_FELSTEYN_EINSIEDL, 50, 88 },
+	{ LROUTE_ID_RYBON_THOSS, 15, 94 },
+	{ LROUTE_ID_RYBON_THOSS, 18, 95 },
+	{ LROUTE_ID_RYBON_THOSS, 21, 96 },
+	{ LROUTE_ID_RYBON_THOSS, 29, 97 },
+	{ LROUTE_ID_RYBON_THOSS, 35, 98 },
+	{ LROUTE_ID_RYBON_THOSS, 44, 99 },
+	{ LROUTE_ID_RYBON_THOSS, 48, 100 },
+	{ LROUTE_ID_RYBON_THOSS, 52, 101 },
+	{ LROUTE_ID_SKJAL_ORVIL, 25, 102 },
+	{ LROUTE_ID_SKJAL_ORVIL, 29, 103 },
+	{ LROUTE_ID_SKJAL_ORVIL, 34, 104 },
+	{ LROUTE_ID_SKJAL_ORVIL, 38, 105 },
+	{ LROUTE_ID_SKJAL_ORVIL, 50, 62 },
+	{ LROUTE_ID_SKJAL_ORVIL, 56, 63 },
+	{ LROUTE_ID_SKJAL_ORVIL, 61, 64 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 20, 106 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 36, 107 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 40, 108 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 48, 109 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 57, 110 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 63, 111 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 68, 112 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 87, 113 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 100, 114 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 112, 115 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 122, 116 },
+	{ LROUTE_ID_SKELELLE_PHEXCAER, 125, 117 },
+	{ LROUTE_ID_MERSKE_ROVAMUND, 18, 118 },
+	{ LROUTE_ID_MERSKE_ROVAMUND, 38, 119 },
+	{ LROUTE_ID_MERSKE_ROVAMUND, 55, 120 },
+	{ LROUTE_ID_ORVIL_ROVIK, 0, 121 },
+	{ LROUTE_ID_ORVIL_ROVIK, 3, 122 },
+	{ LROUTE_ID_ORVIL_ROVIK, 14, 123 },
+	{ LROUTE_ID_ORVIL_ROVIK, 17, 124 },
+	{ LROUTE_ID_LJASDAHL__CIRCULAR, 13, 125 },
+	{ LROUTE_ID_LJASDAHL__CIRCULAR, 42, 126 },
+	{ LROUTE_ID_LJASDAHL__CIRCULAR, 59, 127 },
+	{ LROUTE_ID_RUNINSHA_L_RUNIN__1, 15, 128 },
+	{ LROUTE_ID_RUNINSHA_L_RUNIN__MIDDLE, 10, 129 },
+	{ LROUTE_ID_BRENDHIL_MANRIN, 14, 130 },
+	{ LROUTE_ID_BRENDHIL_MANRIN, 17, 131 },
+	{ LROUTE_ID_BRENDHIL_MANRIN, 19, 132 },
+	{ LROUTE_ID_EINSIEDL__CIRCULAR, 12, 133 },
+	{ LROUTE_ID_EINSIEDL__CIRCULAR, 17, 134 },
+	{ LROUTE_ID_EINSIEDL__CIRCULAR, 20, 135 },
+	{ LROUTE_ID_EINSIEDL__CIRCULAR, 24, 136 },
+	{ LROUTE_ID_EINSIEDL__CIRCULAR, 28, 137 },
+	{ LROUTE_ID_L_RUNIN_RUNINSHA__2, 18, 138 },
+	{ LROUTE_ID__CROSSLINK, 10, 139 },
+	{ LROUTE_ID__CROSSLINK, 23, 140 },
+	{ LROUTE_ID__CROSSLINK, 28, 141 },
+	{ LROUTE_ID__CROSSLINK, 39, 142 },
+	{ LROUTE_ID__CROSSLINK, 43, 143 },
 	{ -1,  0,   0 },
 }; // ds:0xa66d
 
@@ -651,7 +795,7 @@ signed int do_travel_mode(void)
 	char *destinations_tab[6];
 
 	wallclock_update_bak = g_wallclock_update;
-	g_route59_flag = g_wallclock_update = gs_travel_detour = 0;
+	g_journey_crosslink_status = g_wallclock_update = gs_travel_detour = 0;
 	gs_town_id = gs_town_typeindex;
 
 	call_mouse_bg();
@@ -716,14 +860,14 @@ signed int do_travel_mode(void)
 					i = 0;
 					while ((tmp1 = signpost_ptr->linked_travel_routes[i]) != 0xff)
 					{
-						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
+						destinations_tab[i] = get_ttx(235 + (gs_trv_signpost_menu_town_ids[i] = (
 							(tmp2 = g_land_routes[tmp1 - 1].town_id_1) != gs_town_id ?
 							(signed char) tmp2 : g_land_routes[tmp1 - 1].town_id_2)));
 
 						i++;
 					}
 
-					gs_trv_menu_towns[i] = gs_town_id;
+					gs_trv_signpost_menu_town_ids[i] = gs_town_id;
 					destinations_tab[i] = get_ttx(613);
 					i++;
 
@@ -750,7 +894,7 @@ signed int do_travel_mode(void)
 					}
 
 					route_id = signpost_ptr->linked_travel_routes[tmp2];
-					gs_trv_destination = gs_trv_menu_towns[tmp2];
+					gs_journey_destination_town_id = gs_trv_signpost_menu_town_ids[tmp2];
 
 					if (!get_current_season() &&
 						(route_id == 31 || route_id == 41 || route_id == 47 || route_id == 48 || route_id == 49))
@@ -765,16 +909,16 @@ signed int do_travel_mode(void)
 
 					g_wallclock_update = 1;
 
-					TM_func1(signpost_ptr->linked_travel_routes[tmp2],
+					trv_do_journey(signpost_ptr->linked_travel_routes[tmp2],
 						(g_land_routes[signpost_ptr->linked_travel_routes[tmp2] - 1].town_id_1 == gs_town_id ? 0 : 1));
 					g_wallclock_update = 0;
 
-					if (g_route59_flag)
+					if (g_journey_crosslink_status)
 					{
-						TM_func9();
+						TM_do_journey_crosslink();
 					}
 
-					if (gs_trv_return == 2)
+					if (gs_journey_direction == JOURNEY_DIRECTION_BACKWARD)
 					{
 						if (gs_travel_detour && gs_travel_detour != 99)
 						{
@@ -783,7 +927,7 @@ signed int do_travel_mode(void)
 						break;
 					}
 
-					TM_enter_target_town();
+					trv_journey_enter_destination_town();
 
 					if (!gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 					{
@@ -802,7 +946,7 @@ signed int do_travel_mode(void)
 				} else if (g_mouse_leftclick_event)
 				{
 
-					for (i = 0, town_id = -1; i < TOWN_ID__TAIL; i++)
+					for (i = 0, town_id = -1; i < TOWN_ID__END - 1; i++)
 					{
 #if defined(__BORLANDC__)
 						if (is_mouse_in_rect(tmp1 - 4, tmp2 - 4,

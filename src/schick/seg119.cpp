@@ -35,7 +35,7 @@
  */
 void disease_effect(void)
 {
-	signed int i;
+	signed int hero_pos;
 	signed int j; /* multi use: hero_pos, disease_id */
 	struct struct_hero *hero;
 	struct struct_hero *hero2;
@@ -43,11 +43,11 @@ void disease_effect(void)
 
 	g_check_disease = 0;
 
-	for (i = 0; i <= 6; i++) {
+	for (hero_pos = 0; hero_pos <= 6; hero_pos++) {
 
-		if ((get_hero(i)->typus != HERO_TYPE_NONE) && !get_hero(i)->flags.dead) {
+		if ((get_hero(hero_pos)->typus != HERO_TYPE_NONE) && !get_hero(hero_pos)->flags.dead) {
 
-			hero = get_hero(i);
+			hero = get_hero(hero_pos);
 
 			disease_ptr = &hero->disease[DISEASE_ID_WUNDFIEBER];
 
@@ -61,6 +61,7 @@ void disease_effect(void)
 					disease_ptr->status = DISEASE_STATUS_RECOVER;
 
 					sprintf(g_dtp2, get_ttx(561), hero->alias);
+					// "hero finally feels better"
 					GUI_output(g_dtp2);
 
 				} else {
@@ -68,11 +69,11 @@ void disease_effect(void)
 					/* so the effect is worst at the beginning and gets better over time */
 					sub_hero_le(hero, dice_roll(2, 6, -(disease_ptr->time_counter - 1)));
 
-					/* Strength is fading, but only to 1 */
 					if (hero->attrib[ATTRIB_KK].current != 0) {
 
 						sprintf(g_dtp2, get_ttx(572), hero->alias);
 						GUI_output(g_dtp2);
+						// "hero is losing some KK"
 
 						disease_ptr->log_1++;
 						hero->attrib[ATTRIB_KK].current--;
@@ -88,8 +89,8 @@ void disease_effect(void)
 					disease_ptr->time_counter = 0;
 					disease_ptr->status = DISEASE_STATUS_HEALTHY;
 				} else {
-					/* hero regains the lost strength */
 					sprintf(g_dtp2, get_ttx(573), hero->alias);
+					// "hero regains some KK"
 					GUI_output(g_dtp2);
 
 					disease_ptr->log_1--;
@@ -116,6 +117,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current -= 5;
 
 					sprintf(g_dtp2, get_ttx(574), hero->alias);
+					// "hero has slight fever"
 					GUI_output(g_dtp2);
 				}
 
@@ -190,6 +192,7 @@ void disease_effect(void)
 
 				/* regeneration complete */
 				sprintf(g_dtp2, get_ttx(575), hero->alias);
+				// "hero's head feals clearer"
 				GUI_output(g_dtp2);
 			}
 
@@ -215,6 +218,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current -= disease_ptr->log_1;
 
 					sprintf(g_dtp2, get_ttx(577), hero->alias);
+					// "hero's fever gets worse"
 					GUI_output(g_dtp2);
 
 				}
@@ -247,14 +251,24 @@ void disease_effect(void)
 			/* BLUE COUGH / BLAUE KEUCHE: get better */
 			if (disease_ptr->status == DISEASE_STATUS_RECOVER) {
 
+				/* Original-Bug 48:
+				 * When recovering from blaue Keuche, the message
+				 * "Das Leben wird wohl nie wieder sein, wie es war!"
+				 * ("Life will probably never be the same!")
+				 * is shown whether or not a permanent attribute loss actually occurred.
+				 */
+#ifndef M302de_ORIGINAL_BUGFIX
 				/* regeneration complete */
 				sprintf(g_dtp2, get_ttx(576), hero->alias);
+				// "hero has overcome the illness, but life will probably never be the same"
 				GUI_output(g_dtp2);
+#endif
 
 				disease_ptr->time_counter = 0;
 				disease_ptr->status = DISEASE_STATUS_HEALTHY;
 
 				if (disease_ptr->log_3 != 0) {
+					/* permanent attribute loss happened. */
 
 					disease_ptr->log_3 = 0;
 
@@ -266,7 +280,21 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_GE].current += disease_ptr->log_2;
 					hero->attrib[ATTRIB_KK].current += disease_ptr->log_1;
 					disease_ptr->log_1 = disease_ptr->log_2 = 0;
+#ifdef M302de_ORIGINAL_BUGFIX
+					/* Original-Bug 48, see above */
+					sprintf(g_dtp2, get_ttx(576), hero->alias);
+					// %s HAT DIE KRANKHEIT ÜBERWUNDEN, DOCH DAS LEBEN WIRD WOHL NIE WIEDER SEIN, WIE ES WAR!
+				} else {
+					/* permanent attribute loss did not happen. */
+
+					sprintf(g_dtp2, "%s HAT DIE KRANKHEIT ""\x9a""BERWUNDEN.", hero->alias);
+#endif
+
 				}
+
+#ifdef M302de_ORIGINAL_BUGFIX
+				GUI_output(g_dtp2);
+#endif
 			}
 
 
@@ -288,6 +316,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].current -= j;
 
 					sprintf(g_dtp2, get_ttx(579), hero->alias);
+					// "hero's paralysis is worsening"
 					GUI_output(g_dtp2);
 				}
 			}
@@ -314,6 +343,7 @@ void disease_effect(void)
 					{
 
 						sprintf(g_dtp2, get_ttx(573), hero->alias);
+						// "hero regains some KK"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_1--;
@@ -330,6 +360,7 @@ void disease_effect(void)
 					{
 
 						sprintf(g_dtp2, get_ttx(578), hero->alias);
+						// "hero regains some GE"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_2--;
@@ -350,6 +381,7 @@ void disease_effect(void)
 					if (random_schick(100) <= (hero->typus >= HERO_TYPE_AUELF ? 30 : 20)) {
 
 						sprintf(g_dtp2, get_ttx(580), hero->alias);
+						// "hero dies"
 						GUI_output(g_dtp2);
 
 						sub_hero_le(hero, 1000);
@@ -371,6 +403,7 @@ void disease_effect(void)
 							hero->attrib[ATTRIB_KK].current -= 5;
 
 							sprintf(g_dtp2, get_ttx(581), hero->alias, GUI_get_ptr(hero->sex, 0));
+							 // "hero's lips turn yellow and he feels intense pain"
 							GUI_output(g_dtp2);
 						}
 
@@ -394,24 +427,30 @@ void disease_effect(void)
 			if (disease_ptr->status == DISEASE_STATUS_RECOVER) {
 
 				/* Original-Bug 45: It is impossible to fully recover from Schlachtenfieber.
-				 * There is no to get the status back to DISEASE_STATUS_HEALTHY. */
+				 * There is no way to get the status back to DISEASE_STATUS_HEALTHY. */
+#ifndef M302de_ORIGINAL_BUGFIX
 				if (disease_ptr->log_3) {
 
 					disease_ptr->log_3 = 0;
-#ifndef M302de_ORIGINAL_BUGFIX
 					disease_ptr->time_counter = 0;
-#endif
 					hero->attrib[ATTRIB_KK].current += 5;
 				}
-#ifdef M302de_ORIGINAL_BUGFIX
-				else {
-					disease_ptr->time_counter = 0;
-					disease_ptr->status = DISEASE_STATUS_HEALTHY;
-				}
-#endif
 
 				sprintf(g_dtp2, get_ttx(582), hero->alias);
+				// "hero's lips do not look yellow any more"
 				GUI_output(g_dtp2);
+#else
+				if (disease_ptr->log_3) {
+					disease_ptr->log_3 = 0;
+					hero->attrib[ATTRIB_KK].current += 5;
+				} else {
+					disease_ptr->time_counter = 0;
+					disease_ptr->status = DISEASE_STATUS_HEALTHY;
+					sprintf(g_dtp2, get_ttx(582), hero->alias);
+					// "hero's lips do not look yellow any more"
+					GUI_output(g_dtp2);
+				}
+#endif
 			}
 
 			disease_ptr = &hero->disease[DISEASE_ID_FROSTSCHAEDEN];
@@ -421,6 +460,7 @@ void disease_effect(void)
 
 				j = 0;
 
+				/* ((number of days * 5) + 1)% chance for *permanent* GE-1 */
 				if (random_schick(100) <= disease_ptr->time_counter * 5) {
 
 					hero->attrib[ATTRIB_GE].current--;
@@ -429,6 +469,7 @@ void disease_effect(void)
 					j = 1;
 
 					sprintf(g_dtp2, get_ttx(583), hero->alias);
+					// "hero takes permanent damage"
 					GUI_output(g_dtp2);
 				}
 
@@ -449,6 +490,7 @@ void disease_effect(void)
 				if (j == 0) {
 
 					sprintf(g_dtp2, get_ttx(740), hero->alias);
+					// "hero shakes"
 					GUI_output(g_dtp2);
 				}
 			}
@@ -463,7 +505,7 @@ void disease_effect(void)
 					if
 #ifndef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 44:
-					 * Recover from Paralyse does not work, GE and KK are not recovered.
+					 * Recover from Paralyse and Frostschaeden does not work, GE and KK are not recovered.
 					 * In the two if statements below, the condition is reversed. */
 					(!disease_ptr->log_1)
 #else
@@ -471,6 +513,7 @@ void disease_effect(void)
 #endif
 					{
 						sprintf(g_dtp2, get_ttx(573), hero->alias);
+						// "hero regains some KK"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_1--;
@@ -487,6 +530,7 @@ void disease_effect(void)
 					{
 
 						sprintf(g_dtp2, get_ttx(578), hero->alias);
+						// "hero regains some GE"
 						GUI_output(g_dtp2);
 
 						disease_ptr->log_2--;
@@ -529,11 +573,12 @@ void disease_effect(void)
 
 					if (disease_ptr->time_counter > 2) {
 
-						rabies(hero, i);
+						rabies_frenzy(hero, hero_pos);
 
 					} else {
 
 						sprintf(g_dtp2, get_ttx(572), hero->alias);
+						// "hero is losing some KK"
 						GUI_output(g_dtp2);
 					}
 				}
@@ -549,6 +594,7 @@ void disease_effect(void)
 
 				} else {
 					sprintf(g_dtp2, get_ttx(573), hero->alias);
+					// "hero regains some KK"
 					GUI_output(g_dtp2);
 
 					disease_ptr->log_1--;
@@ -560,7 +606,7 @@ void disease_effect(void)
 			for (j = 1; j <= 7; j++) {
 
 				if (hero->disease[j].status != DISEASE_STATUS_HEALTHY) {
-					/* Original-Bug? I think for some of the deseases, an overflow could theoretically happen. */
+					/* Original-Bug? I think for some of the diseases, an overflow could theoretically happen. */
 					hero->disease[j].time_counter++;
 				}
 			}

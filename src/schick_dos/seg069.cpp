@@ -110,7 +110,7 @@ void THO_hetmann(void)
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx2(14), 0);
 
-			gs_informer_flags[INFORMER_ISLEIF] = 1;
+			gs_informer_flags[INFORMER_ID_ISLEIF] = 1;
 			gs_subvention++;
 			gs_got_main_quest = 1;
 			gs_quested_months = 0;
@@ -119,7 +119,7 @@ void THO_hetmann(void)
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx2(15), 0);
 
-			gs_informer_flags[INFORMER_ISLEIF] = 1;
+			gs_informer_flags[INFORMER_ID_ISLEIF] = 1;
 			gs_got_main_quest = 1;
 			gs_quested_months = 0;
 			gs_got_letter_het = 1;

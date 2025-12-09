@@ -147,7 +147,13 @@ void tevent_133(void)
 
 	if (answer == 1) {
 
-		gs_trv_return = 1;
+#ifndef M302de_ORIGINAL_BUGFIX
+		/* Original-Bug 53:
+		 * If the party was already traveling backward, the new direction should be forward. */
+		gs_journey_direction = JOURNEY_DIRECTION_CHANGE_TO_BACKWARD;
+#else
+		gs_journey_direction = (gs_journey_direction == JOURNEY_DIRECTION_FORWARD ? JOURNEY_DIRECTION_CHANGE_TO_BACKWARD : JOURNEY_DIRECTION_CHANGE_TO_FORWARD);
+#endif
 
 	} else {
 
@@ -698,7 +704,7 @@ void TLK_old_woman(const signed int state)
 	} else if (state == 38) {
 		timewarp(HOURS(1));
 	} else if (state == 41) {
-		gs_tevent093_flag = gs_tevent091_flag = gs_informer_flags[INFORMER_ISLEIF] = gs_isleif_jandas_regards = 1;
+		gs_tevent093_flag = gs_tevent091_flag = gs_informer_flags[INFORMER_ID_ISLEIF] = gs_isleif_jandas_regards = 1;
 	}
 }
 

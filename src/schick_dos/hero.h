@@ -1,6 +1,8 @@
 #ifndef HERO_H
 #define HERO_H
 
+#include "common.h"
+
 #include "platform.h"
 
 #pragma pack(1)
@@ -124,7 +126,7 @@ struct struct_hero {
 	signed char sex;
 	unsigned char height; /* unit: cm */
 	signed short weight; /* unit: ounces */
-	signed char god; /* see enum GOD_* */
+	signed char god_id; /* see enum GOD_ID_* */
 	signed char level;
 	int32_t ap; /* Abenteuerpunkte = experience points */
 	int32_t money; /* unit: heller */
@@ -133,7 +135,7 @@ struct struct_hero {
 	signed char rs_bonus_dummy; /* read-only? */
 	signed char rs_be; /* Ruestungsschutzbehinderung */
 	signed char fight_bp_left; /* bp = Bewegungspunkte */
-	struct struct_attribs attrib[14]; /* see enum ATTRIB_* */
+	struct struct_attribs attrib[ATTRIB__END]; /* see enum ATTRIB_* */
 	/* Offset 0x5e */
 	signed short le_max;
 	signed short le;
@@ -158,7 +160,15 @@ struct struct_hero {
 	   * This is strange as the 'start gear' functionality is done on byte level (affecting all bits together).
 	   * Note that this is not a bug because it it should never happen in the game that bit 0 is unset and bit 1 is set.
 	   * Maybe the bit 1 functionality was actually meant to be applied to the second byte of hero_flags, whose bit 1 is unused. Who knows. */
-	signed char herbs; /* none = 0, Belmart = 1, Menchalkaktus = 2 */
+	signed char herbs;
+	  /* Apparently, write-only (hence, no impact on the game)
+	   * default value: 0
+	   * consuming ITEM_BELMART_BLATT: value 1 for 1 day.
+	   * consuming ITEM_MENCHALKAKTUS: value 2 for 1 day.
+	   * According to DSA lore, these two herbs protect you from poisons and/or diseases.
+	   * Probably, it was intended (but never implemented) to realize this effect.
+	   * Might be added in a Feature mod? What about Sternenschweif, is it implemented there?
+	   * Comment: This should better be a bitfield, to allow activation of both Belmart and Menchalkaktus */
 	signed char hunger_timer; /* timer for no-hunger-miracle */
 	signed char hunger; /* percentage */
 	/* Offset 0x80 */
@@ -187,7 +197,7 @@ struct struct_hero {
 	signed char sprite_id; /* fight gfx of hero, depending on typus and sex.
                                 * 1: Gaukler, male. 2: Jaeger, male, ..., 10: any Elf, male,
 				* 11: Gaukler, female, 12: Jaeger, female, ..., 20: any Elf, female. */
-	signed char alchemy_inn_id; /* the id of the inn where the hero is doing alchemy */
+	signed char alchemy_inn_typeindex; /* the id of the inn where the hero is doing alchemy */
 	signed short escape_position; /* the dungeon square the hero escaped to in a fight. read from fig_escape_position */
 	signed char jail; /* 1 = true, i.e. hero is in prison (from breaking into a house), 0 = false */
 	/* Offset 0xa0 */
@@ -203,11 +213,11 @@ struct struct_hero {
 	struct hero_affliction poison[10]; /* 50 = 10 * 5 bytes */ /* for the index, see enum POISON_ID. NOTE that no poison has poison_id == 0, so the first 5 bytes are unused. */
 
 	/* Offset 0x108 */
-	signed char talents[52]; /* see enum TA_* */
+	signed char talents[TA__END]; /* see enum TA_* */
 	/* The first entry does not belong to an actual spell talent and is apparently unused. */
 	signed char saved_talent_increases;
 	/* Offset 0x13d */
-	signed char spells[86]; /* see enum SP_* */
+	signed char spells[SP__END]; /* see enum SP_* */
 	signed char saved_spell_increases;
 	signed char spell_school; /* only for mages */
 	signed char staff_level; /* only for mages */

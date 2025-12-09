@@ -307,12 +307,50 @@ struct trv_start_point { /* a start_point is either a signpost or a harbor */
 #if !defined(__BORLANDC__)
 #pragma pack(1)
 #endif
-// A location is a point of interest in a town or a travel event. //
 struct location {
-	int16_t pos;		// coordinates of the location within its town
-	int8_t loctype;		// the type of the location
-	uint8_t typeindex;	// Index among the locations of the same type.
+	/* A location is a point of interest in a town or a travel event. */
+	/* See https://github.com/shihan42/BrightEyesWiki/wiki/DAT-(Stadt)#feldinhaltliste */
+	int16_t pos;
+	/* coordinates of the location within its town
+	 * byte 1: y-coordinate
+	 * byte 2: x-coordinate
+	 */
+
+	int8_t loctype;
+	/* the type of the location according to enum LOCTYPE_... */
+
+	uint8_t typeindex;
+	/* Index among locations of the same type; the exact implementation depends on the loctype:
+	 * LOCTYPE_TEMPLE, LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT, LOCTYPE_INN,
+	 * 	LOCTYPE_SMITH, LOCTYPE_MARKET, LOCTYPE_INFORMER, LOCTYPE_SPECIAL:
+	 * 	Unique index among all locations of the same type in the game; coveres all towns + travel events.
+	 * 	However, there are a few collisions due to bugs.
+	 * 	For informers, the typeindex is informer_id + 1 according to enum INFORMER_ID...
+	 * 	Also, these locations in Daspota are indexed independently, and the index is probably irrelevant.
+	 * 	In Daspota, only LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT actually occur.)
+	 * LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
+	 * 	A unique index among all harbors and signposts together, but only among the ones of the same town.
+	 * LOCTYPE_DUNGEON_ENTRY:
+	 * 	The ID of the associated dungeon
+	 * otherwise:
+	 *     probably unused.
+	 */
+
 	int16_t locdata;	// Additional data, depending on the LOCTYPE.
+	/* Additional data, depending on the loctype:
+	 * LOCTYPE_TAVERN, LOCTYPE_INN, LOCTYPE_SMITH, LOCTYPE_SPECIAL, LOCTYPE_MERCHANT, LOCTYPE_HEALER:
+	 *     index to retrieve the location name via get_tx from <TOWN.LTX>
+	 *     If the location is in Daspota: Also an index for assigned fights and loot, see do_location_daspota().
+	 * LOCTYPE_HARBOR, LOCTYPE_SIGNPOST:
+	 *     arrival position. bit 0-3: y-coordinate. bit 4-7: viewdir. bit 8-15: x-coordinate.
+	 *     Note that 'viewdir' is used only for LOCTYPE_HARBOR, actually.
+	 *     For LOCTYPE_SIGNPOST, the viewdir entering a town is determined by trv_journey_enter_destination_town_viewdir),
+	 *     which does not make use of the 'viewdir' entry.
+	 * LOCTYPE_MARKET, LOCTYPE_TEMPLE, LOCTYPE_INFORMER, LOCTYPE_DUNGEON_ENTRY:
+	 *     unused.
+	 * otherwise:
+	 *     probably unused.
+	 */
 };
 #if !defined(__BORLANDC__)
 #pragma pack()
@@ -568,8 +606,8 @@ struct struct_chest {
 struct ship {
 	int8_t passage_type;
 	int8_t unkn;		/* UNUSED */
-	int8_t base_price;	/* Unit: [Heller per 10 km] */
-	int8_t base_speed;	/* Unit: [km per day] */	/* TODO: This value should be unsigned instead. */
+	int8_t base_price;	/* unit: [Heller per 10 km] */
+	int8_t base_speed;	/* unit: [km per day] */	/* TODO: This value should be unsigned instead. */
 };
 
 /* TODO: SHOULD BE IN GAME STATE */
@@ -583,6 +621,7 @@ struct sea_route {
 	unsigned char town_id_2;	/* one byte readonly */
 					/* ID of the second town of the connection */
 	unsigned char distance;		/* one byte readonly */
+					/* unit: [km] */
 					/* TODO: But should be 2 Byte for Prem <-> Manrin to avoid an integer overflow */
 	signed char frequency;		/* one byte readonly */
 					/* the higher this value, the rarer a passage on the route is offered */
@@ -688,8 +727,11 @@ struct harbor_option_obsolete {
 /* TODO: needs to be reworked */
 //STATIC_ASSERT(sizeof(struct harbor_option_obsolete) == 12, struct_harbor_option_obsolete_needs_to_be_12_bytes);
 
-struct struct_route_tevent {
-	int16_t place;
+struct struct_journey_tevent {
+	int16_t position;
+	/* position of the travel event on the current journey along a land route,
+	 * given as distance from the starting point. unit [10m] */
+
 	int16_t tevent_id;
 };
 
@@ -697,8 +739,8 @@ struct struct_land_route {
 	/* Note: routes are undirected */
 	uint8_t town_id_1;
 	uint8_t town_id_2;
-	uint8_t distance;
-	int8_t speed_mod;		/* {-4, ..., 7} */
+	uint8_t distance;               /* unit: [km] */
+	int8_t speed_mod;		/* {-4, ..., 7}. Adjustment of the base speed in tenths. For example: -3 means -30% */
 	uint8_t encounters;
 	unsigned char unkn1;		/* unused */
 	unsigned char unkn2;		/* unused */
@@ -706,9 +748,9 @@ struct struct_land_route {
 	unsigned char unkn3;		/* unused */
 };
 
-struct struct_tevent {
-	int8_t route_id;
-	uint8_t place;
+struct struct_land_route_tevent {
+	int8_t land_route_id;
+	uint8_t position; /* position of the travel event on the land route, given as distance from land_route_id.town_id_1. unit: [km] */
 	uint8_t tevent_id;
 };
 
@@ -1545,37 +1587,37 @@ extern int16_t gs_town_typeindex;		//ds:0x4224; seg025-seg120
 extern uint8_t  gs_dng03_highpriest_killed;	//ds:0x4226; seg079
 extern int8_t  gs_dng03_chest12_loads;		//ds:0x4227; seg079
 extern int16_t gs_trv_i;				//ds:0x4228; seg063, seg094
-extern int16_t gs_route_stepcount;		//ds:0x422a; seg063, seg094
-extern int16_t gs_forcedmarch_le_cost;		//ds:0x422c; seg094
-extern int16_t gs_route_total_steps;			//ds:0x422e; seg063, seg094
-extern int16_t gs_route_length;				//ds:0x4230; seg063, seg094
-extern int16_t gs_route_duration;			//ds:0x4232; seg063, seg094
-extern int16_t gs_route_timedelta;			//ds:0x4234; seg063, seg094
-extern int16_t gs_route_mousehover;			//ds:0x4236; seg063, seg094
-extern int16_t gs_route_progress;			//ds:0x4238; seg063, seg094
-extern int16_t gs_route_stepsize;			//ds:0x423a; seg063, seg094
-extern int16_t gs_route_dayprogress;			//ds:0x423c; seg094
+extern int16_t gs_travel_step_counter;		//ds:0x422a; seg063, seg094
+extern int16_t gs_journey_forced_march_le_cost;		//ds:0x422c; seg094
+extern int16_t gs_travel_total_steps;			//ds:0x422e; seg063, seg094
+extern int16_t gs_travel_total_distance;				//ds:0x4230; seg063, seg094 // unit: [10m]
+extern int16_t gs_travel_total_duration;			//ds:0x4232; seg063, seg094 // unit: [minutes]
+extern int16_t gs_travel_duration_per_step;			//ds:0x4234; seg063, seg094 // duration of each step. unit: [minutes]
+extern int16_t gs_travel_mousehover;			//ds:0x4236; seg063, seg094
+extern int16_t gs_travel_distance_made;			//ds:0x4238; seg063, seg094
+extern int16_t gs_travel_distance_per_step;			//ds:0x423a; seg063, seg094 // length of a single step. unit: [10m]
+extern int16_t gs_travel_distance_per_18_hours;			//ds:0x423c; seg094 // unit: [10m]
 extern int16_t gs_sea_travel_passage_id;		//ds:0x423e; seg063
-extern int16_t gs_route_encounter_flag;			//ds:0x4240; seg094
-extern int16_t gs_route_encounter_time;			//ds:0x4242; seg094
-extern int16_t gs_route_informer_flag;			//ds:0x4244; seg094
-extern int16_t gs_route_informer_time;			//ds:0x4246; seg094
-extern int16_t gs_route_fight_flag;			//ds:0x4248; seg094, seg117
-extern int16_t gs_route_fight_time;			//ds:0x424a; seg094
-extern int16_t gs_travel_speed;				//ds:0x424c; seg063, seg094
+extern int16_t gs_journey_random_encounter_flag;			//ds:0x4240; seg094
+extern int16_t gs_journey_random_encounter_position;			//ds:0x4242; seg094
+extern int16_t gs_journey_olvir_treborn_flag;			//ds:0x4244; seg094
+extern int16_t gs_journey_olvir_treborn_position;			//ds:0x4246; seg094
+extern int16_t gs_journey_fight_flag;			//ds:0x4248; seg094, seg117
+extern int16_t gs_journey_fight_position;			//ds:0x424a; seg094
+extern int16_t gs_travel_speed;				//ds:0x424c; seg063, seg094 // unit: [10m per hour]
 extern int16_t gs_passage_deadship_flag;		//ds:0x424e; seg063
 extern int16_t gs_passage_deadship_position;		//ds:0x4250; seg063
 extern int16_t gs_passage_octopus_flag;			//ds:0x4252; seg063
 extern int16_t gs_passage_octopus_position;		//ds:0x4254; seg063
 extern int16_t gs_passage_pirates_flag;			//ds:0x4256; seg063
 extern int16_t gs_passage_pirates_position;		//ds:0x4258; seg063
-extern int16_t *gs_route_course_ptr;			//ds:0x425a; seg063, seg094
-extern int16_t *gs_route_course_start;			//ds:0x425e; seg063, seg094
-extern int16_t *gs_route_course_ptr2;			//ds:0x4262; seg063, seg094
+extern int16_t *gs_travel_course_ptr;			//ds:0x425a; seg063, seg094
+extern int16_t *gs_travel_course_start;			//ds:0x425e; seg063, seg094
+extern int16_t *gs_travel_course_ptr2;			//ds:0x4262; seg063, seg094
 extern uint8_t *gs_sea_travel_courses;			//ds:0x4266; seg063
-extern struct struct_tevent *gs_tevents_tab_ptr;	//ds:0x426a; seg094
+extern struct struct_land_route_tevent *gs_tevents_tab_ptr;	//ds:0x426a; seg094
 extern struct struct_land_route *gs_travel_route_ptr;	//ds:0x426e; seg094
-extern struct struct_route_tevent gs_route_tevents[15]; //ds:0x4272; seg094
+extern struct struct_journey_tevent gs_journey_tevents[15]; //ds:0x4272; seg094
 extern uint8_t  gs_sea_travel_psgbooked_flag;	//ds:0x42ae; seg002, seg063
 extern uint8_t  gs_sea_travel_psgbooked_timer;	//ds:0x42af; seg002, seg063
 extern int8_t  gs_sea_travel_passage_speed1;	//ds:0x42b0; seg063
@@ -1587,8 +1629,21 @@ extern int16_t gs_sea_travel_passage_speed2;	//ds:0x432c; seg063, seg064
 extern uint8_t *gs_travel_map_ptr;		//ds:0x432e; seg028, seg063, seg093, seg094
 extern uint8_t  gs_forcedmarch_timer;		//ds:0x4332; seg002, seg094
 extern uint8_t  gs_travel_detour;		//ds:0x4333; seg002-seg118
+/* mostly used for dungeon_id.
+ * value 99 is used for traveling on a cutter (tevent_047).
+ * value 1 is dual used for DUNGEON_ID_TOTENSCHIFF and traveling the crosslink route.
+ */
+
 extern int16_t gs_current_signpost_typeindex;	//ds:0x4334; seg025, seg063, seg093
-extern int16_t gs_trv_return;			//ds:0x4336; seg093-seg116
+extern int16_t gs_journey_direction;	//ds:0x4336; seg093-seg116
+/* 0: group is traveling forward.
+ * 2: group is traveling backward (i.e., it was traveling forward and decided at some point to go back).
+ * 1: group is about to change from forward to backward.
+ * -1: group is about to change from backward to forward.
+ * Note that gs_journey_direction is not the same as the 'reverse' variable in trv_do_journey.
+ * 'reverse' relates to the order the enpoint towns are stored for a route. It determines the original 'forward' direction.
+ */
+
 extern int16_t gs_travel_destination_town_id;	//ds:0x4338; seg063-seg094
 extern int16_t gs_travel_destination_x;		//ds:0x433a; seg063-seg094
 extern int16_t gs_travel_destination_y;		//ds:0x433c; seg063-seg094
@@ -1600,8 +1655,8 @@ extern struct trv_start_point *gs_tm_unused1_ptr;		//ds:0x4340; seg094
 extern uint32_t gs_tm_unused1_ptr_obsolete;	//ds:0x4340; UNUSED
 #endif
 
-extern int8_t  gs_trv_menu_towns[6];		//ds:0x4344; seg002, seg093, seg094
-extern int16_t gs_trv_destination;		//ds:0x434a; seg078-seg118
+extern int8_t  gs_trv_signpost_menu_town_ids[6];		//ds:0x4344; seg002, seg093, seg094
+extern int16_t gs_journey_destination_town_id;		//ds:0x434a; seg078-seg118
 extern uint8_t  gs_dng08_waterbarrel;		//ds:0x434c; seg083
 extern uint8_t  gs_dng13_collapsecount;		//ds:0x434d; seg075, seg091
 extern uint8_t  gs_dng13_herocount;		//ds:0x434d; seg075, seg091
@@ -1763,12 +1818,12 @@ extern struct trv_start_point g_signposts[106];			//ds:0xa0b4; seg093, seg094
 extern struct trv_start_point g_harbors[26];			//ds:0xa3a3; seg064
 extern struct struct_point g_town_positions[52];		//ds:0xa43f; seg002, seg063, seg094, seg094
 
-extern struct struct_tevent g_tevents_tab[156];		//ds:0xa66d; seg094
+extern struct struct_land_route_tevent g_tevents_tab[156];		//ds:0xa66d; seg094
 extern signed char g_traveling;				//ds:0xa842; seg002, seg032, seg063, seg094
 
 extern signed int g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
 
-extern int g_light_type;			// ds:0xaee8; seg101, seg107
+extern int g_ignite_mode;			// ds:0xaee8; seg101, seg107
 
 extern signed char g_travel_event_active;		// ds:0xb132; seg002, seg109, seg117
 
@@ -1780,6 +1835,11 @@ extern uint8_t g_color_black[3];			// ds:0xb22d; seg029, seg120
 
 extern signed char g_large_buf;			// ds:0xe5e4; seg120, seg028
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
+
+#ifdef M302de_ORIGINAL_BUGFIX
+// required for fix of Original-Bug 55
+extern signed int g_used_item_inv_slot;	// ds:0xe5cc, used_item position
+#endif
 
 //extern struct struct_hero *g_itemuser;		// ds:0xe5ce; seg049, seg107
 extern struct struct_hero *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
@@ -1802,7 +1862,9 @@ extern signed int g_current_town_overx;		// ds:0xe4a9; seg002
 extern signed int g_current_town_overy;		// ds:0xe4a7; seg002
 extern signed int g_current_town_over;		// ds:0xe4a5; seg002, seg093, seg094
 extern signed int g_trv_menu_selection;		// ds:0xe4a3; seg002, seg093, seg094
-extern unsigned char g_route59_flag;		// ds:0xe4a2; seg093, seg094, seg110
+extern unsigned char g_journey_crosslink_status;		// ds:0xe4a2; seg093, seg094, seg110
+/* according to enum CROSSLINK_STATUS_...: 0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund */
+
 extern signed int g_get_extra_loot;		// ds:0xe4a0; seg076, seg077, seg092
 extern struct dungeon_door *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120

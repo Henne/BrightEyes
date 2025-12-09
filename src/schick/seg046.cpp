@@ -437,7 +437,7 @@ void status_show(const signed int index)
 			/* print god */
 			g_txt_tabpos[0] = 265;
 
-			sprintf(g_dtp2, get_tx2(10), get_ttx(hero->god + 21));
+			sprintf(g_dtp2, get_tx2(10), get_ttx(hero->god_id + 21));
 			GUI_print_string(g_dtp2, 200, 55);
 
 			/* show attributes */
