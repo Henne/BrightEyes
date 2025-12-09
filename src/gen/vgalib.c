@@ -7,7 +7,7 @@
  *      just a clean C-implementation.
 */
 #if !defined(__BORLANDC__)
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #endif
 
 #if defined(__linux__)
