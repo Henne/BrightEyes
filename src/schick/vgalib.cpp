@@ -24,7 +24,7 @@
 
 extern unsigned char *g_vga_memstart;
 
-enum { DEF_RATIO = 3 };
+enum { DEF_RATIO = 4 };
 static int RATIO = DEF_RATIO;
 static int W_WIDTH = DEF_RATIO * O_WIDTH;
 static int W_HEIGHT = DEF_RATIO * O_HEIGHT;
