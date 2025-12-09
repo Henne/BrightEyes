@@ -242,7 +242,7 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 			long sec = end.tv_sec - begin.tv_sec;
 			long nsec = end.tv_nsec - begin.tv_nsec;
 			double elapsed = (sec + nsec * 1e-9);
-			fprintf(stderr, "%s() scaling   = %f ms\n", __func__, elapsed * 1000);
+			//fprintf(stderr, "%s() scaling   = %f ms\n", __func__, elapsed * 1000);
 #endif
 
 			if ((texture != NULL) && (renderer != NULL)) {
@@ -260,7 +260,7 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 				sec = end.tv_sec - begin.tv_sec;
 				nsec = end.tv_nsec - begin.tv_nsec;
 				elapsed = (sec + nsec * 1e-9);
-				fprintf(stderr, "%s() scaling   = %f ms\n", __func__, elapsed * 1000);
+			//	fprintf(stderr, "%s() scaling   = %f ms\n", __func__, elapsed * 1000);
 #endif
 			}
 
