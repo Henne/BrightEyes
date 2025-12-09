@@ -3,7 +3,20 @@
 
 #include "common.h"
 
-#include "platform.h"
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+  #include <assert.h>
+#define STATIC_ASSERT(expr, msg) static_assert(expr, #msg)
+#else
+  #define STATIC_ASSERT(expr, msg) typedef char static_assert_##msg[(expr) ? 1 : -1]
+#endif
+
+#if defined(__BORLANDC__) || defined(__WATCOMC__)
+typedef signed long int32_t;
+#else
+typedef signed int int32_t;
+#endif
+
+STATIC_ASSERT(sizeof(int32_t) == 4, int32_needs_to_be_4_bytes);
 
 #pragma pack(1)
 
