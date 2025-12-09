@@ -1851,6 +1851,11 @@ static int sdl_event_loop(const int cmd)
 						}
 						case SDLK_F3: return (KEY_CTRL_F3 << 8); break;
 						case SDLK_F4: return (KEY_CTRL_F4 << 8); break;
+
+						case SDLK_e: return 0x0005; break; 	// STATUS MENU
+						case SDLK_o: return 0x000f; break; 	// SWAP HEROES MENU
+						case SDLK_s: return 0x0013; break; 	// SOUND MENU
+
 					}
 				}
 
