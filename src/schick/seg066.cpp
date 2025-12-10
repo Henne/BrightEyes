@@ -1165,11 +1165,21 @@ void load_town_texture(signed int x, signed int y, signed int nvf_no, signed int
 	 * the following line accesses memory outside of the
 	 * texture array if v4 is 48 or 49!?
 	 */
+#if defined(__BORLANDC__)
 	nvf.src = g_tex_floor[v4];
 
 	if (v4 == 48 || v4 == 49) {
 		nvf.src = (uint8_t*)g_buffer7_ptr;
 	}
+#else
+	if (v4 == 48 || v4 == 49) {
+		nvf.src = (uint8_t*)g_buffer7_ptr;
+	} else if ((0 <= v4) && (v4 <= 5)) {
+		nvf.src = g_tex_floor[v4];
+	} else {
+		fprintf(stderr, "%s() v4 has invalid value of %d\n", __func__, v4);
+	}
+#endif
 
 	nvf.image_num = nvf_no;
 	nvf.compression_type = (direction == 0 ? 3 : 5);
