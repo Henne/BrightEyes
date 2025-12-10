@@ -278,14 +278,19 @@ signed int select_talent(void)
 		nr_talents++;
 	}
 
-	retval = GUI_radio(get_ttx(218), (signed char)nr_talents,
+	retval = GUI_radio(get_ttx(218), nr_talents,
 				get_ttx(a.a[0] + 48),
 				get_ttx(a.a[1] + 48),
 				get_ttx(a.a[2] + 48),
 				get_ttx(a.a[3] + 48),
 				get_ttx(a.a[4] + 48),
+#if defined(__BORLANDC__)
 				get_ttx(a.a[5] + 48),
-				get_ttx(a.a[6] + 48));
+				get_ttx(a.a[6] + 48)
+#else
+				get_ttx(a.a[5] + 48)
+#endif
+				);
 
 	if (retval != -1) {
 		return a.a[retval - 1];
