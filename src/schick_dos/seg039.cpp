@@ -105,7 +105,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	memset(sheet, 0, sizeof(struct enemy_sheet));
 
 	/* copy enemy id, gfx_id and RS to the sheet */
-	sheet->mon_id = monster->mon_id;
+	sheet->monster_id = monster->monster_id;
 	sheet->gfx_id = monster->gfx_id;
 	sheet->rs = monster->rs;
 
@@ -141,7 +141,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 
 		sheet->mr = 5;
 
-	} else if ((g_current_fight_no == FIGHTS_F144) && (sheet->mon_id != 0x48)) {
+	} else if ((g_current_fight_no == FIGHTS_F144) && (sheet->monster_id != MONSTER_ID_ORKCHAMPION)) {
 
 		/* set 'tied' flag */
 		sheet->flags.tied = 1;
@@ -182,7 +182,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 
 	/* Another hack:
 		If the current fight == FIGHTS_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
-	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->mon_id == 0x38)) {
+	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->monster_id == MONSTER_ID_KULTIST__4)) {
 		/* Kultist will flee */
 		/* set 'scared' flag */
 		sheet->flags.scared = 1;

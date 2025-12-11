@@ -151,7 +151,7 @@ void FIG_preload_gfx(void)
 	}
 
 	for (i = 0; i < 20; i++) {
-		g_enemy_sheets[i].mon_id = 0;
+		g_enemy_sheets[i].monster_id = MONSTER_ID_NONE;
 		g_enemy_sheets[i].fighter_id = -1;
 	}
 

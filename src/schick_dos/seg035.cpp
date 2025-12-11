@@ -35,7 +35,7 @@ void FIG_tidy_enemies(void)
 	while (i < 20) {
 
 		/* if the enemy is not able to fight anymore ... */
-		if (g_enemy_sheets[i].mon_id &&
+		if (g_enemy_sheets[i].monster_id &&
 			(g_enemy_sheets[i].flags.dead || g_enemy_sheets[i].flags.mushroom || g_enemy_sheets[i].flags.petrified ||
 			(g_current_fight->enemies[i].round_appear && (enemies_num == 0))))
 		{
@@ -196,9 +196,9 @@ void FIG_split_ap(void)
 	/* calculate ap for that fight */
 	for (i = 0; i < 20; i++) {
 
-		if (g_enemy_sheets[i].mon_id) {
+		if (g_enemy_sheets[i].monster_id) {
 
-			if (gs_known_monsters[g_enemy_sheets[i].mon_id]) {
+			if (gs_known_monsters[g_enemy_sheets[i].monster_id]) {
 
 				/* monster type is already known */
 				known_ap = g_enemy_sheets[i].first_ap / 10;
@@ -213,9 +213,9 @@ void FIG_split_ap(void)
 	/* mark each monster type from that fight in the game state */
 	for (i = 0; i < 20; i++) {
 
-		if (g_enemy_sheets[i].mon_id) {
+		if (g_enemy_sheets[i].monster_id) {
 
-			gs_known_monsters[g_enemy_sheets[i].mon_id] = 1;
+			gs_known_monsters[g_enemy_sheets[i].monster_id] = 1;
 		}
 	}
 

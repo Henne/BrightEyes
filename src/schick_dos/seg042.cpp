@@ -132,9 +132,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			p_target_enemy->flags.asleep = 0;
 
 			g_fig_target_grammar.type = 1;
-			g_fig_target_grammar.id = p_target_enemy->mon_id;
+			g_fig_target_grammar.id = p_target_enemy->monster_id;
 
-			if (!p_target_enemy->mon_id || (p_target_enemy->flags.dead && ((hero->action_id != FIG_ACTION_SPELL) || (hero->spell_id != SP_SKELETTARIUS_KRYPTADUFT))))
+			if (!p_target_enemy->monster_id || (p_target_enemy->flags.dead && ((hero->action_id != FIG_ACTION_SPELL) || (hero->spell_id != SP_SKELETTARIUS_KRYPTADUFT))))
 			{
 				call_mouse();
 				return;

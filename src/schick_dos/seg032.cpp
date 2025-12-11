@@ -218,9 +218,9 @@ signed int FIG_choose_next_enemy(void)
 			enemy = &g_enemy_sheets[0];
 			for (i = 0; i < g_nr_of_enemies; i++, enemy++) {
 
-				D1_ERR("Enemy %02d %x %x\n", i, enemy->mon_id, enemy->attacks_left);
+				D1_ERR("Enemy %02d %x %x\n", i, enemy->monster_id, enemy->attacks_left);
 
-				if (enemy->mon_id && enemy->attacks_left)
+				if (enemy->monster_id && enemy->attacks_left)
 						retval = i;
 			}
 
@@ -236,7 +236,7 @@ signed int FIG_choose_next_enemy(void)
 		enemy = &g_enemy_sheets[retval];
 #endif
 
-	} while (g_enemy_sheets[retval].mon_id == 0 || g_enemy_sheets[retval].attacks_left == 0);
+	} while (g_enemy_sheets[retval].monster_id == MONSTER_ID_NONE || g_enemy_sheets[retval].attacks_left == 0);
 
 	return retval;
 }
@@ -254,7 +254,7 @@ signed int FIG_count_active_enemies(void)
 
 		enemy = &g_enemy_sheets[i];
 
-		if (enemy->mon_id && !enemy->flags.dead && !enemy->flags.petrified && !enemy->flags.tied &&
+		if (enemy->monster_id && !enemy->flags.dead && !enemy->flags.petrified && !enemy->flags.tied &&
 			!enemy->flags.mushroom && !enemy->flags.busy &&	!enemy->round_appear)
 		{
 			retval++;

@@ -75,7 +75,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			g_fig_critical_fail_backfire_1 = g_attacker_dead = g_defender_dead = 0;
 
 		g_fig_actor_grammar.type = 1;
-		g_fig_actor_grammar.id = p_enemy->mon_id;
+		g_fig_actor_grammar.id = p_enemy->monster_id;
 
 		if (p_enemy->target_object_id < 10) {
 
@@ -96,9 +96,9 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			target_enemy = &g_enemy_sheets[p_enemy->target_object_id - 10];
 
 			g_fig_target_grammar.type = 1;
-			g_fig_target_grammar.id = target_enemy->mon_id;
+			g_fig_target_grammar.id = target_enemy->monster_id;
 
-			if (target_enemy->flags.dead || !target_enemy->mon_id) {
+			if (target_enemy->flags.dead || !target_enemy->monster_id) {
 				return;
 			}
 
@@ -338,7 +338,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 										if (damage > 0) {
 
 											/* HESHTHOT */
-											if (p_enemy->mon_id != 0x4d) {
+											if (p_enemy->monster_id != MONSTER_ID_HESHTOT__3) {
 												sub_hero_le(hero, damage);
 											}
 
@@ -450,7 +450,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 							if (damage > 0) {
 
-								if (p_enemy->mon_id != 0x4d) {
+								if (p_enemy->monster_id != MONSTER_ID_HESHTOT__3) {
 									sub_hero_le(hero, damage);
 								}
 
