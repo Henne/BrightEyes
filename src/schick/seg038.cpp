@@ -473,7 +473,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 
 				enemy_ptr = &g_enemy_sheets[i];
 
-				if (enemy_ptr->mon_id && !enemy_ptr->flags.dead) {
+				if (enemy_ptr->monster_id && !enemy_ptr->flags.dead) {
 
 					FIG_search_obj_on_cb(i + 10, &x, &y);
 

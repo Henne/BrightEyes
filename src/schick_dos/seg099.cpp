@@ -220,7 +220,7 @@ void spell_illusionen(void)
 		}
 	} else {
 		/* print a failure message */
-		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 
 		/* costs 2 AE */
 		g_spell_special_aecost = 2;
@@ -298,7 +298,7 @@ void spell_band(void)
 		/* set 'tied' flag */
 		g_spelltarget_e->flags.tied = 1;
 
-		sprintf(g_dtp2, get_tx(6), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(6), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 	} else {
 		/* cast hero */
 
@@ -334,7 +334,7 @@ void spell_bannbaladin(void)
 		/* spell does not work on animals */
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(8), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(8), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->monster_id, 1));
 	} else {
 
 		if (g_spelltarget_e->gfx_id == 0x1c) {
@@ -346,7 +346,7 @@ void spell_bannbaladin(void)
 		/* set 'tame' flag */
 		g_spelltarget_e->flags.tame = 1;
 
-		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 	}
 }
 
@@ -369,7 +369,7 @@ void spell_boeser_blick(void)
 		g_spelltarget_e->attacks = 2;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(10), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(10), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 	}
 }
 
@@ -413,7 +413,7 @@ void spell_herrdertiere(void)
 
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->monster_id, 1));
 	} else {
 
 		g_spell_special_aecost = g_spelltarget_e->first_ap;
@@ -425,7 +425,7 @@ void spell_herrdertiere(void)
 			/* set 'tame' flag */
 			g_spelltarget_e->flags.tame = 1;
 
-			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 		}
 	}
 }
@@ -446,7 +446,7 @@ void spell_horriphobus(void)
 		/* unset 'renegade' flag */
 		g_spelltarget_e->flags.renegade = 0;
 
-		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 	}
 }
 
@@ -488,7 +488,7 @@ void spell_somnigravis(void)
 		g_spelltarget_e->flags.asleep = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 		return;
 	}
 
@@ -529,7 +529,7 @@ void spell_zwingtanz(void)
 		g_spelltarget_e->flags.dancing = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 	}
 }
 
@@ -608,14 +608,14 @@ void spell_skelettarius(void)
 	if (!g_spelltarget_e->flags.dead) {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 
 		/* set ae costs */
 		g_spell_special_aecost = 0;
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 
 		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 

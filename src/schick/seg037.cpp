@@ -644,7 +644,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 
 		/* F064: fight against GORAH */
 
-		if (enemy->mon_id == 0x46) {
+		if (enemy->monster_id == MONSTER_ID_GORAH) {
 			/* GORAH waits the first 5 rounds */
 
 			if (g_fight_round < 5) {

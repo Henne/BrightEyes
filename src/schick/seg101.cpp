@@ -413,7 +413,7 @@ void spell_paralue(void)
 		/* set 'petrified' flag */
 		g_spelltarget_e->flags.petrified = 1;
 
-		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
@@ -467,7 +467,7 @@ void spell_salander(void)
 		g_spelltarget_e->flags.mushroom = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 
 		/* set AE cost */
 		g_spell_special_aecost = ae_cost;

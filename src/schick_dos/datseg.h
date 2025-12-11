@@ -409,7 +409,7 @@ STATIC_ASSERT(sizeof(struct struct_dialog_state) == 8, struct_struct_dialog_stat
 #pragma pack(1)
 #endif
 struct monster {
-	int8_t mon_id;
+	int8_t monster_id;
 	int8_t gfx_id;
 	int8_t rs;
 	uint16_t attrib[7];	/* dice template */
@@ -806,7 +806,7 @@ struct enemy_flags {
 };
 
 struct enemy_sheet {
-	int8_t mon_id;
+	int8_t monster_id;
 	int8_t gfx_id;
 	int8_t rs;
 	int8_t attrib[14]; // used in steps of 2 for positive attribs only

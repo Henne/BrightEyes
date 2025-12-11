@@ -43,7 +43,7 @@ void spell_eigenschaften(void)
 	min = min * 8 / 10;
 	max = max * 8 / 10;
 
-	sprintf(g_dtp2, get_tx(25), GUI_name_singular(g_monnames_index[g_spelltarget_e->mon_id]),
+	sprintf(g_dtp2, get_tx(25), GUI_name_singular(g_monnames_index[g_spelltarget_e->monster_id]),
           g_spelltarget_e->level,	/* Level */
           g_spelltarget_e->at,		/* AT */
           g_spelltarget_e->pa,		/* PA */
@@ -331,7 +331,7 @@ void spell_blitz(void)
 		g_spelltarget_e->blind = 3;
 
 		/* prepare the message */
-		sprintf(g_dtp2, get_tx(85), GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+		sprintf(g_dtp2, get_tx(85), GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 	}
 }
 
@@ -431,7 +431,7 @@ void spell_eisenrost(void)
 				g_spelltarget_e->weapon_broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2, get_tx(91), GUI_names_grammar(0x8000, g_spelltarget_e->mon_id, 1));
+				sprintf(g_dtp2, get_tx(91), GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
 			}
 		}
 	}
@@ -650,7 +650,7 @@ void spell_plumbumbarum(void)
 	g_spelltarget_e->at -= 3;
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(95), GUI_names_grammar(0x8001, g_spelltarget_e->mon_id, 1));
+	sprintf(g_dtp2, get_tx(95), GUI_names_grammar(0x8001, g_spelltarget_e->monster_id, 1));
 }
 
 void spell_radau(void)
