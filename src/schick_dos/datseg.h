@@ -265,7 +265,7 @@ struct armor_descr {
 
 struct usable_item_descr {
 	int8_t unkn1;
-	int8_t quantity;
+	int8_t quantity; /* for magic items: number of charges. for other usable items: 1 */
 	int8_t handler_id;
 };
 
