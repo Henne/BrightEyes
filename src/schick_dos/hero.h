@@ -55,10 +55,14 @@ struct inventory {
 	/* describes an item in a single inventory slot of a hero */
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/CHR-NPC#inventarslots */
 	signed short item_id; /* +0 */
-	signed short quantity; /* +2 */ /* for stackable items: number of items in the stack; for items with magic charges: number of charges left */
+	signed short quantity; /* +2 */
+	/* for stackable items: number of items in the stack;
+	 * for usable magic items with charges: number of remaining charges;
+	 * for other usable items: 1;
+	 * otherwise: 0 */
 
 	struct inventory_flags flags; /* +4 */
-	signed char bf; /* +6 */ /* Bruchfaktor. -99 means unbreakable */
+	signed char bf; /* +6 */ /* Bruchfaktor. the smaller, the better. -99 means unbreakable */
 	signed char rs_lost; /* +7 */ /* so far only seen for body armour. (from 'Ignifaxius' spell or from traps in DNG03 (Spinnenhoehle)) */
 
 	signed char lighting_timer; /* +8 */ /* for burning torch/lantern: number of remaining time, unit: 15 minutes */
