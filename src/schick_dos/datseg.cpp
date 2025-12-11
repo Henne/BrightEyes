@@ -2316,7 +2316,7 @@ int8_t  gs_day_of_week = 0; // ds:0x2dbf
 int8_t  gs_day_of_month = 0; // ds:0x2dc0
 int8_t  gs_month = 0; // ds:0x2dc1
 int8_t  gs_year = 0; // ds:0x2dc2
-int8_t  gs_special_day = 0; // ds:0x2dc3
+int8_t  gs_special_date_id = SPECIAL_DATE_ID_NONE; // ds:0x2dc3
 int32_t gs_ingame_timers[26] = {0}; // ds:0x2dc4
 struct struct_modification_timer gs_modification_timers[100] = { {0} }; // ds:0x2e2c
 unsigned char g_unkn_012[2] = { 0, 0 }; // ds:0x314c
@@ -3638,51 +3638,54 @@ uint8_t g_sky_fade_palette[32][3] = {
 	{ 0x08, 0x07, 0x13 }
 }; // ds:0x4558
 signed char g_special_screen = 1; // ds:0x45b8, , e.g. diary, treasure map, game options, automap
-struct special_day g_special_days[43] = {
-	{ 0x01, 0x01, 0x01 },
-	{ 0x01, 0x02, 0x02 },
-	{ 0x01, 0x03, 0x02 },
-	{ 0x02, 0x05, 0x03 },
-	{ 0x02, 0x0f, 0x04 },
-	{ 0x02, 0x10, 0x04 },
-	{ 0x03, 0x01, 0x05 },
-	{ 0x03, 0x09, 0x06 },
-	{ 0x03, 0x10, 0x07 },
-	{ 0x03, 0x1d, 0x08 },
-	{ 0x03, 0x1e, 0x09 },
-	{ 0x04, 0x01, 0x0a },
-	{ 0x04, 0x02, 0x0b },
-	{ 0x04, 0x03, 0x0b },
-	{ 0x04, 0x04, 0x0c },
-	{ 0x04, 0x0c, 0x0d },
-	{ 0x05, 0x01, 0x0e },
-	{ 0x05, 0x16, 0x0f },
-	{ 0x05, 0x18, 0x10 },
-	{ 0x05, 0x1e, 0x11 },
-	{ 0x06, 0x07, 0x12 },
-	{ 0x06, 0x1e, 0x13 },
-	{ 0x07, 0x01, 0x14 },
-	{ 0x07, 0x1e, 0x15 },
-	{ 0x08, 0x05, 0x16 },
-	{ 0x08, 0x1e, 0x17 },
-	{ 0x09, 0x10, 0x18 },
-	{ 0x09, 0x18, 0x19 },
-	{ 0x09, 0x1e, 0x1a },
-	{ 0x0a, 0x01, 0x1b },
-	{ 0x0a, 0x12, 0x1c },
-	{ 0x0b, 0x01, 0x1d },
-	{ 0x0b, 0x08, 0x1e },
-	{ 0x0b, 0x15, 0x1f },
-	{ 0x0c, 0x01, 0x20 },
-	{ 0x0c, 0x02, 0x20 },
-	{ 0x0c, 0x03, 0x20 },
-	{ 0x0c, 0x04, 0x20 },
-	{ 0x0c, 0x05, 0x20 },
-	{ 0x0c, 0x06, 0x20 },
-	{ 0x0c, 0x07, 0x20 },
-	{ 0x0c, 0x1e, 0x21 },
-	{ -0x01, 0x00, 0x00 }
+
+struct special_date g_special_dates[43] = {
+	// Note: dritter Rastullahellah (1. Tag des Namenlosen) is missing.
+	{  1,  1, SPECIAL_DATE_ID_SOMMERSONNENWENDE },
+	{  1,  2, SPECIAL_DATE_ID_PRAIOSFEST },
+	{  1,  3, SPECIAL_DATE_ID_PRAIOSFEST },
+	{  2,  5, SPECIAL_DATE_ID_TAG_DES_SCHWURS },
+	{  2, 15, SPECIAL_DATE_ID_SCHWERTFEST },
+	{  2, 16, SPECIAL_DATE_ID_SCHWERTFEST },
+	{  3,  1, SPECIAL_DATE_ID_TAG_DES_WASSERS },
+	{  3,  9, SPECIAL_DATE_ID_VIERTER_RASTULLAHELLAH },
+	{  3, 16, SPECIAL_DATE_ID_NEBELFEST },
+	{  3, 29, SPECIAL_DATE_ID_FISCHERFEST },
+	{  3, 30, SPECIAL_DATE_ID_PRUEFUNGSFEST },
+	{  4,  1, SPECIAL_DATE_ID_TAG_DER_HEIMKEHR },
+	{  4,  2, SPECIAL_DATE_ID_FEST_DER_EINGEBRACHTEN_FRUECHTE },
+	{  4,  3, SPECIAL_DATE_ID_FEST_DER_EINGEBRACHTEN_FRUECHTE },
+	{  4,  4, SPECIAL_DATE_ID_TAG_DER_HELDEN },
+	{  4, 12, SPECIAL_DATE_ID_TAG_DER_TREUE },
+	{  5,  1, SPECIAL_DATE_ID_TOTENFEST },
+	{  5, 22, SPECIAL_DATE_ID_FUENFTER_RASTULLAHELLAH },
+	{  5, 24, SPECIAL_DATE_ID_DES_KAISERS_GEBURTSTAG },
+	{  5, 30, SPECIAL_DATE_ID_TAG_DES_GROSSEN_SCHLAFES },
+	{  6,  7, SPECIAL_DATE_ID_ROHALS_VERHUELLUNG },
+	{  6, 30, SPECIAL_DATE_ID_ERLEUCHTUNGSFEST },
+	{  7,  1, SPECIAL_DATE_ID_TAG_DER_JAGD },
+	{  7, 30, SPECIAL_DATE_ID_TAG_DER_IFIRN },
+	{  8,  5, SPECIAL_DATE_ID_ERSTER_RASTULLAHELLAH },
+	{  8, 30, SPECIAL_DATE_ID_TAG_DER_ERNEUERUNG },
+	{  9, 16, SPECIAL_DATE_ID_TAG_DES_PHEX },
+	{  9, 24, SPECIAL_DATE_ID_GLUECKSTAG },
+	{  9, 30, SPECIAL_DATE_ID_VERSENKUNGSFEST },
+	{ 10,  1, SPECIAL_DATE_ID_SAATFEST },
+	{ 10, 18, SPECIAL_DATE_ID_ZWEITER_RASTULLAHELLAH },
+	{ 11,  1, SPECIAL_DATE_ID_TAG_DES_FEUERS },
+	{ 11,  8, SPECIAL_DATE_ID_TAG_DES_AUFBRUCHS },
+	{ 11, 21, SPECIAL_DATE_ID_TAG_DER_WAFFENSCHMIEDE },
+	{ 12,  1, SPECIAL_DATE_ID_FEST_DER_FREUDEN },
+	{ 12,  2, SPECIAL_DATE_ID_FEST_DER_FREUDEN },
+	{ 12,  3, SPECIAL_DATE_ID_FEST_DER_FREUDEN },
+	{ 12,  4, SPECIAL_DATE_ID_FEST_DER_FREUDEN },
+	{ 12,  5, SPECIAL_DATE_ID_FEST_DER_FREUDEN },
+	{ 12,  6, SPECIAL_DATE_ID_FEST_DER_FREUDEN },
+	{ 12,  7, SPECIAL_DATE_ID_FEST_DER_FREUDEN },
+	{ 12, 30, SPECIAL_DATE_ID_REINIGUNGSFEST },
+	{ -0x01, 0x00, 0x00 } // terminator entry
 }; // ds:0x45b9
+
 signed char g_months_spring[4] = { 10, 11, 12, -1 }; // ds:0x463a
 signed char g_months_winter[4] = { 7, 8, 9, -1 }; // ds:0x463e
 signed char g_months_summer[4] = { 1, 2, 3, -1 }; // ds:0x4642
