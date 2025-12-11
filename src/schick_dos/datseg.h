@@ -201,10 +201,10 @@ struct struct_diary_entry {
 
 STATIC_ASSERT(sizeof(struct struct_diary_entry) == 8, struct_struct_diary_entry_needs_to_be_8_bytes);
 
-struct special_day {
+struct special_date {
 	int8_t month;
 	int8_t day;
-	int8_t id;
+	int8_t id; /* according to enum SPECIAL_DATE_ID_... */
 };
 
 struct fight_msg {
@@ -1107,7 +1107,7 @@ extern int8_t  gs_day_of_week;			//ds:0x2dbf; seg002, seg030, seg066, seg068, se
 extern int8_t  gs_day_of_month;			//ds:0x2dc0; seg002, seg024, seg030, seg073, seg116, seg120
 extern int8_t  gs_month;				//ds:0x2dc1; seg002, seg024, seg025, seg030, seg068, seg116, seg120
 extern int8_t  gs_year;				//ds:0x2dc2; seg002, seg024, seg025, seg030, seg068, seg116, seg120
-extern int8_t  gs_special_day;			//ds:0x2dc3; seg002, seg030
+extern int8_t  gs_special_date_id;			//ds:0x2dc3; seg002, seg030
 extern int32_t gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern struct struct_modification_timer gs_modification_timers[100];	//ds:0x2e2c; seg002
 extern int32_t gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
@@ -1690,7 +1690,7 @@ extern uint8_t g_floor_fade_palette[32][3];	//ds:0x4498; seg002
 extern uint8_t g_building_fade_palette[32][3];	//ds:0x44f8; seg002
 extern uint8_t g_sky_fade_palette[32][3];		//ds:0x4558; seg002
 extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
-extern struct special_day g_special_days[43];	//ds:0x45b9; seg002
+extern struct special_date g_special_dates[43];	//ds:0x45b9; seg002
 extern signed char g_months_spring[4];		//ds:0x463a; seg002
 extern signed char g_months_winter[4];		//ds:0x463e; seg002
 extern signed char g_months_summer[4];		//ds:0x4642; seg002

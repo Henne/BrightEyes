@@ -137,9 +137,9 @@ void prepare_date_str(void)
 			get_ttx(21 + gs_month), get_ttx(551 + get_current_season()), gs_year, hour);
 	}
 
-	if (gs_special_day) {
+	if (gs_special_date_id) {
 
-		sprintf(g_text_output_buf, get_ttx(357), get_ttx(357 + gs_special_day));
+		sprintf(g_text_output_buf, get_ttx(357), get_ttx(357 + gs_special_date_id));
 		strcat(g_dtp2, (const char*)g_text_output_buf);
 	}
 }

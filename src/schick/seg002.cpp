@@ -2819,13 +2819,13 @@ void do_timers(void)
 		}
 
 		/* check if we have a special day */
-		gs_special_day = 0;
+		gs_special_date_id = SPECIAL_DATE_ID_NONE;
 
-		for (i = 0; g_special_days[i].month != -1; i++) {
+		for (i = 0; g_special_dates[i].month != -1; i++) {
 
-			if ((g_special_days[i].month == gs_month) && (g_special_days[i].day == gs_day_of_month))
+			if ((g_special_dates[i].month == gs_month) && (g_special_dates[i].day == gs_day_of_month))
 			{
-				gs_special_day = g_special_days[i].id;
+				gs_special_date_id = g_special_dates[i].id;
 				break;
 			}
 		}
