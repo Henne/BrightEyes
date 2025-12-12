@@ -173,7 +173,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					defender_pa++;
 				}
 
-				/* subtract RS handycap */
+				/* subtract RS handicap */
 				defender_at -= hero->rs_be / 2;
 				defender_pa -= hero->rs_be / 2;
 

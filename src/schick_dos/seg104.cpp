@@ -446,7 +446,7 @@ signed int has_herb_for_disease(const struct struct_hero *hero, const signed int
 	return retval;
 }
 
-signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *patient, const signed int handycap, const signed int flag)
+signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *patient, const signed int handicap, const signed int flag)
 {
 	signed int disease_id;
 	signed int retval;
@@ -490,9 +490,9 @@ signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *p
 			/* set timer */
 			patient->heal_timer = HOURS(4);
 
-			if ((flag != 0) || (test_talent(healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
+			if ((flag != 0) || (test_talent(healer, TA_HEILEN_KRANKHEITEN, (signed char)handicap) > 0)) {
 
-				if (((retval = test_talent(healer, TA_HEILEN_KRANKHEITEN, g_diseases_healer_price[disease_id] + handycap)) > 0) &&
+				if (((retval = test_talent(healer, TA_HEILEN_KRANKHEITEN, g_diseases_healer_price[disease_id] + handicap)) > 0) &&
 					(disease_id != DISEASE_ID_WUNDFIEBER) && (disease_id != DISEASE_ID_BLAUE_KEUCHE))
 				{
 

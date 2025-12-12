@@ -183,9 +183,8 @@ signed int test_talent(const struct struct_hero* hero, const signed int talent_i
 					hero->attrib[ATTRIB_KK].current +
 					hero->attrib[ATTRIB_KK].mod) / 4;
 
-			/* add talent value */
 			e_talentval += hero->talents[talent_id];
-			/* sub handycap */
+
 			e_talentval -= handicap;
 
 			randval = random_schick(20);
