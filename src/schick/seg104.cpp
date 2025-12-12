@@ -580,18 +580,14 @@ signed int get_hero_weight(const struct struct_hero *hero)
 
 signed int get_talented_hero_pos(const signed int talent_id)
 {
-	signed int i;
+	signed int pos;
 	signed int cur;
 
-	signed int max;
-	signed int pos;
-	struct struct_hero *hero;
+	signed int max = -100;
+	signed int return_hero_pos;
+	struct struct_hero *hero = get_hero(0);
 
-	max = -100;
-
-	hero = get_hero(0);
-
-	for (i = 0; i <= 6; i++, hero++) {
+	for (pos = 0; pos <= 6; pos++, hero++) {
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 		{
@@ -606,10 +602,10 @@ signed int get_talented_hero_pos(const signed int talent_id)
 
 			if (cur > max) {
 				max = cur;
-				pos = i;
+				return_hero_pos = pos;
 			}
 		}
 	}
 
-	return pos;
+	return return_hero_pos;
 }
