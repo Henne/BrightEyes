@@ -895,7 +895,7 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 */
 
 	{ 0, 1, 13 }  /* 13 <- item_use_beutel */
-	/* ITEM_MAGISCHER_BROTBEUTEL, Original-Bug? Why??
+	/* ITEM_MAGISCHER_BROTBEUTEL : Original-Bug, to be fixed in SCHICK.DAT
 	 * ITEM_BEUTEL
 	 */
 

@@ -1542,8 +1542,8 @@ enum {
 	ITEM_GRIMRING				= 0xb5, /* Grimring [found at Hyggelik's ruin] */
 	ITEM_TOTENKOPFGUERTEL			= 0xb6, /* skull belt [magic: TA - 4; found in Verfallene Herberge ] */
 	ITEM_KRAFTGUERTEL			= 0xb7, /* girdle of might [magic: KK + 5; found in Drachenhoehle] */
-	ITEM_MAGISCHER_BROTBEUTEL		= 0xb8, /* magic breadbag */
-	ITEM_MAGISCHER_WASSERSCHLAUCH		= 0xb9, /* magic waterskin */
+	ITEM_MAGISCHER_BROTBEUTEL		= 0xb8, /* magic breadbag [cannot be found in the game] */
+	ITEM_MAGISCHER_WASSERSCHLAUCH		= 0xb9, /* magic waterskin [cannot be found in the game] */
 	ITEM_REZEPT_FUER_HEILTRANK		= 0xba, /* recipe for heal potion */
 	ITEM_SCHREIBEN_VON_JADRA		= 0xbb, /* writing of Jarda */
 	ITEM_AMULETT__UNKNOWN_2			= 0xbc, /* amulet [TODO: which one?? has the shape of a golden cross. it might be yellow, magic: protects from fire; found at Totenschiff] */
