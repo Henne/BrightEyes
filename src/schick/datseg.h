@@ -2099,6 +2099,8 @@ extern const char* names_attrib[14];
 extern const char* names_talent[52];
 extern const char* names_spell[86];
 extern const char* names_mspell[14];
+
+extern uint8_t* g_buffer_xx;
 #endif
 
 #endif

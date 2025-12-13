@@ -45,10 +45,10 @@ static signed char g_fig_star_last_count = -1; // ds:0x4b7b
 static const signed int g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
 signed char g_fig_star_printed = 0; // ds:0x4b94
 
-#if defined(__BORLANDC__) || defined(_WIN32)
+#if defined(__BORLANDC__)
 const char g_str_temp_xx[] = "TEMP\\XX"; // ds:0x4b95
 #else
-const char g_str_temp_xx[] = "TEMP/XX"; // ds:0x4b95
+uint8_t *g_buffer_xx = NULL;
 #endif
 
 static unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
@@ -423,17 +423,15 @@ void draw_fight_screen(const signed int val)
 
 	} while ((p_fighter = p_fighter->next));
 
-	/* write TEMP/XX */
 #if defined(__BORLANDC__)
+	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
 	handle = _creat(g_str_temp_xx_ptr, 0);
-#elif defined(_WIN32)
-	handle = _open(g_str_temp_xx_ptr, (_O_BINARY | _O_CREAT | _O_TRUNC | _O_WRONLY), _S_IWRITE);
-#else
-	handle = open(g_str_temp_xx_ptr, (O_TRUNC | O_CREAT | O_WRONLY), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
-#endif
-	write(handle, g_buffer8_ptr, 64000);
+	write(handle, g_buffer8_ptr, 320 * 200);
 	close(handle);
+#else
+	memcpy(g_buffer_xx, g_buffer8_ptr, 320 * 200);
+#endif
 
 	if (flag != 0) {
 
@@ -1028,17 +1026,15 @@ to the DOSBox-CPU and may run the timer.
 		g_fig_continue_print = 0;
 	}
 
-	/* read TEMP/XX */
 #if defined(__BORLANDC__)
+	/* read TEMP/XX */
 	/* TODO: should be O_BINARY | O_RDONLY */
 	handle = _open(g_str_temp_xx_ptr, 0);
-#elif defined(_WIN32)
-	handle = open(g_str_temp_xx_ptr, O_BINARY | O_RDONLY);
-#else
-	handle = open(g_str_temp_xx_ptr, O_RDONLY);
-#endif
-	_read(handle, g_buffer8_ptr, 64000);
+	_read(handle, g_buffer8_ptr, 320 * 200);
 	close(handle);
+#else
+	memcpy(g_buffer8_ptr, g_buffer_xx, 320 * 200);
+#endif
 
 	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 }

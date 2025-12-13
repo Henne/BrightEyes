@@ -450,6 +450,9 @@ signed int init_memory(void)
 	g_vga_memstart = (unsigned char*)calloc(320 * 200, sizeof(unsigned char));
 	g_vga_backbuffer = g_vga_memstart;
 
+	g_buffer_xx = (uint8_t*)calloc(320 * 200, sizeof(uint8_t));
+
+	if ((g_vga_memstart == NULL) || (g_buffer_xx == NULL)) error = 1;
 #endif
 
 	/* allocate small chunks of memory */
@@ -925,6 +928,11 @@ void cleanup_game(void)
 		free(g_vga_memstart);
 		g_vga_memstart = NULL;
 		g_vga_backbuffer = NULL;
+	}
+
+	if (g_buffer_xx) {
+		free(g_buffer_xx);
+		g_buffer_xx = NULL;
 	}
 #endif
 }
