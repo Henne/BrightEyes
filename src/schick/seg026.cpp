@@ -1133,6 +1133,14 @@ signed int read_chr_temp(char *fname, const signed int hero_pos, const signed in
 
 		hero->group_id = group_id;
 
+#if !defined(__BORLANDC__)
+		/* Bugfix: a fresh CHR-file should have temple_id == 1 */
+		if (hero->temple_id == 0) {
+			hero->temple_id = 1;
+			fprintf(stderr, "%s() %s temple_id 0 => 1\n", __func__, hero->alias);
+		}
+#endif
+
 		if (hero->sex == 1) {
 
 			hero->sprite_id = hero->typus + 11;
