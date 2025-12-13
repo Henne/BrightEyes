@@ -5412,7 +5412,7 @@ static int clear_hero(volatile struct struct_hero* hero)
 	memset((void*)hero, 0, sizeof(*hero));
 
 	hero->level = 1;
-	hero->group_no = 1;
+	hero->temple_id = 1;
 
 	return 1;
 }
