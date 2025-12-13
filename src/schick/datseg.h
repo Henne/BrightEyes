@@ -1831,6 +1831,8 @@ extern uint8_t g_travel_event_axes[6];			// ds:0xb135; seg109, seg118
 
 extern uint8_t g_color_black[3];			// ds:0xb22d; seg029, seg120
 
+extern const char g_str_temp_dir[];			// ds:0xb311;
+
 /* BSS starts at 0xbc38, variables in reverse/decreasing order */
 
 extern signed char g_large_buf;			// ds:0xe5e4; seg120, seg028

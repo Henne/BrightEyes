@@ -1143,11 +1143,14 @@ static signed int open_temp_file(const signed int index)
 	char tmppath[40];
 	signed int handle;
 
-	sprintf((char*)tmppath, g_str_temp_fmt_ptr, g_fnames_v302de[index]);
+	sprintf(tmppath, g_str_temp_fmt_ptr, g_fnames_v302de[index]);
 
 #if defined(__BORLANDC__) || defined(_WIN32)
+
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
 #else
+	fprintf(stderr, "%s(%d) tmppath = %s \n", __func__, index, tmppath);
+
 	while ( (handle = open(tmppath, O_RDWR)) == -1) {
 #endif
 
@@ -1173,8 +1176,15 @@ static void copy_from_archive_to_temp(const signed int index, const char* fname)
 	if ( (handle1 = load_archive_file(index)) != -1) {
 
 		/* create new file in TEMP */
+#if defined(__BORLANDC__)
 		/* TODO: should be O_BINARY | O_WRONLY */
 		handle2 = _creat(fname, 0);
+#elif defined(_WIN32)
+		handle2 = _open(fname, (_O_BINARY | _O_CREAT | _O_TRUNC | _O_WRONLY), _S_IWRITE);
+#else
+		fprintf(stderr, "%s(%d, %s)\n", __func__, index, fname);
+		handle2 = open(fname, (O_TRUNC | O_CREAT | O_WRONLY), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
+#endif
 
 		/* copy it */
 		while ( (len = read_archive_file(handle1, g_renderbuf_ptr, 60000)) && (len != -1))
@@ -1200,8 +1210,14 @@ void copy_file_to_temp(const char* src_file, const char* fname)
 #endif
 
 		/* create new file in TEMP */
+#if defined(__BORLANDC__)
 		/* TODO: should be O_BINARY | O_WRONLY */
 		handle2 = _creat(fname, 0);
+#elif defined(_WIN32)
+		handle2 = _open(fname, (_O_BINARY | _O_CREAT | _O_TRUNC | _O_WRONLY), _S_IWRITE);
+#else
+		handle2 = open(fname, (O_TRUNC | O_CREAT | O_WRONLY), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
+#endif
 
 		/* copy it */
 		while ( (len = _read(handle1, g_renderbuf_ptr, 60000)) && (len != -1))
@@ -1211,6 +1227,8 @@ void copy_file_to_temp(const char* src_file, const char* fname)
 
 		close(handle1);
 		close(handle2);
+
+		//fprintf(stderr, "copied %s to %s\n", src_file, fname);
 	}
 }
 

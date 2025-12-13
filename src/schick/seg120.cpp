@@ -138,7 +138,11 @@ static uint8_t g_palette_general[32][3] = {
 	{ 0x3c, 0x3c, 0x3c }
 }; // ds:0xb2b1
 
-static const char g_str_backslash_temp[6] = "\\TEMP"; // ds:0xb311
+#if defined(__BORLANDC__) || defined(_WIN32)
+const char g_str_temp_dir[] = "\\TEMP"; // ds:0xb311
+#else
+const char g_str_temp_dir[] = "./TEMP/"; // ds:0xb311
+#endif
 static const char g_str_not_enough_mem[124] = "\x0a\x0aNot enough memory!\x0a\"Realms of Arkania - Blade of Destiny\" needs %ld Byte more memory!\x0aPlease uninstall resident programs!"; // ds:0xb317
 static const char g_str_drive_x[4] = "X:\\"; // ds:0xb393
 static char g_str_temp_dir_fail[280] = "\xf2!!!!! ACHTUNG !!!!!\xf0\x40\x40""DAS SCHWARZE AUGE\x40KANN KEIN TEMPOR\x8eRES VERZEICHNIS ANLEGEN UND IST DAHER NICHT LAUFF\x8eHIG. WAHRSCHEINLICH VERSUCHEN SIE, DAS SPIEL AUF EINEM\xf2 SCHREIBGESCH\x9aTZTEN LAUFWERK\xf0\x40ZU STARTEN. BITTE INSTALLIEREN SIE DAS SPIEL AUF EINE FESTPLATTE.\x40\x40-TASTE ZUM BEENDEN-"; // ds:0xb397
@@ -648,8 +652,7 @@ void prepare_dirs(void)
 		}
 
 		strcpy(g_text_output_buf, gamepath);
-		/* "\\TEMP" */
-		strcat(g_text_output_buf, g_str_backslash_temp);
+		strcat(g_text_output_buf, g_str_temp_dir);
 
 		if (!chdir(g_text_output_buf)) {
 			/*	check if it's possible to change to TEMP-dir: OK
@@ -725,18 +728,17 @@ void prepare_dirs(void)
 	// TODO
 #else
 	signed int errorval = 0;
-	const char temp_dir[8] = "./TEMP/";
 	char path[20];
 
 	/* check if ./TEMP/ */
-	if (!chdir(temp_dir)) {
+	if (!chdir(g_str_temp_dir)) {
 
 		chdir("..");
 
 		errorval = 2;
 
 	} else {
-		if (mkdir(temp_dir, 0)) {
+		if (mkdir(g_str_temp_dir, 0)) {
 			errorval = 1;
 		} else {
 			errorval = 2;
@@ -753,7 +755,7 @@ void prepare_dirs(void)
 
 
 	/* delete files without leading '.' in TEMP-dir */
-	DIR *dir = opendir(temp_dir);
+	DIR *dir = opendir(g_str_temp_dir);
 
 	if ((errorval == 2) && (dir != NULL)) {
 
@@ -763,7 +765,7 @@ void prepare_dirs(void)
 
 			if ((ent->d_name[0] != '.') && (strlen(ent->d_name) <= 12)) {
 
-				strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+				strlcpy(path, g_str_temp_dir, strlen(g_str_temp_dir) + 1);
 				strlcat(path, ent->d_name, 20);
 
 				unlink(path);
@@ -807,7 +809,7 @@ void prepare_dirs(void)
 						}
 						close(handle);
 
-						strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+						strlcpy(path, g_str_temp_dir, strlen(g_str_temp_dir) + 1);
 						strlcat(path, ent->d_name, 20);
 
 						handle = open(path, (O_TRUNC | O_CREAT | O_WRONLY), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));

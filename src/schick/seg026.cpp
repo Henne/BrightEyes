@@ -1113,11 +1113,16 @@ signed int read_chr_temp(char *fname, const signed int hero_pos, const signed in
 		handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 	}
 #else
-	if ((handle = open(g_text_output_buf, O_RDONLY)) == -1) {
-		copy_file_to_temp(fname, g_text_output_buf);
-		handle = open(g_text_output_buf, O_RDONLY);
-	}
+	/* REMARK: 20 characters are enough atm */
+	char path[20];
 
+	strlcpy(path, g_str_temp_dir, strlen(g_str_temp_dir) + 1);
+	strlcat(path, fname, 20);
+
+	if ((handle = open(path, O_RDONLY)) == -1) {
+		copy_file_to_temp(fname, path);
+		handle = open(path, O_RDONLY);
+	}
 #endif
 
 	if (handle != -1) {
@@ -1178,8 +1183,14 @@ void write_chr_temp(const signed int hero_pos)
 
 	sprintf(g_text_output_buf, g_str_temp_fmt_ptr, fname);
 
+#if defined(__BORLANDC__)
 	/* TODO: should be O_BINARY | O_WRONLY */
 	handle = _creat(g_text_output_buf, 0);
+#elif defined(_WIN32)
+	handle = _open(g_text_output_buf, (_O_BINARY | _O_CREAT | _O_TRUNC | _O_WRONLY), _S_IWRITE);
+#else
+	handle = open(g_text_output_buf, (O_TRUNC | O_CREAT | O_WRONLY), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
+#endif
 
 	write(handle, get_hero(hero_pos), sizeof(struct struct_hero));
 
@@ -1236,11 +1247,10 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 		return 0;
 	}
 #elif defined(_WIN32)
-    const char temp_dir[] = "./TEMP/";
     signed int count = 0;
     _finddata_t dp;
     char search[260];
-    snprintf(search, sizeof(search), "%s*.chr", temp_dir);
+    snprintf(search, sizeof(search), "%s*.chr", g_str_temp_dir);
 
     intptr_t ff = _findfirst(search, &dp);
 
@@ -1258,7 +1268,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 
         while (res != -1) {
             char path[128];
-            snprintf(path, sizeof(path), "%s%s", temp_dir, dp.name);
+            snprintf(path, sizeof(path), "%s%s", g_str_temp_dir, dp.name);
 
             const signed int handle = open(path, O_BINARY | O_RDONLY);
 
@@ -1291,8 +1301,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 
     return count;
 #else
-	const char temp_dir[8] = "./TEMP/";
-	DIR *dir = opendir(temp_dir);
+	DIR *dir = opendir(g_str_temp_dir);
 	signed int count = 0;
 
 	if (dir != NULL) {
@@ -1305,7 +1314,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 
 				char path[20];
 
-				strlcpy(path, temp_dir, strlen(temp_dir) + 1);
+				strlcpy(path, g_str_temp_dir, strlen(g_str_temp_dir) + 1);
 				strlcat(path, dp->d_name, 20);
 
 				const signed int handle = open(path, O_RDONLY);
