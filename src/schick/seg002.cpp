@@ -1143,7 +1143,7 @@ static signed int open_temp_file(const signed int index)
 	char tmppath[40];
 	signed int handle;
 
-	sprintf((char*)tmppath, g_str_temp_xx_ptr2, g_fnames_v302de[index]);
+	sprintf((char*)tmppath, g_str_temp_fmt_ptr, g_fnames_v302de[index]);
 
 #if defined(__BORLANDC__) || defined(_WIN32)
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {

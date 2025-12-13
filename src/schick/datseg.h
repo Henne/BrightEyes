@@ -1750,7 +1750,7 @@ extern uint8_t* g_ems_frame_ptr;		//ds:0x4baa; seg002, seg010, seg028
 
 extern unsigned char g_renderbuf_in_use_flag;	//ds:0x4c3a; seg025, seg061
 
-extern char *g_str_temp_xx_ptr2;		//ds:0x4c88; seg002, seg026, seg120
+extern const char *g_str_temp_fmt_ptr;		//ds:0x4c88; seg002, seg026, seg120
 
 extern signed int g_loaded_head_id;		//ds:0x515c; seg026, seg029
 

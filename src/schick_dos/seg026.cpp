@@ -29,8 +29,8 @@
 #include "seg097.h"
 #include "seg106.h"
 
-extern char g_str_temp_xx2[8];
-char *g_str_temp_xx_ptr2 = (char*)&g_str_temp_xx2[0]; // ds:0x4c88, to STR_TEMP_XX2; char*
+extern const char g_str_temp_fmt[];
+const char *g_str_temp_fmt_ptr = &g_str_temp_fmt[0]; // ds:0x4c88
 
 const char* g_fnames_v302de[] = {
 	g_fn_v302de_000, g_fn_v302de_001, g_fn_v302de_002, g_fn_v302de_003,
@@ -113,7 +113,7 @@ const char* g_fnames_v302de[] = {
 }; // ds:0x4c8c
 
 signed int g_loaded_head_id = -1; // ds:0x515c
-char g_str_temp_xx2[8] = "TEMP\\%s"; // ds:0x515e
+const char g_str_temp_fmt[] = "TEMP\\%s"; // ds:0x515e
 
 // ds:0x5166, names of files in SCHICK.DAT
 char g_fn_v302de_XXX[] = "";
@@ -662,7 +662,7 @@ signed int load_game_state(void)
 		g_ani_enabled = 0;
 
 		/* delete every file TEMP\\*.* */
-		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard);
+		sprintf(g_text_output_buf, g_str_temp_fmt_ptr, g_all_files_wildcard);
 
 #if defined(__BORLANDC__)
 		done = findfirst(g_text_output_buf, &blk, 0);
@@ -670,7 +670,7 @@ signed int load_game_state(void)
 		if (done == 0) {
 
 			do {
-				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk))+ 30);
+				sprintf(g_text_output_buf, g_str_temp_fmt_ptr, ((char*)(&blk))+ 30);
 				unlink(g_text_output_buf);
 
 				done = findnext(&blk);
@@ -711,7 +711,7 @@ signed int load_game_state(void)
 			if (g_saved_files_buf[i]) {
 
 				/* write file content to TEMP */
-				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_fnames_v302de[i]);
+				sprintf(g_text_output_buf, g_str_temp_fmt_ptr, g_fnames_v302de[i]);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
@@ -738,7 +738,7 @@ signed int load_game_state(void)
 				prepare_chr_name(name, (char*)hero_i);
 
 				/* write file content to TEMP */
-				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, name);
+				sprintf(g_text_output_buf, g_str_temp_fmt_ptr, name);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
@@ -764,7 +764,7 @@ signed int load_game_state(void)
 
 		while (done == 0) {
 
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, g_str_temp_fmt_ptr, ((char*)(&blk)) + 30);
 
 			if ((handle_sg = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 				handle = open(blk.ff_name, O_BINARY | O_RDWR);
@@ -1009,7 +1009,7 @@ signed int save_game_state(void)
 		/* save all changed files from SCHICK.DAT */
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_fnames_v302de[tw_bak]);
+			sprintf(g_text_output_buf, g_str_temp_fmt_ptr, g_fnames_v302de[tw_bak]);
 
 			done = findfirst(g_text_output_buf, &blk, 0);
 
@@ -1042,12 +1042,12 @@ signed int save_game_state(void)
 
 		/* append all CHR files */
 		lseek(handle_sg, filepos, 0);
-		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard2);
+		sprintf(g_text_output_buf, g_str_temp_fmt_ptr, g_all_chr_wildcard2);
 
 		done = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
+			sprintf(g_text_output_buf, g_str_temp_fmt_ptr, blk.ff_name);
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
@@ -1097,7 +1097,7 @@ signed int read_chr_temp(char *fname, const signed int hero_pos, const signed in
 	signed int hero_size = sizeof(struct struct_hero);
 	struct struct_hero *hero;
 
-	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, fname);
+	sprintf(g_text_output_buf, g_str_temp_fmt_ptr, fname);
 
 	if ((handle = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 		copy_file_to_temp(fname, g_text_output_buf);
@@ -1160,7 +1160,7 @@ void write_chr_temp(const signed int hero_pos)
 
 	prepare_chr_name(fname, get_hero(hero_pos)->name);
 
-	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, fname);
+	sprintf(g_text_output_buf, g_str_temp_fmt_ptr, fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
 	handle = _creat(g_text_output_buf, 0);
@@ -1188,7 +1188,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 
 	hero = (struct struct_hero*)(g_renderbuf_ptr + 60000);
 
-	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard3);
+	sprintf(g_text_output_buf, g_str_temp_fmt_ptr, g_all_chr_wildcard3);
 
 	done = findfirst(g_text_output_buf, &blk, 0);
 
@@ -1196,7 +1196,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 
 		do {
 			/* create the CHR filename */
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
+			sprintf(g_text_output_buf, g_str_temp_fmt_ptr, blk.ff_name);
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);

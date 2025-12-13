@@ -680,14 +680,14 @@ void prepare_dirs(void)
 	}
 
 	/* delete *.* in TEMP-dir */
-	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard2);
+	sprintf(g_text_output_buf, g_str_temp_fmt_ptr, g_all_files_wildcard2);
 
 	done = findfirst(g_text_output_buf, &blk, 0);
 
 	if (!done) {
 
 		do {
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
+			sprintf(g_text_output_buf, g_str_temp_fmt_ptr, blk.ff_name);
 
 			unlink(g_text_output_buf);
 
@@ -709,7 +709,7 @@ void prepare_dirs(void)
 
 		close(handle);
 
-		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name); /* contains a filename */
+		sprintf(g_text_output_buf, g_str_temp_fmt_ptr, blk.ff_name); /* contains a filename */
 
 		handle = _creat(g_text_output_buf, 0);
 
@@ -891,7 +891,7 @@ void cleanup_game(void)
 
 	/* delete all files in TEMP */
 
-	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard3);
+	sprintf(g_text_output_buf, g_str_temp_fmt_ptr, g_all_files_wildcard3);
 
 	done = findfirst(g_text_output_buf, &blk, 0);
 
@@ -899,7 +899,7 @@ void cleanup_game(void)
 
 		do {
 			/* delete each found file */
-			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, blk.ff_name);
+			sprintf(g_text_output_buf, g_str_temp_fmt_ptr, blk.ff_name);
 
 			unlink(g_text_output_buf);
 
