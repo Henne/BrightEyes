@@ -140,7 +140,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				return;
 			}
 
-			if ((is_in_byte_array(p_target_enemy->gfx_id, g_double_size_gfx_id_table)) && (target_cannot_parry == 0))
+			if ((is_in_byte_array(p_target_enemy->sprite_id, g_double_size_sprite_id_table)) && (target_cannot_parry == 0))
 					/* attack head part of double-size enemy */
 			{
 				FIG_search_obj_on_cb(hero->target_object_id, &target_x, &target_y);
@@ -246,7 +246,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			if (gs_tevent071_orcstatue &&
 				(hero->typus == HERO_TYPE_ZWERG) &&
 				!target_is_hero &&
-				(p_target_enemy->gfx_id == 24))
+				(p_target_enemy->sprite_id == ACTOR_SPRITE_ID_ORK))
 			{
 				atpa++;
 			}
@@ -897,7 +897,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_set_sheet(p_target_enemy->fighter_id, 1);
 
-								if (is_in_byte_array(p_target_enemy->gfx_id, g_double_size_gfx_id_table))
+								if (is_in_byte_array(p_target_enemy->sprite_id, g_double_size_sprite_id_table))
 								{
 									fighter_add = FIG_get_fighter(p_target_enemy->fighter_id);
 
@@ -927,7 +927,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 								FIG_make_invisible(p_target_enemy->fighter_id);
 
-								if (is_in_byte_array(p_target_enemy->gfx_id, g_double_size_gfx_id_table))
+								if (is_in_byte_array(p_target_enemy->sprite_id, g_double_size_sprite_id_table))
 								{
 									fighter_add = FIG_get_fighter(p_target_enemy->fighter_id);
 

@@ -339,8 +339,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	/* initialize with bare hands */
 	weapon_type = -1;
 
-	/* every enemy with the gfx_id < 22 has a sword type weapon */
-	if (enemy->gfx_id < 22) {
+	/* every enemy with the sprite_id < 22 has a sword type weapon */
+	if (enemy->sprite_id < ACTOR_SPRITE_ID_ELF__FEMALE + 1) {
 		weapon_type = 2;
 	}
 
@@ -349,8 +349,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		weapon_type = -1;
 	}
 
-	/* read a pointer from an array with the gfx_id as offset, read only */
-	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
+	/* read a pointer from an array with the sprite_id as offset, read only */
+	ani_index_ptr = g_gfx_ani_index[enemy->sprite_id];
 
 	/* find both actors on the chessboard */
 	FIG_search_obj_on_cb((signed char)object_id_target, &target_x, &target_y);
@@ -376,7 +376,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	/* melee attack */
 	l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 21 : 25;
 
-	if ((enemy->gfx_id == 8) || (enemy->gfx_id == 9) || (enemy->gfx_id == 19) || (enemy->gfx_id == 20)) {
+	if ((enemy->sprite_id == ACTOR_SPRITE_ID_DRUIDE__MALE) || (enemy->sprite_id == ACTOR_SPRITE_ID_MAGIER__MALE)
+			|| (enemy->sprite_id == ACTOR_SPRITE_ID_DRUIDE__FEMALE) || (enemy->sprite_id == ACTOR_SPRITE_ID_MAGIER__FEMALE)) {
 
 		weapon_type = -1;
 		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 : 49;
@@ -394,7 +395,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
-	g_fig_anisheets[sheet_id][242] = enemy->gfx_id;
+	g_fig_anisheets[sheet_id][242] = enemy->sprite_id;
 
 	/* first the enemy may turn */
 	if ((enemy->viewdir != dir) &&
@@ -479,7 +480,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 			/* copy the weapon ani */
 			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-				*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
+				*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->sprite_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 		}
 	}
 
@@ -492,7 +493,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 				/* copy the weapon ani */
 				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
-					*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->gfx_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
+					*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->sprite_id] * 48 + weapon_type * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 			}
 	}
 
@@ -512,7 +513,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	*sheet_ptr1 = -1;
 
 	/* does this sprite need two fields */
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table))	{
+	if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table))	{
 
 		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
 
@@ -690,8 +691,8 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	signed int dir2;
 
 
-	/* get a pointer from an array where the gfx_id of the enemy serves as index */
-	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
+	/* get a pointer from an array where the sprite_id of the enemy serves as index */
+	ani_index_ptr = g_gfx_ani_index[enemy->sprite_id];
 
 	FIG_search_obj_on_cb((signed char)caster, &x_caster, &y_caster);
 	FIG_search_obj_on_cb((signed char)target, &x_target, &y_target);
@@ -721,7 +722,7 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
 
-	g_fig_anisheets[sheet_id][242] = enemy->gfx_id;
+	g_fig_anisheets[sheet_id][242] = enemy->sprite_id;
 
 	if ((enemy->viewdir != dir) && (max_range == 4)) {
 
@@ -783,7 +784,7 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	*sheet_ptr = -1;
 
 	/* check if the moster sprite ID needs two fields */
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table)) {
 		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
 	}
 }

@@ -104,9 +104,9 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	/* erease the sheet */
 	memset(sheet, 0, sizeof(struct enemy_sheet));
 
-	/* copy enemy id, gfx_id and RS to the sheet */
+	/* copy enemy id, sprite_id and RS to the sheet */
 	sheet->monster_id = monster->monster_id;
-	sheet->gfx_id = monster->gfx_id;
+	sheet->sprite_id = monster->sprite_id;
 	sheet->rs = monster->rs;
 
 	/* roll attributes  and save them to the sheet */
@@ -243,7 +243,7 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 
 	} else {
 		/* if object is an enemy and needs 2 fields */
-		if (object_id >= 10 && is_in_byte_array(type, g_double_size_gfx_id_table))
+		if (object_id >= 10 && is_in_byte_array(type, g_double_size_sprite_id_table))
 		{
 
 			/* check if field is empty */
@@ -278,15 +278,15 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 	struct nvf_extract_desc nvf;
 	signed int width_height;
 
-	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->gfx_id][0];
+	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->sprite_id][0];
 	g_fig_list_elem.nvf_no = enemy->viewdir;
 	g_fig_list_elem.cbx = x;
 	g_fig_list_elem.cby = y;
 
-	g_fig_list_elem.offsetx = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].x;
-	g_fig_list_elem.offsety = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].y;
+	g_fig_list_elem.offsetx = g_gfxtab_offsets_main[enemy->sprite_id][enemy->viewdir].x;
+	g_fig_list_elem.offsety = g_gfxtab_offsets_main[enemy->sprite_id][enemy->viewdir].y;
 
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table)) {
 
 		/* sprite uses two fields */
 		g_fig_list_elem.x1 = g_gfxtab_double_size_x1[enemy->viewdir];
@@ -306,7 +306,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 	g_fig_list_elem.height = 0x28;
 	g_fig_list_elem.width = 0x20;
 	g_fig_list_elem.is_enemy = 1;
-	g_fig_list_elem.sprite_id = enemy->gfx_id;
+	g_fig_list_elem.sprite_id = enemy->sprite_id;
 	g_fig_list_elem.reload = -1;
 	g_fig_list_elem.wsheet = -1;
 	g_fig_list_elem.sheet = -1;
@@ -321,7 +321,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 	/* check presence in the first round */
 	g_fig_list_elem.visible = (enemy->round_appear == 0 ? 1 : 0);
 
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table)) {
 
 		nvf.src = (uint8_t*)load_fight_figs(g_fig_list_elem.figure);
 		nvf.dst = g_fig_list_elem.gfxbuf;
@@ -335,7 +335,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 
 	enemy->fighter_id = FIG_add_to_list(-1);
 
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table)) {
 
 		/* create fighter entry for the tail of a double-size enemy */
 
@@ -394,9 +394,9 @@ void FIG_init_enemies(void)
 		/* place only the enemies from round 0 */
 		if (!g_current_fight->enemies[i].round_appear) {
 #if !defined(__BORLANDC__)
-			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,	g_current_fight->enemies[i].viewdir);
+			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].sprite_id,	g_current_fight->enemies[i].viewdir);
 #else
-			place_obj_on_cb(x, y, i + 10, (_AL = g_enemy_sheets[i].gfx_id, _AX), g_current_fight->enemies[i].viewdir);
+			place_obj_on_cb(x, y, i + 10, (_AL = g_enemy_sheets[i].sprite_id, _AX), g_current_fight->enemies[i].viewdir);
 #endif
 		}
 

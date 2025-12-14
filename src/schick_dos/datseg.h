@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "hero.h"
+#include "v302de.h"
 
 /* dummy structs */
 struct c_str_3 { char a[3]; };
@@ -410,7 +411,7 @@ STATIC_ASSERT(sizeof(struct struct_dialog_state) == 8, struct_struct_dialog_stat
 #endif
 struct monster {
 	int8_t monster_id;
-	int8_t gfx_id;
+	int8_t sprite_id;
 	int8_t rs;
 	uint16_t attrib[7];	/* dice template */
 	uint16_t le;		/* dice template */
@@ -807,7 +808,7 @@ struct enemy_flags {
 
 struct enemy_sheet {
 	int8_t monster_id;
-	int8_t gfx_id;
+	int8_t sprite_id;
 	int8_t rs;
 	int8_t attrib[14]; // used in steps of 2 for positive attribs only
 	int16_t le_orig;
@@ -979,7 +980,7 @@ extern const int8_t g_gfxtab_figures_main[125][5];			//ds:0x12c0; seg005, seg006
 extern const struct point8s g_gfxtab_offsets_main[125][5];		//ds:0x1531; seg005, seg039, seg043
 extern const signed int g_nvftab_figures_dead[22];	//ds:0x1a13; seg005, seg039
 extern int16_t *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
-extern signed char g_double_size_gfx_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
+extern signed char g_double_size_sprite_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
 extern const signed int g_weaponani_table[72];		//ds:0x25fe; seg044
 extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093

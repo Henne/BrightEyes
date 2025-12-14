@@ -104,7 +104,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 			target_is_hero = 0;
 
-			if ((is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) && (l17 == 0))
+			if ((is_in_byte_array(target_enemy->sprite_id, g_double_size_sprite_id_table)) && (l17 == 0))
 			{
 				FIG_search_obj_on_cb(p_enemy->target_object_id, &target_x, &target_y);
 				FIG_search_obj_on_cb(enemy_id + 10, &hero_x, &hero_y);
@@ -168,7 +168,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				}
 
 				/* after destroying the orc statuette between Oberorken and Felsteyn, dwarfs get a PA-bonus against orcs */
-				if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (p_enemy->gfx_id == 24))
+				if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (p_enemy->sprite_id == ACTOR_SPRITE_ID_ORK))
 				{
 					defender_pa++;
 				}
@@ -645,7 +645,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 							}
 						}
 
-						if ((p_enemy->gfx_id != 0x12) && (p_enemy->gfx_id != 7) && (p_enemy->target_object_id > 0)) {
+						if ((p_enemy->sprite_id != ACTOR_SPRITE_ID_HEXE__FEMALE) && (p_enemy->sprite_id != ACTOR_SPRITE_ID_HEXE__MALE) && (p_enemy->target_object_id > 0)) {
 
 							l12 = FANI_prepare_shotbolt_ani(7, l11, enemy_id + 10, p_enemy->target_object_id, p_enemy->viewdir);
 						}
@@ -678,7 +678,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 							FIG_set_sheet(target_enemy->fighter_id, 1);
 
 
-							if (is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) {
+							if (is_in_byte_array(target_enemy->sprite_id, g_double_size_sprite_id_table)) {
 
 								fighter = FIG_get_fighter(target_enemy->fighter_id);
 
@@ -706,12 +706,12 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 							FIG_remove_from_list(target_enemy->fighter_id, 1);
 
-							g_fig_list_elem.figure = g_gfxtab_figures_main[target_enemy->gfx_id][0];
+							g_fig_list_elem.figure = g_gfxtab_figures_main[target_enemy->sprite_id][0];
 							g_fig_list_elem.nvf_no = target_enemy->viewdir;
-							g_fig_list_elem.offsetx = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].x;
-							g_fig_list_elem.offsety = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].y;
+							g_fig_list_elem.offsetx = g_gfxtab_offsets_main[target_enemy->sprite_id][target_enemy->viewdir].x;
+							g_fig_list_elem.offsety = g_gfxtab_offsets_main[target_enemy->sprite_id][target_enemy->viewdir].y;
 
-							if (is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) {
+							if (is_in_byte_array(target_enemy->sprite_id, g_double_size_sprite_id_table)) {
 
 								g_fig_list_elem.x1 = g_gfxtab_double_size_x1[target_enemy->viewdir];
 								g_fig_list_elem.x2 = g_gfxtab_double_size_x2[target_enemy->viewdir];
@@ -739,7 +739,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 								FIG_make_invisible(target_enemy->fighter_id);
 
-								if (is_in_byte_array(target_enemy->gfx_id, g_double_size_gfx_id_table)) {
+								if (is_in_byte_array(target_enemy->sprite_id, g_double_size_sprite_id_table)) {
 
 									fighter = FIG_get_fighter(target_enemy->fighter_id);
 
