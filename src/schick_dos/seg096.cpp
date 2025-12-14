@@ -189,8 +189,8 @@ static char g_grammar_bufs[5][40];	// ds:0xe4e3
  * \brief   makes a grammatical wordgroup
  *
  * \param   flag
- * \param   index	index of the word of which a worgroup should be made
- * \param   type	if index is true the index is an enemy, if not it is an item
+ * \param   index	index of the word of which a word group should be made
+ * \param   type	if type is true the index is an enemy, if not it is an item
  */
 uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed int type)
 {
