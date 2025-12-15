@@ -203,7 +203,13 @@ static inline char *get_tx(unsigned short no) {
 	return (char*)g_tx_index[no];
 }
 
-static inline signed char get_cb_val(const signed short x, const signed short y) {
+static inline signed char get_cb_val(const signed short x, const signed short y)
+{
+	if ((x < 0) || (x >= 25) || (y < 0) || (y >= 25)) {
+		fprintf(stderr, "%s(%d, %d) out of bounds\n", __func__, x, y);
+		return 0;
+	}
+
 	return *(g_chessboard + 25 * y + x);
 }
 
