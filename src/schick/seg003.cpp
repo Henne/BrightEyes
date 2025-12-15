@@ -42,7 +42,7 @@ void move(void)
 	volatile signed int boundary_flag;
 	unsigned char mapval;
 	volatile signed int i;
-	uint8_t *p_map_small;
+	uint8_t *p_map_small;	/* REMARK: use g_dng_map directly */
 	uint8_t *p_map_large;
 	struct point8s *p_vis_field;
 
@@ -91,7 +91,7 @@ void move(void)
 
 		mapval = (g_map_size_x == 16) ?
 			/* dungeon or small town */
-			*(p_map_small + MAP_POS(x,y )) :
+			*(p_map_small + MAP_POS(x, y)) :
 			/* large city */
 			*(p_map_large + LARGE_MAP_POS(x, y));
 
@@ -102,6 +102,7 @@ void move(void)
 		}
 	}
 
+#if defined(__BORLANDC__)
 	if (g_map_size_x == 16) {
 		/* dungeon or small town */
 		g_steptarget_front = *(p_map_small + MAP_POS(gs_x_target + p_vis_field[0].x, gs_y_target + p_vis_field[0].y));
@@ -113,6 +114,50 @@ void move(void)
 
 		g_steptarget_back  = *(p_map_large + LARGE_MAP_POS(gs_x_target + p_vis_field[1].x, gs_y_target + p_vis_field[1].y));
 	}
+#else
+
+	g_steptarget_front = 0;
+	g_steptarget_back = 0;
+
+	if (g_map_size_x == 16) {
+
+		const int front_index = MAP_POS(gs_x_target + p_vis_field[0].x, gs_y_target + p_vis_field[0].y);
+		const int back_index = MAP_POS(gs_x_target + p_vis_field[1].x, gs_y_target + p_vis_field[1].y);
+
+#if 0
+		fprintf(stderr, " %d %d, %d %d %d", gs_x_target, p_vis_field[0].x, gs_y_target, p_vis_field[0].y,
+				MAP_POS(gs_x_target + p_vis_field[0].x, gs_y_target + p_vis_field[0].y));
+#endif
+
+		/* dungeon or small town */
+		if ((0 <= front_index) && (front_index < 16 * 16)) {
+			g_steptarget_front = *(p_map_small + front_index);
+		}
+
+		if ((0 <= back_index) && (back_index < 16 * 16)) {
+			g_steptarget_back  = *(p_map_small + back_index);
+		}
+
+	} else {
+		const int front_index = LARGE_MAP_POS(gs_x_target + p_vis_field[0].x, gs_y_target + p_vis_field[0].y);
+		const int back_index = LARGE_MAP_POS(gs_x_target + p_vis_field[1].x, gs_y_target + p_vis_field[1].y);
+
+#if 0
+		fprintf(stderr, " %d %d, %d %d %d", gs_x_target, p_vis_field[0].x, gs_y_target, p_vis_field[0].y,
+				LARGE_MAP_POS(gs_x_target + p_vis_field[0].x, gs_y_target + p_vis_field[0].y));
+#endif
+		/* large city */
+		if ((0 <= front_index) && (front_index < 32 * 16)) {
+			g_steptarget_front = *(p_map_large + front_index);
+		}
+
+		if ((0 <= back_index) && (back_index < 32 * 16)) {
+			g_steptarget_back = *(p_map_large + back_index);
+		}
+	}
+
+//	fprintf(stderr, " front = 0x%x back = 0x%x\n", g_steptarget_front, g_steptarget_back);
+#endif
 }
 
 void door_frame(const signed int no, signed int x, signed int y, const signed int frame)
