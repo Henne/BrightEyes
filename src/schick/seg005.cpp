@@ -45,11 +45,8 @@ static signed char g_fig_star_last_count = -1; // ds:0x4b7b
 static const signed int g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
 signed char g_fig_star_printed = 0; // ds:0x4b94
 
-#if defined(__BORLANDC__)
 const char g_str_temp_xx[] = "TEMP\\XX"; // ds:0x4b95
-#else
-uint8_t *g_buffer_xx = NULL;
-#endif
+uint8_t* g_buffer_xx = NULL;
 
 static unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
 static signed int g_fig_figlist_readd[8];	// ds:0xe298
