@@ -36,8 +36,10 @@
 #include "seg096.h"
 
 signed int g_delay_factor = 4; // ds:0x4b66
+#if defined(__BORLANDC__)
 extern const char g_str_temp_xx[];
 static const char *g_str_temp_xx_ptr = &g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; uint8_t*
+#endif
 static const signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
 static signed char g_fig_star_counter = 0; // ds:0x4b78
 signed int g_fig_star_timer = 0; // ds:0x4b79

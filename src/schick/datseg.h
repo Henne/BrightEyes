@@ -1756,6 +1756,8 @@ extern signed int g_loaded_head_id;		//ds:0x515c; seg026, seg029
 
 extern const char* g_fnames_v302de[];		//ds:0x4c8c; seg002, seg026
 
+extern const char g_chr_file_suffix[];		//ds:0x5e3e; seg026, seg120
+
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
 extern signed char g_finalfight_tumult;		//ds:0x5f30; seg033, seg041
