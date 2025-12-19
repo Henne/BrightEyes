@@ -524,7 +524,13 @@ lab04:
 			if (hero1->inventory[pos1].quantity > 1) {
 
 				sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity, (char*)GUI_name_inflect_with_article(
+				/* get_ttx(210): "WIE VIELE DER %d^%s SOLLEN an %s ÜBERGEBEN WERDEN" */
+#ifndef M302de_ORIGINAL_BUGFIX
 					INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+#else
+					// this is 2nd case, not 4th
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_2ND_CASE,
+#endif
 					item_id1,
 					INFLECT_NAME_TYPE_ITEM
 				), hero2->alias);
@@ -628,7 +634,13 @@ lab04:
 		if (hero1->inventory[pos1].quantity > 1) {
 
 			sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity, (char*)GUI_name_inflect_with_article(
+			/* get_ttx(210): "WIE VIELE DER %d^%s SOLLEN an %s ÜBERGEBEN WERDEN" */
+#ifndef M302de_ORIGINAL_BUGFIX
 				INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+#else
+				// this is 2nd case, not 4th
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_2ND_CASE,
+#endif
 				item_id1,
 				INFLECT_NAME_TYPE_ITEM
 			), hero2->alias);

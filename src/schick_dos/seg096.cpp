@@ -275,23 +275,51 @@ uint8_t* GUI_name_inflect_with_article(int16_t inflection_features, const signed
 		/* string_array_itemnames */
 		p_name = g_itemsname[name_id];
 
+		 /* set gender to bits 12 and 13 */
+#ifndef M302de_ORIGINAL_BUGFIX
+		// Usage of + is not clean, assumes that the bits got initialized with 0.
+		// This is probably always the case, so more a glitch than a bug.
 		inflection_features += gender_bitmask.a[g_item_name_genders[name_id]]; /* set gender to bits 12, 13 */
+#else
+		inflection_features |= gender_bitmask.a[g_item_name_genders[name_id]]; /* set gender to bits 12, 13 */
+#endif
 
 		tmp_ptr = &g_items_noplural[0];
 
 		while (((tmp = *tmp_ptr++) != -1) && (tmp != name_id));
 
 		if (tmp == name_id) {
-			// item name has no plural form
-			inflection_features += INFLECT_PLURAL; // set plural bit
+			/* item name has no plural form */
+
+#ifndef M302de_ORIGINAL_BUGFIX
+			// the following is pretty wild...
+			inflection_features += INFLECT_PLURAL; // Usage of "+" instead of "|" is not clean. This in effect toggles the plural bit.
 			inflection_features &= ~INFLECT_DEFINITE_ARTICLE; // unset bit 15 (unset definite_article)
 			inflection_features |= INFLECT_OMIT_ARTICLE; // set bit 14 (set omit_article)
-			if (inflection_features & 1) // either 2nd or 3rd case
+			if (inflection_features & 1) // either 2nd or 3rd case. 3rd case does not make sense here.
 				use_von_form = 1;
+#else
+			// Maybe this was the original intention
+			inflection_features &= ~INFLECT_NUMBER_BITMASK; // unset plural bit
+
+			if ((inflection_features & INFLECT_CASE_BITMASK) == INFLECT_2ND_CASE) {
+				inflection_features &= ~INFLECT_DEFINITE_ARTICLE; // unset bit 15 (unset definite_article)
+				inflection_features |= INFLECT_OMIT_ARTICLE; // set bit 14 (set omit_article)
+				use_von_form = 1;
+			}
+#endif
 		}
 	} else {
 		p_name = g_monnames_index[name_id];
-		inflection_features += gender_bitmask.a[g_monster_name_genders[name_id]]; /* set gender to bits 12 and 13 */
+
+		 /* set gender to bits 12 and 13 */
+#ifndef M302de_ORIGINAL_BUGFIX
+		// Usage of + is not clean, assumes that the bits got initialized with 0.
+		// This is probably always the case, so more a glitch than a bug.
+		inflection_features += gender_bitmask.a[g_monster_name_genders[name_id]];
+#else
+		inflection_features |= gender_bitmask.a[g_monster_name_genders[name_id]];
+#endif
 	}
 
 	// point tmp_ptr to the entry in g_grammar_definite_article_table in masculine form, grammatical number and case described by bits 0..2
@@ -363,8 +391,14 @@ char* GUI_name_inflect(const signed int inflection_features, char *noun_template
 		*p++ = *noun_template++;
 
 	if (
-		(inflection_features & INFLECT_CASE_NUMBER_BITMASK) == 1 &&     // 2nd or 3rd case singular
-		(inflection_features & INFLECT_GENDER_BITMASK) != INFLECT_FEMININE // masculine or neuter
+#ifndef M302de_ORIGINAL_BUGFIX
+		(inflection_features & INFLECT_CASE_NUMBER_BITMASK) == 1
+		// 2nd or 3rd case singular. 3rd case is not correct.
+#else
+		(inflection_features & INFLECT_CASE_NUMBER_BITMASK) == INFLECT_2ND_CASE
+		// 2nd case singular
+#endif
+		&& (inflection_features & INFLECT_GENDER_BITMASK) != INFLECT_FEMININE // masculine or neuter
 	) {
 		// if word ends in B or D, append 'E'
 		if (*(p-1) == 'B' || *(p-1) == 'D') {
@@ -374,18 +408,22 @@ char* GUI_name_inflect(const signed int inflection_features, char *noun_template
 		// then always append 'S'
 		*p++ = 'S';
 
-		// Examples: HEMD -> HEMDES, DEGEN -> DEGENS
+		// Example: DAS HEMD
+		// second case: "angesichts DES HEMDES"
+		// third case: "Ich vertraue DEM HEMD"
+		// fourth case: "Ich sehe DAS HEMD"
 
 	} else {
-		if (
-			((inflection_features & INFLECT_CASE_NUMBER_BITMASK) == (INFLECT_PLURAL | INFLECT_3RD_CASE)) && // 3rd case plural (shouldn't this apply to 4th case plural, too?)
-			(*(p-1) != 'N') && (*(p-1) != 'S') // Word does not end in N or S
-		) {
+		if (((inflection_features & INFLECT_CASE_NUMBER_BITMASK) == (INFLECT_PLURAL | INFLECT_3RD_CASE))
+			&& (*(p-1) != 'N') && (*(p-1) != 'S')) {
 			// append 'N'
-			*p++ = 'N';
+				*p++ = 'N';
 		}
 
-		// example DER HELM, plural DIE HELME, for fourth case append N -> DEN HELMEN
+		// Example: DER HELM, plural DIE HELME
+		// second case: "angesichts DER HELME" -> no N
+		// third case: "Ich vertraue DEN HELMEN" -> append N
+		// fourth case: "Ich sehe DIE HELME" -> no N
 	}
 
 	*p = 0; // append terminator symbol
