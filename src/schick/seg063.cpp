@@ -759,7 +759,12 @@ void sea_travel(const signed int passage_id, const signed int reverse)
 			*(ptr + gs_travel_course_ptr[1] * 320 + gs_travel_course_ptr[0]) =
 				g_trv_track_pixel_bak[gs_travel_step_counter];
 
-		} while (gs_travel_course_ptr[0] != -1);
+		}
+#if defined(__BORLANDC__)
+		while (gs_travel_course_ptr[0] != -1);
+#else
+		while ((gs_travel_course_ptr[0] != -1) && (gs_travel_step_counter != 0));
+#endif
 
 		call_mouse();
 	}
