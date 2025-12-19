@@ -435,17 +435,21 @@ char g_fn_v302de_305[] = "FX17.VOC";
 char g_fn_v302de_306[] = "FX18.VOC";
 char g_fn_v302de_307[] = "OUTRO.XMI";
 
-char g_chr_file_suffix[5] = ".CHR"; // ds:0x5e3e
-char g_savegame_suffix[5] = ".gam"; // ds:0x5e43
-char g_all_files_wildcard[4] = "*.*"; // ds:0x5e48
-char g_all_chr_wildcard[6] = "*.CHR"; // ds:0x5e4c
-char g_empty_string1[1] = ""; // ds:0x5e52
-char g_empty_string2[1] = ""; // ds:0x5e53
-char g_savegame_suffix2[5] = ".gam"; // ds:0x5e54
-char g_savegame_suffix3[5] = ".gam"; // ds:0x5e59
-char g_all_chr_wildcard2[6] = "*.CHR"; // ds:0x5e5e
-char g_all_chr_wildcard3[6] = "*.CHR"; // ds:0x5e64
+const char g_chr_file_suffix[] = ".CHR"; // ds:0x5e3e
 
+#if defined(__BORLANDC__)
+static const char g_savegame_suffix[] = ".gam"; // ds:0x5e43
+static const char g_all_files_wildcard[] = "*.*"; // ds:0x5e48
+static const char g_all_chr_wildcard[] = "*.CHR"; // ds:0x5e4c
+static const char g_empty_string1[] = ""; // ds:0x5e52
+static const char g_empty_string2[] = ""; // ds:0x5e53
+static const char g_savegame_suffix2[] = ".gam"; // ds:0x5e54
+static const char g_savegame_suffix3[] = ".gam"; // ds:0x5e59
+static const char g_all_chr_wildcard2[] = "*.CHR"; // ds:0x5e5e
+static const char g_all_chr_wildcard3[] = "*.CHR"; // ds:0x5e64
+#else
+static const char g_savegame_suffix[] = ".GAM";
+#endif
 
 
 static uint32_t *g_saved_files_buf;		// ds:0xe2d2
@@ -1318,7 +1322,7 @@ signed int copy_chr_names(char *ptr, const signed int temple_id)
 
 		while (dp != NULL) {
 
-			if ((strlen(dp->d_name) <= 12) && strstr(dp->d_name, ".CHR")) {
+			if ((strlen(dp->d_name) <= 12) && strstr(dp->d_name, g_chr_file_suffix)) {
 
 				char path[20];
 

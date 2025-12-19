@@ -789,7 +789,7 @@ void prepare_dirs(void)
 
 		while (ent != NULL) {
 
-			if (strstr(ent->d_name, ".CHR") && (strlen(ent->d_name) <= 12)) {
+			if (strstr(ent->d_name, g_chr_file_suffix) && (strlen(ent->d_name) <= 12)) {
 
 				signed int handle = open(ent->d_name, O_RDONLY);
 
