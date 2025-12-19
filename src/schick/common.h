@@ -1687,6 +1687,32 @@ enum {
 };
 
 enum {
+	INFLECT_NAME_TYPE_ITEM = 0,
+	INFLECT_NAME_TYPE_MONSTER = 1
+};
+
+enum {
+	INFLECT_1ST_CASE            = GRAMMAR_CASE_1ST,                     // 0x0000
+	INFLECT_2ND_CASE            = GRAMMAR_CASE_2ND,                     // 0x0001
+	INFLECT_4TH_CASE            = GRAMMAR_CASE_4TH,                     // 0x0002
+	INFLECT_3RD_CASE            = GRAMMAR_CASE_3RD,                     // 0x0003
+	INFLECT_CASE_BITMASK        = 0x03,				    // 0x0003
+	INFLECT_SINGULAR            = GRAMMAR_NUMBER_SINGULAR << 2,         // 0x0000
+	INFLECT_PLURAL              = GRAMMAR_NUMBER_PLURAL << 2,           // 0x0004
+	INFLECT_NUMBER_BITMASK      = 0x01 << 2,                            // 0x0004
+	INFLECT_CASE_NUMBER_BITMASK = 0x0f,			            // 0x000f (1st nibble, includes bit 3 (unused))
+	INFLECT_GENDER_UNSPECIFIED  = 0x00 << 12,                           // 0x0000
+	INFLECT_MASCULINE           = (GRAMMAR_GENDER_MASCULINE + 1) << 12, // 0x1000
+	INFLECT_FEMININE            = (GRAMMAR_GENDER_FEMININE + 1) << 12,  // 0x2000
+	INFLECT_NEUTER              = (GRAMMAR_GENDER_NEUTER + 1) << 12,    // 0x3000
+	INFLECT_GENDER_BITMASK      = 0x03 << 12,                           // 0x3000
+	INFLECT_INDEFINITE_ARTICLE  = GRAMMAR_ARTICLE_INDEFINITE << 14,     // 0x0000
+	INFLECT_OMIT_ARTICLE        = GRAMMAR_ARTICLE_NONE << 14,           // 0x4000
+	INFLECT_DEFINITE_ARTICLE    = GRAMMAR_ARTICLE_DEFINITE << 14,       // 0x8000
+	INFLECT_ARTICLE_BITMASK     = 0x03 << 14                            // 0xc000
+};
+
+enum {
 	/* strictly speaking, these values encode not only the ship type, but the combined information
 	 * route type (high seas vs. costal); ship type (Langschiff, etc.); passage type (Kabinenpassage, etc.)
 	 * As there are at most two possible combinations per type of ship, we still call it SHIP_TYPE for simplicity. */

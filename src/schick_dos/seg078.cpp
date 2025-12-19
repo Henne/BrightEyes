@@ -87,7 +87,7 @@ signed int DNG02_handler(void)
 
 		} else {
 
-			sprintf(g_dtp2, get_tx(9), hero->alias, GUI_get_ptr(hero->sex, 0));
+			sprintf(g_dtp2, get_tx(9), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 			GUI_output(g_dtp2);
 
 			flag = 0;
@@ -97,7 +97,7 @@ signed int DNG02_handler(void)
 				/* KK+4 */
 				if (test_attrib(hero, ATTRIB_KK, 4) <= 0)
 				{
-					sprintf(g_dtp2, get_tx(10),hero->alias, GUI_get_ptr(hero->sex, 0));
+					sprintf(g_dtp2, get_tx(10),hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 					GUI_output(g_dtp2);
 
@@ -324,9 +324,9 @@ signed int DNG02_handler(void)
 				hero->flags.petrified = 1;
 
 				sprintf(g_dtp2, get_tx(42), hero->alias,
-					GUI_get_ptr(hero->sex, 0),
-					GUI_get_ptr(hero->sex, 0),
-					GUI_get_ptr(hero->sex, 0),
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
 					hero->alias);
 
 				GUI_output(g_dtp2);
@@ -420,7 +420,7 @@ signed int DNG02_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_talent(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -453,7 +453,7 @@ signed int DNG02_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_talent(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
-				(GUI_get_ptr(hero->sex, 0)));
+				(GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST)));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -484,7 +484,7 @@ signed int DNG02_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_talent(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 

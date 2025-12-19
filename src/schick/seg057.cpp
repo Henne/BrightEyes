@@ -289,7 +289,7 @@ void sell_screen(struct merchant_descr *merchant_descr)
 
 			clear_loc_line();
 
-			GUI_print_loc_line(GUI_name_singular(g_itemsname[g_item_selector_sell[item_selector_pos + item_selector_page_offset].item_id]));
+			GUI_print_loc_line(GUI_name_base_form(g_itemsname[g_item_selector_sell[item_selector_pos + item_selector_page_offset].item_id]));
 		}
 
 		if (g_mouse_rightclick_event  || g_action == ACTION_ID_PAGE_UP) {
@@ -324,7 +324,11 @@ void sell_screen(struct merchant_descr *merchant_descr)
 
 				if (g_itemsdat[item_id].flags.undropable) {
 
-					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar(0x8002, item_id, 0));
+					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_name_inflect_with_article(
+						INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+						item_id,
+						INFLECT_NAME_TYPE_ITEM
+					));
 					GUI_output(g_dtp2);
 
 				} else {
@@ -336,7 +340,11 @@ void sell_screen(struct merchant_descr *merchant_descr)
 
 						if (g_itemsdat[item_id].flags.stackable && (hero1->inventory[l15].quantity > 1)) {
 
-							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
+							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_name_inflect_with_article(
+								INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+								item_id,
+								INFLECT_NAME_TYPE_ITEM
+							));
 
 							nice = GUI_input(g_dtp2, 2);
 
@@ -367,7 +375,11 @@ void sell_screen(struct merchant_descr *merchant_descr)
 					} else {
 						if (g_itemsdat[item_id].flags.stackable && (hero1->inventory[l15].quantity > 1)) {
 
-							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
+							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_name_inflect_with_article(
+								INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+								item_id,
+								INFLECT_NAME_TYPE_ITEM
+							));
 
 							nice = GUI_input(g_dtp2, 2);
 

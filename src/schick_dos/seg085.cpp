@@ -106,7 +106,7 @@ signed int DNG10_handler(void)
 		/* check if the hero will survive */
 		if (hero->le > answer)
 		{
-			sprintf(g_text_output_buf, get_tx(10), GUI_get_ptr(hero->sex, 0));
+			sprintf(g_text_output_buf, get_tx(10), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 		}

@@ -458,7 +458,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 								g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
-								strcpy(g_radio_name_list[radio_i], GUI_name_singular(g_itemsname[weapon_id]));
+								strcpy(g_radio_name_list[radio_i], GUI_name_base_form(g_itemsname[weapon_id]));
 
 								radio_i++;
 							}
@@ -472,7 +472,12 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 								sprintf(g_text_output_buf, get_tx(60), hero->alias);
 							} else {
 								sprintf(g_text_output_buf, get_tx(31), hero->alias,
-									GUI_names_grammar(0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
+									GUI_name_inflect_with_article(
+										INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+										hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id,
+										INFLECT_NAME_TYPE_ITEM
+									)
+								);
 							}
 
 							call_mouse();
@@ -524,7 +529,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 								sprintf(g_radio_name_list[radio_i],
 									g_space_separated_strings, /* "%s %s" */
-									GUI_name_singular(g_itemsname[weapon_id]),
+									GUI_name_base_form(g_itemsname[weapon_id]),
 									hero->inventory[i].flags.broken ? get_ttx(478) : g_empty_string3);
 
 								radio_i++;
@@ -536,7 +541,12 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 							GUI_output(g_dtp2);
 						} else {
 							sprintf(g_text_output_buf, get_tx(2), hero->alias,
-								GUI_names_grammar(0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
+								GUI_name_inflect_with_article(
+									INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+									hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id,
+									INFLECT_NAME_TYPE_ITEM
+								)
+							);
 
 							call_mouse();
 							tw_bak = g_textbox_width;
@@ -675,7 +685,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 					/* RS */
 					hero->rs_bonus,
 					/* weapon name */
-					GUI_name_singular(g_itemsname[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id]),
+					GUI_name_base_form(g_itemsname[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id]),
 					/* damage bounds */
 					damage_lo, damage_hi,
 					/* LE */
@@ -731,7 +741,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 							g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
-							strcpy(g_radio_name_list[radio_i], GUI_name_singular(g_itemsname[weapon_id]));
+							strcpy(g_radio_name_list[radio_i], GUI_name_base_form(g_itemsname[weapon_id]));
 
 							radio_i++;
 						}

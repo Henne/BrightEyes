@@ -315,7 +315,7 @@ signed int DNG08_handler(void)
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 2) <= 0)
 			{
-				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(1, 6, 4));
@@ -336,7 +336,7 @@ signed int DNG08_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -412,7 +412,11 @@ void DNG08_search_bed(void)
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 92, 0));
+		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			ITEM_SCHNAPSFLASCHE,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		/* a BRANDY BOTTLE */
 		give_new_item_to_group(ITEM_SCHNAPSFLASCHE, 1, 1);
@@ -424,7 +428,11 @@ void DNG08_search_bed(void)
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 14, 0));
+		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			ITEM_DOLCH,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		/* a DAGGER */
 		give_new_item_to_group(ITEM_DOLCH, 1, 1);
@@ -459,7 +467,7 @@ void DNG08_chest01_trap(void)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	sprintf(g_dtp2, get_tx(11), hero->alias, GUI_get_ptr(hero->sex, 1));
+	sprintf(g_dtp2, get_tx(11), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 	GUI_output(g_dtp2);
 
 	/* 3W6 damage */

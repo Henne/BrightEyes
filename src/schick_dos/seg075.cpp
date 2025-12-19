@@ -1153,8 +1153,8 @@ void DNG_stub6(void)
 				} while (l_di);
 
 				sprintf(g_text_output_buf, get_ttx(771), hero_auto->alias,
-					GUI_get_ptr(hero_auto->sex, 0),
-					GUI_get_ptr(hero_auto->sex, 2));
+					GUI_get_personal_pronoun(hero_auto->sex, GRAMMAR_CASE_1ST),
+					GUI_get_personal_pronoun(hero_auto->sex, GRAMMAR_CASE_4TH));
 
 				strcat(g_dtp2, g_text_output_buf);
 			}

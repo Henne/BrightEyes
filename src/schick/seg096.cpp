@@ -19,21 +19,39 @@
 #include "seg096.h"
 #include "seg097.h"
 
-static char g_grammar_article_der[4] = "DER"; // ds:0xa8d4
-static char g_grammar_article_die[4] = "DIE"; // ds:0xa8d8
-static char g_grammar_article_das[4] = "DAS"; // ds:0xa8dc
-static char g_grammar_article_des[4] = "DES"; // ds:0xa8e0
-static char g_grammar_article_den[4] = "DEN"; // ds:0xa8e4
-static char g_grammar_article_dem[4] = "DEM"; // ds:0xa8e8
-static char g_grammar_article_ein[4] = "EIN"; // ds:0xa8ec
-static char g_grammar_article_eine[5] = "EINE"; // ds:0xa8f0
-static char g_grammar_article_eines[6] = "EINES"; // ds:0xa8f5
-static char g_grammar_article_einer[6] = "EINER"; // ds:0xa8fb
-static char g_grammar_article_einen[6] = "EINEN"; // ds:0xa901
-static char g_grammar_article_eine2[5] = "EINE"; // ds:0xa907
-static char g_grammar_article_einem[6] = "EINEM"; // ds:0xa90c
-static char g_grammar_article_0[1] = ""; // ds:0xa912
-static char g_grammar_article_von[4] = "VON"; // ds:0xa913
+enum{
+	GRAMMAR_ARTICLE_ID_DER       = 0,
+	GRAMMAR_ARTICLE_ID_DIE       = 1,
+	GRAMMAR_ARTICLE_ID_DAS       = 2,
+	GRAMMAR_ARTICLE_ID_DES       = 3,
+	GRAMMAR_ARTICLE_ID_DEN       = 4,
+	GRAMMAR_ARTICLE_ID_DEM       = 5,
+	GRAMMAR_ARTICLE_ID_EIN       = 6,
+	GRAMMAR_ARTICLE_ID_EINE      = 7,
+	GRAMMAR_ARTICLE_ID_EINES     = 8,
+	GRAMMAR_ARTICLE_ID_EINER     = 9,
+	GRAMMAR_ARTICLE_ID_EINEN     = 10,
+	GRAMMAR_ARTICLE_ID_EINE__DUP = 11, // the article "eine" is present twice
+	GRAMMAR_ARTICLE_ID_EINEM     = 12,
+	GRAMMAR_ARTICLE_ID_NONE      = 13,
+	GRAMMAR_ARTICLE_ID_VON       = 14
+};
+
+static char g_grammar_article_der[4]       = "DER"; // ds:0xa8d4
+static char g_grammar_article_die[4]       = "DIE"; // ds:0xa8d8
+static char g_grammar_article_das[4]       = "DAS"; // ds:0xa8dc
+static char g_grammar_article_des[4]       = "DES"; // ds:0xa8e0
+static char g_grammar_article_den[4]       = "DEN"; // ds:0xa8e4
+static char g_grammar_article_dem[4]       = "DEM"; // ds:0xa8e8
+static char g_grammar_article_ein[4]       = "EIN"; // ds:0xa8ec
+static char g_grammar_article_eine[5]      = "EINE"; // ds:0xa8f0
+static char g_grammar_article_eines[6]     = "EINES"; // ds:0xa8f5
+static char g_grammar_article_einer[6]     = "EINER"; // ds:0xa8fb
+static char g_grammar_article_einen[6]     = "EINEN"; // ds:0xa901
+static char g_grammar_article_eine__dup[5] = "EINE"; // ds:0xa907
+static char g_grammar_article_einem[6]     = "EINEM"; // ds:0xa90c
+static char g_grammar_article_none[1]      = ""; // ds:0xa912
+static char g_grammar_article_von[4]       = "VON"; // ds:0xa913
 static char* g_grammar_articles_index[15] = {
 	g_grammar_article_der,
 	g_grammar_article_die,
@@ -46,28 +64,43 @@ static char* g_grammar_articles_index[15] = {
 	g_grammar_article_eines,
 	g_grammar_article_einer,
 	g_grammar_article_einen,
-	g_grammar_article_eine2,
+	g_grammar_article_eine__dup,
 	g_grammar_article_einem,
-	g_grammar_article_0,
+	g_grammar_article_none,
 	g_grammar_article_von
 }; // ds:0xa917; uint8_t*
-static signed int g_grammar_def_table[24] = {
-	0, 1, 2, 3, 0, 3,
-	4, 1, 2, 5, 0, 5,
-	1, 1, 1, 0, 0, 0,
-	1, 1, 1, 4, 4, 4
-}; // ds:0xa953, [8], by case, then by gender
-static signed int g_grammar_indef_table[24] = {
-	6, 7, 6, 8, 9, 8,
-	10, 11, 6, 12, 9, 12,
-	13, 13, 13, 13, 13, 13,
-	13, 13, 13, 13, 13, 13
+
+static signed int g_grammar_definite_article_table[24] = {
+	GRAMMAR_ARTICLE_ID_DER, GRAMMAR_ARTICLE_ID_DIE, GRAMMAR_ARTICLE_ID_DAS, // singular, 1st case
+	GRAMMAR_ARTICLE_ID_DES, GRAMMAR_ARTICLE_ID_DER, GRAMMAR_ARTICLE_ID_DES, // singular, 2nd case
+	GRAMMAR_ARTICLE_ID_DEN, GRAMMAR_ARTICLE_ID_DIE, GRAMMAR_ARTICLE_ID_DAS, // singular, 4th case
+	GRAMMAR_ARTICLE_ID_DEM, GRAMMAR_ARTICLE_ID_DER, GRAMMAR_ARTICLE_ID_DEM, // singular, 3rd case
+	GRAMMAR_ARTICLE_ID_DIE, GRAMMAR_ARTICLE_ID_DIE, GRAMMAR_ARTICLE_ID_DIE, // plural, 1st case
+	GRAMMAR_ARTICLE_ID_DER, GRAMMAR_ARTICLE_ID_DER, GRAMMAR_ARTICLE_ID_DER, // plural, 2st case
+	GRAMMAR_ARTICLE_ID_DIE, GRAMMAR_ARTICLE_ID_DIE, GRAMMAR_ARTICLE_ID_DIE, // plural, 4st case
+	GRAMMAR_ARTICLE_ID_DEN, GRAMMAR_ARTICLE_ID_DEN, GRAMMAR_ARTICLE_ID_DEN  // plural, 3st case
+}; // ds:0xa953, [8],
+
+static signed int g_grammar_indefinite_article_table[24] = {
+	GRAMMAR_ARTICLE_ID_EIN,   GRAMMAR_ARTICLE_ID_EINE,      GRAMMAR_ARTICLE_ID_EIN,   // singular, 1st case
+	GRAMMAR_ARTICLE_ID_EINES, GRAMMAR_ARTICLE_ID_EINER,     GRAMMAR_ARTICLE_ID_EINES, // singular, 2nd case
+	GRAMMAR_ARTICLE_ID_EINEN, GRAMMAR_ARTICLE_ID_EINE__DUP, GRAMMAR_ARTICLE_ID_EIN,   // singular, 4th case
+	GRAMMAR_ARTICLE_ID_EINEM, GRAMMAR_ARTICLE_ID_EINER,     GRAMMAR_ARTICLE_ID_EINEM, // singular, 3rd case
+	GRAMMAR_ARTICLE_ID_NONE,  GRAMMAR_ARTICLE_ID_NONE,      GRAMMAR_ARTICLE_ID_NONE,  // plural, 1st case
+	GRAMMAR_ARTICLE_ID_NONE,  GRAMMAR_ARTICLE_ID_NONE,      GRAMMAR_ARTICLE_ID_NONE,  // plural, 2st case
+	GRAMMAR_ARTICLE_ID_NONE,  GRAMMAR_ARTICLE_ID_NONE,      GRAMMAR_ARTICLE_ID_NONE,  // plural, 4st case
+	GRAMMAR_ARTICLE_ID_NONE,  GRAMMAR_ARTICLE_ID_NONE,      GRAMMAR_ARTICLE_ID_NONE   // plural, 3st case
 }; // ds:0xa983, [8], by case, then by gender
-static signed int g_grammar_noarticle_table[24] = {
-	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
-	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
-	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
-	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d
+
+static signed int g_grammar_omitted_article_table[24] = {
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, // singular, 1st case
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, // singular, 2nd case
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, // singular, 4th case
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, // singular, 3rd case
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, // plural, 1st case
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, // plural, 2st case
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, // plural, 4st case
+	GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE, GRAMMAR_ARTICLE_ID_NONE  // plural, 3st case
 }; // ds:0xa9b3, [8], by case, then by gender
 
 extern char g_str_s_s[6];
@@ -75,16 +108,35 @@ extern char g_str_von_s_s[9];
 
 static char *g_str_s_s_ptr = (char*)&g_str_s_s; // ds:0xa9e3, to STR_S_S; uint8_t*
 static char *g_str_von_s_s_ptr = (char*)&g_str_von_s_s; // ds:0xa9e7, to STR_VON_S_S; uint8_t*
-static signed int g_grammar_buf_no = 0; // ds:0xa9eb
-static struct int16_t_3 g_grammar_gender_bitmasks = { 0x1000, 0x2000, 0x3000 }; // ds:0xa9ed, {0x1000, 0x2000, 0x3000}
-static char g_grammar_pronouns_er[3] = "ER"; // ds:0xa9f3
-static char g_grammar_pronouns_sie[4] = "SIE"; // ds:0xa9f6
-static char g_grammar_pronouns_es[3] = "ES"; // ds:0xa9fa
-static char g_grammar_pronouns_sein[5] = "SEIN"; // ds:0xa9fd
-static char g_grammar_pronouns_ihr[4] = "IHR"; // ds:0xaa02
-static char g_grammar_pronouns_ihn[4] = "IHN"; // ds:0xaa06
-static char g_grammar_pronouns_ihm[4] = "IHM"; // ds:0xaa0a
-static char g_grammar_pronouns_ihnen[6] = "IHNEN"; // ds:0xaa0e
+
+static signed int g_grammar_buf_index = 0; // ds:0xa9eb
+// takes values 0, 1, 2, 3. Used to access g_grammar_bufs[1..4] (note the index shift!) as a ring buffer.
+
+static struct int16_t_3 g_grammar_gender_bitmasks = {
+	INFLECT_MASCULINE, // 0x1000
+	INFLECT_FEMININE,  // 0x2000
+	INFLECT_NEUTER     // 0x3000
+}; // ds:0xa9ed
+
+enum {
+	GRAMMAR_PRONOUN_ID_ER    = 0,
+	GRAMMAR_PRONOUN_ID_SIE   = 1,
+	GRAMMAR_PRONOUN_ID_ES    = 2,
+	GRAMMAR_PRONOUN_ID_SEIN  = 3,
+	GRAMMAR_PRONOUN_ID_IHR   = 4,
+	GRAMMAR_PRONOUN_ID_IHN   = 5,
+	GRAMMAR_PRONOUN_ID_IHM   = 6,
+	GRAMMAR_PRONOUN_ID_IHNEN = 7
+};
+
+static char g_grammar_pronouns_er[3]     = "ER"; // ds:0xa9f3
+static char g_grammar_pronouns_sie[4]    = "SIE"; // ds:0xa9f6
+static char g_grammar_pronouns_es[3]     = "ES"; // ds:0xa9fa
+static char g_grammar_pronouns_sein[5]   = "SEIN"; // ds:0xa9fd
+static char g_grammar_pronouns_ihr[4]    = "IHR"; // ds:0xaa02
+static char g_grammar_pronouns_ihn[4]    = "IHN"; // ds:0xaa06
+static char g_grammar_pronouns_ihm[4]    = "IHM"; // ds:0xaa0a
+static char g_grammar_pronouns_ihnen[6]  = "IHNEN"; // ds:0xaa0e
 static char *g_grammar_pronouns_index[7] = {
 	g_grammar_pronouns_er,
 	g_grammar_pronouns_sie,
@@ -94,7 +146,18 @@ static char *g_grammar_pronouns_index[7] = {
 	g_grammar_pronouns_ihn,
 	g_grammar_pronouns_ihm
 }; // ds:0xaa14; uint8_t*
-static const signed char g_grammar_pronouns_table2[33] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x05, 0x01, 0x02, 0x06, 0x04, 0x06, 0x01, 0x01, 0x01, 0x04, 0x04, 0x04, 0x01, 0x01, 0x01, 0x07, 0x07, 0x07, 0x00, -128, -64, -32, -16, -8, -4, -2, -1 }; // ds:0xaa30, by gender and ??
+
+static const signed char g_grammar_pronouns_table2[33] = {
+	GRAMMAR_PRONOUN_ID_ER,    GRAMMAR_PRONOUN_ID_SIE,   GRAMMAR_PRONOUN_ID_ES,    // singular, 1st case
+	GRAMMAR_PRONOUN_ID_SEIN,  GRAMMAR_PRONOUN_ID_IHR,   GRAMMAR_PRONOUN_ID_SEIN,  // singular, posessive (2nd case would be "seiner, ihrer, seiner")
+	GRAMMAR_PRONOUN_ID_IHN,   GRAMMAR_PRONOUN_ID_SIE,   GRAMMAR_PRONOUN_ID_ES,    // singular, 4th case
+	GRAMMAR_PRONOUN_ID_IHM,   GRAMMAR_PRONOUN_ID_IHR,   GRAMMAR_PRONOUN_ID_IHM,   // singular, 3rd case
+	GRAMMAR_PRONOUN_ID_SIE,   GRAMMAR_PRONOUN_ID_SIE,   GRAMMAR_PRONOUN_ID_SIE,   // plural, 1st case
+	GRAMMAR_PRONOUN_ID_IHR,   GRAMMAR_PRONOUN_ID_IHR,   GRAMMAR_PRONOUN_ID_IHR,   // plural, posessive (2nd case would be "ihrer, ihrer, ihrer")
+	GRAMMAR_PRONOUN_ID_SIE,   GRAMMAR_PRONOUN_ID_SIE,   GRAMMAR_PRONOUN_ID_SIE,   // plural, 4th case
+	GRAMMAR_PRONOUN_ID_IHNEN, GRAMMAR_PRONOUN_ID_IHNEN, GRAMMAR_PRONOUN_ID_IHNEN, // plural, 3rd case
+	0x00, -128, -64, -32, -16, -8, -4, -2, -1
+}; // ds:0xaa30
 
 static const struct struct_char_width g_gui_char_width[75] = {
 	{        ' ',  0, 6 },
@@ -186,54 +249,69 @@ static char g_grammar_bufs[5][40];	// ds:0xe4e3
 
 //000
 /**
- * \brief   makes a grammatical wordgroup
+ * \brief   Forms a grammatical inflection of a noun, possibly including an article.
  *
- * \param   flag
- * \param   index	index of the word of which a word group should be made
- * \param   type	if type is true the index is an enemy, if not it is an item
+ * \param   inflection_features
+ *              bits 0 and 1: case
+ *                  0: 1st case; 1: 2nd case; 2: 4th case; 3: 3rd case
+ *              bit 2: number
+ *                  0: singular; 1: plural
+ *              bits 14 and 15: article
+ *                  1: indefinite article (ein/eine/einer etc.); 2: omit article; 3: definite article (der/die/das etc.)
+ *              bits 12 and 13 are internally added for gender.
+ *                  1: masculine; 2: feminine; 3: neuter
+ * \param   name_id	index of the noun to be inflected
+ * \param   name_type	0: name_id refers to an item; 1: name_id refers to a monster.
  */
-
-uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed int type)
+uint8_t* GUI_name_inflect_with_article(int16_t inflection_features, const signed int name_id, const signed int name_type)
 {
-	signed int *lp1;
-	signed int bit_set = 0;
+	signed int *tmp_ptr; /* multi use: pointer to entries of g_items_noplural, g_grammar_definite_article_table, g_grammar_omitted_article_table, and g_grammar_indefinite_article_table */
+	signed int use_von_form = 0;
 	char *p_name;
 	signed int tmp;
-	struct int16_t_3 lp5 = g_grammar_gender_bitmasks;
-	//int16_t lp5[3] = { {0x1000, 0x2000, 0x3000} };
+	struct int16_t_3 gender_bitmask = g_grammar_gender_bitmasks;
 
-	if (type == 0) {
+	if (name_type == INFLECT_NAME_TYPE_ITEM) {
 		/* string_array_itemnames */
-		p_name = g_itemsname[index];
+		p_name = g_itemsname[name_id];
 
-		flag += lp5.a[g_item_name_genders[index]];
+		inflection_features += gender_bitmask.a[g_item_name_genders[name_id]]; /* set gender to bits 12, 13 */
 
-		lp1 = &g_items_noplural[0];
+		tmp_ptr = &g_items_noplural[0];
 
-		while (((tmp = *lp1++) != -1) && (tmp != index));
+		while (((tmp = *tmp_ptr++) != -1) && (tmp != name_id));
 
-		if (tmp == index) {
-			flag += 4;
-			flag &= 0x7fff;
-			flag |= 0x4000;
-			if (flag & 1)
-				bit_set = 1;
+		if (tmp == name_id) {
+			// item name has no plural form
+			inflection_features += INFLECT_PLURAL; // set plural bit
+			inflection_features &= ~INFLECT_DEFINITE_ARTICLE; // unset bit 15 (unset definite_article)
+			inflection_features |= INFLECT_OMIT_ARTICLE; // set bit 14 (set omit_article)
+			if (inflection_features & 1) // either 2nd or 3rd case
+				use_von_form = 1;
 		}
 	} else {
-		p_name = g_monnames_index[index];
-		flag += lp5.a[g_monster_name_genders[index]];
+		p_name = g_monnames_index[name_id];
+		inflection_features += gender_bitmask.a[g_monster_name_genders[name_id]]; /* set gender to bits 12 and 13 */
 	}
 
-	lp1 = (flag & 0x8000) ? &g_grammar_def_table[(flag & 0xf) * 3] :
-		((flag & 0x4000) ? &g_grammar_noarticle_table[0] : &g_grammar_indef_table[(flag & 0xf) * 3]);
+	// point tmp_ptr to the entry in g_grammar_definite_article_table in masculine form, grammatical number and case described by bits 0..2
+	tmp_ptr = (inflection_features & INFLECT_DEFINITE_ARTICLE) ?
+		&g_grammar_definite_article_table[(inflection_features & 0xf) * 3] :
+		((inflection_features & INFLECT_OMIT_ARTICLE) ?
+		&g_grammar_omitted_article_table[0] : // note that g_grammar_omitted_article_table is constant
+		&g_grammar_indefinite_article_table[(inflection_features & 0xf) * 3]); // otherwise: indefinite_article
 
 
-	sprintf(g_grammar_bufs[g_grammar_buf_no + 1], (bit_set == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
-		g_grammar_articles_index[lp1[((flag & 0x3000) - 1) >> 12]], GUI_name_plural(flag, p_name));
+	sprintf(g_grammar_bufs[g_grammar_buf_index + 1],
+		(use_von_form == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
+		g_grammar_articles_index[tmp_ptr[((inflection_features & INFLECT_GENDER_BITMASK) - 1) >> 12]], // tmp_ptr is refined by gender stored in bits 12 and 13 */
+		GUI_name_inflect(inflection_features, p_name)
+	);
 
-	p_name = g_grammar_bufs[g_grammar_buf_no + 1];
+	p_name = g_grammar_bufs[g_grammar_buf_index + 1];
 
-	if (*p_name == 0x20) {
+	/* remove leading blank. applies to cases without article */
+	if (*p_name == ' ') {
 		do {
 			tmp = *(++p_name);
 			*(p_name - 1) = tmp;
@@ -241,107 +319,162 @@ uint8_t* GUI_names_grammar(int16_t flag, const signed int index, const signed in
 		} while (tmp != 0);
 	}
 
-	tmp = g_grammar_buf_no;
+	tmp = g_grammar_buf_index;
 
-	if (++g_grammar_buf_no == 4)
-		g_grammar_buf_no = 0;
+	/* increase index of ring buffer */
+	if (++g_grammar_buf_index == 4)
+		g_grammar_buf_index = 0;
 
 	return (uint8_t*)g_grammar_bufs[1 + tmp];
 }
 
 //1a7
-char* GUI_name_plural(const signed int v1, char *s)
+/**
+ * \brief   Forms a grammatical inflection of a noun
+ *
+ * \param   inflection_features
+ *              bits 0 and 1: case
+ *                  0: 1st case; 1: 2nd case; 2: 4th case; 3: 3rd case
+ *              bit 2: number
+ *                  0: singular; 1: plural
+ *              bits 12 and 13: gender
+ *                  1: masculine; 2: feminine; 3: neuter
+ *                  0: unspecified: this is often o.k.: The gender information is only used in 2nd or 3rd case singluar.
+ * \param   noun_template
+ * 		the noun to be inflected, given as a template "<root>.<singular_ending>.<plural_ending>".
+ * 		example: "WURF.AXT.ÄXTE"
+ */
+char* GUI_name_inflect(const signed int inflection_features, char *noun_template)
 {
 	char *p = g_grammar_bufs[0];
 	char tmp;
 
-	while ((tmp = *s++) && (tmp != 0x2e)) {
+	/* copy first part */
+	while ((tmp = *noun_template++) && (tmp != '.')) {
 		*p++ = tmp;
 	}
 
-	if (v1 & 4)
-		while ((tmp = *s++) && (tmp != 0x2e));
+	if (inflection_features & INFLECT_PLURAL)
+		/* skip second part */
+		while ((tmp = *noun_template++) && (tmp != '.'));
 
-	while ((tmp = *s) && (tmp != 0x2e))
-		*p++ = *s++;
+	/* copy next part (second part for singular, third part for plural) */
+	while ((tmp = *noun_template) && (tmp != '.'))
+		*p++ = *noun_template++;
 
-	if ((v1 & 0x0f) == 1 && (v1 & 0x3000) != 0x2000) {
-		if (*(p-1) == 'B' || *(p-1) == 'D')
+	if (
+		(inflection_features & INFLECT_CASE_NUMBER_BITMASK) == 1 &&     // 2nd or 3rd case singular
+		(inflection_features & INFLECT_GENDER_BITMASK) != INFLECT_FEMININE // masculine or neuter
+	) {
+		// if word ends in B or D, append 'E'
+		if (*(p-1) == 'B' || *(p-1) == 'D') {
 			*p++ = 'E';
+		}
+
+		// then always append 'S'
 		*p++ = 'S';
+
+		// Examples: HEMD -> HEMDES, DEGEN -> DEGENS
+
 	} else {
-		if (((v1 & 0x0f) == 7) && (*(p-1) != 'N') && (*(p-1) != 'S'))
-				*p++ = 'N';
+		if (
+			((inflection_features & INFLECT_CASE_NUMBER_BITMASK) == (INFLECT_PLURAL | INFLECT_3RD_CASE)) && // 3rd case plural (shouldn't this apply to 4th case plural, too?)
+			(*(p-1) != 'N') && (*(p-1) != 'S') // Word does not end in N or S
+		) {
+			// append 'N'
+			*p++ = 'N';
+		}
+
+		// example DER HELM, plural DIE HELME, for fourth case append N -> DEN HELMEN
 	}
 
-	*p = 0;
+	*p = 0; // append terminator symbol
 
 	return g_grammar_bufs[0];
 }
 
 //290
-char* GUI_name_singular(char *s)
+char* GUI_name_base_form(char *s)
 {
 	char *p = g_grammar_bufs[0];
 	char tmp;
 
-	while ((tmp = *s++) && (tmp != 0x2e)) {
+	/* write first and second part of name template to g_grammar_bufs[0] */
+	/* Example: WURF.AXT.ÄXTE -> WURFAXT */
+
+	/* first part */
+	while ((tmp = *s++) && (tmp != '.')) {
 		*p++ = tmp;
 	}
 
-	while ((tmp = *s) && (tmp != 0x2e)) {
+	/* second part */
+	while ((tmp = *s) && (tmp != '.')) {
 		*p++ = *s++;
 	}
 
-	*p = 0;
+	*p = 0; // append terminator symbol
 
 	return g_grammar_bufs[0];
 }
 
 //2f2
 /**
- * \brief   return a pointer to the pronoun
+ * \brief   return a pointer to a personal pronoun which can be used to replace a name
+ *
+ * \param   inflection_features
+ *              bits 0 and 1: case
+ *                  0: 1st case; 1: 2nd case; 2: 4th case; 3: 3rd case
+ *              bit 2: number
+ *                  0: singular; 1: plural
+ * \param   name_id	index of the noun to be inflected
+ * \param   name_type	0: name_id refers to an item; 1: name_id refers to a monster.
  */
-uint8_t* GUI_2f2(const signed int v1, const signed int word_id, const signed int type)
+uint8_t* GUI_grammar_name_to_personal_pronoun(const signed int inflection_features, const signed int name_id, const signed int name_type)
 {
-	signed int genus = (type == 0 ? g_item_name_genders[word_id] : g_monster_name_genders[word_id]);
+	signed int genus = (name_type == INFLECT_NAME_TYPE_ITEM ? g_item_name_genders[name_id] : g_monster_name_genders[name_id]);
 
-	return (uint8_t*)g_grammar_pronouns_index[g_grammar_pronouns_table2[v1 * 3 + genus]];
+	return (uint8_t*)g_grammar_pronouns_index[g_grammar_pronouns_table2[inflection_features * 3 + genus]];
 }
 
 //330
 /**
- * \brief   return a pointer to the personalpronomen
+ * \brief   return a pointer to a personal pronoun.
+ *          Only singular form, masculine or feminine.
  *
- * \param   genus       gender of the hero
- * \param   causus      the grammatical causus
+ * \param   gender	       the grammatical gender
+ * \param   grammatical_case   the grammatical case
  */
-char* GUI_get_ptr(const signed int genus, const signed int causus)
+char* GUI_get_personal_pronoun(const signed int gender, const signed int grammatical_case)
 {
-	if (genus == 0) {
-		return (causus == 0) ? g_grammar_pronouns_er :
-			((causus == 1) ? g_grammar_pronouns_sein :
-			((causus == 3) ? g_grammar_pronouns_ihm : g_grammar_pronouns_ihn));
+	if (gender == GRAMMAR_GENDER_MASCULINE) {
+		return (grammatical_case == GRAMMAR_CASE_1ST) ? g_grammar_pronouns_er :
+			((grammatical_case == GRAMMAR_CASE_2ND) ? g_grammar_pronouns_sein :
+			((grammatical_case == GRAMMAR_CASE_3RD) ? g_grammar_pronouns_ihm : g_grammar_pronouns_ihn));
 	} else {
-		return (causus == 0) ? g_grammar_pronouns_sie :
-			((causus == 1) ? g_grammar_pronouns_ihr :
-			((causus == 3) ? g_grammar_pronouns_ihr : g_grammar_pronouns_sie));
+		return (grammatical_case == GRAMMAR_CASE_1ST) ? g_grammar_pronouns_sie :
+			((grammatical_case == GRAMMAR_CASE_2ND) ? g_grammar_pronouns_ihr :
+			((grammatical_case == GRAMMAR_CASE_3RD) ? g_grammar_pronouns_ihr : g_grammar_pronouns_sie));
 	}
 }
 
 //394
 /**
+ * \brief   return a pointer to a definite article.
+ *          Only singular form, masculine or feminine.
+ *
+ * \param   gender	       the grammatical gender
+ * \param   grammatical_case   the grammatical case
  */
-char* GUI_get_article(const signed int genus, const signed int causus)
+char* GUI_get_definite_article(const signed int gender, const signed int grammatical_case)
 {
-	if (genus == 0) {
-		return (causus == 0) ? g_grammar_article_der :
-			((causus == 1) ? g_grammar_article_des :
-			((causus == 3) ? g_grammar_article_dem : g_grammar_article_den));
+	if (gender == GRAMMAR_GENDER_MASCULINE) {
+		return (grammatical_case == GRAMMAR_CASE_1ST) ? g_grammar_article_der :
+			((grammatical_case == GRAMMAR_CASE_2ND) ? g_grammar_article_des :
+			((grammatical_case == GRAMMAR_CASE_3RD) ? g_grammar_article_dem : g_grammar_article_den));
 	} else {
-		return (causus == 0) ? g_grammar_article_die :
-			((causus == 1) ? g_grammar_article_der :
-			((causus == 3) ? g_grammar_article_der : g_grammar_article_die));
+		return (grammatical_case == GRAMMAR_CASE_1ST) ? g_grammar_article_die :
+			((grammatical_case == GRAMMAR_CASE_2ND) ? g_grammar_article_der :
+			((grammatical_case == GRAMMAR_CASE_3RD) ? g_grammar_article_der : g_grammar_article_die));
 	}
 }
 

@@ -452,8 +452,11 @@ signed int gather_herbs(struct struct_hero *hero, const signed int hours, const 
 			if (herb_count[herb_index]) {
 
 				sprintf(g_text_output_buf, g_gather_herbs_str_found, herb_count[herb_index],
-					(char*)GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002,
-						g_gather_herbs_table[herb_index].item_id, 0));
+					(char*)GUI_name_inflect_with_article((herb_count[herb_index] > 1 ? INFLECT_PLURAL : INFLECT_SINGULAR)
+						+ (INFLECT_OMIT_ARTICLE | INFLECT_4TH_CASE),
+						g_gather_herbs_table[herb_index].item_id, INFLECT_NAME_TYPE_ITEM
+					)
+				);
 
 				strcat(g_dtp2, g_text_output_buf);
 

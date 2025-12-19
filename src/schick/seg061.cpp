@@ -572,7 +572,11 @@ void miracle_weapon(const char *str, const signed int mode)
 							hero->inventory[i].flags.magic = 1;
 							hero->inventory[i].flags.magic_revealed = 1;
 
-							sprintf(g_dtp2, str, GUI_names_grammar(0x8000, item_id, 0), hero->alias);
+							sprintf(g_dtp2, str, GUI_name_inflect_with_article(
+								INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+								item_id,
+								INFLECT_NAME_TYPE_ITEM
+							), hero->alias);
 
 							done = 1;
 							break;
@@ -584,7 +588,11 @@ void miracle_weapon(const char *str, const signed int mode)
 						{
 							hero->inventory[i].flags.broken = 0;
 
-							sprintf(g_dtp2, str, GUI_names_grammar(0x8000, item_id, 0), hero->alias);
+							sprintf(g_dtp2, str, GUI_name_inflect_with_article(
+								INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+								item_id,
+								INFLECT_NAME_TYPE_ITEM),
+							hero->alias);
 
 							done = 1;
 							break;

@@ -117,7 +117,7 @@ void tevent_057(void)
 				if (get_first_hero_with_item(ITEM_SEIL) == -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1)
 				{
 
-					sprintf(g_dtp2, get_tx2(8), hero->alias, GUI_get_ptr(hero->sex, 0));
+					sprintf(g_dtp2, get_tx2(8), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(9) + 3);

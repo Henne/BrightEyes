@@ -402,7 +402,7 @@ void disease_effect(void)
 							disease_ptr->log_3 = 1;
 							hero->attrib[ATTRIB_KK].current -= 5;
 
-							sprintf(g_dtp2, get_ttx(581), hero->alias, GUI_get_ptr(hero->sex, 0));
+							sprintf(g_dtp2, get_ttx(581), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 							 // "hero's lips turn yellow and he feels intense pain"
 							GUI_output(g_dtp2);
 						}

@@ -257,7 +257,11 @@ void buy_screen(void)
 				}
 			}
 
-			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0));
+			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, GUI_name_inflect_with_article(
+				(INFLECT_OMIT_ARTICLE | INFLECT_1ST_CASE) +  (l4 > 1 || l4 == 0 ? INFLECT_PLURAL : INFLECT_SINGULAR),
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 
 			if (g_itemsdat[item_id].flags.weapon) {
 
@@ -358,12 +362,20 @@ void buy_screen(void)
 
 						if (g_buy_shopping_cart[l16].quantity > 1) {
 
-							sprintf(g_dtp2,	get_ttx(818), GUI_names_grammar(4, item_id, 0));
+							sprintf(g_dtp2,	get_ttx(818), GUI_name_inflect_with_article(
+								INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+								item_id,
+								INFLECT_NAME_TYPE_ITEM
+							));
 
 							l4 = GUI_input(g_dtp2, 2);
 						}
 					} else {
-						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_name_inflect_with_article(
+							INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+							item_id,
+							INFLECT_NAME_TYPE_ITEM
+						));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
@@ -420,14 +432,18 @@ void buy_screen(void)
 
 					if (g_itemsdat[g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id].flags.stackable) {
 
-						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_name_inflect_with_article(
+							INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+							g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id,
+							INFLECT_NAME_TYPE_ITEM
+						));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
 
 					if (l4 > 0) {
 
-						l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price *	g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
+						l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price * g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
 
 						if (price + l9 > p_money) {
 

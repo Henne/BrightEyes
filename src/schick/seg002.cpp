@@ -3445,7 +3445,7 @@ void herokeeping(void)
 							((gs_food_message[i] == 4) ? get_ttx(798) :
 							((gs_food_message[i] == 5) ? get_ttx(799) :
 							get_ttx(800))))),
-							hero->alias, GUI_get_ptr(hero->sex, 1));
+							hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 
 					g_food_message_shown[i] = gs_food_message[i];
 

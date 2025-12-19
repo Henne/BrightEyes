@@ -213,7 +213,7 @@ void rabies_frenzy(struct struct_hero* hero_rabies, signed int hero_pos_rabies)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf(g_dtp2, get_ttx(741), hero_rabies->alias, GUI_get_ptr(hero_rabies->sex, 2), GUI_get_ptr(hero_rabies->sex, 2));
+			sprintf(g_dtp2, get_ttx(741), hero_rabies->alias, GUI_get_personal_pronoun(hero_rabies->sex, GRAMMAR_CASE_4TH), GUI_get_personal_pronoun(hero_rabies->sex, GRAMMAR_CASE_4TH));
 			// "hero_rabies is affected by a rabies frenzy. What to do? ..."
 
 			sprintf(g_dtp2 + 500, get_ttx(742), hero_rabies->alias);

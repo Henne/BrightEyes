@@ -171,7 +171,7 @@ void tevent_133(void)
 					/* test failed */
 					timewarp(HOURS(1));
 
-					sprintf(g_dtp2, get_tx2(39), hero->alias, GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));
+					sprintf(g_dtp2, get_tx2(39), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(8));
@@ -251,14 +251,14 @@ void tevent_135(void)
 
 								GUI_output(get_tx2(50));
 
-								sprintf(g_dtp2, get_tx2(54), hero->alias, GUI_get_ptr(hero->sex, 3));
+								sprintf(g_dtp2, get_tx2(54), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 								GUI_output(g_dtp2);
 
 								load_in_head(45);
 
 								sprintf(g_dtp2 + 0x400, get_tx2(55),
-									GUI_get_ptr(hero->sex, 0),
-									GUI_get_ptr(hero->sex, 0));
+									GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+									GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 								GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
@@ -285,7 +285,7 @@ void tevent_135(void)
 									hero->attrib[ATTRIB_IN].current++;
 								}
 
-								sprintf(g_dtp2 + 0x400, get_tx2(58), hero->alias, GUI_get_ptr(hero->sex, 2));
+								sprintf(g_dtp2 + 0x400, get_tx2(58), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 								GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
 								tmp = 0;

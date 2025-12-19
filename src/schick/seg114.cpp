@@ -391,7 +391,7 @@ void tevent_114(void)
 						/* attrib test failed */
 						timewarp(MINUTES(30));
 
-						sprintf(g_dtp2,	get_tx2(23), hero->alias, GUI_get_ptr(hero->sex, 2));
+						sprintf(g_dtp2,	get_tx2(23), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 						GUI_output(g_dtp2);
 
 						sub_hero_le(hero, random_schick(8));

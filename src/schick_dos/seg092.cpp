@@ -244,7 +244,10 @@ void loot_simple_chest(struct struct_chest *chest)
 		/* write the names of the items in the chest into names[] */
 		while ((item_id = chest->content[item_num]) != 0xff) {
 
-			strcpy(names[item_num++], GUI_name_plural(0, g_itemsname[item_id]));
+			strcpy(names[item_num++], GUI_name_inflect(
+				INFLECT_GENDER_UNSPECIFIED | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				g_itemsname[item_id]
+			));
 		}
 
 		if (item_num == 0) {
@@ -324,7 +327,7 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
 		/* write the names of the items in the chest into names[] */
 		while ((item_id = chest->content[pos]) != 0xff) {
 
-			strcpy(names[pos++], GUI_name_plural(0, g_itemsname[item_id]));
+			strcpy(names[pos++], GUI_name_inflect(INFLECT_GENDER_UNSPECIFIED | INFLECT_SINGULAR | INFLECT_1ST_CASE, g_itemsname[item_id]));
 		}
 
 		if (pos == 0) {
@@ -591,7 +594,13 @@ void loot_multi_chest(uint8_t *content, char *msg)
 				strcat(names[pos], g_str_single_space);
 			}
 
-			strcat(names[pos++], GUI_name_plural( ((int16_t)(quantity > 1 ? (uint16_t)1 : (uint16_t)0)) ? 4 : 0, g_itemsname[i]));
+			strcat(names[pos++], GUI_name_inflect(
+				(((int16_t)(quantity > 1 ? (uint16_t)1 : (uint16_t)0)) ?
+					INFLECT_GENDER_UNSPECIFIED | INFLECT_PLURAL | INFLECT_1ST_CASE :
+					INFLECT_GENDER_UNSPECIFIED | INFLECT_SINGULAR | INFLECT_1ST_CASE
+				),
+				g_itemsname[i]
+			));
 		}
 
 		if (pos != 0) {

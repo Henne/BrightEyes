@@ -530,7 +530,7 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 		g_pic_copy.y2 = 49;
 		g_pic_copy.src = p1;
 		do_pic_copy(0);
-		GUI_print_string(GUI_name_singular(g_monnames_index[p_enemy->monster_id]), 1, 1);
+		GUI_print_string(GUI_name_base_form(g_monnames_index[p_enemy->monster_id]), 1, 1);
 	} else {
 		do_border(g_renderbuf_ptr, 1, 149, 34, 190, 0x1d);
 		g_pic_copy.x1 = 2;
@@ -539,7 +539,7 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 		g_pic_copy.y2 = 189;
 		g_pic_copy.src = p1;
 		do_pic_copy(0);
-		GUI_print_string(GUI_name_singular(g_monnames_index[p_enemy->monster_id]), 1, 193);
+		GUI_print_string(GUI_name_base_form(g_monnames_index[p_enemy->monster_id]), 1, 193);
 	}
 
 	g_pic_copy.dst = g_vga_memstart;

@@ -210,8 +210,8 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 					{
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0),
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1));
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_1ST),
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_2ND));
 
 					} else if (txt_id == 19) {
 
@@ -223,32 +223,32 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2));
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_4TH));
 					} else if (txt_id == 29) {
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							GUI_get_article(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0),
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1),
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2));
+							GUI_get_definite_article(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_1ST),
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_2ND),
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_4TH));
 
 					} else if (txt_id == 30) {
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1),
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 2));
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_2ND),
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_4TH));
 
 					} else if (txt_id == 31) {
 
 						sprintf(dst, fmt,
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 3));
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_3RD));
 
 					} else if (txt_id == 32) {
 
 						sprintf(dst, fmt,
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-							GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0),
+							GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_1ST),
 							((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 					} else {
@@ -277,7 +277,7 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 
 						hero = get_hero(gs_tiomar_drinkmate);
 
-						sprintf(dst, fmt, hero->alias, GUI_get_ptr(hero->sex, 0));
+						sprintf(dst, fmt, hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 					} else {
 
@@ -373,19 +373,19 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 
 							sprintf(dst, fmt,
 								((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-								(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)));
+								(GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_1ST)));
 
 						} else if (txt_id == 5) {
 
 							sprintf(dst, fmt,
-								(GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 0)),
+								(GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_1ST)),
 								((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 						} else if (txt_id == 6) {
 
 							sprintf(dst, fmt,
 								((struct struct_hero*)gs_unicorn_hero_ptr)->alias,
-								GUI_get_ptr(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, 1),
+								GUI_get_personal_pronoun(((struct struct_hero*)gs_unicorn_hero_ptr)->sex, GRAMMAR_CASE_2ND),
 								((struct struct_hero*)gs_unicorn_hero_ptr)->alias);
 
 						} else if (txt_id == 8) {
@@ -427,20 +427,20 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 					} else if (txt_id == 13 || txt_id == 19 || txt_id == 88 || txt_id == 24) {
 
 						sprintf(dst, fmt, hero->alias,
-							GUI_get_ptr(hero->sex, 0),
-							GUI_get_ptr(hero->sex, 0));
+							GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+							GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 					} else if (txt_id == 14 || txt_id == 15 || txt_id == 76) {
 
 						sprintf(dst, fmt, gs_ruin_hero->alias,
-							GUI_get_ptr(gs_ruin_hero->sex, 0));
+							GUI_get_personal_pronoun(gs_ruin_hero->sex, GRAMMAR_CASE_1ST));
 
 					} else if (txt_id == 26 || txt_id == 65) {
 
 						sprintf(dst, fmt, hero->alias,
-							GUI_get_ptr(hero->sex, 0),
-							GUI_get_ptr(hero->sex, 2),
-							GUI_get_ptr(hero->sex, 1));
+							GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+							GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH),
+							GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 
 					} else {
 
@@ -456,8 +456,8 @@ void do_talk(const signed int talk_id, const signed int tlk_informer)
 #endif
 
 						sprintf(dst, fmt, gs_random_tlk_hero->alias,
-							GUI_get_ptr(gs_random_tlk_hero->sex, 0),
-							GUI_get_ptr(gs_random_tlk_hero->sex, 2));
+							GUI_get_personal_pronoun(gs_random_tlk_hero->sex, GRAMMAR_CASE_1ST),
+							GUI_get_personal_pronoun(gs_random_tlk_hero->sex, GRAMMAR_CASE_4TH));
 					} else {
 
 						strcpy(dst, fmt);

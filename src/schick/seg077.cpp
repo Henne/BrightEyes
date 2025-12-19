@@ -84,7 +84,15 @@ signed int DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(1,13,5)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_sabre_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_SAEBEL, 0), (char*)GUI_2f2(2, ITEM_SAEBEL, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			ITEM_SAEBEL,
+			INFLECT_NAME_TYPE_ITEM
+		), (char*)GUI_grammar_name_to_personal_pronoun(
+			INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			ITEM_SAEBEL,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		/* ITEM: get a SABRE */
 		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_SAEBEL, 1, 1)) {
@@ -93,7 +101,15 @@ signed int DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(3,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_crossbow_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_ARMBRUST, 0), (char*)GUI_2f2(2, ITEM_ARMBRUST, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			ITEM_ARMBRUST,
+			INFLECT_NAME_TYPE_ITEM
+		), (char*)GUI_grammar_name_to_personal_pronoun(
+			INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			ITEM_ARMBRUST,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		/* ITEM: get a CROSSBOW */
 		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_ARMBRUST, 1, 1)) {

@@ -199,7 +199,11 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 		} else if (give_new_item_to_group(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
-			sprintf(g_dtp2, get_ttx(486), GUI_names_grammar(0x8002, gs_smith_repairitems[smith_id].item_id, 0));
+			sprintf(g_dtp2, get_ttx(486), GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+				gs_smith_repairitems[smith_id].item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 
 			GUI_output(g_dtp2);
 
@@ -372,7 +376,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 				clear_loc_line();
 
-				GUI_print_loc_line(GUI_name_singular(g_itemsname[g_item_selector_sell[item_selector_pos + item_selector_page_offset].item_id]));
+				GUI_print_loc_line(GUI_name_base_form(g_itemsname[g_item_selector_sell[item_selector_pos + item_selector_page_offset].item_id]));
 			}
 
 			if (g_mouse_rightclick_event  || g_action == ACTION_ID_PAGE_UP) {
@@ -419,7 +423,11 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 						make_valuta_str(g_text_output_buf, price);
 
-						sprintf(g_dtp2, get_ttx(488), GUI_names_grammar(0x8002, item_id, 0), g_text_output_buf);
+						sprintf(g_dtp2, get_ttx(488), GUI_name_inflect_with_article(
+							INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+							item_id,
+							INFLECT_NAME_TYPE_ITEM
+						), g_text_output_buf);
 
 						do {
 							percent = GUI_input(g_dtp2, 2);

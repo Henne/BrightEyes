@@ -164,7 +164,11 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 
 							sprintf(g_dtp2, get_ttx(221), hero->alias,
 								get_ttx((hero->sex != 0 ? 593 : 9) + hero->typus),
-								GUI_names_grammar(2, item_id_2, 0));
+								GUI_name_inflect_with_article(
+									INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+									item_id_2,
+									INFLECT_NAME_TYPE_ITEM
+								));
 
 							GUI_output(g_dtp2);
 
@@ -173,11 +177,17 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 
 								if (is_in_int_array(item_id_2, g_items_pluralwords))
 
-									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0x4000, item_id_2, 0), get_ttx(557));
+									sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+										INFLECT_OMIT_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+										item_id_2,
+										INFLECT_NAME_TYPE_ITEM
+									), get_ttx(557));
 								else
-									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0, item_id_2, 0), get_ttx(556));
+									sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+										INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+										item_id_2,
+										INFLECT_NAME_TYPE_ITEM
+									), get_ttx(556));
 
 								GUI_output(g_dtp2);
 							} else {
@@ -244,12 +254,18 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 			is_in_int_array(inventory_p->item_id, g_items_pluralwords)) {
 
 			/* more than one item or special */
-			sprintf(g_dtp2, get_tx2(72), get_ttx(305),
-				(uint8_t*)GUI_names_grammar(0x4004, inventory_p->item_id, 0));
+			sprintf(g_dtp2, get_tx2(72), get_ttx(305), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_OMIT_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+				inventory_p->item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 		} else {
 			/* one item */
-			sprintf(g_dtp2, get_tx2(11), get_ttx(304),
-				(uint8_t*)GUI_names_grammar(0, inventory_p->item_id, 0));
+			sprintf(g_dtp2, get_tx2(11), get_ttx(304), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				inventory_p->item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 		}
 	} else {
 		/* no item */
@@ -318,7 +334,11 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	if (item1_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar(0x8002, item_id1, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			item_id1,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		GUI_output(g_dtp2);
 		return;
@@ -326,7 +346,11 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 	if (item2_desc->flags.undropable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar(0x8002, item_id2, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			item_id2,
+			INFLECT_NAME_TYPE_ITEM
+		));
 		GUI_output(g_dtp2);
 		return;
 
@@ -338,7 +362,12 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		if (!can_hero_use_item(hero2, item_id1)) {
 
 			sprintf(g_dtp2,	get_ttx(221), hero2->alias, get_ttx((hero2->sex ? 593 : 9) + hero2->typus),
-				GUI_names_grammar(2, item_id1, 0));
+				GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM
+				)
+			);
 
 #if !defined(__BORLANDC__)
 			GUI_output(g_dtp2);
@@ -353,9 +382,17 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 			if (is_in_int_array(item_id1, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id1, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_OMIT_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM),
+				get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item_id1, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM),
+				get_ttx(556));
 			}
 
 #if !defined(__BORLANDC__)
@@ -389,10 +426,13 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		if (!can_hero_use_item(hero1, item_id2)) {
 
 #if !defined(__BORLANDC__)
-			sprintf(g_dtp2,	get_ttx(221), hero1->alias,
-				get_ttx((hero1->sex ? 593 : 9) + hero1->typus),
-				(char*)GUI_names_grammar(2, item_id2, 0));
-
+			sprintf(g_dtp2,	get_ttx(221), hero1->alias, get_ttx((hero1->sex ? 593 : 9) + hero1->typus),
+				(char*)GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+					item_id2,
+					INFLECT_NAME_TYPE_ITEM
+				)
+			);
 
 			GUI_output(g_dtp2);
 			return;
@@ -402,7 +442,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 				push 0
 				push word [item_id2]
 				push 2
-				call far ptr GUI_names_grammar
+				call far ptr GUI_name_inflect_with_article
 				add sp, 0x06
 				push dx
 				push ax
@@ -454,10 +494,17 @@ lab02:
 
 			if (is_in_int_array(item_id2, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id2, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_OMIT_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id2,
+					INFLECT_NAME_TYPE_ITEM
+				), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item_id2, 0), get_ttx(556));
-
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id2,
+					INFLECT_NAME_TYPE_ITEM
+				), get_ttx(556));
 			}
 #if defined (__BORLANDC__)
 lab04:
@@ -480,9 +527,11 @@ lab04:
 
 			if (hero1->inventory[pos1].quantity > 1) {
 
-				sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
-					(char*)GUI_names_grammar(6, item_id1, 0), hero2->alias);
-
+				sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity, (char*)GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM
+				), hero2->alias);
 
 				stackable_quant = GUI_input(g_dtp2, 2);
 			}
@@ -582,9 +631,11 @@ lab04:
 
 		if (hero1->inventory[pos1].quantity > 1) {
 
-			sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
-				(char*)GUI_names_grammar(6, item_id1, 0), hero2->alias);
-
+			sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity, (char*)GUI_name_inflect_with_article(
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+				item_id1,
+				INFLECT_NAME_TYPE_ITEM
+			), hero2->alias);
 
 			stackable_quant = GUI_input(g_dtp2, 2);
 		}

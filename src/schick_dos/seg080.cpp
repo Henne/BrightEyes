@@ -193,14 +193,14 @@ signed int DNG04_handler(void)
 			if (test_attrib(hero, ATTRIB_GE, 0) > 0)
 			{
 				sprintf(g_dtp2,	get_tx(18), hero->alias,
-					GUI_get_ptr(hero->sex, 3),
-					GUI_get_ptr(hero->sex, 0));
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD),
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 			} else {
 
 				sprintf(g_dtp2,	get_tx(19), hero->alias,
-					GUI_get_ptr(hero->sex, 0), hero->alias);
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), hero->alias);
 
 				GUI_output(g_dtp2);
 

@@ -377,7 +377,7 @@ signed int DNG09_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)(((l3 = test_talent(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
-				GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2), GUI_get_ptr(hero->sex, 2));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -408,7 +408,7 @@ signed int DNG09_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)(((l3 = test_talent(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
-				GUI_get_ptr(hero->sex, 3));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 			strcat(g_dtp2, g_text_output_buf);
 

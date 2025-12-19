@@ -153,7 +153,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -180,7 +180,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -301,7 +301,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -331,7 +331,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -387,7 +387,7 @@ signed int DNG14_handler(void)
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead && (test_talent(hero, TA_KLETTERN, 0) <= 0))
 					{
-						sprintf(g_dtp2, get_tx(26), hero->alias, GUI_get_ptr(hero->sex, 2));
+						sprintf(g_dtp2, get_tx(26), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 						GUI_output(g_dtp2);
 
 						/* 1W6 damage */
@@ -500,7 +500,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -536,7 +536,7 @@ signed int DNG14_handler(void)
 
 					if (test_talent(hero, TA_SCHWIMMEN, 8) <= 0) {
 
-						sprintf(g_dtp2, get_tx(40), hero->alias, GUI_get_ptr(hero->sex, 0));
+						sprintf(g_dtp2, get_tx(40), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 						GUI_output(g_dtp2);
 
 						/* 1W6 damage */
@@ -552,7 +552,7 @@ signed int DNG14_handler(void)
 							draw_status_line();
 						}
 					} else {
-						sprintf(g_dtp2, get_tx(41), hero->alias, GUI_get_ptr(hero->sex, 0));
+						sprintf(g_dtp2, get_tx(41), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 						GUI_output(g_dtp2);
 
 						DNG14_dive(hero_pos, 2, (pos == DNG_POS(3,10,10) ? 13 : 9));

@@ -194,7 +194,7 @@ void tevent_071(void)
 		/* Track + 4, Faehrtensuche + 4 */
 		if (test_talent(hero, TA_FAEHRTENSUCHEN, 4) > 0) {
 
-			sprintf(g_dtp2,	get_tx2(13), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 3));
+			sprintf(g_dtp2,	get_tx2(13), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 			do {
 				answer = GUI_radio(g_dtp2, 2, get_tx2(14), get_tx2(15));
@@ -329,7 +329,7 @@ void tevent_unused01(void)
 	{
 		gs_teventu01_flag = 1;
 
-		sprintf(g_dtp2,	get_tx2(29), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 3));
+		sprintf(g_dtp2,	get_tx2(29), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 		do {
 			answer = GUI_radio(g_dtp2, 2, get_tx2(30), get_tx2(31));

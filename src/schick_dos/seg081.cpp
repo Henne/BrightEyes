@@ -253,10 +253,10 @@ signed int DNG06_handler(void)
 		if (i == 1 || i == 3)
 		{
 			sprintf(g_dtp2,	(i == 1 ? get_tx(18) : get_tx(19)), hero->alias,
-				GUI_get_ptr(hero->sex, 0),
-				GUI_get_ptr(hero->sex, 0),
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
 				hero->alias,
-				GUI_get_ptr(hero->sex, 1));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 
 			GUI_output(g_dtp2);
 
@@ -272,8 +272,8 @@ signed int DNG06_handler(void)
 					(test_talent(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus) <= 0))
 				{
 					sprintf(g_dtp2,	get_tx(20), hero->alias,
-						GUI_get_ptr(hero->sex, 0),
-						GUI_get_ptr(hero->sex, 3));
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 					GUI_output(g_dtp2);
 
@@ -373,12 +373,12 @@ signed int DNG06_handler(void)
 		if (test_talent(hero, TA_KOERPERBEHERRSCHUNG, 0) > 0 && test_talent(hero, TA_GEFAHRENSINN, 0) > 0)
 		{
 			/* evasion succeeds */
-			sprintf(g_dtp2, get_tx(26), GUI_get_ptr(hero->sex, 0));
+			sprintf(g_dtp2, get_tx(26), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 			GUI_output(g_dtp2);
 
 		} else {
 			/* disk causes heavy damage */
-			sprintf(g_dtp2,	get_tx(27), GUI_get_ptr(hero->sex, 2));
+			sprintf(g_dtp2,	get_tx(27), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(3, 6, 0));
@@ -391,8 +391,8 @@ signed int DNG06_handler(void)
 			hero = get_first_hero_available_in_group();
 
 			sprintf(g_dtp2,	get_tx(29), hero->alias,
-				GUI_get_ptr(hero->sex, 0),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			GUI_output(g_dtp2);
 
@@ -572,7 +572,7 @@ void DNG09_pitfall(void)
 				/* the current group has only one hero */
 
 				/* print message */
-				sprintf(g_dtp2, get_tx(31), hero_first->alias, GUI_get_ptr(hero_first->sex, 0));
+				sprintf(g_dtp2, get_tx(31), hero_first->alias, GUI_get_personal_pronoun(hero_first->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				/* this hero looses 3W6+3 LE */

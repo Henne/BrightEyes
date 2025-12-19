@@ -655,7 +655,7 @@ void DNG15_collapsing_ceiling(uint8_t* ptr)
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
-					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
+					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(6));
@@ -714,7 +714,7 @@ void DNG15_clear_way(uint8_t* ptr)
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{
-				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, random_schick(6));
