@@ -732,7 +732,7 @@ void prepare_dirs(void)
 #elif defined(_WIN32)
 	signed int errorval = 0;
 	char path[260];
-
+	
 	/* check if ./TEMP/ */
 	if (!_chdir(g_str_temp_dir)) {
 		_chdir("..");
@@ -755,64 +755,66 @@ void prepare_dirs(void)
 	
 	/* delete files without leading '.' in TEMP-dir */
 	if (errorval == 2) {
-		struct _finddata_t fileinfo;
-		intptr_t handle;
 		char search_path[260];
-	
-		sprintf(search_path, "%s*/", g_str_temp_dir);
-		handle = _findfirst(search_path, &fileinfo);
-	
-		if (handle != -1) {
-			do {
-				if ((fileinfo.name[0] != '.') && (strlen(fileinfo.name) <= 12)) {
-					sprintf(path, "%s/%s", g_str_temp_dir, fileinfo.name);
-					_unlink(path);
-				}
-			} while (_findnext(handle, &fileinfo) == 0);
-			_findclose(handle);
-		}
+		sprintf(search_path, "%s*", g_str_temp_dir);
+		struct _finddata_t fileinfo;
+		intptr_t handle = _findfirst(search_path, &fileinfo);
+        while (handle != -1) {
+            if ((fileinfo.name[0] != '.') && (strlen(fileinfo.name) <= 12)) {
+                sprintf(path, "%s/%s", g_str_temp_dir, fileinfo.name);
+                _unlink(path);
+            }
+			if (_findnext(handle, &fileinfo) != 0)
+			{
+				break;
+			}
+        }
+        _findclose(handle);
 	}
 	
 	/* copy CHR all files into TEMP */
 	if (errorval == 2) {
 		struct _finddata_t fileinfo;
-		intptr_t handle;
-	
-		handle = _findfirst("*.CHR", &fileinfo);
-		if (handle != -1) {
-			do {
-				if (strlen(fileinfo.name) <= 12) {
-					int fd = _open(fileinfo.name, _O_RDONLY | _O_BINARY);
-					if (fd != -1) {
-						long f_length = _lseek(fd, 0, SEEK_END);
-						_lseek(fd, 0, SEEK_SET);
-	
-						if ((f_length == sizeof(struct_hero)) || (f_length == sizeof(struct_hero) - 16)) {
-							struct struct_hero hero;
-	
-							if (f_length == sizeof(hero)) {
-								_read(fd, &hero, sizeof(struct_hero));
-							}
-							else {
-								_read(fd, ((uint8_t*)&hero) + 16, sizeof(struct_hero) - 16);
-								memcpy(&hero, ((uint8_t*)&hero), 16);
-							}
-	
-							_close(fd);
-	
-							sprintf(path, "%s/%s", g_str_temp_dir, fileinfo.name);
-	
-							fd = _open(path, _O_TRUNC | _O_CREAT | _O_WRONLY | _O_BINARY, _S_IREAD | _S_IWRITE);
-							if (fd != -1) {
-								_write(fd, &hero, sizeof(struct_hero));
-								_close(fd);
-							}
-						}
-					}
-				}
-			} while (_findnext(handle, &fileinfo) == 0);
-			_findclose(handle);
-		}
+		intptr_t find_handle = _findfirst(g_all_chr_wildcard4, &fileinfo);
+        while (find_handle != -1)
+        {
+            if (strlen(fileinfo.name) <= 12) {
+                int handle_chr = _open(fileinfo.name, _O_RDONLY | _O_BINARY);
+                if (handle_chr != -1) {
+                    long f_length = _lseek(handle_chr, 0, SEEK_END);
+                    _lseek(handle_chr, 0, SEEK_SET);
+
+                    if ((f_length == sizeof(struct_hero)) || (f_length == sizeof(struct_hero) - 16)) {
+                        struct struct_hero hero;
+
+                        if (f_length == sizeof(hero)) {
+                            /* CD Hero */
+                            _read(handle_chr, &hero, sizeof(hero));
+                        }
+                        else {
+                            /* DISK Hero */
+                            _read(handle_chr, (uint8_t*)&hero + 16, sizeof(hero) - 16);
+                            memcpy(&hero, (uint8_t*)&hero + 16, 16);
+                        }
+
+                        _close(handle_chr);
+
+                        sprintf(path, "%s/%s", g_str_temp_dir, fileinfo.name);
+
+                        handle_chr = _open(path, _O_TRUNC | _O_CREAT | _O_WRONLY | _O_BINARY, _S_IREAD | _S_IWRITE);
+                        if (handle_chr != -1) {
+                            _write(handle_chr, &hero, sizeof(hero));
+                            _close(handle_chr);
+                        }
+                    }
+                }
+            }
+            if (_findnext(find_handle, &fileinfo) != 0)
+            {
+                break;
+            }
+        }
+        _findclose(find_handle);
 	}
 #else
 	signed int errorval = 0;
