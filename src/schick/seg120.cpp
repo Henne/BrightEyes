@@ -18,6 +18,7 @@
 #else
 #if defined(_WIN32)
 #include <io.h>
+#include <direct.h>
 #else
 #include <unistd.h>
 #include <dirent.h>
@@ -138,9 +139,10 @@ static uint8_t g_palette_general[32][3] = {
 	{ 0x3c, 0x3c, 0x3c }
 }; // ds:0xb2b1
 
-#if defined(__BORLANDC__) || defined(_WIN32)
+#if defined(__BORLANDC__)
 const char g_str_temp_dir[] = "\\TEMP"; // ds:0xb311
 #else
+// Linux, WIN32
 const char g_str_temp_dir[] = "./TEMP/"; // ds:0xb311
 #endif
 static const char g_str_not_enough_mem[124] = "\x0a\x0aNot enough memory!\x0a\"Realms of Arkania - Blade of Destiny\" needs %ld Byte more memory!\x0aPlease uninstall resident programs!"; // ds:0xb317
@@ -728,7 +730,92 @@ void prepare_dirs(void)
 
 	setdisk(drive_bak);
 #elif defined(_WIN32)
-	// TODO
+	signed int errorval = 0;
+	char path[260];
+	
+	/* check if ./TEMP/ */
+	if (!_chdir(g_str_temp_dir)) {
+		_chdir("..");
+		errorval = 2;
+	}
+	else {
+		if (_mkdir(g_str_temp_dir)) {
+			errorval = 1;
+		}
+		else {
+			errorval = 2;
+		}
+	}
+	
+	if (errorval == 1) {
+		GUI_output(g_str_temp_dir_fail);
+		cleanup_game();
+		exit(0);
+	}
+	
+	/* delete files without leading '.' in TEMP-dir */
+	if (errorval == 2) {
+		char search_path[260];
+		sprintf(search_path, "%s*", g_str_temp_dir);
+		struct _finddata_t fileinfo;
+		intptr_t handle = _findfirst(search_path, &fileinfo);
+        while (handle != -1) {
+            if ((fileinfo.name[0] != '.') && (strlen(fileinfo.name) <= 12)) {
+                sprintf(path, "%s/%s", g_str_temp_dir, fileinfo.name);
+                _unlink(path);
+            }
+			if (_findnext(handle, &fileinfo) != 0)
+			{
+				break;
+			}
+        }
+        _findclose(handle);
+	}
+	
+	/* copy CHR all files into TEMP */
+	if (errorval == 2) {
+		struct _finddata_t fileinfo;
+		intptr_t find_handle = _findfirst(g_all_chr_wildcard4, &fileinfo);
+        while (find_handle != -1)
+        {
+            if (strlen(fileinfo.name) <= 12) {
+                int handle_chr = _open(fileinfo.name, _O_RDONLY | _O_BINARY);
+                if (handle_chr != -1) {
+                    long f_length = _lseek(handle_chr, 0, SEEK_END);
+                    _lseek(handle_chr, 0, SEEK_SET);
+
+                    if ((f_length == sizeof(struct_hero)) || (f_length == sizeof(struct_hero) - 16)) {
+                        struct struct_hero hero;
+
+                        if (f_length == sizeof(hero)) {
+                            /* CD Hero */
+                            _read(handle_chr, &hero, sizeof(hero));
+                        }
+                        else {
+                            /* DISK Hero */
+                            _read(handle_chr, (uint8_t*)&hero + 16, sizeof(hero) - 16);
+                            memcpy(&hero, (uint8_t*)&hero + 16, 16);
+                        }
+
+                        _close(handle_chr);
+
+                        sprintf(path, "%s/%s", g_str_temp_dir, fileinfo.name);
+
+                        handle_chr = _open(path, _O_TRUNC | _O_CREAT | _O_WRONLY | _O_BINARY, _S_IREAD | _S_IWRITE);
+                        if (handle_chr != -1) {
+                            _write(handle_chr, &hero, sizeof(hero));
+                            _close(handle_chr);
+                        }
+                    }
+                }
+            }
+            if (_findnext(find_handle, &fileinfo) != 0)
+            {
+                break;
+            }
+        }
+        _findclose(find_handle);
+	}
 #else
 	signed int errorval = 0;
 	char path[20];
