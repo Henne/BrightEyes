@@ -133,6 +133,15 @@ struct screen_rect {
 /* for positions in cities (i.e, x_size 32) stored in 2 bytes */
 #define LARGE_MAP_POS(x,y) ((y) << 5) + (x) /* no outer parantheses, otherwise binary BCC-check will be broken! */
 
+/* four kinds of dice are encoded as follows. 1: D6,  2: D20,  3: D3,  4: D4.
+ * Technically, every number not 1, 2 or 3 encodes a D4. This happens for example in the MR-bug (Original-Bug 57).
+ * To allow reproducing those buggy situations, all numbers not 1, 2, 3 or 4 (enough: not 1 or 2) are copied literally */
+#define DICE_NUM_FACES_ENCODE(n) ((n) == 6 ? 1 : ((n) == 20 ? 2 : (n)))
+
+#define DICE_TEMPLATE_PACK(n,faces,constant) (((n) << 12) | ((DICE_NUM_FACES_ENCODE(faces)) << 8) | (constant & 0xff))
+#define DICE_TEMPLATE_PACK_CONSTANT(constant) (DICE_TEMPLATE_PACK(0,0,(constant)))
+
+
 /* HACK: this cast is not optimized by Borland C++ 3.1 */
 static inline unsigned short cast_u16(unsigned char v)
 {
