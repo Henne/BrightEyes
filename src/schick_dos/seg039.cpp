@@ -182,7 +182,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 
 	/* Another hack:
 		If the current fight == FIGHTS_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
-	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->monster_id == MONSTER_ID_KULTIST__4)) {
+	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->monster_id == MONSTER_ID_KULTIST__LVL_4)) {
 		/* Kultist will flee */
 		/* set 'scared' flag */
 		sheet->flags.scared = 1;

@@ -205,7 +205,7 @@ void FIG_damage_enemy(struct enemy_sheet *enemy, const signed int damage, const 
 		enemy->flags.dead = 1;
 		enemy->le = 0;
 
-		if ((g_current_fight_no == FIGHTS_F126_08) && (enemy->monster_id == MONSTER_ID_KULTIST__4)) {
+		if ((g_current_fight_no == FIGHTS_F126_08) && (enemy->monster_id == MONSTER_ID_KULTIST__LVL_4)) {
 
 			/* slaying a special cultist */
 			/* set a flag in the status area */

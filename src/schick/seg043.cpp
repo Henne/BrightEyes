@@ -338,7 +338,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 										if (damage > 0) {
 
 											/* HESHTHOT */
-											if (p_enemy->monster_id != MONSTER_ID_HESHTOT__3) {
+											if (p_enemy->monster_id != MONSTER_ID_HESHTOT__WEAK) {
 												sub_hero_le(hero, damage);
 											}
 
@@ -450,7 +450,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 							if (damage > 0) {
 
-								if (p_enemy->monster_id != MONSTER_ID_HESHTOT__3) {
+								if (p_enemy->monster_id != MONSTER_ID_HESHTOT__WEAK) {
 									sub_hero_le(hero, damage);
 								}
 
