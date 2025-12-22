@@ -269,7 +269,7 @@ void THO_arsenal(void)
 		load_in_head(13);
 
 		/* only show two options when the group has "LETTER FROM JADRA" or "LETTER OF INTRODUCTION" */
-		options = get_first_hero_with_item(ITEM_SCHREIBEN_VON_JADRA) != -1 || get_first_hero_with_item(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN) != -1 ? 2 : 1;
+		options = get_first_hero_with_item(ITEM_ID_SCHREIBEN_VON_JADRA) != -1 || get_first_hero_with_item(ITEM_ID_EMPFEHLUNGSSCHREIBEN__HETMAN) != -1 ? 2 : 1;
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), options, get_tx2(2), get_tx2(1));
@@ -343,7 +343,7 @@ void THO_magistracy(void)
 				GUI_output(get_tx2(14));
 
 				/* get "LETTER FROM JADRA" */
-				give_new_item_to_group(ITEM_SCHREIBEN_VON_JADRA, 1, 1);
+				give_new_item_to_group(ITEM_ID_SCHREIBEN_VON_JADRA, 1, 1);
 
 			} else {
 				GUI_output(get_tx2(15));
@@ -731,7 +731,7 @@ signed int academy_get_equal_item(const signed int price)
 			{
 				for (inv_slot = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++) {
 
-					if ((hero->inventory[inv_slot].item_id != ITEM_NONE) && !hero->inventory[inv_slot].flags.broken)
+					if ((hero->inventory[inv_slot].item_id != ITEM_ID_NONE) && !hero->inventory[inv_slot].flags.broken)
 						/* remark: armor with degraded RS is accepted */
 					{
 						p_item = &g_itemsdat[hero->inventory[inv_slot].item_id];

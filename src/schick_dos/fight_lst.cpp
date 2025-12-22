@@ -39,9 +39,9 @@ struct fight_lst fight_data = {
 				{ 11, 0, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_KURZSCHWERT, // loot 0
-				ITEM_SCHILD, // loot 1
-				ITEM_KRAFTGUERTEL // loot 2
+				ITEM_ID_KURZSCHWERT, // loot 0
+				ITEM_ID_SCHILD, // loot 1
+				ITEM_ID_KRAFTGUERTEL // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -71,13 +71,13 @@ struct fight_lst fight_data = {
 				{ 6, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_SILBERSCHMUCK, // loot 4
-				ITEM_WURFMESSER, // loot 5
-				ITEM_SILBERSCHMUCK // loot 6
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 4
+				ITEM_ID_WURFMESSER, // loot 5
+				ITEM_ID_SILBERSCHMUCK // loot 6
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -107,14 +107,14 @@ struct fight_lst fight_data = {
 				{ 6, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_SILBERSCHMUCK, // loot 4
-				ITEM_SILBERSCHMUCK, // loot 5
-				ITEM_WURFMESSER, // loot 6
-				ITEM_WURFMESSER // loot 7
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 4
+				ITEM_ID_SILBERSCHMUCK, // loot 5
+				ITEM_ID_WURFMESSER, // loot 6
+				ITEM_ID_WURFMESSER // loot 7
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -138,14 +138,14 @@ struct fight_lst fight_data = {
 				{ 7, 2, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_HEILTRANK, // loot 0
-				ITEM_KURZSCHWERT, // loot 1
-				ITEM_LEDERHARNISCH, // loot 2
-				ITEM_SAEBEL, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_SAEBEL, // loot 6
-				ITEM_SAEBEL // loot 7
+				ITEM_ID_HEILTRANK, // loot 0
+				ITEM_ID_KURZSCHWERT, // loot 1
+				ITEM_ID_LEDERHARNISCH, // loot 2
+				ITEM_ID_SAEBEL, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_SAEBEL, // loot 6
+				ITEM_ID_SAEBEL // loot 7
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -169,10 +169,10 @@ struct fight_lst fight_data = {
 				{ 14, 5, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SAEBEL, // loot 2
-				ITEM_ZAUBERTRANK // loot 3
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SAEBEL, // loot 2
+				ITEM_ID_ZAUBERTRANK // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -212,7 +212,7 @@ struct fight_lst fight_data = {
 				{ 4, 7, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL // loot 0
+				ITEM_ID_SAEBEL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -233,7 +233,7 @@ struct fight_lst fight_data = {
 				{ 3, 10, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL // loot 0
+				ITEM_ID_SAEBEL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -255,8 +255,8 @@ struct fight_lst fight_data = {
 				{ 10, 17, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL // loot 1
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -317,10 +317,10 @@ struct fight_lst fight_data = {
 				{ 2, 4, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_KETTENHEMD, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_KETTENHEMD // loot 3
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_KETTENHEMD, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_KETTENHEMD // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -400,7 +400,7 @@ struct fight_lst fight_data = {
 				{ 19, 8, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL // loot 0
+				ITEM_ID_SAEBEL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -440,7 +440,7 @@ struct fight_lst fight_data = {
 				{ 8, 10, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL // loot 0
+				ITEM_ID_SAEBEL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -524,9 +524,9 @@ struct fight_lst fight_data = {
 				{ 6, 2, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_AMULETT__RED // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_AMULETT__FEUERBANN // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -707,12 +707,12 @@ struct fight_lst fight_data = {
 				{ 11, 8, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_STREITKOLBEN, // loot 0
-				ITEM_STREITKOLBEN, // loot 1
-				ITEM_SCHILD, // loot 2
-				ITEM_SCHILD, // loot 3
-				ITEM_LEDERHELM, // loot 4
-				ITEM_LEDERHELM // loot 5
+				ITEM_ID_STREITKOLBEN, // loot 0
+				ITEM_ID_STREITKOLBEN, // loot 1
+				ITEM_ID_SCHILD, // loot 2
+				ITEM_ID_SCHILD, // loot 3
+				ITEM_ID_LEDERHELM, // loot 4
+				ITEM_ID_LEDERHELM // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -737,13 +737,13 @@ struct fight_lst fight_data = {
 				{ 6, 1, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHILD, // loot 0
-				ITEM_STREITKOLBEN, // loot 1
-				ITEM_EISENHELM, // loot 2
-				ITEM_SCHWERT, // loot 3
-				ITEM_SCHWERT, // loot 4
-				ITEM_SCHWERT, // loot 5
-				ITEM_SCHWERT // loot 6
+				ITEM_ID_SCHILD, // loot 0
+				ITEM_ID_STREITKOLBEN, // loot 1
+				ITEM_ID_EISENHELM, // loot 2
+				ITEM_ID_SCHWERT, // loot 3
+				ITEM_ID_SCHWERT, // loot 4
+				ITEM_ID_SCHWERT, // loot 5
+				ITEM_ID_SCHWERT // loot 6
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -766,9 +766,9 @@ struct fight_lst fight_data = {
 				{ 9, 3, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT // loot 2
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -792,10 +792,10 @@ struct fight_lst fight_data = {
 				{ 1, 15, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_SCHWERT // loot 3
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_SCHWERT // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -823,11 +823,11 @@ struct fight_lst fight_data = {
 				{ 6, 7, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_SCHWERT, // loot 3
-				ITEM_SCHWERT // loot 4
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_SCHWERT, // loot 3
+				ITEM_ID_SCHWERT // loot 4
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -851,10 +851,10 @@ struct fight_lst fight_data = {
 				{ 1, 13, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_SCHWERT // loot 3
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_SCHWERT // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -875,7 +875,7 @@ struct fight_lst fight_data = {
 				{ 0, 15, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT // loot 0
+				ITEM_ID_SCHWERT // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -899,17 +899,17 @@ struct fight_lst fight_data = {
 				{ 16, 4, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_STREITKOLBEN, // loot 1
-				ITEM_STREITKOLBEN, // loot 2
-				ITEM_EISENHELM, // loot 3
-				ITEM_EISENHELM, // loot 4
-				ITEM_EISENHELM, // loot 5
-				ITEM_STREITKOLBEN, // loot 6
-				ITEM_SCHILD, // loot 7
-				ITEM_SCHILD, // loot 8
-				ITEM_SCHILD, // loot 9
-				ITEM_BRONZESCHLUESSEL // loot 10
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_STREITKOLBEN, // loot 1
+				ITEM_ID_STREITKOLBEN, // loot 2
+				ITEM_ID_EISENHELM, // loot 3
+				ITEM_ID_EISENHELM, // loot 4
+				ITEM_ID_EISENHELM, // loot 5
+				ITEM_ID_STREITKOLBEN, // loot 6
+				ITEM_ID_SCHILD, // loot 7
+				ITEM_ID_SCHILD, // loot 8
+				ITEM_ID_SCHILD, // loot 9
+				ITEM_ID_BRONZESCHLUESSEL // loot 10
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -931,8 +931,8 @@ struct fight_lst fight_data = {
 				{ 5, 22, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT // loot 1
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -972,7 +972,7 @@ struct fight_lst fight_data = {
 				{ 8, 12, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_KRISTALL // loot 0
+				ITEM_ID_KRISTALL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -993,7 +993,7 @@ struct fight_lst fight_data = {
 				{ 8, 12, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_KRISTALL // loot 0
+				ITEM_ID_KRISTALL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1014,7 +1014,7 @@ struct fight_lst fight_data = {
 				{ 7, 13, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_KRISTALL // loot 0
+				ITEM_ID_KRISTALL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1039,15 +1039,15 @@ struct fight_lst fight_data = {
 				{ 1, 11, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_VULKANGLASDOLCH, // loot 4
-				ITEM_ARAXGIFT, // loot 5
-				ITEM_ARAXGIFT, // loot 6
-				ITEM_ARAXGIFT, // loot 7
-				ITEM_ARAXGIFT // loot 8
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_VULKANGLASDOLCH, // loot 4
+				ITEM_ID_ARAXGIFT, // loot 5
+				ITEM_ID_ARAXGIFT, // loot 6
+				ITEM_ID_ARAXGIFT, // loot 7
+				ITEM_ID_ARAXGIFT // loot 8
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1068,8 +1068,8 @@ struct fight_lst fight_data = {
 				{ 3, 12, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_ARAXGIFT // loot 1
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_ARAXGIFT // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1093,10 +1093,10 @@ struct fight_lst fight_data = {
 				{ 14, 9, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_ARAXGIFT, // loot 2
-				ITEM_ARAXGIFT // loot 3
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_ARAXGIFT, // loot 2
+				ITEM_ID_ARAXGIFT // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1193,11 +1193,11 @@ struct fight_lst fight_data = {
 				{ 5, 11, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_VULKANGLASDOLCH, // loot 2
-				ITEM_ARAXGIFT, // loot 3
-				ITEM_ARAXGIFT // loot 4
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_VULKANGLASDOLCH, // loot 2
+				ITEM_ID_ARAXGIFT, // loot 3
+				ITEM_ID_ARAXGIFT // loot 4
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1222,10 +1222,10 @@ struct fight_lst fight_data = {
 				{ 4, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_ARAXGIFT, // loot 0
-				ITEM_ARAXGIFT, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH // loot 3
+				ITEM_ID_ARAXGIFT, // loot 0
+				ITEM_ID_ARAXGIFT, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1246,7 +1246,7 @@ struct fight_lst fight_data = {
 				{ 6, 6, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_VULKANGLASDOLCH // loot 0
+				ITEM_ID_VULKANGLASDOLCH // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1446,11 +1446,11 @@ struct fight_lst fight_data = {
 				{ 11, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SILBERSCHMUCK, // loot 0
-				ITEM_SILBERSCHMUCK, // loot 1
-				ITEM_SILBERSCHMUCK, // loot 2
-				ITEM_SILBERSCHMUCK__MAGIC, // loot 3
-				ITEM_SILBERSTREITKOLBEN // loot 4
+				ITEM_ID_SILBERSCHMUCK, // loot 0
+				ITEM_ID_SILBERSCHMUCK, // loot 1
+				ITEM_ID_SILBERSCHMUCK, // loot 2
+				ITEM_ID_SILBERSCHMUCK__MAGIC, // loot 3
+				ITEM_ID_SILBERSTREITKOLBEN // loot 4
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1471,7 +1471,7 @@ struct fight_lst fight_data = {
 				{ 8, 6, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT // loot 0
+				ITEM_ID_SCHWERT // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1616,7 +1616,7 @@ struct fight_lst fight_data = {
 				{ 9, 12, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_TOTENKOPFGUERTEL // loot 0
+				ITEM_ID_TOTENKOPFGUERTEL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1639,9 +1639,9 @@ struct fight_lst fight_data = {
 				{ 7, 4, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT // loot 2
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1662,7 +1662,7 @@ struct fight_lst fight_data = {
 				{ 13, 14, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT // loot 0
+				ITEM_ID_SCHWERT // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1703,13 +1703,13 @@ struct fight_lst fight_data = {
 				{ 5, 5, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_TOTENKOPFGUERTEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_PEITSCHE, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_HEILTRANK, // loot 4
-				ITEM_BIER, // loot 5
-				ITEM_GOLDSCHMUCK // loot 6
+				ITEM_ID_TOTENKOPFGUERTEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_PEITSCHE, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_HEILTRANK, // loot 4
+				ITEM_ID_BIER, // loot 5
+				ITEM_ID_GOLDSCHMUCK // loot 6
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1734,8 +1734,8 @@ struct fight_lst fight_data = {
 				{ 8, 10, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_TOTENKOPFGUERTEL, // loot 0
-				ITEM_TOTENKOPFGUERTEL // loot 1
+				ITEM_ID_TOTENKOPFGUERTEL, // loot 0
+				ITEM_ID_TOTENKOPFGUERTEL // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1759,10 +1759,10 @@ struct fight_lst fight_data = {
 				{ 2, 8, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SAEBEL, // loot 2
-				ITEM_SAEBEL // loot 3
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SAEBEL, // loot 2
+				ITEM_ID_SAEBEL // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1805,14 +1805,14 @@ struct fight_lst fight_data = {
 				{ 2, 8, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_LEDERZEUG, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_LEDERZEUG, // loot 3
-				ITEM_SAEBEL, // loot 4
-				ITEM_SAEBEL, // loot 5
-				ITEM_SAEBEL, // loot 6
-				ITEM_SAEBEL // loot 7
+				ITEM_ID_LEDERZEUG, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_LEDERZEUG, // loot 3
+				ITEM_ID_SAEBEL, // loot 4
+				ITEM_ID_SAEBEL, // loot 5
+				ITEM_ID_SAEBEL, // loot 6
+				ITEM_ID_SAEBEL // loot 7
 			},
 			0, 15, 0 // ducats, silver, heller
 		},
@@ -1864,10 +1864,10 @@ struct fight_lst fight_data = {
 				{ 15, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_SCHWERT // loot 3
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_SCHWERT // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1890,12 +1890,12 @@ struct fight_lst fight_data = {
 				{ 10, 5, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SAEBEL, // loot 2
-				ITEM_HELM__CURSED, // loot 3
-				ITEM_HELM__CURSED, // loot 4
-				ITEM_HELM__CURSED // loot 5
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SAEBEL, // loot 2
+				ITEM_ID_HELM__CURSED, // loot 3
+				ITEM_ID_HELM__CURSED, // loot 4
+				ITEM_ID_HELM__CURSED // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -1920,17 +1920,17 @@ struct fight_lst fight_data = {
 				{ 10, 12, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_ENTERMESSER, // loot 0
-				ITEM_ENTERMESSER, // loot 1
-				ITEM_ENTERMESSER, // loot 2
-				ITEM_LEDERZEUG, // loot 3
-				ITEM_LEDERZEUG, // loot 4
-				ITEM_LEDERZEUG, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_AMULETT__UNKNOWN_2, // loot 9
-				ITEM_SCHNAPSFLASCHE // loot 10
+				ITEM_ID_ENTERMESSER, // loot 0
+				ITEM_ID_ENTERMESSER, // loot 1
+				ITEM_ID_ENTERMESSER, // loot 2
+				ITEM_ID_LEDERZEUG, // loot 3
+				ITEM_ID_LEDERZEUG, // loot 4
+				ITEM_ID_LEDERZEUG, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_AMULETT__ORDINARY, // loot 9
+				ITEM_ID_SCHNAPSFLASCHE // loot 10
 			},
 			0, 30, 0 // ducats, silver, heller
 		},
@@ -1952,12 +1952,12 @@ struct fight_lst fight_data = {
 				{ 9, 1, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_ENTERMESSER, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_LEDERZEUG, // loot 4
-				ITEM_LEDERZEUG // loot 5
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_ENTERMESSER, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_LEDERZEUG, // loot 4
+				ITEM_ID_LEDERZEUG // loot 5
 			},
 			21, 0, 0 // ducats, silver, heller
 		},
@@ -1979,10 +1979,10 @@ struct fight_lst fight_data = {
 				{ 3, 10, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_ENTERMESSER, // loot 0
-				ITEM_ENTERMESSER, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_LEDERZEUG // loot 3
+				ITEM_ID_ENTERMESSER, // loot 0
+				ITEM_ID_ENTERMESSER, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_LEDERZEUG // loot 3
 			},
 			0, 26, 0 // ducats, silver, heller
 		},
@@ -2004,12 +2004,12 @@ struct fight_lst fight_data = {
 				{ 13, 4, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_ENTERMESSER, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_ENTERMESSER // loot 5
+				ITEM_ID_ENTERMESSER, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_ENTERMESSER // loot 5
 			},
 			0, 26, 0 // ducats, silver, heller
 		},
@@ -2031,12 +2031,12 @@ struct fight_lst fight_data = {
 				{ 0, 12, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_ENTERMESSER, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_LEDERZEUG, // loot 4
-				ITEM_LEDERZEUG // loot 5
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_ENTERMESSER, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_LEDERZEUG, // loot 4
+				ITEM_ID_LEDERZEUG // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2062,18 +2062,18 @@ struct fight_lst fight_data = {
 				{ 6, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_ENTERMESSER, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_LEDERZEUG, // loot 4
-				ITEM_LEDERZEUG, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_LEDERZEUG, // loot 8
-				ITEM_LEDERZEUG, // loot 9
-				ITEM_ENTERMESSER, // loot 10
-				ITEM_ENTERMESSER // loot 11
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_ENTERMESSER, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_LEDERZEUG, // loot 4
+				ITEM_ID_LEDERZEUG, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_LEDERZEUG, // loot 8
+				ITEM_ID_LEDERZEUG, // loot 9
+				ITEM_ID_ENTERMESSER, // loot 10
+				ITEM_ID_ENTERMESSER // loot 11
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2096,14 +2096,14 @@ struct fight_lst fight_data = {
 				{ 6, 13, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SCHNEIDZAHN, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_ORKNASE, // loot 3
-				ITEM_LEDERZEUG, // loot 4
-				ITEM_LEDERZEUG, // loot 5
-				ITEM_SCHNEIDZAHN, // loot 6
-				ITEM_SCHNEIDZAHN // loot 7
+				ITEM_ID_SCHNEIDZAHN, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_ORKNASE, // loot 3
+				ITEM_ID_LEDERZEUG, // loot 4
+				ITEM_ID_LEDERZEUG, // loot 5
+				ITEM_ID_SCHNEIDZAHN, // loot 6
+				ITEM_ID_SCHNEIDZAHN // loot 7
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2133,17 +2133,17 @@ struct fight_lst fight_data = {
 				{ 1, 20, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_SCHWERT, // loot 3
-				ITEM_SCHWERT, // loot 4
-				ITEM_SCHWERT, // loot 5
-				ITEM_SCHWERT, // loot 6
-				ITEM_SCHWERT, // loot 7
-				ITEM_SCHWERT, // loot 8
-				ITEM_SCHWERT, // loot 9
-				ITEM_BEUTEL // loot 10
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_SCHWERT, // loot 3
+				ITEM_ID_SCHWERT, // loot 4
+				ITEM_ID_SCHWERT, // loot 5
+				ITEM_ID_SCHWERT, // loot 6
+				ITEM_ID_SCHWERT, // loot 7
+				ITEM_ID_SCHWERT, // loot 8
+				ITEM_ID_SCHWERT, // loot 9
+				ITEM_ID_BEUTEL // loot 10
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2186,11 +2186,11 @@ struct fight_lst fight_data = {
 				{ 10, 12, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_STARKER_HEILTRANK, // loot 0
-				ITEM_KETTENHEMD, // loot 1
-				ITEM_KHUNCHOMER, // loot 2
-				ITEM_STARKER_HEILTRANK, // loot 3
-				ITEM_ZAUBERTRANK_STARK // loot 4
+				ITEM_ID_STARKER_HEILTRANK, // loot 0
+				ITEM_ID_KETTENHEMD, // loot 1
+				ITEM_ID_KHUNCHOMER, // loot 2
+				ITEM_ID_STARKER_HEILTRANK, // loot 3
+				ITEM_ID_ZAUBERTRANK_STARK // loot 4
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2212,10 +2212,10 @@ struct fight_lst fight_data = {
 				{ 9, 9, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_KETTENHEMD, // loot 0
-				ITEM_KHUNCHOMER, // loot 1
-				ITEM_STARKER_HEILTRANK, // loot 2
-				ITEM_ZAUBERTRANK_STARK // loot 3
+				ITEM_ID_KETTENHEMD, // loot 0
+				ITEM_ID_KHUNCHOMER, // loot 1
+				ITEM_ID_STARKER_HEILTRANK, // loot 2
+				ITEM_ID_ZAUBERTRANK_STARK // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2238,8 +2238,8 @@ struct fight_lst fight_data = {
 				{ 3, 11, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_KUKRIS_MENGBILAR, // loot 0
-				ITEM_AMULETT__BLUE // loot 1
+				ITEM_ID_KUKRIS_MENGBILAR, // loot 0
+				ITEM_ID_AMULETT__MR_BONUS // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2304,8 +2304,8 @@ struct fight_lst fight_data = {
 				{ 10, 7, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_LEDERZEUG // loot 1
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_LEDERZEUG // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2407,10 +2407,10 @@ struct fight_lst fight_data = {
 				{ 4, 19, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_LEDERZEUG // loot 3
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_LEDERZEUG // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2434,8 +2434,8 @@ struct fight_lst fight_data = {
 				{ 10, 12, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_LEDERZEUG // loot 1
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_LEDERZEUG // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2457,9 +2457,9 @@ struct fight_lst fight_data = {
 				{ 17, 12, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_VULKANGLASDOLCH // loot 2
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_VULKANGLASDOLCH // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2520,10 +2520,10 @@ struct fight_lst fight_data = {
 				{ 4, 2, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_LEDERZEUG // loot 3
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_LEDERZEUG // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2549,12 +2549,12 @@ struct fight_lst fight_data = {
 				{ 15, 9, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_LEDERZEUG, // loot 3
-				ITEM_VULKANGLASDOLCH, // loot 4
-				ITEM_VULKANGLASDOLCH // loot 5
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_LEDERZEUG, // loot 3
+				ITEM_ID_VULKANGLASDOLCH, // loot 4
+				ITEM_ID_VULKANGLASDOLCH // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2578,12 +2578,12 @@ struct fight_lst fight_data = {
 				{ 11, 9, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_KUKRISDOLCH, // loot 2
-				ITEM_KRISTALLKUGEL, // loot 3
-				ITEM_GOLDSCHMUCK, // loot 4
-				ITEM_ROTER_SCHLUESSEL // loot 5
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_KUKRISDOLCH, // loot 2
+				ITEM_ID_KRISTALLKUGEL, // loot 3
+				ITEM_ID_GOLDSCHMUCK, // loot 4
+				ITEM_ID_ROTER_SCHLUESSEL // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2606,12 +2606,12 @@ struct fight_lst fight_data = {
 				{ 2, 5, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_LEDERZEUG, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER // loot 5
+				ITEM_ID_LEDERZEUG, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2632,9 +2632,9 @@ struct fight_lst fight_data = {
 				{ 2, 15, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_ENTERMESSER // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_ENTERMESSER // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2655,9 +2655,9 @@ struct fight_lst fight_data = {
 				{ 11, 18, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_ENTERMESSER // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_ENTERMESSER // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2680,15 +2680,15 @@ struct fight_lst fight_data = {
 				{ 9, 3, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_LEDERZEUG, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_SKRAJA, // loot 4
-				ITEM_SKRAJA, // loot 5
-				ITEM_SCHNEIDZAHN, // loot 6
-				ITEM_SCHNEIDZAHN, // loot 7
-				ITEM_SCHNEIDZAHN // loot 8
+				ITEM_ID_LEDERZEUG, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_SKRAJA, // loot 4
+				ITEM_ID_SKRAJA, // loot 5
+				ITEM_ID_SCHNEIDZAHN, // loot 6
+				ITEM_ID_SCHNEIDZAHN, // loot 7
+				ITEM_ID_SCHNEIDZAHN // loot 8
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2732,8 +2732,8 @@ struct fight_lst fight_data = {
 				{ 14, 16, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT // loot 1
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2775,7 +2775,7 @@ struct fight_lst fight_data = {
 				{ 9, 3, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_WUNDERKUR // loot 0
+				ITEM_ID_WUNDERKUR // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2818,7 +2818,7 @@ struct fight_lst fight_data = {
 				{ 10, 5, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_RING__GREEN // loot 0
+				ITEM_ID_RING__GREEN // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2843,16 +2843,16 @@ struct fight_lst fight_data = {
 				{ 9, 5, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_PLATINSCHLUESSEL, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_LEDERZEUG, // loot 2
-				ITEM_LEDERZEUG, // loot 3
-				ITEM_SCHNEIDZAHN, // loot 4
-				ITEM_SCHNEIDZAHN, // loot 5
-				ITEM_SKRAJA, // loot 6
-				ITEM_SKRAJA, // loot 7
-				ITEM_SKRAJA, // loot 8
-				ITEM_SCHNEIDZAHN // loot 9
+				ITEM_ID_PLATINSCHLUESSEL, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_LEDERZEUG, // loot 2
+				ITEM_ID_LEDERZEUG, // loot 3
+				ITEM_ID_SCHNEIDZAHN, // loot 4
+				ITEM_ID_SCHNEIDZAHN, // loot 5
+				ITEM_ID_SKRAJA, // loot 6
+				ITEM_ID_SKRAJA, // loot 7
+				ITEM_ID_SKRAJA, // loot 8
+				ITEM_ID_SCHNEIDZAHN // loot 9
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2873,10 +2873,10 @@ struct fight_lst fight_data = {
 				{ 14, 5, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_HEILTRANK, // loot 0
-				ITEM_HEILTRANK, // loot 1
-				ITEM_ZAUBERTRANK, // loot 2
-				ITEM_WURFDOLCH__MAGIC // loot 3
+				ITEM_ID_HEILTRANK, // loot 0
+				ITEM_ID_HEILTRANK, // loot 1
+				ITEM_ID_ZAUBERTRANK, // loot 2
+				ITEM_ID_WURFDOLCH__MAGIC // loot 3
 			},
 			200, 0, 0 // ducats, silver, heller
 		},
@@ -2897,9 +2897,9 @@ struct fight_lst fight_data = {
 				{ 8, 4, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2921,12 +2921,12 @@ struct fight_lst fight_data = {
 				{ 8, 4, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SILBERSCHMUCK, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_SILBERSCHMUCK, // loot 4
-				ITEM_SAEBEL // loot 5
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SILBERSCHMUCK, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 4
+				ITEM_ID_SAEBEL // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2947,9 +2947,9 @@ struct fight_lst fight_data = {
 				{ 10, 3, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2970,9 +2970,9 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -2994,12 +2994,12 @@ struct fight_lst fight_data = {
 				{ 12, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_SILBERSCHMUCK, // loot 4
-				ITEM_SILBERSCHMUCK // loot 5
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 4
+				ITEM_ID_SILBERSCHMUCK // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3020,9 +3020,9 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3043,9 +3043,9 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3068,16 +3068,16 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_SILBERSCHMUCK, // loot 4
-				ITEM_SILBERSCHMUCK, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_SILBERSCHMUCK, // loot 7
-				ITEM_SKRAJA, // loot 8
-				ITEM_EISENSCHLUESSEL__1 // loot 9
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 4
+				ITEM_ID_SILBERSCHMUCK, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_SILBERSCHMUCK, // loot 7
+				ITEM_ID_SKRAJA, // loot 8
+				ITEM_ID_EISENSCHLUESSEL__1 // loot 9
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3098,9 +3098,9 @@ struct fight_lst fight_data = {
 				{ 10, 4, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3123,10 +3123,10 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SILBERSCHMUCK, // loot 0
-				ITEM_ENTERMESSER, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_EISENSCHLUESSEL__2 // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 0
+				ITEM_ID_ENTERMESSER, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_EISENSCHLUESSEL__2 // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3149,16 +3149,16 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SILBERSCHMUCK, // loot 0
-				ITEM_ENTERMESSER, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SILBERSCHMUCK, // loot 3
-				ITEM_SILBERSCHMUCK, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_SKRAJA, // loot 7
-				ITEM_SKRAJA, // loot 8
-				ITEM_EISENSCHLUESSEL__2 // loot 9
+				ITEM_ID_SILBERSCHMUCK, // loot 0
+				ITEM_ID_ENTERMESSER, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SILBERSCHMUCK, // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_SKRAJA, // loot 7
+				ITEM_ID_SKRAJA, // loot 8
+				ITEM_ID_EISENSCHLUESSEL__2 // loot 9
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3179,9 +3179,9 @@ struct fight_lst fight_data = {
 				{ 3, 6, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3408,11 +3408,11 @@ struct fight_lst fight_data = {
 				{ 3, 12, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_KRIEGSBEIL, // loot 0
-				ITEM_KRIEGSBEIL, // loot 1
-				ITEM_HACKE, // loot 2
-				ITEM_HACKE, // loot 3
-				ITEM_HACKE // loot 4
+				ITEM_ID_KRIEGSBEIL, // loot 0
+				ITEM_ID_KRIEGSBEIL, // loot 1
+				ITEM_ID_HACKE, // loot 2
+				ITEM_ID_HACKE, // loot 3
+				ITEM_ID_HACKE // loot 4
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3433,7 +3433,7 @@ struct fight_lst fight_data = {
 				{ 9, 1, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_KRIEGSBEIL__SPECIAL // loot 0
+				ITEM_ID_KRIEGSBEIL__SPECIAL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3454,7 +3454,7 @@ struct fight_lst fight_data = {
 				{ 15, 8, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_KRIEGSBEIL__SPECIAL // loot 0
+				ITEM_ID_KRIEGSBEIL__SPECIAL // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3476,8 +3476,8 @@ struct fight_lst fight_data = {
 				{ 11, 17, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_KRIEGSBEIL__SPECIAL, // loot 0
-				ITEM_KRIEGSBEIL // loot 1
+				ITEM_ID_KRIEGSBEIL__SPECIAL, // loot 0
+				ITEM_ID_KRIEGSBEIL // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3501,10 +3501,10 @@ struct fight_lst fight_data = {
 				{ 9, 19, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_KRIEGSBEIL__SPECIAL, // loot 0
-				ITEM_KRIEGSBEIL__SPECIAL, // loot 1
-				ITEM_KRIEGSBEIL, // loot 2
-				ITEM_KRIEGSBEIL // loot 3
+				ITEM_ID_KRIEGSBEIL__SPECIAL, // loot 0
+				ITEM_ID_KRIEGSBEIL__SPECIAL, // loot 1
+				ITEM_ID_KRIEGSBEIL, // loot 2
+				ITEM_ID_KRIEGSBEIL // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3528,10 +3528,10 @@ struct fight_lst fight_data = {
 				{ 5, 12, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_KRIEGSBEIL, // loot 0
-				ITEM_KRIEGSBEIL, // loot 1
-				ITEM_KRIEGSBEIL, // loot 2
-				ITEM_KRIEGSBEIL // loot 3
+				ITEM_ID_KRIEGSBEIL, // loot 0
+				ITEM_ID_KRIEGSBEIL, // loot 1
+				ITEM_ID_KRIEGSBEIL, // loot 2
+				ITEM_ID_KRIEGSBEIL // loot 3
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3572,10 +3572,10 @@ struct fight_lst fight_data = {
 				{ 12, 2, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_RAPIER // loot 3
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_RAPIER // loot 3
 			},
 			0, 15, 0 // ducats, silver, heller
 		},
@@ -3597,11 +3597,11 @@ struct fight_lst fight_data = {
 				{ 3, 2, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_BIER // loot 4
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_BIER // loot 4
 			},
 			0, 22, 0 // ducats, silver, heller
 		},
@@ -3623,10 +3623,10 @@ struct fight_lst fight_data = {
 				{ 5, 11, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_RAPIER // loot 3
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_RAPIER // loot 3
 			},
 			0, 13, 0 // ducats, silver, heller
 		},
@@ -3647,8 +3647,8 @@ struct fight_lst fight_data = {
 				{ 9, 2, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_DOLCH // loot 1
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_DOLCH // loot 1
 			},
 			0, 8, 0 // ducats, silver, heller
 		},
@@ -3669,9 +3669,9 @@ struct fight_lst fight_data = {
 				{ 1, 8, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3692,9 +3692,9 @@ struct fight_lst fight_data = {
 				{ 9, 5, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_BIER // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_BIER // loot 2
 			},
 			0, 19, 0 // ducats, silver, heller
 		},
@@ -3715,8 +3715,8 @@ struct fight_lst fight_data = {
 				{ 5, 11, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_RAPIER // loot 1
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_RAPIER // loot 1
 			},
 			0, 5, 0 // ducats, silver, heller
 		},
@@ -3737,9 +3737,9 @@ struct fight_lst fight_data = {
 				{ 9, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_BIER // loot 2
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_BIER // loot 2
 			},
 			0, 11, 0 // ducats, silver, heller
 		},
@@ -3760,9 +3760,9 @@ struct fight_lst fight_data = {
 				{ 4, 3, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_BIER, // loot 1
-				ITEM_SKRAJA // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_BIER, // loot 1
+				ITEM_ID_SKRAJA // loot 2
 			},
 			0, 14, 0 // ducats, silver, heller
 		},
@@ -3783,9 +3783,9 @@ struct fight_lst fight_data = {
 				{ 4, 2, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SILBERSCHMUCK, // loot 1
-				ITEM_ENTERMESSER // loot 2
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SILBERSCHMUCK, // loot 1
+				ITEM_ID_ENTERMESSER // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3806,9 +3806,9 @@ struct fight_lst fight_data = {
 				{ 1, 9, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3829,9 +3829,9 @@ struct fight_lst fight_data = {
 				{ 11, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SILBERSCHMUCK, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_ENTERMESSER // loot 2
+				ITEM_ID_SILBERSCHMUCK, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_ENTERMESSER // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3857,24 +3857,24 @@ struct fight_lst fight_data = {
 				{ 10, 2, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_SKRAJA, // loot 6
-				ITEM_SKRAJA, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_BIER, // loot 10
-				ITEM_BIER, // loot 11
-				ITEM_ORKNASE, // loot 12
-				ITEM_SAEBEL, // loot 13
-				ITEM_DOLCH, // loot 14
-				ITEM_GOLDSCHMUCK, // loot 15
-				ITEM_WEINFLASCHE, // loot 16
-				ITEM_SCHLUESSEL__1 // loot 17
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_SKRAJA, // loot 6
+				ITEM_ID_SKRAJA, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_BIER, // loot 10
+				ITEM_ID_BIER, // loot 11
+				ITEM_ID_ORKNASE, // loot 12
+				ITEM_ID_SAEBEL, // loot 13
+				ITEM_ID_DOLCH, // loot 14
+				ITEM_ID_GOLDSCHMUCK, // loot 15
+				ITEM_ID_WEINFLASCHE, // loot 16
+				ITEM_ID_SCHLUESSEL__YELLOW // loot 17
 			},
 			0, 51, 0 // ducats, silver, heller
 		},
@@ -3902,28 +3902,28 @@ struct fight_lst fight_data = {
 				{ 10, 2, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_SKRAJA, // loot 6
-				ITEM_SKRAJA, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_BIER, // loot 10
-				ITEM_BIER, // loot 11
-				ITEM_ORKNASE, // loot 12
-				ITEM_SAEBEL, // loot 13
-				ITEM_DOLCH, // loot 14
-				ITEM_GOLDSCHMUCK, // loot 15
-				ITEM_WEINFLASCHE, // loot 16
-				ITEM_SCHLUESSEL__1, // loot 17
-				ITEM_RAPIER, // loot 18
-				ITEM_DOLCH, // loot 19
-				ITEM_DOLCH, // loot 20
-				ITEM_BIER // loot 21
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_SKRAJA, // loot 6
+				ITEM_ID_SKRAJA, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_BIER, // loot 10
+				ITEM_ID_BIER, // loot 11
+				ITEM_ID_ORKNASE, // loot 12
+				ITEM_ID_SAEBEL, // loot 13
+				ITEM_ID_DOLCH, // loot 14
+				ITEM_ID_GOLDSCHMUCK, // loot 15
+				ITEM_ID_WEINFLASCHE, // loot 16
+				ITEM_ID_SCHLUESSEL__YELLOW, // loot 17
+				ITEM_ID_RAPIER, // loot 18
+				ITEM_ID_DOLCH, // loot 19
+				ITEM_ID_DOLCH, // loot 20
+				ITEM_ID_BIER // loot 21
 			},
 			0, 63, 0 // ducats, silver, heller
 		},
@@ -3944,9 +3944,9 @@ struct fight_lst fight_data = {
 				{ 9, 2, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SILBERSCHMUCK, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_ENTERMESSER // loot 2
+				ITEM_ID_SILBERSCHMUCK, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_ENTERMESSER // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -3967,9 +3967,9 @@ struct fight_lst fight_data = {
 				{ 12, 8, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_BIER, // loot 1
-				ITEM_SKRAJA // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_BIER, // loot 1
+				ITEM_ID_SKRAJA // loot 2
 			},
 			0, 19, 0 // ducats, silver, heller
 		},
@@ -3991,10 +3991,10 @@ struct fight_lst fight_data = {
 				{ 3, 7, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_RAPIER // loot 3
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_RAPIER // loot 3
 			},
 			0, 16, 0 // ducats, silver, heller
 		},
@@ -4015,8 +4015,8 @@ struct fight_lst fight_data = {
 				{ 5, 3, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_KETTENHEMD, // loot 0
-				ITEM_SCHWERT // loot 1
+				ITEM_ID_KETTENHEMD, // loot 0
+				ITEM_ID_SCHWERT // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4095,7 +4095,7 @@ struct fight_lst fight_data = {
 				{ 10, 7, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT // loot 0
+				ITEM_ID_SCHWERT // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4117,8 +4117,8 @@ struct fight_lst fight_data = {
 				{ 10, 7, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT // loot 1
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4160,7 +4160,7 @@ struct fight_lst fight_data = {
 				{ 0, 14, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT // loot 0
+				ITEM_ID_SCHWERT // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4183,8 +4183,8 @@ struct fight_lst fight_data = {
 				{ 0, 14, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_SCHWERT // loot 1
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_SCHWERT // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4227,7 +4227,7 @@ struct fight_lst fight_data = {
 				{ 8, 2, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SCHWERT // loot 0
+				ITEM_ID_SCHWERT // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4292,26 +4292,26 @@ struct fight_lst fight_data = {
 				{ 8, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_SAEBEL, // loot 5
-				ITEM_SAEBEL, // loot 6
-				ITEM_SAEBEL, // loot 7
-				ITEM_SAEBEL, // loot 8
-				ITEM_SAEBEL, // loot 9
-				ITEM_KRIEGSBEIL, // loot 10
-				ITEM_KRIEGSBEIL, // loot 11
-				ITEM_DOLCH, // loot 12
-				ITEM_DOLCH, // loot 13
-				ITEM_DECKE, // loot 14
-				ITEM_DECKE, // loot 15
-				ITEM_KURZBOGEN, // loot 16
-				ITEM_KURZBOGEN, // loot 17
-				ITEM_PFEIL, // loot 18
-				ITEM_PFEIL // loot 19
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_SAEBEL, // loot 5
+				ITEM_ID_SAEBEL, // loot 6
+				ITEM_ID_SAEBEL, // loot 7
+				ITEM_ID_SAEBEL, // loot 8
+				ITEM_ID_SAEBEL, // loot 9
+				ITEM_ID_KRIEGSBEIL, // loot 10
+				ITEM_ID_KRIEGSBEIL, // loot 11
+				ITEM_ID_DOLCH, // loot 12
+				ITEM_ID_DOLCH, // loot 13
+				ITEM_ID_DECKE, // loot 14
+				ITEM_ID_DECKE, // loot 15
+				ITEM_ID_KURZBOGEN, // loot 16
+				ITEM_ID_KURZBOGEN, // loot 17
+				ITEM_ID_PFEIL, // loot 18
+				ITEM_ID_PFEIL // loot 19
 			},
 			0, 40, 0 // ducats, silver, heller
 		},
@@ -4339,32 +4339,32 @@ struct fight_lst fight_data = {
 				{ 12, 4, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SAEBEL, // loot 2
-				ITEM_SAEBEL, // loot 3
-				ITEM_SAEBEL, // loot 4
-				ITEM_SAEBEL, // loot 5
-				ITEM_SAEBEL, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_DOLCH, // loot 12
-				ITEM_KURZBOGEN, // loot 13
-				ITEM_KURZBOGEN, // loot 14
-				ITEM_KURZBOGEN, // loot 15
-				ITEM_KURZBOGEN, // loot 16
-				ITEM_PFEIL, // loot 17
-				ITEM_PFEIL, // loot 18
-				ITEM_PFEIL, // loot 19
-				ITEM_PFEIL, // loot 20
-				ITEM_DOLCH, // loot 21
-				ITEM_ZWEIHAENDER, // loot 22
-				ITEM_KURZSCHWERT, // loot 23
-				ITEM_DECKE, // loot 24
-				ITEM_AMULETT__BLUE // loot 25
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SAEBEL, // loot 2
+				ITEM_ID_SAEBEL, // loot 3
+				ITEM_ID_SAEBEL, // loot 4
+				ITEM_ID_SAEBEL, // loot 5
+				ITEM_ID_SAEBEL, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_DOLCH, // loot 12
+				ITEM_ID_KURZBOGEN, // loot 13
+				ITEM_ID_KURZBOGEN, // loot 14
+				ITEM_ID_KURZBOGEN, // loot 15
+				ITEM_ID_KURZBOGEN, // loot 16
+				ITEM_ID_PFEIL, // loot 17
+				ITEM_ID_PFEIL, // loot 18
+				ITEM_ID_PFEIL, // loot 19
+				ITEM_ID_PFEIL, // loot 20
+				ITEM_ID_DOLCH, // loot 21
+				ITEM_ID_ZWEIHAENDER, // loot 22
+				ITEM_ID_KURZSCHWERT, // loot 23
+				ITEM_ID_DECKE, // loot 24
+				ITEM_ID_AMULETT__MR_BONUS // loot 25
 			},
 			0, 12, 0 // ducats, silver, heller
 		},
@@ -4478,19 +4478,19 @@ struct fight_lst fight_data = {
 				{ 12, 9, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_RAPIER, // loot 4
-				ITEM_RAPIER, // loot 5
-				ITEM_RAPIER, // loot 6
-				ITEM_RAPIER, // loot 7
-				ITEM_RAPIER, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_ARMBRUST, // loot 10
-				ITEM_BOLZEN, // loot 11
-				ITEM_KUKRISDOLCH // loot 12
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_RAPIER, // loot 4
+				ITEM_ID_RAPIER, // loot 5
+				ITEM_ID_RAPIER, // loot 6
+				ITEM_ID_RAPIER, // loot 7
+				ITEM_ID_RAPIER, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_ARMBRUST, // loot 10
+				ITEM_ID_BOLZEN, // loot 11
+				ITEM_ID_KUKRISDOLCH // loot 12
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4516,7 +4516,7 @@ struct fight_lst fight_data = {
 				{ 21, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_ORKNASE // loot 0
+				ITEM_ID_ORKNASE // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4548,7 +4548,7 @@ struct fight_lst fight_data = {
 				{ 21, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_ORKNASE // loot 0
+				ITEM_ID_ORKNASE // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4586,7 +4586,7 @@ struct fight_lst fight_data = {
 				{ 21, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_ORKNASE // loot 0
+				ITEM_ID_ORKNASE // loot 0
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4612,27 +4612,27 @@ struct fight_lst fight_data = {
 				{ 14, 13, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_RAPIER, // loot 3
-				ITEM_RAPIER, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_WURFMESSER, // loot 11
-				ITEM_WURFMESSER, // loot 12
-				ITEM_WURFMESSER, // loot 13
-				ITEM_WURFMESSER, // loot 14
-				ITEM_WURFMESSER, // loot 15
-				ITEM_WURFMESSER, // loot 16
-				ITEM_ARMBRUST, // loot 17
-				ITEM_BOLZEN, // loot 18
-				ITEM_WURFMESSER, // loot 19
-				ITEM_RAPIER // loot 20
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_RAPIER, // loot 3
+				ITEM_ID_RAPIER, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_WURFMESSER, // loot 11
+				ITEM_ID_WURFMESSER, // loot 12
+				ITEM_ID_WURFMESSER, // loot 13
+				ITEM_ID_WURFMESSER, // loot 14
+				ITEM_ID_WURFMESSER, // loot 15
+				ITEM_ID_WURFMESSER, // loot 16
+				ITEM_ID_ARMBRUST, // loot 17
+				ITEM_ID_BOLZEN, // loot 18
+				ITEM_ID_WURFMESSER, // loot 19
+				ITEM_ID_RAPIER // loot 20
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4676,22 +4676,22 @@ struct fight_lst fight_data = {
 				{ 7, 20, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SAEBEL, // loot 2
-				ITEM_SAEBEL, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_SCHNAPSFLASCHE, // loot 8
-				ITEM_SCHNAPSFLASCHE, // loot 9
-				ITEM_SCHNAPSFLASCHE, // loot 10
-				ITEM_SCHNAPSFLASCHE, // loot 11
-				ITEM_DECKE, // loot 12
-				ITEM_DECKE, // loot 13
-				ITEM_DECKE, // loot 14
-				ITEM_DECKE // loot 15
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SAEBEL, // loot 2
+				ITEM_ID_SAEBEL, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_SCHNAPSFLASCHE, // loot 8
+				ITEM_ID_SCHNAPSFLASCHE, // loot 9
+				ITEM_ID_SCHNAPSFLASCHE, // loot 10
+				ITEM_ID_SCHNAPSFLASCHE, // loot 11
+				ITEM_ID_DECKE, // loot 12
+				ITEM_ID_DECKE, // loot 13
+				ITEM_ID_DECKE, // loot 14
+				ITEM_ID_DECKE // loot 15
 			},
 			0, 10, 32 // ducats, silver, heller
 		},
@@ -4824,22 +4824,22 @@ struct fight_lst fight_data = {
 				{ 15, 12, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE // loot 15
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE // loot 15
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4863,22 +4863,22 @@ struct fight_lst fight_data = {
 				{ 13, 11, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_SCHNAPSFLASCHE, // loot 9
-				ITEM_SCHNAPSFLASCHE, // loot 10
-				ITEM_SCHNAPSFLASCHE, // loot 11
-				ITEM_STREITAXT, // loot 12
-				ITEM_SAEBEL, // loot 13
-				ITEM_DOLCH, // loot 14
-				ITEM_GOLDSCHMUCK // loot 15
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_SCHNAPSFLASCHE, // loot 9
+				ITEM_ID_SCHNAPSFLASCHE, // loot 10
+				ITEM_ID_SCHNAPSFLASCHE, // loot 11
+				ITEM_ID_STREITAXT, // loot 12
+				ITEM_ID_SAEBEL, // loot 13
+				ITEM_ID_DOLCH, // loot 14
+				ITEM_ID_GOLDSCHMUCK // loot 15
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4903,22 +4903,22 @@ struct fight_lst fight_data = {
 				{ 11, 7, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE // loot 15
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE // loot 15
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4943,22 +4943,22 @@ struct fight_lst fight_data = {
 				{ 9, 7, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE // loot 15
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE // loot 15
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -4979,11 +4979,11 @@ struct fight_lst fight_data = {
 				{ 11, 6, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_ENTERMESSER, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_SCHNAPSFLASCHE, // loot 3
-				ITEM_SILBERSCHMUCK // loot 4
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_ENTERMESSER, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_SCHNAPSFLASCHE, // loot 3
+				ITEM_ID_SILBERSCHMUCK // loot 4
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5009,24 +5009,24 @@ struct fight_lst fight_data = {
 				{ 9, 5, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE, // loot 15
-				ITEM_SCHNAPSFLASCHE, // loot 16
-				ITEM_SCHNAPSFLASCHE // loot 17
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE, // loot 15
+				ITEM_ID_SCHNAPSFLASCHE, // loot 16
+				ITEM_ID_SCHNAPSFLASCHE // loot 17
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5048,16 +5048,16 @@ struct fight_lst fight_data = {
 				{ 14, 6, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_ENTERMESSER, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_SCHNAPSFLASCHE, // loot 6
-				ITEM_SCHNAPSFLASCHE, // loot 7
-				ITEM_SILBERSCHMUCK, // loot 8
-				ITEM_SILBERSCHMUCK // loot 9
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_ENTERMESSER, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_SCHNAPSFLASCHE, // loot 6
+				ITEM_ID_SCHNAPSFLASCHE, // loot 7
+				ITEM_ID_SILBERSCHMUCK, // loot 8
+				ITEM_ID_SILBERSCHMUCK // loot 9
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5081,23 +5081,23 @@ struct fight_lst fight_data = {
 				{ 5, 12, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE, // loot 15
-				ITEM_SKRAJA // loot 16
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE, // loot 15
+				ITEM_ID_SKRAJA // loot 16
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5122,27 +5122,27 @@ struct fight_lst fight_data = {
 				{ 4, 15, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE, // loot 15
-				ITEM_SILBERSCHMUCK, // loot 16
-				ITEM_RAPIER, // loot 17
-				ITEM_DOLCH, // loot 18
-				ITEM_WEINFLASCHE, // loot 19
-				ITEM_GOLDSCHMUCK // loot 20
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE, // loot 15
+				ITEM_ID_SILBERSCHMUCK, // loot 16
+				ITEM_ID_RAPIER, // loot 17
+				ITEM_ID_DOLCH, // loot 18
+				ITEM_ID_WEINFLASCHE, // loot 19
+				ITEM_ID_GOLDSCHMUCK // loot 20
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5166,15 +5166,15 @@ struct fight_lst fight_data = {
 				{ 13, 6, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_WEINFLASCHE, // loot 6
-				ITEM_WEINFLASCHE, // loot 7
-				ITEM_WEINFLASCHE // loot 8
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_WEINFLASCHE, // loot 6
+				ITEM_ID_WEINFLASCHE, // loot 7
+				ITEM_ID_WEINFLASCHE // loot 8
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5206,34 +5206,34 @@ struct fight_lst fight_data = {
 				{ 10, 10, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_ENTERMESSER, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_SCHNAPSFLASCHE, // loot 8
-				ITEM_SCHNAPSFLASCHE, // loot 9
-				ITEM_SILBERSCHMUCK, // loot 10
-				ITEM_SILBERSCHMUCK, // loot 11
-				ITEM_SILBERSCHMUCK, // loot 12
-				ITEM_SKRAJA, // loot 13
-				ITEM_ENTERMESSER, // loot 14
-				ITEM_DOLCH, // loot 15
-				ITEM_STREITAXT, // loot 16
-				ITEM_STREITAXT, // loot 17
-				ITEM_STREITAXT, // loot 18
-				ITEM_SAEBEL, // loot 19
-				ITEM_SAEBEL, // loot 20
-				ITEM_SAEBEL, // loot 21
-				ITEM_DOLCH, // loot 22
-				ITEM_DOLCH, // loot 23
-				ITEM_GOLDSCHMUCK, // loot 24
-				ITEM_GOLDSCHMUCK, // loot 25
-				ITEM_GOLDSCHMUCK, // loot 26
-				ITEM_GOLDSCHMUCK // loot 27
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_ENTERMESSER, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_SCHNAPSFLASCHE, // loot 8
+				ITEM_ID_SCHNAPSFLASCHE, // loot 9
+				ITEM_ID_SILBERSCHMUCK, // loot 10
+				ITEM_ID_SILBERSCHMUCK, // loot 11
+				ITEM_ID_SILBERSCHMUCK, // loot 12
+				ITEM_ID_SKRAJA, // loot 13
+				ITEM_ID_ENTERMESSER, // loot 14
+				ITEM_ID_DOLCH, // loot 15
+				ITEM_ID_STREITAXT, // loot 16
+				ITEM_ID_STREITAXT, // loot 17
+				ITEM_ID_STREITAXT, // loot 18
+				ITEM_ID_SAEBEL, // loot 19
+				ITEM_ID_SAEBEL, // loot 20
+				ITEM_ID_SAEBEL, // loot 21
+				ITEM_ID_DOLCH, // loot 22
+				ITEM_ID_DOLCH, // loot 23
+				ITEM_ID_GOLDSCHMUCK, // loot 24
+				ITEM_ID_GOLDSCHMUCK, // loot 25
+				ITEM_ID_GOLDSCHMUCK, // loot 26
+				ITEM_ID_GOLDSCHMUCK // loot 27
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5258,25 +5258,25 @@ struct fight_lst fight_data = {
 				{ 8, 8, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_RAPIER, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_WEINFLASCHE, // loot 8
-				ITEM_WEINFLASCHE, // loot 9
-				ITEM_WEINFLASCHE, // loot 10
-				ITEM_WEINFLASCHE, // loot 11
-				ITEM_DOLCH, // loot 12
-				ITEM_SKRAJA, // loot 13
-				ITEM_ENTERMESSER, // loot 14
-				ITEM_DOLCH, // loot 15
-				ITEM_SCHNAPSFLASCHE, // loot 16
-				ITEM_SILBERSCHMUCK, // loot 17
-				ITEM_GOLDSCHMUCK // loot 18
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_RAPIER, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_WEINFLASCHE, // loot 8
+				ITEM_ID_WEINFLASCHE, // loot 9
+				ITEM_ID_WEINFLASCHE, // loot 10
+				ITEM_ID_WEINFLASCHE, // loot 11
+				ITEM_ID_DOLCH, // loot 12
+				ITEM_ID_SKRAJA, // loot 13
+				ITEM_ID_ENTERMESSER, // loot 14
+				ITEM_ID_DOLCH, // loot 15
+				ITEM_ID_SCHNAPSFLASCHE, // loot 16
+				ITEM_ID_SILBERSCHMUCK, // loot 17
+				ITEM_ID_GOLDSCHMUCK // loot 18
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5298,14 +5298,14 @@ struct fight_lst fight_data = {
 				{ 6, 8, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_ENTERMESSER, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_SCHNAPSFLASCHE, // loot 3
-				ITEM_RAPIER, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_WEINFLASCHE, // loot 6
-				ITEM_GOLDSCHMUCK // loot 7
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_ENTERMESSER, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_SCHNAPSFLASCHE, // loot 3
+				ITEM_ID_RAPIER, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_WEINFLASCHE, // loot 6
+				ITEM_ID_GOLDSCHMUCK // loot 7
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5329,22 +5329,22 @@ struct fight_lst fight_data = {
 				{ 14, 10, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE // loot 15
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE // loot 15
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5369,26 +5369,26 @@ struct fight_lst fight_data = {
 				{ 11, 13, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE, // loot 15
-				ITEM_SCHNAPSFLASCHE, // loot 16
-				ITEM_RAPIER, // loot 17
-				ITEM_DOLCH, // loot 18
-				ITEM_WEINFLASCHE // loot 19
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE, // loot 15
+				ITEM_ID_SCHNAPSFLASCHE, // loot 16
+				ITEM_ID_RAPIER, // loot 17
+				ITEM_ID_DOLCH, // loot 18
+				ITEM_ID_WEINFLASCHE // loot 19
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5412,26 +5412,26 @@ struct fight_lst fight_data = {
 				{ 14, 11, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_SCHNAPSFLASCHE, // loot 12
-				ITEM_SCHNAPSFLASCHE, // loot 13
-				ITEM_SCHNAPSFLASCHE, // loot 14
-				ITEM_SCHNAPSFLASCHE, // loot 15
-				ITEM_SILBERSCHMUCK, // loot 16
-				ITEM_SILBERSCHMUCK, // loot 17
-				ITEM_SILBERSCHMUCK, // loot 18
-				ITEM_SILBERSCHMUCK // loot 19
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_SCHNAPSFLASCHE, // loot 12
+				ITEM_ID_SCHNAPSFLASCHE, // loot 13
+				ITEM_ID_SCHNAPSFLASCHE, // loot 14
+				ITEM_ID_SCHNAPSFLASCHE, // loot 15
+				ITEM_ID_SILBERSCHMUCK, // loot 16
+				ITEM_ID_SILBERSCHMUCK, // loot 17
+				ITEM_ID_SILBERSCHMUCK, // loot 18
+				ITEM_ID_SILBERSCHMUCK // loot 19
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5457,33 +5457,33 @@ struct fight_lst fight_data = {
 				{ 8, 6, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_SKRAJA, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_ENTERMESSER, // loot 8
-				ITEM_ENTERMESSER, // loot 9
-				ITEM_ENTERMESSER, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_DOLCH, // loot 12
-				ITEM_DOLCH, // loot 13
-				ITEM_DOLCH, // loot 14
-				ITEM_DOLCH, // loot 15
-				ITEM_DOLCH, // loot 16
-				ITEM_SCHNAPSFLASCHE, // loot 17
-				ITEM_SCHNAPSFLASCHE, // loot 18
-				ITEM_SCHNAPSFLASCHE, // loot 19
-				ITEM_SCHNAPSFLASCHE, // loot 20
-				ITEM_SCHNAPSFLASCHE, // loot 21
-				ITEM_SCHNAPSFLASCHE, // loot 22
-				ITEM_SILBERSCHMUCK, // loot 23
-				ITEM_SILBERSCHMUCK, // loot 24
-				ITEM_SILBERSCHMUCK, // loot 25
-				ITEM_SKRAJA // loot 26
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_SKRAJA, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_ENTERMESSER, // loot 8
+				ITEM_ID_ENTERMESSER, // loot 9
+				ITEM_ID_ENTERMESSER, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_DOLCH, // loot 12
+				ITEM_ID_DOLCH, // loot 13
+				ITEM_ID_DOLCH, // loot 14
+				ITEM_ID_DOLCH, // loot 15
+				ITEM_ID_DOLCH, // loot 16
+				ITEM_ID_SCHNAPSFLASCHE, // loot 17
+				ITEM_ID_SCHNAPSFLASCHE, // loot 18
+				ITEM_ID_SCHNAPSFLASCHE, // loot 19
+				ITEM_ID_SCHNAPSFLASCHE, // loot 20
+				ITEM_ID_SCHNAPSFLASCHE, // loot 21
+				ITEM_ID_SCHNAPSFLASCHE, // loot 22
+				ITEM_ID_SILBERSCHMUCK, // loot 23
+				ITEM_ID_SILBERSCHMUCK, // loot 24
+				ITEM_ID_SILBERSCHMUCK, // loot 25
+				ITEM_ID_SKRAJA // loot 26
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5510,34 +5510,34 @@ struct fight_lst fight_data = {
 				{ 3, 5, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_SKRAJA, // loot 4
-				ITEM_SKRAJA, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_ENTERMESSER, // loot 7
-				ITEM_ENTERMESSER, // loot 8
-				ITEM_ENTERMESSER, // loot 9
-				ITEM_ENTERMESSER, // loot 10
-				ITEM_ENTERMESSER, // loot 11
-				ITEM_DOLCH, // loot 12
-				ITEM_DOLCH, // loot 13
-				ITEM_DOLCH, // loot 14
-				ITEM_DOLCH, // loot 15
-				ITEM_DOLCH, // loot 16
-				ITEM_DOLCH, // loot 17
-				ITEM_DOLCH, // loot 18
-				ITEM_SCHNAPSFLASCHE, // loot 19
-				ITEM_SCHNAPSFLASCHE, // loot 20
-				ITEM_SCHNAPSFLASCHE, // loot 21
-				ITEM_SILBERSCHMUCK, // loot 22
-				ITEM_SILBERSCHMUCK, // loot 23
-				ITEM_SILBERSCHMUCK, // loot 24
-				ITEM_SILBERSCHMUCK, // loot 25
-				ITEM_RAPIER, // loot 26
-				ITEM_WEINFLASCHE // loot 27
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_SKRAJA, // loot 4
+				ITEM_ID_SKRAJA, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_ENTERMESSER, // loot 7
+				ITEM_ID_ENTERMESSER, // loot 8
+				ITEM_ID_ENTERMESSER, // loot 9
+				ITEM_ID_ENTERMESSER, // loot 10
+				ITEM_ID_ENTERMESSER, // loot 11
+				ITEM_ID_DOLCH, // loot 12
+				ITEM_ID_DOLCH, // loot 13
+				ITEM_ID_DOLCH, // loot 14
+				ITEM_ID_DOLCH, // loot 15
+				ITEM_ID_DOLCH, // loot 16
+				ITEM_ID_DOLCH, // loot 17
+				ITEM_ID_DOLCH, // loot 18
+				ITEM_ID_SCHNAPSFLASCHE, // loot 19
+				ITEM_ID_SCHNAPSFLASCHE, // loot 20
+				ITEM_ID_SCHNAPSFLASCHE, // loot 21
+				ITEM_ID_SILBERSCHMUCK, // loot 22
+				ITEM_ID_SILBERSCHMUCK, // loot 23
+				ITEM_ID_SILBERSCHMUCK, // loot 24
+				ITEM_ID_SILBERSCHMUCK, // loot 25
+				ITEM_ID_RAPIER, // loot 26
+				ITEM_ID_WEINFLASCHE // loot 27
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5564,35 +5564,35 @@ struct fight_lst fight_data = {
 				{ 5, 6, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_WEINFLASCHE, // loot 2
-				ITEM_RAPIER, // loot 3
-				ITEM_RAPIER, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_WEINFLASCHE, // loot 7
-				ITEM_WEINFLASCHE, // loot 8
-				ITEM_SKRAJA, // loot 9
-				ITEM_SKRAJA, // loot 10
-				ITEM_ENTERMESSER, // loot 11
-				ITEM_ENTERMESSER, // loot 12
-				ITEM_ENTERMESSER, // loot 13
-				ITEM_ENTERMESSER, // loot 14
-				ITEM_SKRAJA, // loot 15
-				ITEM_SKRAJA, // loot 16
-				ITEM_DOLCH, // loot 17
-				ITEM_DOLCH, // loot 18
-				ITEM_DOLCH, // loot 19
-				ITEM_DOLCH, // loot 20
-				ITEM_SILBERSCHMUCK, // loot 21
-				ITEM_SILBERSCHMUCK, // loot 22
-				ITEM_SILBERSCHMUCK, // loot 23
-				ITEM_SILBERSCHMUCK, // loot 24
-				ITEM_SCHNAPSFLASCHE, // loot 25
-				ITEM_SCHNAPSFLASCHE, // loot 26
-				ITEM_SCHNAPSFLASCHE, // loot 27
-				ITEM_SCHNAPSFLASCHE // loot 28
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_WEINFLASCHE, // loot 2
+				ITEM_ID_RAPIER, // loot 3
+				ITEM_ID_RAPIER, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_WEINFLASCHE, // loot 7
+				ITEM_ID_WEINFLASCHE, // loot 8
+				ITEM_ID_SKRAJA, // loot 9
+				ITEM_ID_SKRAJA, // loot 10
+				ITEM_ID_ENTERMESSER, // loot 11
+				ITEM_ID_ENTERMESSER, // loot 12
+				ITEM_ID_ENTERMESSER, // loot 13
+				ITEM_ID_ENTERMESSER, // loot 14
+				ITEM_ID_SKRAJA, // loot 15
+				ITEM_ID_SKRAJA, // loot 16
+				ITEM_ID_DOLCH, // loot 17
+				ITEM_ID_DOLCH, // loot 18
+				ITEM_ID_DOLCH, // loot 19
+				ITEM_ID_DOLCH, // loot 20
+				ITEM_ID_SILBERSCHMUCK, // loot 21
+				ITEM_ID_SILBERSCHMUCK, // loot 22
+				ITEM_ID_SILBERSCHMUCK, // loot 23
+				ITEM_ID_SILBERSCHMUCK, // loot 24
+				ITEM_ID_SCHNAPSFLASCHE, // loot 25
+				ITEM_ID_SCHNAPSFLASCHE, // loot 26
+				ITEM_ID_SCHNAPSFLASCHE, // loot 27
+				ITEM_ID_SCHNAPSFLASCHE // loot 28
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5622,36 +5622,36 @@ struct fight_lst fight_data = {
 				{ 8, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_RAPIER, // loot 3
-				ITEM_RAPIER, // loot 4
-				ITEM_RAPIER, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_DOLCH, // loot 10
-				ITEM_DOLCH, // loot 11
-				ITEM_DOLCH, // loot 12
-				ITEM_WEINFLASCHE, // loot 13
-				ITEM_WEINFLASCHE, // loot 14
-				ITEM_WEINFLASCHE, // loot 15
-				ITEM_WEINFLASCHE, // loot 16
-				ITEM_WEINFLASCHE, // loot 17
-				ITEM_SKRAJA, // loot 18
-				ITEM_SKRAJA, // loot 19
-				ITEM_ENTERMESSER, // loot 20
-				ITEM_ENTERMESSER, // loot 21
-				ITEM_ENTERMESSER, // loot 22
-				ITEM_DOLCH, // loot 23
-				ITEM_DOLCH, // loot 24
-				ITEM_SCHNAPSFLASCHE, // loot 25
-				ITEM_SCHNAPSFLASCHE, // loot 26
-				ITEM_SCHNAPSFLASCHE, // loot 27
-				ITEM_GOLDSCHMUCK, // loot 28
-				ITEM_GOLDSCHMUCK // loot 29
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_RAPIER, // loot 3
+				ITEM_ID_RAPIER, // loot 4
+				ITEM_ID_RAPIER, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_DOLCH, // loot 10
+				ITEM_ID_DOLCH, // loot 11
+				ITEM_ID_DOLCH, // loot 12
+				ITEM_ID_WEINFLASCHE, // loot 13
+				ITEM_ID_WEINFLASCHE, // loot 14
+				ITEM_ID_WEINFLASCHE, // loot 15
+				ITEM_ID_WEINFLASCHE, // loot 16
+				ITEM_ID_WEINFLASCHE, // loot 17
+				ITEM_ID_SKRAJA, // loot 18
+				ITEM_ID_SKRAJA, // loot 19
+				ITEM_ID_ENTERMESSER, // loot 20
+				ITEM_ID_ENTERMESSER, // loot 21
+				ITEM_ID_ENTERMESSER, // loot 22
+				ITEM_ID_DOLCH, // loot 23
+				ITEM_ID_DOLCH, // loot 24
+				ITEM_ID_SCHNAPSFLASCHE, // loot 25
+				ITEM_ID_SCHNAPSFLASCHE, // loot 26
+				ITEM_ID_SCHNAPSFLASCHE, // loot 27
+				ITEM_ID_GOLDSCHMUCK, // loot 28
+				ITEM_ID_GOLDSCHMUCK // loot 29
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5681,20 +5681,20 @@ struct fight_lst fight_data = {
 				{ 11, 7, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_STREITAXT, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_SKRAJA, // loot 2
-				ITEM_SKRAJA, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_KNOCHEN_MIT_RUNE, // loot 8
-				ITEM_RAPIER, // loot 9
-				ITEM_RAPIER, // loot 10
-				ITEM_SILBERSCHMUCK, // loot 11
-				ITEM_SILBERSCHMUCK, // loot 12
-				ITEM_SILBERSCHMUCK // loot 13
+				ITEM_ID_STREITAXT, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_SKRAJA, // loot 2
+				ITEM_ID_SKRAJA, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_KNOCHEN_MIT_RUNE, // loot 8
+				ITEM_ID_RAPIER, // loot 9
+				ITEM_ID_RAPIER, // loot 10
+				ITEM_ID_SILBERSCHMUCK, // loot 11
+				ITEM_ID_SILBERSCHMUCK, // loot 12
+				ITEM_ID_SILBERSCHMUCK // loot 13
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5720,17 +5720,17 @@ struct fight_lst fight_data = {
 				{ 11, 15, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_SKRAJA, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_SCHWERT, // loot 3
-				ITEM_SCHWERT, // loot 4
-				ITEM_SILBERSCHMUCK, // loot 5
-				ITEM_GOLDSCHMUCK, // loot 6
-				ITEM_GOLDSCHMUCK, // loot 7
-				ITEM_RAPIER, // loot 8
-				ITEM_RAPIER, // loot 9
-				ITEM_SCHNAPSFLASCHE // loot 10
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_SKRAJA, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_SCHWERT, // loot 3
+				ITEM_ID_SCHWERT, // loot 4
+				ITEM_ID_SILBERSCHMUCK, // loot 5
+				ITEM_ID_GOLDSCHMUCK, // loot 6
+				ITEM_ID_GOLDSCHMUCK, // loot 7
+				ITEM_ID_RAPIER, // loot 8
+				ITEM_ID_RAPIER, // loot 9
+				ITEM_ID_SCHNAPSFLASCHE // loot 10
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5762,22 +5762,22 @@ struct fight_lst fight_data = {
 				{ 2, 8, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_ENTERMESSER, // loot 4
-				ITEM_ENTERMESSER, // loot 5
-				ITEM_ENTERMESSER, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_SCHNAPSFLASCHE, // loot 9
-				ITEM_SCHNAPSFLASCHE, // loot 10
-				ITEM_SILBERSCHMUCK, // loot 11
-				ITEM_SILBERSCHMUCK, // loot 12
-				ITEM_GOLDSCHMUCK, // loot 13
-				ITEM_DOLCH, // loot 14
-				ITEM_SCHWERT // loot 15
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_ENTERMESSER, // loot 4
+				ITEM_ID_ENTERMESSER, // loot 5
+				ITEM_ID_ENTERMESSER, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_SCHNAPSFLASCHE, // loot 9
+				ITEM_ID_SCHNAPSFLASCHE, // loot 10
+				ITEM_ID_SILBERSCHMUCK, // loot 11
+				ITEM_ID_SILBERSCHMUCK, // loot 12
+				ITEM_ID_GOLDSCHMUCK, // loot 13
+				ITEM_ID_DOLCH, // loot 14
+				ITEM_ID_SCHWERT // loot 15
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5809,17 +5809,17 @@ struct fight_lst fight_data = {
 				{ 14, 12, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_SKRAJA, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_ENTERMESSER, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_GOLDSCHMUCK, // loot 5
-				ITEM_SILBERSCHMUCK, // loot 6
-				ITEM_SCHNAPSFLASCHE, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_WEINFLASCHE, // loot 9
-				ITEM_ENTERMESSER // loot 10
+				ITEM_ID_SKRAJA, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_ENTERMESSER, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_GOLDSCHMUCK, // loot 5
+				ITEM_ID_SILBERSCHMUCK, // loot 6
+				ITEM_ID_SCHNAPSFLASCHE, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_WEINFLASCHE, // loot 9
+				ITEM_ID_ENTERMESSER // loot 10
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -5843,9 +5843,9 @@ struct fight_lst fight_data = {
 				{ 5, 6, FIG_VIEWDIR_DOWN, 1 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_DOLCH // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_DOLCH // loot 2
 			},
 			0, 2, 53 // ducats, silver, heller
 		},
@@ -5869,14 +5869,14 @@ struct fight_lst fight_data = {
 				{ 11, 14, FIG_VIEWDIR_RIGHT, 1 } // hero 6
 			},
 			{
-				ITEM_SCHWERT, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_SILBERSCHMUCK, // loot 6
-				ITEM_SILBERSCHMUCK // loot 7
+				ITEM_ID_SCHWERT, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_SILBERSCHMUCK, // loot 6
+				ITEM_ID_SILBERSCHMUCK // loot 7
 			},
 			3, 0, 25 // ducats, silver, heller
 		},
@@ -6021,8 +6021,8 @@ struct fight_lst fight_data = {
 				{ 11, 7, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_VULKANGLASDOLCH, // loot 0
-				ITEM_VULKANGLASDOLCH // loot 1
+				ITEM_ID_VULKANGLASDOLCH, // loot 0
+				ITEM_ID_VULKANGLASDOLCH // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6047,8 +6047,8 @@ struct fight_lst fight_data = {
 				{ 11, 7, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_VULKANGLASDOLCH, // loot 0
-				ITEM_VULKANGLASDOLCH // loot 1
+				ITEM_ID_VULKANGLASDOLCH, // loot 0
+				ITEM_ID_VULKANGLASDOLCH // loot 1
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6110,9 +6110,9 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6134,12 +6134,12 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_LEFT, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_SILBERSCHMUCK, // loot 2
-				ITEM_SAEBEL, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_SILBERSCHMUCK // loot 5
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_SILBERSCHMUCK, // loot 2
+				ITEM_ID_SAEBEL, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_SILBERSCHMUCK // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6160,9 +6160,9 @@ struct fight_lst fight_data = {
 				{ 12, 7, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SILBERSCHMUCK, // loot 0
-				ITEM_ENTERMESSER, // loot 1
-				ITEM_SKRAJA // loot 2
+				ITEM_ID_SILBERSCHMUCK, // loot 0
+				ITEM_ID_ENTERMESSER, // loot 1
+				ITEM_ID_SKRAJA // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6188,24 +6188,24 @@ struct fight_lst fight_data = {
 				{ 10, 2, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_SKRAJA, // loot 6
-				ITEM_SKRAJA, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_DOLCH, // loot 9
-				ITEM_BIER, // loot 10
-				ITEM_BIER, // loot 11
-				ITEM_ORKNASE, // loot 12
-				ITEM_SAEBEL, // loot 13
-				ITEM_DOLCH, // loot 14
-				ITEM_GOLDSCHMUCK, // loot 15
-				ITEM_WEINFLASCHE, // loot 16
-				ITEM_SCHLUESSEL__1 // loot 17
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_SKRAJA, // loot 6
+				ITEM_ID_SKRAJA, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_DOLCH, // loot 9
+				ITEM_ID_BIER, // loot 10
+				ITEM_ID_BIER, // loot 11
+				ITEM_ID_ORKNASE, // loot 12
+				ITEM_ID_SAEBEL, // loot 13
+				ITEM_ID_DOLCH, // loot 14
+				ITEM_ID_GOLDSCHMUCK, // loot 15
+				ITEM_ID_WEINFLASCHE, // loot 16
+				ITEM_ID_SCHLUESSEL__YELLOW // loot 17
 			},
 			0, 51, 0 // ducats, silver, heller
 		},
@@ -6269,13 +6269,13 @@ struct fight_lst fight_data = {
 				{ 4, 6, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_ARAXGIFT, // loot 0
-				ITEM_ARAXGIFT, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_ARAXGIFT, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_VULKANGLASDOLCH // loot 6
+				ITEM_ID_ARAXGIFT, // loot 0
+				ITEM_ID_ARAXGIFT, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_ARAXGIFT, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_VULKANGLASDOLCH // loot 6
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6327,13 +6327,13 @@ struct fight_lst fight_data = {
 				{ 5, 7, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_SILBERSCHMUCK, // loot 4
-				ITEM_SCHNAPSFLASCHE, // loot 5
-				ITEM_BIER // loot 6
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_SILBERSCHMUCK, // loot 4
+				ITEM_ID_SCHNAPSFLASCHE, // loot 5
+				ITEM_ID_BIER // loot 6
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6357,12 +6357,12 @@ struct fight_lst fight_data = {
 				{ 11, 13, FIG_VIEWDIR_DOWN, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_DOLCH, // loot 1
-				ITEM_DOLCH, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_LEDERHELM, // loot 4
-				ITEM_LEDERHELM // loot 5
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_DOLCH, // loot 1
+				ITEM_ID_DOLCH, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_LEDERHELM, // loot 4
+				ITEM_ID_LEDERHELM // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6386,13 +6386,13 @@ struct fight_lst fight_data = {
 				{ 1, 14, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_SAEBEL, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SAEBEL, // loot 2
-				ITEM_SAEBEL, // loot 3
-				ITEM_IRON_SHIELD, // loot 4
-				ITEM_IRON_SHIELD, // loot 5
-				ITEM_IRON_SHIELD // loot 6
+				ITEM_ID_SAEBEL, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SAEBEL, // loot 2
+				ITEM_ID_SAEBEL, // loot 3
+				ITEM_ID_IRON_SHIELD, // loot 4
+				ITEM_ID_IRON_SHIELD, // loot 5
+				ITEM_ID_IRON_SHIELD // loot 6
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6416,12 +6416,12 @@ struct fight_lst fight_data = {
 				{ 9, 13, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_BASTARDSCHWERT, // loot 0
-				ITEM_SCHWERT, // loot 1
-				ITEM_SCHWERT, // loot 2
-				ITEM_SCHWERT, // loot 3
-				ITEM_LEDERHARNISCH, // loot 4
-				ITEM_LEDERHARNISCH // loot 5
+				ITEM_ID_BASTARDSCHWERT, // loot 0
+				ITEM_ID_SCHWERT, // loot 1
+				ITEM_ID_SCHWERT, // loot 2
+				ITEM_ID_SCHWERT, // loot 3
+				ITEM_ID_LEDERHARNISCH, // loot 4
+				ITEM_ID_LEDERHARNISCH // loot 5
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6442,9 +6442,9 @@ struct fight_lst fight_data = {
 				{ 8, 4, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_SAEBEL, // loot 1
-				ITEM_SILBERSCHMUCK // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_SAEBEL, // loot 1
+				ITEM_ID_SILBERSCHMUCK // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6465,9 +6465,9 @@ struct fight_lst fight_data = {
 				{ 2, 15, FIG_VIEWDIR_RIGHT, 0 } // hero 6
 			},
 			{
-				ITEM_DOLCH, // loot 0
-				ITEM_LEDERZEUG, // loot 1
-				ITEM_ENTERMESSER // loot 2
+				ITEM_ID_DOLCH, // loot 0
+				ITEM_ID_LEDERZEUG, // loot 1
+				ITEM_ID_ENTERMESSER // loot 2
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
@@ -6497,21 +6497,21 @@ struct fight_lst fight_data = {
 				{ 9, 10, FIG_VIEWDIR_UP, 0 } // hero 6
 			},
 			{
-				ITEM_RAPIER, // loot 0
-				ITEM_RAPIER, // loot 1
-				ITEM_RAPIER, // loot 2
-				ITEM_DOLCH, // loot 3
-				ITEM_DOLCH, // loot 4
-				ITEM_DOLCH, // loot 5
-				ITEM_DOLCH, // loot 6
-				ITEM_DOLCH, // loot 7
-				ITEM_DOLCH, // loot 8
-				ITEM_SKRAJA, // loot 9
-				ITEM_SKRAJA, // loot 10
-				ITEM_SKRAJA, // loot 11
-				ITEM_BIER, // loot 12
-				ITEM_BIER, // loot 13
-				ITEM_BIER // loot 14
+				ITEM_ID_RAPIER, // loot 0
+				ITEM_ID_RAPIER, // loot 1
+				ITEM_ID_RAPIER, // loot 2
+				ITEM_ID_DOLCH, // loot 3
+				ITEM_ID_DOLCH, // loot 4
+				ITEM_ID_DOLCH, // loot 5
+				ITEM_ID_DOLCH, // loot 6
+				ITEM_ID_DOLCH, // loot 7
+				ITEM_ID_DOLCH, // loot 8
+				ITEM_ID_SKRAJA, // loot 9
+				ITEM_ID_SKRAJA, // loot 10
+				ITEM_ID_SKRAJA, // loot 11
+				ITEM_ID_BIER, // loot 12
+				ITEM_ID_BIER, // loot 13
+				ITEM_ID_BIER // loot 14
 			},
 			0, 66, 0 // ducats, silver, heller
 		},

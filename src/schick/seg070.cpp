@@ -316,7 +316,7 @@ void PHX_apotheke(void)
 
 			set_party_money(money);
 
-			give_new_item_to_group(ITEM_WIRSELKRAUT, 1, 1);
+			give_new_item_to_group(ITEM_ID_WIRSELKRAUT, 1, 1);
 		} else {
 			GUI_input(get_tx2(69), 0);
 		}
@@ -404,7 +404,7 @@ void PHX_apotheke(void)
 
 				set_party_money(money);
 
-				give_new_item_to_group(ITEM_WIRSELKRAUT, 1, 1);
+				give_new_item_to_group(ITEM_ID_WIRSELKRAUT, 1, 1);
 			} else {
 				GUI_input(get_tx2(69), 0);
 			}

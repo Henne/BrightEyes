@@ -114,7 +114,7 @@ void tevent_057(void)
 			{
 
 				/* TODO: Original-Bug: that condition does not make sense */
-				if (get_first_hero_with_item(ITEM_SEIL) == -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1)
+				if (get_first_hero_with_item(ITEM_ID_SEIL) == -1 || get_first_hero_with_item(ITEM_ID_STRICKLEITER) != -1)
 				{
 
 					sprintf(g_dtp2, get_tx2(8), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
@@ -168,7 +168,7 @@ void tevent_059(void)
 
 		if (answer == 1) {
 
-			if (get_first_hero_with_item(ITEM_SCHNAPSFLASCHE) != -1 || get_first_hero_with_item(ITEM_WEINFLASCHE) != -1)
+			if (get_first_hero_with_item(ITEM_ID_SCHNAPSFLASCHE) != -1 || get_first_hero_with_item(ITEM_ID_WEINFLASCHE) != -1)
 			{
 				do {
 					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(12),
@@ -289,8 +289,8 @@ void tevent_060(void)
 						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 							!hero->flags.dead)
 						{
-							nr_items += hero_count_item(hero, ITEM_SEIL);
-							nr_items += hero_count_item(hero, ITEM_STRICKLEITER);
+							nr_items += hero_count_item(hero, ITEM_ID_SEIL);
+							nr_items += hero_count_item(hero, ITEM_ID_STRICKLEITER);
 
 							if (hero->staff_level >= 3)
 							{
@@ -305,9 +305,9 @@ void tevent_060(void)
 
 						for (i = 0; i < 3; i++) {
 
-							answer = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
+							answer = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_ID_SEIL))), ITEM_ID_SEIL);
 							if (answer == -1) {
-								answer = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
+								answer = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_ID_STRICKLEITER))), ITEM_ID_STRICKLEITER);
 							}
 
 							drop_item(hero, answer, 1);

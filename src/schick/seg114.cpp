@@ -51,7 +51,7 @@ void tevent_110(void)
 			{
 				/* talent test failed */
 
-				if (get_first_hero_with_item(ITEM_SEIL) != -1)
+				if (get_first_hero_with_item(ITEM_ID_SEIL) != -1)
 				{
 					/* one hero in the group has a rope */
 					sprintf(g_dtp2,	get_tx2(85), hero->alias);
@@ -190,7 +190,7 @@ void tevent_111(void)
 
 					timewarp(HOURS(3));
 
-					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 200);
+					give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 200);
 
 					gs_tevent111_flag = 2;
 
@@ -230,7 +230,7 @@ void tevent_111(void)
 							}
 						}
 
-						give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 180);
+						give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 180);
 						gs_tevent111_flag = 2;
 					}
 
@@ -274,7 +274,7 @@ void tevent_112(void)
 		{
 			gs_tevent112_herb_flag = 1;
 
-			g_gather_herbs_special = (int8_t)ITEM_THONNYSBLUETE;	/* REMARK: item_id > 127 */
+			g_gather_herbs_special = (int8_t)ITEM_ID_THONNYSBLUETE;	/* REMARK: item_id > 127 */
 
 			TRV_found_camp_place(2);
 
@@ -414,10 +414,10 @@ void tevent_114(void)
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(52), get_tx2(26), 0);
 
 				/* get RECIPE FOR POTENT HEALING POTION */
-				give_new_item_to_group(ITEM_REZEPT_FUER_STARKEN_HEILTRANK, 1, 1);
+				give_new_item_to_group(ITEM_ID_REZEPT_FUER_STARKEN_HEILTRANK, 1, 1);
 
 				/* TODO: ORIGINAL-BUG: this item could have been not taken => get_hero(-1) => SEGFAULT */
-				hero = get_hero(get_first_hero_with_item(ITEM_REZEPT_FUER_STARKEN_HEILTRANK));
+				hero = get_hero(get_first_hero_with_item(ITEM_ID_REZEPT_FUER_STARKEN_HEILTRANK));
 
 				sprintf(g_dtp2,	get_tx2(27), hero->alias);
 				GUI_output(g_dtp2);
@@ -496,7 +496,7 @@ void tevent_118(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent118_flag) ||	gs_tevent118_flag)
 	{
-		g_gather_herbs_special = ITEM_EINBEERE;
+		g_gather_herbs_special = ITEM_ID_EINBEERE;
 
 		TRV_found_herb_place(0);
 

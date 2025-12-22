@@ -166,7 +166,7 @@ void status_menu(signed int hero_pos)
 						9);
 				}
 
-				if (hero1->inventory[g_statuspage_sel_inv_slot_3].item_id != ITEM_NONE) {
+				if (hero1->inventory[g_statuspage_sel_inv_slot_3].item_id != ITEM_ID_NONE) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings,
 						(char*)GUI_name_base_form(g_itemsname[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id]),

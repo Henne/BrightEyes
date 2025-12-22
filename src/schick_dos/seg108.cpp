@@ -114,7 +114,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				}
 
 
-				if (item_id == ITEM_WASSERSCHLAUCH) {
+				if (item_id == ITEM_ID_WASSERSCHLAUCH) {
 					/* water */
 
 					if (owner->inventory[inv_slot].flags.half_empty) {
@@ -123,7 +123,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						owner->inventory[inv_slot].flags.half_empty = 1;
 					}
 
-				} else if (item_id == ITEM_SCHNAPSFLASCHE || item_id == ITEM_WEINFLASCHE) {
+				} else if (item_id == ITEM_ID_SCHNAPSFLASCHE || item_id == ITEM_ID_WEINFLASCHE) {
 					/* wine or snaps */
 					hero_get_drunken(consumer);
 					drop_item(owner, inv_slot, 1);
@@ -132,9 +132,9 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					drop_item(owner, inv_slot, 1);
 
 					/* That does not happen */
-					if (item_id != ITEM_BIER) {
+					if (item_id != ITEM_ID_BIER) {
 						/* get an empty glass bottle */
-						give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+						give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 					}
 				}
 			} else {
@@ -167,7 +167,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				*g_dtp2 = '\0';
 
 				switch (item_id) {
-				case ITEM_GULMOND_BLATT: {
+				case ITEM_ID_GULMOND_BLATT: {
 					/* Gulmond Blatt */
 
 					/* KK+2 for 12h */
@@ -181,7 +181,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					strcpy(g_dtp2, get_ttx(501));
 					break;
 				}
-				case ITEM_EINBEERE: {
+				case ITEM_ID_EINBEERE: {
 					/* Vierblaettrige Einbeere */
 
 					tmp = random_schick(6);
@@ -196,7 +196,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 					break;
 				}
-				case ITEM_BELMART_BLATT: {
+				case ITEM_ID_BELMART_BLATT: {
 					/* Belmart */
 					poison_id = hero_is_poisoned(consumer);
 
@@ -215,7 +215,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					// %s IST JETZT DEUTLICH WIDERSTANDSFÄHIGER GEGENÜBER KRANKHEITEN UND GIFTEN.
 					break;
 				}
-				case ITEM_MENCHALKAKTUS: {
+				case ITEM_ID_MENCHALKAKTUS: {
 					/* Menchalkaktus */
 					poison_id = hero_is_poisoned(consumer);
 
@@ -233,7 +233,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					// %s IST JETZT DEUTLICH WIDERSTANDSFÄHIGER GEGENÜBER KRANKHEITEN UND GIFTEN.
 					break;
 				}
-				case ITEM_ATMONBLUETE: {
+				case ITEM_ID_ATMONBLUETE: {
 					/* Atmon */
 					for (tmp2 = 9; tmp2 < 19; tmp2++) {
 						/* All body talents + 2 for 5h */
@@ -245,7 +245,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					sprintf(g_dtp2, get_ttx(504), consumer->alias);
 					break;
 				}
-				case ITEM_WIRSELKRAUT: {
+				case ITEM_ID_WIRSELKRAUT: {
 					/* Wirselkraut */
 					tmp = 10;
 					le_diff = consumer->le_max - consumer->le;
@@ -258,7 +258,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					sprintf(g_dtp2, get_ttx(505), tmp);
 					break;
 				}
-				case ITEM_TARNELE: {
+				case ITEM_ID_TARNELE: {
 					/* Tarnelle */
 					consumer->ruhe_koerper = 1;
 					break;
@@ -281,7 +281,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				drop_item(owner, inv_slot, 1);
 
 				/* get glassbottle */
-				give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+				give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 				/* Attribute +5 for 1h */
 				tmp = get_free_mod_slot();
@@ -300,7 +300,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				drop_item(owner, inv_slot, 1);
 
 				/* get glassbottle */
-				give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+				give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 				/* Attribute -7 for 1h */
 				tmp = get_free_mod_slot();
@@ -319,7 +319,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				drop_item(owner, inv_slot, 1);
 
 				switch (item_id) {
-				case ITEM_HEILTRANK : {
+				case ITEM_ID_HEILTRANK : {
 					/* Heiltrank */
 
 					tmp2 = consumer->le_max - consumer->le;
@@ -338,13 +338,13 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					add_hero_le(consumer, tmp2);
 
 					/* give owner a glassbottle */
-					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+					give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(510), consumer->alias, tmp2, g_text_output_buf);
 					break;
 				}
-				case  ITEM_STARKER_HEILTRANK : {
+				case  ITEM_ID_STARKER_HEILTRANK : {
 					/* Starker Heiltrank */
 
 					/* 1W20+10 */
@@ -356,7 +356,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					add_hero_le(consumer, tmp2);
 
 					/* give owner a copperbottle */
-					give_new_item_to_hero(owner, ITEM_BRONZEFLASCHE, 2, 1);
+					give_new_item_to_hero(owner, ITEM_ID_BRONZEFLASCHE, 2, 1);
 
 					/* singular POINT/ PUNKT */
 					strcpy(g_text_output_buf, get_ttx(392));
@@ -370,7 +370,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					sprintf(g_dtp2, get_ttx(510), consumer->alias, tmp2, g_text_output_buf);
 					break;
 				}
-				case ITEM_WUNDERKUR: {
+				case ITEM_ID_WUNDERKUR: {
 					/* Wunderkur */
 
 					/* undo starvation damage */
@@ -399,27 +399,27 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* give owner a glasbottle */
-					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+					give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(511), consumer->alias, GUI_get_personal_pronoun(consumer->sex, GRAMMAR_CASE_1ST));
 
 					break;
 				}
-				case ITEM_SCHLAFTRUNK: {
+				case ITEM_ID_SCHLAFTRUNK: {
 					/* Schlaftrunk */
 
 					/* 3 Rounds of sleep */
 					consumer->ruhe_koerper = 3;
 
 					/* give owner a glasbottle */
-					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+					give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(738), consumer->alias);
 					break;
 				}
-				case ITEM_ZAUBERTRANK: {
+				case ITEM_ID_ZAUBERTRANK: {
 					/* Zaubertrank */
 
 					if (consumer->typus >= HERO_TYPE_HEXE) {
@@ -434,7 +434,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						add_hero_ae(consumer, tmp2);
 
 						/* give hero a glassbottle */
-						give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+						give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 						/* prepare output */
 						strcpy(g_text_output_buf, get_ttx(392));
@@ -450,12 +450,12 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
-						give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+						give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 					}
 
 					break;
 				}
-				case ITEM_ZAUBERTRANK_STARK: {
+				case ITEM_ID_ZAUBERTRANK_STARK: {
 					/* Zaubertrank (stark) */
 
 					if (consumer->typus >= HERO_TYPE_HEXE) {
@@ -470,7 +470,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						add_hero_ae(consumer, tmp2);
 
 						/* give owner a glassbottle */
-						give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+						give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 						/* prepare output */
 						if (consumer->ae >= consumer->ae_max) {
@@ -489,11 +489,11 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
-						give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+						give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 					}
 					break;
 				}
-				case ITEM_GEGENGIFT: {
+				case ITEM_ID_GEGENGIFT: {
 					/* Gegengift */
 
 					poison_id = hero_is_poisoned(consumer);
@@ -504,12 +504,12 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					}
 
 					/* give owner a glassbottle */
-					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+					give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 					sprintf(g_dtp2, get_ttx(467), consumer->alias);
 					break;
 				}
-				case ITEM_ANTIKRANKHEITSELIXIER: {
+				case ITEM_ID_ANTIKRANKHEITSELIXIER: {
 					/* Antikrankheitselexier */
 
 					disease_id = hero_is_diseased(consumer);
@@ -518,7 +518,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					consumer->disease[disease_id].time_counter = 0;
 
 					/* give owner a glassbottle */
-					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
+					give_new_item_to_hero(owner, ITEM_ID_GLASFLASCHE, 2, 1);
 
 					sprintf(g_dtp2, get_ttx(467), consumer->alias);
 					break;

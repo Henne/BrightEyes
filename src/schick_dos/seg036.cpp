@@ -217,7 +217,7 @@ signed int AFIG_change_hero_weapon(struct struct_hero *hero)
 		/* find a free slot, to get rid of the broken weapon */
 		for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
 
-			if (hero->inventory[pos].item_id == ITEM_NONE) {
+			if (hero->inventory[pos].item_id == ITEM_ID_NONE) {
 
 				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
 				has_new_weapon = 2;
@@ -767,14 +767,14 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 			/* equip LONGBOW and ARROWS in the first round,
 			 * if the hero has them in the inventory */
 			if ((g_fight_round == 0) &&
-				(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LANGBOGEN) &&
-				(inv_slot_of_item(hero, ITEM_PFEIL) != -1) &&
-				(inv_slot_of_item(hero, ITEM_LANGBOGEN) != -1))
+				(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_ID_LANGBOGEN) &&
+				(inv_slot_of_item(hero, ITEM_ID_PFEIL) != -1) &&
+				(inv_slot_of_item(hero, ITEM_ID_LANGBOGEN) != -1))
 			{
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_LANGBOGEN), hero);
+				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_ID_LANGBOGEN), hero);
 
-				if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_PFEIL) {
-					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
+				if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_ID_PFEIL) {
+					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_ID_PFEIL), hero);
 				}
 			}
 
@@ -785,14 +785,14 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 				/* equip LONGBOW and ARROWS in the first round,
 				 * if the hero has them in the inventory */
 				if ((g_fight_round == 0) &&
-					(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LANGBOGEN) &&
-					(inv_slot_of_item(hero, ITEM_PFEIL) != -1) &&
-					(inv_slot_of_item(hero, ITEM_LANGBOGEN) != -1))
+					(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_ID_LANGBOGEN) &&
+					(inv_slot_of_item(hero, ITEM_ID_PFEIL) != -1) &&
+					(inv_slot_of_item(hero, ITEM_ID_LANGBOGEN) != -1))
 				{
-					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_LANGBOGEN), hero);
+					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_ID_LANGBOGEN), hero);
 
-					if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_PFEIL) {
-						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
+					if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_ID_PFEIL) {
+						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_ID_PFEIL), hero);
 					}
 
 				} else if (FIG_get_range_weapon_type(hero) == -1) {

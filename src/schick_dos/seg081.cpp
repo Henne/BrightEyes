@@ -58,7 +58,7 @@ signed int DNG06_handler(void)
 
 	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !gs_dng06_book_flag)
 	{
-		if (GUI_bool(get_tx(1)) && give_new_item_to_group(ITEM_BUCH__KAISERSPRUECHE_HALS, 1, 1))
+		if (GUI_bool(get_tx(1)) && give_new_item_to_group(ITEM_ID_BUCH__KAISERSPRUECHE_HALS, 1, 1))
 		{
 			gs_dng06_book_flag = 1;
 		}
@@ -97,7 +97,7 @@ signed int DNG06_handler(void)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
-			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 40);
+			give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 40);
 			gs_dng06_proviant_flag = 1;
 		}
 
@@ -207,7 +207,7 @@ signed int DNG06_handler(void)
 			{
 				gs_dng06_goldkey_flag = 2;
 
-				give_new_item_to_group(ITEM_GOLDENER_SCHLUESSEL, 1, 1);
+				give_new_item_to_group(ITEM_ID_GOLDENER_SCHLUESSEL, 1, 1);
 
 				/* TODO: This is not neccessary */
 				hero = get_first_hero_available_in_group();
@@ -599,8 +599,8 @@ void DNG09_pitfall(void)
 
 		if ((i = DNG_check_climb_tools()) != -1)
 		{
-			l3 = group_count_item(ITEM_SEIL);
-			l3 += group_count_item(ITEM_STRICKLEITER);
+			l3 = group_count_item(ITEM_ID_SEIL);
+			l3 += group_count_item(ITEM_ID_STRICKLEITER);
 
 			if (l3 >= 2 || (l3 == 1 && i))
 			{

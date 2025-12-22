@@ -1190,7 +1190,7 @@ signed int DNG_check_climb_tools(void)
 	}
 
 	/* check for ladder or rope */
-	return ((get_first_hero_with_item(ITEM_SEIL) != -1) || (get_first_hero_with_item(ITEM_STRICKLEITER) != -1)) ? 0 : -1;
+	return ((get_first_hero_with_item(ITEM_ID_SEIL) != -1) || (get_first_hero_with_item(ITEM_ID_STRICKLEITER) != -1)) ? 0 : -1;
 }
 
 signed int DNG_fallpit(const signed int max_damage)

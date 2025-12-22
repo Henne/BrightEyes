@@ -31,7 +31,7 @@
 #include "seg105.h"
 
 struct struct_chest g_dng01_specialchests[9] = {
-	{ DNG_POS(0,12,9),	(signed char)ITEM_GOLDSCHLUESSEL,	use_key_on_chest,	chest_protected_normal, DNG01_chest00_loot,	 0,    0, 0 },
+	{ DNG_POS(0,12,9),	(signed char)ITEM_ID_GOLDSCHLUESSEL,	use_key_on_chest,	chest_protected_normal, DNG01_chest00_loot,	 0,    0, 0 },
 	{ DNG_POS(1,5,8),	2,					use_lockpicks_on_chest,	chest_closed,		DNG01_chest01_loot,	 0,    0, 0 },
 	{ DNG_POS(1,14,8),    	3,					use_lockpicks_on_chest,	chest_protected_heavy,	DNG01_chest02_loot,	 0,    0, 0 },
 	{ DNG_POS(3,5,5),    	0,					NULL,			NULL,			DNG01_chest03_loot,	 0,    0, 0 },
@@ -86,16 +86,16 @@ signed int DNG01_handler(void)
 	{
 		sprintf(g_text_output_buf, get_ttx(528), GUI_name_inflect_with_article(
 			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
-			ITEM_SAEBEL,
+			ITEM_ID_SAEBEL,
 			INFLECT_NAME_TYPE_ITEM
 		), (char*)GUI_grammar_name_to_personal_pronoun(
 			INFLECT_SINGULAR | INFLECT_4TH_CASE,
-			ITEM_SAEBEL,
+			ITEM_ID_SAEBEL,
 			INFLECT_NAME_TYPE_ITEM
 		));
 
 		/* ITEM: get a SABRE */
-		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_SAEBEL, 1, 1)) {
+		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_ID_SAEBEL, 1, 1)) {
 			gs_dng01_sabre_taken = 1;
 		}
 
@@ -103,16 +103,16 @@ signed int DNG01_handler(void)
 	{
 		sprintf(g_text_output_buf, get_ttx(528), GUI_name_inflect_with_article(
 			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
-			ITEM_ARMBRUST,
+			ITEM_ID_ARMBRUST,
 			INFLECT_NAME_TYPE_ITEM
 		), (char*)GUI_grammar_name_to_personal_pronoun(
 			INFLECT_SINGULAR | INFLECT_4TH_CASE,
-			ITEM_ARMBRUST,
+			ITEM_ID_ARMBRUST,
 			INFLECT_NAME_TYPE_ITEM
 		));
 
 		/* ITEM: get a CROSSBOW */
-		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_ARMBRUST, 1, 1)) {
+		if (GUI_bool(g_text_output_buf) && give_new_item_to_group(ITEM_ID_ARMBRUST, 1, 1)) {
 
 			gs_dng01_crossbow_taken = 1;
 		}
@@ -120,7 +120,7 @@ signed int DNG01_handler(void)
 	} else if ((target_pos == DNG_POS(4,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_amulet_taken)
 	{
 		/* ITEM: a magic AMULET */
-		if (GUI_bool(get_tx(7)) && give_new_item_to_group(ITEM_AMULETT__GREEN, 1, 1))
+		if (GUI_bool(get_tx(7)) && give_new_item_to_group(ITEM_ID_AMULETT__FLIM_FLAM, 1, 1))
 		{
 			gs_dng01_amulet_taken = 1;
 			gs_gods_estimation[GOD_ID_BORON] -= 100L;
@@ -186,7 +186,7 @@ signed int DNG01_handler(void)
 		{
 			/* check if a ROPE LADDER or a ROPE is available */
 			/* Original-Bug: Why not check for a mage with staffspell level >= 3? */
-			if (get_first_hero_with_item(ITEM_SEIL) != -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1)
+			if (get_first_hero_with_item(ITEM_ID_SEIL) != -1 || get_first_hero_with_item(ITEM_ID_STRICKLEITER) != -1)
 			{
 				/* Original-Bug: better get_first_hero_available_in_group() */
 				if (test_talent(get_hero(0), TA_KLETTERN, 0) > 0)
@@ -322,7 +322,7 @@ void DNG01_chest06_loot(struct struct_chest* chest)
 	{
 #endif
 	/* ITEM: the GOLDEN KEY */
-	give_new_item_to_group(ITEM_GOLDSCHLUESSEL, 1, 1);
+	give_new_item_to_group(ITEM_ID_GOLDSCHLUESSEL, 1, 1);
 
 	/* Original-Bug: The string 14 from SHIP.DTX needs a pointer to the name of the hero, not an integer.
 	 */

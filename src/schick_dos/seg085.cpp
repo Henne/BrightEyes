@@ -334,9 +334,9 @@ signed int DNG10_handler(void)
 					GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(35), 0);
 
 					/* 2x HEALING POTION, MAGIC POTION, THROWING DAGGER and ...*/
-					give_new_item_to_group(ITEM_HEILTRANK, 1, 2);
-					give_new_item_to_group(ITEM_ZAUBERTRANK, 1, 1);
-					give_new_item_to_group(ITEM_WURFDOLCH__MAGIC, 1, 1);
+					give_new_item_to_group(ITEM_ID_HEILTRANK, 1, 2);
+					give_new_item_to_group(ITEM_ID_ZAUBERTRANK, 1, 1);
+					give_new_item_to_group(ITEM_ID_WURFDOLCH__MAGIC, 1, 1);
 
 					/* 200 Ducats */
 					p_money = get_party_money();
@@ -363,20 +363,20 @@ signed int DNG10_handler(void)
 
 			gs_x_target = gs_y_target = 12;
 
-			if ((answer = get_first_hero_with_item(ITEM_PLATINSCHLUESSEL)) != -1)
+			if ((answer = get_first_hero_with_item(ITEM_ID_PLATINSCHLUESSEL)) != -1)
 			{
 				hero = get_hero(answer);
-				result = inv_slot_of_item(hero, ITEM_PLATINSCHLUESSEL);
+				result = inv_slot_of_item(hero, ITEM_ID_PLATINSCHLUESSEL);
 				drop_item(hero, result, 1);
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(36), 0);
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(37), 0);
 
 				/* 2x HEALING POTION, MAGIC POTION, THROWING DAGGER, CRYSTAL BALL and ...*/
-				give_new_item_to_group(ITEM_HEILTRANK, 1, 2);
-				give_new_item_to_group(ITEM_ZAUBERTRANK, 1, 1);
-				give_new_item_to_group(ITEM_WURFDOLCH__MAGIC, 1, 1);
-				give_new_item_to_group(ITEM_KRISTALLKUGEL, 1, 1);
+				give_new_item_to_group(ITEM_ID_HEILTRANK, 1, 2);
+				give_new_item_to_group(ITEM_ID_ZAUBERTRANK, 1, 1);
+				give_new_item_to_group(ITEM_ID_WURFDOLCH__MAGIC, 1, 1);
+				give_new_item_to_group(ITEM_ID_KRISTALLKUGEL, 1, 1);
 
 				/* ... 200 Ducats and ... */
 				p_money = get_party_money();

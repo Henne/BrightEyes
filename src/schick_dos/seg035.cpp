@@ -90,7 +90,7 @@ void FIG_loot_enemies(void)
 	do {
 		loot_num = item_cnt = 0;
 
-		while ((item_id = g_current_fight->loot[loot_num]) && (loot_num < 30) && (item_id != ITEM_KNOCHEN_MIT_RUNE))
+		while ((item_id = g_current_fight->loot[loot_num]) && (loot_num < 30) && (item_id != ITEM_ID_KNOCHEN_MIT_RUNE))
 			/* Apparently a quick "fix" for an unwanted bone with runes in fight THOR8,
 			 * see https://www.crystals-dsa-foren.de/showthread.php?tid=453&pid=172221#pid172221 */
 		{

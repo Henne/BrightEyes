@@ -142,7 +142,7 @@ void DNG_door(const signed int action)
 					{
 						/* for this door works an IRON KEY [first type] */
 						/* BEWARE: there are two types of IRON KEYs in the game */
-						if (gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && get_first_hero_with_item(ITEM_EISENSCHLUESSEL__1) != -1)
+						if (gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && get_first_hero_with_item(ITEM_ID_EISENSCHLUESSEL__1) != -1)
 						{
 							*(g_dng_map_ptr + MAP_POS(x, y)) |= 0x02;
 							/* effect: ......1. i.e. door is unlocked */
@@ -925,7 +925,7 @@ void DNG_waterbarrel(uint8_t *unit_ptr)
 				{
 					for (inv_slot = hero_refilled = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++)
 					{
-						if (hero->inventory[inv_slot].item_id == ITEM_WASSERSCHLAUCH)
+						if (hero->inventory[inv_slot].item_id == ITEM_ID_WASSERSCHLAUCH)
 						{
 							units_needed = 0;
 

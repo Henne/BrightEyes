@@ -64,7 +64,7 @@ signed int FIG_get_range_weapon_type(const struct struct_hero *hero)
 		/* is a weapon */
 
 		/* MagicStaffs or Fightstaffs are spears, but no range weapons */
-		if ((item_p->subtype == WEAPON_TYPE_SPEER) && (weapon_id != ITEM_ZAUBERSTAB) && (weapon_id != ITEM_KAMPFSTAB)) {
+		if ((item_p->subtype == WEAPON_TYPE_SPEER) && (weapon_id != ITEM_ID_ZAUBERSTAB) && (weapon_id != ITEM_ID_KAMPFSTAB)) {
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline... */
 
 			retval = 5;

@@ -262,7 +262,7 @@ void repair_screen(struct smith_descr *smith, const signed int smith_id)
 
 					num_filled_inv_slots = 0;
 					for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
-						if (hero2->inventory[i].item_id != ITEM_NONE) {
+						if (hero2->inventory[i].item_id != ITEM_ID_NONE) {
 							add_item_to_repair_selector(smith, hero2, i, num_filled_inv_slots++);
 						}
 					}

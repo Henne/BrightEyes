@@ -124,7 +124,7 @@ void buy_screen(void)
 				{
 					for (j = HERO_INVENTORY_SLOT_KNAPSACK_1; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-						if (hero2->inventory[j].item_id == ITEM_NONE) {
+						if (hero2->inventory[j].item_id == ITEM_ID_NONE) {
 							free_slots++;
 						}
 					}

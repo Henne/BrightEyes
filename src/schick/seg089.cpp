@@ -279,7 +279,7 @@ signed int DNG15_handler(void)
 		{
 			GUI_output(get_tx(51));
 
-			if (give_new_item_to_group(ITEM_HACKE, 1, 1) != -1)
+			if (give_new_item_to_group(ITEM_ID_HACKE, 1, 1) != -1)
 			{
 				gs_dng15_took_hoe = 1;
 			}
@@ -448,7 +448,7 @@ signed int DNG15_handler(void)
 				if (1) { } else { }
 
 				/* group gets GRIMRING */
-				do { ; } while (!give_new_item_to_group(ITEM_GRIMRING, 1, 1));
+				do { ; } while (!give_new_item_to_group(ITEM_ID_GRIMRING, 1, 1));
 
 				gs_got_grimring = 1;
 
@@ -603,7 +603,7 @@ void DNG15_cursed_money_chest(struct struct_chest* chest)
 		set_party_money(p_money);
 
 		/* ... 50 GOLD JEWELRY. */
-		give_new_item_to_group(ITEM_GOLDSCHMUCK, 1, 50);
+		give_new_item_to_group(ITEM_ID_GOLDSCHMUCK, 1, 50);
 	}
 	g_textbox_width = tw_bak;
 }
@@ -693,10 +693,10 @@ void DNG15_clear_way(uint8_t* ptr)
 	i = 0;
 
 	/* With all of the following items SHOVEL, HOE, CROWBAR, FRANCESCA ...*/
-	if ((get_first_hero_with_item(ITEM_SCHAUFEL) != -1) &&
-		(get_first_hero_with_item(ITEM_HACKE) != -1) &&
-		(get_first_hero_with_item(ITEM_BRECHEISEN) != -1) &&
-		(get_first_hero_with_item(ITEM_WURFBEIL) != -1))
+	if ((get_first_hero_with_item(ITEM_ID_SCHAUFEL) != -1) &&
+		(get_first_hero_with_item(ITEM_ID_HACKE) != -1) &&
+		(get_first_hero_with_item(ITEM_ID_BRECHEISEN) != -1) &&
+		(get_first_hero_with_item(ITEM_ID_WURFBEIL) != -1))
 	{
 		i = 1;
 	}

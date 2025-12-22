@@ -108,7 +108,7 @@ void tevent_083(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) || gs_tevent083_flag != 0)
 	{
-		g_gather_herbs_special = ITEM_WIRSELKRAUT;
+		g_gather_herbs_special = ITEM_ID_WIRSELKRAUT;
 
 		TRV_found_herb_place(0);
 
@@ -162,7 +162,7 @@ void tevent_085(void)
 		{
 			gs_tevent085_herb_flag = 1;
 
-			g_gather_herbs_special = ITEM_DONFSTENGEL;
+			g_gather_herbs_special = ITEM_ID_DONFSTENGEL;
 
 			TRV_found_camp_place(2);
 
@@ -257,7 +257,7 @@ void tevent_098(void)
 	struct struct_hero *hero;
 
 	/* TODO: this may not be correct */
-	i = get_first_hero_with_item(ITEM_SEIL) != -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1 ? 3 : 2; /* TODO: STAFFSPELL? */
+	i = get_first_hero_with_item(ITEM_ID_SEIL) != -1 || get_first_hero_with_item(ITEM_ID_STRICKLEITER) != -1 ? 3 : 2; /* TODO: STAFFSPELL? */
 
 	do {
 		answer = GUI_radio(get_tx2(27), (signed char)i,	get_tx2(28), get_tx2(29), get_tx2(30));
@@ -774,7 +774,7 @@ void tevent_107(void)
 				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 1) <= 0)
 			{
 
-				if (get_first_hero_with_item(ITEM_SEIL) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
+				if (get_first_hero_with_item(ITEM_ID_SEIL) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
 					sprintf(g_dtp2, get_tx2(70), hero->alias);
 

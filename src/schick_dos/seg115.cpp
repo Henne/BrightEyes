@@ -170,7 +170,7 @@ void tevent_091(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent091_flag) ||	gs_tevent091_flag)
 	{
-		g_gather_herbs_special = ITEM_SHURINKNOLLE;
+		g_gather_herbs_special = ITEM_ID_SHURINKNOLLE;
 
 		TRV_found_herb_place(0);
 

@@ -27,8 +27,8 @@
 #include "seg103.h"
 
 enum {
-	ITEM_ARMOR_POS_HEAD = 70,
-	ITEM_POS_MAX = 100
+	ITEM_ID_ARMOR_POS_HEAD = 70,
+	ITEM_ID_POS_MAX = 100
 	/* these settings rely on the number of armor items in the sell list being at most 30. */
 };
 
@@ -211,13 +211,13 @@ void do_merchant(void)
 	merchant = &g_merchant_descr_table[gs_town_typeindex];
 
 	/* redundant by memset() */
-	for (item_selector_pos = 0; item_selector_pos < ITEM_POS_MAX; item_selector_pos++) {
+	for (item_selector_pos = 0; item_selector_pos < ITEM_ID_POS_MAX; item_selector_pos++) {
 		g_item_selector_buy[item_selector_pos].item_id = 0;
 	}
 
 	item_selector_pos = 1;
 	item_selector_pos_tail = 0;
-	item_selector_pos_tail_2 = ITEM_ARMOR_POS_HEAD;
+	item_selector_pos_tail_2 = ITEM_ID_ARMOR_POS_HEAD;
 
 	while (g_itemsdat[item_selector_pos].gfx != -1) {
 
@@ -261,17 +261,17 @@ void do_merchant(void)
 	if (merchant->type == MERCHANT_WEAPONS) {
 
 		qsort((uint8_t*)g_item_selector_buy, item_selector_pos_tail, sizeof(item_selector_item), item_selector_item_compare);
-		qsort((uint8_t*)g_item_selector_buy + sizeof(item_selector_item) * ITEM_ARMOR_POS_HEAD, item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD, sizeof(item_selector_item), item_selector_item_compare);
+		qsort((uint8_t*)g_item_selector_buy + sizeof(item_selector_item) * ITEM_ID_ARMOR_POS_HEAD, item_selector_pos_tail_2 - ITEM_ID_ARMOR_POS_HEAD, sizeof(item_selector_item), item_selector_item_compare);
 
 		/* copy the rest */
-		for (item_selector_pos = 0; item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD > item_selector_pos; item_selector_pos++) {
+		for (item_selector_pos = 0; item_selector_pos_tail_2 - ITEM_ID_ARMOR_POS_HEAD > item_selector_pos; item_selector_pos++) {
 
-			g_item_selector_buy[item_selector_pos_tail + item_selector_pos] = g_item_selector_buy[item_selector_pos + ITEM_ARMOR_POS_HEAD];
+			g_item_selector_buy[item_selector_pos_tail + item_selector_pos] = g_item_selector_buy[item_selector_pos + ITEM_ID_ARMOR_POS_HEAD];
 
 		}
 
 		/* cleanup */
-		for (item_selector_pos = item_selector_pos_tail + item_selector_pos_tail_2 - ITEM_ARMOR_POS_HEAD; item_selector_pos < ITEM_POS_MAX; item_selector_pos++) {
+		for (item_selector_pos = item_selector_pos_tail + item_selector_pos_tail_2 - ITEM_ID_ARMOR_POS_HEAD; item_selector_pos < ITEM_ID_POS_MAX; item_selector_pos++) {
 			g_item_selector_buy[item_selector_pos].item_id = 0;
 		}
 

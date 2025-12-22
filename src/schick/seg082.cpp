@@ -173,7 +173,7 @@ signed int DNG07_handler(void)
 
 			if (GUI_bool(get_tx(3)))
 			{
-				give_new_item_to_group(ITEM_MU_ELIXIER, 1, 1);
+				give_new_item_to_group(ITEM_ID_MU_ELIXIER, 1, 1);
 
 				gs_dng07_mu_elixir_flag = 2;
 			}
@@ -191,7 +191,7 @@ signed int DNG07_handler(void)
 		} else {
 			if (GUI_bool(get_tx(5)))
 			{
-				give_new_item_to_group(ITEM_MU_ELIXIER, 1, 1);
+				give_new_item_to_group(ITEM_ID_MU_ELIXIER, 1, 1);
 
 				gs_dng07_mu_elixir_flag = 2;
 			}
@@ -207,7 +207,7 @@ signed int DNG07_handler(void)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
-			give_new_item_to_group(ITEM_MU_ELIXIER__BAD, 1, 1);
+			give_new_item_to_group(ITEM_ID_MU_ELIXIER__BAD, 1, 1);
 
 			gs_dng07_anti_mu_elixir_flag = 1;
 		}

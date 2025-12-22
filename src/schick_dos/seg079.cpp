@@ -228,7 +228,7 @@ signed int DNG03_handler(void)
 
 			timewarp(MINUTES(20));
 
-			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
+			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_ID_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
 				armor_rs = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
@@ -256,7 +256,7 @@ signed int DNG03_handler(void)
 
 			timewarp(MINUTES(20));
 
-			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
+			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_ID_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
 				armor_rs = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
@@ -299,7 +299,7 @@ signed int DNG03_handler(void)
 	{
 
 		/* check if a hero in this group has crystals */
-		i = get_first_hero_with_item(ITEM_KRISTALL) != -1 ? 0 : 1;
+		i = get_first_hero_with_item(ITEM_ID_KRISTALL) != -1 ? 0 : 1;
 
 		do {
 			j = GUI_radio(get_tx(14), 2, get_tx(15), !i ? get_tx(16) : get_tx(29));
@@ -318,14 +318,14 @@ signed int DNG03_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,5,13,NORTH);
 
 			/* drop all crystals from the heroes of that group */
-			i = get_first_hero_with_item(ITEM_KRISTALL);
+			i = get_first_hero_with_item(ITEM_ID_KRISTALL);
 
 			do {
 				hero = get_hero(i);
 
-				drop_item(hero, inv_slot_of_item(hero, ITEM_KRISTALL), 1);
+				drop_item(hero, inv_slot_of_item(hero, ITEM_ID_KRISTALL), 1);
 
-				i = get_first_hero_with_item(ITEM_KRISTALL);
+				i = get_first_hero_with_item(ITEM_ID_KRISTALL);
 
 			} while (i != -1);
 
@@ -529,7 +529,7 @@ void DNG03_chest12_loot(struct struct_chest* chest)
 	/* count the crystals in the knapsack of the leader */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++)
 	{
-		if (hero->inventory[i].item_id == ITEM_KRISTALL)
+		if (hero->inventory[i].item_id == ITEM_ID_KRISTALL)
 		{
 			crystals++;
 		}

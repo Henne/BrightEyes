@@ -585,7 +585,7 @@ void spell_ignifaxius(void)
 		/* get a pointer to the armor */
 		p_armor = (struct inventory*)&(get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY]);
 
-		if ((p_armor->item_id != ITEM_NONE) && (rs_malus != 0)) {
+		if ((p_armor->item_id != ITEM_ID_NONE) && (rs_malus != 0)) {
 
 			/* adjust rs_malus such that the RS of the worn body armor won't be negative */
 			if ((p_armor->rs_lost + rs_malus) > g_armors_table[g_itemsdat[p_armor->item_id].table_index].rs) {

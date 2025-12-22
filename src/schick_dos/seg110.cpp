@@ -166,7 +166,7 @@ void tevent_013(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent013_flag) || gs_tevent013_flag)
 	{
-		g_gather_herbs_special = ITEM_BELMART_BLATT;
+		g_gather_herbs_special = ITEM_ID_BELMART_BLATT;
 
 		TRV_found_herb_place(0);
 
@@ -267,7 +267,7 @@ void tevent_021(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) || gs_tevent021_flag)
 	{
-		g_gather_herbs_special = ITEM_ALRAUNE;
+		g_gather_herbs_special = ITEM_ID_ALRAUNE;
 
 		TRV_found_herb_place(1);
 
@@ -379,18 +379,18 @@ void tevent_029(void)
 			{
 				sub_hero_le(hero, 2);
 
-				i = inv_slot_of_item(hero, ITEM_PROVIANTPAKET);
+				i = inv_slot_of_item(hero, ITEM_ID_PROVIANTPAKET);
 
 				if (i != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
 					drop_item(hero, i, hero->inventory[i].quantity);
 				}
 
-				i = hero_count_item(hero, ITEM_WASSERSCHLAUCH);
+				i = hero_count_item(hero, ITEM_ID_WASSERSCHLAUCH);
 
 				if (i) {
 					/* hero looses the first WATERSKIN */
-					drop_item(hero, inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH), i - 1);
+					drop_item(hero, inv_slot_of_item(hero, ITEM_ID_WASSERSCHLAUCH), i - 1);
 					/* effect of i - 1:
 					 * if i==0 (hero doesn't have a waterskin), don't drop anything.
 					 * otherwise (hero has one ore more waterskins), drop a single one.
@@ -458,7 +458,7 @@ void tevent_032(void)
 		{
 			gs_tevent032_herb_flag = 1;
 
-			g_gather_herbs_special = ITEM_EITRIGER_KROETENSCHEMEL;
+			g_gather_herbs_special = ITEM_ID_EITRIGER_KROETENSCHEMEL;
 
 			TRV_found_camp_place(2);
 
@@ -536,7 +536,7 @@ void tevent_036(void)
 		{
 			gs_tevent036_herb_flag = 1;
 
-			g_gather_herbs_special = ITEM_GULMOND_BLATT;
+			g_gather_herbs_special = ITEM_ID_GULMOND_BLATT;
 
 			TRV_found_camp_place(2);
 

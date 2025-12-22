@@ -809,7 +809,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 	*g_dtp2 = '\0';
 
-	if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_MIASTHMATICUM) {
+	if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_ID_MIASTHMATICUM) {
 		/* MIASTHMATIC */
 
 		/* 1W6 + 4 */
@@ -845,7 +845,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 		/* drop the item in the left hand */
 		drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 
-	} else if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_HYLAILER_FEUER) {
+	} else if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_ID_HYLAILER_FEUER) {
 
 		/* HYLAILIC FIRE */
 

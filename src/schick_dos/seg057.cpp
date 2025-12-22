@@ -148,7 +148,7 @@ void sell_screen(struct merchant_descr *merchant_descr)
 
 				num_filled_inv_slots = 0;
 				for (tmp = 0; tmp < NR_HERO_INVENTORY_SLOTS; tmp++) {
-					if (hero1->inventory[tmp].item_id != ITEM_NONE) {
+					if (hero1->inventory[tmp].item_id != ITEM_ID_NONE) {
 						add_item_to_sell_selector(merchant_descr, hero1, tmp, num_filled_inv_slots++);
 					}
 				}

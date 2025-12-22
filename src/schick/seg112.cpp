@@ -25,10 +25,10 @@
 #include "seg112.h"
 
 static uint8_t g_tevent067_chest[10] = {
-	ITEM_BASTARDSCHWERT, 1,
-	ITEM_SCHNAPSFLASCHE, 1,
-	ITEM_REZEPT_FUER_VOMICUM, 1,
-	ITEM_BOLZEN, 2,
+	ITEM_ID_BASTARDSCHWERT, 1,
+	ITEM_ID_SCHNAPSFLASCHE, 1,
+	ITEM_ID_REZEPT_FUER_VOMICUM, 1,
+	ITEM_ID_BOLZEN, 2,
 	0xff, 0
 }; // ds:0xb16a
 
@@ -148,7 +148,7 @@ void tevent_070(void)
 		{
 			gs_tevent070_herb_flag = 1;
 
-			g_gather_herbs_special = (int8_t)ITEM_JORUGAWURZEL; /* REMARK: item_id > 127 */
+			g_gather_herbs_special = (int8_t)ITEM_ID_JORUGAWURZEL; /* REMARK: item_id > 127 */
 
 			answer = TRV_found_camp_place(2);
 
@@ -358,7 +358,7 @@ void tevent_unused01(void)
 
 				GUI_output(get_tx2(38));
 
-				g_gather_herbs_special = ITEM_GULMOND_BLATT;
+				g_gather_herbs_special = ITEM_ID_GULMOND_BLATT;
 
 				TRV_inside_herb_place();
 

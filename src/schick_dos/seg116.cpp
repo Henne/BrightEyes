@@ -123,7 +123,7 @@ void tevent_132(void)
 
 			gs_tevent132_herb_flag = 1;
 
-			g_gather_herbs_special = ITEM_WIRSELKRAUT;
+			g_gather_herbs_special = ITEM_ID_WIRSELKRAUT;
 
 			TRV_found_camp_place(2);
 
@@ -192,7 +192,7 @@ void tevent_134(void)
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent134_flag) ||
 		gs_tevent134_flag)
 	{
-		g_gather_herbs_special = (int8_t)ITEM_KAIRANHALM;	/* REMARK: item_id > 127 */
+		g_gather_herbs_special = (int8_t)ITEM_ID_KAIRANHALM;	/* REMARK: item_id > 127 */
 
 		TRV_found_herb_place(0);
 
@@ -357,12 +357,12 @@ void tevent_137(void)
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) && !hero->flags.dead)
 				{
 					/* each hero gets five FOODPACKAGES */
-					give_new_item_to_hero(hero, ITEM_PROVIANTPAKET, 1, 5);
+					give_new_item_to_hero(hero, ITEM_ID_PROVIANTPAKET, 1, 5);
 
 					/* each hero gets his first WATERSKIN filled */
 					/* potential Original-Bug: Does it make sense that the further WATERSKINs are not filled? */
 
-					if ((inv_slot = inv_slot_of_item(hero, ITEM_WASSERSCHLAUCH)) != -1)
+					if ((inv_slot = inv_slot_of_item(hero, ITEM_ID_WASSERSCHLAUCH)) != -1)
 					{
 						/* fill waterskin */
 						hero->inventory[inv_slot].flags.half_empty = hero->inventory[inv_slot].flags.empty = 0;
@@ -448,7 +448,7 @@ void tevent_140(void)
 
 			gs_tevent140_herb_flag = 1;
 
-			g_gather_herbs_special = (int8_t)ITEM_JORUGAWURZEL;	/* REMARK: item_id > 127 */
+			g_gather_herbs_special = (int8_t)ITEM_ID_JORUGAWURZEL;	/* REMARK: item_id > 127 */
 
 			TRV_found_camp_place(2);
 
@@ -544,7 +544,7 @@ void tevent_144(void)
 
 	right_time_flag = 0;
 
-	if ((grimring_hero_pos = get_first_hero_with_item(ITEM_GRIMRING)) != -1) {
+	if ((grimring_hero_pos = get_first_hero_with_item(ITEM_ID_GRIMRING)) != -1) {
 
 		if ((gs_year == 17) && (gs_month == 10) && (gs_day_of_month >= 10)) {
 			right_time_flag = 1;
@@ -604,7 +604,7 @@ void tevent_144(void)
 			do {
 				status_menu(grimring_hero_pos);
 
-				grimring_hero_pos = get_first_hero_with_item(ITEM_GRIMRING);
+				grimring_hero_pos = get_first_hero_with_item(ITEM_ID_GRIMRING);
 
 				if (grimring_hero_pos == -1) {
 					grimring_hero_pos = 0;
