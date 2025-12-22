@@ -139,6 +139,7 @@
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG121.CPP
 @REM BCC.EXE -mlarge -O- -c -1 -Yo SEG122.CPP
 @REM BCC.EXE -mlarge -O- -c -1 -Yo DATSEG.CPP
+BCC.EXE -mlarge -O- -c -1 -Yo FL.CPP
 @REM -- here start the empty
 
 @REM examine the ouput and press anykey

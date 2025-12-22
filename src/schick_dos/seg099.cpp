@@ -220,7 +220,11 @@ void spell_illusionen(void)
 		}
 	} else {
 		/* print a failure message */
-		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(3), GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		/* costs 2 AE */
 		g_spell_special_aecost = 2;
@@ -289,7 +293,7 @@ void spell_band(void)
 		/* Set pointer to enemy target */
 		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
-		if (g_spelltarget_e->gfx_id == 0x1c) {
+		if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			/* does not work on skeletons */
 			g_spell_special_aecost = -2;
 			return;
@@ -298,7 +302,11 @@ void spell_band(void)
 		/* set 'tied' flag */
 		g_spelltarget_e->flags.tied = 1;
 
-		sprintf(g_dtp2, get_tx(6), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(6), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 		/* cast hero */
 
@@ -334,10 +342,14 @@ void spell_bannbaladin(void)
 		/* spell does not work on animals */
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(8), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(8), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 
-		if (g_spelltarget_e->gfx_id == 0x1c) {
+		if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			/* spell does not work on skeletons */
 			g_spell_special_aecost = -2;
 			return;
@@ -346,7 +358,11 @@ void spell_bannbaladin(void)
 		/* set 'tame' flag */
 		g_spelltarget_e->flags.tame = 1;
 
-		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -356,7 +372,7 @@ void spell_boeser_blick(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 
 		g_spell_special_aecost = -2;
 
@@ -369,7 +385,11 @@ void spell_boeser_blick(void)
 		g_spelltarget_e->attacks = 2;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(10), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(10), (char*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -386,7 +406,7 @@ void spell_grosse_ver(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 		g_spell_special_aecost = -2;
 		return;
 	} else {
@@ -413,7 +433,11 @@ void spell_herrdertiere(void)
 
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 
 		g_spell_special_aecost = g_spelltarget_e->first_ap;
@@ -425,7 +449,11 @@ void spell_herrdertiere(void)
 			/* set 'tame' flag */
 			g_spelltarget_e->flags.tame = 1;
 
-			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				g_spelltarget_e->monster_id,
+				INFLECT_NAME_TYPE_MONSTER
+			));
 		}
 	}
 }
@@ -436,7 +464,7 @@ void spell_horriphobus(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 
 		g_spell_special_aecost = -2;
 
@@ -446,7 +474,11 @@ void spell_horriphobus(void)
 		/* unset 'renegade' flag */
 		g_spelltarget_e->flags.renegade = 0;
 
-		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -479,7 +511,7 @@ void spell_somnigravis(void)
 		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 		/* this spell does not work on all kind of skeletons */
-		if (g_spelltarget_e->gfx_id == 0x1c) {
+		if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			g_spell_special_aecost = -2;
 			return;
 		}
@@ -488,7 +520,11 @@ void spell_somnigravis(void)
 		g_spelltarget_e->flags.asleep = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 		return;
 	}
 
@@ -521,7 +557,7 @@ void spell_zwingtanz(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 		g_spell_special_aecost = -2;
 	} else {
 
@@ -529,7 +565,11 @@ void spell_zwingtanz(void)
 		g_spelltarget_e->flags.dancing = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -608,14 +648,22 @@ void spell_skelettarius(void)
 	if (!g_spelltarget_e->flags.dead) {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		/* set ae costs */
 		g_spell_special_aecost = 0;
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 

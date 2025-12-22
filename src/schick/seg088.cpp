@@ -47,7 +47,7 @@ void DNG14_dive(const signed int diver_pos, const signed char handicap, const si
 			if (test_talent(hero, TA_SCHWIMMEN, handicap) <= 0) {
 
 				/* swimming failed */
-				sprintf(g_dtp2,	get_tx(42), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2,	get_tx(42), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				/* loose 2W6 LE */

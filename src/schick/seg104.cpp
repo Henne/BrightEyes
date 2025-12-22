@@ -202,7 +202,11 @@ signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, cons
 
 		give_new_item_to_hero(hero, r_ptr->outcome, 1, 1);
 
-		sprintf(g_dtp2, get_ttx(731), hero->alias, (char*)GUI_names_grammar(1, r_ptr->outcome, 0));
+		sprintf(g_dtp2, get_ttx(731), hero->alias, (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_2ND_CASE,
+			r_ptr->outcome,
+			INFLECT_NAME_TYPE_ITEM
+		));
 		GUI_output(g_dtp2);
 
 		return 1;
@@ -211,7 +215,11 @@ signed int do_alchemy(struct struct_hero* hero, const signed int recipe_id, cons
 		/* give first ingredient back, which is always the bottle (glass or bronze). */
 		give_new_item_to_hero(hero, r_ptr->ingredients[0], 1, 1);
 
-		sprintf(g_dtp2,	get_ttx(732), hero->alias, (char*)GUI_names_grammar(2, r_ptr->outcome, 0));
+		sprintf(g_dtp2,	get_ttx(732), hero->alias, (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			r_ptr->outcome,
+			INFLECT_NAME_TYPE_ITEM
+		));
 		GUI_output(g_dtp2);
 
 		return 0;
@@ -249,7 +257,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 		for (i = 0; i <= 12; i++) {
 			if (inv_slot_of_item(hero, g_alchemy_recipes[i].item_id) != -1) {
 
-				strcpy(g_dtp2 + recipes * 50, GUI_name_singular(g_itemsname[g_alchemy_recipes[i].outcome]));
+				strcpy(g_dtp2 + recipes * 50, GUI_name_base_form(g_itemsname[g_alchemy_recipes[i].outcome]));
 
 				g_radio_name_list[recipes] = g_dtp2 + recipes * 50;
 				array[recipes] = (signed char)i;
@@ -387,7 +395,7 @@ signed int plan_alchemy(struct struct_hero *hero)
 					}
 				} else {
 					/* not all ingrendients */
-					sprintf(g_dtp2, get_tx(49), GUI_name_singular(g_itemsname[g_alchemy_missing_item]));
+					sprintf(g_dtp2, get_tx(49), GUI_name_base_form(g_itemsname[g_alchemy_missing_item]));
 					GUI_output(g_dtp2);
 				}
 			}
@@ -498,7 +506,7 @@ signed int talent_cure_disease(struct struct_hero *healer, struct struct_hero *p
 
 					add_hero_le(patient, retval);
 
-					sprintf(g_dtp2,	get_ttx(695), healer->alias, patient->alias, GUI_get_ptr(patient->sex, 3), retval);
+					sprintf(g_dtp2,	get_ttx(695), healer->alias, patient->alias, GUI_get_personal_pronoun(patient->sex, GRAMMAR_CASE_3RD), retval);
 					GUI_output(g_dtp2);
 
 					/* cure the disease */

@@ -169,7 +169,7 @@ void status_menu(signed int hero_pos)
 				if (hero1->inventory[g_statuspage_sel_inv_slot_3].item_id != ITEM_NONE) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings,
-						(char*)GUI_name_singular(g_itemsname[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id]),
+						(char*)GUI_name_base_form(g_itemsname[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id]),
 						!is_in_int_array(hero1->inventory[g_statuspage_sel_inv_slot_3].item_id,
 							g_forbidden_item_ids_table[hero2->typus - 1]) ? g_empty_string8 : get_tx2(66));
 
@@ -350,7 +350,7 @@ void status_menu(signed int hero_pos)
 				if (hero2->inventory[g_statuspage_sel_inv_slot_3].item_id) {
 
 					sprintf(g_dtp2, g_extraspace_separated_strings2,
-						(char*)GUI_name_singular(g_itemsname[hero2->inventory[g_statuspage_sel_inv_slot_3].item_id]),
+						(char*)GUI_name_base_form(g_itemsname[hero2->inventory[g_statuspage_sel_inv_slot_3].item_id]),
 						!is_in_int_array(
 						    hero2->inventory[g_statuspage_sel_inv_slot_3].item_id,
 						    g_forbidden_item_ids_table[hero2->typus - 1]) ? g_empty_string9 : get_tx2(66));
@@ -476,7 +476,7 @@ void status_menu(signed int hero_pos)
 		/* check if the hero is diseased and print a message */
 		if ((g_status_page_mode == 1) && (g_action == ACTION_ID_240) &&	hero_is_diseased(hero2))
 		{
-			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), hero2->alias, GUI_get_ptr(hero2->sex, 1));
+			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), hero2->alias, GUI_get_personal_pronoun(hero2->sex, GRAMMAR_CASE_2ND));
 
 			GUI_output(g_dtp2);
 		}
@@ -584,7 +584,7 @@ void status_menu(signed int hero_pos)
 							flag1 = 1;
 							reset_item_selector();
 						} else if (l1 == 7) {
-							sprintf(g_dtp2, get_tx2(25 + flag3), hero2->alias, GUI_get_ptr(hero2->sex, 1));
+							sprintf(g_dtp2, get_tx2(25 + flag3), hero2->alias, GUI_get_personal_pronoun(hero2->sex, GRAMMAR_CASE_2ND));
 							GUI_output(g_dtp2);
 						} else {
 							g_status_page_mode = 2;
@@ -619,7 +619,7 @@ void status_menu(signed int hero_pos)
 					case 9: {
 						if (flag3) {
 
-							sprintf(g_dtp2, get_tx2(25 + flag3), hero2->alias, GUI_get_ptr(hero2->sex, 1));
+							sprintf(g_dtp2, get_tx2(25 + flag3), hero2->alias, GUI_get_personal_pronoun(hero2->sex, GRAMMAR_CASE_2ND));
 							GUI_output(g_dtp2);
 
 							break;

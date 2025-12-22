@@ -67,7 +67,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 				/* note that, for nutrition, table_index contains the nutrition value */
 
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(g_itemsname[item_id]),
+					consumer->alias, GUI_name_base_form(g_itemsname[item_id]),
 					item_desc->table_index,
 					consumer->hunger, (diff >= 0) ? diff : 0);
 #endif
@@ -96,7 +96,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 #if !defined(__BORLANDC__)
 				int diff = consumer->thirst - item_desc->table_index;
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_singular(g_itemsname[item_id]), item_desc->table_index,
+					consumer->alias, GUI_name_base_form(g_itemsname[item_id]), item_desc->table_index,
 					consumer->thirst, (diff >= 0) ? diff : 0);
 #endif
 
@@ -402,7 +402,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 					give_new_item_to_hero(owner, ITEM_GLASFLASCHE, 2, 1);
 
 					/* prepare output */
-					sprintf(g_dtp2, get_ttx(511), consumer->alias, GUI_get_ptr(consumer->sex, 0));
+					sprintf(g_dtp2, get_ttx(511), consumer->alias, GUI_get_personal_pronoun(consumer->sex, GRAMMAR_CASE_1ST));
 
 					break;
 				}

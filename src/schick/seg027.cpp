@@ -30,7 +30,7 @@
 
 static uint8_t *g_pp20_buffers[9] = { 0 };			// ds:0x5e6a; uint8_t*
 static signed long g_pp20_buffer_lengths[9] = {0};		// ds:0x5e8e
-static signed int g_current_fight_id = 0;			// ds:0x5eb2
+static signed int g_current_fight_id_2 = 0;			// ds:0x5eb2
 static unsigned char g_unkn_038[4] = { 0xb8, 0x14, 0x00, 0x50 }; // ds:0x5eb4
 
 void load_pp20(const signed int index)
@@ -603,7 +603,7 @@ signed int count_fight_enemies(signed int fight_id)
 	for (enemy_i = 0; enemy_i < 20; enemy_i++) {
 
 		/* no enemy and enemy does not appear in the first round */
-		if (fight_lst_buf->enemies[enemy_i].id	&& !fight_lst_buf->enemies[enemy_i].round_appear)
+		if (fight_lst_buf->enemies[enemy_i].monster_id && !fight_lst_buf->enemies[enemy_i].round_appear)
 		{
 			/* increment counter */
 			enemy_count++;
@@ -634,7 +634,7 @@ void read_fight_lst(signed int fight_id)
 		fight_id = 0;
 
 	/* write the fight number to a global var */
-	g_current_fight_id = fight_id;
+	g_current_fight_id_2 = fight_id;
 
 	/* seek to file position */
 	lseek(handle, (int32_t)sizeof(struct fight) * fight_id + 2, SEEK_SET);
@@ -661,7 +661,7 @@ void read_fight_lst(signed int fight_id)
  */
 void write_fight_lst(void)
 {
-	const signed int fight_id = g_current_fight_id;
+	const signed int fight_id = g_current_fight_id_2;
 
 	/* load FIGHT.LST from TEMP dir */
 	signed int handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);

@@ -413,7 +413,11 @@ void spell_paralue(void)
 		/* set 'petrified' flag */
 		g_spelltarget_e->flags.petrified = 1;
 
-		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(103), (char*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
@@ -467,7 +471,11 @@ void spell_salander(void)
 		g_spelltarget_e->flags.mushroom = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2, get_tx(104), (char*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		/* set AE cost */
 		g_spell_special_aecost = ae_cost;
@@ -521,7 +529,7 @@ void spell_visibili(void)
 		mod_slot = get_free_mod_slot();
 		set_mod_slot(mod_slot, (int32_t)rounds * MINUTES(5), (uint8_t*)&get_spelluser()->invisible, 1, pos);
 
-		sprintf(g_dtp2,	get_tx(106), get_spelluser()->alias, GUI_get_ptr(get_spelluser()->sex, 0));
+		sprintf(g_dtp2,	get_tx(106), get_spelluser()->alias, GUI_get_personal_pronoun(get_spelluser()->sex, GRAMMAR_CASE_1ST));
 	} else {
 		sprintf(g_dtp2,	get_ttx(607), get_spelluser()->alias);
 
@@ -599,8 +607,8 @@ void spell_brenne(void)
 		sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
 
 		answer = GUI_radio(g_dtp2, 2,
-				(char*)GUI_names_grammar(0x4000, ITEM_FACKEL__UNLIT, 0),
-				(char*)GUI_names_grammar(0x4000, ITEM_LATERNE__UNLIT, 0));
+				(char*)GUI_name_inflect_with_article(0x4000, ITEM_FACKEL__UNLIT, 0),
+				(char*)GUI_name_inflect_with_article(0x4000, ITEM_LATERNE__UNLIT, 0));
 
 		if (answer == -1) {
 

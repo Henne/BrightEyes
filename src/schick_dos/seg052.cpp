@@ -27,10 +27,10 @@
 #include "seg105.h"
 
 static const signed int g_dcampfights[4] = {
-	FIGHTS_DCAMPFIGHT1,
-	FIGHTS_DCAMPFIGHT2,
-	FIGHTS_DCAMPFIGHT3,
-	FIGHTS_DCAMPFIGHT4
+	FIGHT_ID_DCAMPFIGHT1,
+	FIGHT_ID_DCAMPFIGHT2,
+	FIGHT_ID_DCAMPFIGHT3,
+	FIGHT_ID_DCAMPFIGHT4
 }; // ds:0x66e2
 
 static signed char g_area_camp_guards[3];	// ds:0xe3de

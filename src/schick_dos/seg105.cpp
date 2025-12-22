@@ -523,7 +523,11 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 		if (p_item->flags.undropable) {
 
 			/* this item is not droppable */
-			sprintf(g_dtp2,get_ttx(454), (char*)GUI_names_grammar(0x8002, item_id, 0));
+			sprintf(g_dtp2,get_ttx(454), (char*)GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 			GUI_output(g_dtp2);
 
 		} else {
@@ -532,7 +536,11 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 			if (p_item->flags.stackable) {
 
 				if (quantity == -1) {
-					sprintf(g_dtp2,	get_ttx(219), (char*)GUI_names_grammar(6, item_id, 0));
+					sprintf(g_dtp2,	get_ttx(219), (char*)GUI_name_inflect_with_article(
+						INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+						item_id,
+						INFLECT_NAME_TYPE_ITEM
+					));
 
 					do {
 						answer = GUI_input(g_dtp2, 2);
@@ -662,7 +670,11 @@ signed int give_new_item_to_group(signed int item_id, const signed int dummy, si
 			autofight_bak = g_autofight;
 			g_autofight = 0;
 
-			sprintf(g_dtp2,	get_ttx(549), GUI_names_grammar((quantity > 1 ? 4 : 0) + 2, item_id, 0));
+			sprintf(g_dtp2,	get_ttx(549), GUI_name_inflect_with_article(
+				(quantity > 1 ? INFLECT_PLURAL : INFLECT_SINGULAR) + (INFLECT_INDEFINITE_ARTICLE | INFLECT_4TH_CASE),
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 
 			if (GUI_bool(g_dtp2)) {
 
@@ -770,7 +782,11 @@ void loose_random_item(struct struct_hero *hero, const signed int chance, char *
 			/* drop 1 item */
 			drop_item(hero, inv_slot, 1);
 
-			sprintf(g_text_output_buf, text, hero->alias, (uint8_t*)GUI_names_grammar(0, item_id, 0));
+			sprintf(g_text_output_buf, text, hero->alias, (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 			GUI_output(g_text_output_buf);
 
 			return;
@@ -798,7 +814,7 @@ signed int select_item_to_drop(struct struct_hero *hero)
 		if ((item_id = hero->inventory[i].item_id)) {
 			str[item_cnt] = i;
 			g_radio_name_list[item_cnt] = (g_dtp2 + item_cnt * 30);
-			strcpy(g_radio_name_list[item_cnt], GUI_name_singular(g_itemsname[item_id]));
+			strcpy(g_radio_name_list[item_cnt], GUI_name_base_form(g_itemsname[item_id]));
 			item_cnt++;
 		}
 	}

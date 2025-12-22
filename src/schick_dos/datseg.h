@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "hero.h"
+#include "v302de.h"
 
 /* dummy structs */
 struct c_str_3 { char a[3]; };
@@ -410,7 +411,7 @@ STATIC_ASSERT(sizeof(struct struct_dialog_state) == 8, struct_struct_dialog_stat
 #endif
 struct monster {
 	int8_t monster_id;
-	int8_t gfx_id;
+	int8_t sprite_id;
 	int8_t rs;
 	uint16_t attrib[7];	/* dice template */
 	uint16_t le;		/* dice template */
@@ -475,7 +476,7 @@ struct struct_fighter {
 #pragma pack(1)
 #endif
 struct fight_enemy {
-	int8_t id;
+	int8_t monster_id;
 	int8_t x;
 	int8_t y;
 	int8_t viewdir;
@@ -503,7 +504,7 @@ struct fight {
 
 struct scenario {
 	char name[20];
-	int8_t bg_id;
+	int8_t fig_background_id;
 	int8_t board[600];
 };
 #if !defined(__BORLANDC__)
@@ -807,7 +808,7 @@ struct enemy_flags {
 
 struct enemy_sheet {
 	int8_t monster_id;
-	int8_t gfx_id;
+	int8_t sprite_id;
 	int8_t rs;
 	int8_t attrib[14]; // used in steps of 2 for positive attribs only
 	int16_t le_orig;
@@ -979,7 +980,7 @@ extern const int8_t g_gfxtab_figures_main[125][5];			//ds:0x12c0; seg005, seg006
 extern const struct point8s g_gfxtab_offsets_main[125][5];		//ds:0x1531; seg005, seg039, seg043
 extern const signed int g_nvftab_figures_dead[22];	//ds:0x1a13; seg005, seg039
 extern int16_t *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
-extern signed char g_double_size_gfx_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
+extern signed char g_double_size_sprite_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
 extern const signed int g_weaponani_table[72];		//ds:0x25fe; seg044
 extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093
@@ -1910,7 +1911,7 @@ extern signed char g_fig_double_size_fighter_id_table[21];	// ds:0xe35a; seg005-
 //extern signed char *g_chessboard_cpy;		// ds:0xe356; seg038
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
-extern signed int g_current_fight_no;	// ds:0xe316; seg002-seg042
+extern signed int g_current_fight_id;	// ds:0xe316; seg002-seg042
 extern signed int g_tlk_id;		// ds:0xe314; seg030, seg031
 extern signed int g_dialog_state;	// ds:0xe312; seg030, seg031, seg060
 extern signed int g_dialog_done;	// ds:0xe310; seg030, seg031, seg060
@@ -2040,7 +2041,7 @@ extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
 extern unsigned char *g_buffer8_ptr;	// ds:0xc3a9; seg005, seg026, seg028, seg032, seg042, seg050, seg061, seg098, seg120
 extern struct location g_locations_tab[150];	//ds:0xc025; seg028, seg64, seg066, seg74, seg094
-extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
+extern struct struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
 extern struct item_selector_item *g_item_selector_buy; /* used for merchant buy screen */	// ds:0xc009; seg055, seg056
 extern struct item_selector_item *g_item_selector_sell;	/* used for merchant sell screen and smith */ // ds:0xc005; seg056, seg057, seg058

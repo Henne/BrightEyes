@@ -102,7 +102,7 @@ void TRV_swim2(const signed int handicap, const signed int percent)
 
 			} else {
 				/* talent test failed */
-				sprintf(g_dtp2, get_tx2(32), hero->alias, GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2, get_tx2(32), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
@@ -438,10 +438,10 @@ void tevent_031(void)
 			{
 				/* talent test failed */
 				g_fig_initiative = 1;
-				do_fight(FIGHTS_F031);
+				do_fight(FIGHT_ID_F031);
 			}
 		} else {
-			do_fight(FIGHTS_F031);
+			do_fight(FIGHT_ID_F031);
 		}
 
 		gs_tevent031_flag = 1;
@@ -516,10 +516,10 @@ void tevent_035(void)
 			{
 				/* talent test failed */
 				g_fig_initiative = 1;
-				do_fight(FIGHTS_F035);
+				do_fight(FIGHT_ID_F035);
 			}
 		} else {
-			do_fight(FIGHTS_F035);
+			do_fight(FIGHT_ID_F035);
 		}
 
 		gs_tevent035_flag = 1;
@@ -628,7 +628,7 @@ void tevent_044(void)
 
 		hero = get_first_hero_available_in_group();
 
-		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), hero->alias, GUI_get_ptr(hero->sex, 3));
+		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 2, get_tx2(34), get_tx2(35));
@@ -706,7 +706,7 @@ void tevent_046(void)
 
 		if (test_talent(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
-			sprintf(g_dtp2,	get_tx2(45), hero->alias, GUI_get_ptr(hero->sex, 0));
+			sprintf(g_dtp2,	get_tx2(45), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			do {
 				answer = GUI_radio(g_dtp2, 2, get_tx2(46), get_tx2(47));
@@ -727,7 +727,7 @@ void tevent_046(void)
 
 			g_fig_discard = 1;
 
-			TRV_fight_event(FIGHTS_F046, 46);
+			TRV_fight_event(FIGHT_ID_F046, 46);
 
 			do {
 				answer = GUI_radio(get_tx2(49), 2, get_tx2(50), get_tx2(51));

@@ -188,7 +188,7 @@ void talk_tavern(void)
 
 				hero = get_hero(gs_tlk_tav_testdrunk - 1);
 
-				sprintf(text_buffer, format, hero->alias, GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 1));
+				sprintf(text_buffer, format, hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 ;
 			} else if (txt_id == 18 || txt_id == 31) {
 
@@ -242,8 +242,8 @@ void talk_tavern(void)
 			} else if (txt_id == 122 || txt_id == 126 || txt_id == 127 || txt_id == 132) {
 
 				sprintf(text_buffer, format,
-					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
-					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0));
+					GUI_get_personal_pronoun(gs_tlk_tav_informersex - 1, GRAMMAR_CASE_1ST),
+					GUI_get_personal_pronoun(gs_tlk_tav_informersex - 1, GRAMMAR_CASE_1ST));
 
 			} else if (txt_id == 128) {
 
@@ -252,8 +252,8 @@ void talk_tavern(void)
 			} else if (txt_id == 131) {
 
 				sprintf(text_buffer, format,
-					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
-					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
+					GUI_get_personal_pronoun(gs_tlk_tav_informersex - 1, GRAMMAR_CASE_1ST),
+					GUI_get_personal_pronoun(gs_tlk_tav_informersex - 1, GRAMMAR_CASE_1ST),
 					(uint8_t*)load_current_town_gossip());
 
 			} else {

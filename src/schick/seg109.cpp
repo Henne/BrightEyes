@@ -813,7 +813,7 @@ void TRV_barrier(const signed int text_start)
 						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
 
 						sprintf(g_dtp2 + 0x400,	get_tx2(text_start + 7), hero->alias,
-								GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 						GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
 						hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 30);

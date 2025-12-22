@@ -904,7 +904,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 			if ((hero->typus >= HERO_TYPE_HEXE) &&		/* spellcaster */
 				(hero->ae > 10) &&	/* AE > 10 */
 				(try_autospell != 0) &&
-				(g_current_fight_no != FIGHTS_F144) &&	/* not in the final fight */
+				(g_current_fight_id != FIGHT_ID_F144) &&	/* not in the final fight */
 				g_autofight_magic) /* magic activated in auto fight */
 			{
 				if (AFIG_select_autospell(hero, hero_pos, hero->flags.renegade, x, y))

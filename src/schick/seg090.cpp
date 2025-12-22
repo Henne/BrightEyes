@@ -346,14 +346,14 @@ signed int DNG12_handler(void)
 				{
 					/* the hero must at least fall three times into pit */
 					sprintf(g_dtp2,	get_tx(25), hero->alias,
-						GUI_get_ptr(hero->sex, 0),
-						GUI_get_ptr(hero->sex, 2));
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 				} else {
 					/* the hero falls again into the pit */
 #ifndef M302de_FEATURE_MOD
 					sprintf(g_dtp2,	get_tx(31), hero->alias,
-						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 2),
-						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 2));
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH),
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 #else
 					/* Feature Mod 7: The following is a translation of a text block in OBER.DTX
 					 * of the English version, which has not been present in the German one.
@@ -395,9 +395,9 @@ signed int DNG12_handler(void)
 						"ALS %s WIEDER AUF %sE F\x9aSSE KOMMT.");
 
 					sprintf(g_dtp2, g_text_output_buf, hero->alias,
-						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 2),
-						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 0),
-						GUI_get_ptr(hero->sex, 1));
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH),
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 #endif
 				}
 

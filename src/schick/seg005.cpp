@@ -154,7 +154,11 @@ static char* FIG_name_3rd_case(const signed int type, volatile const signed int 
 	if (type == 2) {
 		return get_hero(pos)->alias;
 	} else {
-		return (char*)GUI_names_grammar(3, pos, 1);
+		return (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_3RD_CASE,
+			pos,
+			INFLECT_NAME_TYPE_MONSTER
+		);
 	}
 }
 
@@ -170,7 +174,11 @@ static char* FIG_name_4th_case(const signed int type, volatile const signed int 
 	if (type == 2) {
 		return get_hero(pos)->alias;
 	} else {
-		return (char*)GUI_names_grammar(2, pos, 1);
+		return (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			pos,
+			INFLECT_NAME_TYPE_MONSTER
+		);
 	}
 }
 
@@ -186,7 +194,11 @@ static char *FIG_name_1st_case(const signed int type, volatile const signed int 
 	if (type == 2) {
 		return get_hero(pos)->alias;
 	} else {
-		return (char*)GUI_names_grammar(0, pos, 1);
+		return (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			pos,
+			INFLECT_NAME_TYPE_MONSTER
+		);
 	}
 }
 

@@ -143,7 +143,7 @@ signed int DNG03_handler(void)
 				!hero->flags.dead &&
 				(test_talent(hero, TA_KLETTERN, 2) <= 0))
 			{
-				sprintf(g_dtp2,	get_tx(6), hero->alias,	GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2,	get_tx(6), hero->alias,	GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(1, 6, 3));
@@ -221,7 +221,7 @@ signed int DNG03_handler(void)
 
 		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
-			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_ptr(hero->sex, 3));
+			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(2, 6, 0));
@@ -249,7 +249,7 @@ signed int DNG03_handler(void)
 			(test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
 
-			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_ptr(hero->sex, 3));
+			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(2, 6, 0));
@@ -329,7 +329,7 @@ signed int DNG03_handler(void)
 
 			} while (i != -1);
 
-			do_fight(FIGHTS_F051_14C);
+			do_fight(FIGHT_ID_F051_14C);
 		}
 
 	} else if (target_pos == DNG_POS(1,1,1) && target_pos != gs_dng_handled_pos &&

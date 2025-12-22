@@ -99,7 +99,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 			hero->action_id = FIG_ACTION_WAIT;
 
-			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
+			if (((g_current_fight_id != FIGHT_ID_F144) || (g_finalfight_tumult)) &&
 				(hero->fight_bp_left >= 3))
 			{
 				AFIG_hero_turn(hero, hero_pos, x, y);
@@ -458,7 +458,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 								g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
-								strcpy(g_radio_name_list[radio_i], GUI_name_singular(g_itemsname[weapon_id]));
+								strcpy(g_radio_name_list[radio_i], GUI_name_base_form(g_itemsname[weapon_id]));
 
 								radio_i++;
 							}
@@ -472,7 +472,12 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 								sprintf(g_text_output_buf, get_tx(60), hero->alias);
 							} else {
 								sprintf(g_text_output_buf, get_tx(31), hero->alias,
-									GUI_names_grammar(0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
+									GUI_name_inflect_with_article(
+										INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+										hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id,
+										INFLECT_NAME_TYPE_ITEM
+									)
+								);
 							}
 
 							call_mouse();
@@ -524,7 +529,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 								sprintf(g_radio_name_list[radio_i],
 									g_space_separated_strings, /* "%s %s" */
-									GUI_name_singular(g_itemsname[weapon_id]),
+									GUI_name_base_form(g_itemsname[weapon_id]),
 									hero->inventory[i].flags.broken ? get_ttx(478) : g_empty_string3);
 
 								radio_i++;
@@ -536,7 +541,12 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 							GUI_output(g_dtp2);
 						} else {
 							sprintf(g_text_output_buf, get_tx(2), hero->alias,
-								GUI_names_grammar(0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
+								GUI_name_inflect_with_article(
+									INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+									hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id,
+									INFLECT_NAME_TYPE_ITEM
+								)
+							);
 
 							call_mouse();
 							tw_bak = g_textbox_width;
@@ -644,7 +654,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
 					/* "THE SWORD GRIMRING" gets a damage bonus + 5 in the final fight */
-					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_GRIMRING) && (g_current_fight_no == FIGHTS_F144)) {
+					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_GRIMRING) && (g_current_fight_id == FIGHT_ID_F144)) {
 						damage_lo += 5;
 						damage_hi += 5;
 					}
@@ -675,7 +685,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 					/* RS */
 					hero->rs_bonus,
 					/* weapon name */
-					GUI_name_singular(g_itemsname[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id]),
+					GUI_name_base_form(g_itemsname[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id]),
 					/* damage bounds */
 					damage_lo, damage_hi,
 					/* LE */
@@ -702,7 +712,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 			} else if (selected == FIG_ACTION_COMPUTER_FIGHT) {
 				/* COMPUTER FIGHT / COMPUTERKAMPF */
 
-				if (g_current_fight_no != FIGHTS_F144) {
+				if (g_current_fight_id != FIGHT_ID_F144) {
 
 					call_mouse();
 
@@ -731,7 +741,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 							g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
-							strcpy(g_radio_name_list[radio_i], GUI_name_singular(g_itemsname[weapon_id]));
+							strcpy(g_radio_name_list[radio_i], GUI_name_base_form(g_itemsname[weapon_id]));
 
 							radio_i++;
 						}
@@ -832,7 +842,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 	}
 
 	/* final fight vs. Orkchampion */
-	if ((g_current_fight_no == FIGHTS_F144) &&
+	if ((g_current_fight_id == FIGHT_ID_F144) &&
 		(get_hero_index(gs_main_acting_hero) != hero_pos) &&
 		((hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_RANGE_ATTACK) ||

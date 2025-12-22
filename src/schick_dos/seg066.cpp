@@ -541,9 +541,9 @@ signed int enter_location_daspota(void)
 				disable_ani();
 
 				if (locations_tab_ptr->locdata == 6) {
-					do_fight(FIGHTS_DASP6B);
+					do_fight(FIGHT_ID_DASP6B);
 				} else if (locations_tab_ptr->locdata == 12) {
-					do_fight(FIGHTS_DASP12B);
+					do_fight(FIGHT_ID_DASP12B);
 				}
 
 				leave_location();

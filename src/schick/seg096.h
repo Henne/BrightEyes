@@ -1,17 +1,17 @@
 //20
 void GUI_write_char_to_screen(uint8_t*, const signed int, const signed int);
 //25
-uint8_t* GUI_names_grammar(int16_t, const signed int, const signed int);
+uint8_t* GUI_name_inflect_with_article(int16_t, const signed int, const signed int);
 //2a
-char* GUI_name_plural(const signed int, char*);
+char* GUI_name_inflect(const signed int, char*);
 //2f
-char* GUI_name_singular(char*);
+char* GUI_name_base_form(char*);
 //34
-uint8_t* GUI_2f2(const signed int, const signed int, const signed int);
+uint8_t* GUI_grammar_name_to_personal_pronoun(const signed int, const signed int, const signed int);
 //39
-char* GUI_get_ptr(const signed int, const signed int);
+char* GUI_get_personal_pronoun(const signed int, const signed int);
 //3e
-char* GUI_get_article(const signed int, const signed int);
+char* GUI_get_definite_article(const signed int, const signed int);
 //43
 void GUI_print_string(char*, signed int, signed int);
 //48

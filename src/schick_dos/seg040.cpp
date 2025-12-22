@@ -103,7 +103,7 @@ void FIG_chessboard_init(void)
 
 	i = 0;
 
-	if (g_scenario_buf->bg_id <= 3) {
+	if (g_scenario_buf->fig_background_id <= FIG_BACKGROUND_ID_3) {
 
 		while (g_cb_rear_border[i].x != -1) {
 

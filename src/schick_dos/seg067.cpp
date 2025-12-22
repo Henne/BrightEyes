@@ -89,7 +89,7 @@ void city_event_1(void)
 		}
 	} else {
 
-		sprintf(g_dtp2, get_tx(random_schick(4) + 3), hero->alias, GUI_get_ptr(hero->sex, 1));
+		sprintf(g_dtp2, get_tx(random_schick(4) + 3), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 
 		answer = GUI_dialogbox(hero->pic, hero->alias, g_dtp2, 3,
 				get_tx(random_schick(4) + 7),
@@ -322,7 +322,7 @@ void city_event_7(void)
 
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 
-		sprintf(g_dtp2 + 0x400, get_tx(125), GUI_get_ptr(hero->sex, 3));
+		sprintf(g_dtp2 + 0x400, get_tx(125), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 

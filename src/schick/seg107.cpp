@@ -78,9 +78,13 @@ void use_item(const signed int inv_slot, const signed int hero_pos)
 				if (is_in_int_array(g_used_item_id, g_items_pluralwords))
 				{
 					/* german grammar, singular and plural are the same */
-					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(g_itemsname[g_used_item_id]));
+					sprintf(g_dtp2, get_ttx(792), GUI_name_base_form(g_itemsname[g_used_item_id]));
 				} else {
-					sprintf(g_dtp2, get_ttx(571), GUI_names_grammar(0, g_used_item_id, 0));
+					sprintf(g_dtp2, get_ttx(571), GUI_name_inflect_with_article(
+						INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+						g_used_item_id,
+						INFLECT_NAME_TYPE_ITEM
+					));
 				}
 
 				GUI_output(g_dtp2);
@@ -408,8 +412,10 @@ void item_apply_weapon_poison(void)
 
 		give_new_item_to_hero(g_itemuser, bottle_id, 1, 1);
 
-		sprintf(g_dtp2, get_ttx(739),
-			(char*)GUI_names_grammar(0x8000, g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
+		sprintf(g_dtp2, get_ttx(739), (char*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_itemuser->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, INFLECT_NAME_TYPE_ITEM
+		));
 
 	} else {
 		sprintf(g_dtp2, get_ttx(805), g_itemuser->alias);

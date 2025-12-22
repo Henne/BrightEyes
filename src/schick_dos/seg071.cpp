@@ -114,7 +114,7 @@ void PHX_drogentempel(void)
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(29), 0);
 
-			do_fight(FIGHTS_PHEX3);
+			do_fight(FIGHT_ID_PHEX3);
 		} else {
 
 			if (gs_drug_timer && (nr_heroes * 2500 <= money)) {

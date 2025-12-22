@@ -383,7 +383,11 @@ void mspell_verwandlung(void)
 			g_spelltarget_e->flags.petrified = 0;
 
 			/* prepare message */
-			sprintf(g_dtp2,	get_tx(114), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+			sprintf(g_dtp2,	get_tx(114), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				g_spelltarget_e->monster_id,
+				INFLECT_NAME_TYPE_MONSTER
+			));
 		}
 
 	} else if (g_spelltarget_e->flags.mushroom) {
@@ -537,7 +541,11 @@ void mspell_blitz(void)
 		g_spelltarget_e->blind = 3;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(85), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(85), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -565,7 +573,11 @@ void mspell_eisenrost(void)
 				get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2,	get_tx(92), (uint8_t*)GUI_names_grammar(0x8000, item_id, 0), get_spelltarget()->alias);
+				sprintf(g_dtp2,	get_tx(92), (uint8_t*)GUI_name_inflect_with_article(
+					INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id,
+					INFLECT_NAME_TYPE_ITEM
+				), get_spelltarget()->alias);
 
 			} else {
 				g_mspell_ae_cost = -2;
@@ -585,7 +597,11 @@ void mspell_eisenrost(void)
 			g_spelltarget_e->weapon_broken = 1;
 
 			/* prepare message */
-			sprintf(g_dtp2,	get_tx(91), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+			sprintf(g_dtp2,	get_tx(91), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				g_spelltarget_e->monster_id,
+				INFLECT_NAME_TYPE_MONSTER
+			));
 		}
 	}
 }
@@ -722,7 +738,11 @@ void mspell_plumbumbarum(void)
 		g_spelltarget_e->at = g_spelltarget_e->at - 3;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(95), (uint8_t*)GUI_names_grammar(0x8001, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(95), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_2ND_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -775,7 +795,11 @@ void mspell_paralue(void)
 		g_spelltarget_e->flags.petrified = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(103), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(103), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 		/* target is a hero */
 
