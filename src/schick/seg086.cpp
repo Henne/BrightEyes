@@ -76,7 +76,7 @@ signed int DNG11_handler(void)
 			{
 				g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,8,15,SOUTH);
 
-				do_fight(FIGHTS_F131_01B);
+				do_fight(FIGHT_ID_F131_01B);
 			}
 		}
 
@@ -482,7 +482,7 @@ void DNG11_chest13_loot(struct struct_chest* chest)
  */
 void DNG11_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_F131_11_1) {
+	if (fight_id == FIGHT_ID_F131_11_1) {
 		GUI_output(get_tx(14));
 	}
 }

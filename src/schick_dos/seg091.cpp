@@ -250,7 +250,7 @@ void DNG13_chest01_loot(struct struct_chest* chest)
  */
 void DNG13_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_DPRE10_1)
+	if (fight_id == FIGHT_ID_DPRE10_1)
 	{
 		GUI_output(get_tx(13));
 	}

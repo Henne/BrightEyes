@@ -171,7 +171,7 @@ void THO_windriders(void)
 				GUI_output(get_tx2(28));
 
 				g_fig_discard = 1;
-				do_fight(FIGHTS_THOR8);
+				do_fight(FIGHT_ID_THOR8);
 			}
 
 			gs_otta_windriders++;
@@ -279,7 +279,7 @@ void THO_stormchildren(void)
 				GUI_output(get_tx2(37));
 
 				g_fig_discard = 1;
-				do_fight(FIGHTS_THOR8);
+				do_fight(FIGHT_ID_THOR8);
 			}
 
 			gs_otta_stormchildren++;
@@ -312,7 +312,7 @@ void THO_garaldsson(void)
 				GUI_output(get_tx2(46));
 
 				g_fig_discard = 1;
-				do_fight(FIGHTS_THOR8);
+				do_fight(FIGHT_ID_THOR8);
 			}
 
 			gs_otta_garaldsson++;

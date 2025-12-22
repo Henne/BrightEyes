@@ -64,7 +64,7 @@ signed int DNG02_handler(void)
 
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,6,NORTH);
 
-			do_fight(FIGHTS_F046_01);
+			do_fight(FIGHT_ID_F046_01);
 		}
 
 	} else if (target_pos == DNG_POS(0,3,6) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
@@ -387,7 +387,7 @@ signed int DNG02_handler(void)
 	{
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,12,11,NORTH);
 
-		if (!do_fight(FIGHTS_F046_31))
+		if (!do_fight(FIGHT_ID_F046_31))
 		{
 #if defined(__BORLANDC__)
 			gs_always_one2 = 1;
@@ -649,13 +649,13 @@ void DNG02_chest06_loot(struct struct_chest* chest)
  */
 void DNG02_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_F046_13) {
+	if (fight_id == FIGHT_ID_F046_13) {
 		GUI_output(get_tx(32));
-	} else if (fight_id == FIGHTS_F046_22) {
+	} else if (fight_id == FIGHT_ID_F046_22) {
 		GUI_output(get_tx(33));
-	} else if (fight_id == FIGHTS_F046_25) {
+	} else if (fight_id == FIGHT_ID_F046_25) {
 		GUI_output(get_tx(34));
-	} else if (fight_id == FIGHTS_F046_28) {
+	} else if (fight_id == FIGHT_ID_F046_28) {
 		GUI_output(get_tx(36));
 	}
 }

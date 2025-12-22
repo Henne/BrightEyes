@@ -548,13 +548,13 @@ void tevent_064(void)
 
 			GUI_output(get_tx2(62));
 
-			result = TRV_fight_event(FIGHTS_F064, 64);
+			result = TRV_fight_event(FIGHT_ID_F064, 64);
 
 			gs_tevent064_silent_flag = 1;
 
 		} else {
 			GUI_output(gs_tevent064_silent_flag != 0 ? get_tx2(62) : get_tx2(63));
-			result = TRV_fight_event(FIGHTS_F064, 64);
+			result = TRV_fight_event(FIGHT_ID_F064, 64);
 		}
 
 		if (!result) {
@@ -706,7 +706,7 @@ void tevent_066(void)
 					}
 				}
 
-				if (!do_fight(FIGHTS_F066)) {
+				if (!do_fight(FIGHT_ID_F066)) {
 					gs_tevent066_track_flag = 1;
 					add_hero_ap_all(50);
 				}

@@ -532,7 +532,7 @@ void tevent_122(void)
 		if (answer == 1)
 		{
 			/* attack wolves */
-			if (!TRV_fight_event(FIGHTS_F122, 122))
+			if (!TRV_fight_event(FIGHT_ID_F122, 122))
 			{
 				gs_tevent122_flag = 1;
 

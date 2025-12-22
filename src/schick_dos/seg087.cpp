@@ -58,7 +58,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(0,3,8,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,14,SOUTH);
 
-		do_fight(FIGHTS_DTHO03);
+		do_fight(FIGHT_ID_DTHO03);
 
 	} else if (pos == DNG_POS(0,2,4) && pos != gs_dng_handled_pos && !gs_dng14_money_flag) {
 
@@ -91,7 +91,7 @@ signed int DNG14_handler(void)
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,5,4,SOUTH);
 
-		do_fight(FIGHTS_DTHO06);
+		do_fight(FIGHT_ID_DTHO06);
 
 	} else if (pos == DNG_POS(0,7,6) && pos != gs_dng_handled_pos && gs_direction == NORTH) {
 
@@ -107,13 +107,13 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = DNG_POS_DIR(0,11,11,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,9,14,SOUTH);
 
-		do_fight(FIGHTS_DTHO09);
+		do_fight(FIGHT_ID_DTHO09);
 
 	} else if (pos == DNG_POS(0,11,14) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,8,14,WEST);
 
-		do_fight(FIGHTS_DTHO10);
+		do_fight(FIGHT_ID_DTHO10);
 
 	} else if (pos == DNG_POS(0,11,14) && pos != gs_dng_handled_pos && gs_direction == EAST) {
 
@@ -137,7 +137,7 @@ signed int DNG14_handler(void)
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,9,11,WEST);
 
-		do_fight(FIGHTS_DTHO13);
+		do_fight(FIGHT_ID_DTHO13);
 
 	} else if (pos == DNG_POS(0,10,3) && pos != gs_dng_handled_pos) {
 
@@ -201,14 +201,14 @@ signed int DNG14_handler(void)
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,6,NORTH);
 
-		do_fight(FIGHTS_DTHO18);
+		do_fight(FIGHT_ID_DTHO18);
 
 	} else if (pos == DNG_POS(1,1,11) && pos != gs_dng_handled_pos && random_schick(100) <= 5) {
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(1,1,9,NORTH);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,14,SOUTH);
 
-		do_fight(FIGHTS_DTHO19);
+		do_fight(FIGHT_ID_DTHO19);
 
 	} else if (pos == DNG_POS(1,1,14) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
@@ -216,7 +216,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,5,14,EAST);
 		g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,14,NORTH);
 
-		do_fight(FIGHTS_DTHO20);
+		do_fight(FIGHT_ID_DTHO20);
 
 	} else if (pos == DNG_POS(1,13,13) && pos != gs_dng_handled_pos) {
 
@@ -240,7 +240,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = DNG_POS_DIR(1,11,10,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,9,14,SOUTH);
 
-		if (!do_fight(random_schick(100) <= 50 ? FIGHTS_DTHO21A : FIGHTS_DTHO21B))
+		if (!do_fight(random_schick(100) <= 50 ? FIGHT_ID_DTHO21A : FIGHT_ID_DTHO21B))
 		{
 			gs_dng14_lvl2_fight = 1;
 		}
@@ -255,7 +255,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = DNG_POS_DIR(1,12,6,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,10,9,SOUTH);
 
-		do_fight(FIGHTS_DTHO23);
+		do_fight(FIGHT_ID_DTHO23);
 
 	} else if ((pos == DNG_POS(1,8,2) || pos == DNG_POS(1,8,5)) && pos != gs_dng_handled_pos && gs_direction == WEST) {
 

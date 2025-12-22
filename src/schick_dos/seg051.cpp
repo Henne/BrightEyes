@@ -30,10 +30,10 @@
 #include "seg105.h"
 
 static const signed int g_campfights[4] = {
-	FIGHTS_CAMPFIGHT1,
-	FIGHTS_CAMPFIGHT2,
-	FIGHTS_CAMPFIGHT3,
-	FIGHTS_CAMPFIGHT4
+	FIGHT_ID_CAMPFIGHT1,
+	FIGHT_ID_CAMPFIGHT2,
+	FIGHT_ID_CAMPFIGHT3,
+	FIGHT_ID_CAMPFIGHT4
 }; // ds:0x6694
 
 struct gather_herbs g_gather_herbs_table[13] = {

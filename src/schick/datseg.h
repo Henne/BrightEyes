@@ -475,7 +475,7 @@ struct struct_fighter {
 #pragma pack(1)
 #endif
 struct fight_enemy {
-	int8_t id;
+	int8_t monster_id;
 	int8_t x;
 	int8_t y;
 	int8_t viewdir;
@@ -503,7 +503,7 @@ struct fight {
 
 struct scenario {
 	char name[20];
-	int8_t bg_id;
+	int8_t fig_background_id;
 	int8_t board[600];
 };
 #if !defined(__BORLANDC__)
@@ -1914,7 +1914,7 @@ extern signed char g_fig_double_size_fighter_id_table[21];	// ds:0xe35a; seg005-
 //extern signed char *g_chessboard_cpy;		// ds:0xe356; seg038
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
-extern signed int g_current_fight_no;	// ds:0xe316; seg002-seg042
+extern signed int g_current_fight_id;	// ds:0xe316; seg002-seg042
 extern signed int g_tlk_id;		// ds:0xe314; seg030, seg031
 extern signed int g_dialog_state;	// ds:0xe312; seg030, seg031, seg060
 extern signed int g_dialog_done;	// ds:0xe310; seg030, seg031, seg060

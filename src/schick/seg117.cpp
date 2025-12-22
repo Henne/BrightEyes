@@ -634,7 +634,7 @@ void pirates_attack(void)
 	g_max_enemies = random_interval(3, 8);
 	g_fig_discard = 1;
 
-	do_fight(FIGHTS_S001);
+	do_fight(FIGHT_ID_S001);
 
 	g_basepos_x = g_basepos_y = 0;
 
@@ -658,7 +658,7 @@ void do_wild8_fight(void)
 	g_max_enemies = random_interval(5, 10);
 	g_fig_discard = 1;
 
-	do_fight(FIGHTS_WILD8);
+	do_fight(FIGHT_ID_WILD8);
 
 	gs_journey_fight_flag = 0;
 	gs_show_travel_map = 1;
@@ -709,14 +709,14 @@ void journey_random_encounter(signed int tmp)
 				case 0: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(6) + 1;
-						do_fight(FIGHTS_WILD1);
+						do_fight(FIGHT_ID_WILD1);
 					}
 					break;
 				}
 				case 1: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
-						do_fight(FIGHTS_WILD2);
+						do_fight(FIGHT_ID_WILD2);
 					}
 					break;
 				}
@@ -727,7 +727,7 @@ void journey_random_encounter(signed int tmp)
 				case 3: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(2);
-						do_fight(FIGHTS_WILD3);
+						do_fight(FIGHT_ID_WILD3);
 					}
 					break;
 				}
@@ -738,21 +738,21 @@ void journey_random_encounter(signed int tmp)
 				case 5: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(6) + 1;
-						do_fight(FIGHTS_WILD4);
+						do_fight(FIGHT_ID_WILD4);
 					}
 					break;
 				}
 				case 6: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3) + 3;
-						do_fight(FIGHTS_WILD4);
+						do_fight(FIGHT_ID_WILD4);
 					}
 					break;
 				}
 				case 7: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(2) + 1;
-						do_fight(FIGHTS_WILD5);
+						do_fight(FIGHT_ID_WILD5);
 					}
 					break;
 				}
@@ -767,7 +767,7 @@ void journey_random_encounter(signed int tmp)
 				case 10: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
-						do_fight(FIGHTS_WILD6);
+						do_fight(FIGHT_ID_WILD6);
 					}
 					break;
 				}
@@ -778,7 +778,7 @@ void journey_random_encounter(signed int tmp)
 				case 12: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
-						do_fight(FIGHTS_WILD7);
+						do_fight(FIGHT_ID_WILD7);
 					}
 					break;
 				}

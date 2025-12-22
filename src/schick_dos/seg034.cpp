@@ -853,7 +853,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed i
 						problem = 2;
 
 					} else if ((sel_x > 23) || (sel_x < 0) || (sel_y > 23) || (sel_y < 0) || (get_cb_val(sel_x, sel_y) < 0)) {
-						if ((g_scenario_buf->bg_id > 3) || (sel_x >= 0))
+						if ((g_scenario_buf->fig_background_id > FIG_BACKGROUND_ID_3) || (sel_x >= 0))
 						{
 							problem = 1;
 						}

@@ -230,7 +230,7 @@ void PHX_villa_gremob(void)
 	GUI_output(!gs_gremob_invited ? get_tx2(40) : get_tx2(39));
 
 	if (gs_gremob_invited) {
-		do_fight(FIGHTS_PHEX24);
+		do_fight(FIGHT_ID_PHEX24);
 	}
 }
 

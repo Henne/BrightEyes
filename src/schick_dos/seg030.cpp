@@ -548,12 +548,12 @@ void talk_switch(void)
 
 				g_fig_discard = 1;
 
-				if (!do_fight(FIGHTS_DASP1A)) {
+				if (!do_fight(FIGHT_ID_DASP1A)) {
 					if (GUI_bool(get_tx(22))) {
 
 						g_fig_discard = 0;
 
-						if (!do_fight(FIGHTS_DASP1B)) {
+						if (!do_fight(FIGHT_ID_DASP1B)) {
 							gs_daspota_fightflags[1] = 1;
 						}
 					}
@@ -567,7 +567,7 @@ void talk_switch(void)
 
 			if (state == 1 && !gs_daspota_fightflags[2]) {
 
-				if (!do_fight(FIGHTS_DASP2)) {
+				if (!do_fight(FIGHT_ID_DASP2)) {
 					gs_daspota_fightflags[2] = 1;
 				}
 			}
@@ -577,7 +577,7 @@ void talk_switch(void)
 
 			if ((state == 4 || state == 6) && !gs_daspota_fightflags[3]) {
 
-				if (!do_fight(FIGHTS_DASP3)) {
+				if (!do_fight(FIGHT_ID_DASP3)) {
 					gs_daspota_fightflags[3] = 1;
 				}
 			}
@@ -587,7 +587,7 @@ void talk_switch(void)
 
 			if (state == 4 && !gs_daspota_fightflags[4]) {
 
-				if (!do_fight(FIGHTS_DASP4)) {
+				if (!do_fight(FIGHT_ID_DASP4)) {
 					gs_daspota_fightflags[4] = 1;
 				}
 			}
@@ -597,7 +597,7 @@ void talk_switch(void)
 
 			if ((state == 1 || state == 4 || state == 7) && !gs_daspota_fightflags[5]) {
 
-				if (!do_fight(FIGHTS_DASP5)) {
+				if (!do_fight(FIGHT_ID_DASP5)) {
 					gs_daspota_fightflags[5] = 1;
 				}
 			}
@@ -607,7 +607,7 @@ void talk_switch(void)
 
 			if ((state == 4 || state == 5) && !gs_daspota_fightflags[6]) {
 
-				if (!do_fight(FIGHTS_DASP6A)) {
+				if (!do_fight(FIGHT_ID_DASP6A)) {
 					gs_daspota_fightflags[6] = 1;
 				}
 			}
@@ -617,7 +617,7 @@ void talk_switch(void)
 
 			if ((state == 1 || state == 4 || state == 7) && !gs_daspota_fightflags[7]) {
 
-				if (!do_fight(FIGHTS_DASP7)) {
+				if (!do_fight(FIGHT_ID_DASP7)) {
 					gs_daspota_fightflags[7] = 1;
 				}
 			}
@@ -630,7 +630,7 @@ void talk_switch(void)
 
 			if (state == 4 && !gs_daspota_fightflags[8]) {
 
-				if (!do_fight(FIGHTS_DASP8)) {
+				if (!do_fight(FIGHT_ID_DASP8)) {
 					gs_daspota_fightflags[8] = 1;
 				}
 			}
@@ -640,7 +640,7 @@ void talk_switch(void)
 
 			if (state == 1 && !gs_daspota_fightflags[9]) {
 
-				if (!do_fight(FIGHTS_DASP9)) {
+				if (!do_fight(FIGHT_ID_DASP9)) {
 					gs_daspota_fightflags[9] = 1;
 				}
 			}
@@ -650,7 +650,7 @@ void talk_switch(void)
 
 			if (state == 1 && !gs_daspota_fightflags[10]) {
 
-				if (!do_fight(FIGHTS_DASP10)) {
+				if (!do_fight(FIGHT_ID_DASP10)) {
 					gs_daspota_fightflags[10] = 1;
 				}
 			}
@@ -660,7 +660,7 @@ void talk_switch(void)
 
 			if (state == 4 && !gs_daspota_fightflags[11]) {
 
-				if (!do_fight(FIGHTS_DASP11)) {
+				if (!do_fight(FIGHT_ID_DASP11)) {
 					gs_daspota_fightflags[11] = 1;
 				}
 			}
@@ -670,7 +670,7 @@ void talk_switch(void)
 
 			if (state == 1 && !gs_daspota_fightflags[12]) {
 
-				if (!do_fight(FIGHTS_DASP12A)) {
+				if (!do_fight(FIGHT_ID_DASP12A)) {
 					gs_daspota_fightflags[12] = 1;
 				}
 			}
@@ -680,7 +680,7 @@ void talk_switch(void)
 
 			if (state == 5 && !gs_daspota_fightflags[13]) {
 
-				if (!do_fight(FIGHTS_DASP13)) {
+				if (!do_fight(FIGHT_ID_DASP13)) {
 					gs_daspota_fightflags[13] = 1;
 				}
 			}
@@ -690,7 +690,7 @@ void talk_switch(void)
 
 			if (state == 1 && !gs_daspota_fightflags[14]) {
 
-				if (!do_fight(FIGHTS_DASP14)) {
+				if (!do_fight(FIGHT_ID_DASP14)) {
 					gs_daspota_fightflags[14] = 1;
 				}
 			}
@@ -703,7 +703,7 @@ void talk_switch(void)
 
 			if ((state == 4 || state == 6) && !gs_daspota_fightflags[16]) {
 
-				if (!do_fight(FIGHTS_DASP16)) {
+				if (!do_fight(FIGHT_ID_DASP16)) {
 					gs_daspota_fightflags[16] = 1;
 				}
 			}
@@ -713,7 +713,7 @@ void talk_switch(void)
 
 			if ((state == 4 || state == 5 || state == 6) && !gs_daspota_fightflags[17]) {
 
-				if (!do_fight(FIGHTS_DASP17)) {
+				if (!do_fight(FIGHT_ID_DASP17)) {
 					gs_daspota_fightflags[17] = 1;
 				}
 			}
@@ -723,7 +723,7 @@ void talk_switch(void)
 
 			if ((state == 6 || state == 7) && !gs_daspota_fightflags[18]) {
 
-				if (!do_fight(FIGHTS_DASP18)) {
+				if (!do_fight(FIGHT_ID_DASP18)) {
 					gs_daspota_fightflags[18] = 1;
 				}
 			}

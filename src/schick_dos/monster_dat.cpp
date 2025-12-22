@@ -6,7 +6,6 @@
  * to create the file MONSTER.DAT which can be packed into SCHICK.DAT.
  */
 
-
 #include "v302de.h"
 #include "common.h"
 #include "datseg.h"

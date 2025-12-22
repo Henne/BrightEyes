@@ -135,13 +135,13 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	sheet->mr = dice_template(monster->mr);
 
 	/* Terrible hack:
-		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
-		if the current fight is FIGHTS_F144 (final fight), and the enemy is no "Orkchampion" then set the 'tied' flag */
-	if (g_current_fight_no == FIGHTS_F084) {
+		if the current fight is FIGHT_ID_F084, set MR to 5 (Travel-Event 84),
+		if the current fight is FIGHT_ID_F144 (final fight), and the enemy is no "Orkchampion" then set the 'tied' flag */
+	if (g_current_fight_id == FIGHT_ID_F084) {
 
 		sheet->mr = 5;
 
-	} else if ((g_current_fight_no == FIGHTS_F144) && (sheet->monster_id != MONSTER_ID_ORKCHAMPION)) {
+	} else if ((g_current_fight_id == FIGHT_ID_F144) && (sheet->monster_id != MONSTER_ID_ORKCHAMPION)) {
 
 		/* set 'tied' flag */
 		sheet->flags.tied = 1;
@@ -181,8 +181,8 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	sheet->le_flee = monster->le_flee;
 
 	/* Another hack:
-		If the current fight == FIGHTS_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
-	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->monster_id == MONSTER_ID_KULTIST__LVL_4)) {
+		If the current fight == FIGHT_ID_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
+	if ((g_current_fight_id == FIGHT_ID_F126_08) && (sheet->monster_id == MONSTER_ID_KULTIST__LVL_4)) {
 		/* Kultist will flee */
 		/* set 'scared' flag */
 		sheet->flags.scared = 1;
@@ -377,9 +377,9 @@ void FIG_init_enemies(void)
 	/* Fill the tables with new values */
 	for (i = 0; i < 20; i++) {
 
-		if (g_current_fight->enemies[i].id) {
+		if (g_current_fight->enemies[i].monster_id) {
 
-			fill_enemy_sheet(i, g_current_fight->enemies[i].id, g_current_fight->enemies[i].round_appear);
+			fill_enemy_sheet(i, g_current_fight->enemies[i].monster_id, g_current_fight->enemies[i].round_appear);
 
 			g_nr_of_enemies++;
 		}
@@ -433,7 +433,7 @@ void FIG_init_heroes(void)
 			hero->target_object_id = 0;
 
 			/* FINAL FIGHT */
-			if (g_current_fight_no == FIGHTS_F144) {
+			if (g_current_fight_id == FIGHT_ID_F144) {
 
 				if (hero == gs_main_acting_hero) {
 

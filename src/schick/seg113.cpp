@@ -133,7 +133,7 @@ void tevent_084(void)
 
 		if (answer == 1) {
 
-			if (!do_fight(FIGHTS_F084)) {
+			if (!do_fight(FIGHT_ID_F084)) {
 				gs_tevent084_flag = 1;
 			}
 		} else {
@@ -142,7 +142,7 @@ void tevent_084(void)
 			{
 				g_fig_initiative = 1;
 
-				if (!do_fight(FIGHTS_F084)) {
+				if (!do_fight(FIGHT_ID_F084)) {
 					gs_tevent084_flag = 1;
 				}
 			}
@@ -429,7 +429,7 @@ void tevent_099(void)
 
 		if (answer == 1) {
 
-			if (!do_fight(FIGHTS_F099)) {
+			if (!do_fight(FIGHT_ID_F099)) {
 				gs_tevent099_flag = 1;
 #ifdef M302de_ORIGINAL_BUGFIX
 			}
@@ -440,7 +440,7 @@ void tevent_099(void)
 
 				g_fig_initiative = 1;
 
-				if (!do_fight(FIGHTS_F099)) {
+				if (!do_fight(FIGHT_ID_F099)) {
 					gs_tevent099_flag = 1;
 				}
 			}
@@ -472,7 +472,7 @@ void tevent_101(void)
 		/* Original-Bugfix: see description in tevent_099() */
 		if (answer == 1) {
 
-			if (!do_fight(FIGHTS_F101)) {
+			if (!do_fight(FIGHT_ID_F101)) {
 
 				gs_tevent101_flag = 1;
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -484,7 +484,7 @@ void tevent_101(void)
 
 				g_fig_initiative = 1;
 
-				if (!do_fight(FIGHTS_F101)) {
+				if (!do_fight(FIGHT_ID_F101)) {
 					gs_tevent101_flag = 1;
 				}
 			}

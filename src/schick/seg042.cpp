@@ -744,7 +744,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				/* cast a spell */
 
-				if (g_current_fight_no == FIGHTS_F144) {
+				if (g_current_fight_id == FIGHT_ID_F144) {
 					/* No spells allowed in the final fight -> instant death */
 
 					sub_hero_le(hero, hero->le + 1);

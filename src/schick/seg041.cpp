@@ -205,18 +205,18 @@ void FIG_damage_enemy(struct enemy_sheet *enemy, const signed int damage, const 
 		enemy->flags.dead = 1;
 		enemy->le = 0;
 
-		if ((g_current_fight_no == FIGHTS_F126_08) && (enemy->monster_id == MONSTER_ID_KULTIST__LVL_4)) {
+		if ((g_current_fight_id == FIGHT_ID_F126_08) && (enemy->monster_id == MONSTER_ID_KULTIST__LVL_4)) {
 
 			/* slaying a special cultist */
 			/* set a flag in the status area */
 			gs_dng09_cultist_flag = 0;
 
-		} else if ((g_current_fight_no == FIGHTS_F144) && (enemy->monster_id == MONSTER_ID_ORKCHAMPION) && !g_finalfight_tumult) {
+		} else if ((g_current_fight_id == FIGHT_ID_F144) && (enemy->monster_id == MONSTER_ID_ORKCHAMPION) && !g_finalfight_tumult) {
 
 			/* slaying the orc champion, ends the fight */
 			g_in_fight = 0;
 
-		} else if ((g_current_fight_no == FIGHTS_F064) && (enemy->monster_id == MONSTER_ID_GORAH)) {
+		} else if ((g_current_fight_id == FIGHT_ID_F064) && (enemy->monster_id == MONSTER_ID_GORAH)) {
 
 			/* slaying Gorah makes everyone flee except Heshthot */
 			for (i = 0; i < 20; i++) {

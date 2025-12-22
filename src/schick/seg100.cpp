@@ -74,7 +74,7 @@ void spell_exposami(void)
 
 		if (g_current_fight->enemies[i].round_appear) {
 
-			id = g_current_fight->enemies[i].id;
+			id = g_current_fight->enemies[i].monster_id;
 
 			changed = 0;
 

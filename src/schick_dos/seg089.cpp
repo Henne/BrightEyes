@@ -378,7 +378,7 @@ signed int DNG15_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,9,2,WEST);
 			g_fig_escape_position[SOUTH] = DNG_POS_DIR(3,13,5,SOUTH);
 
-			if (!do_fight(FIGHTS_DFIN26))
+			if (!do_fight(FIGHT_ID_DFIN26))
 			{
 				gs_dng15_undead_fight = 1;
 			}
@@ -391,7 +391,7 @@ signed int DNG15_handler(void)
 		{
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,13,5,SOUTH);
 
-			if (!do_fight(FIGHTS_DFIN26))
+			if (!do_fight(FIGHT_ID_DFIN26))
 			{
 				gs_dng15_undead_fight = 1;
 			}
@@ -436,7 +436,7 @@ signed int DNG15_handler(void)
 			/* fight the zombies */
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,10,10,NORTH);
 
-			if (!do_fight(FIGHTS_DFIN28))
+			if (!do_fight(FIGHT_ID_DFIN28))
 			{
 				/* talk with hyggelik */
 				draw_main_screen();

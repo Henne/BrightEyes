@@ -391,7 +391,7 @@ void DNG01_chest00_loot(struct struct_chest* chest)
 		/* fight the demon */
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,13,10,WEST);
 
-		if (!do_fight(FIGHTS_SHIP10_1))
+		if (!do_fight(FIGHT_ID_SHIP10_1))
 		{
 			add_hero_ap_all(50);
 		}

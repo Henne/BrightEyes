@@ -99,7 +99,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 			hero->action_id = FIG_ACTION_WAIT;
 
-			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
+			if (((g_current_fight_id != FIGHT_ID_F144) || (g_finalfight_tumult)) &&
 				(hero->fight_bp_left >= 3))
 			{
 				AFIG_hero_turn(hero, hero_pos, x, y);
@@ -654,7 +654,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
 					/* "THE SWORD GRIMRING" gets a damage bonus + 5 in the final fight */
-					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_GRIMRING) && (g_current_fight_no == FIGHTS_F144)) {
+					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_GRIMRING) && (g_current_fight_id == FIGHT_ID_F144)) {
 						damage_lo += 5;
 						damage_hi += 5;
 					}
@@ -712,7 +712,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 			} else if (selected == FIG_ACTION_COMPUTER_FIGHT) {
 				/* COMPUTER FIGHT / COMPUTERKAMPF */
 
-				if (g_current_fight_no != FIGHTS_F144) {
+				if (g_current_fight_id != FIGHT_ID_F144) {
 
 					call_mouse();
 
@@ -842,7 +842,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 	}
 
 	/* final fight vs. Orkchampion */
-	if ((g_current_fight_no == FIGHTS_F144) &&
+	if ((g_current_fight_id == FIGHT_ID_F144) &&
 		(get_hero_index(gs_main_acting_hero) != hero_pos) &&
 		((hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
 			(hero->action_id == FIG_ACTION_RANGE_ATTACK) ||

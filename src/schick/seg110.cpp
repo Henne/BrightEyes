@@ -438,10 +438,10 @@ void tevent_031(void)
 			{
 				/* talent test failed */
 				g_fig_initiative = 1;
-				do_fight(FIGHTS_F031);
+				do_fight(FIGHT_ID_F031);
 			}
 		} else {
-			do_fight(FIGHTS_F031);
+			do_fight(FIGHT_ID_F031);
 		}
 
 		gs_tevent031_flag = 1;
@@ -516,10 +516,10 @@ void tevent_035(void)
 			{
 				/* talent test failed */
 				g_fig_initiative = 1;
-				do_fight(FIGHTS_F035);
+				do_fight(FIGHT_ID_F035);
 			}
 		} else {
-			do_fight(FIGHTS_F035);
+			do_fight(FIGHT_ID_F035);
 		}
 
 		gs_tevent035_flag = 1;
@@ -727,7 +727,7 @@ void tevent_046(void)
 
 			g_fig_discard = 1;
 
-			TRV_fight_event(FIGHTS_F046, 46);
+			TRV_fight_event(FIGHT_ID_F046, 46);
 
 			do {
 				answer = GUI_radio(get_tx2(49), 2, get_tx2(50), get_tx2(51));

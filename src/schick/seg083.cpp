@@ -216,7 +216,7 @@ signed int DNG08_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,7,SOUTH);
 			g_fig_escape_position[EAST] = DNG_POS_DIR(0,6,3,EAST);
 
-			do_fight(FIGHTS_F108_3B);
+			do_fight(FIGHT_ID_F108_3B);
 		}
 
 	} else if (target_pos == DNG_POS(0,1,4) && target_pos != gs_dng_handled_pos && !gs_dng08_bundles_done)
@@ -232,7 +232,7 @@ signed int DNG08_handler(void)
 			g_fig_escape_position[NORTH] = (g_fig_escape_position[SOUTH] = ( g_fig_escape_position[WEST] = (DNG_POS_DIR(0,2,7,SOUTH))));
 			g_fig_escape_position[EAST] = (DNG_POS_DIR(0,6,3,EAST));
 
-			do_fight(FIGHTS_F108_3B);
+			do_fight(FIGHT_ID_F108_3B);
 		}
 
 

@@ -329,7 +329,7 @@ signed int DNG03_handler(void)
 
 			} while (i != -1);
 
-			do_fight(FIGHTS_F051_14C);
+			do_fight(FIGHT_ID_F051_14C);
 		}
 
 	} else if (target_pos == DNG_POS(1,1,1) && target_pos != gs_dng_handled_pos &&

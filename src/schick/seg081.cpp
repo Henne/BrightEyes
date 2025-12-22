@@ -420,7 +420,7 @@ signed int DNG06_handler(void)
 		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,6,14,WEST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(1,13,13,NORTH);
 
-		if (!do_fight(FIGHTS_F094_19))
+		if (!do_fight(FIGHT_ID_F094_19))
 		{
 			gs_dng06_fight19_flag = 1;
 		}
@@ -457,7 +457,7 @@ signed int DNG06_handler(void)
  */
 void DNG06_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_F094_22)
+	if (fight_id == FIGHT_ID_F094_22)
 	{
 		/* this is true all the time */
 		sprintf(g_dtp2,	get_tx(30), (!gs_estorik_known ? get_tx(32) : get_tx(31)));

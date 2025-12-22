@@ -51,7 +51,7 @@ static signed int g_fig_all_heroes_withdrawn = 0; // ds:0x5f14
 signed int g_max_enemies = 0; // ds:0x5f16, an upper bound for the number of enemies
 static const char g_str_error_on_obj_malloc[23] = "ERROR ON OBJECT MALLOC"; // ds:0x5f18
 
-signed int g_current_fight_no;		// ds:0xe316
+signed int g_current_fight_id;		// ds:0xe316
 signed int g_autofight;			// ds:0xe318
 signed int g_fig_dropped_weapons[30];	// ds:0xe31a
 
@@ -940,7 +940,7 @@ signed int do_fight(const signed int fight_id)
 
 	g_timers_disabled = 1;
 
-	g_current_fight_no = fight_id;
+	g_current_fight_id = fight_id;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
@@ -1014,13 +1014,13 @@ signed int do_fight(const signed int fight_id)
 	disable_ani();
 	call_mouse_bg();
 
-	if (g_scenario_buf->bg_id > 3) {
+	if (g_scenario_buf->fig_background_id > FIG_BACKGROUND_ID_3) {
 
-		load_fightbg(g_scenario_buf->bg_id + 197);
+		load_fightbg(g_scenario_buf->fig_background_id + 197);
 
 	} else {
 
-		load_fightbg(g_scenario_buf->bg_id + 1);
+		load_fightbg(g_scenario_buf->fig_background_id + 1);
 
 	}
 
@@ -1068,7 +1068,7 @@ signed int do_fight(const signed int fight_id)
 				FIG_latecomers();
 			}
 
-			if ((fight_id == FIGHTS_DFIN28) && (g_fight_round >= 10)) {
+			if ((fight_id == FIGHT_ID_DFIN28) && (g_fight_round >= 10)) {
 
 				/* This fight ends after 9 rounds */
 				g_in_fight = 0;
@@ -1111,7 +1111,7 @@ signed int do_fight(const signed int fight_id)
 
 			/* GAME_STATE is neither GAME_STATE_FIGQUIT nor GAME_STATE_MAIN. Does that mean that the fight is lost?? */
 
-			if ((fight_id != FIGHTS_F144) && count_heroes_available()) {
+			if ((fight_id != FIGHT_ID_F144) && count_heroes_available()) {
 
 				g_game_state = GAME_STATE_MAIN;
 

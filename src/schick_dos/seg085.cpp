@@ -218,7 +218,7 @@ signed int DNG10_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,10,13,NORTH);
 			gs_dng_handled_pos = 0;
 
-			if (!do_fight(FIGHTS_F129_17)) {
+			if (!do_fight(FIGHT_ID_F129_17)) {
 				gs_dng10_heshtot = 1;
 			}
 
@@ -270,7 +270,7 @@ signed int DNG10_handler(void)
 		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,12,3,EAST);
 		g_fig_discard = 1;
 
-		do_fight(FIGHTS_F129_21);
+		do_fight(FIGHT_ID_F129_21);
 
 	} else if (target_pos == DNG_POS(1,1,12) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
 	{
@@ -283,7 +283,7 @@ signed int DNG10_handler(void)
 		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,9,10,NORTH);
 		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,9,10,NORTH);
 
-		do_fight(FIGHTS_F129_29);
+		do_fight(FIGHT_ID_F129_29);
 
 	} else if (target_pos == DNG_POS(2,12,12) && target_pos != gs_dng_handled_pos)
 	{
