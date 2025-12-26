@@ -14,7 +14,7 @@ static enum {
 	D4_BUG = 0x0f
 };
 
-struct monster monster_dat[79] = {
+struct monster monster_dat[MONSTER_ID__END + 1] = {
 	{ MONSTER_ID_NONE,
 		0,
 		0,
