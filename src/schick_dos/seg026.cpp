@@ -1114,16 +1114,16 @@ signed int read_chr_temp(char *fname, const signed int hero_pos, const signed in
 
 		if (hero->sex == 1) {
 
-			hero->sprite_id = hero->typus + 11;
+			hero->actor_sprite_id = hero->typus + 11;
 
-			if (hero->sprite_id > 21) {
-				hero->sprite_id = 21;
+			if (hero->actor_sprite_id > 21) {
+				hero->actor_sprite_id = 21;
 			}
 		} else {
-			hero->sprite_id = hero->typus;
+			hero->actor_sprite_id = hero->typus;
 
-			if (hero->sprite_id > 10) {
-				hero->sprite_id = 10;
+			if (hero->actor_sprite_id > 10) {
+				hero->actor_sprite_id = 10;
 			}
 		}
 

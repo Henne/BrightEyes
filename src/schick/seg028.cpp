@@ -533,14 +533,14 @@ void load_npc(const signed int index)
 
 	if (npc->sex == 1) {
 		/* female */
-		npc->sprite_id = npc->typus + 11;
-		if (npc->sprite_id > 21)
-			npc->sprite_id = 21;
+		npc->actor_sprite_id = npc->typus + 11;
+		if (npc->actor_sprite_id > 21)
+			npc->actor_sprite_id = 21;
 	} else {
 		/* male */
-		npc->sprite_id = npc->typus;
-		if (npc->sprite_id > 10)
-			npc->sprite_id = 10;
+		npc->actor_sprite_id = npc->typus;
+		if (npc->actor_sprite_id > 10)
+			npc->actor_sprite_id = 10;
 	}
 }
 

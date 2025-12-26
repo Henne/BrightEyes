@@ -359,7 +359,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 	if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) /* actor is an enemy */
 	{
 		actor_enemy_ptr = actor_ptr;
-		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->sprite_id, g_double_size_sprite_id_table))
+		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->actor_sprite_id, g_double_size_actor_sprite_id_table))
 		{
 			double_size = 1;
 		}

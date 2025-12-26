@@ -201,7 +201,7 @@ void buy_screen(void)
 						g_pic_copy.y2 = array5.a[l_di] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.image_num = g_itemsdat[j].gfx;
+						nvf.image_num = g_itemsdat[j].item_sprite_id;
 
 						process_nvf_extraction(&nvf);
 

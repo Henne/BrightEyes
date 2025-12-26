@@ -220,7 +220,7 @@ void FIG_damage_enemy(struct enemy_sheet *enemy, const signed int damage, const 
 
 			/* slaying Gorah makes everyone flee except Heshthot */
 			for (i = 0; i < 20; i++) {
-				if (g_enemy_sheets[i].sprite_id != ACTOR_SPRITE_ID_HESHTHOT) {
+				if (g_enemy_sheets[i].actor_sprite_id != ACTOR_SPRITE_ID_HESHTHOT) {
 					g_enemy_sheets[i].flags.scared = 1;
 				}
 			}
@@ -250,7 +250,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	signed int x_target;
 	signed int y_target;
 	signed int hero_idx;
-	signed char enemy_sprite_id;
+	signed char enemy_actor_sprite_id;
 	struct enemy_sheet* enemy_p;
 	signed int weapon_type;
 
@@ -352,9 +352,9 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 	if (!attack_hero) {
 
-		enemy_sprite_id = enemy_p->sprite_id;
+		enemy_actor_sprite_id = enemy_p->actor_sprite_id;
 
-		if ((right_hand == ITEM_ID_SAEBEL__MAGIC) && (enemy_sprite_id == ACTOR_SPRITE_ID_SKELETT || enemy_sprite_id == ACTOR_SPRITE_ID_ZOMBIE)) {
+		if ((right_hand == ITEM_ID_SAEBEL__MAGIC) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_SKELETT || enemy_actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE)) {
 
 			/* magic SABRE gives Damage + 1 to SKELETONS and ZOMBIES */
 			damage++;
@@ -381,12 +381,12 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			give_new_item_to_hero(hero, ITEM_ID_MENGBILAR, 1, 1); /* TODO: what if no free knapsack slot? */
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_ID_MENGBILAR), hero);
 
-		} else if ((right_hand == ITEM_ID_SILBERSTREITKOLBEN) && (enemy_sprite_id == ACTOR_SPRITE_ID_SKELETT)) {
+		} else if ((right_hand == ITEM_ID_SILBERSTREITKOLBEN) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_SKELETT)) {
 
 			/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
 			damage += 4;
 
-		} else if ((right_hand == ITEM_ID_GRIMRING) && (enemy_sprite_id == ACTOR_SPRITE_ID_ORK)) {
+		} else if ((right_hand == ITEM_ID_GRIMRING) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_ORK)) {
 
 			/* DAS SCHWERT GRIMRING gives Damage + 5 to ORCS */
 			damage += 5;
@@ -433,7 +433,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 		damage *= 2;
 	}
 
-	if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (attack_hero == 0) && (enemy_p->sprite_id == ACTOR_SPRITE_ID_ORK))
+	if (gs_tevent071_orcstatue && (hero->typus == HERO_TYPE_ZWERG) && (attack_hero == 0) && (enemy_p->actor_sprite_id == ACTOR_SPRITE_ID_ORK))
 	{
 		damage++;
 	}
@@ -502,14 +502,14 @@ signed int FIG_get_enemy_attack_damage(const struct enemy_sheet *attacker, struc
 		damage -= hero->rs_bonus;
 
 		/* armor bonus against skeletons and zombies */
-		if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_ID_KETTENHEMD__CURSED && ((attacker->sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->sprite_id == ACTOR_SPRITE_ID_SKELETT)))
+		if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_ID_KETTENHEMD__CURSED && ((attacker->actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT)))
 		{
 			damage -= 3;
 		}
 
 		/* get position of Totenkopfguertel/Skullbelt */
 
-		if ( ((pos = inv_slot_of_item(hero, ITEM_ID_TOTENKOPFGUERTEL)) != -1) && ((attacker->sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->sprite_id == ACTOR_SPRITE_ID_SKELETT))) {
+		if ( ((pos = inv_slot_of_item(hero, ITEM_ID_TOTENKOPFGUERTEL)) != -1) && ((attacker->actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT))) {
 
 			/* no damage for the hero who has it */
 			damage = 0;

@@ -411,7 +411,7 @@ STATIC_ASSERT(sizeof(struct struct_dialog_state) == 8, struct_struct_dialog_stat
 #endif
 struct monster {
 	int8_t monster_id;
-	int8_t sprite_id;
+	int8_t actor_sprite_id;
 	int8_t rs;
 	uint16_t attrib[7];	/* dice template */
 	uint16_t le;		/* dice template */
@@ -466,7 +466,7 @@ struct struct_fighter {
 	signed char object_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
 	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */
 				/* strangly, at one position in seg039.cpp the value 2 is written */
-	signed char sprite_id;	/* 0x12c0, 0x1531, 0x1210 */
+	signed char actor_sprite_id;	/* 0x12c0, 0x1531, 0x1210 */
 	uint8_t* gfxbuf;
 	struct struct_fighter* next;	/* TODO: These should located at the start of the structure */
 	struct struct_fighter* prev;
@@ -681,7 +681,7 @@ STATIC_ASSERT(sizeof(struct item_flags) == 1, struct_item_flags_needs_to_be_1_by
 struct item_stats {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
 	/* structure of the entries of ITEMS.DAT */
-	int16_t gfx;
+	int16_t item_sprite_id;
 	struct item_flags flags;/* bitfield */
 	int8_t subtype;
 		/* meaning depends on item type set in flags.
@@ -808,7 +808,7 @@ struct enemy_flags {
 
 struct enemy_sheet {
 	int8_t monster_id;
-	int8_t sprite_id;
+	int8_t actor_sprite_id;
 	int8_t rs;
 	int8_t attrib[14]; // used in steps of 2 for positive attribs only
 	int16_t le_orig;
@@ -980,7 +980,7 @@ extern const int8_t g_gfxtab_figures_main[125][5];			//ds:0x12c0; seg005, seg006
 extern const struct point8s g_gfxtab_offsets_main[125][5];		//ds:0x1531; seg005, seg039, seg043
 extern const signed int g_nvftab_figures_dead[22];	//ds:0x1a13; seg005, seg039
 extern int16_t *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
-extern signed char g_double_size_sprite_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
+extern signed char g_double_size_actor_sprite_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
 extern const signed int g_weaponani_table[72];		//ds:0x25fe; seg044
 extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093

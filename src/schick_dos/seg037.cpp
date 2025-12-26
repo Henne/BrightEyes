@@ -90,11 +90,11 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	signed int i;
 
 	g_fig_anisheets[1][0] = 0;
-	g_fig_anisheets[1][242] = enemy->sprite_id;
+	g_fig_anisheets[1][242] = enemy->actor_sprite_id;
 
 	sheet_ptr = &g_fig_anisheets[1][1];
 	i = 0;
-	ani_index_ptr = g_gfx_ani_index[enemy->sprite_id];
+	ani_index_ptr = g_gfx_ani_index[enemy->actor_sprite_id];
 
 	while (g_fig_move_pathdir[i] != -1) {
 
@@ -158,7 +158,7 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	g_fig_cb_marker_id = -1;
 	FIG_set_sheet(enemy->fighter_id, 1);
 
-	if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table)) {
+	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 243);
 
@@ -753,7 +753,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 
 					flag = 1;
 
-					if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table))
+					if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table))
 					{
 
 						target = get_cb_val(x - diff.offset[i].x, y - diff.offset[i].y);

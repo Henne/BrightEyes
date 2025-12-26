@@ -4883,12 +4883,12 @@ void sub_hero_le(struct struct_hero *hero, const signed int le)
 
 					fighter = FIG_get_fighter(hero->fighter_id);
 
-					fighter->nvf_no = g_nvftab_figures_unconscious[hero->sprite_id] + hero->viewdir;
+					fighter->nvf_no = g_nvftab_figures_unconscious[hero->actor_sprite_id] + hero->viewdir;
 
 					fighter->reload = -1;
 
-					fighter->offsetx = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].x;
-					fighter->offsety = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].y;
+					fighter->offsetx = g_gfxtab_offsets_unconscious[hero->actor_sprite_id][hero->viewdir].x;
+					fighter->offsety = g_gfxtab_offsets_unconscious[hero->actor_sprite_id][hero->viewdir].y;
 
 
 					FIG_add_msg(7, 0);
@@ -4959,7 +4959,7 @@ void add_hero_le(struct struct_hero *hero, const signed int le)
 
 				if (ret != -1) {
 
-					fighter->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][ret][hero->viewdir];
+					fighter->nvf_no = g_nvftab_figures_rangeweapon[hero->actor_sprite_id - 1][ret][hero->viewdir];
 				} else {
 					fighter->nvf_no = hero->viewdir;
 				}

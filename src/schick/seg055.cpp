@@ -219,7 +219,7 @@ void do_merchant(void)
 	item_selector_pos_tail = 0;
 	item_selector_pos_tail_2 = ITEM_ID_ARMOR_POS_HEAD;
 
-	while (g_itemsdat[item_selector_pos].gfx != -1) {
+	while (g_itemsdat[item_selector_pos].item_sprite_id != -1) {
 
 		if (merchant->sortiment <= g_itemsdat[item_selector_pos].commonness) {
 

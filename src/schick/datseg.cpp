@@ -1901,7 +1901,7 @@ int16_t *g_gfx_ani_index[41] = {
 	g_gfx_ani_descriptions_17,
 	g_gfx_ani_descriptions_28,
 }; // ds:0x2555; uint8_t*
-signed char g_double_size_sprite_id_table[5] = { ACTOR_SPRITE_ID_TIGER, ACTOR_SPRITE_ID_HUND, ACTOR_SPRITE_ID_WOLF, ACTOR_SPRITE_ID_LOEWE, -1 }; // ds:0x25f9
+signed char g_double_size_actor_sprite_id_table[5] = { ACTOR_SPRITE_ID_TIGER, ACTOR_SPRITE_ID_HUND, ACTOR_SPRITE_ID_WOLF, ACTOR_SPRITE_ID_LOEWE, -1 }; // ds:0x25f9
 const signed int g_weaponani_table[72] = {
 	0x0000, 0x0003, 0x0006, 0x0009, 0x000c, 0x000f, 0x0012, 0x0015,
 	0x0001, 0x0004, 0x0007, 0x000a, 0x000d, 0x0010, 0x0013, 0x0016,

@@ -462,7 +462,7 @@ void status_menu(signed int hero_pos)
 						nvf.compression_type = 0;
 						nvf.width = &width;
 						nvf.height = &height;
-						nvf.image_num = g_itemsdat[hero2->inventory[g_statuspage_sel_inv_slot_3].item_id].gfx;
+						nvf.image_num = g_itemsdat[hero2->inventory[g_statuspage_sel_inv_slot_3].item_id].item_sprite_id;
 						process_nvf_extraction(&nvf);
 
 						make_ggst_cursor(g_icon);

@@ -49,7 +49,7 @@ struct monster monster_dat[79] = {
 
 	{ // 1
 		MONSTER_ID_OGER,                    // monster_id
-		ACTOR_SPRITE_ID_OGER,               // sprite_id
+		ACTOR_SPRITE_ID_OGER,               // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 17),       // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 1),        // attrib_kl
@@ -82,7 +82,7 @@ struct monster monster_dat[79] = {
 
 	{ // 2
 		MONSTER_ID_ORK__LVL_1,              // monster_id
-		ACTOR_SPRITE_ID_ORK,                // sprite_id
+		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 4),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -115,7 +115,7 @@ struct monster monster_dat[79] = {
 
 	{ // 3
 		MONSTER_ID_GOBLIN__LVL_1,           // monster_id
-		ACTOR_SPRITE_ID_GOBLIN,             // sprite_id
+		ACTOR_SPRITE_ID_GOBLIN,             // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 2),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 3),        // attrib_kl
@@ -148,7 +148,7 @@ struct monster monster_dat[79] = {
 
 	{ // 4
 		MONSTER_ID_HESHTHOT__LVL_1,         // monster_id
-		ACTOR_SPRITE_ID_HESHTHOT,           // sprite_id
+		ACTOR_SPRITE_ID_HESHTHOT,           // actor_sprite_id
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -181,7 +181,7 @@ struct monster monster_dat[79] = {
 
 	{ // 5
 		MONSTER_ID_SAEBELZAHNTIGER,         // monster_id
-		ACTOR_SPRITE_ID_TIGER,              // sprite_id
+		ACTOR_SPRITE_ID_TIGER,              // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(22),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -214,7 +214,7 @@ struct monster monster_dat[79] = {
 
 	{ // 6
 		MONSTER_ID_SKELETT__LVL_1,          // monster_id
-		ACTOR_SPRITE_ID_SKELETT,            // sprite_id
+		ACTOR_SPRITE_ID_SKELETT,            // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -247,7 +247,7 @@ struct monster monster_dat[79] = {
 
 	{ // 7
 		MONSTER_ID_WALDSCHRAT,              // monster_id
-		ACTOR_SPRITE_ID_WALDSCHRAT,         // sprite_id
+		ACTOR_SPRITE_ID_WALDSCHRAT,         // actor_sprite_id
 		6,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 17),       // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 2),        // attrib_kl
@@ -280,7 +280,7 @@ struct monster monster_dat[79] = {
 
 	{ // 8
 		MONSTER_ID_MUMIE__LVL_1,            // monster_id
-		ACTOR_SPRITE_ID_MUMIE,              // sprite_id
+		ACTOR_SPRITE_ID_MUMIE,              // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -313,7 +313,7 @@ struct monster monster_dat[79] = {
 
 	{ // 9
 		MONSTER_ID_HARPYIE,                 // monster_id
-		ACTOR_SPRITE_ID_HARPYIE,            // sprite_id
+		ACTOR_SPRITE_ID_HARPYIE,            // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(18),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -346,7 +346,7 @@ struct monster monster_dat[79] = {
 
 	{ // 10
 		MONSTER_ID_WALDSPINNE,              // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // sprite_id
+		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(7),     // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -379,7 +379,7 @@ struct monster monster_dat[79] = {
 
 	{ // 11
 		MONSTER_ID_GROSSE_SCHROETER,        // monster_id
-		ACTOR_SPRITE_ID_KAEFER,             // sprite_id
+		ACTOR_SPRITE_ID_KAEFER,             // actor_sprite_id
 		5,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -412,7 +412,7 @@ struct monster monster_dat[79] = {
 
 	{ // 12
 		MONSTER_ID_PIRAT__LVL_1,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -450,7 +450,7 @@ struct monster monster_dat[79] = {
 
 	{ // 13
 		MONSTER_ID_STEUERMANN,              // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -488,7 +488,7 @@ struct monster monster_dat[79] = {
 
 	{ // 14
 		MONSTER_ID_KAPITAEN,                // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -526,7 +526,7 @@ struct monster monster_dat[79] = {
 
 	{ // 15
 		MONSTER_ID_STREUNER__LVL_1,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // sprite_id
+		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -564,7 +564,7 @@ struct monster monster_dat[79] = {
 
 	{ // 16
 		MONSTER_ID_ZOMBIE,                  // monster_id
-		ACTOR_SPRITE_ID_ZOMBIE,             // sprite_id
+		ACTOR_SPRITE_ID_ZOMBIE,             // actor_sprite_id
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -597,7 +597,7 @@ struct monster monster_dat[79] = {
 
 	{ // 17
 		MONSTER_ID_HESHTHOT__LVL_2,         // monster_id
-		ACTOR_SPRITE_ID_HESHTHOT,           // sprite_id
+		ACTOR_SPRITE_ID_HESHTHOT,           // actor_sprite_id
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -630,7 +630,7 @@ struct monster monster_dat[79] = {
 
 	{ // 18
 		MONSTER_ID_DRUIDE__LVL_2,           // monster_id
-		ACTOR_SPRITE_ID_DRUIDE__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_DRUIDE__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_kl
@@ -663,7 +663,7 @@ struct monster monster_dat[79] = {
 
 	{ // 19
 		MONSTER_ID_DRUIDE__LVL_3,           // monster_id
-		ACTOR_SPRITE_ID_DRUIDE__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_DRUIDE__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_kl
@@ -696,7 +696,7 @@ struct monster monster_dat[79] = {
 
 	{ // 20
 		MONSTER_ID_THORWALER__LVL_1,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // sprite_id
+		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -734,7 +734,7 @@ struct monster monster_dat[79] = {
 
 	{ // 21
 		MONSTER_ID_THORWALER__LVL_3,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // sprite_id
+		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -772,7 +772,7 @@ struct monster monster_dat[79] = {
 
 	{ // 22
 		MONSTER_ID_THORWALER__LVL_5,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // sprite_id
+		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -805,7 +805,7 @@ struct monster monster_dat[79] = {
 
 	{ // 23
 		MONSTER_ID_THORWALER__LVL_6,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // sprite_id
+		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -838,7 +838,7 @@ struct monster monster_dat[79] = {
 
 	{ // 24
 		MONSTER_ID_GOBLIN__LVL_2,           // monster_id
-		ACTOR_SPRITE_ID_GOBLIN,             // sprite_id
+		ACTOR_SPRITE_ID_GOBLIN,             // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 3),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 3),        // attrib_kl
@@ -871,7 +871,7 @@ struct monster monster_dat[79] = {
 
 	{ // 25
 		MONSTER_ID_GOBLIN__LVL_3,           // monster_id
-		ACTOR_SPRITE_ID_GOBLIN,             // sprite_id
+		ACTOR_SPRITE_ID_GOBLIN,             // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 4),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 4),        // attrib_kl
@@ -904,7 +904,7 @@ struct monster monster_dat[79] = {
 
 	{ // 26
 		MONSTER_ID_ORK__LVL_2,              // monster_id
-		ACTOR_SPRITE_ID_ORK,                // sprite_id
+		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 5),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -937,7 +937,7 @@ struct monster monster_dat[79] = {
 
 	{ // 27
 		MONSTER_ID_ORK__LVL_3,              // monster_id
-		ACTOR_SPRITE_ID_ORK,                // sprite_id
+		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -970,7 +970,7 @@ struct monster monster_dat[79] = {
 
 	{ // 28
 		MONSTER_ID_PIRAT__LVL_2,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1008,7 +1008,7 @@ struct monster monster_dat[79] = {
 
 	{ // 29
 		MONSTER_ID_PIRAT__LVL_3,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1046,7 +1046,7 @@ struct monster monster_dat[79] = {
 
 	{ // 30
 		MONSTER_ID_STREUNER__LVL_2,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // sprite_id
+		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1084,7 +1084,7 @@ struct monster monster_dat[79] = {
 
 	{ // 31
 		MONSTER_ID_STREUNER__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // sprite_id
+		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1122,7 +1122,7 @@ struct monster monster_dat[79] = {
 
 	{ // 32
 		MONSTER_ID_STREUNER__LVL_4,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // sprite_id
+		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1160,7 +1160,7 @@ struct monster monster_dat[79] = {
 
 	{ // 33
 		MONSTER_ID_SKELETT__LVL_2,          // monster_id
-		ACTOR_SPRITE_ID_SKELETT,            // sprite_id
+		ACTOR_SPRITE_ID_SKELETT,            // actor_sprite_id
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1193,7 +1193,7 @@ struct monster monster_dat[79] = {
 
 	{ // 34
 		MONSTER_ID_FOLTERKNECHT,            // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // sprite_id
+		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1231,7 +1231,7 @@ struct monster monster_dat[79] = {
 
 	{ // 35
 		MONSTER_ID_GRIMWOLF__LVL_1,         // monster_id
-		ACTOR_SPRITE_ID_WOLF,               // sprite_id
+		ACTOR_SPRITE_ID_WOLF,               // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(9),     // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1264,7 +1264,7 @@ struct monster monster_dat[79] = {
 
 	{ // 36
 		MONSTER_ID_GRIMWOLF__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_WOLF,               // sprite_id
+		ACTOR_SPRITE_ID_WOLF,               // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1297,7 +1297,7 @@ struct monster monster_dat[79] = {
 
 	{ // 37
 		MONSTER_ID_HOEHLENSPINNE__LVL_1,    // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // sprite_id
+		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1330,7 +1330,7 @@ struct monster monster_dat[79] = {
 
 	{ // 38
 		MONSTER_ID_HOEHLENSPINNE__LVL_2,    // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // sprite_id
+		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1363,7 +1363,7 @@ struct monster monster_dat[79] = {
 
 	{ // 39
 		MONSTER_ID_HOEHLENSPINNE__LVL_3,    // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // sprite_id
+		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1396,7 +1396,7 @@ struct monster monster_dat[79] = {
 
 	{ // 40
 		MONSTER_ID_KRIEGER,                 // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // sprite_id
+		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1434,7 +1434,7 @@ struct monster monster_dat[79] = {
 
 	{ // 41
 		MONSTER_ID_STADTGARDIST__LVL_3,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // sprite_id
+		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1467,7 +1467,7 @@ struct monster monster_dat[79] = {
 
 	{ // 42
 		MONSTER_ID_STADTGARDIST__LVL_4,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // sprite_id
+		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1500,7 +1500,7 @@ struct monster monster_dat[79] = {
 
 	{ // 43
 		MONSTER_ID_STADTGARDIST__LVL_5,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // sprite_id
+		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1533,7 +1533,7 @@ struct monster monster_dat[79] = {
 
 	{ // 44
 		MONSTER_ID_KRIEGSVETERAN,           // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // sprite_id
+		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(15),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -1566,7 +1566,7 @@ struct monster monster_dat[79] = {
 
 	{ // 45
 		MONSTER_ID_MUMIE__LVL_2,            // monster_id
-		ACTOR_SPRITE_ID_MUMIE,              // sprite_id
+		ACTOR_SPRITE_ID_MUMIE,              // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1599,7 +1599,7 @@ struct monster monster_dat[79] = {
 
 	{ // 46
 		MONSTER_ID_MAGIER__LVL_3,           // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1632,7 +1632,7 @@ struct monster monster_dat[79] = {
 
 	{ // 47
 		MONSTER_ID_MAGIER__LVL_6,           // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1665,7 +1665,7 @@ struct monster monster_dat[79] = {
 
 	{ // 48
 		MONSTER_ID_ZAUBERER__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_ZAUBERER,           // sprite_id
+		ACTOR_SPRITE_ID_ZAUBERER,           // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1698,7 +1698,7 @@ struct monster monster_dat[79] = {
 
 	{ // 49
 		MONSTER_ID_ZAUBERER__LVL_6,         // monster_id
-		ACTOR_SPRITE_ID_ZAUBERER,           // sprite_id
+		ACTOR_SPRITE_ID_ZAUBERER,           // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1731,7 +1731,7 @@ struct monster monster_dat[79] = {
 
 	{ // 50
 		MONSTER_ID_ZWERG,                   // monster_id
-		ACTOR_SPRITE_ID_ZWERG__MALE,        // sprite_id
+		ACTOR_SPRITE_ID_ZWERG__MALE,        // actor_sprite_id
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_kl
@@ -1764,7 +1764,7 @@ struct monster monster_dat[79] = {
 
 	{ // 51
 		MONSTER_ID_LINDWURM,                // monster_id
-		ACTOR_SPRITE_ID_HARPYIE,            // sprite_id
+		ACTOR_SPRITE_ID_HARPYIE,            // actor_sprite_id
 		6,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(18),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(17),    // attrib_kl
@@ -1797,7 +1797,7 @@ struct monster monster_dat[79] = {
 
 	{ // 52
 		MONSTER_ID_HOEHLENDRACHE,           // monster_id
-		ACTOR_SPRITE_ID_HARPYIE,            // sprite_id
+		ACTOR_SPRITE_ID_HARPYIE,            // actor_sprite_id
 		6,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(18),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_kl
@@ -1830,7 +1830,7 @@ struct monster monster_dat[79] = {
 
 	{ // 53
 		MONSTER_ID_KULTIST__LVL_2,          // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // sprite_id
+		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1868,7 +1868,7 @@ struct monster monster_dat[79] = {
 
 	{ // 54
 		MONSTER_ID_KULTIST__LVL_3__1,       // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // sprite_id
+		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1906,7 +1906,7 @@ struct monster monster_dat[79] = {
 
 	{ // 55
 		MONSTER_ID_KULTIST__LVL_3__2,       // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // sprite_id
+		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1944,7 +1944,7 @@ struct monster monster_dat[79] = {
 
 	{ // 56
 		MONSTER_ID_KULTIST__LVL_4,          // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // sprite_id
+		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1977,7 +1977,7 @@ struct monster monster_dat[79] = {
 
 	{ // 57
 		MONSTER_ID_PRIESTER__LVL_2,         // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_kl
@@ -2010,7 +2010,7 @@ struct monster monster_dat[79] = {
 
 	{ // 58
 		MONSTER_ID_PRIESTER__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_kl
@@ -2043,7 +2043,7 @@ struct monster monster_dat[79] = {
 
 	{ // 59
 		MONSTER_ID_HOHEPRIESTER,            // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -2076,7 +2076,7 @@ struct monster monster_dat[79] = {
 
 	{ // 60
 		MONSTER_ID_ESTORIK,                 // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // sprite_id
+		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2109,7 +2109,7 @@ struct monster monster_dat[79] = {
 
 	{ // 61
 		MONSTER_ID_PIRATENBOSS,             // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2142,7 +2142,7 @@ struct monster monster_dat[79] = {
 
 	{ // 62
 		MONSTER_ID_PIRAT__LVL_5,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2175,7 +2175,7 @@ struct monster monster_dat[79] = {
 
 	{ // 63
 		MONSTER_ID_MAGIER__LVL_4,           // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(15),    // attrib_kl
@@ -2208,7 +2208,7 @@ struct monster monster_dat[79] = {
 
 	{ // 64
 		MONSTER_ID_ZWERGENVETERAN,          // monster_id
-		ACTOR_SPRITE_ID_ZWERG__MALE,        // sprite_id
+		ACTOR_SPRITE_ID_ZWERG__MALE,        // actor_sprite_id
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(15),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_kl
@@ -2241,7 +2241,7 @@ struct monster monster_dat[79] = {
 
 	{ // 65
 		MONSTER_ID_RAEUBER__LVL_2,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // sprite_id
+		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -2279,7 +2279,7 @@ struct monster monster_dat[79] = {
 
 	{ // 66
 		MONSTER_ID_RAEUBER__LVL_3,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // sprite_id
+		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -2317,7 +2317,7 @@ struct monster monster_dat[79] = {
 
 	{ // 67
 		MONSTER_ID_RAEUBER__LVL_5,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // sprite_id
+		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2350,7 +2350,7 @@ struct monster monster_dat[79] = {
 
 	{ // 68
 		MONSTER_ID_RAEUBER__LVL_6,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // sprite_id
+		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2383,7 +2383,7 @@ struct monster monster_dat[79] = {
 
 	{ // 69
 		MONSTER_ID_RAEUBER__LVL_8,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // sprite_id
+		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2416,7 +2416,7 @@ struct monster monster_dat[79] = {
 
 	{ // 70
 		MONSTER_ID_GORAH,                   // monster_id
-		ACTOR_SPRITE_ID_DRUIDE__MALE,       // sprite_id
+		ACTOR_SPRITE_ID_DRUIDE__MALE,       // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -2449,7 +2449,7 @@ struct monster monster_dat[79] = {
 
 	{ // 71
 		MONSTER_ID_STEPPENHUND,             // monster_id
-		ACTOR_SPRITE_ID_HUND,               // sprite_id
+		ACTOR_SPRITE_ID_HUND,               // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(5),     // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -2482,7 +2482,7 @@ struct monster monster_dat[79] = {
 
 	{ // 72
 		MONSTER_ID_ORKCHAMPION,             // monster_id
-		ACTOR_SPRITE_ID_ORK,                // sprite_id
+		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -2515,7 +2515,7 @@ struct monster monster_dat[79] = {
 
 	{ // 73
 		MONSTER_ID_PIRAT__LVL_10,           // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // sprite_id
+		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2548,7 +2548,7 @@ struct monster monster_dat[79] = {
 
 	{ // 74
 		MONSTER_ID_STADTGARDIST__LVL_2,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // sprite_id
+		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -2586,7 +2586,7 @@ struct monster monster_dat[79] = {
 
 	{ // 75
 		MONSTER_ID_WALDLOEWE,               // monster_id
-		ACTOR_SPRITE_ID_LOEWE,              // sprite_id
+		ACTOR_SPRITE_ID_LOEWE,              // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -2619,7 +2619,7 @@ struct monster monster_dat[79] = {
 
 	{ // 76
 		MONSTER_ID_SPINNENDAEMON,           // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // sprite_id
+		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -2658,7 +2658,7 @@ struct monster monster_dat[79] = {
 	 * It is not clear if this is a mistake, or if it was the intention to have the modified part "tot" (German: "dead"). */
 	{ // 77
 		MONSTER_ID_HESHTOT__WEAK,           // monster_id
-		ACTOR_SPRITE_ID_HESHTHOT,           // sprite_id
+		ACTOR_SPRITE_ID_HESHTHOT,           // actor_sprite_id
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl

@@ -563,7 +563,7 @@ void spell_ignifaxius(void)
 
 	/* damage doubles if the target is a mummy */
 	if ((get_spelluser()->target_object_id >= 10) &&
-			(g_enemy_sheets[get_spelluser()->target_object_id - 10].sprite_id == ACTOR_SPRITE_ID_MUMIE))
+			(g_enemy_sheets[get_spelluser()->target_object_id - 10].actor_sprite_id == ACTOR_SPRITE_ID_MUMIE))
 	{
 		damage *= 2;
 		mummy = 1;

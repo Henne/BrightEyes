@@ -201,7 +201,7 @@ void sell_screen(struct merchant_descr *merchant_descr)
 						g_pic_copy.y2 = array5.a[tmp] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.image_num = g_itemsdat[j].gfx;
+						nvf.image_num = g_itemsdat[j].item_sprite_id;
 
 						process_nvf_extraction(&nvf);
 

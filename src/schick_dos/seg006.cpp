@@ -500,9 +500,9 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 
 	p_enemy = &g_enemy_sheets[enemy_id - 10];
 
-	if (g_gfxtab_figures_main[p_enemy->sprite_id][0] != g_fight_figs_index) {
+	if (g_gfxtab_figures_main[p_enemy->actor_sprite_id][0] != g_fight_figs_index) {
 
-		nvf.src = (uint8_t*)load_fight_figs(g_gfxtab_figures_main[p_enemy->sprite_id][0]);
+		nvf.src = (uint8_t*)load_fight_figs(g_gfxtab_figures_main[p_enemy->actor_sprite_id][0]);
 		nvf.dst = p1;
 		nvf.image_num = 1;
 		nvf.compression_type = 0;
@@ -511,7 +511,7 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 
 		process_nvf_extraction(&nvf);
 
-		g_fight_figs_index = g_gfxtab_figures_main[p_enemy->sprite_id][0];
+		g_fight_figs_index = g_gfxtab_figures_main[p_enemy->actor_sprite_id][0];
 	}
 
 	/* save and set text colors */

@@ -323,7 +323,7 @@ void status_show(const signed int index)
 
 			nvf.dst = g_icon;
 			/* set no */
-			nvf.image_num = g_itemsdat[hero->inventory[i].item_id].gfx;
+			nvf.image_num = g_itemsdat[hero->inventory[i].item_id].item_sprite_id;
 
 			process_nvf_extraction(&nvf);
 

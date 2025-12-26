@@ -606,7 +606,7 @@ void FIG_do_round(void)
 							if (((struct enemy_flags)g_enemy_sheets[hero->target_object_id - 10].flags).dead)
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[hero->target_object_id - 10].sprite_id, g_double_size_sprite_id_table))
+								if (is_in_byte_array(g_enemy_sheets[hero->target_object_id - 10].actor_sprite_id, g_double_size_actor_sprite_id_table))
 								{
 									/* attacked dead enemy is double-size */
 									/* goal: remove tail part */
@@ -701,7 +701,7 @@ void FIG_do_round(void)
 							{
 
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[enemy->target_object_id - 10].sprite_id, g_double_size_sprite_id_table))
+								if (is_in_byte_array(g_enemy_sheets[enemy->target_object_id - 10].actor_sprite_id, g_double_size_actor_sprite_id_table))
 								{
 									/* attacked dead enemy is double-size */
 									/* goal: remove tail part */
@@ -752,7 +752,7 @@ void FIG_do_round(void)
 						if (enemy->flags.dead) { /* check 'dead' flag */
 
 							/* attacking enemy is dead because of critical attack failure */
-							if (is_in_byte_array(enemy->sprite_id, g_double_size_sprite_id_table)) {
+							if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 								/* attacking dead enemy is double-size */
 								/* goal: remove tail part */
 

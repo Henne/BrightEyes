@@ -582,7 +582,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 									ptr = FIG_get_fighter(hero->fighter_id);
 
 									if (rwt2 != -1) {
-										ptr->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][rwt2][hero->viewdir];
+										ptr->nvf_no = g_nvftab_figures_rangeweapon[hero->actor_sprite_id - 1][rwt2][hero->viewdir];
 									} else {
 										ptr->nvf_no = hero->viewdir;
 									}

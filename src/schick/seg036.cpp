@@ -109,10 +109,10 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	int16_t *ani_index_ptr;
 
 	g_fig_anisheets[0][0] = 0;
-	g_fig_anisheets[0][242] = hero->sprite_id;
+	g_fig_anisheets[0][242] = hero->actor_sprite_id;
 
 	sheet_ptr = &g_fig_anisheets[0][1];
-	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
+	ani_index_ptr = g_gfx_ani_index[hero->actor_sprite_id];
 
 	i = 0;
 

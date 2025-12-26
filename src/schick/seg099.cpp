@@ -299,7 +299,7 @@ void spell_band(void)
 		/* Set pointer to enemy target */
 		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
-		if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
+		if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			/* does not work on skeletons */
 			g_spell_special_aecost = -2;
 			return;
@@ -355,7 +355,7 @@ void spell_bannbaladin(void)
 		));
 	} else {
 
-		if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
+		if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			/* spell does not work on skeletons */
 			g_spell_special_aecost = -2;
 			return;
@@ -378,7 +378,7 @@ void spell_boeser_blick(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 
 		g_spell_special_aecost = -2;
 
@@ -412,7 +412,7 @@ void spell_grosse_ver(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 		g_spell_special_aecost = -2;
 		return;
 	} else {
@@ -470,7 +470,7 @@ void spell_horriphobus(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 
 		g_spell_special_aecost = -2;
 
@@ -517,7 +517,7 @@ void spell_somnigravis(void)
 		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 		/* this spell does not work on all kind of skeletons */
-		if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
+		if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			g_spell_special_aecost = -2;
 			return;
 		}
@@ -563,7 +563,7 @@ void spell_zwingtanz(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->sprite_id == ACTOR_SPRITE_ID_SKELETT) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 		g_spell_special_aecost = -2;
 	} else {
 
