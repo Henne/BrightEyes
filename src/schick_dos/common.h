@@ -1418,7 +1418,7 @@ enum {
 	LROUTE_ID__END                     = 60
 };
 
-enum {
+enum { // 1-based
 	/* High seas routes */
 	SEA_ROUTE_ID_THORWAL_PREM      =  1,
 	SEA_ROUTE_ID_PREM_HJALSING     =  2,
