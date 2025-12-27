@@ -25,20 +25,20 @@
 #include "seg108.h"
 
 static void (*g_use_item_handlers[14])(void) = {
-	NULL,
-	item_invoke_arcano_psychostabilils,
-	item_read_recipe,
-	item_read_document,
-	item_invoke_armatrutz,
-	item_invoke_flim_flam,
-	item_read_schuldbuch,
-	item_read_orkdokument,
-	item_apply_weapon_poison,
-	item_use_miasthmaticum,
-	item_use_hylailer_feuer,
-	item_read_spellbook_heptagon,
-	item_ignite,
-	item_use_beutel
+	NULL,                               // USABLE_ITEM_STATS_ID_NONE                  ==  0
+	item_invoke_arcano_psychostabilils, // USABLE_ITEM_STATS_ID_ARCANO_PSYCHOSTABILIS ==  1
+	item_read_recipe,                   // USABLE_ITEM_STATS_ID_RECIPE                ==  2
+	item_read_document,                 // USABLE_ITEM_STATS_ID_DOCUMENT              ==  3
+	item_invoke_armatrutz,              // USABLE_ITEM_STATS_ID_ARMATRUTZ             ==  4
+	item_invoke_flim_flam,              // USABLE_ITEM_STATS_ID_FLIM_FLAM             ==  5
+	item_read_schuldbuch,               // USABLE_ITEM_STATS_ID_SCHULDBUCH            ==  6
+	item_read_orkdokument,              // USABLE_ITEM_STATS_ID_ORKDOKUMENT           ==  7
+	item_apply_weapon_poison,           // USABLE_ITEM_STATS_ID_WEAPON_POISON         ==  8
+	item_use_miasthmaticum,             // USABLE_ITEM_STATS_ID_MIASTHMATICUM         ==  9
+	item_use_hylailer_feuer,            // USABLE_ITEM_STATS_ID_HYLAILER_FEUER        == 10
+	item_read_spellbook_heptagon,       // USABLE_ITEM_STATS_ID_SPELLBOOK_HEPTAGON    == 11
+	item_ignite,                        // USABLE_ITEM_STATS_ID_LIGHTING              == 12
+	item_use_beutel                     // USABLE_ITEM_STATS_ID_MAGISCHER_BEUTEL      == 13
 }; // ds:0xaeb0
 
 int g_ignite_mode = IGNITE_MODE_SPELL_OR_USE_TINDER; // ds:0xaee8, 0 = spell or use tinder, 1 = use torch, 2 = use lantern

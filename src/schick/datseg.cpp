@@ -775,7 +775,7 @@ struct weapon_descr g_weapons_table[65] = {
 	{ 1, 6, 15,  3, -1, -1, -3 }, /* 45 <- ITEM_ID_DOPPELKUNCHOMER */
 	{ 1, 2, 99,  0,  1,  0,  0 }, /* 46 <- ITEM_ID_SCHLEUDER */
 	{ 1, 3, 13,  4, -1,  0, -2 }, /* 47 <- ITEM_ID_SKRAJA */
-	{ 1, 4, 13,  2, -1, -2, -4 }, /* 48 <- ITEM_ID_KRIEGSBEIL_2 */
+	{ 1, 4, 13,  2, -1, -2, -4 }, /* 48 <- ITEM_ID_KRIEGSBEIL */
 	{ 1, 5, 14,  2, -1, -1, -3 }, /* 49 <- ITEM_ID_ORKNASE */
 	{ 1, 4, 99,  0, -1,  0,  0 }, /* 50 <- ITEM_ID_SCHNEIDZAHN */ /* Original-Bug: entry -1 for ranged_index is not o.k. for a throwing weapon */
 	{ 1, 3, 15,  2, -1,  0,  0 }, /* 51 <- ITEM_ID_ROBBENTOETER */
@@ -822,12 +822,12 @@ struct armor_descr g_armors_table[25] = {
 	{-1, 0 }
 }; // ds:0x0877
 
-const struct usable_item_descr g_usable_items_table[14] = {
-	{ 0, 0,  0 }, /*  0 <- DUMMY */
-	{ 2, 5,  1 }, /*  1 <- item_invoke_arcano_psychostabilils */
+const struct usable_item_descr g_usable_items_table[USABLE_ITEM_STATS_ID__END] = {
+	{ 0, 0, USABLE_ITEM_STATS_ID_NONE }, /*  0 <- DUMMY */
+	{ 2, 5, USABLE_ITEM_STATS_ID_ARCANO_PSYCHOSTABILIS }, /*  1 <- item_invoke_arcano_psychostabilils */
 	/* ITEM_ID_RING__RED */
 
-	{ 0, 1,  2 }, /*  2 <- item_read_recipe */
+	{ 0, 1,  USABLE_ITEM_STATS_ID_RECIPE }, /*  2 <- item_read_recipe */
 	/* ITEM_ID_REZEPT_FUER_EXPURGICUM,
 	 * ITEM_ID_REZEPT_FUER_VOMICUM,
 	 * ITEM_ID_REZEPT_FUER_HEILTRANK,
@@ -843,7 +843,7 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 * ITEM_ID_REZEPT_FUER_MIASTHMATICUM
 	 */
 
-	{ 0, 1,  3 }, /*  3 <- item_read_document */
+	{ 0, 1, USABLE_ITEM_STATS_ID_DOCUMENT }, /*  3 <- item_read_document */
 	/* ITEM_ID_DOKUMENT__UNICORN,
 	 * ITEM_ID_SCHREIBEN_VON_JADRA,
 	 * ITEM_ID_LOBPREISUNGEN,
@@ -855,21 +855,21 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 * ITEM_ID_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN
 	 */
 
-	{ 2, 3,  4 }, /*  4 <- item_invoke_armatrutz */
+	{ 2, 3, USABLE_ITEM_STATS_ID_ARMATRUTZ }, /*  4 <- item_invoke_armatrutz */
 	/* ITEM_ID_SILBERNER_STIRNREIF__1,
 	 * ITEM_ID_SILBERNER_STIRNREIF__2
 	 */
 
-	{ 0, 6,  5 }, /*  5 <- item_invoke_flim_flam */
+	{ 0, 6, USABLE_ITEM_STATS_ID_FLIM_FLAM }, /*  5 <- item_invoke_flim_flam */
 	/* ITEM_ID_AMULETT__FLIM_FLAM */
 
-	{ 0, 1,  6 }, /*  6 <- item_read_schuldbuch */
+	{ 0, 1, USABLE_ITEM_STATS_ID_SCHULDBUCH }, /*  6 <- item_read_schuldbuch */
 	/* ITEM_ID_SCHULDBUCH */
 
-	{ 0, 1,  7 }, /*  7 <- item_read_orkdokument */
+	{ 0, 1, USABLE_ITEM_STATS_ID_ORKDOKUMENT }, /*  7 <- item_read_orkdokument */
 	/* ITEM_ID_ORKDOKUMENT */
 
-	{ 0, 1,  8 }, /*  8 <- item_apply_weapon_poison */
+	{ 0, 1, USABLE_ITEM_STATS_ID_WEAPON_POISON }, /*  8 <- item_apply_weapon_poison */
 	/* ITEM_ID_SHURINKNOLLEKNOLLENGIFT,
 	 * ITEM_ID_ARAXGIFT,
 	 * ITEM_ID_ANGSTGIFT,
@@ -879,23 +879,23 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 * ITEM_ID_VOMICUM
 	 */
 
-	{ 0, 1,  9 }, /*  9 <- item_use_miasthmaticum */
+	{ 0, 1, USABLE_ITEM_STATS_ID_MIASTHMATICUM }, /*  9 <- item_use_miasthmaticum */
 	/* ITEM_ID_MIASTHMATICUM */
 
-	{ 0, 1, 10 }, /* 10 <- item_use_hylailer_feuer */
+	{ 0, 1, USABLE_ITEM_STATS_ID_HYLAILER_FEUER }, /* 10 <- item_use_hylailer_feuer */
 	/* ITEM_ID_HYLAILER_FEUER */
 
-	{ 0, 1, 11 }, /* 11 <- item_use_spellbook_heptagon */
+	{ 0, 1, USABLE_ITEM_STATS_ID_SPELLBOOK_HEPTAGON }, /* 11 <- item_use_spellbook_heptagon */
 	/* ITEM_ID_BUCH__HEPTAGON */
 
-	{ 0, 1, 12 }, /* 12 <- item_ignite */
+	{ 0, 1, USABLE_ITEM_STATS_ID_LIGHTING }, /* 12 <- item_ignite */
 	/* ITEM_ID_LATERNE__UNLIT,
 	 * ITEM_ID_FACKEL__UNLIT,
 	 * ITEM_ID_ZUNDERKAESTCHEN, -> ignite either lantern or torch
 	 * ITEM_ID_LATERNE__LIT     -> refill lit lantern with oil
 	 */
 
-	{ 0, 1, 13 }  /* 13 <- item_use_beutel */
+	{ 0, 1, USABLE_ITEM_STATS_ID_MAGISCHER_BEUTEL }  /* 13 <- item_use_beutel */
 	/* ITEM_ID_MAGISCHER_BROTBEUTEL : Original-Bug, to be fixed in SCHICK.DAT
 	 * ITEM_ID_BEUTEL
 	 */
