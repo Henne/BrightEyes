@@ -448,7 +448,7 @@ signed int DNG15_handler(void)
 				if (1) { } else { }
 
 				/* group gets GRIMRING */
-				do { ; } while (!give_new_item_to_group(ITEM_ID_GRIMRING, 1, 1));
+				do { ; } while (!give_new_item_to_group(ITEM_ID_DAS_SCHWERT_GRIMRING, 1, 1));
 
 				gs_got_grimring = 1;
 

@@ -386,7 +386,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
 			damage += 4;
 
-		} else if ((right_hand == ITEM_ID_GRIMRING) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_ORK)) {
+		} else if ((right_hand == ITEM_ID_DAS_SCHWERT_GRIMRING) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_ORK)) {
 
 			/* DAS SCHWERT GRIMRING gives Damage + 5 to ORCS */
 			damage += 5;

@@ -654,7 +654,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
 					/* "THE SWORD GRIMRING" gets a damage bonus + 5 in the final fight */
-					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_ID_GRIMRING) && (g_current_fight_id == FIGHT_ID_F144)) {
+					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_ID_DAS_SCHWERT_GRIMRING) && (g_current_fight_id == FIGHT_ID_F144)) {
 						damage_lo += 5;
 						damage_hi += 5;
 					}

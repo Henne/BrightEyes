@@ -544,7 +544,7 @@ void tevent_144(void)
 
 	right_time_flag = 0;
 
-	if ((grimring_hero_pos = get_first_hero_with_item(ITEM_ID_GRIMRING)) != -1) {
+	if ((grimring_hero_pos = get_first_hero_with_item(ITEM_ID_DAS_SCHWERT_GRIMRING)) != -1) {
 
 		if ((gs_year == 17) && (gs_month == 10) && (gs_day_of_month >= 10)) {
 			right_time_flag = 1;
@@ -604,7 +604,7 @@ void tevent_144(void)
 			do {
 				status_menu(grimring_hero_pos);
 
-				grimring_hero_pos = get_first_hero_with_item(ITEM_ID_GRIMRING);
+				grimring_hero_pos = get_first_hero_with_item(ITEM_ID_DAS_SCHWERT_GRIMRING);
 
 				if (grimring_hero_pos == -1) {
 					grimring_hero_pos = 0;

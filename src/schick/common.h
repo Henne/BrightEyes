@@ -1852,7 +1852,7 @@ enum {
 	ITEM_ID_ZWEIHAENDER__MAGIC                = 178, /* two-handed sword [magic: unbreakable; found in Orkhoehle] */
 	ITEM_ID_ORKDOKUMENT                       = 179, /* orc document [found in Orkhoehle] */
 	ITEM_ID_GEGENGIFT                         = 180, /* antivenom */
-	ITEM_ID_GRIMRING                          = 181, /* Grimring [found at Hyggelik's ruin] */
+	ITEM_ID_DAS_SCHWERT_GRIMRING              = 181, /* Grimring [found at Hyggelik's ruin] */
 	ITEM_ID_TOTENKOPFGUERTEL                  = 182, /* skull belt [magic: TA - 4; found in Verfallene Herberge ] */
 	ITEM_ID_KRAFTGUERTEL                      = 183, /* girdle of might [magic: KK + 5; found in Drachenhoehle] */
 	ITEM_ID_MAGISCHER_BROTBEUTEL              = 184, /* magic breadbag [cannot be found in the game] */
