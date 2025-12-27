@@ -1686,7 +1686,7 @@ enum {
 	ITEM_ID_ARMBRUST                          =  12, /* crossbow */
 	ITEM_ID_BOLZEN                            =  13, /* bolt */
 	ITEM_ID_DOLCH                             =  14, /* dagger */
-	ITEM_ID_IRON_SHIELD                       =  15, /* iron shield */
+	ITEM_ID_EISENSCHILD                       =  15, /* iron shield */
 	ITEM_ID_WURFBEIL                          =  16, /* francesca */
 	ITEM_ID_WURFSTERN                         =  17, /* throwing star */
 	ITEM_ID_ZWEIHAENDER                       =  18, /* two-handed sword */

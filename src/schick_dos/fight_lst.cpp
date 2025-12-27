@@ -6390,9 +6390,9 @@ struct fight_lst fight_data = {
 				ITEM_ID_SAEBEL, // loot 1
 				ITEM_ID_SAEBEL, // loot 2
 				ITEM_ID_SAEBEL, // loot 3
-				ITEM_ID_IRON_SHIELD, // loot 4
-				ITEM_ID_IRON_SHIELD, // loot 5
-				ITEM_ID_IRON_SHIELD // loot 6
+				ITEM_ID_EISENSCHILD, // loot 4
+				ITEM_ID_EISENSCHILD, // loot 5
+				ITEM_ID_EISENSCHILD // loot 6
 			},
 			0, 0, 0 // ducats, silver, heller
 		},
