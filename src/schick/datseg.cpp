@@ -822,12 +822,12 @@ struct armor_descr g_armors_table[25] = {
 	{-1, 0 }
 }; // ds:0x0877
 
-const struct usable_item_descr g_usable_items_table[14] = {
-	{ 0, 0,  0 }, /*  0 <- DUMMY */
-	{ 2, 5,  1 }, /*  1 <- item_invoke_arcano_psychostabilils */
+const struct usable_item_descr g_usable_items_table[USABLE_ITEM__END] = {
+	{ 0, 0, USABLE_ITEM_NONE }, /*  0 <- DUMMY */
+	{ 2, 5, USABLE_ITEM_ARCANO_PSYCHOSTABILIS }, /*  1 <- item_invoke_arcano_psychostabilils */
 	/* ITEM_ID_RING__RED */
 
-	{ 0, 1,  2 }, /*  2 <- item_read_recipe */
+	{ 0, 1,  USABLE_ITEM_RECIPE }, /*  2 <- item_read_recipe */
 	/* ITEM_ID_REZEPT_FUER_EXPURGICUM,
 	 * ITEM_ID_REZEPT_FUER_VOMICUM,
 	 * ITEM_ID_REZEPT_FUER_HEILTRANK,
@@ -843,7 +843,7 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 * ITEM_ID_REZEPT_FUER_MIASTHMATICUM
 	 */
 
-	{ 0, 1,  3 }, /*  3 <- item_read_document */
+	{ 0, 1, USABLE_ITEM_DOCUMENT }, /*  3 <- item_read_document */
 	/* ITEM_ID_DOKUMENT__UNICORN,
 	 * ITEM_ID_SCHREIBEN_VON_JADRA,
 	 * ITEM_ID_LOBPREISUNGEN,
@@ -855,21 +855,21 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 * ITEM_ID_EMPFEHLUNGSSCHREIBEN__SIEBENSTEIN
 	 */
 
-	{ 2, 3,  4 }, /*  4 <- item_invoke_armatrutz */
+	{ 2, 3, USABLE_ITEM_ARMATRUTZ }, /*  4 <- item_invoke_armatrutz */
 	/* ITEM_ID_SILBERNER_STIRNREIF__1,
 	 * ITEM_ID_SILBERNER_STIRNREIF__2
 	 */
 
-	{ 0, 6,  5 }, /*  5 <- item_invoke_flim_flam */
+	{ 0, 6, USABLE_ITEM_FLIM_FLAM }, /*  5 <- item_invoke_flim_flam */
 	/* ITEM_ID_AMULETT__FLIM_FLAM */
 
-	{ 0, 1,  6 }, /*  6 <- item_read_schuldbuch */
+	{ 0, 1, USABLE_ITEM_SCHULDBUCH }, /*  6 <- item_read_schuldbuch */
 	/* ITEM_ID_SCHULDBUCH */
 
-	{ 0, 1,  7 }, /*  7 <- item_read_orkdokument */
+	{ 0, 1, USABLE_ITEM_ORKDOKUMENT }, /*  7 <- item_read_orkdokument */
 	/* ITEM_ID_ORKDOKUMENT */
 
-	{ 0, 1,  8 }, /*  8 <- item_apply_weapon_poison */
+	{ 0, 1, USABLE_ITEM_WEAPON_POISON }, /*  8 <- item_apply_weapon_poison */
 	/* ITEM_ID_SHURINKNOLLEKNOLLENGIFT,
 	 * ITEM_ID_ARAXGIFT,
 	 * ITEM_ID_ANGSTGIFT,
@@ -879,23 +879,23 @@ const struct usable_item_descr g_usable_items_table[14] = {
 	 * ITEM_ID_VOMICUM
 	 */
 
-	{ 0, 1,  9 }, /*  9 <- item_use_miasthmaticum */
+	{ 0, 1, USABLE_ITEM_MIASTHMATICUM }, /*  9 <- item_use_miasthmaticum */
 	/* ITEM_ID_MIASTHMATICUM */
 
-	{ 0, 1, 10 }, /* 10 <- item_use_hylailer_feuer */
+	{ 0, 1, USABLE_ITEM_HYLAILER_FEUER }, /* 10 <- item_use_hylailer_feuer */
 	/* ITEM_ID_HYLAILER_FEUER */
 
-	{ 0, 1, 11 }, /* 11 <- item_use_spellbook_heptagon */
+	{ 0, 1, USABLE_ITEM_SPELLBOOK_HEPTAGON }, /* 11 <- item_use_spellbook_heptagon */
 	/* ITEM_ID_BUCH__HEPTAGON */
 
-	{ 0, 1, 12 }, /* 12 <- item_ignite */
+	{ 0, 1, USABLE_ITEM_LIGHTING }, /* 12 <- item_ignite */
 	/* ITEM_ID_LATERNE__UNLIT,
 	 * ITEM_ID_FACKEL__UNLIT,
 	 * ITEM_ID_ZUNDERKAESTCHEN, -> ignite either lantern or torch
 	 * ITEM_ID_LATERNE__LIT     -> refill lit lantern with oil
 	 */
 
-	{ 0, 1, 13 }  /* 13 <- item_use_beutel */
+	{ 0, 1, USABLE_ITEM_MAGISCHER_BEUTEL }  /* 13 <- item_use_beutel */
 	/* ITEM_ID_MAGISCHER_BROTBEUTEL : Original-Bug, to be fixed in SCHICK.DAT
 	 * ITEM_ID_BEUTEL
 	 */

@@ -590,6 +590,24 @@ enum {
 };
 
 enum {
+	USABLE_ITEM_NONE                  =  0,
+	USABLE_ITEM_ARCANO_PSYCHOSTABILIS =  1,
+	USABLE_ITEM_RECIPE                =  2,
+	USABLE_ITEM_DOCUMENT              =  3,
+	USABLE_ITEM_ARMATRUTZ             =  4,
+	USABLE_ITEM_FLIM_FLAM             =  5,
+	USABLE_ITEM_SCHULDBUCH            =  6,
+	USABLE_ITEM_ORKDOKUMENT           =  7,
+	USABLE_ITEM_WEAPON_POISON         =  8,
+	USABLE_ITEM_MIASTHMATICUM         =  9,
+	USABLE_ITEM_HYLAILER_FEUER        = 10,
+	USABLE_ITEM_SPELLBOOK_HEPTAGON    = 11,
+	USABLE_ITEM_LIGHTING              = 12,
+	USABLE_ITEM_MAGISCHER_BEUTEL      = 13,
+	USABLE_ITEM__END                  = 14,
+};
+
+enum {
 	LOCTYPE_NONE		=  0,
 	LOCTYPE_UNKN1		=  1,
 	LOCTYPE_TEMPLE		=  2,
