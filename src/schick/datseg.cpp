@@ -726,100 +726,100 @@ const struct ranged_weapon_descr g_ranged_weapons_table[9] = {
 	{ -1,  0,  0,  0,  0,  0,  0,  0 }
 }; // ds:0x0668
 
-struct weapon_descr g_weapons_table[65] = {
-	{ 1, 4, 14,  2, -1,  0,  0 }, /*  0 <- ITEM_ID_SCHWERT */
-	{ 1, 1, 14,  6, -1, -1, -3 }, /*  1 <- ITEM_ID_KNUEPPEL */
-	{ 1, 3, 15,  2, -1,  0,  0 }, /*  2 <- ITEM_ID_SAEBEL */
-	{ 1, 0, 16,  4, -1, -3, -4 }, /*  3 <- ITEM_ID_MESSER */
-	{ 1, 3, 99,  5,  1,  0, -3 }, /*  4 <- ITEM_ID_SPEER */
-	{ 1, 2, 15,  1, -1,  0, -1 }, /*  5 <- ITEM_ID_KURZSCHWERT */
-	{ 1, 4, 14,  5, -1,  0, -3 }, /*  6 <- ITEM_ID_KRIEGSBEIL__SPECIAL */
-	{ 1, 3, 99,  0,  3,  0,  0 }, /*  7 <- ITEM_ID_KURZBOGEN */
-	{ 2, 4, 14,  3, -1, -1, -4 }, /*  8 <- ITEM_ID_STREITAXT */
-	{ 1, 6, 99,  0,  5,  0,  0 }, /*  9 <- ITEM_ID_ARMBRUST */
-	{ 1, 1, 15,  3, -1, -2, -3 }, /* 10 <- ITEM_ID_DOLCH, ITEM_ID_KUKRISDOLCH */
-	{ 1, 3, 99,  4,  2, -1, -3 }, /* 11 <- ITEM_ID_WURFBEIL */
-	{ 1, 1, 99,  0,  0,  0,  0 }, /* 12 <- ITEM_ID_WURFSTERN */
-	{ 2, 4, 14,  3, -1, -2, -3 }, /* 13 <- ITEM_ID_ZWEIHAENDER */
-	{ 1, 4, 99,  0,  4,  0,  0 }, /* 14 <- ITEM_ID_LANGBOGEN */
-	{ 1, 5, 15,  5, -1, -1, -3 }, /* 15 <- ITEM_ID_MORGENSTERN */
-	{ 1, 0, 16,  6, -1, -2, -3 }, /* 16 <- ITEM_ID_VULKANGLASDOLCH */
-	{ 1, 3, 99,  4,  2, -1, -4 }, /* 17 <- ITEM_ID_WURFAXT */
-	{ 1, 3, 19,  7, -1, -1, -4 }, /* 18 <- ITEM_ID_PIKE */
-	{ 1, 4, 13,  1, -1,  0, -2 }, /* 19 <- ITEM_ID_STREITKOLBEN, ITEM_ID_SILBERSTREITKOLBEN */
-	{ 1, 3, 16,  3, -1,  0, -1 }, /* 20 <- ITEM_ID_DEGEN */
-	{ 1, 3, 16,  3, -1,  0, -1 }, /* 21 <- ITEM_ID_FLORETT */
-	{ 1, 1, 15,  5, -1,  0, -1 }, /* 22 <- ITEM_ID_KAMPFSTAB */
-	{ 1, 0, 19,  2, -1,  0, -6 }, /* 23 <- ITEM_ID_PEITSCHE */
-	{ 1, 0, 99,  4,  0, -3, -4 }, /* 24 <- ITEM_ID_WURFMESSER */
-	{ 1, 2, 17,  5, -1, -3, -4 }, /* 25 <- ITEM_ID_SICKLE, ITEM_ID_SICKLE_MAGIC */
-	{ 1, 3, 17,  6, -1, -3, -4 }, /* 26 <- ITEM_ID_SENSE */
-	{ 2, 3, 15,  2, -1, -2, -4 }, /* 27 <- ITEM_ID_KRIEGSHAMMER */
-	{ 1, 3, 15,  3, -1,  0, -3 }, /* 28 <- ITEM_ID_DREIZACK */
-	{ 1, 4, 15,  5, -1, -1, -3 }, /* 29 <- ITEM_ID_HELLEBARDE */
-	{ 1, 2, 13,  6, -1, -2, -3 }, /* 30 <- ITEM_ID_DRESCHFLEGEL */
-	{ 1, 3, 18,  4, -1, -1, -1 }, /* 31 <- ITEM_ID_ZWEILILIEN */
-	{ 3, 3, 17,  4, -1, -3, -4 }, /* 32 <- ITEM_ID_OCHSENHERDE */
-	{ 1, 1, 16,  4, -1, -2, -3 }, /* 33 <- ITEM_ID_BASILISKENZUNGE */
-	{ 1, 2, 15,  4, -1, -2, -3 }, /* 34 <- ITEM_ID_OGERFAENGER */
-	{ 1, 1, 16,  7, -1, -3, -4 }, /* 35 <- ITEM_ID_MENGBILAR, ITEM_ID_KUKRIS_MENGBILAR */
-	{ 1, 2, 15,  2, -1, -1, -2 }, /* 36 <- ITEM_ID_SCHWERER_DOLCH */
-	{ 2, 2, 15,  3, -1, -2, -2 }, /* 37 <- ITEM_ID_RONDRAKAMM */
-	{ 1, 3, 15,  2, -1,  0, -1 }, /* 38 <- ITEM_ID_ENTERMESSER */
-	{ 1, 5, 14,  2, -1, -1, -2 }, /* 39 <- ITEM_ID_BASTARDSCHWERT */
-	{ 1, 6, 15,  1, -1, -2, -2 }, /* 40 <- ITEM_ID_TUZAKMESSER */
-	{ 1, 4, 16,  3, -1, -1, -3 }, /* 41 <- ITEM_ID_RABENSCHNABEL */
-	{ 1, 5, 14,  1, -1, -1, -2 }, /* 42 <- ITEM_ID_BRABAKBENGEL */
-	{ 1, 3, 16,  4, -1,  0, -1 }, /* 43 <- ITEM_ID_RAPIER */
-	{ 1, 4, 14,  2, -1,  0, -1 }, /* 44 <- ITEM_ID_KUNCHOMER */
-	{ 1, 6, 15,  3, -1, -1, -3 }, /* 45 <- ITEM_ID_DOPPELKUNCHOMER */
-	{ 1, 2, 99,  0,  1,  0,  0 }, /* 46 <- ITEM_ID_SCHLEUDER */
-	{ 1, 3, 13,  4, -1,  0, -2 }, /* 47 <- ITEM_ID_SKRAJA */
-	{ 1, 4, 13,  2, -1, -2, -4 }, /* 48 <- ITEM_ID_KRIEGSBEIL */
-	{ 1, 5, 14,  2, -1, -1, -3 }, /* 49 <- ITEM_ID_ORKNASE */
-	{ 1, 4, 99,  0, -1,  0,  0 }, /* 50 <- ITEM_ID_SCHNEIDZAHN */ /* Original-Bug: entry -1 for ranged_index is not o.k. for a throwing weapon */
-	{ 1, 3, 15,  2, -1,  0,  0 }, /* 51 <- ITEM_ID_ROBBENTOETER */
-	{ 1, 3, 15,  2, -1,  0, -1 }, /* 52 <- ITEM_ID_WOLFSMESSER */
-	{ 0, 0, 99,  0, -1,  0,  0 }, /* 53 <- ITEM_ID_PFEIL, ITEM_ID_BOLZEN */
-	{ 1, 5, 14, -5, -1, -2, -3 }, /* 54 <- ITEM_ID_BASTARDSCHWERT__MAGIC */
-	{ 1,10, 14,-99, -1, -2, -8 }, /* 55 <- ITEM_ID_ORKNASE__MAGIC */
-	{ 1, 2, 15,-99, -1,  2, -1 }, /* 56 <- ITEM_ID_KURZSCHWERT__MAGIC */
-	{ 1, 3, 15,  0, -1,  0,  0 }, /* 57 <- ITEM_ID_SAEBEL__MAGIC */
-	{ 2, 4, 14,-99, -1, -3, -4 }, /* 58 <- ITEM_ID_ZWEIHAENDER__MAGIC */
-	{ 1, 4, 14,-99, -1,  2,  2 }, /* 59 <- ITEM_ID_DAS_SCHWERT_GRIMRING */
-	{ 1, 4, 14,  0, -1,  2,  0 }, /* 60 <- ITEM_ID_SCHWERT__MAGIC */
-	{ 1, 3, 99,  5,  6,  1,  1 }, /* 61 <- ITEM_ID_SPEER__MAGIC */
-	{ 1, 0, 99,  4,  7, -3, -4 }, /* 62 <- ITEM_ID_WURFDOLCH__MAGIC */
-	{ 1, 1, 15,-99, -1,  0,  0 }, /* 63 <- ITEM_ID_ZAUBERSTAB, ITEM_ID_HEXENBESEN */
-	{-1, 0,  0,  0,  0,  0,  0 }
+struct weapon_descr g_weapons_table[WEAPON_STATS_ID__END + 1] = {
+	{ 1, 4, 14,  2, -1,  0,  0 }, // WEAPON_STATS_ID_SCHWERT               ==  0,
+	{ 1, 1, 14,  6, -1, -1, -3 }, // WEAPON_STATS_ID_KNUEPPEL              ==  1,
+	{ 1, 3, 15,  2, -1,  0,  0 }, // WEAPON_STATS_ID_SAEBEL                ==  2,
+	{ 1, 0, 16,  4, -1, -3, -4 }, // WEAPON_STATS_ID_MESSER                ==  3,
+	{ 1, 3, 99,  5,  1,  0, -3 }, // WEAPON_STATS_ID_SPEER                 ==  4,
+	{ 1, 2, 15,  1, -1,  0, -1 }, // WEAPON_STATS_ID_KURZSCHWERT           ==  5,
+	{ 1, 4, 14,  5, -1,  0, -3 }, // WEAPON_STATS_ID_KRIEGSBEIL__SPECIAL   ==  6,
+	{ 1, 3, 99,  0,  3,  0,  0 }, // WEAPON_STATS_ID_KURZBOGEN             ==  7,
+	{ 2, 4, 14,  3, -1, -1, -4 }, // WEAPON_STATS_ID_STREITAXT             ==  8,
+	{ 1, 6, 99,  0,  5,  0,  0 }, // WEAPON_STATS_ID_ARMBRUST              ==  9,
+	{ 1, 1, 15,  3, -1, -2, -3 }, // WEAPON_STATS_ID_DOLCH                 == 10, /* WEAPON_STATS_ID_DOLCH, WEAPON_STATS_ID_KUKRISDOLCH */
+	{ 1, 3, 99,  4,  2, -1, -3 }, // WEAPON_STATS_ID_WURFBEIL              == 11,
+	{ 1, 1, 99,  0,  0,  0,  0 }, // WEAPON_STATS_ID_WURFSTERN             == 12,
+	{ 2, 4, 14,  3, -1, -2, -3 }, // WEAPON_STATS_ID_ZWEIHAENDER           == 13,
+	{ 1, 4, 99,  0,  4,  0,  0 }, // WEAPON_STATS_ID_LANGBOGEN             == 14,
+	{ 1, 5, 15,  5, -1, -1, -3 }, // WEAPON_STATS_ID_MORGENSTERN           == 15,
+	{ 1, 0, 16,  6, -1, -2, -3 }, // WEAPON_STATS_ID_VULKANGLASDOLCH       == 16,
+	{ 1, 3, 99,  4,  2, -1, -4 }, // WEAPON_STATS_ID_WURFAXT               == 17,
+	{ 1, 3, 19,  7, -1, -1, -4 }, // WEAPON_STATS_ID_PIKE                  == 18,
+	{ 1, 4, 13,  1, -1,  0, -2 }, // WEAPON_STATS_ID_STREITKOLBEN          == 19, /* WEAPON_STATS_ID_STREITKOLBEN, WEAPON_STATS_ID_SILBERSTREITKOLBEN */
+	{ 1, 3, 16,  3, -1,  0, -1 }, // WEAPON_STATS_ID_DEGEN                 == 20,
+	{ 1, 3, 16,  3, -1,  0, -1 }, // WEAPON_STATS_ID_FLORETT               == 21,
+	{ 1, 1, 15,  5, -1,  0, -1 }, // WEAPON_STATS_ID_KAMPFSTAB             == 22,
+	{ 1, 0, 19,  2, -1,  0, -6 }, // WEAPON_STATS_ID_PEITSCHE              == 23,
+	{ 1, 0, 99,  4,  0, -3, -4 }, // WEAPON_STATS_ID_WURFMESSER            == 24,
+	{ 1, 2, 17,  5, -1, -3, -4 }, // WEAPON_STATS_ID_SICKLE                == 25, /* WEAPON_STATS_ID_SICKLE, WEAPON_STATS_ID_SICKLE_MAGIC */
+	{ 1, 3, 17,  6, -1, -3, -4 }, // WEAPON_STATS_ID_SENSE                 == 26,
+	{ 2, 3, 15,  2, -1, -2, -4 }, // WEAPON_STATS_ID_KRIEGSHAMMER          == 27,
+	{ 1, 3, 15,  3, -1,  0, -3 }, // WEAPON_STATS_ID_DREIZACK              == 28,
+	{ 1, 4, 15,  5, -1, -1, -3 }, // WEAPON_STATS_ID_HELLEBARDE            == 29,
+	{ 1, 2, 13,  6, -1, -2, -3 }, // WEAPON_STATS_ID_DRESCHFLEGEL          == 30,
+	{ 1, 3, 18,  4, -1, -1, -1 }, // WEAPON_STATS_ID_ZWEILILIEN            == 31,
+	{ 3, 3, 17,  4, -1, -3, -4 }, // WEAPON_STATS_ID_OCHSENHERDE           == 32,
+	{ 1, 1, 16,  4, -1, -2, -3 }, // WEAPON_STATS_ID_BASILISKENZUNGE       == 33,
+	{ 1, 2, 15,  4, -1, -2, -3 }, // WEAPON_STATS_ID_OGERFAENGER           == 34,
+	{ 1, 1, 16,  7, -1, -3, -4 }, // WEAPON_STATS_ID_MENGBILAR             == 35, /* WEAPON_STATS_ID_MENGBILAR, WEAPON_STATS_ID_KUKRIS_MENGBILAR */
+	{ 1, 2, 15,  2, -1, -1, -2 }, // WEAPON_STATS_ID_SCHWERER_DOLCH        == 36,
+	{ 2, 2, 15,  3, -1, -2, -2 }, // WEAPON_STATS_ID_RONDRAKAMM            == 37,
+	{ 1, 3, 15,  2, -1,  0, -1 }, // WEAPON_STATS_ID_ENTERMESSER           == 38,
+	{ 1, 5, 14,  2, -1, -1, -2 }, // WEAPON_STATS_ID_BASTARDSCHWERT        == 39,
+	{ 1, 6, 15,  1, -1, -2, -2 }, // WEAPON_STATS_ID_TUZAKMESSER           == 40,
+	{ 1, 4, 16,  3, -1, -1, -3 }, // WEAPON_STATS_ID_RABENSCHNABEL         == 41,
+	{ 1, 5, 14,  1, -1, -1, -2 }, // WEAPON_STATS_ID_BRABAKBENGEL          == 42,
+	{ 1, 3, 16,  4, -1,  0, -1 }, // WEAPON_STATS_ID_RAPIER                == 43,
+	{ 1, 4, 14,  2, -1,  0, -1 }, // WEAPON_STATS_ID_KUNCHOMER             == 44,
+	{ 1, 6, 15,  3, -1, -1, -3 }, // WEAPON_STATS_ID_DOPPELKUNCHOMER       == 45,
+	{ 1, 2, 99,  0,  1,  0,  0 }, // WEAPON_STATS_ID_SCHLEUDER             == 46,
+	{ 1, 3, 13,  4, -1,  0, -2 }, // WEAPON_STATS_ID_SKRAJA                == 47,
+	{ 1, 4, 13,  2, -1, -2, -4 }, // WEAPON_STATS_ID_KRIEGSBEIL            == 48,
+	{ 1, 5, 14,  2, -1, -1, -3 }, // WEAPON_STATS_ID_ORKNASE               == 49,
+	{ 1, 4, 99,  0, -1,  0,  0 }, // WEAPON_STATS_ID_SCHNEIDZAHN           == 50, // Original-Bug: ranged_index -1 is not o.k. for a throwing weapon
+	{ 1, 3, 15,  2, -1,  0,  0 }, // WEAPON_STATS_ID_ROBBENTOETER          == 51,
+	{ 1, 3, 15,  2, -1,  0, -1 }, // WEAPON_STATS_ID_WOLFSMESSER           == 52,
+	{ 0, 0, 99,  0, -1,  0,  0 }, // WEAPON_STATS_ID_PROJECTILE            == 53, /* WEAPON_STATS_ID_PFEIL, WEAPON_STATS_ID_BOLZEN */
+	{ 1, 5, 14, -5, -1, -2, -3 }, // WEAPON_STATS_ID_BASTARDSCHWERT__MAGIC == 54,
+	{ 1,10, 14,-99, -1, -2, -8 }, // WEAPON_STATS_ID_ORKNASE__MAGIC        == 55,
+	{ 1, 2, 15,-99, -1,  2, -1 }, // WEAPON_STATS_ID_KURZSCHWERT__MAGIC    == 56,
+	{ 1, 3, 15,  0, -1,  0,  0 }, // WEAPON_STATS_ID_SAEBEL__MAGIC         == 57,
+	{ 2, 4, 14,-99, -1, -3, -4 }, // WEAPON_STATS_ID_ZWEIHAENDER__MAGIC    == 58,
+	{ 1, 4, 14,-99, -1,  2,  2 }, // WEAPON_STATS_ID_DAS_SCHWERT_GRIMRING  == 59,
+	{ 1, 4, 14,  0, -1,  2,  0 }, // WEAPON_STATS_ID_SCHWERT__MAGIC        == 60,
+	{ 1, 3, 99,  5,  6,  1,  1 }, // WEAPON_STATS_ID_SPEER__MAGIC          == 61,
+	{ 1, 0, 99,  4,  7, -3, -4 }, // WEAPON_STATS_ID_WURFDOLCH__MAGIC      == 62,
+	{ 1, 1, 15,-99, -1,  0,  0 }, // WEAPON_STATS_ID_ZAUBERSTAB_HEXENBESEN == 63, /* WEAPON_STATS_ID_ZAUBERSTAB, WEAPON_STATS_ID_HEXENBESEN */
+	{-1, 0,  0,  0,  0,  0,  0 }  // WEAPON_STATS_ID__END                  == 64  // terminator entry
 }; // ds:0x06b0
 
-struct armor_descr g_armors_table[25] = {
-	{ 1, 0 }, /*  0 <- ITEM_ID_SCHILD */
-	{ 2, 1 }, /*  1 <- ITEM_ID_EISENSCHILD, ITEM_ID_GOLDENER_SCHILD */
-	{ 3, 2 }, /*  2 <- ITEM_ID_EISENHELM, ITEM_ID_SILBERHELM */
-	{ 1, 0 }, /*  3 <- ITEM_ID_HEMD */
-	{ 0, 0 }, /*  4 <- ITEM_ID_TROWSERS */
-	{ 0, 0 }, /*  5 <- ITEM_ID_SCHUHE */
-	{ 0, 0 }, /*  6 <- ITEM_ID_STIEFEL */
-	{ 0, 0 }, /*  7 <- ITEM_ID_SCHNEESCHUHE */
-	{ 3, 3 }, /*  8 <- ITEM_ID_LEDERHARNISCH */
-	{ 5, 4 }, /*  9 <- ITEM_ID_SCHUPPENRUESTUNG */
-	{ 0, 0 }, /* 10 <- ITEM_ID_ROBE__GREEN_1, ITEM_ID_ROBE__GREEN_2 */
-	{ 0, 0 }, /* 11 <- ITEM_ID_ROBE__RED */
-	{ 2, 1 }, /* 12 <- ITEM_ID_TOPFHELM */
-	{ 1, 0 }, /* 13 <- ITEM_ID_LEDERHELM */
-	{ 2, 2 }, /* 14 <- ITEM_ID_WAFFENROCK */
-	{ 4, 4 }, /* 15 <- ITEM_ID_KETTENHEMD */
-	{ 3, 3 }, /* 16 <- ITEM_ID_KROETENHAUT */
-	{ 2, 1 }, /* 17 <- ITEM_ID_PLATTENZEUG */
-	{ 1, 1 }, /* 18 <- ITEM_ID_KETTENZEUG */
-	{ 1, 0 }, /* 19 <- ITEM_ID_LEDERZEUG */
-	{ 1, 1 }, /* 20 <- ITEM_ID_WINTERMANTEL */
-	{ 1, 0 }, /* 21 <- ITEM_ID_HELM__CURSED */
-	{ 2, 4 }, /* 22 <- ITEM_ID_KETTENHEMD__CURSED */
-	{ 5, 3 }, /* 23 <- ITEM_ID_KETTENHEMD__MAGIC */
-	{-1, 0 }
+struct armor_descr g_armors_table[ARMOR_STATS_ID__END + 1] = {
+	{ 1, 0 }, // ARMOR_STATS_ID_SCHILD             ==  0,
+	{ 2, 1 }, // ARMOR_STATS_ID_EISENSCHILD        ==  1, /* ITEM_ID_EISENSCHILD, ITEM_ID_GOLDENER_SCHILD */
+	{ 3, 2 }, // ARMOR_STATS_ID_EISENHELM          ==  2, /* ITEM_ID_EISENHELM, ITEM_ID_SILBERHELM */
+	{ 1, 0 }, // ARMOR_STATS_ID_HEMD               ==  3,
+	{ 0, 0 }, // ARMOR_STATS_ID_HOSE               ==  4,
+	{ 0, 0 }, // ARMOR_STATS_ID_SCHUHE             ==  5,
+	{ 0, 0 }, // ARMOR_STATS_ID_STIEFEL            ==  6,
+	{ 0, 0 }, // ARMOR_STATS_ID_SCHNEESCHUHE       ==  7,
+	{ 3, 3 }, // ARMOR_STATS_ID_LEDERHARNISCH      ==  8,
+	{ 5, 4 }, // ARMOR_STATS_ID_SCHUPPENRUESTUNG   ==  9,
+	{ 0, 0 }, // ARMOR_STATS_ID_ROBE__GREEN        == 10, /* ITEM_ID_ROBE__GREEN_1, ITEM_ID_ROBE__GREEN_2 */
+	{ 0, 0 }, // ARMOR_STATS_ID_ROBE__RED          == 11,
+	{ 2, 1 }, // ARMOR_STATS_ID_TOPFHELM           == 12,
+	{ 1, 0 }, // ARMOR_STATS_ID_LEDERHELM          == 13,
+	{ 2, 2 }, // ARMOR_STATS_ID_WAFFENROCK         == 14,
+	{ 4, 4 }, // ARMOR_STATS_ID_KETTENHEMD         == 15,
+	{ 3, 3 }, // ARMOR_STATS_ID_KROETENHAUT        == 16,
+	{ 2, 1 }, // ARMOR_STATS_ID_PLATTENZEUG        == 17,
+	{ 1, 1 }, // ARMOR_STATS_ID_KETTENZEUG         == 18,
+	{ 1, 0 }, // ARMOR_STATS_ID_LEDERZEUG          == 19,
+	{ 1, 1 }, // ARMOR_STATS_ID_WINTERMANTEL       == 20,
+	{ 1, 0 }, // ARMOR_STATS_ID_HELM__CURSED       == 21,
+	{ 2, 4 }, // ARMOR_STATS_ID_KETTENHEMD__CURSED == 22,
+	{ 5, 3 }, // ARMOR_STATS_ID_KETTENHEMD__MAGIC  == 23,
+	{-1, 0 }  // ARMOR_STATS_ID__END               == 24  // terminator entry
 }; // ds:0x0877
 
 const struct usable_item_descr g_usable_items_table[USABLE_ITEM_STATS_ID__END] = {
