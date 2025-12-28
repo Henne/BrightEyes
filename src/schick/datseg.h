@@ -950,7 +950,7 @@ extern signed int g_items_noplural[23];					// ds:0x0270; seg096
 extern const signed int g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
 extern const signed int* g_forbidden_item_ids_table[12];		// ds:0x0638; seg048, seg056, seg105
-extern const struct ranged_weapon_stats g_ranged_weapons_table[9];	// ds:0x0668; seg041
+extern const struct ranged_weapon_stats g_ranged_weapon_stats_table[RANGED_WEAPON_STATS_ID__END + 1];	// ds:0x0668; seg041
 extern struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1];	// ds:0x06b0; seg033, seg041, seg105
 extern struct armor_stats g_armor_stats_table[ARMOR_STATS_ID__END + 1];				// ds:0x0877; seg079, seg100, seg102, seg105
 extern const struct usable_item_descr g_usable_items_table[USABLE_ITEM_STATS_ID__END];		// ds:0x08a9; seg105, seg107

@@ -714,84 +714,105 @@ const signed int *g_forbidden_item_ids_table[12] = {
     g_forbidden_item_ids_waldelf
 }; // ds:0x0638, items wearable depending on hero type
 
-const struct ranged_weapon_stats g_ranged_weapons_table[9] = {
-	{  1,  0,  0, -1,-99,-99,-99,  6 }, /* 0 <- ITEM_ID_WURFSTERN, ITEM_ID_WURFMESSER */
-	{  1,  1,  0,  0, -1,-99,-99,  6 }, /* 1 <- ITEM_ID_SPEER, ITEM_ID_SCHLEUDER */
-	{  2,  1,  0,  0,  0,-99,-99,  7 }, /* 2 <- ITEM_ID_WURFBEIL, ITEM_ID_WURFAXT */
-	{  1,  1,  0,  0,  0, -1,-99,  4 }, /* 3 <- ITEM_ID_KURZBOGEN */
-	{  2,  2,  1,  0,  0, -1, -2,  4 }, /* 4 <- ITEM_ID_LANGBOGEN */
-	{  2,  2,  1,  0, -1, -2, -3,  3 }, /* 5 <- ITEM_ID_ARMBRUST */
-	{  2,  2,  1,  1,  0,  0, -1,  4 }, /* 6 <- ITEM_ID_SPEER__MAGIC */
-	{  9,  9,  9,  9,  9,  9,  9,  2 }, /* 7 <- ITEM_ID_WURFDOLCH__MAGIC */
-	{ -1,  0,  0,  0,  0,  0,  0,  0 }
+const struct ranged_weapon_stats g_ranged_weapon_stats_table[RANGED_WEAPON_STATS_ID__END + 1] = {
+	{  1,  0,  0, -1,-99,-99,-99,  6 }, // RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER == 0
+	{  1,  1,  0,  0, -1,-99,-99,  6 }, // RANGED_WEAPON_STATS_ID_SPEER_SCHLEUDER      == 1
+	{  2,  1,  0,  0,  0,-99,-99,  7 }, // RANGED_WEAPON_STATS_ID_WURFBEIL_WURFAXT     == 2
+	{  1,  1,  0,  0,  0, -1,-99,  4 }, // RANGED_WEAPON_STATS_ID_KURZBOGEN            == 3
+	{  2,  2,  1,  0,  0, -1, -2,  4 }, // RANGED_WEAPON_STATS_ID_LANGBOGEN            == 4
+	{  2,  2,  1,  0, -1, -2, -3,  3 }, // RANGED_WEAPON_STATS_ID_ARMBRUST             == 5
+	{  2,  2,  1,  1,  0,  0, -1,  4 }, // RANGED_WEAPON_STATS_ID_SPEER__MAGIC         == 6
+	{  9,  9,  9,  9,  9,  9,  9,  2 }, // RANGED_WEAPON_STATS_ID_WURFDOLCH__MAGIC     == 7
+	{ -1,  0,  0,  0,  0,  0,  0,  0 }  // RANGED_WEAPON_STATS_ID__END                 == 8
 }; // ds:0x0668
 
 struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1] = {
-	{ 1, 4, 14,  2, -1,  0,  0 }, // WEAPON_STATS_ID_SCHWERT               ==  0,
-	{ 1, 1, 14,  6, -1, -1, -3 }, // WEAPON_STATS_ID_KNUEPPEL              ==  1,
-	{ 1, 3, 15,  2, -1,  0,  0 }, // WEAPON_STATS_ID_SAEBEL                ==  2,
-	{ 1, 0, 16,  4, -1, -3, -4 }, // WEAPON_STATS_ID_MESSER                ==  3,
-	{ 1, 3, 99,  5,  1,  0, -3 }, // WEAPON_STATS_ID_SPEER                 ==  4,
-	{ 1, 2, 15,  1, -1,  0, -1 }, // WEAPON_STATS_ID_KURZSCHWERT           ==  5,
-	{ 1, 4, 14,  5, -1,  0, -3 }, // WEAPON_STATS_ID_KRIEGSBEIL__SPECIAL   ==  6,
-	{ 1, 3, 99,  0,  3,  0,  0 }, // WEAPON_STATS_ID_KURZBOGEN             ==  7,
-	{ 2, 4, 14,  3, -1, -1, -4 }, // WEAPON_STATS_ID_STREITAXT             ==  8,
-	{ 1, 6, 99,  0,  5,  0,  0 }, // WEAPON_STATS_ID_ARMBRUST              ==  9,
-	{ 1, 1, 15,  3, -1, -2, -3 }, // WEAPON_STATS_ID_DOLCH                 == 10, /* WEAPON_STATS_ID_DOLCH, WEAPON_STATS_ID_KUKRISDOLCH */
-	{ 1, 3, 99,  4,  2, -1, -3 }, // WEAPON_STATS_ID_WURFBEIL              == 11,
-	{ 1, 1, 99,  0,  0,  0,  0 }, // WEAPON_STATS_ID_WURFSTERN             == 12,
-	{ 2, 4, 14,  3, -1, -2, -3 }, // WEAPON_STATS_ID_ZWEIHAENDER           == 13,
-	{ 1, 4, 99,  0,  4,  0,  0 }, // WEAPON_STATS_ID_LANGBOGEN             == 14,
-	{ 1, 5, 15,  5, -1, -1, -3 }, // WEAPON_STATS_ID_MORGENSTERN           == 15,
-	{ 1, 0, 16,  6, -1, -2, -3 }, // WEAPON_STATS_ID_VULKANGLASDOLCH       == 16,
-	{ 1, 3, 99,  4,  2, -1, -4 }, // WEAPON_STATS_ID_WURFAXT               == 17,
-	{ 1, 3, 19,  7, -1, -1, -4 }, // WEAPON_STATS_ID_PIKE                  == 18,
-	{ 1, 4, 13,  1, -1,  0, -2 }, // WEAPON_STATS_ID_STREITKOLBEN          == 19, /* WEAPON_STATS_ID_STREITKOLBEN, WEAPON_STATS_ID_SILBERSTREITKOLBEN */
-	{ 1, 3, 16,  3, -1,  0, -1 }, // WEAPON_STATS_ID_DEGEN                 == 20,
-	{ 1, 3, 16,  3, -1,  0, -1 }, // WEAPON_STATS_ID_FLORETT               == 21,
-	{ 1, 1, 15,  5, -1,  0, -1 }, // WEAPON_STATS_ID_KAMPFSTAB             == 22,
-	{ 1, 0, 19,  2, -1,  0, -6 }, // WEAPON_STATS_ID_PEITSCHE              == 23,
-	{ 1, 0, 99,  4,  0, -3, -4 }, // WEAPON_STATS_ID_WURFMESSER            == 24,
-	{ 1, 2, 17,  5, -1, -3, -4 }, // WEAPON_STATS_ID_SICKLE                == 25, /* WEAPON_STATS_ID_SICKLE, WEAPON_STATS_ID_SICKLE_MAGIC */
-	{ 1, 3, 17,  6, -1, -3, -4 }, // WEAPON_STATS_ID_SENSE                 == 26,
-	{ 2, 3, 15,  2, -1, -2, -4 }, // WEAPON_STATS_ID_KRIEGSHAMMER          == 27,
-	{ 1, 3, 15,  3, -1,  0, -3 }, // WEAPON_STATS_ID_DREIZACK              == 28,
-	{ 1, 4, 15,  5, -1, -1, -3 }, // WEAPON_STATS_ID_HELLEBARDE            == 29,
-	{ 1, 2, 13,  6, -1, -2, -3 }, // WEAPON_STATS_ID_DRESCHFLEGEL          == 30,
-	{ 1, 3, 18,  4, -1, -1, -1 }, // WEAPON_STATS_ID_ZWEILILIEN            == 31,
-	{ 3, 3, 17,  4, -1, -3, -4 }, // WEAPON_STATS_ID_OCHSENHERDE           == 32,
-	{ 1, 1, 16,  4, -1, -2, -3 }, // WEAPON_STATS_ID_BASILISKENZUNGE       == 33,
-	{ 1, 2, 15,  4, -1, -2, -3 }, // WEAPON_STATS_ID_OGERFAENGER           == 34,
-	{ 1, 1, 16,  7, -1, -3, -4 }, // WEAPON_STATS_ID_MENGBILAR             == 35, /* WEAPON_STATS_ID_MENGBILAR, WEAPON_STATS_ID_KUKRIS_MENGBILAR */
-	{ 1, 2, 15,  2, -1, -1, -2 }, // WEAPON_STATS_ID_SCHWERER_DOLCH        == 36,
-	{ 2, 2, 15,  3, -1, -2, -2 }, // WEAPON_STATS_ID_RONDRAKAMM            == 37,
-	{ 1, 3, 15,  2, -1,  0, -1 }, // WEAPON_STATS_ID_ENTERMESSER           == 38,
-	{ 1, 5, 14,  2, -1, -1, -2 }, // WEAPON_STATS_ID_BASTARDSCHWERT        == 39,
-	{ 1, 6, 15,  1, -1, -2, -2 }, // WEAPON_STATS_ID_TUZAKMESSER           == 40,
-	{ 1, 4, 16,  3, -1, -1, -3 }, // WEAPON_STATS_ID_RABENSCHNABEL         == 41,
-	{ 1, 5, 14,  1, -1, -1, -2 }, // WEAPON_STATS_ID_BRABAKBENGEL          == 42,
-	{ 1, 3, 16,  4, -1,  0, -1 }, // WEAPON_STATS_ID_RAPIER                == 43,
-	{ 1, 4, 14,  2, -1,  0, -1 }, // WEAPON_STATS_ID_KUNCHOMER             == 44,
-	{ 1, 6, 15,  3, -1, -1, -3 }, // WEAPON_STATS_ID_DOPPELKUNCHOMER       == 45,
-	{ 1, 2, 99,  0,  1,  0,  0 }, // WEAPON_STATS_ID_SCHLEUDER             == 46,
-	{ 1, 3, 13,  4, -1,  0, -2 }, // WEAPON_STATS_ID_SKRAJA                == 47,
-	{ 1, 4, 13,  2, -1, -2, -4 }, // WEAPON_STATS_ID_KRIEGSBEIL            == 48,
-	{ 1, 5, 14,  2, -1, -1, -3 }, // WEAPON_STATS_ID_ORKNASE               == 49,
-	{ 1, 4, 99,  0, -1,  0,  0 }, // WEAPON_STATS_ID_SCHNEIDZAHN           == 50, // Original-Bug: ranged_index -1 is not o.k. for a throwing weapon
-	{ 1, 3, 15,  2, -1,  0,  0 }, // WEAPON_STATS_ID_ROBBENTOETER          == 51,
-	{ 1, 3, 15,  2, -1,  0, -1 }, // WEAPON_STATS_ID_WOLFSMESSER           == 52,
-	{ 0, 0, 99,  0, -1,  0,  0 }, // WEAPON_STATS_ID_PROJECTILE            == 53, /* WEAPON_STATS_ID_PFEIL, WEAPON_STATS_ID_BOLZEN */
-	{ 1, 5, 14, -5, -1, -2, -3 }, // WEAPON_STATS_ID_BASTARDSCHWERT__MAGIC == 54,
-	{ 1,10, 14,-99, -1, -2, -8 }, // WEAPON_STATS_ID_ORKNASE__MAGIC        == 55,
-	{ 1, 2, 15,-99, -1,  2, -1 }, // WEAPON_STATS_ID_KURZSCHWERT__MAGIC    == 56,
-	{ 1, 3, 15,  0, -1,  0,  0 }, // WEAPON_STATS_ID_SAEBEL__MAGIC         == 57,
-	{ 2, 4, 14,-99, -1, -3, -4 }, // WEAPON_STATS_ID_ZWEIHAENDER__MAGIC    == 58,
-	{ 1, 4, 14,-99, -1,  2,  2 }, // WEAPON_STATS_ID_DAS_SCHWERT_GRIMRING  == 59,
-	{ 1, 4, 14,  0, -1,  2,  0 }, // WEAPON_STATS_ID_SCHWERT__MAGIC        == 60,
-	{ 1, 3, 99,  5,  6,  1,  1 }, // WEAPON_STATS_ID_SPEER__MAGIC          == 61,
-	{ 1, 0, 99,  4,  7, -3, -4 }, // WEAPON_STATS_ID_WURFDOLCH__MAGIC      == 62,
-	{ 1, 1, 15,-99, -1,  0,  0 }, // WEAPON_STATS_ID_ZAUBERSTAB_HEXENBESEN == 63, /* WEAPON_STATS_ID_ZAUBERSTAB, WEAPON_STATS_ID_HEXENBESEN */
-	{-1, 0,  0,  0,  0,  0,  0 }  // WEAPON_STATS_ID__END                  == 64  // terminator entry
+	{ 1, 4,  14,   2, -1,                                           0,  0 }, // WEAPON_STATS_ID_SCHWERT               ==  0
+	{ 1, 1,  14,   6, -1,                                          -1, -3 }, // WEAPON_STATS_ID_KNUEPPEL              ==  1
+	{ 1, 3,  15,   2, -1,                                           0,  0 }, // WEAPON_STATS_ID_SAEBEL                ==  2
+	{ 1, 0,  16,   4, -1,                                          -3, -4 }, // WEAPON_STATS_ID_MESSER                ==  3
+	{ 1, 3,  99,   5, RANGED_WEAPON_STATS_ID_SPEER_SCHLEUDER,       0, -3 }, // WEAPON_STATS_ID_SPEER                 ==  4
+	{ 1, 2,  15,   1, -1,                                           0, -1 }, // WEAPON_STATS_ID_KURZSCHWERT           ==  5
+	{ 1, 4,  14,   5, -1,                                           0, -3 }, // WEAPON_STATS_ID_KRIEGSBEIL__SPECIAL   ==  6
+	{ 1, 3,  99,   0, RANGED_WEAPON_STATS_ID_KURZBOGEN,             0,  0 }, // WEAPON_STATS_ID_KURZBOGEN             ==  7
+	{ 2, 4,  14,   3, -1,                                          -1, -4 }, // WEAPON_STATS_ID_STREITAXT             ==  8
+	{ 1, 6,  99,   0, RANGED_WEAPON_STATS_ID_ARMBRUST,              0,  0 }, // WEAPON_STATS_ID_ARMBRUST              ==  9
+
+	{ 1, 1,  15,   3, -1,                                          -2, -3 }, // WEAPON_STATS_ID_DOLCH                 == 10
+										 /* WEAPON_STATS_ID_DOLCH, WEAPON_STATS_ID_KUKRISDOLCH */
+
+	{ 1, 3,  99,   4, RANGED_WEAPON_STATS_ID_WURFBEIL_WURFAXT,     -1, -3 }, // WEAPON_STATS_ID_WURFBEIL              == 11
+	{ 1, 1,  99,   0, RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER,  0,  0 }, // WEAPON_STATS_ID_WURFSTERN             == 12
+	{ 2, 4,  14,   3, -1,                                          -2, -3 }, // WEAPON_STATS_ID_ZWEIHAENDER           == 13
+	{ 1, 4,  99,   0, RANGED_WEAPON_STATS_ID_LANGBOGEN,             0,  0 }, // WEAPON_STATS_ID_LANGBOGEN             == 14
+	{ 1, 5,  15,   5, -1,                                          -1, -3 }, // WEAPON_STATS_ID_MORGENSTERN           == 15
+	{ 1, 0,  16,   6, -1,                                          -2, -3 }, // WEAPON_STATS_ID_VULKANGLASDOLCH       == 16
+	{ 1, 3,  99,   4, RANGED_WEAPON_STATS_ID_WURFBEIL_WURFAXT,     -1, -4 }, // WEAPON_STATS_ID_WURFAXT               == 17
+	{ 1, 3,  19,   7, -1,                                          -1, -4 }, // WEAPON_STATS_ID_PIKE                  == 18
+
+	{ 1, 4,  13,   1, -1,                                           0, -2 }, // WEAPON_STATS_ID_STREITKOLBEN          == 19
+										 /* WEAPON_STATS_ID_STREITKOLBEN, WEAPON_STATS_ID_SILBERSTREITKOLBEN */
+
+	{ 1, 3,  16,   3, -1,                                           0, -1 }, // WEAPON_STATS_ID_DEGEN                 == 20
+	{ 1, 3,  16,   3, -1,                                           0, -1 }, // WEAPON_STATS_ID_FLORETT               == 21
+	{ 1, 1,  15,   5, -1,                                           0, -1 }, // WEAPON_STATS_ID_KAMPFSTAB             == 22
+	{ 1, 0,  19,   2, -1,                                           0, -6 }, // WEAPON_STATS_ID_PEITSCHE              == 23
+	{ 1, 0,  99,   4, RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER, -3, -4 }, // WEAPON_STATS_ID_WURFMESSER            == 24
+
+	{ 1, 2,  17,   5, -1,                                          -3, -4 }, // WEAPON_STATS_ID_SICKLE                == 25
+										 /* WEAPON_STATS_ID_SICKLE, WEAPON_STATS_ID_SICKLE_MAGIC */
+
+	{ 1, 3,  17,   6, -1,                                          -3, -4 }, // WEAPON_STATS_ID_SENSE                 == 26
+	{ 2, 3,  15,   2, -1,                                          -2, -4 }, // WEAPON_STATS_ID_KRIEGSHAMMER          == 27
+	{ 1, 3,  15,   3, -1,                                           0, -3 }, // WEAPON_STATS_ID_DREIZACK              == 28
+	{ 1, 4,  15,   5, -1,                                          -1, -3 }, // WEAPON_STATS_ID_HELLEBARDE            == 29
+	{ 1, 2,  13,   6, -1,                                          -2, -3 }, // WEAPON_STATS_ID_DRESCHFLEGEL          == 30
+	{ 1, 3,  18,   4, -1,                                          -1, -1 }, // WEAPON_STATS_ID_ZWEILILIEN            == 31
+	{ 3, 3,  17,   4, -1,                                          -3, -4 }, // WEAPON_STATS_ID_OCHSENHERDE           == 32
+	{ 1, 1,  16,   4, -1,                                          -2, -3 }, // WEAPON_STATS_ID_BASILISKENZUNGE       == 33
+	{ 1, 2,  15,   4, -1,                                          -2, -3 }, // WEAPON_STATS_ID_OGERFAENGER           == 34
+
+	{ 1, 1,  16,   7, -1,                                          -3, -4 }, // WEAPON_STATS_ID_MENGBILAR             == 35
+										 /* WEAPON_STATS_ID_MENGBILAR, WEAPON_STATS_ID_KUKRIS_MENGBILAR */
+
+	{ 1, 2,  15,   2, -1,                                          -1, -2 }, // WEAPON_STATS_ID_SCHWERER_DOLCH        == 36
+	{ 2, 2,  15,   3, -1,                                          -2, -2 }, // WEAPON_STATS_ID_RONDRAKAMM            == 37
+	{ 1, 3,  15,   2, -1,                                           0, -1 }, // WEAPON_STATS_ID_ENTERMESSER           == 38
+	{ 1, 5,  14,   2, -1,                                          -1, -2 }, // WEAPON_STATS_ID_BASTARDSCHWERT        == 39
+	{ 1, 6,  15,   1, -1,                                          -2, -2 }, // WEAPON_STATS_ID_TUZAKMESSER           == 40
+	{ 1, 4,  16,   3, -1,                                          -1, -3 }, // WEAPON_STATS_ID_RABENSCHNABEL         == 41
+	{ 1, 5,  14,   1, -1,                                          -1, -2 }, // WEAPON_STATS_ID_BRABAKBENGEL          == 42
+	{ 1, 3,  16,   4, -1,                                           0, -1 }, // WEAPON_STATS_ID_RAPIER                == 43
+	{ 1, 4,  14,   2, -1,                                           0, -1 }, // WEAPON_STATS_ID_KUNCHOMER             == 44
+	{ 1, 6,  15,   3, -1,                                          -1, -3 }, // WEAPON_STATS_ID_DOPPELKUNCHOMER       == 45
+	{ 1, 2,  99,   0, RANGED_WEAPON_STATS_ID_SPEER_SCHLEUDER,       0,  0 }, // WEAPON_STATS_ID_SCHLEUDER             == 46
+	{ 1, 3,  13,   4, -1,                                           0, -2 }, // WEAPON_STATS_ID_SKRAJA                == 47
+	{ 1, 4,  13,   2, -1,                                          -2, -4 }, // WEAPON_STATS_ID_KRIEGSBEIL            == 48
+	{ 1, 5,  14,   2, -1,                                          -1, -3 }, // WEAPON_STATS_ID_ORKNASE               == 49
+
+	{ 1, 4,  99,   0, -1,                                           0,  0 }, // WEAPON_STATS_ID_SCHNEIDZAHN           == 50
+	// Original-Bug: ranged_index -1 is not o.k. for a throwing weapon
+
+	{ 1, 3,  15,   2, -1,                                           0,  0 }, // WEAPON_STATS_ID_ROBBENTOETER          == 51
+	{ 1, 3,  15,   2, -1,                                           0, -1 }, // WEAPON_STATS_ID_WOLFSMESSER           == 52
+
+	{ 0, 0,  99,   0, -1,                                           0,  0 }, // WEAPON_STATS_ID_PROJECTILE            == 53
+	                                                                         /* WEAPON_STATS_ID_PFEIL, WEAPON_STATS_ID_BOLZEN */
+
+	{ 1, 5,  14,  -5, -1,                                          -2, -3 }, // WEAPON_STATS_ID_BASTARDSCHWERT__MAGIC == 54
+	{ 1, 10, 14, -99, -1,                                          -2, -8 }, // WEAPON_STATS_ID_ORKNASE__MAGIC        == 55
+	{ 1, 2,  15, -99, -1,                                           2, -1 }, // WEAPON_STATS_ID_KURZSCHWERT__MAGIC    == 56
+	{ 1, 3,  15,   0, -1,                                           0,  0 }, // WEAPON_STATS_ID_SAEBEL__MAGIC         == 57
+	{ 2, 4,  14, -99, -1,                                          -3, -4 }, // WEAPON_STATS_ID_ZWEIHAENDER__MAGIC    == 58
+	{ 1, 4,  14, -99, -1,                                           2,  2 }, // WEAPON_STATS_ID_DAS_SCHWERT_GRIMRING  == 59
+	{ 1, 4,  14,   0, -1,                                           2,  0 }, // WEAPON_STATS_ID_SCHWERT__MAGIC        == 60
+	{ 1, 3,  99,   5, RANGED_WEAPON_STATS_ID_SPEER__MAGIC,          1,  1 }, // WEAPON_STATS_ID_SPEER__MAGIC          == 61
+	{ 1, 0,  99,   4, RANGED_WEAPON_STATS_ID_WURFDOLCH__MAGIC,     -3, -4 }, // WEAPON_STATS_ID_WURFDOLCH__MAGIC      == 62
+
+	{ 1, 1,  15, -99, -1,                                           0,  0 }, // WEAPON_STATS_ID_ZAUBERSTAB_HEXENBESEN == 63
+										 /* WEAPON_STATS_ID_ZAUBERSTAB, WEAPON_STATS_ID_HEXENBESEN */
+
+	{-1, 0,   0,   0,  0,                                           0,  0 }  // WEAPON_STATS_ID__END                  == 64 // terminator entry
 }; // ds:0x06b0
 
 struct armor_stats g_armor_stats_table[ARMOR_STATS_ID__END + 1] = {

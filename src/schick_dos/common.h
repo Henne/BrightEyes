@@ -556,6 +556,18 @@ enum {
 
 /* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
 
+enum {
+	RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER = 0, /* ITEM_ID_WURFSTERN, ITEM_ID_WURFMESSER */
+	RANGED_WEAPON_STATS_ID_SPEER_SCHLEUDER      = 1, /* ITEM_ID_SPEER, ITEM_ID_SCHLEUDER */
+	RANGED_WEAPON_STATS_ID_WURFBEIL_WURFAXT     = 2, /* ITEM_ID_WURFBEIL, ITEM_ID_WURFAXT */
+	RANGED_WEAPON_STATS_ID_KURZBOGEN            = 3, /* ITEM_ID_KURZBOGEN */
+	RANGED_WEAPON_STATS_ID_LANGBOGEN            = 4, /* ITEM_ID_LANGBOGEN */
+	RANGED_WEAPON_STATS_ID_ARMBRUST             = 5, /* ITEM_ID_ARMBRUST */
+	RANGED_WEAPON_STATS_ID_SPEER__MAGIC         = 6, /* ITEM_ID_SPEER__MAGIC */
+	RANGED_WEAPON_STATS_ID_WURFDOLCH__MAGIC     = 7, /* ITEM_ID_WURFDOLCH__MAGIC */
+	RANGED_WEAPON_STATS_ID__END                 = 8
+};
+
 /* ranged distance types, named according to DSA3 rules. */
 enum {
 	/*                                       implemented distance on chessboard */

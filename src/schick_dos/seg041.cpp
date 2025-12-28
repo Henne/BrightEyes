@@ -312,7 +312,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 				ranged_distance_type = RANGED_DISTANCE_TYPE_EXTREM_WEIT;
 			}
 
-			p_rangedtab = &g_ranged_weapons_table[weapon->ranged_index];
+			p_rangedtab = &g_ranged_weapon_stats_table[weapon->ranged_index];
 
 			if (attack_hero) {
 				if (target->typus == HERO_TYPE_ZWERG) {
@@ -331,7 +331,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			damage_mod = (test_talent(hero,
 						(item_p_rh->item_subtype_id == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * ranged_distance_type - 2 * target_size) > 0) ?
-					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[ranged_distance_type] : -damage;
+					g_ranged_weapon_stats_table[weapon->ranged_index].damage_modifier[ranged_distance_type] : -damage;
 
 			if (damage_mod != 0) { /* test is redundant */
 				damage += damage_mod;
