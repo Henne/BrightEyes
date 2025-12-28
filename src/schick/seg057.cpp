@@ -322,7 +322,7 @@ void sell_screen(struct merchant_descr *merchant_descr)
 
 			} else {
 
-				if (g_itemsdat[item_id].flags.undropable) {
+				if (g_itemsdat[item_id].flags.undroppable) {
 
 					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_name_inflect_with_article(
 						INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,

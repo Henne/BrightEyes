@@ -43,11 +43,11 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 		/* if item is an armor ? */
 		if (item_p->flags.armor) {
 
-			hero->rs_bonus -= g_armors_table[item_p->table_index].rs;
+			hero->rs_bonus -= g_armor_stats_table[item_p->item_type_stats_id].rs;
 
 			hero->rs_bonus += hero->inventory[inv_slot].rs_lost;
 
-			hero->rs_be -= g_armors_table[item_p->table_index].be;
+			hero->rs_be -= g_armor_stats_table[item_p->item_type_stats_id].be;
 		}
 
 		/* if item is a weapon and in the right hand ? */
@@ -118,13 +118,13 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		if (item_p->flags.armor) {
 
 			/* add RS boni */
-			equipper->rs_bonus += g_armors_table[item_p->table_index].rs;
+			equipper->rs_bonus += g_armor_stats_table[item_p->item_type_stats_id].rs;
 
 			/* subtract degraded RS */
 			equipper->rs_bonus -= owner->inventory[inv_slot_owner].rs_lost;
 
 			/* add RS-BE */
-			equipper->rs_be += g_armors_table[item_p->table_index].be;
+			equipper->rs_be += g_armor_stats_table[item_p->item_type_stats_id].be;
 
 		}
 
@@ -132,13 +132,13 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		if (item_p->flags.weapon && (inv_slot_equipper == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
 			/* set weapon type */
-			equipper->weapon_type = item_p->subtype;
+			equipper->weapon_type = item_p->item_subtype_id;
 
 			/* set AT */
-			equipper->weapon_at_mod = g_weapons_table[item_p->table_index].at_mod;
+			equipper->weapon_at_mod = g_weapon_stats_table[item_p->item_type_stats_id].at_mod;
 
 			/* set PA */
-			equipper->weapon_pa_mod = g_weapons_table[item_p->table_index].pa_mod;
+			equipper->weapon_pa_mod = g_weapon_stats_table[item_p->item_type_stats_id].pa_mod;
 		}
 
 		/* Girdle of might / Kraftguertel */
@@ -227,17 +227,17 @@ signed int can_hero_equip_item_at_slot(const signed int item_id, const signed in
 	if (item_p->flags.armor) {
 
 		/* can be worn on the head */
-		if ((inv_slot == HERO_INVENTORY_SLOT_HEAD && item_p->subtype == ARMOR_TYPE_HEAD) ||
+		if ((inv_slot == HERO_INVENTORY_SLOT_HEAD && item_p->item_subtype_id == ARMOR_TYPE_HEAD) ||
 			/* can be worn on the torso */
-			(inv_slot == HERO_INVENTORY_SLOT_BODY && item_p->subtype == ARMOR_TYPE_BODY) ||
+			(inv_slot == HERO_INVENTORY_SLOT_BODY && item_p->item_subtype_id == ARMOR_TYPE_BODY) ||
 			/* can be worn at the feet */
-			(inv_slot == HERO_INVENTORY_SLOT_FEET && item_p->subtype == ARMOR_TYPE_FEET) ||
+			(inv_slot == HERO_INVENTORY_SLOT_FEET && item_p->item_subtype_id == ARMOR_TYPE_FEET) ||
 			/* can be worn at the arms */
-			(inv_slot == HERO_INVENTORY_SLOT_ARMS && item_p->subtype == ARMOR_TYPE_ARMS) ||
+			(inv_slot == HERO_INVENTORY_SLOT_ARMS && item_p->item_subtype_id == ARMOR_TYPE_ARMS) ||
 			/* can be worn at the legs */
-			(inv_slot == HERO_INVENTORY_SLOT_LEGS && item_p->subtype == ARMOR_TYPE_LEGS) ||
+			(inv_slot == HERO_INVENTORY_SLOT_LEGS && item_p->item_subtype_id == ARMOR_TYPE_LEGS) ||
 			/* can be worn at the left hand */
-			(inv_slot == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->subtype == ARMOR_TYPE_LEFT_HAND)) {
+			(inv_slot == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->item_subtype_id == ARMOR_TYPE_LEFT_HAND)) {
 			return 1;
 		} else {
 			return 0;
@@ -413,10 +413,10 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 							hero->inventory[inv_slot_2].quantity =
 								(item_p->flags.stackable ? quantity_left : (item_p->flags.usable ?
-								g_usable_items_table[item_p->table_index].quantity : 0));
+								g_usable_items_table[item_p->item_type_stats_id].quantity : 0));
 
 							/* set magical flag */
-							if (item_p->magic) {
+							if (item_p->is_magic) {
 
 								hero->inventory[inv_slot_2].flags.magic = 1;
 
@@ -428,7 +428,7 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 							/* set breakfactor */
 							if (item_p->flags.weapon) {
-								hero->inventory[inv_slot_2].bf = g_weapons_table[item_p->table_index].bf;
+								hero->inventory[inv_slot_2].bf = g_weapon_stats_table[item_p->item_type_stats_id].bf;
 							}
 
 							/* adjust weight */
@@ -486,11 +486,11 @@ signed int is_item_pleasing_ingerimm(const signed int item_id)
 {
 	struct item_stats *item_p = &g_itemsdat[item_id];
 
-	if (item_p->flags.weapon && (item_p->subtype == WEAPON_TYPE_AXT))
+	if (item_p->flags.weapon && (item_p->item_subtype_id == WEAPON_TYPE_AXT))
 		/* Ingerimm is pleased by either an axe ... */
 		return 1;
 
-	if (item_p->flags.armor && (g_armors_table[item_p->table_index].rs > 1))
+	if (item_p->flags.armor && (g_armor_stats_table[item_p->item_type_stats_id].rs > 1))
 		/* or an armor with RS > 1 */
 		return 1;
 
@@ -520,7 +520,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 
 		p_item = &g_itemsdat[item_id];
 
-		if (p_item->flags.undropable) {
+		if (p_item->flags.undroppable) {
 
 			/* this item is not droppable */
 			sprintf(g_dtp2,get_ttx(454), (char*)GUI_name_inflect_with_article(
@@ -777,7 +777,7 @@ void loose_random_item(struct struct_hero *hero, const signed int chance, char *
 		p_item = &g_itemsdat[item_id];
 
 		/* No item to drop */
-		if (item_id != 0 && !p_item->flags.undropable) {
+		if (item_id != 0 && !p_item->flags.undroppable) {
 
 			/* drop 1 item */
 			drop_item(hero, inv_slot, 1);

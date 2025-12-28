@@ -588,8 +588,8 @@ void spell_ignifaxius(void)
 		if ((p_armor->item_id != ITEM_ID_NONE) && (rs_malus != 0)) {
 
 			/* adjust rs_malus such that the RS of the worn body armor won't be negative */
-			if ((p_armor->rs_lost + rs_malus) > g_armors_table[g_itemsdat[p_armor->item_id].table_index].rs) {
-				rs_malus = g_armors_table[g_itemsdat[p_armor->item_id].table_index].rs - p_armor->rs_lost;
+			if ((p_armor->rs_lost + rs_malus) > g_armor_stats_table[g_itemsdat[p_armor->item_id].item_type_stats_id].rs) {
+				rs_malus = g_armor_stats_table[g_itemsdat[p_armor->item_id].item_type_stats_id].rs - p_armor->rs_lost;
 			}
 
 			/* add rs_malus to the armor */

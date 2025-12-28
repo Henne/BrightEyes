@@ -174,7 +174,7 @@ void status_menu(signed int hero_pos)
 							g_forbidden_item_ids_table[hero2->typus - 1]) ? g_empty_string8 : get_tx2(66));
 
 					if (g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].flags.weapon) {
-						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].subtype));
+						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].item_subtype_id));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
@@ -357,7 +357,7 @@ void status_menu(signed int hero_pos)
 
 					if (g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].flags.weapon) {
 
-						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].subtype));
+						strcat(g_dtp2, get_ttx(48 + g_itemsdat[hero1->inventory[g_statuspage_sel_inv_slot_3].item_id].item_subtype_id));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);

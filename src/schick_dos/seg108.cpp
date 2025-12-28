@@ -59,21 +59,21 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 	/* is nutrition */
 	if (item_desc->flags.nutrition) {
 
-		if (item_desc->subtype == NUTRITION_TYPE_FOOD) {
+		if (item_desc->item_subtype_id == NUTRITION_TYPE_FOOD) {
 			/* eating */
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->hunger - item_desc->table_index;
-				/* note that, for nutrition, table_index contains the nutrition value */
+				int diff = consumer->hunger - item_desc->item_type_stats_id;
+				/* note that, for nutrition, item_type_stats_id contains the nutrition value */
 
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
 					consumer->alias, GUI_name_base_form(g_itemsname[item_id]),
-					item_desc->table_index,
+					item_desc->item_type_stats_id,
 					consumer->hunger, (diff >= 0) ? diff : 0);
 #endif
 
 			/* subtract from hunger value */
-			consumer->hunger -= item_desc->table_index;
+			consumer->hunger -= item_desc->item_type_stats_id;
 
 			/* adjust hunger value */
 			if (consumer->hunger < 0) {
@@ -94,14 +94,14 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 			if (!owner->inventory[inv_slot].flags.empty) {
 
 #if !defined(__BORLANDC__)
-				int diff = consumer->thirst - item_desc->table_index;
+				int diff = consumer->thirst - item_desc->item_type_stats_id;
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
-					consumer->alias, GUI_name_base_form(g_itemsname[item_id]), item_desc->table_index,
+					consumer->alias, GUI_name_base_form(g_itemsname[item_id]), item_desc->item_type_stats_id,
 					consumer->thirst, (diff >= 0) ? diff : 0);
 #endif
 
 				/* subtract from thirst value */
-				consumer->thirst -= item_desc->table_index;
+				consumer->thirst -= item_desc->item_type_stats_id;
 
 				/* adjust thirst value */
 				if (consumer->thirst < 0) {
@@ -147,7 +147,7 @@ void consume(struct struct_hero *owner, struct struct_hero *consumer, const sign
 
 	} else if (item_desc->flags.herb_potion) {
 
-		if (item_desc->subtype == HERB_POTION_TYPE_HERB_AND_POISON) {
+		if (item_desc->item_subtype_id == HERB_POTION_TYPE_HERB_AND_POISON) {
 
 			if (is_in_int_array(item_id, g_herbs_uneatable)) {
 

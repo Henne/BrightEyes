@@ -239,8 +239,8 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	signed int damage;
 	signed int damage_mod = 0;
 	struct item_stats *item_p_rh;
-	struct weapon_descr *weapon;
-	const struct ranged_weapon_descr *p_rangedtab;
+	struct weapon_stats *weapon;
+	const struct ranged_weapon_stats *p_rangedtab;
 	signed int target_size;
 	signed int right_hand;
 	signed int distance;
@@ -281,7 +281,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 	if (weapon_type != -1) {
 
-		weapon = &g_weapons_table[item_p_rh->table_index];
+		weapon = &g_weapon_stats_table[item_p_rh->item_type_stats_id];
 
 		damage = dice_roll(weapon->damage_d6, 6, weapon->damage_const);
 
@@ -329,7 +329,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 			/* Original-Bug: For ITEM_ID_SPEER and ITEM_ID_SPEER__MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
 			damage_mod = (test_talent(hero,
-						(item_p_rh->subtype == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
+						(item_p_rh->item_subtype_id == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * ranged_distance_type - 2 * target_size) > 0) ?
 					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[ranged_distance_type] : -damage;
 
@@ -585,10 +585,10 @@ signed int weapon_check(const struct struct_hero *hero)
 
 	if (!item_p->flags.weapon || hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken ||
 		(item_p->flags.weapon &&
-			((item_p->subtype == WEAPON_TYPE_SCHUSSWAFFE) ||
-			(item_p->subtype == WEAPON_TYPE_WURFWAFFE) ||
+			((item_p->item_subtype_id == WEAPON_TYPE_SCHUSSWAFFE) ||
+			(item_p->item_subtype_id == WEAPON_TYPE_WURFWAFFE) ||
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline. */
-			(item_p->subtype == WEAPON_TYPE_SPEER &&
+			(item_p->item_subtype_id == WEAPON_TYPE_SPEER &&
 			(item_id != ITEM_ID_ZAUBERSTAB) && (item_id != ITEM_ID_KAMPFSTAB)))))
 	{
 		retval = -1;

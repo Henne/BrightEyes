@@ -100,7 +100,7 @@ void use_item(const signed int inv_slot, const signed int hero_pos)
 				GUI_output(get_ttx(638));
 			} else {
 				/* usable item, but not poison, herb, or potion */
-				func = g_use_item_handlers[g_usable_items_table[g_used_item_desc->table_index].handler_id];
+				func = g_use_item_handlers[g_usable_items_table[g_used_item_desc->item_type_stats_id].handler_id];
 				func();
 			}
 	}

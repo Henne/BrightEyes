@@ -213,7 +213,7 @@ struct fight_msg {
 };
 
 /* seg041 */
-struct ranged_weapon_descr {
+struct ranged_weapon_stats {
 	/* structure of the entries of RANGED_WEAPON_TABLE */
 	int8_t damage_modifier[7]; /* table with damage modifiers depending on the distance */
 	int8_t base_handicap;
@@ -246,7 +246,7 @@ struct ranged_weapon_descr {
 	 * The modifier is given in the RANGED_WEAPON_STATS_DAMAGE_MODIFIER array. */
 };
 
-struct weapon_descr {
+struct weapon_stats {
 	int8_t damage_d6;
 	int8_t damage_const;
 	int8_t damage_kk_bonus;		/* Koerperkraft-Zuschlag */
@@ -256,7 +256,7 @@ struct weapon_descr {
 	int8_t pa_mod;
 };
 
-struct armor_descr {
+struct armor_stats {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#R%C3%BCstungstabelle */
 	/* structure of the entries of ARMORS_TABLE */
 	int8_t rs; /* Rüstungsschutz */
@@ -649,7 +649,7 @@ struct item_flags {
 
 	uint16_t stackable	:1;	/* bit 4: stackable */
 	uint16_t herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
-	uint16_t undropable	:1;	/* bit 6: personal item (cannot be dropped) */
+	uint16_t undroppable	:1;	/* bit 6: personal item (cannot be dropped) */
 	uint16_t dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
@@ -664,7 +664,7 @@ struct item_flags {
 
 	uint8_t stackable	:1;	/* bit 4: stackable */
 	uint8_t herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
-	uint8_t undropable	:1;	/* bit 6: personal item (cannot be dropped) */
+	uint8_t undroppable	:1;	/* bit 6: personal item (cannot be dropped) */
 	uint8_t dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
@@ -682,17 +682,17 @@ struct item_stats {
 	/* structure of the entries of ITEMS.DAT */
 	int16_t item_sprite_id;
 	struct item_flags flags;/* bitfield */
-	int8_t subtype;
+	int8_t item_subtype_id;
 		/* meaning depends on item type set in flags.
 		 * flags.weapon -> WEAPON_TYPE_...,
 		 * flags.armor -> ARMOR_TYPE_...,
 		 * flags.nutrition -> NUTRITION_TYPE...
 		 * flags.herb_potion -> HERB_POTION_TYPE...
 		 */
-	int8_t table_index;
+	int8_t item_type_stats_id;
 		/* meaning depends on item type set in flags.
-		 * flags.armor -> index in g_armors_table
-		 * flags.weapon -> index in g_weapons_table
+		 * flags.armor -> index in g_armor_stats_table
+		 * flags.weapon -> index in g_weapon_stats_table
 		 * flags.nutrition -> number of nutrition units (percentage value)
 		 * flags.usable -> index in g_usable_items_table
 		 */
@@ -700,7 +700,7 @@ struct item_stats {
 	int8_t price_unit;	/* 1: Heller / 10: Silberstücke / 100: Dukaten */
 	int16_t price;		/* base unit is price_unit. So the price in Heller is price_unit * price */
 	int8_t commonness;	/* which merchants do offer this item? */
-	int8_t magic;		/* 0: not magic / 1: magic */
+	int8_t is_magic;	/* 0: not magic / 1: magic */
 };
 #if !defined(__BORLANDC__)
 #pragma pack()
@@ -950,9 +950,9 @@ extern signed int g_items_noplural[23];					// ds:0x0270; seg096
 extern const signed int g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
 extern const signed int* g_forbidden_item_ids_table[12];		// ds:0x0638; seg048, seg056, seg105
-extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
-extern struct weapon_descr g_weapons_table[WEAPON_STATS_ID__END + 1];	// ds:0x06b0; seg033, seg041, seg105
-extern struct armor_descr g_armors_table[ARMOR_STATS_ID__END + 1];				// ds:0x0877; seg079, seg100, seg102, seg105
+extern const struct ranged_weapon_stats g_ranged_weapons_table[9];	// ds:0x0668; seg041
+extern struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1];	// ds:0x06b0; seg033, seg041, seg105
+extern struct armor_stats g_armor_stats_table[ARMOR_STATS_ID__END + 1];				// ds:0x0877; seg079, seg100, seg102, seg105
 extern const struct usable_item_descr g_usable_items_table[USABLE_ITEM_STATS_ID__END];		// ds:0x08a9; seg105, seg107
 extern const signed int g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
 extern const signed int g_herbs_toxic[5];				// ds:0x08e7; seg108

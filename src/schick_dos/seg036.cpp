@@ -202,9 +202,9 @@ signed int AFIG_change_hero_weapon(struct struct_hero *hero)
 		/* grab the first melee weapon in the knapsack,
 		 * and exchange it with the broken weapon. */
 		if (item_p->flags.weapon &&
-			(item_p->subtype != WEAPON_TYPE_SCHUSSWAFFE) &&
-			(item_p->subtype != WEAPON_TYPE_WURFWAFFE) &&
-			(item_p->subtype != WEAPON_TYPE_SPEER))
+			(item_p->item_subtype_id != WEAPON_TYPE_SCHUSSWAFFE) &&
+			(item_p->item_subtype_id != WEAPON_TYPE_WURFWAFFE) &&
+			(item_p->item_subtype_id != WEAPON_TYPE_SPEER))
 		{
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
 			has_new_weapon = 1;

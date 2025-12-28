@@ -263,7 +263,7 @@ void buy_screen(void)
 
 				strcat(g_dtp2, g_buy_screen_str_comma_space);
 
-				strcat(g_dtp2, get_ttx(48 + g_itemsdat[item_id].subtype));
+				strcat(g_dtp2, get_ttx(48 + g_itemsdat[item_id].item_subtype_id));
 			}
 
 			GUI_print_loc_line(g_dtp2);

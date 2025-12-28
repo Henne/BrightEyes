@@ -714,7 +714,7 @@ const signed int *g_forbidden_item_ids_table[12] = {
     g_forbidden_item_ids_waldelf
 }; // ds:0x0638, items wearable depending on hero type
 
-const struct ranged_weapon_descr g_ranged_weapons_table[9] = {
+const struct ranged_weapon_stats g_ranged_weapons_table[9] = {
 	{  1,  0,  0, -1,-99,-99,-99,  6 }, /* 0 <- ITEM_ID_WURFSTERN, ITEM_ID_WURFMESSER */
 	{  1,  1,  0,  0, -1,-99,-99,  6 }, /* 1 <- ITEM_ID_SPEER, ITEM_ID_SCHLEUDER */
 	{  2,  1,  0,  0,  0,-99,-99,  7 }, /* 2 <- ITEM_ID_WURFBEIL, ITEM_ID_WURFAXT */
@@ -726,7 +726,7 @@ const struct ranged_weapon_descr g_ranged_weapons_table[9] = {
 	{ -1,  0,  0,  0,  0,  0,  0,  0 }
 }; // ds:0x0668
 
-struct weapon_descr g_weapons_table[WEAPON_STATS_ID__END + 1] = {
+struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1] = {
 	{ 1, 4, 14,  2, -1,  0,  0 }, // WEAPON_STATS_ID_SCHWERT               ==  0,
 	{ 1, 1, 14,  6, -1, -1, -3 }, // WEAPON_STATS_ID_KNUEPPEL              ==  1,
 	{ 1, 3, 15,  2, -1,  0,  0 }, // WEAPON_STATS_ID_SAEBEL                ==  2,
@@ -794,7 +794,7 @@ struct weapon_descr g_weapons_table[WEAPON_STATS_ID__END + 1] = {
 	{-1, 0,  0,  0,  0,  0,  0 }  // WEAPON_STATS_ID__END                  == 64  // terminator entry
 }; // ds:0x06b0
 
-struct armor_descr g_armors_table[ARMOR_STATS_ID__END + 1] = {
+struct armor_stats g_armor_stats_table[ARMOR_STATS_ID__END + 1] = {
 	{ 1, 0 }, // ARMOR_STATS_ID_SCHILD             ==  0,
 	{ 2, 1 }, // ARMOR_STATS_ID_EISENSCHILD        ==  1, /* ITEM_ID_EISENSCHILD, ITEM_ID_GOLDENER_SCHILD */
 	{ 3, 2 }, // ARMOR_STATS_ID_EISENHELM          ==  2, /* ITEM_ID_EISENHELM, ITEM_ID_SILBERHELM */

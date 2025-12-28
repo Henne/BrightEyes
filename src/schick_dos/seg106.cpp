@@ -76,8 +76,8 @@ signed int two_hand_collision(struct struct_hero* hero, const signed int item_id
 		if (other_item_id) {
 
 			/* check if one hand has a two-handed weapon */
-			if ((g_itemsdat[item_id].flags.weapon && (g_itemsdat[item_id].subtype == WEAPON_TYPE_ZWEIHAENDER)) ||
-			(g_itemsdat[other_item_id].flags.weapon && (g_itemsdat[other_item_id].subtype == WEAPON_TYPE_ZWEIHAENDER))) {
+			if ((g_itemsdat[item_id].flags.weapon && (g_itemsdat[item_id].item_subtype_id == WEAPON_TYPE_ZWEIHAENDER)) ||
+			(g_itemsdat[other_item_id].flags.weapon && (g_itemsdat[other_item_id].item_subtype_id == WEAPON_TYPE_ZWEIHAENDER))) {
 				retval = 1;
 			}
 		}
@@ -328,7 +328,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 	item1_desc = &g_itemsdat[item_id1];
 	item2_desc = &g_itemsdat[item_id2];
 
-	if (item1_desc->flags.undropable) {
+	if (item1_desc->flags.undroppable) {
 
 		sprintf(g_dtp2, get_ttx(454), GUI_name_inflect_with_article(
 			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
@@ -340,7 +340,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		return;
 	}
 
-	if (item2_desc->flags.undropable) {
+	if (item2_desc->flags.undroppable) {
 
 		sprintf(g_dtp2, get_ttx(454), GUI_name_inflect_with_article(
 			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,

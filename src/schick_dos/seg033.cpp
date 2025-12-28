@@ -61,7 +61,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 	signed char at;
 	signed char pa;
 	struct item_stats *p_itemsdat;
-	struct weapon_descr *weapon;
+	struct weapon_stats *weapon;
 	struct spell_descr *spell_description;
 	signed int damage_lo;
 	signed int damage_hi;
@@ -633,7 +633,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 
 						p_itemsdat = &g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id];
-						weapon = &g_weapons_table[p_itemsdat->table_index];
+						weapon = &g_weapon_stats_table[p_itemsdat->item_type_stats_id];
 
 						calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
@@ -649,7 +649,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 
 
 					p_itemsdat = &g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id];
-					weapon = &g_weapons_table[p_itemsdat->table_index];
+					weapon = &g_weapon_stats_table[p_itemsdat->item_type_stats_id];
 
 					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, &damage_lo, &damage_hi);
 
