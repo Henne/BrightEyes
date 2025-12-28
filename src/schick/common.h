@@ -495,7 +495,8 @@ enum {
 	MONSTER_SPELL_PLUMBUMBARUM            = 11, // 0x0b
 	MONSTER_SPELL_SAFT_KRAFT_MONSTERMACHT = 12, // 0x0c
 	MONSTER_SPELL_ARMATRUTZ               = 13, // 0x0d
-	MONSTER_SPELL_PARALUE                 = 14  // 0x0e
+	MONSTER_SPELL_PARALUE                 = 14, // 0x0e
+	MONSTER_SPELL__END                    = 15
 };
 
 enum {

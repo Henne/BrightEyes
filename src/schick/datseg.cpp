@@ -1048,7 +1048,7 @@ struct staffspell_descr g_staffspell_descriptions[7] = {
 	{ ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, 99, 26, 0 },
 	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 99, 21, 2 }
 }; // ds:0x0973
-struct spell_descr g_spell_descriptions[87] = {
+struct spell_descr g_spell_descriptions[SP__END + 1] = {
 	{  0                   , 0        , 0        , 0        ,  0,  0, 0, 0, 0, 0 }, /* ... strangely, an all-zero entry */
 	{  SPELL_ORIGIN_DRUIDE , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1,  0, 1, 2, 0, 0 }, /* Beherrschung brechen */
 	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_IN, ATTRIB_FF, -1,  0, 0, 0, 0, 0 }, /* Destructibo Arcanitas */
@@ -1346,7 +1346,7 @@ void (*g_spell_handlers[SP__END])(void) = {
 	spell_sturmgebr
 }; // ds:0x0dbb, function pointer[86]
 
-struct mon_spell_description g_mon_spell_descriptions[15] = {
+struct mon_spell_description g_mon_spell_descriptions[MONSTER_SPELL__END] = {
 	{  0, 0, 0, 0, 0, 0, 0, 0 },	/* DUMMY */
 	{ 20, 1, 0, 0, 1, 2, 0, 1 },	/* Verwandlung Beenden */
 	{  8, 2, 0, 5, 2, 2, 1, 0 },	/* Bannbaladin */
@@ -1444,7 +1444,7 @@ int8_t g_mon_spellbooks[11][5] = {
 	}
 }; // ds:0x0f8b
 
-void (*g_mon_spellhandlers[15])(void) = {
+void (*g_mon_spellhandlers[MONSTER_SPELL__END])(void) = {
 	NULL,
 	mspell_verwandlung,		/*  1 */
 	mspell_bannbaladin,		/*  2 */
@@ -4104,7 +4104,7 @@ const char* names_spell[SP__END] = {
     "Abvenenum", "Aeolitus", "Brenne", "Claudibus", "Dunkelheit", "Erstarre", "Flim Flam", "Schmelze", "Silentium", "Sturmgebrüll" // Veränderung
 };
 
-const char* names_mspell[14] = {
+const char* names_mspell[MONSTER_SPELL__END - 1] = {
     "Verwandlung Beenden",
     "Bannbaladin",
     "Böser Blick",

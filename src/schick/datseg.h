@@ -951,9 +951,9 @@ extern const signed int g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
 extern const signed int* g_forbidden_item_ids_table[12];		// ds:0x0638; seg048, seg056, seg105
 extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
-extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
-extern struct armor_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
-extern const struct usable_item_descr g_usable_items_table[14];		// ds:0x08a9; seg105, seg107
+extern struct weapon_descr g_weapons_table[WEAPON_STATS_ID__END + 1];	// ds:0x06b0; seg033, seg041, seg105
+extern struct armor_descr g_armors_table[ARMOR_STATS_ID__END + 1];				// ds:0x0877; seg079, seg100, seg102, seg105
+extern const struct usable_item_descr g_usable_items_table[USABLE_ITEM_STATS_ID__END];		// ds:0x08a9; seg105, seg107
 extern const signed int g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
 extern const signed int g_herbs_toxic[5];				// ds:0x08e7; seg108
 extern const signed int g_herbs_uneatable[7];				// ds:0x08f1; seg108
@@ -962,15 +962,15 @@ extern const signed int g_bad_elixirs[8];				// ds:0x090f; seg108
 extern const signed int g_attack_items[3];				// ds:0x091f; seg033
 extern signed char g_monster_name_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
-extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
+extern struct spell_descr g_spell_descriptions[SP__END + 1];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
 extern const struct spell_range g_spellclasses[12];			// ds:0x0d03; seg046, seg098
 //extern const struct spell_range g_spellclasses_2[4];			// ds:0x0d13; seg046
 extern const signed int* g_magic_schools_table[9];
-extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
-extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
+extern void (*g_spell_handlers[SP__END])(void);				// ds:0x0dbb; seg098
+extern struct mon_spell_description g_mon_spell_descriptions[MONSTER_SPELL__END];	// ds:0x0f13; seg037, seg043, seg102
 extern int8_t g_mon_spellbooks[11][5];				// ds:0x0f8b; seg037
-extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
-extern const struct talent_descr g_talent_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
+extern void (*g_mon_spellhandlers[MONSTER_SPELL__END])(void);				// ds:0x0fc2; seg102
+extern const struct talent_descr g_talent_descriptions[TA__END];		// ds:0x0ffe; seg050, seg103, seg104
 extern const struct talent_range g_talentclasses[7];			//ds:0x10ce; seg046, seg103
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];		//ds:0x10dc; seg002, seg033, seg039
 extern signed short g_nvftab_figures_unconscious[22];			//ds:0x11e4; seg002, seg005, seg039
@@ -1149,7 +1149,7 @@ extern int16_t gs_debt_days;			//ds:0x3360; seg002, seg055, seg068
 extern int16_t gs_in_academy;			//ds:0x3362; seg068, seg099
 extern uint8_t  gs_informer_flags[16];		//ds:0x3364; seg030-seg116
 extern uint8_t  gs_tav_kicked_flags[88];		//ds:0x3374; seg060;
-extern uint8_t  gs_town_outlawed_flags[52];	//ds:0x33cc; seg054, seg060;
+extern uint8_t  gs_town_outlawed_flags[TOWN_ID__END - 1];	//ds:0x33cc; seg054, seg060;
 extern uint8_t  gs_inn_kicked_flags[74];	//ds:0x3400; seg060
 extern uint8_t  gs_got_letter_het;		//ds:0x344a; seg069
 extern uint8_t  gs_jurge_awaits_letter;		//ds:0x344c; seg069, seg072, seg073
@@ -2097,10 +2097,10 @@ extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
-extern const char* names_attrib[14];
-extern const char* names_talent[52];
-extern const char* names_spell[86];
-extern const char* names_mspell[14];
+extern const char* names_attrib[ATTRIB__END];
+extern const char* names_talent[TA__END];
+extern const char* names_spell[SP__END];
+extern const char* names_mspell[MONSTER_SPELL__END - 1];
 
 extern uint8_t* g_buffer_xx;
 #endif
