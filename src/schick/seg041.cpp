@@ -53,22 +53,22 @@ static const signed int g_knive_weapons[5] = {
  */
 signed int range_attack_check_ammo(struct struct_hero *hero, const signed int arg)
 {
-	signed int right_hand;
-	signed int left_hand;
+	signed int right_hand_item_id;
+	signed int left_hand_item_id;
 	signed int retval = 0;
 
 	/* read the item ids from the hands */
-	right_hand = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
-	left_hand = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
+	right_hand_item_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
+	left_hand_item_id = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
 
-	switch (right_hand) {
-		case ITEM_ID_SPEER:		/* Speer */
-		case ITEM_ID_WURFBEIL:		/* Wurfbeil */
-		case ITEM_ID_WURFSTERN:	/* Wurfstern */
-		case ITEM_ID_WURFAXT:		/* Wurfaxt */
-		case ITEM_ID_WURFMESSER:	/* Wurfmesser */
-		case ITEM_ID_SCHNEIDZAHN:		/* Schneidzahn */
-		case ITEM_ID_WURFDOLCH__MAGIC:/* Wurfdolch */
+	switch (right_hand_item_id) {
+		case ITEM_ID_SPEER:
+		case ITEM_ID_WURFBEIL:
+		case ITEM_ID_WURFSTERN:
+		case ITEM_ID_WURFAXT:
+		case ITEM_ID_WURFMESSER:
+		case ITEM_ID_SCHNEIDZAHN:
+		case ITEM_ID_WURFDOLCH__MAGIC:
 			/* Original-Bug: missing throwing weapon: ITEM_ID_SPEER__MAGIC */
 			{
 				if (!arg) {
@@ -77,13 +77,13 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 						/* potential Original-Bug: Only the item IDs are stored, but not the other item stats. Is this a problem?
 						 * For example, magic_revealed for the ITEM_ID_WURFDOLCH__MAGIC might get lost.
 						 * Moreover, it would be nice to store the owner, to give it back the hero who used the ranged weapon. */
-						g_fig_dropped_weapons[g_fig_dropped_counter] = right_hand;
+						g_fig_dropped_weapons[g_fig_dropped_counter] = right_hand_item_id;
 						g_fig_dropped_counter++;
 					}
 
 					drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
 
-					if (left_hand == right_hand) {
+					if (left_hand_item_id == right_hand_item_id) {
 						move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_LEFT_HAND, hero);
 					}
 
@@ -91,10 +91,10 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 				retval = 1;
 				break;
 			}
-		case ITEM_ID_KURZBOGEN: 		/* Kurzbogen */
-		case ITEM_ID_LANGBOGEN:		/* Langbogen */
+		case ITEM_ID_KURZBOGEN:
+		case ITEM_ID_LANGBOGEN:
 			{
-				if (left_hand != ITEM_ID_PFEIL) { /* Pfeil */
+				if (left_hand_item_id != ITEM_ID_PFEIL) {
 					if (arg != 2) {
 
 						sprintf(g_dtp2, get_tx(8), hero->alias);
@@ -109,9 +109,9 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 				}
 				break;
 			}
-		case ITEM_ID_ARMBRUST:		/* Armbrust */
+		case ITEM_ID_ARMBRUST:
 			{
-				if (left_hand != ITEM_ID_BOLZEN) { /* Bolzen */
+				if (left_hand_item_id != ITEM_ID_BOLZEN) {
 					if (arg != 2) {
 
 						sprintf(g_dtp2, get_tx(9), hero->alias);
@@ -125,14 +125,14 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 				}
 				break;
 			}
-		case ITEM_ID_SCHLEUDER:	/* SCHLEUDER	/ SLING */
+		case ITEM_ID_SCHLEUDER:
 			{
 #ifndef M302de_FEATURE_MOD
 				/* sling does not work in the original game.
 				 * there is no object with the id 999 */
 				/* REMARK: That's true for technical reasons!
 				 * The maximum value of an unsigned char is 255/0xff */
-				if (left_hand != 999) {
+				if (left_hand_item_id != 999) {
 					if (arg != 2) {
 
 						sprintf(g_dtp2, get_tx(10), hero->alias);
