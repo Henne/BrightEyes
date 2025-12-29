@@ -198,7 +198,7 @@ void hunt_karen(void)
 		if ((get_first_hero_with_item(ITEM_ID_KURZBOGEN) != -1) ||
 			(get_first_hero_with_item(ITEM_ID_LANGBOGEN) != -1) ||
 			(get_first_hero_with_item(ITEM_ID_ARMBRUST) != -1) ||
-			(get_first_hero_with_item(ITEM_ID_SPEER) != -1))
+			(get_first_hero_with_item(ITEM_ID_SPEER) != -1)) /* Original-Bug: Speer is a melee weapon */
 		{
 			hero = get_hero(0);
 			/* make a STEALTH+2 test and count the heroes who passed it */

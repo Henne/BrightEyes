@@ -204,7 +204,7 @@ signed int AFIG_change_hero_weapon(struct struct_hero *hero)
 		if (item_p->flags.weapon &&
 			(item_p->item_subtype_id != WEAPON_TYPE_SCHUSSWAFFE) &&
 			(item_p->item_subtype_id != WEAPON_TYPE_WURFWAFFE) &&
-			(item_p->item_subtype_id != WEAPON_TYPE_SPEER))
+			(item_p->item_subtype_id != WEAPON_TYPE_SPEER)) // Original-Bug: WEAPON_TYPE_SPEER is a melee weapon category.
 		{
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
 			has_new_weapon = 1;
