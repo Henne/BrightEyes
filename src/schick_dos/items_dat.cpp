@@ -2846,7 +2846,14 @@ item_stats items_dat[ITEM_ID__END + 1] = {
 		ITEM_SPRITE_ID_BASTARDSCHWERT,
 		0, // flags.armor
 		1, // flags.weapon
+#ifndef M302de_ORIGINAL_BUGFIX
+		/* Original-Bug 58:
+		 * "magisches Bastardschwert" is marked as 'usable'. Using it crashes the game.
+		 * See https://crystals-dsa-foren.de/showthread.php?tid=6217 */
 		1, // flags.usable
+#else
+		0, // flags.usable
+#endif
 		0, // flags.nutrition
 		0, // flags.stackable
 		0, // flags.herb_potion
