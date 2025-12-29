@@ -3321,14 +3321,27 @@ item_stats items_dat[ITEM_ID__END + 1] = {
 		ITEM_SPRITE_ID_MAGISCHER_BROTBEUTEL,
 		0, // flags.armor
 		0, // flags.weapon
+#ifndef M302de_ORIGINAL_BUGFIX
+		/* Original-Bug 59:
+		 * The item "magischer Brotbeutel" has the same functionality as "magischer Beutel",
+		 * i.e., it can be used to remove a wall in the first level of "Ruine des Schwarzmagiers".
+		 * Almost certainly, this is not the intended effect.
+		 * (But note that there is no regular way to find a "magischer Brotbeutel" in the game.) */
 		1, // flags.usable
+#else
+		0, // flags.usable
+#endif
 		0, // flags.nutrition
 		0, // flags.stackable
 		0, // flags.herb_potion
 		0, // flags.undroppable
 		0, // flags.dummy
 		0, // subtype
+#ifndef M302de_ORIGINAL_BUGFIX
 		USABLE_ITEM_STATS_ID_MAGISCHER_BEUTEL,
+#else
+		0,
+#endif
 		10, // weight
 		100, // price_unit
 		10, // price
