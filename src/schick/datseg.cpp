@@ -716,7 +716,7 @@ const signed int *g_forbidden_item_ids_table[12] = {
 
 const struct ranged_weapon_stats g_ranged_weapon_stats_table[RANGED_WEAPON_STATS_ID__END + 1] = {
 	{  1,  0,  0, -1,-99,-99,-99,  6 }, // RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER == 0
-	{  1,  1,  0,  0, -1,-99,-99,  6 }, // RANGED_WEAPON_STATS_ID_SPEER_SCHLEUDER      == 1
+	{  1,  1,  0,  0, -1,-99,-99,  6 }, // RANGED_WEAPON_STATS_ID_SCHLEUDER            == 1
 	{  2,  1,  0,  0,  0,-99,-99,  7 }, // RANGED_WEAPON_STATS_ID_WURFBEIL_WURFAXT     == 2
 	{  1,  1,  0,  0,  0, -1,-99,  4 }, // RANGED_WEAPON_STATS_ID_KURZBOGEN            == 3
 	{  2,  2,  1,  0,  0, -1, -2,  4 }, // RANGED_WEAPON_STATS_ID_LANGBOGEN            == 4
@@ -731,7 +731,19 @@ struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1] = {
 	{ 1, 1,  14,   6, -1,                                          -1, -3 }, // WEAPON_STATS_ID_KNUEPPEL              ==  1
 	{ 1, 3,  15,   2, -1,                                           0,  0 }, // WEAPON_STATS_ID_SAEBEL                ==  2
 	{ 1, 0,  16,   4, -1,                                          -3, -4 }, // WEAPON_STATS_ID_MESSER                ==  3
-	{ 1, 3,  99,   5, RANGED_WEAPON_STATS_ID_SPEER_SCHLEUDER,       0, -3 }, // WEAPON_STATS_ID_SPEER                 ==  4
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60:
+	 * In ITEMS.DAT, the items "Speer" and "Speer (magisch)" are declared as weapons based on the talent "Speere".
+	 * But in the weapon stats table, they are more a hybrid of a melee and a ranged weapon,
+	 * having no KK-Zuschlag and a linked modifier table for ranged attacks.
+	 * According to DSA 2/3 rules, "Speere" is melee weapon talent, and the item "Speer" is a melee weapon.
+	 * (The throwing variant is called "Wurfspeer".)
+	 */
+	{ 1, 3,  99,   5, RANGED_WEAPON_STATS_ID_SCHLEUDER,             0, -3 }, // WEAPON_STATS_ID_SPEER                 ==  4
+#else
+	/* KK-Zuschlag 16 according to "Kaiser Retos Waffenkammer". */
+	{ 1, 3,  16,   5, -1,                                           0, -3 }, // WEAPON_STATS_ID_SPEER                 ==  4
+#endif
 	{ 1, 2,  15,   1, -1,                                           0, -1 }, // WEAPON_STATS_ID_KURZSCHWERT           ==  5
 	{ 1, 4,  14,   5, -1,                                           0, -3 }, // WEAPON_STATS_ID_KRIEGSBEIL__SPECIAL   ==  6
 	{ 1, 3,  99,   0, RANGED_WEAPON_STATS_ID_KURZBOGEN,             0,  0 }, // WEAPON_STATS_ID_KURZBOGEN             ==  7
@@ -785,7 +797,7 @@ struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1] = {
 	{ 1, 3,  16,   4, -1,                                           0, -1 }, // WEAPON_STATS_ID_RAPIER                == 43
 	{ 1, 4,  14,   2, -1,                                           0, -1 }, // WEAPON_STATS_ID_KUNCHOMER             == 44
 	{ 1, 6,  15,   3, -1,                                          -1, -3 }, // WEAPON_STATS_ID_DOPPELKUNCHOMER       == 45
-	{ 1, 2,  99,   0, RANGED_WEAPON_STATS_ID_SPEER_SCHLEUDER,       0,  0 }, // WEAPON_STATS_ID_SCHLEUDER             == 46
+	{ 1, 2,  99,   0, RANGED_WEAPON_STATS_ID_SCHLEUDER,             0,  0 }, // WEAPON_STATS_ID_SCHLEUDER             == 46
 	{ 1, 3,  13,   4, -1,                                           0, -2 }, // WEAPON_STATS_ID_SKRAJA                == 47
 	{ 1, 4,  13,   2, -1,                                          -2, -4 }, // WEAPON_STATS_ID_KRIEGSBEIL            == 48
 	{ 1, 5,  14,   2, -1,                                          -1, -3 }, // WEAPON_STATS_ID_ORKNASE               == 49
@@ -806,7 +818,13 @@ struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1] = {
 	{ 2, 4,  14, -99, -1,                                          -3, -4 }, // WEAPON_STATS_ID_ZWEIHAENDER__MAGIC    == 58
 	{ 1, 4,  14, -99, -1,                                           2,  2 }, // WEAPON_STATS_ID_DAS_SCHWERT_GRIMRING  == 59
 	{ 1, 4,  14,   0, -1,                                           2,  0 }, // WEAPON_STATS_ID_SCHWERT__MAGIC        == 60
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60:
+	 * Speer is a melee weapon. */
 	{ 1, 3,  99,   5, RANGED_WEAPON_STATS_ID_SPEER__MAGIC,          1,  1 }, // WEAPON_STATS_ID_SPEER__MAGIC          == 61
+#else
+	{ 1, 3,  16,   5, -1,                                           1,  1 }, // WEAPON_STATS_ID_SPEER__MAGIC          == 61
+#endif
 	{ 1, 0,  99,   4, RANGED_WEAPON_STATS_ID_WURFDOLCH__MAGIC,     -3, -4 }, // WEAPON_STATS_ID_WURFDOLCH__MAGIC      == 62
 
 	{ 1, 1,  15, -99, -1,                                           0,  0 }, // WEAPON_STATS_ID_ZAUBERSTAB_HEXENBESEN == 63

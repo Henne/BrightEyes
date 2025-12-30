@@ -62,14 +62,17 @@ signed int range_attack_check_ammo(struct struct_hero *hero, const signed int ar
 	left_hand_item_id = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
 
 	switch (right_hand_item_id) {
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60:
+	 * Speer is a melee weapon. */
 		case ITEM_ID_SPEER:
+#endif
 		case ITEM_ID_WURFBEIL:
 		case ITEM_ID_WURFSTERN:
 		case ITEM_ID_WURFAXT:
 		case ITEM_ID_WURFMESSER:
 		case ITEM_ID_SCHNEIDZAHN:
 		case ITEM_ID_WURFDOLCH__MAGIC:
-			/* Original-Bug: missing throwing weapon: ITEM_ID_SPEER__MAGIC */
 			{
 				if (!arg) {
 

@@ -194,12 +194,18 @@ void hunt_karen(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		/* check for a hunting weapon, BOWS, CROSSBOWS or SPEAR */ /* TODO 2021-04-18: Original-Bug: What about magic spear? sling? (maybe not) */
-		if ((get_first_hero_with_item(ITEM_ID_KURZBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_ID_LANGBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_ID_ARMBRUST) != -1) ||
-			(get_first_hero_with_item(ITEM_ID_SPEER) != -1)) /* Original-Bug: Speer is a melee weapon */
-		{
+		/* check for a hunting weapon */
+		if (
+			(get_first_hero_with_item(ITEM_ID_KURZBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_LANGBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_ARMBRUST) != -1)
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60:
+	 * Speer is a melee weapon. */
+			|| (get_first_hero_with_item(ITEM_ID_SPEER) != -1)
+#endif
+		) {
+
 			hero = get_hero(0);
 			/* make a STEALTH+2 test and count the heroes who passed it */
 			for (i = passed = 0; i <= 6; i++, hero++) {
@@ -218,7 +224,7 @@ void hunt_karen(void)
 
 				GUI_output(get_tx2(5));
 
-				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */ /* TODO 2021-04-18: Original-Bug: Why TA_SCHUSSWAFFEN for spears? */
+				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */
 				hero = get_hero(0);
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
@@ -274,19 +280,26 @@ void hunt_wildboar(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		/* check for a hunting weapon, BOWS, CROSSBOWS or SPEAR */ /* TODO 2021-04-18: Original-Bug: What about magic spear? sling? (maybe not) */
-		if ((get_first_hero_with_item(ITEM_ID_KURZBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_ID_LANGBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_ID_ARMBRUST) != -1) ||
-			(get_first_hero_with_item(ITEM_ID_SPEER) != -1))
-		{
+		/* check for a hunting weapon */
+		if (
+			(get_first_hero_with_item(ITEM_ID_KURZBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_LANGBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_ARMBRUST) != -1)
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60:
+	 * Speer is a melee weapon. */
+			|| (get_first_hero_with_item(ITEM_ID_SPEER) != -1)
+#endif
+		) {
 
 			hero = get_hero(0);
 			/* make a STEALTH+0 test and count the heroes who passed it */
 			for (i = passed = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-					!hero->flags.dead && (test_talent(hero, TA_SCHLEICHEN, 0) > 0))
+				if ((hero->typus != HERO_TYPE_NONE) &&
+					(hero->group_id == gs_active_group_id) &&
+					!hero->flags.dead &&
+					(test_talent(hero, TA_SCHLEICHEN, 0) > 0))
 				{
 					passed++;
 				}
@@ -297,7 +310,7 @@ void hunt_wildboar(void)
 
 				GUI_output(get_tx2(15));
 
-				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */ /* TODO 2021-04-18: Original-Bug: Why TA_SCHUSSWAFFEN for spears? */
+				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */
 				hero = get_hero(0);
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
