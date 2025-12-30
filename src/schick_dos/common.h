@@ -89,30 +89,30 @@ enum {
 };
 
 enum {
-	NPC_NONE	= 0,
-	NPC_NARIELL	= 1,
-	NPC_HARIKA	= 2,
-	NPC_CURIAN	= 3,
-	NPC_ARDORA	= 4,
-	NPC_GARSVIK	= 5,
-	NPC_ERWO	= 6
+	NPC_NONE    = 0,
+	NPC_NARIELL = 1,
+	NPC_HARIKA  = 2,
+	NPC_CURIAN  = 3,
+	NPC_ARDORA  = 4,
+	NPC_GARSVIK = 5,
+	NPC_ERWO    = 6
 };
 
 enum {
-	HERO_TYPE_NONE		=  0,
-	HERO_TYPE_GAUKLER	=  1,	/* juggler */
-	HERO_TYPE_JAEGER	=  2,	/* hunter */
-	HERO_TYPE_KRIEGER	=  3,	/* warrior */
-	HERO_TYPE_STREUNER	=  4,	/* stray */
-	HERO_TYPE_THORWALER	=  5,	/* Thorwalian */
-	HERO_TYPE_ZWERG		=  6,	/* dwarf */
-	/* magic users have id > 66 */
-	HERO_TYPE_HEXE		=  7,	/* witch */
-	HERO_TYPE_DRUIDE	=  8,	/* druid */
-	HERO_TYPE_MAGIER	=  9,	/* mage */
-	HERO_TYPE_AUELF		= 10,	/* green elf */
-	HERO_TYPE_FIRNELF	= 11,	/* ice elf */
-	HERO_TYPE_WALDELF	= 12,	/* sylvan elf */
+	HERO_TYPE_NONE      =  0,
+	HERO_TYPE_GAUKLER   =  1,	/* juggler */
+	HERO_TYPE_JAEGER    =  2,	/* hunter */
+	HERO_TYPE_KRIEGER   =  3,	/* warrior */
+	HERO_TYPE_STREUNER  =  4,	/* stray */
+	HERO_TYPE_THORWALER =  5,	/* Thorwalian */
+	HERO_TYPE_ZWERG     =  6,	/* dwarf */
+	/* magic users have id > 6 */
+	HERO_TYPE_HEXE      =  7,	/* witch */
+	HERO_TYPE_DRUIDE    =  8,	/* druid */
+	HERO_TYPE_MAGIER    =  9,	/* mage */
+	HERO_TYPE_AUELF     = 10,	/* green elf */
+	HERO_TYPE_FIRNELF   = 11,	/* ice elf */
+	HERO_TYPE_WALDELF   = 12,	/* sylvan elf */
 };
 
 enum {
@@ -158,61 +158,61 @@ enum {
 };
 
 enum {
-	FIG_ACTION_NONE			=  0,
-	FIG_ACTION_MOVE			=  1,
-	FIG_ACTION_MELEE_ATTACK		=  2,
-	FIG_ACTION_GUARD		=  3,
-	FIG_ACTION_SPELL		=  4,
-	FIG_ACTION_USE_ITEM		=  5,
-	FIG_ACTION_DROP_ITEM		=  6,
-	FIG_ACTION_EXCHANGE_WEAPON	=  7,
-	FIG_ACTION_EXCHANGE_ITEM	=  8,
-	FIG_ACTION_CHECK_VALUES		=  9,
-	FIG_ACTION_WAIT			= 10,
-	FIG_ACTION_COMPUTER_FIGHT	= 11,
-	FIG_ACTION_QUIT_AND_LOAD	= 12,
-	FIG_ACTION_REPEAT_OPTION	= 13,
-	FIG_ACTION_RANGE_ATTACK		= 15,
-	FIG_ACTION_FLEE			= 16,
-	FIG_ACTION_PARRY		= 100, /* is set in sub_hero_le() when all le are lost */
-	FIG_ACTION_UNKNOWN3		= 102, /* drink potion? */
-	FIG_ACTION_UNKNOWN4		= 103  /* cast spell? */
+	FIG_ACTION_NONE            =   0,
+	FIG_ACTION_MOVE            =   1,
+	FIG_ACTION_MELEE_ATTACK    =   2,
+	FIG_ACTION_GUARD           =   3,
+	FIG_ACTION_SPELL           =   4,
+	FIG_ACTION_USE_ITEM        =   5,
+	FIG_ACTION_DROP_ITEM       =   6,
+	FIG_ACTION_EXCHANGE_WEAPON =   7,
+	FIG_ACTION_EXCHANGE_ITEM   =   8,
+	FIG_ACTION_CHECK_VALUES    =   9,
+	FIG_ACTION_WAIT            =  10,
+	FIG_ACTION_COMPUTER_FIGHT  =  11,
+	FIG_ACTION_QUIT_AND_LOAD   =  12,
+	FIG_ACTION_REPEAT_OPTION   =  13,
+	FIG_ACTION_RANGE_ATTACK    =  15,
+	FIG_ACTION_FLEE            =  16,
+	FIG_ACTION_PARRY           = 100, /* is set in sub_hero_le() when all le are lost */
+	FIG_ACTION_UNKNOWN3        = 102, /* drink potion? */
+	FIG_ACTION_UNKNOWN4        = 103  /* cast spell? */
 };
 
 enum {
-	DISEASE_ID_NONE			= 0,
-	DISEASE_ID_WUNDFIEBER		= 1,
-	DISEASE_ID_DUMPFSCHAEDEL	= 2,
-	DISEASE_ID_BLAUE_KEUCHE		= 3,
-	DISEASE_ID_PARALYSE		= 4,
-	DISEASE_ID_SCHLACHTENFIEBER	= 5,
-	DISEASE_ID_FROSTSCHAEDEN	= 6,
-	DISEASE_ID_TOLLWUT		= 7
+	DISEASE_ID_NONE             = 0,
+	DISEASE_ID_WUNDFIEBER       = 1,
+	DISEASE_ID_DUMPFSCHAEDEL    = 2,
+	DISEASE_ID_BLAUE_KEUCHE     = 3,
+	DISEASE_ID_PARALYSE         = 4,
+	DISEASE_ID_SCHLACHTENFIEBER = 5,
+	DISEASE_ID_FROSTSCHAEDEN    = 6,
+	DISEASE_ID_TOLLWUT          = 7
 };
 
 enum {
-	DISEASE_STATUS_DISEASED	= -1,
-	DISEASE_STATUS_HEALTHY	= 0,
-	DISEASE_STATUS_RECOVER	= 1
+	DISEASE_STATUS_DISEASED = -1,
+	DISEASE_STATUS_HEALTHY  =  0,
+	DISEASE_STATUS_RECOVER  =  1
 };
 
 enum {
-	POISON_ID_NONE			= 0,
-	POISON_ID_SHURINKNOLLENGIFT	= 1,
-	POISON_ID_ARAX			= 2,
-	POISON_ID_ANGSTGIFT		= 3,
-	POISON_ID_SCHLAFGIFT		= 4,
-	POISON_ID_GOLDLEIM		= 5,
-	POISON_ID_KROETENSCHEMEL	= 6,
-	POISON_ID_LOTUSGIFT		= 7,
-	POISON_ID_KUKRIS		= 8,
-	POISON_ID_BANNSTAUB		= 9
+	POISON_ID_NONE              = 0,
+	POISON_ID_SHURINKNOLLENGIFT = 1,
+	POISON_ID_ARAX              = 2,
+	POISON_ID_ANGSTGIFT         = 3,
+	POISON_ID_SCHLAFGIFT        = 4,
+	POISON_ID_GOLDLEIM          = 5,
+	POISON_ID_KROETENSCHEMEL    = 6,
+	POISON_ID_LOTUSGIFT         = 7,
+	POISON_ID_KUKRIS            = 8,
+	POISON_ID_BANNSTAUB         = 9
 };
 
 enum {
-	POISON_STATUS_POISONED	= -1,
-	POISON_STATUS_HEALTHY	= 0,
-	POISON_STATUS_RECOVER	= 1
+	POISON_STATUS_POISONED = -1,
+	POISON_STATUS_HEALTHY  =  0,
+	POISON_STATUS_RECOVER  =  1
 };
 
 enum {
@@ -235,167 +235,167 @@ enum {
 
 enum {
 	/* Kampf */
-	TA_WAFFENLOS		=  0, // 0x00
-	TA_HIEBWAFFEN		=  1, // 0x01
-	TA_STICHWAFFEN		=  2, // 0x02
-	TA_SCHWERTER		=  3, // 0x03
-	TA_AEXTE		=  4, // 0x04
-	TA_SPEERE		=  5, // 0x05
-	TA_ZWEIHAENDER		=  6, // 0x06
-	TA_SCHUSSWAFFEN		=  7, // 0x07
-	TA_WURFWAFFEN		=  8, // 0x08
+	TA_WAFFENLOS           =  0, // 0x00
+	TA_HIEBWAFFEN          =  1, // 0x01
+	TA_STICHWAFFEN         =  2, // 0x02
+	TA_SCHWERTER           =  3, // 0x03
+	TA_AEXTE               =  4, // 0x04
+	TA_SPEERE              =  5, // 0x05
+	TA_ZWEIHAENDER         =  6, // 0x06
+	TA_SCHUSSWAFFEN        =  7, // 0x07
+	TA_WURFWAFFEN          =  8, // 0x08
 	/* Körper */
-	TA_AKROBATIK		=  9, // 0x09
-	TA_KLETTERN		= 10, // 0x0a
-	TA_KOERPERBEHERRSCHUNG	= 11, // 0x0b
-	TA_REITEN		= 12, // 0x0c
-	TA_SCHLEICHEN		= 13, // 0x0d
-	TA_SCHWIMMEN		= 14, // 0x0e
-	TA_SELBSTBEHERRSCHUNG	= 15, // 0x0f
-	TA_TANZEN		= 16, // 0x10
-	TA_VERSTECKEN		= 17, // 0x11
-	TA_ZECHEN		= 18, // 0x12
+	TA_AKROBATIK           =  9, // 0x09
+	TA_KLETTERN            = 10, // 0x0a
+	TA_KOERPERBEHERRSCHUNG = 11, // 0x0b
+	TA_REITEN              = 12, // 0x0c
+	TA_SCHLEICHEN          = 13, // 0x0d
+	TA_SCHWIMMEN           = 14, // 0x0e
+	TA_SELBSTBEHERRSCHUNG  = 15, // 0x0f
+	TA_TANZEN              = 16, // 0x10
+	TA_VERSTECKEN          = 17, // 0x11
+	TA_ZECHEN              = 18, // 0x12
 	/* Gesellschaft */
-	TA_BEKEHREN		= 19, // 0x13
-	TA_BETOEREN		= 20, // 0x14
-	TA_FEILSCHEN		= 21, // 0x15
-	TA_GASSENWISSEN		= 22, // 0x16
-	TA_LUEGEN		= 23, // 0x17
-	TA_MENSCHENKENNTNIS	= 24, // 0x18
-	TA_SCHAETZEN		= 25, // 0x19
+	TA_BEKEHREN            = 19, // 0x13
+	TA_BETOEREN            = 20, // 0x14
+	TA_FEILSCHEN           = 21, // 0x15
+	TA_GASSENWISSEN        = 22, // 0x16
+	TA_LUEGEN              = 23, // 0x17
+	TA_MENSCHENKENNTNIS    = 24, // 0x18
+	TA_SCHAETZEN           = 25, // 0x19
 	/* Natur */
-	TA_FAEHRTENSUCHEN	= 26, // 0x1a
-	TA_FESSELN		= 27, // 0x1b
-	TA_ORIENTIERUNG		= 28, // 0x1c
-	TA_PFLANZENKUNDE	= 29, // 0x1d
-	TA_TIERKUNDE		= 30, // 0x1e
-	TA_WILDNISLEBEN		= 31, // 0x1f
+	TA_FAEHRTENSUCHEN      = 26, // 0x1a
+	TA_FESSELN             = 27, // 0x1b
+	TA_ORIENTIERUNG        = 28, // 0x1c
+	TA_PFLANZENKUNDE       = 29, // 0x1d
+	TA_TIERKUNDE           = 30, // 0x1e
+	TA_WILDNISLEBEN        = 31, // 0x1f
 	/* Wissen */
-	TA_ALCHIMIE		= 32, // 0x20
-	TA_ALTE_SPRACHEN	= 33, // 0x21
-	TA_GEOGRAPHIE		= 34, // 0x22
-	TA_GESCHICHTE		= 35, // 0x23
-	TA_GOETTER_KULTE	= 36, // 0x24
-	TA_KRIEGSKUNST		= 37, // 0x25
-	TA_LESEN		= 38, // 0x26
-	TA_MAGIEKUNDE		= 39, // 0x27
-	TA_SPRACHEN		= 40, // 0x28
+	TA_ALCHIMIE            = 32, // 0x20
+	TA_ALTE_SPRACHEN       = 33, // 0x21
+	TA_GEOGRAPHIE          = 34, // 0x22
+	TA_GESCHICHTE          = 35, // 0x23
+	TA_GOETTER_KULTE       = 36, // 0x24
+	TA_KRIEGSKUNST         = 37, // 0x25
+	TA_LESEN               = 38, // 0x26
+	TA_MAGIEKUNDE          = 39, // 0x27
+	TA_SPRACHEN            = 40, // 0x28
 	/* Handwerk */
-	TA_ABRICHTEN		= 41, // 0x29
-	TA_FAHRZEUGE		= 42, // 0x2a
-	TA_FALSCHSPIEL		= 43, // 0x2b
-	TA_HEILEN_GIFT		= 44, // 0x2c
-	TA_HEILEN_KRANKHEITEN	= 45, // 0x2d
-	TA_HEILEN_WUNDEN	= 46, // 0x2e
-	TA_MUSIZIEREN		= 47, // 0x2f
-	TA_SCHLOESSER		= 48, // 0x30
-	TA_TASCHENDIEBSTAHL	= 49, // 0x31
+	TA_ABRICHTEN           = 41, // 0x29
+	TA_FAHRZEUGE           = 42, // 0x2a
+	TA_FALSCHSPIEL         = 43, // 0x2b
+	TA_HEILEN_GIFT         = 44, // 0x2c
+	TA_HEILEN_KRANKHEITEN  = 45, // 0x2d
+	TA_HEILEN_WUNDEN       = 46, // 0x2e
+	TA_MUSIZIEREN          = 47, // 0x2f
+	TA_SCHLOESSER          = 48, // 0x30
+	TA_TASCHENDIEBSTAHL    = 49, // 0x31
 	/* Intuition */
-	TA_GEFAHRENSINN		= 50, // 0x32
-	TA_SINNESSCHAERFE	= 51, // 0x33
-	TA__END			= 52
+	TA_GEFAHRENSINN        = 50, // 0x32
+	TA_SINNESSCHAERFE      = 51, // 0x33
+	TA__END                = 52
 };
 
 enum {
-	SP_NONE					=  0, // 0x00
+	SP_NONE                          =  0, // 0x00
 	/* Antimagie */
-	SP_BEHERRSCHUNG_BRECHEN			=  1, // 0x01
-	SP_DESTRUCTIBO_ARCANITAS		=  2, // 0x02
-	SP_GARDIANUM_PARADEI			=  3, // 0x03
-	SP_ILLUSIONEN_ZERSTOEREN		=  4, // 0x04
-	SP_VERWANDLUNG_BEENDEN			=  5, // 0x05
+	SP_BEHERRSCHUNG_BRECHEN          =  1, // 0x01
+	SP_DESTRUCTIBO_ARCANITAS         =  2, // 0x02
+	SP_GARDIANUM_PARADEI             =  3, // 0x03
+	SP_ILLUSIONEN_ZERSTOEREN         =  4, // 0x04
+	SP_VERWANDLUNG_BEENDEN           =  5, // 0x05
 	/* Beherrschung */
-	SP_BAND_UND_FESSEL			=  6, // 0x06
-	SP_BANNBALADIN				=  7, // 0x07
-	SP_BOESER_BLICK				=  8, // 0x08
-	SP_GROSSE_GIER				=  9, // 0x09
-	SP_GROSSE_VERWIRRUNG			= 10, // 0x0a
-	SP_HERR_UEBER_DAS_TIERREICH		= 11, // 0x0b
-	SP_HORRIPHOBUS				= 12, // 0x0c
-	SP_MAGISCHER_RAUB			= 13, // 0x0d
-	SP_RESPONDAMI_VERITAR			= 14, // 0x0e
-	SP_SANFTMUT				= 15, // 0x0f
-	SP_SOMNIGRAVIS_TAUSENDSCHLAF		= 16, // 0x10
-	SP_ZWINGTANZ				= 17, // 0x11
+	SP_BAND_UND_FESSEL               =  6, // 0x06
+	SP_BANNBALADIN                   =  7, // 0x07
+	SP_BOESER_BLICK                  =  8, // 0x08
+	SP_GROSSE_GIER                   =  9, // 0x09
+	SP_GROSSE_VERWIRRUNG             = 10, // 0x0a
+	SP_HERR_UEBER_DAS_TIERREICH      = 11, // 0x0b
+	SP_HORRIPHOBUS                   = 12, // 0x0c
+	SP_MAGISCHER_RAUB                = 13, // 0x0d
+	SP_RESPONDAMI_VERITAR            = 14, // 0x0e
+	SP_SANFTMUT                      = 15, // 0x0f
+	SP_SOMNIGRAVIS_TAUSENDSCHLAF     = 16, // 0x10
+	SP_ZWINGTANZ                     = 17, // 0x11
 	/* Daemonologie */
-	SP_FUROR_BLUT_UND_SULPHURDAMPF		= 18, // 0x12
-	SP_GEISTER_AUSTREIBEN			= 19, // 0x13
-	SP_GEISTER_BESCHWOEREN			= 20, // 0x14
-	SP_HEPTAGON_UND_KROETENEI		= 21, // 0x15
-	SP_KRAEHENRUF				= 22, // 0x16
-	SP_SKELETTARIUS_KRYPTADUFT		= 23, // 0x17
+	SP_FUROR_BLUT_UND_SULPHURDAMPF   = 18, // 0x12
+	SP_GEISTER_AUSTREIBEN            = 19, // 0x13
+	SP_GEISTER_BESCHWOEREN           = 20, // 0x14
+	SP_HEPTAGON_UND_KROETENEI        = 21, // 0x15
+	SP_KRAEHENRUF                    = 22, // 0x16
+	SP_SKELETTARIUS_KRYPTADUFT       = 23, // 0x17
 	/* Elemente */
-	SP_ELEMENTARE_BESCHWOEREN		= 24, // 0x18
-	SP_NIHILATIO_GRAVITAS			= 25, // 0x19
-	SP_SOLIDIRID_FARBENSPIEL		= 26, // 0x1a
+	SP_ELEMENTARE_BESCHWOEREN        = 24, // 0x18
+	SP_NIHILATIO_GRAVITAS            = 25, // 0x19
+	SP_SOLIDIRID_FARBENSPIEL         = 26, // 0x1a
 	/* Bewegung */
-	SP_AXXELERATUS_BLITZGESCHWIND		= 27, // 0x1b
-	SP_FORAMEN_FORAMINOR			= 28, // 0x1c
-	SP_MOTORICUS_MOTILITICH			= 29, // 0x1d
-	SP_SPURLOS_TRITTLOS_FAEHRTENLOS		= 30, // 0x1e
-	SP_TRANSVERSALIS_TELEPORT		= 31, // 0x1f
-	SP_UEBER_EIS_UND_UEBER_SCHNEE		= 32, // 0x20
+	SP_AXXELERATUS_BLITZGESCHWIND    = 27, // 0x1b
+	SP_FORAMEN_FORAMINOR             = 28, // 0x1c
+	SP_MOTORICUS_MOTILITICH          = 29, // 0x1d
+	SP_SPURLOS_TRITTLOS_FAEHRTENLOS  = 30, // 0x1e
+	SP_TRANSVERSALIS_TELEPORT        = 31, // 0x1f
+	SP_UEBER_EIS_UND_UEBER_SCHNEE    = 32, // 0x20
 	/* Heilung */
-	SP_BALSAM_SALABUNDE			= 33, // 0x21
-	SP_HEXENSPEICHEL			= 34, // 0x22
-	SP_KLARUM_PURUM_KRAEUTERSUD		= 35, // 0x23
-	SP_RUHE_KOERPER_RUHE_GEIST		= 36, // 0x24
-	SP_TIERE_BESPRECHEN			= 37, // 0x25
+	SP_BALSAM_SALABUNDE              = 33, // 0x21
+	SP_HEXENSPEICHEL                 = 34, // 0x22
+	SP_KLARUM_PURUM_KRAEUTERSUD      = 35, // 0x23
+	SP_RUHE_KOERPER_RUHE_GEIST       = 36, // 0x24
+	SP_TIERE_BESPRECHEN              = 37, // 0x25
 	/* Wahrnehmung */
-	SP_ADLERAUG_UND_LUCHSENOHR		= 38, // 0x26
-	SP_ANALUES_ARCANSTRUKTUR		= 39, // 0x27
-	SP_EIGENSCHAFTEN_SEID_GELESEN		= 40, // 0x28
-	SP_EXPOSAMI_CREATUR			= 41, // 0x29
-	SP_ODEM_ARCANUM				= 42, // 0x2a
-	SP_PENETRIZZEL_HOLZ_UND_STEIN		= 43, // 0x2b
-	SP_SENSIBAR_WAHR_UND_KLAR		= 44, // 0x2c
+	SP_ADLERAUG_UND_LUCHSENOHR       = 38, // 0x26
+	SP_ANALUES_ARCANSTRUKTUR         = 39, // 0x27
+	SP_EIGENSCHAFTEN_SEID_GELESEN    = 40, // 0x28
+	SP_EXPOSAMI_CREATUR              = 41, // 0x29
+	SP_ODEM_ARCANUM                  = 42, // 0x2a
+	SP_PENETRIZZEL_HOLZ_UND_STEIN    = 43, // 0x2b
+	SP_SENSIBAR_WAHR_UND_KLAR        = 44, // 0x2c
 	/* Visionen */
-	SP_CHAMAELIONI_MIMIKRY			= 45, // 0x2d
-	SP_DUPLICATUS_DOPPELPEIN		= 46, // 0x2e
-	SP_HARMLOSE_GESTALT			= 47, // 0x2f
-	SP_HEXENKNOTEN				= 48, // 0x30
+	SP_CHAMAELIONI_MIMIKRY           = 45, // 0x2d
+	SP_DUPLICATUS_DOPPELPEIN         = 46, // 0x2e
+	SP_HARMLOSE_GESTALT              = 47, // 0x2f
+	SP_HEXENKNOTEN                   = 48, // 0x30
 	/* Kampf */
-	SP_BLITZ_DICH_FIND			= 49, // 0x31
-	SP_ECLIPTIFACTUS			= 50, // 0x32
-	SP_EISENROST_UND_GRUENER_SPAN		= 51, // 0x33
-	SP_FULMINICTUS_DONNERKEIL		= 52, // 0x34
-	SP_IGNIFAXIUS_FLAMMENSTRAHL		= 53, // 0x35
-	SP_PLUMBUMBARUM_UND_NARRETEI		= 54, // 0x36
-	SP_RADAU				= 55, // 0x37
-	SP_SAFT_KRAFT_MONSTERMACHT		= 56, // 0x38
-	SP_SCHARFES_AUGE_UND_SICHRE_HAND	= 57, // 0x39
+	SP_BLITZ_DICH_FIND               = 49, // 0x31
+	SP_ECLIPTIFACTUS                 = 50, // 0x32
+	SP_EISENROST_UND_GRUENER_SPAN    = 51, // 0x33
+	SP_FULMINICTUS_DONNERKEIL        = 52, // 0x34
+	SP_IGNIFAXIUS_FLAMMENSTRAHL      = 53, // 0x35
+	SP_PLUMBUMBARUM_UND_NARRETEI     = 54, // 0x36
+	SP_RADAU                         = 55, // 0x37
+	SP_SAFT_KRAFT_MONSTERMACHT       = 56, // 0x38
+	SP_SCHARFES_AUGE_UND_SICHRE_HAND = 57, // 0x39
 	/* Verstaendigung */
-	SP_HEXENBLICK				= 58, // 0x3a
-	SP_NEKROPATHIA_MODERND_LEICH		= 59, // 0x3b
+	SP_HEXENBLICK                    = 58, // 0x3a
+	SP_NEKROPATHIA_MODERND_LEICH     = 59, // 0x3b
 	/* Verwandlung */
-	SP_ADLER_WOLF_UND_HAMMERHAI		= 60, // 0x3c
-	SP_ARCANO_PSYCHOSTABILIS		= 61, // 0x3d
-	SP_ARMATRUTZ				= 62, // 0x3e
-	SP_CH_STEIGERN				= 63, // 0x3f
-	SP_FEUERBANN				= 64, // 0x40
-	SP_FF_STEIGERN				= 65, // 0x41
-	SP_GE_STEIGERN				= 66, // 0x42
-	SP_IN_STEIGERN				= 67, // 0x43
-	SP_KK_STEIGERN				= 68, // 0x44
-	SP_KL_STEIGERN				= 69, // 0x45
-	SP_MU_STEIGERN				= 70, // 0x46
-	SP_MUTABILI_HYBRIDIL			= 71, // 0x47
-	SP_PARALUE_PARALEIN			= 72, // 0x48
-	SP_SALANDER_MUTANDERER			= 73, // 0x49
-	SP_IN_SEE_UND_FLUSS			= 74, // 0x4a
-	SP_VISIBILI_VANITAR			= 75, // 0x4b
+	SP_ADLER_WOLF_UND_HAMMERHAI      = 60, // 0x3c
+	SP_ARCANO_PSYCHOSTABILIS         = 61, // 0x3d
+	SP_ARMATRUTZ                     = 62, // 0x3e
+	SP_CH_STEIGERN                   = 63, // 0x3f
+	SP_FEUERBANN                     = 64, // 0x40
+	SP_FF_STEIGERN                   = 65, // 0x41
+	SP_GE_STEIGERN                   = 66, // 0x42
+	SP_IN_STEIGERN                   = 67, // 0x43
+	SP_KK_STEIGERN                   = 68, // 0x44
+	SP_KL_STEIGERN                   = 69, // 0x45
+	SP_MU_STEIGERN                   = 70, // 0x46
+	SP_MUTABILI_HYBRIDIL             = 71, // 0x47
+	SP_PARALUE_PARALEIN              = 72, // 0x48
+	SP_SALANDER_MUTANDERER           = 73, // 0x49
+	SP_IN_SEE_UND_FLUSS              = 74, // 0x4a
+	SP_VISIBILI_VANITAR              = 75, // 0x4b
 	/* Veraenderung */
-	SP_ABVENENUM_PEST_UND_GALLE		= 76, // 0x4c
-	SP_AEOLITUS_WINDGEBRAUS			= 77, // 0x4d
-	SP_BRENNE_TOTER_STOFF			= 78, // 0x4e
-	SP_CLAUDIBUS_CLAVISTIBOR		= 79, // 0x4f
-	SP_DUNKELHEIT				= 80, // 0x50
-	SP_WEICHES_ERSTARRE			= 81, // 0x51
-	SP_FLIM_FLAM_FUNKEL			= 82, // 0x52
-	SP_HARTES_SCHMELZE			= 83, // 0x53
-	SP_SILENTIUM_SILENTILLE			= 84, // 0x54
-	SP_STURMGEBRUELL_BESAENFTGE_DICH	= 85, // 0x55
-	SP__END					= 86
+	SP_ABVENENUM_PEST_UND_GALLE      = 76, // 0x4c
+	SP_AEOLITUS_WINDGEBRAUS          = 77, // 0x4d
+	SP_BRENNE_TOTER_STOFF            = 78, // 0x4e
+	SP_CLAUDIBUS_CLAVISTIBOR         = 79, // 0x4f
+	SP_DUNKELHEIT                    = 80, // 0x50
+	SP_WEICHES_ERSTARRE              = 81, // 0x51
+	SP_FLIM_FLAM_FUNKEL              = 82, // 0x52
+	SP_HARTES_SCHMELZE               = 83, // 0x53
+	SP_SILENTIUM_SILENTILLE          = 84, // 0x54
+	SP_STURMGEBRUELL_BESAENFTGE_DICH = 85, // 0x55
+	SP__END                          = 86
 };
 
 enum {
@@ -532,12 +532,12 @@ enum {
 enum {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
 	/* except the last entry ITEM_SUBTYPE_ARMOR_LEFT_HAND (shields), all values agree with HERO_INVENTORY_SLOT_... */
-	ARMOR_TYPE_HEAD 	= 0,
-	ARMOR_TYPE_ARMS 	= 1,
-	ARMOR_TYPE_BODY 	= 2,
-	ARMOR_TYPE_LEGS 	= 5,
-	ARMOR_TYPE_FEET 	= 6,
-	ARMOR_TYPE_LEFT_HAND 	= 9, /* shields */
+	ARMOR_TYPE_HEAD      = 0,
+	ARMOR_TYPE_ARMS      = 1,
+	ARMOR_TYPE_BODY      = 2,
+	ARMOR_TYPE_LEGS      = 5,
+	ARMOR_TYPE_FEET      = 6,
+	ARMOR_TYPE_LEFT_HAND = 9, /* shields */
 };
 
 enum {
@@ -593,8 +593,8 @@ enum {
 };
 
 enum {
-	NUTRITION_TYPE_DRINK	= 0,
-	NUTRITION_TYPE_FOOD	= 1
+	NUTRITION_TYPE_DRINK = 0,
+	NUTRITION_TYPE_FOOD  = 1
 };
 
 enum {
@@ -717,25 +717,25 @@ enum {
 };
 
 enum {
-	LOCTYPE_NONE		=  0,
-	LOCTYPE_UNKN1		=  1,
-	LOCTYPE_TEMPLE		=  2,
-	LOCTYPE_TAVERN		=  3,
-	LOCTYPE_HEALER		=  4,
-	LOCTYPE_MERCHANT	=  5,
-	LOCTYPE_WILDCAMP	=  6,
-	LOCTYPE_INN		=  7,
-	LOCTYPE_SMITH		=  8,
-	LOCTYPE_MARKET		=  9,
-	LOCTYPE_CITIZEN		= 10, // Leuchtturm Runin is of this type
-	LOCTYPE_HARBOR 		= 11,
-	LOCTYPE_SIGNPOST	= 12,
-	LOCTYPE_INFORMER	= 13,
-	LOCTYPE_DUNGEON_ENTRY	= 14, // used in Prem, Oberorken. The entry to "Alte Zwingfeste" in Thorwal is LOCTYPE_SPECIAL
-	LOCTYPE_UNKN2		= 15,
-	LOCTYPE_HOUSE		= 16,
-	LOCTYPE_SPECIAL		= 17, // used in Thorwal, Phexcaer, Einsiedlersee
-	LOCTYPE_AREA_CAMP	= 18
+	LOCTYPE_NONE          =  0,
+	LOCTYPE_UNKN1         =  1,
+	LOCTYPE_TEMPLE        =  2,
+	LOCTYPE_TAVERN        =  3,
+	LOCTYPE_HEALER        =  4,
+	LOCTYPE_MERCHANT      =  5,
+	LOCTYPE_WILDCAMP      =  6,
+	LOCTYPE_INN           =  7,
+	LOCTYPE_SMITH         =  8,
+	LOCTYPE_MARKET        =  9,
+	LOCTYPE_CITIZEN       = 10, // Leuchtturm Runin is of this type
+	LOCTYPE_HARBOR        = 11,
+	LOCTYPE_SIGNPOST      = 12,
+	LOCTYPE_INFORMER      = 13,
+	LOCTYPE_DUNGEON_ENTRY = 14, // used in Prem, Oberorken. The entry to "Alte Zwingfeste" in Thorwal is LOCTYPE_SPECIAL
+	LOCTYPE_UNKN2         = 15,
+	LOCTYPE_HOUSE         = 16,
+	LOCTYPE_SPECIAL       = 17, // used in Thorwal, Phexcaer, Einsiedlersee
+	LOCTYPE_AREA_CAMP     = 18
 };
 
 enum {
@@ -752,51 +752,51 @@ enum {
 };
 
 enum {
-	GAME_STATE_MAIN		=  0,
-	GAME_STATE_DEAD		=  1, /* all heroes dead */
-	GAME_STATE_UNKNOWN	=  2,
-	GAME_STATE_QUIT		=  3, /* ordinary quit */
-	GAME_STATE_TIMEUP	=  4, /* max. game time is up */
-	GAME_STATE_OUTRO	=  5, /* after (successful) outro */
-	GAME_STATE_FIGQUIT	=  7, /* quit game during fight */
-	GAME_STATE_VICTORY	= 99 /* final fight won (before outro) */
+	GAME_STATE_MAIN    =  0,
+	GAME_STATE_DEAD    =  1, /* all heroes dead */
+	GAME_STATE_UNKNOWN =  2,
+	GAME_STATE_QUIT    =  3, /* ordinary quit */
+	GAME_STATE_TIMEUP  =  4, /* max. game time is up */
+	GAME_STATE_OUTRO   =  5, /* after (successful) outro */
+	GAME_STATE_FIGQUIT =  7, /* quit game during fight */
+	GAME_STATE_VICTORY = 99 /* final fight won (before outro) */
 };
 
 enum {
-	GOD_ID_PRAIOS		=  1,
-	GOD_ID_RONDRA		=  2,
-	GOD_ID_EFFERD		=  3,
-	GOD_ID_TRAVIA		=  4,
-	GOD_ID_BORON		=  5,
-	GOD_ID_HESINDE		=  6,
-	GOD_ID_FIRUN		=  7,
-	GOD_ID_TSA		=  8,
-	GOD_ID_PHEX		=  9,
-	GOD_ID_PERAINE		= 10,
-	GOD_ID_INGERIMM		= 11,
-	GOD_ID_RAHJA		= 12,
-	GOD_ID_SWAFNIR		= 13,
-	GOD_ID_IFIRN		= 14,
-	GOD_ID__END		= 15
+	GOD_ID_PRAIOS   =  1,
+	GOD_ID_RONDRA   =  2,
+	GOD_ID_EFFERD   =  3,
+	GOD_ID_TRAVIA   =  4,
+	GOD_ID_BORON    =  5,
+	GOD_ID_HESINDE  =  6,
+	GOD_ID_FIRUN    =  7,
+	GOD_ID_TSA      =  8,
+	GOD_ID_PHEX     =  9,
+	GOD_ID_PERAINE  = 10,
+	GOD_ID_INGERIMM = 11,
+	GOD_ID_RAHJA    = 12,
+	GOD_ID_SWAFNIR  = 13,
+	GOD_ID_IFIRN    = 14,
+	GOD_ID__END     = 15
 };
 
 enum {
-	INFORMER_ID_JURGE	=  0,
-	INFORMER_ID_HJORE	=  1,
-	INFORMER_ID_YASMA	=  2,
-	INFORMER_ID_UMBRIK	=  3,
-	INFORMER_ID_ISLEIF	=  4,
-	INFORMER_ID_RAGNA	=  5,
-	INFORMER_ID_BEORN	=  6,
-	INFORMER_ID_ASGRIMM	=  7,
-	INFORMER_ID_ELIANE	=  8,
-	INFORMER_ID_OLVIR	=  9,
-	INFORMER_ID_SWAFNILD	= 10,
-	INFORMER_ID_TREBORN	= 11,
-	INFORMER_ID_UNICORN	= 12,
-	INFORMER_ID_ALGRID	= 13,
-	INFORMER_ID_TIOMAR	= 14,
-	INFORMER_ID__END	= 15
+	INFORMER_ID_JURGE    =  0,
+	INFORMER_ID_HJORE    =  1,
+	INFORMER_ID_YASMA    =  2,
+	INFORMER_ID_UMBRIK   =  3,
+	INFORMER_ID_ISLEIF   =  4,
+	INFORMER_ID_RAGNA    =  5,
+	INFORMER_ID_BEORN    =  6,
+	INFORMER_ID_ASGRIMM  =  7,
+	INFORMER_ID_ELIANE   =  8,
+	INFORMER_ID_OLVIR    =  9,
+	INFORMER_ID_SWAFNILD = 10,
+	INFORMER_ID_TREBORN  = 11,
+	INFORMER_ID_UNICORN  = 12,
+	INFORMER_ID_ALGRID   = 13,
+	INFORMER_ID_TIOMAR   = 14,
+	INFORMER_ID__END     = 15
 };
 
 enum { /* identifiers are based on the entries of FIGHT.LST */
@@ -1331,66 +1331,66 @@ enum {
 };
 
 enum {
-	AREA_TYPE_DUNGEON = 0,
-	AREA_TYPE_TOWN    = 1,
+	AREA_TYPE_DUNGEON =  0,
+	AREA_TYPE_TOWN    =  1,
 	AREA_TYPE_NONE    = -1
 };
 
 enum {
-	TOWN_ID_NONE			=  0, // %0x00
-	TOWN_ID_THORWAL			=  1, // %0x01
-	TOWN_ID_SERSKE			=  2, // %0x02
-	TOWN_ID_BREIDA			=  3, // %0x03
-	TOWN_ID_PEILINEN		=  4, // %0x04
-	TOWN_ID_ROVAMUND		=  5, // %0x05
-	TOWN_ID_NORDVEST		=  6, // %0x06
-	TOWN_ID_KRAVIK			=  7, // %0x07
-	TOWN_ID_SKELELLEN		=  8, // %0x08
-	TOWN_ID_MERSKE			=  9, // %0x09
-	TOWN_ID_EFFERDUN		= 10, // %0x0a
-	TOWN_ID_TJOILA			= 11, // %0x0b
-	TOWN_ID_RUKIAN			= 12, // %0x0c
-	TOWN_ID_ANGBODIRTAL		= 13, // %0x0d
-	TOWN_ID_AUPLOG			= 14, // %0x0e
-	TOWN_ID_VILNHEIM		= 15, // %0x0f
-	TOWN_ID_BODON			= 16, // %0x10
-	TOWN_ID_OBERORKEN		= 17, // %0x11
-	TOWN_ID_PHEXCAER		= 18, // %0x12
-	TOWN_ID_GROENVELDEN		= 19, // %0x13
-	TOWN_ID_FELSTEYN		= 20, // %0x14
-	TOWN_ID_EINSIEDLERSEE		= 21, // %0x15
-	TOWN_ID_ORKANGER		= 22, // %0x16
-	TOWN_ID_CLANEGH			= 23, // %0x17
-	TOWN_ID_LISKOR			= 24, // %0x18
-	TOWN_ID_THOSS			= 25, // %0x19
-	TOWN_ID_TJANSET			= 26, // %0x1a
-	TOWN_ID_ALA			= 27, // %0x1b
-	TOWN_ID_ORVIL			= 28, // %0x1c
-	TOWN_ID_OVERTHORN		= 29, // %0x1d
-	TOWN_ID_ROVIK			= 30, // %0x1e
-	TOWN_ID_HJALSINGOR		= 31, // %0x1f
-	TOWN_ID_GUDDASUNDEN		= 32, // %0x20
-	TOWN_ID_KORD			= 33, // %0x21
-	TOWN_ID_TREBAN			= 34, // %0x22
-	TOWN_ID_ARYN			= 35, // %0x23
-	TOWN_ID_RUNINSHAVEN		= 36, // %0x24
-	TOWN_ID_OTTARJE			= 37, // %0x25
-	TOWN_ID_SKJAL			= 38, // %0x26
-	TOWN_ID_PREM			= 39, // %0x27
-	TOWN_ID_DASPOTA			= 40, // %0x28
-	TOWN_ID_RYBON			= 41, // %0x29
-	TOWN_ID_LJASDAHL		= 42, // %0x2a
-	TOWN_ID_VARNHEIM		= 43, // %0x2b
-	TOWN_ID_VAERMHAG		= 44, // %0x2c
-	TOWN_ID_TYLDON			= 45, // %0x2d
-	TOWN_ID_VIDSAND			= 46, // %0x2e
-	TOWN_ID_BRENDHIL		= 47, // %0x2f
-	TOWN_ID_MANRIN			= 48, // %0x30
-	TOWN_ID_FAEHRSTATION_TJOILA	= 49, // %0x31
-	TOWN_ID_FAEHRE_ANGBODIRTAL	= 50, // %0x32
-	TOWN_ID_HJALLANDER_HOF		= 51, // %0x33
-	TOWN_ID_LEUCHTTURM_RUNIN	= 52, // %0x34
-	TOWN_ID__END			= 53
+	TOWN_ID_NONE                =  0, // %0x00
+	TOWN_ID_THORWAL             =  1, // %0x01
+	TOWN_ID_SERSKE              =  2, // %0x02
+	TOWN_ID_BREIDA              =  3, // %0x03
+	TOWN_ID_PEILINEN            =  4, // %0x04
+	TOWN_ID_ROVAMUND            =  5, // %0x05
+	TOWN_ID_NORDVEST            =  6, // %0x06
+	TOWN_ID_KRAVIK              =  7, // %0x07
+	TOWN_ID_SKELELLEN           =  8, // %0x08
+	TOWN_ID_MERSKE              =  9, // %0x09
+	TOWN_ID_EFFERDUN            = 10, // %0x0a
+	TOWN_ID_TJOILA              = 11, // %0x0b
+	TOWN_ID_RUKIAN              = 12, // %0x0c
+	TOWN_ID_ANGBODIRTAL         = 13, // %0x0d
+	TOWN_ID_AUPLOG              = 14, // %0x0e
+	TOWN_ID_VILNHEIM            = 15, // %0x0f
+	TOWN_ID_BODON               = 16, // %0x10
+	TOWN_ID_OBERORKEN           = 17, // %0x11
+	TOWN_ID_PHEXCAER            = 18, // %0x12
+	TOWN_ID_GROENVELDEN         = 19, // %0x13
+	TOWN_ID_FELSTEYN            = 20, // %0x14
+	TOWN_ID_EINSIEDLERSEE       = 21, // %0x15
+	TOWN_ID_ORKANGER            = 22, // %0x16
+	TOWN_ID_CLANEGH             = 23, // %0x17
+	TOWN_ID_LISKOR              = 24, // %0x18
+	TOWN_ID_THOSS               = 25, // %0x19
+	TOWN_ID_TJANSET             = 26, // %0x1a
+	TOWN_ID_ALA                 = 27, // %0x1b
+	TOWN_ID_ORVIL               = 28, // %0x1c
+	TOWN_ID_OVERTHORN           = 29, // %0x1d
+	TOWN_ID_ROVIK               = 30, // %0x1e
+	TOWN_ID_HJALSINGOR          = 31, // %0x1f
+	TOWN_ID_GUDDASUNDEN         = 32, // %0x20
+	TOWN_ID_KORD                = 33, // %0x21
+	TOWN_ID_TREBAN              = 34, // %0x22
+	TOWN_ID_ARYN                = 35, // %0x23
+	TOWN_ID_RUNINSHAVEN         = 36, // %0x24
+	TOWN_ID_OTTARJE             = 37, // %0x25
+	TOWN_ID_SKJAL               = 38, // %0x26
+	TOWN_ID_PREM                = 39, // %0x27
+	TOWN_ID_DASPOTA             = 40, // %0x28
+	TOWN_ID_RYBON               = 41, // %0x29
+	TOWN_ID_LJASDAHL            = 42, // %0x2a
+	TOWN_ID_VARNHEIM            = 43, // %0x2b
+	TOWN_ID_VAERMHAG            = 44, // %0x2c
+	TOWN_ID_TYLDON              = 45, // %0x2d
+	TOWN_ID_VIDSAND             = 46, // %0x2e
+	TOWN_ID_BRENDHIL            = 47, // %0x2f
+	TOWN_ID_MANRIN              = 48, // %0x30
+	TOWN_ID_FAEHRSTATION_TJOILA = 49, // %0x31
+	TOWN_ID_FAEHRE_ANGBODIRTAL  = 50, // %0x32
+	TOWN_ID_HJALLANDER_HOF      = 51, // %0x33
+	TOWN_ID_LEUCHTTURM_RUNIN    = 52, // %0x34
+	TOWN_ID__END                = 53
 };
 
 enum {
@@ -1979,7 +1979,7 @@ enum {
 	ITEM_ID_ZWEIHAENDER__MAGIC                = 178, /* two-handed sword [magic: unbreakable; found in Orkhoehle] */
 	ITEM_ID_ORKDOKUMENT                       = 179, /* orc document [found in Orkhoehle] */
 	ITEM_ID_GEGENGIFT                         = 180, /* antivenom */
-	ITEM_ID_DAS_SCHWERT_GRIMRING                          = 181, /* Grimring [found at Hyggelik's ruin] */
+	ITEM_ID_DAS_SCHWERT_GRIMRING              = 181, /* Grimring [found at Hyggelik's ruin] */
 	ITEM_ID_TOTENKOPFGUERTEL                  = 182, /* skull belt [magic: TA - 4; found in Verfallene Herberge ] */
 	ITEM_ID_KRAFTGUERTEL                      = 183, /* girdle of might [magic: KK + 5; found in Drachenhoehle] */
 	ITEM_ID_MAGISCHER_BROTBEUTEL              = 184, /* magic breadbag [cannot be found in the game] */
@@ -2278,7 +2278,6 @@ enum {
 	INFLECT_DEFINITE_ARTICLE    = GRAMMAR_ARTICLE_DEFINITE << 14,       // 0x8000
 	INFLECT_ARTICLE_BITMASK     = 0x03 << 14                            // 0xc000
 };
-// INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE
 
 enum {
 	/* strictly speaking, these values encode not only the ship type, but the combined information
@@ -2323,62 +2322,62 @@ enum { /* note that the order differs from the one in HERO_TYPE... :( */
 };
 
 enum {
-	MENU_ICON_NONE			= -1,
-	MENU_ICON_HIRE_HERO		=  0,
-	MENU_ICON_DISMISS_HERO		=  1,
-	MENU_ICON_DELETE_HERO		=  2,
-	MENU_ICON_LOAD_GAME		=  3,
-	MENU_ICON_SAVE_GAME		=  4,
-	MENU_ICON_QUIT_GAME		=  5,
-	MENU_ICON_PRAY			=  6,
-	MENU_ICON_SACRIFICE		=  7,
-	MENU_ICON_LEAVE			=  8,
-	MENU_ICON_GUARDS		=  9,
-	MENU_ICON_GIVE_GOLD		= 10, /* unused? */
-	MENU_ICON_MAGIC			= 11,
-	MENU_ICON_SPLIT_GROUP		= 12,
-	MENU_ICON_ORDER_FOOD		= 13,
-	MENU_ICON_TAKE_GOLD		= 14, /* unused? */
-	MENU_ICON_MERGE_GROUP		= 15,
-	MENU_ICON_REPLENISH_SUPPLIES	= 16,
-	MENU_ICON_SLEEP			= 17,
-	MENU_ICON_REPAIR		= 18,
-	MENU_ICON_BOOK_BED		= 19,
-	MENU_ICON_GATHER_HERBS		= 20,
-	MENU_ICON_TALK			= 21,
-	MENU_ICON_BUY			= 22,
-	MENU_ICON_BARGAIN		= 23,
-	MENU_ICON_SELL			= 24,
-	MENU_ICON_APPLY_TALENT		= 25,
-	MENU_ICON_SCROLL_RIGHT		= 26,
-	MENU_ICON_SCROLL_LEFT		= 27,
-	MENU_ICON_HERO			= 28,
-	MENU_ICON_SWITCH_GROUP		= 29,
-	MENU_ICON_HEAL_WOUNDS		= 30,
-	MENU_ICON_HEAL_DISEASE		= 31,
-	MENU_ICON_HEAL_POISON		= 32,
-	MENU_ICON_OPEN_CLOSE_DOOR	= 33,
-	MENU_ICON_SMASH_DOOR		= 34,
-	MENU_ICON_PICK_LOCK		= 35,
-	MENU_ICON_WIZARD_FLOOR		= 36, /* unused? */
-	MENU_ICON_INFO			= 37,
-	MENU_ICON_OPEN_CHEST		= 38,
-	MENU_ICON_MAP			= 39,
-	MENU_ICON_BOOK_SHIP_PASSAGE	= 40,
-	MENU_ICON_BOARD_SHIP		= 41,
-	MENU_ICON_HARBOR_MASTER		= 42,
-	MENU_ICON_MARKET		= 43,
-	MENU_ICON_HYGELLIK_MAP		= 44,
-	MENU_ICON_MERGE_GROUP_GRAYED	= 45,
-	MENU_ICON_MOVE_LEVER		= 46,
-	MENU_ICON_ATTACK		= 47, /* unused? */
-	MENU_ICON_QUIT_CAMP		= 48,
-	MENU_ICON_INN			= 49,
-	MENU_ICON_TAVERN		= 50,
-	MENU_ICON_BATTLE_FRAME_RATE	= 51,
-	MENU_ICON_DIARY			= 52,
-	MENU_ICON_SOUND			= 53,
-	MENU_ICON_CAMP			= 54
+	MENU_ICON_NONE               =  -1,
+	MENU_ICON_HIRE_HERO          =  0,
+	MENU_ICON_DISMISS_HERO       =  1,
+	MENU_ICON_DELETE_HERO        =  2,
+	MENU_ICON_LOAD_GAME          =  3,
+	MENU_ICON_SAVE_GAME          =  4,
+	MENU_ICON_QUIT_GAME          =  5,
+	MENU_ICON_PRAY               =  6,
+	MENU_ICON_SACRIFICE          =  7,
+	MENU_ICON_LEAVE              =  8,
+	MENU_ICON_GUARDS             =  9,
+	MENU_ICON_GIVE_GOLD          = 10, /* unused? */
+	MENU_ICON_MAGIC              = 11,
+	MENU_ICON_SPLIT_GROUP        = 12,
+	MENU_ICON_ORDER_FOOD         = 13,
+	MENU_ICON_TAKE_GOLD          = 14, /* unused? */
+	MENU_ICON_MERGE_GROUP        = 15,
+	MENU_ICON_REPLENISH_SUPPLIES = 16,
+	MENU_ICON_SLEEP              = 17,
+	MENU_ICON_REPAIR             = 18,
+	MENU_ICON_BOOK_BED           = 19,
+	MENU_ICON_GATHER_HERBS       = 20,
+	MENU_ICON_TALK               = 21,
+	MENU_ICON_BUY                = 22,
+	MENU_ICON_BARGAIN            = 23,
+	MENU_ICON_SELL               = 24,
+	MENU_ICON_APPLY_TALENT       = 25,
+	MENU_ICON_SCROLL_RIGHT       = 26,
+	MENU_ICON_SCROLL_LEFT        = 27,
+	MENU_ICON_HERO               = 28,
+	MENU_ICON_SWITCH_GROUP       = 29,
+	MENU_ICON_HEAL_WOUNDS        = 30,
+	MENU_ICON_HEAL_DISEASE       = 31,
+	MENU_ICON_HEAL_POISON        = 32,
+	MENU_ICON_OPEN_CLOSE_DOOR    = 33,
+	MENU_ICON_SMASH_DOOR         = 34,
+	MENU_ICON_PICK_LOCK          = 35,
+	MENU_ICON_WIZARD_FLOOR       = 36, /* unused? */
+	MENU_ICON_INFO               = 37,
+	MENU_ICON_OPEN_CHEST         = 38,
+	MENU_ICON_MAP                = 39,
+	MENU_ICON_BOOK_SHIP_PASSAGE  = 40,
+	MENU_ICON_BOARD_SHIP         = 41,
+	MENU_ICON_HARBOR_MASTER      = 42,
+	MENU_ICON_MARKET             = 43,
+	MENU_ICON_HYGELLIK_MAP       = 44,
+	MENU_ICON_MERGE_GROUP_GRAYED = 45,
+	MENU_ICON_MOVE_LEVER         = 46,
+	MENU_ICON_ATTACK             = 47, /* unused? */
+	MENU_ICON_QUIT_CAMP          = 48,
+	MENU_ICON_INN                = 49,
+	MENU_ICON_TAVERN             = 50,
+	MENU_ICON_BATTLE_FRAME_RATE  = 51,
+	MENU_ICON_DIARY              = 52,
+	MENU_ICON_SOUND              = 53,
+	MENU_ICON_CAMP               = 54
 };
 
 enum {
