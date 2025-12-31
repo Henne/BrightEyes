@@ -245,7 +245,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	struct weapon_stats *weapon;
 	const struct ranged_weapon_stats *p_rangedtab;
 	signed int target_size;
-	signed int right_hand;
+	signed int right_hand_item_id;
 	signed int distance;
 	signed int ranged_distance_type;
 	signed int x_hero;
@@ -261,9 +261,9 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 		enemy_p = (struct enemy_sheet*)target; /* TODO: to attack an enemy enemy_p should be used instead of target */
 	}
 
-	right_hand = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
+	right_hand_item_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-	item_p_rh = &g_itemsdat[right_hand];
+	item_p_rh = &g_itemsdat[right_hand_item_id];
 
 	weapon_type = weapon_check(hero);
 
@@ -357,12 +357,12 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 		enemy_actor_sprite_id = enemy_p->actor_sprite_id;
 
-		if ((right_hand == ITEM_ID_SAEBEL__MAGIC) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_SKELETT || enemy_actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE)) {
+		if ((right_hand_item_id == ITEM_ID_SAEBEL__MAGIC) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_SKELETT || enemy_actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE)) {
 
 			/* magic SABRE gives Damage + 1 to SKELETONS and ZOMBIES */
 			damage++;
 
-		} else if (right_hand == ITEM_ID_KUKRISDOLCH) {
+		} else if (right_hand_item_id == ITEM_ID_KUKRISDOLCH) {
 
 			/* KUKRIS DAGGER / KUKRISDOLCH */
 			/* Interesting */
@@ -373,7 +373,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			give_new_item_to_hero(hero, ITEM_ID_DOLCH, 1, 1); /* TODO: what if no free knapsack slot? */
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_ID_DOLCH), hero);
 
-		} else if (right_hand == ITEM_ID_KUKRIS_MENGBILAR) {
+		} else if (right_hand_item_id == ITEM_ID_KUKRIS_MENGBILAR) {
 
 			/* KUKRISMENGBILAR */
 			/* Interesting */
@@ -384,12 +384,12 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 			give_new_item_to_hero(hero, ITEM_ID_MENGBILAR, 1, 1); /* TODO: what if no free knapsack slot? */
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_ID_MENGBILAR), hero);
 
-		} else if ((right_hand == ITEM_ID_SILBERSTREITKOLBEN) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_SKELETT)) {
+		} else if ((right_hand_item_id == ITEM_ID_SILBERSTREITKOLBEN) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_SKELETT)) {
 
 			/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
 			damage += 4;
 
-		} else if ((right_hand == ITEM_ID_DAS_SCHWERT_GRIMRING) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_ORK)) {
+		} else if ((right_hand_item_id == ITEM_ID_DAS_SCHWERT_GRIMRING) && (enemy_actor_sprite_id == ACTOR_SPRITE_ID_ORK)) {
 
 			/* DAS SCHWERT GRIMRING gives Damage + 5 to ORCS */
 			damage += 5;
