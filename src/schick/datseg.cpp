@@ -721,7 +721,15 @@ const struct ranged_weapon_stats g_ranged_weapon_stats_table[RANGED_WEAPON_STATS
 	{  1,  1,  0,  0,  0, -1,-99,  4 }, // RANGED_WEAPON_STATS_ID_KURZBOGEN            == 3
 	{  2,  2,  1,  0,  0, -1, -2,  4 }, // RANGED_WEAPON_STATS_ID_LANGBOGEN            == 4
 	{  2,  2,  1,  0, -1, -2, -3,  3 }, // RANGED_WEAPON_STATS_ID_ARMBRUST             == 5
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60: Speer is a melee weapon.
+	 * Original-Bug 61: missing distance-based damage modifier table for the throwing weapon Schneidzahn. */
 	{  2,  2,  1,  1,  0,  0, -1,  4 }, // RANGED_WEAPON_STATS_ID_SPEER__MAGIC         == 6
+#else
+	/* We reuse the unnecessary distance modifier table of Speer (magisch) for Schneidzahn.
+	 * Values according to "Kaiser Retos Waffenkammer". */
+	{  3,  2, -1, -2,-99,-99,-99,  8 }, // RANGED_WEAPON_STATS_ID_SCHNEIDZAHN          == 6
+#endif
 	{  9,  9,  9,  9,  9,  9,  9,  2 }, // RANGED_WEAPON_STATS_ID_WURFDOLCH__MAGIC     == 7
 	{ -1,  0,  0,  0,  0,  0,  0,  0 }  // RANGED_WEAPON_STATS_ID__END                 == 8
 }; // ds:0x0668
@@ -802,8 +810,12 @@ struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1] = {
 	{ 1, 4,  13,   2, -1,                                          -2, -4 }, // WEAPON_STATS_ID_KRIEGSBEIL            == 48
 	{ 1, 5,  14,   2, -1,                                          -1, -3 }, // WEAPON_STATS_ID_ORKNASE               == 49
 
+#ifndef  M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 61: missing distance-based damage modifier table for the throwing weapon Schneidzahn. */
 	{ 1, 4,  99,   0, -1,                                           0,  0 }, // WEAPON_STATS_ID_SCHNEIDZAHN           == 50
-	// Original-Bug: ranged_index -1 is not o.k. for a throwing weapon
+#else
+	{ 1, 4,  99,   0, RANGED_WEAPON_STATS_ID_SCHNEIDZAHN,           0,  0 }, // WEAPON_STATS_ID_SCHNEIDZAHN           == 50
+#endif
 
 	{ 1, 3,  15,   2, -1,                                           0,  0 }, // WEAPON_STATS_ID_ROBBENTOETER          == 51
 	{ 1, 3,  15,   2, -1,                                           0, -1 }, // WEAPON_STATS_ID_WOLFSMESSER           == 52

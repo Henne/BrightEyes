@@ -563,7 +563,14 @@ enum {
 	RANGED_WEAPON_STATS_ID_KURZBOGEN            = 3, /* ITEM_ID_KURZBOGEN */
 	RANGED_WEAPON_STATS_ID_LANGBOGEN            = 4, /* ITEM_ID_LANGBOGEN */
 	RANGED_WEAPON_STATS_ID_ARMBRUST             = 5, /* ITEM_ID_ARMBRUST */
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60: Speer is a melee weapon.
+	 * Original-Bug 61: missing distance-based damage modifier table for the throwing weapon Schneidzahn. */
 	RANGED_WEAPON_STATS_ID_SPEER__MAGIC         = 6, /* ITEM_ID_SPEER__MAGIC */
+#else
+	/* We reuse the unnecessary damage modifier table of Speer (magisch) for Schneidzahn. */
+	RANGED_WEAPON_STATS_ID_SCHNEIDZAHN          = 6, /* ITEM_ID_SCHNEIDZAHN */
+#endif
 	RANGED_WEAPON_STATS_ID_WURFDOLCH__MAGIC     = 7, /* ITEM_ID_WURFDOLCH__MAGIC */
 	RANGED_WEAPON_STATS_ID__END                 = 8
 };

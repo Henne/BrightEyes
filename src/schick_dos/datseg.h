@@ -244,7 +244,7 @@ struct ranged_weapon_stats {
 	 * The general formula for the handicap is base_handicap + 2 * distance_type - 2 * target_size.
 	 *
 	 * The damage is calculated as the base damage of the weapon (like D6 + 3 for the shortbow) + a distance modifier.
-	 * The modifier is given in the RANGED_WEAPON_STATS_DAMAGE_MODIFIER array. */
+	 * The modifier is given in the damage_modifier array. */
 };
 
 struct weapon_stats {
