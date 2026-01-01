@@ -252,7 +252,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	signed int y_hero;
 	signed int x_target;
 	signed int y_target;
-	signed int hero_idx;
+	signed int hero_pos;
 	signed char enemy_actor_sprite_id;
 	struct enemy_sheet* enemy_p;
 	signed int weapon_type;
@@ -292,9 +292,9 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 			/* weapon does ranged damage */
 
-			hero_idx = get_hero_index(hero);
+			hero_pos = get_hero_index(hero);
 
-			FIG_search_obj_on_cb(hero_idx + 1, &x_hero, &y_hero);
+			FIG_search_obj_on_cb(hero_pos + 1, &x_hero, &y_hero);
 			FIG_search_obj_on_cb(hero->target_object_id, &x_target, &y_target);
 
 			distance = manhattan_distance(x_hero, y_hero, x_target, y_target);
@@ -330,11 +330,16 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 				target_size = ((struct enemy_sheet*)target)->target_size;
 			}
 
-			/* Original-Bug: For ITEM_ID_SPEER and ITEM_ID_SPEER__MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
-			damage_mod = (test_talent(hero,
-						(item_p_rh->item_subtype_id == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
-						p_rangedtab->base_handicap + 2 * ranged_distance_type - 2 * target_size) > 0) ?
-					g_ranged_weapon_stats_table[weapon->ranged_index].damage_modifier[ranged_distance_type] : -damage;
+			/* Original-Bug: For ITEM_ID_SPEER and ITEM_ID_SPEER__MAGIC, a test on TA_SCHUSSWAFFEN will be performed
+			 * The fix of Original-Bug 60 fixes this, too, since ITEM_ID_SPEER and ITEM_ID_SPEER__MAGIC are then pure melee weapons. */
+			damage_mod = (
+				test_talent(
+					hero,
+					(item_p_rh->item_subtype_id == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
+					p_rangedtab->base_handicap + 2 * ranged_distance_type - 2 * target_size)
+				> 0) ?
+					g_ranged_weapon_stats_table[weapon->ranged_index].damage_modifier[ranged_distance_type] :
+					-damage;
 
 			if (damage_mod != 0) { /* test is redundant */
 				damage += damage_mod;
@@ -504,20 +509,22 @@ signed int FIG_get_enemy_attack_damage(const struct enemy_sheet *attacker, struc
 		/* subtract RS */
 		damage -= hero->rs_bonus;
 
-		/* armor bonus against skeletons and zombies */
-		if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_ID_KETTENHEMD__CURSED && ((attacker->actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT)))
-		{
+		/* Cursed chainmail gives an armor bonus against skeletons and zombies. */
+		if (
+			hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_ID_KETTENHEMD__CURSED
+			&& ((attacker->actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT))
+		) {
 			damage -= 3;
 		}
 
-		/* get position of Totenkopfguertel/Skullbelt */
-
-		if ( ((pos = inv_slot_of_item(hero, ITEM_ID_TOTENKOPFGUERTEL)) != -1) && ((attacker->actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT))) {
-
-			/* no damage for the hero who has it */
+		/* Totenkopfguertel (skull belt) nullifies skeleton and zombie attacks. */
+		if (
+			((pos = inv_slot_of_item(hero, ITEM_ID_TOTENKOPFGUERTEL)) != -1)
+			&& ((attacker->actor_sprite_id == ACTOR_SPRITE_ID_ZOMBIE) || (attacker->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT))
+		) {
 			damage = 0;
 
-			/* 4% chance to loose this item */
+			/* 4% chance to loose the Totenkopfguertel (skull belt) */
 			if (random_schick(100) < 5) {
 				drop_item(hero, pos, 1);
 				GUI_output(get_tx(11));
@@ -587,13 +594,13 @@ signed int weapon_check(const struct struct_hero *hero)
 	item_p = &g_itemsdat[item_id];
 
 	if (!item_p->flags.weapon || hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken ||
-		(item_p->flags.weapon &&
-			((item_p->item_subtype_id == WEAPON_TYPE_SCHUSSWAFFE) ||
-			(item_p->item_subtype_id == WEAPON_TYPE_WURFWAFFE) ||
+		(item_p->flags.weapon && (
+			(item_p->item_subtype_id == WEAPON_TYPE_SCHUSSWAFFE)
+			|| (item_p->item_subtype_id == WEAPON_TYPE_WURFWAFFE)
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline. */
-			(item_p->item_subtype_id == WEAPON_TYPE_SPEER &&
-			(item_id != ITEM_ID_ZAUBERSTAB) && (item_id != ITEM_ID_KAMPFSTAB)))))
-	{
+			|| (item_p->item_subtype_id == WEAPON_TYPE_SPEER && (item_id != ITEM_ID_ZAUBERSTAB) && (item_id != ITEM_ID_KAMPFSTAB))
+		))
+	) {
 		retval = -1;
 	} else {
 		if (is_in_int_array(item_id, g_force_weapons)) {
