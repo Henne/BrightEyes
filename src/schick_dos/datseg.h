@@ -359,9 +359,11 @@ struct location {
 
 STATIC_ASSERT(sizeof(struct location) == 6, struct_location_needs_to_be_6_bytes);
 
-struct struct_msg {
-	signed int type;
-	signed int id; /* hero_pos or monster_id */
+/* An actor class is either a hero or a monster.
+ * The identifier 'actor_class' is chosen since 'actor' refers to a hero or an enemy (i.e., an instance of a monster). */
+struct actor_class {
+	signed int actor_class_type;
+	signed int actor_class_id; /* hero_pos or monster_id */
 };
 
 struct statuspage_line {
@@ -1922,8 +1924,8 @@ extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 extern char g_savegame_names[5][9];	// ds:0xe2da; seg026, seg027
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
 extern signed int g_delay_timer;	// ds:0xe2d0; seg004, seg005
-extern struct struct_msg g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
-extern struct struct_msg g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
+extern struct actor_class g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
+extern struct actor_class g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern struct item_stats *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120

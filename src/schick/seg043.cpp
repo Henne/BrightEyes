@@ -63,7 +63,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 	signed int target_y;
 	signed int dir;
 	struct viewdir_offsets8s dst = g_fig_viewdir_inverse_offsets3;
-	struct struct_msg tmp;
+	struct actor_class tmp;
 
 	call_mouse_bg();
 
@@ -74,16 +74,16 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 		defender_gets_hit = g_fig_critical_fail_backfire_2 =
 			g_fig_critical_fail_backfire_1 = g_attacker_dead = g_defender_dead = 0;
 
-		g_fig_actor_grammar.type = 1;
-		g_fig_actor_grammar.id = p_enemy->monster_id;
+		g_fig_actor_grammar.actor_class_type = ACTOR_CLASS_TYPE_MONSTER;
+		g_fig_actor_grammar.actor_class_id = p_enemy->monster_id;
 
 		if (p_enemy->target_object_id < 10) {
 
 			/* enemy attacks hero */
 			hero = get_hero(p_enemy->target_object_id - 1);
 
-			g_fig_target_grammar.type = 2;
-			g_fig_target_grammar.id = p_enemy->target_object_id - 1;
+			g_fig_target_grammar.actor_class_type = ACTOR_CLASS_TYPE_HERO;
+			g_fig_target_grammar.actor_class_id = p_enemy->target_object_id - 1;
 
 			if (hero->flags.dead || !hero->typus) {
 				return;
@@ -95,8 +95,8 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 			target_enemy = &g_enemy_sheets[p_enemy->target_object_id - 10];
 
-			g_fig_target_grammar.type = 1;
-			g_fig_target_grammar.id = target_enemy->monster_id;
+			g_fig_target_grammar.actor_class_type = ACTOR_CLASS_TYPE_MONSTER;
+			g_fig_target_grammar.actor_class_id = target_enemy->monster_id;
 
 			if (target_enemy->flags.dead || !target_enemy->monster_id) {
 				return;

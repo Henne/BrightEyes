@@ -96,7 +96,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed int target_y;
 	signed int viewdir;
 	struct struct_fighter *fighter;
-	struct struct_msg grammar_tmp;
+	struct actor_class grammar_tmp;
 	signed int fg_bak;
 	signed int bg_bak;
 	struct nvf_extract_desc nvf;
@@ -112,8 +112,8 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 		attacker_weapon_type = target_weapon_type = -1;
 
-		g_fig_actor_grammar.type = 2;
-		g_fig_actor_grammar.id = hero_pos;
+		g_fig_actor_grammar.actor_class_type = ACTOR_CLASS_TYPE_HERO;
+		g_fig_actor_grammar.actor_class_id = hero_pos;
 
 		if (hero->target_object_id >= 10) {
 
@@ -131,8 +131,8 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			/* attacked enemy won't be asleep any more */
 			p_target_enemy->flags.asleep = 0;
 
-			g_fig_target_grammar.type = 1;
-			g_fig_target_grammar.id = p_target_enemy->monster_id;
+			g_fig_target_grammar.actor_class_type = ACTOR_CLASS_TYPE_MONSTER;
+			g_fig_target_grammar.actor_class_id = p_target_enemy->monster_id;
 
 			if (!p_target_enemy->monster_id || (p_target_enemy->flags.dead && ((hero->action_id != FIG_ACTION_SPELL) || (hero->spell_id != SP_SKELETTARIUS_KRYPTADUFT))))
 			{
@@ -193,8 +193,8 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				/* hero attacks another hero */
 				p_target_hero = get_hero(hero->target_object_id - 1);
 
-				g_fig_target_grammar.type = 2;
-				g_fig_target_grammar.id = hero->target_object_id - 1;
+				g_fig_target_grammar.actor_class_type = ACTOR_CLASS_TYPE_HERO;
+				g_fig_target_grammar.actor_class_id = hero->target_object_id - 1;
 
 				if (p_target_hero->flags.asleep) {
 
