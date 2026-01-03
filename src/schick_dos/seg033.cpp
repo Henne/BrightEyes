@@ -442,7 +442,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 						sprintf(g_dtp2,	get_tx(17), hero->alias);
 						GUI_output(g_dtp2);
 					}
-			} else if (selected == FIG_ACTION_EXCHANGE_ITEM) {
+			} else if (selected == FIG_ACTION_CHANGE_ITEM) {
 				/* EXCHANGE ITEM / GGST. WECHSELN */
 					if (hero->fight_bp_left >= 2) {
 
@@ -511,7 +511,7 @@ void FIG_menu(struct struct_hero *hero, const signed int hero_pos, signed int x,
 						GUI_output(g_dtp2);
 					}
 
-			} else if (selected == FIG_ACTION_EXCHANGE_WEAPON) {
+			} else if (selected == FIG_ACTION_CHANGE_WEAPON) {
 				/* CHANGE WEAPON / WAFFE WECHSELN */
 					if (hero->fight_bp_left >= 2) {
 
