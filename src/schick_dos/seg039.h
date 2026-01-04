@@ -1,7 +1,7 @@
 /* 0x20 */
 signed int manhattan_distance(const signed int, const signed int, const signed int, const signed int);
 /* 0x25 */
-signed int FIG_get_range_weapon_type(const struct struct_hero*);
+signed int FIG_weapon_gfx_id_ranged(const struct struct_hero*);
 /* 0x2a */
 void fill_enemy_sheet(const signed int, const signed char, const signed char);
 /* 0x2f */

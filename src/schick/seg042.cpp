@@ -62,8 +62,8 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	struct struct_hero *p_target_hero;
 	struct inventory *p_weapon_attacker;
 	struct inventory *p_weapon_target;
-	signed int attacker_weapon_type;
-	signed int target_weapon_type;
+	signed int attacker_weapon_gfx_id;
+	signed int target_weapon_gfx_id;
 	signed int critical_failure_roll_2d6;
 	signed int attacker_hits_target;
 	signed int spell_ani;
@@ -110,7 +110,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 		attacker_hits_target = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 =
 			g_spell_illusionen = g_attacker_dead = g_defender_dead = 0;
 
-		attacker_weapon_type = target_weapon_type = -1;
+		attacker_weapon_gfx_id = target_weapon_gfx_id = WEAPON_GFX_ID_NONE;
 
 		g_fig_actor_grammar.actor_class_type = ACTOR_CLASS_TYPE_HERO;
 		g_fig_actor_grammar.actor_class_id = hero_pos;
@@ -222,15 +222,15 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			p_weapon_attacker = &hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-			attacker_weapon_type = weapon_check(hero);
+			attacker_weapon_gfx_id = FIG_weapon_gfx_id_melee(hero);
 
 			if (target_is_hero != 0) {
 				p_weapon_target = &p_target_hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-				target_weapon_type = weapon_check(p_target_hero);
+				target_weapon_gfx_id = FIG_weapon_gfx_id_melee(p_target_hero);
 			}
 
-			if (attacker_weapon_type == -1) {
+			if (attacker_weapon_gfx_id == WEAPON_GFX_ID_NONE) {
 				/* no valid weapon == bare hands */
 				atpa = hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + hero->fight_atpa_mod - hero->rs_be / 2;
 			} else {
@@ -258,7 +258,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			if (target_is_hero) {
 
-				if (target_weapon_type == -1) {
+				if (target_weapon_gfx_id == WEAPON_GFX_ID_NONE) {
 					/* Original-Bug? Why is target_hero mixed with hero??
 					 * Probably, the intention was
 					 * target_hero_at_val = p_target_hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + p_target_hero->fight_atpa_mod - p_target_hero->rs_be / 2;
@@ -307,7 +307,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				critical_failure_roll_2d6 = random_interval(2, 12);
 
-				if ((critical_failure_roll_2d6 == 2) && (attacker_weapon_type != -1) && (p_weapon_attacker->bf != -99))
+				if ((critical_failure_roll_2d6 == 2) && (attacker_weapon_gfx_id != WEAPON_GFX_ID_NONE) && (p_weapon_attacker->bf != -99))
 				{
 					/* weapon broken */
 					p_weapon_attacker->flags.broken = 1;
@@ -376,7 +376,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					if (target_is_hero != 0) {
 
-						if (target_weapon_type == -1) {
+						if (target_weapon_gfx_id == WEAPON_GFX_ID_NONE) {
 							target_pa_val = p_target_hero->pa_talent_bonus[WEAPON_TYPE_WAFFENLOS] - p_target_hero->fight_atpa_mod - p_target_hero->rs_be / 2;
 						} else {
 							target_pa_val = p_target_hero->pa_talent_bonus[p_target_hero->weapon_type] - p_target_hero->fight_atpa_mod - p_target_hero->rs_be / 2 + p_target_hero->weapon_at_mod;
@@ -586,7 +586,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			clear_anisheets();
 
-			FANI_prepare_fight_hero_ani(0, hero, attacker_weapon_type, FIG_ACTION_MELEE_ATTACK, hero_pos + 1,
+			FANI_prepare_fight_hero_ani(0, hero, attacker_weapon_gfx_id, FIG_ACTION_MELEE_ATTACK, hero_pos + 1,
 							target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20, 0);
 
 			if (target_is_hero != 0) {
@@ -594,7 +594,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (check_hero(p_target_hero) || (g_defender_dead != 0)) {
 
-					FANI_prepare_fight_hero_ani(1, p_target_hero, target_weapon_type,
+					FANI_prepare_fight_hero_ani(1, p_target_hero, target_weapon_gfx_id,
 								FIG_ACTION_PARRY, hero->target_object_id, hero_pos + 1, 1);
 				}
 			} else {
@@ -620,9 +620,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			if (hero->action_id == FIG_ACTION_RANGE_ATTACK) {
 
-				attacker_weapon_type = FIG_get_range_weapon_type(hero);
+				attacker_weapon_gfx_id = FIG_weapon_gfx_id_ranged(hero);
 
-				if (attacker_weapon_type != -1) {
+				if (attacker_weapon_gfx_id != WEAPON_GFX_ID_NONE) {
 
 #ifndef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 32: throwing weapon in a ranged attack is dropped before the damage logic is done.
@@ -686,12 +686,12 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					clear_anisheets();
 
-					l12 = attacker_weapon_type;
+					l12 = attacker_weapon_gfx_id;
 					ranged_attack_possible = 0;
 
 					FIG_call_draw_pic();
 
-					FANI_prepare_fight_hero_ani(0, hero, attacker_weapon_type,
+					FANI_prepare_fight_hero_ani(0, hero, attacker_weapon_gfx_id,
 							FIG_ACTION_RANGE_ATTACK, hero_pos + 1,
 							target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20, 0);
 
@@ -703,7 +703,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					draw_fight_screen_pal(0);
 
-					if (FIG_get_range_weapon_type(hero) == -1) {
+					if (FIG_weapon_gfx_id_ranged(hero) == WEAPON_GFX_ID_NONE) {
 
 						fighter = FIG_get_fighter(hero->fighter_id);
 

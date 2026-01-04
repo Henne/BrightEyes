@@ -795,7 +795,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_ID_PFEIL), hero);
 					}
 
-				} else if (FIG_get_range_weapon_type(hero) == -1) {
+				} else if (FIG_weapon_gfx_id_ranged(hero) == WEAPON_GFX_ID_NONE) {
 					hero->action_id = FIG_ACTION_FLEE;
 				}
 			}
@@ -919,7 +919,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 
 			if ((hero->action_id == FIG_ACTION_MOVE) && (hero->fight_bp_left > 0)) {
 
-				if (FIG_get_range_weapon_type(hero) != -1) {
+				if (FIG_weapon_gfx_id_ranged(hero) != WEAPON_GFX_ID_NONE) {
 
 					if (range_attack_check_ammo(hero, 2)) {
 

@@ -51,7 +51,7 @@ signed int manhattan_distance(const signed int x1, const signed int y1, const si
  * \param   hero        pointer to hero
  * \return              range weapon type {-1, 3, 4, 5}: -1 = none, 3 = shooting, 4 = throwing, 5 = weapon of type spear, but not magic wand or quarterstaff
  */
-signed int FIG_get_range_weapon_type(const struct struct_hero *hero)
+signed int FIG_weapon_gfx_id_ranged(const struct struct_hero *hero)
 {
 	struct item_stats *item_p;
 	signed int retval = -1;
@@ -411,7 +411,7 @@ void FIG_init_heroes(void)
 	signed int cb_x;
 	signed int cb_y;
 	signed int i;
-	signed int hero_pos; /* REMARK: double use: also range_weapon_type */
+	signed int hero_pos; /* REMARK: double use: also weapon_gfx_id_ranged */
 
 	for (i = 0; i <= 6; i++) {
 
@@ -473,9 +473,9 @@ void FIG_init_heroes(void)
 			place_obj_on_cb(cb_x, cb_y, i + 1, (_AL = hero->typus, _AX), hero->viewdir);
 #endif
 
-			hero_pos = FIG_get_range_weapon_type(hero);
+			hero_pos = FIG_weapon_gfx_id_ranged(hero);
 
-			if (hero_pos != -1) {
+			if (hero_pos != WEAPON_GFX_ID_NONE) {
 				g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->actor_sprite_id - 1][hero_pos][hero->viewdir];
 			} else {
 				g_fig_list_elem.nvf_no = hero->viewdir;

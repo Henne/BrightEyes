@@ -4955,9 +4955,9 @@ void add_hero_le(struct struct_hero *hero, const signed int le)
 
 				fighter = FIG_get_fighter(hero->fighter_id);
 
-				ret = FIG_get_range_weapon_type(hero);
+				ret = FIG_weapon_gfx_id_ranged(hero);
 
-				if (ret != -1) {
+				if (ret != WEAPON_GFX_ID_NONE) {
 
 					fighter->nvf_no = g_nvftab_figures_rangeweapon[hero->actor_sprite_id - 1][ret][hero->viewdir];
 				} else {

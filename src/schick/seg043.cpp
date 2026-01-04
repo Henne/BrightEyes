@@ -41,7 +41,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 	struct enemy_sheet *target_enemy;
 	struct inventory *p_weapon;
 	signed int two_w_6;
-	signed int weapon_type;
+	signed int weapon_gfx_id;
 	signed int defender_gets_hit;
 	signed int randval;
 	signed int randval2;
@@ -151,9 +151,9 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				p_weapon = &hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND];
 
-				weapon_type = weapon_check(hero);
+				weapon_gfx_id = FIG_weapon_gfx_id_melee(hero);
 
-				if (weapon_type == -1) {
+				if (weapon_gfx_id == WEAPON_GFX_ID_NONE) {
 					/* no valid weapon == bare hands */
 					defender_at = hero->at_talent_bonus[WEAPON_TYPE_WAFFENLOS] + hero->fight_atpa_mod;
 					defender_pa = hero->pa_talent_bonus[WEAPON_TYPE_WAFFENLOS] - hero->fight_atpa_mod;
@@ -485,7 +485,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				if (check_hero(hero) || (g_defender_dead != 0)) {
 
-					FANI_prepare_fight_hero_ani(0, hero, weapon_type, FIG_ACTION_PARRY, p_enemy->target_object_id, enemy_id + 10, 1);
+					FANI_prepare_fight_hero_ani(0, hero, weapon_gfx_id, FIG_ACTION_PARRY, p_enemy->target_object_id, enemy_id + 10, 1);
 				}
 
 			} else if (l17 == 0) {

@@ -23,19 +23,19 @@
 #include "seg105.h"
 #include "seg106.h"
 
-static const signed int g_force_weapons[9] = {
+static const signed int g_FIG_weapon_gfx_id_melee_blunt_list[9] = {
 	ITEM_ID_KNUEPPEL,
 	ITEM_ID_MORGENSTERN,
 	ITEM_ID_STREITKOLBEN,
 	ITEM_ID_KAMPFSTAB,
-	ITEM_ID_PEITSCHE, /* wtf?? */
+	ITEM_ID_PEITSCHE,
 	ITEM_ID_KRIEGSHAMMER,
 	ITEM_ID_HEXENBESEN,
 	ITEM_ID_ZAUBERSTAB,
 	-1
 }; // ds:0x615c, terminated with -1
  
-static const signed int g_knive_weapons[5] = {
+static const signed int g_FIG_weapon_gfx_id_melee_knife_list[5] = {
 	ITEM_ID_MESSER,
 	ITEM_ID_DOLCH,
 	ITEM_ID_VULKANGLASDOLCH,
@@ -255,7 +255,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	signed int hero_pos;
 	signed char enemy_actor_sprite_id;
 	struct enemy_sheet* enemy_p;
-	signed int weapon_type;
+	signed int weapon_gfx_id;
 
 	if (attack_hero == 0) {
 		enemy_p = (struct enemy_sheet*)target; /* TODO: to attack an enemy enemy_p should be used instead of target */
@@ -265,14 +265,14 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 
 	item_p_rh = &g_itemsdat[right_hand_item_id];
 
-	weapon_type = weapon_check(hero);
+	weapon_gfx_id = FIG_weapon_gfx_id_melee(hero);
 
-	if (weapon_type == -1) {
+	if (weapon_gfx_id == WEAPON_GFX_ID_NONE) {
 		/* not a weapon or a ranged weapon */
-		weapon_type = FIG_get_range_weapon_type(hero);
+		weapon_gfx_id = FIG_weapon_gfx_id_ranged(hero);
 	}
 
-	/* now depending on the item in the right hand, <weapon_type> is
+	/* now depending on the item in the right hand, <weapon_gfx_id> is
 	 * -1: not a weapon or broken melee weapon (inluding broken WEAPON_TYPE_WAFFENLOS (i.e. ammunition), broken ITEM_ID_ZAUBERSTAB and broken ITEM_ID_KAMPFSTAB, but no other WEAPON_TYPE_SPEER)
 	 *  0: non-broken knive weapon
 	 *  1: non-broken force weapon (including ITEM_ID_ZAUBERSTAB and ITEM_ID_KAMPFSTAB)
@@ -282,7 +282,7 @@ signed int FIG_get_hero_weapon_attack_damage(struct struct_hero* hero, struct st
 	 *  5: any weapon of type WEAPON_TYPE_SPEER with the exception of ITEM_ID_KAMPFSTAB and ITEM_ID_ZAUBERSTAB, broken or not
 	 */
 
-	if (weapon_type != -1) {
+	if (weapon_gfx_id != WEAPON_GFX_ID_NONE) {
 
 		weapon = &g_weapon_stats_table[item_p_rh->item_type_stats_id];
 
@@ -571,7 +571,7 @@ void clear_anisheets(void)
 }
 
 /**
- * \brief   check if a hero is equipped with a vaild weapon
+ * \brief   returns the weapon_gfx_id of a hero engaged in melee
  *
  * \param   hero        pointer to hero
  *
@@ -581,7 +581,7 @@ void clear_anisheets(void)
  *	1 = non-broken force weapon (includes ITEM_ID_ZAUBERSTAB and ITEM_ID_KAMPFSTAB),
  *	2 = any other non-broken melee weapon, including WEAPON_TYPE_WAFFENLOS (i.e. ammunition), but no WEAPON_TYPE_SPEER
  */
-signed int weapon_check(const struct struct_hero *hero)
+signed int FIG_weapon_gfx_id_melee(const struct struct_hero *hero)
 {
 	struct item_stats *item_p;
 
@@ -601,19 +601,19 @@ signed int weapon_check(const struct struct_hero *hero)
 			|| (item_p->item_subtype_id == WEAPON_TYPE_SPEER && (item_id != ITEM_ID_ZAUBERSTAB) && (item_id != ITEM_ID_KAMPFSTAB))
 		))
 	) {
-		retval = -1;
+		retval = WEAPON_GFX_ID_NONE;
 	} else {
-		if (is_in_int_array(item_id, g_force_weapons)) {
+		if (is_in_int_array(item_id, g_FIG_weapon_gfx_id_melee_blunt_list)) {
 
-			retval = 1;
+			retval = WEAPON_GFX_ID_MELEE_BLUNT;
 
-		} else if (is_in_int_array(item_id, g_knive_weapons)) {
+		} else if (is_in_int_array(item_id, g_FIG_weapon_gfx_id_melee_knife_list)) {
 
-			retval = 0;
+			retval = WEAPON_GFX_ID_MELEE_KNIFE;
 
 		} else {
 
-			retval = 2;
+			retval = WEAPON_GFX_ID_MELEE_BLADE;
 		}
 	}
 
