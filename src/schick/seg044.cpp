@@ -137,7 +137,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	signed int attacker_y;
 	signed int target_x;
 	signed int target_y;
-	signed int dir;
+	signed int viewdir;
 	signed int l7;
 	signed int l8;
 	signed int l9;
@@ -157,22 +157,25 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 
 		if (attacker_x == target_x) {
 			if (target_y < attacker_y) {
-				dir = 1;
+				viewdir = FIG_VIEWDIR_DOWN;
 			} else {
-				dir = 3;
+				viewdir = FIG_VIEWDIR_UP;
 			}
 		} else {
 			if (target_x < attacker_x) {
-				dir = 2;
+				viewdir = FIG_VIEWDIR_LEFT;
 			} else {
-				dir = 0;
+				viewdir = FIG_VIEWDIR_RIGHT;
 			}
 		}
 	} else {
-		dir = hero->viewdir;
+		viewdir = hero->viewdir;
 	}
 
-	if ((weapon_gfx_id == WEAPON_GFX_ID_NONE) || ((hero->typus == HERO_TYPE_MAGIER) && (weapon_id == ITEM_ID_ZAUBERSTAB))) {
+	if (
+		(weapon_gfx_id == WEAPON_GFX_ID_NONE)
+		|| ((hero->typus == HERO_TYPE_MAGIER) && (weapon_id == ITEM_ID_ZAUBERSTAB))
+	) {
 
 		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 :		/* melee attack */
 			(f_action == FIG_ACTION_UNKNOWN3) ? 41 :		/* drink potion */
@@ -189,20 +192,25 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 			61;
 	}
 
-	l1 += dir;
+	l1 += viewdir;
 	sheet_ptr1 = &g_fig_anisheets[sheet_id][1];
 	sheet_ptr2 = &g_fig_anisheets[sheet_id + 4][1];
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
 	g_fig_anisheets[sheet_id][242] = hero->actor_sprite_id;
 
-	if (check_hero(hero) && (hero->viewdir != dir) &&
-
-		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_PARRY) && !g_fig_hero_parry_action_used[(signed char)object_id_attacker - 1]) ||
-			((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0)) ||
-			((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))))
-	{
+	if (
+		check_hero(hero)
+		&& (hero->viewdir != viewdir)
+		&& (
+			(f_action == FIG_ACTION_MELEE_ATTACK)
+			|| (f_action == FIG_ACTION_RANGE_ATTACK)
+			|| (f_action == FIG_ACTION_UNKNOWN4)
+			|| ((f_action == FIG_ACTION_PARRY) && !g_fig_hero_parry_action_used[(signed char)object_id_attacker - 1])
+			|| ((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0))
+			|| ((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))
+		)
+	) {
 			g_fig_anisheets[sheet_id][0] = 0;
 			l8 = l7 = -1;
 			l9 = hero->viewdir;
@@ -213,20 +221,20 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 				l9 = 0;
 			}
 
-			if (l9 != dir) {
+			if (l9 != viewdir) {
 				l7 = l9;
 				l9++;
 				if (l9 == 4) {
 					l9 = 0;
 				}
 
-				if (l9 != dir) {
+				if (l9 != viewdir) {
 					l8 = hero->viewdir + 4;
 					l7 = -1;
 				}
 			}
 
-			hero->viewdir = dir;
+			hero->viewdir = viewdir;
 
 			if (l7 == -1) {
 				for (i = 0; i < 2; i++) {
@@ -253,10 +261,17 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		}
 	}
 
-	if ((check_hero(hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
-		((f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN3) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_PARRY) && !g_fig_hero_parry_action_used[(signed char)object_id_attacker - 1])))
-	{
+	if (
+		(
+			check_hero(hero)
+			&& (f_action == FIG_ACTION_MELEE_ATTACK)
+		) || (
+			(f_action == FIG_ACTION_RANGE_ATTACK)
+			|| (f_action == FIG_ACTION_UNKNOWN3)
+			|| (f_action == FIG_ACTION_UNKNOWN4)
+			|| ((f_action == FIG_ACTION_PARRY) && !g_fig_hero_parry_action_used[(signed char)object_id_attacker - 1])
+		)
+	) {
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
 		if (
@@ -277,7 +292,16 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		}
 	}
 
-	if ((check_hero(hero) && g_fig_critical_fail_backfire_2 && !a7) || (g_fig_critical_fail_backfire_1 && (a7 == 1))) {
+	if (
+		(
+			check_hero(hero)
+			&& g_fig_critical_fail_backfire_2
+			&& !a7
+		) || (
+			g_fig_critical_fail_backfire_1
+			&& (a7 == 1)
+		)
+	) {
 
 			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
 
@@ -293,8 +317,10 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 			}
 	}
 
-	if ((g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
-	{
+	if (
+		(g_attacker_dead && !a7)
+		|| (g_defender_dead && (a7 == 1))
+	) {
 		*sheet_ptr1++ = -4;
 		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
 		*sheet_ptr1++ = 0;
@@ -302,8 +328,11 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[20], 2);
 	}
 
-	if (check_hero(hero) ||	(g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
-	{
+	if (
+		check_hero(hero)
+		|| (g_attacker_dead && !a7)
+		|| (g_defender_dead && (a7 == 1))
+	) {
 		FIG_set_sheet(hero->fighter_id, (signed char)sheet_id);
 		*sheet_ptr1 = -1;
 
@@ -335,7 +364,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	signed int attacker_y;
 	signed int target_x;
 	signed int target_y;
-	signed int dir;
+	signed int viewdir;
 	signed int l7;
 	signed int l8;
 	signed int l9;
@@ -368,19 +397,17 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	/* find out which direction the action will have */
 	if (attacker_x == target_x) {
 		if (target_y < attacker_y) {
-			dir = 1;
+			viewdir = FIG_VIEWDIR_DOWN;
 		} else {
-			dir = 3;
+			viewdir = FIG_VIEWDIR_UP;
 		}
 	} else {
 		if (target_x < attacker_x) {
-			dir = 2;
+			viewdir = FIG_VIEWDIR_LEFT;
 		} else {
-			dir = 0;
+			viewdir = FIG_VIEWDIR_RIGHT;
 		}
 	}
-
-
 
 	/* melee attack */
 	l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 21 : 25;
@@ -401,7 +428,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		weapon_gfx_id = WEAPON_GFX_ID_NONE;
 	}
 
-	l1 += dir;
+	l1 += viewdir;
 
 	sheet_ptr1 = &g_fig_anisheets[sheet_id][1];
 	sheet_ptr2 = &g_fig_anisheets[sheet_id + 4][1];
@@ -411,12 +438,18 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	g_fig_anisheets[sheet_id][242] = enemy->actor_sprite_id;
 
 	/* first the enemy may turn */
-	if ((enemy->viewdir != dir) &&
-		(	((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-			((f_action == FIG_ACTION_PARRY) && !g_fig_enemy_parry_action_used[(signed char)object_id_attacker])) ||
-			(g_fig_critical_fail_backfire_2 && !a7) ||
-			(g_fig_critical_fail_backfire_1 && (a7 == 1))))
-		{
+	if (
+		(enemy->viewdir != viewdir)
+		&& (
+			(
+				 (f_action == FIG_ACTION_MELEE_ATTACK)
+				 || (f_action == FIG_ACTION_RANGE_ATTACK)
+				 || ((f_action == FIG_ACTION_PARRY) && !g_fig_enemy_parry_action_used[(signed char)object_id_attacker])
+			)
+			|| (g_fig_critical_fail_backfire_2 && !a7)
+			|| (g_fig_critical_fail_backfire_1 && (a7 == 1))
+		)
+	) {
 
 		g_fig_anisheets[sheet_id][0] = 0;
 
@@ -432,14 +465,14 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 			l9 = 0;
 		}
 
-		if (l9 != dir) {
+		if (l9 != viewdir) {
 			l7 = l9;
 			l9++;
 			if (l9 == 4) {
 				l9 = 0;
 			}
 
-			if (l9 != dir) {
+			if (l9 != viewdir) {
 				l8 = enemy->viewdir + 4;
 				l7 = -1;
 			}
@@ -447,7 +480,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 
 		/* set the new direction in enemy sheet */
-		enemy->viewdir = dir;
+		enemy->viewdir = viewdir;
 
 		/* only if the turn is 90 degree */
 		if (l7 == -1) {
@@ -477,9 +510,11 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		}
 	}
 
-	if ((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-		((f_action == FIG_ACTION_PARRY) && !g_fig_enemy_parry_action_used[(signed char)object_id_attacker]))
-	{
+	if (
+		(f_action == FIG_ACTION_MELEE_ATTACK)
+		|| (f_action == FIG_ACTION_RANGE_ATTACK)
+		|| ((f_action == FIG_ACTION_PARRY) && !g_fig_enemy_parry_action_used[(signed char)object_id_attacker])
+	) {
 		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 
 		if (weapon_gfx_id != WEAPON_GFX_ID_NONE) {
@@ -497,8 +532,10 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		}
 	}
 
-	if (((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0)) ||
-		((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))) {
+	if (
+		((g_fig_critical_fail_backfire_2 != 0) && (a7 == 0))
+		|| ((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))
+	) {
 
 			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
 
@@ -510,9 +547,10 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 			}
 	}
 
-	if ( ((g_attacker_dead != 0) && (a7 == 0)) ||
-		((g_defender_dead != 0) && (a7 == 1)))
-	{
+	if (
+		((g_attacker_dead != 0) && (a7 == 0))
+		|| ((g_defender_dead != 0) && (a7 == 1))
+	) {
 		*sheet_ptr1++ = -4;
 		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
 		*sheet_ptr1++ = 0;
@@ -567,7 +605,7 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 	signed int y_obj1;
 	signed int x_obj2;
 	signed int y_obj2;
-	signed int dir;
+	signed int viewdir;
 	signed int l2;
 	signed int l3;
 	int8_t *sheet_ptr;
@@ -583,23 +621,23 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 
 	if (x_obj1 == x_obj2) {
 		if (y_obj2 < y_obj1)
-			dir = 1;
+			viewdir = FIG_VIEWDIR_DOWN;
 		else
-			dir = 3;
+			viewdir = FIG_VIEWDIR_UP;
 	} else {
 		if (x_obj2 < x_obj1)
-			dir = 2;
+			viewdir = FIG_VIEWDIR_LEFT;
 		else
-			dir = 0;
+			viewdir = FIG_VIEWDIR_RIGHT;
 	}
 
 	if ((signed char)obj2 == (signed char)obj1)
-		dir = hero->viewdir;
+		viewdir = hero->viewdir;
 
 
 	l_di = (max_range == 4) ? ((v5 == 1) ? 37 : 29) : 16;
 
-	l_di += (max_range == 4) ? dir : hero->viewdir;
+	l_di += (max_range == 4) ? viewdir : hero->viewdir;
 
 	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
@@ -607,32 +645,32 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 
 	g_fig_anisheets[sheet_id][242] = hero->actor_sprite_id;
 
-	if ((hero->viewdir != dir) && (max_range == 4)) {
+	if ((hero->viewdir != viewdir) && (max_range == 4)) {
 
-		signed int viewdir;
+		signed int viewdir_2;
 
 		g_fig_anisheets[sheet_id][0] = 0;
 
 		l3 = l2 = -1;
-		viewdir = hero->viewdir;
-		l3 = viewdir;
-		viewdir++;
-		if (viewdir == 4)
-			viewdir = 0;
+		viewdir_2 = hero->viewdir;
+		l3 = viewdir_2;
+		viewdir_2++;
+		if (viewdir_2 == 4)
+			viewdir_2 = 0;
 
-		if (viewdir != dir) {
-			l2 = viewdir;
-			viewdir++;
-			if (viewdir == 4)
-				viewdir = 0;
+		if (viewdir_2 != viewdir) {
+			l2 = viewdir_2;
+			viewdir_2++;
+			if (viewdir_2 == 4)
+				viewdir_2 = 0;
 
-			if (viewdir != dir) {
+			if (viewdir_2 != viewdir) {
 				l3 = hero->viewdir + 4;
 				l2 = -1;
 			}
 		}
 
-		hero->viewdir = dir;
+		hero->viewdir = viewdir;
 		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l3], 2);
 
 		if (l2 != -1) {
@@ -649,15 +687,20 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 		sheet_ptr++;
 	}
 
-	if ((max_range == 4) || check_hero(hero) ||
-		((g_attacker_dead != 0) && (v6 == 0)) ||
-		((g_defender_dead != 0) && (v6 == 1))) {
+	if (
+		(max_range == 4)
+		|| check_hero(hero)
+		|| ((g_attacker_dead != 0) && (v6 == 0))
+		|| ((g_defender_dead != 0) && (v6 == 1))
+	) {
 
 		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l_di], 2);
 	}
 
-	if (((g_attacker_dead != 0) && (v6 == 0)) ||
-		((g_defender_dead != 0) && (v6 == 1))) {
+	if (
+		((g_attacker_dead != 0) && (v6 == 0))
+		|| ((g_defender_dead != 0) && (v6 == 1))
+	) {
 
 		*sheet_ptr = -4;
 		sheet_ptr++;
@@ -682,7 +725,7 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
  *
  * \param[in] sheet_id  0 or 1
  * \param   p           pointer to an entry of g_enemy_sheets
- * \param   max_range          4 of 99
+ * \param   max_range   4 of 99
  * \param   target      the id of the target
  * \param   caster      the id of the caster
  * \param   v5          0 or 1
@@ -695,13 +738,13 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	signed int y_target;
 	signed int x_caster;
 	signed int y_caster;
-	signed int dir;
+	signed int viewdir;
 	signed int l2;
 	signed int l3;		/* indicees to ani_index_ptr */
 	int8_t *sheet_ptr;	/* mostly written */
 	int16_t *ani_index_ptr;	/* read only */
 
-	signed int dir2;
+	signed int viewdir_2;
 
 
 	/* get a pointer from an array where the actor_sprite_id of the enemy serves as index */
@@ -712,18 +755,18 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 
 	if (x_target == x_caster) {
 		if (y_caster < y_target)
-			dir = 1;
+			viewdir = FIG_VIEWDIR_DOWN;
 		else
-			dir = 3;
+			viewdir = FIG_VIEWDIR_UP;
 	} else {
 		if (x_caster < x_target)
-			dir = 2;
+			viewdir = FIG_VIEWDIR_LEFT;
 		else
-			dir = 0;
+			viewdir = FIG_VIEWDIR_RIGHT;
 	}
 
 	if ((signed char)caster == (signed char)target)
-		dir = enemy->viewdir;
+		viewdir = enemy->viewdir;
 
 	/* this is true if an enemy attacks a hero */
 	l1 = (max_range == 4) ? 29 : 16;
@@ -731,37 +774,37 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	sheet_ptr = &g_fig_anisheets[sheet_id][1];
 
 	/* this is true if an enemy attacks a hero */
-	l1 += (max_range == 4) ? dir : enemy->viewdir;
+	l1 += (max_range == 4) ? viewdir : enemy->viewdir;
 
 	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
 
 	g_fig_anisheets[sheet_id][242] = enemy->actor_sprite_id;
 
-	if ((enemy->viewdir != dir) && (max_range == 4)) {
+	if ((enemy->viewdir != viewdir) && (max_range == 4)) {
 
 		g_fig_anisheets[sheet_id][0] = 0;
 
 		l3 = l2 = -1;
 
-		dir2 = enemy->viewdir;
-		l3 = dir2;
-		dir2++;
-		if (dir2 == 4)
-			dir2 = 0;
+		viewdir_2 = enemy->viewdir;
+		l3 = viewdir_2;
+		viewdir_2++;
+		if (viewdir_2 == 4)
+			viewdir_2 = 0;
 
-		if (dir2 != dir) {
+		if (viewdir_2 != viewdir) {
 
-			l2 = dir2;
-			dir2++;
-			if (dir2 == 4)
-				dir2 = 0;
-			if (dir2 != dir) {
+			l2 = viewdir_2;
+			viewdir_2++;
+			if (viewdir_2 == 4)
+				viewdir_2 = 0;
+			if (viewdir_2 != viewdir) {
 				l3 = enemy->viewdir + 4;
 				l2 = -1;
 			}
 		}
 
-		enemy->viewdir = dir;
+		enemy->viewdir = viewdir;
 
 		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l3], 1);
 
@@ -780,7 +823,10 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 
 	sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l1], 1);
 
-	if ((g_attacker_dead && !v5) || (g_defender_dead && (v5 == 1))) {
+	if (
+		(g_attacker_dead && !v5)
+		|| (g_defender_dead && (v5 == 1))
+	) {
 
 		*sheet_ptr = -4;
 		sheet_ptr++;
@@ -796,7 +842,7 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 
 	*sheet_ptr = -1;
 
-	/* check if the moster sprite ID needs two fields */
+	/* check if the moster sprite ID needs two squares */
 	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
 	}
