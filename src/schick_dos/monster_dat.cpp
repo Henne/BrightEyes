@@ -10,46 +10,16 @@
 #include "common.h"
 #include "datseg.h"
 
-static enum {
+enum {
 	D4_BUG = 0x0f
 };
 
 struct monster monster_dat[MONSTER_ID__END + 1] = {
-	{ MONSTER_ID_NONE,
-		0,
-		0,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0,
-		0,
-		0,
-		0,
-		0x0000,
-		0x0000,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0x0000,
-		0,
-		0x0000,
-		0
-	},
+	{ MONSTER_ID_NONE }, // 0 // dummy zero entry
 
 	{ // 1
-		MONSTER_ID_OGER,                    // monster_id
-		ACTOR_SPRITE_ID_OGER,               // actor_sprite_id
+		MONSTER_ID_OGER,
+		ACTOR_SPRITE_ID_OGER,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 17),       // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 1),        // attrib_kl
@@ -71,7 +41,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		4,                                  // target_size
+		TARGET_SIZE_GROSS,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -81,8 +51,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 2
-		MONSTER_ID_ORK__LVL_1,              // monster_id
-		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
+		MONSTER_ID_ORK__LVL_1,
+		ACTOR_SPRITE_ID_ORK,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 4),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -104,7 +74,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -114,8 +84,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 3
-		MONSTER_ID_GOBLIN__LVL_1,           // monster_id
-		ACTOR_SPRITE_ID_GOBLIN,             // actor_sprite_id
+		MONSTER_ID_GOBLIN__LVL_1,
+		ACTOR_SPRITE_ID_GOBLIN,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 2),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 3),        // attrib_kl
@@ -137,7 +107,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -147,8 +117,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 4
-		MONSTER_ID_HESHTHOT__LVL_1,         // monster_id
-		ACTOR_SPRITE_ID_HESHTHOT,           // actor_sprite_id
+		MONSTER_ID_HESHTHOT__LVL_1,
+		ACTOR_SPRITE_ID_HESHTHOT,
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -170,7 +140,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		1,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -180,8 +150,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 5
-		MONSTER_ID_SAEBELZAHNTIGER,         // monster_id
-		ACTOR_SPRITE_ID_TIGER,              // actor_sprite_id
+		MONSTER_ID_SAEBELZAHNTIGER,
+		ACTOR_SPRITE_ID_TIGER,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(22),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -203,7 +173,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -213,8 +183,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 6
-		MONSTER_ID_SKELETT__LVL_1,          // monster_id
-		ACTOR_SPRITE_ID_SKELETT,            // actor_sprite_id
+		MONSTER_ID_SKELETT__LVL_1,
+		ACTOR_SPRITE_ID_SKELETT,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -236,7 +206,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -246,8 +216,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 7
-		MONSTER_ID_WALDSCHRAT,              // monster_id
-		ACTOR_SPRITE_ID_WALDSCHRAT,         // actor_sprite_id
+		MONSTER_ID_WALDSCHRAT,
+		ACTOR_SPRITE_ID_WALDSCHRAT,
 		6,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 17),       // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 2),        // attrib_kl
@@ -269,7 +239,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -279,8 +249,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 8
-		MONSTER_ID_MUMIE__LVL_1,            // monster_id
-		ACTOR_SPRITE_ID_MUMIE,              // actor_sprite_id
+		MONSTER_ID_MUMIE__LVL_1,
+		ACTOR_SPRITE_ID_MUMIE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -302,7 +272,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -312,8 +282,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 9
-		MONSTER_ID_HARPYIE,                 // monster_id
-		ACTOR_SPRITE_ID_HARPYIE,            // actor_sprite_id
+		MONSTER_ID_HARPYIE,
+		ACTOR_SPRITE_ID_HARPYIE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(18),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -335,7 +305,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -345,8 +315,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 10
-		MONSTER_ID_WALDSPINNE,              // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
+		MONSTER_ID_WALDSPINNE,
+		ACTOR_SPRITE_ID_SPINNE,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(7),     // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -368,7 +338,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -378,8 +348,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 11
-		MONSTER_ID_GROSSE_SCHROETER,        // monster_id
-		ACTOR_SPRITE_ID_KAEFER,             // actor_sprite_id
+		MONSTER_ID_GROSSE_SCHROETER,
+		ACTOR_SPRITE_ID_KAEFER,
 		5,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -401,7 +371,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -411,8 +381,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 12
-		MONSTER_ID_PIRAT__LVL_1,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_PIRAT__LVL_1,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -439,7 +409,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -449,8 +419,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 13
-		MONSTER_ID_STEUERMANN,              // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_STEUERMANN,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -477,7 +447,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -487,8 +457,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 14
-		MONSTER_ID_KAPITAEN,                // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_KAPITAEN,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -515,7 +485,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		4,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -525,8 +495,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 15
-		MONSTER_ID_STREUNER__LVL_1,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
+		MONSTER_ID_STREUNER__LVL_1,
+		ACTOR_SPRITE_ID_STREUNER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -553,7 +523,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -563,8 +533,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 16
-		MONSTER_ID_ZOMBIE,                  // monster_id
-		ACTOR_SPRITE_ID_ZOMBIE,             // actor_sprite_id
+		MONSTER_ID_ZOMBIE,
+		ACTOR_SPRITE_ID_ZOMBIE,
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -586,7 +556,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -596,8 +566,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 17
-		MONSTER_ID_HESHTHOT__LVL_2,         // monster_id
-		ACTOR_SPRITE_ID_HESHTHOT,           // actor_sprite_id
+		MONSTER_ID_HESHTHOT__LVL_2,
+		ACTOR_SPRITE_ID_HESHTHOT,
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -619,7 +589,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		1,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -629,8 +599,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 18
-		MONSTER_ID_DRUIDE__LVL_2,           // monster_id
-		ACTOR_SPRITE_ID_DRUIDE__MALE,       // actor_sprite_id
+		MONSTER_ID_DRUIDE__LVL_2,
+		ACTOR_SPRITE_ID_DRUIDE__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_kl
@@ -652,7 +622,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		0,                                  // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -662,8 +632,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 19
-		MONSTER_ID_DRUIDE__LVL_3,           // monster_id
-		ACTOR_SPRITE_ID_DRUIDE__MALE,       // actor_sprite_id
+		MONSTER_ID_DRUIDE__LVL_3,
+		ACTOR_SPRITE_ID_DRUIDE__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_kl
@@ -685,7 +655,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		1,                                  // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -695,8 +665,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 20
-		MONSTER_ID_THORWALER__LVL_1,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
+		MONSTER_ID_THORWALER__LVL_1,
+		ACTOR_SPRITE_ID_THORWALER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -723,7 +693,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -733,8 +703,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 21
-		MONSTER_ID_THORWALER__LVL_3,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
+		MONSTER_ID_THORWALER__LVL_3,
+		ACTOR_SPRITE_ID_THORWALER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -761,7 +731,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -771,8 +741,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 22
-		MONSTER_ID_THORWALER__LVL_5,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
+		MONSTER_ID_THORWALER__LVL_5,
+		ACTOR_SPRITE_ID_THORWALER__MALE,
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -794,7 +764,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		5,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -804,8 +774,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 23
-		MONSTER_ID_THORWALER__LVL_6,        // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
+		MONSTER_ID_THORWALER__LVL_6,
+		ACTOR_SPRITE_ID_THORWALER__MALE,
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -827,7 +797,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		6,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -837,8 +807,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 24
-		MONSTER_ID_GOBLIN__LVL_2,           // monster_id
-		ACTOR_SPRITE_ID_GOBLIN,             // actor_sprite_id
+		MONSTER_ID_GOBLIN__LVL_2,
+		ACTOR_SPRITE_ID_GOBLIN,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 3),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 3),        // attrib_kl
@@ -860,7 +830,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -870,8 +840,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 25
-		MONSTER_ID_GOBLIN__LVL_3,           // monster_id
-		ACTOR_SPRITE_ID_GOBLIN,             // actor_sprite_id
+		MONSTER_ID_GOBLIN__LVL_3,
+		ACTOR_SPRITE_ID_GOBLIN,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 4),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 4),        // attrib_kl
@@ -893,7 +863,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -903,8 +873,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 26
-		MONSTER_ID_ORK__LVL_2,              // monster_id
-		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
+		MONSTER_ID_ORK__LVL_2,
+		ACTOR_SPRITE_ID_ORK,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 5),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -926,7 +896,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -936,8 +906,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 27
-		MONSTER_ID_ORK__LVL_3,              // monster_id
-		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
+		MONSTER_ID_ORK__LVL_3,
+		ACTOR_SPRITE_ID_ORK,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -959,7 +929,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -969,8 +939,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 28
-		MONSTER_ID_PIRAT__LVL_2,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_PIRAT__LVL_2,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -997,7 +967,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1007,8 +977,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 29
-		MONSTER_ID_PIRAT__LVL_3,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_PIRAT__LVL_3,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1035,7 +1005,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1045,8 +1015,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 30
-		MONSTER_ID_STREUNER__LVL_2,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
+		MONSTER_ID_STREUNER__LVL_2,
+		ACTOR_SPRITE_ID_STREUNER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1073,7 +1043,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1083,8 +1053,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 31
-		MONSTER_ID_STREUNER__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
+		MONSTER_ID_STREUNER__LVL_3,
+		ACTOR_SPRITE_ID_STREUNER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1111,7 +1081,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1121,8 +1091,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 32
-		MONSTER_ID_STREUNER__LVL_4,         // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
+		MONSTER_ID_STREUNER__LVL_4,
+		ACTOR_SPRITE_ID_STREUNER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1149,7 +1119,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		4,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		10,                                 // shots
 		DICE_TEMPLATE_PACK(1, 6, 4),        // shot_dam
@@ -1159,8 +1129,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 33
-		MONSTER_ID_SKELETT__LVL_2,          // monster_id
-		ACTOR_SPRITE_ID_SKELETT,            // actor_sprite_id
+		MONSTER_ID_SKELETT__LVL_2,
+		ACTOR_SPRITE_ID_SKELETT,
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1182,7 +1152,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1192,8 +1162,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 34
-		MONSTER_ID_FOLTERKNECHT,            // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
+		MONSTER_ID_FOLTERKNECHT,
+		ACTOR_SPRITE_ID_RAEUBER,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1220,7 +1190,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1230,8 +1200,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 35
-		MONSTER_ID_GRIMWOLF__LVL_1,         // monster_id
-		ACTOR_SPRITE_ID_WOLF,               // actor_sprite_id
+		MONSTER_ID_GRIMWOLF__LVL_1,
+		ACTOR_SPRITE_ID_WOLF,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(9),     // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1253,7 +1223,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1263,8 +1233,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 36
-		MONSTER_ID_GRIMWOLF__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_WOLF,               // actor_sprite_id
+		MONSTER_ID_GRIMWOLF__LVL_3,
+		ACTOR_SPRITE_ID_WOLF,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1286,7 +1256,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1296,8 +1266,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 37
-		MONSTER_ID_HOEHLENSPINNE__LVL_1,    // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
+		MONSTER_ID_HOEHLENSPINNE__LVL_1,
+		ACTOR_SPRITE_ID_SPINNE,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1319,7 +1289,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1329,8 +1299,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 38
-		MONSTER_ID_HOEHLENSPINNE__LVL_2,    // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
+		MONSTER_ID_HOEHLENSPINNE__LVL_2,
+		ACTOR_SPRITE_ID_SPINNE,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1352,7 +1322,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1362,8 +1332,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 39
-		MONSTER_ID_HOEHLENSPINNE__LVL_3,    // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
+		MONSTER_ID_HOEHLENSPINNE__LVL_3,
+		ACTOR_SPRITE_ID_SPINNE,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1385,7 +1355,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1395,8 +1365,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 40
-		MONSTER_ID_KRIEGER,                 // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
+		MONSTER_ID_KRIEGER,
+		ACTOR_SPRITE_ID_KRIEGER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1423,7 +1393,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1433,8 +1403,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 41
-		MONSTER_ID_STADTGARDIST__LVL_3,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
+		MONSTER_ID_STADTGARDIST__LVL_3,
+		ACTOR_SPRITE_ID_KRIEGER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1456,7 +1426,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1466,8 +1436,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 42
-		MONSTER_ID_STADTGARDIST__LVL_4,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
+		MONSTER_ID_STADTGARDIST__LVL_4,
+		ACTOR_SPRITE_ID_KRIEGER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1489,7 +1459,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		4,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1499,8 +1469,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 43
-		MONSTER_ID_STADTGARDIST__LVL_5,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
+		MONSTER_ID_STADTGARDIST__LVL_5,
+		ACTOR_SPRITE_ID_KRIEGER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1522,7 +1492,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		5,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1532,8 +1502,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 44
-		MONSTER_ID_KRIEGSVETERAN,           // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
+		MONSTER_ID_KRIEGSVETERAN,
+		ACTOR_SPRITE_ID_KRIEGER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(15),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -1555,7 +1525,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		10,                                 // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1565,8 +1535,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 45
-		MONSTER_ID_MUMIE__LVL_2,            // monster_id
-		ACTOR_SPRITE_ID_MUMIE,              // actor_sprite_id
+		MONSTER_ID_MUMIE__LVL_2,
+		ACTOR_SPRITE_ID_MUMIE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -1588,7 +1558,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1598,8 +1568,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 46
-		MONSTER_ID_MAGIER__LVL_3,           // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
+		MONSTER_ID_MAGIER__LVL_3,
+		ACTOR_SPRITE_ID_MAGIER__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1621,7 +1591,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		3,                                  // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1631,8 +1601,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 47
-		MONSTER_ID_MAGIER__LVL_6,           // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
+		MONSTER_ID_MAGIER__LVL_6,
+		ACTOR_SPRITE_ID_MAGIER__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1654,7 +1624,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		5,                                  // spellbook_id
 		6,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1664,8 +1634,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 48
-		MONSTER_ID_ZAUBERER__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_ZAUBERER,           // actor_sprite_id
+		MONSTER_ID_ZAUBERER__LVL_3,
+		ACTOR_SPRITE_ID_ZAUBERER,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1687,7 +1657,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		6,                                  // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1697,8 +1667,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 49
-		MONSTER_ID_ZAUBERER__LVL_6,         // monster_id
-		ACTOR_SPRITE_ID_ZAUBERER,           // actor_sprite_id
+		MONSTER_ID_ZAUBERER__LVL_6,
+		ACTOR_SPRITE_ID_ZAUBERER,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -1720,7 +1690,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		7,                                  // spellbook_id
 		6,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1730,8 +1700,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 50
-		MONSTER_ID_ZWERG,                   // monster_id
-		ACTOR_SPRITE_ID_ZWERG__MALE,        // actor_sprite_id
+		MONSTER_ID_ZWERG,
+		ACTOR_SPRITE_ID_ZWERG__MALE,
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_kl
@@ -1753,7 +1723,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		4,                                  // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1763,8 +1733,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 51
-		MONSTER_ID_LINDWURM,                // monster_id
-		ACTOR_SPRITE_ID_HARPYIE,            // actor_sprite_id
+		MONSTER_ID_LINDWURM,
+		ACTOR_SPRITE_ID_HARPYIE,
 		6,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(18),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(17),    // attrib_kl
@@ -1773,10 +1743,10 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_ge
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_in
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_kk
-		DICE_TEMPLATE_PACK_CONSTANT(-106),  // le
+		DICE_TEMPLATE_PACK_CONSTANT(150),   // le
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // ae
 		DICE_TEMPLATE_PACK_CONSTANT(18),    // mr
-		-6,                                 // first_ap
+		(int8_t)250,                        // first_ap
 		3,                                  // attacks
 		16,                                 // at
 		10,                                 // pa
@@ -1786,7 +1756,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		4,                                  // level
-		5,                                  // target_size
+		TARGET_SIZE_SEHR_GROSS,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1796,8 +1766,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 52
-		MONSTER_ID_HOEHLENDRACHE,           // monster_id
-		ACTOR_SPRITE_ID_HARPYIE,            // actor_sprite_id
+		MONSTER_ID_HOEHLENDRACHE,
+		ACTOR_SPRITE_ID_HARPYIE,
 		6,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(18),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_kl
@@ -1819,7 +1789,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		5,                                  // target_size
+		TARGET_SIZE_SEHR_GROSS,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1829,8 +1799,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 53
-		MONSTER_ID_KULTIST__LVL_2,          // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
+		MONSTER_ID_KULTIST__LVL_2,
+		ACTOR_SPRITE_ID_STREUNER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1857,7 +1827,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1867,8 +1837,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 54
-		MONSTER_ID_KULTIST__LVL_3__1,       // monster_id
-		ACTOR_SPRITE_ID_STREUNER__MALE,     // actor_sprite_id
+		MONSTER_ID_KULTIST__LVL_3__1,
+		ACTOR_SPRITE_ID_STREUNER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1895,7 +1865,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1905,8 +1875,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 55
-		MONSTER_ID_KULTIST__LVL_3__2,       // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
+		MONSTER_ID_KULTIST__LVL_3__2,
+		ACTOR_SPRITE_ID_THORWALER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1933,7 +1903,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -1943,8 +1913,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 56
-		MONSTER_ID_KULTIST__LVL_4,          // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
+		MONSTER_ID_KULTIST__LVL_4,
+		ACTOR_SPRITE_ID_KRIEGER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -1966,7 +1936,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		4,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		10,                                 // shots
 		DICE_TEMPLATE_PACK(1, 6, 4),        // shot_dam
@@ -1976,8 +1946,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 57
-		MONSTER_ID_PRIESTER__LVL_2,         // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
+		MONSTER_ID_PRIESTER__LVL_2,
+		ACTOR_SPRITE_ID_MAGIER__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_kl
@@ -1999,7 +1969,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		8,                                  // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2009,8 +1979,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 58
-		MONSTER_ID_PRIESTER__LVL_3,         // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
+		MONSTER_ID_PRIESTER__LVL_3,
+		ACTOR_SPRITE_ID_MAGIER__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_kl
@@ -2032,7 +2002,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		9,                                  // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2042,8 +2012,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 59
-		MONSTER_ID_HOHEPRIESTER,            // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
+		MONSTER_ID_HOHEPRIESTER,
+		ACTOR_SPRITE_ID_MAGIER__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -2065,7 +2035,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		10,                                 // spellbook_id
 		6,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2075,8 +2045,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 60
-		MONSTER_ID_ESTORIK,                 // monster_id
-		ACTOR_SPRITE_ID_THORWALER__MALE,    // actor_sprite_id
+		MONSTER_ID_ESTORIK,
+		ACTOR_SPRITE_ID_THORWALER__MALE,
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2098,7 +2068,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		6,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2108,8 +2078,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 61
-		MONSTER_ID_PIRATENBOSS,             // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_PIRATENBOSS,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2131,7 +2101,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		6,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2141,8 +2111,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 62
-		MONSTER_ID_PIRAT__LVL_5,            // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_PIRAT__LVL_5,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2164,7 +2134,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		5,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2174,8 +2144,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 63
-		MONSTER_ID_MAGIER__LVL_4,           // monster_id
-		ACTOR_SPRITE_ID_MAGIER__MALE,       // actor_sprite_id
+		MONSTER_ID_MAGIER__LVL_4,
+		ACTOR_SPRITE_ID_MAGIER__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(15),    // attrib_kl
@@ -2197,7 +2167,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		4,                                  // spellbook_id
 		4,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2207,8 +2177,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 64
-		MONSTER_ID_ZWERGENVETERAN,          // monster_id
-		ACTOR_SPRITE_ID_ZWERG__MALE,        // actor_sprite_id
+		MONSTER_ID_ZWERGENVETERAN,
+		ACTOR_SPRITE_ID_ZWERG__MALE,
 		4,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(15),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(11),    // attrib_kl
@@ -2230,7 +2200,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		10,                                 // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2240,8 +2210,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 65
-		MONSTER_ID_RAEUBER__LVL_2,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
+		MONSTER_ID_RAEUBER__LVL_2,
+		ACTOR_SPRITE_ID_RAEUBER,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -2268,7 +2238,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2278,8 +2248,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 66
-		MONSTER_ID_RAEUBER__LVL_3,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
+		MONSTER_ID_RAEUBER__LVL_3,
+		ACTOR_SPRITE_ID_RAEUBER,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -2306,7 +2276,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		3,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2316,8 +2286,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 67
-		MONSTER_ID_RAEUBER__LVL_5,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
+		MONSTER_ID_RAEUBER__LVL_5,
+		ACTOR_SPRITE_ID_RAEUBER,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2339,7 +2309,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		5,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2349,8 +2319,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 68
-		MONSTER_ID_RAEUBER__LVL_6,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
+		MONSTER_ID_RAEUBER__LVL_6,
+		ACTOR_SPRITE_ID_RAEUBER,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(13),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2372,7 +2342,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		6,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		3,                                  // shots
 		DICE_TEMPLATE_PACK(1, 6, 4),        // shot_dam
@@ -2382,8 +2352,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 69
-		MONSTER_ID_RAEUBER__LVL_8,          // monster_id
-		ACTOR_SPRITE_ID_RAEUBER,            // actor_sprite_id
+		MONSTER_ID_RAEUBER__LVL_8,
+		ACTOR_SPRITE_ID_RAEUBER,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2405,7 +2375,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		8,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		6,                                  // shots
 		DICE_TEMPLATE_PACK(1, 6, 4),        // shot_dam
@@ -2415,8 +2385,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 70
-		MONSTER_ID_GORAH,                   // monster_id
-		ACTOR_SPRITE_ID_DRUIDE__MALE,       // actor_sprite_id
+		MONSTER_ID_GORAH,
+		ACTOR_SPRITE_ID_DRUIDE__MALE,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_kl
@@ -2438,7 +2408,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		2,                                  // spellbook_id
 		8,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2448,8 +2418,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 71
-		MONSTER_ID_STEPPENHUND,             // monster_id
-		ACTOR_SPRITE_ID_HUND,               // actor_sprite_id
+		MONSTER_ID_STEPPENHUND,
+		ACTOR_SPRITE_ID_HUND,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(5),     // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -2471,7 +2441,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2481,8 +2451,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 72
-		MONSTER_ID_ORKCHAMPION,             // monster_id
-		ACTOR_SPRITE_ID_ORK,                // actor_sprite_id
+		MONSTER_ID_ORKCHAMPION,
+		ACTOR_SPRITE_ID_ORK,
 		2,                                  // rs
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_mu
 		DICE_TEMPLATE_PACK(1, 3, 4),        // attrib_kl
@@ -2504,7 +2474,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		10,                                 // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2514,8 +2484,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 73
-		MONSTER_ID_PIRAT__LVL_10,           // monster_id
-		ACTOR_SPRITE_ID_PIRAT,              // actor_sprite_id
+		MONSTER_ID_PIRAT__LVL_10,
+		ACTOR_SPRITE_ID_PIRAT,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(14),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 8),        // attrib_kl
@@ -2537,7 +2507,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		10,                                 // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2547,8 +2517,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 74
-		MONSTER_ID_STADTGARDIST__LVL_2,     // monster_id
-		ACTOR_SPRITE_ID_KRIEGER__MALE,      // actor_sprite_id
+		MONSTER_ID_STADTGARDIST__LVL_2,
+		ACTOR_SPRITE_ID_KRIEGER__MALE,
 		3,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(12),    // attrib_mu
 		DICE_TEMPLATE_PACK(1, 6, 7),        // attrib_kl
@@ -2575,7 +2545,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		2,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2585,8 +2555,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 75
-		MONSTER_ID_WALDLOEWE,               // monster_id
-		ACTOR_SPRITE_ID_LOEWE,              // actor_sprite_id
+		MONSTER_ID_WALDLOEWE,
+		ACTOR_SPRITE_ID_LOEWE,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -2608,7 +2578,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2618,8 +2588,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	},
 
 	{ // 76
-		MONSTER_ID_SPINNENDAEMON,           // monster_id
-		ACTOR_SPRITE_ID_SPINNE,             // actor_sprite_id
+		MONSTER_ID_SPINNENDAEMON,
+		ACTOR_SPRITE_ID_SPINNE,
 		1,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(10),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -2641,7 +2611,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		1,                                  // magic
 		-1,                                 // spellbook_id
 		5,                                  // level
-		2,                                  // target_size
+		TARGET_SIZE_KLEIN,
 		1,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2657,8 +2627,8 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 	 * Also, note that "HESHTHOT" is spelled as "HESHTOT" here.
 	 * It is not clear if this is a mistake, or if it was the intention to have the modified part "tot" (German: "dead"). */
 	{ // 77
-		MONSTER_ID_HESHTOT__WEAK,           // monster_id
-		ACTOR_SPRITE_ID_HESHTHOT,           // actor_sprite_id
+		MONSTER_ID_HESHTOT__WEAK,
+		ACTOR_SPRITE_ID_HESHTHOT,
 		0,                                  // rs
 		DICE_TEMPLATE_PACK_CONSTANT(30),    // attrib_mu
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // attrib_kl
@@ -2680,7 +2650,7 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		1,                                  // magic
 		-1,                                 // spellbook_id
 		1,                                  // level
-		3,                                  // target_size
+		TARGET_SIZE_MITTEL,
 		0,                                  // is_animal
 		0,                                  // shots
 		DICE_TEMPLATE_PACK_CONSTANT(0),     // shot_dam
@@ -2689,35 +2659,5 @@ struct monster monster_dat[MONSTER_ID__END + 1] = {
 		0                                   // le_flee
 	},
 
-	{ -1, // 78
-		0,
-		0,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0x0000,
-		0,
-		0,
-		0,
-		0,
-		0x0000,
-		0x0000,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0x0000,
-		0,
-		0x0000,
-		0
-	}
+	{ -1 } // 78 // terminator entry
 };
