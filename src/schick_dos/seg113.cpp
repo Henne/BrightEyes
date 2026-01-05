@@ -46,7 +46,7 @@ void tevent_080(void)
 
 		hero = (struct struct_hero*)gs_main_acting_hero;
 
-		if ((hero && !gs_tevent080_tatzelwurm && test_talent(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||	gs_tevent080_tatzelwurm == 1)
+		if ((hero && !gs_tevent080_tatzelwurm && test_talent(hero, TA_FAEHRTENSUCHEN, 5) > 0) || gs_tevent080_tatzelwurm == 1)
 		{
 			gs_tevent080_tatzelwurm = 1;
 
@@ -174,6 +174,7 @@ void tevent_085(void)
 	}
 }
 
+/* Oberorken <-> Einsiedlersee: Riesenlindwurm */
 void tevent_086(void)
 {
 	signed int i;
