@@ -166,7 +166,7 @@ struct struct_hero {
 	signed char pa_talent_bonus[7]; /* talent-based PA bonus in melee weapon categories as in enum WEAPON_TYPE_* */
 	signed char weapon_at_mod; /* AT bonus the equipped weapon (may be negative) */
 	signed char weapon_pa_mod; /* PA bonus of the equipped weapon (may be negative) */
-	signed char weapon_type; /* type of the equipped weapon */
+	signed char weapon_type; /* type of the equipped weapon according to enum WEAPON_TYPE_... */
 	signed char fight_atpa_mod; /* last used attack mode in fight. +2: aggressive (AT+2, PA-2); 0: normal (AT+0, PA+0); -2: cautious (AT-2, PA+2) */
 	signed char le_max_malus; /* le_max lost from starvation */
 	signed char timer_id;
