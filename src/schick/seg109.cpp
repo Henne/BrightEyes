@@ -73,7 +73,7 @@ static void (*g_travel_event_handlers[146])(void) = {
 
 signed char g_travel_event_active = 0; // ds:0xb132
 
-static signed int g_travel_event_tx2 = -1; // ds:0xb133
+static signed int g_travel_event_id = -1; // ds:0xb133
 
 #ifndef M302de_ORIGINAL_BUGFIX
 /* Original-Bug 33:
@@ -118,7 +118,7 @@ void TRV_load_textfile(signed int travel_event_id)
 	load_tx(ARCHIVE_FILE_FEATURE_LTX);
 
 	if (travel_event_id == -1) {
-		travel_event_id = g_travel_event_tx2;
+		travel_event_id = g_travel_event_id;
 	}
 
 	load_tx2( (travel_event_id == 37 || travel_event_id == 47 || travel_event_id == 100) ? ARCHIVE_FILE_FEATURE9_LTX :
@@ -131,7 +131,7 @@ void TRV_load_textfile(signed int travel_event_id)
 			( travel_event_id < 126 ? ARCHIVE_FILE_FEATURE6_LTX :
 			( travel_event_id < 143 ? ARCHIVE_FILE_FEATURE7_LTX : ARCHIVE_FILE_FEATURE8_LTX)))))))));
 
-	g_travel_event_tx2 = travel_event_id;
+	g_travel_event_id = travel_event_id;
 }
 
 void TRV_event(const signed int travel_event_id)
