@@ -42,7 +42,7 @@ signed int DNG14_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
+	pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	hero = get_first_hero_available_in_group();
 

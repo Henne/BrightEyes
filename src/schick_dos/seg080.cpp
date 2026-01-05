@@ -48,7 +48,7 @@ signed int DNG04_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-        pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
+        pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !gs_dng04_corpse0_flag)
 	{
