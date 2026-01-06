@@ -550,7 +550,10 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 					damage = dice_template(weapon_gfx_id_ranged == WEAPON_GFX_ID_RANGED_MISSILE ? p_enemy->shot_dam : p_enemy->throw_dam);
 
+					/* Feature mod 1: avoid the a posteriori weakening of enemies. */
+#ifndef M302de_FEATURE_MOD
 					damage = (damage * 8) / 10;
+#endif
 
 					/* RS */
 					damage -= hero->rs_bonus;
