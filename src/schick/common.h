@@ -2002,7 +2002,7 @@ enum {
 	ITEM_ID_REZEPT_FUER_VOMICUM               = 169, /* recipe for Vomicum */
 	ITEM_ID_DOKUMENT__UNICORN                 = 170, /* unicorn letter [found in tevent073] */
 	ITEM_ID_SILBERNER_STIRNREIF__1            = 171, /* silver coronet [magic, 3 charges, use -> Armatrutz +5, i.e. RS + 5] */
-	ITEM_ID_SAEBEL__MAGIC                     = 172, /* sabre [magic, damage+1 to skeletons and zombies] */
+	ITEM_ID_SAEBEL__MAGIC                     = 172, /* sabre [magic, damage+1 to skeletons and zombies. probably: cannot be found in the game ] */
 	ITEM_ID_AMULETT__FEUERBANN                = 173, /* amulet [6 blue gems, magic, protection from fire; found at a corpse between Rovamund and Nordvest. Is there another one on the Totenschiff? ] */
 	ITEM_ID_AMULETT__FLIM_FLAM                = 174, /* amulet [6 blue gems, magic, 6 charges: use -> Flim Flam; found in Totenschiff.] */
 	ITEM_ID_AMULETT__TRAVIA                   = 175, /* amulet [golden cross, magic: no hunger or thirst; found in Wolfshoehle ] */
