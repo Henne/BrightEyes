@@ -49,7 +49,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 	signed int target_at_val;
 	signed int target_pa_val;
 	signed char target_is_hero;
-	signed int l11;
+	signed int projectile_gfx_id;
 	signed int ranged_attack_nonadjacent_flag; /* for ranged or spell attack: 0: at an adjacent square; 1: at a square at distance >= 2 */
 	signed int spell_test_result;
 	signed int spellcast_ani_id;
@@ -588,7 +588,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				clear_anisheets();
 
-				l11 = weapon_gfx_id_ranged;
+				projectile_gfx_id = weapon_gfx_id_ranged;
 				ranged_attack_nonadjacent_flag = 0;
 
 				FIG_call_draw_pic();
@@ -602,9 +602,9 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					0
 				);
 
-				ranged_attack_nonadjacent_flag = FANI_prepare_shotbolt_ani(
+				ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
 					7,
-					l11,
+					projectile_gfx_id,
 					enemy_id + 10,
 					p_enemy->target_object_id,
 					p_enemy->viewdir
@@ -616,11 +616,11 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				if (ranged_attack_nonadjacent_flag != 0) {
 
-					FIG_set_sheet(g_fig_shot_bolt_id, 7);
+					FIG_set_sheet(g_fig_projectile_id, 7);
 
 					draw_fight_screen((ranged_attack_nonadjacent_flag == 0) && (g_defender_dead == 0) ? 0 : 1);
 
-					FIG_make_invisible(g_fig_shot_bolt_id);
+					FIG_make_invisible(g_fig_projectile_id);
 				}
 
 				g_fig_continue_print = 1;
@@ -651,7 +651,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					}
 				}
 
-				FANI_remove_shotbolt();
+				FANI_remove_projectile();
 				draw_fight_screen(0);
 				clear_anisheets();
 
@@ -669,14 +669,14 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				if (p_enemy->target_object_id) {
 
-					l11 = ranged_attack_nonadjacent_flag = 0;
+					projectile_gfx_id = ranged_attack_nonadjacent_flag = PROJECTILE_GFX_ID_SPELLCAST_ORB; // == 0
 
 					if (random_schick(100) > 50) {
-						l11 = 1;
+						projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_BOLT;
 					}
 
 					if (p_enemy->target_object_id < 10) {
-						l11 = 2;
+						projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_STAR;
 					}
 
 					FIG_call_draw_pic();
@@ -737,9 +737,9 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 							&& (p_enemy->target_object_id > 0)
 						) {
 
-							ranged_attack_nonadjacent_flag = FANI_prepare_shotbolt_ani(
+							ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
 								7,
-								l11,
+								projectile_gfx_id,
 								enemy_id + 10,
 								p_enemy->target_object_id,
 								p_enemy->viewdir
@@ -758,11 +758,11 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 						if (ranged_attack_nonadjacent_flag != 0) {
 
-							FIG_set_sheet(g_fig_shot_bolt_id, 7);
+							FIG_set_sheet(g_fig_projectile_id, 7);
 
 							draw_fight_screen(1);
 
-							FIG_make_invisible(g_fig_shot_bolt_id);
+							FIG_make_invisible(g_fig_projectile_id);
 						}
 
 						if (spellcast_ani_id > 0) {
@@ -793,7 +793,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 						draw_fight_screen(1);
 
 						if (spellcast_ani_id > 0) {
-							FIG_make_invisible(g_fig_shot_bolt_id);
+							FIG_make_invisible(g_fig_projectile_id);
 						}
 
 						if (g_mspell_awake_flag) {
@@ -851,7 +851,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 						}
 
 						if (ranged_attack_nonadjacent_flag != 0) {
-							FANI_remove_shotbolt();
+							FANI_remove_projectile();
 						}
 
 						if (spellcast_ani_id > 0) {

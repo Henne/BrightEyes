@@ -14,7 +14,7 @@
 #include "seg038.h"
 #include "seg039.h"
 
-static const signed int g_gfxtab_shotbolt_ox[6][4] = {
+static const signed int g_gfxtab_projectile_ox[6][4] = {
 	{ -17, -3, -3, 3 },
 	{ -17, -3, -3, 3 },
 	{ -17, -3, -3, 3 },
@@ -22,7 +22,7 @@ static const signed int g_gfxtab_shotbolt_ox[6][4] = {
 	{ -17, -3, -3, 3 },
 	{ -17, -3, -3, 3 }
 }; // ds:0x6198
-static const signed int g_gfxtab_shotbolt_oy[6][4] = {
+static const signed int g_gfxtab_projectile_oy[6][4] = {
 	{ -30, -20, -20, -20 },
 	{ -30, -20, -20, -20 },
 	{ -30, -20, -20, -20 },
@@ -30,10 +30,10 @@ static const signed int g_gfxtab_shotbolt_oy[6][4] = {
 	{ -30, -20, -20, -20 },
 	{ -30, -20, -20, -20 }
 }; // ds:0x61c8
-static const signed int g_gfxtab_shotbolt_nvfno[6] = { 0, 4, 8, 12, 16, 20 }; // ds:0x61f8
-static const signed int g_gfxtab_shotbolt_height[6] = { 15, 15, 15, 5, 5, 8 }; // ds:0x6204
-static const signed int g_gfxtab_shotbolt_width[6] = { 25, 25, 25, 9, 9, 16 }; // ds:0x6210
-static const int8_t g_anitab_shotbolt_data[24][7] = {
+static const signed int g_gfxtab_projectile_nvfno[6] = { 0, 4, 8, 12, 16, 20 }; // ds:0x61f8
+static const signed int g_gfxtab_projectile_height[6] = { 15, 15, 15, 5, 5, 8 }; // ds:0x6204
+static const signed int g_gfxtab_projectile_width[6] = { 25, 25, 25, 9, 9, 16 }; // ds:0x6210
+static const int8_t g_anitab_projectile_data[24][7] = {
 
 	{-2,  1,  0,  0, 0, 0, -1},
 	{-2,  0, -1,  1, 0, 0, -1},
@@ -65,21 +65,21 @@ static const int8_t g_anitab_shotbolt_data[24][7] = {
 	{-2, -1,  0, 22, 0, 0, -1},
 	{-2,  0,  1, 23, 0, 0, -1}
 }; // ds:0x621c, arrays, each terminated by -1
-static const int8_t *g_anitab_shotbolt_index2[6][4] = {
-	{g_anitab_shotbolt_data[0],  g_anitab_shotbolt_data[1],  g_anitab_shotbolt_data[2],  g_anitab_shotbolt_data[3]},
-	{g_anitab_shotbolt_data[4],  g_anitab_shotbolt_data[5],  g_anitab_shotbolt_data[6],  g_anitab_shotbolt_data[7]},
-	{g_anitab_shotbolt_data[8],  g_anitab_shotbolt_data[9],  g_anitab_shotbolt_data[10], g_anitab_shotbolt_data[11]},
-	{g_anitab_shotbolt_data[12], g_anitab_shotbolt_data[13], g_anitab_shotbolt_data[14], g_anitab_shotbolt_data[15]},
-	{g_anitab_shotbolt_data[16], g_anitab_shotbolt_data[17], g_anitab_shotbolt_data[18], g_anitab_shotbolt_data[19]},
-	{g_anitab_shotbolt_data[20], g_anitab_shotbolt_data[21], g_anitab_shotbolt_data[22], g_anitab_shotbolt_data[23]}
+static const int8_t *g_anitab_projectile_index2[6][4] = {
+	{g_anitab_projectile_data[0],  g_anitab_projectile_data[1],  g_anitab_projectile_data[2],  g_anitab_projectile_data[3]},
+	{g_anitab_projectile_data[4],  g_anitab_projectile_data[5],  g_anitab_projectile_data[6],  g_anitab_projectile_data[7]},
+	{g_anitab_projectile_data[8],  g_anitab_projectile_data[9],  g_anitab_projectile_data[10], g_anitab_projectile_data[11]},
+	{g_anitab_projectile_data[12], g_anitab_projectile_data[13], g_anitab_projectile_data[14], g_anitab_projectile_data[15]},
+	{g_anitab_projectile_data[16], g_anitab_projectile_data[17], g_anitab_projectile_data[18], g_anitab_projectile_data[19]},
+	{g_anitab_projectile_data[20], g_anitab_projectile_data[21], g_anitab_projectile_data[22], g_anitab_projectile_data[23]}
 }; // ds:0x62c4, 6 long arrays of length 4 (viewdir); uint8_t*
-static const int8_t **g_anitab_shotbolt_index[6] = {
-	g_anitab_shotbolt_index2[0],
-	g_anitab_shotbolt_index2[1],
-	g_anitab_shotbolt_index2[2],
-	g_anitab_shotbolt_index2[3],
-	g_anitab_shotbolt_index2[4],
-	g_anitab_shotbolt_index2[5]
+static const int8_t **g_anitab_projectile_index[6] = {
+	g_anitab_projectile_index2[0],
+	g_anitab_projectile_index2[1],
+	g_anitab_projectile_index2[2],
+	g_anitab_projectile_index2[3],
+	g_anitab_projectile_index2[4],
+	g_anitab_projectile_index2[5]
 }; // ds:0x6324; uint8_t*
 
 static const int8_t g_anitab_spell_nvfno[2] = { 9, 27 }; // ds:0x633c
@@ -104,12 +104,12 @@ static const int8_t* g_anitab_spell_index[2] = {
 
 
 /**
- * \brief load sprites of arrows/shotbolts
+ * \brief load sprites of projectiles (from spell, missile weapon or throwing weapon)
  * \param[in] fighter_id	fighter ID
- * \param[in] type		arrow or shotbolt ???
+ * \param[in] type		arrow or projectile ???
  * \param[in] dir		direction
  **/
-void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const signed int dir)
+void FANI_add_projectile(const signed int fighter_id, const signed int projectile_gfx_id, const signed int dir)
 {
 	signed int obj_x;
 	signed int obj_y;
@@ -119,9 +119,9 @@ void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const
 
 	g_fig_list_elem.figure = 0;
 
-	g_fig_list_elem.nvf_no = g_gfxtab_shotbolt_nvfno[type];
+	g_fig_list_elem.nvf_no = g_gfxtab_projectile_nvfno[projectile_gfx_id];
 
-	if (type != 2) {
+	if (projectile_gfx_id != PROJECTILE_GFX_ID_SPELLCAST_STAR) {
 		g_fig_list_elem.nvf_no = g_fig_list_elem.nvf_no + dir;
 	}
 
@@ -131,26 +131,26 @@ void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const
 
 	g_fig_list_elem.cbx = obj_x;
 	g_fig_list_elem.cby = obj_y;
-	g_fig_list_elem.offsetx = g_gfxtab_shotbolt_ox[type][dir];
-	g_fig_list_elem.offsety = g_gfxtab_shotbolt_oy[type][dir];
-	g_fig_list_elem.height = g_gfxtab_shotbolt_height[type];
-	g_fig_list_elem.width = g_gfxtab_shotbolt_width[type];
+	g_fig_list_elem.offsetx = g_gfxtab_projectile_ox[projectile_gfx_id][dir];
+	g_fig_list_elem.offsety = g_gfxtab_projectile_oy[projectile_gfx_id][dir];
+	g_fig_list_elem.height = g_gfxtab_projectile_height[projectile_gfx_id];
+	g_fig_list_elem.width = g_gfxtab_projectile_width[projectile_gfx_id];
 
 	g_fig_list_elem.x1 = 0;
 	g_fig_list_elem.y1 = 0;
-	g_fig_list_elem.x2 = g_gfxtab_shotbolt_width[type] - 1;
-	g_fig_list_elem.y2 = g_gfxtab_shotbolt_height[type] - 1;
+	g_fig_list_elem.x2 = g_gfxtab_projectile_width[projectile_gfx_id] - 1;
+	g_fig_list_elem.y2 = g_gfxtab_projectile_height[projectile_gfx_id] - 1;
 
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
 	g_fig_list_elem.wsheet = -1;
 	g_fig_list_elem.sheet = -1;
-	g_fig_list_elem.gfxbuf = g_fig_shot_bolt_buf;
+	g_fig_list_elem.gfxbuf = g_fig_projectile_buf;
 	g_fig_list_elem.z = 100;
 	g_fig_list_elem.visible = 0;
 	g_fig_list_elem.double_size = -1;
 
-	nvf.dst = g_fig_shot_bolt_buf;
+	nvf.dst = g_fig_projectile_buf;
 	nvf.src = g_spellobj_nvf_buf;
 	nvf.image_num = g_fig_list_elem.nvf_no;
 	nvf.compression_type = 0;
@@ -159,13 +159,13 @@ void FANI_add_shotbolt(const signed int fighter_id, const signed int type, const
 
 	process_nvf_extraction(&nvf);
 
-	g_fig_shot_bolt_id = FIG_add_to_list(-1);
+	g_fig_projectile_id = FIG_add_to_list(-1);
 }
 
-void FANI_remove_shotbolt(void)
+void FANI_remove_projectile(void)
 {
-	FIG_remove_from_list(g_fig_shot_bolt_id, 0);
-	g_fig_shot_bolt_id = -1;
+	FIG_remove_from_list(g_fig_projectile_id, 0);
+	g_fig_projectile_id = -1;
 }
 
 /**
@@ -197,7 +197,7 @@ signed int FANI_copy_sequence(int8_t *dst, const int8_t *src, const signed char 
 	return i;
 }
 
-signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int type, const signed int fighter_id, const signed int target_object_id, const signed int dir)
+signed int FANI_prepare_projectile_ani(const signed int sheet_id, const signed int projectile_gfx_id, const signed int fighter_id, const signed int target_object_id, const signed int dir)
 {
 	signed int i;
 	int8_t *sheet_ptr;
@@ -221,11 +221,11 @@ signed int FANI_prepare_shotbolt_ani(const signed int sheet_id, const signed int
 	g_fig_anisheets[sheet_id][242] = 0;
 
 	for (i = 0; distance - 1 > i; i++) {
-		sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_shotbolt_index[type][dir], -1);
+		sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_projectile_index[projectile_gfx_id][dir], -1);
 	}
 	*sheet_ptr = -1;
 
-	FANI_add_shotbolt(fighter_id, type, dir);
+	FANI_add_projectile(fighter_id, projectile_gfx_id, dir);
 
 	return 1;
 }

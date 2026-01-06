@@ -253,7 +253,7 @@ signed char g_fig_enemy_parry_action_used[30]; // ds:0xd82d, see FIG_ACTION_PARR
 signed char g_fig_hero_parry_action_used[7]; // ds:0xd84b
 signed char *g_chessboard;// ds:0xd852
 uint8_t *g_fig_spellgfx_buf; // ds:0xd856
-uint8_t *g_fig_shot_bolt_buf; // ds:0xd85a
+uint8_t *g_fig_projectile_buf; // ds:0xd85a
 uint8_t *g_fig_cb_selector_buf; // ds:0xd85e
 uint8_t *g_fig_cb_marker_buf; // ds:0xd862
 uint8_t *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f

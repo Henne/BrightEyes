@@ -72,7 +72,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed int atpa;
 	signed int target_pa_val; /* of attacked enemy or hero */
 	signed int target_hero_at_val;
-	signed int l12; /* some ani related value */
+	signed int projectile_gfx_id; /* some ani related value */
 	signed int ranged_attack_nonadjacent_flag; /* for ranged or spell attack: 0: at an adjacent square; 1: at a square at distance >= 2 */
 	signed int target_is_hero = 0;
 	signed int spell_test_result;
@@ -723,7 +723,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					clear_anisheets();
 
-					l12 = attacker_weapon_gfx_id;
+					projectile_gfx_id = attacker_weapon_gfx_id;
 					ranged_attack_nonadjacent_flag = 0;
 
 					FIG_call_draw_pic();
@@ -738,9 +738,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						0
 					);
 
-					ranged_attack_nonadjacent_flag = FANI_prepare_shotbolt_ani(
+					ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
 						7,
-						l12,
+						projectile_gfx_id,
 						hero_pos + 1,
 						target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 						hero->viewdir
@@ -760,11 +760,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					if (ranged_attack_nonadjacent_flag != 0) {
 
-						FIG_set_sheet(g_fig_shot_bolt_id, 7);
+						FIG_set_sheet(g_fig_projectile_id, 7);
 
 						draw_fight_screen(ranged_attack_nonadjacent_flag == 0 && g_defender_dead == 0 ? 0 : 1);
 
-						FIG_make_invisible(g_fig_shot_bolt_id);
+						FIG_make_invisible(g_fig_projectile_id);
 					}
 
 					g_fig_continue_print = 1;
@@ -795,7 +795,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						}
 					}
 
-					FANI_remove_shotbolt();
+					FANI_remove_projectile();
 
 					draw_fight_screen(0);
 
@@ -846,15 +846,15 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (hero->target_object_id != 0) {
 
-					l12 = ranged_attack_nonadjacent_flag = 0;
+					projectile_gfx_id = ranged_attack_nonadjacent_flag = PROJECTILE_GFX_ID_SPELLCAST_ORB; // == 0
 
 					if (random_schick(100) > 50) {
-						l12 = 1;
+						projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_BOLT;
 					}
 
 					if (hero->target_object_id < 10) {
 						/* target is a hero */
-						l12 = 2;
+						projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_STAR;
 					}
 
 					FIG_call_draw_pic();
@@ -867,7 +867,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							4,
 							hero_pos + 1,
 							target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
-							l12,
+							projectile_gfx_id,
 							0
 						);
 					}
@@ -918,9 +918,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							&& (hero->target_object_id > 0)
 						) {
 
-							ranged_attack_nonadjacent_flag = FANI_prepare_shotbolt_ani(
+							ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
 								7,
-								l12,
+								projectile_gfx_id,
 								hero_pos + 1,
 								target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 								hero->viewdir
@@ -938,11 +938,11 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 						if (ranged_attack_nonadjacent_flag != 0) {
 
-							FIG_set_sheet(g_fig_shot_bolt_id, 7);
+							FIG_set_sheet(g_fig_projectile_id, 7);
 
 							draw_fight_screen(1);
 
-							FIG_make_invisible(g_fig_shot_bolt_id);
+							FIG_make_invisible(g_fig_projectile_id);
 						}
 
 						if (spellcast_ani_id > 0) {
@@ -1005,7 +1005,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						draw_fight_screen(1);
 
 						if (spellcast_ani_id > 0) {
-							FIG_make_invisible(g_fig_shot_bolt_id);
+							FIG_make_invisible(g_fig_projectile_id);
 						}
 
 						if (g_spell_illusionen) {
@@ -1029,7 +1029,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						}
 
 						if (ranged_attack_nonadjacent_flag != 0) {
-							FANI_remove_shotbolt();
+							FANI_remove_projectile();
 						}
 
 						if ((spellcast_ani_id > 0) && (spellcast_ani_id != 3) && (spellcast_ani_id != 4)) {

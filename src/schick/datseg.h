@@ -1902,7 +1902,7 @@ extern signed int  g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg09
 extern signed int  g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099
 extern signed char g_fig_cb_selector_id[21];	// ds:0xe38f; seg032, seg034, seg040
 extern signed char g_fig_cb_marker_id;		// ds:0xe38e; seg032, seg033, seg036, seg037, seg038, seg040
-extern signed char g_fig_shot_bolt_id;		// ds:0xe38d; seg040, seg042, seg043, seg045
+extern signed char g_fig_projectile_id;		// ds:0xe38d; seg040, seg042, seg043, seg045
 extern signed char g_fig_spellgfx_id;		// ds:0xe38c; seg040, seg042, seg043, seg045
 extern unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388; seg032, seg040
 extern signed short *g_figobj_gfxheight_table;	// ds:0xe384; seg032, seg040
@@ -1954,7 +1954,7 @@ extern uint8_t* g_weapons_nvf_buf;	// ds:0xd86a; seg005, seg032, seg040
 extern uint8_t* g_spellobj_nvf_buf;	// ds:0xd868; seg005, seg032, seg040, seg045, seg100
 extern uint8_t* g_fig_cb_marker_buf;	// ds:0xd862; seg038, seg040
 extern uint8_t* g_fig_cb_selector_buf;	// ds:0xd85e; seg034, seg040
-extern uint8_t* g_fig_shot_bolt_buf;	// ds:0xd85a; seg040, seg045
+extern uint8_t* g_fig_projectile_buf;	// ds:0xd85a; seg040, seg045
 extern uint8_t* g_fig_spellgfx_buf;	// ds:0xd856; seg040, seg045
 extern signed char *g_chessboard;	// ds:0xd852;
 extern signed char g_fig_hero_parry_action_used[7];	// ds:0xd84b; seg032, seg042, seg043, seg044

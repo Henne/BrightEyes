@@ -559,6 +559,8 @@ enum {
 	WEAPON_TYPE_WURFWAFFE	= 8
 };
 
+/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
+
 enum {
 	WEAPON_GFX_ID_NONE           = -1, /* weaponless */
 	WEAPON_GFX_ID_MELEE_KNIFE    =  0, /* ITEM_ID_MESSER, ITEM_ID_DOLCH, ITEM_ID_VULKANGLASDOLCH, ITEM_ID_WOLFSMESSER */
@@ -570,7 +572,14 @@ enum {
 	WEAPON_GFX_ID_RANGED_SPEAR   =  5, /* throwing spears */
 };
 
-/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
+enum {
+	PROJECTILE_GFX_ID_SPELLCAST_ORB  = 0, /* greenish bright orb with trail */
+	PROJECTILE_GFX_ID_SPELLCAST_BOLT = 1, /* blueish bright bolt with trail */
+	PROJECTILE_GFX_ID_SPELLCAST_STAR = 2, /* star-shaped orb, no trail. Looks the same in all motion directions */
+	PROJECTILE_GFX_ID_RANGED_MISSILE = 3,
+	PROJECTILE_GFX_ID_RANGED_THROW   = 4,
+	PROJECTILE_GFX_ID_RANGED_SPEAR   = 5
+};
 
 enum {
 	RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER = 0, /* ITEM_ID_WURFSTERN, ITEM_ID_WURFMESSER */

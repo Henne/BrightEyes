@@ -1,13 +1,13 @@
 /* should be static */
 /* 0x20 */
-void FANI_add_shotbolt(const signed int, const signed int, const signed int);
+void FANI_add_projectile(const signed int, const signed int, const signed int);
 /* 0x25 */
-void FANI_remove_shotbolt(void);
+void FANI_remove_projectile(void);
 /* should be static */
 /* 0x2a */
 signed int FANI_copy_sequence(int8_t*, int8_t*, const signed char);
 /* 0x2f */
-signed int FANI_prepare_shotbolt_ani(const signed int, const signed int, const signed int, const signed int, const signed int);
+signed int FANI_prepare_projectile_ani(const signed int, const signed int, const signed int, const signed int, const signed int);
 
 /* should be static */
 /* 0x34 */
