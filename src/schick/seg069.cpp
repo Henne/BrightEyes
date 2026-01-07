@@ -56,7 +56,7 @@ void THO_hetmann(void)
 		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx(86), 0);
 
 		gs_got_letter_het = 1;
-		give_new_item_to_group(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN, 1, 1);
+		give_new_item_to_group(ITEM_ID_EMPFEHLUNGSSCHREIBEN__HETMAN, 1, 1);
 
 	} else if (!gs_heard_announce || gs_got_main_quest != 0) {
 
@@ -123,7 +123,7 @@ void THO_hetmann(void)
 			gs_got_main_quest = 1;
 			gs_quested_months = 0;
 			gs_got_letter_het = 1;
-			give_new_item_to_group(ITEM_EMPFEHLUNGSSCHREIBEN__HETMAN, 1, 1);
+			give_new_item_to_group(ITEM_ID_EMPFEHLUNGSSCHREIBEN__HETMAN, 1, 1);
 
 		} else if (answer == 3) {
 
@@ -171,7 +171,7 @@ void THO_windriders(void)
 				GUI_output(get_tx2(28));
 
 				g_fig_discard = 1;
-				do_fight(FIGHTS_THOR8);
+				do_fight(FIGHT_ID_THOR8);
 			}
 
 			gs_otta_windriders++;
@@ -279,7 +279,7 @@ void THO_stormchildren(void)
 				GUI_output(get_tx2(37));
 
 				g_fig_discard = 1;
-				do_fight(FIGHTS_THOR8);
+				do_fight(FIGHT_ID_THOR8);
 			}
 
 			gs_otta_stormchildren++;
@@ -312,7 +312,7 @@ void THO_garaldsson(void)
 				GUI_output(get_tx2(46));
 
 				g_fig_discard = 1;
-				do_fight(FIGHTS_THOR8);
+				do_fight(FIGHT_ID_THOR8);
 			}
 
 			gs_otta_garaldsson++;

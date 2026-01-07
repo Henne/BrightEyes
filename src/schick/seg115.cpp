@@ -102,7 +102,7 @@ void tevent_016(void)
 							timewarp(MINUTES(15));
 
 							sprintf(g_dtp2 + 0x400, get_tx2(35), hero->alias,
-								GUI_get_ptr(hero->sex, 0));
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 							GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
@@ -111,17 +111,17 @@ void tevent_016(void)
 							/* fail */
 							sprintf(g_dtp2 + 0x400,	get_tx2(34),
 								hero->alias,
-								GUI_get_ptr(hero->sex, 0),
-								GUI_get_ptr(hero->sex, 2),
-								GUI_get_ptr(hero->sex, 3),
-								GUI_get_ptr(hero->sex, 2));
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH),
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD),
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
 							timewarp(HOURS(1));
 
 							sprintf(g_dtp2 + 0x400,	get_tx2(37), hero->alias,
-								GUI_get_ptr(hero->sex, 1));
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
@@ -170,7 +170,7 @@ void tevent_091(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent091_flag) ||	gs_tevent091_flag)
 	{
-		g_gather_herbs_special = ITEM_SHURINKNOLLE;
+		g_gather_herbs_special = ITEM_ID_SHURINKNOLLE;
 
 		TRV_found_herb_place(0);
 
@@ -707,7 +707,7 @@ void tevent_100(void)
 
 					timewarp(MINUTES(15));
 
-					sprintf(g_dtp2,	get_tx2(69), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 0));
+					sprintf(g_dtp2,	get_tx2(69), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 					GUI_output(g_dtp2);
 				}

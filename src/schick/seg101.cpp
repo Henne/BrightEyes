@@ -413,7 +413,11 @@ void spell_paralue(void)
 		/* set 'petrified' flag */
 		g_spelltarget_e->flags.petrified = 1;
 
-		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(103), (char*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
@@ -467,7 +471,11 @@ void spell_salander(void)
 		g_spelltarget_e->flags.mushroom = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2, get_tx(104), (char*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		/* set AE cost */
 		g_spell_special_aecost = ae_cost;
@@ -521,7 +529,7 @@ void spell_visibili(void)
 		mod_slot = get_free_mod_slot();
 		set_mod_slot(mod_slot, (int32_t)rounds * MINUTES(5), (uint8_t*)&get_spelluser()->invisible, 1, pos);
 
-		sprintf(g_dtp2,	get_tx(106), get_spelluser()->alias, GUI_get_ptr(get_spelluser()->sex, 0));
+		sprintf(g_dtp2,	get_tx(106), get_spelluser()->alias, GUI_get_personal_pronoun(get_spelluser()->sex, GRAMMAR_CASE_1ST));
 	} else {
 		sprintf(g_dtp2,	get_ttx(607), get_spelluser()->alias);
 
@@ -570,15 +578,15 @@ void spell_brenne(void)
 	 * box and a bottle of oil.
 	 */
 	if (g_ignite_mode == IGNITE_MODE_USE_TORCH) {
-		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
+		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_ID_FACKEL__UNLIT);
 	} else {
 		if (g_ignite_mode == IGNITE_MODE_USE_LANTERN) {
 		} else {
 			// assert(g_ignite_mode == IGNITE_MODE_SPELL_OR_USE_TINDER);
-			torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
+			torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_ID_FACKEL__UNLIT);
 		}
 
-		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
+		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_ID_LATERNE__UNLIT);
 	}
 #else
 	/* For the fix, we rely on the stored inventory slot of the used item in g_used_item_inv_slot */
@@ -588,8 +596,8 @@ void spell_brenne(void)
 		lantern_inv_slot = g_used_item_inv_slot;
 	} else {
 		// assert(g_ignite_mode == IGNITE_MODE_SPELL_OR_USE_TINDER);
-		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_FACKEL__UNLIT);
-		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_LATERNE__UNLIT);
+		torch_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_ID_FACKEL__UNLIT);
+		lantern_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_ID_LATERNE__UNLIT);
 	}
 #endif
 
@@ -599,8 +607,8 @@ void spell_brenne(void)
 		sprintf(g_dtp2,	get_tx(107), get_spelluser()->alias);
 
 		answer = GUI_radio(g_dtp2, 2,
-				(char*)GUI_names_grammar(0x4000, ITEM_FACKEL__UNLIT, 0),
-				(char*)GUI_names_grammar(0x4000, ITEM_LATERNE__UNLIT, 0));
+				(char*)GUI_name_inflect_with_article(0x4000, ITEM_ID_FACKEL__UNLIT, 0),
+				(char*)GUI_name_inflect_with_article(0x4000, ITEM_ID_LATERNE__UNLIT, 0));
 
 		if (answer == -1) {
 
@@ -620,7 +628,7 @@ void spell_brenne(void)
 	if (torch_inv_slot != -1) {
 
 		/* change torch to burning torch */
-		get_spelluser()->inventory[torch_inv_slot].item_id = ITEM_FACKEL__LIT;
+		get_spelluser()->inventory[torch_inv_slot].item_id = ITEM_ID_FACKEL__LIT;
 
 		/* set timer to 10 */
 		get_spelluser()->inventory[torch_inv_slot].lighting_timer = 10;
@@ -634,12 +642,12 @@ void spell_brenne(void)
 	} else if (lantern_inv_slot != -1) {
 
 		/* get position of oil */
-		oil_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_OEL);
+		oil_inv_slot = inv_slot_of_item(get_spelluser(), ITEM_ID_OEL);
 
 		if (oil_inv_slot != -1) {
 
 			/* change lantern to burning lantern */
-			get_spelluser()->inventory[lantern_inv_slot].item_id = ITEM_LATERNE__LIT;
+			get_spelluser()->inventory[lantern_inv_slot].item_id = ITEM_ID_LATERNE__LIT;
 
 			/* set counter to 100 */
 			get_spelluser()->inventory[lantern_inv_slot].lighting_timer = 100;
@@ -648,7 +656,7 @@ void spell_brenne(void)
 			drop_item(get_spelluser(), oil_inv_slot, 1);
 
 			/* give bronze flask */
-			give_new_item_to_hero(get_spelluser(), ITEM_BRONZEFLASCHE, 0, 1);
+			give_new_item_to_hero(get_spelluser(), ITEM_ID_BRONZEFLASCHE, 0, 1);
 
 			/* set AP cost */
 			g_spell_special_aecost = random_schick(20);

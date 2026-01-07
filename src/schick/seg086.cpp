@@ -76,7 +76,7 @@ signed int DNG11_handler(void)
 			{
 				g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,8,15,SOUTH);
 
-				do_fight(FIGHTS_F131_01B);
+				do_fight(FIGHT_ID_F131_01B);
 			}
 		}
 
@@ -208,7 +208,7 @@ signed int DNG11_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((gs_dng11_lever_flag == 2 || gs_dng11_lever_flag == 3) && (test_result = test_talent(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
-				GUI_get_ptr(hero->sex, 3));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 			strcat(g_dtp2, g_text_output_buf);
 			GUI_output(g_dtp2);
@@ -238,7 +238,7 @@ signed int DNG11_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((gs_dng11_lever_flag == 1 || gs_dng11_lever_flag == 3) && (test_result = test_talent(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
-				GUI_get_ptr(hero->sex, 3));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -269,7 +269,7 @@ signed int DNG11_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((gs_dng11_lever_flag == 5 || gs_dng11_lever_flag == 3) && (test_result = test_talent(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
-				GUI_get_ptr(hero->sex, 3));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -482,7 +482,7 @@ void DNG11_chest13_loot(struct struct_chest* chest)
  */
 void DNG11_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_F131_11_1) {
+	if (fight_id == FIGHT_ID_F131_11_1) {
 		GUI_output(get_tx(14));
 	}
 }

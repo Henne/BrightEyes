@@ -30,22 +30,22 @@
 #include "seg106.h"
 
 static const signed int g_hero_startup_items[12][4] = {
-	{ ITEM_DOLCH, ITEM_WURFMESSER, ITEM_WURFMESSER, -1 }, /* Gaukler */
-	{ ITEM_LANGBOGEN, ITEM_DOLCH, -1, -1 }, /* Jaeger */
-	{ ITEM_SCHWERT, ITEM_DOLCH, ITEM_LEDERHARNISCH, -1 }, /* Krieger */
-	{ ITEM_RAPIER, ITEM_DOLCH, ITEM_DIETRICHE, -1 }, /* Streuner */
-	{ ITEM_SKRAJA, ITEM_SAEBEL, ITEM_SCHNAPSFLASCHE, -1 }, /* Thorwaler */
-	{ ITEM_STREITKOLBEN, ITEM_BRECHEISEN, ITEM_HAMMER, -1 }, /* Zwerg */
-	{ ITEM_HEXENBESEN, ITEM_EINBEERE, ITEM_EINBEERE, -1 }, /* Hexe */
-	{ ITEM_VULKANGLASDOLCH, ITEM_WIRSELKRAUT, ITEM_JORUGAWURZEL, -1 }, /* Druide */
-	{ ITEM_ZAUBERSTAB, ITEM_DOLCH, ITEM_SCHREIBZEUG, ITEM_ROBE__GREEN_1 }, /* Magier */
-	{ ITEM_LANGBOGEN, ITEM_RAPIER, ITEM_HARFE, -1 }, /* Auelf */
-	{ ITEM_ROBBENTOETER, ITEM_SPEER, ITEM_FLOETE, -1 }, /* Firnelf */
-	{ ITEM_LANGBOGEN, ITEM_MESSER, ITEM_FLOETE, -1 } /* Waldelf */
+	{ ITEM_ID_DOLCH, ITEM_ID_WURFMESSER, ITEM_ID_WURFMESSER, -1 }, /* Gaukler */
+	{ ITEM_ID_LANGBOGEN, ITEM_ID_DOLCH, -1, -1 }, /* Jaeger */
+	{ ITEM_ID_SCHWERT, ITEM_ID_DOLCH, ITEM_ID_LEDERHARNISCH, -1 }, /* Krieger */
+	{ ITEM_ID_RAPIER, ITEM_ID_DOLCH, ITEM_ID_DIETRICHE, -1 }, /* Streuner */
+	{ ITEM_ID_SKRAJA, ITEM_ID_SAEBEL, ITEM_ID_SCHNAPSFLASCHE, -1 }, /* Thorwaler */
+	{ ITEM_ID_STREITKOLBEN, ITEM_ID_BRECHEISEN, ITEM_ID_HAMMER, -1 }, /* Zwerg */
+	{ ITEM_ID_HEXENBESEN, ITEM_ID_EINBEERE, ITEM_ID_EINBEERE, -1 }, /* Hexe */
+	{ ITEM_ID_VULKANGLASDOLCH, ITEM_ID_WIRSELKRAUT, ITEM_ID_JORUGAWURZEL, -1 }, /* Druide */
+	{ ITEM_ID_ZAUBERSTAB, ITEM_ID_DOLCH, ITEM_ID_SCHREIBZEUG, ITEM_ID_ROBE__GREEN_1 }, /* Magier */
+	{ ITEM_ID_LANGBOGEN, ITEM_ID_RAPIER, ITEM_ID_HARFE, -1 }, /* Auelf */
+	{ ITEM_ID_ROBBENTOETER, ITEM_ID_SPEER, ITEM_ID_FLOETE, -1 }, /* Firnelf */
+	{ ITEM_ID_LANGBOGEN, ITEM_ID_MESSER, ITEM_ID_FLOETE, -1 } /* Waldelf */
 }; // ds:0xae48
 
 static const signed int g_hero_startup_items_all[4] = {
-	ITEM_WASSERSCHLAUCH, ITEM_PROVIANTPAKET, ITEM_PROVIANTPAKET, ITEM_HOSE
+	ITEM_ID_WASSERSCHLAUCH, ITEM_ID_PROVIANTPAKET, ITEM_ID_PROVIANTPAKET, ITEM_ID_HOSE
 }; // ds:0xaea8
 
 /**
@@ -80,8 +80,8 @@ signed int two_hand_collision(struct struct_hero* hero, const signed int item_id
 		if (other_item_id) {
 
 			/* check if one hand has a two-handed weapon */
-			if ((g_itemsdat[item_id].flags.weapon && (g_itemsdat[item_id].subtype == WEAPON_TYPE_ZWEIHAENDER)) ||
-			(g_itemsdat[other_item_id].flags.weapon && (g_itemsdat[other_item_id].subtype == WEAPON_TYPE_ZWEIHAENDER))) {
+			if ((g_itemsdat[item_id].flags.weapon && (g_itemsdat[item_id].item_subtype_id == WEAPON_TYPE_ZWEIHAENDER)) ||
+			(g_itemsdat[other_item_id].flags.weapon && (g_itemsdat[other_item_id].item_subtype_id == WEAPON_TYPE_ZWEIHAENDER))) {
 				retval = 1;
 			}
 		}
@@ -117,7 +117,7 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 			if ((inv_slot_2 < inv_slot_1) || ((inv_slot_1 < HERO_INVENTORY_SLOT_KNAPSACK_1) && (inv_slot_2 < HERO_INVENTORY_SLOT_KNAPSACK_1))) {
 
 				if (inv_slot_1 < HERO_INVENTORY_SLOT_KNAPSACK_1) {
-					if (item_id_1 != ITEM_NONE)
+					if (item_id_1 != ITEM_ID_NONE)
 						v3 = 1;
 				} else {
 					v3 = 1;
@@ -143,7 +143,7 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 				GUI_output(get_ttx(209));
 
 			} else {
-				if (item_id_2 != ITEM_NONE) {
+				if (item_id_2 != ITEM_ID_NONE) {
 
 					/* item have the same ids and are stackable */
 					if ((item_id_2 == item_id_1) && g_itemsdat[item_id_1].flags.stackable) {
@@ -164,7 +164,11 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 
 							sprintf(g_dtp2, get_ttx(221), hero->alias,
 								get_ttx((hero->sex != 0 ? 593 : 9) + hero->typus),
-								GUI_names_grammar(2, item_id_2, 0));
+								GUI_name_inflect_with_article(
+									INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+									item_id_2,
+									INFLECT_NAME_TYPE_ITEM
+								));
 
 							GUI_output(g_dtp2);
 
@@ -173,11 +177,17 @@ void move_item(signed int inv_slot_1, signed int inv_slot_2, struct struct_hero 
 
 								if (is_in_int_array(item_id_2, g_items_pluralwords))
 
-									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0x4000, item_id_2, 0), get_ttx(557));
+									sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+										INFLECT_OMIT_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+										item_id_2,
+										INFLECT_NAME_TYPE_ITEM
+									), get_ttx(557));
 								else
-									sprintf(g_dtp2, get_ttx(222),
-										GUI_names_grammar(0, item_id_2, 0), get_ttx(556));
+									sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+										INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+										item_id_2,
+										INFLECT_NAME_TYPE_ITEM
+									), get_ttx(556));
 
 								GUI_output(g_dtp2);
 							} else {
@@ -236,7 +246,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 	/* create pointer to the item in the inventory */
 	struct inventory *inventory_p = &hero->inventory[pos];
 
-	if (inventory_p->item_id != ITEM_NONE) {
+	if (inventory_p->item_id != ITEM_ID_NONE) {
 
 		/* normal item */
 
@@ -244,12 +254,18 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 			is_in_int_array(inventory_p->item_id, g_items_pluralwords)) {
 
 			/* more than one item or special */
-			sprintf(g_dtp2, get_tx2(72), get_ttx(305),
-				(uint8_t*)GUI_names_grammar(0x4004, inventory_p->item_id, 0));
+			sprintf(g_dtp2, get_tx2(72), get_ttx(305), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_OMIT_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+				inventory_p->item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 		} else {
 			/* one item */
-			sprintf(g_dtp2, get_tx2(11), get_ttx(304),
-				(uint8_t*)GUI_names_grammar(0, inventory_p->item_id, 0));
+			sprintf(g_dtp2, get_tx2(11), get_ttx(304), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				inventory_p->item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 		}
 	} else {
 		/* no item */
@@ -273,7 +289,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 	}
 
 	/* poisoned */
-	if (inventory_p->item_id == ITEM_KUKRISDOLCH || inventory_p->item_id == ITEM_KUKRIS_MENGBILAR ||
+	if (inventory_p->item_id == ITEM_ID_KUKRISDOLCH || inventory_p->item_id == ITEM_ID_KUKRIS_MENGBILAR ||
 		inventory_p->flags.poison_expurgicum || inventory_p->flags.poison_vomicum ||
 		hero->inventory[pos].poison_id != POISON_ID_NONE) {
 
@@ -281,7 +297,7 @@ void print_item_description(struct struct_hero *hero, const signed int pos)
 	}
 
 	/* magic wand */
-	if (inventory_p->item_id == ITEM_ZAUBERSTAB) {
+	if (inventory_p->item_id == ITEM_ID_ZAUBERSTAB) {
 		sprintf(g_text_output_buf, get_tx2(53), hero->staff_level);
 		strcat(g_dtp2, g_text_output_buf);
 	}
@@ -316,17 +332,25 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 	item1_desc = &g_itemsdat[item_id1];
 	item2_desc = &g_itemsdat[item_id2];
 
-	if (item1_desc->flags.undropable) {
+	if (item1_desc->flags.undroppable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar(0x8002, item_id1, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			item_id1,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		GUI_output(g_dtp2);
 		return;
 	}
 
-	if (item2_desc->flags.undropable) {
+	if (item2_desc->flags.undroppable) {
 
-		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar(0x8002, item_id2, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			item_id2,
+			INFLECT_NAME_TYPE_ITEM
+		));
 		GUI_output(g_dtp2);
 		return;
 
@@ -338,7 +362,12 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		if (!can_hero_use_item(hero2, item_id1)) {
 
 			sprintf(g_dtp2,	get_ttx(221), hero2->alias, get_ttx((hero2->sex ? 593 : 9) + hero2->typus),
-				GUI_names_grammar(2, item_id1, 0));
+				GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM
+				)
+			);
 
 #if !defined(__BORLANDC__)
 			GUI_output(g_dtp2);
@@ -353,9 +382,17 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 
 			if (is_in_int_array(item_id1, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id1, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_OMIT_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM),
+				get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item_id1, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM),
+				get_ttx(556));
 			}
 
 #if !defined(__BORLANDC__)
@@ -389,10 +426,13 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 		if (!can_hero_use_item(hero1, item_id2)) {
 
 #if !defined(__BORLANDC__)
-			sprintf(g_dtp2,	get_ttx(221), hero1->alias,
-				get_ttx((hero1->sex ? 593 : 9) + hero1->typus),
-				(char*)GUI_names_grammar(2, item_id2, 0));
-
+			sprintf(g_dtp2,	get_ttx(221), hero1->alias, get_ttx((hero1->sex ? 593 : 9) + hero1->typus),
+				(char*)GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+					item_id2,
+					INFLECT_NAME_TYPE_ITEM
+				)
+			);
 
 			GUI_output(g_dtp2);
 			return;
@@ -402,7 +442,7 @@ void pass_item(struct struct_hero *hero1, const signed int old_pos1, struct stru
 				push 0
 				push word [item_id2]
 				push 2
-				call far ptr GUI_names_grammar
+				call far ptr GUI_name_inflect_with_article
 				add sp, 0x06
 				push dx
 				push ax
@@ -454,10 +494,17 @@ lab02:
 
 			if (is_in_int_array(item_id2, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item_id2, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_OMIT_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id2,
+					INFLECT_NAME_TYPE_ITEM
+				), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item_id2, 0), get_ttx(556));
-
+				sprintf(g_dtp2, get_ttx(222), GUI_name_inflect_with_article(
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					item_id2,
+					INFLECT_NAME_TYPE_ITEM
+				), get_ttx(556));
 			}
 #if defined (__BORLANDC__)
 lab04:
@@ -470,7 +517,7 @@ lab04:
 /* 0xa14 */
 
 	/* identical from here */
-	if (item_id2 != ITEM_NONE) {
+	if (item_id2 != ITEM_ID_NONE) {
 
 		flag = 1;
 		if ((item_id2 == item_id1) && item2_desc->flags.stackable) {
@@ -480,9 +527,17 @@ lab04:
 
 			if (hero1->inventory[pos1].quantity > 1) {
 
-				sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
-					(char*)GUI_names_grammar(6, item_id1, 0), hero2->alias);
-
+				sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity, (char*)GUI_name_inflect_with_article(
+				/* get_ttx(210): "WIE VIELE DER %d^%s SOLLEN an %s ÜBERGEBEN WERDEN" */
+#ifndef M302de_ORIGINAL_BUGFIX
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+#else
+					// this is 2nd case, not 4th
+					INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_2ND_CASE,
+#endif
+					item_id1,
+					INFLECT_NAME_TYPE_ITEM
+				), hero2->alias);
 
 				stackable_quant = GUI_input(g_dtp2, 2);
 			}
@@ -557,19 +612,19 @@ lab04:
 				hero2->num_filled_inv_slots++;
 
 				/* special items */
-				if (item_id2 == ITEM_SICHEL__MAGIC) {
+				if (item_id2 == ITEM_ID_SICHEL__MAGIC) {
 					hero1->talents[TA_PFLANZENKUNDE] = hero1->talents[TA_PFLANZENKUNDE] + 3;
 					hero2->talents[TA_PFLANZENKUNDE] = hero2->talents[TA_PFLANZENKUNDE] - 3;
 				}
-				if (item_id2 == ITEM_AMULETT__BLUE) {
+				if (item_id2 == ITEM_ID_AMULETT__MR_BONUS) {
 					hero1->mr = hero1->mr + 5;
 					hero2->mr = hero2->mr - 5;
 				}
-				if (item_id1 == ITEM_SICHEL__MAGIC) {
+				if (item_id1 == ITEM_ID_SICHEL__MAGIC) {
 					hero1->talents[TA_PFLANZENKUNDE] = hero1->talents[TA_PFLANZENKUNDE] - 3;
 					hero2->talents[TA_PFLANZENKUNDE] = hero2->talents[TA_PFLANZENKUNDE] + 3;
 				}
-				if (item_id1 == ITEM_AMULETT__BLUE) {
+				if (item_id1 == ITEM_ID_AMULETT__MR_BONUS) {
 					hero1->mr = hero1->mr - 5;
 					hero2->mr = hero2->mr + 5;
 				}
@@ -582,9 +637,17 @@ lab04:
 
 		if (hero1->inventory[pos1].quantity > 1) {
 
-			sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity,
-				(char*)GUI_names_grammar(6, item_id1, 0), hero2->alias);
-
+			sprintf(g_dtp2,	get_ttx(210), hero1->inventory[pos1].quantity, (char*)GUI_name_inflect_with_article(
+			/* get_ttx(210): "WIE VIELE DER %d^%s SOLLEN an %s ÜBERGEBEN WERDEN" */
+#ifndef M302de_ORIGINAL_BUGFIX
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+#else
+				// this is 2nd case, not 4th
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_2ND_CASE,
+#endif
+				item_id1,
+				INFLECT_NAME_TYPE_ITEM
+			), hero2->alias);
 
 			stackable_quant = GUI_input(g_dtp2, 2);
 		}
@@ -641,11 +704,11 @@ lab04:
 		memset(&hero1->inventory[pos1], 0, sizeof(inventory));
 
 		/* special items */
-		if (item_id1 == ITEM_SICHEL__MAGIC) {
+		if (item_id1 == ITEM_ID_SICHEL__MAGIC) {
 			hero1->talents[TA_PFLANZENKUNDE] = hero1->talents[TA_PFLANZENKUNDE] - 3;
 			hero2->talents[TA_PFLANZENKUNDE] = hero2->talents[TA_PFLANZENKUNDE] + 3;
 		}
-		if (item_id1 == ITEM_AMULETT__BLUE) {
+		if (item_id1 == ITEM_ID_AMULETT__MR_BONUS) {
 			hero1->mr = hero1->mr - 5;
 			hero2->mr = hero2->mr + 5;
 		}
@@ -673,7 +736,7 @@ void startup_equipment(struct struct_hero *hero)
 	if ((hero->sex != 0) && (hero->typus != HERO_TYPE_KRIEGER) && (hero->typus != HERO_TYPE_MAGIER))
        	{
 		/* female non-warriors and non-mages get a free shirt */
-		give_new_item_to_hero(hero, ITEM_HEMD, 1, 1);
+		give_new_item_to_hero(hero, ITEM_ID_HEMD, 1, 1);
 		move_item(HERO_INVENTORY_SLOT_BODY, HERO_INVENTORY_SLOT_KNAPSACK_3, hero);
 	}
 
@@ -688,19 +751,19 @@ void startup_equipment(struct struct_hero *hero)
 	}
 
 	if (hero->typus == HERO_TYPE_KRIEGER) {
-		move_item(HERO_INVENTORY_SLOT_BODY, inv_slot_of_item(hero, ITEM_LEDERHARNISCH), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, inv_slot_of_item(hero, ITEM_ID_LEDERHARNISCH), hero);
 	}
 
 	if (hero->typus == HERO_TYPE_MAGIER) {
-		move_item(HERO_INVENTORY_SLOT_BODY, inv_slot_of_item(hero, ITEM_ROBE__GREEN_1), hero);
+		move_item(HERO_INVENTORY_SLOT_BODY, inv_slot_of_item(hero, ITEM_ID_ROBE__GREEN_1), hero);
 	}
 
 	if ((hero->typus == HERO_TYPE_JAEGER) ||
 		(hero->typus == HERO_TYPE_AUELF) ||
 		(hero->typus == HERO_TYPE_WALDELF))
 	{
-		give_new_item_to_hero(hero, ITEM_PFEIL, 1, 20);
-		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
+		give_new_item_to_hero(hero, ITEM_ID_PFEIL, 1, 20);
+		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_ID_PFEIL), hero);
 	}
 }
 
@@ -728,13 +791,13 @@ signed int get_max_light_time(void)
 		for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
 			/* search for a burning torch */
-			if (hero->inventory[j].item_id == ITEM_FACKEL__LIT) {
+			if (hero->inventory[j].item_id == ITEM_ID_FACKEL__LIT) {
 
 				if (hero->inventory[j].lighting_timer > retval) {
 					retval = hero->inventory[j].lighting_timer;
 				}
 
-			} else if (hero->inventory[j].item_id == ITEM_LATERNE__LIT) {
+			} else if (hero->inventory[j].item_id == ITEM_ID_LATERNE__LIT) {
 
 				/* search for a burning lantern */
 
@@ -865,7 +928,7 @@ signed int get_full_waterskin_pos(const struct struct_hero *hero)
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
 		/* look for a non-empty waterskin */
-		if ((hero->inventory[i].item_id == ITEM_WASSERSCHLAUCH) && !hero->inventory[i].flags.empty)
+		if ((hero->inventory[i].item_id == ITEM_ID_WASSERSCHLAUCH) && !hero->inventory[i].flags.empty)
 		{
 			inv_pos = i;
 			break;

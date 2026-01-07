@@ -124,7 +124,7 @@ void buy_screen(void)
 				{
 					for (j = HERO_INVENTORY_SLOT_KNAPSACK_1; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-						if (hero2->inventory[j].item_id == ITEM_NONE) {
+						if (hero2->inventory[j].item_id == ITEM_ID_NONE) {
 							free_slots++;
 						}
 					}
@@ -197,7 +197,7 @@ void buy_screen(void)
 						g_pic_copy.y2 = array5.a[l_di] + 15;
 						g_pic_copy.src = g_renderbuf_ptr;
 
-						nvf.image_num = g_itemsdat[j].gfx;
+						nvf.image_num = g_itemsdat[j].item_sprite_id;
 
 						process_nvf_extraction(&nvf);
 
@@ -253,13 +253,17 @@ void buy_screen(void)
 				}
 			}
 
-			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0));
+			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, GUI_name_inflect_with_article(
+				(INFLECT_OMIT_ARTICLE | INFLECT_1ST_CASE) +  (l4 > 1 || l4 == 0 ? INFLECT_PLURAL : INFLECT_SINGULAR),
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 
 			if (g_itemsdat[item_id].flags.weapon) {
 
 				strcat(g_dtp2, g_buy_screen_str_comma_space);
 
-				strcat(g_dtp2, get_ttx(48 + g_itemsdat[item_id].subtype));
+				strcat(g_dtp2, get_ttx(48 + g_itemsdat[item_id].item_subtype_id));
 			}
 
 			GUI_print_loc_line(g_dtp2);
@@ -354,12 +358,20 @@ void buy_screen(void)
 
 						if (g_buy_shopping_cart[l16].quantity > 1) {
 
-							sprintf(g_dtp2,	get_ttx(818), GUI_names_grammar(4, item_id, 0));
+							sprintf(g_dtp2,	get_ttx(818), GUI_name_inflect_with_article(
+								INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+								item_id,
+								INFLECT_NAME_TYPE_ITEM
+							));
 
 							l4 = GUI_input(g_dtp2, 2);
 						}
 					} else {
-						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_name_inflect_with_article(
+							INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+							item_id,
+							INFLECT_NAME_TYPE_ITEM
+						));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
@@ -416,14 +428,18 @@ void buy_screen(void)
 
 					if (g_itemsdat[g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id].flags.stackable) {
 
-						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_name_inflect_with_article(
+							INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_1ST_CASE,
+							g_item_selector_buy[item_selector_pos + item_selector_page_offset].item_id,
+							INFLECT_NAME_TYPE_ITEM
+						));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
 
 					if (l4 > 0) {
 
-						l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price *	g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
+						l9 = (int32_t)g_item_selector_buy[item_selector_pos + item_selector_page_offset].price * g_item_selector_buy[item_selector_pos + item_selector_page_offset].price_unit * l4;
 
 						if (price + l9 > p_money) {
 

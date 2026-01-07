@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "hero.h"
+#include "v302de.h"
 
 /* dummy structs */
 struct c_str_3 { char a[3]; };
@@ -213,7 +214,7 @@ struct fight_msg {
 };
 
 /* seg041 */
-struct ranged_weapon_descr {
+struct ranged_weapon_stats {
 	/* structure of the entries of RANGED_WEAPON_TABLE */
 	int8_t damage_modifier[7]; /* table with damage modifiers depending on the distance */
 	int8_t base_handicap;
@@ -243,10 +244,10 @@ struct ranged_weapon_descr {
 	 * The general formula for the handicap is base_handicap + 2 * distance_type - 2 * target_size.
 	 *
 	 * The damage is calculated as the base damage of the weapon (like D6 + 3 for the shortbow) + a distance modifier.
-	 * The modifier is given in the RANGED_WEAPON_STATS_DAMAGE_MODIFIER array. */
+	 * The modifier is given in the damage_modifier array. */
 };
 
-struct weapon_descr {
+struct weapon_stats {
 	int8_t damage_d6;
 	int8_t damage_const;
 	int8_t damage_kk_bonus;		/* Koerperkraft-Zuschlag */
@@ -256,7 +257,7 @@ struct weapon_descr {
 	int8_t pa_mod;
 };
 
-struct armor_descr {
+struct armor_stats {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#R%C3%BCstungstabelle */
 	/* structure of the entries of ARMORS_TABLE */
 	int8_t rs; /* Rüstungsschutz */
@@ -358,9 +359,11 @@ struct location {
 
 STATIC_ASSERT(sizeof(struct location) == 6, struct_location_needs_to_be_6_bytes);
 
-struct struct_msg {
-	signed int type;
-	signed int id; /* hero_pos or monster_id */
+/* An actor class is either a hero or a monster.
+ * The identifier 'actor_class' is chosen since 'actor' refers to a hero or an enemy (i.e., an instance of a monster). */
+struct actor_class {
+	signed int actor_class_type;
+	signed int actor_class_id; /* hero_pos or monster_id */
 };
 
 struct statuspage_line {
@@ -410,7 +413,7 @@ STATIC_ASSERT(sizeof(struct struct_dialog_state) == 8, struct_struct_dialog_stat
 #endif
 struct monster {
 	int8_t monster_id;
-	int8_t gfx_id;
+	int8_t actor_sprite_id;
 	int8_t rs;
 	uint16_t attrib[7];	/* dice template */
 	uint16_t le;		/* dice template */
@@ -465,7 +468,7 @@ struct struct_fighter {
 	signed char object_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
 	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */
 				/* strangly, at one position in seg039.cpp the value 2 is written */
-	signed char sprite_id;	/* 0x12c0, 0x1531, 0x1210 */
+	signed char actor_sprite_id;	/* 0x12c0, 0x1531, 0x1210 */
 	uint8_t* gfxbuf;
 	struct struct_fighter* next;	/* TODO: These should located at the start of the structure */
 	struct struct_fighter* prev;
@@ -475,7 +478,7 @@ struct struct_fighter {
 #pragma pack(1)
 #endif
 struct fight_enemy {
-	int8_t id;
+	int8_t monster_id;
 	int8_t x;
 	int8_t y;
 	int8_t viewdir;
@@ -503,7 +506,7 @@ struct fight {
 
 struct scenario {
 	char name[20];
-	int8_t bg_id;
+	int8_t fig_background_id;
 	int8_t board[600];
 };
 #if !defined(__BORLANDC__)
@@ -649,7 +652,7 @@ struct item_flags {
 
 	uint16_t stackable	:1;	/* bit 4: stackable */
 	uint16_t herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
-	uint16_t undropable	:1;	/* bit 6: personal item (cannot be dropped) */
+	uint16_t undroppable	:1;	/* bit 6: personal item (cannot be dropped) */
 	uint16_t dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
@@ -664,7 +667,7 @@ struct item_flags {
 
 	uint8_t stackable	:1;	/* bit 4: stackable */
 	uint8_t herb_potion	:1;	/* bit 5: poison/herb/potion (items are also marked as usable in ITEMS.DAT) */
-	uint8_t undropable	:1;	/* bit 6: personal item (cannot be dropped) */
+	uint8_t undroppable	:1;	/* bit 6: personal item (cannot be dropped) */
 	uint8_t dummy		:1;	/* bit 7: Apparently, the bit is not evaluated.
 						 * In ITEMS.DAT, it seems that flag 7 is set for an item if and only if no other flag is set.
 						 * Exception: The last three items ITEM_200_PFEILE, ITEM_50_BOLZEN, ITEM_20_KLETTERHAKEN,
@@ -680,19 +683,19 @@ STATIC_ASSERT(sizeof(struct item_flags) == 1, struct_item_flags_needs_to_be_1_by
 struct item_stats {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/ITEMS.DAT */
 	/* structure of the entries of ITEMS.DAT */
-	int16_t gfx;
+	int16_t item_sprite_id;
 	struct item_flags flags;/* bitfield */
-	int8_t subtype;
+	int8_t item_subtype_id;
 		/* meaning depends on item type set in flags.
 		 * flags.weapon -> WEAPON_TYPE_...,
 		 * flags.armor -> ARMOR_TYPE_...,
 		 * flags.nutrition -> NUTRITION_TYPE...
 		 * flags.herb_potion -> HERB_POTION_TYPE...
 		 */
-	int8_t table_index;
+	int8_t item_type_stats_id;
 		/* meaning depends on item type set in flags.
-		 * flags.armor -> index in g_armors_table
-		 * flags.weapon -> index in g_weapons_table
+		 * flags.armor -> index in g_armor_stats_table
+		 * flags.weapon -> index in g_weapon_stats_table
 		 * flags.nutrition -> number of nutrition units (percentage value)
 		 * flags.usable -> index in g_usable_items_table
 		 */
@@ -700,7 +703,7 @@ struct item_stats {
 	int8_t price_unit;	/* 1: Heller / 10: Silberstücke / 100: Dukaten */
 	int16_t price;		/* base unit is price_unit. So the price in Heller is price_unit * price */
 	int8_t commonness;	/* which merchants do offer this item? */
-	int8_t magic;		/* 0: not magic / 1: magic */
+	int8_t is_magic;	/* 0: not magic / 1: magic */
 };
 #if !defined(__BORLANDC__)
 #pragma pack()
@@ -807,7 +810,7 @@ struct enemy_flags {
 
 struct enemy_sheet {
 	int8_t monster_id;
-	int8_t gfx_id;
+	int8_t actor_sprite_id;
 	int8_t rs;
 	int8_t attrib[14]; // used in steps of 2 for positive attribs only
 	int16_t le_orig;
@@ -950,10 +953,10 @@ extern signed int g_items_noplural[23];					// ds:0x0270; seg096
 extern const signed int g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
 extern signed char g_item_name_genders[254];				// ds:0x02ac; seg096
 extern const signed int* g_forbidden_item_ids_table[12];		// ds:0x0638; seg048, seg056, seg105
-extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
-extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
-extern struct armor_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
-extern const struct usable_item_descr g_usable_items_table[14];		// ds:0x08a9; seg105, seg107
+extern const struct ranged_weapon_stats g_ranged_weapon_stats_table[RANGED_WEAPON_STATS_ID__END + 1];	// ds:0x0668; seg041
+extern struct weapon_stats g_weapon_stats_table[WEAPON_STATS_ID__END + 1];	// ds:0x06b0; seg033, seg041, seg105
+extern struct armor_stats g_armor_stats_table[ARMOR_STATS_ID__END + 1];				// ds:0x0877; seg079, seg100, seg102, seg105
+extern const struct usable_item_descr g_usable_items_table[USABLE_ITEM_STATS_ID__END];		// ds:0x08a9; seg105, seg107
 extern const signed int g_weapon_poisons[10];				// ds:0x08d3; seg107, seg108
 extern const signed int g_herbs_toxic[5];				// ds:0x08e7; seg108
 extern const signed int g_herbs_uneatable[7];				// ds:0x08f1; seg108
@@ -962,15 +965,15 @@ extern const signed int g_bad_elixirs[8];				// ds:0x090f; seg108
 extern const signed int g_attack_items[3];				// ds:0x091f; seg033
 extern signed char g_monster_name_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
-extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
+extern struct spell_descr g_spell_descriptions[SP__END + 1];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
 extern const struct spell_range g_spellclasses[12];			// ds:0x0d03; seg046, seg098
 //extern const struct spell_range g_spellclasses_2[4];			// ds:0x0d13; seg046
 extern const signed int* g_magic_schools_table[9];
-extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
-extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
+extern void (*g_spell_handlers[SP__END])(void);				// ds:0x0dbb; seg098
+extern struct mon_spell_description g_mon_spell_descriptions[MONSTER_SPELL__END];	// ds:0x0f13; seg037, seg043, seg102
 extern int8_t g_mon_spellbooks[11][5];				// ds:0x0f8b; seg037
-extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
-extern const struct talent_descr g_talent_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
+extern void (*g_mon_spellhandlers[MONSTER_SPELL__END])(void);				// ds:0x0fc2; seg102
+extern const struct talent_descr g_talent_descriptions[TA__END];		// ds:0x0ffe; seg050, seg103, seg104
 extern const struct talent_range g_talentclasses[7];			//ds:0x10ce; seg046, seg103
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];		//ds:0x10dc; seg002, seg033, seg039
 extern signed short g_nvftab_figures_unconscious[22];			//ds:0x11e4; seg002, seg005, seg039
@@ -979,7 +982,7 @@ extern const int8_t g_gfxtab_figures_main[125][5];			//ds:0x12c0; seg005, seg006
 extern const struct point8s g_gfxtab_offsets_main[125][5];		//ds:0x1531; seg005, seg039, seg043
 extern const signed int g_nvftab_figures_dead[22];	//ds:0x1a13; seg005, seg039
 extern int16_t *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
-extern signed char g_double_size_gfx_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
+extern signed char g_double_size_actor_sprite_id_table[5];	//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
 extern const signed int g_weaponani_table[72];		//ds:0x25fe; seg044
 extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093
@@ -1149,7 +1152,7 @@ extern int16_t gs_debt_days;			//ds:0x3360; seg002, seg055, seg068
 extern int16_t gs_in_academy;			//ds:0x3362; seg068, seg099
 extern uint8_t  gs_informer_flags[16];		//ds:0x3364; seg030-seg116
 extern uint8_t  gs_tav_kicked_flags[88];		//ds:0x3374; seg060;
-extern uint8_t  gs_town_outlawed_flags[52];	//ds:0x33cc; seg054, seg060;
+extern uint8_t  gs_town_outlawed_flags[TOWN_ID__END - 1];	//ds:0x33cc; seg054, seg060;
 extern uint8_t  gs_inn_kicked_flags[74];	//ds:0x3400; seg060
 extern uint8_t  gs_got_letter_het;		//ds:0x344a; seg069
 extern uint8_t  gs_jurge_awaits_letter;		//ds:0x344c; seg069, seg072, seg073
@@ -1896,7 +1899,7 @@ extern signed int  g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg09
 extern signed int  g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099
 extern signed char g_fig_cb_selector_id[21];	// ds:0xe38f; seg032, seg034, seg040
 extern signed char g_fig_cb_marker_id;		// ds:0xe38e; seg032, seg033, seg036, seg037, seg038, seg040
-extern signed char g_fig_shot_bolt_id;		// ds:0xe38d; seg040, seg042, seg043, seg045
+extern signed char g_fig_projectile_id;		// ds:0xe38d; seg040, seg042, seg043, seg045
 extern signed char g_fig_spellgfx_id;		// ds:0xe38c; seg040, seg042, seg043, seg045
 extern unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388; seg032, seg040
 extern signed short *g_figobj_gfxheight_table;	// ds:0xe384; seg032, seg040
@@ -1910,7 +1913,7 @@ extern signed char g_fig_double_size_fighter_id_table[21];	// ds:0xe35a; seg005-
 //extern signed char *g_chessboard_cpy;		// ds:0xe356; seg038
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
-extern signed int g_current_fight_no;	// ds:0xe316; seg002-seg042
+extern signed int g_current_fight_id;	// ds:0xe316; seg002-seg042
 extern signed int g_tlk_id;		// ds:0xe314; seg030, seg031
 extern signed int g_dialog_state;	// ds:0xe312; seg030, seg031, seg060
 extern signed int g_dialog_done;	// ds:0xe310; seg030, seg031, seg060
@@ -1921,8 +1924,8 @@ extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 extern char g_savegame_names[5][9];	// ds:0xe2da; seg026, seg027
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
 extern signed int g_delay_timer;	// ds:0xe2d0; seg004, seg005
-extern struct struct_msg g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
-extern struct struct_msg g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
+extern struct actor_class g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
+extern struct actor_class g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern struct item_stats *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
@@ -1948,7 +1951,7 @@ extern uint8_t* g_weapons_nvf_buf;	// ds:0xd86a; seg005, seg032, seg040
 extern uint8_t* g_spellobj_nvf_buf;	// ds:0xd868; seg005, seg032, seg040, seg045, seg100
 extern uint8_t* g_fig_cb_marker_buf;	// ds:0xd862; seg038, seg040
 extern uint8_t* g_fig_cb_selector_buf;	// ds:0xd85e; seg034, seg040
-extern uint8_t* g_fig_shot_bolt_buf;	// ds:0xd85a; seg040, seg045
+extern uint8_t* g_fig_projectile_buf;	// ds:0xd85a; seg040, seg045
 extern uint8_t* g_fig_spellgfx_buf;	// ds:0xd856; seg040, seg045
 extern signed char *g_chessboard;	// ds:0xd852;
 extern signed char g_fig_hero_parry_action_used[7];	// ds:0xd84b; seg032, seg042, seg043, seg044
@@ -2040,7 +2043,7 @@ extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
 extern unsigned char *g_buffer8_ptr;	// ds:0xc3a9; seg005, seg026, seg028, seg032, seg042, seg050, seg061, seg098, seg120
 extern struct location g_locations_tab[150];	//ds:0xc025; seg028, seg64, seg066, seg74, seg094
-extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
+extern struct struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
 extern struct item_selector_item *g_item_selector_buy; /* used for merchant buy screen */	// ds:0xc009; seg055, seg056
 extern struct item_selector_item *g_item_selector_sell;	/* used for merchant sell screen and smith */ // ds:0xc005; seg056, seg057, seg058
@@ -2089,10 +2092,10 @@ extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
-extern const char* names_attrib[14];
-extern const char* names_talent[52];
-extern const char* names_spell[86];
-extern const char* names_mspell[14];
+extern const char* names_attrib[ATTRIB__END];
+extern const char* names_talent[TA__END];
+extern const char* names_spell[SP__END];
+extern const char* names_mspell[MONSTER_SPELL__END - 1];
 #endif
 
 #endif

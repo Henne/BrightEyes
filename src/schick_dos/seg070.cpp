@@ -230,7 +230,7 @@ void PHX_villa_gremob(void)
 	GUI_output(!gs_gremob_invited ? get_tx2(40) : get_tx2(39));
 
 	if (gs_gremob_invited) {
-		do_fight(FIGHTS_PHEX24);
+		do_fight(FIGHT_ID_PHEX24);
 	}
 }
 
@@ -316,7 +316,7 @@ void PHX_apotheke(void)
 
 			set_party_money(money);
 
-			give_new_item_to_group(ITEM_WIRSELKRAUT, 1, 1);
+			give_new_item_to_group(ITEM_ID_WIRSELKRAUT, 1, 1);
 		} else {
 			GUI_input(get_tx2(69), 0);
 		}
@@ -404,7 +404,7 @@ void PHX_apotheke(void)
 
 				set_party_money(money);
 
-				give_new_item_to_group(ITEM_WIRSELKRAUT, 1, 1);
+				give_new_item_to_group(ITEM_ID_WIRSELKRAUT, 1, 1);
 			} else {
 				GUI_input(get_tx2(69), 0);
 			}

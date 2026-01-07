@@ -355,7 +355,7 @@ signed int DNG09_handler(void)
 
 			if (i == 1) {
 
-				give_new_item_to_group(ITEM_SCHWARZE_STATUETTE, 1, 1);
+				give_new_item_to_group(ITEM_ID_SCHWARZE_STATUETTE, 1, 1);
 
 			} else {
 
@@ -377,7 +377,7 @@ signed int DNG09_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)(((l3 = test_talent(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
-				GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2), GUI_get_ptr(hero->sex, 2));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -408,7 +408,7 @@ signed int DNG09_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)(((l3 = test_talent(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
-				GUI_get_ptr(hero->sex, 3));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -457,7 +457,7 @@ signed int DNG09_handler(void)
  */
 void DNG09_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_F126_08)
+	if (fight_id == FIGHT_ID_F126_08)
 	{
 		GUI_output(get_tx(13));
 	}
@@ -608,5 +608,5 @@ void DNG09_chest04_trap(void)
 {
 	g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,10,11,SOUTH);
 
-	do_fight(FIGHTS_F126_22);
+	do_fight(FIGHT_ID_F126_22);
 }

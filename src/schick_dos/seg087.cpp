@@ -42,7 +42,7 @@ signed int DNG14_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
+	pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	hero = get_first_hero_available_in_group();
 
@@ -58,7 +58,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(0,3,8,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,14,SOUTH);
 
-		do_fight(FIGHTS_DTHO03);
+		do_fight(FIGHT_ID_DTHO03);
 
 	} else if (pos == DNG_POS(0,2,4) && pos != gs_dng_handled_pos && !gs_dng14_money_flag) {
 
@@ -91,7 +91,7 @@ signed int DNG14_handler(void)
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,5,4,SOUTH);
 
-		do_fight(FIGHTS_DTHO06);
+		do_fight(FIGHT_ID_DTHO06);
 
 	} else if (pos == DNG_POS(0,7,6) && pos != gs_dng_handled_pos && gs_direction == NORTH) {
 
@@ -107,13 +107,13 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = DNG_POS_DIR(0,11,11,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,9,14,SOUTH);
 
-		do_fight(FIGHTS_DTHO09);
+		do_fight(FIGHT_ID_DTHO09);
 
 	} else if (pos == DNG_POS(0,11,14) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,8,14,WEST);
 
-		do_fight(FIGHTS_DTHO10);
+		do_fight(FIGHT_ID_DTHO10);
 
 	} else if (pos == DNG_POS(0,11,14) && pos != gs_dng_handled_pos && gs_direction == EAST) {
 
@@ -137,7 +137,7 @@ signed int DNG14_handler(void)
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,9,11,WEST);
 
-		do_fight(FIGHTS_DTHO13);
+		do_fight(FIGHT_ID_DTHO13);
 
 	} else if (pos == DNG_POS(0,10,3) && pos != gs_dng_handled_pos) {
 
@@ -153,7 +153,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -180,7 +180,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -201,14 +201,14 @@ signed int DNG14_handler(void)
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,6,NORTH);
 
-		do_fight(FIGHTS_DTHO18);
+		do_fight(FIGHT_ID_DTHO18);
 
 	} else if (pos == DNG_POS(1,1,11) && pos != gs_dng_handled_pos && random_schick(100) <= 5) {
 
 		g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(1,1,9,NORTH);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,14,SOUTH);
 
-		do_fight(FIGHTS_DTHO19);
+		do_fight(FIGHT_ID_DTHO19);
 
 	} else if (pos == DNG_POS(1,1,14) && pos != gs_dng_handled_pos && random_schick(100) <= 10) {
 
@@ -216,7 +216,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,5,14,EAST);
 		g_fig_escape_position[WEST] = DNG_POS_DIR(1,1,14,NORTH);
 
-		do_fight(FIGHTS_DTHO20);
+		do_fight(FIGHT_ID_DTHO20);
 
 	} else if (pos == DNG_POS(1,13,13) && pos != gs_dng_handled_pos) {
 
@@ -240,7 +240,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = DNG_POS_DIR(1,11,10,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,9,14,SOUTH);
 
-		if (!do_fight(random_schick(100) <= 50 ? FIGHTS_DTHO21A : FIGHTS_DTHO21B))
+		if (!do_fight(random_schick(100) <= 50 ? FIGHT_ID_DTHO21A : FIGHT_ID_DTHO21B))
 		{
 			gs_dng14_lvl2_fight = 1;
 		}
@@ -255,7 +255,7 @@ signed int DNG14_handler(void)
 		g_fig_escape_position[EAST] = DNG_POS_DIR(1,12,6,EAST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,10,9,SOUTH);
 
-		do_fight(FIGHTS_DTHO23);
+		do_fight(FIGHT_ID_DTHO23);
 
 	} else if ((pos == DNG_POS(1,8,2) || pos == DNG_POS(1,8,5)) && pos != gs_dng_handled_pos && gs_direction == WEST) {
 
@@ -301,7 +301,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -331,7 +331,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -357,8 +357,8 @@ signed int DNG14_handler(void)
 
 		if (GUI_bool(get_tx(21))) {
 
-			tmp = group_count_item(ITEM_SEIL);
-			tmp += group_count_item(ITEM_STRICKLEITER);
+			tmp = group_count_item(ITEM_ID_SEIL);
+			tmp += group_count_item(ITEM_ID_STRICKLEITER);
 
 			hero = get_hero(0);
 			for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero++) {
@@ -387,7 +387,7 @@ signed int DNG14_handler(void)
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 						!hero->flags.dead && (test_talent(hero, TA_KLETTERN, 0) <= 0))
 					{
-						sprintf(g_dtp2, get_tx(26), hero->alias, GUI_get_ptr(hero->sex, 2));
+						sprintf(g_dtp2, get_tx(26), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 						GUI_output(g_dtp2);
 
 						/* 1W6 damage */
@@ -427,7 +427,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_torches_flag = 1;
 
-			give_new_item_to_group(ITEM_FACKEL__UNLIT, 1, 4);
+			give_new_item_to_group(ITEM_ID_FACKEL__UNLIT, 1, 4);
 		}
 
 	} else if (pos == DNG_POS(2,3,1) && pos != gs_dng_handled_pos && !gs_dng14_spooky_flag) {
@@ -453,7 +453,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_spear_flag = 1;
 
-			give_new_item_to_group(ITEM_SPEER, 1, 1);
+			give_new_item_to_group(ITEM_ID_SPEER, 1, 1);
 		}
 
 
@@ -500,7 +500,7 @@ signed int DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -527,7 +527,7 @@ signed int DNG14_handler(void)
 	{
 		if (GUI_bool(get_tx(38))) {
 
-			if (get_first_hero_with_item(ITEM_SEIL) != - 1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1) /* TODO: why not staffspell >= 3 ? */
+			if (get_first_hero_with_item(ITEM_ID_SEIL) != - 1 || get_first_hero_with_item(ITEM_ID_STRICKLEITER) != -1) /* TODO: why not staffspell >= 3 ? */
 			{
 
 				if ((hero_pos = select_hero_ok(get_tx(39))) != -1) {
@@ -536,7 +536,7 @@ signed int DNG14_handler(void)
 
 					if (test_talent(hero, TA_SCHWIMMEN, 8) <= 0) {
 
-						sprintf(g_dtp2, get_tx(40), hero->alias, GUI_get_ptr(hero->sex, 0));
+						sprintf(g_dtp2, get_tx(40), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 						GUI_output(g_dtp2);
 
 						/* 1W6 damage */
@@ -552,7 +552,7 @@ signed int DNG14_handler(void)
 							draw_status_line();
 						}
 					} else {
-						sprintf(g_dtp2, get_tx(41), hero->alias, GUI_get_ptr(hero->sex, 0));
+						sprintf(g_dtp2, get_tx(41), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 						GUI_output(g_dtp2);
 
 						DNG14_dive(hero_pos, 2, (pos == DNG_POS(3,10,10) ? 13 : 9));
@@ -582,7 +582,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_hatchet_flag = 1;
 
-			give_new_item_to_group(ITEM_HACKE, 1, 1);
+			give_new_item_to_group(ITEM_ID_HACKE, 1, 1);
 		}
 
 	} else if (pos == DNG_POS(3,11,13) && pos != gs_dng_handled_pos && gs_direction == EAST) {
@@ -603,7 +603,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_ring_flag = 1;
 
-			give_new_item_to_group(ITEM_RING__BLUE, 1, 1);
+			give_new_item_to_group(ITEM_ID_RING__BLUE, 1, 1);
 		}
 
 	} else if (pos == DNG_POS(3,11,1) && pos != gs_dng_handled_pos) {
@@ -636,7 +636,7 @@ signed int DNG14_handler(void)
 
 			gs_dng14_orknase_flag = 1;
 
-			give_new_item_to_group(ITEM_ORKNASE, 1, 1);
+			give_new_item_to_group(ITEM_ID_ORKNASE, 1, 1);
 		}
 
 	} else if (pos == DNG_POS(4,12,9) && pos != gs_dng_handled_pos && gs_direction == SOUTH) {

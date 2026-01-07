@@ -58,7 +58,7 @@ signed int DNG06_handler(void)
 
 	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !gs_dng06_book_flag)
 	{
-		if (GUI_bool(get_tx(1)) && give_new_item_to_group(ITEM_BUCH__KAISERSPRUECHE_HALS, 1, 1))
+		if (GUI_bool(get_tx(1)) && give_new_item_to_group(ITEM_ID_BUCH__KAISERSPRUECHE_HALS, 1, 1))
 		{
 			gs_dng06_book_flag = 1;
 		}
@@ -97,7 +97,7 @@ signed int DNG06_handler(void)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
-			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 40);
+			give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 40);
 			gs_dng06_proviant_flag = 1;
 		}
 
@@ -207,7 +207,7 @@ signed int DNG06_handler(void)
 			{
 				gs_dng06_goldkey_flag = 2;
 
-				give_new_item_to_group(ITEM_GOLDENER_SCHLUESSEL, 1, 1);
+				give_new_item_to_group(ITEM_ID_GOLDENER_SCHLUESSEL, 1, 1);
 
 				/* TODO: This is not neccessary */
 				hero = get_first_hero_available_in_group();
@@ -253,10 +253,10 @@ signed int DNG06_handler(void)
 		if (i == 1 || i == 3)
 		{
 			sprintf(g_dtp2,	(i == 1 ? get_tx(18) : get_tx(19)), hero->alias,
-				GUI_get_ptr(hero->sex, 0),
-				GUI_get_ptr(hero->sex, 0),
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
 				hero->alias,
-				GUI_get_ptr(hero->sex, 1));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 
 			GUI_output(g_dtp2);
 
@@ -272,8 +272,8 @@ signed int DNG06_handler(void)
 					(test_talent(hero, TA_KOERPERBEHERRSCHUNG, hero->rs_bonus) <= 0))
 				{
 					sprintf(g_dtp2,	get_tx(20), hero->alias,
-						GUI_get_ptr(hero->sex, 0),
-						GUI_get_ptr(hero->sex, 3));
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+						GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 					GUI_output(g_dtp2);
 
@@ -373,12 +373,12 @@ signed int DNG06_handler(void)
 		if (test_talent(hero, TA_KOERPERBEHERRSCHUNG, 0) > 0 && test_talent(hero, TA_GEFAHRENSINN, 0) > 0)
 		{
 			/* evasion succeeds */
-			sprintf(g_dtp2, get_tx(26), GUI_get_ptr(hero->sex, 0));
+			sprintf(g_dtp2, get_tx(26), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 			GUI_output(g_dtp2);
 
 		} else {
 			/* disk causes heavy damage */
-			sprintf(g_dtp2,	get_tx(27), GUI_get_ptr(hero->sex, 2));
+			sprintf(g_dtp2,	get_tx(27), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(3, 6, 0));
@@ -391,8 +391,8 @@ signed int DNG06_handler(void)
 			hero = get_first_hero_available_in_group();
 
 			sprintf(g_dtp2,	get_tx(29), hero->alias,
-				GUI_get_ptr(hero->sex, 0),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST),
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			GUI_output(g_dtp2);
 
@@ -420,7 +420,7 @@ signed int DNG06_handler(void)
 		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,6,14,WEST);
 		g_fig_escape_position[SOUTH] = g_fig_escape_position[EAST] = DNG_POS_DIR(1,13,13,NORTH);
 
-		if (!do_fight(FIGHTS_F094_19))
+		if (!do_fight(FIGHT_ID_F094_19))
 		{
 			gs_dng06_fight19_flag = 1;
 		}
@@ -457,7 +457,7 @@ signed int DNG06_handler(void)
  */
 void DNG06_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_F094_22)
+	if (fight_id == FIGHT_ID_F094_22)
 	{
 		/* this is true all the time */
 		sprintf(g_dtp2,	get_tx(30), (!gs_estorik_known ? get_tx(32) : get_tx(31)));
@@ -572,7 +572,7 @@ void DNG09_pitfall(void)
 				/* the current group has only one hero */
 
 				/* print message */
-				sprintf(g_dtp2, get_tx(31), hero_first->alias, GUI_get_ptr(hero_first->sex, 0));
+				sprintf(g_dtp2, get_tx(31), hero_first->alias, GUI_get_personal_pronoun(hero_first->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				/* this hero looses 3W6+3 LE */
@@ -599,8 +599,8 @@ void DNG09_pitfall(void)
 
 		if ((i = DNG_check_climb_tools()) != -1)
 		{
-			l3 = group_count_item(ITEM_SEIL);
-			l3 += group_count_item(ITEM_STRICKLEITER);
+			l3 = group_count_item(ITEM_ID_SEIL);
+			l3 += group_count_item(ITEM_ID_STRICKLEITER);
 
 			if (l3 >= 2 || (l3 == 1 && i))
 			{

@@ -39,11 +39,22 @@ void spell_eigenschaften(void)
 
 	damage_range_template(g_spelltarget_e->dam1, &min, &max);
 
-	/* Remark: For unknown reasons the shown TP-values of enemies are scaled down to 80% */
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 63:
+	 * When casting the spell "Eigenschaften seid gelesen", the displayed damage range is only 80% of the true numbers.
+	 *
+	 * Background: Apparently, late in the development process, a decision was made to make the fights easier.
+	 * One adjustment is that the heroes now take only 80% of the damage from enemy ranged attacks.
+	 * Probably, the damage from enemy melee attacks was also supposed to be reduced in the same way, but this was apparently forgotten.
+	 * In the damage display of the spell "Eigenschaften seid gelesen", however, the value was still reduced to 80%.
+	 *
+	 * See also Feature mod 1.
+	 */
 	min = min * 8 / 10;
 	max = max * 8 / 10;
+#endif
 
-	sprintf(g_dtp2, get_tx(25), GUI_name_singular(g_monnames_index[g_spelltarget_e->monster_id]),
+	sprintf(g_dtp2, get_tx(25), GUI_name_base_form(g_monnames_index[g_spelltarget_e->monster_id]),
           g_spelltarget_e->level,	/* Level */
           g_spelltarget_e->at,		/* AT */
           g_spelltarget_e->pa,		/* PA */
@@ -56,6 +67,10 @@ void spell_eigenschaften(void)
           g_spelltarget_e->le_orig,	/* LEmax */
           g_spelltarget_e->ae,		/* AE */
           g_spelltarget_e->ae_orig);	/* AEmax */
+	/* Incomplete list of properties not displayed:
+	 * Damage from ranged attacks (throw, missile) and from 2nd melee attack
+	 * MR
+	 */
 }
 
 void spell_exposami(void)
@@ -74,7 +89,7 @@ void spell_exposami(void)
 
 		if (g_current_fight->enemies[i].round_appear) {
 
-			id = g_current_fight->enemies[i].id;
+			id = g_current_fight->enemies[i].monster_id;
 
 			changed = 0;
 
@@ -104,7 +119,13 @@ void spell_exposami(void)
 		for (i = 0; count - 1 > i; i++) {
 			sprintf(g_text_output_buf, get_tx(33),		/* "%d %s" */
 				arr[i][1],
-				(char*)(uint8_t*)GUI_names_grammar(((arr[i][1] > 1) ? 4 : 0) + 0x4000, arr[i][0], 1));
+				(char*)(uint8_t*)GUI_name_inflect_with_article(
+					((arr[i][1] > 1) ? INFLECT_PLURAL : INFLECT_SINGULAR)
+						+ (INFLECT_OMIT_ARTICLE | INFLECT_1ST_CASE),
+					arr[i][0],
+					INFLECT_NAME_TYPE_MONSTER
+				)
+			);
 			strcat(g_dtp2, g_text_output_buf);
 
 			if (count - 2 > i) {
@@ -118,8 +139,13 @@ void spell_exposami(void)
 
 		sprintf(g_text_output_buf, get_tx(33),
 			arr[count - 1][1],	/* TODO: this field access produces other code */
-			(char*)(uint8_t*)GUI_names_grammar((arr[count - 1][1] > 1 ? 4 : 0) + 0x4000,
-								arr[count - 1][0], 1));
+			(char*)(uint8_t*)GUI_name_inflect_with_article(
+				((arr[count - 1][1] > 1) ? 4 : INFLECT_SINGULAR) // TODO: '4' should be 'INFLECT_PLURAL'. but this breaks binary equivalence :(
+					+ (INFLECT_OMIT_ARTICLE | INFLECT_1ST_CASE),
+				arr[count - 1][0],
+				INFLECT_NAME_TYPE_MONSTER
+			)
+		);
 
 		strcat(g_dtp2, g_text_output_buf);
 
@@ -154,12 +180,20 @@ void spell_odem_arcanum(void)
 
 		if (get_spelluser()->inventory[inv_pos].flags.magic) {
 
-			sprintf(g_dtp2, get_tx(81), GUI_names_grammar(0x8000, item_id, 0));
+			sprintf(g_dtp2, get_tx(81), GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 
 			get_spelluser()->inventory[inv_pos].flags.magic_revealed = 1;
 
 		} else {
-			sprintf(g_dtp2, get_tx(82), GUI_names_grammar(0x8000, item_id, 0));
+			sprintf(g_dtp2, get_tx(82), GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 		}
 	}
 }
@@ -194,7 +228,7 @@ void spell_chamaelioni(void)
 
 	/* prepare the message */
 	sprintf(g_dtp2,	get_tx(83), get_spelluser()->alias,
-		(GUI_get_ptr(get_spelluser()->sex, 0)));
+		(GUI_get_personal_pronoun(get_spelluser()->sex, GRAMMAR_CASE_1ST)));
 }
 
 void spell_duplicatus(void)
@@ -203,7 +237,7 @@ void spell_duplicatus(void)
 
 	/* prepare the message */
 	sprintf(g_dtp2, get_tx(84), get_spelluser()->alias,
-		GUI_get_ptr(get_spelluser()->sex, 0));
+		GUI_get_personal_pronoun(get_spelluser()->sex, GRAMMAR_CASE_1ST));
 }
 
 void spell_harmlos(void)
@@ -331,7 +365,11 @@ void spell_blitz(void)
 		g_spelltarget_e->blind = 3;
 
 		/* prepare the message */
-		sprintf(g_dtp2, get_tx(85), GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2, get_tx(85), GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -355,7 +393,7 @@ void spell_ecliptifactus(void)
 			get_spelluser()->ecliptifactus_timer = rounds + 1;
 			/* prepare the message */
 			sprintf(g_dtp2, get_tx(88), get_spelluser()->alias,
-				GUI_get_ptr(get_spelluser()->sex, 3), rounds);
+				GUI_get_personal_pronoun(get_spelluser()->sex, GRAMMAR_CASE_3RD), rounds);
 		} else {
 			/* prepare the message */
 			sprintf(g_dtp2, get_ttx(607), get_spelluser()->alias);
@@ -369,7 +407,7 @@ void spell_ecliptifactus(void)
 
 void spell_eisenrost(void)
 {
-	signed int id;
+	signed int item_id;
 
 	if (get_spelluser()->target_object_id < 10) {
 		/* target is a hero */
@@ -384,9 +422,9 @@ void spell_eisenrost(void)
 			strcpy(g_dtp2, get_tx(112));
 		} else {
 			/* get weapon id of the target */
-			id = get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
+			item_id = get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-			if (!id) {
+			if (!item_id) {
 				/* no weapon in hand */
 				g_spell_special_aecost = -2;
 			} else {
@@ -401,8 +439,11 @@ void spell_eisenrost(void)
 
 						get_spelltarget()->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken = 1;
 
-						sprintf(g_dtp2, get_tx(92), GUI_names_grammar(0x8000, id, 0),
-							(char*)get_spelltarget()->alias);
+						sprintf(g_dtp2, get_tx(92), GUI_name_inflect_with_article(
+							INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+							item_id,
+							INFLECT_NAME_TYPE_ITEM
+						), (char*)get_spelltarget()->alias);
 					} else {
 						g_spell_special_aecost = -2;
 					}
@@ -431,7 +472,11 @@ void spell_eisenrost(void)
 				g_spelltarget_e->weapon_broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2, get_tx(91), GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+				sprintf(g_dtp2, get_tx(91), GUI_name_inflect_with_article(
+					INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+					g_spelltarget_e->monster_id,
+					INFLECT_NAME_TYPE_MONSTER
+				));
 			}
 		}
 	}
@@ -533,7 +578,7 @@ void spell_ignifaxius(void)
 
 	/* damage doubles if the target is a mummy */
 	if ((get_spelluser()->target_object_id >= 10) &&
-			(g_enemy_sheets[get_spelluser()->target_object_id - 10].gfx_id == 0x1e))
+			(g_enemy_sheets[get_spelluser()->target_object_id - 10].actor_sprite_id == ACTOR_SPRITE_ID_MUMIE))
 	{
 		damage *= 2;
 		mummy = 1;
@@ -555,11 +600,11 @@ void spell_ignifaxius(void)
 		/* get a pointer to the armor */
 		p_armor = (struct inventory*)&(get_spelltarget()->inventory[HERO_INVENTORY_SLOT_BODY]);
 
-		if ((p_armor->item_id != ITEM_NONE) && (rs_malus != 0)) {
+		if ((p_armor->item_id != ITEM_ID_NONE) && (rs_malus != 0)) {
 
 			/* adjust rs_malus such that the RS of the worn body armor won't be negative */
-			if ((p_armor->rs_lost + rs_malus) > g_armors_table[g_itemsdat[p_armor->item_id].table_index].rs) {
-				rs_malus = g_armors_table[g_itemsdat[p_armor->item_id].table_index].rs - p_armor->rs_lost;
+			if ((p_armor->rs_lost + rs_malus) > g_armor_stats_table[g_itemsdat[p_armor->item_id].item_type_stats_id].rs) {
+				rs_malus = g_armor_stats_table[g_itemsdat[p_armor->item_id].item_type_stats_id].rs - p_armor->rs_lost;
 			}
 
 			/* add rs_malus to the armor */
@@ -650,7 +695,11 @@ void spell_plumbumbarum(void)
 	g_spelltarget_e->at -= 3;
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(95), GUI_names_grammar(0x8001, g_spelltarget_e->monster_id, 1));
+	sprintf(g_dtp2, get_tx(95), GUI_name_inflect_with_article(
+		INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_2ND_CASE,
+		g_spelltarget_e->monster_id,
+		INFLECT_NAME_TYPE_MONSTER
+	));
 }
 
 void spell_radau(void)

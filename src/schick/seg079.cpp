@@ -143,7 +143,7 @@ signed int DNG03_handler(void)
 				!hero->flags.dead &&
 				(test_talent(hero, TA_KLETTERN, 2) <= 0))
 			{
-				sprintf(g_dtp2,	get_tx(6), hero->alias,	GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2,	get_tx(6), hero->alias,	GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(1, 6, 3));
@@ -221,17 +221,17 @@ signed int DNG03_handler(void)
 
 		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
-			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_ptr(hero->sex, 3));
+			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(2, 6, 0));
 
 			timewarp(MINUTES(20));
 
-			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
+			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_ID_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				armor_rs = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
+				armor_rs = g_armor_stats_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].item_type_stats_id].rs
 				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
 				armor_malus = (armor_rs > 3 ? 3 : (armor_rs > 0 ? armor_rs : 0));
@@ -249,17 +249,17 @@ signed int DNG03_handler(void)
 			(test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
 
-			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_ptr(hero->sex, 3));
+			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(2, 6, 0));
 
 			timewarp(MINUTES(20));
 
-			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
+			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_ID_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				armor_rs = g_armors_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].table_index].rs
+				armor_rs = g_armor_stats_table[g_itemsdat[hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id].item_type_stats_id].rs
 				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
 				armor_malus = (armor_rs > 3 ? 3 : (armor_rs > 0 ? armor_rs : 0));
@@ -299,7 +299,7 @@ signed int DNG03_handler(void)
 	{
 
 		/* check if a hero in this group has crystals */
-		i = get_first_hero_with_item(ITEM_KRISTALL) != -1 ? 0 : 1;
+		i = get_first_hero_with_item(ITEM_ID_KRISTALL) != -1 ? 0 : 1;
 
 		do {
 			j = GUI_radio(get_tx(14), 2, get_tx(15), !i ? get_tx(16) : get_tx(29));
@@ -318,18 +318,18 @@ signed int DNG03_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,5,13,NORTH);
 
 			/* drop all crystals from the heroes of that group */
-			i = get_first_hero_with_item(ITEM_KRISTALL);
+			i = get_first_hero_with_item(ITEM_ID_KRISTALL);
 
 			do {
 				hero = get_hero(i);
 
-				drop_item(hero, inv_slot_of_item(hero, ITEM_KRISTALL), 1);
+				drop_item(hero, inv_slot_of_item(hero, ITEM_ID_KRISTALL), 1);
 
-				i = get_first_hero_with_item(ITEM_KRISTALL);
+				i = get_first_hero_with_item(ITEM_ID_KRISTALL);
 
 			} while (i != -1);
 
-			do_fight(FIGHTS_F051_14C);
+			do_fight(FIGHT_ID_F051_14C);
 		}
 
 	} else if (target_pos == DNG_POS(1,1,1) && target_pos != gs_dng_handled_pos &&
@@ -529,7 +529,7 @@ void DNG03_chest12_loot(struct struct_chest* chest)
 	/* count the crystals in the knapsack of the leader */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++)
 	{
-		if (hero->inventory[i].item_id == ITEM_KRISTALL)
+		if (hero->inventory[i].item_id == ITEM_ID_KRISTALL)
 		{
 			crystals++;
 		}

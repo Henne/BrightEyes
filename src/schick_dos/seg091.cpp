@@ -61,7 +61,7 @@ signed int DNG13_handler(void)
 		{
 			gs_dng13_lantern_flag = 1;
 
-			give_new_item_to_group(ITEM_LATERNE__UNLIT, 1, 1);
+			give_new_item_to_group(ITEM_ID_LATERNE__UNLIT, 1, 1);
 		}
 
 	} else if ((pos == DNG_POS(0,1,12) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,14,13) || pos == DNG_POS(0,3,1)) &&
@@ -187,10 +187,10 @@ void DNG13_unblock_passage(char* text, uint8_t* flag)
 
 			has_items = 0;
 
-			if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1 &&
-				get_first_hero_with_item(ITEM_HACKE) != -1 &&
-				get_first_hero_with_item(ITEM_BRECHEISEN) != -1 &&
-				get_first_hero_with_item(ITEM_WURFBEIL) != -1)
+			if (get_first_hero_with_item(ITEM_ID_SCHAUFEL) != -1 &&
+				get_first_hero_with_item(ITEM_ID_HACKE) != -1 &&
+				get_first_hero_with_item(ITEM_ID_BRECHEISEN) != -1 &&
+				get_first_hero_with_item(ITEM_ID_WURFBEIL) != -1)
 			{
 				has_items = 1;
 			}
@@ -250,7 +250,7 @@ void DNG13_chest01_loot(struct struct_chest* chest)
  */
 void DNG13_fight_intro(const signed int fight_id)
 {
-	if (fight_id == FIGHTS_DPRE10_1)
+	if (fight_id == FIGHT_ID_DPRE10_1)
 	{
 		GUI_output(get_tx(13));
 	}
@@ -290,10 +290,10 @@ void DNG13_collapsing_ceiling(void)
 
 		has_items = 0;
 
-		if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1 &&
-			get_first_hero_with_item(ITEM_HACKE) != -1 &&
-			get_first_hero_with_item(ITEM_BRECHEISEN) != -1 &&
-			get_first_hero_with_item(ITEM_WURFBEIL) != -1)
+		if (get_first_hero_with_item(ITEM_ID_SCHAUFEL) != -1 &&
+			get_first_hero_with_item(ITEM_ID_HACKE) != -1 &&
+			get_first_hero_with_item(ITEM_ID_BRECHEISEN) != -1 &&
+			get_first_hero_with_item(ITEM_ID_WURFBEIL) != -1)
 		{
 			has_items = 1;
 		}
@@ -337,10 +337,10 @@ void DNG13_collapsing_ceiling_easy(void)
 
 		has_items = 0;
 
-		if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1 &&
-			get_first_hero_with_item(ITEM_HACKE) != -1 &&
-			get_first_hero_with_item(ITEM_BRECHEISEN) != -1 &&
-			get_first_hero_with_item(ITEM_WURFBEIL) != -1)
+		if (get_first_hero_with_item(ITEM_ID_SCHAUFEL) != -1 &&
+			get_first_hero_with_item(ITEM_ID_HACKE) != -1 &&
+			get_first_hero_with_item(ITEM_ID_BRECHEISEN) != -1 &&
+			get_first_hero_with_item(ITEM_ID_WURFBEIL) != -1)
 		{
 			has_items = 1;
 		}

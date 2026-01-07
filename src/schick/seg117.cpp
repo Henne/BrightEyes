@@ -194,12 +194,18 @@ void hunt_karen(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		/* check for a hunting weapon, BOWS, CROSSBOWS or SPEAR */ /* TODO 2021-04-18: Original-Bug: What about magic spear? sling? (maybe not) */
-		if ((get_first_hero_with_item(ITEM_KURZBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_LANGBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_ARMBRUST) != -1) ||
-			(get_first_hero_with_item(ITEM_SPEER) != -1))
-		{
+		/* check for a hunting weapon */
+		if (
+			(get_first_hero_with_item(ITEM_ID_KURZBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_LANGBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_ARMBRUST) != -1)
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60:
+	 * Speer is a melee weapon. */
+			|| (get_first_hero_with_item(ITEM_ID_SPEER) != -1)
+#endif
+		) {
+
 			hero = get_hero(0);
 			/* make a STEALTH+2 test and count the heroes who passed it */
 			for (i = passed = 0; i <= 6; i++, hero++) {
@@ -218,7 +224,7 @@ void hunt_karen(void)
 
 				GUI_output(get_tx2(5));
 
-				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */ /* TODO 2021-04-18: Original-Bug: Why TA_SCHUSSWAFFEN for spears? */
+				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */
 				hero = get_hero(0);
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
@@ -234,14 +240,14 @@ void hunt_karen(void)
 
 					GUI_output(get_tx2(8));
 					/* get 80 FOOD PACKAGES */
-					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 80);
+					give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 80);
 
 				} else if (passed) {
 					/* at least one of the group passed MISSLE WEAPON+0 */
 
 					GUI_output(get_tx2(7));
 					/* get 40 FOOD PACKAGES */
-					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 40);
+					give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 40);
 				} else {
 					/* everybody failed MISSLE WEAPON+0 */
 					GUI_output(get_tx2(6));
@@ -274,19 +280,26 @@ void hunt_wildboar(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		/* check for a hunting weapon, BOWS, CROSSBOWS or SPEAR */ /* TODO 2021-04-18: Original-Bug: What about magic spear? sling? (maybe not) */
-		if ((get_first_hero_with_item(ITEM_KURZBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_LANGBOGEN) != -1) ||
-			(get_first_hero_with_item(ITEM_ARMBRUST) != -1) ||
-			(get_first_hero_with_item(ITEM_SPEER) != -1))
-		{
+		/* check for a hunting weapon */
+		if (
+			(get_first_hero_with_item(ITEM_ID_KURZBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_LANGBOGEN) != -1)
+			|| (get_first_hero_with_item(ITEM_ID_ARMBRUST) != -1)
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 60:
+	 * Speer is a melee weapon. */
+			|| (get_first_hero_with_item(ITEM_ID_SPEER) != -1)
+#endif
+		) {
 
 			hero = get_hero(0);
 			/* make a STEALTH+0 test and count the heroes who passed it */
 			for (i = passed = 0; i <= 6; i++, hero++) {
 
-				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
-					!hero->flags.dead && (test_talent(hero, TA_SCHLEICHEN, 0) > 0))
+				if ((hero->typus != HERO_TYPE_NONE) &&
+					(hero->group_id == gs_active_group_id) &&
+					!hero->flags.dead &&
+					(test_talent(hero, TA_SCHLEICHEN, 0) > 0))
 				{
 					passed++;
 				}
@@ -297,7 +310,7 @@ void hunt_wildboar(void)
 
 				GUI_output(get_tx2(15));
 
-				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */ /* TODO 2021-04-18: Original-Bug: Why TA_SCHUSSWAFFEN for spears? */
+				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */
 				hero = get_hero(0);
 				for (i = passed = 0; i <= 6; i++, hero++) {
 
@@ -313,7 +326,7 @@ void hunt_wildboar(void)
 
 					GUI_output(get_tx2(17));
 					/* get 30 FOOD PACKAGES */
-					give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 30);
+					give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 30);
 
 				} else {
 					/* everybody failed MISSLE WEAPON+0 */
@@ -634,7 +647,7 @@ void pirates_attack(void)
 	g_max_enemies = random_interval(3, 8);
 	g_fig_discard = 1;
 
-	do_fight(FIGHTS_S001);
+	do_fight(FIGHT_ID_S001);
 
 	g_basepos_x = g_basepos_y = 0;
 
@@ -658,7 +671,7 @@ void do_wild8_fight(void)
 	g_max_enemies = random_interval(5, 10);
 	g_fig_discard = 1;
 
-	do_fight(FIGHTS_WILD8);
+	do_fight(FIGHT_ID_WILD8);
 
 	gs_journey_fight_flag = 0;
 	gs_show_travel_map = 1;
@@ -709,14 +722,14 @@ void journey_random_encounter(signed int tmp)
 				case 0: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(6) + 1;
-						do_fight(FIGHTS_WILD1);
+						do_fight(FIGHT_ID_WILD1);
 					}
 					break;
 				}
 				case 1: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
-						do_fight(FIGHTS_WILD2);
+						do_fight(FIGHT_ID_WILD2);
 					}
 					break;
 				}
@@ -727,7 +740,7 @@ void journey_random_encounter(signed int tmp)
 				case 3: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(2);
-						do_fight(FIGHTS_WILD3);
+						do_fight(FIGHT_ID_WILD3);
 					}
 					break;
 				}
@@ -738,21 +751,21 @@ void journey_random_encounter(signed int tmp)
 				case 5: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(6) + 1;
-						do_fight(FIGHTS_WILD4);
+						do_fight(FIGHT_ID_WILD4);
 					}
 					break;
 				}
 				case 6: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3) + 3;
-						do_fight(FIGHTS_WILD4);
+						do_fight(FIGHT_ID_WILD4);
 					}
 					break;
 				}
 				case 7: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(2) + 1;
-						do_fight(FIGHTS_WILD5);
+						do_fight(FIGHT_ID_WILD5);
 					}
 					break;
 				}
@@ -767,7 +780,7 @@ void journey_random_encounter(signed int tmp)
 				case 10: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
-						do_fight(FIGHTS_WILD6);
+						do_fight(FIGHT_ID_WILD6);
 					}
 					break;
 				}
@@ -778,7 +791,7 @@ void journey_random_encounter(signed int tmp)
 				case 12: {
 					if (!skip_fight) {
 						g_max_enemies = random_schick(3);
-						do_fight(FIGHTS_WILD7);
+						do_fight(FIGHT_ID_WILD7);
 					}
 					break;
 				}

@@ -30,26 +30,26 @@
 #include "seg105.h"
 
 static const signed int g_campfights[4] = {
-	FIGHTS_CAMPFIGHT1,
-	FIGHTS_CAMPFIGHT2,
-	FIGHTS_CAMPFIGHT3,
-	FIGHTS_CAMPFIGHT4
+	FIGHT_ID_CAMPFIGHT1,
+	FIGHT_ID_CAMPFIGHT2,
+	FIGHT_ID_CAMPFIGHT3,
+	FIGHT_ID_CAMPFIGHT4
 }; // ds:0x6694
 
 struct gather_herbs g_gather_herbs_table[13] = {
-	{ ITEM_ALRAUNE,			 5, 1, 15 },
-	{ ITEM_BELMART_BLATT,		12, 3,  8 },
-	{ ITEM_DONFSTENGEL,		10, 2,  9 },
-	{ ITEM_GULMOND_BLATT,		15, 3,  8 },
-	{ ITEM_JORUGAWURZEL,		15, 1, 10 },
-	{ ITEM_KAIRANHALM,		 1, 1, 18 },
-	{ ITEM_SHURINKNOLLE,		12, 2,  8 },
-	{ ITEM_TARNELE,			45, 5,  4 },
-	{ ITEM_THONNYSBLUETE,		 3, 1, 15 },
-	{ ITEM_EINBEERE,		40, 4,  8 },
-	{ ITEM_WIRSELKRAUT,		30, 2,  4 },
-	{ ITEM_EITRIGER_KROETENSCHEMEL,	20, 2,  4 },
-	{ 0xff,				 0, 0,  0 }
+	{ ITEM_ID_ALRAUNE,                  5, 1, 15 },
+	{ ITEM_ID_BELMART_BLATT,           12, 3,  8 },
+	{ ITEM_ID_DONFSTENGEL,             10, 2,  9 },
+	{ ITEM_ID_GULMOND_BLATT,           15, 3,  8 },
+	{ ITEM_ID_JORUGAWURZEL,            15, 1, 10 },
+	{ ITEM_ID_KAIRANHALM,               1, 1, 18 },
+	{ ITEM_ID_SHURINKNOLLE,            12, 2,  8 },
+	{ ITEM_ID_TARNELE,                 45, 5,  4 },
+	{ ITEM_ID_THONNYSBLUETE,            3, 1, 15 },
+	{ ITEM_ID_EINBEERE,                40, 4,  8 },
+	{ ITEM_ID_WIRSELKRAUT,             30, 2,  4 },
+	{ ITEM_ID_EITRIGER_KROETENSCHEMEL, 20, 2,  4 },
+	{ 0xff,                             0, 0,  0 }
 }; // ds:0x669c
 int8_t g_gather_herbs_special = -1; 			// ds:0x66d0	/* REMARK: should be signed int */
 static char g_gather_herbs_str_found[6] = "%d^%s";	// ds:0x66d1
@@ -452,8 +452,11 @@ signed int gather_herbs(struct struct_hero *hero, const signed int hours, const 
 			if (herb_count[herb_index]) {
 
 				sprintf(g_text_output_buf, g_gather_herbs_str_found, herb_count[herb_index],
-					(char*)GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002,
-						g_gather_herbs_table[herb_index].item_id, 0));
+					(char*)GUI_name_inflect_with_article((herb_count[herb_index] > 1 ? INFLECT_PLURAL : INFLECT_SINGULAR)
+						+ (INFLECT_OMIT_ARTICLE | INFLECT_4TH_CASE),
+						g_gather_herbs_table[herb_index].item_id, INFLECT_NAME_TYPE_ITEM
+					)
+				);
 
 				strcat(g_dtp2, g_text_output_buf);
 
@@ -553,7 +556,7 @@ signed int replenish_stocks(signed int handicap, const signed int tries)
 
 								for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-									if (hero2->inventory[j].item_id == ITEM_WASSERSCHLAUCH) {
+									if (hero2->inventory[j].item_id == ITEM_ID_WASSERSCHLAUCH) {
 
 										hero2->inventory[j].flags.empty = 0;
 										hero2->inventory[j].flags.half_empty = 0;
@@ -584,7 +587,7 @@ signed int replenish_stocks(signed int handicap, const signed int tries)
 						}
 
 						/* the group may get three food packages */
-						if (!give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 3)) {
+						if (!give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 3)) {
 							strcpy(g_dtp2, get_ttx(306));
 							g_request_refresh = 1;
 						} else {

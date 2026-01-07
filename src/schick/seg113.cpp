@@ -46,7 +46,7 @@ void tevent_080(void)
 
 		hero = (struct struct_hero*)gs_main_acting_hero;
 
-		if ((hero && !gs_tevent080_tatzelwurm && test_talent(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||	gs_tevent080_tatzelwurm == 1)
+		if ((hero && !gs_tevent080_tatzelwurm && test_talent(hero, TA_FAEHRTENSUCHEN, 5) > 0) || gs_tevent080_tatzelwurm == 1)
 		{
 			gs_tevent080_tatzelwurm = 1;
 
@@ -108,7 +108,7 @@ void tevent_083(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) || gs_tevent083_flag != 0)
 	{
-		g_gather_herbs_special = ITEM_WIRSELKRAUT;
+		g_gather_herbs_special = ITEM_ID_WIRSELKRAUT;
 
 		TRV_found_herb_place(0);
 
@@ -133,7 +133,7 @@ void tevent_084(void)
 
 		if (answer == 1) {
 
-			if (!do_fight(FIGHTS_F084)) {
+			if (!do_fight(FIGHT_ID_F084)) {
 				gs_tevent084_flag = 1;
 			}
 		} else {
@@ -142,7 +142,7 @@ void tevent_084(void)
 			{
 				g_fig_initiative = 1;
 
-				if (!do_fight(FIGHTS_F084)) {
+				if (!do_fight(FIGHT_ID_F084)) {
 					gs_tevent084_flag = 1;
 				}
 			}
@@ -162,7 +162,7 @@ void tevent_085(void)
 		{
 			gs_tevent085_herb_flag = 1;
 
-			g_gather_herbs_special = ITEM_DONFSTENGEL;
+			g_gather_herbs_special = ITEM_ID_DONFSTENGEL;
 
 			TRV_found_camp_place(2);
 
@@ -174,6 +174,7 @@ void tevent_085(void)
 	}
 }
 
+/* Oberorken <-> Einsiedlersee: Riesenlindwurm */
 void tevent_086(void)
 {
 	signed int i;
@@ -257,7 +258,7 @@ void tevent_098(void)
 	struct struct_hero *hero;
 
 	/* TODO: this may not be correct */
-	i = get_first_hero_with_item(ITEM_SEIL) != -1 || get_first_hero_with_item(ITEM_STRICKLEITER) != -1 ? 3 : 2; /* TODO: STAFFSPELL? */
+	i = get_first_hero_with_item(ITEM_ID_SEIL) != -1 || get_first_hero_with_item(ITEM_ID_STRICKLEITER) != -1 ? 3 : 2; /* TODO: STAFFSPELL? */
 
 	do {
 		answer = GUI_radio(get_tx2(27), (signed char)i,	get_tx2(28), get_tx2(29), get_tx2(30));
@@ -429,7 +430,7 @@ void tevent_099(void)
 
 		if (answer == 1) {
 
-			if (!do_fight(FIGHTS_F099)) {
+			if (!do_fight(FIGHT_ID_F099)) {
 				gs_tevent099_flag = 1;
 #ifdef M302de_ORIGINAL_BUGFIX
 			}
@@ -440,7 +441,7 @@ void tevent_099(void)
 
 				g_fig_initiative = 1;
 
-				if (!do_fight(FIGHTS_F099)) {
+				if (!do_fight(FIGHT_ID_F099)) {
 					gs_tevent099_flag = 1;
 				}
 			}
@@ -472,7 +473,7 @@ void tevent_101(void)
 		/* Original-Bugfix: see description in tevent_099() */
 		if (answer == 1) {
 
-			if (!do_fight(FIGHTS_F101)) {
+			if (!do_fight(FIGHT_ID_F101)) {
 
 				gs_tevent101_flag = 1;
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -484,7 +485,7 @@ void tevent_101(void)
 
 				g_fig_initiative = 1;
 
-				if (!do_fight(FIGHTS_F101)) {
+				if (!do_fight(FIGHT_ID_F101)) {
 					gs_tevent101_flag = 1;
 				}
 			}
@@ -774,7 +775,7 @@ void tevent_107(void)
 				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 1) <= 0)
 			{
 
-				if (get_first_hero_with_item(ITEM_SEIL) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
+				if (get_first_hero_with_item(ITEM_ID_SEIL) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
 					sprintf(g_dtp2, get_tx2(70), hero->alias);
 

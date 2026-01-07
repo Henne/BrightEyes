@@ -79,7 +79,7 @@ signed int DNG07_handler(void)
 
 							g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = target_pos;
 
-							do_fight(FIGHTS_F100_03);
+							do_fight(FIGHT_ID_F100_03);
 
 						} else if (talent_result <= 0) {
 
@@ -87,7 +87,7 @@ signed int DNG07_handler(void)
 
 							g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = target_pos;
 
-							do_fight(FIGHTS_F100_03);
+							do_fight(FIGHT_ID_F100_03);
 
 						} else {
 
@@ -132,7 +132,7 @@ signed int DNG07_handler(void)
 
 						g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = target_pos;
 
-						do_fight(FIGHTS_F100_03);
+						do_fight(FIGHT_ID_F100_03);
 
 					} else {
 
@@ -173,7 +173,7 @@ signed int DNG07_handler(void)
 
 			if (GUI_bool(get_tx(3)))
 			{
-				give_new_item_to_group(ITEM_MU_ELIXIER, 1, 1);
+				give_new_item_to_group(ITEM_ID_MU_ELIXIER, 1, 1);
 
 				gs_dng07_mu_elixir_flag = 2;
 			}
@@ -191,7 +191,7 @@ signed int DNG07_handler(void)
 		} else {
 			if (GUI_bool(get_tx(5)))
 			{
-				give_new_item_to_group(ITEM_MU_ELIXIER, 1, 1);
+				give_new_item_to_group(ITEM_ID_MU_ELIXIER, 1, 1);
 
 				gs_dng07_mu_elixir_flag = 2;
 			}
@@ -207,14 +207,14 @@ signed int DNG07_handler(void)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
-			give_new_item_to_group(ITEM_MU_ELIXIER__BAD, 1, 1);
+			give_new_item_to_group(ITEM_ID_MU_ELIXIER__BAD, 1, 1);
 
 			gs_dng07_anti_mu_elixir_flag = 1;
 		}
 
 	} else if (target_pos == DNG_POS(2,10,1) && target_pos != gs_dng_handled_pos)
 	{
-		if (!do_fight(FIGHTS_F100_13))
+		if (!do_fight(FIGHT_ID_F100_13))
 		{
 			if (gs_treasure_maps[1] == 2)
 			{

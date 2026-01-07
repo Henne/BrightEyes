@@ -500,9 +500,9 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 
 	p_enemy = &g_enemy_sheets[enemy_id - 10];
 
-	if (g_gfxtab_figures_main[p_enemy->gfx_id][0] != g_fight_figs_index) {
+	if (g_gfxtab_figures_main[p_enemy->actor_sprite_id][0] != g_fight_figs_index) {
 
-		nvf.src = (uint8_t*)load_fight_figs(g_gfxtab_figures_main[p_enemy->gfx_id][0]);
+		nvf.src = (uint8_t*)load_fight_figs(g_gfxtab_figures_main[p_enemy->actor_sprite_id][0]);
 		nvf.dst = p1;
 		nvf.image_num = 1;
 		nvf.compression_type = 0;
@@ -511,7 +511,7 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 
 		process_nvf_extraction(&nvf);
 
-		g_fight_figs_index = g_gfxtab_figures_main[p_enemy->gfx_id][0];
+		g_fight_figs_index = g_gfxtab_figures_main[p_enemy->actor_sprite_id][0];
 	}
 
 	/* save and set text colors */
@@ -530,7 +530,7 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 		g_pic_copy.y2 = 49;
 		g_pic_copy.src = p1;
 		do_pic_copy(0);
-		GUI_print_string(GUI_name_singular(g_monnames_index[p_enemy->monster_id]), 1, 1);
+		GUI_print_string(GUI_name_base_form(g_monnames_index[p_enemy->monster_id]), 1, 1);
 	} else {
 		do_border(g_renderbuf_ptr, 1, 149, 34, 190, 0x1d);
 		g_pic_copy.x1 = 2;
@@ -539,7 +539,7 @@ void FIG_draw_enemy_pic(const signed int loc, const signed int enemy_id)
 		g_pic_copy.y2 = 189;
 		g_pic_copy.src = p1;
 		do_pic_copy(0);
-		GUI_print_string(GUI_name_singular(g_monnames_index[p_enemy->monster_id]), 1, 193);
+		GUI_print_string(GUI_name_base_form(g_monnames_index[p_enemy->monster_id]), 1, 193);
 	}
 
 	g_pic_copy.dst = g_vga_memstart;

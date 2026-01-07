@@ -132,7 +132,7 @@ void tevent_037(void)
 					/* select a hero randomly */
 					hero = get_hero(answer = get_random_hero());
 
-					sprintf(g_dtp2, get_tx2(45), hero->alias, GUI_get_ptr(hero->sex, 2));
+					sprintf(g_dtp2, get_tx2(45), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 					GUI_output(g_dtp2);
 
 					add_hero_ap(hero, 20);
@@ -156,7 +156,7 @@ void tevent_037(void)
 							/* check if the answer is "RAD" 3rd */
 							if (strcmp(g_text_input_buf, g_str_rad3))
 							{
-								sprintf(g_dtp2, get_tx2(50), hero->alias, GUI_get_article(hero->sex, 0), hero->alias, GUI_get_ptr(hero->sex, 2));
+								sprintf(g_dtp2, get_tx2(50), hero->alias, GUI_get_definite_article(hero->sex, GRAMMAR_CASE_1ST), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 
 								GUI_output(g_dtp2);
 
@@ -253,7 +253,7 @@ void tevent_078(void)
 			/* try to clean the path */
 
 			/* with SHOVEL/SCHAUFEL 5 Hours, without 8 Hours */
-			if (get_first_hero_with_item(ITEM_SCHAUFEL) != -1) {
+			if (get_first_hero_with_item(ITEM_ID_SCHAUFEL) != -1) {
 				tmp = 5;
 			} else {
 				tmp = 8;
@@ -523,7 +523,7 @@ void tevent_124(void)
 #endif
 				{
 					/* fatal */
-					sprintf(g_dtp2, get_tx2(56), hero->alias, GUI_get_ptr(hero->sex, 0));
+					sprintf(g_dtp2, get_tx2(56), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 					GUI_output(g_dtp2);
 
 					hero_disappear(hero, i, -1);

@@ -57,7 +57,7 @@ int16_t *g_figobj_gfxheight_table;	// ds:0xe380, to int16_t[63]
 int16_t *g_figobj_gfxwidth_table;	// ds:0xe384, to int16_t[63]
 unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388, to long[63]; uint8_t*
 signed char g_fig_spellgfx_id;		// ds:0xe38c
-signed char g_fig_shot_bolt_id;		// ds:0xe38d
+signed char g_fig_projectile_id;		// ds:0xe38d
 signed char g_fig_cb_marker_id;		// ds:0xe38e
 signed char g_fig_cb_selector_id[21];	// ds:0xe38f
 
@@ -107,7 +107,7 @@ void FIG_chessboard_init(void)
 
 	i = 0;
 
-	if (g_scenario_buf->bg_id <= 3) {
+	if (g_scenario_buf->fig_background_id <= FIG_BACKGROUND_ID_3) {
 
 		while (g_cb_rear_border[i].x != -1) {
 
@@ -170,7 +170,7 @@ void FIG_preload_gfx(void)
 		g_fig_cb_selector_id[i] = -1;
 	}
 
-	g_fig_shot_bolt_id = -1;
+	g_fig_projectile_id = -1;
 	g_fig_spellgfx_id = -1;
 
 	/* load ANI.DAT */
@@ -218,7 +218,7 @@ void FIG_preload_gfx(void)
 	nvf.compression_type = 0;
 	process_nvf_extraction(&nvf);
 
-	g_fig_shot_bolt_buf = g_fightobj_buf_seek_ptr;
+	g_fig_projectile_buf = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 400;
 	g_fig_spellgfx_buf = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 1300;

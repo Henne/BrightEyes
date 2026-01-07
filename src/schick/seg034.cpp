@@ -441,7 +441,7 @@ void FIG_latecomers(void)
 
 				if (!p_enemy->flags.scared) {
 
-					if (is_in_byte_array(p_enemy->gfx_id, g_double_size_gfx_id_table)) {
+					if (is_in_byte_array(p_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 						FIG_find_latecomer_position(g_current_fight->enemies[i].x, g_current_fight->enemies[i].y,
 								&x, &y,	g_current_fight->enemies[i].viewdir, 1);
@@ -480,9 +480,9 @@ void FIG_latecomers(void)
 					}
 
 #if !defined(__BORLANDC__)
-					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, g_current_fight->enemies[i].viewdir);
+					place_obj_on_cb(x, y, i + 10, p_enemy->actor_sprite_id, g_current_fight->enemies[i].viewdir);
 #else
-					place_obj_on_cb(x, y, i + 10, (_AX = (int16_t)p_enemy->gfx_id), (_AX = (int16_t)g_current_fight->enemies[i].viewdir));
+					place_obj_on_cb(x, y, i + 10, (_AX = (int16_t)p_enemy->actor_sprite_id), (_AX = (int16_t)g_current_fight->enemies[i].viewdir));
 #endif
 					FIG_make_visible(p_enemy->fighter_id);
 
@@ -853,7 +853,7 @@ void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed i
 						problem = 2;
 
 					} else if ((sel_x > 23) || (sel_x < 0) || (sel_y > 23) || (sel_y < 0) || (get_cb_val(sel_x, sel_y) < 0)) {
-						if ((g_scenario_buf->bg_id > 3) || (sel_x >= 0))
+						if ((g_scenario_buf->fig_background_id > FIG_BACKGROUND_ID_3) || (sel_x >= 0))
 						{
 							problem = 1;
 						}

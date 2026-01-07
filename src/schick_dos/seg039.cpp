@@ -51,7 +51,7 @@ signed int manhattan_distance(const signed int x1, const signed int y1, const si
  * \param   hero        pointer to hero
  * \return              range weapon type {-1, 3, 4, 5}: -1 = none, 3 = shooting, 4 = throwing, 5 = weapon of type spear, but not magic wand or quarterstaff
  */
-signed int FIG_get_range_weapon_type(const struct struct_hero *hero)
+signed int FIG_weapon_gfx_id_ranged(const struct struct_hero *hero)
 {
 	struct item_stats *item_p;
 	signed int retval = -1;
@@ -64,16 +64,16 @@ signed int FIG_get_range_weapon_type(const struct struct_hero *hero)
 		/* is a weapon */
 
 		/* MagicStaffs or Fightstaffs are spears, but no range weapons */
-		if ((item_p->subtype == WEAPON_TYPE_SPEER) && (weapon_id != ITEM_ZAUBERSTAB) && (weapon_id != ITEM_KAMPFSTAB)) {
+		if ((item_p->item_subtype_id == WEAPON_TYPE_SPEER) && (weapon_id != ITEM_ID_ZAUBERSTAB) && (weapon_id != ITEM_ID_KAMPFSTAB)) {
 			/* TODO: according to original DSA2/3 rules, weapon type SPEER is a melee discipline... */
 
 			retval = 5;
 
-		} else if (item_p->subtype == WEAPON_TYPE_SCHUSSWAFFE) {
+		} else if (item_p->item_subtype_id == WEAPON_TYPE_SCHUSSWAFFE) {
 
 			retval = 3;
 
-		} else if (item_p->subtype == WEAPON_TYPE_WURFWAFFE) {
+		} else if (item_p->item_subtype_id == WEAPON_TYPE_WURFWAFFE) {
 
 			retval = 4;
 		}
@@ -104,9 +104,9 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	/* erease the sheet */
 	memset(sheet, 0, sizeof(struct enemy_sheet));
 
-	/* copy enemy id, gfx_id and RS to the sheet */
+	/* copy enemy id, actor_sprite_id and RS to the sheet */
 	sheet->monster_id = monster->monster_id;
-	sheet->gfx_id = monster->gfx_id;
+	sheet->actor_sprite_id = monster->actor_sprite_id;
 	sheet->rs = monster->rs;
 
 	/* roll attributes  and save them to the sheet */
@@ -135,13 +135,13 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	sheet->mr = dice_template(monster->mr);
 
 	/* Terrible hack:
-		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
-		if the current fight is FIGHTS_F144 (final fight), and the enemy is no "Orkchampion" then set the 'tied' flag */
-	if (g_current_fight_no == FIGHTS_F084) {
+		if the current fight is FIGHT_ID_F084, set MR to 5 (Travel-Event 84),
+		if the current fight is FIGHT_ID_F144 (final fight), and the enemy is no "Orkchampion" then set the 'tied' flag */
+	if (g_current_fight_id == FIGHT_ID_F084) {
 
 		sheet->mr = 5;
 
-	} else if ((g_current_fight_no == FIGHTS_F144) && (sheet->monster_id != MONSTER_ID_ORKCHAMPION)) {
+	} else if ((g_current_fight_id == FIGHT_ID_F144) && (sheet->monster_id != MONSTER_ID_ORKCHAMPION)) {
 
 		/* set 'tied' flag */
 		sheet->flags.tied = 1;
@@ -181,8 +181,8 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	sheet->le_flee = monster->le_flee;
 
 	/* Another hack:
-		If the current fight == FIGHTS_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
-	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->monster_id == MONSTER_ID_KULTIST__4)) {
+		If the current fight == FIGHT_ID_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
+	if ((g_current_fight_id == FIGHT_ID_F126_08) && (sheet->monster_id == MONSTER_ID_KULTIST__LVL_4)) {
 		/* Kultist will flee */
 		/* set 'scared' flag */
 		sheet->flags.scared = 1;
@@ -243,7 +243,7 @@ signed int place_obj_on_cb(const signed int x, const signed int y, const signed 
 
 	} else {
 		/* if object is an enemy and needs 2 fields */
-		if (object_id >= 10 && is_in_byte_array(type, g_double_size_gfx_id_table))
+		if (object_id >= 10 && is_in_byte_array(type, g_double_size_actor_sprite_id_table))
 		{
 
 			/* check if field is empty */
@@ -278,15 +278,15 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 	struct nvf_extract_desc nvf;
 	signed int width_height;
 
-	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->gfx_id][0];
+	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->actor_sprite_id][0];
 	g_fig_list_elem.nvf_no = enemy->viewdir;
 	g_fig_list_elem.cbx = x;
 	g_fig_list_elem.cby = y;
 
-	g_fig_list_elem.offsetx = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].x;
-	g_fig_list_elem.offsety = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].y;
+	g_fig_list_elem.offsetx = g_gfxtab_offsets_main[enemy->actor_sprite_id][enemy->viewdir].x;
+	g_fig_list_elem.offsety = g_gfxtab_offsets_main[enemy->actor_sprite_id][enemy->viewdir].y;
 
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 		/* sprite uses two fields */
 		g_fig_list_elem.x1 = g_gfxtab_double_size_x1[enemy->viewdir];
@@ -306,7 +306,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 	g_fig_list_elem.height = 0x28;
 	g_fig_list_elem.width = 0x20;
 	g_fig_list_elem.is_enemy = 1;
-	g_fig_list_elem.sprite_id = enemy->gfx_id;
+	g_fig_list_elem.actor_sprite_id = enemy->actor_sprite_id;
 	g_fig_list_elem.reload = -1;
 	g_fig_list_elem.wsheet = -1;
 	g_fig_list_elem.sheet = -1;
@@ -321,7 +321,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 	/* check presence in the first round */
 	g_fig_list_elem.visible = (enemy->round_appear == 0 ? 1 : 0);
 
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 		nvf.src = (uint8_t*)load_fight_figs(g_fig_list_elem.figure);
 		nvf.dst = g_fig_list_elem.gfxbuf;
@@ -335,7 +335,7 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 
 	enemy->fighter_id = FIG_add_to_list(-1);
 
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 		/* create fighter entry for the tail of a double-size enemy */
 
@@ -377,9 +377,9 @@ void FIG_init_enemies(void)
 	/* Fill the tables with new values */
 	for (i = 0; i < 20; i++) {
 
-		if (g_current_fight->enemies[i].id) {
+		if (g_current_fight->enemies[i].monster_id) {
 
-			fill_enemy_sheet(i, g_current_fight->enemies[i].id, g_current_fight->enemies[i].round_appear);
+			fill_enemy_sheet(i, g_current_fight->enemies[i].monster_id, g_current_fight->enemies[i].round_appear);
 
 			g_nr_of_enemies++;
 		}
@@ -394,9 +394,9 @@ void FIG_init_enemies(void)
 		/* place only the enemies from round 0 */
 		if (!g_current_fight->enemies[i].round_appear) {
 #if !defined(__BORLANDC__)
-			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,	g_current_fight->enemies[i].viewdir);
+			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].actor_sprite_id,	g_current_fight->enemies[i].viewdir);
 #else
-			place_obj_on_cb(x, y, i + 10, (_AL = g_enemy_sheets[i].gfx_id, _AX), g_current_fight->enemies[i].viewdir);
+			place_obj_on_cb(x, y, i + 10, (_AL = g_enemy_sheets[i].actor_sprite_id, _AX), g_current_fight->enemies[i].viewdir);
 #endif
 		}
 
@@ -411,7 +411,7 @@ void FIG_init_heroes(void)
 	signed int cb_x;
 	signed int cb_y;
 	signed int i;
-	signed int hero_pos; /* REMARK: double use: also range_weapon_type */
+	signed int hero_pos; /* REMARK: double use: also weapon_gfx_id_ranged */
 
 	for (i = 0; i <= 6; i++) {
 
@@ -433,7 +433,7 @@ void FIG_init_heroes(void)
 			hero->target_object_id = 0;
 
 			/* FINAL FIGHT */
-			if (g_current_fight_no == FIGHTS_F144) {
+			if (g_current_fight_id == FIGHT_ID_F144) {
 
 				if (hero == gs_main_acting_hero) {
 
@@ -473,15 +473,15 @@ void FIG_init_heroes(void)
 			place_obj_on_cb(cb_x, cb_y, i + 1, (_AL = hero->typus, _AX), hero->viewdir);
 #endif
 
-			hero_pos = FIG_get_range_weapon_type(hero);
+			hero_pos = FIG_weapon_gfx_id_ranged(hero);
 
-			if (hero_pos != -1) {
-				g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_id - 1][hero_pos][hero->viewdir];
+			if (hero_pos != WEAPON_GFX_ID_NONE) {
+				g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[hero->actor_sprite_id - 1][hero_pos][hero->viewdir];
 			} else {
 				g_fig_list_elem.nvf_no = hero->viewdir;
 			}
 
-			g_fig_list_elem.figure = g_gfxtab_figures_main[hero->sprite_id][0];
+			g_fig_list_elem.figure = g_gfxtab_figures_main[hero->actor_sprite_id][0];
 			g_fig_list_elem.cbx = cb_x;
 			g_fig_list_elem.cby = cb_y;
 			g_fig_list_elem.offsetx = 0;
@@ -490,16 +490,16 @@ void FIG_init_heroes(void)
 			if (hero->flags.dead) {
 
 				/* hero is dead */
-				g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->sprite_id];
-				g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->sprite_id][4].x;
-				g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->sprite_id][4].y;
+				g_fig_list_elem.nvf_no = g_nvftab_figures_dead[hero->actor_sprite_id];
+				g_fig_list_elem.offsetx = g_gfxtab_offsets_main[hero->actor_sprite_id][4].x;
+				g_fig_list_elem.offsety = g_gfxtab_offsets_main[hero->actor_sprite_id][4].y;
 
 			} else if (hero->flags.asleep || hero->flags.unconscious) {
 
 				/* hero is asleep or unconscious */
-				g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->sprite_id] + hero->viewdir;
-				g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].x;
-				g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[hero->sprite_id][hero->viewdir].y;
+				g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[hero->actor_sprite_id] + hero->viewdir;
+				g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[hero->actor_sprite_id][hero->viewdir].x;
+				g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[hero->actor_sprite_id][hero->viewdir].y;
 			}
 
 
@@ -514,7 +514,7 @@ void FIG_init_heroes(void)
 			 * however, the apparently only read operation checks for ==1, so the value 2 does not make a difference */
 			g_fig_list_elem.is_enemy = 2;
 
-			g_fig_list_elem.sprite_id = hero->sprite_id;
+			g_fig_list_elem.actor_sprite_id = hero->actor_sprite_id;
 			g_fig_list_elem.reload = -1;
 			g_fig_list_elem.wsheet = -1;
 			g_fig_list_elem.sheet = -1;

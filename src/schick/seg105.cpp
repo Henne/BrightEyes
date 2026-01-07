@@ -36,18 +36,18 @@ unsigned char g_unkn_067[1] = { 0x00 }; // ds:0xae47
 void unequip(struct struct_hero *hero, const signed int item_id, const signed int inv_slot)
 {
 	/* unequip of item 0 is not allowed */
-	if (item_id != ITEM_NONE) {
+	if (item_id != ITEM_ID_NONE) {
 
 		struct item_stats *item_p = &g_itemsdat[item_id];
 	
 		/* if item is an armor ? */
 		if (item_p->flags.armor) {
 
-			hero->rs_bonus -= g_armors_table[item_p->table_index].rs;
+			hero->rs_bonus -= g_armor_stats_table[item_p->item_type_stats_id].rs;
 
 			hero->rs_bonus += hero->inventory[inv_slot].rs_lost;
 
-			hero->rs_be -= g_armors_table[item_p->table_index].be;
+			hero->rs_be -= g_armor_stats_table[item_p->item_type_stats_id].be;
 		}
 
 		/* if item is a weapon and in the right hand ? */
@@ -59,38 +59,38 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
 		}
 
 		/* unequip Kraftguertel KK - 5 */
-		if (item_id == ITEM_KRAFTGUERTEL) {
+		if (item_id == ITEM_ID_KRAFTGUERTEL) {
 
 			hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].current - 5;
 			/* TODO: Original-Bug: update dependent values like atpa_base */
 		}
 
 		/* unequip Helm CH + 1 (cursed) */
-		if (item_id == ITEM_HELM__CURSED) {
+		if (item_id == ITEM_ID_HELM__CURSED) {
 
 			hero->attrib[ATTRIB_CH].current++;
 		}
 
 		/* unequip Silberschmuck TA + 2 */
-		if (item_id == ITEM_SILBERSCHMUCK__MAGIC) {
+		if (item_id == ITEM_ID_SILBERSCHMUCK__MAGIC) {
 
 			hero->attrib[ATTRIB_TA].current = hero->attrib[ATTRIB_TA].current + 2;
 		}
 
 		/* unequip Stirnreif or Ring MR - 2 */
-		if (item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_RING__RED) {
+		if (item_id == ITEM_ID_STIRNREIF__MR_BONUS || item_id == ITEM_ID_RING__RED) {
 
 			hero->mr = hero->mr - 2;
 		}
 
 		/* unequip Totenkopfguertel TA + 4 */
-		if (item_id == ITEM_TOTENKOPFGUERTEL) {
+		if (item_id == ITEM_ID_TOTENKOPFGUERTEL) {
 
 			hero->attrib[ATTRIB_TA].current = hero->attrib[ATTRIB_TA].current + 4;
 		}
 
 		/* unequip Kristallkugel Gefahrensinn - 2 */
-		if (item_id == ITEM_KRISTALLKUGEL) {
+		if (item_id == ITEM_ID_KRISTALLKUGEL) {
 
 			hero->talents[TA_GEFAHRENSINN] = hero->talents[TA_GEFAHRENSINN] - 2;
 		}
@@ -109,7 +109,7 @@ void unequip(struct struct_hero *hero, const signed int item_id, const signed in
  */
 void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, const signed int item_id, const signed int inv_slot_owner, const signed int inv_slot_equipper)
 {
-	if (item_id != ITEM_NONE) {
+	if (item_id != ITEM_ID_NONE) {
 
 		/* calculate pointer to item description */
 		struct item_stats *item_p = &g_itemsdat[item_id];
@@ -118,13 +118,13 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		if (item_p->flags.armor) {
 
 			/* add RS boni */
-			equipper->rs_bonus += g_armors_table[item_p->table_index].rs;
+			equipper->rs_bonus += g_armor_stats_table[item_p->item_type_stats_id].rs;
 
 			/* subtract degraded RS */
 			equipper->rs_bonus -= owner->inventory[inv_slot_owner].rs_lost;
 
 			/* add RS-BE */
-			equipper->rs_be += g_armors_table[item_p->table_index].be;
+			equipper->rs_be += g_armor_stats_table[item_p->item_type_stats_id].be;
 
 		}
 
@@ -132,42 +132,42 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		if (item_p->flags.weapon && (inv_slot_equipper == HERO_INVENTORY_SLOT_RIGHT_HAND)) {
 
 			/* set weapon type */
-			equipper->weapon_type = item_p->subtype;
+			equipper->weapon_type = item_p->item_subtype_id;
 
 			/* set AT */
-			equipper->weapon_at_mod = g_weapons_table[item_p->table_index].at_mod;
+			equipper->weapon_at_mod = g_weapon_stats_table[item_p->item_type_stats_id].at_mod;
 
 			/* set PA */
-			equipper->weapon_pa_mod = g_weapons_table[item_p->table_index].pa_mod;
+			equipper->weapon_pa_mod = g_weapon_stats_table[item_p->item_type_stats_id].pa_mod;
 		}
 
 		/* Girdle of might / Kraftguertel */
-		if (item_id == ITEM_KRAFTGUERTEL) {
+		if (item_id == ITEM_ID_KRAFTGUERTEL) {
 
 			equipper->attrib[ATTRIB_KK].current = equipper->attrib[ATTRIB_KK].current + 5;
 			/* TODO: Original-Bug: update dependent values like atpa_base */
 		}
 
 		/* Helmet / Helm */
-		if (item_id == ITEM_HELM__CURSED) {
+		if (item_id == ITEM_ID_HELM__CURSED) {
 
 			equipper->attrib[ATTRIB_CH].current--;
 		}
 
 		/* Silver Jewelry / Silberschmuck (magisch) */
-		if (item_id == ITEM_SILBERSCHMUCK__MAGIC) {
+		if (item_id == ITEM_ID_SILBERSCHMUCK__MAGIC) {
 
 			equipper->attrib[ATTRIB_TA].current = equipper->attrib[ATTRIB_TA].current - 2;
 		}
 
 		/* Coronet or Ring / Stirnreif oder Ring */
-		if (item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_RING__RED) {
+		if (item_id == ITEM_ID_STIRNREIF__MR_BONUS || item_id == ITEM_ID_RING__RED) {
 
 			equipper->mr = equipper->mr + 2;
 		}
 
 		/* Skull belt / Totenkopfguertel */
-		if (item_id == ITEM_TOTENKOPFGUERTEL) {
+		if (item_id == ITEM_ID_TOTENKOPFGUERTEL) {
 
 			/* TA - 4 */
 			equipper->attrib[ATTRIB_TA].current = equipper->attrib[ATTRIB_TA].current - 4;
@@ -178,7 +178,7 @@ void add_equip_boni(struct struct_hero *owner, struct struct_hero *equipper, con
 		}
 
 		/* Crystal ball / Kristalkugel */
-		if (item_id == ITEM_KRISTALLKUGEL) {
+		if (item_id == ITEM_ID_KRISTALLKUGEL) {
 
 			equipper->talents[TA_GEFAHRENSINN] = equipper->talents[TA_GEFAHRENSINN] + 2;
 		}
@@ -227,17 +227,17 @@ signed int can_hero_equip_item_at_slot(const signed int item_id, const signed in
 	if (item_p->flags.armor) {
 
 		/* can be worn on the head */
-		if ((inv_slot == HERO_INVENTORY_SLOT_HEAD && item_p->subtype == ARMOR_TYPE_HEAD) ||
+		if ((inv_slot == HERO_INVENTORY_SLOT_HEAD && item_p->item_subtype_id == ARMOR_TYPE_HEAD) ||
 			/* can be worn on the torso */
-			(inv_slot == HERO_INVENTORY_SLOT_BODY && item_p->subtype == ARMOR_TYPE_BODY) ||
+			(inv_slot == HERO_INVENTORY_SLOT_BODY && item_p->item_subtype_id == ARMOR_TYPE_BODY) ||
 			/* can be worn at the feet */
-			(inv_slot == HERO_INVENTORY_SLOT_FEET && item_p->subtype == ARMOR_TYPE_FEET) ||
+			(inv_slot == HERO_INVENTORY_SLOT_FEET && item_p->item_subtype_id == ARMOR_TYPE_FEET) ||
 			/* can be worn at the arms */
-			(inv_slot == HERO_INVENTORY_SLOT_ARMS && item_p->subtype == ARMOR_TYPE_ARMS) ||
+			(inv_slot == HERO_INVENTORY_SLOT_ARMS && item_p->item_subtype_id == ARMOR_TYPE_ARMS) ||
 			/* can be worn at the legs */
-			(inv_slot == HERO_INVENTORY_SLOT_LEGS && item_p->subtype == ARMOR_TYPE_LEGS) ||
+			(inv_slot == HERO_INVENTORY_SLOT_LEGS && item_p->item_subtype_id == ARMOR_TYPE_LEGS) ||
 			/* can be worn at the left hand */
-			(inv_slot == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->subtype == ARMOR_TYPE_LEFT_HAND)) {
+			(inv_slot == HERO_INVENTORY_SLOT_LEFT_HAND && item_p->item_subtype_id == ARMOR_TYPE_LEFT_HAND)) {
 			return 1;
 		} else {
 			return 0;
@@ -245,7 +245,7 @@ signed int can_hero_equip_item_at_slot(const signed int item_id, const signed in
 	} else {
 
 		/* coronet (Stirnreif) (3 types) can be worn at the head */
-		if ((item_id == ITEM_STIRNREIF__BLUE || item_id == ITEM_SILBERNER_STIRNREIF || item_id == ITEM_STIRNREIF__GREEN)
+		if ((item_id == ITEM_ID_STIRNREIF__MR_BONUS || item_id == ITEM_ID_SILBERNER_STIRNREIF__1 || item_id == ITEM_ID_SILBERNER_STIRNREIF__2)
 			&& (inv_slot == HERO_INVENTORY_SLOT_HEAD))
 		{
 			return 1;
@@ -390,7 +390,7 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 						/* look for a free place : tricky */
 						inv_slot_2 = HERO_INVENTORY_SLOT_KNAPSACK_1 - 1;
-						while ((hero->inventory[++inv_slot_2].item_id != ITEM_NONE) && (inv_slot_2 < NR_HERO_INVENTORY_SLOTS));
+						while ((hero->inventory[++inv_slot_2].item_id != ITEM_ID_NONE) && (inv_slot_2 < NR_HERO_INVENTORY_SLOTS));
 
 						if (inv_slot_2 < NR_HERO_INVENTORY_SLOTS) {
 							/* inv_slot_2 is free */
@@ -413,10 +413,10 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 							hero->inventory[inv_slot_2].quantity =
 								(item_p->flags.stackable ? quantity_left : (item_p->flags.usable ?
-								g_usable_items_table[item_p->table_index].quantity : 0));
+								g_usable_items_table[item_p->item_type_stats_id].quantity : 0));
 
 							/* set magical flag */
-							if (item_p->magic) {
+							if (item_p->is_magic) {
 
 								hero->inventory[inv_slot_2].flags.magic = 1;
 
@@ -428,7 +428,7 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 
 							/* set breakfactor */
 							if (item_p->flags.weapon) {
-								hero->inventory[inv_slot_2].bf = g_weapons_table[item_p->table_index].bf;
+								hero->inventory[inv_slot_2].bf = g_weapon_stats_table[item_p->item_type_stats_id].bf;
 							}
 
 							/* adjust weight */
@@ -450,11 +450,11 @@ signed int give_new_item_to_hero(struct struct_hero *hero, const signed int item
 								done = 1;
 
 							/* Apply effects for items which have an effect as soon as they are in the inventory. */
-							if (item_id == ITEM_SICHEL__MAGIC) {
+							if (item_id == ITEM_ID_SICHEL__MAGIC) {
 								hero->talents[TA_PFLANZENKUNDE] = hero->talents[TA_PFLANZENKUNDE] + 3;
 							}
 
-							if (item_id == ITEM_AMULETT__BLUE) {
+							if (item_id == ITEM_ID_AMULETT__MR_BONUS) {
 
 								hero->mr = hero->mr + 5;
 							}
@@ -486,11 +486,11 @@ signed int is_item_pleasing_ingerimm(const signed int item_id)
 {
 	struct item_stats *item_p = &g_itemsdat[item_id];
 
-	if (item_p->flags.weapon && (item_p->subtype == WEAPON_TYPE_AXT))
+	if (item_p->flags.weapon && (item_p->item_subtype_id == WEAPON_TYPE_AXT))
 		/* Ingerimm is pleased by either an axe ... */
 		return 1;
 
-	if (item_p->flags.armor && (g_armors_table[item_p->table_index].rs > 1))
+	if (item_p->flags.armor && (g_armor_stats_table[item_p->item_type_stats_id].rs > 1))
 		/* or an armor with RS > 1 */
 		return 1;
 
@@ -516,14 +516,18 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 	const signed int item_id = hero->inventory[inv_slot].item_id;
 
 	/* check if that item_id is valid */
-	if (item_id != ITEM_NONE) {
+	if (item_id != ITEM_ID_NONE) {
 
 		p_item = &g_itemsdat[item_id];
 
-		if (p_item->flags.undropable) {
+		if (p_item->flags.undroppable) {
 
 			/* this item is not droppable */
-			sprintf(g_dtp2,get_ttx(454), (char*)GUI_names_grammar(0x8002, item_id, 0));
+			sprintf(g_dtp2,get_ttx(454), (char*)GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 			GUI_output(g_dtp2);
 
 		} else {
@@ -532,7 +536,11 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 			if (p_item->flags.stackable) {
 
 				if (quantity == -1) {
-					sprintf(g_dtp2,	get_ttx(219), (char*)GUI_names_grammar(6, item_id, 0));
+					sprintf(g_dtp2,	get_ttx(219), (char*)GUI_name_inflect_with_article(
+						INFLECT_INDEFINITE_ARTICLE | INFLECT_PLURAL | INFLECT_4TH_CASE,
+						item_id,
+						INFLECT_NAME_TYPE_ITEM
+					));
 
 					do {
 						answer = GUI_input(g_dtp2, 2);
@@ -583,13 +591,13 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 
 					/* check special items */
 					/* item: SICHEL Pflanzenkunde -3 */
-					if (item_id == ITEM_SICHEL__MAGIC) {
+					if (item_id == ITEM_ID_SICHEL__MAGIC) {
 
 						hero->talents[TA_PFLANZENKUNDE] = hero->talents[TA_PFLANZENKUNDE] - 3;
 					}
 
 					/* item:  AMULETT MR -5 */
-					if (item_id == ITEM_AMULETT__BLUE) {
+					if (item_id == ITEM_ID_AMULETT__MR_BONUS) {
 
 						hero->mr = hero->mr - 5;
 					}
@@ -602,7 +610,7 @@ signed int drop_item(struct struct_hero *hero, const signed int inv_slot, signed
 		}
 
 		/* check for the pirate cave on Manrek to bring Efferd a gift */
-		if ((item_id == ITEM_DREIZACK || item_id == ITEM_NETZ) &&
+		if ((item_id == ITEM_ID_DREIZACK || item_id == ITEM_ID_NETZ) &&
 			(gs_dungeon_id == DUNGEON_ID_PIRATENHOEHLE) && (gs_x_target == 9) && (gs_y_target == 9))
 			/* no check of dungeon level needed: pirate cafe has only a single level */
 		{
@@ -640,9 +648,9 @@ signed int give_new_item_to_group(signed int item_id, const signed int dummy, si
 	signed int autofight_bak;
 
 	/* Special stacked items */
-	if (item_id == ITEM_200_PFEILE) { item_id = ITEM_PFEIL; quantity = 200; } else
-	if (item_id == ITEM_50_BOLZEN) { item_id = ITEM_BOLZEN; quantity = 50; } else
-	if (item_id == ITEM_20_KLETTERHAKEN) { item_id = ITEM_KLETTERHAKEN; quantity = 20;}
+	if (item_id == ITEM_ID_200_PFEILE) { item_id = ITEM_ID_PFEIL; quantity = 200; } else
+	if (item_id == ITEM_ID_50_BOLZEN) { item_id = ITEM_ID_BOLZEN; quantity = 50; } else
+	if (item_id == ITEM_ID_20_KLETTERHAKEN) { item_id = ITEM_ID_KLETTERHAKEN; quantity = 20;}
 
 	do {
 		hero_i = get_hero(0);
@@ -662,7 +670,11 @@ signed int give_new_item_to_group(signed int item_id, const signed int dummy, si
 			autofight_bak = g_autofight;
 			g_autofight = 0;
 
-			sprintf(g_dtp2,	get_ttx(549), GUI_names_grammar((quantity > 1 ? 4 : 0) + 2, item_id, 0));
+			sprintf(g_dtp2,	get_ttx(549), GUI_name_inflect_with_article(
+				(quantity > 1 ? INFLECT_PLURAL : INFLECT_SINGULAR) + (INFLECT_INDEFINITE_ARTICLE | INFLECT_4TH_CASE),
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 
 			if (GUI_bool(g_dtp2)) {
 
@@ -765,12 +777,16 @@ void loose_random_item(struct struct_hero *hero, const signed int chance, char *
 		p_item = &g_itemsdat[item_id];
 
 		/* No item to drop */
-		if (item_id != 0 && !p_item->flags.undropable) {
+		if (item_id != 0 && !p_item->flags.undroppable) {
 
 			/* drop 1 item */
 			drop_item(hero, inv_slot, 1);
 
-			sprintf(g_text_output_buf, text, hero->alias, (uint8_t*)GUI_names_grammar(0, item_id, 0));
+			sprintf(g_text_output_buf, text, hero->alias, (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				item_id,
+				INFLECT_NAME_TYPE_ITEM
+			));
 			GUI_output(g_text_output_buf);
 
 			return;
@@ -798,7 +814,7 @@ signed int select_item_to_drop(struct struct_hero *hero)
 		if ((item_id = hero->inventory[i].item_id)) {
 			str[item_cnt] = i;
 			g_radio_name_list[item_cnt] = (g_dtp2 + item_cnt * 30);
-			strcpy(g_radio_name_list[item_cnt], GUI_name_singular(g_itemsname[item_id]));
+			strcpy(g_radio_name_list[item_cnt], GUI_name_base_form(g_itemsname[item_id]));
 			item_cnt++;
 		}
 	}

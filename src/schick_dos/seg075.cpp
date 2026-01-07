@@ -1153,8 +1153,8 @@ void DNG_stub6(void)
 				} while (l_di);
 
 				sprintf(g_text_output_buf, get_ttx(771), hero_auto->alias,
-					GUI_get_ptr(hero_auto->sex, 0),
-					GUI_get_ptr(hero_auto->sex, 2));
+					GUI_get_personal_pronoun(hero_auto->sex, GRAMMAR_CASE_1ST),
+					GUI_get_personal_pronoun(hero_auto->sex, GRAMMAR_CASE_4TH));
 
 				strcat(g_dtp2, g_text_output_buf);
 			}
@@ -1190,7 +1190,7 @@ signed int DNG_check_climb_tools(void)
 	}
 
 	/* check for ladder or rope */
-	return ((get_first_hero_with_item(ITEM_SEIL) != -1) || (get_first_hero_with_item(ITEM_STRICKLEITER) != -1)) ? 0 : -1;
+	return ((get_first_hero_with_item(ITEM_ID_SEIL) != -1) || (get_first_hero_with_item(ITEM_ID_STRICKLEITER) != -1)) ? 0 : -1;
 }
 
 signed int DNG_fallpit(const signed int max_damage)

@@ -25,10 +25,10 @@
 #include "seg112.h"
 
 static uint8_t g_tevent067_chest[10] = {
-	ITEM_BASTARDSCHWERT, 1,
-	ITEM_SCHNAPSFLASCHE, 1,
-	ITEM_REZEPT_FUER_VOMICUM, 1,
-	ITEM_BOLZEN, 2,
+	ITEM_ID_BASTARDSCHWERT, 1,
+	ITEM_ID_SCHNAPSFLASCHE, 1,
+	ITEM_ID_REZEPT_FUER_VOMICUM, 1,
+	ITEM_ID_BOLZEN, 2,
 	0xff, 0
 }; // ds:0xb16a
 
@@ -148,7 +148,7 @@ void tevent_070(void)
 		{
 			gs_tevent070_herb_flag = 1;
 
-			g_gather_herbs_special = (int8_t)ITEM_JORUGAWURZEL; /* REMARK: item_id > 127 */
+			g_gather_herbs_special = (int8_t)ITEM_ID_JORUGAWURZEL; /* REMARK: item_id > 127 */
 
 			answer = TRV_found_camp_place(2);
 
@@ -194,7 +194,7 @@ void tevent_071(void)
 		/* Track + 4, Faehrtensuche + 4 */
 		if (test_talent(hero, TA_FAEHRTENSUCHEN, 4) > 0) {
 
-			sprintf(g_dtp2,	get_tx2(13), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 3));
+			sprintf(g_dtp2,	get_tx2(13), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 			do {
 				answer = GUI_radio(g_dtp2, 2, get_tx2(14), get_tx2(15));
@@ -329,7 +329,7 @@ void tevent_unused01(void)
 	{
 		gs_teventu01_flag = 1;
 
-		sprintf(g_dtp2,	get_tx2(29), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 3));
+		sprintf(g_dtp2,	get_tx2(29), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD));
 
 		do {
 			answer = GUI_radio(g_dtp2, 2, get_tx2(30), get_tx2(31));
@@ -358,7 +358,7 @@ void tevent_unused01(void)
 
 				GUI_output(get_tx2(38));
 
-				g_gather_herbs_special = ITEM_GULMOND_BLATT;
+				g_gather_herbs_special = ITEM_ID_GULMOND_BLATT;
 
 				TRV_inside_herb_place();
 
@@ -443,7 +443,7 @@ void tevent_074(void)
 		if (answer == 1) {
 
 			/* fight */
-			gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
+			gs_tevent074_fight_flag = TRV_fight_event(FIGHT_ID_F074, 74);
 
 		} else if (answer == 2) {
 
@@ -453,7 +453,7 @@ void tevent_074(void)
 			{
 				/* failed, so fight */
 				g_fig_initiative = 1;
-				gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
+				gs_tevent074_fight_flag = TRV_fight_event(FIGHT_ID_F074, 74);
 
 			} else {
 
@@ -491,7 +491,7 @@ void tevent_074(void)
 
 				if (p_money < 1500) {
 					/* not enough money, so fight */
-					gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
+					gs_tevent074_fight_flag = TRV_fight_event(FIGHT_ID_F074, 74);
 				} else {
 					/* pay 1500 */
 					p_money -= 1500;
@@ -501,7 +501,7 @@ void tevent_074(void)
 			} else if (answer == 2) {
 
 				/* fight */
-				gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
+				gs_tevent074_fight_flag = TRV_fight_event(FIGHT_ID_F074, 74);
 
 			} else {
 
@@ -512,7 +512,7 @@ void tevent_074(void)
 				{
 					/* fight */
 					g_fig_initiative = 1;
-					gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
+					gs_tevent074_fight_flag = TRV_fight_event(FIGHT_ID_F074, 74);
 				}
 			}
 		}
@@ -546,19 +546,19 @@ void tevent_075(void)
 
 				g_fig_initiative = 2;
 
-				ret = TRV_fight_event(FIGHTS_F075_A, 75);
+				ret = TRV_fight_event(FIGHT_ID_F075_A, 75);
 
 			} else if (answer == 2) {
 
-				i = FIGHTS_F075_B;
+				i = FIGHT_ID_F075_B;
 
 				if (!gs_tevent074_fight_flag && !gs_tevent077_fight_flag) {
 
-					i = FIGHTS_F075_A;
+					i = FIGHT_ID_F075_A;
 
 				} else if (gs_tevent074_fight_flag && gs_tevent077_fight_flag) {
 
-					i = FIGHTS_F075_C;
+					i = FIGHT_ID_F075_C;
 				}
 
 				ret = TRV_fight_event(i, 75);
@@ -581,15 +581,15 @@ void tevent_075(void)
 
 					g_fig_initiative = 1;
 
-					i = FIGHTS_F075_B;
+					i = FIGHT_ID_F075_B;
 
 					if (!gs_tevent074_fight_flag && !gs_tevent077_fight_flag) {
 
-						i = FIGHTS_F075_A;
+						i = FIGHT_ID_F075_A;
 
 					} else if (gs_tevent074_fight_flag != 0 && gs_tevent077_fight_flag != 0) {
 
-						i = FIGHTS_F075_C;
+						i = FIGHT_ID_F075_C;
 					}
 
 					ret = TRV_fight_event(i, 75);
@@ -679,7 +679,7 @@ void tevent_077(void)
 
 				/* test failed, so fight */
 				g_fig_initiative = 1;
-				gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
+				gs_tevent077_fight_flag = TRV_fight_event(FIGHT_ID_F077, 77);
 
 			} else {
 
@@ -718,7 +718,7 @@ void tevent_077(void)
 
 				if (p_money < 1500) {
 					/* not enough money, so fight */
-					gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
+					gs_tevent077_fight_flag = TRV_fight_event(FIGHT_ID_F077, 77);
 				} else {
 					/* pay 1500 */
 					p_money -= 1500;
@@ -728,7 +728,7 @@ void tevent_077(void)
 			} else if (answer == 2) {
 
 				/* fight */
-				gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
+				gs_tevent077_fight_flag = TRV_fight_event(FIGHT_ID_F077, 77);
 
 			} else {
 
@@ -739,7 +739,7 @@ void tevent_077(void)
 				{
 					/* fight */
 					g_fig_initiative = 1;
-					gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
+					gs_tevent077_fight_flag = TRV_fight_event(FIGHT_ID_F077, 77);
 				}
 			}
 		}

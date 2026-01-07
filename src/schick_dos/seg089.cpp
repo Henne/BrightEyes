@@ -279,7 +279,7 @@ signed int DNG15_handler(void)
 		{
 			GUI_output(get_tx(51));
 
-			if (give_new_item_to_group(ITEM_HACKE, 1, 1) != -1)
+			if (give_new_item_to_group(ITEM_ID_HACKE, 1, 1) != -1)
 			{
 				gs_dng15_took_hoe = 1;
 			}
@@ -378,7 +378,7 @@ signed int DNG15_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,9,2,WEST);
 			g_fig_escape_position[SOUTH] = DNG_POS_DIR(3,13,5,SOUTH);
 
-			if (!do_fight(FIGHTS_DFIN26))
+			if (!do_fight(FIGHT_ID_DFIN26))
 			{
 				gs_dng15_undead_fight = 1;
 			}
@@ -391,7 +391,7 @@ signed int DNG15_handler(void)
 		{
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,13,5,SOUTH);
 
-			if (!do_fight(FIGHTS_DFIN26))
+			if (!do_fight(FIGHT_ID_DFIN26))
 			{
 				gs_dng15_undead_fight = 1;
 			}
@@ -436,7 +436,7 @@ signed int DNG15_handler(void)
 			/* fight the zombies */
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(3,10,10,NORTH);
 
-			if (!do_fight(FIGHTS_DFIN28))
+			if (!do_fight(FIGHT_ID_DFIN28))
 			{
 				/* talk with hyggelik */
 				draw_main_screen();
@@ -448,7 +448,7 @@ signed int DNG15_handler(void)
 				if (1) { } else { }
 
 				/* group gets GRIMRING */
-				do { ; } while (!give_new_item_to_group(ITEM_GRIMRING, 1, 1));
+				do { ; } while (!give_new_item_to_group(ITEM_ID_DAS_SCHWERT_GRIMRING, 1, 1));
 
 				gs_got_grimring = 1;
 
@@ -603,7 +603,7 @@ void DNG15_cursed_money_chest(struct struct_chest* chest)
 		set_party_money(p_money);
 
 		/* ... 50 GOLD JEWELRY. */
-		give_new_item_to_group(ITEM_GOLDSCHMUCK, 1, 50);
+		give_new_item_to_group(ITEM_ID_GOLDSCHMUCK, 1, 50);
 	}
 	g_textbox_width = tw_bak;
 }
@@ -655,7 +655,7 @@ void DNG15_collapsing_ceiling(uint8_t* ptr)
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 					!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
-					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
+					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(6));
@@ -693,10 +693,10 @@ void DNG15_clear_way(uint8_t* ptr)
 	i = 0;
 
 	/* With all of the following items SHOVEL, HOE, CROWBAR, FRANCESCA ...*/
-	if ((get_first_hero_with_item(ITEM_SCHAUFEL) != -1) &&
-		(get_first_hero_with_item(ITEM_HACKE) != -1) &&
-		(get_first_hero_with_item(ITEM_BRECHEISEN) != -1) &&
-		(get_first_hero_with_item(ITEM_WURFBEIL) != -1))
+	if ((get_first_hero_with_item(ITEM_ID_SCHAUFEL) != -1) &&
+		(get_first_hero_with_item(ITEM_ID_HACKE) != -1) &&
+		(get_first_hero_with_item(ITEM_ID_BRECHEISEN) != -1) &&
+		(get_first_hero_with_item(ITEM_ID_WURFBEIL) != -1))
 	{
 		i = 1;
 	}
@@ -714,7 +714,7 @@ void DNG15_clear_way(uint8_t* ptr)
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{
-				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, random_schick(6));

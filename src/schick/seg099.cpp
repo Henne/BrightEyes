@@ -39,95 +39,97 @@
 static const struct analues_item g_analues_items[28] = {
 	/* messages from SPELLTXT.LTX */
 
-	{ ITEM_AMULETT__UNKNOWN_1   ,  2, 0x36 },
+	{ ITEM_ID_AMULETT__ANTI_IGNIFAXIUS,  2, 0x36 },
 	/* DIENT DER ABWEHR VON IGNIFAXIUS, MÖCHT ICH MEINEN.@DA BIN ICH MIR SOGAR ZIEMLICH SICHER. */
+	/* Original-Bug? effect seems not to be implemented. */
 
-	{ ITEM_RING__RED            ,  3, 0x38 },
+	{ ITEM_ID_RING__RED               ,  3, 0x38 },
 	/* HOCHINTERESSANT...EIN SCHUTZRING...ERHÖHT DIE MAGISCHEN ABWEHRKRÄFTE... SEHR BELIEBT BEI THORWALERN.*/
 
-	{ ITEM_SILBERNER_STIRNREIF  ,  4, 0x39 },
+	{ ITEM_ID_SILBERNER_STIRNREIF__1  ,  4, 0x39 },
 	/* <DIESER STIRNREIF IST EINDEUTIG ELFISCHER MACHART.@ACH JA, UND EIN ARMATRUTZ IST ENTHALTEN. */
 
-	{ ITEM_STIRNREIF__GREEN     ,  4, 0x39 },
+	{ ITEM_ID_SILBERNER_STIRNREIF__2  ,  4, 0x39 },
 	/* <DIESER STIRNREIF IST EINDEUTIG ELFISCHER MACHART.@ACH JA, UND EIN ARMATRUTZ IST ENTHALTEN. */
 
-	{ ITEM_SAEBEL__MAGIC        ,  3, 0x3a },
+	{ ITEM_ID_SAEBEL__MAGIC           ,  3, 0x3a },
 	/* DIESER SÄBEL IST BESONDERS WIRKUNGSVOLL GEGEN ZOMBIES, SKELETTE UND MUMIEN. */
 
-	{ ITEM_AMULETT__RED         ,  6, 0x3b },
+	{ ITEM_ID_AMULETT__FEUERBANN      ,  6, 0x3b },
 	/* AUF DIESEM AMULETT LIEGT DER HEXENZAUBER FEUERBANN.@JEDESMAL, WENN MAN DURCH FEUER SCHADEN ERLEIDEN WÜRDE, FÄNGT DIESES AMULETT EINEN GROSSTEIL DER WIRKUNG AUF. */
 	/* Original-Bug? effect seems not to be implemented. */
 
-	{ ITEM_AMULETT__GREEN       ,  0, 0x3c },
+	{ ITEM_ID_AMULETT__FLIM_FLAM      ,  0, 0x3c },
 	/* AUF DIESEM AMULETT LIEGT DER ZAUBER FLIM FLAM FUNKEL.@DER BESITZER BRAUCHT SICH DIE NÄCHSTE ZEIT KEINE UNNÖTIGEN SORGEN UM FACKELN ODER ÖLLAMPEN ZU MACHEN. */
 
-	{ ITEM_TRAVIA_AMULETT       ,  6, 0x3d },
+	{ ITEM_ID_AMULETT__TRAVIA         ,  6, 0x3d },
 	/* AUF DIESEM AMULETT LIEGT EIN ZAUBER, DER DEN TRÄGER UNEMPFINDLICH GEGEN HUNGER UND DURST MACHT. WELCHE ART ZAUBER DIES IST, KANN ICH JEDOCH NICHT BESTIMMEN. */
 
-	{ ITEM_ZWEIHAENDER__MAGIC   ,  0, 0x3e },
+	{ ITEM_ID_ZWEIHAENDER__MAGIC      ,  0, 0x3e },
 	/* DIESE WAFFE SCHEINT MIR UNZERBRECHLICH ZU SEIN. */
 
-	{ ITEM_SILBERSCHMUCK__MAGIC ,  3, 0x3f },
+	{ ITEM_ID_SILBERSCHMUCK__MAGIC    ,  3, 0x3f },
 	/* SCHEINT MIR EIN GUTER SCHUTZ GEGEN UNTOTE ZU SEIN. */
 
-	{ ITEM_SPEER__MAGIC         ,  3, 0x40 },
+	{ ITEM_ID_SPEER__MAGIC            ,  3, 0x40 },
 	/* MIR SCHEINT, ALS HÄTTE DIESER SPEER MACHT ÜBER SPINNENTIERE. */
 	/* Original-Bug? effect seems not to be implemented. */
 
-	{ ITEM_STIRNREIF__BLUE      ,  4, 0x41 },
+	{ ITEM_ID_STIRNREIF__MR_BONUS     ,  4, 0x41 },
 	/* OHA! AUF DIESEM STIRNREIF LIEGT EIN PERMANENTER ARCANO PSYCHOSTABILIS! */
 
-	{ ITEM_BASTARDSCHWERT__MAGIC,  4, 0x42 },
+	{ ITEM_ID_BASTARDSCHWERT__MAGIC   ,  4, 0x42 },
 	/* EINE HERVORRAGENDE WAFFE! */
+	/* Original-Bug? This is not really true. Compared to normal Bastardschwert, AT-1 and PA-2.
+	 * See https://www.crystals-dsa-foren.de/showthread.php?tid=6217 */
 
-	{ ITEM_ORKNASE__MAGIC       ,  4, 0x43 },
+	{ ITEM_ID_ORKNASE__MAGIC          ,  4, 0x43 },
 	/* AHA. DA HAT DER SCHMIED DIE WUCHT DER WAFFE AUF KOSTEN DER HANDHABUNG VERBESSTER.@NUR ETWAS FÜR ECHTE KÖNNER. */
 
-	{ ITEM_KURZSCHWERT__MAGIC   ,  4, 0x44 },
+	{ ITEM_ID_KURZSCHWERT__MAGIC      ,  4, 0x44 },
 	/* DIESES KURZSCHWERT SCHEINT DIE ATTACKE DES TRÄGERS ENTSCHEIDEND ZU VERBESSERN. */
 
-	{ ITEM_SICHEL__MAGIC        ,  6, 0x45 },
+	{ ITEM_ID_SICHEL__MAGIC           ,  6, 0x45 },
 	/* HM. SCHEINT MIR EIN DRUIDISCHES ARTEFAKT ZU SEIN, DAS EINEM DEN WEG ZU BESTIMMTEN KRÄUTERN WEIST. ABER ICH BIN MIR NICHT SICHER. */
 
-	{ ITEM_AMULETT__BLUE        ,  2, 0x46 },
+	{ ITEM_ID_AMULETT__MR_BONUS       ,  2, 0x46 },
 	/* OFFENSICHTLICH EIN SCHUZTAMULETT, GANZ BESONDERS GEGEN VERWANDLUNGEN UND KAMPFZAUBER GEEIGNET. */
 
-	{ ITEM_AMULETT__UNKNOWN_2   ,  0, 0x47 },
+	{ ITEM_ID_AMULETT__ORDINARY   ,  0, 0x47 },
 	/* ICH KANN KEINERLEI ZAUBER FESTSTELLEN. */
 
-	{ ITEM_KETTENHEMD__MAGIC    , 15, 0x48 },
+	{ ITEM_ID_KETTENHEMD__MAGIC       , 15, 0x48 },
 	/* ICH KANN DEN GENAUEN ZAUBER NICHT ERKENNEN, ABER ES SCHEINT ETWAS MIT DEM WESEN DER SCHWERE ZU TUN ZU HABEN.@DIESES KETTENHEMD WIRKT AUCH ZIEMLICH LEICHT FÜR SEINE STABILE MACHART. */
 
-	{ ITEM_KRAFTGUERTEL         ,  7, 0x49 },
+	{ ITEM_ID_KRAFTGUERTEL            ,  7, 0x49 },
 	/* DIESER GÜRTEL VERLEIHT DEM TRÄGER EINMALIG EINE IMMENSE KÖRPERKRAFT. */
 
-	{ ITEM_SCHWERT__MAGIC       ,  5, 0x4a },
+	{ ITEM_ID_SCHWERT__MAGIC          ,  5, 0x4a },
 	/* DIESES SCHWERT SOLLTE BESONDERS GEGEN UNTOTE WIRKSAM SEIN. */
 	/* Original-Bug? effect seems not to be implemented. */
 
-	{ ITEM_KETTENHEMD__CURSED   ,  5, 0x4b },
+	{ ITEM_ID_KETTENHEMD__CURSED      ,  5, 0x4b },
 	/* DIESES RÜSTSTÜCK SCHEINT ZU MERKEN, OB UNTOTE DIE WAFFEN FÜHREN. ABER WAS GENAU DANN PASSIERT, WEISS ICH NICHT. */
 
-	{ ITEM_ANTIKRANKHEITSELIXIER, 15, 0x4c },
+	{ ITEM_ID_ANTIKRANKHEITSELIXIER   , 15, 0x4c },
 	/* DIESES MITTEL SCHEINT GEGEN KRANKHEITEN ZU WIRKEN. */
 
-	{ ITEM_RING__GREEN          ,  5, 0x4d },
+	{ ITEM_ID_RING__GREEN             ,  5, 0x4d },
 	/* DIESER SCHMUCK SCHÜTZT DEN TRÄGER VOR MAGISCHEM FEUER, JEDENFALLS EINE GEWISSE ZEIT LANG. */
 	/* Original-Bug? effect seems not to be implemented. */
 
-	{ ITEM_WURFDOLCH__MAGIC     ,  6, 0x4e },
+	{ ITEM_ID_WURFDOLCH__MAGIC        ,  6, 0x4e },
 	/* DIESER WURFDOLCH SCHEINT EINEM DAS ZIELEN SEHR ZU ERLEICHTERN. */
 	/* Indeed, accuracy is improved a bit (but not too much), but the main treat is the damage formula 1D6 + 9, see https://crystals-dsa-foren.de/showthread.php?pid=170046 */
 
-	{ ITEM_KRISTALLKUGEL        ,  2, 0x4f },
+	{ ITEM_ID_KRISTALLKUGEL           ,  2, 0x4f },
 	/* DIESE KUGEL HILFT EINEM, DROHENDE GEFAHREN RECHTZEITIG ZU BEMERKEN. */
 
-	{ ITEM_BEUTEL               ,  0, 0x50 },
+	{ ITEM_ID_BEUTEL                  ,  0, 0x50 },
 	/* DIESEN ZAUBER VERSTEHE ICH NICHT! */
 
-	{ -0x0001                   ,  0, 0x00 }
+	{ -0x0001                      ,  0, 0x00 }
 }; // ds:0xac3c
-
 
 void spell_beherrschung(void)
 {
@@ -224,7 +226,11 @@ void spell_illusionen(void)
 		}
 	} else {
 		/* print a failure message */
-		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(3), GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		/* costs 2 AE */
 		g_spell_special_aecost = 2;
@@ -293,7 +299,7 @@ void spell_band(void)
 		/* Set pointer to enemy target */
 		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
-		if (g_spelltarget_e->gfx_id == 0x1c) {
+		if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			/* does not work on skeletons */
 			g_spell_special_aecost = -2;
 			return;
@@ -302,7 +308,11 @@ void spell_band(void)
 		/* set 'tied' flag */
 		g_spelltarget_e->flags.tied = 1;
 
-		sprintf(g_dtp2, get_tx(6), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(6), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 		/* cast hero */
 
@@ -338,10 +348,14 @@ void spell_bannbaladin(void)
 		/* spell does not work on animals */
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(8), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(8), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 
-		if (g_spelltarget_e->gfx_id == 0x1c) {
+		if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			/* spell does not work on skeletons */
 			g_spell_special_aecost = -2;
 			return;
@@ -350,7 +364,11 @@ void spell_bannbaladin(void)
 		/* set 'tame' flag */
 		g_spelltarget_e->flags.tame = 1;
 
-		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -360,7 +378,7 @@ void spell_boeser_blick(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 
 		g_spell_special_aecost = -2;
 
@@ -373,7 +391,11 @@ void spell_boeser_blick(void)
 		g_spelltarget_e->attacks = 2;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(10), (char*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(10), (char*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -390,7 +412,7 @@ void spell_grosse_ver(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 		g_spell_special_aecost = -2;
 		return;
 	} else {
@@ -417,7 +439,11 @@ void spell_herrdertiere(void)
 
 		g_spell_special_aecost = 0;
 
-		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_names_grammar(0, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(11), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	} else {
 
 		g_spell_special_aecost = g_spelltarget_e->first_ap;
@@ -429,7 +455,11 @@ void spell_herrdertiere(void)
 			/* set 'tame' flag */
 			g_spelltarget_e->flags.tame = 1;
 
-			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+			sprintf(g_dtp2,	get_tx(9), (uint8_t*)GUI_name_inflect_with_article(
+				INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				g_spelltarget_e->monster_id,
+				INFLECT_NAME_TYPE_MONSTER
+			));
 		}
 	}
 }
@@ -440,7 +470,7 @@ void spell_horriphobus(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 
 		g_spell_special_aecost = -2;
 
@@ -450,7 +480,11 @@ void spell_horriphobus(void)
 		/* unset 'renegade' flag */
 		g_spelltarget_e->flags.renegade = 0;
 
-		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(12), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -483,7 +517,7 @@ void spell_somnigravis(void)
 		g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 		/* this spell does not work on all kind of skeletons */
-		if (g_spelltarget_e->gfx_id == 0x1c) {
+		if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 			g_spell_special_aecost = -2;
 			return;
 		}
@@ -492,7 +526,11 @@ void spell_somnigravis(void)
 		g_spelltarget_e->flags.asleep = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(13), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 		return;
 	}
 
@@ -525,7 +563,7 @@ void spell_zwingtanz(void)
 	g_spelltarget_e = &g_enemy_sheets[get_spelluser()->target_object_id - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (g_spelltarget_e->gfx_id == 0x1c) {
+	if (g_spelltarget_e->actor_sprite_id == ACTOR_SPRITE_ID_SKELETT) {
 		g_spell_special_aecost = -2;
 	} else {
 
@@ -533,7 +571,11 @@ void spell_zwingtanz(void)
 		g_spelltarget_e->flags.dancing = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(14), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 	}
 }
 
@@ -612,14 +654,22 @@ void spell_skelettarius(void)
 	if (!g_spelltarget_e->flags.dead) {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(15), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		/* set ae costs */
 		g_spell_special_aecost = 0;
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_names_grammar(0x8000, g_spelltarget_e->monster_id, 1));
+		sprintf(g_dtp2,	get_tx(16), (uint8_t*)GUI_name_inflect_with_article(
+			INFLECT_DEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			g_spelltarget_e->monster_id,
+			INFLECT_NAME_TYPE_MONSTER
+		));
 
 		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 

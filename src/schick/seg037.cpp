@@ -90,11 +90,11 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	signed int i;
 
 	g_fig_anisheets[1][0] = 0;
-	g_fig_anisheets[1][242] = enemy->gfx_id;
+	g_fig_anisheets[1][242] = enemy->actor_sprite_id;
 
 	sheet_ptr = &g_fig_anisheets[1][1];
 	i = 0;
-	ani_index_ptr = g_gfx_ani_index[enemy->gfx_id];
+	ani_index_ptr = g_gfx_ani_index[enemy->actor_sprite_id];
 
 	while (g_fig_move_pathdir[i] != -1) {
 
@@ -158,7 +158,7 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	g_fig_cb_marker_id = -1;
 	FIG_set_sheet(enemy->fighter_id, 1);
 
-	if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table)) {
+	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 243);
 
@@ -640,7 +640,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 
 	/* check if we are in a special fight */
 
-	if (g_current_fight_no == FIGHTS_F064) {
+	if (g_current_fight_id == FIGHT_ID_F064) {
 
 		/* F064: fight against GORAH */
 
@@ -652,21 +652,21 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			}
 		}
 
-	} else if ((g_current_fight_no == FIGHTS_F099) && (random_interval(8, 12) <= g_fight_round)) {
+	} else if ((g_current_fight_id == FIGHT_ID_F099) && (random_interval(8, 12) <= g_fight_round)) {
 
 		/* F099: fight against four HARPIES */
 
 		/* after 8-12 rounds, the enemies flee */
 		enemy->flags.scared = 1;
 
-	} else if ((g_current_fight_no == FIGHTS_F122) && (FIG_count_active_enemies() <= 3)) {
+	} else if ((g_current_fight_id == FIGHT_ID_F122) && (FIG_count_active_enemies() <= 3)) {
 
 		/* F122: fight against 13 WOLVES */
 
 		/* if at most 3 wolves are left, all enemies flee */
 		enemy->flags.scared = 1;
 
-	} else if (g_current_fight_no == FIGHTS_F144) {
+	} else if (g_current_fight_id == FIGHT_ID_F144) {
 
 		/* F144: final fight */
 
@@ -753,7 +753,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 
 					flag = 1;
 
-					if (is_in_byte_array(enemy->gfx_id, g_double_size_gfx_id_table))
+					if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table))
 					{
 
 						target = get_cb_val(x - diff.offset[i].x, y - diff.offset[i].y);

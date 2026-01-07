@@ -39,88 +39,123 @@
 #include "seg097.h"
 #include "seg119.h"
 
-static const signed int g_passage_type_to_name[7] = {
-	/* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
-	0x001d, /* HEUER */
-	0x001e, /* BEGLEITSCHUTZFAHRT */
-	0x001f, /* LUXUSPASSAGE */
-	0x0020, /* KOMFORTABLE PASSAGE */
-	0x0021, /* KABINENPASSAGE */
-	0x0022, /* DECKPASSAGE */
-	0x0023  /* MITFAHRGELEGENHEIT */
+static const signed int g_trv_passage_type_to_hafen_ltx[7] = {
+	/* maps PASSAGE_TYPE -> index of its name (Begleitschutzfahrt, Deckpassage etc.) in HAFEN.LTX */
+	29, /* PASSAGE_TYPE_HEUER */
+	30, /* PASSAGE_TYPE_BEGLEITSCHUTZFAHRT */
+	31, /* PASSAGE_TYPE_LUXUSPASSAGE */
+	32, /* PASSAGE_TYPE_KOMFORTABLE PASSAGE */
+	33, /* PASSAGE_TYPE_KABINENPASSAGE */
+	34, /* PASSAGE_TYPE_DECKPASSAGE */
+	35  /* PASSAGE_TYPE_MITFAHRGELEGENHEIT */
 }; // ds:0x6ec2/*
+
 static const struct ship g_ship_table[8] = {
-	{ 0, 1,  0, 120 },
-	{ 3, 1, 35, 100 },
-	{ 1, 1,  0, (signed char)150 }, //BUG
-	{ 2, 1, 45, (signed char)150 }, //BUG
-	{ 0, 1,  0,  90 },
-	{ 4, 1, 20,  80 },
-	{ 5, 0, 10,  60 },
-	{ 6, 0,  0,  40 }
+	{ PASSAGE_TYPE_HEUER,               1, 0,  120 },
+	{ PASSAGE_TYPE_KOMFORTABLE_PASSAGE, 1, 35, 100 },
+	{ PASSAGE_TYPE_BEGLEITSCHUTZFAHRT,  1,  0, (signed char)150 }, //BUG
+	{ PASSAGE_TYPE_LUXUSPASSAGE,        1, 45, (signed char)150 }, //BUG
+	{ PASSAGE_TYPE_HEUER,               1,  0, 90 },
+	{ PASSAGE_TYPE_KABINENPASSAGE,      1, 20, 80 },
+	{ PASSAGE_TYPE_DECKPASSAGE,         0, 10, 60 },
+	{ PASSAGE_TYPE_MITFAHRGELEGENHEIT,  0,  0, 40 }
 }; // ds:0x6ed0
-static const signed int g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
+
+static const signed int g_trv_ship_to_hafen_ltx[8] = {
+	/* maps SHIP_TYPE -> index of its name (Langschiff, Karracke etc.) in HAFEN.LTX */
+	36, // SHIP_TYPE_LANGSCHIFF_HIGH_SEAS
+	37, // SHIP_TYPE_KARRACKE
+	38, // SHIP_TYPE_SCHNELLSEGLER
+	38, // SHIP_TYPE_SCHNELLSEGLER_LUXURY
+	36, // SHIP_TYPE_LANGSCHIFF_COSTAL
+	39, // SHIP_TYPE_KUESTENSEGLER
+	40, // SHIP_TYPE_KUTTER
+	41  // SHIP_TYPE_FISCHERBOOT
+}; // ds:0x6ef0
+
 struct sea_route g_sea_routes[SEA_ROUTE_ID__END] = {
-	{ TOWN_ID_THORWAL    , TOWN_ID_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
-	{ TOWN_ID_PREM       , TOWN_ID_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
+	/* High seas routes */
+	{ TOWN_ID_THORWAL    , TOWN_ID_PREM            , 115,  1, 0, 0, 0, 0 }, // SEA_ROUTE_ID_THORWAL_PREM      ==  1
+	{ TOWN_ID_PREM       , TOWN_ID_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, // SEA_ROUTE_ID_PREM_HJALSING     ==  2
 #ifndef M302de_ORIGINAL_BUGFIX
 	 /* Original-Bug 25: According to the map, the route Prem <-> Manrin should be the longest ship route by far. Distance 54 is way too short. Maybe the original intention was a value of 310, which after a byte overflow results in 54. */
-	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          ,  54,  7, 0, 0, 0, 0 }, //  3
+	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          ,  54,  7, 0, 0, 0, 0 }, // SEA_ROUTE_ID_PREM_MANRIN       ==  3
 #else
-	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          , 255,  7, 0, 0, 0, 0 }, //  3
+	{ TOWN_ID_PREM       , TOWN_ID_MANRIN          , 255,  7, 0, 0, 0, 0 }, // SEA_ROUTE_ID_PREM_MANRIN       ==  3
 	/* set the distance to maximum possible value 255. Still too short, but much better than 54 */
 #endif
-	{ TOWN_ID_PREM       , TOWN_ID_KORD            , 135,  7, 0, 0, 0, 0 }, //  4
-	{ TOWN_ID_KORD       , TOWN_ID_HJALSINGOR      ,  80,  6, 0, 0, 0, 0 }, //  5
-	{ TOWN_ID_HJALSINGOR , TOWN_ID_OVERTHORN       , 115,  4, 0, 0, 0, 0 }, //  6
-	{ TOWN_ID_HJALSINGOR , TOWN_ID_MANRIN          , 110,  5, 0, 0, 0, 0 }, //  7
-	{ TOWN_ID_THORWAL    , TOWN_ID_VAERMHAG        ,  30,  7, 0, 1, 0, 0 }, //  8
-	{ TOWN_ID_VAERMHAG   , TOWN_ID_VARNHEIM        ,  37,  5, 0, 1, 0, 0 }, //  9
-	{ TOWN_ID_VARNHEIM   , TOWN_ID_LJASDAHL        ,  25,  3, 0, 1, 0, 0 }, // 10
-	{ TOWN_ID_VARNHEIM   , TOWN_ID_OTTARJE         ,  25,  8, 0, 1, 0, 0 }, // 11
-	{ TOWN_ID_LJASDAHL   , TOWN_ID_OTTARJE         ,  10,  1, 0, 1, 0, 0 }, // 12
-	{ TOWN_ID_SKJAL      , TOWN_ID_OTTARJE         ,  52,  3, 0, 1, 0, 0 }, // 13
-	{ TOWN_ID_SKJAL      , TOWN_ID_PREM            ,  28,  4, 0, 1, 0, 0 }, // 14
-	{ TOWN_ID_PREM       , TOWN_ID_ARYN            ,  28,  6, 0, 1, 0, 0 }, // 15
-	{ TOWN_ID_PREM       , TOWN_ID_RUNINSHAVEN     ,  35,  7, 0, 1, 0, 0 }, // 16
-	{ TOWN_ID_ARYN       , TOWN_ID_RUNINSHAVEN     ,  25,  4, 0, 1, 0, 0 }, // 17
-	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_TREBAN          ,  50,  7, 0, 1, 0, 0 }, // 18
-	{ TOWN_ID_TREBAN     , TOWN_ID_KORD            ,  40,  2, 0, 1, 0, 0 }, // 19
-	{ TOWN_ID_KORD       , TOWN_ID_GUDDASUNDEN     ,  65,  2, 0, 1, 0, 0 }, // 20
-	{ TOWN_ID_GUDDASUNDEN, TOWN_ID_HJALSINGOR      ,  20,  1, 0, 1, 0, 0 }, // 21
-	{ TOWN_ID_HJALSINGOR , TOWN_ID_ROVIK           ,  46,  2, 0, 1, 0, 0 }, // 22
-	{ TOWN_ID_ROVIK      , TOWN_ID_OVERTHORN       ,  67,  2, 0, 1, 0, 0 }, // 23
-	{ TOWN_ID_ROVIK      , TOWN_ID_ORVIL           ,  18,  1, 0, 1, 0, 0 }, // 24
-	{ TOWN_ID_OVERTHORN  , TOWN_ID_TJANSET         ,  40,  3, 0, 1, 0, 0 }, // 25
-	{ TOWN_ID_OVERTHORN  , TOWN_ID_VIDSAND         ,  48,  1, 0, 1, 0, 0 }, // 26
-	{ TOWN_ID_TJANSET    , TOWN_ID_LISKOR          ,  22,  6, 0, 1, 0, 0 }, // 27
-	{ TOWN_ID_LISKOR     , TOWN_ID_VIDSAND         ,  22,  1, 0, 1, 0, 0 }, // 28
-	{ TOWN_ID_TJANSET    , TOWN_ID_VIDSAND         ,  36,  2, 0, 1, 0, 0 }, // 29
-	{ TOWN_ID_OVERTHORN  , TOWN_ID_BRENDHIL        ,  32,  3, 0, 1, 0, 0 }, // 30
-	{ TOWN_ID_BRENDHIL   , TOWN_ID_MANRIN          ,  57,  5, 0, 1, 0, 0 }, // 31
-	{ TOWN_ID_ROVIK      , TOWN_ID_MANRIN          ,  83,  7, 0, 1, 0, 0 }, // 32
-	{ TOWN_ID_THORWAL    , TOWN_ID_MERSKE          ,  30,  7, 0, 1, 0, 0 }, // 33
-	{ TOWN_ID_MERSKE     , TOWN_ID_EFFERDUN        ,  18,  8, 0, 1, 0, 0 }, // 34
-	{ TOWN_ID_THORWAL    , TOWN_ID_EFFERDUN        ,  47,  3, 0, 1, 0, 0 }, // 35
-	{ TOWN_ID_SERSKE     , TOWN_ID_MERSKE          ,  24,  7, 0, 1, 0, 0 }, // 36
-	{ TOWN_ID_SERSKE     , TOWN_ID_EFFERDUN        ,  41,  5, 0, 1, 0, 0 }, // 37
-	{ TOWN_ID_OVERTHORN  , TOWN_ID_LISKOR          ,  51,  3, 0, 1, 0, 0 }, // 38
-	{ TOWN_ID_THORWAL    , TOWN_ID_VARNHEIM        ,  67,  4, 0, 1, 0, 0 }, // 39
-	{ TOWN_ID_OTTARJE    , TOWN_ID_PREM            ,  62,  4, 0, 1, 0, 0 }, // 40
-	{ TOWN_ID_OTTARJE    , TOWN_ID_RUNINSHAVEN     ,  73,  7, 0, 1, 0, 0 }, // 41
-	{ TOWN_ID_SKJAL      , TOWN_ID_RUNINSHAVEN     ,  55,  6, 0, 1, 0, 0 }, // 42
-	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
-	{ TOWN_ID_TREBAN     , TOWN_ID_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
-	{ TOWN_ID_MANRIN     , TOWN_ID_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
-	{ (unsigned char)-1  , 0x00                    ,   0,  0, 0, 0, 0, 0 }  //TODO: towns should be signed
+	{ TOWN_ID_PREM       , TOWN_ID_KORD            , 135,  7, 0, 0, 0, 0 }, // SEA_ROUTE_ID_PREM_KORD         ==  4
+	{ TOWN_ID_KORD       , TOWN_ID_HJALSINGOR      ,  80,  6, 0, 0, 0, 0 }, // SEA_ROUTE_ID_KORD_HJALSING     ==  5
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_OVERTHORN       , 115,  4, 0, 0, 0, 0 }, // SEA_ROUTE_ID_HJALSING_OVERTHOR ==  6
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_MANRIN          , 110,  5, 0, 0, 0, 0 }, // SEA_ROUTE_ID_HJALSING_MANRIN   ==  7
+	/* Costal routes */
+	{ TOWN_ID_THORWAL    , TOWN_ID_VAERMHAG        ,  30,  7, 0, 1, 0, 0 }, // SEA_ROUTE_ID_THORWAL_VAERMHAG  ==  8
+	{ TOWN_ID_VAERMHAG   , TOWN_ID_VARNHEIM        ,  37,  5, 0, 1, 0, 0 }, // SEA_ROUTE_ID_VAERMHAG_VARNHEIM ==  9
+	{ TOWN_ID_VARNHEIM   , TOWN_ID_LJASDAHL        ,  25,  3, 0, 1, 0, 0 }, // SEA_ROUTE_ID_VARNHEIM_LJASDAHL == 10
+	{ TOWN_ID_VARNHEIM   , TOWN_ID_OTTARJE         ,  25,  8, 0, 1, 0, 0 }, // SEA_ROUTE_ID_VARNHEIM_OTTARJE  == 11
+	{ TOWN_ID_LJASDAHL   , TOWN_ID_OTTARJE         ,  10,  1, 0, 1, 0, 0 }, // SEA_ROUTE_ID_LJASDAHL_OTTARJE  == 12
+	{ TOWN_ID_SKJAL      , TOWN_ID_OTTARJE         ,  52,  3, 0, 1, 0, 0 }, // SEA_ROUTE_ID_SKJAL_OTTARJE     == 13
+	{ TOWN_ID_SKJAL      , TOWN_ID_PREM            ,  28,  4, 0, 1, 0, 0 }, // SEA_ROUTE_ID_SKJAL_PREM        == 14
+	{ TOWN_ID_PREM       , TOWN_ID_ARYN            ,  28,  6, 0, 1, 0, 0 }, // SEA_ROUTE_ID_PREM_ARYN         == 15
+	{ TOWN_ID_PREM       , TOWN_ID_RUNINSHAVEN     ,  35,  7, 0, 1, 0, 0 }, // SEA_ROUTE_ID_PREM_RUNINSHA     == 16
+	{ TOWN_ID_ARYN       , TOWN_ID_RUNINSHAVEN     ,  25,  4, 0, 1, 0, 0 }, // SEA_ROUTE_ID_ARYN_RUNINSHA     == 17
+	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_TREBAN          ,  50,  7, 0, 1, 0, 0 }, // SEA_ROUTE_ID_RUNINSHA_TREBAN   == 18
+	{ TOWN_ID_TREBAN     , TOWN_ID_KORD            ,  40,  2, 0, 1, 0, 0 }, // SEA_ROUTE_ID_TREBAN_KORD       == 19
+	{ TOWN_ID_KORD       , TOWN_ID_GUDDASUNDEN     ,  65,  2, 0, 1, 0, 0 }, // SEA_ROUTE_ID_KORD_GUDDASUN     == 20
+	{ TOWN_ID_GUDDASUNDEN, TOWN_ID_HJALSINGOR      ,  20,  1, 0, 1, 0, 0 }, // SEA_ROUTE_ID_GUDDASUN_HJALSING == 21
+	{ TOWN_ID_HJALSINGOR , TOWN_ID_ROVIK           ,  46,  2, 0, 1, 0, 0 }, // SEA_ROUTE_ID_HJALSING_ROVIK    == 22
+	{ TOWN_ID_ROVIK      , TOWN_ID_OVERTHORN       ,  67,  2, 0, 1, 0, 0 }, // SEA_ROUTE_ID_ROVIK_OVERTHOR    == 23
+	{ TOWN_ID_ROVIK      , TOWN_ID_ORVIL           ,  18,  1, 0, 1, 0, 0 }, // SEA_ROUTE_ID_ROVIK_ORVIL       == 24
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_TJANSET         ,  40,  3, 0, 1, 0, 0 }, // SEA_ROUTE_ID_OVERTHOR_TJANSET  == 25
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_VIDSAND         ,  48,  1, 0, 1, 0, 0 }, // SEA_ROUTE_ID_OVERTHOR_VIDSAND  == 26
+	{ TOWN_ID_TJANSET    , TOWN_ID_LISKOR          ,  22,  6, 0, 1, 0, 0 }, // SEA_ROUTE_ID_TJANSET_LISKOR    == 27
+	{ TOWN_ID_LISKOR     , TOWN_ID_VIDSAND         ,  22,  1, 0, 1, 0, 0 }, // SEA_ROUTE_ID_LISKOR_VIDSAND    == 28
+	{ TOWN_ID_TJANSET    , TOWN_ID_VIDSAND         ,  36,  2, 0, 1, 0, 0 }, // SEA_ROUTE_ID_TJANSET_VIDSAND   == 29
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_BRENDHIL        ,  32,  3, 0, 1, 0, 0 }, // SEA_ROUTE_ID_OVERTHOR_BRENDHIL == 30
+	{ TOWN_ID_BRENDHIL   , TOWN_ID_MANRIN          ,  57,  5, 0, 1, 0, 0 }, // SEA_ROUTE_ID_BRENDHIL_MANRIN   == 31
+	{ TOWN_ID_ROVIK      , TOWN_ID_MANRIN          ,  83,  7, 0, 1, 0, 0 }, // SEA_ROUTE_ID_ROVIK_MANRIN      == 32
+	{ TOWN_ID_THORWAL    , TOWN_ID_MERSKE          ,  30,  7, 0, 1, 0, 0 }, // SEA_ROUTE_ID_THORWAL_MERSKE    == 33
+	{ TOWN_ID_MERSKE     , TOWN_ID_EFFERDUN        ,  18,  8, 0, 1, 0, 0 }, // SEA_ROUTE_ID_MERSKE_EFFERDUN   == 34
+	{ TOWN_ID_THORWAL    , TOWN_ID_EFFERDUN        ,  47,  3, 0, 1, 0, 0 }, // SEA_ROUTE_ID_THORWAL_EFFERDUN  == 35
+	{ TOWN_ID_SERSKE     , TOWN_ID_MERSKE          ,  24,  7, 0, 1, 0, 0 }, // SEA_ROUTE_ID_SERSKE_MERSKE     == 36
+	{ TOWN_ID_SERSKE     , TOWN_ID_EFFERDUN        ,  41,  5, 0, 1, 0, 0 }, // SEA_ROUTE_ID_SERSKE_EFFERDUN   == 37
+	{ TOWN_ID_OVERTHORN  , TOWN_ID_LISKOR          ,  51,  3, 0, 1, 0, 0 }, // SEA_ROUTE_ID_OVERTHOR_LISKOR   == 38
+	{ TOWN_ID_THORWAL    , TOWN_ID_VARNHEIM        ,  67,  4, 0, 1, 0, 0 }, // SEA_ROUTE_ID_THORWAL_VARNHEIM  == 39
+	{ TOWN_ID_OTTARJE    , TOWN_ID_PREM            ,  62,  4, 0, 1, 0, 0 }, // SEA_ROUTE_ID_OTTARJE_PREM      == 40
+	{ TOWN_ID_OTTARJE    , TOWN_ID_RUNINSHAVEN     ,  73,  7, 0, 1, 0, 0 }, // SEA_ROUTE_ID_OTTARJE_RUNINSHA  == 41
+	{ TOWN_ID_SKJAL      , TOWN_ID_RUNINSHAVEN     ,  55,  6, 0, 1, 0, 0 }, // SEA_ROUTE_ID_SKJAL_RUNINSHA    == 42
+	{ TOWN_ID_RUNINSHAVEN, TOWN_ID_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // SEA_ROUTE_ID_RUNINSHA_L_RUNIN  == 43
+	{ TOWN_ID_TREBAN     , TOWN_ID_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // SEA_ROUTE_ID_TREBAN_L_RUNIN    == 44
+	{ TOWN_ID_MANRIN     , TOWN_ID_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // SEA_ROUTE_ID_MANRIN_OVERTHOR   == 45
+	{ (unsigned char)-1  , 0x00                    ,   0,  0, 0, 0, 0, 0 }  // SEA_ROUTE_ID__END              == 46
+	/* TODO: towns should be signed */
 }; // ds:0x6f00
+
 signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
-static struct int16_t_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
-static struct int16_t_7 g_sea_travel_sleepbonus_table2 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
+
+static struct int16_t_7 g_sea_travel_sleepbonus_table1 = {
+	-2, // PASSAGE_TYPE_HEUER
+	 0, // PASSAGE_TYPE_BEGLEITSCHUTZFAHRT
+	 5, // PASSAGE_TYPE_LUXUSPASSAGE
+	 4, // PASSAGE_TYPE_KOMFORTABLE_PASSAGE
+	 3, // PASSAGE_TYPE_KABINENPASSAGE
+	 1, // PASSAGE_TYPE_DECKPASSAGE
+	 0  // PASSAGE_TYPE_MITFAHRGELEGENHEIT
+}; // ds:0x7071
+
+static struct int16_t_7 g_sea_travel_sleepbonus_table2 = {
+	-2, // PASSAGE_TYPE_HEUER
+	 0, // PASSAGE_TYPE_BEGLEITSCHUTZFAHRT
+	 5, // PASSAGE_TYPE_LUXUSPASSAGE
+	 4, // PASSAGE_TYPE_KOMFORTABLE_PASSAGE
+	 3, // PASSAGE_TYPE_KABINENPASSAGE
+	 1, // PASSAGE_TYPE_DECKPASSAGE
+	 0  // PASSAGE_TYPE_MITFAHRGELEGENHEIT
+}; // ds:0x707f
+
 static char g_sea_travel_str_t[2] = "T"; // ds:0x708d
 static char g_sea_travel_str_en[3] = "EN"; // ds:0x708f
 static char g_sea_travel_str_comma[3] = ", "; // ds:0x7092
-
 
 static signed char g_sea_travel_sleep_quality; // ds:0xe3fa
 
@@ -257,11 +292,11 @@ void do_harbor(void)
 
 					sprintf(g_dtp2,	get_tx(16),
 
-						get_tx(g_sea_travel_tx_ship[psg_ptr->ship_type]), /* Fischerboot, Schnellsegler etc. */
+						get_tx(g_trv_ship_to_hafen_ltx[psg_ptr->ship_type]), /* Fischerboot, Schnellsegler etc. */
 						psg_ptr->ship_name_ptr,
 						(!psg_ptr->ship_timer ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
-						get_tx(g_passage_type_to_name[g_ship_table[psg_ptr->ship_type].passage_type]), /* Kabinenpassage etc. */
+						get_tx(g_trv_passage_type_to_hafen_ltx[g_ship_table[psg_ptr->ship_type].passage_type]), /* Kabinenpassage etc. */
 						get_ttx(psg_ptr->destination + 235),
 #ifdef __BORLANDC__
 						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, g_ship_table[psg_ptr->ship_type].base_speed),

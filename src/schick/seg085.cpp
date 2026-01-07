@@ -106,7 +106,7 @@ signed int DNG10_handler(void)
 		/* check if the hero will survive */
 		if (hero->le > answer)
 		{
-			sprintf(g_text_output_buf, get_tx(10), GUI_get_ptr(hero->sex, 0));
+			sprintf(g_text_output_buf, get_tx(10), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 		}
@@ -218,7 +218,7 @@ signed int DNG10_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,10,13,NORTH);
 			gs_dng_handled_pos = 0;
 
-			if (!do_fight(FIGHTS_F129_17)) {
+			if (!do_fight(FIGHT_ID_F129_17)) {
 				gs_dng10_heshtot = 1;
 			}
 
@@ -270,7 +270,7 @@ signed int DNG10_handler(void)
 		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,12,3,EAST);
 		g_fig_discard = 1;
 
-		do_fight(FIGHTS_F129_21);
+		do_fight(FIGHT_ID_F129_21);
 
 	} else if (target_pos == DNG_POS(1,1,12) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
 	{
@@ -283,7 +283,7 @@ signed int DNG10_handler(void)
 		g_fig_escape_position[NORTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(1,9,10,NORTH);
 		g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = DNG_POS_DIR(1,9,10,NORTH);
 
-		do_fight(FIGHTS_F129_29);
+		do_fight(FIGHT_ID_F129_29);
 
 	} else if (target_pos == DNG_POS(2,12,12) && target_pos != gs_dng_handled_pos)
 	{
@@ -334,9 +334,9 @@ signed int DNG10_handler(void)
 					GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(35), 0);
 
 					/* 2x HEALING POTION, MAGIC POTION, THROWING DAGGER and ...*/
-					give_new_item_to_group(ITEM_HEILTRANK, 1, 2);
-					give_new_item_to_group(ITEM_ZAUBERTRANK, 1, 1);
-					give_new_item_to_group(ITEM_WURFDOLCH__MAGIC, 1, 1);
+					give_new_item_to_group(ITEM_ID_HEILTRANK, 1, 2);
+					give_new_item_to_group(ITEM_ID_ZAUBERTRANK, 1, 1);
+					give_new_item_to_group(ITEM_ID_WURFDOLCH__MAGIC, 1, 1);
 
 					/* 200 Ducats */
 					p_money = get_party_money();
@@ -363,20 +363,20 @@ signed int DNG10_handler(void)
 
 			gs_x_target = gs_y_target = 12;
 
-			if ((answer = get_first_hero_with_item(ITEM_PLATINSCHLUESSEL)) != -1)
+			if ((answer = get_first_hero_with_item(ITEM_ID_PLATINSCHLUESSEL)) != -1)
 			{
 				hero = get_hero(answer);
-				result = inv_slot_of_item(hero, ITEM_PLATINSCHLUESSEL);
+				result = inv_slot_of_item(hero, ITEM_ID_PLATINSCHLUESSEL);
 				drop_item(hero, result, 1);
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(36), 0);
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(37), 0);
 
 				/* 2x HEALING POTION, MAGIC POTION, THROWING DAGGER, CRYSTAL BALL and ...*/
-				give_new_item_to_group(ITEM_HEILTRANK, 1, 2);
-				give_new_item_to_group(ITEM_ZAUBERTRANK, 1, 1);
-				give_new_item_to_group(ITEM_WURFDOLCH__MAGIC, 1, 1);
-				give_new_item_to_group(ITEM_KRISTALLKUGEL, 1, 1);
+				give_new_item_to_group(ITEM_ID_HEILTRANK, 1, 2);
+				give_new_item_to_group(ITEM_ID_ZAUBERTRANK, 1, 1);
+				give_new_item_to_group(ITEM_ID_WURFDOLCH__MAGIC, 1, 1);
+				give_new_item_to_group(ITEM_ID_KRISTALLKUGEL, 1, 1);
 
 				/* ... 200 Ducats and ... */
 				p_money = get_party_money();

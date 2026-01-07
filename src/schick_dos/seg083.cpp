@@ -216,7 +216,7 @@ signed int DNG08_handler(void)
 			g_fig_escape_position[NORTH] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,2,7,SOUTH);
 			g_fig_escape_position[EAST] = DNG_POS_DIR(0,6,3,EAST);
 
-			do_fight(FIGHTS_F108_3B);
+			do_fight(FIGHT_ID_F108_3B);
 		}
 
 	} else if (target_pos == DNG_POS(0,1,4) && target_pos != gs_dng_handled_pos && !gs_dng08_bundles_done)
@@ -232,7 +232,7 @@ signed int DNG08_handler(void)
 			g_fig_escape_position[NORTH] = (g_fig_escape_position[SOUTH] = ( g_fig_escape_position[WEST] = (DNG_POS_DIR(0,2,7,SOUTH))));
 			g_fig_escape_position[EAST] = (DNG_POS_DIR(0,6,3,EAST));
 
-			do_fight(FIGHTS_F108_3B);
+			do_fight(FIGHT_ID_F108_3B);
 		}
 
 
@@ -315,7 +315,7 @@ signed int DNG08_handler(void)
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id) &&
 				!hero->flags.dead && test_talent(hero, TA_KLETTERN, 2) <= 0)
 			{
-				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_ptr(hero->sex, 0));
+				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(1, 6, 4));
@@ -336,7 +336,7 @@ signed int DNG08_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((tmp = test_talent(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
-				GUI_get_ptr(hero->sex, 0));
+				GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -412,10 +412,14 @@ void DNG08_search_bed(void)
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 92, 0));
+		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			ITEM_ID_SCHNAPSFLASCHE,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		/* a BRANDY BOTTLE */
-		give_new_item_to_group(ITEM_SCHNAPSFLASCHE, 1, 1);
+		give_new_item_to_group(ITEM_ID_SCHNAPSFLASCHE, 1, 1);
 
 		GUI_output(g_dtp2);
 
@@ -424,10 +428,14 @@ void DNG08_search_bed(void)
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 14, 0));
+		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			ITEM_ID_DOLCH,
+			INFLECT_NAME_TYPE_ITEM
+		));
 
 		/* a DAGGER */
-		give_new_item_to_group(ITEM_DOLCH, 1, 1);
+		give_new_item_to_group(ITEM_ID_DOLCH, 1, 1);
 
 		GUI_output(g_dtp2);
 
@@ -459,7 +467,7 @@ void DNG08_chest01_trap(void)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	sprintf(g_dtp2, get_tx(11), hero->alias, GUI_get_ptr(hero->sex, 1));
+	sprintf(g_dtp2, get_tx(11), hero->alias, GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_2ND));
 	GUI_output(g_dtp2);
 
 	/* 3W6 damage */
@@ -475,7 +483,7 @@ void DNG08_chest00_loot(struct struct_chest* chest)
 		GUI_output(get_tx(32));
 
 		/* get 40 FOOD PACKAGES */
-		give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 40);
+		give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 40);
 	}
 }
 
@@ -524,7 +532,7 @@ void DNG08_chest03_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0)
+	if (get_first_hero_with_item(ITEM_ID_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0)
 	{
 		if (!(gs_dng08_chest35_looted & 1)) {
 
@@ -545,7 +553,7 @@ void DNG08_chest04_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_ID_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot(chest);
 
@@ -559,7 +567,7 @@ void DNG08_chest05_open(struct struct_chest* chest)
 {
 	struct struct_hero *hero = get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_ID_BRONZESCHLUESSEL) != -1 || test_talent(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot(chest);
 

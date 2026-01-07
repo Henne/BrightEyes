@@ -73,22 +73,36 @@ static void (*g_travel_event_handlers[146])(void) = {
 
 signed char g_travel_event_active = 0; // ds:0xb132
 
-static signed int g_travel_event_tx2 = -1; // ds:0xb133
+static signed int g_travel_event_id = -1; // ds:0xb133
 
 #ifndef M302de_ORIGINAL_BUGFIX
 /* Original-Bug 33:
  * In certain travel events, an axe is needed as a tool.
  * (These are: bridge building Breida <-> Tjoila, bridge building Auplog <-> Varnheim, path blocked by a tree Skjal <-> Ottarje)
  * The list of accepted axes is a bit arbitrary (The common pattern is that all have "...axt" or "...beil" in their name.
- * Other more or less sensible options would be: ITEM_SKRAJA, ITEM_ORKNASE, ITEM_SCHNEIDZAHN, ITEM_ORKNASE__MAGIC, ITEM_HELLEBARDE. */
-uint8_t g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_WURFAXT, ITEM_WURFBEIL, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+ * Other more or less sensible options would be: ITEM_ID_SKRAJA, ITEM_ID_ORKNASE, ITEM_ID_SCHNEIDZAHN, ITEM_ID_ORKNASE__MAGIC, ITEM_ID_HELLEBARDE. */
+uint8_t g_travel_event_axes[6] = {
+	ITEM_ID_KRIEGSBEIL__SPECIAL,
+	ITEM_ID_STREITAXT,
+	ITEM_ID_WURFAXT,
+	ITEM_ID_WURFBEIL,
+	ITEM_ID_KRIEGSBEIL,
+	0xff
+}; // ds:0xb135
 #else
-uint8_t g_travel_event_axes[6] = { ITEM_KRIEGSBEIL__SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE__MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+uint8_t g_travel_event_axes[6] = {
+	ITEM_ID_KRIEGSBEIL__SPECIAL,
+	ITEM_ID_STREITAXT,
+	ITEM_ID_ORKNASE,
+	ITEM_ID_ORKNASE__MAGIC,
+	ITEM_ID_KRIEGSBEIL,
+	0xff
+}; // ds:0xb135
 /* rationale:
- * - don't allow throwing axes (ITEM_WURFAXT, ITEM_WURFBEIL, ITEM_SCHNEIDZAHN), as they are pretty light and designed for a completely different purpose.
- * - don't allow ITEM_HELLEBARDE, as it is a polearm with a different purpose. (Note that surprisingliy, it is classified as WEAPON_TYPE_AXT in Schicksalsklinge)
- * - don't allow ITEM_SKRAJA, as it is a small axe with a very short shaft, which won't produce too much momentum.
-   (Note that while being an axe, ITEM_SKRAJA is classified as WEAPON_TYPE_HIEBWAFFEN in Schicksalsklinge -- which might be a bug on its own.)
+ * - don't allow throwing axes (ITEM_ID_WURFAXT, ITEM_ID_WURFBEIL, ITEM_ID_SCHNEIDZAHN), as they are pretty light and designed for a completely different purpose.
+ * - don't allow ITEM_ID_HELLEBARDE, as it is a polearm with a different purpose. (Note that surprisingliy, it is classified as WEAPON_TYPE_AXT in Schicksalsklinge)
+ * - don't allow ITEM_ID_SKRAJA, as it is a small axe with a very short shaft, which won't produce too much momentum.
+   (Note that while being an axe, ITEM_ID_SKRAJA is classified as WEAPON_TYPE_HIEBWAFFEN in Schicksalsklinge -- which might be a bug on its own.)
  * - allow all other axes in the game.
  * In this way, we get again a list of 5 possible items.
  * See discussion at https://www.crystals-dsa-foren.de/showthread.php?tid=6036&pid=170066#pid170066
@@ -104,7 +118,7 @@ void TRV_load_textfile(signed int travel_event_id)
 	load_tx(ARCHIVE_FILE_FEATURE_LTX);
 
 	if (travel_event_id == -1) {
-		travel_event_id = g_travel_event_tx2;
+		travel_event_id = g_travel_event_id;
 	}
 
 	load_tx2( (travel_event_id == 37 || travel_event_id == 47 || travel_event_id == 100) ? ARCHIVE_FILE_FEATURE9_LTX :
@@ -117,7 +131,7 @@ void TRV_load_textfile(signed int travel_event_id)
 			( travel_event_id < 126 ? ARCHIVE_FILE_FEATURE6_LTX :
 			( travel_event_id < 143 ? ARCHIVE_FILE_FEATURE7_LTX : ARCHIVE_FILE_FEATURE8_LTX)))))))));
 
-	g_travel_event_tx2 = travel_event_id;
+	g_travel_event_id = travel_event_id;
 }
 
 void TRV_event(const signed int travel_event_id)
@@ -656,7 +670,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 
 				timewarp(HOURS(1));
 
-				give_new_item_to_group(ITEM_PROVIANTPAKET, 1, foods1);
+				give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, foods1);
 
 				answer = 0;
 			} else {
@@ -676,7 +690,7 @@ void TRV_hunt_generic(const signed int ani_id, const signed int city_index,
 		add_hero_ap_all(ap_all2);
 
 		if (foods2 != 0) {
-			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, foods2);
+			give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, foods2);
 		}
 
 	} else if (answer == 1) {
@@ -753,8 +767,8 @@ void TRV_barrier(const signed int text_start)
 
 				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_id == gs_active_group_id))
 				{
-					tools_num += hero_count_item(hero, ITEM_SEIL);
-					tools_num += hero_count_item(hero, ITEM_STRICKLEITER);
+					tools_num += hero_count_item(hero, ITEM_ID_SEIL);
+					tools_num += hero_count_item(hero, ITEM_ID_STRICKLEITER);
 				}
 			}
 
@@ -775,7 +789,7 @@ void TRV_barrier(const signed int text_start)
 
 				} while (tools_num && g_travel_event_axes[i] != 0xff);
 
-				if (tools_num || get_first_hero_with_item(ITEM_HAMMER) == -1) {
+				if (tools_num || get_first_hero_with_item(ITEM_ID_HAMMER) == -1) {
 
 					GUI_dialog_na(0, get_tx2(text_start + 4));
 
@@ -792,15 +806,15 @@ void TRV_barrier(const signed int text_start)
 
 					add_hero_ap_all(10);
 
-					i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
+					i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_ID_SEIL))), ITEM_ID_SEIL);
 					if (i == -1) {
-						i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
+						i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_ID_STRICKLEITER))), ITEM_ID_STRICKLEITER);
 					}
 					drop_item(hero, i, 1);
 
-					i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_SEIL))), ITEM_SEIL);
+					i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_ID_SEIL))), ITEM_ID_SEIL);
 					if (i == -1) {
-						i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_STRICKLEITER))), ITEM_STRICKLEITER);
+						i = inv_slot_of_item((hero = get_hero(get_first_hero_with_item(ITEM_ID_STRICKLEITER))), ITEM_ID_STRICKLEITER);
 					}
 					drop_item(hero, i, 1);
 
@@ -813,7 +827,7 @@ void TRV_barrier(const signed int text_start)
 						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
 
 						sprintf(g_dtp2 + 0x400,	get_tx2(text_start + 7), hero->alias,
-								GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));
+								GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD), GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_4TH));
 						GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
 						hero_disease_test(hero, DISEASE_ID_DUMPFSCHAEDEL, 30);
@@ -846,7 +860,7 @@ void tevent_009(void)
 {
 	if ((test_talent(get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||	gs_tevent009_flag)
 	{
-		g_gather_herbs_special = ITEM_EINBEERE;
+		g_gather_herbs_special = ITEM_ID_EINBEERE;
 
 		TRV_found_herb_place(0);
 

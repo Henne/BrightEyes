@@ -359,7 +359,7 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 	if ((mode == 0) || (mode == 2) || (mode == 4) || (mode == 6) || (mode == 7)) /* actor is an enemy */
 	{
 		actor_enemy_ptr = actor_ptr;
-		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->gfx_id, g_double_size_gfx_id_table))
+		if (is_in_byte_array(((struct enemy_sheet*)actor_enemy_ptr)->actor_sprite_id, g_double_size_actor_sprite_id_table))
 		{
 			double_size = 1;
 		}
@@ -657,8 +657,8 @@ signed int FIG_find_path_to_target(uint8_t *actor_ptr, const signed int actor_id
 							}
 						} else {
 							if (((mode == 4) || (mode == 5)) && /* actor is fleeing */
-								((g_scenario_buf->bg_id > 3) ||
-									((g_scenario_buf->bg_id <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
+								((g_scenario_buf->fig_background_id > FIG_BACKGROUND_ID_3) ||
+									((g_scenario_buf->fig_background_id <= FIG_BACKGROUND_ID_3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
 							{
 								/* it is not tested if there is space for the tail of a double-size enemy! */
 								unused[nr_targets_reached] = 1;

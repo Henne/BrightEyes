@@ -48,7 +48,7 @@ signed int DNG04_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-        pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
+        pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !gs_dng04_corpse0_flag)
 	{
@@ -73,7 +73,7 @@ signed int DNG04_handler(void)
 			sub_hero_le(hero, 2);
 
 			/* get a magic AMULET */
-			give_new_item_to_group(ITEM_TRAVIA_AMULETT, 1, 1);
+			give_new_item_to_group(ITEM_ID_AMULETT__TRAVIA, 1, 1);
 
 			gs_dng04_gap_flag = 1;
 		}
@@ -84,7 +84,7 @@ signed int DNG04_handler(void)
 		if (GUI_bool(get_tx(7)))
 		{
 			/* get a SILVER HELMET */
-			if (give_new_item_to_group(ITEM_SILBERHELM, 1, 1))
+			if (give_new_item_to_group(ITEM_ID_SILBERHELM, 1, 1))
 			{
 				/* mark SILVER HELMET as taken */
 				gs_dng04_helmet_flag = 1;
@@ -168,7 +168,7 @@ signed int DNG04_handler(void)
 		if (GUI_bool(get_tx(16)))
 		{
 			/* get a LANTERN */
-			if (give_new_item_to_group(ITEM_LATERNE__UNLIT, 1, 1))
+			if (give_new_item_to_group(ITEM_ID_LATERNE__UNLIT, 1, 1))
 			{
 				/* mark LANTERN as taken */
 				gs_dng04_lantern_flag = 1;
@@ -193,14 +193,14 @@ signed int DNG04_handler(void)
 			if (test_attrib(hero, ATTRIB_GE, 0) > 0)
 			{
 				sprintf(g_dtp2,	get_tx(18), hero->alias,
-					GUI_get_ptr(hero->sex, 3),
-					GUI_get_ptr(hero->sex, 0));
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_3RD),
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST));
 				GUI_output(g_dtp2);
 
 			} else {
 
 				sprintf(g_dtp2,	get_tx(19), hero->alias,
-					GUI_get_ptr(hero->sex, 0), hero->alias);
+					GUI_get_personal_pronoun(hero->sex, GRAMMAR_CASE_1ST), hero->alias);
 
 				GUI_output(g_dtp2);
 
@@ -366,7 +366,7 @@ signed int DNG05_handler(void)
 		{
 			GUI_output(get_tx(3));
 
-			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, 10);
+			give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, 10);
 
 			gs_dng05_proviant_flag = 1;
 		}
@@ -400,7 +400,7 @@ signed int DNG05_handler(void)
 			g_max_enemies = (random_schick(100) < 10 ? 3 : 2);
 			g_fig_escape_position[NORTH] = g_fig_escape_position[EAST] = g_fig_escape_position[SOUTH] = g_fig_escape_position[WEST] = DNG_POS_DIR(0,8,7,SOUTH);
 
-			do_fight(FIGHTS_F061_4B);
+			do_fight(FIGHT_ID_F061_4B);
 		}
 
 	} else if (pos == DNG_POS(0,11,1) && pos != gs_dng_handled_pos)

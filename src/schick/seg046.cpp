@@ -318,12 +318,12 @@ void status_show(const signed int index)
 
 		for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
-			if (hero->inventory[i].item_id == ITEM_NONE)
+			if (hero->inventory[i].item_id == ITEM_ID_NONE)
 				continue;
 
 			nvf.dst = g_icon;
 			/* set no */
-			nvf.image_num = g_itemsdat[hero->inventory[i].item_id].gfx;
+			nvf.image_num = g_itemsdat[hero->inventory[i].item_id].item_sprite_id;
 
 			process_nvf_extraction(&nvf);
 

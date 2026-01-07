@@ -109,10 +109,10 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	int16_t *ani_index_ptr;
 
 	g_fig_anisheets[0][0] = 0;
-	g_fig_anisheets[0][242] = hero->sprite_id;
+	g_fig_anisheets[0][242] = hero->actor_sprite_id;
 
 	sheet_ptr = &g_fig_anisheets[0][1];
-	ani_index_ptr = g_gfx_ani_index[hero->sprite_id];
+	ani_index_ptr = g_gfx_ani_index[hero->actor_sprite_id];
 
 	i = 0;
 
@@ -202,9 +202,9 @@ signed int AFIG_change_hero_weapon(struct struct_hero *hero)
 		/* grab the first melee weapon in the knapsack,
 		 * and exchange it with the broken weapon. */
 		if (item_p->flags.weapon &&
-			(item_p->subtype != WEAPON_TYPE_SCHUSSWAFFE) &&
-			(item_p->subtype != WEAPON_TYPE_WURFWAFFE) &&
-			(item_p->subtype != WEAPON_TYPE_SPEER))
+			(item_p->item_subtype_id != WEAPON_TYPE_SCHUSSWAFFE) &&
+			(item_p->item_subtype_id != WEAPON_TYPE_WURFWAFFE) &&
+			(item_p->item_subtype_id != WEAPON_TYPE_SPEER)) // Original-Bug: WEAPON_TYPE_SPEER is a melee weapon category.
 		{
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
 			has_new_weapon = 1;
@@ -217,7 +217,7 @@ signed int AFIG_change_hero_weapon(struct struct_hero *hero)
 		/* find a free slot, to get rid of the broken weapon */
 		for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
 
-			if (hero->inventory[pos].item_id == ITEM_NONE) {
+			if (hero->inventory[pos].item_id == ITEM_ID_NONE) {
 
 				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, pos, hero);
 				has_new_weapon = 2;
@@ -767,14 +767,14 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 			/* equip LONGBOW and ARROWS in the first round,
 			 * if the hero has them in the inventory */
 			if ((g_fight_round == 0) &&
-				(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LANGBOGEN) &&
-				(inv_slot_of_item(hero, ITEM_PFEIL) != -1) &&
-				(inv_slot_of_item(hero, ITEM_LANGBOGEN) != -1))
+				(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_ID_LANGBOGEN) &&
+				(inv_slot_of_item(hero, ITEM_ID_PFEIL) != -1) &&
+				(inv_slot_of_item(hero, ITEM_ID_LANGBOGEN) != -1))
 			{
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_LANGBOGEN), hero);
+				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_ID_LANGBOGEN), hero);
 
-				if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_PFEIL) {
-					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
+				if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_ID_PFEIL) {
+					move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_ID_PFEIL), hero);
 				}
 			}
 
@@ -785,17 +785,17 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 				/* equip LONGBOW and ARROWS in the first round,
 				 * if the hero has them in the inventory */
 				if ((g_fight_round == 0) &&
-					(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_LANGBOGEN) &&
-					(inv_slot_of_item(hero, ITEM_PFEIL) != -1) &&
-					(inv_slot_of_item(hero, ITEM_LANGBOGEN) != -1))
+					(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id != ITEM_ID_LANGBOGEN) &&
+					(inv_slot_of_item(hero, ITEM_ID_PFEIL) != -1) &&
+					(inv_slot_of_item(hero, ITEM_ID_LANGBOGEN) != -1))
 				{
-					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_LANGBOGEN), hero);
+					move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, inv_slot_of_item(hero, ITEM_ID_LANGBOGEN), hero);
 
-					if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_PFEIL) {
-						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_PFEIL), hero);
+					if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id != ITEM_ID_PFEIL) {
+						move_item(HERO_INVENTORY_SLOT_LEFT_HAND, inv_slot_of_item(hero, ITEM_ID_PFEIL), hero);
 					}
 
-				} else if (FIG_get_range_weapon_type(hero) == -1) {
+				} else if (FIG_weapon_gfx_id_ranged(hero) == WEAPON_GFX_ID_NONE) {
 					hero->action_id = FIG_ACTION_FLEE;
 				}
 			}
@@ -904,7 +904,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 			if ((hero->typus >= HERO_TYPE_HEXE) &&		/* spellcaster */
 				(hero->ae > 10) &&	/* AE > 10 */
 				(try_autospell != 0) &&
-				(g_current_fight_no != FIGHTS_F144) &&	/* not in the final fight */
+				(g_current_fight_id != FIGHT_ID_F144) &&	/* not in the final fight */
 				g_autofight_magic) /* magic activated in auto fight */
 			{
 				if (AFIG_select_autospell(hero, hero_pos, hero->flags.renegade, x, y))
@@ -919,7 +919,7 @@ void AFIG_hero_turn(struct struct_hero *hero, const signed int hero_pos, signed 
 
 			if ((hero->action_id == FIG_ACTION_MOVE) && (hero->fight_bp_left > 0)) {
 
-				if (FIG_get_range_weapon_type(hero) != -1) {
+				if (FIG_weapon_gfx_id_ranged(hero) != WEAPON_GFX_ID_NONE) {
 
 					if (range_attack_check_ammo(hero, 2)) {
 

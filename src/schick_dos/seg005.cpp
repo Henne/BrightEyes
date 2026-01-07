@@ -45,8 +45,8 @@ char g_str_temp_xx[8] = "TEMP\\XX"; // ds:0x4b95
 static unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
 static signed int g_fig_figlist_readd[8];	// ds:0xe298
 static signed int g_fig_ani_state[8];		// ds:0xe2a8
-struct_msg g_fig_actor_grammar;			// ds:0xe2ba
-struct_msg g_fig_target_grammar;		// ds:0xe2be
+struct actor_class g_fig_actor_grammar;			// ds:0xe2ba
+struct actor_class g_fig_target_grammar;		// ds:0xe2be
 static signed int g_figobj_unkn_y1;		// ds:0xe2c0
 static signed int g_figobj_unkn_y1_bak;		// ds:0xe2c2
 static signed int g_figobj_unkn_x1;		// ds:0xe2c4
@@ -132,50 +132,62 @@ static void FIG_set_star_color(uint8_t *ptr, signed int count, signed char color
 }
 
 /**
- * \brief   returns name in the 3rd german case
+ * \brief   returns the name of an actor class (monster or hero) in the 3rd german case
  *
- * \param   type        1 = enemy / 2 = hero
- * \param   pos         position
+ * \param   actor_class_type   1 = monster / 2 = hero
+ * \param   actor_class_id     monster_id or hero_pos
  * \return              "einem Magier" if the enemy is a "Magier".
  */
-static char* FIG_name_3rd_case(const signed int type, volatile const signed int pos)
+static char* FIG_name_3rd_case(const signed int actor_class_type, volatile const signed int actor_class_id)
 {
-	if (type == 2) {
-		return get_hero(pos)->alias;
+	if (actor_class_type == ACTOR_CLASS_TYPE_HERO) {
+		return get_hero(actor_class_id)->alias;
 	} else {
-		return (char*)GUI_names_grammar(3, pos, 1);
+		return (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_3RD_CASE,
+			actor_class_id,
+			INFLECT_NAME_TYPE_MONSTER
+		);
 	}
 }
 
 /**
- * \brief   returns name in the 4th german case
+ * \brief   returns the name of an actor class (monster or hero) in the 4th german case
  *
- * \param   type        1 = enemy / 2 = hero
- * \param   pos         position
+ * \param   actor_class_type   1 = monster / 2 = hero
+ * \param   actor_class_id     monster_id or hero_pos
  * \return              "einen Magier" if the enemy is a "Magier".
  */
-static char* FIG_name_4th_case(const signed int type, volatile const signed int pos)
+static char* FIG_name_4th_case(const signed int actor_class_type, volatile const signed int actor_class_id)
 {
-	if (type == 2) {
-		return get_hero(pos)->alias;
+	if (actor_class_type == ACTOR_CLASS_TYPE_HERO) {
+		return get_hero(actor_class_id)->alias;
 	} else {
-		return (char*)GUI_names_grammar(2, pos, 1);
+		return (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_4TH_CASE,
+			actor_class_id,
+			INFLECT_NAME_TYPE_MONSTER
+		);
 	}
 }
 
 /**
- * \brief   returns name in the 1st german case
+ * \brief   returns the name of an actor class (monster or hero) in the 1st german case
  *
- * \param   type        1 = enemy / 2 = hero
- * \param   pos         position
+ * \param   actor_class_type   1 = monster / 2 = hero
+ * \param   actor_class_id     monster_id or hero_pos
  * \return              "ein Magier" if the enemy is a "Magier".
  */
-static char *FIG_name_1st_case(const signed int type, volatile const signed int pos)
+static char *FIG_name_1st_case(const signed int actor_class_type, volatile const signed int actor_class_id)
 {
-	if (type == 2) {
-		return get_hero(pos)->alias;
+	if (actor_class_type == ACTOR_CLASS_TYPE_HERO) {
+		return get_hero(actor_class_id)->alias;
 	} else {
-		return (char*)GUI_names_grammar(0, pos, 1);
+		return (char*)GUI_name_inflect_with_article(
+			INFLECT_INDEFINITE_ARTICLE | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+			actor_class_id,
+			INFLECT_NAME_TYPE_MONSTER
+		);
 	}
 }
 
@@ -265,7 +277,7 @@ static signed int fight_printer(void)
 //						case 3: /* enemy attack fails */
 
 						sprintf(g_text_output_buf, get_tx(idx),
-							FIG_name_3rd_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id));
+							FIG_name_3rd_case(g_fig_actor_grammar.actor_class_type, g_fig_actor_grammar.actor_class_id));
 
 					} else if (f_action == 2 || f_action == 4 || f_action == 7) {
 //						case 2: /* hero parade fails */
@@ -273,7 +285,7 @@ static signed int fight_printer(void)
 //						case 7:	/* hero get unconscious */
 
 						sprintf(g_text_output_buf, get_tx(idx),
-							FIG_name_3rd_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
+							FIG_name_3rd_case(g_fig_target_grammar.actor_class_type, g_fig_target_grammar.actor_class_id));
 
 
 
@@ -282,8 +294,8 @@ static signed int fight_printer(void)
 //						case 11:	/* hero hits enemy */
 
 						sprintf(g_text_output_buf, get_tx(idx),
-							FIG_name_1st_case(g_fig_actor_grammar.type, g_fig_actor_grammar.id),
-							FIG_name_4th_case(g_fig_target_grammar.type, g_fig_target_grammar.id));
+							FIG_name_1st_case(g_fig_actor_grammar.actor_class_type, g_fig_actor_grammar.actor_class_id),
+							FIG_name_4th_case(g_fig_target_grammar.actor_class_type, g_fig_target_grammar.actor_class_id));
 					} else {
 						/* case 5: hero successful parade */
 						/* case 6: weapon broke */
@@ -536,7 +548,7 @@ void draw_fight_screen(const signed int val)
 							p_fighter->nvf_no += *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						} else {
 
-							p_fighter->figure = g_gfxtab_figures_main[p_fighter->sprite_id][*(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet])];
+							p_fighter->figure = g_gfxtab_figures_main[p_fighter->actor_sprite_id][*(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet])];
 							p_fighter->nvf_no = *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
 						}
 
@@ -546,8 +558,8 @@ void draw_fight_screen(const signed int val)
 							if (p_fighter->nvf_no > 3) {
 
 								/* not standing still */
-								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][4].x;
-								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][4].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->actor_sprite_id][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->actor_sprite_id][4].y;
 
 								if (p_fighter->double_size != -1) {
 									p_fighter->x1 = g_gfxtab_double_size_x1[1];
@@ -555,8 +567,8 @@ void draw_fight_screen(const signed int val)
 								}
 
 							} else {
-								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][p_fighter->nvf_no].x;
-								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][p_fighter->nvf_no].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->actor_sprite_id][p_fighter->nvf_no].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->actor_sprite_id][p_fighter->nvf_no].y;
 
 								if (p_fighter->double_size != -1) {
 									p_fighter->x1 = g_gfxtab_double_size_x1[p_fighter->nvf_no];
@@ -565,18 +577,18 @@ void draw_fight_screen(const signed int val)
 							}
 
 						} else {
-							if (p_fighter->nvf_no == g_nvftab_figures_dead[p_fighter->sprite_id]) {
+							if (p_fighter->nvf_no == g_nvftab_figures_dead[p_fighter->actor_sprite_id]) {
 
-								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->sprite_id][4].x;
-								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->sprite_id][4].y;
+								p_fighter->offsetx = g_gfxtab_offsets_main[p_fighter->actor_sprite_id][4].x;
+								p_fighter->offsety = g_gfxtab_offsets_main[p_fighter->actor_sprite_id][4].y;
 
 							} else {
-								viewdir_unconsc = p_fighter->nvf_no - g_nvftab_figures_unconscious[p_fighter->sprite_id];
+								viewdir_unconsc = p_fighter->nvf_no - g_nvftab_figures_unconscious[p_fighter->actor_sprite_id];
 
 								if (viewdir_unconsc >= 0) {
 
-									p_fighter->offsetx = g_gfxtab_offsets_unconscious[p_fighter->sprite_id][viewdir_unconsc].x;
-									p_fighter->offsety = g_gfxtab_offsets_unconscious[p_fighter->sprite_id][viewdir_unconsc].y;
+									p_fighter->offsetx = g_gfxtab_offsets_unconscious[p_fighter->actor_sprite_id][viewdir_unconsc].x;
+									p_fighter->offsety = g_gfxtab_offsets_unconscious[p_fighter->actor_sprite_id][viewdir_unconsc].y;
 								}
 							}
 						}
@@ -803,7 +815,7 @@ void draw_fight_screen(const signed int val)
 
 							obj_y -= *(sheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
 
-							i = g_gfxtab_figures_main[p_fighter->sprite_id][*(sheet)];
+							i = g_gfxtab_figures_main[p_fighter->actor_sprite_id][*(sheet)];
 
 							if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
 								nvf.src = (uint8_t*)load_fight_figs(i);

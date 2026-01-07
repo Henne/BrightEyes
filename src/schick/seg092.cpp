@@ -244,7 +244,10 @@ void loot_simple_chest(struct struct_chest *chest)
 		/* write the names of the items in the chest into names[] */
 		while ((item_id = chest->content[item_num]) != 0xff) {
 
-			strcpy(names[item_num++], GUI_name_plural(0, g_itemsname[item_id]));
+			strcpy(names[item_num++], GUI_name_inflect(
+				INFLECT_GENDER_UNSPECIFIED | INFLECT_SINGULAR | INFLECT_1ST_CASE,
+				g_itemsname[item_id]
+			));
 		}
 
 		if (item_num == 0) {
@@ -324,7 +327,7 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
 		/* write the names of the items in the chest into names[] */
 		while ((item_id = chest->content[pos]) != 0xff) {
 
-			strcpy(names[pos++], GUI_name_plural(0, g_itemsname[item_id]));
+			strcpy(names[pos++], GUI_name_inflect(INFLECT_GENDER_UNSPECIFIED | INFLECT_SINGULAR | INFLECT_1ST_CASE, g_itemsname[item_id]));
 		}
 
 		if (pos == 0) {
@@ -375,7 +378,7 @@ signed int hero_has_lockpicks(const struct struct_hero *hero)
 	for (inv_slot = 0; inv_slot < NR_HERO_INVENTORY_SLOTS; inv_slot++) {
 
 		/* ... check for lockpicks ... */
-		if (hero->inventory[inv_slot].item_id == ITEM_DIETRICHE) {
+		if (hero->inventory[inv_slot].item_id == ITEM_ID_DIETRICHE) {
 
 			/* ... which are not broken */
 			if (!hero->inventory[inv_slot].flags.broken) {
@@ -472,7 +475,7 @@ void loot_special_chest(const signed int check_dir)
 
 		if (chest_ptr->food) {
 			/* There are FOOD PACKAGES in the chest */
-			give_new_item_to_group(ITEM_PROVIANTPAKET, 1, chest_ptr->food);
+			give_new_item_to_group(ITEM_ID_PROVIANTPAKET, 1, chest_ptr->food);
 		}
 	}
 }
@@ -591,7 +594,13 @@ void loot_multi_chest(uint8_t *content, char *msg)
 				strcat(names[pos], g_str_single_space);
 			}
 
-			strcat(names[pos++], GUI_name_plural( ((int16_t)(quantity > 1 ? (uint16_t)1 : (uint16_t)0)) ? 4 : 0, g_itemsname[i]));
+			strcat(names[pos++], GUI_name_inflect(
+				(((int16_t)(quantity > 1 ? (uint16_t)1 : (uint16_t)0)) ?
+					INFLECT_GENDER_UNSPECIFIED | INFLECT_PLURAL | INFLECT_1ST_CASE :
+					INFLECT_GENDER_UNSPECIFIED | INFLECT_SINGULAR | INFLECT_1ST_CASE
+				),
+				g_itemsname[i]
+			));
 		}
 
 		if (pos != 0) {
@@ -622,7 +631,7 @@ void loot_multi_chest(uint8_t *content, char *msg)
 
 				if (i != 0) {
 
-					if (content[pos] == ITEM_DUKATEN) {
+					if (content[pos] == ITEM_ID_DUKATEN) {
 
 						add_party_money(i * 100L);
 

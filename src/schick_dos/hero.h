@@ -166,7 +166,7 @@ struct struct_hero {
 	signed char pa_talent_bonus[7]; /* talent-based PA bonus in melee weapon categories as in enum WEAPON_TYPE_* */
 	signed char weapon_at_mod; /* AT bonus the equipped weapon (may be negative) */
 	signed char weapon_pa_mod; /* PA bonus of the equipped weapon (may be negative) */
-	signed char weapon_type; /* type of the equipped weapon */
+	signed char weapon_type; /* type of the equipped weapon according to enum WEAPON_TYPE_... */
 	signed char fight_atpa_mod; /* last used attack mode in fight. +2: aggressive (AT+2, PA-2); 0: normal (AT+0, PA+0); -2: cautious (AT-2, PA+2) */
 	signed char le_max_malus; /* le_max lost from starvation */
 	signed char timer_id;
@@ -211,9 +211,9 @@ struct struct_hero {
 	signed char saftkraft; /* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
 	signed char fireban; /* 1 = 'Feuerbann' spell is active, 0 = inactive */ /* Original-Bug? Effect seems not to be implemented. */
 	signed char invisible; /* 1 = 'Visibili' spell is active, 0 = inactive */
-	signed char sprite_id; /* fight gfx of hero, depending on typus and sex.
-                                * 1: Gaukler, male. 2: Jaeger, male, ..., 10: any Elf, male,
-				* 11: Gaukler, female, 12: Jaeger, female, ..., 20: any Elf, female. */
+	signed char actor_sprite_id; /* fight gfx of hero, depending on typus and sex.
+				      * 1: Gaukler, male. 2: Jaeger, male, ..., 10: any Elf, male,
+				      * 11: Gaukler, female, 12: Jaeger, female, ..., 20: any Elf, female. */
 	signed char alchemy_inn_typeindex; /* the id of the inn where the hero is doing alchemy */
 	signed short escape_position; /* the dungeon square the hero escaped to in a fight. read from fig_escape_position */
 	signed char jail; /* 1 = true, i.e. hero is in prison (from breaking into a house), 0 = false */
