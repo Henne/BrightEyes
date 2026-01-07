@@ -39,9 +39,20 @@ void spell_eigenschaften(void)
 
 	damage_range_template(g_spelltarget_e->dam1, &min, &max);
 
-	/* Remark: For unknown reasons the shown TP-values of enemies are scaled down to 80% */
+#ifndef M302de_ORIGINAL_BUGFIX
+	/* Original-Bug 63:
+	 * When casting the spell "Eigenschaften seid gelesen", the displayed damage range is only 80% of the true numbers.
+	 *
+	 * Background: Apparently, late in the development process, a decision was made to make the fights easier.
+	 * One adjustment is that the heroes now take only 80% of the damage from enemy ranged attacks.
+	 * Probably, the damage from enemy melee attacks was also supposed to be reduced in the same way, but this was apparently forgotten.
+	 * In the damage display of the spell "Eigenschaften seid gelesen", however, the value was still reduced to 80%.
+	 *
+	 * See also Feature mod 1.
+	 */
 	min = min * 8 / 10;
 	max = max * 8 / 10;
+#endif
 
 	sprintf(g_dtp2, get_tx(25), GUI_name_base_form(g_monnames_index[g_spelltarget_e->monster_id]),
           g_spelltarget_e->level,	/* Level */
@@ -56,6 +67,10 @@ void spell_eigenschaften(void)
           g_spelltarget_e->le_orig,	/* LEmax */
           g_spelltarget_e->ae,		/* AE */
           g_spelltarget_e->ae_orig);	/* AEmax */
+	/* Incomplete list of properties not displayed:
+	 * Damage from ranged attacks (throw, missile) and from 2nd melee attack
+	 * MR
+	 */
 }
 
 void spell_exposami(void)
