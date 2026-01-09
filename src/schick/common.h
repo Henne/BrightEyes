@@ -2063,7 +2063,7 @@ enum {
 	ITEM_ID_GE_ELIXIER__BAD                   = 230, /* GE elixir [bad] */
 	ITEM_ID_IN_ELIXIER__BAD                   = 231, /* IN elixir [bad] */
 	ITEM_ID_KK_ELIXIER__BAD                   = 232, /* KK elixir [bad] */
-	ITEM_ID_ROBE__GREEN_2                     = 233, /* robe [green] */
+	ITEM_ID_ROBE__GREEN_2                     = 233, /* robe [green, probably not found in the game] */
 	ITEM_ID_GOLDENER_SCHILD                   = 234, /* golden shield [magic: can be equiped by all hero classes; found in Tempel des Namenlosen ] */
 	ITEM_ID_EMPFEHLUNGSSCHREIBEN__HETMAN      = 235, /* commendation letter [Hetman] */
 	ITEM_ID_WUNDERKUR                         = 236, /* Wunderkur */
