@@ -592,19 +592,19 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
  * \param[in] sheet_id  0 or 1
  * \param   hero        pointer to a hero
  * \param   max_range          99 or 4
- * \param   obj1
- * \param   obj2
+ * \param   caster_object_id
+ * \param   target_object_id
  * \param   v5		-1 or a var
  * \param   v6          0 or 1
  */
 
 /* Borlandified and identical */
-void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero, const signed int max_range, const signed int obj1, const signed int obj2, const signed int v5, const signed int v6)
+void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero, const signed int max_range, const signed int caster_object_id, const signed int target_object_id, const signed int v5, const signed int v6)
 {
-	signed int x_obj1;
-	signed int y_obj1;
-	signed int x_obj2;
-	signed int y_obj2;
+	signed int x_caster;
+	signed int y_caster;
+	signed int x_target;
+	signed int y_target;
 	signed int viewdir;
 	signed int l2;
 	signed int l3;
@@ -616,22 +616,22 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 	/* get a pointer from an array where the Monster-ID serves as index */
 	ani_index_ptr = g_gfx_ani_index[hero->actor_sprite_id];
 
-	FIG_search_obj_on_cb((signed char)obj2, &x_obj2, &y_obj2);
-	FIG_search_obj_on_cb((signed char)obj1, &x_obj1, &y_obj1);
+	FIG_search_obj_on_cb((signed char)target_object_id, &x_target, &y_target);
+	FIG_search_obj_on_cb((signed char)caster_object_id, &x_caster, &y_caster);
 
-	if (x_obj1 == x_obj2) {
-		if (y_obj2 < y_obj1)
+	if (x_caster == x_target) {
+		if (y_target < y_caster)
 			viewdir = FIG_VIEWDIR_DOWN;
 		else
 			viewdir = FIG_VIEWDIR_UP;
 	} else {
-		if (x_obj2 < x_obj1)
+		if (x_target < x_caster)
 			viewdir = FIG_VIEWDIR_LEFT;
 		else
 			viewdir = FIG_VIEWDIR_RIGHT;
 	}
 
-	if ((signed char)obj2 == (signed char)obj1)
+	if ((signed char)target_object_id == (signed char)caster_object_id)
 		viewdir = hero->viewdir;
 
 
@@ -726,12 +726,12 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
  * \param[in] sheet_id  0 or 1
  * \param   p           pointer to an entry of g_enemy_sheets
  * \param   max_range   4 of 99
- * \param   target      the id of the target
- * \param   caster      the id of the caster
+ * \param   target_object_id      the id of the target
+ * \param   caster_object_id      the id of the caster
  * \param   v5          0 or 1
  */
 /* Borlandified and identical */
-void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *enemy, const signed int max_range, const signed int target, const signed int caster, const signed int v5)
+void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *enemy, const signed int max_range, const signed int target_object_id, const signed int caster_object_id, const signed int v5)
 {
 	signed int l1;
 	signed int x_target;
@@ -750,8 +750,8 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	/* get a pointer from an array where the actor_sprite_id of the enemy serves as index */
 	ani_index_ptr = g_gfx_ani_index[enemy->actor_sprite_id];
 
-	FIG_search_obj_on_cb((signed char)caster, &x_caster, &y_caster);
-	FIG_search_obj_on_cb((signed char)target, &x_target, &y_target);
+	FIG_search_obj_on_cb((signed char)caster_object_id, &x_caster, &y_caster);
+	FIG_search_obj_on_cb((signed char)target_object_id, &x_target, &y_target);
 
 	if (x_target == x_caster) {
 		if (y_caster < y_target)
@@ -765,7 +765,7 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 			viewdir = FIG_VIEWDIR_RIGHT;
 	}
 
-	if ((signed char)caster == (signed char)target)
+	if ((signed char)caster_object_id == (signed char)target_object_id)
 		viewdir = enemy->viewdir;
 
 	/* this is true if an enemy attacks a hero */
