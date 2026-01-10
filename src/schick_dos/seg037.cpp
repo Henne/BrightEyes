@@ -78,7 +78,7 @@ static signed int copy_ani_sequence(int8_t *dst, const signed int ani_num, const
 	return len;
 }
 
-void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
+void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_id)
 {
 	signed char dir1;
 	signed char dir2;
@@ -171,7 +171,7 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_no)
 	draw_fight_screen(0);
 	memset(&g_fig_anisheets[1], -1, 243);
 	memset(&g_fig_anisheets[3], -1, 243);
-	FIG_init_list_elem(enemy_no + 10);
+	FIG_init_list_elem(enemy_id + 10);
 }
 
 
@@ -388,7 +388,7 @@ signed int FIG_get_mspell(const signed int mspell_id, const signed int mode)
 	return retval;
 }
 
-signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_no, const signed int attack_foe, signed int x, signed int y)
+signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_id, const signed int attack_foe, signed int x, signed int y)
 {
 	signed int available_spells;
 	signed int mspell_id;
@@ -437,7 +437,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 		if ( (mode = FIG_get_mspell(mspell_id, attack_foe)) > 0) {
 
 			if (mode == 3) {
-				enemy->target_object_id = enemy_no + 10;
+				enemy->target_object_id = enemy_id + 10;
  				enemy->mspell_id = mspell_id;
 				retval = 1;
 				done = 1;
@@ -473,13 +473,13 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 							if (!enemy->flags.tied) {
 
 								if (mode == 1)
-									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 2);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 2);
 								else
-									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 0);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 0);
 
 								if (target_found != -1) {
-									prepare_enemy_ani(enemy, enemy_no);
-									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
+									prepare_enemy_ani(enemy, enemy_id);
+									FIG_search_obj_on_cb(enemy_id + 10, &x, &y);
 
 									if (enemy->bp < 3) {
 										enemy->bp = 0;
@@ -520,13 +520,13 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 							if (!enemy->flags.tied) {
 
 								if (mode == 1)
-									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 7);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 7);
 								else
-									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 6);
+									target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 6);
 
 								if (target_found != -1) {
-									prepare_enemy_ani(enemy, enemy_no);
-									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
+									prepare_enemy_ani(enemy, enemy_id);
+									FIG_search_obj_on_cb(enemy_id + 10, &x, &y);
 
 									if (enemy->bp < 5) {
 										enemy->bp = 0;
@@ -555,7 +555,7 @@ signed int FIG_select_mspell(struct enemy_sheet* enemy, const signed int enemy_n
 }
 
 
-signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int enemy_no, const signed int attack_foe, signed int x, signed int y)
+signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int enemy_id, const signed int attack_foe, signed int x, signed int y)
 {
 
 	signed int cnt;
@@ -599,13 +599,13 @@ signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int en
 					if (!enemy->flags.tied) {
 
 						if (attack_foe == 0)
-							target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 6);
+							target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 6);
 						else
-							target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 7);
+							target_found = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 7);
 
 						if (target_found != -1) {
-							prepare_enemy_ani(enemy, enemy_no);
-							FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
+							prepare_enemy_ani(enemy, enemy_id);
+							FIG_search_obj_on_cb(enemy_id + 10, &x, &y);
 
 							if (enemy->bp < 3) {
 								enemy->bp = 0;
@@ -624,7 +624,7 @@ signed int FIG_enemy_range_attack(struct enemy_sheet *enemy, const signed int en
 }
 
 
-void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed int x, signed int y)
+void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_id, signed int x, signed int y)
 {
 	signed int target_reachable;
 	signed int attack_foe;
@@ -682,7 +682,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			g_fig_cb_marker_id = -1;
 		}
 
-		FIG_init_list_elem(enemy_no + 10);
+		FIG_init_list_elem(enemy_id + 10);
 
 		draw_fight_screen_pal(0);
 
@@ -699,7 +699,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 		if (random_schick(100) < 5) {
 #if !defined(__BORLANDC__)
 			if (enemy->flags.illusion) {
-				D1_INFO("Feind %d verliert seinen Illusionszauber\n", enemy_no);
+				D1_INFO("Feind %d verliert seinen Illusionszauber\n", enemy_id);
 			}
 #endif
 			/* Original-Bug? Why unset 'tied' and not 'illusion'?? */
@@ -715,7 +715,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			}
 
 			/* enemy can cast spells and has AE >= 5 left */
-			if ((enemy->spellbook_id != -1) && (enemy->ae >= 5) && FIG_select_mspell(enemy, enemy_no, attack_foe, x, y))
+			if ((enemy->spellbook_id != -1) && (enemy->ae >= 5) && FIG_select_mspell(enemy, enemy_id, attack_foe, x, y))
 			{
 				/* REMARK: enemy can still cast a spell with less than 5 BP. */
 				enemy->action_id = FIG_ACTION_SPELL;
@@ -730,7 +730,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			}
 
 			/* enemy has range weapons */
-			if ( ((enemy->shots > 0) || (enemy->throws > 0)) && FIG_enemy_range_attack(enemy, enemy_no, attack_foe, x, y))
+			if ( ((enemy->shots > 0) || (enemy->throws > 0)) && FIG_enemy_range_attack(enemy, enemy_id, attack_foe, x, y))
 			{
 				/* REMARK: enemy can still attack with less than 3 BP. */
 				enemy->action_id = FIG_ACTION_RANGE_ATTACK;
@@ -758,7 +758,7 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 
 						target = get_cb_val(x - diff.offset[i].x, y - diff.offset[i].y);
 
-						if (target && (enemy_no + 30 != target)) {
+						if (target && (enemy_id + 30 != target)) {
 
 							if ((target < 0) || (target >= 50) || (target >= 30) ||
 								((target > 0) && (target < 10) && !get_hero(target - 1)->flags.dead) ||
@@ -792,21 +792,21 @@ void FIG_enemy_turn(struct enemy_sheet *enemy, const signed int enemy_no, signed
 			if (!enemy->flags.tied) {
 
 				if (enemy->flags.scared) {
-					target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 4);
+					target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 4);
 					enemy->bp = 0;
 				} else {
 					if (enemy->flags.renegade)
-						target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 2);
+						target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 2);
 					else
-						target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_no, x, y, 0);
+						target_reachable = FIG_find_path_to_target((uint8_t*)enemy, enemy_id, x, y, 0);
 				}
 
 				if (target_reachable != -1) {
 
 					x_bak = x;
 					y_bak = y;
-					prepare_enemy_ani(enemy, enemy_no);
-					FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
+					prepare_enemy_ani(enemy, enemy_id);
+					FIG_search_obj_on_cb(enemy_id + 10, &x, &y);
 
 					if ((x_bak == x) && (y_bak == y)) {
 						enemy->bp = 0;
