@@ -532,346 +532,342 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			draw_fight_screen_pal(0);
 			clear_anisheets();
 
-		} else {
+		} else if (p_enemy->action_id == FIG_ACTION_RANGE_ATTACK) {
 
-			if (p_enemy->action_id == FIG_ACTION_RANGE_ATTACK) {
+			if (p_enemy->shots > 0) {
+				weapon_gfx_id_ranged = WEAPON_GFX_ID_RANGED_MISSILE;
+				p_enemy->shots--;
+			} else {
+				weapon_gfx_id_ranged = WEAPON_GFX_ID_RANGED_THROW;
+				p_enemy->throws--;
+			}
 
-				if (p_enemy->shots > 0) {
-					weapon_gfx_id_ranged = WEAPON_GFX_ID_RANGED_MISSILE;
-					p_enemy->shots--;
-				} else {
-					weapon_gfx_id_ranged = WEAPON_GFX_ID_RANGED_THROW;
-					p_enemy->throws--;
+			if (target_is_hero != 0) {
+
+				/* attack hero */
+
+				damage = dice_template(weapon_gfx_id_ranged == WEAPON_GFX_ID_RANGED_MISSILE ? p_enemy->shot_dam : p_enemy->throw_dam);
+
+				/* Feature mod 1: avoid the a posteriori weakening of enemies. */
+#ifndef M302de_FEATURE_MOD
+				damage = (damage * 8) / 10;
+#endif
+
+				/* RS */
+				damage -= hero->rs_bonus;
+
+				if (damage > 0) {
+
+					sub_hero_le(hero, damage);
+
+					FIG_add_msg(8, damage);
+
+					if (hero->flags.dead) {
+						g_defender_dead = 1;
+					}
 				}
+
+			} else {
+				/* target is an enemy */
+
+				damage = dice_template(weapon_gfx_id_ranged == 3 ? p_enemy->shot_dam : p_enemy->throw_dam) - target_enemy->rs;
+
+				if (damage > 0) {
+
+					FIG_damage_enemy(target_enemy, damage, 1);
+
+					FIG_add_msg(11, damage);
+
+					if (target_enemy->flags.dead) {
+						g_defender_dead = 1;
+					}
+				}
+			}
+
+			clear_anisheets();
+
+			projectile_gfx_id = weapon_gfx_id_ranged;
+			ranged_attack_nonadjacent_flag = 0;
+
+			FIG_call_draw_pic();
+
+			FANI_prepare_fight_enemy_ani(
+				0,
+				p_enemy,
+				FIG_ACTION_RANGE_ATTACK,
+				enemy_id + 10,
+				p_enemy->target_object_id,
+				0
+			);
+
+			ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
+				7,
+				projectile_gfx_id,
+				enemy_id + 10,
+				p_enemy->target_object_id,
+				p_enemy->viewdir
+			);
+
+			FIG_set_sheet(p_enemy->fighter_id, 0);
+
+			draw_fight_screen_pal(0);
+
+			if (ranged_attack_nonadjacent_flag != 0) {
+
+				FIG_set_sheet(g_fig_projectile_id, 7);
+
+				draw_fight_screen((ranged_attack_nonadjacent_flag == 0) && (g_defender_dead == 0) ? 0 : 1);
+
+				FIG_make_invisible(g_fig_projectile_id);
+			}
+
+			g_fig_continue_print = 1;
+
+			if (g_defender_dead != 0) {
 
 				if (target_is_hero != 0) {
 
-					/* attack hero */
-
-					damage = dice_template(weapon_gfx_id_ranged == WEAPON_GFX_ID_RANGED_MISSILE ? p_enemy->shot_dam : p_enemy->throw_dam);
-
-					/* Feature mod 1: avoid the a posteriori weakening of enemies. */
-#ifndef M302de_FEATURE_MOD
-					damage = (damage * 8) / 10;
-#endif
-
-					/* RS */
-					damage -= hero->rs_bonus;
-
-					if (damage > 0) {
-
-						sub_hero_le(hero, damage);
-
-						FIG_add_msg(8, damage);
-
-						if (hero->flags.dead) {
-							g_defender_dead = 1;
-						}
-					}
-
+					FANI_prepare_fight_hero_ani(
+						1,
+						hero,
+						-1,
+						FIG_ACTION_NONE,
+						p_enemy->target_object_id,
+						enemy_id + 10,
+						1
+					);
 				} else {
-					/* target is an enemy */
 
-					damage = dice_template(weapon_gfx_id_ranged == 3 ? p_enemy->shot_dam : p_enemy->throw_dam) - target_enemy->rs;
+					FANI_prepare_fight_enemy_ani(
+						1,
+						target_enemy,
+						FIG_ACTION_NONE,
+						p_enemy->target_object_id,
+						enemy_id + 10,
+						1
+					);
+				}
+			}
 
-					if (damage > 0) {
+			FANI_remove_projectile();
+			draw_fight_screen(0);
+			clear_anisheets();
 
-						FIG_damage_enemy(target_enemy, damage, 1);
+		} else if (p_enemy->action_id == FIG_ACTION_SPELL) {
 
-						FIG_add_msg(11, damage);
+			/* spellcast */
 
-						if (target_enemy->flags.dead) {
-							g_defender_dead = 1;
-						}
-					}
+			spell_impact_gfx_id = g_mon_spell_descriptions[p_enemy->mspell_id].spell_impact_gfx_id;
+
+			*g_dtp2 = '\0';
+
+			spell_test_result = MON_cast_spell(p_enemy, 0);
+
+			clear_anisheets();
+
+			if (p_enemy->target_object_id) {
+
+				projectile_gfx_id = ranged_attack_nonadjacent_flag = PROJECTILE_GFX_ID_SPELLCAST_ORB; // == 0
+
+				if (random_schick(100) > 50) {
+					projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_BOLT;
 				}
 
-				clear_anisheets();
-
-				projectile_gfx_id = weapon_gfx_id_ranged;
-				ranged_attack_nonadjacent_flag = 0;
+				if (p_enemy->target_object_id < 10) {
+					projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_STAR;
+				}
 
 				FIG_call_draw_pic();
 
-				FANI_prepare_fight_enemy_ani(
-					0,
-					p_enemy,
-					FIG_ACTION_RANGE_ATTACK,
-					enemy_id + 10,
-					p_enemy->target_object_id,
-					0
-				);
+				if (spell_test_result != -1) {
 
-				ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
-					7,
-					projectile_gfx_id,
-					enemy_id + 10,
-					p_enemy->target_object_id,
-					p_enemy->viewdir
-				);
-
-				FIG_set_sheet(p_enemy->fighter_id, 0);
-
-				draw_fight_screen_pal(0);
-
-				if (ranged_attack_nonadjacent_flag != 0) {
-
-					FIG_set_sheet(g_fig_projectile_id, 7);
-
-					draw_fight_screen((ranged_attack_nonadjacent_flag == 0) && (g_defender_dead == 0) ? 0 : 1);
-
-					FIG_make_invisible(g_fig_projectile_id);
+					FANI_prepare_spell_enemy(
+						0,
+						p_enemy,
+						4,
+						enemy_id + 10,
+						p_enemy->target_object_id,
+						0
+					);
 				}
 
-				g_fig_continue_print = 1;
+				if (spell_test_result > 0) {
 
-				if (g_defender_dead != 0) {
+					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 
-					if (target_is_hero != 0) {
+						FANI_prepare_enemy_spell_ani(6, p_enemy, spell_impact_gfx_id);
 
-						FANI_prepare_fight_hero_ani(
-							1,
-							hero,
-							-1,
-							FIG_ACTION_NONE,
-							p_enemy->target_object_id,
-							enemy_id + 10,
-							1
-						);
 					} else {
+						// assert(spell_impact_gfx_id == SPELL_IMPACT_GFX_ID_GLOW)
 
-						FANI_prepare_fight_enemy_ani(
-							1,
-							target_enemy,
-							FIG_ACTION_NONE,
-							p_enemy->target_object_id,
-							enemy_id + 10,
-							1
-						);
-					}
-				}
+						if (p_enemy->target_object_id > 0) {
 
-				FANI_remove_projectile();
-				draw_fight_screen(0);
-				clear_anisheets();
+							if (!target_is_hero) {
 
-			} else if (p_enemy->action_id == FIG_ACTION_SPELL) {
+								FANI_prepare_spell_enemy(
+									1,
+									target_enemy,
+									99,
+									p_enemy->target_object_id,
+									enemy_id + 10,
+									1
+								);
+							} else {
 
-				/* spellcast */
+								if (check_hero(hero) || (g_defender_dead != 0)) {
 
-				spell_impact_gfx_id = g_mon_spell_descriptions[p_enemy->mspell_id].spell_impact_gfx_id;
-
-				*g_dtp2 = '\0';
-
-				spell_test_result = MON_cast_spell(p_enemy, 0);
-
-				clear_anisheets();
-
-				if (p_enemy->target_object_id) {
-
-					projectile_gfx_id = ranged_attack_nonadjacent_flag = PROJECTILE_GFX_ID_SPELLCAST_ORB; // == 0
-
-					if (random_schick(100) > 50) {
-						projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_BOLT;
-					}
-
-					if (p_enemy->target_object_id < 10) {
-						projectile_gfx_id = PROJECTILE_GFX_ID_SPELLCAST_STAR;
-					}
-
-					FIG_call_draw_pic();
-
-					if (spell_test_result != -1) {
-
-						FANI_prepare_spell_enemy(
-							0,
-							p_enemy,
-							4,
-							enemy_id + 10,
-							p_enemy->target_object_id,
-							0
-						);
-					}
-
-					if (spell_test_result > 0) {
-
-						if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
-
-							FANI_prepare_enemy_spell_ani(6, p_enemy, spell_impact_gfx_id);
-
-						} else {
-							// assert(spell_impact_gfx_id == SPELL_IMPACT_GFX_ID_GLOW)
-
-							if (p_enemy->target_object_id > 0) {
-
-								if (!target_is_hero) {
-
-									FANI_prepare_spell_enemy(
+									FANI_prepare_spell_hero(
 										1,
-										target_enemy,
+										hero,
 										99,
 										p_enemy->target_object_id,
-										enemy_id + 10,
+										0,
+										-1,
 										1
 									);
-								} else {
-
-									if (check_hero(hero) || (g_defender_dead != 0)) {
-
-										FANI_prepare_spell_hero(
-											1,
-											hero,
-											99,
-											p_enemy->target_object_id,
-											0,
-											-1,
-											1
-										);
-									}
 								}
 							}
 						}
-
-						if (
-							(p_enemy->actor_sprite_id != ACTOR_SPRITE_ID_HEXE__FEMALE)
-							&& (p_enemy->actor_sprite_id != ACTOR_SPRITE_ID_HEXE__MALE)
-							&& (p_enemy->target_object_id > 0)
-						) {
-
-							ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
-								7,
-								projectile_gfx_id,
-								enemy_id + 10,
-								p_enemy->target_object_id,
-								p_enemy->viewdir
-							);
-						}
-
-					}
-					if (spell_test_result != -1) {
-
-						FIG_set_sheet(p_enemy->fighter_id, 0);
-
-						draw_fight_screen_pal(1);
 					}
 
-					if (spell_test_result > 0) {
+					if (
+						(p_enemy->actor_sprite_id != ACTOR_SPRITE_ID_HEXE__FEMALE)
+						&& (p_enemy->actor_sprite_id != ACTOR_SPRITE_ID_HEXE__MALE)
+						&& (p_enemy->target_object_id > 0)
+					) {
 
-						if (ranged_attack_nonadjacent_flag != 0) {
+						ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
+							7,
+							projectile_gfx_id,
+							enemy_id + 10,
+							p_enemy->target_object_id,
+							p_enemy->viewdir
+						);
+					}
 
-							FIG_set_sheet(g_fig_projectile_id, 7);
+				}
+				if (spell_test_result != -1) {
 
-							draw_fight_screen(1);
+					FIG_set_sheet(p_enemy->fighter_id, 0);
 
-							FIG_make_invisible(g_fig_projectile_id);
+					draw_fight_screen_pal(1);
+				}
+
+				if (spell_test_result > 0) {
+
+					if (ranged_attack_nonadjacent_flag != 0) {
+
+						FIG_set_sheet(g_fig_projectile_id, 7);
+
+						draw_fight_screen(1);
+
+						FIG_make_invisible(g_fig_projectile_id);
+					}
+
+					if (spell_impact_gfx_id > 0) {
+						FIG_set_sheet(g_fig_spellgfx_id, 6);
+					}
+
+					if (!target_is_hero) {
+
+						FIG_set_sheet(target_enemy->fighter_id, 1);
+
+
+						if (is_in_byte_array(target_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
+
+							fighter = FIG_get_fighter(target_enemy->fighter_id);
+
+							FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], 3);
+						}
+					} else {
+
+						if (p_enemy->target_object_id > 0) {
+
+							FIG_set_sheet(hero->fighter_id, 1);
+						}
+					}
+
+					g_fig_continue_print = 1;
+
+					draw_fight_screen(1);
+
+					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
+						FIG_make_invisible(g_fig_projectile_id);
+					}
+
+					if (g_mspell_awake_flag) {
+
+						g_mspell_awake_flag = 0;
+
+						FIG_remove_from_list(target_enemy->fighter_id, 1);
+
+						g_fig_list_elem.figure = g_gfxtab_figures_main[target_enemy->actor_sprite_id][0];
+						g_fig_list_elem.nvf_no = target_enemy->viewdir;
+						g_fig_list_elem.offsetx = g_gfxtab_offsets_main[target_enemy->actor_sprite_id][target_enemy->viewdir].x;
+						g_fig_list_elem.offsety = g_gfxtab_offsets_main[target_enemy->actor_sprite_id][target_enemy->viewdir].y;
+
+						if (is_in_byte_array(target_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
+
+							g_fig_list_elem.x1 = g_gfxtab_double_size_x1[target_enemy->viewdir];
+							g_fig_list_elem.x2 = g_gfxtab_double_size_x2[target_enemy->viewdir];
+						} else {
+							g_fig_list_elem.x1 = 0;
+							g_fig_list_elem.x2 = 31;
+							g_fig_list_elem.double_size = -1;
 						}
 
-						if (spell_impact_gfx_id > 0) {
-							FIG_set_sheet(g_fig_spellgfx_id, 6);
-						}
+						g_fig_list_elem.y1 = 0;
+						g_fig_list_elem.y2 = 39;
+						g_fig_list_elem.height = 40;
+						g_fig_list_elem.width = 32;
+						g_fig_list_elem.is_enemy = 1;
+						g_fig_list_elem.reload = -1;
+						g_fig_list_elem.wsheet = -1;
+						g_fig_list_elem.sheet = -1;
 
-						if (!target_is_hero) {
+						FIG_add_to_list(target_enemy->fighter_id);
+					}
 
-							FIG_set_sheet(target_enemy->fighter_id, 1);
+					if (g_spell_illusionen) {
 
+						if (p_enemy->target_object_id >= 10) {
+
+							FIG_make_invisible(target_enemy->fighter_id);
 
 							if (is_in_byte_array(target_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 								fighter = FIG_get_fighter(target_enemy->fighter_id);
 
-								FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], 3);
+								FIG_make_invisible(g_fig_double_size_fighter_id_table[fighter->double_size]);
 							}
 						} else {
 
 							if (p_enemy->target_object_id > 0) {
 
-								FIG_set_sheet(hero->fighter_id, 1);
+								FIG_make_invisible(hero->fighter_id);
 							}
 						}
-
-						g_fig_continue_print = 1;
-
-						draw_fight_screen(1);
-
-						if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
-							FIG_make_invisible(g_fig_projectile_id);
-						}
-
-						if (g_mspell_awake_flag) {
-
-							g_mspell_awake_flag = 0;
-
-							FIG_remove_from_list(target_enemy->fighter_id, 1);
-
-							g_fig_list_elem.figure = g_gfxtab_figures_main[target_enemy->actor_sprite_id][0];
-							g_fig_list_elem.nvf_no = target_enemy->viewdir;
-							g_fig_list_elem.offsetx = g_gfxtab_offsets_main[target_enemy->actor_sprite_id][target_enemy->viewdir].x;
-							g_fig_list_elem.offsety = g_gfxtab_offsets_main[target_enemy->actor_sprite_id][target_enemy->viewdir].y;
-
-							if (is_in_byte_array(target_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
-
-								g_fig_list_elem.x1 = g_gfxtab_double_size_x1[target_enemy->viewdir];
-								g_fig_list_elem.x2 = g_gfxtab_double_size_x2[target_enemy->viewdir];
-							} else {
-								g_fig_list_elem.x1 = 0;
-								g_fig_list_elem.x2 = 31;
-								g_fig_list_elem.double_size = -1;
-							}
-
-							g_fig_list_elem.y1 = 0;
-							g_fig_list_elem.y2 = 39;
-							g_fig_list_elem.height = 40;
-							g_fig_list_elem.width = 32;
-							g_fig_list_elem.is_enemy = 1;
-							g_fig_list_elem.reload = -1;
-							g_fig_list_elem.wsheet = -1;
-							g_fig_list_elem.sheet = -1;
-
-							FIG_add_to_list(target_enemy->fighter_id);
-						}
-
-						if (g_spell_illusionen) {
-
-							if (p_enemy->target_object_id >= 10) {
-
-								FIG_make_invisible(target_enemy->fighter_id);
-
-								if (is_in_byte_array(target_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
-
-									fighter = FIG_get_fighter(target_enemy->fighter_id);
-
-									FIG_make_invisible(g_fig_double_size_fighter_id_table[fighter->double_size]);
-								}
-							} else {
-
-								if (p_enemy->target_object_id > 0) {
-
-									FIG_make_invisible(hero->fighter_id);
-								}
-							}
-						}
-
-						if (ranged_attack_nonadjacent_flag != 0) {
-							FANI_remove_projectile();
-						}
-
-						if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
-							FANI_remove_spell();
-						}
-
-						FIG_draw_figures();
 					}
 
+					if (ranged_attack_nonadjacent_flag != 0) {
+						FANI_remove_projectile();
+					}
 
-					FIG_output(g_dtp2);
+					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
+						FANI_remove_spell();
+					}
 
-					clear_anisheets();
-				} else {
-					FIG_output(g_dtp2);
+					FIG_draw_figures();
 				}
+
+
+				FIG_output(g_dtp2);
+
+				clear_anisheets();
+			} else {
+				FIG_output(g_dtp2);
 			}
 		}
-
 	}
 
 	call_mouse();

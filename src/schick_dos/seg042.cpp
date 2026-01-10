@@ -193,35 +193,33 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					}
 				}
 			}
-		} else {
-			if (hero->target_object_id > 0) {
+		} else if (hero->target_object_id > 0) {
 
-				/* hero attacks another hero */
-				p_target_hero = get_hero(hero->target_object_id - 1);
+			/* hero attacks another hero */
+			p_target_hero = get_hero(hero->target_object_id - 1);
 
-				g_fig_target_grammar.actor_class_type = ACTOR_CLASS_TYPE_HERO;
-				g_fig_target_grammar.actor_class_id = hero->target_object_id - 1;
+			g_fig_target_grammar.actor_class_type = ACTOR_CLASS_TYPE_HERO;
+			g_fig_target_grammar.actor_class_id = hero->target_object_id - 1;
 
-				if (p_target_hero->flags.asleep) {
+			if (p_target_hero->flags.asleep) {
 
-					/* wake up target hero */
-					p_target_hero->flags.asleep = 0;
+				/* wake up target hero */
+				p_target_hero->flags.asleep = 0;
 
-					fighter = FIG_get_fighter(p_target_hero->fighter_id);
+				fighter = FIG_get_fighter(p_target_hero->fighter_id);
 
-					fighter->nvf_no = p_target_hero->viewdir;
-					fighter->reload = -1;
-					fighter->offsetx = 0;
-					fighter->offsety = 0;
-				}
-
-				if (p_target_hero->flags.dead || !p_target_hero->typus) {
-					call_mouse();
-					return;
-				}
-
-				target_is_hero = 1;
+				fighter->nvf_no = p_target_hero->viewdir;
+				fighter->reload = -1;
+				fighter->offsetx = 0;
+				fighter->offsety = 0;
 			}
+
+			if (p_target_hero->flags.dead || !p_target_hero->typus) {
+				call_mouse();
+				return;
+			}
+
+			target_is_hero = 1;
 		}
 
 		if (hero->action_id == FIG_ACTION_MELEE_ATTACK) {
@@ -278,7 +276,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				}
 
 				/* Probably, the intention was
-				 * if (target_hero->rs_be & 1) {
+				 * if (target_hero->rs_be & 1) ...
 				 */
 				if (hero->rs_be & 1) {
 					/* if rs_be is odd, subtract another point. Changes the rounding behavior of 'target_hero->rs_be / 2' above to "round up". */
