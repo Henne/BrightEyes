@@ -874,30 +874,37 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 }
 
 /**
- * \brief   *
+ * \brief   in fight mode: hero uses item in left hand
  *
- * \param   hero        pointer to the hero who uses the item
- * \param   target_enemy pointer to the enemy
- * \param   target_hero pointer to the hero
- * \param   flag        bool value, used when a hero attacks a hero
- * \param   hero_pos    position of the hero
+ * \param   hero              pointer to the hero who uses the item
+ * \param   target_enemy      pointer to the target enemy
+ * \param   target_hero       pointer to the target hero
+ * \param   target_is_hero    bool value, used when a hero attacks a hero
+ *                            (redundant, hero->target_object_id could be used)
+ * \param   hero_pos          position of the hero
  */
-void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, struct struct_hero *target_hero, const signed int flag, const signed int hero_pos)
+void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, struct struct_hero *target_hero, const signed int target_is_hero, const signed int hero_pos)
 {
+	enum {
+		USE_CASE_NOT_USABLE = 0,
+		USE_CASE_HERB_OR_POTION = 1,
+		USE_CASE_OTHERS = 2
+	};
+
 	signed int damage;
 
 	signed int l3;
-	signed int hylailic = 0;
-	signed int usecase;
+	signed int item_is_hylailer_feuer = 0; // variable redundant, item_id could be used
+	signed int use_case;
 	signed int item_id = hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id;
 	struct item_stats *p_item = &g_itemsdat[item_id];
 
 	if (p_item->flags.herb_potion) {
-		usecase = 1;
+		use_case = USE_CASE_HERB_OR_POTION;
 	} else if (!p_item->flags.usable || (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].quantity == 0)) {
-		usecase = 0;
+		use_case = USE_CASE_NOT_USABLE;
 	} else {
-		usecase = 2;
+		use_case = USE_CASE_OTHERS;
 	}
 
 	*g_dtp2 = '\0';
@@ -909,6 +916,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 		damage = dice_roll(1, 6, 4);
 
 		if (hero->target_object_id >= 10) {
+			/* .. used on an enemy */
 
 			strcpy(g_dtp2, get_tx(37));
 
@@ -919,19 +927,17 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 			if (target_enemy->flags.dead) {
 				g_fig_target_dead = 1;
 			}
-		} else {
+		} else if (target_is_hero != 0) { // check is redundant
+			/* .. used on another hero */
 
-			if (flag != 0) {
+			strcpy(g_dtp2, get_tx(37));
 
-				strcpy(g_dtp2, get_tx(37));
+			sub_hero_le(target_hero, damage);
 
-				sub_hero_le(target_hero, damage);
+			FIG_add_msg(8, damage);
 
-				FIG_add_msg(8, damage);
-
-				if (target_hero->flags.dead) {
-					g_fig_target_dead = 1;
-				}
+			if (target_hero->flags.dead) {
+				g_fig_target_dead = 1;
 			}
 		}
 
@@ -943,7 +949,6 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 		/* HYLAILIC FIRE */
 
 		if (hero->target_object_id >= 10) {
-
 			/* .. used on an enemy */
 
 			FIG_damage_enemy(target_enemy, 20, 0);
@@ -953,24 +958,22 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 			if (target_enemy->flags.dead) {
 				g_fig_target_dead = 1;
 			}
-		} else {
+		} else if (target_is_hero != 0) { // check is redundant
 			/* .. used on another hero */
-			if (flag != 0) {
 
-				sub_hero_le(target_hero, 20);
+			sub_hero_le(target_hero, 20);
 
-				FIG_add_msg(8, 20);
+			FIG_add_msg(8, 20);
 
-				if (target_hero->flags.dead) {
-					g_fig_target_dead = 1;
-				}
+			if (target_hero->flags.dead) {
+				g_fig_target_dead = 1;
 			}
 		}
 
 		/* drop the item in the left hand */
 		drop_item(hero, HERO_INVENTORY_SLOT_LEFT_HAND, 1);
 
-		hylailic = 1;
+		item_is_hylailer_feuer = 1;
 	} else {
 		/* use item in the regular way */
 
@@ -979,7 +982,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 		*g_dtp2 = '\0';
 	}
 
-	if (usecase > 0) {
+	if (use_case > USE_CASE_NOT_USABLE) {
 
 		clear_anisheets();
 
@@ -987,7 +990,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 			0,
 			hero,
 			-1,
-			usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4,
+			use_case == USE_CASE_HERB_OR_POTION ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4,
 			hero_pos + 1,
 			hero->target_object_id,
 			0
@@ -995,7 +998,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 		l3 = 0;
 
-		if (hylailic != 0) {
+		if (item_is_hylailer_feuer != 0) {
 			FANI_prepare_hero_spell_ani(6, hero, SPELL_IMPACT_GFX_ID_FLAME);
 		} else {
 			g_fig_continue_print = 1;
@@ -1003,7 +1006,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 		draw_fight_screen_pal(0);
 
-		if (hylailic != 0) {
+		if (item_is_hylailer_feuer != 0) {
 
 			FIG_set_sheet(g_fig_spellgfx_id, 6);
 
@@ -1020,7 +1023,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 		if (g_fig_target_dead != 0) {
 
-			if (flag != 0) {
+			if (target_is_hero != 0) {
 				FANI_prepare_fight_hero_ani(
 					1,
 					target_hero,
