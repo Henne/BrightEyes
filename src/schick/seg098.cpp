@@ -132,7 +132,7 @@ void FIG_do_spell_damage(const signed int le)
 
 			/* set a variable if the hero died */
 			if (get_spelltarget()->flags.dead) {
-				g_defender_dead = 1;
+				g_fig_target_dead = 1;
 			}
 		}
 
@@ -150,7 +150,7 @@ void FIG_do_spell_damage(const signed int le)
 
 		/* set a variable if the enemy died */
 		if (g_spelltarget_e->flags.dead) {
-			g_defender_dead = 1;
+			g_fig_target_dead = 1;
 		}
 	}
 }

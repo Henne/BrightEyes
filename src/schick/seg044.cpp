@@ -318,8 +318,8 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	}
 
 	if (
-		(g_attacker_dead && !a7)
-		|| (g_defender_dead && (a7 == 1))
+		(g_fig_attacker_dead && !a7)
+		|| (g_fig_target_dead && (a7 == 1))
 	) {
 		*sheet_ptr1++ = -4;
 		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
@@ -330,8 +330,8 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 
 	if (
 		check_hero(hero)
-		|| (g_attacker_dead && !a7)
-		|| (g_defender_dead && (a7 == 1))
+		|| (g_fig_attacker_dead && !a7)
+		|| (g_fig_target_dead && (a7 == 1))
 	) {
 		FIG_set_sheet(hero->fighter_id, (signed char)sheet_id);
 		*sheet_ptr1 = -1;
@@ -548,8 +548,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	}
 
 	if (
-		((g_attacker_dead != 0) && (a7 == 0))
-		|| ((g_defender_dead != 0) && (a7 == 1))
+		((g_fig_attacker_dead != 0) && (a7 == 0))
+		|| ((g_fig_target_dead != 0) && (a7 == 1))
 	) {
 		*sheet_ptr1++ = -4;
 		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
@@ -690,16 +690,16 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 	if (
 		(max_range == 4)
 		|| check_hero(hero)
-		|| ((g_attacker_dead != 0) && (v6 == 0))
-		|| ((g_defender_dead != 0) && (v6 == 1))
+		|| ((g_fig_attacker_dead != 0) && (v6 == 0))
+		|| ((g_fig_target_dead != 0) && (v6 == 1))
 	) {
 
 		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l_di], 2);
 	}
 
 	if (
-		((g_attacker_dead != 0) && (v6 == 0))
-		|| ((g_defender_dead != 0) && (v6 == 1))
+		((g_fig_attacker_dead != 0) && (v6 == 0))
+		|| ((g_fig_target_dead != 0) && (v6 == 1))
 	) {
 
 		*sheet_ptr = -4;
@@ -824,8 +824,8 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l1], 1);
 
 	if (
-		(g_attacker_dead && !v5)
-		|| (g_defender_dead && (v5 == 1))
+		(g_fig_attacker_dead && !v5)
+		|| (g_fig_target_dead && (v5 == 1))
 	) {
 
 		*sheet_ptr = -4;

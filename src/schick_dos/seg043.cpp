@@ -75,7 +75,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 		FIG_clear_msgs();
 
-		attacker_hits_target = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 = g_attacker_dead = g_defender_dead = 0;
+		attacker_hits_target = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 = g_fig_attacker_dead = g_fig_target_dead = 0;
 
 		g_fig_actor_grammar.actor_class_type = ACTOR_CLASS_TYPE_MONSTER;
 		g_fig_actor_grammar.actor_class_id = p_enemy->monster_id;
@@ -268,7 +268,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 								g_fig_actor_grammar = grammar_tmp;
 
 								if (p_enemy->flags.dead) {
-									g_attacker_dead = 1;
+									g_fig_attacker_dead = 1;
 								}
 							}
 						}
@@ -287,7 +287,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 						g_fig_target_grammar = g_fig_actor_grammar;
 
 						if (p_enemy->flags.dead) {
-							g_attacker_dead = 1;
+							g_fig_attacker_dead = 1;
 						}
 					} else if (critical_failure_roll_2d6 == 12) {
 #if !defined(__BORLANDC__)
@@ -349,7 +349,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 											FIG_add_msg(8, damage);
 
 											if (hero->flags.dead) {
-												g_defender_dead = 1;
+												g_fig_target_dead = 1;
 											}
 										}
 									} else {
@@ -362,7 +362,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 											FIG_add_msg(11, damage);
 
 											if (target_enemy->flags.dead) {
-												g_defender_dead = 1;
+												g_fig_target_dead = 1;
 											}
 										}
 									}
@@ -383,7 +383,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 									FIG_add_msg(8, damage);
 
 									if (hero->flags.dead) {
-										g_defender_dead = 1;
+										g_fig_target_dead = 1;
 									}
 
 								} else {
@@ -393,7 +393,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 									FIG_add_msg(11, damage);
 
 									if (target_enemy->flags.dead) {
-										g_defender_dead = 1;
+										g_fig_target_dead = 1;
 									}
 								}
 							}
@@ -461,7 +461,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 								FIG_add_msg(8, damage);
 
 								if (hero->flags.dead) {
-									g_defender_dead = 1;
+									g_fig_target_dead = 1;
 								}
 							}
 						} else {
@@ -475,7 +475,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 								FIG_add_msg(11, damage);
 
 								if (target_enemy->flags.dead) {
-									g_defender_dead = 1;
+									g_fig_target_dead = 1;
 								}
 							}
 						}
@@ -487,7 +487,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 			if (target_is_hero != 0) {
 
-				if (check_hero(hero) || (g_defender_dead != 0)) {
+				if (check_hero(hero) || (g_fig_target_dead != 0)) {
 
 					FANI_prepare_fight_hero_ani(
 						0,
@@ -509,7 +509,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					enemy_id + 10,
 					1
 				);
-			} else if (g_defender_dead != 0) {
+			} else if (g_fig_target_dead != 0) {
 				FANI_prepare_fight_enemy_ani(
 					0,
 					target_enemy,
@@ -563,7 +563,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					FIG_add_msg(8, damage);
 
 					if (hero->flags.dead) {
-						g_defender_dead = 1;
+						g_fig_target_dead = 1;
 					}
 				}
 
@@ -579,7 +579,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					FIG_add_msg(11, damage);
 
 					if (target_enemy->flags.dead) {
-						g_defender_dead = 1;
+						g_fig_target_dead = 1;
 					}
 				}
 			}
@@ -616,14 +616,14 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				FIG_set_sheet(g_fig_projectile_id, 7);
 
-				draw_fight_screen((ranged_attack_nonadjacent_flag == 0) && (g_defender_dead == 0) ? 0 : 1);
+				draw_fight_screen((ranged_attack_nonadjacent_flag == 0) && (g_fig_target_dead == 0) ? 0 : 1);
 
 				FIG_make_invisible(g_fig_projectile_id);
 			}
 
 			g_fig_continue_print = 1;
 
-			if (g_defender_dead != 0) {
+			if (g_fig_target_dead != 0) {
 
 				if (target_is_hero != 0) {
 
@@ -714,7 +714,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 								);
 							} else {
 
-								if (check_hero(hero) || (g_defender_dead != 0)) {
+								if (check_hero(hero) || (g_fig_target_dead != 0)) {
 
 									FANI_prepare_spell_hero(
 										1,
@@ -917,7 +917,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 			FIG_add_msg(11, damage);
 
 			if (target_enemy->flags.dead) {
-				g_defender_dead = 1;
+				g_fig_target_dead = 1;
 			}
 		} else {
 
@@ -930,7 +930,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 				FIG_add_msg(8, damage);
 
 				if (target_hero->flags.dead) {
-					g_defender_dead = 1;
+					g_fig_target_dead = 1;
 				}
 			}
 		}
@@ -951,7 +951,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 			FIG_add_msg(11, 20);
 
 			if (target_enemy->flags.dead) {
-				g_defender_dead = 1;
+				g_fig_target_dead = 1;
 			}
 		} else {
 			/* .. used on another hero */
@@ -962,7 +962,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 				FIG_add_msg(8, 20);
 
 				if (target_hero->flags.dead) {
-					g_defender_dead = 1;
+					g_fig_target_dead = 1;
 				}
 			}
 		}
@@ -1018,7 +1018,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 			FANI_remove_spell();
 		}
 
-		if (g_defender_dead != 0) {
+		if (g_fig_target_dead != 0) {
 
 			if (flag != 0) {
 				FANI_prepare_fight_hero_ani(
@@ -1043,7 +1043,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 		}
 
-		if ((l3 != 0) || (g_defender_dead != 0)) {
+		if ((l3 != 0) || (g_fig_target_dead != 0)) {
 			draw_fight_screen(0);
 		}
 

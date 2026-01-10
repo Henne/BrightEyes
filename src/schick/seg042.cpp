@@ -30,8 +30,8 @@ static struct viewdir_offsets8s g_fig_viewdir_inverse_offsets2 = { { { -1, 0 }, 
 static const char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
 
 signed int g_spell_illusionen;		// ds:0xe3a4, 1 = spell has effect
-signed int g_defender_dead;		// ds:0xe3a6
-signed int g_attacker_dead;		// ds:0xe3a8
+signed int g_fig_target_dead;		// ds:0xe3a6
+signed int g_fig_attacker_dead;		// ds:0xe3a8
 signed int g_fig_critical_fail_backfire_1;	// ds:0xe3aa
 	/* either: critical attack failure, defender gets a free attack
 	 * or: critical defense failure, attacker gets another free attack.
@@ -108,7 +108,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 		FIG_clear_msgs();
 
 		attacker_hits_target = g_fig_critical_fail_backfire_2 = g_fig_critical_fail_backfire_1 =
-			g_spell_illusionen = g_attacker_dead = g_defender_dead = 0;
+			g_spell_illusionen = g_fig_attacker_dead = g_fig_target_dead = 0;
 
 		attacker_weapon_gfx_id = target_weapon_gfx_id = WEAPON_GFX_ID_NONE;
 
@@ -352,7 +352,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					}
 
 					if (hero->flags.dead) {
-						g_attacker_dead = 1;
+						g_fig_attacker_dead = 1;
 					}
 
 				} else if ((critical_failure_roll_2d6 >= 9) && (critical_failure_roll_2d6 <= 11)) {
@@ -367,7 +367,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					g_fig_target_grammar = g_fig_actor_grammar;
 
 					if (hero->flags.dead) {
-						g_attacker_dead = 1;
+						g_fig_attacker_dead = 1;
 					}
 				}
 
@@ -456,7 +456,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 										FIG_add_msg(8, damage);
 
 										if (p_target_hero->flags.dead) {
-											g_defender_dead = 1;
+											g_fig_target_dead = 1;
 										}
 									}
 								} else {
@@ -470,7 +470,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 										FIG_add_msg(11, damage);
 
 										if (p_target_enemy->flags.dead) {
-											g_defender_dead = 1;
+											g_fig_target_dead = 1;
 										}
 									}
 								}
@@ -486,7 +486,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 								FIG_add_msg(8, damage);
 
 								if (p_target_hero->flags.dead) {
-									g_defender_dead = 1;
+									g_fig_target_dead = 1;
 								}
 							} else {
 								FIG_damage_enemy(p_target_enemy, damage, 1);
@@ -494,7 +494,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 								FIG_add_msg(11, damage);
 
 								if (p_target_enemy->flags.dead) {
-									g_defender_dead = 1;
+									g_fig_target_dead = 1;
 								}
 							}
 						}
@@ -570,7 +570,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							FIG_add_msg(8, damage);
 
 							if (p_target_hero->flags.dead) {
-								g_defender_dead = 1;
+								g_fig_target_dead = 1;
 							}
 						}
 					} else {
@@ -584,7 +584,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							FIG_add_msg(11, damage);
 
 							if (p_target_enemy->flags.dead) {
-								g_defender_dead = 1;
+								g_fig_target_dead = 1;
 							}
 						}
 					}
@@ -606,7 +606,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 			if (target_is_hero != 0) {
 				/* target is hero */
 
-				if (check_hero(p_target_hero) || (g_defender_dead != 0)) {
+				if (check_hero(p_target_hero) || (g_fig_target_dead != 0)) {
 
 					FANI_prepare_fight_hero_ani(
 						1,
@@ -632,7 +632,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					);
 				} else {
 					/* flank or rear is attacked -> no parry animation */
-					if (g_defender_dead != 0) {
+					if (g_fig_target_dead != 0) {
 						FANI_prepare_fight_enemy_ani(
 							1,
 							p_target_enemy,
@@ -689,7 +689,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						FIG_add_msg(8, damage);
 
 						if (p_target_hero->flags.dead) {
-							g_defender_dead = 1;
+							g_fig_target_dead = 1;
 						}
 					}
 				} else {
@@ -712,7 +712,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						FIG_add_msg(11, damage);
 
 						if (p_target_enemy->flags.dead) {
-							g_defender_dead = 1;
+							g_fig_target_dead = 1;
 						}
 					}
 				}
@@ -758,14 +758,14 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					FIG_set_sheet(g_fig_projectile_id, 7);
 
-					draw_fight_screen(ranged_attack_nonadjacent_flag == 0 && g_defender_dead == 0 ? 0 : 1);
+					draw_fight_screen(ranged_attack_nonadjacent_flag == 0 && g_fig_target_dead == 0 ? 0 : 1);
 
 					FIG_make_invisible(g_fig_projectile_id);
 				}
 
 				g_fig_continue_print = 1;
 
-				if (g_defender_dead != 0) {
+				if (g_fig_target_dead != 0) {
 
 					if (target_is_hero != 0) {
 						/* target is hero */
@@ -807,7 +807,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				sub_hero_le(hero, hero->le + 1);
 
-				g_attacker_dead = 1;
+				g_fig_attacker_dead = 1;
 			}
 
 			spell_impact_gfx_id = g_spell_descriptions[hero->spell_id].spell_impact_gfx_id;
@@ -892,7 +892,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 								);
 							} else {
 
-								if (check_hero(p_target_hero) || (g_defender_dead != 0)) {
+								if (check_hero(p_target_hero) || (g_fig_target_dead != 0)) {
 
 									FANI_prepare_spell_hero(
 										1,

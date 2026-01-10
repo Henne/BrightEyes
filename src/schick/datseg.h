@@ -1897,8 +1897,8 @@ extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg049, seg052
 extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg049, seg052
 extern signed int  g_fig_critical_fail_backfire_2;	// ds:0xe3ac; seg042, seg043, seg044
 extern signed int  g_fig_critical_fail_backfire_1;		// ds:0xe3aa; seg042, seg043, seg044
-extern signed int  g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
-extern signed int  g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg098, seg102
+extern signed int  g_fig_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
+extern signed int  g_fig_target_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg098, seg102
 extern signed int  g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099
 extern signed char g_fig_cb_selector_id[21];	// ds:0xe38f; seg032, seg034, seg040
 extern signed char g_fig_cb_marker_id;		// ds:0xe38e; seg032, seg033, seg036, seg037, seg038, seg040

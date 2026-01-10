@@ -47,7 +47,7 @@ void MON_do_spell_damage(const signed int damage)
 
 			/* check if someone died */
 			if (get_spelltarget()->flags.dead) {
-				g_defender_dead = 1;
+				g_fig_target_dead = 1;
 			}
 
 		} else {
@@ -64,7 +64,7 @@ void MON_do_spell_damage(const signed int damage)
 
 			/* check if someone died */
 			if (g_spelltarget_e->flags.dead) {
-				g_defender_dead = 1;
+				g_fig_target_dead = 1;
 			}
 		}
 	}
