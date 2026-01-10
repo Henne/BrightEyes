@@ -582,6 +582,14 @@ enum {
 };
 
 enum {
+	SPELL_IMPACT_GFX_ID_GLOW = 0, /* for this one, the animation depends on the target spite */
+	SPELL_IMPACT_GFX_ID_DOME = 1, /* sparkling dome */
+	SPELL_IMPACT_GFX_ID_FLAME = 2, /* only for spell Kraehenruf and item Hylailer Feuer */
+	SPELL_IMPACT_GFX_ID_BARRIER = 3, /* only for spell Hexenknoten */
+	SPELL_IMPACT_GFX_ID_MUSHROOM = 4 /* only for Spell Salander Mutanderer */
+};
+
+enum {
 	RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER = 0, /* ITEM_ID_WURFSTERN, ITEM_ID_WURFMESSER */
 	RANGED_WEAPON_STATS_ID_SCHLEUDER            = 1, /* ITEM_ID_SCHLEUDER, ITEM_ID_SPEER (Original-Bug 60) */
 	RANGED_WEAPON_STATS_ID_WURFBEIL_WURFAXT     = 2, /* ITEM_ID_WURFBEIL, ITEM_ID_WURFAXT */

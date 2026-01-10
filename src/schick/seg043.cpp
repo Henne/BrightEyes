@@ -31,7 +31,7 @@ static struct viewdir_offsets8s g_fig_viewdir_inverse_offsets3 = { { { -1, 0 }, 
 /**
  * \brief   execute the fight action of an enemy
  *
- * \param   enemy     pointer to the enemy sheet
+ * \param   p_enemy   pointer to the enemy sheet
  * \param   enemy_id  id of the enemy
  */
 void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
@@ -52,7 +52,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 	signed int projectile_gfx_id;
 	signed int ranged_attack_nonadjacent_flag; /* for ranged or spell attack: 0: at an adjacent square; 1: at a square at distance >= 2 */
 	signed int spell_test_result;
-	signed int spellcast_ani_id;
+	signed int spell_impact_gfx_id;
 	signed int weapon_gfx_id_ranged;
 	struct struct_fighter *fighter;
 
@@ -659,7 +659,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				/* spellcast */
 
-				spellcast_ani_id = g_mon_spell_descriptions[p_enemy->mspell_id].ani_id;
+				spell_impact_gfx_id = g_mon_spell_descriptions[p_enemy->mspell_id].spell_impact_gfx_id;
 
 				*g_dtp2 = '\0';
 
@@ -695,11 +695,12 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 					if (spell_test_result > 0) {
 
-						if (spellcast_ani_id > 0) {
+						if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 
-							FANI_prepare_enemy_spell_ani(6, p_enemy, spellcast_ani_id);
+							FANI_prepare_enemy_spell_ani(6, p_enemy, spell_impact_gfx_id);
 
 						} else {
+							// assert(spell_impact_gfx_id == SPELL_IMPACT_GFX_ID_GLOW)
 
 							if (p_enemy->target_object_id > 0) {
 
@@ -765,7 +766,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 							FIG_make_invisible(g_fig_projectile_id);
 						}
 
-						if (spellcast_ani_id > 0) {
+						if (spell_impact_gfx_id > 0) {
 							FIG_set_sheet(g_fig_spellgfx_id, 6);
 						}
 
@@ -792,7 +793,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 						draw_fight_screen(1);
 
-						if (spellcast_ani_id > 0) {
+						if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 							FIG_make_invisible(g_fig_projectile_id);
 						}
 
@@ -854,7 +855,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 							FANI_remove_projectile();
 						}
 
-						if (spellcast_ani_id > 0) {
+						if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 							FANI_remove_spell();
 						}
 
@@ -999,7 +1000,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 		l3 = 0;
 
 		if (hylailic != 0) {
-			FANI_prepare_hero_spell_ani(6, hero, 2);
+			FANI_prepare_hero_spell_ani(6, hero, SPELL_IMPACT_GFX_ID_FLAME);
 		} else {
 			g_fig_continue_print = 1;
 		}

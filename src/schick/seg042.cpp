@@ -66,7 +66,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 	signed int target_weapon_gfx_id;
 	signed int critical_failure_roll_2d6;
 	signed int attacker_hits_target;
-	signed int spellcast_ani_id;
+	signed int spell_impact_gfx_id;
 	signed int at_roll_d20;
 	signed int pa_roll_d20;
 	signed int atpa;
@@ -812,7 +812,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				g_attacker_dead = 1;
 			}
 
-			spellcast_ani_id = g_spell_descriptions[hero->spell_id].ani;
+			spell_impact_gfx_id = g_spell_descriptions[hero->spell_id].spell_impact_gfx_id;
 
 			*g_dtp2 = '\0';
 
@@ -872,10 +872,10 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (spell_test_result > 0) {
 
-					if (spellcast_ani_id > 0) {
+					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 
-						if (spellcast_ani_id != 4) {
-							FANI_prepare_hero_spell_ani(6, hero, spellcast_ani_id);
+						if (spell_impact_gfx_id != SPELL_IMPACT_GFX_ID_MUSHROOM) {
+							FANI_prepare_hero_spell_ani(6, hero, spell_impact_gfx_id);
 						}
 
 					} else {
@@ -943,9 +943,9 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						FIG_make_invisible(g_fig_projectile_id);
 					}
 
-					if (spellcast_ani_id > 0) {
+					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 
-						if (spellcast_ani_id != 4) {
+						if (spell_impact_gfx_id != SPELL_IMPACT_GFX_ID_MUSHROOM) {
 							FIG_set_sheet(g_fig_spellgfx_id, 6);
 						} else {
 
@@ -1002,7 +1002,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					draw_fight_screen(1);
 
-					if (spellcast_ani_id > 0) {
+					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 						FIG_make_invisible(g_fig_projectile_id);
 					}
 
@@ -1030,7 +1030,12 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 						FANI_remove_projectile();
 					}
 
-					if ((spellcast_ani_id > 0) && (spellcast_ani_id != 3) && (spellcast_ani_id != 4)) {
+					if (
+						(spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW)
+						&& (spell_impact_gfx_id != SPELL_IMPACT_GFX_ID_BARRIER)
+						&& (spell_impact_gfx_id != SPELL_IMPACT_GFX_ID_MUSHROOM)
+					) {
+						// assert(spell_impact_gfx_id == SPELL_IMPACT_GFX_ID_DOME || spell_impact_gfx_id == SPELL_IMPACT_GFX_ID_FLAME)
 						FANI_remove_spell();
 					}
 

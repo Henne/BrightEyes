@@ -238,7 +238,7 @@ struct dummy4 {
 	signed int a[2];
 };
 
-void FANI_add_spell(const signed int x, const signed int y, const signed int spell_ani_id)
+void FANI_add_spell(const signed int x, const signed int y, const signed int spell_impact_gfx_id)
 {
 	signed int height;
 	signed int width;
@@ -253,19 +253,19 @@ void FANI_add_spell(const signed int x, const signed int y, const signed int spe
 	nvf.dst = g_fig_spellgfx_buf;
 	nvf.src = g_spellobj_nvf_buf;
 
-	nvf.image_num = a.a[spell_ani_id - 1];
+	nvf.image_num = a.a[spell_impact_gfx_id - 1];
 	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
 	process_nvf_extraction(&nvf);
 
 	g_fig_list_elem.figure = 0;
-	g_fig_list_elem.nvf_no = a.a[spell_ani_id - 1];
+	g_fig_list_elem.nvf_no = a.a[spell_impact_gfx_id - 1];
 	g_fig_list_elem.cbx = x;
 	g_fig_list_elem.cby = y;
 
-	g_fig_list_elem.offsetx = (unsigned char)b.a[spell_ani_id - 1];
-	g_fig_list_elem.offsety = (unsigned char)c.a[spell_ani_id - 1];
+	g_fig_list_elem.offsetx = (unsigned char)b.a[spell_impact_gfx_id - 1];
+	g_fig_list_elem.offsety = (unsigned char)c.a[spell_impact_gfx_id - 1];
 
 	g_fig_list_elem.height = height;
 	g_fig_list_elem.width = width;
@@ -311,7 +311,7 @@ void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_
 	FANI_add_spell(x, y, spell_ani_id);
 }
 
-void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_sheet *enemy, const signed int spell_ani_id)
+void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_sheet *enemy, const signed int spell_impact_gfx_id)
 {
 	int8_t *sheet_ptr;
 	signed int x;
@@ -326,8 +326,8 @@ void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_
 	g_fig_anisheets[sheet_id][242] = -1;
 
 	/* copy the ani sequence and terminate it */
-	sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
+	sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_spell_index[spell_impact_gfx_id - 1], -1);
 	*sheet_ptr = -1;
 
-	FANI_add_spell(x, y, spell_ani_id);
+	FANI_add_spell(x, y, spell_impact_gfx_id);
 }

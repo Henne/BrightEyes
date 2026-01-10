@@ -1099,95 +1099,97 @@ struct staffspell_descr g_staffspell_descriptions[7] = {
 	{ ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, 99, 26, 0 },
 	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 99, 21, 2 }
 }; // ds:0x0973
+
 struct spell_descr g_spell_descriptions[SP__END + 1] = {
-	{  0                   , 0        , 0        , 0        ,  0,  0, 0, 0, 0, 0 }, /* ... strangely, an all-zero entry */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1,  0, 1, 2, 0, 0 }, /* Beherrschung brechen */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_IN, ATTRIB_FF, -1,  0, 0, 0, 0, 0 }, /* Destructibo Arcanitas */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_IN, ATTRIB_CH, ATTRIB_KK, -1,  1, 1, 0, 0, 0 }, /* Gardianum Paradei */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1,  1, 0, 1, 1, 0 }, /* Illusionen zerstoeren */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, -1,  0, 1, 2, 0, 0 }, /* Verwandlung beenden */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK, 12,  1, 0, 3, 0, 1 }, /* Band und Fessel */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_IN, ATTRIB_CH, ATTRIB_CH,  8,  1, 0, 1, 0, 1 }, /* Bannbaladin */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_MU, ATTRIB_CH, ATTRIB_CH,  8,  1, 0, 1, 0, 1 }, /* Boeser Blick */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH,  8,  1, 0, 1, 0, 1 }, /* Grosse Gier */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_KL, ATTRIB_KL, ATTRIB_CH, -1,  1, 0, 1, 0, 1 }, /* Grosse Verwirrung */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, -1,  1, 0, 1, 0, 1 }, /* Herr ueber das Tierreich */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_IN, ATTRIB_CH,  7,  1, 0, 1, 0, 1 }, /* Horriphobus */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_MU, ATTRIB_KL, ATTRIB_KK,  6, -1, 0, 0, 0, 1 }, /* Magischer Raub */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH,  5, -1, 1, 0, 0, 1 }, /* Respondami Veritar */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, -1,  1, 1, 1, 0, 1 }, /* Sanftmut */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_CH,  8,  1, 0, 3, 1, 1 }, /* Somnigravis Tausendschlaf */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_MU, ATTRIB_KL, ATTRIB_CH,  6,  1, 0, 1, 1, 1 }, /* Zwingtanz */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 13, -1, 0, 0, 0, 0 }, /* Furor Blut und Sulphurdampf */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 13, -1, 0, 0, 0, 0 }, /* Geister austreiben */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 11, -1, 0, 0, 0, 0 }, /* Geister beschwoeren */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 23, -1, 0, 0, 0, 0 }, /* Heptagon und Kroetenei */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, 13,  1, 2, 3, 1, 0 }, /* Kraehenruf */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 15,  1, 0, 1, 0, 0 }, /* Skelettarius Kryptaduft */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, -1, -1, 0, 0, 0, 0 }, /* Elementare Beschwoeren */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_KK, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Nihilatio Gravitas */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_IN, ATTRIB_GE, ATTRIB_KK, -1, -1, 0, 0, 0, 0 }, /* Solidirid Farbenspiel */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_GE, ATTRIB_KK,  7,  1, 1, 2, 0, 0 }, /* Axxeleratus Blitzgeschwind */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_KL, ATTRIB_FF,  6, -1, 0, 0, 0, 0 }, /* Foramen Foraminor */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_FF, ATTRIB_KK, -1, -1, 0, 0, 0, 0 }, /* Motoricus Motilitich */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_IN, ATTRIB_GE, ATTRIB_GE,  7, -1, 0, 0, 0, 0 }, /* Spurlos trittlos faehrtenlos */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_KL, ATTRIB_KK, -1, -1, 0, 0, 0, 0 }, /* Transversalis Teleport */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_GE, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Ueber Eis und ueber Schnee */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1,  0, 1, 2, 0, 0 }, /* Balsam Salabunde */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_IN, ATTRIB_CH, ATTRIB_FF, -1,  0, 1, 2, 0, 0 }, /* Hexenspeichel */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_KL, ATTRIB_CH, -1,  0, 1, 2, 0, 0 }, /* Klarum Purum Kraeutersud */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  7, -1, 1, 2, 0, 0 }, /* Ruhe Koerper ruhe Geist */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, -1,  0, 1, 0, 0, 0 }, /* Tiere besprechen */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_IN, ATTRIB_FF,  5,  0, 1, 0, 0, 0 }, /* Adleraug und Luchsenohr */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_KL, ATTRIB_IN, 10, -1, 0, 0, 0, 0 }, /* Analues Arcanstruktur */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH,  7,  1, 1, 1, 1, 1 }, /* Eigenschaften seid gelesen */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_KL, ATTRIB_IN,  5,  1, 1, 0, 0, 0 }, /* Exposami Creatur */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH,  5, -1, 1, 0, 0, 0 }, /* Odem Arcanum */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_KL, ATTRIB_KK,  5, -1, 1, 0, 0, 0 }, /* Penetrizzel Holz und Stein */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH,  5, -1, 1, 0, 0, 1 }, /* Sensibar wahr und klar */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_IN, ATTRIB_CH, ATTRIB_GE,  5,  1, 1, 0, 0, 0 }, /* Chamaelioni Mimikry */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_CH, ATTRIB_GE,  8,  1, 1, 0, 0, 0 }, /* Duplicatus Doppelpein */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_KL, ATTRIB_CH, ATTRIB_GE,  6, -1, 1, 0, 0, 0 }, /* Harmlose Gestalt */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH,  4,  1, 3, 0, 0, 0 }, /* Hexenknoten */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_IN, ATTRIB_GE,  5,  1, 0, 3, 1, 0 }, /* Blitz dich Find */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1,  1, 0, 0, 0, 0 }, /* Ecliptifactus */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_CH, ATTRIB_GE,  5,  1, 0, 3, 0, 0 }, /* Eisenrost und gruener Span */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_GE, ATTRIB_KK, -1,  1, 0, 3, 1, 0 }, /* Fulminictus Donnerkeil */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_GE, ATTRIB_FF, -1,  1, 0, 3, 1, 0 }, /* Ignifaxius Flammenstrahl */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_CH, ATTRIB_GE, ATTRIB_KK,  5,  1, 0, 3, 1, 1 }, /* Plumbumbarum und Narretei */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_MU, ATTRIB_IN, ATTRIB_CH,  4,  1, 0, 3, 1, 0 }, /* Radau */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, -1,  1, 1, 2, 0, 0 }, /* Saft Kraft Monstermacht */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_IN, ATTRIB_GE, ATTRIB_FF,  5,  1, 1, 2, 0, 0 }, /* Scharfes Auge und sichre Hand */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_IN, ATTRIB_IN, ATTRIB_CH,  2, -1, 1, 0, 0, 0 }, /* Hexenblick */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 11, -1, 1, 0, 0, 0 }, /* Nekropathia modernd Leich */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_MU, ATTRIB_IN, ATTRIB_GE,  7, -1, 1, 0, 0, 0 }, /* Adler Wolf und Hammerhai */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_KL, ATTRIB_CH,  7,  1, 1, 2, 1, 0 }, /* Arcano Psychostabilis */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_IN, ATTRIB_GE, ATTRIB_KK, -1,  1, 1, 0, 0, 0 }, /* Armatrutz */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_CH, ATTRIB_CH,  7,  0, 1, 2, 0, 0 }, /* Charisma steigern */
-	{  SPELL_ORIGIN_HEXE   , ATTRIB_MU, ATTRIB_MU, ATTRIB_KK,  7,  0, 1, 0, 0, 0 }, /* Feuerbann */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_FF,  7,  0, 1, 2, 0, 0 }, /* Fingerfertigkeit steigern */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_CH, ATTRIB_GE,  7,  0, 1, 2, 0, 0 }, /* Gewandheit steigern */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_IN, ATTRIB_CH,  7,  0, 1, 2, 0, 0 }, /* Intuition steigern */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  7,  0, 1, 2, 0, 0 }, /* Koerperkraft steigern */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_KL, ATTRIB_CH,  7,  0, 1, 2, 0, 0 }, /* Klugheit steigern */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_MU, ATTRIB_KL, ATTRIB_CH,  7,  0, 1, 2, 0, 0 }, /* Mut steigern */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_GE, ATTRIB_KK, -1,  0, 0, 0, 0, 0 }, /* Mutabili Hybridil */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_IN, ATTRIB_CH, ATTRIB_KK, 13,  1, 0, 3, 1, 1 }, /* Paralue Paralein */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1,  1, 4, 1, 0, 1 }, /* Salander Mutanderer */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, 1, 0, 0, 0 }, /* In See und Fluss */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_KL, ATTRIB_GE, -1,  0, 1, 0, 0, 0 }, /* Visibili Vanitar */
-	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_KL, ATTRIB_FF,  5, -1, 0, 0, 0, 0 }, /* Abvenenum Pest und Galle */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Aeolitus Windgebraus */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, 0, 0, 0, 0 }, /* Brenne toter Stoff */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_KL, ATTRIB_FF, ATTRIB_KK, -1, -1, 0, 0, 0, 0 }, /* Claudibus Clavistibor */
-	{  SPELL_ORIGIN_DRUIDE , ATTRIB_KL, ATTRIB_KL, ATTRIB_FF,  3,  1, 0, 0, 0, 0 }, /* Dunkelheit */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, 0, 0, 0, 0 }, /* Weiches erstarre */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_KL, ATTRIB_FF,  1, -1, 0, 0, 0, 0 }, /* Flim Flam Funkel */
-	{  SPELL_ORIGIN_MAGIER , ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, 0, 0, 0, 0 }, /* Hartes schmelze */
-	{  SPELL_ORIGIN_AUELF  , ATTRIB_KL, ATTRIB_KL, ATTRIB_CH, -1, -1, 0, 0, 0, 0 }, /* Silentium Silentille */
-	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Sturmgebruell besaenftge dich */
-	{                   -1 ,         0,         0,         0,  0,  0, 0, 0, 0, 0 }  /* ... terminator entry */
+	{  0,                    0,         0,         0,         0,  0,  0,                            0, 0, 0 }, /* ... strangely, an all-zero entry */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1, 0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Beherrschung brechen */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_IN, ATTRIB_FF, -1, 0,  SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Destructibo Arcanitas */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_IN, ATTRIB_CH, ATTRIB_KK, -1, 1,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Gardianum Paradei */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1, 1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 1, 0 }, /* Illusionen zerstoeren */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, -1, 0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Verwandlung beenden */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK, 12, 1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 0, 1 }, /* Band und Fessel */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_IN, ATTRIB_CH, ATTRIB_CH, 8,  1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 0, 1 }, /* Bannbaladin */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, 8,  1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 0, 1 }, /* Boeser Blick */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 8,  1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 0, 1 }, /* Grosse Gier */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_KL, ATTRIB_KL, ATTRIB_CH, -1, 1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 0, 1 }, /* Grosse Verwirrung */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, -1, 1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 0, 1 }, /* Herr ueber das Tierreich */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, 7,  1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 0, 1 }, /* Horriphobus */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, 6,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 1 }, /* Magischer Raub */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 5,  -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 1 }, /* Respondami Veritar */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, -1, 1,  SPELL_IMPACT_GFX_ID_DOME,     1, 0, 1 }, /* Sanftmut */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_CH, 8,  1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 1, 1 }, /* Somnigravis Tausendschlaf */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 6,  1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 1, 1 }, /* Zwingtanz */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 13, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Furor Blut und Sulphurdampf */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 13, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Geister austreiben */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 11, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Geister beschwoeren */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 23, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Heptagon und Kroetenei */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, 13, 1,  SPELL_IMPACT_GFX_ID_FLAME,    3, 1, 0 }, /* Kraehenruf */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_MU, ATTRIB_CH, 15, 1,  SPELL_IMPACT_GFX_ID_GLOW,     1, 0, 0 }, /* Skelettarius Kryptaduft */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Elementare Beschwoeren */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_KK, ATTRIB_KK, 5,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Nihilatio Gravitas */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_IN, ATTRIB_GE, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Solidirid Farbenspiel */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_GE, ATTRIB_KK, 7,  1,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Axxeleratus Blitzgeschwind */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_KL, ATTRIB_FF, 6,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Foramen Foraminor */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_FF, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Motoricus Motilitich */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_IN, ATTRIB_GE, ATTRIB_GE, 7,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Spurlos trittlos faehrtenlos */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_KL, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Transversalis Teleport */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_GE, ATTRIB_KK, 5,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Ueber Eis und ueber Schnee */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1, 0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Balsam Salabunde */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_IN, ATTRIB_CH, ATTRIB_FF, -1, 0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Hexenspeichel */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_KL, ATTRIB_CH, -1, 0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Klarum Purum Kraeutersud */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK, 7,  -1, SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Ruhe Koerper ruhe Geist */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, -1, 0,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Tiere besprechen */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_IN, ATTRIB_FF, 5,  0,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Adleraug und Luchsenohr */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_KL, ATTRIB_IN, 10, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Analues Arcanstruktur */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 7,  1,  SPELL_IMPACT_GFX_ID_DOME,     1, 1, 1 }, /* Eigenschaften seid gelesen */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_KL, ATTRIB_IN, 5,  1,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Exposami Creatur */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 5,  -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Odem Arcanum */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_KL, ATTRIB_KK, 5,  -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Penetrizzel Holz und Stein */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 5,  -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 1 }, /* Sensibar wahr und klar */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_IN, ATTRIB_CH, ATTRIB_GE, 5,  1,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Chamaelioni Mimikry */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_CH, ATTRIB_GE, 8,  1,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Duplicatus Doppelpein */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_KL, ATTRIB_CH, ATTRIB_GE, 6,  -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Harmlose Gestalt */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 4,  1,  SPELL_IMPACT_GFX_ID_BARRIER,  0, 0, 0 }, /* Hexenknoten */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_IN, ATTRIB_GE, 5,  1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 1, 0 }, /* Blitz dich Find */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, 1,  SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Ecliptifactus */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_CH, ATTRIB_GE, 5,  1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 0, 0 }, /* Eisenrost und gruener Span */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_GE, ATTRIB_KK, -1, 1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 1, 0 }, /* Fulminictus Donnerkeil */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_GE, ATTRIB_FF, -1, 1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 1, 0 }, /* Ignifaxius Flammenstrahl */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_CH, ATTRIB_GE, ATTRIB_KK, 5,  1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 1, 1 }, /* Plumbumbarum und Narretei */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, 4,  1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 1, 0 }, /* Radau */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_IN, ATTRIB_CH, -1, 1,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Saft Kraft Monstermacht */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_IN, ATTRIB_GE, ATTRIB_FF, 5,  1,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Scharfes Auge und sichre Hand */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_IN, ATTRIB_IN, ATTRIB_CH, 2,  -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Hexenblick */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 11, -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Nekropathia modernd Leich */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_MU, ATTRIB_IN, ATTRIB_GE, 7,  -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Adler Wolf und Hammerhai */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 7,  1,  SPELL_IMPACT_GFX_ID_DOME,     2, 1, 0 }, /* Arcano Psychostabilis */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_IN, ATTRIB_GE, ATTRIB_KK, -1, 1,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Armatrutz */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_CH, ATTRIB_CH, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Charisma steigern */
+	{  SPELL_ORIGIN_HEXE,    ATTRIB_MU, ATTRIB_MU, ATTRIB_KK, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Feuerbann */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_FF, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Fingerfertigkeit steigern */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_CH, ATTRIB_GE, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Gewandheit steigern */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Intuition steigern */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Koerperkraft steigern */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_KL, ATTRIB_CH, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Klugheit steigern */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 7,  0,  SPELL_IMPACT_GFX_ID_DOME,     2, 0, 0 }, /* Mut steigern */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_GE, ATTRIB_KK, -1, 0,  SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Mutabili Hybridil */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_IN, ATTRIB_CH, ATTRIB_KK, 13, 1,  SPELL_IMPACT_GFX_ID_GLOW,     3, 1, 1 }, /* Paralue Paralein */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1, 1,  SPELL_IMPACT_GFX_ID_MUSHROOM, 1, 0, 1 }, /* Salander Mutanderer */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* In See und Fluss */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_KL, ATTRIB_GE, -1, 0,  SPELL_IMPACT_GFX_ID_DOME,     0, 0, 0 }, /* Visibili Vanitar */
+	{  SPELL_ORIGIN_WALDELF, ATTRIB_KL, ATTRIB_KL, ATTRIB_FF, 5,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Abvenenum Pest und Galle */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK, 5,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Aeolitus Windgebraus */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Brenne toter Stoff */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_KL, ATTRIB_FF, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Claudibus Clavistibor */
+	{  SPELL_ORIGIN_DRUIDE,  ATTRIB_KL, ATTRIB_KL, ATTRIB_FF, 3,  1,  SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Dunkelheit */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Weiches erstarre */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_KL, ATTRIB_FF, 1,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Flim Flam Funkel */
+	{  SPELL_ORIGIN_MAGIER,  ATTRIB_MU, ATTRIB_KL, ATTRIB_KK, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Hartes schmelze */
+	{  SPELL_ORIGIN_AUELF,   ATTRIB_KL, ATTRIB_KL, ATTRIB_CH, -1, -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Silentium Silentille */
+	{  SPELL_ORIGIN_FIRNELF, ATTRIB_KL, ATTRIB_CH, ATTRIB_KK, 5,  -1, SPELL_IMPACT_GFX_ID_GLOW,     0, 0, 0 }, /* Sturmgebruell besaenftge dich */
+	{                   -1,  0,         0,         0,         0,  0,  0,                            0, 0, 0 }  /* ... terminator entry */
 }; // ds:0x099d
+
 const struct spell_range g_spellclasses[12] = {
 	{ SP_BEHERRSCHUNG_BRECHEN       ,  5 }, /* Antimagie */
 	{ SP_BAND_UND_FESSEL            , 12 }, /* Beherrschung */
