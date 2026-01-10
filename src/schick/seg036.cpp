@@ -305,7 +305,7 @@ signed int AFIG_can_attack_neighbour(const signed int start_x, const signed int 
  * \param   renegade    0 = hero is normal, 1 = hero is renegade
  * \return              0 = no target found, fight-id of the target
  */
-signed int AFIG_search_spell_target(const signed int x, const signed int y, const signed int dir, const signed int renegade)
+signed int AFIG_search_spell_target(const signed int x, const signed int y, const signed int viewdir, const signed int renegade)
 {
 	signed int x_diff;
 	signed int y_diff;
@@ -319,13 +319,12 @@ signed int AFIG_search_spell_target(const signed int x, const signed int y, cons
 	will_attack = 0;
 
 	while (done == 0) {
-
 		/* calculate the offset from direction */
-		if (dir == 0) {
+		if (viewdir == FIG_VIEWDIR_RIGHT) {
 			x_diff++;
-		} else if (dir == 1) {
+		} else if (viewdir == FIG_VIEWDIR_DOWN) {
 			y_diff--;
-		} else if (dir == 2) {
+		} else if (viewdir == FIG_VIEWDIR_LEFT) {
 			x_diff--;
 		} else {
 			y_diff++;
