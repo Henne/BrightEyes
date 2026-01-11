@@ -12,13 +12,13 @@ struct struct_hero* FIG_get_hero_ptr(const signed int);
 
 struct enemy_sheet* FIG_get_enemy_sheet(const signed int);
 
-void FIG_set_sheet(const signed char, const signed char);
+void FIG_set_ani_track_id_base(const signed char, const signed char);
 
 void FIG_make_invisible(const signed char);
 
 void FIG_make_visible(const signed int);
 
-void FIG_set_weapon_sheet(const signed char, const signed char);
+void FIG_set_ani_track_id_weapon(const signed char, const signed char);
 
 void FIG_remove_from_list(const signed char, const signed char);
 

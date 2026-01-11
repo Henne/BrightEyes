@@ -67,8 +67,8 @@ void FIG_init_list_elem(const signed int object_id)
 
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
-	g_fig_list_elem.wsheet = -1;
-	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+	g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 
 	g_fig_list_elem.gfxbuf = g_fig_cb_marker_buf;
 	g_fig_list_elem.z = 0;

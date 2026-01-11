@@ -559,15 +559,15 @@ signed int FIG_get_enemy_attack_damage(const struct enemy_sheet *attacker, struc
 	return damage;
 }
 
-void clear_anisheets(void)
+void FANI_clear_ani_tracks(void)
 {
 	signed int i;
 
-	for (i = 0; i < 8; i++)
-		memset(&g_fig_anisheets[i], -1, 243);
+	for (i = 0; i < FANI_TRACK_ID__MAX; i++)
+		memset(&g_fig_ani_tracks[i], -1, 243);
 
 	/* That would be better */
-	/* memset(&g_fig_anisheets[0], -1, 243 * 8); */
+	/* memset(&g_fig_ani_tracks[0], -1, 243 * 8); */
 }
 
 /**

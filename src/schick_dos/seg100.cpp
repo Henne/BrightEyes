@@ -319,8 +319,8 @@ void spell_hexenknoten(void)
 	g_fig_list_elem.x2 = width - 1;
 	g_fig_list_elem.y2 = height - 1;
 	g_fig_list_elem.reload = 0;
-	g_fig_list_elem.wsheet = -1;
-	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+	g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 	g_fig_list_elem.gfxbuf = rp;
 	g_fig_list_elem.z = 50;
 	g_fig_list_elem.visible = 1;

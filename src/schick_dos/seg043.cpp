@@ -483,14 +483,14 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				}
 			}
 
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 			if (target_is_hero != 0) {
 
 				if (check_hero(hero) || (g_fig_target_dead != 0)) {
 
 					FANI_prepare_fight_hero_ani(
-						0,
+						FANI_TRACK_ID_ACTOR_0_BASE,
 						hero,
 						weapon_gfx_id,
 						FIG_ACTION_PARRY,
@@ -502,7 +502,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 			} else if (target_cannot_parry == 0) {
 				FANI_prepare_fight_enemy_ani(
-					0,
+					FANI_TRACK_ID_ACTOR_0_BASE,
 					target_enemy,
 					FIG_ACTION_PARRY,
 					p_enemy->target_object_id,
@@ -511,7 +511,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				);
 			} else if (g_fig_target_dead != 0) {
 				FANI_prepare_fight_enemy_ani(
-					0,
+					FANI_TRACK_ID_ACTOR_0_BASE,
 					target_enemy,
 					FIG_ACTION_NONE,
 					p_enemy->target_object_id,
@@ -521,7 +521,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			}
 
 			FANI_prepare_fight_enemy_ani(
-				1,
+				FANI_TRACK_ID_ACTOR_1_BASE,
 				p_enemy,
 				FIG_ACTION_MELEE_ATTACK,
 				enemy_id + 10,
@@ -530,7 +530,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			);
 			g_fig_continue_print = 1;
 			draw_fight_screen_pal(0);
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 		} else if (p_enemy->action_id == FIG_ACTION_RANGE_ATTACK) {
 
@@ -584,7 +584,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				}
 			}
 
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 			projectile_gfx_id = weapon_gfx_id_ranged;
 			ranged_attack_nonadjacent_flag = 0;
@@ -592,7 +592,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			FIG_call_draw_pic();
 
 			FANI_prepare_fight_enemy_ani(
-				0,
+				FANI_TRACK_ID_ACTOR_0_BASE,
 				p_enemy,
 				FIG_ACTION_RANGE_ATTACK,
 				enemy_id + 10,
@@ -601,20 +601,20 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 			);
 
 			ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
-				7,
+				FANI_TRACK_ID_PROJECTILE,
 				projectile_gfx_id,
 				enemy_id + 10,
 				p_enemy->target_object_id,
 				p_enemy->viewdir
 			);
 
-			FIG_set_sheet(p_enemy->fighter_id, 0);
+			FIG_set_ani_track_id_base(p_enemy->fighter_id, FANI_TRACK_ID_ACTOR_0_BASE);
 
 			draw_fight_screen_pal(0);
 
 			if (ranged_attack_nonadjacent_flag != 0) {
 
-				FIG_set_sheet(g_fig_projectile_id, 7);
+				FIG_set_ani_track_id_base(g_fig_projectile_id, FANI_TRACK_ID_PROJECTILE);
 
 				draw_fight_screen((ranged_attack_nonadjacent_flag == 0) && (g_fig_target_dead == 0) ? 0 : 1);
 
@@ -628,7 +628,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				if (target_is_hero != 0) {
 
 					FANI_prepare_fight_hero_ani(
-						1,
+						FANI_TRACK_ID_ACTOR_1_BASE,
 						hero,
 						-1,
 						FIG_ACTION_NONE,
@@ -639,7 +639,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				} else {
 
 					FANI_prepare_fight_enemy_ani(
-						1,
+						FANI_TRACK_ID_ACTOR_1_BASE,
 						target_enemy,
 						FIG_ACTION_NONE,
 						p_enemy->target_object_id,
@@ -651,7 +651,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 			FANI_remove_projectile();
 			draw_fight_screen(0);
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 		} else if (p_enemy->action_id == FIG_ACTION_SPELL) {
 
@@ -663,7 +663,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 			spell_test_result = MON_cast_spell(p_enemy, 0);
 
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 			if (p_enemy->target_object_id) {
 
@@ -682,7 +682,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				if (spell_test_result != -1) {
 
 					FANI_prepare_spell_enemy(
-						0,
+						FANI_TRACK_ID_ACTOR_0_BASE,
 						p_enemy,
 						4,
 						enemy_id + 10,
@@ -695,7 +695,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 
-						FANI_prepare_enemy_spell_ani(6, p_enemy, spell_impact_gfx_id);
+						FANI_prepare_enemy_spell_ani(FANI_TRACK_ID_SPELL_IMPACT, p_enemy, spell_impact_gfx_id);
 
 					} else {
 						// assert(spell_impact_gfx_id == SPELL_IMPACT_GFX_ID_GLOW)
@@ -705,7 +705,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 							if (!target_is_hero) {
 
 								FANI_prepare_spell_enemy(
-									1,
+									FANI_TRACK_ID_ACTOR_1_BASE,
 									target_enemy,
 									99,
 									p_enemy->target_object_id,
@@ -717,7 +717,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 								if (check_hero(hero) || (g_fig_target_dead != 0)) {
 
 									FANI_prepare_spell_hero(
-										1,
+										FANI_TRACK_ID_ACTOR_1_BASE,
 										hero,
 										99,
 										p_enemy->target_object_id,
@@ -737,7 +737,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					) {
 
 						ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
-							7,
+							FANI_TRACK_ID_PROJECTILE,
 							projectile_gfx_id,
 							enemy_id + 10,
 							p_enemy->target_object_id,
@@ -748,7 +748,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 				}
 				if (spell_test_result != -1) {
 
-					FIG_set_sheet(p_enemy->fighter_id, 0);
+					FIG_set_ani_track_id_base(p_enemy->fighter_id, FANI_TRACK_ID_ACTOR_0_BASE);
 
 					draw_fight_screen_pal(1);
 				}
@@ -757,7 +757,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 					if (ranged_attack_nonadjacent_flag != 0) {
 
-						FIG_set_sheet(g_fig_projectile_id, 7);
+						FIG_set_ani_track_id_base(g_fig_projectile_id, FANI_TRACK_ID_PROJECTILE);
 
 						draw_fight_screen(1);
 
@@ -765,25 +765,25 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 					}
 
 					if (spell_impact_gfx_id > 0) {
-						FIG_set_sheet(g_fig_spellgfx_id, 6);
+						FIG_set_ani_track_id_base(g_fig_spellgfx_id, FANI_TRACK_ID_SPELL_IMPACT);
 					}
 
 					if (!target_is_hero) {
 
-						FIG_set_sheet(target_enemy->fighter_id, 1);
+						FIG_set_ani_track_id_base(target_enemy->fighter_id, FANI_TRACK_ID_ACTOR_1_BASE);
 
 
 						if (is_in_byte_array(target_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
 							fighter = FIG_get_fighter(target_enemy->fighter_id);
 
-							FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], 3);
+							FIG_set_ani_track_id_base(g_fig_double_size_fighter_id_table[fighter->double_size], FANI_TRACK_ID_ACTOR_1_TAIL);
 						}
 					} else {
 
 						if (p_enemy->target_object_id > 0) {
 
-							FIG_set_sheet(hero->fighter_id, 1);
+							FIG_set_ani_track_id_base(hero->fighter_id, FANI_TRACK_ID_ACTOR_1_BASE);
 						}
 					}
 
@@ -822,8 +822,8 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 						g_fig_list_elem.width = 32;
 						g_fig_list_elem.is_enemy = 1;
 						g_fig_list_elem.reload = -1;
-						g_fig_list_elem.wsheet = -1;
-						g_fig_list_elem.sheet = -1;
+						g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+						g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 
 						FIG_add_to_list(target_enemy->fighter_id);
 					}
@@ -863,7 +863,7 @@ void FIG_do_enemy_action(struct enemy_sheet* p_enemy, const signed int enemy_id)
 
 				FIG_output(g_dtp2);
 
-				clear_anisheets();
+				FANI_clear_ani_tracks();
 			} else {
 				FIG_output(g_dtp2);
 			}
@@ -984,10 +984,10 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 	if (use_case > USE_CASE_NOT_USABLE) {
 
-		clear_anisheets();
+		FANI_clear_ani_tracks();
 
 		FANI_prepare_fight_hero_ani(
-			0,
+			FANI_TRACK_ID_ACTOR_0_BASE,
 			hero,
 			-1,
 			use_case == USE_CASE_HERB_OR_POTION ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4,
@@ -999,7 +999,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 		l3 = 0;
 
 		if (item_is_hylailer_feuer != 0) {
-			FANI_prepare_hero_spell_ani(6, hero, SPELL_IMPACT_GFX_ID_FLAME);
+			FANI_prepare_hero_spell_ani(FANI_TRACK_ID_SPELL_IMPACT, hero, SPELL_IMPACT_GFX_ID_FLAME);
 		} else {
 			g_fig_continue_print = 1;
 		}
@@ -1008,7 +1008,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 		if (item_is_hylailer_feuer != 0) {
 
-			FIG_set_sheet(g_fig_spellgfx_id, 6);
+			FIG_set_ani_track_id_base(g_fig_spellgfx_id, FANI_TRACK_ID_SPELL_IMPACT);
 
 			l3 = 1;
 
@@ -1025,7 +1025,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 
 			if (target_is_hero != 0) {
 				FANI_prepare_fight_hero_ani(
-					1,
+					FANI_TRACK_ID_ACTOR_1_BASE,
 					target_hero,
 					-1,
 					FIG_ACTION_NONE,
@@ -1035,7 +1035,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 				);
 			} else {
 				FANI_prepare_fight_enemy_ani(
-					1,
+					FANI_TRACK_ID_ACTOR_1_BASE,
 					target_enemy,
 					FIG_ACTION_NONE,
 					hero->target_object_id,
@@ -1050,7 +1050,7 @@ void FIG_use_item(struct struct_hero *hero, struct enemy_sheet *target_enemy, st
 			draw_fight_screen(0);
 		}
 
-		clear_anisheets();
+		FANI_clear_ani_tracks();
 	}
 
 	if (*g_dtp2) {

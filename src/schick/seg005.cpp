@@ -87,7 +87,7 @@ static signed int FIG_obj_needs_refresh(struct struct_fighter *fighter, const si
 		signed int oy;
 
 		/* animated objects always need a refresh */
-		if ((fighter->sheet != -1) || (fighter->visible == 3))
+		if ((fighter->ani_track_id_base != FANI_TRACK_ID_NONE) || (fighter->visible == 3))
 			goto damn_label;
 
 		/* i = i->next; */
@@ -364,8 +364,8 @@ void draw_fight_screen(const signed int val)
 	signed char double_size_move_tail_first;
 	struct struct_fighter *p_fighter_tmp;
 	signed int viewdir_unconsc;
-	int8_t *sheet;
-	int8_t *p_weapon_anisheet;
+	int8_t *p_ani_clip;
+	int8_t *p_ani_clip_weapon;
 	signed int handle;
 	struct nvf_extract_desc nvf;
 	signed int figlist_remove[8];
@@ -410,11 +410,11 @@ void draw_fight_screen(const signed int val)
 
 #if !defined(__BORLANDC__)
 		D1_LOG(" loop Figure = %3d Sheet_ID : %d 0xf : %d 0x12: %d object: %d\n",
-				p_fighter->figure, p_fighter->sheet, p_fighter->wsheet,
+				p_fighter->figure, p_fighter->ani_track_id_base, p_fighter->ani_track_id_weapon,
 				p_fighter->visible, p_fighter->object_id);
 #endif
 
-		if (p_fighter->sheet != -1) {
+		if (p_fighter->ani_track_id_base != FANI_TRACK_ID_NONE) {
 			/* Has a sheet id */
 
 			if (p_fighter->visible) {
@@ -423,15 +423,15 @@ void draw_fight_screen(const signed int val)
 
 			flag = 1;
 
-			g_fig_ani_state[p_fighter->sheet] = 0;
+			g_fig_ani_state[p_fighter->ani_track_id_base] = 0;
 
-			memcpy((uint8_t*)g_fig_gfxbuffers[p_fighter->sheet],
+			memcpy((uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_base],
 				p_fighter->gfxbuf,
 				p_fighter->width * p_fighter->height);
 		}
 
-		if (p_fighter->wsheet != -1) {
-			memset((uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet], 0, 0x508);
+		if (p_fighter->ani_track_id_weapon != FANI_TRACK_ID_NONE) {
+			memset((uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_weapon], 0, 0x508);
 		}
 
 
@@ -504,67 +504,67 @@ void draw_fight_screen(const signed int val)
 
 			p_figure_gfx = p_fighter->gfxbuf;
 
-			if ((p_fighter->sheet != -1) && (g_fig_ani_state[p_fighter->sheet] != -1)) {
+			if ((p_fighter->ani_track_id_base != FANI_TRACK_ID_NONE) && (g_fig_ani_state[p_fighter->ani_track_id_base] != -1)) {
 
-				sheet = g_fig_anisheets[p_fighter->sheet];
+				p_ani_clip = g_fig_ani_tracks[p_fighter->ani_track_id_base];
 
-				if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -1) {
+				if (*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -1) {
 
-					p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
-					g_fig_ani_state[p_fighter->sheet] = -1;
-					p_fighter->sheet = p_fighter->wsheet = -1;
+					p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_base];
+					g_fig_ani_state[p_fighter->ani_track_id_base] = -1;
+					p_fighter->ani_track_id_base = p_fighter->ani_track_id_weapon = FANI_TRACK_ID_NONE;
 
 				} else {
 
-					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -7)
+					if (*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -7)
 					{
-						p_fighter->z = (*(sheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3));
+						p_fighter->z = (*(p_ani_clip + 2 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3));
 
-						g_fig_ani_state[p_fighter->sheet]++;
+						g_fig_ani_state[p_fighter->ani_track_id_base]++;
 
-						g_fig_figlist_readd[p_fighter->sheet] = p_fighter->id;
+						g_fig_figlist_readd[p_fighter->ani_track_id_base] = p_fighter->id;
 					}
 
-					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
+					if (*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -9)
 					{
-						play_voc(0xc8 + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
-						g_fig_ani_state[p_fighter->sheet]++;
+						play_voc(0xc8 + *(p_ani_clip + 2 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]));
+						g_fig_ani_state[p_fighter->ani_track_id_base]++;
 					}
 
 
-					if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -5) {
+					if (*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -5) {
 
-						if (p_fighter->wsheet != -1) {
+						if (p_fighter->ani_track_id_weapon != FANI_TRACK_ID_NONE) {
 
-							p_weapon_anisheet = &g_fig_anisheets[p_fighter->wsheet][0];
+							p_ani_clip_weapon = &g_fig_ani_tracks[p_fighter->ani_track_id_weapon][0];
 
-							if (*(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -9)
+							if (*(p_ani_clip_weapon + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -9)
 							{
-								play_voc(0xc8 + *(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
+								play_voc(0xc8 + *(p_ani_clip_weapon + 2 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]));
 							}
 						}
 
-						g_fig_ani_state[p_fighter->sheet]++;
+						g_fig_ani_state[p_fighter->ani_track_id_base]++;
 
-					} else if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -4) {
+					} else if (*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -4) {
 
-						*sheet = *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]);
+						*p_ani_clip = *(p_ani_clip + 2 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]);
 
-						g_fig_ani_state[p_fighter->sheet]++;
+						g_fig_ani_state[p_fighter->ani_track_id_base]++;
 
-					} else if ((*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -3) ||
-							(*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -6)) {
+					} else if ((*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -3) ||
+							(*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -6)) {
 
 						/* get nvf no */
 						viewdir_before = p_fighter->nvf_no;
 
-						if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -3) {
+						if (*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -3) {
 
-							p_fighter->nvf_no += *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
+							p_fighter->nvf_no += *(p_ani_clip + 3 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]);
 						} else {
 
-							p_fighter->figure = g_gfxtab_figures_main[p_fighter->actor_sprite_id][*(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet])];
-							p_fighter->nvf_no = *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]);
+							p_fighter->figure = g_gfxtab_figures_main[p_fighter->actor_sprite_id][*(p_ani_clip + 2 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base])];
+							p_fighter->nvf_no = *(p_ani_clip + 3 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]);
 						}
 
 						if (p_fighter->figure >= 88) {
@@ -615,7 +615,7 @@ void draw_fight_screen(const signed int val)
 						obj_x += p_fighter->offsetx;
 						obj_y += p_fighter->offsety;
 
-						if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
+						if ((p_fighter->ani_track_id_base < FANI_TRACK_ID_SPELL_IMPACT) && (*(p_ani_clip + 242) >= 0)) {
 							nvf.src = (uint8_t*)load_fight_figs(p_fighter->figure);
 						} else {
 							nvf.src = g_spellobj_nvf_buf;
@@ -629,7 +629,7 @@ void draw_fight_screen(const signed int val)
 
 						process_nvf_extraction(&nvf);
 
-						g_fig_ani_state[p_fighter->sheet]++;
+						g_fig_ani_state[p_fighter->ani_track_id_base]++;
 
 						p_figure_gfx = p_fighter->gfxbuf;
 
@@ -691,18 +691,18 @@ void draw_fight_screen(const signed int val)
 					} else {
 
 						/* move a hero/enemy */
-						if (*(sheet + 1 + 3 * g_fig_ani_state[p_fighter->sheet]) == -2) {
+						if (*(p_ani_clip + 1 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]) == -2) {
 
-							if (p_fighter->sheet < 6) {
+							if (p_fighter->ani_track_id_base < FANI_TRACK_ID_SPELL_IMPACT) {
 
 								object_id_bak = get_cb_val(p_fighter->cbx, p_fighter->cby);
 
 								/* copy fighter.object_id back to the chessboard */
 								FIG_set_cb_object(p_fighter->cby, p_fighter->cbx, p_fighter->object_id);
 
-								p_fighter->cbx = (p_fighter->cbx + *(sheet + 2 + 3 * g_fig_ani_state[p_fighter->sheet]));
+								p_fighter->cbx = (p_fighter->cbx + *(p_ani_clip + 2 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]));
 
-								p_fighter->cby = (p_fighter->cby + *(sheet + 3 + 3 * g_fig_ani_state[p_fighter->sheet]));
+								p_fighter->cby = (p_fighter->cby + *(p_ani_clip + 3 + 3 * g_fig_ani_state[p_fighter->ani_track_id_base]));
 
 								double_size_move_tail_first = 0;
 
@@ -751,7 +751,7 @@ void draw_fight_screen(const signed int val)
 											if (p_enemy_sheet) {
 												p_enemy_sheet->flags.dead = 1;
 												p_enemy_sheet->bp = 0;
-												figlist_remove[p_fighter->sheet] = p_enemy_sheet->fighter_id;
+												figlist_remove[p_fighter->ani_track_id_base] = p_enemy_sheet->fighter_id;
 
 												if (p_fighter->double_size != -1) {
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -761,7 +761,7 @@ void draw_fight_screen(const signed int val)
 													p_fighter_tmp = FIG_get_fighter(g_fig_double_size_fighter_id_table[p_fighter->double_size]);
 													FIG_set_cb_object(p_fighter_tmp->cby, p_fighter_tmp->cbx, p_fighter_tmp->object_id);
 #endif
-													figlist_remove[2 + p_fighter->sheet] = g_fig_double_size_fighter_id_table[p_fighter->double_size];
+													figlist_remove[2 + p_fighter->ani_track_id_base] = g_fig_double_size_fighter_id_table[p_fighter->double_size];
 												}
 											}
 										} else {
@@ -778,19 +778,19 @@ void draw_fight_screen(const signed int val)
 												 * The distinction is done only later. */
 												hero->escape_position =
 													g_fig_escape_position[hero->viewdir == 3 ? NORTH : (hero->viewdir + 1)];
-												figlist_remove[p_fighter->sheet] = hero->fighter_id;
+												figlist_remove[p_fighter->ani_track_id_base] = hero->fighter_id;
 
 											}
 										}
 
 										p_fighter->object_id = 0;
-										*((int8_t*)(sheet + 1 + 3 * (1 + g_fig_ani_state[p_fighter->sheet]))) = -1;
+										*((int8_t*)(p_ani_clip + 1 + 3 * (1 + g_fig_ani_state[p_fighter->ani_track_id_base]))) = -1;
 
 										if (p_fighter->double_size != -1) {
 
-											g_fig_anisheets[p_fighter->sheet + 2][4 + 3 * g_fig_ani_state[2 + p_fighter->sheet]] = -1;
+											g_fig_ani_tracks[FANI_TRACK_ID_BASE_TO_TAIL(p_fighter->ani_track_id_base)][4 + 3 * g_fig_ani_state[2 + p_fighter->ani_track_id_base]] = -1; // the two '2 + p_fighter->ani_track_id_base' are the wrong way round and cannot be replaced by FANI_TRACK_ID_BASE_TO_TAIL
 
-											g_fig_ani_state[2 + p_fighter->sheet] = -1;
+											g_fig_ani_state[2 + p_fighter->ani_track_id_base] = -1;
 										}
 
 								} else {
@@ -800,22 +800,22 @@ void draw_fight_screen(const signed int val)
 								}
 							} else {
 								p_fighter->cbx = (p_fighter->cbx +
-									*(sheet + g_fig_ani_state[p_fighter->sheet] * 3 + 2));
+									*(p_ani_clip + g_fig_ani_state[p_fighter->ani_track_id_base] * 3 + 2));
 
 								p_fighter->cby = (p_fighter->cby +
-									*(sheet + g_fig_ani_state[p_fighter->sheet] * 3 + 3));
+									*(p_ani_clip + g_fig_ani_state[p_fighter->ani_track_id_base] * 3 + 3));
 							}
 
-							g_fig_figlist_readd[p_fighter->sheet] = p_fighter->id;
+							g_fig_figlist_readd[p_fighter->ani_track_id_base] = p_fighter->id;
 
-							g_fig_ani_state[p_fighter->sheet]++;
+							g_fig_ani_state[p_fighter->ani_track_id_base]++;
 						}
 
-						if (*(sheet + 1 + (g_fig_ani_state[p_fighter->sheet] * 3)) == -1) {
+						if (*(p_ani_clip + 1 + (g_fig_ani_state[p_fighter->ani_track_id_base] * 3)) == -1) {
 
-							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
-							g_fig_ani_state[p_fighter->sheet] = -1;
-							p_fighter->sheet = p_fighter->wsheet = -1;
+							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_base];
+							g_fig_ani_state[p_fighter->ani_track_id_base] = -1;
+							p_fighter->ani_track_id_base = p_fighter->ani_track_id_weapon = FANI_TRACK_ID_NONE;
 
 						} else {
 							obj_x = 10 - (p_fighter->width / 2) + (10 * (p_fighter->cbx + p_fighter->cby));
@@ -826,43 +826,43 @@ void draw_fight_screen(const signed int val)
 
 							obj_y += p_fighter->offsety;
 
-							obj_x += *(sheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3);
+							obj_x += *(p_ani_clip + 2 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3);
 
-							obj_y -= *(sheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
+							obj_y -= *(p_ani_clip + 3 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3);
 
-							i = g_gfxtab_figures_main[p_fighter->actor_sprite_id][*(sheet)];
+							i = g_gfxtab_figures_main[p_fighter->actor_sprite_id][*(p_ani_clip)];
 
-							if ((p_fighter->sheet < 6) && (*(sheet + 0xf2) >= 0)) {
+							if ((p_fighter->ani_track_id_base < FANI_TRACK_ID_SPELL_IMPACT) && (*(p_ani_clip + 242) >= 0)) {
 								nvf.src = (uint8_t*)load_fight_figs(i);
 							} else {
 								nvf.src = g_spellobj_nvf_buf;
 							}
 
-							nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
-							nvf.image_num = *(sheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
+							nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_base];
+							nvf.image_num = *(p_ani_clip + 1 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3);
 							nvf.compression_type = 0;
 							nvf.width = &width;
 							nvf.height = &object_id_bak;
 
 							process_nvf_extraction(&nvf);
 
-							if (p_fighter->wsheet != -1) {
+							if (p_fighter->ani_track_id_weapon != FANI_TRACK_ID_NONE) {
 
-								p_weapon_anisheet = &g_fig_anisheets[p_fighter->wsheet][0];
+								p_ani_clip_weapon = &g_fig_ani_tracks[p_fighter->ani_track_id_weapon][0];
 
-								if (*(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3) == -1)
+								if (*(p_ani_clip_weapon + 1 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3) == -1)
 								{
-									p_fighter->wsheet = -1;
+									p_fighter->ani_track_id_weapon = FANI_TRACK_ID_NONE;
 								} else {
 									current_x1 = obj_x;
 									current_y1 = obj_y;
 
-									p_weapon_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet];
+									p_weapon_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_weapon];
 
-									if (*(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[p_fighter->sheet])) != -5) {
-										nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->wsheet];
+									if (*(p_ani_clip_weapon + 1 + 3 * (g_fig_ani_state[p_fighter->ani_track_id_base])) != -5) {
+										nvf.dst = (uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_weapon];
 										nvf.src = g_weapons_nvf_buf;
-										nvf.image_num = *(uint8_t*)(p_weapon_anisheet + 1 + g_fig_ani_state[p_fighter->sheet] * 3);
+										nvf.image_num = *(uint8_t*)(p_ani_clip_weapon + 1 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3);
 										nvf.compression_type = 0;
 										nvf.width = &width;
 										nvf.height = &object_id_bak;
@@ -870,17 +870,17 @@ void draw_fight_screen(const signed int val)
 										process_nvf_extraction(&nvf);
 
 										current_x1 += p_fighter->width - 14;
-										current_x1 += *(p_weapon_anisheet + 2 + g_fig_ani_state[p_fighter->sheet] * 3);
-										current_y1 -= *(p_weapon_anisheet + 3 + g_fig_ani_state[p_fighter->sheet] * 3);
+										current_x1 += *(p_ani_clip_weapon + 2 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3);
+										current_y1 -= *(p_ani_clip_weapon + 3 + g_fig_ani_state[p_fighter->ani_track_id_base] * 3);
 									}
 								}
 							}
 
-							g_fig_ani_state[p_fighter->sheet]++;
+							g_fig_ani_state[p_fighter->ani_track_id_base]++;
 						}
 
-						if (p_fighter->sheet != -1) {
-							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->sheet];
+						if (p_fighter->ani_track_id_base != FANI_TRACK_ID_NONE) {
+							p_figure_gfx = (uint8_t*)g_fig_gfxbuffers[p_fighter->ani_track_id_base];
 						}
 					}
 				}
@@ -889,9 +889,9 @@ void draw_fight_screen(const signed int val)
 
 			if (FIG_obj_needs_refresh(p_fighter, obj_x, obj_y)) {
 
-				if ((p_fighter->sheet == -1) || (figlist_remove[p_fighter->sheet] == -1)) {
+				if ((p_fighter->ani_track_id_base == FANI_TRACK_ID_NONE) || (figlist_remove[p_fighter->ani_track_id_base] == -1)) {
 
-					if (p_fighter->sheet != -1) {
+					if (p_fighter->ani_track_id_base != FANI_TRACK_ID_NONE) {
 
 						g_figobj_unkn_x1 = g_figobj_unkn_x2;
 						g_figobj_unkn_y1 = g_figobj_unkn_y2;

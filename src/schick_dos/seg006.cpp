@@ -181,7 +181,7 @@ struct enemy_sheet* FIG_get_enemy_sheet(const signed int fighter_id)
 	return (struct enemy_sheet*)NULL;
 }
 
-void FIG_set_sheet(const signed char fighter_id, const signed char sheet)
+void FIG_set_ani_track_id_base(const signed char fighter_id, const signed char ani_track_id_base)
 {
 	struct struct_fighter *list_i = g_fig_list_head;
 
@@ -196,7 +196,7 @@ void FIG_set_sheet(const signed char fighter_id, const signed char sheet)
 		list_i = list_i->next;
 	}
 
-	list_i->sheet = sheet;
+	list_i->ani_track_id_base = ani_track_id_base;
 
 	/* set presence flag */
 	list_i->visible = 1;
@@ -271,7 +271,7 @@ void FIG_make_visible(const signed int fighter_id)
 	}
 }
 
-void FIG_set_weapon_sheet(const signed char fighter_id, const signed char wsheet)
+void FIG_set_ani_track_id_weapon(const signed char fighter_id, const signed char ani_track_id_weapon)
 {
 	struct struct_fighter *list_i = g_fig_list_head;
 
@@ -284,7 +284,7 @@ void FIG_set_weapon_sheet(const signed char fighter_id, const signed char wsheet
 		list_i = list_i->next;
 	}
 
-	list_i->wsheet = wsheet;
+	list_i->ani_track_id_weapon = ani_track_id_weapon;
 }
 
 /**

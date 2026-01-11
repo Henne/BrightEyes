@@ -208,8 +208,8 @@ signed char FIG_cb_select_target(signed int *px, signed int *py, const signed in
 	g_fig_list_elem.y2 = 10;
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
-	g_fig_list_elem.wsheet = -1;
-	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+	g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 	g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
 	g_fig_list_elem.z = 1;
 	g_fig_list_elem.visible = 1;
@@ -580,8 +580,8 @@ void FIG_move_hero(struct struct_hero *hero, const signed int hero_pos, signed i
 	g_fig_list_elem.width = 22;
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
-	g_fig_list_elem.wsheet = -1;
-	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+	g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 	g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
 	g_fig_list_elem.z = 1;
 	g_fig_list_elem.visible = 1;

@@ -83,16 +83,16 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_id)
 	signed char dir1;
 	signed char dir2;
 	signed char dir3;
-	int8_t *sheet_ptr;
+	int8_t *p_ani_clip_base;
 	struct struct_fighter *fighter;
 	int16_t *ani_index_ptr;
 
 	signed int i;
 
-	g_fig_anisheets[1][0] = 0;
-	g_fig_anisheets[1][242] = enemy->actor_sprite_id;
+	g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_1_BASE][0] = 0;
+	g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_1_BASE][242] = enemy->actor_sprite_id;
 
-	sheet_ptr = &g_fig_anisheets[1][1];
+	p_ani_clip_base = &g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_1_BASE][1];
 	i = 0;
 	ani_index_ptr = g_gfx_ani_index[enemy->actor_sprite_id];
 
@@ -128,23 +128,23 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_id)
 
 			enemy->viewdir = g_fig_move_pathdir[i];
 
-			sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[dir2], 1);
+			p_ani_clip_base += copy_ani_sequence(p_ani_clip_base, ani_index_ptr[dir2], 1);
 
 			if (dir1 != -1) {
 
-				sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[dir1], 1);
+				p_ani_clip_base += copy_ani_sequence(p_ani_clip_base, ani_index_ptr[dir1], 1);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[g_fig_move_pathdir[i] + 0x0c], 1);
+			p_ani_clip_base += copy_ani_sequence(p_ani_clip_base, ani_index_ptr[g_fig_move_pathdir[i] + 12], 1);
 			i += 2;
 			/* BP - 2 */
 			enemy->bp = enemy->bp - 2;
 
 		} else {
-			sheet_ptr += copy_ani_sequence(sheet_ptr, ani_index_ptr[g_fig_move_pathdir[i] + 0x08], 1);
+			p_ani_clip_base += copy_ani_sequence(p_ani_clip_base, ani_index_ptr[g_fig_move_pathdir[i] + 8], 1);
 			i++;
 			/* BP - 1 */
 			enemy->bp--;
@@ -152,25 +152,25 @@ void prepare_enemy_ani(struct enemy_sheet *enemy, const signed int enemy_id)
 	}
 
 	/* terminate array */
-	*sheet_ptr = -1;
+	*p_ani_clip_base = -1;
 	FIG_call_draw_pic();
 	FIG_remove_from_list(g_fig_cb_marker_id, 0);
 	g_fig_cb_marker_id = -1;
-	FIG_set_sheet(enemy->fighter_id, 1);
+	FIG_set_ani_track_id_base(enemy->fighter_id, FANI_TRACK_ID_ACTOR_1_BASE);
 
 	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
 
-		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 243);
+		memcpy(&g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_1_TAIL], &g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_1_BASE], 243);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
-		FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], 3);
+		FIG_set_ani_track_id_base(g_fig_double_size_fighter_id_table[fighter->double_size], FANI_TRACK_ID_ACTOR_1_TAIL);
 	}
 
 	/* draw_fight_screen */
 	draw_fight_screen(0);
-	memset(&g_fig_anisheets[1], -1, 243);
-	memset(&g_fig_anisheets[3], -1, 243);
+	memset(&g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_1_BASE], -1, 243);
+	memset(&g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_1_TAIL], -1, 243);
 	FIG_init_list_elem(enemy_id + 10);
 }
 

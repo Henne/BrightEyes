@@ -143,8 +143,8 @@ void FANI_add_projectile(const signed int fighter_id, const signed int projectil
 
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
-	g_fig_list_elem.wsheet = -1;
-	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+	g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 	g_fig_list_elem.gfxbuf = g_fig_projectile_buf;
 	g_fig_list_elem.z = 100;
 	g_fig_list_elem.visible = 0;
@@ -197,10 +197,10 @@ signed int FANI_copy_sequence(int8_t *dst, const int8_t *src, const signed char 
 	return i;
 }
 
-signed int FANI_prepare_projectile_ani(const signed int sheet_id, const signed int projectile_gfx_id, const signed int fighter_id, const signed int target_object_id, const signed int dir)
+signed int FANI_prepare_projectile_ani(const signed int ani_track_id, const signed int projectile_gfx_id, const signed int fighter_id, const signed int target_object_id, const signed int viewdir)
 {
 	signed int i;
-	int8_t *sheet_ptr;
+	int8_t *p_ani_clip_projectile;
 	signed int fighter_x;
 	signed int fighter_y;
 	signed int target_x;
@@ -216,16 +216,16 @@ signed int FANI_prepare_projectile_ani(const signed int sheet_id, const signed i
 		return 0;
 	}
 
-	sheet_ptr = &g_fig_anisheets[sheet_id][1];
-	g_fig_anisheets[sheet_id][0] = 0;
-	g_fig_anisheets[sheet_id][242] = 0;
+	p_ani_clip_projectile = &g_fig_ani_tracks[ani_track_id][1];
+	g_fig_ani_tracks[ani_track_id][0] = 0;
+	g_fig_ani_tracks[ani_track_id][242] = 0;
 
 	for (i = 0; distance - 1 > i; i++) {
-		sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_projectile_index[projectile_gfx_id][dir], -1);
+		p_ani_clip_projectile += FANI_copy_sequence(p_ani_clip_projectile, g_anitab_projectile_index[projectile_gfx_id][viewdir], -1);
 	}
-	*sheet_ptr = -1;
+	*p_ani_clip_projectile = -1;
 
-	FANI_add_projectile(fighter_id, projectile_gfx_id, dir);
+	FANI_add_projectile(fighter_id, projectile_gfx_id, viewdir);
 
 	return 1;
 }
@@ -238,7 +238,7 @@ struct dummy4 {
 	signed int a[2];
 };
 
-void FANI_add_spell(const signed int x, const signed int y, const signed int spell_ani_id)
+void FANI_add_spell(const signed int x, const signed int y, const signed int spell_impact_gfx_id)
 {
 	signed int height;
 	signed int width;
@@ -253,19 +253,19 @@ void FANI_add_spell(const signed int x, const signed int y, const signed int spe
 	nvf.dst = g_fig_spellgfx_buf;
 	nvf.src = g_spellobj_nvf_buf;
 
-	nvf.image_num = a.a[spell_ani_id - 1];
+	nvf.image_num = a.a[spell_impact_gfx_id - 1];
 	nvf.compression_type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
 	process_nvf_extraction(&nvf);
 
 	g_fig_list_elem.figure = 0;
-	g_fig_list_elem.nvf_no = a.a[spell_ani_id - 1];
+	g_fig_list_elem.nvf_no = a.a[spell_impact_gfx_id - 1];
 	g_fig_list_elem.cbx = x;
 	g_fig_list_elem.cby = y;
 
-	g_fig_list_elem.offsetx = (unsigned char)b.a[spell_ani_id - 1];
-	g_fig_list_elem.offsety = (unsigned char)c.a[spell_ani_id - 1];
+	g_fig_list_elem.offsetx = (unsigned char)b.a[spell_impact_gfx_id - 1];
+	g_fig_list_elem.offsety = (unsigned char)c.a[spell_impact_gfx_id - 1];
 
 	g_fig_list_elem.height = height;
 	g_fig_list_elem.width = width;
@@ -275,8 +275,8 @@ void FANI_add_spell(const signed int x, const signed int y, const signed int spe
 	g_fig_list_elem.y2 = height - 1;
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
-	g_fig_list_elem.wsheet = -1;
-	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+	g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 	g_fig_list_elem.gfxbuf = g_fig_spellgfx_buf;
 	g_fig_list_elem.z = 99;
 	g_fig_list_elem.visible = 0;
@@ -290,44 +290,44 @@ void FANI_remove_spell(void)
 	g_fig_spellgfx_id = -1;
 }
 
-void FANI_prepare_hero_spell_ani(const signed int sheet_id, const struct struct_hero *hero, const signed int spell_ani_id)
+void FANI_prepare_hero_spell_ani(const signed int ani_track_id, const struct struct_hero *hero, const signed int spell_gfx_id)
 {
-	int8_t *sheet_ptr;
+	int8_t *p_ani_clip_spell_impact;
 	signed int x;
 	signed int y;
 
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(hero->target_object_id, &x, &y);
 
-	sheet_ptr = &g_fig_anisheets[sheet_id][1];
+	p_ani_clip_spell_impact = &g_fig_ani_tracks[ani_track_id][1];
 
-	g_fig_anisheets[sheet_id][0] = 0;
-	g_fig_anisheets[sheet_id][242] = -1;
+	g_fig_ani_tracks[ani_track_id][0] = 0;
+	g_fig_ani_tracks[ani_track_id][242] = -1;
 
 	/* copy the ani sequence and terminate it */
-	sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
-	*sheet_ptr = -1;
+	p_ani_clip_spell_impact += FANI_copy_sequence(p_ani_clip_spell_impact, g_anitab_spell_index[spell_gfx_id - 1], -1);
+	*p_ani_clip_spell_impact = -1;
 
-	FANI_add_spell(x, y, spell_ani_id);
+	FANI_add_spell(x, y, spell_gfx_id);
 }
 
-void FANI_prepare_enemy_spell_ani(const signed int sheet_id, const struct enemy_sheet *enemy, const signed int spell_ani_id)
+void FANI_prepare_enemy_spell_ani(const signed int ani_track_id, const struct enemy_sheet *enemy, const signed int spell_impact_gfx_id)
 {
-	int8_t *sheet_ptr;
+	int8_t *p_ani_clip_spell_impact;
 	signed int x;
 	signed int y;
 
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(enemy->target_object_id, &x, &y);
 
-	sheet_ptr = &g_fig_anisheets[sheet_id][1];
+	p_ani_clip_spell_impact = &g_fig_ani_tracks[ani_track_id][1];
 
-	g_fig_anisheets[sheet_id][0] = 0;
-	g_fig_anisheets[sheet_id][242] = -1;
+	g_fig_ani_tracks[ani_track_id][0] = 0;
+	g_fig_ani_tracks[ani_track_id][242] = -1;
 
 	/* copy the ani sequence and terminate it */
-	sheet_ptr += FANI_copy_sequence(sheet_ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
-	*sheet_ptr = -1;
+	p_ani_clip_spell_impact += FANI_copy_sequence(p_ani_clip_spell_impact, g_anitab_spell_index[spell_impact_gfx_id - 1], -1);
+	*p_ani_clip_spell_impact = -1;
 
-	FANI_add_spell(x, y, spell_ani_id);
+	FANI_add_spell(x, y, spell_impact_gfx_id);
 }

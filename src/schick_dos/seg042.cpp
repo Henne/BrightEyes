@@ -591,10 +591,10 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				}
 			}
 
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 			FANI_prepare_fight_hero_ani(
-				0,
+				FANI_TRACK_ID_ACTOR_0_BASE,
 				hero,
 				attacker_weapon_gfx_id,
 				FIG_ACTION_MELEE_ATTACK,
@@ -609,7 +609,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				if (check_hero(p_target_hero) || (g_fig_target_dead != 0)) {
 
 					FANI_prepare_fight_hero_ani(
-						1,
+						FANI_TRACK_ID_ACTOR_1_BASE,
 						p_target_hero,
 						target_weapon_gfx_id,
 						FIG_ACTION_PARRY,
@@ -623,7 +623,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (target_cannot_parry == 0) {
 					FANI_prepare_fight_enemy_ani(
-						1,
+						FANI_TRACK_ID_ACTOR_1_BASE,
 						p_target_enemy,
 						FIG_ACTION_PARRY,
 						hero->target_object_id,
@@ -634,7 +634,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					/* flank or rear is attacked -> no parry animation */
 					if (g_fig_target_dead != 0) {
 						FANI_prepare_fight_enemy_ani(
-							1,
+							FANI_TRACK_ID_ACTOR_1_BASE,
 							p_target_enemy,
 							FIG_ACTION_NONE,
 							hero->target_object_id,
@@ -649,7 +649,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			draw_fight_screen_pal(0);
 
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 		} else if (hero->action_id == FIG_ACTION_RANGE_ATTACK) {
 
@@ -717,7 +717,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					}
 				}
 
-				clear_anisheets();
+				FANI_clear_ani_tracks();
 
 				projectile_gfx_id = attacker_weapon_gfx_id;
 				ranged_attack_nonadjacent_flag = 0;
@@ -725,7 +725,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				FIG_call_draw_pic();
 
 				FANI_prepare_fight_hero_ani(
-					0,
+					FANI_TRACK_ID_ACTOR_0_BASE,
 					hero,
 					attacker_weapon_gfx_id,
 					FIG_ACTION_RANGE_ATTACK,
@@ -735,14 +735,14 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				);
 
 				ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
-					7,
+					FANI_TRACK_ID_PROJECTILE,
 					projectile_gfx_id,
 					hero_pos + 1,
 					target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
 					hero->viewdir
 				);
 
-				FIG_set_sheet(hero->fighter_id, 0);
+				FIG_set_ani_track_id_base(hero->fighter_id, FANI_TRACK_ID_ACTOR_0_BASE);
 
 				draw_fight_screen_pal(0);
 
@@ -756,7 +756,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (ranged_attack_nonadjacent_flag != 0) {
 
-					FIG_set_sheet(g_fig_projectile_id, 7);
+					FIG_set_ani_track_id_base(g_fig_projectile_id, FANI_TRACK_ID_PROJECTILE);
 
 					draw_fight_screen(ranged_attack_nonadjacent_flag == 0 && g_fig_target_dead == 0 ? 0 : 1);
 
@@ -770,7 +770,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (target_is_hero != 0) {
 						/* target is hero */
 						FANI_prepare_fight_hero_ani(
-							1,
+							FANI_TRACK_ID_ACTOR_1_BASE,
 							p_target_hero,
 							-1,
 							FIG_ACTION_NONE,
@@ -781,7 +781,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					} else {
 						/* target is enemy */
 						FANI_prepare_fight_enemy_ani(
-							1,
+							FANI_TRACK_ID_ACTOR_1_BASE,
 							p_target_enemy,
 							FIG_ACTION_NONE,
 							hero->target_object_id,
@@ -795,7 +795,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				draw_fight_screen(0);
 
-				clear_anisheets();
+				FANI_clear_ani_tracks();
 			}
 
 		} else if (hero->action_id == FIG_ACTION_SPELL) {
@@ -816,7 +816,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 			spell_test_result = use_spell(hero, 0, 0);
 
-			clear_anisheets();
+			FANI_clear_ani_tracks();
 
 			if (g_autofight != 0) {
 				g_pic_copy.x1 = g_pic_copy.v1 = 0;
@@ -858,7 +858,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 				if (spell_test_result != -1) {
 
 					FANI_prepare_spell_hero(
-						0,
+						FANI_TRACK_ID_ACTOR_0_BASE,
 						hero,
 						4,
 						hero_pos + 1,
@@ -873,7 +873,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 
 						if (spell_impact_gfx_id != SPELL_IMPACT_GFX_ID_MUSHROOM) {
-							FANI_prepare_hero_spell_ani(6, hero, spell_impact_gfx_id);
+							FANI_prepare_hero_spell_ani(FANI_TRACK_ID_SPELL_IMPACT, hero, spell_impact_gfx_id);
 						}
 
 					} else {
@@ -883,7 +883,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 							if (target_is_hero == 0) {
 
 								FANI_prepare_spell_enemy(
-									1,
+									FANI_TRACK_ID_ACTOR_1_BASE,
 									p_target_enemy,
 									99,
 									target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
@@ -895,7 +895,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 								if (check_hero(p_target_hero) || (g_fig_target_dead != 0)) {
 
 									FANI_prepare_spell_hero(
-										1,
+										FANI_TRACK_ID_ACTOR_1_BASE,
 										p_target_hero,
 										99,
 										hero->target_object_id,
@@ -915,7 +915,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					) {
 
 						ranged_attack_nonadjacent_flag = FANI_prepare_projectile_ani(
-							7,
+							FANI_TRACK_ID_PROJECTILE,
 							projectile_gfx_id,
 							hero_pos + 1,
 							target_object_id_was_modified == 0 ? hero->target_object_id : hero->target_object_id + 20,
@@ -926,7 +926,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				if (spell_test_result != -1) {
 
-					FIG_set_sheet(hero->fighter_id, 0);
+					FIG_set_ani_track_id_base(hero->fighter_id, FANI_TRACK_ID_ACTOR_0_BASE);
 					draw_fight_screen_pal(1);
 				}
 
@@ -934,7 +934,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 					if (ranged_attack_nonadjacent_flag != 0) {
 
-						FIG_set_sheet(g_fig_projectile_id, 7);
+						FIG_set_ani_track_id_base(g_fig_projectile_id, FANI_TRACK_ID_PROJECTILE);
 
 						draw_fight_screen(1);
 
@@ -944,7 +944,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 					if (spell_impact_gfx_id > SPELL_IMPACT_GFX_ID_GLOW) {
 
 						if (spell_impact_gfx_id != SPELL_IMPACT_GFX_ID_MUSHROOM) {
-							FIG_set_sheet(g_fig_spellgfx_id, 6);
+							FIG_set_ani_track_id_base(g_fig_spellgfx_id, FANI_TRACK_ID_SPELL_IMPACT);
 						} else {
 
 							FIG_call_draw_pic();
@@ -978,20 +978,20 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 						if (target_is_hero == 0) {
 
-							FIG_set_sheet(p_target_enemy->fighter_id, 1);
+							FIG_set_ani_track_id_base(p_target_enemy->fighter_id, FANI_TRACK_ID_ACTOR_1_BASE);
 
 							if (is_in_byte_array(p_target_enemy->actor_sprite_id, g_double_size_actor_sprite_id_table))
 							{
 								fighter_add = FIG_get_fighter(p_target_enemy->fighter_id);
 
-								FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter_add->double_size], 3);
+								FIG_set_ani_track_id_base(g_fig_double_size_fighter_id_table[fighter_add->double_size], FANI_TRACK_ID_ACTOR_1_TAIL);
 							}
 
 						} else {
 
 							if (hero->target_object_id > 0) {
 
-								FIG_set_sheet(p_target_hero->fighter_id, 1);
+								FIG_set_ani_track_id_base(p_target_hero->fighter_id, FANI_TRACK_ID_ACTOR_1_BASE);
 							}
 						}
 					}
@@ -1042,7 +1042,7 @@ void FIG_do_hero_action(struct struct_hero* hero, const signed int hero_pos)
 
 				FIG_output(g_dtp2);
 
-				clear_anisheets();
+				FANI_clear_ani_tracks();
 
 			} else {
 				FIG_output(g_dtp2);

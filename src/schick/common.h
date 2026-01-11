@@ -581,7 +581,6 @@ enum {
 	PROJECTILE_GFX_ID_RANGED_SPEAR   = 5
 };
 
-
 enum {
 	SPELL_IMPACT_GFX_ID_GLOW = 0, /* for this one, the animation depends on the target spite */
 	SPELL_IMPACT_GFX_ID_DOME = 1, /* sparkling dome */
@@ -589,6 +588,30 @@ enum {
 	SPELL_IMPACT_GFX_ID_BARRIER = 3, /* only for spell Hexenknoten */
 	SPELL_IMPACT_GFX_ID_MUSHROOM = 4 /* only for Spell Salander Mutanderer */
 };
+
+enum {
+	/* IDs of the individual tracks of a fight animation */
+	FANI_TRACK_ID_NONE           = -1,
+	FANI_TRACK_ID_ACTOR_0_BASE   =  0, /* in case of a double size actor: front part */
+	FANI_TRACK_ID_ACTOR_1_BASE   =  1, /* in case of a double size actor: front part */
+	FANI_TRACK_ID_ACTOR_0_TAIL   =  2, /* tail part of the body of a double size actor */
+	FANI_TRACK_ID_ACTOR_1_TAIL   =  3, /* tail part of the body of a double size actor */
+	FANI_TRACK_ID_ACTOR_0_WEAPON =  4,
+	FANI_TRACK_ID_ACTOR_1_WEAPON =  5,
+	FANI_TRACK_ID_SPELL_IMPACT   =  6, /* the impact at the target of a spell */
+	FANI_TRACK_ID_PROJECTILE     =  7,
+	FANI_TRACK_ID__MAX           =  8
+};
+
+#define FANI_TRACK_ID_BASE_TO_TAIL(ani_track_id) ((ani_track_id) + 2)
+/* resulting transformation:
+ * FANI_TRACK_ID_ACTOR_0_BASE --> FANI_TRACK_ID_ACTOR_0_TAIL
+ * FANI_TRACK_ID_ACTOR_1_BASE --> FANI_TRACK_ID_ACTOR_1_TAIL */
+
+#define FANI_TRACK_ID_BASE_TO_WEAPON(ani_track_id) ((ani_track_id) + 4)
+/* resulting transformation:
+ * FANI_TRACK_ID_ACTOR_0_BASE --> FANI_TRACK_ID_ACTOR_0_WEAPON
+ * FANI_TRACK_ID_ACTOR_1_BASE --> FANI_TRACK_ID_ACTOR_1_WEAPON */
 
 enum {
 	RANGED_WEAPON_STATS_ID_WURFSTERN_WURFMESSER = 0, /* ITEM_ID_WURFSTERN, ITEM_ID_WURFMESSER */
@@ -1836,6 +1859,11 @@ enum {
 	ARCHIVE_FILE_FX17_VOC     = 305,
 	ARCHIVE_FILE_FX18_VOC     = 306,
 	ARCHIVE_FILE_OUTRO_XMI    = 307
+};
+
+enum {
+	ANI_SRC_FILE_ID_ANI_DAT = 2,
+	ANI_SRC_FILE_ID_WEAPANI_DAT = 3
 };
 
 enum {

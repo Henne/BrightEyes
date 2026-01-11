@@ -85,13 +85,13 @@ signed int FIG_weapon_gfx_id_ranged(const struct struct_hero *hero)
 /**
  * \brief   fills an enemies sheet from a template
  *
- * \param   sheet_no    the number of the sheet
+ * \param   enemy_id    the number of the sheet
  * \param   target_object_id    the ID of the enemy (MONSTER.DAT)
  * \param   round       the fight round the enemy appears
  *
  * \remark: special fight situations should be handled elsewhere
  */
-void fill_enemy_sheet(const signed int sheet_no, const signed char target_object_id, const signed char round)
+void fill_enemy_sheet(const signed int enemy_id, const signed char target_object_id, const signed char round)
 {
 	struct monster *monster;
 	struct enemy_sheet *sheet;
@@ -99,7 +99,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 
 	/* calculate the pointers */
 	monster = &g_monster_dat_buf[target_object_id];
-	sheet = &g_enemy_sheets[sheet_no];
+	sheet = &g_enemy_sheets[enemy_id];
 
 	/* erease the sheet */
 	memset(sheet, 0, sizeof(struct enemy_sheet));
@@ -172,7 +172,7 @@ void fill_enemy_sheet(const signed int sheet_no, const signed char target_object
 	sheet->is_animal = monster->is_animal;
 	sheet->round_appear = round;
 
-	sheet->viewdir = g_current_fight->enemies[sheet_no].viewdir;
+	sheet->viewdir = g_current_fight->enemies[enemy_id].viewdir;
 
 	sheet->shots = monster->shots;
 	sheet->shot_dam = monster->shot_dam;
@@ -308,8 +308,8 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, const signed int x, const
 	g_fig_list_elem.is_enemy = 1;
 	g_fig_list_elem.actor_sprite_id = enemy->actor_sprite_id;
 	g_fig_list_elem.reload = -1;
-	g_fig_list_elem.wsheet = -1;
-	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+	g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 	g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr; /* ->prev */
 	g_fig_list_elem.object_id = 0; /* ->next */
 
@@ -516,8 +516,8 @@ void FIG_init_heroes(void)
 
 			g_fig_list_elem.actor_sprite_id = hero->actor_sprite_id;
 			g_fig_list_elem.reload = -1;
-			g_fig_list_elem.wsheet = -1;
-			g_fig_list_elem.sheet = -1;
+			g_fig_list_elem.ani_track_id_weapon = FANI_TRACK_ID_NONE;
+			g_fig_list_elem.ani_track_id_base = FANI_TRACK_ID_NONE;
 			g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr;
 			g_fig_list_elem.object_id = 0;
 			g_fightobj_buf_seek_ptr += 0x508;

@@ -274,7 +274,7 @@ uint8_t *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
 unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer
 signed int g_nr_of_enemies; // ds:0xd872, ?
 signed char g_fightobj_list[90]; // ds:0xd874
-int8_t g_fig_anisheets[8][243]; // ds:0xd8ce
+int8_t g_fig_ani_tracks[FANI_TRACK_ID__MAX][243]; // ds:0xd8ce
 
 struct struct_fighter g_fig_list_elem; // ds:0xe066
 signed char g_fig_list_array[127]; // ds:0xe089

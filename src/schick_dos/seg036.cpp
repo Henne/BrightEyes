@@ -41,46 +41,48 @@ static struct viewdir_offsets g_fig_viewdir_offsets3 = { { { 1, 0 }, { 0, -1 }, 
 static struct viewdir_offsets g_fig_viewdir_offsets4 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fc7
 
 /**
- * \brief   copies an ani sequence
+ * \brief   loads an ani clip from SCHICK.DAT
  *
- * \param dst         destination pointer for data
- * \param ani_num
- * \param mode	DAT-File to use 3 = WEAPANI.DAT, else ANI.DAT
- * \return   the length of the sequence in bytes.
+ * \param dst           destination pointer for data
+ * \param ani_num       number of the track within the source file.
+ * \param src_file_id	id for the source file within SCHICK.DAT to use.
+ *                      ANI.DAT     --> ANI_SRC_FILE_ID_ANI_DAT     == 2  (or in fact, all values != 3)
+ *                      WEAPANI.DAT --> ANI_SRC_FILE_ID_WEAPANI_DAT == 3  (in fact, this never happens)
+ * \return              the length of the track in bytes.
  */
-static signed int AFIG_copy_ani_sequence(int8_t *dst, const signed int ani_num, const signed int mode)
+static signed int load_ani_clip_from_file(int8_t *dst, const signed int clip_num, const signed int src_file_id)
 {
 	uint8_t *p_datbuffer;
 	uint8_t *p_datitem;
 	signed char len;
 	signed int i;
-	signed int ani_max_num;
+	signed int clip_num_max;
 
 	/* set the right buffer */
 	p_datbuffer = g_buffer_anidat;
 
-	/* This function is never called with mode == 3 */
-	if (mode == 3)
+	if (src_file_id == ANI_SRC_FILE_ID_WEAPANI_DAT)
+		// this never happens
 		p_datbuffer = g_buffer_weapanidat;
 
 	/* read how many ani sequences are in the file */
-	ani_max_num = *(int16_t*)p_datbuffer;
+	clip_num_max = *(int16_t*)p_datbuffer;
 
 	/* check if the desired ani_no is in the range */
-	if (ani_num < 0)
+	if (clip_num < 0)
 		return 0;
 
-	if (ani_num > ani_max_num)
+	if (clip_num > clip_num_max)
 		return 0;
 
 	/* set p_datitem to the first (0) ani sequence */
 	p_datitem = p_datbuffer;
-	p_datitem += ani_max_num + 2;
+	p_datitem += clip_num_max + 2;
 	/* set len to the lenght first (0) ani sequence */
 	len = p_datbuffer[2];
 
 	/* forward to the desired ani sequence */
-	for (i = 1; i <= ani_num; i++) {
+	for (i = 1; i <= clip_num; i++) {
 		p_datitem += len;
 		len = *(p_datbuffer + i + 2);
 	}
@@ -104,14 +106,14 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 	signed int i;
 	signed char dir1;
 	signed char dir2;
-	int8_t *sheet_ptr;
+	int8_t *p_ani_clip_base;
 	signed char dir3;
 	int16_t *ani_index_ptr;
 
-	g_fig_anisheets[0][0] = 0;
-	g_fig_anisheets[0][242] = hero->actor_sprite_id;
+	g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_0_BASE][0] = 0;
+	g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_0_BASE][242] = hero->actor_sprite_id;
 
-	sheet_ptr = &g_fig_anisheets[0][1];
+	p_ani_clip_base = &g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_0_BASE][1];
 	ani_index_ptr = g_gfx_ani_index[hero->actor_sprite_id];
 
 	i = 0;
@@ -148,35 +150,35 @@ void FIG_prepare_hero_ani(struct struct_hero *hero, const signed int hero_pos)
 			/* set heroes looking direction */
 			hero->viewdir = g_fig_move_pathdir[i];
 
-			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[dir2], 2);
+			p_ani_clip_base += load_ani_clip_from_file(p_ani_clip_base, ani_index_ptr[dir2], ANI_SRC_FILE_ID_ANI_DAT);
 
 			if (dir1 != -1) {
-				sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[dir1], 2);
+				p_ani_clip_base += load_ani_clip_from_file(p_ani_clip_base, ani_index_ptr[dir1], ANI_SRC_FILE_ID_ANI_DAT);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[(g_fig_move_pathdir[i] + 12)], 2);
+			p_ani_clip_base += load_ani_clip_from_file(p_ani_clip_base, ani_index_ptr[(g_fig_move_pathdir[i] + 12)], ANI_SRC_FILE_ID_ANI_DAT);
 			i += 2;
 			/* BP - 2 */
 			hero->fight_bp_left = hero->fight_bp_left - 2;
 		} else {
-			sheet_ptr += AFIG_copy_ani_sequence(sheet_ptr, ani_index_ptr[(g_fig_move_pathdir[i] + 8)], 2);
+			p_ani_clip_base += load_ani_clip_from_file(p_ani_clip_base, ani_index_ptr[(g_fig_move_pathdir[i] + 8)], ANI_SRC_FILE_ID_ANI_DAT);
 			i++;
 			/* BP - 1 */
 			hero->fight_bp_left--;
 		}
 	}
 
-	*sheet_ptr = -1;
+	*p_ani_clip_base = -1;
 	FIG_call_draw_pic();
 	FIG_remove_from_list(g_fig_cb_marker_id, 0);
 	g_fig_cb_marker_id = -1;
-	FIG_set_sheet(hero->fighter_id, 0);
+	FIG_set_ani_track_id_base(hero->fighter_id, FANI_TRACK_ID_ACTOR_0_BASE);
 
 	draw_fight_screen(0);
-	memset(&g_fig_anisheets[0], -1, 243);
+	memset(&g_fig_ani_tracks[FANI_TRACK_ID_ACTOR_0_BASE], -1, 243);
 	FIG_init_list_elem(hero_pos + 1);
 }
 
@@ -319,6 +321,7 @@ signed int AFIG_search_spell_target(const signed int x, const signed int y, cons
 	will_attack = 0;
 
 	while (done == 0) {
+
 		/* calculate the offset from direction */
 		if (viewdir == FIG_VIEWDIR_RIGHT) {
 			x_diff++;

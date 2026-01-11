@@ -124,13 +124,13 @@ static signed char get_seq_header(const signed int ani_num)
 /**
  * \brief   prepares the animation sequence of a hero in fights
  *
- * \param   sheet_id        [0, 1]
+ * \param   ani_track_id       [0, 1]
  * \param   hero            pointer to hero
  * \param   weapon_gfx_id   the type of weapon for the animation [-1, 5], 3,4,5 are range weapons
  * \param   action_type     {FIG_ACTION_MELEE_ATTACK = 2, FIG_ACTION_RANGE_ATTACK = 15, FIG_ACTION_PARRY = 100, FIG_ACTION_UNKNOWN3 = 102, FIG_ACTION_UNKNOWN4 = 103}
  */
 /* Borlandified and identical */
-void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *hero, const signed int weapon_gfx_id, const signed int f_action, const signed int object_id_attacker, const signed int object_id_target, const signed int a7)
+void FANI_prepare_fight_hero_ani(const signed int ani_track_id, struct struct_hero *hero, const signed int weapon_gfx_id, const signed int f_action, const signed int object_id_attacker, const signed int object_id_target, const signed int a7)
 {
 	signed int l1;
 	signed int attacker_x;
@@ -142,8 +142,8 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	signed int l8;
 	signed int l9;
 	signed int i;
-	int8_t *sheet_ptr1;
-	int8_t *sheet_ptr2;
+	int8_t *p_ani_clip_base;
+	int8_t *p_ani_clip_weapon;
 	signed int weapon_id;
 	int16_t *ani_index_ptr;
 
@@ -193,11 +193,11 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 	}
 
 	l1 += viewdir;
-	sheet_ptr1 = &g_fig_anisheets[sheet_id][1];
-	sheet_ptr2 = &g_fig_anisheets[sheet_id + 4][1];
+	p_ani_clip_base = &g_fig_ani_tracks[ani_track_id][1];
+	p_ani_clip_weapon = &g_fig_ani_tracks[FANI_TRACK_ID_BASE_TO_WEAPON(ani_track_id)][1];
 
-	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
-	g_fig_anisheets[sheet_id][242] = hero->actor_sprite_id;
+	g_fig_ani_tracks[ani_track_id][0] = get_seq_header(ani_index_ptr[l1]);
+	g_fig_ani_tracks[ani_track_id][242] = hero->actor_sprite_id;
 
 	if (
 		check_hero(hero)
@@ -211,7 +211,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 			|| ((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))
 		)
 	) {
-			g_fig_anisheets[sheet_id][0] = 0;
+			g_fig_ani_tracks[ani_track_id][0] = 0;
 			l8 = l7 = -1;
 			l9 = hero->viewdir;
 			l8 = l9;
@@ -238,26 +238,26 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 
 			if (l7 == -1) {
 				for (i = 0; i < 2; i++) {
-					*sheet_ptr1++ = -5;
-					*sheet_ptr1++ = 0;
-					*sheet_ptr1++ = 0;
+					*p_ani_clip_base++ = -5;
+					*p_ani_clip_base++ = 0;
+					*p_ani_clip_base++ = 0;
 				}
 			}
 
-			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l8], 2);
+			p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l8], ANI_SRC_FILE_ID_ANI_DAT);
 
 			if (l7 != -1) {
-				sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l7], 2);
+				p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l7], ANI_SRC_FILE_ID_ANI_DAT);
 			}
 
-			*sheet_ptr1++ = -4;
-			*sheet_ptr1++ = get_seq_header(ani_index_ptr[l1]);
-			*sheet_ptr1++ = 0;
+			*p_ani_clip_base++ = -4;
+			*p_ani_clip_base++ = get_seq_header(ani_index_ptr[l1]);
+			*p_ani_clip_base++ = 0;
 	} else {
 		for (i = 0; i < 5; i++) {
-			*sheet_ptr1++ = -5;
-			*sheet_ptr1++ = 0;
-			*sheet_ptr1++ = 0;
+			*p_ani_clip_base++ = -5;
+			*p_ani_clip_base++ = 0;
+			*p_ani_clip_base++ = 0;
 		}
 	}
 
@@ -272,7 +272,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 			|| ((f_action == FIG_ACTION_PARRY) && !g_fig_hero_parry_action_used[(signed char)object_id_attacker - 1])
 		)
 	) {
-		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l1], ANI_SRC_FILE_ID_ANI_DAT);
 
 		if (
 			(weapon_gfx_id != WEAPON_GFX_ID_NONE)
@@ -281,14 +281,14 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 			&& (hero->typus != HERO_TYPE_DRUIDE)
 		) {
 			for (i = 0; i < 5; i++) {
-				*sheet_ptr2++ = -5;
-				*sheet_ptr2++ = 0;
-				*sheet_ptr2++ = 0;
+				*p_ani_clip_weapon++ = -5;
+				*p_ani_clip_weapon++ = 0;
+				*p_ani_clip_weapon++ = 0;
 			}
 
-			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
+			p_ani_clip_weapon += copy_ani_seq(p_ani_clip_weapon,
 				*(int16_t*)((uint8_t*)g_weaponani_table + (g_weaponani_types[hero->actor_sprite_id] * 48 + weapon_gfx_id * 16) +
-				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
+				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), ANI_SRC_FILE_ID_WEAPANI_DAT);
 		}
 	}
 
@@ -303,7 +303,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		)
 	) {
 
-			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 2);
+			p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l1], ANI_SRC_FILE_ID_ANI_DAT);
 
 			if (
 				(weapon_gfx_id != WEAPON_GFX_ID_NONE)
@@ -311,7 +311,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 				&& (hero->typus != HERO_TYPE_MAGIER)
 				&& (hero->typus != HERO_TYPE_DRUIDE)
 			) {
-				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
+				p_ani_clip_weapon += copy_ani_seq(p_ani_clip_weapon,
 					*(int16_t*)((uint8_t*)g_weaponani_table + (g_weaponani_types[hero->actor_sprite_id] * 48 + weapon_gfx_id * 16) +
 					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + hero->viewdir * 2), 3);
 			}
@@ -321,11 +321,11 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		(g_fig_attacker_dead && !a7)
 		|| (g_fig_target_dead && (a7 == 1))
 	) {
-		*sheet_ptr1++ = -4;
-		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
-		*sheet_ptr1++ = 0;
+		*p_ani_clip_base++ = -4;
+		*p_ani_clip_base++ = get_seq_header(ani_index_ptr[20]);
+		*p_ani_clip_base++ = 0;
 
-		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[20], 2);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[20], ANI_SRC_FILE_ID_ANI_DAT);
 	}
 
 	if (
@@ -333,8 +333,8 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 		|| (g_fig_attacker_dead && !a7)
 		|| (g_fig_target_dead && (a7 == 1))
 	) {
-		FIG_set_sheet(hero->fighter_id, (signed char)sheet_id);
-		*sheet_ptr1 = -1;
+		FIG_set_ani_track_id_base(hero->fighter_id, (signed char)ani_track_id);
+		*p_ani_clip_base = -1;
 
 		if (
 			(weapon_gfx_id != WEAPON_GFX_ID_NONE)
@@ -342,12 +342,13 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
 			&& (hero->typus != HERO_TYPE_MAGIER)
 			&& (hero->typus != HERO_TYPE_DRUIDE)
 		) {
-			FIG_set_weapon_sheet(hero->fighter_id, sheet_id + 4);
-			*sheet_ptr2 = -1;
+			FIG_set_ani_track_id_weapon(hero->fighter_id, FANI_TRACK_ID_BASE_TO_WEAPON(ani_track_id));
+
+			*p_ani_clip_weapon = -1;
 		}
 	}
 
-	*sheet_ptr1 = -1;
+	*p_ani_clip_base = -1;
 	if (f_action == FIG_ACTION_PARRY) {
 		g_fig_hero_parry_action_used[(signed char)object_id_attacker - 1] = 1;
 	}
@@ -357,7 +358,7 @@ void FANI_prepare_fight_hero_ani(const signed int sheet_id, struct struct_hero *
  * \brief   prepares the animation sequence of a hero in fights
  */
 /* Borlandified and identical */
-void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet *enemy, const signed int f_action, const signed int object_id_attacker, const signed int object_id_target, const signed int a7)
+void FANI_prepare_fight_enemy_ani(const signed int ani_track_id, struct enemy_sheet *enemy, const signed int f_action, const signed int object_id_attacker, const signed int object_id_target, const signed int a7)
 {
 	signed int l1;
 	signed int attacker_x;
@@ -369,8 +370,8 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 	signed int l8;
 	signed int l9;
 	signed int i;
-	int8_t *sheet_ptr1;
-	int8_t *sheet_ptr2;
+	int8_t *p_ani_clip_base;
+	int8_t *p_ani_clip_weapon;
 	struct struct_fighter *fighter;			/* only user for two sprited figures */
 	int16_t *ani_index_ptr;			/* read only */
 	signed int weapon_gfx_id;
@@ -430,12 +431,12 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 	l1 += viewdir;
 
-	sheet_ptr1 = &g_fig_anisheets[sheet_id][1];
-	sheet_ptr2 = &g_fig_anisheets[sheet_id + 4][1];
+	p_ani_clip_base = &g_fig_ani_tracks[ani_track_id][1];
+	p_ani_clip_weapon = &g_fig_ani_tracks[FANI_TRACK_ID_BASE_TO_WEAPON(ani_track_id)][1];
 
 
-	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
-	g_fig_anisheets[sheet_id][242] = enemy->actor_sprite_id;
+	g_fig_ani_tracks[ani_track_id][0] = get_seq_header(ani_index_ptr[l1]);
+	g_fig_ani_tracks[ani_track_id][242] = enemy->actor_sprite_id;
 
 	/* first the enemy may turn */
 	if (
@@ -451,7 +452,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		)
 	) {
 
-		g_fig_anisheets[sheet_id][0] = 0;
+		g_fig_ani_tracks[ani_track_id][0] = 0;
 
 		/* find out the new direction */
 		l8 = l7 = -1;
@@ -486,27 +487,27 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		if (l7 == -1) {
 			/* do not move for 2 frames */
 			for (i = 0; i < 2; i++) {
-				*sheet_ptr1++ = -5;
-				*sheet_ptr1++ = 0;
-				*sheet_ptr1++ = 0;
+				*p_ani_clip_base++ = -5;
+				*p_ani_clip_base++ = 0;
+				*p_ani_clip_base++ = 0;
 			}
 		}
 
-		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l8], 1);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l8], 1);
 
 		if (l7 != -1) {
-			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l7], 1);
+			p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l7], 1);
 		}
 
-		*sheet_ptr1++ = -4;
-		*sheet_ptr1++ = get_seq_header(ani_index_ptr[l1]);
-		*sheet_ptr1++ = 0;
+		*p_ani_clip_base++ = -4;
+		*p_ani_clip_base++ = get_seq_header(ani_index_ptr[l1]);
+		*p_ani_clip_base++ = 0;
 	} else {
 		/* do not move for 5 frames */
 		for (i = 0; i < 5; i++) {
-			*sheet_ptr1++ = -5;
-			*sheet_ptr1++ = 0;
-			*sheet_ptr1++ = 0;
+			*p_ani_clip_base++ = -5;
+			*p_ani_clip_base++ = 0;
+			*p_ani_clip_base++ = 0;
 		}
 	}
 
@@ -515,19 +516,19 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		|| (f_action == FIG_ACTION_RANGE_ATTACK)
 		|| ((f_action == FIG_ACTION_PARRY) && !g_fig_enemy_parry_action_used[(signed char)object_id_attacker])
 	) {
-		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l1], 1);
 
 		if (weapon_gfx_id != WEAPON_GFX_ID_NONE) {
 
 			/* do not move for 5 frames */
 			for (i = 0; i < 5; i++) {
-				*sheet_ptr2++ = -5;
-				*sheet_ptr2++ = 0;
-				*sheet_ptr2++ = 0;
+				*p_ani_clip_weapon++ = -5;
+				*p_ani_clip_weapon++ = 0;
+				*p_ani_clip_weapon++ = 0;
 			}
 
 			/* copy the weapon ani */
-			sheet_ptr2 += copy_ani_seq(sheet_ptr2,
+			p_ani_clip_weapon += copy_ani_seq(p_ani_clip_weapon,
 				*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->actor_sprite_id] * 48 + weapon_gfx_id * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 		}
 	}
@@ -537,12 +538,12 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		|| ((g_fig_critical_fail_backfire_1 != 0) && (a7 == 1))
 	) {
 
-			sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[l1], 1);
+			p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l1], 1);
 
 			if (weapon_gfx_id != WEAPON_GFX_ID_NONE) {
 
 				/* copy the weapon ani */
-				sheet_ptr2 += copy_ani_seq(sheet_ptr2,
+				p_ani_clip_weapon += copy_ani_seq(p_ani_clip_weapon,
 					*(int16_t*)((uint8_t*)g_weaponani_table + g_weaponani_types[enemy->actor_sprite_id] * 48 + weapon_gfx_id * 16 + ((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + enemy->viewdir * 2), 3);
 			}
 	}
@@ -551,34 +552,34 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 		((g_fig_attacker_dead != 0) && (a7 == 0))
 		|| ((g_fig_target_dead != 0) && (a7 == 1))
 	) {
-		*sheet_ptr1++ = -4;
-		*sheet_ptr1++ = get_seq_header(ani_index_ptr[20]);
-		*sheet_ptr1++ = 0;
+		*p_ani_clip_base++ = -4;
+		*p_ani_clip_base++ = get_seq_header(ani_index_ptr[20]);
+		*p_ani_clip_base++ = 0;
 
-		sheet_ptr1 += copy_ani_seq(sheet_ptr1, ani_index_ptr[20], 1);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[20], 1);
 	}
 
-	FIG_set_sheet(enemy->fighter_id, (signed char)sheet_id);
+	FIG_set_ani_track_id_base(enemy->fighter_id, (signed char)ani_track_id);
 
 	/* terminate figure animation array */
-	*sheet_ptr1 = -1;
+	*p_ani_clip_base = -1;
 
 	/* does this sprite need two fields */
 	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table))	{
 
-		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
+		memcpy(&g_fig_ani_tracks[FANI_TRACK_ID_BASE_TO_TAIL(ani_track_id)], &g_fig_ani_tracks[ani_track_id], 243);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
-		FIG_set_sheet(g_fig_double_size_fighter_id_table[fighter->double_size], sheet_id + 2);
+		FIG_set_ani_track_id_base(g_fig_double_size_fighter_id_table[fighter->double_size], FANI_TRACK_ID_BASE_TO_TAIL(ani_track_id));
 	}
 
 	if (weapon_gfx_id != WEAPON_GFX_ID_NONE) {
 
-		FIG_set_weapon_sheet(enemy->fighter_id, sheet_id + 4);
+		FIG_set_ani_track_id_weapon(enemy->fighter_id, FANI_TRACK_ID_BASE_TO_WEAPON(ani_track_id));
 
 		/* terminate weapon animation array */
-		*sheet_ptr2 = -1;
+		*p_ani_clip_weapon = -1;
 	}
 
 	if (f_action == FIG_ACTION_PARRY) {
@@ -589,7 +590,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
 
 /**
  *
- * \param[in] sheet_id  0 or 1
+ * \param[in] ani_track_id  0 or 1
  * \param   hero        pointer to a hero
  * \param   max_range          99 or 4
  * \param   caster_object_id
@@ -599,7 +600,7 @@ void FANI_prepare_fight_enemy_ani(const signed int sheet_id, struct enemy_sheet 
  */
 
 /* Borlandified and identical */
-void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero, const signed int max_range, const signed int caster_object_id, const signed int target_object_id, const signed int v5, const signed int v6)
+void FANI_prepare_spell_hero(const signed int ani_track_id, struct struct_hero *hero, const signed int max_range, const signed int caster_object_id, const signed int target_object_id, const signed int v5, const signed int v6)
 {
 	signed int x_caster;
 	signed int y_caster;
@@ -608,7 +609,7 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 	signed int viewdir;
 	signed int l2;
 	signed int l3;
-	int8_t *sheet_ptr;
+	int8_t *p_ani_clip_base;
 	int16_t *ani_index_ptr;
 
 	signed int l_di;
@@ -639,17 +640,17 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 
 	l_di += (max_range == 4) ? viewdir : hero->viewdir;
 
-	sheet_ptr = &g_fig_anisheets[sheet_id][1];
+	p_ani_clip_base = &g_fig_ani_tracks[ani_track_id][1];
 
-	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l_di]);
+	g_fig_ani_tracks[ani_track_id][0] = get_seq_header(ani_index_ptr[l_di]);
 
-	g_fig_anisheets[sheet_id][242] = hero->actor_sprite_id;
+	g_fig_ani_tracks[ani_track_id][242] = hero->actor_sprite_id;
 
 	if ((hero->viewdir != viewdir) && (max_range == 4)) {
 
 		signed int viewdir_2;
 
-		g_fig_anisheets[sheet_id][0] = 0;
+		g_fig_ani_tracks[ani_track_id][0] = 0;
 
 		l3 = l2 = -1;
 		viewdir_2 = hero->viewdir;
@@ -671,20 +672,20 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 		}
 
 		hero->viewdir = viewdir;
-		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l3], 2);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l3], ANI_SRC_FILE_ID_ANI_DAT);
 
 		if (l2 != -1) {
-			sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l2], 2);
+			p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l2], ANI_SRC_FILE_ID_ANI_DAT);
 		}
 
-		*sheet_ptr = -4;
-		sheet_ptr++;
+		*p_ani_clip_base = -4;
+		p_ani_clip_base++;
 
-		*sheet_ptr = get_seq_header(ani_index_ptr[l_di]);
-		sheet_ptr++;
+		*p_ani_clip_base = get_seq_header(ani_index_ptr[l_di]);
+		p_ani_clip_base++;
 
-		*sheet_ptr = 0x00;
-		sheet_ptr++;
+		*p_ani_clip_base = 0x00;
+		p_ani_clip_base++;
 	}
 
 	if (
@@ -694,7 +695,7 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 		|| ((g_fig_target_dead != 0) && (v6 == 1))
 	) {
 
-		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l_di], 2);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l_di], ANI_SRC_FILE_ID_ANI_DAT);
 	}
 
 	if (
@@ -702,19 +703,19 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
 		|| ((g_fig_target_dead != 0) && (v6 == 1))
 	) {
 
-		*sheet_ptr = -4;
-		sheet_ptr++;
+		*p_ani_clip_base = -4;
+		p_ani_clip_base++;
 
-		*sheet_ptr = get_seq_header(ani_index_ptr[20]);
-		sheet_ptr++;
+		*p_ani_clip_base = get_seq_header(ani_index_ptr[20]);
+		p_ani_clip_base++;
 
-		*sheet_ptr = 0;
-		sheet_ptr++;
+		*p_ani_clip_base = 0;
+		p_ani_clip_base++;
 
-		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[20], 2);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[20], ANI_SRC_FILE_ID_ANI_DAT);
 	}
 
-	*sheet_ptr = -1;
+	*p_ani_clip_base = -1;
 }
 
 
@@ -723,7 +724,7 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
  *
  *          This is used for "Blitz", "Fulminictus", "Ignifaxius"
  *
- * \param[in] sheet_id  0 or 1
+ * \param[in] ani_track_id  0 or 1
  * \param   p           pointer to an entry of g_enemy_sheets
  * \param   max_range   4 of 99
  * \param   target_object_id      the id of the target
@@ -731,7 +732,7 @@ void FANI_prepare_spell_hero(const signed int sheet_id, struct struct_hero *hero
  * \param   v5          0 or 1
  */
 /* Borlandified and identical */
-void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *enemy, const signed int max_range, const signed int target_object_id, const signed int caster_object_id, const signed int v5)
+void FANI_prepare_spell_enemy(const signed int ani_track_id, struct enemy_sheet *enemy, const signed int max_range, const signed int target_object_id, const signed int caster_object_id, const signed int v5)
 {
 	signed int l1;
 	signed int x_target;
@@ -741,7 +742,7 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	signed int viewdir;
 	signed int l2;
 	signed int l3;		/* indicees to ani_index_ptr */
-	int8_t *sheet_ptr;	/* mostly written */
+	int8_t *p_ani_clip_base;	/* mostly written */
 	int16_t *ani_index_ptr;	/* read only */
 
 	signed int viewdir_2;
@@ -771,18 +772,18 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 	/* this is true if an enemy attacks a hero */
 	l1 = (max_range == 4) ? 29 : 16;
 
-	sheet_ptr = &g_fig_anisheets[sheet_id][1];
+	p_ani_clip_base = &g_fig_ani_tracks[ani_track_id][1];
 
 	/* this is true if an enemy attacks a hero */
 	l1 += (max_range == 4) ? viewdir : enemy->viewdir;
 
-	g_fig_anisheets[sheet_id][0] = get_seq_header(ani_index_ptr[l1]);
+	g_fig_ani_tracks[ani_track_id][0] = get_seq_header(ani_index_ptr[l1]);
 
-	g_fig_anisheets[sheet_id][242] = enemy->actor_sprite_id;
+	g_fig_ani_tracks[ani_track_id][242] = enemy->actor_sprite_id;
 
 	if ((enemy->viewdir != viewdir) && (max_range == 4)) {
 
-		g_fig_anisheets[sheet_id][0] = 0;
+		g_fig_ani_tracks[ani_track_id][0] = 0;
 
 		l3 = l2 = -1;
 
@@ -806,44 +807,44 @@ void FANI_prepare_spell_enemy(const signed int sheet_id, struct enemy_sheet *ene
 
 		enemy->viewdir = viewdir;
 
-		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l3], 1);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l3], 1);
 
 		if (l2 != -1)
-			sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l2], 1);
+			p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l2], 1);
 
-		*sheet_ptr = -4;
-		sheet_ptr++;
+		*p_ani_clip_base = -4;
+		p_ani_clip_base++;
 
-		*sheet_ptr = get_seq_header(ani_index_ptr[l1]);
-		sheet_ptr++;
+		*p_ani_clip_base = get_seq_header(ani_index_ptr[l1]);
+		p_ani_clip_base++;
 
-		*sheet_ptr = 0;
-		sheet_ptr++;
+		*p_ani_clip_base = 0;
+		p_ani_clip_base++;
 	}
 
-	sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[l1], 1);
+	p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[l1], 1);
 
 	if (
 		(g_fig_attacker_dead && !v5)
 		|| (g_fig_target_dead && (v5 == 1))
 	) {
 
-		*sheet_ptr = -4;
-		sheet_ptr++;
+		*p_ani_clip_base = -4;
+		p_ani_clip_base++;
 
-		*sheet_ptr = get_seq_header(ani_index_ptr[20]);
-		sheet_ptr++;
+		*p_ani_clip_base = get_seq_header(ani_index_ptr[20]);
+		p_ani_clip_base++;
 
-		*sheet_ptr = 0;
-		sheet_ptr++;
+		*p_ani_clip_base = 0;
+		p_ani_clip_base++;
 
-		sheet_ptr += copy_ani_seq(sheet_ptr, ani_index_ptr[20], 1);
+		p_ani_clip_base += copy_ani_seq(p_ani_clip_base, ani_index_ptr[20], 1);
 	}
 
-	*sheet_ptr = -1;
+	*p_ani_clip_base = -1;
 
 	/* check if the moster sprite ID needs two squares */
 	if (is_in_byte_array(enemy->actor_sprite_id, g_double_size_actor_sprite_id_table)) {
-		memcpy(&g_fig_anisheets[sheet_id + 2], &g_fig_anisheets[sheet_id], 243);
+		memcpy(&g_fig_ani_tracks[FANI_TRACK_ID_BASE_TO_TAIL(ani_track_id)], &g_fig_ani_tracks[ani_track_id], 243);
 	}
 }

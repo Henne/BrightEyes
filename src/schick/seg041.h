@@ -15,4 +15,4 @@ signed int FIG_weapon_gfx_id_melee(const struct struct_hero*);
 //0x43
 signed int FIG_get_enemy_attack_damage(const struct enemy_sheet*, struct enemy_sheet*, const signed int);
 //0x48
-void clear_anisheets(void);
+void FANI_clear_ani_tracks(void);
