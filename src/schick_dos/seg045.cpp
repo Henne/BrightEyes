@@ -105,34 +105,34 @@ static const int8_t* g_anitab_spell_index[2] = {
 
 /**
  * \brief load sprites of projectiles (from spell, missile weapon or throwing weapon)
- * \param[in] fighter_id	fighter ID
- * \param[in] type		arrow or projectile ???
- * \param[in] dir		direction
+ * \param[in] attacker_object_id         object_id of the attacker
+ * \param[in] projectile_gfx_id
+ * \param[in] viewdir		direction
  **/
-void FANI_add_projectile(const signed int fighter_id, const signed int projectile_gfx_id, const signed int dir)
+void FANI_add_projectile(const signed int attacker_object_id, const signed int projectile_gfx_id, const signed int viewdir)
 {
-	signed int obj_x;
-	signed int obj_y;
+	signed int attacker_x;
+	signed int attacker_y;
 	struct nvf_extract_desc nvf;
 
-	FIG_search_obj_on_cb(fighter_id, &obj_x, &obj_y);
+	FIG_search_obj_on_cb(attacker_object_id, &attacker_x, &attacker_y);
 
 	g_fig_list_elem.figure = 0;
 
 	g_fig_list_elem.nvf_no = g_gfxtab_projectile_nvfno[projectile_gfx_id];
 
 	if (projectile_gfx_id != PROJECTILE_GFX_ID_SPELLCAST_STAR) {
-		g_fig_list_elem.nvf_no = g_fig_list_elem.nvf_no + dir;
+		g_fig_list_elem.nvf_no = g_fig_list_elem.nvf_no + viewdir;
 	}
 
-	if (dir == 0) {
-		obj_x += 2;
+	if (viewdir == FIG_VIEWDIR_RIGHT) {
+		attacker_x += 2;
 	}
 
-	g_fig_list_elem.cbx = obj_x;
-	g_fig_list_elem.cby = obj_y;
-	g_fig_list_elem.offsetx = g_gfxtab_projectile_ox[projectile_gfx_id][dir];
-	g_fig_list_elem.offsety = g_gfxtab_projectile_oy[projectile_gfx_id][dir];
+	g_fig_list_elem.cbx = attacker_x;
+	g_fig_list_elem.cby = attacker_y;
+	g_fig_list_elem.offsetx = g_gfxtab_projectile_ox[projectile_gfx_id][viewdir];
+	g_fig_list_elem.offsety = g_gfxtab_projectile_oy[projectile_gfx_id][viewdir];
 	g_fig_list_elem.height = g_gfxtab_projectile_height[projectile_gfx_id];
 	g_fig_list_elem.width = g_gfxtab_projectile_width[projectile_gfx_id];
 
@@ -154,8 +154,8 @@ void FANI_add_projectile(const signed int fighter_id, const signed int projectil
 	nvf.src = g_spellobj_nvf_buf;
 	nvf.image_num = g_fig_list_elem.nvf_no;
 	nvf.compression_type = 0;
-	nvf.width = &obj_x;
-	nvf.height = &obj_x;
+	nvf.width = &attacker_x;
+	nvf.height = &attacker_x;
 
 	process_nvf_extraction(&nvf);
 
@@ -197,20 +197,20 @@ signed int FANI_copy_sequence(int8_t *dst, const int8_t *src, const signed char 
 	return i;
 }
 
-signed int FANI_prepare_projectile_ani(const signed int ani_track_id, const signed int projectile_gfx_id, const signed int fighter_id, const signed int target_object_id, const signed int viewdir)
+signed int FANI_prepare_projectile_ani(const signed int ani_track_id, const signed int projectile_gfx_id, const signed int attacker_object_id, const signed int target_object_id, const signed int viewdir)
 {
 	signed int i;
 	int8_t *p_ani_clip_projectile;
-	signed int fighter_x;
-	signed int fighter_y;
+	signed int attacker_x;
+	signed int attacker_y;
 	signed int target_x;
 	signed int target_y;
 	signed int distance;
 
 	FIG_search_obj_on_cb(target_object_id, &target_x, &target_y);
-	FIG_search_obj_on_cb(fighter_id, &fighter_x, &fighter_y);
+	FIG_search_obj_on_cb(attacker_object_id, &attacker_x, &attacker_y);
 
-	distance = manhattan_distance(fighter_x, fighter_y, target_x, target_y);
+	distance = manhattan_distance(attacker_x, attacker_y, target_x, target_y);
 
 	if (distance <= 1) {
 		return 0;
@@ -225,7 +225,7 @@ signed int FANI_prepare_projectile_ani(const signed int ani_track_id, const sign
 	}
 	*p_ani_clip_projectile = -1;
 
-	FANI_add_projectile(fighter_id, projectile_gfx_id, viewdir);
+	FANI_add_projectile(attacker_object_id, projectile_gfx_id, viewdir);
 
 	return 1;
 }

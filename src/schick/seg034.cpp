@@ -52,55 +52,60 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 			const signed int x_diff, const signed int y_diff,
 			const signed int max_range)
 {
-	signed int fighter_id_target;
-	signed int fighter_id;
+	signed int target_object_id;
+	signed int hero_object_id;
 	signed int distance;
 
-	fighter_id = get_cb_val(x, y);
-	fighter_id_target = get_cb_val(x + x_diff, y + y_diff);
+	hero_object_id = get_cb_val(x, y);
+	target_object_id = get_cb_val(x + x_diff, y + y_diff);
 
 	distance = manhattan_distance(x + x_diff, y + y_diff, x_hero, y_hero);
 
 	/* distance actions */
-	if ((fighter_id != 0) && (manhattan_distance(x, y, x_hero, y_hero) < distance) && (distance <= max_range)) {
+	if ((hero_object_id != 0) && (manhattan_distance(x, y, x_hero, y_hero) < distance) && (distance <= max_range)) {
 
 		if ((x_hero == x) && (y_hero == y)) {
 
-			if ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
+			if ((target_object_id < 50) || ((target_object_id >= 50) && is_in_int_array(target_object_id - 50, g_cb_obj_nonobstacle)))
 			{
 				return 1;
 			} else {
 				return 0;
 			}
 
-		} else if (((fighter_id >= 50) ||
-				((fighter_id >= 10) && (fighter_id < 30) && ((struct enemy_flags)g_enemy_sheets[fighter_id - 10].flags).dead) ||
-				((fighter_id >= 30) && (fighter_id < 50) && ((struct enemy_flags)g_enemy_sheets[fighter_id - 30].flags).dead) ||
-				((fighter_id < 10) && get_hero(fighter_id - 1)->flags.dead))
-				&&
-				((fighter_id_target >= 0) &&
-				 ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))))
-			{
+		} else if (
+			(
+				(hero_object_id >= 50)
+				|| ((hero_object_id >= 10) && (hero_object_id < 30) && ((struct enemy_flags)g_enemy_sheets[hero_object_id - 10].flags).dead)
+				|| ((hero_object_id >= 30) && (hero_object_id < 50) && ((struct enemy_flags)g_enemy_sheets[hero_object_id - 30].flags).dead)
+				|| ((hero_object_id < 10) && get_hero(hero_object_id - 1)->flags.dead)
+			) && (
+				(target_object_id >= 0)
+				&& ((target_object_id < 50) || ((target_object_id >= 50) && is_in_int_array(target_object_id - 50, g_cb_obj_nonobstacle)))
+			)
+		) {
 
-				if (((((x_diff == 1) || (x_diff == -1)) && (y_hero != y))) ||
-					((((y_diff == 1) || (y_diff == -1)) && (x_hero != x))))
-				{
-					return 0;
-				} else {
-					return 1;
-				}
-
-			} else {
+			if (
+				((((x_diff == 1) || (x_diff == -1)) && (y_hero != y)))
+				|| ((((y_diff == 1) || (y_diff == -1)) && (x_hero != x)))
+			) {
 				return 0;
+			} else {
+				return 1;
 			}
+
+		} else {
+			return 0;
+		}
 	}
 
 	/* 4 near actions */
 	if (x_diff == 1) {
-		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((x < 23) && (y == y_hero) && (manhattan_distance(x_hero, y_hero, x + 1, y) <= max_range)))
-		{
+		if (
+			(target_object_id >= 0)
+			&& ((target_object_id < 50) || ((target_object_id >= 50) && is_in_int_array(target_object_id - 50, g_cb_obj_nonobstacle)))
+			&& ((x < 23) && (y == y_hero) && (manhattan_distance(x_hero, y_hero, x + 1, y) <= max_range))
+		) {
 			return 1;
 		} else {
 			return 0;
@@ -110,10 +115,11 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 	}
 
 	if (x_diff == -1) {
-		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((x > 0) && (y == y_hero) && (manhattan_distance(x_hero, y_hero, x - 1, y) <= max_range)))
-		{
+		if (
+			(target_object_id >= 0)
+			&& ((target_object_id < 50) || ((target_object_id >= 50) && is_in_int_array(target_object_id - 50, g_cb_obj_nonobstacle)))
+			&& ((x > 0) && (y == y_hero) && (manhattan_distance(x_hero, y_hero, x - 1, y) <= max_range))
+		) {
 			return 1;
 		} else {
 			return 0;
@@ -124,10 +130,11 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 	}
 
 	if (y_diff == 1) {
-		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((y < 23) && (x == x_hero) && (manhattan_distance(x_hero, y_hero, x, y + 1) <= max_range)))
-		{
+		if (
+			(target_object_id >= 0)
+			&& ((target_object_id < 50) || ((target_object_id >= 50) && is_in_int_array(target_object_id - 50, g_cb_obj_nonobstacle)))
+			&& ((y < 23) && (x == x_hero) && (manhattan_distance(x_hero, y_hero, x, y + 1) <= max_range))
+		) {
 			return 1;
 		} else {
 			return 0;
@@ -138,10 +145,11 @@ signed int FIG_check_hero_attack(const signed int x_hero, const signed int y_her
 	}
 
 	if (y_diff == -1) {
-		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_int_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
-			&& ((y > 0) && (x == x_hero) && (manhattan_distance(x_hero, y_hero, x, y - 1) <= max_range)))
-		{
+		if (
+			(target_object_id >= 0)
+			&& ((target_object_id < 50) || ((target_object_id >= 50) && is_in_int_array(target_object_id - 50, g_cb_obj_nonobstacle)))
+			&& ((y > 0) && (x == x_hero) && (manhattan_distance(x_hero, y_hero, x, y - 1) <= max_range))
+		) {
 			return 1;
 		} else {
 			return 0;
@@ -165,7 +173,7 @@ signed char FIG_cb_select_target(signed int *px, signed int *py, const signed in
 	signed int y_diff;
 	signed int x;
 	signed int y;
-	signed int fighter_id;
+	signed int actor_object_id;
 	signed int x_screen;
 	signed int y_screen;
 	signed int from_kbd;
@@ -315,18 +323,18 @@ signed char FIG_cb_select_target(signed int *px, signed int *py, const signed in
 
 			call_mouse();
 			FIG_call_draw_pic();
-			fighter_id = get_cb_val(*px, *py);
+			actor_object_id = get_cb_val(*px, *py);
 
-			if ((fighter_id > 0) && (fighter_id < 50)) {
+			if ((actor_object_id > 0) && (actor_object_id < 50)) {
 
-				if (fighter_id < 10) {
-					FIG_draw_char_pic(1, fighter_id);
+				if (actor_object_id < 10) {
+					FIG_draw_char_pic(1, actor_object_id);
 				} else {
 
-					if (fighter_id >= 30) {
-						FIG_draw_enemy_pic(1, fighter_id - 20);
+					if (actor_object_id >= 30) {
+						FIG_draw_enemy_pic(1, actor_object_id - 20);
 					} else {
-						FIG_draw_enemy_pic(1, fighter_id);
+						FIG_draw_enemy_pic(1, actor_object_id);
 					}
 				}
 			}
